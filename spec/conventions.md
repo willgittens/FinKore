@@ -26,7 +26,7 @@ Text is normative when it uses one of these uppercase keywords. Invariant sectio
 
 - Timestamps used as domain values MUST identify an unambiguous instant. A serialized timestamp MUST use an RFC 3339 `date-time` representation with an explicit numeric UTC offset or `Z`.
 - Exact decimal domain values MUST use base-10 semantics. A specification that defines a serialized decimal value MUST define an encoding that preserves its exact numeric value; JSON numbers are not portable for this purpose.
-- Currency identifiers SHOULD use uppercase ISO 4217 alphabetic codes where a suitable code exists. Private or non-ISO identifiers MUST be explicitly documented and MUST NOT collide with ISO codes in the same context.
+- Currency identifiers SHOULD use ISO 4217 alphabetic codes when representing currencies covered by ISO 4217, and those codes MUST be uppercase. Application-defined and non-ISO identifier namespaces are outside the normative scope of FinFlow Core Draft 0.1.
 - JSON object member order MUST NOT carry meaning.
 - Optional and nullable values are distinct; a specification MUST state which, if either, is allowed.
 

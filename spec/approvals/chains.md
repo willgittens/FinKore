@@ -11,17 +11,17 @@ This document defines how multiple Approval Requirements combine. The term Appro
 ## Requirements
 
 - An Approval Chain MUST contain one or more declared Approval Requirements.
-- It MUST declare whether its Approval Requirements are sequential, unordered, or combined by another explicitly defined rule.
+- It MUST declare whether its Approval Requirements are sequential or unordered.
 - An unordered chain MUST NOT be interpreted as sequential.
 - A sequential chain MUST NOT activate a later Approval Requirement before its predecessor is satisfied.
-- An Approval Chain using the all-required rule is `APPROVED` only when every applicable Approval Requirement is approved.
+- An Approval Chain is `APPROVED` only when every applicable Approval Requirement is approved.
 - Such a chain is `PENDING` while at least one applicable Approval Requirement remains pending and no effective rejection determines the outcome.
 - Every Approval Chain definition MUST state how an effective rejection determines its outcome.
 - Evaluation MUST be deterministic from the chain definition, applicable requirements, and effective decisions.
 
 ## Invariants
 
-An Approval Chain outcome MUST be consistent with its declared combination rule and effective required Approval Decisions.
+An Approval Chain outcome MUST be consistent with its sequencing declaration and effective required Approval Decisions.
 
 ## Examples
 
@@ -39,6 +39,10 @@ The arrow denotes a sequential chain. `AND` denotes an unordered all-required ch
 
 ## Open Questions
 
-- Should quorum, any-of, and other non-all-required combination rules be standardized in the first conformance suite?
-- How should a chain react when its definition changes mid-process?
+- Which future approval semantics should define quorum, any-of, or other non-all-required combination rules?
+- How should a future specification version and migrate Approval Chain definitions when a definition changes mid-process?
+
+## Non-Goals
+
+FinFlow Core Draft 0.1 does not define quorum, any-of, delegation, complex dependency graphs, or migration between Approval Chain definitions.
 

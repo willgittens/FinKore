@@ -31,7 +31,7 @@ A failed Financial Entity operation MUST NOT produce a partially valid Financial
 
 ## Open Questions
 
-- Should correction and reversal failures share entity codes or receive a future dedicated domain catalog?
+- Should a future correction specification define a dedicated portable error catalog for Correction, Reversal, Void, Cancellation, Supersession, and Adjustment?
 
 ## Non-Goals
 

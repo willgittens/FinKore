@@ -11,12 +11,12 @@ This document defines a need for an Approval Decision from an eligible Actor or 
 ## Requirements
 
 - An Approval Requirement MUST have a stable identifier within its approval context.
+- It MUST identify the subject whose approval is requested.
 - It MUST identify its eligible Actor, application-defined subject, or eligibility rule.
 - It MUST define which Approval Decision outcome satisfies or rejects it.
 - An applicable Approval Requirement with no effective Approval Decision MUST have the `PENDING` State.
 - Eligibility MUST be evaluated independently from the Actor's technical ability to submit a request.
 - A requirement MAY be conditional as defined by [Conditions](conditions.md).
-- A requirement SHOULD identify the object and revision or facts being approved.
 
 ## Invariants
 
@@ -41,5 +41,5 @@ The following JSON is illustrative and non-normative; eligibility is not limited
 
 ## Open Questions
 
-- Must every requirement bind to an immutable revision of the approved facts?
+- Should a future interchange specification define a portable representation for associating Approval Decisions with subject state or facts?
 

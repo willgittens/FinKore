@@ -28,6 +28,16 @@ An undeclared Source-State-to-Target-State Transition MUST NOT succeed. Validati
 
 ## Examples
 
+The following concurrency example is non-normative:
+
+```text
+Current state: SUBMITTED
+Process A requests: SUBMITTED → APPROVED
+Process B requests: SUBMITTED → REJECTED
+```
+
+FinFlow Core Draft 0.1 defines whether each request is valid from `SUBMITTED`; it does not determine which concurrent request wins. That decision belongs to the application, persistence layer, or a future concurrency specification.
+
 Given `DRAFT → SUBMITTED`, requesting that transition from `DRAFT` succeeds if all guards pass.
 
 ## Invalid Examples
@@ -41,4 +51,5 @@ Except for a request from a terminal State, an undeclared Transition Request MUS
 ## Open Questions
 
 - Should transitions have stable identifiers distinct from source and target state pairs?
+- What conflict semantics should a future concurrency specification define for simultaneous Transition Requests from the same current State?
 

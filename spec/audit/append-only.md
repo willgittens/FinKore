@@ -10,20 +10,22 @@ This document defines logical preservation rules for committed Audit Events, ind
 
 ## Requirements
 
-- Within logical audit history, a committed Audit Event MUST NOT be replaced, modified, reordered, or removed. A policy-authorized redacted representation follows [Audit Redaction](redaction.md) and MUST leave evidence of the redaction.
-- A correction MUST be represented by a new Audit Event. When the corrected occurrence is identifiable, the correction event MUST reference or otherwise identify it.
-- A reversal MUST be represented by a new compensating event and MUST NOT erase the reversed event.
+- Within logical audit history, a committed Audit Event MUST NOT be replaced, modified, or removed. A policy-authorized redacted representation follows [Audit Redaction](redaction.md) and MUST leave evidence of the redaction.
+- An ordering relationship explicitly recorded as part of committed logical history MUST NOT later be changed.
 - Submission of an already committed Audit Event identity MUST fail with `FINFLOW_AUDIT_DUPLICATE_EVENT` and MUST NOT create another committed event.
 - Any exceptional transformation required by law or policy MUST remain detectable through compliant [redaction](redaction.md) evidence.
+- FinFlow Core does not guarantee a total ordering of independently produced concurrent Audit Events.
+- When timestamps do not establish a reliable ordering between independently produced Audit Events, an implementation MUST NOT assign domain meaning to their arbitrary storage or retrieval order.
 
 ## Invariants
 
-Reading logical history later MUST preserve the existence, identity, and relative order of every committed Audit Event. A redacted representation MUST preserve the event-level meaning required by [Audit Redaction](redaction.md).
+Reading logical history later MUST preserve the existence and identity of every committed Audit Event and every explicitly recorded ordering relationship. A redacted representation MUST preserve the event-level meaning required by [Audit Redaction](redaction.md).
 
 ## Invalid Examples
 
-- Editing yesterday's event to match today's corrected value.
+- Editing yesterday's event to match a later value.
 - Deleting a rejected decision after a later approval.
+- Treating database row order as proof that one concurrent event caused another.
 
 ## Errors
 
@@ -31,9 +33,9 @@ An attempted prohibited mutation MUST report `FINFLOW_AUDIT_APPEND_ONLY_VIOLATIO
 
 ## Open Questions
 
-- What ordering guarantees are required when independent producers submit concurrent events?
+- Should a future specification define entity-local sequencing or explicit causal relationships between Audit Events?
 
 ## Non-Goals
 
-This document does not prescribe event stores, ledgers, hashes, signatures, or replication protocols.
+This document does not prescribe event stores, ledgers, hashes, signatures, replication protocols, global sequence numbers, Lamport clocks, vector clocks, broker offsets, distributed consensus, or database transaction ordering. Correction, reversal, void, cancellation, supersession, and adjustment semantics are outside FinFlow Core Draft 0.1.
 

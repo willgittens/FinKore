@@ -32,5 +32,5 @@ Invalid definitions or state values MUST report an applicable code from [Workflo
 
 ## Open Questions
 
-- Should future revisions standardize versioning of workflow definitions?
+- How should a future specification identify Workflow definition versions, migrate active instances, and determine transition behavior after a definition changes?
 

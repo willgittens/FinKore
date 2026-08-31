@@ -10,11 +10,11 @@ This document defines the minimum meaning and content of an Audit Event. An Audi
 
 ## Requirements
 
-- An Audit Event MUST have a stable event identifier, event type, entity reference, and timestamp.
+- Every committed Audit Event MUST have a stable event identifier, event type, entity reference, and timestamp.
 - It MUST identify an Actor when the responsible Actor is known; otherwise Actor attribution MAY be omitted or explicitly represented as unknown.
 - The event type MUST express a domain occurrence and MUST NOT merely name an implementation method.
 - The entity reference MUST identify the affected entity type and stable entity identifier.
-- The timestamp MUST identify when the recorded occurrence took effect and, when serialized, MUST follow [Timestamp conventions](../conventions.md#portable-values).
+- The timestamp MUST identify an unambiguous instant when the recorded occurrence took effect and, when serialized, MUST follow [Timestamp conventions](../conventions.md#portable-values).
 - Event metadata MAY provide relevant context but MUST NOT contradict required event fields.
 - An event MUST be complete enough to retain its declared meaning without relying on mutable display text.
 

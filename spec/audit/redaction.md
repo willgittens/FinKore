@@ -16,7 +16,7 @@ This document defines how sensitive information may be withheld while preserving
 
 - An audit policy MUST identify which content requires redaction and under what authority.
 - A redacted value MUST be distinguishable from a value that was absent originally.
-- A redacted representation MUST preserve event identity, ordering, event type, entity reference, and occurrence timestamp.
+- A redacted representation MUST preserve event identity, event type, entity reference, occurrence timestamp, and every ordering relationship explicitly recorded in logical history.
 - Redaction SHOULD preserve enough structural information to explain what category of content was removed.
 - Access-time masking MAY supplement redaction but MUST NOT be represented as mutation of the committed source event.
 - A redaction action affecting committed logical history MUST produce an Audit Event identifying that the redaction occurred.

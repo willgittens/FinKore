@@ -24,8 +24,6 @@
 
 **Change** — A description within an Audit Event of a difference between prior and resulting domain values. A Change may describe part of a Mutation but is not itself the Mutation.
 
-**Correction** — A new action or record that rectifies earlier information while preserving its history.
-
 **Currency** — A named unit in which a monetary amount is denominated.
 
 **Financial Entity** — A domain concept distinguished by stable identity and continuity over time whose lifecycle or values represent financially relevant activity.
@@ -35,8 +33,6 @@
 **Money** — An exact decimal amount paired with a currency.
 
 **Mutation** — A domain-recognized change to an entity's current data or state.
-
-**Reversal** — A new compensating action that offsets the effect of an earlier action without erasing it.
 
 **State** — A named lifecycle condition that determines currently permitted behavior.
 

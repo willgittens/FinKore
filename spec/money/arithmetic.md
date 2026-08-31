@@ -16,12 +16,13 @@ This document defines exact arithmetic on Money values.
 - Multiplication by an exact decimal scalar MUST multiply the amount by that scalar and preserve currency.
 - Division by a non-zero exact decimal scalar MUST divide the amount by that scalar and preserve currency.
 - Division by zero MUST fail with `FINFLOW_MONEY_DIVISION_BY_ZERO`.
+- When an arithmetic result can be represented exactly, the operation MUST preserve that exact decimal result and MUST NOT round it.
 - An operation that requires precision reduction MUST NOT choose a rounding rule implicitly; it MUST use an explicitly supplied or domain-declared [rounding](rounding.md) rule.
 - Arithmetic MUST NOT alter the observable value of any operand.
 
 ## Invariants
 
-An operation described as exact MUST NOT lose significant decimal digits. Arithmetic MUST NOT create a Money value with an absent or changed currency except through an explicit conversion operation.
+An operation described as exact MUST NOT lose significant decimal digits. Currency minor units MUST NOT be treated as an implicit calculation scale. Arithmetic MUST NOT create a Money value with an absent or changed currency except through an explicit conversion operation.
 
 ## Examples
 

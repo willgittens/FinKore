@@ -13,7 +13,7 @@ This domain defines approval requirements and decisions independently of any par
 ## Requirements
 
 - Approval behavior MUST be based on declared [Approval Requirements](requirements.md).
-- An [Approval Decision](decisions.md) MUST identify its Approval Requirement, outcome, Actor, and time.
+- An [Approval Decision](decisions.md) MUST identify its Approval Requirement, outcome, Actor, time, and association with the relevant subject state or facts.
 - An [Approval Chain](chains.md) MUST define how its Approval Requirements combine and MUST declare sequencing only when sequencing applies.
 - [Conditional Approval Requirements](conditions.md) MUST use explicit domain facts.
 
@@ -23,5 +23,5 @@ An Approval outcome MUST be derivable from the applicable Approval Requirements 
 
 ## Non-Goals
 
-This domain does not define RBAC, authentication, organizational directories, UI inboxes, or notification delivery.
+This domain does not define RBAC, authentication, organizational directories, UI inboxes, notification delivery, withdrawal, supersession, quorum, delegation, expiration, escalation, approval-definition migration, or complex dependency graphs.
 

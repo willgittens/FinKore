@@ -15,7 +15,6 @@ This document defines how a Financial Entity progresses through declared domain 
 - Current State MUST change only through a Successful Transition.
 - Audit requirements for lifecycle Transitions MUST be declared as specified by [Financial Entities](README.md).
 - A composing domain MUST define the domain consequences of each state.
-- Correction and reversal behavior MUST preserve prior domain history and MUST be explicitly defined before use.
 
 ## Invariants
 
@@ -31,7 +30,6 @@ DRAFT → SUBMITTED → APPROVED
 ## Invalid Examples
 
 - Assigning `APPROVED` directly when no permitted transition exists.
-- Erasing a completed lifecycle to perform a correction.
 
 ## Errors
 
@@ -40,4 +38,8 @@ Workflow failures use [Workflow Errors](../workflow/errors.md); entity-specific 
 ## Open Questions
 
 - How should imported entities with pre-existing lifecycle history establish their initial FinFlow state?
+
+## Non-Goals
+
+FinFlow Core Draft 0.1 does not define Correction, Reversal, Void, Cancellation, Supersession, or Adjustment behavior.
 

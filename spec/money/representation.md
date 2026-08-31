@@ -10,7 +10,7 @@ This document defines the information carried by a Money value.
 
 ## Terminology
 
-**Amount** is a conceptual, exact signed base-10 decimal quantity. **Scale** is the number of digits after its decimal point in a particular representation; it does not imply a currency-wide minor-unit rule.
+**Amount** is a conceptual, exact signed base-10 decimal quantity. **Scale** is the number of digits after its decimal point in a particular representation. A currency's **minor-unit scale** describes that currency, while **calculation scale** is selected for an operation; neither necessarily determines the other.
 
 ## Requirements
 
@@ -51,5 +51,5 @@ Invalid components MUST fail with an applicable code from [Money Errors](errors.
 
 ## Open Questions
 
-- Should a later revision define portable limits for precision, scale, or overflow behavior?
+- What portable precision, scale, and overflow limits, if any, should a later revision require of implementations?
 

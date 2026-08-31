@@ -28,11 +28,7 @@ This document defines initial portable workflow failure categories.
 
 A failed Workflow operation MUST leave current State unchanged.
 
-## Open Questions
-
-- Is a separate concurrency-conflict code needed at the domain level?
-
 ## Non-Goals
 
-This document does not define transport status codes or implementation-specific exception hierarchies.
+This document does not define transport status codes, implementation-specific exception hierarchies, or concurrency-conflict errors. FinFlow Core Draft 0.1 does not select a winner between concurrent Transition Requests.
 

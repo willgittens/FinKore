@@ -31,5 +31,5 @@ A Workflow instance MUST have exactly one current State, and that State MUST bel
 
 ## Non-Goals
 
-This domain does not define screens, queues, persistence, process engines, or actor authorization.
+This domain does not define screens, queues, persistence, process engines, or actor authorization. FinFlow Core Draft 0.1 also does not define optimistic locking, pessimistic locking, concurrent-transition conflict resolution, distributed coordination, database transaction isolation, Workflow definition versions, Workflow migrations, treatment of entities created under older definitions, or transition behavior after a definition changes.
 
