@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
@@ -12,14 +12,14 @@ This document defines domain conditions that determine whether an approval requi
 
 - A condition MUST be expressed in terms of identified domain facts.
 - Evaluation MUST produce an applicable or not-applicable result.
-- The facts and condition version used for evaluation SHOULD be retained for auditability.
+- The facts and condition version used for an effective evaluation SHOULD be retained as audit evidence.
 - A condition MUST NOT depend implicitly on presentation state or an unspecified authorization policy.
 - The result MUST be deterministic for the same condition and facts.
 - If required facts are absent, evaluation MUST fail or remain unresolved; it MUST NOT silently treat the requirement as not applicable.
 
 ## Invariants
 
-Only applicable requirements contribute to an approval chain's outcome.
+Only applicable Approval Requirements MUST contribute to an Approval Chain's outcome.
 
 ## Examples
 

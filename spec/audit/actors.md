@@ -2,26 +2,28 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
-This document defines attribution of domain events to people, systems, or other subjects.
+This document defines attribution of domain events to Actors. An Actor may be a human, service, scheduled process, system, integration, or another identified subject.
 
 ## Requirements
 
 - An actor reference MUST include a stable identifier and SHOULD include an actor type.
 - Actor identifiers MUST be treated as opaque.
 - Display names MAY be captured as historical metadata but MUST NOT replace stable identity.
-- If no actor can be identified, the event MUST represent that fact explicitly rather than invent an actor.
+- If an unknown Actor is represented, that representation MUST distinguish unknown attribution from a known Actor and MUST NOT invent an identity. [Audit Events](events.md) also permits omission when no Actor is known.
 - Delegation or acting-on-behalf-of relationships SHOULD preserve both the initiating and represented subjects when domain-relevant.
 - Actor data MUST follow applicable [redaction](redaction.md) rules.
 
 ## Invariants
 
-Later changes to an actor's profile MUST NOT silently change the identity recorded by a committed event.
+Later changes to an Actor's profile MUST NOT change the identity recorded by a committed Audit Event.
 
-## Examples
+## Example
+
+The following JSON is illustrative and non-normative; it does not prescribe serialized member names.
 
 ```json
 {

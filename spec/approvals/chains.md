@@ -2,31 +2,35 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
-This document defines how multiple approval requirements combine.
+This document defines how multiple Approval Requirements combine. The term Approval Chain does not by itself imply sequencing.
 
 ## Requirements
 
-- A chain MUST contain one or more declared requirements.
-- It MUST state whether requirements are sequential, parallel, or combined by an explicitly declared rule.
-- A sequential chain MUST NOT activate a later requirement before its predecessor is satisfied unless the chain declares otherwise.
-- A chain is approved only when every required applicable requirement is approved.
-- A chain is pending while at least one required applicable requirement remains pending and no effective rejection determines the outcome.
-- Rejection behavior MUST be explicit; by default, any effective rejection makes the chain rejected.
+- An Approval Chain MUST contain one or more declared Approval Requirements.
+- It MUST declare whether its Approval Requirements are sequential, unordered, or combined by another explicitly defined rule.
+- An unordered chain MUST NOT be interpreted as sequential.
+- A sequential chain MUST NOT activate a later Approval Requirement before its predecessor is satisfied.
+- An Approval Chain using the all-required rule is `APPROVED` only when every applicable Approval Requirement is approved.
+- Such a chain is `PENDING` while at least one applicable Approval Requirement remains pending and no effective rejection determines the outcome.
+- Every Approval Chain definition MUST state how an effective rejection determines its outcome.
 - Evaluation MUST be deterministic from the chain definition, applicable requirements, and effective decisions.
 
 ## Invariants
 
-The chain outcome MUST NOT contradict the outcomes of its effective required decisions.
+An Approval Chain outcome MUST be consistent with its declared combination rule and effective required Approval Decisions.
 
 ## Examples
 
 ```text
 Manager approval → Finance approval
+Manager approval AND Finance approval
 ```
+
+The arrow denotes a sequential chain. `AND` denotes an unordered all-required chain; it does not imply that either Approval Requirement occurs first.
 
 ## Invalid Examples
 
@@ -35,6 +39,6 @@ Manager approval → Finance approval
 
 ## Open Questions
 
-- Should quorum and any-of rules be standardized in the first conformance suite?
+- Should quorum, any-of, and other non-all-required combination rules be standardized in the first conformance suite?
 - How should a chain react when its definition changes mid-process?
 

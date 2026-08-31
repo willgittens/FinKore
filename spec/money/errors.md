@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
@@ -10,7 +10,7 @@ This document defines initial portable failure categories for Money behavior.
 
 ## Requirements
 
-Money failures MUST be predictable and MUST NOT return a plausible monetary result when a required invariant cannot be satisfied. Implementations MAY provide additional structured details in accordance with [conventions](../conventions.md).
+When a condition in the table occurs, the operation MUST report the listed code and MUST NOT return a monetary result. Implementations MAY provide additional structured details in accordance with [conventions](../conventions.md).
 
 ## Error Codes
 
@@ -25,11 +25,7 @@ Money failures MUST be predictable and MUST NOT return a plausible monetary resu
 
 ## Invariants
 
-Failure MUST leave all Money operands unchanged.
-
-## Open Questions
-
-- Should overflow be portable if implementations may support arbitrary precision?
+A failed operation MUST leave the observable value of every Money operand unchanged.
 
 ## Non-Goals
 

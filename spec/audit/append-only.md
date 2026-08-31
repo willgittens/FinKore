@@ -2,24 +2,23 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
-This document defines preservation rules for committed audit events.
+This document defines logical preservation rules for committed Audit Events, independently of physical storage technology.
 
 ## Requirements
 
-- Once committed, an audit event MUST NOT be silently rewritten, reordered, or removed.
-- A correction MUST be represented by a new event that references or otherwise identifies the corrected occurrence where possible.
+- Within logical audit history, a committed Audit Event MUST NOT be replaced, modified, reordered, or removed. A policy-authorized redacted representation follows [Audit Redaction](redaction.md) and MUST leave evidence of the redaction.
+- A correction MUST be represented by a new Audit Event. When the corrected occurrence is identifiable, the correction event MUST reference or otherwise identify it.
 - A reversal MUST be represented by a new compensating event and MUST NOT erase the reversed event.
-- Event ordering MUST be stable within an audit history.
-- Duplicate submission of the same event identity MUST NOT create contradictory copies.
+- Submission of an already committed Audit Event identity MUST fail with `FINFLOW_AUDIT_DUPLICATE_EVENT` and MUST NOT create another committed event.
 - Any exceptional transformation required by law or policy MUST remain detectable through compliant [redaction](redaction.md) evidence.
 
 ## Invariants
 
-Reading history later MUST preserve the existence, identity, and relative order of all non-redacted committed events.
+Reading logical history later MUST preserve the existence, identity, and relative order of every committed Audit Event. A redacted representation MUST preserve the event-level meaning required by [Audit Redaction](redaction.md).
 
 ## Invalid Examples
 

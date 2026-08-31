@@ -2,11 +2,11 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
-This document defines when financial entity data may change and how immutable lifecycle states constrain mutation.
+This document defines when Financial Entity data may change and how immutable lifecycle States constrain Mutation.
 
 ## Terminology
 
@@ -16,15 +16,15 @@ An **immutable lifecycle state** is a state in which specified entity data canno
 
 - A composing domain MUST declare which fields may change in each lifecycle state.
 - A mutation MUST be rejected when the current state makes any targeted field immutable.
-- A successful mutation SHOULD create an audit event describing financially relevant changes.
+- Audit requirements for Mutations MUST be declared as specified by [Financial Entities](README.md).
 - A rejected mutation MUST leave all entity data and state unchanged.
 - Entering an immutable state MUST NOT erase or detach prior audit history.
 - Corrections and reversals MUST be explicit domain operations and MUST preserve the original action or value in history.
-- Metadata MAY remain mutable in an otherwise immutable state only when the composing domain identifies it and preserves relevant auditability.
+- Metadata MAY remain mutable in an otherwise immutable State only when the composing domain identifies it and applies the Audit Event requirements declared under [Financial Entities](README.md).
 
 ## Invariants
 
-Immutable fields do not change through ordinary mutation while their immutability rule applies.
+A field declared immutable in the current State MUST NOT change through an ordinary Mutation.
 
 ## Invalid Examples
 

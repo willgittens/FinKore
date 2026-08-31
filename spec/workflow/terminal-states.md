@@ -2,22 +2,23 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
-This document defines states after which ordinary workflow progression ends.
+This document defines States with no outgoing Transitions in their Workflow definition.
 
 ## Requirements
 
-- A workflow definition MUST explicitly identify each terminal state.
-- A terminal state MUST NOT have ordinary outgoing transitions.
-- A request to leave a terminal state MUST fail unless a composing specification declares a distinct correction or reversal mechanism.
-- Terminal status MUST be determined from the workflow definition, not inferred from naming.
+- A Workflow definition MUST explicitly identify each terminal State.
+- A terminal State MUST NOT have an outgoing Transition in that Workflow definition.
+- A Transition Request from a terminal State MUST fail with `FINFLOW_WORKFLOW_TERMINAL_STATE`.
+- A correction or reversal, if a composing specification defines one, is a distinct domain operation and MUST NOT be represented as an outgoing Transition from a terminal State in that Workflow.
+- Terminal status MUST be determined from the Workflow definition, not inferred from naming.
 
 ## Invariants
 
-Entering a terminal state ends ordinary transition processing for that workflow instance.
+Once a Workflow instance enters a terminal State, no further Transition in that Workflow definition MUST succeed.
 
 ## Examples
 

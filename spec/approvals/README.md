@@ -2,24 +2,24 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
 This domain defines approval requirements and decisions independently of any particular authorization system.
 
-Authorization answers whether an actor is permitted to act. Approval records whether a required actor, role, or subject has made a domain decision. A system MUST NOT treat these concepts as interchangeable.
+[Authorization](../glossary.md) answers, “May this Actor perform this operation?” Approval answers, “Has the required business decision been granted?” Authorization to perform an operation MUST NOT be treated as evidence that an Approval Requirement is satisfied.
 
 ## Requirements
 
-- Approval behavior MUST be based on declared [requirements](requirements.md).
-- A [decision](decisions.md) MUST identify its requirement, outcome, actor, and time.
-- An [approval chain](chains.md) MUST define how its requirements combine and, when relevant, their order.
-- [Conditional requirements](conditions.md) MUST use explicit domain facts.
+- Approval behavior MUST be based on declared [Approval Requirements](requirements.md).
+- An [Approval Decision](decisions.md) MUST identify its Approval Requirement, outcome, Actor, and time.
+- An [Approval Chain](chains.md) MUST define how its Approval Requirements combine and MUST declare sequencing only when sequencing applies.
+- [Conditional Approval Requirements](conditions.md) MUST use explicit domain facts.
 
 ## Invariants
 
-An approval outcome MUST be derivable from the applicable requirements and recorded decisions.
+An Approval outcome MUST be derivable from the applicable Approval Requirements and effective Approval Decisions.
 
 ## Non-Goals
 

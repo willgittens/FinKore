@@ -2,24 +2,23 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
-This document defines domain conditions that control whether a declared transition may occur.
+This document defines Transition Guards: domain predicates that control whether a declared Transition may occur.
 
 ## Requirements
 
-- A guard MUST evaluate against the facts provided for the transition request.
-- Every applicable guard MUST pass before the transition succeeds.
-- Guard evaluation MUST NOT change workflow state.
-- A guard result MUST be deterministic for the same declared facts, or its dependence on external facts MUST be explicit.
-- A failed guard SHOULD identify a portable reason without exposing sensitive inputs.
+- A Transition Guard MUST evaluate against the facts provided for the Transition Request.
+- Every applicable Transition Guard MUST pass before the Transition succeeds.
+- Transition Guard evaluation MUST NOT change Workflow State or other domain data.
+- A Transition Guard result MUST be deterministic for the same declared facts, or the guard definition MUST identify its dependence on external facts.
 - Authorization MAY be an input to a guard, but a guard MUST NOT assume a particular authorization model.
 
 ## Invariants
 
-Failure of any required guard leaves current state unchanged. Guard order MUST NOT change the logical result when all guards are evaluated against the same facts.
+Failure of any required Transition Guard MUST leave current State unchanged. Guard order MUST NOT change the logical result when all guards are evaluated against the same facts.
 
 ## Examples
 
@@ -35,7 +34,7 @@ Guard: required approvals are satisfied
 
 ## Errors
 
-A rejected guard MUST report `FINFLOW_WORKFLOW_GUARD_REJECTED` or a more specific code declared by the composing domain.
+A Transition Guard rejection MUST report `FINFLOW_WORKFLOW_GUARD_REJECTED`. A composing domain MAY provide additional context or a secondary domain code without replacing this failure category.
 
 ## Open Questions
 

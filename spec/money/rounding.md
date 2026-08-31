@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
@@ -18,8 +18,8 @@ This document governs deliberate precision reduction of monetary amounts.
 - Rounding MUST be deterministic for the same amount, target scale, and mode.
 - An implementation MUST NOT silently substitute a currency's customary scale for an explicit target scale.
 - A domain specification MAY declare a rounding policy; that declaration MUST identify both scale derivation and mode.
-- If no applicable policy exists when precision reduction is required, the operation MUST fail.
-- Rounding SHOULD occur only at a domain-defined boundary, not at arbitrary intermediate steps.
+- If no applicable policy exists when precision reduction is required, the operation MUST fail with `FINFLOW_MONEY_ROUNDING_REQUIRED`.
+Rounding at explicit domain boundaries avoids unintended cumulative precision loss.
 
 ## Invariants
 
@@ -31,7 +31,7 @@ Rounding MUST preserve currency. If no digits are discarded, rounding MUST prese
 round(1.235 EUR, scale 2, HALF_UP) = 1.24 EUR
 ```
 
-Mode names in examples are descriptive; a later revision may standardize a portable mode catalog.
+The example is non-normative. Mode names are descriptive; no portable rounding-mode catalog is defined in this draft.
 
 ## Invalid Examples
 

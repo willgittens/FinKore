@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
@@ -10,27 +10,29 @@ This document defines validation of financial entity state and proposed domain o
 
 ## Terminology
 
-**Structural validation** checks required shape and value forms. **Domain validation** checks business invariants and state-dependent rules.
+**Structural Validation** checks required shape and value forms. **Business Validation** checks business invariants and State-dependent rules.
 
 ## Requirements
 
-- An entity MUST satisfy all structural and domain rules applicable to its current state.
-- A proposed mutation or transition MUST be validated before any resulting change becomes observable.
+- A Financial Entity MUST satisfy all Structural Validation and Business Validation rules applicable to its current State.
+- A proposed Mutation or Transition MUST be validated before any resulting Change becomes observable.
 - Validation MUST evaluate the complete proposed domain result when rules span multiple fields.
-- Validation failure MUST identify `FINFLOW_VALIDATION_FAILED` and SHOULD provide one or more stable, structured violation identifiers.
+- Failure of a Structural Validation or Business Validation rule defined for the Financial Entity MUST identify `FINFLOW_ENTITY_VALIDATION_FAILED` and SHOULD provide one or more stable, structured violation identifiers. When an independently specified Money, Workflow, Approval, or Audit operation is the primary failure, its domain-specific code MUST be retained instead.
 - Validation details SHOULD identify relevant domain paths and MUST NOT expose sensitive values unnecessarily.
-- Validation MUST NOT mutate the entity.
+- Validation evaluation MUST NOT alter the observable Financial Entity.
 - A composing domain SHOULD distinguish rules required in every state from rules required only for a transition or target state.
 
 ## Invariants
 
-A successful operation leaves the entity valid for its resulting state. A failed operation leaves the entity unchanged.
+A successful operation MUST leave the Financial Entity valid for its resulting State. A failed operation MUST leave the Financial Entity unchanged.
 
-## Examples
+## Example
+
+The following JSON is illustrative and non-normative.
 
 ```json
 {
-  "code": "FINFLOW_VALIDATION_FAILED",
+  "code": "FINFLOW_ENTITY_VALIDATION_FAILED",
   "violations": [
     { "rule": "AMOUNT_REQUIRED", "path": "amount" }
   ]

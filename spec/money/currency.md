@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
@@ -14,7 +14,7 @@ This document defines currency identity and compatibility for Money values.
 - ISO 4217 alphabetic codes SHOULD be used where applicable and MUST be uppercase when used.
 - Private identifiers MAY be used when documented and MUST NOT masquerade as a different ISO 4217 currency.
 - Two Money values are currency-compatible only when their currency identifiers denote the same currency under the same identifier scheme.
-- Operations between incompatible currencies MUST fail unless a separate, explicit conversion operation supplies the conversion terms.
+- Operations that require currency compatibility MUST fail with `FINFLOW_MONEY_CURRENCY_MISMATCH` when currencies are incompatible. Conversion is a separate explicit operation outside this specification.
 - Currency metadata MUST NOT be treated as an exchange rate.
 
 ## Invariants
@@ -32,11 +32,11 @@ A Money operation other than explicit conversion MUST NOT change currency.
 
 ## Errors
 
-An incompatible operation MUST report `FINFLOW_MONEY_CURRENCY_MISMATCH`. An invalid identifier MUST report `FINFLOW_MONEY_INVALID_CURRENCY`.
+The applicable failure conditions are defined in [Money Errors](errors.md).
 
 ## Open Questions
 
-- How should private and non-fiat currency identifier schemes be registered?
+- What identifier scheme or namespace rules are needed for unambiguous private and non-fiat currencies?
 
 ## Non-Goals
 

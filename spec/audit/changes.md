@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
@@ -10,23 +10,25 @@ This document defines how an audit event may describe domain-relevant field chan
 
 ## Requirements
 
-- A change MUST identify the changed field or domain path.
-- A change SHOULD record prior and resulting values when both may be safely retained.
-- A change MUST distinguish an absent value from an explicit null value when the underlying domain distinguishes them.
-- Values MUST use stable domain representations, not localized display strings.
-- A change set MUST NOT claim a field changed when its domain value remained equal.
+- A Change MUST identify the changed field or domain path.
+- A Change SHOULD record prior and resulting values when both may be safely retained.
+- A Change MUST distinguish an absent value from an explicit null value when the underlying domain distinguishes them.
+- Values MUST use stable domain representations, not localized display strings. Changes to Money values MUST preserve the semantics defined by [Money](../money/README.md).
+- A Change set MUST NOT claim a field changed when its domain value remained equal.
 - Sensitive values MUST follow [Redaction](redaction.md).
 - An event MAY omit field changes when its event type fully expresses the occurrence or disclosure is prohibited.
 
 ## Invariants
 
-Recorded changes MUST be consistent with the event's declared domain meaning.
+Recorded Changes MUST be consistent with the Audit Event's declared domain meaning.
 
-## Examples
+## Example
+
+The following JSON is illustrative and non-normative; it does not prescribe serialized member names or a domain-path syntax.
 
 ```json
 {
-  "field": "status",
+  "field": "state",
   "before": "DRAFT",
   "after": "SUBMITTED"
 }

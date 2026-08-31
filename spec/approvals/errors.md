@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
@@ -20,13 +20,13 @@ This document defines initial portable approval failure categories.
 
 ## Requirements
 
-- A failed decision MUST NOT change the requirement or chain outcome.
+- A failed Approval Decision MUST NOT change an Approval Requirement or Approval Chain outcome.
 - Error details MAY identify the affected requirement, but MUST NOT disclose restricted eligibility or decision data.
 - Missing approval MUST be distinguishable from explicit rejection.
 
 ## Invariants
 
-Failure leaves existing committed decisions unchanged.
+A failed Approval operation MUST leave existing committed Approval Decisions unchanged.
 
 ## Open Questions
 

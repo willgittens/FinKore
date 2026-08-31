@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
@@ -14,7 +14,7 @@ This document defines initial portable audit failure categories.
 | --- | --- |
 | `FINFLOW_AUDIT_INVALID_EVENT` | Required event content is missing, malformed, or inconsistent. |
 | `FINFLOW_AUDIT_DUPLICATE_EVENT` | The event identity has already been committed. |
-| `FINFLOW_AUDIT_APPEND_ONLY_VIOLATION` | An operation would rewrite, reorder, or remove committed history. |
+| `FINFLOW_AUDIT_APPEND_ONLY_VIOLATION` | An operation would replace, modify, reorder, or remove committed logical history outside the redaction rules. |
 | `FINFLOW_AUDIT_REDACTION_INVALID` | A redaction violates policy or destroys required event meaning. |
 | `FINFLOW_AUDIT_ACTOR_INVALID` | Actor attribution is malformed or inconsistent. |
 
@@ -26,7 +26,7 @@ This document defines initial portable audit failure categories.
 
 ## Invariants
 
-A failed append leaves committed history unchanged.
+A failed append MUST leave committed logical history unchanged.
 
 ## Open Questions
 

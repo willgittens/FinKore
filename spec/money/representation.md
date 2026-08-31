@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
@@ -10,7 +10,7 @@ This document defines the information carried by a Money value.
 
 ## Terminology
 
-**Amount** is an exact signed base-10 decimal quantity. **Scale** is the number of digits after its decimal point.
+**Amount** is a conceptual, exact signed base-10 decimal quantity. **Scale** is the number of digits after its decimal point in a particular representation; it does not imply a currency-wide minor-unit rule.
 
 ## Requirements
 
@@ -18,13 +18,17 @@ This document defines the information carried by a Money value.
 - The amount MUST be finite and exactly representable in base 10.
 - An amount MUST NOT be interpreted without its currency.
 - Sign MUST carry ordinary numeric meaning; domain-specific restrictions on negative or zero amounts belong to the consuming specification.
-- An implementation MAY preserve input scale, but numerical equality MUST NOT depend solely on differing insignificant trailing zeros.
+- Numerical equality MUST NOT depend on differing insignificant trailing zeros.
+- An implementation MAY use any internal representation that preserves these observable semantics; this document does not require storage as a decimal string or at a currency's customary minor-unit scale.
+- The portable decimal-string encoding is defined separately by [Money Serialization](serialization.md).
 
 ## Invariants
 
 The amount and currency form one value and MUST remain associated through every operation.
 
-## Examples
+## Example
+
+The following JSON is illustrative and non-normative; the normative interchange form is defined by [Money Serialization](serialization.md).
 
 ```json
 {
@@ -47,5 +51,5 @@ Invalid components MUST fail with an applicable code from [Money Errors](errors.
 
 ## Open Questions
 
-- Should a later revision define limits on precision or scale for portable conformance?
+- Should a later revision define portable limits for precision, scale, or overflow behavior?
 

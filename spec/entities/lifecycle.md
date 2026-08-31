@@ -2,24 +2,24 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
-This document defines how a financial entity progresses through declared domain states.
+This document defines how a Financial Entity progresses through declared domain States.
 
 ## Requirements
 
-- A financial entity MUST declare or reference a [workflow](../workflow/README.md).
-- A new entity MUST begin in that workflow's initial state.
-- Current state MUST change only through a valid workflow transition.
-- A lifecycle transition SHOULD create an [audit event](../audit/events.md).
+- A Financial Entity MUST declare or reference a [Workflow](../workflow/README.md).
+- A newly created Financial Entity MUST begin in that Workflow's initial State. Import with existing history follows the separate rule in [Workflow States](../workflow/states.md).
+- Current State MUST change only through a Successful Transition.
+- Audit requirements for lifecycle Transitions MUST be declared as specified by [Financial Entities](README.md).
 - A composing domain MUST define the domain consequences of each state.
 - Correction and reversal behavior MUST preserve prior domain history and MUST be explicitly defined before use.
 
 ## Invariants
 
-The entity has exactly one current lifecycle state. A failed transition leaves both current state and entity data unchanged.
+A Financial Entity MUST have exactly one current lifecycle State. A Rejected Transition MUST leave both current State and entity data unchanged.
 
 ## Examples
 

@@ -2,13 +2,13 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
 FinFlow is a specification-first, language-agnostic standard for recurring financial domain behavior. The specification is the source of truth; implementations exist to realize and verify that behavior.
 
-Implementations MAY expose different APIs and use different languages, frameworks, or persistence models. Conformance concerns observable behavior and invariants, not syntax or internal structure. Financial rules SHOULD survive migrations between those implementation choices.
+Implementations MAY expose different APIs and use different languages, frameworks, or persistence models. Conformance concerns observable behavior and invariants, not syntax or internal structure. The specification is intended to preserve the same financial semantics across those implementation choices.
 
 The development flow is:
 
@@ -26,7 +26,7 @@ Reference Implementation
 Other Implementations
 ```
 
-Specifications SHOULD remain small and composable. A new concept MUST begin with a real domain problem and MUST NOT begin solely with a proposed class, API, or framework abstraction.
+Specifications are intended to remain small and composable. New concepts should address domain problems rather than proposed classes, APIs, or framework abstractions.
 
 ## Organization
 
@@ -38,7 +38,7 @@ Specifications SHOULD remain small and composable. A new concept MUST begin with
 - [Approvals](approvals/README.md) defines approval requirements and decisions.
 - [Entities](entities/README.md) defines the common behavior of financial entities.
 
-Later domain specifications MAY compose these areas. A domain-specific specification MUST state any refinement or exception explicitly and MUST preserve all unmodified underlying invariants.
+Later domain specifications MAY compose these areas. A domain-specific specification that refines or makes an exception to an underlying rule MUST identify that change explicitly; all other applicable underlying requirements remain in force.
 
 ## Conformance
 

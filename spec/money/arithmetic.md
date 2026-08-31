@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
@@ -13,14 +13,15 @@ This document defines exact arithmetic on Money values.
 - Addition and subtraction MUST require compatible currencies.
 - Addition and subtraction MUST preserve the operands' currency.
 - Negation MUST preserve currency and MUST reverse the amount's sign exactly.
-- Multiplication or division by a scalar MUST treat the scalar as an exact decimal value.
-- Division by zero MUST fail predictably.
+- Multiplication by an exact decimal scalar MUST multiply the amount by that scalar and preserve currency.
+- Division by a non-zero exact decimal scalar MUST divide the amount by that scalar and preserve currency.
+- Division by zero MUST fail with `FINFLOW_MONEY_DIVISION_BY_ZERO`.
 - An operation that requires precision reduction MUST NOT choose a rounding rule implicitly; it MUST use an explicitly supplied or domain-declared [rounding](rounding.md) rule.
-- Arithmetic SHOULD leave all operands unchanged.
+- Arithmetic MUST NOT alter the observable value of any operand.
 
 ## Invariants
 
-Exact operations MUST NOT lose significant decimal digits. Arithmetic MUST NOT create a Money value with an absent or changed currency except through an explicit conversion operation.
+An operation described as exact MUST NOT lose significant decimal digits. Arithmetic MUST NOT create a Money value with an absent or changed currency except through an explicit conversion operation.
 
 ## Examples
 
@@ -37,9 +38,9 @@ Exact operations MUST NOT lose significant decimal digits. Arithmetic MUST NOT c
 
 ## Errors
 
-Currency mismatch and invalid arithmetic MUST use codes defined in [Money Errors](errors.md).
+The applicable failure conditions and codes are defined in [Money Errors](errors.md).
 
 ## Non-Goals
 
-This document does not define allocation, taxation, interest, exchange conversion, or aggregation policies.
+This document does not define Money-by-Money multiplication or division, allocation, taxation, interest, exchange conversion, or aggregation policies.
 

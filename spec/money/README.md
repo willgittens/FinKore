@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
@@ -11,8 +11,8 @@ This domain defines exact monetary values and their fundamental behavior. A Mone
 ## Requirements
 
 - Money MUST contain an amount and a currency.
-- Money operations SHOULD produce new values without changing their operands.
-- Monetary behavior MUST use exact base-10 semantics and MUST NOT rely on unsafe binary floating-point semantics.
+- Operations on Money values MUST NOT alter the observable amount or currency of their operands.
+- A Money operation's observable result MUST equal the result of exact base-10 arithmetic, except when an explicit rounding rule applies.
 - Cross-currency behavior MUST follow [currency compatibility](currency.md).
 - Any loss of precision MUST follow an explicit [rounding](rounding.md) rule.
 
@@ -28,7 +28,7 @@ This domain defines exact monetary values and their fundamental behavior. A Mone
 
 ## Invariants
 
-A Money value always has exactly one valid amount and one valid currency. Its amount is denominated only in that currency.
+A Money value MUST have exactly one valid amount and one valid currency. Its amount MUST be denominated only in that currency.
 
 ## Non-Goals
 

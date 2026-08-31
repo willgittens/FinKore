@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
@@ -10,20 +10,21 @@ This document defines declared changes between workflow states.
 
 ## Terminology
 
-**Source state** is the required current state. **Target state** is the state after a successful transition.
+**Source State** is the required current State. **Target State** is the State after success. A **Transition Request** asks to perform a declared Transition. A **Successful Transition** changes current State after validation; a **Rejected Transition** does not.
 
 ## Requirements
 
-- A transition MUST identify a declared source state and target state.
-- A requested transition MUST be allowed from the instance's current state.
-- All applicable [guards](guards.md) MUST pass before the state changes.
-- A successful transition MUST change the current state to its target exactly once.
-- A failed transition MUST leave current state unchanged.
-- Transition evaluation SHOULD produce enough domain context for an audit event without prescribing audit storage.
+- A Transition MUST identify one declared Source State and one declared Target State.
+- A Transition is directed; declaring one direction MUST NOT declare or permit its reverse.
+- A Transition Request MUST match a Transition whose Source State is the instance's current State.
+- All applicable [Transition Guards](guards.md) MUST pass before the State changes.
+- A Successful Transition MUST change the current State to its Target State exactly once.
+- A Rejected Transition MUST leave current State unchanged.
+- A composing domain should identify the context needed to describe a Successful Transition in an [Audit Event](../audit/events.md).
 
 ## Invariants
 
-An undeclared source-to-target transition MUST NOT succeed. Validation and state change MUST behave as one domain operation from the observer's perspective.
+An undeclared Source-State-to-Target-State Transition MUST NOT succeed. Validation and State change MUST behave as one domain operation from the observer's perspective.
 
 ## Examples
 
@@ -35,7 +36,7 @@ Requesting `DRAFT → APPROVED` when only `DRAFT → SUBMITTED` is declared MUST
 
 ## Errors
 
-An unavailable transition MUST report `FINFLOW_WORKFLOW_INVALID_TRANSITION`. A failed guard MUST follow [Guards](guards.md).
+Except for a request from a terminal State, an undeclared Transition Request MUST report `FINFLOW_WORKFLOW_INVALID_TRANSITION`. A request from a terminal State follows [Terminal States](terminal-states.md), and a failed Transition Guard follows [Guards](guards.md).
 
 ## Open Questions
 

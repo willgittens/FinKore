@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
@@ -10,10 +10,10 @@ This domain defines lifecycle behavior through declared [states](states.md), [tr
 
 ## Requirements
 
-- A workflow MUST declare its states and exactly one initial state.
-- Every permitted state change MUST be declared as a transition.
-- A transition MUST be validated before it changes current state.
-- An undeclared or guard-rejected transition MUST fail predictably.
+- A Workflow MUST declare its States and exactly one initial State so creation of a new instance has one deterministic result.
+- Every permitted State change MUST be declared as a directed Transition. Declaring `A → B` MUST NOT permit `B → A` unless that reverse Transition is also declared.
+- A Transition Request MUST be validated before it changes current State.
+- A Transition Request from a terminal State MUST fail with `FINFLOW_WORKFLOW_TERMINAL_STATE`. Otherwise, an undeclared Transition Request MUST fail with `FINFLOW_WORKFLOW_INVALID_TRANSITION`, and a request rejected by a Transition Guard MUST fail with `FINFLOW_WORKFLOW_GUARD_REJECTED`.
 
 ## Example
 
@@ -27,7 +27,7 @@ SUBMITTED
 
 ## Invariants
 
-At any point, a workflow instance has exactly one current state from its workflow definition.
+A Workflow instance MUST have exactly one current State, and that State MUST belong to its Workflow definition.
 
 ## Non-Goals
 

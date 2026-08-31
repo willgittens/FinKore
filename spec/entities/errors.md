@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft.
+**Draft**
 
 ## Purpose
 
@@ -16,18 +16,18 @@ This document defines initial portable entity failure categories.
 | `FINFLOW_ENTITY_IMMUTABLE` | A requested mutation targets data immutable in the current state. |
 | `FINFLOW_ENTITY_INVALID_MUTATION` | A requested change is not a recognized or permitted domain mutation. |
 | `FINFLOW_ENTITY_STATE_CONFLICT` | The operation's expected state does not match current state. |
-| `FINFLOW_VALIDATION_FAILED` | One or more structural or domain validation rules failed. |
+| `FINFLOW_ENTITY_VALIDATION_FAILED` | One or more Structural Validation or Business Validation rules failed. |
 
 ## Requirements
 
-- An entity failure MUST leave identity, current state, and entity data unchanged.
+- A Financial Entity failure MUST leave identity, current State, and entity data unchanged.
 - Validation failures SHOULD include stable violation identifiers.
 - Implementations MAY attach safe diagnostic context without changing portable code meaning.
-- Workflow, Money, Approval, or Audit failures SHOULD retain their more specific domain code when that code explains the primary failure.
+- A Workflow, Money, Approval, or Audit failure MUST retain its domain-specific code when that condition is the primary failure; it MUST NOT be replaced by `FINFLOW_ENTITY_VALIDATION_FAILED`.
 
 ## Invariants
 
-No failed entity operation produces a partially valid entity.
+A failed Financial Entity operation MUST NOT produce a partially valid Financial Entity.
 
 ## Open Questions
 
