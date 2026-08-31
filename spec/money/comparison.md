@@ -1,0 +1,41 @@
+# Money Comparison
+
+## Status
+
+Draft.
+
+## Purpose
+
+This document defines equality and ordering of Money values.
+
+## Requirements
+
+- Numeric equality MUST compare exact decimal amounts and compatible currencies.
+- Insignificant trailing zeros MUST NOT make numerically equal Money values unequal.
+- Ordering MUST be defined only for compatible currencies.
+- Comparing order across incompatible currencies MUST fail predictably unless an explicit conversion has occurred.
+- Implementations MAY offer representation equality separately, provided it is clearly distinguished from numeric equality.
+
+## Invariants
+
+For compatible currencies, comparison MUST be reflexive and consistent with exact decimal arithmetic. Currency compatibility MUST be evaluated consistently with [Currency](currency.md).
+
+## Examples
+
+```text
+10.0 EUR equals 10.00 EUR
+9.99 EUR is less than 10.00 EUR
+```
+
+## Invalid Examples
+
+Ordering `10 EUR` and `10 USD` as equal because their amounts have the same digits violates this specification.
+
+## Errors
+
+An incompatible comparison MUST report `FINFLOW_MONEY_CURRENCY_MISMATCH`.
+
+## Open Questions
+
+- Should equality of private currency identifiers require an explicitly declared namespace?
+

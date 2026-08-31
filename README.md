@@ -2,17 +2,21 @@
 
 > **CRUD is easy. Financial CRUD isn't.**
 
-FinFlow is an open-source TypeScript toolkit for building safer and more predictable financial workflows.
+FinFlow is an open specification for building predictable, auditable, and portable financial domain logic.
 
-It provides reusable primitives for the parts that usually become messy in financial applications: money handling, state transitions, approval chains, validation, audit trails, and immutable business events.
+It defines common financial primitives, behaviors, schemas, error codes, and conformance rules that can be implemented consistently across different programming languages and runtime environments.
 
-Instead of rebuilding these rules in every invoice, expense, payment, procurement, or accounting module, FinFlow gives you a consistent foundation.
+FinFlow is not tied to TypeScript, Java, Node.js, React, Spring, or any specific framework.
+
+The specification is the source of truth.
+
+Language implementations follow it.
 
 ---
 
-## Why FinFlow?
+## What is FinFlow?
 
-A basic CRUD application is simple.
+Most business applications start with CRUD.
 
 Create a record.
 
@@ -22,525 +26,923 @@ Update it.
 
 Delete it.
 
-Financial software rarely stays that simple.
+Financial applications rarely stay that simple.
 
-Soon, the requirements start looking like this:
+Soon, requirements start looking like this:
 
-* An approved expense cannot be edited.
-* An invoice above €10,000 requires Finance approval.
-* A posted invoice cannot be deleted.
-* Every important field change must be auditable.
 * Monetary values must use predictable decimal arithmetic.
-* Status transitions must follow strict business rules.
-* Sensitive data should not appear in audit logs.
-* Corrections should create new events instead of rewriting history.
+* An approved expense cannot be edited.
+* An invoice above a certain amount requires additional approval.
+* Posted financial records cannot simply be deleted.
+* Every relevant modification must be auditable.
+* Status transitions must follow strict lifecycle rules.
+* Sensitive information must be redacted from audit records.
+* Corrections should preserve history instead of rewriting it.
+* Different services must interpret financial events consistently.
 
-At that point, CRUD becomes business infrastructure.
+These are not framework problems.
 
-FinFlow exists to make that infrastructure reusable.
+They are domain problems.
 
----
-
-## Goals
-
-FinFlow aims to provide small, composable building blocks for financial software.
-
-The project focuses on:
-
-* predictable financial domain logic;
-* framework-independent APIs;
-* auditability by default;
-* explicit business rules;
-* strong TypeScript support;
-* portability between front-end and back-end environments;
-* incremental adoption in both new and legacy applications.
-
-FinFlow does **not** aim to become an ERP, accounting platform, or full application framework.
-
-Use the pieces you need.
+FinFlow exists to define these behaviors once.
 
 ---
 
-## Core Concepts
+# FinFlow is a Specification
 
-### Money
+The core of FinFlow is not a package.
 
-Avoid floating-point surprises and make currency explicit.
+It is a specification.
 
-```ts
-import { money } from '@finflow/core'
-
-const subtotal = money('1299.90', 'EUR')
-const tax = money('246.98', 'EUR')
-
-const total = subtotal.add(tax)
-
-console.log(total.toString())
-// 1546.88 EUR
+```text
+                    FinFlow
+                       │
+          ┌────────────┴────────────┐
+          │                         │
+     Specification             Conformance
+          │                         │
+   Rules / Schemas             Test vectors
+          │                         │
+     ┌────┼─────┐                   │
+     │    │     │                   │
+     ▼    ▼     ▼                   │
+   TS/JS Java  Future ◄─────────────┘
 ```
 
-Operations involving incompatible currencies should fail explicitly.
+The specification defines:
+
+* domain concepts;
+* required behaviors;
+* serialization formats;
+* validation rules;
+* error codes;
+* lifecycle semantics;
+* audit semantics;
+* conformance expectations.
+
+Each implementation can expose an API that feels natural in its language.
+
+The behavior, however, must remain consistent.
+
+---
+
+# Example
+
+The FinFlow specification may define a rule such as:
+
+```text
+Money.add
+
+1. Both monetary values MUST use the same currency.
+2. Arithmetic MUST use decimal-safe semantics.
+3. The operation MUST NOT mutate either operand.
+4. A currency mismatch MUST produce
+   FINFLOW_MONEY_CURRENCY_MISMATCH.
+```
+
+A TypeScript implementation might expose:
 
 ```ts
-money('10', 'EUR').add(
-  money('10', 'USD')
-)
+const total = money('10.20', 'EUR')
+  .add(money('5.30', 'EUR'))
+```
 
-// CurrencyMismatchError
+A Java implementation might expose:
+
+```java
+Money total = Money.of("10.20", "EUR")
+    .add(Money.of("5.30", "EUR"));
+```
+
+The syntax is different.
+
+The behavior is the same.
+
+That is FinFlow.
+
+---
+
+# Why a Specification?
+
+Financial applications are frequently distributed across multiple technologies.
+
+A single product may contain:
+
+```text
+React frontend
+      ↓
+Node.js API
+      ↓
+Java services
+      ↓
+Kafka
+      ↓
+Python reconciliation jobs
+```
+
+Without a shared domain definition, each service may implement concepts such as money, approvals, lifecycle transitions, or audit history differently.
+
+FinFlow provides a shared contract.
+
+```text
+              FinFlow Spec
+                   │
+       ┌───────────┼───────────┐
+       ▼           ▼           ▼
+    Node.js       Java       Python
+       │           │           │
+       └───────────┼───────────┘
+                   ▼
+          Same domain behavior
 ```
 
 ---
 
-### Financial Entities
+# Core Principles
 
-Define domain entities with explicit financial behavior.
+## The specification is the source of truth
 
-```ts
-import {
-  financialEntity,
-  money,
-  string
-} from '@finflow/core'
+No language implementation defines FinFlow by itself.
 
-const Invoice = financialEntity({
-  name: 'invoice',
+The specification does.
 
-  fields: {
-    vendor: string(),
-    amount: money(),
-  },
-
-  audit: true,
-})
-```
-
-```ts
-const invoice = Invoice.create({
-  vendor: 'ACME GmbH',
-  amount: ['1200.00', 'EUR'],
-})
-```
+An implementation is conformant only when its behavior matches the published specification and conformance suite.
 
 ---
 
-### Workflows
+## Behavior over syntax
 
-Financial records usually have controlled lifecycle transitions.
+FinFlow does not require identical APIs across languages.
 
-```ts
-const Expense = financialEntity({
-  name: 'expense',
+This would be:
 
-  workflow: {
-    draft: ['submitted'],
-    submitted: ['approved', 'rejected'],
-    approved: ['paid'],
-    rejected: [],
-    paid: [],
-  },
-})
+```text
+bad
 ```
 
-Valid:
-
-```ts
-expense.transition('submitted')
-expense.transition('approved')
-expense.transition('paid')
+```java
+money.add(...)
 ```
 
-Invalid:
+forced everywhere simply because another implementation uses it.
 
-```ts
-expense.transition('paid')
-
-// InvalidTransitionError:
-// draft -> paid is not allowed
-```
-
-Business rules remain explicit instead of being distributed across UI components and service methods.
+Instead, implementations should feel natural to their ecosystems while preserving the same domain semantics.
 
 ---
 
-### Approval Chains
+## Explicit over magical
 
-Declare approval requirements as business rules.
+Financial rules should be visible and understandable.
 
-```ts
-import { approvalChain } from '@finflow/core'
+A workflow such as:
 
-const invoiceApproval = approvalChain()
-  .when(({ amount }) => amount.greaterThan('1000'))
-  .require('manager')
-  .when(({ amount }) => amount.greaterThan('10000'))
-  .require('finance')
-  .when(({ amount }) => amount.greaterThan('50000'))
-  .require('controller')
+```text
+draft
+  ↓
+submitted
+  ├── approved
+  └── rejected
 ```
 
-An application can then evaluate the required approvals without embedding a growing collection of conditional statements throughout the codebase.
+should be represented explicitly rather than hidden behind framework behavior.
 
 ---
 
-### Audit Trail
+## Auditability by design
 
-FinFlow treats auditability as domain behavior, not application logging.
+Financial operations should be able to answer:
 
-```ts
-invoice.update({
-  amount: ['1350.00', 'EUR']
-}, {
-  actor: 'user-42',
-  reason: 'Vendor correction'
-})
+```text
+What happened?
+Who did it?
+When?
+Why?
+What changed?
 ```
 
-FinFlow can generate an append-only audit event:
+Auditability is treated as domain behavior, not application logging.
+
+---
+
+## Portable domain logic
+
+A company's financial rules should not disappear because it migrated:
+
+```text
+Vue → React
+Node → Java
+Monolith → Services
+```
+
+Frameworks change.
+
+Financial behavior should survive.
+
+---
+
+# Initial Specification Areas
+
+The first FinFlow specifications focus on a small collection of reusable financial primitives.
+
+---
+
+# Money
+
+Money is more than a floating-point number.
+
+FinFlow defines behavior for:
+
+* amount representation;
+* currency;
+* arithmetic;
+* comparison;
+* rounding;
+* serialization;
+* currency mismatch handling.
+
+Example representation:
 
 ```json
 {
-  "entity": "invoice",
-  "entityId": "INV-001",
-  "action": "updated",
-  "actor": "user-42",
-  "timestamp": "2026-08-31T10:41:00Z",
-  "reason": "Vendor correction",
-  "changes": {
-    "amount": {
-      "from": "1200.00 EUR",
-      "to": "1350.00 EUR"
-    }
-  }
+  "amount": "1299.90",
+  "currency": "EUR"
 }
 ```
 
-Business events such as lifecycle changes can also be recorded.
+Amounts are represented as decimal values, never binary floating-point approximations.
 
-```ts
-invoice.submit({
-  actor: 'user-42'
-})
-
-invoice.approve({
-  actor: 'finance-12'
-})
-```
-
-Result:
+A conformant implementation must ensure that:
 
 ```text
-10:32 CREATED
-10:41 AMOUNT_CHANGED
-10:45 SUBMITTED
-11:03 APPROVED
+0.1 + 0.2
 ```
 
-Audit records are intended to be append-only.
-
-History should explain what happened, not rewrite what happened.
+does not become a financial data problem.
 
 ---
 
-### Sensitive Fields
+# Financial Entities
 
-Audit data should not become a security problem.
+FinFlow defines conventions for domain entities representing financial records.
 
-```ts
-const Vendor = financialEntity({
-  name: 'vendor',
+Examples include:
 
-  audit: {
-    track: [
-      'name',
-      'bankAccount',
-      'paymentTerms'
-    ],
-
-    redact: [
-      'bankAccount'
-    ]
-  }
-})
+```text
+Invoice
+Expense
+Purchase Order
+Payment
+Reimbursement
+Journal Entry
 ```
 
-Instead of storing:
+A financial entity can expose behaviors such as:
+
+* lifecycle transitions;
+* validation;
+* audit events;
+* immutability;
+* approvals;
+* corrections.
+
+FinFlow does not prescribe database models or ORM structures.
+
+It defines domain behavior.
+
+---
+
+# Workflows
+
+Financial records frequently follow controlled lifecycle transitions.
+
+Example:
+
+```text
+DRAFT
+  ↓
+SUBMITTED
+  ├── APPROVED
+  │      ↓
+  │     PAID
+  │
+  └── REJECTED
+```
+
+A workflow specification defines allowed transitions.
+
+For example:
+
+```json
+{
+  "draft": ["submitted"],
+  "submitted": ["approved", "rejected"],
+  "approved": ["paid"],
+  "rejected": [],
+  "paid": []
+}
+```
+
+Attempting:
+
+```text
+draft → paid
+```
+
+must result in a predictable error.
+
+Example error code:
+
+```text
+FINFLOW_WORKFLOW_INVALID_TRANSITION
+```
+
+---
+
+# Approval Chains
+
+FinFlow defines a model for expressing approval requirements.
+
+Example business rule:
+
+```text
+amount > 1,000
+→ Manager approval
+
+amount > 10,000
+→ Finance approval
+
+amount > 50,000
+→ Controller approval
+```
+
+Implementations may expose this differently.
+
+TypeScript:
+
+```ts
+approvalChain()
+  .when(amount.gt('1000'))
+  .require('manager')
+```
+
+Java:
+
+```java
+ApprovalChain.builder()
+    .when(amountGreaterThan("1000"))
+    .require("manager")
+    .build();
+```
+
+Both must produce equivalent approval requirements.
+
+---
+
+# Audit Trail
+
+FinFlow audit records are intended to describe meaningful domain activity.
+
+Example:
+
+```json
+{
+  "id": "evt_123",
+  "entity": "invoice",
+  "entityId": "INV-001",
+  "event": "field_changed",
+  "actor": {
+    "id": "user-42"
+  },
+  "timestamp": "2026-08-31T14:00:00Z",
+  "changes": [
+    {
+      "field": "amount",
+      "from": {
+        "amount": "1200.00",
+        "currency": "EUR"
+      },
+      "to": {
+        "amount": "1350.00",
+        "currency": "EUR"
+      }
+    }
+  ]
+}
+```
+
+Audit histories should be append-only.
+
+If a correction occurs, history should not be rewritten.
+
+Instead:
+
+```text
+CREATE
+↓
+CHANGE
+↓
+APPROVE
+↓
+CORRECT
+```
+
+remains visible as a sequence of events.
+
+History describes what happened.
+
+It should not pretend something never happened.
+
+---
+
+# Sensitive Data
+
+Auditability must not create unnecessary data exposure.
+
+FinFlow defines redaction semantics for sensitive fields.
+
+For example:
 
 ```text
 DE89370400440532013000
 ```
 
-an audit adapter could persist:
+could be represented in an audit event as:
 
 ```text
-****3000 -> ****8121
+****3000
 ```
+
+Implementations should provide mechanisms for controlling:
+
+* tracked fields;
+* ignored fields;
+* redacted fields;
+* custom serialization.
 
 ---
 
-### Immutable States
+# Immutable Financial States
 
-Certain financial states should restrict mutation.
+Some financial lifecycle states should prevent direct mutation.
+
+For example:
+
+```text
+DRAFT
+↓
+APPROVED
+↓
+POSTED
+```
+
+Once posted, directly changing:
+
+```text
+amount = 1000
+```
+
+may no longer be valid.
+
+Instead, the domain may require:
+
+```text
+Correction
+Reversal
+Void
+Adjustment
+```
+
+FinFlow defines these concepts as lifecycle behavior rather than database restrictions.
+
+---
+
+# Corrections Instead of Deletion
+
+Traditional CRUD assumes:
+
+```text
+DELETE
+```
+
+Financial systems often cannot.
+
+Instead of deleting a financial record, an application may need to:
+
+```text
+void
+reverse
+correct
+supersede
+```
+
+FinFlow aims to define reusable semantics for these operations.
+
+---
+
+# Standard Error Codes
+
+Implementations may use language-specific exception types, but FinFlow defines portable error codes.
+
+For example:
+
+```text
+FINFLOW_MONEY_CURRENCY_MISMATCH
+
+FINFLOW_WORKFLOW_INVALID_TRANSITION
+
+FINFLOW_ENTITY_IMMUTABLE
+
+FINFLOW_APPROVAL_REQUIRED
+
+FINFLOW_VALIDATION_FAILED
+```
+
+TypeScript may throw:
 
 ```ts
-const Invoice = financialEntity({
-  name: 'invoice',
+CurrencyMismatchError
+```
 
-  workflow: {
-    draft: ['submitted'],
-    submitted: ['approved'],
-    approved: ['posted'],
-    posted: ['voided']
+Java may throw:
+
+```java
+CurrencyMismatchException
+```
+
+Both must expose:
+
+```text
+FINFLOW_MONEY_CURRENCY_MISMATCH
+```
+
+This allows domain behavior to remain predictable across systems.
+
+---
+
+# Shared Data Schemas
+
+FinFlow defines portable data representations for concepts that may cross service boundaries.
+
+For example:
+
+```text
+Money
+AuditEvent
+WorkflowEvent
+ApprovalDecision
+ValidationError
+```
+
+Schemas are intended to support communication between different FinFlow implementations.
+
+Example:
+
+```text
+Node.js service
+      ↓
+   Kafka
+      ↓
+Java service
+```
+
+Both services should interpret the same financial event consistently.
+
+---
+
+# Conformance
+
+A FinFlow implementation is expected to run against the FinFlow Conformance Suite.
+
+Test cases are language-independent.
+
+Example:
+
+```json
+{
+  "suite": "money.add",
+  "name": "adds values with the same currency",
+  "left": {
+    "amount": "10.20",
+    "currency": "EUR"
   },
-
-  immutableWhen: ['posted']
-})
+  "right": {
+    "amount": "5.30",
+    "currency": "EUR"
+  },
+  "expected": {
+    "amount": "15.50",
+    "currency": "EUR"
+  }
+}
 ```
 
-```ts
-invoice.update({
-  amount: ['9999', 'EUR']
-})
+Another test:
 
-// ImmutableEntityError
+```json
+{
+  "suite": "money.add",
+  "name": "rejects different currencies",
+  "left": {
+    "amount": "10.00",
+    "currency": "EUR"
+  },
+  "right": {
+    "amount": "10.00",
+    "currency": "USD"
+  },
+  "error": "FINFLOW_MONEY_CURRENCY_MISMATCH"
+}
 ```
 
-Instead of deleting or silently modifying historical financial data, applications can model corrections explicitly.
+Every conformant implementation should produce equivalent results.
 
-```ts
-invoice.void({
-  reason: 'Incorrect supplier'
-})
+---
+
+# Repository Structure
+
+The project is expected to evolve toward a structure similar to:
+
+```text
+finflow/
+│
+├── spec/
+│   ├── money/
+│   ├── workflow/
+│   ├── approvals/
+│   ├── audit/
+│   └── entities/
+│
+├── schemas/
+│   ├── money.schema.json
+│   ├── audit-event.schema.json
+│   └── approval.schema.json
+│
+├── conformance/
+│   ├── money/
+│   ├── workflow/
+│   ├── approval/
+│   └── audit/
+│
+├── implementations/
+│   ├── typescript/
+│   └── java/
+│
+├── examples/
+│
+└── README.md
 ```
 
 ---
 
-## Headless by Design
+# Implementations
 
-FinFlow is not tied to React, Vue, Angular, Node.js, or any particular persistence layer.
+## TypeScript / JavaScript
 
-The core package contains domain logic only.
+The first reference implementation will target TypeScript.
+
+Potential packages:
 
 ```text
 @finflow/core
+@finflow/node
 ```
 
-Framework integrations can live separately:
+The core package should remain runtime-independent whenever possible.
+
+It should be usable from environments such as:
+
+```text
+Browser
+Node.js
+Bun
+Deno
+Workers
+```
+
+Framework integrations may eventually be provided separately:
 
 ```text
 @finflow/react
 @finflow/vue
-@finflow/node
 ```
 
-Persistence should also be adapter-based.
+They are integrations.
 
-```ts
-createRepository({
-  adapter: postgresAdapter(...)
-})
+They are not FinFlow itself.
+
+---
+
+## Java
+
+A Java implementation may provide modules such as:
+
+```text
+finflow-core
+finflow-spring
+```
+
+The API should follow Java conventions while remaining conformant with the FinFlow specification.
+
+---
+
+## Future Implementations
+
+FinFlow is designed so that additional implementations can exist independently.
+
+Potential ecosystems include:
+
+```text
+C#
+Python
+Go
+Rust
+PHP
+```
+
+A new implementation does not need to copy another implementation's internal architecture.
+
+It only needs to implement the specification correctly.
+
+---
+
+# What FinFlow Is Not
+
+FinFlow is not:
+
+* an ERP;
+* an accounting application;
+* a payment processor;
+* a database abstraction;
+* an ORM;
+* a UI framework;
+* a React component library;
+* a replacement for an accounting engine.
+
+FinFlow provides financial domain primitives.
+
+Applications decide how to compose them.
+
+---
+
+# What FinFlow May Become
+
+The initial scope is intentionally small.
+
+Future specifications may explore:
+
+```text
+Journal Entries
+Debit / Credit
+General Ledger
+Reconciliation
+Fiscal Periods
+Cost Centers
+Purchase Orders
+Invoice Matching
+Payments
+Corrections
+Reversals
+Tax primitives
+```
+
+These should only be added when their semantics can be clearly defined and tested across implementations.
+
+FinFlow should grow from real financial software problems, not from an attempt to model every accounting concept at once.
+
+---
+
+# Development Model
+
+FinFlow follows a specification-first development model.
+
+```text
+Problem
+   ↓
+Specification
+   ↓
+Examples
+   ↓
+Conformance Tests
+   ↓
+Reference Implementation
+   ↓
+Other Implementations
+```
+
+A feature should not begin with:
+
+```text
+Let's add a class.
+```
+
+It should begin with:
+
+```text
+What behavior are we trying to standardize?
+```
+
+---
+
+# Contributing
+
+FinFlow is developed in the open.
+
+Contributions may include:
+
+* financial use cases;
+* specification proposals;
+* edge cases;
+* conformance tests;
+* schema improvements;
+* implementation work;
+* documentation;
+* examples.
+
+For major features, contributors are encouraged to start with the domain problem rather than implementation details.
+
+A good issue might describe:
+
+```text
+Invoices that have been posted cannot be edited directly.
+
+Different systems currently solve corrections differently.
+
+Can FinFlow define a portable correction model?
+```
+
+That is more valuable than starting with:
+
+```text
+We should add a Correction class.
+```
+
+Behavior comes first.
+
+API comes later.
+
+---
+
+# Project Philosophy
+
+Software stacks change.
+
+Frameworks change.
+
+Architectures change.
+
+Financial rules remain.
+
+A company may migrate:
+
+```text
+Angular
+   ↓
+Vue
+   ↓
+React
 ```
 
 or:
 
-```ts
-createRepository({
-  adapter: indexedDbAdapter(...)
-})
+```text
+PHP monolith
+   ↓
+Node.js
+   ↓
+Java services
 ```
 
-This allows financial domain rules to survive framework migrations and legacy modernization projects.
+The meaning of:
 
----
-
-## Example
-
-A simplified expense workflow could look like this:
-
-```ts
-import {
-  financialEntity,
-  money,
-  string,
-  approvalChain
-} from '@finflow/core'
-
-const Expense = financialEntity({
-  name: 'expense',
-
-  fields: {
-    description: string(),
-    amount: money(),
-    costCenter: string(),
-  },
-
-  workflow: {
-    draft: ['submitted'],
-    submitted: ['approved', 'rejected'],
-    approved: ['paid'],
-    rejected: [],
-    paid: [],
-  },
-
-  approvals: approvalChain()
-    .when(({ amount }) => amount.greaterThan('1000'))
-    .require('manager')
-    .when(({ amount }) => amount.greaterThan('10000'))
-    .require('finance'),
-
-  immutableWhen: ['paid'],
-
-  audit: true,
-})
+```text
+Approved
+Posted
+Paid
+Reversed
 ```
 
-Now the application can focus on the product instead of repeatedly implementing financial infrastructure.
+should not change because the technology did.
+
+FinFlow attempts to separate those concepts from the frameworks used to implement them.
 
 ---
 
-## Initial Scope
+# Status
 
-The first versions of FinFlow will focus on a small set of primitives:
+FinFlow is currently experimental.
 
-* Money
-* Financial entities
-* Workflows
-* Approval chains
-* Validation
-* Audit trails
-* Immutable lifecycle states
-* Persistence adapters
+The specification is under active development and is expected to evolve significantly before reaching version 1.0.
 
-Future modules may explore concepts such as:
+The first reference implementation will be built in TypeScript.
 
-* journal entries;
-* debit and credit primitives;
-* reconciliation;
-* fiscal periods;
-* cost centers;
-* general ledger accounts;
-* invoice matching;
-* purchase orders;
-* payment workflows;
-* financial corrections and reversals.
-
-These features are intentionally outside the initial scope.
-
-FinFlow should grow from real use cases, not from trying to model an entire accounting system on day one.
+Production use is not recommended yet.
 
 ---
 
-## Design Principles
-
-### Explicit over magical
-
-Financial rules should be readable.
-
-```ts
-submitted: ['approved', 'rejected']
-```
-
-is preferable to hidden behavior spread across several layers.
-
-### Domain first
-
-FinFlow models business concepts rather than UI components.
-
-### Auditability by default
-
-Important operations should be capable of explaining:
-
-* what changed;
-* who changed it;
-* when it changed;
-* why it changed.
-
-### Framework independence
-
-Financial rules should not disappear because a company migrated from Vue to React.
-
-### Incremental adoption
-
-Using FinFlow should not require rewriting an existing application.
-
-A legacy system should be able to adopt one primitive at a time.
-
-### Small core
-
-FinFlow should remain a toolkit, not become another enterprise framework.
-
----
-
-## Who Is FinFlow For?
-
-FinFlow may be useful if you are building:
-
-* Accounts Payable systems;
-* Expense Management products;
-* invoicing platforms;
-* procurement software;
-* payment workflows;
-* accounting tools;
-* fintech products;
-* financial back-office applications;
-* internal finance tooling;
-* regulated business applications.
-
-It may also be useful for teams modernizing legacy financial systems where business rules are currently distributed across controllers, components, database procedures, and conditional statements.
-
----
-
-## Status
-
-FinFlow is currently in early development.
-
-The API is expected to change significantly while the core concepts are explored.
-
-Do not use it for production financial systems yet.
-
----
-
-## Contributing
-
-FinFlow is being developed in the open.
-
-Ideas, discussions, bug reports, experiments, and pull requests are welcome.
-
-If you have worked on financial systems and have encountered recurring problems around approvals, auditability, lifecycle management, monetary values, or financial data integrity, those use cases are especially valuable.
-
-Open an issue and describe the problem before proposing the abstraction.
-
-Real financial problems should drive the library.
-
----
-
-## Philosophy
-
-Most financial applications eventually implement the same concepts.
-
-Money.
-
-Statuses.
-
-Approvals.
-
-Validation.
-
-Audit history.
-
-Permissions.
-
-Corrections.
-
-Immutability.
-
-And many teams rebuild them from scratch.
-
-FinFlow is an attempt to turn those recurring problems into reusable, understandable primitives.
-
-**CRUD is easy. Financial CRUD isn't.**
-
----
-
-## License
+# License
 
 MIT
+
+---
+
+**CRUD is easy. Financial CRUD isn't.**
