@@ -14,12 +14,12 @@ This document defines the information carried by a Money value.
 
 ## Requirements
 
-- Money MUST contain one amount and one [currency](currency.md).
-- The amount MUST be finite and exactly representable in base 10.
-- An amount MUST NOT be interpreted without its currency.
-- Sign MUST carry ordinary numeric meaning; domain-specific restrictions on negative or zero amounts belong to the consuming specification.
-- Numerical equality MUST NOT depend on differing insignificant trailing zeros.
-- An implementation MAY use any internal representation that preserves these observable semantics; this document does not require storage as a decimal string or at a currency's customary minor-unit scale.
+- **MONEY-REPRESENTATION-001** — Money MUST contain one amount and one [currency](currency.md).
+- **MONEY-REPRESENTATION-002** — The amount MUST be finite and exactly representable in base 10.
+- **MONEY-REPRESENTATION-003** — An amount MUST NOT be interpreted without its currency.
+- **MONEY-REPRESENTATION-004** — Sign MUST carry ordinary numeric meaning; domain-specific restrictions on negative or zero amounts belong to the consuming specification.
+- **MONEY-REPRESENTATION-005** — Numerical equality MUST NOT depend on differing insignificant trailing zeros.
+- **MONEY-REPRESENTATION-006** — An implementation MAY use any internal representation that preserves these observable semantics; this document does not require storage as a decimal string or at a currency's customary minor-unit scale.
 - The portable decimal-string encoding is defined separately by [Money Serialization](serialization.md).
 
 ## Invariants

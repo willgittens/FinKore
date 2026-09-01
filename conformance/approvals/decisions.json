@@ -1,0 +1,626 @@
+{
+  "finflowVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "approval.requirement.pending-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-005"
+      ],
+      "description": "An applicable requirement without an effective decision is pending.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": []
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "pending-treated-as-approved"
+      ]
+    },
+    {
+      "id": "approval.requirement.approved-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "An eligible approving decision satisfies its associated requirement.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3",
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              }
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "revision": "3",
+          "amount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approved-interpreted-as-rejected"
+      ]
+    },
+    {
+      "id": "approval.requirement.rejected-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "An eligible rejecting decision rejects its associated requirement.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3",
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              }
+            },
+            "outcome": "REJECTED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "revision": "3",
+          "amount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "REJECTED"
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "rejected-interpreted-as-approved"
+      ]
+    },
+    {
+      "id": "approval.requirement.wrong-association-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-001"
+      ],
+      "description": "A decision for another requirement does not satisfy this requirement.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "manager-review",
+            "subjectFacts": {
+              "revision": "3",
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              }
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "revision": "3",
+          "amount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "decision-bound-to-wrong-requirement"
+      ]
+    },
+    {
+      "id": "approval.decision.pending-invalid-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-005"
+      ],
+      "description": "Rejects PENDING as a decision outcome.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "3",
+            "amount": {
+              "amount": "9000.00",
+              "currency": "EUR"
+            }
+          },
+          "outcome": "PENDING",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant"
+      ]
+    },
+    {
+      "id": "approval.decision.ineligible-actor-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-004"
+      ],
+      "description": "Rejects a decision by an ineligible actor without changing history.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "3",
+            "amount": {
+              "amount": "9000.00",
+              "currency": "EUR"
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-9"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_APPROVAL_INELIGIBLE_ACTOR"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "eligibility-check-removed"
+      ]
+    },
+    {
+      "id": "approval.decision.subject-facts-unchanged-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-DECISION-003"
+      ],
+      "description": "Keeps a decision effective for the same relevant subject facts.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "3",
+            "amount": {
+              "amount": "9000.00",
+              "currency": "EUR"
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "revision": "3",
+          "amount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        },
+        "relevantFactPaths": [
+          "revision",
+          "amount"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "EFFECTIVE"
+      },
+      "tags": [
+        "positive"
+      ]
+    },
+    {
+      "id": "approval.decision.subject-facts-changed-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-DECISION-003"
+      ],
+      "description": "Does not assume an approval remains effective after a relevant amount fact changes.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "3",
+            "amount": {
+              "amount": "9000.00",
+              "currency": "EUR"
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "revision": "4",
+          "amount": {
+            "amount": "90000.00",
+            "currency": "EUR"
+          }
+        },
+        "relevantFactPaths": [
+          "revision",
+          "amount"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "INEFFECTIVE"
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "subject-revision-check-removed",
+        "relevant-facts-change-ignored"
+      ]
+    },
+    {
+      "id": "approval.condition.missing-fact-001",
+      "spec": "approvals/conditions",
+      "requirements": [
+        "APPROVAL-CONDITION-001",
+        "APPROVAL-CONDITION-006"
+      ],
+      "description": "Does not treat a conditional requirement as inapplicable when a declared required fact is absent.",
+      "operation": "approval.condition.evaluate",
+      "input": {
+        "condition": {
+          "id": "finance-required",
+          "requiredFacts": [
+            "totalAmount"
+          ],
+          "evaluation": "composing-domain"
+        },
+        "facts": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_APPROVAL_CONDITION_UNRESOLVED"
+        }
+      },
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "missing-fact-treated-as-not-applicable"
+      ]
+    },
+    {
+      "id": "approval.chain.all-approved-001",
+      "spec": "approvals/chains",
+      "requirements": [
+        "APPROVAL-CHAIN-005"
+      ],
+      "description": "An all-required unordered chain is approved only when every applicable requirement is approved.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "UNORDERED",
+          "requirements": [
+            "manager",
+            "finance"
+          ],
+          "rejectionOutcome": "REJECTED"
+        },
+        "states": {
+          "manager": "APPROVED",
+          "finance": "APPROVED"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "requirement-ignored"
+      ]
+    },
+    {
+      "id": "approval.chain.pending-001",
+      "spec": "approvals/chains",
+      "requirements": [
+        "APPROVAL-CHAIN-005",
+        "APPROVAL-CHAIN-006"
+      ],
+      "description": "An all-required chain remains pending while one applicable requirement is pending.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "UNORDERED",
+          "requirements": [
+            "manager",
+            "finance"
+          ],
+          "rejectionOutcome": "REJECTED"
+        },
+        "states": {
+          "manager": "APPROVED",
+          "finance": "PENDING"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "pending-treated-as-approved"
+      ]
+    },
+    {
+      "id": "approval.chain.rejected-001",
+      "spec": "approvals/chains",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "Uses the chain's declared rejection outcome when an effective rejection exists.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "UNORDERED",
+          "requirements": [
+            "manager",
+            "finance"
+          ],
+          "rejectionOutcome": "REJECTED"
+        },
+        "states": {
+          "manager": "APPROVED",
+          "finance": "REJECTED"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "REJECTED"
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "rejection-ignored"
+      ]
+    },
+    {
+      "id": "approval.chain.sequential-not-active-001",
+      "spec": "approvals/chains",
+      "requirements": [
+        "APPROVAL-CHAIN-004"
+      ],
+      "description": "Does not activate a later sequential requirement before its predecessor is satisfied.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "SEQUENTIAL",
+          "requirements": [
+            "manager",
+            "finance"
+          ],
+          "rejectionOutcome": "REJECTED"
+        },
+        "states": {
+          "manager": "PENDING",
+          "finance": "PENDING"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "state": "PENDING",
+          "activeRequirements": [
+            "manager"
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "sequential-order-ignored"
+      ]
+    }
+  ]
+}

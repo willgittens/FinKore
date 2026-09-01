@@ -14,13 +14,13 @@ An Approval Decision outcome is `APPROVED` or `REJECTED`. `PENDING` describes an
 
 ## Requirements
 
-- An Approval Decision MUST identify its Approval Requirement, deciding Actor, outcome, and decision timestamp.
-- An Approval Decision MUST be associated with the relevant subject state or facts against which the decision was made.
-- An Approval Decision MUST NOT be assumed to remain valid when facts relevant to its Approval Requirement have changed. The application or a higher-level domain policy MAY define which mutations are relevant or material.
-- The Actor MUST satisfy the Approval Requirement's eligibility rule at the domain-defined evaluation time.
-- An outcome MUST be either `APPROVED` or `REJECTED`.
-- The decision timestamp MUST identify an unambiguous instant and, when serialized, MUST follow [Timestamp conventions](../conventions.md#portable-values).
-- A committed Approval Decision MUST NOT be overwritten or removed from logical approval history. When a composing domain also requires an [Audit Event](../audit/events.md), that Audit Event MUST preserve the Approval Decision's domain meaning.
+- **APPROVAL-DECISION-001** — An Approval Decision MUST identify its Approval Requirement, deciding Actor, outcome, and decision timestamp.
+- **APPROVAL-DECISION-002** — An Approval Decision MUST be associated with the relevant subject state or facts against which the decision was made.
+- **APPROVAL-DECISION-003** — An Approval Decision MUST NOT be assumed to remain valid when facts relevant to its Approval Requirement have changed. The application or a higher-level domain policy MAY define which mutations are relevant or material.
+- **APPROVAL-DECISION-004** — The Actor MUST satisfy the Approval Requirement's eligibility rule at the domain-defined evaluation time.
+- **APPROVAL-DECISION-005** — An outcome MUST be either `APPROVED` or `REJECTED`.
+- **APPROVAL-DECISION-006** — The decision timestamp MUST identify an unambiguous instant and, when serialized, MUST follow [Timestamp conventions](../conventions.md#portable-values).
+- **APPROVAL-DECISION-007** — A committed Approval Decision MUST NOT be overwritten or removed from logical approval history. When a composing domain also requires an [Audit Event](../audit/events.md), that Audit Event MUST preserve the Approval Decision's domain meaning.
 
 ## Invariants
 

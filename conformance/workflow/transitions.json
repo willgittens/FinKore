@@ -1,0 +1,592 @@
+{
+  "finflowVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "workflow.create.initial-state-001",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-002",
+        "WORKFLOW-STATES-003"
+      ],
+      "description": "Creates an instance in the one declared initial state.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "DRAFT"
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant"
+      ]
+    },
+    {
+      "id": "workflow.create.duplicate-state-001",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-001"
+      ],
+      "description": "Rejects duplicate state identifiers.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative"
+      ]
+    },
+    {
+      "id": "workflow.create.multiple-initial-001",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-002"
+      ],
+      "description": "Rejects a definition with more than one initial state.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialStates": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative"
+      ]
+    },
+    {
+      "id": "workflow.create.terminal-outgoing-001",
+      "spec": "workflow/terminal-states",
+      "requirements": [
+        "WORKFLOW-TERMINAL-002"
+      ],
+      "description": "Rejects a definition with an outgoing transition from a terminal state.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "DONE"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "DONE"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "DONE"
+            },
+            {
+              "source": "DONE",
+              "target": "DRAFT"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "terminal-outgoing-transition-accepted"
+      ]
+    },
+    {
+      "id": "workflow.transition.valid-001",
+      "spec": "workflow/transitions",
+      "requirements": [
+        "WORKFLOW-TRANSITION-003",
+        "WORKFLOW-TRANSITION-005"
+      ],
+      "description": "Applies one declared directed transition exactly once.",
+      "operation": "workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "DRAFT"
+        },
+        "target": "SUBMITTED",
+        "facts": {}
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "SUBMITTED"
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "declared-transition-rejected",
+        "state-update-omitted"
+      ]
+    },
+    {
+      "id": "workflow.transition.reverse-not-implied-001",
+      "spec": "workflow/transitions",
+      "requirements": [
+        "WORKFLOW-TRANSITION-002",
+        "WORKFLOW-TRANSITION-006",
+        "WORKFLOW-ERROR-003"
+      ],
+      "description": "Does not infer the reverse of a declared transition.",
+      "operation": "workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "DRAFT",
+        "facts": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_WORKFLOW_INVALID_TRANSITION"
+        },
+        "observations": {
+          "currentState": "SUBMITTED"
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "transition-direction-reversed",
+        "undeclared-transition-accepted"
+      ]
+    },
+    {
+      "id": "workflow.transition.undeclared-001",
+      "spec": "workflow/transitions",
+      "requirements": [
+        "WORKFLOW-TRANSITION-003",
+        "WORKFLOW-TRANSITION-006",
+        "WORKFLOW-ERROR-003"
+      ],
+      "description": "Rejects an undeclared direct transition and preserves state.",
+      "operation": "workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "DRAFT"
+        },
+        "target": "APPROVED",
+        "facts": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_WORKFLOW_INVALID_TRANSITION"
+        },
+        "observations": {
+          "currentState": "DRAFT"
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "transition-validation-removed",
+        "failed-transition-mutates-state"
+      ]
+    },
+    {
+      "id": "workflow.guard.pass-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-TRANSITION-004"
+      ],
+      "description": "Allows a declared transition when its required guard passes on supplied facts.",
+      "operation": "workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "APPROVED",
+        "facts": {
+          "approvalsSatisfied": true
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "APPROVED"
+        }
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "guard-result-inverted"
+      ]
+    },
+    {
+      "id": "workflow.guard.reject-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-GUARD-003"
+      ],
+      "description": "Rejects a transition when its guard fails and changes neither state nor facts.",
+      "operation": "workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "APPROVED",
+        "facts": {
+          "approvalsSatisfied": false
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_WORKFLOW_GUARD_REJECTED"
+        },
+        "observations": {
+          "currentState": "SUBMITTED",
+          "facts": {
+            "approvalsSatisfied": false
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "guard-bypassed",
+        "guard-result-inverted",
+        "guard-side-effect"
+      ]
+    },
+    {
+      "id": "workflow.terminal.transition-rejected-001",
+      "spec": "workflow/terminal-states",
+      "requirements": [
+        "WORKFLOW-TERMINAL-003",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-TERMINAL-001",
+        "WORKFLOW-TERMINAL-004"
+      ],
+      "description": "A terminal-state request reports the terminal error even when no transition is declared.",
+      "operation": "workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "APPROVED"
+        },
+        "target": "DRAFT",
+        "facts": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_WORKFLOW_TERMINAL_STATE"
+        },
+        "observations": {
+          "currentState": "APPROVED"
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "terminal-state-transition-allowed",
+        "error-precedence-changed"
+      ]
+    }
+  ]
+}

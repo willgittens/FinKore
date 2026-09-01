@@ -20,9 +20,9 @@ This document defines initial portable workflow failure categories.
 
 ## Requirements
 
-- A failed Workflow operation MUST identify one applicable portable code. For a Transition Request from a terminal State, `FINFLOW_WORKFLOW_TERMINAL_STATE` takes precedence over `FINFLOW_WORKFLOW_INVALID_TRANSITION`.
-- Error context MAY include the current State and requested Transition when disclosure is safe.
-- It MUST NOT claim that state changed when the operation failed.
+- **WORKFLOW-ERROR-001** — A failed Workflow operation MUST identify one applicable portable code. For a Transition Request from a terminal State, `FINFLOW_WORKFLOW_TERMINAL_STATE` takes precedence over `FINFLOW_WORKFLOW_INVALID_TRANSITION`.
+- **WORKFLOW-ERROR-002** — Error context MAY include the current State and requested Transition when disclosure is safe.
+- **WORKFLOW-ERROR-003** — It MUST NOT claim that state changed when the operation failed.
 
 ## Invariants
 

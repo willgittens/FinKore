@@ -14,6 +14,15 @@ The keywords **MUST**, **MUST NOT**, **SHOULD**, **SHOULD NOT**, and **MAY** exp
 
 Text is normative when it uses one of these uppercase keywords. Invariant sections summarize fundamental normative rules and use the keywords when they impose a conformance requirement. Examples, explanatory notes, and sections explicitly labeled non-normative do not add requirements.
 
+## Stable Requirement Identifiers
+
+Normative clauses selected for conformance traceability use a domain-prefixed identifier such as `MONEY-ARITHMETIC-001`.
+
+- Once published, a requirement identifier MUST remain bound to the same normative meaning.
+- An identifier MUST NOT be renumbered merely to close a sequence gap or because its document moves.
+- A materially different replacement requirement MUST receive a new identifier; retired identifiers MUST NOT be reused.
+- Conformance vectors SHOULD reference every normative requirement they exercise.
+
 ## Naming and Terminology
 
 - A specification MUST use terms as defined in the [glossary](glossary.md), unless it explicitly defines a narrower local meaning.

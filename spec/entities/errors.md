@@ -20,10 +20,10 @@ This document defines initial portable entity failure categories.
 
 ## Requirements
 
-- A Financial Entity failure MUST leave identity, current State, and entity data unchanged.
-- Validation failures SHOULD include stable violation identifiers.
-- Implementations MAY attach safe diagnostic context without changing portable code meaning.
-- A Workflow, Money, Approval, or Audit failure MUST retain its domain-specific code when that condition is the primary failure; it MUST NOT be replaced by `FINFLOW_ENTITY_VALIDATION_FAILED`.
+- **ENTITY-ERROR-001** — A Financial Entity failure MUST leave identity, current State, and entity data unchanged.
+- **ENTITY-ERROR-002** — Validation failures SHOULD include stable violation identifiers.
+- **ENTITY-ERROR-003** — Implementations MAY attach safe diagnostic context without changing portable code meaning.
+- **ENTITY-ERROR-004** — A Workflow, Money, Approval, or Audit failure MUST retain its domain-specific code when that condition is the primary failure; it MUST NOT be replaced by `FINFLOW_ENTITY_VALIDATION_FAILED`.
 
 ## Invariants
 

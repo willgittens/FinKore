@@ -14,12 +14,12 @@ This document defines declared changes between workflow states.
 
 ## Requirements
 
-- A Transition MUST identify one declared Source State and one declared Target State.
-- A Transition is directed; declaring one direction MUST NOT declare or permit its reverse.
-- A Transition Request MUST match a Transition whose Source State is the instance's current State.
-- All applicable [Transition Guards](guards.md) MUST pass before the State changes.
-- A Successful Transition MUST change the current State to its Target State exactly once.
-- A Rejected Transition MUST leave current State unchanged.
+- **WORKFLOW-TRANSITION-001** — A Transition MUST identify one declared Source State and one declared Target State.
+- **WORKFLOW-TRANSITION-002** — A Transition is directed; declaring one direction MUST NOT declare or permit its reverse.
+- **WORKFLOW-TRANSITION-003** — A Transition Request MUST match a Transition whose Source State is the instance's current State.
+- **WORKFLOW-TRANSITION-004** — All applicable [Transition Guards](guards.md) MUST pass before the State changes.
+- **WORKFLOW-TRANSITION-005** — A Successful Transition MUST change the current State to its Target State exactly once.
+- **WORKFLOW-TRANSITION-006** — A Rejected Transition MUST leave current State unchanged.
 - A composing domain should identify the context needed to describe a Successful Transition in an [Audit Event](../audit/events.md).
 
 ## Invariants

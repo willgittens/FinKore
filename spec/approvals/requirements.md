@@ -10,13 +10,13 @@ This document defines a need for an Approval Decision from an eligible Actor or 
 
 ## Requirements
 
-- An Approval Requirement MUST have a stable identifier within its approval context.
-- It MUST identify the subject whose approval is requested.
-- It MUST identify its eligible Actor, application-defined subject, or eligibility rule.
-- It MUST define which Approval Decision outcome satisfies or rejects it.
-- An applicable Approval Requirement with no effective Approval Decision MUST have the `PENDING` State.
-- Eligibility MUST be evaluated independently from the Actor's technical ability to submit a request.
-- A requirement MAY be conditional as defined by [Conditions](conditions.md).
+- **APPROVAL-REQUIREMENT-001** — An Approval Requirement MUST have a stable identifier within its approval context.
+- **APPROVAL-REQUIREMENT-002** — It MUST identify the subject whose approval is requested.
+- **APPROVAL-REQUIREMENT-003** — It MUST identify its eligible Actor, application-defined subject, or eligibility rule.
+- **APPROVAL-REQUIREMENT-004** — It MUST define which Approval Decision outcome satisfies or rejects it.
+- **APPROVAL-REQUIREMENT-005** — An applicable Approval Requirement with no effective Approval Decision MUST have the `PENDING` State.
+- **APPROVAL-REQUIREMENT-006** — Eligibility MUST be evaluated independently from the Actor's technical ability to submit a request.
+- **APPROVAL-REQUIREMENT-007** — A requirement MAY be conditional as defined by [Conditions](conditions.md).
 
 ## Invariants
 

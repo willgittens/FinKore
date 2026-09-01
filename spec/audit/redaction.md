@@ -14,12 +14,12 @@ This document defines how sensitive information may be withheld while preserving
 
 ## Requirements
 
-- An audit policy MUST identify which content requires redaction and under what authority.
-- A redacted value MUST be distinguishable from a value that was absent originally.
-- A redacted representation MUST preserve event identity, event type, entity reference, occurrence timestamp, and every ordering relationship explicitly recorded in logical history.
-- Redaction SHOULD preserve enough structural information to explain what category of content was removed.
-- Access-time masking MAY supplement redaction but MUST NOT be represented as mutation of the committed source event.
-- A redaction action affecting committed logical history MUST produce an Audit Event identifying that the redaction occurred.
+- **AUDIT-REDACTION-001** — An audit policy MUST identify which content requires redaction and under what authority.
+- **AUDIT-REDACTION-002** — A redacted value MUST be distinguishable from a value that was absent originally.
+- **AUDIT-REDACTION-003** — A redacted representation MUST preserve event identity, event type, entity reference, occurrence timestamp, and every ordering relationship explicitly recorded in logical history.
+- **AUDIT-REDACTION-004** — Redaction SHOULD preserve enough structural information to explain what category of content was removed.
+- **AUDIT-REDACTION-005** — Access-time masking MAY supplement redaction but MUST NOT be represented as mutation of the committed source event.
+- **AUDIT-REDACTION-006** — A redaction action affecting committed logical history MUST produce an Audit Event identifying that the redaction occurred.
 
 ## Invariants
 

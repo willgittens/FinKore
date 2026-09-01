@@ -10,13 +10,13 @@ This document defines how an audit event may describe domain-relevant field chan
 
 ## Requirements
 
-- A Change MUST identify the changed field or domain path.
-- A Change SHOULD record prior and resulting values when both may be safely retained.
-- A Change MUST distinguish an absent value from an explicit null value when the underlying domain distinguishes them.
-- Values MUST use stable domain representations, not localized display strings. Changes to Money values MUST preserve the semantics defined by [Money](../money/README.md).
-- A Change set MUST NOT claim a field changed when its domain value remained equal.
-- Sensitive values MUST follow [Redaction](redaction.md).
-- An event MAY omit field changes when its event type fully expresses the occurrence or disclosure is prohibited.
+- **AUDIT-CHANGE-001** — A Change MUST identify the changed field or domain path.
+- **AUDIT-CHANGE-002** — A Change SHOULD record prior and resulting values when both may be safely retained.
+- **AUDIT-CHANGE-003** — A Change MUST distinguish an absent value from an explicit null value when the underlying domain distinguishes them.
+- **AUDIT-CHANGE-004** — Values MUST use stable domain representations, not localized display strings. Changes to Money values MUST preserve the semantics defined by [Money](../money/README.md).
+- **AUDIT-CHANGE-005** — A Change set MUST NOT claim a field changed when its domain value remained equal.
+- **AUDIT-CHANGE-006** — Sensitive values MUST follow [Redaction](redaction.md).
+- **AUDIT-CHANGE-007** — An event MAY omit field changes when its event type fully expresses the occurrence or disclosure is prohibited.
 
 ## Invariants
 

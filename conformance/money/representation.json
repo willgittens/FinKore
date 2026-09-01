@@ -1,0 +1,296 @@
+{
+  "finflowVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "money.deserialize.positive-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-SERIALIZATION-001",
+        "MONEY-SERIALIZATION-002",
+        "MONEY-REPRESENTATION-001",
+        "MONEY-REPRESENTATION-002"
+      ],
+      "description": "Accepts a plain exact positive decimal string with currency.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "1299.90",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1299.90",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive"
+      ]
+    },
+    {
+      "id": "money.deserialize.zero-001",
+      "spec": "money/representation",
+      "requirements": [
+        "MONEY-REPRESENTATION-004"
+      ],
+      "description": "Accepts zero as an ordinary signed decimal domain value.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "0",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "0",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary"
+      ]
+    },
+    {
+      "id": "money.deserialize.negative-001",
+      "spec": "money/representation",
+      "requirements": [
+        "MONEY-REPRESENTATION-004"
+      ],
+      "description": "Preserves the ordinary numeric meaning of a negative amount.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "-0.01",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-0.01",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary"
+      ]
+    },
+    {
+      "id": "money.deserialize.missing-amount-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-SERIALIZATION-001",
+        "MONEY-REPRESENTATION-001"
+      ],
+      "description": "Rejects portable Money with no amount.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_MONEY_INVALID_AMOUNT"
+        }
+      },
+      "tags": [
+        "negative"
+      ]
+    },
+    {
+      "id": "money.deserialize.missing-currency-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-SERIALIZATION-001",
+        "MONEY-SERIALIZATION-004",
+        "MONEY-REPRESENTATION-001"
+      ],
+      "description": "Rejects portable Money with no currency.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "10.00"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_MONEY_INVALID_CURRENCY"
+        }
+      },
+      "tags": [
+        "negative"
+      ]
+    },
+    {
+      "id": "money.deserialize.numeric-amount-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-SERIALIZATION-002"
+      ],
+      "description": "Rejects a JSON number because portable amounts are decimal strings.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": 1299.9,
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_MONEY_INVALID_AMOUNT"
+        }
+      },
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "binary-floating-point-acceptance"
+      ]
+    },
+    {
+      "id": "money.deserialize.exponent-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-SERIALIZATION-003",
+        "MONEY-SERIALIZATION-005"
+      ],
+      "description": "Rejects exponential notation.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "1e3",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_MONEY_INVALID_AMOUNT"
+        }
+      },
+      "tags": [
+        "negative"
+      ]
+    },
+    {
+      "id": "money.deserialize.leading-plus-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-SERIALIZATION-003",
+        "MONEY-SERIALIZATION-005"
+      ],
+      "description": "Rejects a leading plus sign.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "+1.00",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_MONEY_INVALID_AMOUNT"
+        }
+      },
+      "tags": [
+        "negative"
+      ]
+    },
+    {
+      "id": "money.deserialize.non-finite-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-SERIALIZATION-003",
+        "MONEY-SERIALIZATION-005"
+      ],
+      "description": "Rejects a non-finite token.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "NaN",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_MONEY_INVALID_AMOUNT"
+        }
+      },
+      "tags": [
+        "negative"
+      ]
+    },
+    {
+      "id": "money.deserialize.lowercase-currency-001",
+      "spec": "money/currency",
+      "requirements": [
+        "MONEY-CURRENCY-002"
+      ],
+      "description": "Rejects a lowercase ISO 4217 currency identifier rather than normalizing it.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "eur"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_MONEY_INVALID_CURRENCY"
+        }
+      },
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "silent-currency-normalization"
+      ]
+    },
+    {
+      "id": "money.serialize.locale-independent-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-SERIALIZATION-002",
+        "MONEY-SERIALIZATION-003"
+      ],
+      "description": "Serializes a decimal with the canonical period separator and no locale grouping.",
+      "operation": "money.serialize",
+      "input": {
+        "value": {
+          "amount": "1299.90",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1299.90",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "machine-locale-formatting",
+        "json-number-serialization"
+      ]
+    }
+  ]
+}

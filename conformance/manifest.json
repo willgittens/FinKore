@@ -1,0 +1,39 @@
+{
+  "finflowConformance": "0.1",
+  "vectorSchema": "./vector.schema.json",
+  "suites": [
+    {
+      "id": "money",
+      "vectorFiles": [
+        "./money/representation.json",
+        "./money/arithmetic.json",
+        "./money/comparison.json",
+        "./money/rounding.json"
+      ]
+    },
+    {
+      "id": "workflow",
+      "vectorFiles": [
+        "./workflow/transitions.json"
+      ]
+    },
+    {
+      "id": "audit",
+      "vectorFiles": [
+        "./audit/history.json"
+      ]
+    },
+    {
+      "id": "approvals",
+      "vectorFiles": [
+        "./approvals/decisions.json"
+      ]
+    },
+    {
+      "id": "entities",
+      "vectorFiles": [
+        "./entities/behavior.json"
+      ]
+    }
+  ]
+}

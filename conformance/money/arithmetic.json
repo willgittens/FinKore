@@ -1,0 +1,510 @@
+{
+  "finflowVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "money.add.same-currency.basic-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-001",
+        "MONEY-ARITHMETIC-002",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "Adds positive same-currency values exactly.",
+      "operation": "money.add",
+      "input": {
+        "left": {
+          "amount": "10.20",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "5.30",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "15.50",
+          "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "10.20",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "5.30",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant"
+      ]
+    },
+    {
+      "id": "money.add.exact-decimal-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-007"
+      ],
+      "description": "Adds decimal tenths exactly, detecting binary floating-point leakage.",
+      "operation": "money.add",
+      "input": {
+        "left": {
+          "amount": "0.1",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "0.2",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "0.3",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "binary-floating-point-arithmetic"
+      ]
+    },
+    {
+      "id": "money.add.negative-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-001",
+        "MONEY-REPRESENTATION-004"
+      ],
+      "description": "Adds a negative operand with ordinary sign semantics.",
+      "operation": "money.add",
+      "input": {
+        "left": {
+          "amount": "10.00",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "-12.50",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-2.50",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "negative-sign-reversal"
+      ]
+    },
+    {
+      "id": "money.add.zero-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-007"
+      ],
+      "description": "Preserves a value when exact zero is added.",
+      "operation": "money.add",
+      "input": {
+        "left": {
+          "amount": "7.125",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "0",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "7.125",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary"
+      ]
+    },
+    {
+      "id": "money.add.currency-mismatch-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-001",
+        "MONEY-CURRENCY-004",
+        "MONEY-CURRENCY-003"
+      ],
+      "description": "Rejects addition across currencies and preserves operands.",
+      "operation": "money.add",
+      "input": {
+        "left": {
+          "amount": "10.00",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "5.00",
+          "currency": "USD"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_MONEY_CURRENCY_MISMATCH"
+        },
+        "observations": {
+          "left": {
+            "amount": "10.00",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "5.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "currency-check-removed",
+        "currency-check-inverted"
+      ]
+    },
+    {
+      "id": "money.subtract.basic-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-001",
+        "MONEY-ARITHMETIC-002"
+      ],
+      "description": "Subtracts same-currency values in operand order.",
+      "operation": "money.subtract",
+      "input": {
+        "left": {
+          "amount": "10.00",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "3.25",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "6.75",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "subtraction-changed-to-addition",
+        "operand-order-reversed"
+      ]
+    },
+    {
+      "id": "money.subtract.negative-result-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-007"
+      ],
+      "description": "Preserves an exact negative subtraction result.",
+      "operation": "money.subtract",
+      "input": {
+        "left": {
+          "amount": "3.25",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "10.00",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-6.75",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary"
+      ]
+    },
+    {
+      "id": "money.subtract.currency-mismatch-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-001",
+        "MONEY-CURRENCY-004"
+      ],
+      "description": "Rejects subtraction across currencies.",
+      "operation": "money.subtract",
+      "input": {
+        "left": {
+          "amount": "10.00",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "3.00",
+          "currency": "USD"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_MONEY_CURRENCY_MISMATCH"
+        },
+        "observations": {
+          "left": {
+            "amount": "10.00",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "3.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "currency-check-removed"
+      ]
+    },
+    {
+      "id": "money.negate.positive-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-003"
+      ],
+      "description": "Reverses a positive sign exactly and preserves currency.",
+      "operation": "money.negate",
+      "input": {
+        "value": {
+          "amount": "12.34",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-12.34",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "12.34",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "negative-sign-not-reversed",
+        "currency-relabelled"
+      ]
+    },
+    {
+      "id": "money.negate.negative-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-003"
+      ],
+      "description": "Reverses a negative sign exactly.",
+      "operation": "money.negate",
+      "input": {
+        "value": {
+          "amount": "-12.34",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "12.34",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "absolute-value-substitution"
+      ]
+    },
+    {
+      "id": "money.multiply.decimal-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-004",
+        "MONEY-ARITHMETIC-007"
+      ],
+      "description": "Multiplies by an exact decimal scalar without minor-unit rounding.",
+      "operation": "money.multiply",
+      "input": {
+        "value": {
+          "amount": "10.25",
+          "currency": "EUR"
+        },
+        "scalar": "1.5"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "15.375",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.25",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "implicit-minor-unit-rounding",
+        "multiplication-changed-to-division"
+      ]
+    },
+    {
+      "id": "money.divide.exact-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-005",
+        "MONEY-ARITHMETIC-007"
+      ],
+      "description": "Divides by a non-zero scalar when the quotient is exact.",
+      "operation": "money.divide",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "EUR"
+        },
+        "scalar": "4"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "2.5",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "division-changed-to-multiplication"
+      ]
+    },
+    {
+      "id": "money.divide.zero-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-006"
+      ],
+      "description": "Rejects a zero divisor and preserves the operand.",
+      "operation": "money.divide",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "EUR"
+        },
+        "scalar": "0"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_MONEY_DIVISION_BY_ZERO"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "zero-divisor-check-removed"
+      ]
+    },
+    {
+      "id": "money.divide.rounding-required-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-008",
+        "MONEY-ROUNDING-006"
+      ],
+      "description": "Rejects a non-terminating quotient when no rounding policy is supplied.",
+      "operation": "money.divide",
+      "input": {
+        "value": {
+          "amount": "1",
+          "currency": "EUR"
+        },
+        "scalar": "3"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_MONEY_ROUNDING_REQUIRED"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "implicit-rounding-policy"
+      ]
+    }
+  ]
+}

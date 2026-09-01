@@ -10,12 +10,12 @@ This document defines the normative portable JSON representation of Money. It sp
 
 ## Requirements
 
-- Serialized Money MUST include `amount` and `currency`.
-- `amount` MUST be a JSON string containing a base-10 decimal in plain notation: an optional minus sign, one or more integer digits, and an optional decimal point followed by one or more fractional digits.
-- `amount` MUST NOT contain exponential notation, a leading plus sign, or non-finite tokens.
-- `currency` MUST be a JSON string satisfying [Currency](currency.md).
-- A parser MUST reject non-finite, malformed, or ambiguous amounts.
-- Unknown members MAY be accepted by an implementation, but MUST NOT alter the meaning of `amount` or `currency`.
+- **MONEY-SERIALIZATION-001** — Serialized Money MUST include `amount` and `currency`.
+- **MONEY-SERIALIZATION-002** — `amount` MUST be a JSON string containing a base-10 decimal in plain notation: an optional minus sign, one or more integer digits, and an optional decimal point followed by one or more fractional digits.
+- **MONEY-SERIALIZATION-003** — `amount` MUST NOT contain exponential notation, a leading plus sign, or non-finite tokens.
+- **MONEY-SERIALIZATION-004** — `currency` MUST be a JSON string satisfying [Currency](currency.md).
+- **MONEY-SERIALIZATION-005** — A parser MUST reject non-finite, malformed, or ambiguous amounts.
+- **MONEY-SERIALIZATION-006** — Unknown members MAY be accepted by an implementation, but MUST NOT alter the meaning of `amount` or `currency`.
 
 ## Invariants
 

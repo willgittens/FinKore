@@ -1,0 +1,189 @@
+{
+  "finflowVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "money.compare.equal-trailing-zeros-001",
+      "spec": "money/comparison",
+      "requirements": [
+        "MONEY-COMPARISON-001",
+        "MONEY-COMPARISON-002",
+        "MONEY-REPRESENTATION-005"
+      ],
+      "description": "Treats insignificant trailing zeros as numerically equal.",
+      "operation": "money.compare",
+      "input": {
+        "left": {
+          "amount": "10.0",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "10.00",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "EQUAL"
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "representation-equality-substitution"
+      ]
+    },
+    {
+      "id": "money.compare.less-001",
+      "spec": "money/comparison",
+      "requirements": [
+        "MONEY-COMPARISON-003"
+      ],
+      "description": "Orders a smaller compatible-currency amount before a larger one.",
+      "operation": "money.compare",
+      "input": {
+        "left": {
+          "amount": "9.99",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "10.00",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "LESS"
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "comparison-direction-reversed"
+      ]
+    },
+    {
+      "id": "money.compare.greater-negative-001",
+      "spec": "money/comparison",
+      "requirements": [
+        "MONEY-COMPARISON-003"
+      ],
+      "description": "Orders a less-negative value above a more-negative value.",
+      "operation": "money.compare",
+      "input": {
+        "left": {
+          "amount": "-1.00",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "-2.00",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "GREATER"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "negative-comparison-reversed"
+      ]
+    },
+    {
+      "id": "money.compare.equal-zero-scale-001",
+      "spec": "money/comparison",
+      "requirements": [
+        "MONEY-COMPARISON-002"
+      ],
+      "description": "Compares zero representations numerically.",
+      "operation": "money.compare",
+      "input": {
+        "left": {
+          "amount": "0",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "0.000",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "EQUAL"
+      },
+      "tags": [
+        "positive",
+        "boundary"
+      ]
+    },
+    {
+      "id": "money.compare.equality-currency-mismatch-001",
+      "spec": "money/comparison",
+      "requirements": [
+        "MONEY-COMPARISON-004"
+      ],
+      "description": "Rejects equality comparison across currencies.",
+      "operation": "money.compare",
+      "input": {
+        "left": {
+          "amount": "10.00",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "10.00",
+          "currency": "USD"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_MONEY_CURRENCY_MISMATCH"
+        }
+      },
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "currency-check-removed"
+      ]
+    },
+    {
+      "id": "money.compare.order-currency-mismatch-001",
+      "spec": "money/comparison",
+      "requirements": [
+        "MONEY-COMPARISON-004"
+      ],
+      "description": "Rejects ordering comparison across currencies even when digits differ.",
+      "operation": "money.compare",
+      "input": {
+        "left": {
+          "amount": "1.00",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "2.00",
+          "currency": "USD"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_MONEY_CURRENCY_MISMATCH"
+        }
+      },
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "amount-first-cross-currency-comparison"
+      ]
+    }
+  ]
+}

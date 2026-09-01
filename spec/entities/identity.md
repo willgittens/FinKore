@@ -10,12 +10,12 @@ This document defines stable domain identity and continuity for a Financial Enti
 
 ## Requirements
 
-- A Financial Entity MUST have an identifier unique within its declared identity scope.
-- The identifier MUST remain stable for the Financial Entity's entire lifecycle.
-- Identifiers MUST be opaque; consumers MUST NOT infer mutable domain facts from their format.
-- Revisions, versions, and display numbers MUST NOT replace stable identity unless a composing specification explicitly makes them identical and immutable.
-- Two distinct entities MUST NOT share the same identifier within the same scope.
-- Import or migration MUST preserve identity or record an explicit identity mapping.
+- **ENTITY-IDENTITY-001** — A Financial Entity MUST have an identifier unique within its declared identity scope.
+- **ENTITY-IDENTITY-002** — The identifier MUST remain stable for the Financial Entity's entire lifecycle.
+- **ENTITY-IDENTITY-003** — Identifiers MUST be opaque; consumers MUST NOT infer mutable domain facts from their format.
+- **ENTITY-IDENTITY-004** — Revisions, versions, and display numbers MUST NOT replace stable identity unless a composing specification explicitly makes them identical and immutable.
+- **ENTITY-IDENTITY-005** — Two distinct entities MUST NOT share the same identifier within the same scope.
+- **ENTITY-IDENTITY-006** — Import or migration MUST preserve identity or record an explicit identity mapping.
 
 ## Invariants
 

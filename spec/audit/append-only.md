@@ -10,12 +10,12 @@ This document defines logical preservation rules for committed Audit Events, ind
 
 ## Requirements
 
-- Within logical audit history, a committed Audit Event MUST NOT be replaced, modified, or removed. A policy-authorized redacted representation follows [Audit Redaction](redaction.md) and MUST leave evidence of the redaction.
-- An ordering relationship explicitly recorded as part of committed logical history MUST NOT later be changed.
-- Submission of an already committed Audit Event identity MUST fail with `FINFLOW_AUDIT_DUPLICATE_EVENT` and MUST NOT create another committed event.
-- Any exceptional transformation required by law or policy MUST remain detectable through compliant [redaction](redaction.md) evidence.
+- **AUDIT-APPEND-001** — Within logical audit history, a committed Audit Event MUST NOT be replaced, modified, or removed. A policy-authorized redacted representation follows [Audit Redaction](redaction.md) and MUST leave evidence of the redaction.
+- **AUDIT-APPEND-002** — An ordering relationship explicitly recorded as part of committed logical history MUST NOT later be changed.
+- **AUDIT-APPEND-003** — Submission of an already committed Audit Event identity MUST fail with `FINFLOW_AUDIT_DUPLICATE_EVENT` and MUST NOT create another committed event.
+- **AUDIT-APPEND-004** — Any exceptional transformation required by law or policy MUST remain detectable through compliant [redaction](redaction.md) evidence.
 - FinFlow Core does not guarantee a total ordering of independently produced concurrent Audit Events.
-- When timestamps do not establish a reliable ordering between independently produced Audit Events, an implementation MUST NOT assign domain meaning to their arbitrary storage or retrieval order.
+- **AUDIT-APPEND-006** — When timestamps do not establish a reliable ordering between independently produced Audit Events, an implementation MUST NOT assign domain meaning to their arbitrary storage or retrieval order.
 
 ## Invariants
 

@@ -20,9 +20,9 @@ This document defines initial portable approval failure categories.
 
 ## Requirements
 
-- A failed Approval Decision MUST NOT change an Approval Requirement or Approval Chain outcome.
-- Error details MAY identify the affected requirement, but MUST NOT disclose restricted eligibility or decision data.
-- Missing approval MUST be distinguishable from explicit rejection.
+- **APPROVAL-ERROR-001** — A failed Approval Decision MUST NOT change an Approval Requirement or Approval Chain outcome.
+- **APPROVAL-ERROR-002** — Error details MAY identify the affected requirement, but MUST NOT disclose restricted eligibility or decision data.
+- **APPROVAL-ERROR-003** — Missing approval MUST be distinguishable from explicit rejection.
 
 ## Invariants
 

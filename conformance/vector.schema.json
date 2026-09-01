@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://finflow.dev/conformance/vector.schema.json",
+  "title": "FinFlow Conformance Vector File 0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["finflowVectorFile", "vectors"],
+  "properties": {
+    "finflowVectorFile": { "const": "0.1" },
+    "vectors": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/vector" }
+    }
+  },
+  "$defs": {
+    "vector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "spec", "requirements", "description", "operation", "input", "expected", "tags"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$" },
+        "spec": { "type": "string", "pattern": "^[a-z]+/[a-z-]+$" },
+        "requirements": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[A-Z]+(?:-[A-Z]+)+-[0-9]{3}$" }
+        },
+        "description": { "type": "string", "minLength": 1 },
+        "operation": { "type": "string", "pattern": "^[a-z]+(?:\\.[a-z]+)+$" },
+        "input": { "type": "object" },
+        "context": { "type": "object" },
+        "expected": { "$ref": "#/$defs/expected" },
+        "tags": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["positive", "negative", "boundary", "invariant", "regression", "mutation-sensitive"]
+          }
+        },
+        "guardsAgainst": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+        }
+      }
+    },
+    "expected": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "value"],
+          "properties": {
+            "status": { "const": "success" },
+            "value": {},
+            "observations": { "type": "object" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "error"],
+          "properties": {
+            "status": { "const": "error" },
+            "error": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["code"],
+              "properties": {
+                "code": { "type": "string", "pattern": "^FINFLOW_[A-Z]+(?:_[A-Z]+)+$" }
+              }
+            },
+            "observations": { "type": "object" }
+          }
+        }
+      ]
+    }
+  }
+}

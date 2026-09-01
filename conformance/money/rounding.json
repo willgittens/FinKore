@@ -1,0 +1,722 @@
+{
+  "finflowVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "money.round.half-up.tie-positive-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies HALF_UP at a mutation-sensitive 10.005 boundary.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "10.005",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "HALF_UP"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "10.01",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.005",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "rounding-mode-substitution",
+        "half-up-tie-boundary"
+      ]
+    },
+    {
+      "id": "money.round.half-up.tie-negative-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies HALF_UP at a mutation-sensitive -10.005 boundary.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "-10.005",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "HALF_UP"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-10.01",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-10.005",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "half-up-toward-positive"
+      ]
+    },
+    {
+      "id": "money.round.half-even.tie-even-down-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies HALF_EVEN at a mutation-sensitive 10.005 boundary.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "10.005",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "HALF_EVEN"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "10.00",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.005",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "rounding-mode-substitution",
+        "half-even-tie-boundary"
+      ]
+    },
+    {
+      "id": "money.round.half-even.tie-odd-up-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies HALF_EVEN at a mutation-sensitive 10.015 boundary.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "10.015",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "HALF_EVEN"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "10.02",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.015",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "half-even-always-down"
+      ]
+    },
+    {
+      "id": "money.round.half-even.tie-negative-even-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies HALF_EVEN at a mutation-sensitive -10.005 boundary.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "-10.005",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "HALF_EVEN"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-10.00",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-10.005",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "half-even-negative-tie"
+      ]
+    },
+    {
+      "id": "money.round.down.positive-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies DOWN at a mutation-sensitive 1.239 boundary.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "1.239",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "DOWN"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1.23",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1.239",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "down-replaced-with-floor"
+      ]
+    },
+    {
+      "id": "money.round.down.negative-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies DOWN at a mutation-sensitive -1.239 boundary.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "-1.239",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "DOWN"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-1.23",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-1.239",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "down-replaced-with-floor"
+      ]
+    },
+    {
+      "id": "money.round.up.positive-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies UP at a mutation-sensitive 1.231 boundary.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "1.231",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "UP"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1.24",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1.231",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "up-replaced-with-ceiling"
+      ]
+    },
+    {
+      "id": "money.round.up.negative-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies UP at a mutation-sensitive -1.231 boundary.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "-1.231",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "UP"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-1.24",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-1.231",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "up-replaced-with-ceiling"
+      ]
+    },
+    {
+      "id": "money.round.floor.positive-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies FLOOR at a mutation-sensitive 1.239 boundary.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "1.239",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "FLOOR"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1.23",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1.239",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "floor-replaced-with-down-sign-blind"
+      ]
+    },
+    {
+      "id": "money.round.floor.negative-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies FLOOR at a mutation-sensitive -1.231 boundary.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "-1.231",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "FLOOR"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-1.24",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-1.231",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "floor-replaced-with-down"
+      ]
+    },
+    {
+      "id": "money.round.ceiling.positive-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies CEILING at a mutation-sensitive 1.231 boundary.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "1.231",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "CEILING"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1.24",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1.231",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "ceiling-replaced-with-up-sign-blind"
+      ]
+    },
+    {
+      "id": "money.round.ceiling.negative-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies CEILING at a mutation-sensitive -1.239 boundary.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "-1.239",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "CEILING"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-1.23",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-1.239",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "ceiling-replaced-with-up"
+      ]
+    },
+    {
+      "id": "money.round.below-half-positive-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies HALF_UP at a mutation-sensitive 10.0049 boundary.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "10.0049",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "HALF_UP"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "10.00",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.0049",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "rounding-boundary-shifted"
+      ]
+    },
+    {
+      "id": "money.round.above-half-positive-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies HALF_UP at a mutation-sensitive 10.0051 boundary.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "10.0051",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "HALF_UP"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "10.01",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.0051",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "rounding-boundary-shifted"
+      ]
+    },
+    {
+      "id": "money.round.explicit-scale-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-001",
+        "MONEY-ROUNDING-004"
+      ],
+      "description": "Uses explicit scale three rather than EUR customary scale.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "1.2345",
+          "currency": "EUR"
+        },
+        "scale": 3,
+        "mode": "HALF_UP"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1.235",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "target-scale-ignored",
+        "currency-scale-substituted"
+      ]
+    },
+    {
+      "id": "money.round.no-discard-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Leaves numeric value unchanged when no non-zero digits are discarded.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "1.230",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "FLOOR"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1.23",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary"
+      ]
+    },
+    {
+      "id": "money.round.invalid-mode-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-001"
+      ],
+      "description": "Rejects an unsupported rounding mode.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "1.235",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "HALF_DOWN"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_MONEY_INVALID_ROUNDING"
+        }
+      },
+      "tags": [
+        "negative"
+      ]
+    },
+    {
+      "id": "money.round.invalid-scale-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-001"
+      ],
+      "description": "Rejects a negative target scale.",
+      "operation": "money.round",
+      "input": {
+        "value": {
+          "amount": "1.235",
+          "currency": "EUR"
+        },
+        "scale": -1,
+        "mode": "HALF_UP"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_MONEY_INVALID_ROUNDING"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary"
+      ]
+    }
+  ]
+}

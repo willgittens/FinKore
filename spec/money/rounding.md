@@ -14,12 +14,12 @@ This document governs deliberate precision reduction of monetary amounts.
 
 ## Requirements
 
-- Rounding MUST specify a target scale and a rounding mode.
-- Rounding MUST be deterministic for the same amount, target scale, and mode.
-- Every conforming implementation MUST support `HALF_UP`, `HALF_EVEN`, `DOWN`, `UP`, `FLOOR`, and `CEILING` with the semantics defined below.
-- An implementation MUST NOT silently substitute a currency's customary scale for an explicit target scale.
-- A domain specification MAY declare a rounding policy; that declaration MUST identify both scale derivation and mode.
-- If no applicable policy exists when precision reduction is required, the operation MUST fail with `FINFLOW_MONEY_ROUNDING_REQUIRED`.
+- **MONEY-ROUNDING-001** — Rounding MUST specify a target scale and a rounding mode.
+- **MONEY-ROUNDING-002** — Rounding MUST be deterministic for the same amount, target scale, and mode.
+- **MONEY-ROUNDING-003** — Every conforming implementation MUST support `HALF_UP`, `HALF_EVEN`, `DOWN`, `UP`, `FLOOR`, and `CEILING` with the semantics defined below.
+- **MONEY-ROUNDING-004** — An implementation MUST NOT silently substitute a currency's customary scale for an explicit target scale.
+- **MONEY-ROUNDING-005** — A domain specification MAY declare a rounding policy; that declaration MUST identify both scale derivation and mode.
+- **MONEY-ROUNDING-006** — If no applicable policy exists when precision reduction is required, the operation MUST fail with `FINFLOW_MONEY_ROUNDING_REQUIRED`.
 
 Rounding at explicit domain boundaries avoids unintended cumulative precision loss.
 

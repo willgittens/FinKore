@@ -10,14 +10,14 @@ This document defines how multiple Approval Requirements combine. The term Appro
 
 ## Requirements
 
-- An Approval Chain MUST contain one or more declared Approval Requirements.
-- It MUST declare whether its Approval Requirements are sequential or unordered.
-- An unordered chain MUST NOT be interpreted as sequential.
-- A sequential chain MUST NOT activate a later Approval Requirement before its predecessor is satisfied.
-- An Approval Chain is `APPROVED` only when every applicable Approval Requirement is approved.
-- Such a chain is `PENDING` while at least one applicable Approval Requirement remains pending and no effective rejection determines the outcome.
-- Every Approval Chain definition MUST state how an effective rejection determines its outcome.
-- Evaluation MUST be deterministic from the chain definition, applicable requirements, and effective decisions.
+- **APPROVAL-CHAIN-001** — An Approval Chain MUST contain one or more declared Approval Requirements.
+- **APPROVAL-CHAIN-002** — It MUST declare whether its Approval Requirements are sequential or unordered.
+- **APPROVAL-CHAIN-003** — An unordered chain MUST NOT be interpreted as sequential.
+- **APPROVAL-CHAIN-004** — A sequential chain MUST NOT activate a later Approval Requirement before its predecessor is satisfied.
+- **APPROVAL-CHAIN-005** — An Approval Chain MUST be `APPROVED` only when every applicable Approval Requirement is approved.
+- **APPROVAL-CHAIN-006** — Such a chain MUST remain `PENDING` while at least one applicable Approval Requirement remains pending and no effective rejection determines the outcome.
+- **APPROVAL-CHAIN-007** — Every Approval Chain definition MUST state how an effective rejection determines its outcome.
+- **APPROVAL-CHAIN-008** — Evaluation MUST be deterministic from the chain definition, applicable requirements, and effective decisions.
 
 ## Invariants
 

@@ -10,15 +10,15 @@ This document defines exact arithmetic on Money values.
 
 ## Requirements
 
-- Addition and subtraction MUST require compatible currencies.
-- Addition and subtraction MUST preserve the operands' currency.
-- Negation MUST preserve currency and MUST reverse the amount's sign exactly.
-- Multiplication by an exact decimal scalar MUST multiply the amount by that scalar and preserve currency.
-- Division by a non-zero exact decimal scalar MUST divide the amount by that scalar and preserve currency.
-- Division by zero MUST fail with `FINFLOW_MONEY_DIVISION_BY_ZERO`.
-- When an arithmetic result can be represented exactly, the operation MUST preserve that exact decimal result and MUST NOT round it.
-- An operation that requires precision reduction MUST NOT choose a rounding rule implicitly; it MUST use an explicitly supplied or domain-declared [rounding](rounding.md) rule.
-- Arithmetic MUST NOT alter the observable value of any operand.
+- **MONEY-ARITHMETIC-001** — Addition and subtraction MUST require compatible currencies.
+- **MONEY-ARITHMETIC-002** — Addition and subtraction MUST preserve the operands' currency.
+- **MONEY-ARITHMETIC-003** — Negation MUST preserve currency and MUST reverse the amount's sign exactly.
+- **MONEY-ARITHMETIC-004** — Multiplication by an exact decimal scalar MUST multiply the amount by that scalar and preserve currency.
+- **MONEY-ARITHMETIC-005** — Division by a non-zero exact decimal scalar MUST divide the amount by that scalar and preserve currency.
+- **MONEY-ARITHMETIC-006** — Division by zero MUST fail with `FINFLOW_MONEY_DIVISION_BY_ZERO`.
+- **MONEY-ARITHMETIC-007** — When an arithmetic result can be represented exactly, the operation MUST preserve that exact decimal result and MUST NOT round it.
+- **MONEY-ARITHMETIC-008** — An operation that requires precision reduction MUST NOT choose a rounding rule implicitly; it MUST use an explicitly supplied or domain-declared [rounding](rounding.md) rule.
+- **MONEY-ARITHMETIC-009** — Arithmetic MUST NOT alter the observable value of any operand.
 
 ## Invariants
 

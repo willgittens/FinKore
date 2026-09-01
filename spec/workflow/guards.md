@@ -10,11 +10,11 @@ This document defines Transition Guards: domain predicates that control whether 
 
 ## Requirements
 
-- A Transition Guard MUST evaluate against the facts provided for the Transition Request.
-- Every applicable Transition Guard MUST pass before the Transition succeeds.
-- Transition Guard evaluation MUST NOT change Workflow State or other domain data.
-- A Transition Guard result MUST be deterministic for the same declared facts, or the guard definition MUST identify its dependence on external facts.
-- Authorization MAY be an input to a guard, but a guard MUST NOT assume a particular authorization model.
+- **WORKFLOW-GUARD-001** — A Transition Guard MUST evaluate against the facts provided for the Transition Request.
+- **WORKFLOW-GUARD-002** — Every applicable Transition Guard MUST pass before the Transition succeeds.
+- **WORKFLOW-GUARD-003** — Transition Guard evaluation MUST NOT change Workflow State or other domain data.
+- **WORKFLOW-GUARD-004** — A Transition Guard result MUST be deterministic for the same declared facts, or the guard definition MUST identify its dependence on external facts.
+- **WORKFLOW-GUARD-005** — Authorization MAY be an input to a guard, but a guard MUST NOT assume a particular authorization model.
 
 ## Invariants
 

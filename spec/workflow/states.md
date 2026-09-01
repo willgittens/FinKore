@@ -10,12 +10,12 @@ This document defines named lifecycle conditions and workflow initialization.
 
 ## Requirements
 
-- Each state MUST have an identifier unique within its workflow definition.
-- A Workflow definition MUST declare exactly one initial State.
-- A newly created Workflow instance MUST begin in the declared initial State. Importing an instance with existing history is a separate operation whose resulting State MUST be defined by the composing specification.
-- The current state MUST be one of the declared states.
-- State identifiers MUST be treated as domain names, not presentation labels.
-- A definition SHOULD document the domain meaning of every state.
+- **WORKFLOW-STATES-001** — Each state MUST have an identifier unique within its workflow definition.
+- **WORKFLOW-STATES-002** — A Workflow definition MUST declare exactly one initial State.
+- **WORKFLOW-STATES-003** — A newly created Workflow instance MUST begin in the declared initial State. Importing an instance with existing history is a separate operation whose resulting State MUST be defined by the composing specification.
+- **WORKFLOW-STATES-004** — The current state MUST be one of the declared states.
+- **WORKFLOW-STATES-005** — State identifiers MUST be treated as domain names, not presentation labels.
+- **WORKFLOW-STATES-006** — A definition SHOULD document the domain meaning of every state.
 
 ## Invariants
 

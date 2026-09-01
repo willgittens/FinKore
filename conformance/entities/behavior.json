@@ -1,0 +1,645 @@
+{
+  "finflowVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "entity.create.initial-lifecycle-001",
+      "spec": "entities/lifecycle",
+      "requirements": [
+        "ENTITY-LIFECYCLE-001",
+        "ENTITY-LIFECYCLE-002",
+        "ENTITY-IDENTITY-001",
+        "ENTITY-VALIDATION-001"
+      ],
+      "description": "Creates a financial entity with stable identity in its workflow initial state.",
+      "operation": "entity.create",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "id": "inv-42",
+        "data": {
+          "amount": {
+            "amount": "100.00",
+            "currency": "EUR"
+          },
+          "memo": "initial",
+          "deliveryStatus": "NEW"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant"
+      ]
+    },
+    {
+      "id": "entity.mutate.mutable-field-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-MUTABILITY-001"
+      ],
+      "description": "Allows a field explicitly declared mutable in the current state.",
+      "operation": "entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "memo": "revised"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "revised",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "observations": {
+          "identity": "inv-42",
+          "state": "DRAFT"
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant"
+      ]
+    },
+    {
+      "id": "entity.mutate.immutable-financial-field-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-MUTABILITY-002",
+        "ENTITY-MUTABILITY-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Rejects a financial-field mutation declared immutable in the current state without partial change.",
+      "operation": "entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "FINAL",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "200.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_ENTITY_IMMUTABLE"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "FINAL",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "immutable-state-guard-removed",
+        "failed-mutation-partially-applied"
+      ]
+    },
+    {
+      "id": "entity.mutate.terminal-metadata-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-MUTABILITY-006",
+        "ENTITY-MUTABILITY-007"
+      ],
+      "description": "Allows operational metadata explicitly declared mutable even in a terminal state.",
+      "operation": "entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "FINAL",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "deliveryStatus": "SENT"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "FINAL",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "SENT"
+          }
+        },
+        "observations": {
+          "identity": "inv-42",
+          "state": "FINAL"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "terminal-state-made-globally-immutable"
+      ]
+    },
+    {
+      "id": "entity.validation.complete-result-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-002",
+        "ENTITY-VALIDATION-003",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-VALIDATION-006",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Validates the complete proposal and rejects it atomically when the resulting amount is invalid.",
+      "operation": "entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "-1.00",
+            "currency": "EUR"
+          },
+          "memo": "should-not-stick"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_ENTITY_VALIDATION_FAILED"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "mutation-before-validation",
+        "partial-multi-field-mutation"
+      ]
+    },
+    {
+      "id": "entity.transition.success-identity-stable-001",
+      "spec": "entities/lifecycle",
+      "requirements": [
+        "ENTITY-LIFECYCLE-003",
+        "ENTITY-IDENTITY-002"
+      ],
+      "description": "A successful lifecycle transition preserves entity identity.",
+      "operation": "entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "FINAL",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "observations": {
+          "identity": "inv-42"
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-identity-changed",
+        "lifecycle-state-not-updated"
+      ]
+    },
+    {
+      "id": "entity.transition.rejected-preserves-entity-001",
+      "spec": "entities/lifecycle",
+      "requirements": [
+        "ENTITY-LIFECYCLE-003",
+        "ENTITY-ERROR-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Retains the Workflow error and entire entity when a transition is undeclared.",
+      "operation": "entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "UNKNOWN"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_WORKFLOW_INVALID_TRANSITION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "domain-error-replaced",
+        "failed-transition-mutates-entity"
+      ]
+    }
+  ]
+}

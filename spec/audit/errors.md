@@ -20,9 +20,9 @@ This document defines initial portable audit failure categories.
 
 ## Requirements
 
-- A rejected audit operation MUST NOT partially commit the invalid event.
-- Error details MUST NOT disclose content protected by redaction policy.
-- Implementations MAY expose additional diagnostic context that preserves these constraints.
+- **AUDIT-ERROR-001** — A rejected audit operation MUST NOT partially commit the invalid event.
+- **AUDIT-ERROR-002** — Error details MUST NOT disclose content protected by redaction policy.
+- **AUDIT-ERROR-003** — Implementations MAY expose additional diagnostic context that preserves these constraints.
 
 ## Invariants
 
