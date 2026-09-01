@@ -26,7 +26,7 @@ This document defines initial portable workflow failure categories.
 
 ## Invariants
 
-A failed Workflow operation MUST leave current State unchanged.
+A failed Workflow operation must leave current State unchanged.
 
 ## Non-Goals
 

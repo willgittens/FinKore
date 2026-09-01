@@ -24,7 +24,7 @@ This document defines the information carried by a Money value.
 
 ## Invariants
 
-The amount and currency form one value and MUST remain associated through every operation.
+The amount and currency form one value and remain associated through every operation; see **MONEY-ARITHMETIC-002** through **MONEY-ARITHMETIC-005**.
 
 ## Example
 
@@ -47,7 +47,7 @@ The following JSON is illustrative and non-normative; the normative interchange 
 
 ## Errors
 
-Invalid components MUST fail with an applicable code from [Money Errors](errors.md).
+Invalid components fail as defined by **MONEY-ERROR-001** and **MONEY-ERROR-002** in [Money Errors](errors.md).
 
 ## Open Questions
 

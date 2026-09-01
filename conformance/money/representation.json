@@ -5,10 +5,10 @@
       "id": "money.deserialize.positive-001",
       "spec": "money/serialization",
       "requirements": [
-        "MONEY-SERIALIZATION-001",
-        "MONEY-SERIALIZATION-002",
         "MONEY-REPRESENTATION-001",
-        "MONEY-REPRESENTATION-002"
+        "MONEY-REPRESENTATION-002",
+        "MONEY-SERIALIZATION-001",
+        "MONEY-SERIALIZATION-002"
       ],
       "description": "Accepts a plain exact positive decimal string with currency.",
       "operation": "money.deserialize",
@@ -85,8 +85,9 @@
       "id": "money.deserialize.missing-amount-001",
       "spec": "money/serialization",
       "requirements": [
-        "MONEY-SERIALIZATION-001",
-        "MONEY-REPRESENTATION-001"
+        "MONEY-ERROR-001",
+        "MONEY-REPRESENTATION-001",
+        "MONEY-SERIALIZATION-001"
       ],
       "description": "Rejects portable Money with no amount.",
       "operation": "money.deserialize",
@@ -109,9 +110,10 @@
       "id": "money.deserialize.missing-currency-001",
       "spec": "money/serialization",
       "requirements": [
+        "MONEY-ERROR-002",
+        "MONEY-REPRESENTATION-001",
         "MONEY-SERIALIZATION-001",
-        "MONEY-SERIALIZATION-004",
-        "MONEY-REPRESENTATION-001"
+        "MONEY-SERIALIZATION-004"
       ],
       "description": "Rejects portable Money with no currency.",
       "operation": "money.deserialize",
@@ -134,6 +136,7 @@
       "id": "money.deserialize.numeric-amount-001",
       "spec": "money/serialization",
       "requirements": [
+        "MONEY-ERROR-001",
         "MONEY-SERIALIZATION-002"
       ],
       "description": "Rejects a JSON number because portable amounts are decimal strings.",
@@ -162,6 +165,7 @@
       "id": "money.deserialize.exponent-001",
       "spec": "money/serialization",
       "requirements": [
+        "MONEY-ERROR-001",
         "MONEY-SERIALIZATION-003",
         "MONEY-SERIALIZATION-005"
       ],
@@ -187,6 +191,7 @@
       "id": "money.deserialize.leading-plus-001",
       "spec": "money/serialization",
       "requirements": [
+        "MONEY-ERROR-001",
         "MONEY-SERIALIZATION-003",
         "MONEY-SERIALIZATION-005"
       ],
@@ -212,6 +217,7 @@
       "id": "money.deserialize.non-finite-001",
       "spec": "money/serialization",
       "requirements": [
+        "MONEY-ERROR-001",
         "MONEY-SERIALIZATION-003",
         "MONEY-SERIALIZATION-005"
       ],
@@ -237,7 +243,8 @@
       "id": "money.deserialize.lowercase-currency-001",
       "spec": "money/currency",
       "requirements": [
-        "MONEY-CURRENCY-002"
+        "SPEC-CURRENCY-002",
+        "MONEY-ERROR-002"
       ],
       "description": "Rejects a lowercase ISO 4217 currency identifier rather than normalizing it.",
       "operation": "money.deserialize",

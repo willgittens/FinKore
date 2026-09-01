@@ -15,10 +15,11 @@ This document defines equality and ordering of Money values.
 - **MONEY-COMPARISON-003** — Ordering MUST be defined only for compatible currencies.
 - **MONEY-COMPARISON-004** — Equality or ordering across incompatible currencies MUST fail with `FINFLOW_MONEY_CURRENCY_MISMATCH` unless an explicit conversion has occurred.
 - **MONEY-COMPARISON-005** — Implementations MAY offer representation equality separately, provided it is clearly distinguished from numeric equality.
+- **MONEY-COMPARISON-006** — Numeric comparison of compatible Money values MUST be reflexive.
 
 ## Invariants
 
-For compatible currencies, comparison MUST be reflexive and consistent with exact decimal arithmetic. Currency compatibility MUST be evaluated consistently with [Currency](currency.md).
+For compatible currencies, comparison must be reflexive and consistent with exact decimal arithmetic. Currency compatibility must be evaluated consistently with [Currency](currency.md).
 
 ## Examples
 

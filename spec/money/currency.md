@@ -11,14 +11,15 @@ This document defines currency identity and compatibility for Money values that 
 ## Requirements
 
 - **MONEY-CURRENCY-001** — A currency identifier MUST be non-empty and unambiguous within its declared context.
-- **MONEY-CURRENCY-002** — Currency identifiers SHOULD use ISO 4217 alphabetic codes when representing currencies covered by ISO 4217; those codes MUST be uppercase when used.
+- **MONEY-CURRENCY-002** — Currency identifiers SHOULD use ISO 4217 alphabetic codes when representing currencies covered by ISO 4217.
 - **MONEY-CURRENCY-003** — Within this document's normative scope, two Money values MUST be considered currency-compatible only when they use the same ISO 4217 currency identifier.
 - **MONEY-CURRENCY-004** — Operations that require currency compatibility MUST fail with `FINFLOW_MONEY_CURRENCY_MISMATCH` when currencies are incompatible. Conversion is a separate explicit operation outside this specification.
 - **MONEY-CURRENCY-005** — Currency metadata MUST NOT be treated as an exchange rate.
+The uppercase rule for ISO 4217 identifiers is **SPEC-CURRENCY-002** in [Specification Conventions](../conventions.md).
 
 ## Invariants
 
-A Money operation other than explicit conversion MUST NOT change currency.
+A Money operation other than explicit conversion does not change currency; see **MONEY-ARITHMETIC-002** through **MONEY-ARITHMETIC-005**.
 
 ## Examples
 

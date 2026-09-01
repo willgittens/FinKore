@@ -21,7 +21,7 @@ This document defines how multiple Approval Requirements combine. The term Appro
 
 ## Invariants
 
-An Approval Chain outcome MUST be consistent with its sequencing declaration and effective required Approval Decisions.
+An Approval Chain outcome must be consistent with its sequencing declaration and effective required Approval Decisions.
 
 ## Examples
 

@@ -146,8 +146,10 @@
       "spec": "money/arithmetic",
       "requirements": [
         "MONEY-ARITHMETIC-001",
+        "MONEY-CURRENCY-003",
         "MONEY-CURRENCY-004",
-        "MONEY-CURRENCY-003"
+        "MONEY-ERROR-003",
+        "MONEY-ERROR-007"
       ],
       "description": "Rejects addition across currencies and preserves operands.",
       "operation": "money.add",
@@ -257,7 +259,9 @@
       "spec": "money/arithmetic",
       "requirements": [
         "MONEY-ARITHMETIC-001",
-        "MONEY-CURRENCY-004"
+        "MONEY-CURRENCY-004",
+        "MONEY-ERROR-003",
+        "MONEY-ERROR-007"
       ],
       "description": "Rejects subtraction across currencies.",
       "operation": "money.subtract",
@@ -436,7 +440,9 @@
       "id": "money.divide.zero-001",
       "spec": "money/arithmetic",
       "requirements": [
-        "MONEY-ARITHMETIC-006"
+        "MONEY-ARITHMETIC-006",
+        "MONEY-ERROR-004",
+        "MONEY-ERROR-007"
       ],
       "description": "Rejects a zero divisor and preserves the operand.",
       "operation": "money.divide",
@@ -474,6 +480,8 @@
       "spec": "money/arithmetic",
       "requirements": [
         "MONEY-ARITHMETIC-008",
+        "MONEY-ERROR-005",
+        "MONEY-ERROR-007",
         "MONEY-ROUNDING-006"
       ],
       "description": "Rejects a non-terminating quotient when no rounding policy is supplied.",

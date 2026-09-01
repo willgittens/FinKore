@@ -15,10 +15,11 @@ This document defines Transition Guards: domain predicates that control whether 
 - **WORKFLOW-GUARD-003** — Transition Guard evaluation MUST NOT change Workflow State or other domain data.
 - **WORKFLOW-GUARD-004** — A Transition Guard result MUST be deterministic for the same declared facts, or the guard definition MUST identify its dependence on external facts.
 - **WORKFLOW-GUARD-005** — Authorization MAY be an input to a guard, but a guard MUST NOT assume a particular authorization model.
+- **WORKFLOW-GUARD-006** — Guard evaluation order MUST NOT change the logical result when all guards evaluate the same supplied facts.
 
 ## Invariants
 
-Failure of any required Transition Guard MUST leave current State unchanged. Guard order MUST NOT change the logical result when all guards are evaluated against the same facts.
+Failure of any required Transition Guard must leave current State unchanged. Guard order must not change the logical result when all guards are evaluated against the same facts.
 
 ## Examples
 
@@ -34,7 +35,7 @@ Guard: required approvals are satisfied
 
 ## Errors
 
-A Transition Guard rejection MUST report `FINFLOW_WORKFLOW_GUARD_REJECTED`. A composing domain MAY provide additional context or a secondary domain code without replacing this failure category.
+A Transition Guard rejection must report `FINFLOW_WORKFLOW_GUARD_REJECTED`. A composing domain may provide additional context or a secondary domain code without replacing this failure category.
 
 ## Open Questions
 

@@ -26,7 +26,7 @@ This document defines initial portable audit failure categories.
 
 ## Invariants
 
-A failed append MUST leave committed logical history unchanged.
+A failed append must leave committed logical history unchanged.
 
 ## Non-Goals
 

@@ -15,12 +15,13 @@ This document defines the minimum meaning and content of an Audit Event. An Audi
 - **AUDIT-EVENT-003** — The event type MUST express a domain occurrence and MUST NOT merely name an implementation method.
 - **AUDIT-EVENT-004** — The entity reference MUST identify the affected entity type and stable entity identifier.
 - **AUDIT-EVENT-005** — The timestamp MUST identify an unambiguous instant when the recorded occurrence took effect and, when serialized, MUST follow [Timestamp conventions](../conventions.md#portable-values).
-- **AUDIT-EVENT-006** — Event metadata MAY provide relevant context but MUST NOT contradict required event fields.
+- **AUDIT-EVENT-006** — Event metadata MAY provide relevant context.
+- **AUDIT-EVENT-008** — Event metadata MUST NOT contradict required event fields.
 - **AUDIT-EVENT-007** — An event MUST be complete enough to retain its declared meaning without relying on mutable display text.
 
 ## Invariants
 
-Within one audit history, event identifiers MUST be unique and committed events MUST follow [append-only](append-only.md) behavior.
+Within one audit history, event identifiers must be unique and committed events must follow [append-only](append-only.md) behavior.
 
 ## Example
 

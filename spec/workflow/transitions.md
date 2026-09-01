@@ -20,11 +20,12 @@ This document defines declared changes between workflow states.
 - **WORKFLOW-TRANSITION-004** — All applicable [Transition Guards](guards.md) MUST pass before the State changes.
 - **WORKFLOW-TRANSITION-005** — A Successful Transition MUST change the current State to its Target State exactly once.
 - **WORKFLOW-TRANSITION-006** — A Rejected Transition MUST leave current State unchanged.
+- **WORKFLOW-TRANSITION-007** — Transition validation and State change MUST be observable as one domain operation, with no intermediate State change exposed.
 - A composing domain should identify the context needed to describe a Successful Transition in an [Audit Event](../audit/events.md).
 
 ## Invariants
 
-An undeclared Source-State-to-Target-State Transition MUST NOT succeed. Validation and State change MUST behave as one domain operation from the observer's perspective.
+An undeclared Source-State-to-Target-State Transition must not succeed. Validation and State change must behave as one domain operation from the observer's perspective.
 
 ## Examples
 
@@ -42,11 +43,11 @@ Given `DRAFT → SUBMITTED`, requesting that transition from `DRAFT` succeeds if
 
 ## Invalid Examples
 
-Requesting `DRAFT → APPROVED` when only `DRAFT → SUBMITTED` is declared MUST fail.
+Requesting `DRAFT → APPROVED` when only `DRAFT → SUBMITTED` is declared must fail.
 
 ## Errors
 
-Except for a request from a terminal State, an undeclared Transition Request MUST report `FINFLOW_WORKFLOW_INVALID_TRANSITION`. A request from a terminal State follows [Terminal States](terminal-states.md), and a failed Transition Guard follows [Guards](guards.md).
+Except for a request from a terminal State, an undeclared Transition Request must report `FINFLOW_WORKFLOW_INVALID_TRANSITION`. A request from a terminal State follows [Terminal States](terminal-states.md), and a failed Transition Guard follows [Guards](guards.md).
 
 ## Open Questions
 

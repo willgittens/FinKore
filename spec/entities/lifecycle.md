@@ -15,10 +15,11 @@ This document defines how a Financial Entity progresses through declared domain 
 - **ENTITY-LIFECYCLE-003** — Current State MUST change only through a Successful Transition.
 - **ENTITY-LIFECYCLE-004** — Audit requirements for lifecycle Transitions MUST be declared as specified by [Financial Entities](README.md).
 - **ENTITY-LIFECYCLE-005** — A composing domain MUST define the domain consequences of each state.
+- **ENTITY-LIFECYCLE-006** — A Financial Entity MUST have exactly one current lifecycle State.
 
 ## Invariants
 
-A Financial Entity MUST have exactly one current lifecycle State. A Rejected Transition MUST leave both current State and entity data unchanged.
+A Financial Entity must have exactly one current lifecycle State. A Rejected Transition must leave both current State and entity data unchanged.
 
 ## Examples
 

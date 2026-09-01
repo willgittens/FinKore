@@ -24,7 +24,7 @@ This document defines how declared field-level mutability rules constrain Financ
 
 ## Invariants
 
-A field declared immutable in the current State MUST NOT change through an ordinary Mutation.
+A field declared immutable in the current State must not change through an ordinary Mutation.
 
 ## Invalid Examples
 
@@ -33,7 +33,7 @@ A field declared immutable in the current State MUST NOT change through an ordin
 
 ## Errors
 
-A prohibited mutation MUST report `FINFLOW_ENTITY_IMMUTABLE`.
+A prohibited mutation must report `FINFLOW_ENTITY_IMMUTABLE`.
 
 ## Open Questions
 

@@ -6,7 +6,7 @@
 
 ## Purpose
 
-This document defines a need for an Approval Decision from an eligible Actor or application-defined subject. Eligibility MAY refer to an individual Actor, role, group, organizational responsibility, or another declared rule; no authorization or RBAC model is prescribed.
+This document defines a need for an Approval Decision from an eligible Actor or application-defined subject. Eligibility may refer to an individual Actor, role, group, organizational responsibility, or another declared rule; no authorization or RBAC model is prescribed.
 
 ## Requirements
 
@@ -20,7 +20,7 @@ This document defines a need for an Approval Decision from an eligible Actor or 
 
 ## Invariants
 
-An Approval Requirement MUST NOT be considered approved without an effective approving Approval Decision from an eligible Actor.
+An Approval Requirement must not be considered approved without an effective approving Approval Decision from an eligible Actor.
 
 ## Example
 

@@ -10,15 +10,15 @@ This domain defines common behavior for identifiable, lifecycle-managed, auditab
 
 ## Requirements
 
-- A Financial Entity MUST have a stable [identity](identity.md).
-- It MUST have a declared [lifecycle](lifecycle.md) and current State.
-- Proposed Mutations MUST follow [mutability](mutability.md) and [validation](validation.md) rules.
-- A composing domain MUST identify which Mutations and Transitions require an [Audit Event](../audit/events.md). Each successful operation so identified MUST produce a corresponding Audit Event.
-- A composing domain MUST define its fields, lifecycle, and financially relevant invariants.
+A Financial Entity follows the canonical [identity](identity.md), [lifecycle](lifecycle.md), [mutability](mutability.md), and [validation](validation.md) requirements.
+
+- **ENTITY-AUDIT-001** — A composing domain MUST identify which Mutations and Transitions require an [Audit Event](../audit/events.md).
+- **ENTITY-AUDIT-002** — Each successful Mutation or Transition identified by **ENTITY-AUDIT-001** MUST produce a corresponding Audit Event.
+- **ENTITY-DEFINITION-001** — A composing domain MUST define its fields, lifecycle, and financially relevant invariants.
 
 ## Invariants
 
-A Financial Entity's identity MUST remain stable throughout its lifecycle. Its current State and data MUST reflect only successful domain operations.
+A Financial Entity's identity must remain stable throughout its lifecycle. Its current State and data must reflect only successful domain operations.
 
 ## Non-Goals
 

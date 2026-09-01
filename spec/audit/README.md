@@ -6,14 +6,14 @@
 
 ## Purpose
 
-This domain defines audit history as logical records of financially relevant occurrences, not application logging. A Business Event is the occurrence itself; an Audit Event records that occurrence. The two MAY carry related information but MUST NOT be assumed to be identical.
+This domain defines audit history as logical records of financially relevant occurrences, not application logging. A Business Event is the occurrence itself; an Audit Event records that occurrence. The two may carry related information but must not be assumed to be identical.
 
 ## Requirements
 
-- An Audit Event MUST identify what occurred, when it occurred, and the affected Financial Entity.
-- An Audit Event MUST identify the responsible [Actor](actors.md) when one is known.
-- Committed logical audit history MUST be [append-only](append-only.md).
-- Sensitive content MUST follow the declared [redaction](redaction.md) policy.
+- An Audit Event must identify what occurred, when it occurred, and the affected Financial Entity.
+- An Audit Event must identify the responsible [Actor](actors.md) when one is known.
+- Committed logical audit history must be [append-only](append-only.md).
+- Sensitive content must follow the declared [redaction](redaction.md) policy.
 
 ## Documents
 
@@ -26,7 +26,7 @@ This domain defines audit history as logical records of financially relevant occ
 
 ## Invariants
 
-Committed logical audit history MUST preserve the existence and meaning of its Audit Events and every explicitly recorded ordering relationship, subject only to declared [redaction](redaction.md).
+Committed logical audit history must preserve the existence and meaning of its Audit Events and every explicitly recorded ordering relationship, subject only to declared [redaction](redaction.md).
 
 ## Non-Goals
 

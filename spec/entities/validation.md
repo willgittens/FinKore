@@ -17,14 +17,15 @@ This document defines validation of financial entity state and proposed domain o
 - **ENTITY-VALIDATION-001** — A Financial Entity MUST satisfy all Structural Validation and Business Validation rules applicable to its current State.
 - **ENTITY-VALIDATION-002** — A proposed Mutation or Transition MUST be validated before any resulting Change becomes observable.
 - **ENTITY-VALIDATION-003** — Validation MUST evaluate the complete proposed domain result when rules span multiple fields.
-- **ENTITY-VALIDATION-004** — Failure of a Structural Validation or Business Validation rule defined for the Financial Entity MUST identify `FINFLOW_ENTITY_VALIDATION_FAILED` and SHOULD provide one or more stable, structured violation identifiers. When an independently specified Money, Workflow, Approval, or Audit operation is the primary failure, its domain-specific code MUST be retained instead.
-- **ENTITY-VALIDATION-005** — Validation details SHOULD identify relevant domain paths and MUST NOT expose sensitive values unnecessarily.
+- **ENTITY-VALIDATION-004** — Failure of a Structural Validation or Business Validation rule defined for the Financial Entity MUST identify `FINFLOW_ENTITY_VALIDATION_FAILED`. Stable violation identifiers follow **ENTITY-ERROR-002**, and preservation of a primary domain-specific code follows **ENTITY-ERROR-004**.
+- **ENTITY-VALIDATION-005** — Validation details SHOULD identify relevant domain paths.
+- **ENTITY-VALIDATION-008** — Validation details MUST NOT expose sensitive values unnecessarily.
 - **ENTITY-VALIDATION-006** — Validation evaluation MUST NOT alter the observable Financial Entity.
 - **ENTITY-VALIDATION-007** — A composing domain SHOULD distinguish rules required in every state from rules required only for a transition or target state.
 
 ## Invariants
 
-A successful operation MUST leave the Financial Entity valid for its resulting State. A failed operation MUST leave the Financial Entity unchanged.
+A successful operation must leave the Financial Entity valid for its resulting State. A failed operation must leave the Financial Entity unchanged.
 
 ## Example
 

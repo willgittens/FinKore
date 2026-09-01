@@ -22,7 +22,7 @@ This document defines exact arithmetic on Money values.
 
 ## Invariants
 
-An operation described as exact MUST NOT lose significant decimal digits. Currency minor units MUST NOT be treated as an implicit calculation scale. Arithmetic MUST NOT create a Money value with an absent or changed currency except through an explicit conversion operation.
+An operation described as exact must not lose significant decimal digits. Currency minor units must not be treated as an implicit calculation scale. Arithmetic must not create a Money value with an absent or changed currency except through an explicit conversion operation.
 
 ## Examples
 

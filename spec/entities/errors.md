@@ -27,7 +27,7 @@ This document defines initial portable entity failure categories.
 
 ## Invariants
 
-A failed Financial Entity operation MUST NOT produce a partially valid Financial Entity.
+A failed Financial Entity operation must not produce a partially valid Financial Entity.
 
 ## Open Questions
 

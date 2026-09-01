@@ -20,11 +20,12 @@ An Approval Decision outcome is `APPROVED` or `REJECTED`. `PENDING` describes an
 - **APPROVAL-DECISION-004** — The Actor MUST satisfy the Approval Requirement's eligibility rule at the domain-defined evaluation time.
 - **APPROVAL-DECISION-005** — An outcome MUST be either `APPROVED` or `REJECTED`.
 - **APPROVAL-DECISION-006** — The decision timestamp MUST identify an unambiguous instant and, when serialized, MUST follow [Timestamp conventions](../conventions.md#portable-values).
-- **APPROVAL-DECISION-007** — A committed Approval Decision MUST NOT be overwritten or removed from logical approval history. When a composing domain also requires an [Audit Event](../audit/events.md), that Audit Event MUST preserve the Approval Decision's domain meaning.
+- **APPROVAL-DECISION-007** — A committed Approval Decision MUST NOT be overwritten or removed from logical approval history.
+- **APPROVAL-DECISION-008** — When a composing domain requires an [Audit Event](../audit/events.md) for an Approval Decision, that Audit Event MUST preserve the Approval Decision's domain meaning.
 
 ## Invariants
 
-Each effective Approval Decision MUST have exactly one outcome and exactly one attributable Actor.
+Each effective Approval Decision must have exactly one outcome and exactly one attributable Actor.
 
 ## Example
 
@@ -50,7 +51,7 @@ For example, a manager approves an invoice for `9,000 EUR`. If its amount change
 
 ## Errors
 
-Invalid decisions MUST use an applicable [Approval Error](errors.md).
+Invalid decisions must use an applicable [Approval Error](errors.md).
 
 ## Open Questions
 

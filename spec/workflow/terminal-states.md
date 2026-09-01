@@ -17,11 +17,11 @@ This document defines States with no outgoing Transitions in their Workflow defi
 
 ## Invariants
 
-Once a Workflow instance enters a terminal State, no further Transition in that Workflow definition MUST succeed.
+Once a Workflow instance enters a terminal State, no further Transition in that Workflow definition must succeed.
 
 ## Examples
 
-`APPROVED` and `REJECTED` MAY both be terminal states even though their domain outcomes differ.
+`APPROVED` and `REJECTED` may both be terminal states even though their domain outcomes differ.
 
 ## Invalid Examples
 
@@ -29,7 +29,7 @@ Treating a state named `COMPLETE` as terminal without declaring it terminal is i
 
 ## Errors
 
-An ordinary transition from a terminal state MUST report `FINFLOW_WORKFLOW_TERMINAL_STATE`.
+An ordinary transition from a terminal state must report `FINFLOW_WORKFLOW_TERMINAL_STATE`.
 
 ## Non-Goals
 

@@ -19,7 +19,7 @@ This document defines logical preservation rules for committed Audit Events, ind
 
 ## Invariants
 
-Reading logical history later MUST preserve the existence and identity of every committed Audit Event and every explicitly recorded ordering relationship. A redacted representation MUST preserve the event-level meaning required by [Audit Redaction](redaction.md).
+Reading logical history later must preserve the existence and identity of every committed Audit Event and every explicitly recorded ordering relationship. A redacted representation must preserve the event-level meaning required by [Audit Redaction](redaction.md).
 
 ## Invalid Examples
 
@@ -29,7 +29,7 @@ Reading logical history later MUST preserve the existence and identity of every 
 
 ## Errors
 
-An attempted prohibited mutation MUST report `FINFLOW_AUDIT_APPEND_ONLY_VIOLATION`.
+An attempted prohibited mutation must report `FINFLOW_AUDIT_APPEND_ONLY_VIOLATION`.
 
 ## Open Questions
 

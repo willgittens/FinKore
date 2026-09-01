@@ -16,10 +16,11 @@ This document defines named lifecycle conditions and workflow initialization.
 - **WORKFLOW-STATES-004** — The current state MUST be one of the declared states.
 - **WORKFLOW-STATES-005** — State identifiers MUST be treated as domain names, not presentation labels.
 - **WORKFLOW-STATES-006** — A definition SHOULD document the domain meaning of every state.
+- **WORKFLOW-STATES-007** — A Workflow instance MUST have exactly one current State.
 
 ## Invariants
 
-A Workflow instance MUST NOT occupy multiple current States simultaneously. A State change MUST occur only through a [Successful Transition](transitions.md).
+A Workflow instance must not occupy multiple current States simultaneously. A State change must occur only through a [Successful Transition](transitions.md).
 
 ## Invalid Examples
 
@@ -28,7 +29,7 @@ A Workflow instance MUST NOT occupy multiple current States simultaneously. A St
 
 ## Errors
 
-Invalid definitions or state values MUST report an applicable code from [Workflow Errors](errors.md).
+Invalid definitions or state values must report an applicable code from [Workflow Errors](errors.md).
 
 ## Open Questions
 

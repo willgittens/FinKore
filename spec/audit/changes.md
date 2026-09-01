@@ -20,7 +20,7 @@ This document defines how an audit event may describe domain-relevant field chan
 
 ## Invariants
 
-Recorded Changes MUST be consistent with the Audit Event's declared domain meaning.
+Recorded Changes must be consistent with the Audit Event's declared domain meaning.
 
 ## Example
 

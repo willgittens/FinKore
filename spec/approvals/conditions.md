@@ -19,7 +19,7 @@ This document defines domain conditions that determine whether an approval requi
 
 ## Invariants
 
-Only applicable Approval Requirements MUST contribute to an Approval Chain's outcome.
+Only applicable Approval Requirements must contribute to an Approval Chain's outcome.
 
 ## Examples
 
@@ -36,7 +36,7 @@ The example assumes the amount comparison and any conversion basis are declared 
 
 ## Errors
 
-An unevaluable required condition MUST report `FINFLOW_APPROVAL_CONDITION_UNRESOLVED`.
+An unevaluable required condition must report `FINFLOW_APPROVAL_CONDITION_UNRESOLVED`.
 
 ## Open Questions
 

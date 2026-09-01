@@ -18,8 +18,11 @@ This document governs deliberate precision reduction of monetary amounts.
 - **MONEY-ROUNDING-002** — Rounding MUST be deterministic for the same amount, target scale, and mode.
 - **MONEY-ROUNDING-003** — Every conforming implementation MUST support `HALF_UP`, `HALF_EVEN`, `DOWN`, `UP`, `FLOOR`, and `CEILING` with the semantics defined below.
 - **MONEY-ROUNDING-004** — An implementation MUST NOT silently substitute a currency's customary scale for an explicit target scale.
-- **MONEY-ROUNDING-005** — A domain specification MAY declare a rounding policy; that declaration MUST identify both scale derivation and mode.
+- **MONEY-ROUNDING-005** — A domain specification MAY declare a rounding policy.
 - **MONEY-ROUNDING-006** — If no applicable policy exists when precision reduction is required, the operation MUST fail with `FINFLOW_MONEY_ROUNDING_REQUIRED`.
+- **MONEY-ROUNDING-007** — A declared rounding policy MUST identify both scale derivation and mode.
+- **MONEY-ROUNDING-008** — Rounding MUST preserve currency.
+- **MONEY-ROUNDING-009** — If no digits are discarded, rounding MUST preserve numeric value.
 
 Rounding at explicit domain boundaries avoids unintended cumulative precision loss.
 
@@ -40,7 +43,7 @@ These meanings apply to positive and negative values. A mode affects the result 
 
 ## Invariants
 
-Rounding MUST preserve currency. If no digits are discarded, rounding MUST preserve numeric value.
+Rounding preserves currency and preserves numeric value when no digits are discarded, as required by **MONEY-ROUNDING-008** and **MONEY-ROUNDING-009**.
 
 ## Examples
 
@@ -67,7 +70,7 @@ Returning `1.23 EUR` or `1.24 EUR` from `1.235 EUR` without identifying the rule
 
 ## Errors
 
-Missing or unsupported rounding policy MUST report `FINFLOW_MONEY_ROUNDING_REQUIRED` or `FINFLOW_MONEY_INVALID_ROUNDING` as applicable.
+Missing and invalid rounding-policy failures are defined by **MONEY-ERROR-005** and **MONEY-ERROR-006** in [Money Errors](errors.md).
 
 ## Open Questions
 

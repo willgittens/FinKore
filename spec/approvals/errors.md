@@ -21,12 +21,14 @@ This document defines initial portable approval failure categories.
 ## Requirements
 
 - **APPROVAL-ERROR-001** — A failed Approval Decision MUST NOT change an Approval Requirement or Approval Chain outcome.
-- **APPROVAL-ERROR-002** — Error details MAY identify the affected requirement, but MUST NOT disclose restricted eligibility or decision data.
+- **APPROVAL-ERROR-002** — Error details MAY identify the affected requirement.
+- **APPROVAL-ERROR-004** — Error details MUST NOT disclose restricted eligibility or decision data.
+- **APPROVAL-ERROR-005** — A failed Approval operation MUST leave existing committed Approval Decisions unchanged.
 - **APPROVAL-ERROR-003** — Missing approval MUST be distinguishable from explicit rejection.
 
 ## Invariants
 
-A failed Approval operation MUST leave existing committed Approval Decisions unchanged.
+A failed Approval operation must leave existing committed Approval Decisions unchanged.
 
 ## Open Questions
 

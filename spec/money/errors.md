@@ -10,7 +10,15 @@ This document defines initial portable failure categories for Money behavior.
 
 ## Requirements
 
-When a condition in the table occurs, the operation MUST report the listed code and MUST NOT return a monetary result. Implementations MAY provide additional structured details in accordance with [conventions](../conventions.md).
+- **MONEY-ERROR-001** — A missing, malformed, non-finite, or unsupported amount MUST fail with `FINFLOW_MONEY_INVALID_AMOUNT` and MUST NOT return a Money result.
+- **MONEY-ERROR-002** — A missing or invalid currency identifier MUST fail with `FINFLOW_MONEY_INVALID_CURRENCY` and MUST NOT return a Money result.
+- **MONEY-ERROR-003** — An operation requiring compatible currencies that receives incompatible currencies MUST fail with `FINFLOW_MONEY_CURRENCY_MISMATCH` and MUST NOT return a Money result.
+- **MONEY-ERROR-004** — Division by a zero scalar MUST fail with `FINFLOW_MONEY_DIVISION_BY_ZERO` and MUST NOT return a Money result.
+- **MONEY-ERROR-005** — Required precision reduction without an applicable explicit rounding policy MUST fail with `FINFLOW_MONEY_ROUNDING_REQUIRED` and MUST NOT return a Money result.
+- **MONEY-ERROR-006** — An invalid or unsupported rounding scale or mode MUST fail with `FINFLOW_MONEY_INVALID_ROUNDING` and MUST NOT return a Money result.
+- **MONEY-ERROR-007** — A failed Money operation MUST leave the observable value of every Money operand unchanged.
+
+Implementations can provide additional structured details in accordance with [conventions](../conventions.md).
 
 ## Error Codes
 
@@ -25,7 +33,7 @@ When a condition in the table occurs, the operation MUST report the listed code 
 
 ## Invariants
 
-A failed operation MUST leave the observable value of every Money operand unchanged.
+A failed operation leaves the observable value of every Money operand unchanged, as required by **MONEY-ERROR-007**.
 
 ## Non-Goals
 

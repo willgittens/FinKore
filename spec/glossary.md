@@ -46,5 +46,5 @@
 
 ## Conventions
 
-Terms are technology-neutral. A domain specification MAY refine a term but MUST identify the refinement and MUST NOT silently contradict the shared definition.
+Terms are technology-neutral. The rules for refining shared terms are defined by **SPEC-TERMINOLOGY-001** in [Conventions](conventions.md).
 

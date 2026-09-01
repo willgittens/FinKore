@@ -15,11 +15,13 @@ This document defines the normative portable JSON representation of Money. It sp
 - **MONEY-SERIALIZATION-003** — `amount` MUST NOT contain exponential notation, a leading plus sign, or non-finite tokens.
 - **MONEY-SERIALIZATION-004** — `currency` MUST be a JSON string satisfying [Currency](currency.md).
 - **MONEY-SERIALIZATION-005** — A parser MUST reject non-finite, malformed, or ambiguous amounts.
-- **MONEY-SERIALIZATION-006** — Unknown members MAY be accepted by an implementation, but MUST NOT alter the meaning of `amount` or `currency`.
+- **MONEY-SERIALIZATION-006** — Unknown members MAY be accepted by an implementation.
+- **MONEY-SERIALIZATION-007** — Unknown members MUST NOT alter the meaning of `amount` or `currency`.
+- **MONEY-SERIALIZATION-008** — Serialization followed by deserialization MUST preserve numeric amount and currency.
 
 ## Invariants
 
-Serialization followed by deserialization MUST preserve numeric amount and currency.
+Serialization followed by deserialization preserves numeric amount and currency as required by **MONEY-SERIALIZATION-008**.
 
 ## Normative Example
 
@@ -42,7 +44,7 @@ The numeric JSON form is not portable because its host may apply binary floating
 
 ## Errors
 
-Malformed data MUST report `FINFLOW_MONEY_INVALID_AMOUNT` or `FINFLOW_MONEY_INVALID_CURRENCY` as applicable.
+Malformed data fails as defined by **MONEY-ERROR-001** or **MONEY-ERROR-002** in [Money Errors](errors.md), as applicable.
 
 ## Open Questions
 

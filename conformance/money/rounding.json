@@ -6,7 +6,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-002",
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Applies HALF_UP at a mutation-sensitive 10.005 boundary.",
       "operation": "money.round",
@@ -47,7 +48,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-002",
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Applies HALF_UP at a mutation-sensitive -10.005 boundary.",
       "operation": "money.round",
@@ -87,7 +89,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-002",
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Applies HALF_EVEN at a mutation-sensitive 10.005 boundary.",
       "operation": "money.round",
@@ -128,7 +131,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-002",
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Applies HALF_EVEN at a mutation-sensitive 10.015 boundary.",
       "operation": "money.round",
@@ -168,7 +172,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-002",
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Applies HALF_EVEN at a mutation-sensitive -10.005 boundary.",
       "operation": "money.round",
@@ -208,7 +213,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-002",
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Applies DOWN at a mutation-sensitive 1.239 boundary.",
       "operation": "money.round",
@@ -248,7 +254,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-002",
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Applies DOWN at a mutation-sensitive -1.239 boundary.",
       "operation": "money.round",
@@ -288,7 +295,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-002",
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Applies UP at a mutation-sensitive 1.231 boundary.",
       "operation": "money.round",
@@ -328,7 +336,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-002",
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Applies UP at a mutation-sensitive -1.231 boundary.",
       "operation": "money.round",
@@ -368,7 +377,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-002",
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Applies FLOOR at a mutation-sensitive 1.239 boundary.",
       "operation": "money.round",
@@ -408,7 +418,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-002",
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Applies FLOOR at a mutation-sensitive -1.231 boundary.",
       "operation": "money.round",
@@ -448,7 +459,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-002",
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Applies CEILING at a mutation-sensitive 1.231 boundary.",
       "operation": "money.round",
@@ -488,7 +500,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-002",
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Applies CEILING at a mutation-sensitive -1.239 boundary.",
       "operation": "money.round",
@@ -528,7 +541,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-002",
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Applies HALF_UP at a mutation-sensitive 10.0049 boundary.",
       "operation": "money.round",
@@ -568,7 +582,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-002",
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Applies HALF_UP at a mutation-sensitive 10.0051 boundary.",
       "operation": "money.round",
@@ -608,7 +623,8 @@
       "spec": "money/rounding",
       "requirements": [
         "MONEY-ROUNDING-001",
-        "MONEY-ROUNDING-004"
+        "MONEY-ROUNDING-004",
+        "MONEY-ROUNDING-008"
       ],
       "description": "Uses explicit scale three rather than EUR customary scale.",
       "operation": "money.round",
@@ -641,7 +657,9 @@
       "id": "money.round.no-discard-001",
       "spec": "money/rounding",
       "requirements": [
-        "MONEY-ROUNDING-003"
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008",
+        "MONEY-ROUNDING-009"
       ],
       "description": "Leaves numeric value unchanged when no non-zero digits are discarded.",
       "operation": "money.round",
@@ -669,6 +687,7 @@
       "id": "money.round.invalid-mode-001",
       "spec": "money/rounding",
       "requirements": [
+        "MONEY-ERROR-006",
         "MONEY-ROUNDING-001"
       ],
       "description": "Rejects an unsupported rounding mode.",
@@ -695,6 +714,7 @@
       "id": "money.round.invalid-scale-001",
       "spec": "money/rounding",
       "requirements": [
+        "MONEY-ERROR-006",
         "MONEY-ROUNDING-001"
       ],
       "description": "Rejects a negative target scale.",

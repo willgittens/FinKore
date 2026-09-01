@@ -10,11 +10,7 @@ This domain defines exact monetary values and their fundamental behavior. A Mone
 
 ## Requirements
 
-- Money MUST contain an amount and a currency.
-- Operations on Money values MUST NOT alter the observable amount or currency of their operands.
-- A Money operation's observable result MUST equal the result of exact base-10 arithmetic, except when an explicit rounding rule applies.
-- Cross-currency behavior MUST follow [currency compatibility](currency.md).
-- Any loss of precision MUST follow an explicit [rounding](rounding.md) rule.
+The canonical Money requirements are defined by [Representation](representation.md), [Arithmetic](arithmetic.md), [Comparison](comparison.md), [Rounding](rounding.md), [Currency](currency.md), [Serialization](serialization.md), and [Errors](errors.md).
 
 ## Documents
 
@@ -28,7 +24,7 @@ This domain defines exact monetary values and their fundamental behavior. A Mone
 
 ## Invariants
 
-A Money value MUST have exactly one valid amount and one valid currency. Its amount MUST be denominated only in that currency.
+A Money value has exactly one valid amount and one valid currency. Its amount is denominated only in that currency. The canonical rules are **MONEY-REPRESENTATION-001** through **MONEY-REPRESENTATION-003**.
 
 ## Non-Goals
 

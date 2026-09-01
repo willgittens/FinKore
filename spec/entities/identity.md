@@ -19,7 +19,7 @@ This document defines stable domain identity and continuity for a Financial Enti
 
 ## Invariants
 
-A Mutation, Transition, or other domain operation MUST NOT silently create a new identity for the same continuing Financial Entity.
+A Mutation, Transition, or other domain operation must not silently create a new identity for the same continuing Financial Entity.
 
 ## Example
 

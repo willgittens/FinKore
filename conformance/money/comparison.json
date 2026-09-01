@@ -125,7 +125,8 @@
       "id": "money.compare.equality-currency-mismatch-001",
       "spec": "money/comparison",
       "requirements": [
-        "MONEY-COMPARISON-004"
+        "MONEY-COMPARISON-004",
+        "MONEY-ERROR-003"
       ],
       "description": "Rejects equality comparison across currencies.",
       "operation": "money.compare",
@@ -157,7 +158,8 @@
       "id": "money.compare.order-currency-mismatch-001",
       "spec": "money/comparison",
       "requirements": [
-        "MONEY-COMPARISON-004"
+        "MONEY-COMPARISON-004",
+        "MONEY-ERROR-003"
       ],
       "description": "Rejects ordering comparison across currencies even when digits differ.",
       "operation": "money.compare",

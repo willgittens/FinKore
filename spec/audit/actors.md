@@ -10,7 +10,9 @@ This document defines attribution of domain events to Actors. An Actor may be a 
 
 ## Requirements
 
-- **AUDIT-ACTOR-001** — An actor reference MUST include a stable identifier and SHOULD include an actor type.
+- **AUDIT-ACTOR-001** — An actor reference MUST include a stable identifier.
+- **AUDIT-ACTOR-007** — An actor reference SHOULD include an actor type.
+- **AUDIT-ACTOR-008** — Later changes to an Actor profile MUST NOT change the Actor identity recorded by a committed Audit Event.
 - **AUDIT-ACTOR-002** — Actor identifiers MUST be treated as opaque.
 - **AUDIT-ACTOR-003** — Display names MAY be captured as historical metadata but MUST NOT replace stable identity.
 - **AUDIT-ACTOR-004** — If an unknown Actor is represented, that representation MUST distinguish unknown attribution from a known Actor and MUST NOT invent an identity. [Audit Events](events.md) also permits omission when no Actor is known.
@@ -19,7 +21,7 @@ This document defines attribution of domain events to Actors. An Actor may be a 
 
 ## Invariants
 
-Later changes to an Actor's profile MUST NOT change the identity recorded by a committed Audit Event.
+Later changes to an Actor's profile must not change the identity recorded by a committed Audit Event.
 
 ## Example
 
