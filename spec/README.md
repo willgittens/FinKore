@@ -28,6 +28,14 @@ Other Implementations
 
 Specifications are intended to remain small and composable. New concepts should address domain problems rather than proposed classes, APIs, or framework abstractions.
 
+## Implementation Direction (Non-Normative)
+
+The first planned reference implementation targets TypeScript. Its core is intended to remain runtime-independent where practical so it can be used in browsers, Node.js, Bun, Deno, and worker environments. Candidate package names such as `@finflow/core` and `@finflow/node` are exploratory, not specification requirements. Framework integrations, including possible React or Vue packages, would remain integrations rather than definitions of FinFlow.
+
+A Java implementation may provide idiomatic modules such as `finflow-core` and `finflow-spring`. Other implementations may target C#, Python, Go, Rust, PHP, or additional ecosystems. An implementation does not need to copy another implementation's API or internal architecture; it needs to preserve the behavior required here and verified by the conformance suite.
+
+The repository is organized around `spec/` and `conformance/` today. As implementations and portable interchange schemas are introduced, they may live in dedicated top-level areas alongside examples. This layout is project direction rather than a normative requirement.
+
 ## Organization
 
 - [Conventions](conventions.md) defines the language and representation rules used throughout the specification.
@@ -40,6 +48,12 @@ Specifications are intended to remain small and composable. New concepts should 
 
 Later domain specifications MAY compose these areas. A domain-specific specification that refines or makes an exception to an underlying rule MUST identify that change explicitly; all other applicable underlying requirements remain in force.
 
+## Scope Discipline (Non-Normative)
+
+FinFlow Core deliberately begins with reusable primitives rather than concrete invoice, expense, purchase-order, payment, reimbursement, or journal-entry models. Applications may compose the primitives for those domains, but Core Draft 0.1 does not claim to standardize them.
+
+Possible later specifications may explore journal entries, debit and credit, general ledgers, reconciliation, fiscal periods, cost centers, purchase orders, invoice matching, payments, corrections, reversals, and tax primitives. These are not current capabilities or commitments. A topic should enter scope only when its semantics can be defined clearly, tested across implementations, and justified by a real financial software problem.
+
 ## Conformance
 
 A conforming implementation MUST satisfy every applicable **MUST** and **MUST NOT** requirement. It SHOULD satisfy applicable recommendations unless a documented reason prevents it. Examples illustrate expected behavior but are non-normative unless explicitly identified as normative.
@@ -47,4 +61,3 @@ A conforming implementation MUST satisfy every applicable **MUST** and **MUST NO
 ## Non-Goals
 
 This specification does not prescribe programming constructs, user interfaces, storage systems, network protocols, or deployment architecture.
-
