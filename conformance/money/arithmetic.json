@@ -10,7 +10,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Adds positive same-currency values exactly.",
-      "operation": "money.add",
+      "operation": "finflow.money.add",
       "input": {
         "left": {
           "amount": "10.20",
@@ -50,7 +50,7 @@
         "MONEY-ARITHMETIC-007"
       ],
       "description": "Adds decimal tenths exactly, detecting binary floating-point leakage.",
-      "operation": "money.add",
+      "operation": "finflow.money.add",
       "input": {
         "left": {
           "amount": "0.1",
@@ -84,7 +84,7 @@
         "MONEY-REPRESENTATION-004"
       ],
       "description": "Adds a negative operand with ordinary sign semantics.",
-      "operation": "money.add",
+      "operation": "finflow.money.add",
       "input": {
         "left": {
           "amount": "10.00",
@@ -118,7 +118,7 @@
         "MONEY-ARITHMETIC-007"
       ],
       "description": "Preserves a value when exact zero is added.",
-      "operation": "money.add",
+      "operation": "finflow.money.add",
       "input": {
         "left": {
           "amount": "7.125",
@@ -152,7 +152,7 @@
         "MONEY-ERROR-007"
       ],
       "description": "Rejects addition across currencies and preserves operands.",
-      "operation": "money.add",
+      "operation": "finflow.money.add",
       "input": {
         "left": {
           "amount": "10.00",
@@ -197,7 +197,7 @@
         "MONEY-ARITHMETIC-002"
       ],
       "description": "Subtracts same-currency values in operand order.",
-      "operation": "money.subtract",
+      "operation": "finflow.money.subtract",
       "input": {
         "left": {
           "amount": "10.00",
@@ -231,7 +231,7 @@
         "MONEY-ARITHMETIC-007"
       ],
       "description": "Preserves an exact negative subtraction result.",
-      "operation": "money.subtract",
+      "operation": "finflow.money.subtract",
       "input": {
         "left": {
           "amount": "3.25",
@@ -264,7 +264,7 @@
         "MONEY-ERROR-007"
       ],
       "description": "Rejects subtraction across currencies.",
-      "operation": "money.subtract",
+      "operation": "finflow.money.subtract",
       "input": {
         "left": {
           "amount": "10.00",

@@ -45,13 +45,13 @@ These identifiers name observable behavior, not implementation methods.
 | --- | --- |
 | `money.deserialize` | Parse the normative portable Money JSON value. |
 | `money.serialize` | Produce the normative portable Money JSON value. |
-| `money.add`, `money.subtract` | Exact compatible-currency arithmetic. |
+| `finflow.money.add`, `finflow.money.subtract` | Exact compatible-currency arithmetic. |
 | `money.negate` | Exact sign reversal. |
 | `money.multiply`, `money.divide` | Exact scalar arithmetic, with an optional explicit rounding policy where needed. |
-| `money.compare` | Return `LESS`, `EQUAL`, or `GREATER`. |
-| `money.round` | Reduce to the explicit `scale` using the explicit `mode`. |
+| `finflow.money.compare` | Return `LESS`, `EQUAL`, or `GREATER`. |
+| `finflow.money.round` | Reduce to the explicit `scale` using the explicit `mode`. |
 | `workflow.create` | Validate a definition and create an instance at its initial state. |
-| `workflow.transition` | Request the supplied target from the instance's current state using supplied guard facts. |
+| `finflow.workflow.transition` | Request the supplied target from the instance's current state using supplied guard facts. |
 | `audit.append` | Append one event to supplied committed logical history. |
 | `audit.replace`, `audit.remove` | Attempt the named change to committed logical history. |
 | `audit.redact` | Produce a policy-authorized redacted logical representation and evidence event. |
@@ -66,6 +66,11 @@ These identifiers name observable behavior, not implementation methods.
 | `entity.transition` | Apply a lifecycle transition under the referenced workflow. |
 
 Logical fixtures in `input` are intentionally small declarative models. An adapter constructs any idiomatic implementation objects required to realize them. The fixtures do not define a production interchange format.
+
+Identifiers beginning with `finflow.` are canonical operations in the
+[Agentic Contract](../agentic/operations.md). Remaining catalog entries are
+conformance-local adapter operations until their stable public contracts are
+reviewed; vector use alone does not make them advertised FinFlow capabilities.
 
 ## Runner contract
 

@@ -76,6 +76,10 @@ FinFlow uses language-independent conformance vectors, strict deterministic test
 
 The [Conformance Suite](./conformance/README.md) documents the vector format, runner contract, traceability, regression policy, mutation policy, and quality model.
 
+FinFlow is also [agent-ready by contract](./agentic/README.md): operations,
+effects, portable errors, and domain constraints are machine-discoverable without
+bypassing financial rules.
+
 ## Who Is This For?
 
 FinFlow is intended for engineers and teams building:
@@ -96,6 +100,7 @@ FinFlow is not an ERP, ORM, payment processor, UI framework, accounting applicat
 
 - [FinFlow Specification](./spec/README.md) — normative financial behavior, conventions, and domain definitions.
 - [Conformance Suite](./conformance/README.md) — language-independent test vectors and reliability methodology.
+- [Agentic Contract](./agentic/README.md) — portable operational semantics for machine clients.
 - [Conformance Traceability](./conformance/traceability.md) — current vector coverage, known gaps, and readiness.
 
 ## Project Status

@@ -195,7 +195,7 @@
         "WORKFLOW-TRANSITION-005"
       ],
       "description": "Applies one declared directed transition exactly once.",
-      "operation": "workflow.transition",
+      "operation": "finflow.workflow.transition",
       "input": {
         "definition": {
           "states": [
@@ -259,7 +259,7 @@
         "WORKFLOW-ERROR-003"
       ],
       "description": "Does not infer the reverse of a declared transition.",
-      "operation": "workflow.transition",
+      "operation": "finflow.workflow.transition",
       "input": {
         "definition": {
           "states": [
@@ -326,7 +326,7 @@
         "WORKFLOW-ERROR-003"
       ],
       "description": "Rejects an undeclared direct transition and preserves state.",
-      "operation": "workflow.transition",
+      "operation": "finflow.workflow.transition",
       "input": {
         "definition": {
           "states": [
@@ -393,7 +393,7 @@
         "WORKFLOW-TRANSITION-004"
       ],
       "description": "Allows a declared transition when its required guard passes on supplied facts.",
-      "operation": "workflow.transition",
+      "operation": "finflow.workflow.transition",
       "input": {
         "definition": {
           "states": [
@@ -456,7 +456,7 @@
         "WORKFLOW-GUARD-003"
       ],
       "description": "Rejects a transition when its guard fails and changes neither state nor facts.",
-      "operation": "workflow.transition",
+      "operation": "finflow.workflow.transition",
       "input": {
         "definition": {
           "states": [
@@ -530,7 +530,7 @@
         "WORKFLOW-TERMINAL-004"
       ],
       "description": "A terminal-state request reports the terminal error even when no transition is declared.",
-      "operation": "workflow.transition",
+      "operation": "finflow.workflow.transition",
       "input": {
         "definition": {
           "states": [

@@ -10,7 +10,7 @@
         "MONEY-REPRESENTATION-005"
       ],
       "description": "Treats insignificant trailing zeros as numerically equal.",
-      "operation": "money.compare",
+      "operation": "finflow.money.compare",
       "input": {
         "left": {
           "amount": "10.0",
@@ -40,7 +40,7 @@
         "MONEY-COMPARISON-003"
       ],
       "description": "Orders a smaller compatible-currency amount before a larger one.",
-      "operation": "money.compare",
+      "operation": "finflow.money.compare",
       "input": {
         "left": {
           "amount": "9.99",
@@ -70,7 +70,7 @@
         "MONEY-COMPARISON-003"
       ],
       "description": "Orders a less-negative value above a more-negative value.",
-      "operation": "money.compare",
+      "operation": "finflow.money.compare",
       "input": {
         "left": {
           "amount": "-1.00",
@@ -101,7 +101,7 @@
         "MONEY-COMPARISON-002"
       ],
       "description": "Compares zero representations numerically.",
-      "operation": "money.compare",
+      "operation": "finflow.money.compare",
       "input": {
         "left": {
           "amount": "0",
@@ -129,7 +129,7 @@
         "MONEY-ERROR-003"
       ],
       "description": "Rejects equality comparison across currencies.",
-      "operation": "money.compare",
+      "operation": "finflow.money.compare",
       "input": {
         "left": {
           "amount": "10.00",
@@ -162,7 +162,7 @@
         "MONEY-ERROR-003"
       ],
       "description": "Rejects ordering comparison across currencies even when digits differ.",
-      "operation": "money.compare",
+      "operation": "finflow.money.compare",
       "input": {
         "left": {
           "amount": "1.00",
