@@ -1,0 +1,40 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "testRunner": "vitest",
+  "mutate": [
+    "src/comparator.ts:14-35",
+    "src/validator.ts:31-40",
+    "src/validator.ts:43-54",
+    "src/validator.ts:60-64",
+    "src/validator.ts:74-98",
+    "src/validator.ts:115-117",
+    "src/validator.ts:124-129",
+    "src/validator.ts:132-141",
+    "src/runner.ts:26-80",
+    "src/reporter.ts:4-62",
+    "src/reporter.ts:121-125",
+    "src/filters.ts"
+  ],
+  "testFiles": [
+    "test/adapter-registry.test.ts",
+    "test/comparator.test.ts",
+    "test/filters.test.ts",
+    "test/loader.test.ts",
+    "test/manifest.test.ts",
+    "test/metadata.test.ts",
+    "test/reporter.test.ts",
+    "test/runner.test.ts",
+    "test/validator.test.ts"
+  ],
+  "reporters": ["clear-text", "html", "json"],
+  "thresholds": {
+    "high": 95,
+    "low": 90,
+    "break": 95
+  },
+  "vitest": {
+    "configFile": "vitest.config.ts",
+    "related": true
+  },
+  "disableTypeChecks": "src/**/*.ts"
+}
