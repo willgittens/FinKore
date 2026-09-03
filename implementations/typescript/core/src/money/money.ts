@@ -1,7 +1,7 @@
 import { Currency } from './currency.js'
 import { CurrencyMismatchError } from './errors.js'
 import { serializeMoney, validateSerializedAmount } from './serialization.js'
-import type { MoneyInput, SerializedMoney } from './types.js'
+import type { MoneyComparisonResult, MoneyInput, SerializedMoney } from './types.js'
 
 interface DecimalParts {
   readonly integer: bigint
@@ -42,14 +42,27 @@ function subtractDecimals(left: string, right: string): string {
   return formatDecimal(scaleDecimal(leftParts, scale) - scaleDecimal(rightParts, scale), scale)
 }
 
+function compareDecimals(left: string, right: string): MoneyComparisonResult {
+  const leftParts = decimalParts(left)
+  const rightParts = decimalParts(right)
+  const scale = Math.max(leftParts.scale, rightParts.scale)
+  const scaledLeft = scaleDecimal(leftParts, scale)
+  const scaledRight = scaleDecimal(rightParts, scale)
+
+  if (scaledLeft < scaledRight) return 'LESS'
+  if (scaledLeft > scaledRight) return 'GREATER'
+  return 'EQUAL'
+}
+
 /**
  * TypeScript Money value for the first FinFlow reference implementation
  * milestone.
  *
  * A Money value binds an exact decimal amount to a currency identifier. This
  * milestone supports construction, validation, canonical serialization,
- * compatible-currency addition, and compatible-currency subtraction.
- * Comparison, rounding, multiplication, and division are intentionally absent.
+ * compatible-currency addition, compatible-currency subtraction, and exact
+ * compatible-currency numeric comparison.
+ * Rounding, multiplication, and division are intentionally absent.
  *
  * @remarks
  * This TypeScript implementation stores the validated decimal representation
@@ -198,6 +211,34 @@ export class Money {
   subtract(other: Money): Money {
     this.assertCompatibleCurrency(other)
     return new Money(subtractDecimals(this.amount, other.amount), this.currency)
+  }
+
+  /**
+   * Compares this Money value with another compatible-currency Money value.
+   *
+   * Comparison uses exact base-10 numeric semantics. Insignificant trailing
+   * zeros do not affect equality, ordering is available only for compatible
+   * currencies, and neither operand is mutated.
+   *
+   * @param other - Money value to compare with this value.
+   * @returns `LESS`, `EQUAL`, or `GREATER` for this value relative to `other`.
+   * @throws {CurrencyMismatchError}
+   * When the operands use incompatible currencies.
+   *
+   * @see FINFLOW_MONEY_CURRENCY_MISMATCH
+   * @see MONEY-COMPARISON-001
+   * @see MONEY-COMPARISON-002
+   * @see MONEY-COMPARISON-003
+   * @see MONEY-COMPARISON-004
+   * @see MONEY-COMPARISON-006
+   * @see MONEY-CURRENCY-003
+   * @see MONEY-CURRENCY-004
+   * @see MONEY-ERROR-003
+   * @see MONEY-ERROR-007
+   */
+  compare(other: Money): MoneyComparisonResult {
+    this.assertCompatibleCurrency(other)
+    return compareDecimals(this.amount, other.amount)
   }
 
   /**

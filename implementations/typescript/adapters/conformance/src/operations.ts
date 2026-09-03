@@ -97,6 +97,34 @@ function executeMoneySubtract(request: AdapterRequest): NormalizedResult {
 }
 
 /**
+ * Executes canonical Money comparison through the TypeScript core API.
+ *
+ * The adapter constructs operands, delegates currency compatibility and exact
+ * decimal ordering to `Money.compare`, and returns normalized observations for
+ * the runner's operand non-mutation checks.
+ */
+function executeMoneyCompare(request: AdapterRequest): NormalizedResult {
+  const operands = inputOperands(request.input)
+  let left: Money | undefined
+  let right: Money | undefined
+  try {
+    left = Money.deserialize(operands.left)
+    right = Money.deserialize(operands.right)
+    return {
+      status: 'success',
+      value: left.compare(right),
+      observations: { left: left.toJSON(), right: right.toJSON() },
+    }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && left !== undefined && right !== undefined) {
+      return { ...result, observations: { left: left.toJSON(), right: right.toJSON() } }
+    }
+    return result
+  }
+}
+
+/**
  * Operation handlers supported by the first TypeScript conformance adapter.
  *
  * These are conformance-local operation identifiers from the vector catalog,
@@ -107,6 +135,7 @@ function executeMoneySubtract(request: AdapterRequest): NormalizedResult {
  */
 export const operationHandlers = {
   'finflow.money.add': executeMoneyAdd,
+  'finflow.money.compare': executeMoneyCompare,
   'finflow.money.subtract': executeMoneySubtract,
   'money.deserialize': executeMoneySerialization,
   'money.serialize': executeMoneySerialization,

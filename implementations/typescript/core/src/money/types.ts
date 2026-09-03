@@ -53,6 +53,18 @@ export interface MoneyInput {
 }
 
 /**
+ * Exact numeric ordering result for compatible FinFlow Money values.
+ *
+ * The result is independent of insignificant decimal trailing zeros and is
+ * defined only after currency compatibility succeeds.
+ *
+ * @see MONEY-COMPARISON-001
+ * @see MONEY-COMPARISON-002
+ * @see MONEY-COMPARISON-003
+ */
+export type MoneyComparisonResult = 'LESS' | 'EQUAL' | 'GREATER'
+
+/**
  * Portable FinFlow Money error code.
  *
  * Consumers that need cross-language semantics should rely on these codes

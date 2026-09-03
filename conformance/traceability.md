@@ -7,14 +7,14 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Domain | Requirements | MUST / MUST NOT | SHOULD / SHOULD NOT | MAY | Covered | Partial | Uncovered | Not directly testable |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Shared | 29 | 23 | 5 | 1 | 1 | 0 | 0 | 28 |
-| Money | 50 | 45 | 1 | 4 | 38 | 0 | 7 | 5 |
+| Money | 50 | 45 | 1 | 4 | 39 | 0 | 6 | 5 |
 | Workflow | 27 | 25 | 1 | 1 | 17 | 0 | 8 | 2 |
 | Audit | 38 | 30 | 4 | 4 | 16 | 0 | 15 | 7 |
 | Approvals | 34 | 31 | 1 | 2 | 13 | 0 | 18 | 3 |
 | Entities | 34 | 29 | 3 | 2 | 17 | 0 | 13 | 4 |
-| **Total** | **212** | **183** | **15** | **14** | **102** | **0** | **61** | **49** |
+| **Total** | **212** | **183** | **15** | **14** | **103** | **0** | **60** | **49** |
 
-The suite contains 94 vectors. Overall: **102 covered (48.1%)**, **0 partially covered (0.0%)**, **61 uncovered (28.8%)**, and **49 not directly testable (23.1%)**.
+The suite contains 94 vectors. Overall: **103 covered (48.6%)**, **0 partially covered (0.0%)**, **60 uncovered (28.3%)**, and **49 not directly testable (23.1%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules and optional or recommended freedoms without one mandatory runtime observation. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -65,11 +65,11 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules and optional or recom
 | MONEY-COMPARISON-003 | Money | MUST / MUST NOT | COVERED | money.compare.greater-negative-001, money.compare.less-001 |
 | MONEY-COMPARISON-004 | Money | MUST / MUST NOT | COVERED | money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001 |
 | MONEY-COMPARISON-005 | Money | MAY | NOT DIRECTLY TESTABLE | — |
-| MONEY-COMPARISON-006 | Money | MUST / MUST NOT | UNCOVERED | — |
+| MONEY-COMPARISON-006 | Money | MUST / MUST NOT | COVERED | money.compare.equal-trailing-zeros-001, money.compare.equal-zero-scale-001 |
 | MONEY-CURRENCY-001 | Money | MUST / MUST NOT | UNCOVERED | — |
 | MONEY-CURRENCY-002 | Money | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
-| MONEY-CURRENCY-003 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001 |
-| MONEY-CURRENCY-004 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.subtract.currency-mismatch-001 |
+| MONEY-CURRENCY-003 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001 |
+| MONEY-CURRENCY-004 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.subtract.currency-mismatch-001 |
 | MONEY-CURRENCY-005 | Money | MUST / MUST NOT | UNCOVERED | — |
 | MONEY-ERROR-001 | Money | MUST / MUST NOT | COVERED | money.deserialize.exponent-001, money.deserialize.leading-plus-001, money.deserialize.missing-amount-001, money.deserialize.non-finite-001, money.deserialize.numeric-amount-001 |
 | MONEY-ERROR-002 | Money | MUST / MUST NOT | COVERED | money.deserialize.lowercase-currency-001, money.deserialize.missing-currency-001 |
@@ -77,7 +77,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules and optional or recom
 | MONEY-ERROR-004 | Money | MUST / MUST NOT | COVERED | money.divide.zero-001 |
 | MONEY-ERROR-005 | Money | MUST / MUST NOT | COVERED | money.divide.rounding-required-001 |
 | MONEY-ERROR-006 | Money | MUST / MUST NOT | COVERED | money.round.invalid-mode-001, money.round.invalid-scale-001 |
-| MONEY-ERROR-007 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.divide.rounding-required-001, money.divide.zero-001, money.subtract.currency-mismatch-001 |
+| MONEY-ERROR-007 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.divide.rounding-required-001, money.divide.zero-001, money.subtract.currency-mismatch-001 |
 | MONEY-REPRESENTATION-001 | Money | MUST / MUST NOT | COVERED | money.deserialize.missing-amount-001, money.deserialize.missing-currency-001, money.deserialize.positive-001 |
 | MONEY-REPRESENTATION-002 | Money | MUST / MUST NOT | COVERED | money.deserialize.positive-001 |
 | MONEY-REPRESENTATION-003 | Money | MUST / MUST NOT | UNCOVERED | — |

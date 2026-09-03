@@ -11,4 +11,4 @@ export {
 } from './money/errors.js'
 export { Money } from './money/money.js'
 export { serializeMoney, validateSerializedAmount } from './money/serialization.js'
-export type { MoneyErrorCode, MoneyInput, SerializedMoney } from './money/types.js'
+export type { MoneyComparisonResult, MoneyErrorCode, MoneyInput, SerializedMoney } from './money/types.js'

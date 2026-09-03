@@ -23,7 +23,17 @@
       },
       "expected": {
         "status": "success",
-        "value": "EQUAL"
+        "value": "EQUAL",
+        "observations": {
+          "left": {
+            "amount": "10.0",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "10.00",
+            "currency": "EUR"
+          }
+        }
       },
       "tags": [
         "positive",
@@ -53,7 +63,17 @@
       },
       "expected": {
         "status": "success",
-        "value": "LESS"
+        "value": "LESS",
+        "observations": {
+          "left": {
+            "amount": "9.99",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "10.00",
+            "currency": "EUR"
+          }
+        }
       },
       "tags": [
         "positive",
@@ -83,7 +103,17 @@
       },
       "expected": {
         "status": "success",
-        "value": "GREATER"
+        "value": "GREATER",
+        "observations": {
+          "left": {
+            "amount": "-1.00",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "-2.00",
+            "currency": "EUR"
+          }
+        }
       },
       "tags": [
         "positive",
@@ -114,7 +144,17 @@
       },
       "expected": {
         "status": "success",
-        "value": "EQUAL"
+        "value": "EQUAL",
+        "observations": {
+          "left": {
+            "amount": "0",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "0.000",
+            "currency": "EUR"
+          }
+        }
       },
       "tags": [
         "positive",
@@ -126,7 +166,10 @@
       "spec": "money/comparison",
       "requirements": [
         "MONEY-COMPARISON-004",
-        "MONEY-ERROR-003"
+        "MONEY-CURRENCY-003",
+        "MONEY-CURRENCY-004",
+        "MONEY-ERROR-003",
+        "MONEY-ERROR-007"
       ],
       "description": "Rejects equality comparison across currencies.",
       "operation": "finflow.money.compare",
@@ -144,6 +187,16 @@
         "status": "error",
         "error": {
           "code": "FINFLOW_MONEY_CURRENCY_MISMATCH"
+        },
+        "observations": {
+          "left": {
+            "amount": "10.00",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
         }
       },
       "tags": [
@@ -159,7 +212,10 @@
       "spec": "money/comparison",
       "requirements": [
         "MONEY-COMPARISON-004",
-        "MONEY-ERROR-003"
+        "MONEY-CURRENCY-003",
+        "MONEY-CURRENCY-004",
+        "MONEY-ERROR-003",
+        "MONEY-ERROR-007"
       ],
       "description": "Rejects ordering comparison across currencies even when digits differ.",
       "operation": "finflow.money.compare",
@@ -177,6 +233,16 @@
         "status": "error",
         "error": {
           "code": "FINFLOW_MONEY_CURRENCY_MISMATCH"
+        },
+        "observations": {
+          "left": {
+            "amount": "1.00",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "2.00",
+            "currency": "USD"
+          }
         }
       },
       "tags": [

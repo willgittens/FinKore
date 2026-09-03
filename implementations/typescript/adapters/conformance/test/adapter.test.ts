@@ -6,14 +6,14 @@ import { createTypeScriptConformanceAdapter } from '../src/adapter.js'
 const manifestPath = resolve(import.meta.dirname, '../../../../../conformance/manifest.json')
 
 describe('TypeScript conformance adapter', () => {
-  it('supports Money serialization and canonical arithmetic operations', () => {
+  it('supports Money serialization, canonical arithmetic, and comparison operations', () => {
     const adapter = createTypeScriptConformanceAdapter()
 
     expect(adapter.supports('money.deserialize')).toBe(true)
     expect(adapter.supports('money.serialize')).toBe(true)
     expect(adapter.supports('finflow.money.add')).toBe(true)
     expect(adapter.supports('finflow.money.subtract')).toBe(true)
-    expect(adapter.supports('finflow.money.compare')).toBe(false)
+    expect(adapter.supports('finflow.money.compare')).toBe(true)
     expect(adapter.supports('finflow.money.round')).toBe(false)
     expect(adapter.supports('money.negate')).toBe(false)
     expect(adapter.supports('money.multiply')).toBe(false)
@@ -60,5 +60,21 @@ describe('TypeScript conformance adapter', () => {
     ] })
 
     expect(report.summary).toEqual({ total: 11, passed: 11, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+  })
+
+  it('passes current canonical Money comparison vectors', async () => {
+    const report = await createConformanceRunner({
+      manifestPath,
+      adapter: createTypeScriptConformanceAdapter(),
+    }).run({ vectorIds: [
+      'money.compare.equal-trailing-zeros-001',
+      'money.compare.less-001',
+      'money.compare.greater-negative-001',
+      'money.compare.equal-zero-scale-001',
+      'money.compare.equality-currency-mismatch-001',
+      'money.compare.order-currency-mismatch-001',
+    ] })
+
+    expect(report.summary).toEqual({ total: 6, passed: 6, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 })
