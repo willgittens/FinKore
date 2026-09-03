@@ -77,7 +77,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules and optional or recom
 | MONEY-ERROR-004 | Money | MUST / MUST NOT | COVERED | money.divide.zero-001 |
 | MONEY-ERROR-005 | Money | MUST / MUST NOT | COVERED | money.divide.rounding-required-001 |
 | MONEY-ERROR-006 | Money | MUST / MUST NOT | COVERED | money.round.invalid-mode-001, money.round.invalid-scale-001 |
-| MONEY-ERROR-007 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.divide.rounding-required-001, money.divide.zero-001, money.subtract.currency-mismatch-001 |
+| MONEY-ERROR-007 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.divide.rounding-required-001, money.divide.zero-001, money.round.invalid-mode-001, money.round.invalid-scale-001, money.subtract.currency-mismatch-001 |
 | MONEY-REPRESENTATION-001 | Money | MUST / MUST NOT | COVERED | money.deserialize.missing-amount-001, money.deserialize.missing-currency-001, money.deserialize.positive-001 |
 | MONEY-REPRESENTATION-002 | Money | MUST / MUST NOT | COVERED | money.deserialize.positive-001 |
 | MONEY-REPRESENTATION-003 | Money | MUST / MUST NOT | UNCOVERED | — |

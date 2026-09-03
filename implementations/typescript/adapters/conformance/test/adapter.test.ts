@@ -6,7 +6,7 @@ import { createTypeScriptConformanceAdapter } from '../src/adapter.js'
 const manifestPath = resolve(import.meta.dirname, '../../../../../conformance/manifest.json')
 
 describe('TypeScript conformance adapter', () => {
-  it('supports Money serialization, canonical arithmetic, and comparison operations', () => {
+  it('supports Money serialization, canonical arithmetic, comparison, and rounding operations', () => {
     const adapter = createTypeScriptConformanceAdapter()
 
     expect(adapter.supports('money.deserialize')).toBe(true)
@@ -14,7 +14,7 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('finflow.money.add')).toBe(true)
     expect(adapter.supports('finflow.money.subtract')).toBe(true)
     expect(adapter.supports('finflow.money.compare')).toBe(true)
-    expect(adapter.supports('finflow.money.round')).toBe(false)
+    expect(adapter.supports('finflow.money.round')).toBe(true)
     expect(adapter.supports('money.negate')).toBe(false)
     expect(adapter.supports('money.multiply')).toBe(false)
     expect(adapter.supports('money.divide')).toBe(false)
@@ -76,5 +76,34 @@ describe('TypeScript conformance adapter', () => {
     ] })
 
     expect(report.summary).toEqual({ total: 6, passed: 6, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+  })
+
+  it('passes current canonical Money rounding vectors', async () => {
+    const report = await createConformanceRunner({
+      manifestPath,
+      adapter: createTypeScriptConformanceAdapter(),
+    }).run({ vectorIds: [
+      'money.round.half-up.tie-positive-001',
+      'money.round.half-up.tie-negative-001',
+      'money.round.half-even.tie-even-down-001',
+      'money.round.half-even.tie-odd-up-001',
+      'money.round.half-even.tie-negative-even-001',
+      'money.round.down.positive-001',
+      'money.round.down.negative-001',
+      'money.round.up.positive-001',
+      'money.round.up.negative-001',
+      'money.round.floor.positive-001',
+      'money.round.floor.negative-001',
+      'money.round.ceiling.positive-001',
+      'money.round.ceiling.negative-001',
+      'money.round.below-half-positive-001',
+      'money.round.above-half-positive-001',
+      'money.round.explicit-scale-001',
+      'money.round.no-discard-001',
+      'money.round.invalid-mode-001',
+      'money.round.invalid-scale-001',
+    ] })
+
+    expect(report.summary).toEqual({ total: 19, passed: 19, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 })

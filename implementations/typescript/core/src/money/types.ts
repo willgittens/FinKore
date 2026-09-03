@@ -65,6 +65,43 @@ export interface MoneyInput {
 export type MoneyComparisonResult = 'LESS' | 'EQUAL' | 'GREATER'
 
 /**
+ * FinFlow rounding modes supported by every conforming Money implementation.
+ *
+ * These identifiers are the canonical portable values defined by the Money
+ * rounding specification. They intentionally do not include implementation
+ * aliases such as "bankers" or "truncate".
+ *
+ * @see MONEY-ROUNDING-003
+ */
+export type RoundingMode = 'HALF_UP' | 'HALF_EVEN' | 'DOWN' | 'UP' | 'FLOOR' | 'CEILING'
+
+/**
+ * Explicit rounding context for {@link Money.round}.
+ *
+ * FinFlow rounding requires both a target scale and a rounding mode. The scale
+ * is the number of fractional decimal digits in the rounded result; it is not
+ * implicitly derived from the currency.
+ *
+ * @see MONEY-ROUNDING-001
+ * @see MONEY-ROUNDING-004
+ */
+export interface MoneyRoundOptions {
+  /**
+   * Non-negative target scale for the rounded result.
+   *
+   * @see MONEY-ROUNDING-001
+   */
+  readonly scale: unknown
+
+  /**
+   * Canonical FinFlow rounding mode.
+   *
+   * @see MONEY-ROUNDING-003
+   */
+  readonly mode: unknown
+}
+
+/**
  * Portable FinFlow Money error code.
  *
  * Consumers that need cross-language semantics should rely on these codes

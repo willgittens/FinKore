@@ -641,6 +641,12 @@
         "value": {
           "amount": "1.235",
           "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1.2345",
+            "currency": "EUR"
+          }
         }
       },
       "tags": [
@@ -676,6 +682,12 @@
         "value": {
           "amount": "1.23",
           "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1.230",
+            "currency": "EUR"
+          }
         }
       },
       "tags": [
@@ -704,6 +716,12 @@
         "status": "error",
         "error": {
           "code": "FINFLOW_MONEY_INVALID_ROUNDING"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1.235",
+            "currency": "EUR"
+          }
         }
       },
       "tags": [
@@ -731,6 +749,12 @@
         "status": "error",
         "error": {
           "code": "FINFLOW_MONEY_INVALID_ROUNDING"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1.235",
+            "currency": "EUR"
+          }
         }
       },
       "tags": [

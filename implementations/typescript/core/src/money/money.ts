@@ -1,7 +1,7 @@
 import { Currency } from './currency.js'
-import { CurrencyMismatchError } from './errors.js'
+import { CurrencyMismatchError, InvalidMoneyRoundingError } from './errors.js'
 import { serializeMoney, validateSerializedAmount } from './serialization.js'
-import type { MoneyComparisonResult, MoneyInput, SerializedMoney } from './types.js'
+import type { MoneyComparisonResult, MoneyInput, MoneyRoundOptions, RoundingMode, SerializedMoney } from './types.js'
 
 interface DecimalParts {
   readonly integer: bigint
@@ -54,15 +54,90 @@ function compareDecimals(left: string, right: string): MoneyComparisonResult {
   return 'EQUAL'
 }
 
+function validateRoundingOptions(options: MoneyRoundOptions): { readonly scale: number; readonly mode: RoundingMode } {
+  if (typeof options !== 'object' || options === null) {
+    throw new InvalidMoneyRoundingError()
+  }
+  const scale = options.scale
+  if (!Number.isSafeInteger(scale) || (scale as number) < 0) {
+    throw new InvalidMoneyRoundingError()
+  }
+  switch (options.mode) {
+    case 'HALF_UP':
+    case 'HALF_EVEN':
+    case 'DOWN':
+    case 'UP':
+    case 'FLOOR':
+    case 'CEILING':
+      return { scale: scale as number, mode: options.mode }
+    default:
+      throw new InvalidMoneyRoundingError()
+  }
+}
+
+function shouldIncrement(
+  mode: RoundingMode,
+  negative: boolean,
+  retainedMagnitude: bigint,
+  discardedMagnitude: bigint,
+  divisor: bigint,
+): boolean {
+  if (discardedMagnitude === 0n) return false
+
+  switch (mode) {
+    case 'DOWN':
+      return false
+    case 'UP':
+      return true
+    case 'FLOOR':
+      return negative
+    case 'CEILING':
+      return !negative
+    case 'HALF_UP':
+      return discardedMagnitude * 2n >= divisor
+    case 'HALF_EVEN': {
+      const tieComparison = discardedMagnitude * 2n
+      if (tieComparison > divisor) return true
+      if (tieComparison < divisor) return false
+      return retainedMagnitude % 2n !== 0n
+    }
+    default: {
+      const unsupported: never = mode
+      throw new InvalidMoneyRoundingError('Invalid Money rounding mode', { mode: unsupported })
+    }
+  }
+}
+
+function roundDecimal(amount: string, targetScale: number, mode: RoundingMode): string {
+  const parts = decimalParts(amount)
+  if (targetScale >= parts.scale) {
+    return formatDecimal(scaleDecimal(parts, targetScale), targetScale)
+  }
+
+  const scaleDifference = parts.scale - targetScale
+  const divisor = 10n ** BigInt(scaleDifference)
+  // Stryker disable next-line EqualityOperator: bigint has no distinct negative zero.
+  const negative = parts.integer < 0n
+  // Stryker disable next-line EqualityOperator: bigint has no distinct negative zero.
+  const magnitude = parts.integer < 0n ? -parts.integer : parts.integer
+  const retainedMagnitude = magnitude / divisor
+  const discardedMagnitude = magnitude % divisor
+  const increment = shouldIncrement(mode, negative, retainedMagnitude, discardedMagnitude, divisor) ? 1n : 0n
+  const roundedMagnitude = retainedMagnitude + increment
+  const roundedInteger = negative ? -roundedMagnitude : roundedMagnitude
+
+  return formatDecimal(roundedInteger, targetScale)
+}
+
 /**
  * TypeScript Money value for the first FinFlow reference implementation
  * milestone.
  *
  * A Money value binds an exact decimal amount to a currency identifier. This
  * milestone supports construction, validation, canonical serialization,
- * compatible-currency addition, compatible-currency subtraction, and exact
- * compatible-currency numeric comparison.
- * Rounding, multiplication, and division are intentionally absent.
+ * compatible-currency addition, compatible-currency subtraction, exact
+ * compatible-currency numeric comparison, and explicit Money rounding.
+ * Multiplication and division are intentionally absent.
  *
  * @remarks
  * This TypeScript implementation stores the validated decimal representation
@@ -239,6 +314,34 @@ export class Money {
   compare(other: Money): MoneyComparisonResult {
     this.assertCompatibleCurrency(other)
     return compareDecimals(this.amount, other.amount)
+  }
+
+  /**
+   * Rounds this Money value to an explicit target scale using a FinFlow
+   * rounding mode.
+   *
+   * The target scale is supplied by the caller and is not derived from the
+   * currency's customary minor units. The returned Money value preserves this
+   * value's currency, and this operation does not mutate the current value.
+   *
+   * @param options - Explicit target scale and canonical FinFlow rounding mode.
+   * @returns A new Money value containing the rounded result.
+   * @throws {InvalidMoneyRoundingError}
+   * When the target scale or rounding mode is invalid or unsupported.
+   *
+   * @see FINFLOW_MONEY_INVALID_ROUNDING
+   * @see MONEY-ROUNDING-001
+   * @see MONEY-ROUNDING-002
+   * @see MONEY-ROUNDING-003
+   * @see MONEY-ROUNDING-004
+   * @see MONEY-ROUNDING-008
+   * @see MONEY-ROUNDING-009
+   * @see MONEY-ERROR-006
+   * @see MONEY-ERROR-007
+   */
+  round(options: MoneyRoundOptions): Money {
+    const { scale, mode } = validateRoundingOptions(options)
+    return new Money(roundDecimal(this.amount, scale, mode), this.currency)
   }
 
   /**

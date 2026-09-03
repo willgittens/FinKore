@@ -165,8 +165,9 @@ export class MoneyRoundingRequiredError extends FinFlowMoneyError {
  * TypeScript representation of the portable
  * `FINFLOW_MONEY_INVALID_ROUNDING` domain error.
  *
- * This class is exposed for the portable Money error catalog, although rounding
- * is not implemented in the first TypeScript Money milestone.
+ * This class represents an invalid or unsupported target scale or rounding
+ * mode. Cross-language consumers should rely on the portable code rather than
+ * this TypeScript-specific class name.
  *
  * @see FINFLOW_MONEY_INVALID_ROUNDING
  * @see MONEY-ERROR-006

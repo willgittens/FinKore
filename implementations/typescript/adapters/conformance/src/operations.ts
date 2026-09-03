@@ -24,6 +24,14 @@ function inputOperands(input: unknown): { readonly left: unknown; readonly right
   return input as { readonly left: unknown; readonly right: unknown }
 }
 
+function inputRounding(input: unknown): { readonly value: unknown; readonly scale: unknown; readonly mode: unknown } {
+  if (typeof input !== 'object' || input === null || !('value' in input)) {
+    return { value: undefined, scale: undefined, mode: undefined }
+  }
+  const candidate = input as { readonly value: unknown; readonly scale?: unknown; readonly mode?: unknown }
+  return { value: candidate.value, scale: candidate.scale, mode: candidate.mode }
+}
+
 /**
  * Executes the first-milestone Money serialization boundary.
  *
@@ -125,6 +133,32 @@ function executeMoneyCompare(request: AdapterRequest): NormalizedResult {
 }
 
 /**
+ * Executes canonical Money rounding through the TypeScript core API.
+ *
+ * The adapter parses the Money value, delegates target-scale and mode
+ * validation plus exact decimal rounding to `Money.round`, and reports the
+ * operand observation used by conformance non-mutation checks.
+ */
+function executeMoneyRound(request: AdapterRequest): NormalizedResult {
+  const input = inputRounding(request.input)
+  let value: Money | undefined
+  try {
+    value = Money.deserialize(input.value)
+    return {
+      status: 'success',
+      value: value.round({ scale: input.scale, mode: input.mode }).toJSON(),
+      observations: { operand: value.toJSON() },
+    }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && value !== undefined) {
+      return { ...result, observations: { operand: value.toJSON() } }
+    }
+    return result
+  }
+}
+
+/**
  * Operation handlers supported by the first TypeScript conformance adapter.
  *
  * These are conformance-local operation identifiers from the vector catalog,
@@ -136,6 +170,7 @@ function executeMoneyCompare(request: AdapterRequest): NormalizedResult {
 export const operationHandlers = {
   'finflow.money.add': executeMoneyAdd,
   'finflow.money.compare': executeMoneyCompare,
+  'finflow.money.round': executeMoneyRound,
   'finflow.money.subtract': executeMoneySubtract,
   'money.deserialize': executeMoneySerialization,
   'money.serialize': executeMoneySerialization,

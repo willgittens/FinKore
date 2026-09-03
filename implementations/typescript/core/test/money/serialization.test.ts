@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { Money } from '../../src/index.js'
+import { InvalidMoneyAmountError, Money } from '../../src/index.js'
 
 describe('Money serialization', () => {
   it('serializes locale-independent decimal strings', () => {
@@ -21,5 +21,10 @@ describe('Money serialization', () => {
       amount: '10.00',
       currency: 'EUR',
     })
+  })
+
+  it('rejects non-object portable Money values', () => {
+    expect(() => Money.deserialize(undefined)).toThrow(InvalidMoneyAmountError)
+    expect(() => Money.deserialize(null)).toThrow(InvalidMoneyAmountError)
   })
 })
