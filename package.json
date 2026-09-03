@@ -1,0 +1,16 @@
+{
+  "name": "finflow",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "runner",
+    "implementations/typescript/core",
+    "implementations/typescript/adapters/conformance"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
+    "test": "npm run test --workspaces"
+  }
+}

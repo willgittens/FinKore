@@ -1,0 +1,29 @@
+{
+  "name": "@finflow/typescript-conformance-adapter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/adapter.d.ts",
+      "import": "./dist/adapter.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@finflow/conformance-runner": "file:../../../../runner",
+    "@finflow/typescript": "file:../../core"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0",
+    "vitest": "^4.1.1"
+  },
+  "engines": {
+    "node": "^22.18.0 || >=24.11.0"
+  }
+}
