@@ -1,10 +1,20 @@
 # FinFlow TypeScript
 
-First TypeScript reference implementation milestone for FinFlow Money representation.
+TypeScript reference implementation for the current FinFlow Money milestone.
 
-This package implements only construction, validation, portable Money errors, and canonical serialization. It intentionally does not implement arithmetic, comparison, rounding, persistence, framework integrations, or agent adapters.
+This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, and exact compatible-currency subtraction.
 
-The specification remains canonical. This package stores validated decimal amounts as strings for now because the current milestone needs exact base-10 representation and serialization preservation, not arithmetic.
+It intentionally does not implement Money comparison, rounding, multiplication, division, FX conversion, persistence, framework integrations, or agent adapters.
+
+The specification remains canonical. This package stores validated decimal amounts as strings and performs addition and subtraction with scaled integer arithmetic so observable behavior preserves exact base-10 semantics without using JavaScript `number`.
+
+## Current Money API
+
+- `Money.from(input)` validates amount and currency and returns a Money value.
+- `Money.deserialize(value)` parses portable Money JSON.
+- `money.toJSON()` returns canonical portable Money serialization.
+- `money.add(other)` returns an exact same-currency sum and throws `FINFLOW_MONEY_CURRENCY_MISMATCH` for incompatible currencies.
+- `money.subtract(other)` returns an exact same-currency difference and throws `FINFLOW_MONEY_CURRENCY_MISMATCH` for incompatible currencies.
 
 ## API Documentation
 

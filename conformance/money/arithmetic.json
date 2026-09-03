@@ -47,7 +47,8 @@
       "id": "money.add.exact-decimal-001",
       "spec": "money/arithmetic",
       "requirements": [
-        "MONEY-ARITHMETIC-007"
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
       ],
       "description": "Adds decimal tenths exactly, detecting binary floating-point leakage.",
       "operation": "finflow.money.add",
@@ -66,6 +67,16 @@
         "value": {
           "amount": "0.3",
           "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "0.1",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "0.2",
+            "currency": "EUR"
+          }
         }
       },
       "tags": [
@@ -81,6 +92,7 @@
       "spec": "money/arithmetic",
       "requirements": [
         "MONEY-ARITHMETIC-001",
+        "MONEY-ARITHMETIC-009",
         "MONEY-REPRESENTATION-004"
       ],
       "description": "Adds a negative operand with ordinary sign semantics.",
@@ -100,6 +112,16 @@
         "value": {
           "amount": "-2.50",
           "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "10.00",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "-12.50",
+            "currency": "EUR"
+          }
         }
       },
       "tags": [
@@ -115,7 +137,8 @@
       "id": "money.add.zero-001",
       "spec": "money/arithmetic",
       "requirements": [
-        "MONEY-ARITHMETIC-007"
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
       ],
       "description": "Preserves a value when exact zero is added.",
       "operation": "finflow.money.add",
@@ -134,11 +157,66 @@
         "value": {
           "amount": "7.125",
           "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "7.125",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "0",
+            "currency": "EUR"
+          }
         }
       },
       "tags": [
         "positive",
         "boundary"
+      ]
+    },
+    {
+      "id": "money.add.differing-scale-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "Adds operands with differing decimal scales exactly without rounding.",
+      "operation": "finflow.money.add",
+      "input": {
+        "left": {
+          "amount": "1.2",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "0.03",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1.23",
+          "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "1.2",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "0.03",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "decimal-scale-alignment-removed"
       ]
     },
     {
@@ -194,7 +272,8 @@
       "spec": "money/arithmetic",
       "requirements": [
         "MONEY-ARITHMETIC-001",
-        "MONEY-ARITHMETIC-002"
+        "MONEY-ARITHMETIC-002",
+        "MONEY-ARITHMETIC-009"
       ],
       "description": "Subtracts same-currency values in operand order.",
       "operation": "finflow.money.subtract",
@@ -213,6 +292,16 @@
         "value": {
           "amount": "6.75",
           "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "10.00",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "3.25",
+            "currency": "EUR"
+          }
         }
       },
       "tags": [
@@ -228,7 +317,8 @@
       "id": "money.subtract.negative-result-001",
       "spec": "money/arithmetic",
       "requirements": [
-        "MONEY-ARITHMETIC-007"
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
       ],
       "description": "Preserves an exact negative subtraction result.",
       "operation": "finflow.money.subtract",
@@ -247,11 +337,111 @@
         "value": {
           "amount": "-6.75",
           "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "3.25",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "10.00",
+            "currency": "EUR"
+          }
         }
       },
       "tags": [
         "positive",
         "boundary"
+      ]
+    },
+    {
+      "id": "money.subtract.differing-scale-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "Subtracts operands with differing decimal scales exactly without rounding.",
+      "operation": "finflow.money.subtract",
+      "input": {
+        "left": {
+          "amount": "1.20",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "0.003",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1.197",
+          "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "1.20",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "0.003",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "decimal-scale-alignment-removed"
+      ]
+    },
+    {
+      "id": "money.subtract.whole-number-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "Subtracts whole-number decimal strings exactly without adding an implicit decimal scale.",
+      "operation": "finflow.money.subtract",
+      "input": {
+        "left": {
+          "amount": "10",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "3",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "7",
+          "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "10",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "3",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "implicit-decimal-scale"
       ]
     },
     {

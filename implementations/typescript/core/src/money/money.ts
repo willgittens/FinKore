@@ -1,14 +1,55 @@
 import { Currency } from './currency.js'
+import { CurrencyMismatchError } from './errors.js'
 import { serializeMoney, validateSerializedAmount } from './serialization.js'
 import type { MoneyInput, SerializedMoney } from './types.js'
+
+interface DecimalParts {
+  readonly integer: bigint
+  readonly scale: number
+}
+
+function decimalParts(amount: string): DecimalParts {
+  const [whole, fraction = ''] = amount.split('.')
+  const digits = `${whole}${fraction}`
+  return { integer: BigInt(digits), scale: fraction.length }
+}
+
+function scaleDecimal(parts: DecimalParts, scale: number): bigint {
+  return parts.integer * 10n ** BigInt(scale - parts.scale)
+}
+
+function formatDecimal(integer: bigint, scale: number): string {
+  const negative = integer < 0n
+  const unsignedDigits = integer.toString().replace('-', '').padStart(scale + 1, '0')
+  if (scale === 0) return `${negative ? '-' : ''}${unsignedDigits}`
+
+  const whole = unsignedDigits.slice(0, -scale)
+  const fraction = unsignedDigits.slice(-scale)
+  return `${negative ? '-' : ''}${whole}.${fraction}`
+}
+
+function addDecimals(left: string, right: string): string {
+  const leftParts = decimalParts(left)
+  const rightParts = decimalParts(right)
+  const scale = Math.max(leftParts.scale, rightParts.scale)
+  return formatDecimal(scaleDecimal(leftParts, scale) + scaleDecimal(rightParts, scale), scale)
+}
+
+function subtractDecimals(left: string, right: string): string {
+  const leftParts = decimalParts(left)
+  const rightParts = decimalParts(right)
+  const scale = Math.max(leftParts.scale, rightParts.scale)
+  return formatDecimal(scaleDecimal(leftParts, scale) - scaleDecimal(rightParts, scale), scale)
+}
 
 /**
  * TypeScript Money value for the first FinFlow reference implementation
  * milestone.
  *
  * A Money value binds an exact decimal amount to a currency identifier. This
- * milestone supports construction, validation, and canonical serialization
- * only; arithmetic, comparison, and rounding are intentionally absent.
+ * milestone supports construction, validation, canonical serialization,
+ * compatible-currency addition, and compatible-currency subtraction.
+ * Comparison, rounding, multiplication, and division are intentionally absent.
  *
  * @remarks
  * This TypeScript implementation stores the validated decimal representation
@@ -106,6 +147,60 @@ export class Money {
   }
 
   /**
+   * Adds another Money value using exact decimal semantics.
+   *
+   * Both operands must use the same currency identifier in this milestone's
+   * ISO 4217 scope. The returned Money value preserves that currency, and
+   * neither operand is mutated.
+   *
+   * @param other - Money value to add to this value.
+   * @returns A new Money value containing the exact sum.
+   * @throws {CurrencyMismatchError}
+   * When the operands use incompatible currencies.
+   *
+   * @see FINFLOW_MONEY_CURRENCY_MISMATCH
+   * @see MONEY-ARITHMETIC-001
+   * @see MONEY-ARITHMETIC-002
+   * @see MONEY-ARITHMETIC-007
+   * @see MONEY-ARITHMETIC-009
+   * @see MONEY-CURRENCY-003
+   * @see MONEY-CURRENCY-004
+   * @see MONEY-ERROR-003
+   * @see MONEY-ERROR-007
+   */
+  add(other: Money): Money {
+    this.assertCompatibleCurrency(other)
+    return new Money(addDecimals(this.amount, other.amount), this.currency)
+  }
+
+  /**
+   * Subtracts another Money value using exact decimal semantics.
+   *
+   * Both operands must use the same currency identifier in this milestone's
+   * ISO 4217 scope. The returned Money value preserves this value's currency,
+   * and neither operand is mutated.
+   *
+   * @param other - Money value to subtract from this value.
+   * @returns A new Money value containing the exact difference.
+   * @throws {CurrencyMismatchError}
+   * When the operands use incompatible currencies.
+   *
+   * @see FINFLOW_MONEY_CURRENCY_MISMATCH
+   * @see MONEY-ARITHMETIC-001
+   * @see MONEY-ARITHMETIC-002
+   * @see MONEY-ARITHMETIC-007
+   * @see MONEY-ARITHMETIC-009
+   * @see MONEY-CURRENCY-003
+   * @see MONEY-CURRENCY-004
+   * @see MONEY-ERROR-003
+   * @see MONEY-ERROR-007
+   */
+  subtract(other: Money): Money {
+    this.assertCompatibleCurrency(other)
+    return new Money(subtractDecimals(this.amount, other.amount), this.currency)
+  }
+
+  /**
    * Returns the canonical FinFlow Money serialization.
    *
    * The representation is locale-independent and intended for portable
@@ -128,5 +223,11 @@ export class Money {
    */
   toJSON(): SerializedMoney {
     return serializeMoney(this.amount, this.currency.code)
+  }
+
+  private assertCompatibleCurrency(other: Money): void {
+    if (this.currency.code !== other.currency.code) {
+      throw new CurrencyMismatchError()
+    }
   }
 }

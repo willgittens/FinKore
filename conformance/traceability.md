@@ -14,7 +14,7 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Entities | 34 | 29 | 3 | 2 | 17 | 0 | 13 | 4 |
 | **Total** | **212** | **183** | **15** | **14** | **102** | **0** | **61** | **49** |
 
-The suite contains 91 vectors. Overall: **102 covered (48.1%)**, **0 partially covered (0.0%)**, **61 uncovered (28.8%)**, and **49 not directly testable (23.1%)**.
+The suite contains 94 vectors. Overall: **102 covered (48.1%)**, **0 partially covered (0.0%)**, **61 uncovered (28.8%)**, and **49 not directly testable (23.1%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules and optional or recommended freedoms without one mandatory runtime observation. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -57,9 +57,9 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules and optional or recom
 | MONEY-ARITHMETIC-004 | Money | MUST / MUST NOT | COVERED | money.multiply.decimal-001 |
 | MONEY-ARITHMETIC-005 | Money | MUST / MUST NOT | COVERED | money.divide.exact-001 |
 | MONEY-ARITHMETIC-006 | Money | MUST / MUST NOT | COVERED | money.divide.zero-001 |
-| MONEY-ARITHMETIC-007 | Money | MUST / MUST NOT | COVERED | money.add.exact-decimal-001, money.add.zero-001, money.divide.exact-001, money.multiply.decimal-001, money.subtract.negative-result-001 |
+| MONEY-ARITHMETIC-007 | Money | MUST / MUST NOT | COVERED | money.add.differing-scale-001, money.add.exact-decimal-001, money.add.zero-001, money.divide.exact-001, money.multiply.decimal-001, money.subtract.differing-scale-001, money.subtract.negative-result-001, money.subtract.whole-number-001 |
 | MONEY-ARITHMETIC-008 | Money | MUST / MUST NOT | COVERED | money.divide.rounding-required-001 |
-| MONEY-ARITHMETIC-009 | Money | MUST / MUST NOT | COVERED | money.add.same-currency.basic-001 |
+| MONEY-ARITHMETIC-009 | Money | MUST / MUST NOT | COVERED | money.add.differing-scale-001, money.add.exact-decimal-001, money.add.negative-001, money.add.same-currency.basic-001, money.add.zero-001, money.subtract.basic-001, money.subtract.differing-scale-001, money.subtract.negative-result-001, money.subtract.whole-number-001 |
 | MONEY-COMPARISON-001 | Money | MUST / MUST NOT | COVERED | money.compare.equal-trailing-zeros-001 |
 | MONEY-COMPARISON-002 | Money | MUST / MUST NOT | COVERED | money.compare.equal-trailing-zeros-001, money.compare.equal-zero-scale-001 |
 | MONEY-COMPARISON-003 | Money | MUST / MUST NOT | COVERED | money.compare.greater-negative-001, money.compare.less-001 |

@@ -105,7 +105,7 @@ FinFlow is not an ERP, ORM, payment processor, UI framework, accounting applicat
 
 ## Project Status
 
-FinFlow is experimental. The Core Specification is under active development, and its initial conformance vectors are being expanded. Specification and conformance work come first; the planned initial reference implementation in TypeScript will follow.
+FinFlow is experimental. The Core Specification is under active development, and its initial conformance vectors are being expanded. The TypeScript reference implementation currently covers Money representation, canonical serialization, portable Money errors, and exact compatible-currency Money addition/subtraction.
 
 The specification is expected to evolve significantly before version 1.0. Production use is not recommended yet, and no implementation should claim that its API defines FinFlow independently of the specification.
 

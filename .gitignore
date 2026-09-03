@@ -2,3 +2,5 @@ node_modules
 .tools/
 .npm-cache
 dist/
+coverage/
+reports/

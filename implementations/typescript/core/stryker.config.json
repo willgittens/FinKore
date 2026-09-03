@@ -1,0 +1,22 @@
+{
+  "$schema": "../../../../node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "testRunner": "vitest",
+  "mutate": [
+    "src/money/money.ts:1-47",
+    "src/money/money.ts:175-205",
+    "src/money/money.ts:232-235"
+  ],
+  "testFiles": [
+    "test/money/arithmetic.test.ts"
+  ],
+  "reporters": ["clear-text", "html", "json"],
+  "thresholds": {
+    "high": 95,
+    "low": 90,
+    "break": 95
+  },
+  "vitest": {
+    "related": true
+  },
+  "disableTypeChecks": "src/**/*.ts"
+}

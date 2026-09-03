@@ -17,6 +17,13 @@ function inputValue(input: unknown): unknown {
   return (input as { readonly value: unknown }).value
 }
 
+function inputOperands(input: unknown): { readonly left: unknown; readonly right: unknown } {
+  if (typeof input !== 'object' || input === null || !('left' in input) || !('right' in input)) {
+    return { left: undefined, right: undefined }
+  }
+  return input as { readonly left: unknown; readonly right: unknown }
+}
+
 /**
  * Executes the first-milestone Money serialization boundary.
  *
@@ -34,6 +41,62 @@ function executeMoneySerialization(request: AdapterRequest): NormalizedResult {
 }
 
 /**
+ * Executes canonical Money addition through the TypeScript core API.
+ *
+ * The adapter constructs operands, delegates compatibility and exact decimal
+ * arithmetic to `Money.add`, and returns normalized observations for the
+ * runner's operand non-mutation checks.
+ */
+function executeMoneyAdd(request: AdapterRequest): NormalizedResult {
+  const operands = inputOperands(request.input)
+  let left: Money | undefined
+  let right: Money | undefined
+  try {
+    left = Money.deserialize(operands.left)
+    right = Money.deserialize(operands.right)
+    return {
+      status: 'success',
+      value: left.add(right).toJSON(),
+      observations: { left: left.toJSON(), right: right.toJSON() },
+    }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && left !== undefined && right !== undefined) {
+      return { ...result, observations: { left: left.toJSON(), right: right.toJSON() } }
+    }
+    return result
+  }
+}
+
+/**
+ * Executes canonical Money subtraction through the TypeScript core API.
+ *
+ * The adapter constructs operands, delegates compatibility and exact decimal
+ * arithmetic to `Money.subtract`, and returns normalized observations for the
+ * runner's operand non-mutation checks.
+ */
+function executeMoneySubtract(request: AdapterRequest): NormalizedResult {
+  const operands = inputOperands(request.input)
+  let left: Money | undefined
+  let right: Money | undefined
+  try {
+    left = Money.deserialize(operands.left)
+    right = Money.deserialize(operands.right)
+    return {
+      status: 'success',
+      value: left.subtract(right).toJSON(),
+      observations: { left: left.toJSON(), right: right.toJSON() },
+    }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && left !== undefined && right !== undefined) {
+      return { ...result, observations: { left: left.toJSON(), right: right.toJSON() } }
+    }
+    return result
+  }
+}
+
+/**
  * Operation handlers supported by the first TypeScript conformance adapter.
  *
  * These are conformance-local operation identifiers from the vector catalog,
@@ -43,6 +106,8 @@ function executeMoneySerialization(request: AdapterRequest): NormalizedResult {
  * @see MONEY-SERIALIZATION-001
  */
 export const operationHandlers = {
+  'finflow.money.add': executeMoneyAdd,
+  'finflow.money.subtract': executeMoneySubtract,
   'money.deserialize': executeMoneySerialization,
   'money.serialize': executeMoneySerialization,
 } satisfies Readonly<Record<string, OperationHandler>>
