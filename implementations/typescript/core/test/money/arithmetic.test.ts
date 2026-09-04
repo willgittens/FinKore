@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { CurrencyMismatchError, FinFlowMoneyError, Money } from '../../src/index.js'
+import {
+  CurrencyMismatchError,
+  FinFlowMoneyError,
+  Money,
+  MoneyDivisionByZeroError,
+  MoneyRoundingRequiredError,
+} from '../../src/index.js'
 
 describe('Money arithmetic', () => {
   it('adds compatible currencies exactly and preserves operand values', () => {
@@ -93,5 +99,86 @@ describe('Money arithmetic', () => {
 
     expect(left.toJSON()).toEqual({ amount: '10.00', currency: 'EUR' })
     expect(right.toJSON()).toEqual({ amount: '5.00', currency: 'USD' })
+  })
+
+  it('negates amounts exactly while preserving currency and operand value', () => {
+    const positive = Money.from({ amount: '10.25', currency: 'EUR' })
+    const negative = Money.from({ amount: '-10.250', currency: 'EUR' })
+    const zero = Money.from({ amount: '0.00', currency: 'EUR' })
+
+    expect(positive.negate().toJSON()).toEqual({ amount: '-10.25', currency: 'EUR' })
+    expect(negative.negate().toJSON()).toEqual({ amount: '10.250', currency: 'EUR' })
+    expect(zero.negate().toJSON()).toEqual({ amount: '0.00', currency: 'EUR' })
+    expect(Money.from({ amount: '-0.00', currency: 'EUR' }).negate().toJSON()).toEqual({
+      amount: '0.00',
+      currency: 'EUR',
+    })
+    expect(positive.toJSON()).toEqual({ amount: '10.25', currency: 'EUR' })
+    expect(negative.toJSON()).toEqual({ amount: '-10.250', currency: 'EUR' })
+    expect(zero.toJSON()).toEqual({ amount: '0.00', currency: 'EUR' })
+  })
+
+  it('multiplies by exact decimal scalars without rounding or binary floating-point arithmetic', () => {
+    const money = Money.from({ amount: '10.25', currency: 'EUR' })
+
+    expect(money.multiply('1.5').toJSON()).toEqual({ amount: '15.375', currency: 'EUR' })
+    expect(Money.from({ amount: '0.1', currency: 'EUR' }).multiply('0.2').toJSON()).toEqual({
+      amount: '0.02',
+      currency: 'EUR',
+    })
+    expect(Money.from({ amount: '-12.50', currency: 'EUR' }).multiply('-2').toJSON()).toEqual({
+      amount: '25.00',
+      currency: 'EUR',
+    })
+    expect(money.toJSON()).toEqual({ amount: '10.25', currency: 'EUR' })
+  })
+
+  it('divides by non-zero exact decimal scalars when the quotient terminates', () => {
+    const money = Money.from({ amount: '10.00', currency: 'EUR' })
+
+    expect(money.divide('4').toJSON()).toEqual({ amount: '2.5', currency: 'EUR' })
+    expect(Money.from({ amount: '1.20', currency: 'EUR' }).divide('0.3').toJSON()).toEqual({
+      amount: '4',
+      currency: 'EUR',
+    })
+    expect(Money.from({ amount: '-1.00', currency: 'EUR' }).divide('8').toJSON()).toEqual({
+      amount: '-0.125',
+      currency: 'EUR',
+    })
+    expect(Money.from({ amount: '1', currency: 'EUR' }).divide('5').toJSON()).toEqual({
+      amount: '0.2',
+      currency: 'EUR',
+    })
+    expect(Money.from({ amount: '1.25', currency: 'EUR' }).divide('-0.5').toJSON()).toEqual({
+      amount: '-2.5',
+      currency: 'EUR',
+    })
+    expect(money.toJSON()).toEqual({ amount: '10.00', currency: 'EUR' })
+  })
+
+  it('rejects zero divisors without mutating the operand', () => {
+    const money = Money.from({ amount: '10.00', currency: 'EUR' })
+
+    expect(() => money.divide('0.00')).toThrow(MoneyDivisionByZeroError)
+    try {
+      money.divide('0.00')
+    } catch (error) {
+      expect(error).toBeInstanceOf(FinFlowMoneyError)
+      expect((error as FinFlowMoneyError).code).toBe('FINFLOW_MONEY_DIVISION_BY_ZERO')
+    }
+    expect(money.toJSON()).toEqual({ amount: '10.00', currency: 'EUR' })
+  })
+
+  it('rejects non-terminating quotients without choosing an implicit rounding policy', () => {
+    const money = Money.from({ amount: '1', currency: 'EUR' })
+
+    expect(() => money.divide('3')).toThrow(MoneyRoundingRequiredError)
+    try {
+      money.divide('3')
+    } catch (error) {
+      expect(error).toBeInstanceOf(FinFlowMoneyError)
+      expect((error as FinFlowMoneyError).code).toBe('FINFLOW_MONEY_ROUNDING_REQUIRED')
+    }
+    expect(money.toJSON()).toEqual({ amount: '1', currency: 'EUR' })
   })
 })

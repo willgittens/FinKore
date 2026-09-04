@@ -118,8 +118,7 @@ export class CurrencyMismatchError extends FinFlowMoneyError {
  * TypeScript representation of the portable
  * `FINFLOW_MONEY_DIVISION_BY_ZERO` domain error.
  *
- * This class is exposed for the portable Money error catalog, although division
- * is not implemented in the first TypeScript Money milestone.
+ * This class represents a Money division by a numerically zero scalar.
  *
  * @see FINFLOW_MONEY_DIVISION_BY_ZERO
  * @see MONEY-ERROR-004
@@ -141,9 +140,8 @@ export class MoneyDivisionByZeroError extends FinFlowMoneyError {
  * TypeScript representation of the portable
  * `FINFLOW_MONEY_ROUNDING_REQUIRED` domain error.
  *
- * This class is exposed for the portable Money error catalog, although
- * precision-reducing operations are not implemented in the first TypeScript
- * Money milestone.
+ * This class represents a Money operation that would require precision
+ * reduction when no applicable rounding policy is supplied.
  *
  * @see FINFLOW_MONEY_ROUNDING_REQUIRED
  * @see MONEY-ERROR-005

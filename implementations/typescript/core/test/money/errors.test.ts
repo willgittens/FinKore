@@ -8,6 +8,7 @@ import {
   Money,
   MoneyDivisionByZeroError,
   MoneyRoundingRequiredError,
+  isFinFlowMoneyError,
 } from '../../src/index.js'
 
 describe('Money errors', () => {
@@ -42,5 +43,10 @@ describe('Money errors', () => {
     expect(new MoneyDivisionByZeroError().code).toBe('FINFLOW_MONEY_DIVISION_BY_ZERO')
     expect(new MoneyRoundingRequiredError().code).toBe('FINFLOW_MONEY_ROUNDING_REQUIRED')
     expect(new InvalidMoneyRoundingError().code).toBe('FINFLOW_MONEY_INVALID_ROUNDING')
+  })
+
+  it('narrows FinFlow Money errors without relying on messages', () => {
+    expect(isFinFlowMoneyError(new InvalidMoneyAmountError())).toBe(true)
+    expect(isFinFlowMoneyError(new Error('Invalid Money amount'))).toBe(false)
   })
 })

@@ -7,8 +7,11 @@
       "requirements": [
         "MONEY-REPRESENTATION-001",
         "MONEY-REPRESENTATION-002",
+        "MONEY-REPRESENTATION-003",
+        "MONEY-CURRENCY-001",
         "MONEY-SERIALIZATION-001",
-        "MONEY-SERIALIZATION-002"
+        "MONEY-SERIALIZATION-002",
+        "MONEY-SERIALIZATION-008"
       ],
       "description": "Accepts a plain exact positive decimal string with currency.",
       "operation": "money.deserialize",
@@ -112,6 +115,7 @@
       "requirements": [
         "MONEY-ERROR-002",
         "MONEY-REPRESENTATION-001",
+        "MONEY-REPRESENTATION-003",
         "MONEY-SERIALIZATION-001",
         "MONEY-SERIALIZATION-004"
       ],
@@ -266,6 +270,76 @@
       ],
       "guardsAgainst": [
         "silent-currency-normalization"
+      ]
+    },
+    {
+      "id": "money.deserialize.unknown-members-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-CURRENCY-005",
+        "MONEY-SERIALIZATION-006",
+        "MONEY-SERIALIZATION-007",
+        "MONEY-SERIALIZATION-008"
+      ],
+      "description": "Accepts unknown members without changing amount or currency meaning.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "15.50",
+          "currency": "EUR",
+          "minorUnitScale": 0,
+          "display": "USD 999.99"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "15.50",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unknown-member-semantic-override",
+        "currency-metadata-as-exchange-rate"
+      ]
+    },
+    {
+      "id": "money.serialize.roundtrip-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-SERIALIZATION-001",
+        "MONEY-SERIALIZATION-002",
+        "MONEY-SERIALIZATION-004",
+        "MONEY-SERIALIZATION-008"
+      ],
+      "description": "Serialization preserves numeric amount, trailing-zero representation, and currency through the portable boundary.",
+      "operation": "money.serialize",
+      "input": {
+        "value": {
+          "amount": "-15.50",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-15.50",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "serialization-value-changed",
+        "currency-omitted"
       ]
     },
     {

@@ -1,5 +1,11 @@
 import { Currency } from './currency.js'
-import { CurrencyMismatchError, InvalidMoneyRoundingError } from './errors.js'
+import {
+  CurrencyMismatchError,
+  InvalidMoneyAmountError,
+  InvalidMoneyRoundingError,
+  MoneyDivisionByZeroError,
+  MoneyRoundingRequiredError,
+} from './errors.js'
 import { serializeMoney, validateSerializedAmount } from './serialization.js'
 import type { MoneyComparisonResult, MoneyInput, MoneyRoundOptions, RoundingMode, SerializedMoney } from './types.js'
 
@@ -40,6 +46,72 @@ function subtractDecimals(left: string, right: string): string {
   const rightParts = decimalParts(right)
   const scale = Math.max(leftParts.scale, rightParts.scale)
   return formatDecimal(scaleDecimal(leftParts, scale) - scaleDecimal(rightParts, scale), scale)
+}
+
+function multiplyDecimals(left: string, right: string): string {
+  const leftParts = decimalParts(left)
+  const rightParts = decimalParts(right)
+  return formatDecimal(leftParts.integer * rightParts.integer, leftParts.scale + rightParts.scale)
+}
+
+function gcd(left: bigint, right: bigint): bigint {
+  // Stryker disable next-line EqualityOperator: bigint has no distinct negative zero, so `< 0n` and `<= 0n` are equivalent here.
+  let a = left < 0n ? -left : left
+  let b = right
+  while (b !== 0n) {
+    const remainder = a % b
+    a = b
+    b = remainder
+  }
+  return a
+}
+
+function factorCount(value: bigint, factor: bigint): number {
+  let remaining = value
+  let count = 0
+  while (remaining % factor === 0n) {
+    remaining /= factor
+    count += 1
+  }
+  return count
+}
+
+function divideDecimals(dividend: string, divisor: string): string {
+  const dividendParts = decimalParts(dividend)
+  const divisorParts = decimalParts(divisor)
+  if (divisorParts.integer === 0n) {
+    throw new MoneyDivisionByZeroError()
+  }
+
+  // Stryker disable next-line EqualityOperator: zero divisors are rejected above, so `< 0n` and `<= 0n` are equivalent here.
+  const divisorMagnitude = divisorParts.integer < 0n ? -divisorParts.integer : divisorParts.integer
+  // Stryker disable next-line EqualityOperator: zero divisors are rejected above, so `< 0n` and `<= 0n` are equivalent here.
+  const numeratorSign = divisorParts.integer < 0n ? -1n : 1n
+  // Stryker disable next-line ArithmeticOperator: multiplying and dividing by a sign value constrained to `1n | -1n` are equivalent.
+  let numerator = dividendParts.integer * numeratorSign * 10n ** BigInt(divisorParts.scale)
+  let denominator = divisorMagnitude * 10n ** BigInt(dividendParts.scale)
+
+  const divisorGcd = gcd(numerator, denominator)
+  numerator /= divisorGcd
+  denominator /= divisorGcd
+
+  const twos = factorCount(denominator, 2n)
+  const withoutTwos = denominator / 2n ** BigInt(twos)
+  const fives = factorCount(withoutTwos, 5n)
+  const remaining = withoutTwos / 5n ** BigInt(fives)
+  if (remaining !== 1n) {
+    throw new MoneyRoundingRequiredError()
+  }
+
+  const scale = Math.max(twos, fives)
+  const scaledInteger = numerator * 2n ** BigInt(scale - twos) * 5n ** BigInt(scale - fives)
+  return formatDecimal(scaledInteger, scale)
+}
+
+function negateDecimal(amount: string): string {
+  const parts = decimalParts(amount)
+  if (parts.integer === 0n) return formatDecimal(0n, parts.scale)
+  return amount.startsWith('-') ? amount.slice(1) : `-${amount}`
 }
 
 function compareDecimals(left: string, right: string): MoneyComparisonResult {
@@ -101,15 +173,18 @@ function shouldIncrement(
       if (tieComparison < divisor) return false
       return retainedMagnitude % 2n !== 0n
     }
+    // Stryker disable all: validateRoundingOptions narrows all public inputs to supported modes before this internal helper is called.
     default: {
       const unsupported: never = mode
       throw new InvalidMoneyRoundingError('Invalid Money rounding mode', { mode: unsupported })
     }
+    // Stryker restore all
   }
 }
 
 function roundDecimal(amount: string, targetScale: number, mode: RoundingMode): string {
   const parts = decimalParts(amount)
+  // Stryker disable next-line EqualityOperator: at equal scale the reduction path also discards zero digits and returns the same decimal value.
   if (targetScale >= parts.scale) {
     return formatDecimal(scaleDecimal(parts, targetScale), targetScale)
   }
@@ -135,9 +210,9 @@ function roundDecimal(amount: string, targetScale: number, mode: RoundingMode): 
  *
  * A Money value binds an exact decimal amount to a currency identifier. This
  * milestone supports construction, validation, canonical serialization,
- * compatible-currency addition, compatible-currency subtraction, exact
- * compatible-currency numeric comparison, and explicit Money rounding.
- * Multiplication and division are intentionally absent.
+ * compatible-currency addition, compatible-currency subtraction, negation,
+ * exact decimal scalar multiplication and division, exact compatible-currency
+ * numeric comparison, and explicit Money rounding.
  *
  * @remarks
  * This TypeScript implementation stores the validated decimal representation
@@ -228,7 +303,7 @@ export class Money {
    */
   static deserialize(value: unknown): Money {
     if (typeof value !== 'object' || value === null) {
-      return Money.from({ amount: undefined, currency: undefined })
+      throw new InvalidMoneyAmountError()
     }
     const candidate = value as Partial<Record<keyof SerializedMoney, unknown>>
     return Money.from({ amount: candidate.amount, currency: candidate.currency })
@@ -286,6 +361,81 @@ export class Money {
   subtract(other: Money): Money {
     this.assertCompatibleCurrency(other)
     return new Money(subtractDecimals(this.amount, other.amount), this.currency)
+  }
+
+  /**
+   * Reverses this Money value's amount sign exactly while preserving currency.
+   *
+   * The returned Money value preserves this value's currency and this operation
+   * does not mutate the current value.
+   *
+   * @returns A new Money value with the opposite numeric sign.
+   *
+   * @see MONEY-ARITHMETIC-003
+   * @see MONEY-ARITHMETIC-009
+   */
+  negate(): Money {
+    return new Money(negateDecimal(this.amount), this.currency)
+  }
+
+  /**
+   * Multiplies this Money value by an exact decimal scalar.
+   *
+   * The scalar must use FinFlow's plain base-10 decimal string representation.
+   * The operation preserves exact decimal results and currency, and does not
+   * mutate the current value.
+   *
+   * @param scalar - Exact decimal scalar in plain notation.
+   * @returns A new Money value containing the exact product.
+   * @throws {InvalidMoneyAmountError}
+   * When the scalar is missing, malformed, non-finite, or unsupported.
+   *
+   * @see FINFLOW_MONEY_INVALID_AMOUNT
+   * @see MONEY-ARITHMETIC-004
+   * @see MONEY-ARITHMETIC-007
+   * @see MONEY-ARITHMETIC-009
+   * @see MONEY-ERROR-001
+   */
+  multiply(scalar: unknown): Money {
+    const validatedScalar = validateSerializedAmount(scalar)
+    return new Money(multiplyDecimals(this.amount, validatedScalar), this.currency)
+  }
+
+  /**
+   * Divides this Money value by an exact decimal scalar when the quotient is
+   * exactly representable in base 10.
+   *
+   * This operation does not choose a rounding policy implicitly. Non-
+   * terminating decimal quotients fail with `FINFLOW_MONEY_ROUNDING_REQUIRED`.
+   * The returned Money value preserves this value's currency, and this
+   * operation does not mutate the current value.
+   *
+   * @param scalar - Non-zero exact decimal scalar in plain notation.
+   * @returns A new Money value containing the exact quotient.
+   * @throws {InvalidMoneyAmountError}
+   * When the scalar is missing, malformed, non-finite, or unsupported.
+   * @throws {MoneyDivisionByZeroError}
+   * When the scalar is numerically zero.
+   * @throws {MoneyRoundingRequiredError}
+   * When the exact quotient would require precision reduction and no rounding
+   * policy is supplied.
+   *
+   * @see FINFLOW_MONEY_INVALID_AMOUNT
+   * @see FINFLOW_MONEY_DIVISION_BY_ZERO
+   * @see FINFLOW_MONEY_ROUNDING_REQUIRED
+   * @see MONEY-ARITHMETIC-005
+   * @see MONEY-ARITHMETIC-006
+   * @see MONEY-ARITHMETIC-007
+   * @see MONEY-ARITHMETIC-008
+   * @see MONEY-ARITHMETIC-009
+   * @see MONEY-ERROR-001
+   * @see MONEY-ERROR-004
+   * @see MONEY-ERROR-005
+   * @see MONEY-ERROR-007
+   */
+  divide(scalar: unknown): Money {
+    const validatedScalar = validateSerializedAmount(scalar)
+    return new Money(divideDecimals(this.amount, validatedScalar), this.currency)
   }
 
   /**

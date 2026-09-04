@@ -15,9 +15,9 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('finflow.money.subtract')).toBe(true)
     expect(adapter.supports('finflow.money.compare')).toBe(true)
     expect(adapter.supports('finflow.money.round')).toBe(true)
-    expect(adapter.supports('money.negate')).toBe(false)
-    expect(adapter.supports('money.multiply')).toBe(false)
-    expect(adapter.supports('money.divide')).toBe(false)
+    expect(adapter.supports('money.negate')).toBe(true)
+    expect(adapter.supports('money.multiply')).toBe(true)
+    expect(adapter.supports('money.divide')).toBe(true)
   })
 
   it('passes current Money representation and serialization vectors', async () => {
@@ -35,10 +35,12 @@ describe('TypeScript conformance adapter', () => {
       'money.deserialize.leading-plus-001',
       'money.deserialize.non-finite-001',
       'money.deserialize.lowercase-currency-001',
+      'money.deserialize.unknown-members-001',
+      'money.serialize.roundtrip-001',
       'money.serialize.locale-independent-001',
     ] })
 
-    expect(report.summary).toEqual({ total: 11, passed: 11, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 13, passed: 13, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current canonical Money arithmetic vectors', async () => {
@@ -57,9 +59,15 @@ describe('TypeScript conformance adapter', () => {
       'money.subtract.differing-scale-001',
       'money.subtract.whole-number-001',
       'money.subtract.currency-mismatch-001',
+      'money.negate.positive-001',
+      'money.negate.negative-001',
+      'money.multiply.decimal-001',
+      'money.divide.exact-001',
+      'money.divide.zero-001',
+      'money.divide.rounding-required-001',
     ] })
 
-    expect(report.summary).toEqual({ total: 11, passed: 11, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 17, passed: 17, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current canonical Money comparison vectors', async () => {

@@ -9,6 +9,9 @@ This milestone supports only:
 - `finflow.money.round`
 - `finflow.money.subtract`
 - `money.deserialize`
+- `money.divide`
+- `money.multiply`
+- `money.negate`
 - `money.serialize`
 
-It does not claim support for Money multiplication, division, workflow, audit, approvals, entities, MCP, or executable agent integrations.
+It does not claim support for workflow, audit, approvals, entities, MCP, or executable agent integrations.

@@ -128,7 +128,8 @@
       "id": "money.compare.equal-zero-scale-001",
       "spec": "money/comparison",
       "requirements": [
-        "MONEY-COMPARISON-002"
+        "MONEY-COMPARISON-002",
+        "MONEY-COMPARISON-006"
       ],
       "description": "Compares zero representations numerically.",
       "operation": "finflow.money.compare",

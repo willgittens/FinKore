@@ -494,7 +494,8 @@
       "id": "money.negate.positive-001",
       "spec": "money/arithmetic",
       "requirements": [
-        "MONEY-ARITHMETIC-003"
+        "MONEY-ARITHMETIC-003",
+        "MONEY-ARITHMETIC-009"
       ],
       "description": "Reverses a positive sign exactly and preserves currency.",
       "operation": "money.negate",
@@ -531,7 +532,8 @@
       "id": "money.negate.negative-001",
       "spec": "money/arithmetic",
       "requirements": [
-        "MONEY-ARITHMETIC-003"
+        "MONEY-ARITHMETIC-003",
+        "MONEY-ARITHMETIC-009"
       ],
       "description": "Reverses a negative sign exactly.",
       "operation": "money.negate",
@@ -546,10 +548,17 @@
         "value": {
           "amount": "12.34",
           "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-12.34",
+            "currency": "EUR"
+          }
         }
       },
       "tags": [
         "positive",
+        "invariant",
         "mutation-sensitive"
       ],
       "guardsAgainst": [
@@ -561,7 +570,8 @@
       "spec": "money/arithmetic",
       "requirements": [
         "MONEY-ARITHMETIC-004",
-        "MONEY-ARITHMETIC-007"
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
       ],
       "description": "Multiplies by an exact decimal scalar without minor-unit rounding.",
       "operation": "money.multiply",
@@ -600,7 +610,8 @@
       "spec": "money/arithmetic",
       "requirements": [
         "MONEY-ARITHMETIC-005",
-        "MONEY-ARITHMETIC-007"
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
       ],
       "description": "Divides by a non-zero scalar when the quotient is exact.",
       "operation": "money.divide",
@@ -616,10 +627,17 @@
         "value": {
           "amount": "2.5",
           "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "EUR"
+          }
         }
       },
       "tags": [
         "positive",
+        "invariant",
         "mutation-sensitive"
       ],
       "guardsAgainst": [

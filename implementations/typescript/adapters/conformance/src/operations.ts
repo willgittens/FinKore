@@ -32,6 +32,14 @@ function inputRounding(input: unknown): { readonly value: unknown; readonly scal
   return { value: candidate.value, scale: candidate.scale, mode: candidate.mode }
 }
 
+function inputUnaryArithmetic(input: unknown): { readonly value: unknown; readonly scalar?: unknown } {
+  if (typeof input !== 'object' || input === null || !('value' in input)) {
+    return { value: undefined }
+  }
+  const candidate = input as { readonly value: unknown; readonly scalar?: unknown }
+  return { value: candidate.value, scalar: candidate.scalar }
+}
+
 /**
  * Executes the first-milestone Money serialization boundary.
  *
@@ -99,6 +107,82 @@ function executeMoneySubtract(request: AdapterRequest): NormalizedResult {
     const result = normalizeThrown(error)
     if (result.status === 'error' && left !== undefined && right !== undefined) {
       return { ...result, observations: { left: left.toJSON(), right: right.toJSON() } }
+    }
+    return result
+  }
+}
+
+/**
+ * Executes Money negation through the TypeScript core API.
+ *
+ * The adapter constructs the operand, delegates exact sign reversal to
+ * `Money.negate`, and reports the operand observation used by conformance
+ * non-mutation checks.
+ */
+function executeMoneyNegate(request: AdapterRequest): NormalizedResult {
+  const input = inputUnaryArithmetic(request.input)
+  let value: Money | undefined
+  try {
+    value = Money.deserialize(input.value)
+    return {
+      status: 'success',
+      value: value.negate().toJSON(),
+      observations: { operand: value.toJSON() },
+    }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && value !== undefined) {
+      return { ...result, observations: { operand: value.toJSON() } }
+    }
+    return result
+  }
+}
+
+/**
+ * Executes Money scalar multiplication through the TypeScript core API.
+ *
+ * Scalar validation and exact decimal multiplication remain core behavior; the
+ * adapter only translates the conformance fixture and normalized result.
+ */
+function executeMoneyMultiply(request: AdapterRequest): NormalizedResult {
+  const input = inputUnaryArithmetic(request.input)
+  let value: Money | undefined
+  try {
+    value = Money.deserialize(input.value)
+    return {
+      status: 'success',
+      value: value.multiply(input.scalar).toJSON(),
+      observations: { operand: value.toJSON() },
+    }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && value !== undefined) {
+      return { ...result, observations: { operand: value.toJSON() } }
+    }
+    return result
+  }
+}
+
+/**
+ * Executes Money scalar division through the TypeScript core API.
+ *
+ * Division-by-zero and rounding-required behavior remain in `Money.divide`;
+ * this adapter only maps the fixture shape into the TypeScript API.
+ */
+function executeMoneyDivide(request: AdapterRequest): NormalizedResult {
+  const input = inputUnaryArithmetic(request.input)
+  let value: Money | undefined
+  try {
+    value = Money.deserialize(input.value)
+    return {
+      status: 'success',
+      value: value.divide(input.scalar).toJSON(),
+      observations: { operand: value.toJSON() },
+    }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && value !== undefined) {
+      return { ...result, observations: { operand: value.toJSON() } }
     }
     return result
   }
@@ -173,6 +257,9 @@ export const operationHandlers = {
   'finflow.money.round': executeMoneyRound,
   'finflow.money.subtract': executeMoneySubtract,
   'money.deserialize': executeMoneySerialization,
+  'money.divide': executeMoneyDivide,
+  'money.multiply': executeMoneyMultiply,
+  'money.negate': executeMoneyNegate,
   'money.serialize': executeMoneySerialization,
 } satisfies Readonly<Record<string, OperationHandler>>
 
