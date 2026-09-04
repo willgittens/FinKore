@@ -498,7 +498,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Reverses a positive sign exactly and preserves currency.",
-      "operation": "money.negate",
+      "operation": "finflow.money.negate",
       "input": {
         "value": {
           "amount": "12.34",
@@ -536,7 +536,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Reverses a negative sign exactly.",
-      "operation": "money.negate",
+      "operation": "finflow.money.negate",
       "input": {
         "value": {
           "amount": "-12.34",
@@ -574,7 +574,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Multiplies by an exact decimal scalar without minor-unit rounding.",
-      "operation": "money.multiply",
+      "operation": "finflow.money.multiply",
       "input": {
         "value": {
           "amount": "10.25",
@@ -614,7 +614,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Divides by a non-zero scalar when the quotient is exact.",
-      "operation": "money.divide",
+      "operation": "finflow.money.divide",
       "input": {
         "value": {
           "amount": "10.00",
@@ -653,7 +653,7 @@
         "MONEY-ERROR-007"
       ],
       "description": "Rejects a zero divisor and preserves the operand.",
-      "operation": "money.divide",
+      "operation": "finflow.money.divide",
       "input": {
         "value": {
           "amount": "10.00",
@@ -693,7 +693,7 @@
         "MONEY-ROUNDING-006"
       ],
       "description": "Rejects a non-terminating quotient when no rounding policy is supplied.",
-      "operation": "money.divide",
+      "operation": "finflow.money.divide",
       "input": {
         "value": {
           "amount": "1",

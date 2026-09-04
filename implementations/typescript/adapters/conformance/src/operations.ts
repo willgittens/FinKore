@@ -113,7 +113,7 @@ function executeMoneySubtract(request: AdapterRequest): NormalizedResult {
 }
 
 /**
- * Executes Money negation through the TypeScript core API.
+ * Executes canonical Money negation through the TypeScript core API.
  *
  * The adapter constructs the operand, delegates exact sign reversal to
  * `Money.negate`, and reports the operand observation used by conformance
@@ -139,7 +139,7 @@ function executeMoneyNegate(request: AdapterRequest): NormalizedResult {
 }
 
 /**
- * Executes Money scalar multiplication through the TypeScript core API.
+ * Executes canonical Money scalar multiplication through the TypeScript core API.
  *
  * Scalar validation and exact decimal multiplication remain core behavior; the
  * adapter only translates the conformance fixture and normalized result.
@@ -164,7 +164,7 @@ function executeMoneyMultiply(request: AdapterRequest): NormalizedResult {
 }
 
 /**
- * Executes Money scalar division through the TypeScript core API.
+ * Executes canonical Money scalar division through the TypeScript core API.
  *
  * Division-by-zero and rounding-required behavior remain in `Money.divide`;
  * this adapter only maps the fixture shape into the TypeScript API.
@@ -245,9 +245,9 @@ function executeMoneyRound(request: AdapterRequest): NormalizedResult {
 /**
  * Operation handlers supported by the first TypeScript conformance adapter.
  *
- * These are conformance-local operation identifiers from the vector catalog,
- * not new Agentic Contract operation IDs. Future `finflow.money.*` support must
- * be added only when the corresponding TypeScript domain behavior exists.
+ * Public Money domain operations use canonical Agentic Contract identifiers.
+ * `money.deserialize` and `money.serialize` remain conformance-local
+ * representation boundary checks rather than public FinFlow operations.
  *
  * @see MONEY-SERIALIZATION-001
  */
@@ -257,9 +257,9 @@ export const operationHandlers = {
   'finflow.money.round': executeMoneyRound,
   'finflow.money.subtract': executeMoneySubtract,
   'money.deserialize': executeMoneySerialization,
-  'money.divide': executeMoneyDivide,
-  'money.multiply': executeMoneyMultiply,
-  'money.negate': executeMoneyNegate,
+  'finflow.money.divide': executeMoneyDivide,
+  'finflow.money.multiply': executeMoneyMultiply,
+  'finflow.money.negate': executeMoneyNegate,
   'money.serialize': executeMoneySerialization,
 } satisfies Readonly<Record<string, OperationHandler>>
 

@@ -22,7 +22,13 @@ The runner loads only files declared by `conformance/manifest.json`. It validate
 
 ## Canonical operations and requirements
 
-Canonical operation IDs are reused verbatim from the Agentic Contract, including `finflow.money.add` and `finflow.workflow.transition`. `src/metadata.ts` contains the small explicit Draft 0.1 Agentic ID set aligned with `agentic/operations.md`; it duplicates identifiers, not semantics. Operations without the `finflow.` prefix remain conformance-local adapter vocabulary as documented by `conformance/conventions.md`.
+Canonical operation IDs are reused verbatim from the Agentic Contract, including
+`finflow.money.add`, `finflow.money.divide`, and
+`finflow.workflow.transition`. `src/metadata.ts` contains the small explicit
+Draft 0.1 Agentic ID set aligned with `agentic/operations.md`; it duplicates
+identifiers, not semantics. Operations without the `finflow.` prefix remain
+conformance-local adapter vocabulary as documented by
+`conformance/conventions.md`.
 
 Requirement IDs and the existing critical classification are read conservatively from the canonical tables in `conformance/traceability.md`. The loader fails if that inventory is missing, and vector references outside it are rejected. This focused table reader is deliberately not a generalized Markdown or specification parser.
 

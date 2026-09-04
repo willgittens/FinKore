@@ -4,8 +4,14 @@ import { AGENTIC_OPERATION_IDS, CONFORMANCE_OPERATION_IDS, parseTraceabilityMeta
 describe('metadata', () => {
   it('keeps canonical Agentic ids distinct from local conformance operations', () => {
     expect(AGENTIC_OPERATION_IDS.has('finflow.money.add')).toBe(true)
+    expect(AGENTIC_OPERATION_IDS.has('finflow.money.negate')).toBe(true)
+    expect(AGENTIC_OPERATION_IDS.has('finflow.money.multiply')).toBe(true)
+    expect(AGENTIC_OPERATION_IDS.has('finflow.money.divide')).toBe(true)
     expect(AGENTIC_OPERATION_IDS.has('money.deserialize')).toBe(false)
     expect(CONFORMANCE_OPERATION_IDS.has('money.deserialize')).toBe(true)
+    expect(CONFORMANCE_OPERATION_IDS.has('money.negate')).toBe(false)
+    expect(CONFORMANCE_OPERATION_IDS.has('money.multiply')).toBe(false)
+    expect(CONFORMANCE_OPERATION_IDS.has('money.divide')).toBe(false)
   })
 
   it('extracts requirement inventory and the named critical table only', () => {

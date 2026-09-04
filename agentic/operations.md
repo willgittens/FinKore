@@ -13,6 +13,9 @@ contract, effects, and inputs are reviewed.
 | --- | --- | ---: | ---: | ---: | ---: | --- | --- |
 | `finflow.money.add` | Money | No | No | Yes | None | None | `MONEY-ARITHMETIC-001`, `-002`, `-007`, `-009` |
 | `finflow.money.subtract` | Money | No | No | Yes | None | None | `MONEY-ARITHMETIC-001`, `-002`, `-007`, `-009` |
+| `finflow.money.negate` | Money | No | No | Yes | None | None | `MONEY-ARITHMETIC-003`, `-009` |
+| `finflow.money.multiply` | Money | No | No | Yes | None | None | `MONEY-ARITHMETIC-004`, `-007`, `-009` |
+| `finflow.money.divide` | Money | No | No | Yes | None | None | `MONEY-ARITHMETIC-005`–`-009`, `MONEY-ROUNDING-006` |
 | `finflow.money.compare` | Money | No | No | Yes | None | None | `MONEY-COMPARISON-001`–`-004`, `-006` |
 | `finflow.money.round` | Money | No | No | Yes | None | None | `MONEY-ROUNDING-001`–`-004`, `-008`, `-009` |
 | `finflow.workflow.transition` | Workflow | Yes | Unspecified | Unspecified | May | May be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007` |
@@ -58,6 +61,62 @@ validation errors may also apply; this list is not exhaustive.
 **Normative traceability:** [MONEY-ARITHMETIC-001, -002, -007, -009](../spec/money/arithmetic.md),
 [MONEY-CURRENCY-003, -004](../spec/money/currency.md), and
 [MONEY-ERROR-003, -007](../spec/money/errors.md).
+
+## `finflow.money.negate`
+
+**Purpose:** Reverse the sign of a Money value exactly.
+
+**Input:** `value` using normative Money serialization.
+
+**Preconditions:** The input is valid Money.
+
+**Success:** Returns Money with the exact additive inverse amount and the same
+currency. The input Money does not change.
+
+**Known operation-specific error:** None. Money validation errors may apply; this
+list is not exhaustive.
+
+**Normative traceability:** [MONEY-ARITHMETIC-003 and -009](../spec/money/arithmetic.md).
+
+## `finflow.money.multiply`
+
+**Purpose:** Multiply Money by an exact decimal scalar.
+
+**Input:** `value` using normative Money serialization and `scalar` as an exact
+decimal scalar accepted by the Money arithmetic specification.
+
+**Preconditions:** Money and scalar inputs are valid.
+
+**Success:** Returns Money whose exact amount is `value * scalar`, preserving the
+input currency and without implicit minor-unit rounding. The input Money does
+not change.
+
+**Known operation-specific error:** None. Money validation errors may apply; this
+list is not exhaustive.
+
+**Normative traceability:** [MONEY-ARITHMETIC-004, -007, and -009](../spec/money/arithmetic.md).
+
+## `finflow.money.divide`
+
+**Purpose:** Divide Money by a non-zero exact decimal scalar.
+
+**Input:** `value` using normative Money serialization and `scalar` as an exact
+decimal scalar accepted by the Money arithmetic specification.
+
+**Preconditions:** Money and scalar inputs are valid. The scalar is not zero. If
+the quotient does not terminate exactly, an explicit rounding policy is required
+by the Money specification.
+
+**Success:** Returns Money whose exact amount is `value / scalar`, preserving the
+input currency when the quotient is exact. The input Money does not change.
+
+**Known operation-specific errors:** `FINFLOW_MONEY_DIVISION_BY_ZERO` and
+`FINFLOW_MONEY_ROUNDING_REQUIRED`. Money validation errors may also apply; this
+list is not exhaustive.
+
+**Normative traceability:** [MONEY-ARITHMETIC-005 through -009](../spec/money/arithmetic.md),
+[MONEY-ROUNDING-006](../spec/money/rounding.md), and
+[MONEY-ERROR-004, -005, -007](../spec/money/errors.md).
 
 ## `finflow.money.compare`
 

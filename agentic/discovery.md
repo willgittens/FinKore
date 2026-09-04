@@ -16,6 +16,11 @@ Illustrative, non-normative discovery data:
       "summary": "Adds two compatible Money values."
     },
     {
+      "id": "finflow.money.divide",
+      "domain": "money",
+      "summary": "Divides Money by a non-zero exact decimal scalar."
+    },
+    {
       "id": "finflow.money.round",
       "domain": "money",
       "summary": "Rounds Money using an explicit target scale and mode."
@@ -36,4 +41,3 @@ Draft 0.1 creates no `operations.json`. A machine-readable manifest should be
 added only after the descriptor model and its versioning policy are stable, with
 Markdown retaining its explanatory role and one data artifact becoming the
 portable registry rather than creating conflicting sources of truth.
-

@@ -15,9 +15,12 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('finflow.money.subtract')).toBe(true)
     expect(adapter.supports('finflow.money.compare')).toBe(true)
     expect(adapter.supports('finflow.money.round')).toBe(true)
-    expect(adapter.supports('money.negate')).toBe(true)
-    expect(adapter.supports('money.multiply')).toBe(true)
-    expect(adapter.supports('money.divide')).toBe(true)
+    expect(adapter.supports('finflow.money.negate')).toBe(true)
+    expect(adapter.supports('finflow.money.multiply')).toBe(true)
+    expect(adapter.supports('finflow.money.divide')).toBe(true)
+    expect(adapter.supports('money.negate')).toBe(false)
+    expect(adapter.supports('money.multiply')).toBe(false)
+    expect(adapter.supports('money.divide')).toBe(false)
   })
 
   it('passes current Money representation and serialization vectors', async () => {

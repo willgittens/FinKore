@@ -7,10 +7,11 @@ Its descriptor makes the operation Discoverable, Understandable, and Governable.
 Invocation bindings are implementation-specific and outside Draft 0.1.
 
 An adapter MAY expose only a subset of the registry. A Money-only implementation,
-for example, may expose `finflow.money.add`, `finflow.money.subtract`, and
-`finflow.money.round` without exposing `finflow.workflow.transition`. Its
-capability list MUST accurately describe what is available; clients MUST NOT
-assume that every FinFlow implementation supports every registered operation.
+for example, may expose Money operations such as `finflow.money.add`,
+`finflow.money.divide`, and `finflow.money.round` without exposing
+`finflow.workflow.transition`. Its capability list MUST accurately describe what
+is available; clients MUST NOT assume that every FinFlow implementation supports
+every registered operation.
 
 ## Capability and conformance
 
@@ -35,4 +36,3 @@ Some operations may be suitable for autonomous execution. Others may require
 human confirmation, an Approval, authorization, or application policy. Draft
 0.1 exposes available facts and does not impose human confirmation on every
 mutation.
-

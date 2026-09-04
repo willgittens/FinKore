@@ -22,7 +22,7 @@ misleading if compressed into booleans.
 
 An operation with state mutation `no` does not mutate observable domain state.
 This is behavioral and does not require functional-programming techniques.
-Money addition, subtraction, comparison, and rounding are non-mutating under
+Money arithmetic, comparison, and rounding operations are non-mutating under
 `MONEY-ARITHMETIC-009` and `MONEY-ERROR-007`; rounding returns a Money result and
 does not alter its input value. A non-mutating classification MUST NOT be read as
 permission to mutate financial state.
@@ -69,4 +69,3 @@ registry does not claim that any operation is irreversible.
 Idempotency is also not a Draft 0.1 metadata dimension. Pure Money operations can
 be recomputed without mutating their operands, but this does not define transport
 retries or idempotency keys. State-changing idempotency remains open.
-

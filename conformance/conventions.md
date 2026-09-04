@@ -46,8 +46,8 @@ These identifiers name observable behavior, not implementation methods.
 | `money.deserialize` | Parse the normative portable Money JSON value. |
 | `money.serialize` | Produce the normative portable Money JSON value. |
 | `finflow.money.add`, `finflow.money.subtract` | Exact compatible-currency arithmetic. |
-| `money.negate` | Exact sign reversal. |
-| `money.multiply`, `money.divide` | Exact scalar arithmetic, with an optional explicit rounding policy where needed. |
+| `finflow.money.negate` | Exact sign reversal. |
+| `finflow.money.multiply`, `finflow.money.divide` | Exact scalar arithmetic, with an optional explicit rounding policy where needed. |
 | `finflow.money.compare` | Return `LESS`, `EQUAL`, or `GREATER`. |
 | `finflow.money.round` | Reduce to the explicit `scale` using the explicit `mode`. |
 | `workflow.create` | Validate a definition and create an instance at its initial state. |
@@ -71,6 +71,9 @@ Identifiers beginning with `finflow.` are canonical operations in the
 [Agentic Contract](../agentic/operations.md). Remaining catalog entries are
 conformance-local adapter operations until their stable public contracts are
 reviewed; vector use alone does not make them advertised FinFlow capabilities.
+For Money Draft 0.1, `money.deserialize` and `money.serialize` remain
+conformance-local representation boundary checks. They exercise normative Money
+serialization but are not separate public Agentic operations.
 
 ## Runner contract
 
