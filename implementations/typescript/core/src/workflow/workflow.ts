@@ -34,11 +34,18 @@ function guardsPass(guards: readonly WorkflowTransitionGuard[], facts: Readonly<
  * transitions update that current state after validation; rejected transitions
  * leave it unchanged.
  *
+ * An explicitly terminal current state rejects every later transition request.
+ * Workflow terminality governs transitions only; it does not imply broader
+ * entity or metadata immutability.
+ *
  * @see WORKFLOW-STATES-003
  * @see WORKFLOW-STATES-004
  * @see WORKFLOW-STATES-007
  * @see WORKFLOW-TRANSITION-005
  * @see WORKFLOW-TRANSITION-006
+ * @see WORKFLOW-TERMINAL-001
+ * @see WORKFLOW-TERMINAL-003
+ * @see WORKFLOW-TERMINAL-004
  */
 export class Workflow {
   /** Validated Workflow definition governing this instance. */
@@ -143,6 +150,8 @@ export class Workflow {
    * @see WORKFLOW-TRANSITION-004
    * @see WORKFLOW-TRANSITION-005
    * @see WORKFLOW-TRANSITION-006
+   * @see WORKFLOW-TERMINAL-003
+   * @see WORKFLOW-TERMINAL-004
    */
   transition(target: unknown, options?: WorkflowTransitionOptions): Workflow {
     const requestedTarget = validateRequestedState(target)

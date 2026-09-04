@@ -1,17 +1,18 @@
 # FinFlow TypeScript
 
 TypeScript reference implementation for the current FinFlow Money milestone and
-the first Workflow Core milestone.
+the current Workflow Core milestones.
 
 FinFlow Money Draft 0.1 is fully implemented by this TypeScript reference implementation. This statement applies only to the current Money specification draft; it does not imply that other FinFlow domains are complete.
 
 This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact compatible-currency numeric comparison, and explicit Money rounding.
 
-It also implements the first Workflow Core milestone: validated workflow
+It also implements the current Workflow Core milestones: validated workflow
 definitions, exact state identifiers, one initial state, current state,
-explicit terminal states, directed transitions, single or multiple simple Draft
-0.1 fact-equality guards, successful state changes, rejected transition errors,
-and state preservation after rejected transitions.
+directed transitions, single or multiple simple Draft 0.1 fact-equality guards,
+explicit terminal-state detection, rejection of outgoing transitions in
+terminal definitions, terminal-state transition rejection and portable error
+precedence, successful state changes, and state preservation after rejection.
 
 It intentionally does not implement FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, audit integration, approvals integration, entities, corrections, or reversals.
 
@@ -35,13 +36,22 @@ The specification remains canonical. This package stores validated decimal amoun
 - `Workflow.create(definition)` validates a workflow definition and creates an instance in its declared initial state.
 - `Workflow.from(definition, { currentState })` validates an existing current-state observation against the definition.
 - `workflow.currentState` returns the instance's current state identifier exactly as declared.
-- `workflow.transition(target, { facts })` applies a declared directed transition and updates current state on success only when every guard attached to the matched transition passes.
+- `workflow.definition.isTerminalState(state)` reports terminal status only
+  when the definition explicitly lists the state; names and empty outgoing
+  transition sets do not imply terminality.
+- `workflow.transition(target, { facts })` applies a declared directed
+  transition and updates current state on success only when the current state is
+  non-terminal and every guard attached to the matched transition passes.
 - `workflow.toJSON()` returns `{ currentState }` for portable observation.
 
 Workflow failures expose portable codes: `FINFLOW_WORKFLOW_INVALID_DEFINITION`,
 `FINFLOW_WORKFLOW_INVALID_STATE`, `FINFLOW_WORKFLOW_INVALID_TRANSITION`,
 `FINFLOW_WORKFLOW_GUARD_REJECTED`, and
-`FINFLOW_WORKFLOW_TERMINAL_STATE`.
+`FINFLOW_WORKFLOW_TERMINAL_STATE`. A request from an explicitly terminal
+current state reports `FINFLOW_WORKFLOW_TERMINAL_STATE` before undeclared
+transition errors and leaves current state unchanged. Entering a declared
+terminal target through a valid transition remains allowed. Terminal Workflow
+status does not imply broader entity or metadata immutability.
 
 Transition definitions may use `guard` for one fact-equality condition or
 `guards` for multiple fact-equality conditions. If multiple guards are attached

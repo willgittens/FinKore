@@ -133,6 +133,7 @@ export class WorkflowGuardRejectedError extends FinFlowWorkflowError {
  * @see FINFLOW_WORKFLOW_TERMINAL_STATE
  * @see WORKFLOW-ERROR-001
  * @see WORKFLOW-TERMINAL-003
+ * @see WORKFLOW-TRANSITION-006
  */
 export class WorkflowTerminalStateError extends FinFlowWorkflowError {
   /**

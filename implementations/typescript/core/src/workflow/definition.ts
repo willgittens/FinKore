@@ -73,6 +73,8 @@ function assertUnique(values: readonly string[]): void {
  * @see WORKFLOW-GUARD-006
  * @see WORKFLOW-TRANSITION-001
  * @see WORKFLOW-TERMINAL-001
+ * @see WORKFLOW-TERMINAL-002
+ * @see WORKFLOW-TERMINAL-004
  */
 export class WorkflowDefinition {
   private readonly stateSet: ReadonlySet<WorkflowStateIdentifier>
@@ -176,8 +178,11 @@ export class WorkflowDefinition {
   /**
    * Reports whether a state is explicitly terminal.
    *
+   * A name or the absence of declared outgoing transitions does not make a
+   * state terminal.
+   *
    * @param state - Candidate declared state identifier.
-   * @returns `true` only for states listed in `terminalStates`.
+   * @returns `true` only when `terminalStates` explicitly lists the state.
    *
    * @see WORKFLOW-TERMINAL-001
    * @see WORKFLOW-TERMINAL-004

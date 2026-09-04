@@ -663,13 +663,113 @@
       ]
     },
     {
+      "id": "workflow.terminal.entry-allowed-001",
+      "spec": "workflow/terminal-states",
+      "requirements": [
+        "WORKFLOW-TERMINAL-001",
+        "WORKFLOW-TERMINAL-004",
+        "WORKFLOW-TRANSITION-003",
+        "WORKFLOW-TRANSITION-005"
+      ],
+      "description": "Allows a declared transition into an explicitly terminal target state.",
+      "operation": "finflow.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "COMPLETE"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "COMPLETE"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "COMPLETE"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "DRAFT"
+        },
+        "target": "COMPLETE",
+        "facts": {}
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "COMPLETE"
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "target-state-treated-as-current-terminal-state",
+        "transition-into-terminal-state-rejected"
+      ]
+    },
+    {
+      "id": "workflow.terminal.not-inferred-no-outgoing-001",
+      "spec": "workflow/terminal-states",
+      "requirements": [
+        "WORKFLOW-TERMINAL-001",
+        "WORKFLOW-TERMINAL-004",
+        "WORKFLOW-TRANSITION-003",
+        "WORKFLOW-TRANSITION-006",
+        "WORKFLOW-ERROR-003"
+      ],
+      "description": "A state with no outgoing transition is not terminal unless the definition explicitly identifies it as terminal.",
+      "operation": "finflow.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "COMPLETE"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [],
+          "transitions": []
+        },
+        "instance": {
+          "currentState": "COMPLETE"
+        },
+        "target": "DRAFT",
+        "facts": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_WORKFLOW_INVALID_TRANSITION"
+        },
+        "observations": {
+          "currentState": "COMPLETE"
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "terminal-state-inferred-from-name",
+        "terminal-state-inferred-from-outgoing-transitions",
+        "non-terminal-state-treated-as-terminal"
+      ]
+    },
+    {
       "id": "workflow.terminal.transition-rejected-001",
       "spec": "workflow/terminal-states",
       "requirements": [
         "WORKFLOW-TERMINAL-003",
         "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-003",
         "WORKFLOW-TERMINAL-001",
-        "WORKFLOW-TERMINAL-004"
+        "WORKFLOW-TERMINAL-004",
+        "WORKFLOW-TRANSITION-006"
       ],
       "description": "A terminal-state request reports the terminal error even when no transition is declared.",
       "operation": "finflow.workflow.transition",
@@ -727,7 +827,9 @@
       ],
       "guardsAgainst": [
         "terminal-state-transition-allowed",
-        "error-precedence-changed"
+        "error-precedence-changed",
+        "terminal-rejection-mutates-state",
+        "guard-facts-bypass-terminal-state"
       ]
     }
   ]
