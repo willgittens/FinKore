@@ -6,9 +6,9 @@ client can derive from the contract; they do not implement an agent or adapter.
 ## Predictable Money failure
 
 ```text
-Agent discovers: finflow.money.add
+Agent discovers: finkore.money.add
 Effects: non-mutating, deterministic
-Possible error: FINFLOW_MONEY_CURRENCY_MISMATCH
+Possible error: FINKORE_MONEY_CURRENCY_MISMATCH
 Input: 10 EUR + 5 USD
 
 Conclusion: unchanged execution will fail. The agent must not silently convert,
@@ -27,7 +27,7 @@ Conceptual input uses the normative Money serialization:
 ## Safe pure computation
 
 ```text
-Agent discovers: finflow.money.round
+Agent discovers: finkore.money.round
 Input: 10.005 EUR, scale 2, HALF_EVEN
 Effects: non-mutating, deterministic
 Output: 10.00 EUR
@@ -39,20 +39,20 @@ the result. The agent must not substitute a customary currency scale or mode.
 ## Invalid Workflow shortcut
 
 ```text
-Agent discovers: finflow.workflow.transition
+Agent discovers: finkore.workflow.transition
 Current state: DRAFT
 Requested target: PAID
 Declared transition: absent
 Effects: state-changing; financial-state effect unspecified
 
-Conclusion: FINFLOW_WORKFLOW_INVALID_TRANSITION is expected and current state
+Conclusion: FINKORE_WORKFLOW_INVALID_TRANSITION is expected and current state
 remains DRAFT. Autonomous execution cannot bypass the Workflow definition.
 ```
 
 ## Conditional approval and audit implications
 
 ```text
-Agent discovers: finflow.workflow.transition
+Agent discovers: finkore.workflow.transition
 Declared transition: SUBMITTED → APPROVED
 Applicable guard: required approval is satisfied
 Supplied fact: approval unsatisfied

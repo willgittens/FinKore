@@ -8,14 +8,14 @@ export interface RunnerMetadata {
 }
 
 export const AGENTIC_OPERATION_IDS = new Set([
-  'finflow.money.add',
-  'finflow.money.subtract',
-  'finflow.money.negate',
-  'finflow.money.multiply',
-  'finflow.money.divide',
-  'finflow.money.compare',
-  'finflow.money.round',
-  'finflow.workflow.transition',
+  'finkore.money.add',
+  'finkore.money.subtract',
+  'finkore.money.negate',
+  'finkore.money.multiply',
+  'finkore.money.divide',
+  'finkore.money.compare',
+  'finkore.money.round',
+  'finkore.workflow.transition',
 ])
 
 export const CONFORMANCE_OPERATION_IDS = new Set([

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   CurrencyMismatchError,
-  FinFlowMoneyError,
+  FinKoreMoneyError,
   Money,
   MoneyDivisionByZeroError,
   MoneyRoundingRequiredError,
@@ -92,8 +92,8 @@ describe('Money arithmetic', () => {
       try {
         operation()
       } catch (error) {
-        expect(error).toBeInstanceOf(FinFlowMoneyError)
-        expect((error as FinFlowMoneyError).code).toBe('FINFLOW_MONEY_CURRENCY_MISMATCH')
+        expect(error).toBeInstanceOf(FinKoreMoneyError)
+        expect((error as FinKoreMoneyError).code).toBe('FINKORE_MONEY_CURRENCY_MISMATCH')
       }
     }
 
@@ -163,8 +163,8 @@ describe('Money arithmetic', () => {
     try {
       money.divide('0.00')
     } catch (error) {
-      expect(error).toBeInstanceOf(FinFlowMoneyError)
-      expect((error as FinFlowMoneyError).code).toBe('FINFLOW_MONEY_DIVISION_BY_ZERO')
+      expect(error).toBeInstanceOf(FinKoreMoneyError)
+      expect((error as FinKoreMoneyError).code).toBe('FINKORE_MONEY_DIVISION_BY_ZERO')
     }
     expect(money.toJSON()).toEqual({ amount: '10.00', currency: 'EUR' })
   })
@@ -176,8 +176,8 @@ describe('Money arithmetic', () => {
     try {
       money.divide('3')
     } catch (error) {
-      expect(error).toBeInstanceOf(FinFlowMoneyError)
-      expect((error as FinFlowMoneyError).code).toBe('FINFLOW_MONEY_ROUNDING_REQUIRED')
+      expect(error).toBeInstanceOf(FinKoreMoneyError)
+      expect((error as FinKoreMoneyError).code).toBe('FINKORE_MONEY_ROUNDING_REQUIRED')
     }
     expect(money.toJSON()).toEqual({ amount: '1', currency: 'EUR' })
   })

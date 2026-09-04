@@ -1,5 +1,5 @@
 {
-  "finflowVectorFile": "0.1",
+  "finkoreVectorFile": "0.1",
   "vectors": [
     {
       "id": "money.add.same-currency.basic-001",
@@ -10,7 +10,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Adds positive same-currency values exactly.",
-      "operation": "finflow.money.add",
+      "operation": "finkore.money.add",
       "input": {
         "left": {
           "amount": "10.20",
@@ -51,7 +51,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Adds decimal tenths exactly, detecting binary floating-point leakage.",
-      "operation": "finflow.money.add",
+      "operation": "finkore.money.add",
       "input": {
         "left": {
           "amount": "0.1",
@@ -96,7 +96,7 @@
         "MONEY-REPRESENTATION-004"
       ],
       "description": "Adds a negative operand with ordinary sign semantics.",
-      "operation": "finflow.money.add",
+      "operation": "finkore.money.add",
       "input": {
         "left": {
           "amount": "10.00",
@@ -141,7 +141,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Preserves a value when exact zero is added.",
-      "operation": "finflow.money.add",
+      "operation": "finkore.money.add",
       "input": {
         "left": {
           "amount": "7.125",
@@ -182,7 +182,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Adds operands with differing decimal scales exactly without rounding.",
-      "operation": "finflow.money.add",
+      "operation": "finkore.money.add",
       "input": {
         "left": {
           "amount": "1.2",
@@ -230,7 +230,7 @@
         "MONEY-ERROR-007"
       ],
       "description": "Rejects addition across currencies and preserves operands.",
-      "operation": "finflow.money.add",
+      "operation": "finkore.money.add",
       "input": {
         "left": {
           "amount": "10.00",
@@ -244,7 +244,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_MONEY_CURRENCY_MISMATCH"
+          "code": "FINKORE_MONEY_CURRENCY_MISMATCH"
         },
         "observations": {
           "left": {
@@ -276,7 +276,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Subtracts same-currency values in operand order.",
-      "operation": "finflow.money.subtract",
+      "operation": "finkore.money.subtract",
       "input": {
         "left": {
           "amount": "10.00",
@@ -321,7 +321,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Preserves an exact negative subtraction result.",
-      "operation": "finflow.money.subtract",
+      "operation": "finkore.money.subtract",
       "input": {
         "left": {
           "amount": "3.25",
@@ -362,7 +362,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Subtracts operands with differing decimal scales exactly without rounding.",
-      "operation": "finflow.money.subtract",
+      "operation": "finkore.money.subtract",
       "input": {
         "left": {
           "amount": "1.20",
@@ -407,7 +407,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Subtracts whole-number decimal strings exactly without adding an implicit decimal scale.",
-      "operation": "finflow.money.subtract",
+      "operation": "finkore.money.subtract",
       "input": {
         "left": {
           "amount": "10",
@@ -454,7 +454,7 @@
         "MONEY-ERROR-007"
       ],
       "description": "Rejects subtraction across currencies.",
-      "operation": "finflow.money.subtract",
+      "operation": "finkore.money.subtract",
       "input": {
         "left": {
           "amount": "10.00",
@@ -468,7 +468,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_MONEY_CURRENCY_MISMATCH"
+          "code": "FINKORE_MONEY_CURRENCY_MISMATCH"
         },
         "observations": {
           "left": {
@@ -498,7 +498,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Reverses a positive sign exactly and preserves currency.",
-      "operation": "finflow.money.negate",
+      "operation": "finkore.money.negate",
       "input": {
         "value": {
           "amount": "12.34",
@@ -536,7 +536,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Reverses a negative sign exactly.",
-      "operation": "finflow.money.negate",
+      "operation": "finkore.money.negate",
       "input": {
         "value": {
           "amount": "-12.34",
@@ -574,7 +574,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Multiplies by an exact decimal scalar without minor-unit rounding.",
-      "operation": "finflow.money.multiply",
+      "operation": "finkore.money.multiply",
       "input": {
         "value": {
           "amount": "10.25",
@@ -614,7 +614,7 @@
         "MONEY-ARITHMETIC-009"
       ],
       "description": "Divides by a non-zero scalar when the quotient is exact.",
-      "operation": "finflow.money.divide",
+      "operation": "finkore.money.divide",
       "input": {
         "value": {
           "amount": "10.00",
@@ -653,7 +653,7 @@
         "MONEY-ERROR-007"
       ],
       "description": "Rejects a zero divisor and preserves the operand.",
-      "operation": "finflow.money.divide",
+      "operation": "finkore.money.divide",
       "input": {
         "value": {
           "amount": "10.00",
@@ -664,7 +664,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_MONEY_DIVISION_BY_ZERO"
+          "code": "FINKORE_MONEY_DIVISION_BY_ZERO"
         },
         "observations": {
           "operand": {
@@ -693,7 +693,7 @@
         "MONEY-ROUNDING-006"
       ],
       "description": "Rejects a non-terminating quotient when no rounding policy is supplied.",
-      "operation": "finflow.money.divide",
+      "operation": "finkore.money.divide",
       "input": {
         "value": {
           "amount": "1",
@@ -704,7 +704,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_MONEY_ROUNDING_REQUIRED"
+          "code": "FINKORE_MONEY_ROUNDING_REQUIRED"
         },
         "observations": {
           "operand": {

@@ -22,7 +22,7 @@ describe('manifest-driven loading', () => {
 
   it('rejects missing vector files', async () => {
     const fixture = await createFixtureConformance([], {
-      finflowConformance: '0.1',
+      finkoreConformance: '0.1',
       vectorSchema: './schema.json',
       suites: [{ id: 'money', vectorFiles: ['./missing.json'] }],
     })
@@ -31,7 +31,7 @@ describe('manifest-driven loading', () => {
 
   it.each(['../escape.json', '/tmp/escape.json', '.'])('rejects unsafe vector path %s', async (path) => {
     const fixture = await createFixtureConformance([], {
-      finflowConformance: '0.1',
+      finkoreConformance: '0.1',
       vectorSchema: './schema.json',
       suites: [{ id: 'money', vectorFiles: [path] }],
     })
@@ -40,7 +40,7 @@ describe('manifest-driven loading', () => {
 
   it('rejects unsafe schema paths', async () => {
     const fixture = await createFixtureConformance([validVector], {
-      finflowConformance: '0.1',
+      finkoreConformance: '0.1',
       vectorSchema: '../schema.json',
       suites: [{ id: 'money', vectorFiles: ['./suite/vectors.json'] }],
     })
@@ -50,9 +50,9 @@ describe('manifest-driven loading', () => {
   it('rejects duplicate ids across files', async () => {
     const fixture = await createFixtureConformance()
     await mkdir(join(fixture.root, 'other'))
-    await writeFile(join(fixture.root, 'other', 'vectors.json'), JSON.stringify({ finflowVectorFile: '0.1', vectors: [validVector] }))
+    await writeFile(join(fixture.root, 'other', 'vectors.json'), JSON.stringify({ finkoreVectorFile: '0.1', vectors: [validVector] }))
     await writeFile(fixture.manifestPath, JSON.stringify({
-      finflowConformance: '0.1',
+      finkoreConformance: '0.1',
       vectorSchema: './schema.json',
       suites: [
         { id: 'money', vectorFiles: ['./suite/vectors.json'] },

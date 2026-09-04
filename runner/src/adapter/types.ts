@@ -6,7 +6,7 @@ export interface AdapterRequest {
   readonly context?: unknown
 }
 
-export interface FinFlowConformanceAdapter {
+export interface FinKoreConformanceAdapter {
   supports(operationId: string): boolean
   execute(request: AdapterRequest): Promise<NormalizedResult> | NormalizedResult
   reset?(): Promise<void> | void

@@ -1,5 +1,5 @@
 {
-  "name": "@finflow/typescript-conformance-adapter",
+  "name": "@finkore/typescript-conformance-adapter",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -15,8 +15,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@finflow/conformance-runner": "file:../../../../runner",
-    "@finflow/typescript": "file:../../core"
+    "@finkore/conformance-runner": "file:../../../../runner",
+    "@finkore/typescript": "file:../../core"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

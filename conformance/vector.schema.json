@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://finflow.dev/conformance/vector.schema.json",
-  "title": "FinFlow Conformance Vector File 0.1",
+  "$id": "https://finkore.dev/conformance/vector.schema.json",
+  "title": "FinKore Conformance Vector File 0.1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["finflowVectorFile", "vectors"],
+  "required": ["finkoreVectorFile", "vectors"],
   "properties": {
-    "finflowVectorFile": { "const": "0.1" },
+    "finkoreVectorFile": { "const": "0.1" },
     "vectors": {
       "type": "array",
       "minItems": 1,
@@ -71,7 +71,7 @@
               "additionalProperties": false,
               "required": ["code"],
               "properties": {
-                "code": { "type": "string", "pattern": "^FINFLOW_[A-Z]+(?:_[A-Z]+)+$" }
+                "code": { "type": "string", "pattern": "^FINKORE_[A-Z]+(?:_[A-Z]+)+$" }
               }
             },
             "observations": { "type": "object" }

@@ -35,7 +35,7 @@ Guard: required approvals are satisfied
 
 ## Errors
 
-A Transition Guard rejection must report `FINFLOW_WORKFLOW_GUARD_REJECTED`. A composing domain may provide additional context or a secondary domain code without replacing this failure category.
+A Transition Guard rejection must report `FINKORE_WORKFLOW_GUARD_REJECTED`. A composing domain may provide additional context or a secondary domain code without replacing this failure category.
 
 ## Open Questions
 

@@ -12,15 +12,15 @@ This document defines initial portable workflow failure categories.
 
 | Code | Meaning |
 | --- | --- |
-| `FINFLOW_WORKFLOW_INVALID_DEFINITION` | The workflow definition violates a structural requirement. |
-| `FINFLOW_WORKFLOW_INVALID_STATE` | A state value is missing or not declared. |
-| `FINFLOW_WORKFLOW_INVALID_TRANSITION` | The requested directed Transition is not declared from the current State. |
-| `FINFLOW_WORKFLOW_GUARD_REJECTED` | A required Transition Guard did not pass. |
-| `FINFLOW_WORKFLOW_TERMINAL_STATE` | A Transition Request was made from a terminal State. |
+| `FINKORE_WORKFLOW_INVALID_DEFINITION` | The workflow definition violates a structural requirement. |
+| `FINKORE_WORKFLOW_INVALID_STATE` | A state value is missing or not declared. |
+| `FINKORE_WORKFLOW_INVALID_TRANSITION` | The requested directed Transition is not declared from the current State. |
+| `FINKORE_WORKFLOW_GUARD_REJECTED` | A required Transition Guard did not pass. |
+| `FINKORE_WORKFLOW_TERMINAL_STATE` | A Transition Request was made from a terminal State. |
 
 ## Requirements
 
-- **WORKFLOW-ERROR-001** — A failed Workflow operation MUST identify one applicable portable code. For a Transition Request from a terminal State, `FINFLOW_WORKFLOW_TERMINAL_STATE` takes precedence over `FINFLOW_WORKFLOW_INVALID_TRANSITION`.
+- **WORKFLOW-ERROR-001** — A failed Workflow operation MUST identify one applicable portable code. For a Transition Request from a terminal State, `FINKORE_WORKFLOW_TERMINAL_STATE` takes precedence over `FINKORE_WORKFLOW_INVALID_TRANSITION`.
 - **WORKFLOW-ERROR-002** — Error context MAY include the current State and requested Transition when disclosure is safe.
 - **WORKFLOW-ERROR-003** — It MUST NOT claim that state changed when the operation failed.
 
@@ -30,5 +30,5 @@ A failed Workflow operation must leave current State unchanged.
 
 ## Non-Goals
 
-This document does not define transport status codes, implementation-specific exception hierarchies, or concurrency-conflict errors. FinFlow Core Draft 0.1 does not select a winner between concurrent Transition Requests.
+This document does not define transport status codes, implementation-specific exception hierarchies, or concurrency-conflict errors. FinKore Core Draft 0.1 does not select a winner between concurrent Transition Requests.
 

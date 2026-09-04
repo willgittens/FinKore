@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import {
   CurrencyMismatchError,
-  FinFlowMoneyError,
+  FinKoreMoneyError,
   InvalidCurrencyError,
   InvalidMoneyAmountError,
   InvalidMoneyRoundingError,
   Money,
   MoneyDivisionByZeroError,
   MoneyRoundingRequiredError,
-  isFinFlowMoneyError,
+  isFinKoreMoneyError,
 } from '../../src/index.js'
 
 describe('Money errors', () => {
@@ -18,8 +18,8 @@ describe('Money errors', () => {
       try {
         Money.from({ amount, currency: 'EUR' })
       } catch (error) {
-        expect(error).toBeInstanceOf(FinFlowMoneyError)
-        expect((error as FinFlowMoneyError).code).toBe('FINFLOW_MONEY_INVALID_AMOUNT')
+        expect(error).toBeInstanceOf(FinKoreMoneyError)
+        expect((error as FinKoreMoneyError).code).toBe('FINKORE_MONEY_INVALID_AMOUNT')
       }
     }
   })
@@ -30,23 +30,23 @@ describe('Money errors', () => {
       try {
         Money.from({ amount: '10.00', currency })
       } catch (error) {
-        expect(error).toBeInstanceOf(FinFlowMoneyError)
-        expect((error as FinFlowMoneyError).code).toBe('FINFLOW_MONEY_INVALID_CURRENCY')
+        expect(error).toBeInstanceOf(FinKoreMoneyError)
+        expect((error as FinKoreMoneyError).code).toBe('FINKORE_MONEY_INVALID_CURRENCY')
       }
     }
   })
 
   it('exposes every currently specified portable Money code', () => {
-    expect(new InvalidMoneyAmountError().code).toBe('FINFLOW_MONEY_INVALID_AMOUNT')
-    expect(new InvalidCurrencyError().code).toBe('FINFLOW_MONEY_INVALID_CURRENCY')
-    expect(new CurrencyMismatchError().code).toBe('FINFLOW_MONEY_CURRENCY_MISMATCH')
-    expect(new MoneyDivisionByZeroError().code).toBe('FINFLOW_MONEY_DIVISION_BY_ZERO')
-    expect(new MoneyRoundingRequiredError().code).toBe('FINFLOW_MONEY_ROUNDING_REQUIRED')
-    expect(new InvalidMoneyRoundingError().code).toBe('FINFLOW_MONEY_INVALID_ROUNDING')
+    expect(new InvalidMoneyAmountError().code).toBe('FINKORE_MONEY_INVALID_AMOUNT')
+    expect(new InvalidCurrencyError().code).toBe('FINKORE_MONEY_INVALID_CURRENCY')
+    expect(new CurrencyMismatchError().code).toBe('FINKORE_MONEY_CURRENCY_MISMATCH')
+    expect(new MoneyDivisionByZeroError().code).toBe('FINKORE_MONEY_DIVISION_BY_ZERO')
+    expect(new MoneyRoundingRequiredError().code).toBe('FINKORE_MONEY_ROUNDING_REQUIRED')
+    expect(new InvalidMoneyRoundingError().code).toBe('FINKORE_MONEY_INVALID_ROUNDING')
   })
 
-  it('narrows FinFlow Money errors without relying on messages', () => {
-    expect(isFinFlowMoneyError(new InvalidMoneyAmountError())).toBe(true)
-    expect(isFinFlowMoneyError(new Error('Invalid Money amount'))).toBe(false)
+  it('narrows FinKore Money errors without relying on messages', () => {
+    expect(isFinKoreMoneyError(new InvalidMoneyAmountError())).toBe(true)
+    expect(isFinKoreMoneyError(new Error('Invalid Money amount'))).toBe(false)
   })
 })

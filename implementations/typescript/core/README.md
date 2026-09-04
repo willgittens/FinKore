@@ -1,9 +1,9 @@
-# FinFlow TypeScript
+# FinKore TypeScript
 
-TypeScript reference implementation for the current FinFlow Money milestone and
+TypeScript reference implementation for the current FinKore Money milestone and
 the current Workflow Core milestones.
 
-FinFlow Money Draft 0.1 is fully implemented by this TypeScript reference implementation. This statement applies only to the current Money specification draft; it does not imply that other FinFlow domains are complete.
+FinKore Money Draft 0.1 is fully implemented by this TypeScript reference implementation. This statement applies only to the current Money specification draft; it does not imply that other FinKore domains are complete.
 
 This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact compatible-currency numeric comparison, and explicit Money rounding.
 
@@ -23,13 +23,13 @@ The specification remains canonical. This package stores validated decimal amoun
 - `Money.from(input)` validates amount and currency and returns a Money value.
 - `Money.deserialize(value)` parses portable Money JSON.
 - `money.toJSON()` returns canonical portable Money serialization.
-- `money.add(other)` returns an exact same-currency sum and throws `FINFLOW_MONEY_CURRENCY_MISMATCH` for incompatible currencies.
-- `money.subtract(other)` returns an exact same-currency difference and throws `FINFLOW_MONEY_CURRENCY_MISMATCH` for incompatible currencies.
+- `money.add(other)` returns an exact same-currency sum and throws `FINKORE_MONEY_CURRENCY_MISMATCH` for incompatible currencies.
+- `money.subtract(other)` returns an exact same-currency difference and throws `FINKORE_MONEY_CURRENCY_MISMATCH` for incompatible currencies.
 - `money.negate()` returns a new Money value with the amount sign reversed exactly.
 - `money.multiply(scalar)` returns a new Money value multiplied by an exact decimal scalar.
-- `money.divide(scalar)` returns a new Money value divided by a non-zero exact decimal scalar when the quotient terminates; zero divisors throw `FINFLOW_MONEY_DIVISION_BY_ZERO`, and non-terminating quotients without a rounding policy throw `FINFLOW_MONEY_ROUNDING_REQUIRED`.
-- `money.compare(other)` returns `LESS`, `EQUAL`, or `GREATER` for exact same-currency numeric comparison and throws `FINFLOW_MONEY_CURRENCY_MISMATCH` for incompatible currencies.
-- `money.round({ scale, mode })` returns a new Money value rounded to the explicit target scale using `HALF_UP`, `HALF_EVEN`, `DOWN`, `UP`, `FLOOR`, or `CEILING`; invalid scale or mode values throw `FINFLOW_MONEY_INVALID_ROUNDING`.
+- `money.divide(scalar)` returns a new Money value divided by a non-zero exact decimal scalar when the quotient terminates; zero divisors throw `FINKORE_MONEY_DIVISION_BY_ZERO`, and non-terminating quotients without a rounding policy throw `FINKORE_MONEY_ROUNDING_REQUIRED`.
+- `money.compare(other)` returns `LESS`, `EQUAL`, or `GREATER` for exact same-currency numeric comparison and throws `FINKORE_MONEY_CURRENCY_MISMATCH` for incompatible currencies.
+- `money.round({ scale, mode })` returns a new Money value rounded to the explicit target scale using `HALF_UP`, `HALF_EVEN`, `DOWN`, `UP`, `FLOOR`, or `CEILING`; invalid scale or mode values throw `FINKORE_MONEY_INVALID_ROUNDING`.
 
 ## Current Workflow API
 
@@ -44,11 +44,11 @@ The specification remains canonical. This package stores validated decimal amoun
   non-terminal and every guard attached to the matched transition passes.
 - `workflow.toJSON()` returns `{ currentState }` for portable observation.
 
-Workflow failures expose portable codes: `FINFLOW_WORKFLOW_INVALID_DEFINITION`,
-`FINFLOW_WORKFLOW_INVALID_STATE`, `FINFLOW_WORKFLOW_INVALID_TRANSITION`,
-`FINFLOW_WORKFLOW_GUARD_REJECTED`, and
-`FINFLOW_WORKFLOW_TERMINAL_STATE`. A request from an explicitly terminal
-current state reports `FINFLOW_WORKFLOW_TERMINAL_STATE` before undeclared
+Workflow failures expose portable codes: `FINKORE_WORKFLOW_INVALID_DEFINITION`,
+`FINKORE_WORKFLOW_INVALID_STATE`, `FINKORE_WORKFLOW_INVALID_TRANSITION`,
+`FINKORE_WORKFLOW_GUARD_REJECTED`, and
+`FINKORE_WORKFLOW_TERMINAL_STATE`. A request from an explicitly terminal
+current state reports `FINKORE_WORKFLOW_TERMINAL_STATE` before undeclared
 transition errors and leaves current state unchanged. Entering a declared
 terminal target through a valid transition remains allowed. Terminal Workflow
 status does not imply broader entity or metadata immutability.
@@ -57,7 +57,7 @@ Transition definitions may use `guard` for one fact-equality condition or
 `guards` for multiple fact-equality conditions. If multiple guards are attached
 to the matched transition, every guard must pass against the supplied facts
 before current state changes. Failed guard evaluation throws
-`FINFLOW_WORKFLOW_GUARD_REJECTED` and leaves state unchanged.
+`FINKORE_WORKFLOW_GUARD_REJECTED` and leaves state unchanged.
 
 This Workflow milestone does not define a production interchange format,
 callback guard model, authorization system, or full guard language. The current
@@ -66,6 +66,6 @@ without introducing broader workflow behavior.
 
 ## API Documentation
 
-Public TypeScript APIs are documented with JSDoc. Where an API implements normative FinFlow behavior, its JSDoc references the relevant stable requirement IDs from `/spec`.
+Public TypeScript APIs are documented with JSDoc. Where an API implements normative FinKore behavior, its JSDoc references the relevant stable requirement IDs from `/spec`.
 
-The JSDoc is implementation guidance for TypeScript users; `/spec` remains the normative source of FinFlow behavior. Future generated API documentation may be produced from these comments.
+The JSDoc is implementation guidance for TypeScript users; `/spec` remains the normative source of FinKore behavior. Future generated API documentation may be produced from these comments.

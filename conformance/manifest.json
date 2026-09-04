@@ -1,5 +1,5 @@
 {
-  "finflowConformance": "0.1",
+  "finkoreConformance": "0.1",
   "vectorSchema": "./vector.schema.json",
   "suites": [
     {

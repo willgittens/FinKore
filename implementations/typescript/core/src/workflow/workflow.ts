@@ -90,7 +90,7 @@ export class Workflow {
    * @throws {InvalidWorkflowStateError}
    * When the supplied current state is missing or undeclared.
    *
-   * @see FINFLOW_WORKFLOW_INVALID_STATE
+   * @see FINKORE_WORKFLOW_INVALID_STATE
    * @see WORKFLOW-STATES-004
    * @see WORKFLOW-STATES-007
    */
@@ -135,10 +135,10 @@ export class Workflow {
    * @throws {WorkflowGuardRejectedError}
    * When a declared guard does not pass using supplied facts.
    *
-   * @see FINFLOW_WORKFLOW_INVALID_STATE
-   * @see FINFLOW_WORKFLOW_TERMINAL_STATE
-   * @see FINFLOW_WORKFLOW_INVALID_TRANSITION
-   * @see FINFLOW_WORKFLOW_GUARD_REJECTED
+   * @see FINKORE_WORKFLOW_INVALID_STATE
+   * @see FINKORE_WORKFLOW_TERMINAL_STATE
+   * @see FINKORE_WORKFLOW_INVALID_TRANSITION
+   * @see FINKORE_WORKFLOW_GUARD_REJECTED
    * @see WORKFLOW-ERROR-001
    * @see WORKFLOW-ERROR-003
    * @see WORKFLOW-GUARD-001

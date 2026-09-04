@@ -31,6 +31,6 @@ export interface LoadedVector extends ConformanceVector {
 }
 
 export interface VectorFile {
-  readonly finflowVectorFile: '0.1'
+  readonly finkoreVectorFile: '0.1'
   readonly vectors: readonly ConformanceVector[]
 }

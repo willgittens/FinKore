@@ -1,5 +1,5 @@
 {
-  "finflowVectorFile": "0.1",
+  "finkoreVectorFile": "0.1",
   "vectors": [
     {
       "id": "audit.event.append-complete-001",
@@ -157,7 +157,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_AUDIT_INVALID_EVENT"
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
         },
         "observations": {
           "history": []
@@ -207,7 +207,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_AUDIT_INVALID_EVENT"
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
         },
         "observations": {
           "history": []
@@ -273,7 +273,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_AUDIT_DUPLICATE_EVENT"
+          "code": "FINKORE_AUDIT_DUPLICATE_EVENT"
         },
         "observations": {
           "history": [
@@ -365,7 +365,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_AUDIT_APPEND_ONLY_VIOLATION"
+          "code": "FINKORE_AUDIT_APPEND_ONLY_VIOLATION"
         },
         "observations": {
           "history": [
@@ -437,7 +437,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_AUDIT_APPEND_ONLY_VIOLATION"
+          "code": "FINKORE_AUDIT_APPEND_ONLY_VIOLATION"
         },
         "observations": {
           "history": [

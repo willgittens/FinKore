@@ -12,18 +12,18 @@ This document defines initial portable entity failure categories.
 
 | Code | Meaning |
 | --- | --- |
-| `FINFLOW_ENTITY_INVALID_IDENTITY` | Entity identity is missing, unstable, or conflicts within its scope. |
-| `FINFLOW_ENTITY_IMMUTABLE` | A requested mutation targets data immutable in the current state. |
-| `FINFLOW_ENTITY_INVALID_MUTATION` | A requested change is not a recognized or permitted domain mutation. |
-| `FINFLOW_ENTITY_STATE_CONFLICT` | The operation's expected state does not match current state. |
-| `FINFLOW_ENTITY_VALIDATION_FAILED` | One or more Structural Validation or Business Validation rules failed. |
+| `FINKORE_ENTITY_INVALID_IDENTITY` | Entity identity is missing, unstable, or conflicts within its scope. |
+| `FINKORE_ENTITY_IMMUTABLE` | A requested mutation targets data immutable in the current state. |
+| `FINKORE_ENTITY_INVALID_MUTATION` | A requested change is not a recognized or permitted domain mutation. |
+| `FINKORE_ENTITY_STATE_CONFLICT` | The operation's expected state does not match current state. |
+| `FINKORE_ENTITY_VALIDATION_FAILED` | One or more Structural Validation or Business Validation rules failed. |
 
 ## Requirements
 
 - **ENTITY-ERROR-001** — A Financial Entity failure MUST leave identity, current State, and entity data unchanged.
 - **ENTITY-ERROR-002** — Validation failures SHOULD include stable violation identifiers.
 - **ENTITY-ERROR-003** — Implementations MAY attach safe diagnostic context without changing portable code meaning.
-- **ENTITY-ERROR-004** — A Workflow, Money, Approval, or Audit failure MUST retain its domain-specific code when that condition is the primary failure; it MUST NOT be replaced by `FINFLOW_ENTITY_VALIDATION_FAILED`.
+- **ENTITY-ERROR-004** — A Workflow, Money, Approval, or Audit failure MUST retain its domain-specific code when that condition is the primary failure; it MUST NOT be replaced by `FINKORE_ENTITY_VALIDATION_FAILED`.
 
 ## Invariants
 

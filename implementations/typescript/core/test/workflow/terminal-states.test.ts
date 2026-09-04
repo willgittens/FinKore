@@ -103,7 +103,7 @@ describe('Workflow terminal states', () => {
       throw new Error('Expected terminal-state rejection')
     } catch (error) {
       expect(error).toBeInstanceOf(WorkflowTerminalStateError)
-      expect((error as WorkflowTerminalStateError).code).toBe('FINFLOW_WORKFLOW_TERMINAL_STATE')
+      expect((error as WorkflowTerminalStateError).code).toBe('FINKORE_WORKFLOW_TERMINAL_STATE')
     }
     expect(workflow.currentState).toBe('REJECTED')
   })

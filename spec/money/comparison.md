@@ -13,7 +13,7 @@ This document defines equality and ordering of Money values.
 - **MONEY-COMPARISON-001** — Numeric equality MUST compare exact decimal amounts and compatible currencies.
 - **MONEY-COMPARISON-002** — Insignificant trailing zeros MUST NOT make numerically equal Money values unequal.
 - **MONEY-COMPARISON-003** — Ordering MUST be defined only for compatible currencies.
-- **MONEY-COMPARISON-004** — Equality or ordering across incompatible currencies MUST fail with `FINFLOW_MONEY_CURRENCY_MISMATCH` unless an explicit conversion has occurred.
+- **MONEY-COMPARISON-004** — Equality or ordering across incompatible currencies MUST fail with `FINKORE_MONEY_CURRENCY_MISMATCH` unless an explicit conversion has occurred.
 - **MONEY-COMPARISON-005** — Implementations MAY offer representation equality separately, provided it is clearly distinguished from numeric equality.
 - **MONEY-COMPARISON-006** — Numeric comparison of compatible Money values MUST be reflexive.
 

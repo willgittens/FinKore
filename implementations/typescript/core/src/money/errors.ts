@@ -1,7 +1,7 @@
 import type { MoneyErrorCode } from './types.js'
 
 /**
- * Base TypeScript error for portable FinFlow Money domain failures.
+ * Base TypeScript error for portable FinKore Money domain failures.
  *
  * Consumers requiring cross-language semantics should rely on {@link code}
  * rather than this TypeScript-specific class name or the human-readable
@@ -11,9 +11,9 @@ import type { MoneyErrorCode } from './types.js'
  * @see SPEC-ERROR-002
  * @see MONEY-ERROR-001
  */
-export class FinFlowMoneyError extends Error {
+export class FinKoreMoneyError extends Error {
   /**
-   * Stable portable FinFlow Money error code.
+   * Stable portable FinKore Money error code.
    */
   readonly code: MoneyErrorCode
 
@@ -28,7 +28,7 @@ export class FinFlowMoneyError extends Error {
   readonly details?: unknown
 
   /**
-   * Creates a TypeScript Money error carrying a portable FinFlow code.
+   * Creates a TypeScript Money error carrying a portable FinKore code.
    *
    * @param code - Stable portable error category.
    * @param message - Non-normative human-readable message.
@@ -36,7 +36,7 @@ export class FinFlowMoneyError extends Error {
    */
   constructor(code: MoneyErrorCode, message: string, options: { readonly details?: unknown } = {}) {
     super(message)
-    this.name = 'FinFlowMoneyError'
+    this.name = 'FinKoreMoneyError'
     this.code = code
     if (options.details !== undefined) this.details = options.details
   }
@@ -44,16 +44,16 @@ export class FinFlowMoneyError extends Error {
 
 /**
  * TypeScript representation of the portable
- * `FINFLOW_MONEY_INVALID_AMOUNT` domain error.
+ * `FINKORE_MONEY_INVALID_AMOUNT` domain error.
  *
  * This class represents a missing, malformed, non-finite, or unsupported Money
  * amount. Cross-language consumers should rely on the portable code rather than
  * this TypeScript-specific class name.
  *
- * @see FINFLOW_MONEY_INVALID_AMOUNT
+ * @see FINKORE_MONEY_INVALID_AMOUNT
  * @see MONEY-ERROR-001
  */
-export class InvalidMoneyAmountError extends FinFlowMoneyError {
+export class InvalidMoneyAmountError extends FinKoreMoneyError {
   /**
    * Creates an invalid-amount Money error.
    *
@@ -61,23 +61,23 @@ export class InvalidMoneyAmountError extends FinFlowMoneyError {
    * @param details - Optional implementation-provided diagnostic context.
    */
   constructor(message = 'Invalid Money amount', details?: unknown) {
-    super('FINFLOW_MONEY_INVALID_AMOUNT', message, { details })
+    super('FINKORE_MONEY_INVALID_AMOUNT', message, { details })
     this.name = 'InvalidMoneyAmountError'
   }
 }
 
 /**
  * TypeScript representation of the portable
- * `FINFLOW_MONEY_INVALID_CURRENCY` domain error.
+ * `FINKORE_MONEY_INVALID_CURRENCY` domain error.
  *
  * This class represents a missing or invalid Money currency identifier.
  * Cross-language consumers should rely on the portable code rather than this
  * TypeScript-specific class name.
  *
- * @see FINFLOW_MONEY_INVALID_CURRENCY
+ * @see FINKORE_MONEY_INVALID_CURRENCY
  * @see MONEY-ERROR-002
  */
-export class InvalidCurrencyError extends FinFlowMoneyError {
+export class InvalidCurrencyError extends FinKoreMoneyError {
   /**
    * Creates an invalid-currency Money error.
    *
@@ -85,23 +85,23 @@ export class InvalidCurrencyError extends FinFlowMoneyError {
    * @param details - Optional implementation-provided diagnostic context.
    */
   constructor(message = 'Invalid Money currency', details?: unknown) {
-    super('FINFLOW_MONEY_INVALID_CURRENCY', message, { details })
+    super('FINKORE_MONEY_INVALID_CURRENCY', message, { details })
     this.name = 'InvalidCurrencyError'
   }
 }
 
 /**
  * TypeScript representation of the portable
- * `FINFLOW_MONEY_CURRENCY_MISMATCH` domain error.
+ * `FINKORE_MONEY_CURRENCY_MISMATCH` domain error.
  *
  * This class represents an operation receiving incompatible Money currencies.
  * Cross-language consumers should rely on the portable code rather than this
  * TypeScript-specific class name.
  *
- * @see FINFLOW_MONEY_CURRENCY_MISMATCH
+ * @see FINKORE_MONEY_CURRENCY_MISMATCH
  * @see MONEY-ERROR-003
  */
-export class CurrencyMismatchError extends FinFlowMoneyError {
+export class CurrencyMismatchError extends FinKoreMoneyError {
   /**
    * Creates a currency-mismatch Money error.
    *
@@ -109,21 +109,21 @@ export class CurrencyMismatchError extends FinFlowMoneyError {
    * @param details - Optional implementation-provided diagnostic context.
    */
   constructor(message = 'Money currencies are incompatible', details?: unknown) {
-    super('FINFLOW_MONEY_CURRENCY_MISMATCH', message, { details })
+    super('FINKORE_MONEY_CURRENCY_MISMATCH', message, { details })
     this.name = 'CurrencyMismatchError'
   }
 }
 
 /**
  * TypeScript representation of the portable
- * `FINFLOW_MONEY_DIVISION_BY_ZERO` domain error.
+ * `FINKORE_MONEY_DIVISION_BY_ZERO` domain error.
  *
  * This class represents a Money division by a numerically zero scalar.
  *
- * @see FINFLOW_MONEY_DIVISION_BY_ZERO
+ * @see FINKORE_MONEY_DIVISION_BY_ZERO
  * @see MONEY-ERROR-004
  */
-export class MoneyDivisionByZeroError extends FinFlowMoneyError {
+export class MoneyDivisionByZeroError extends FinKoreMoneyError {
   /**
    * Creates a division-by-zero Money error.
    *
@@ -131,22 +131,22 @@ export class MoneyDivisionByZeroError extends FinFlowMoneyError {
    * @param details - Optional implementation-provided diagnostic context.
    */
   constructor(message = 'Money division by zero', details?: unknown) {
-    super('FINFLOW_MONEY_DIVISION_BY_ZERO', message, { details })
+    super('FINKORE_MONEY_DIVISION_BY_ZERO', message, { details })
     this.name = 'MoneyDivisionByZeroError'
   }
 }
 
 /**
  * TypeScript representation of the portable
- * `FINFLOW_MONEY_ROUNDING_REQUIRED` domain error.
+ * `FINKORE_MONEY_ROUNDING_REQUIRED` domain error.
  *
  * This class represents a Money operation that would require precision
  * reduction when no applicable rounding policy is supplied.
  *
- * @see FINFLOW_MONEY_ROUNDING_REQUIRED
+ * @see FINKORE_MONEY_ROUNDING_REQUIRED
  * @see MONEY-ERROR-005
  */
-export class MoneyRoundingRequiredError extends FinFlowMoneyError {
+export class MoneyRoundingRequiredError extends FinKoreMoneyError {
   /**
    * Creates a rounding-required Money error.
    *
@@ -154,23 +154,23 @@ export class MoneyRoundingRequiredError extends FinFlowMoneyError {
    * @param details - Optional implementation-provided diagnostic context.
    */
   constructor(message = 'Money rounding policy is required', details?: unknown) {
-    super('FINFLOW_MONEY_ROUNDING_REQUIRED', message, { details })
+    super('FINKORE_MONEY_ROUNDING_REQUIRED', message, { details })
     this.name = 'MoneyRoundingRequiredError'
   }
 }
 
 /**
  * TypeScript representation of the portable
- * `FINFLOW_MONEY_INVALID_ROUNDING` domain error.
+ * `FINKORE_MONEY_INVALID_ROUNDING` domain error.
  *
  * This class represents an invalid or unsupported target scale or rounding
  * mode. Cross-language consumers should rely on the portable code rather than
  * this TypeScript-specific class name.
  *
- * @see FINFLOW_MONEY_INVALID_ROUNDING
+ * @see FINKORE_MONEY_INVALID_ROUNDING
  * @see MONEY-ERROR-006
  */
-export class InvalidMoneyRoundingError extends FinFlowMoneyError {
+export class InvalidMoneyRoundingError extends FinKoreMoneyError {
   /**
    * Creates an invalid-rounding Money error.
    *
@@ -178,21 +178,21 @@ export class InvalidMoneyRoundingError extends FinFlowMoneyError {
    * @param details - Optional implementation-provided diagnostic context.
    */
   constructor(message = 'Invalid Money rounding', details?: unknown) {
-    super('FINFLOW_MONEY_INVALID_ROUNDING', message, { details })
+    super('FINKORE_MONEY_INVALID_ROUNDING', message, { details })
     this.name = 'InvalidMoneyRoundingError'
   }
 }
 
 /**
- * Narrows an unknown thrown value to a TypeScript FinFlow Money error.
+ * Narrows an unknown thrown value to a TypeScript FinKore Money error.
  *
- * Use the narrowed error's portable {@link FinFlowMoneyError.code} when mapping
+ * Use the narrowed error's portable {@link FinKoreMoneyError.code} when mapping
  * failures across language or adapter boundaries.
  *
  * @param error - Unknown thrown value.
- * @returns `true` when the value is a FinFlow Money error from this
+ * @returns `true` when the value is a FinKore Money error from this
  * implementation.
  */
-export function isFinFlowMoneyError(error: unknown): error is FinFlowMoneyError {
-  return error instanceof FinFlowMoneyError
+export function isFinKoreMoneyError(error: unknown): error is FinKoreMoneyError {
+  return error instanceof FinKoreMoneyError
 }

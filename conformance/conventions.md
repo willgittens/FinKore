@@ -2,11 +2,11 @@
 
 ## Versions
 
-`finflowConformance` versions the manifest and `finflowVectorFile` versions vector-file syntax. Version `0.1` targets FinFlow Core Draft 0.1. A runner MUST reject versions it does not support.
+`finkoreConformance` versions the manifest and `finkoreVectorFile` versions vector-file syntax. Version `0.1` targets FinKore Core Draft 0.1. A runner MUST reject versions it does not support.
 
 ## File and vector shape
 
-Each manifest-listed JSON file is an object containing `finflowVectorFile` and a non-empty `vectors` array. Each vector has:
+Each manifest-listed JSON file is an object containing `finkoreVectorFile` and a non-empty `vectors` array. Each vector has:
 
 - `id`: stable, globally unique, domain-prefixed identifier.
 - `spec`: repository-relative specification topic without a Markdown line number.
@@ -23,7 +23,7 @@ Unknown vector members MAY be ignored. They MUST NOT alter the meaning of define
 
 `expected.status` is either `success` or `error`. Success uses `value`; failure uses `error.code`. Either may include `observations` for post-operation state. A vector MUST NOT contain both `value` and `error`. Error messages are never compared. Exact object member order is irrelevant; array order is significant unless a specific operation says otherwise.
 
-The normalized observation belongs only to conformance infrastructure. Production FinFlow libraries are not required to return this shape.
+The normalized observation belongs only to conformance infrastructure. Production FinKore libraries are not required to return this shape.
 
 ## Canonical values
 
@@ -32,7 +32,7 @@ Conformance-only sentinels use `{"presence":"ABSENT"}` and `{"presence":"REDACTE
 
 ## Declarative fixtures
 
-Workflow guard expressions and entity validation rules in these vectors are small adapter fixtures, not additions to the FinFlow business specification or a general expression DSL. The fixture `{"fact":"x","equals":value}` compares one explicitly supplied fact. The entity validator named `positive-money` accepts an exact Money amount greater than zero. These fixtures let every adapter exercise guard/validation ordering and atomicity under the same deterministic predicate.
+Workflow guard expressions and entity validation rules in these vectors are small adapter fixtures, not additions to the FinKore business specification or a general expression DSL. The fixture `{"fact":"x","equals":value}` compares one explicitly supplied fact. The entity validator named `positive-money` accepts an exact Money amount greater than zero. These fixtures let every adapter exercise guard/validation ordering and atomicity under the same deterministic predicate.
 
 
 Timestamps are RFC 3339 instants with `Z` or an explicit numeric offset. Identifiers are opaque strings. States and outcomes use the exact domain names supplied by the vector.
@@ -45,13 +45,13 @@ These identifiers name observable behavior, not implementation methods.
 | --- | --- |
 | `money.deserialize` | Parse the normative portable Money JSON value. |
 | `money.serialize` | Produce the normative portable Money JSON value. |
-| `finflow.money.add`, `finflow.money.subtract` | Exact compatible-currency arithmetic. |
-| `finflow.money.negate` | Exact sign reversal. |
-| `finflow.money.multiply`, `finflow.money.divide` | Exact scalar arithmetic, with an optional explicit rounding policy where needed. |
-| `finflow.money.compare` | Return `LESS`, `EQUAL`, or `GREATER`. |
-| `finflow.money.round` | Reduce to the explicit `scale` using the explicit `mode`. |
+| `finkore.money.add`, `finkore.money.subtract` | Exact compatible-currency arithmetic. |
+| `finkore.money.negate` | Exact sign reversal. |
+| `finkore.money.multiply`, `finkore.money.divide` | Exact scalar arithmetic, with an optional explicit rounding policy where needed. |
+| `finkore.money.compare` | Return `LESS`, `EQUAL`, or `GREATER`. |
+| `finkore.money.round` | Reduce to the explicit `scale` using the explicit `mode`. |
 | `workflow.create` | Validate a definition and create an instance at its initial state. |
-| `finflow.workflow.transition` | Request the supplied target from the instance's current state using supplied guard facts. |
+| `finkore.workflow.transition` | Request the supplied target from the instance's current state using supplied guard facts. |
 | `audit.append` | Append one event to supplied committed logical history. |
 | `audit.replace`, `audit.remove` | Attempt the named change to committed logical history. |
 | `audit.redact` | Produce a policy-authorized redacted logical representation and evidence event. |
@@ -67,10 +67,10 @@ These identifiers name observable behavior, not implementation methods.
 
 Logical fixtures in `input` are intentionally small declarative models. An adapter constructs any idiomatic implementation objects required to realize them. The fixtures do not define a production interchange format.
 
-Identifiers beginning with `finflow.` are canonical operations in the
+Identifiers beginning with `finkore.` are canonical operations in the
 [Agentic Contract](../agentic/operations.md). Remaining catalog entries are
 conformance-local adapter operations until their stable public contracts are
-reviewed; vector use alone does not make them advertised FinFlow capabilities.
+reviewed; vector use alone does not make them advertised FinKore capabilities.
 For Money Draft 0.1, `money.deserialize` and `money.serialize` remain
 conformance-local representation boundary checks. They exercise normative Money
 serialization but are not separate public Agentic operations.

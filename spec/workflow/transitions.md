@@ -37,7 +37,7 @@ Process A requests: SUBMITTED → APPROVED
 Process B requests: SUBMITTED → REJECTED
 ```
 
-FinFlow Core Draft 0.1 defines whether each request is valid from `SUBMITTED`; it does not determine which concurrent request wins. That decision belongs to the application, persistence layer, or a future concurrency specification.
+FinKore Core Draft 0.1 defines whether each request is valid from `SUBMITTED`; it does not determine which concurrent request wins. That decision belongs to the application, persistence layer, or a future concurrency specification.
 
 Given `DRAFT → SUBMITTED`, requesting that transition from `DRAFT` succeeds if all guards pass.
 
@@ -47,7 +47,7 @@ Requesting `DRAFT → APPROVED` when only `DRAFT → SUBMITTED` is declared must
 
 ## Errors
 
-Except for a request from a terminal State, an undeclared Transition Request must report `FINFLOW_WORKFLOW_INVALID_TRANSITION`. A request from a terminal State follows [Terminal States](terminal-states.md), and a failed Transition Guard follows [Guards](guards.md).
+Except for a request from a terminal State, an undeclared Transition Request must report `FINKORE_WORKFLOW_INVALID_TRANSITION`. A request from a terminal State follows [Terminal States](terminal-states.md), and a failed Transition Guard follows [Guards](guards.md).
 
 ## Open Questions
 

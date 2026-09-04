@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import type { FinFlowConformanceAdapter } from '../adapter/types.js'
+import type { FinKoreConformanceAdapter } from '../adapter/types.js'
 import { createConformanceRunner } from '../runner.js'
 import { exitCodeForReport, formatConsoleReport, formatJsonReport } from '../reporter.js'
 
@@ -15,7 +15,7 @@ interface CliOptions {
 }
 
 function usage(): string {
-  return `Usage: finflow-conformance --adapter <module> [options]
+  return `Usage: finkore-conformance --adapter <module> [options]
 
 Options:
   --manifest <path>  Manifest path (default: conformance/manifest.json)
@@ -57,7 +57,7 @@ export function parseArgs(args: readonly string[]): CliOptions {
   return options
 }
 
-function isAdapter(value: unknown): value is FinFlowConformanceAdapter {
+function isAdapter(value: unknown): value is FinKoreConformanceAdapter {
   return typeof value === 'object' && value !== null
     && typeof (value as { supports?: unknown }).supports === 'function'
     && typeof (value as { execute?: unknown }).execute === 'function'
@@ -81,7 +81,7 @@ async function main(): Promise<void> {
     process.stdout.write(options.json ? formatJsonReport(report) : `${formatConsoleReport(report)}\n`)
     process.exitCode = exitCodeForReport(report)
   } catch (error) {
-    process.stderr.write(`FinFlow conformance infrastructure error: ${error instanceof Error ? error.message : String(error)}\n`)
+    process.stderr.write(`FinKore conformance infrastructure error: ${error instanceof Error ? error.message : String(error)}\n`)
     process.exitCode = 2
   }
 }

@@ -52,7 +52,7 @@ export function buildReport(
   })
 
   return {
-    finflowConformanceRunner: '0.1',
+    finkoreConformanceRunner: '0.1',
     summary,
     mutationSensitive,
     suites,
@@ -71,7 +71,7 @@ function formatJson(value: unknown): string {
 }
 
 export function formatConsoleReport(report: ConformanceReport): string {
-  const lines = ['FinFlow Conformance', '']
+  const lines = ['FinKore Conformance', '']
   for (const suite of report.suites) {
     lines.push(suite.suiteId, `  ${countsLine(suite.counts)}`, '')
   }

@@ -33,7 +33,7 @@ A field declared immutable in the current State must not change through an ordin
 
 ## Errors
 
-A prohibited mutation must report `FINFLOW_ENTITY_IMMUTABLE`.
+A prohibited mutation must report `FINKORE_ENTITY_IMMUTABLE`.
 
 ## Open Questions
 
@@ -42,5 +42,5 @@ A prohibited mutation must report `FINFLOW_ENTITY_IMMUTABLE`.
 
 ## Non-Goals
 
-FinFlow Core Draft 0.1 does not define Correction, Reversal, Void, Cancellation, Supersession, or Adjustment. These terms are not treated as synonyms. It also does not define a universal policy for post-finalization operational metadata.
+FinKore Core Draft 0.1 does not define Correction, Reversal, Void, Cancellation, Supersession, or Adjustment. These terms are not treated as synonyms. It also does not define a universal policy for post-finalization operational metadata.
 

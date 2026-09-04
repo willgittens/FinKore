@@ -1,5 +1,5 @@
 {
-  "finflowVectorFile": "0.1",
+  "finkoreVectorFile": "0.1",
   "vectors": [
     {
       "id": "money.deserialize.positive-001",
@@ -102,7 +102,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_MONEY_INVALID_AMOUNT"
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
         }
       },
       "tags": [
@@ -129,7 +129,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_MONEY_INVALID_CURRENCY"
+          "code": "FINKORE_MONEY_INVALID_CURRENCY"
         }
       },
       "tags": [
@@ -154,7 +154,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_MONEY_INVALID_AMOUNT"
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
         }
       },
       "tags": [
@@ -184,7 +184,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_MONEY_INVALID_AMOUNT"
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
         }
       },
       "tags": [
@@ -210,7 +210,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_MONEY_INVALID_AMOUNT"
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
         }
       },
       "tags": [
@@ -236,7 +236,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_MONEY_INVALID_AMOUNT"
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
         }
       },
       "tags": [
@@ -261,7 +261,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_MONEY_INVALID_CURRENCY"
+          "code": "FINKORE_MONEY_INVALID_CURRENCY"
         }
       },
       "tags": [

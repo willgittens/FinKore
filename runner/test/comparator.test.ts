@@ -22,26 +22,26 @@ describe('exact result comparison', () => {
   })
 
   it('rejects success/error inversions in both directions', () => {
-    expect(compareResults({ status: 'success', value: 1 }, { status: 'error', error: { code: 'FINFLOW_MONEY_BAD' } }))
+    expect(compareResults({ status: 'success', value: 1 }, { status: 'error', error: { code: 'FINKORE_MONEY_BAD' } }))
       .toEqual({ matches: false, diagnostic: 'Expected success, actual error' })
-    expect(compareResults({ status: 'error', error: { code: 'FINFLOW_MONEY_BAD' } }, { status: 'success', value: 1 }))
+    expect(compareResults({ status: 'error', error: { code: 'FINKORE_MONEY_BAD' } }, { status: 'success', value: 1 }))
       .toEqual({ matches: false, diagnostic: 'Expected error, actual success' })
   })
 
   it('compares portable error code and observations but ignores details', () => {
     expect(compareResults(
-      { status: 'error', error: { code: 'FINFLOW_MONEY_BAD' }, observations: { state: 'A' } },
-      { status: 'error', error: { code: 'FINFLOW_MONEY_BAD', details: { native: 'x' } }, observations: { state: 'A' } },
+      { status: 'error', error: { code: 'FINKORE_MONEY_BAD' }, observations: { state: 'A' } },
+      { status: 'error', error: { code: 'FINKORE_MONEY_BAD', details: { native: 'x' } }, observations: { state: 'A' } },
     )).toEqual({ matches: true })
     const errorMismatch = compareResults(
-      { status: 'error', error: { code: 'FINFLOW_MONEY_BAD' } },
-      { status: 'error', error: { code: 'FINFLOW_MONEY_OTHER' } },
+      { status: 'error', error: { code: 'FINKORE_MONEY_BAD' } },
+      { status: 'error', error: { code: 'FINKORE_MONEY_OTHER' } },
     )
     expect(errorMismatch.matches).toBe(false)
-    expect(errorMismatch.diagnostic).toContain('FINFLOW_MONEY_OTHER')
+    expect(errorMismatch.diagnostic).toContain('FINKORE_MONEY_OTHER')
     expect(compareResults(
-      { status: 'error', error: { code: 'FINFLOW_MONEY_BAD' }, observations: { state: 'A' } },
-      { status: 'error', error: { code: 'FINFLOW_MONEY_BAD' }, observations: { state: 'B' } },
+      { status: 'error', error: { code: 'FINKORE_MONEY_BAD' }, observations: { state: 'A' } },
+      { status: 'error', error: { code: 'FINKORE_MONEY_BAD' }, observations: { state: 'B' } },
     ).diagnostic).toContain('Observations mismatch')
     expect(compareResults(
       { status: 'success', value: 1, observations: { state: 'A' } },

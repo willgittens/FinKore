@@ -1,6 +1,6 @@
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { createConformanceRunner } from '@finflow/conformance-runner'
+import { createConformanceRunner } from '@finkore/conformance-runner'
 import { createTypeScriptConformanceAdapter } from '../src/adapter.js'
 
 const manifestPath = resolve(import.meta.dirname, '../../../../../conformance/manifest.json')
@@ -11,15 +11,15 @@ describe('TypeScript conformance adapter', () => {
 
     expect(adapter.supports('money.deserialize')).toBe(true)
     expect(adapter.supports('money.serialize')).toBe(true)
-    expect(adapter.supports('finflow.money.add')).toBe(true)
-    expect(adapter.supports('finflow.money.subtract')).toBe(true)
-    expect(adapter.supports('finflow.money.compare')).toBe(true)
-    expect(adapter.supports('finflow.money.round')).toBe(true)
-    expect(adapter.supports('finflow.money.negate')).toBe(true)
-    expect(adapter.supports('finflow.money.multiply')).toBe(true)
-    expect(adapter.supports('finflow.money.divide')).toBe(true)
+    expect(adapter.supports('finkore.money.add')).toBe(true)
+    expect(adapter.supports('finkore.money.subtract')).toBe(true)
+    expect(adapter.supports('finkore.money.compare')).toBe(true)
+    expect(adapter.supports('finkore.money.round')).toBe(true)
+    expect(adapter.supports('finkore.money.negate')).toBe(true)
+    expect(adapter.supports('finkore.money.multiply')).toBe(true)
+    expect(adapter.supports('finkore.money.divide')).toBe(true)
     expect(adapter.supports('workflow.create')).toBe(true)
-    expect(adapter.supports('finflow.workflow.transition')).toBe(true)
+    expect(adapter.supports('finkore.workflow.transition')).toBe(true)
     expect(adapter.supports('money.negate')).toBe(false)
     expect(adapter.supports('money.multiply')).toBe(false)
     expect(adapter.supports('money.divide')).toBe(false)

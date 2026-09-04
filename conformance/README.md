@@ -1,12 +1,12 @@
-# FinFlow Conformance Suite
+# FinKore Conformance Suite
 
 ## Reliability principle
 
-> FinFlow tests are designed not only to demonstrate that a correct implementation works, but to demonstrate that plausible incorrect implementations fail.
+> FinKore tests are designed not only to demonstrate that a correct implementation works, but to demonstrate that plausible incorrect implementations fail.
 
 > In financial software, a passing test suite is useful only if it reliably rejects broken behavior.
 
-This directory is the language-independent executable evidence for FinFlow Draft 0.1. The specification remains the source of truth. Vectors describe observable domain behavior; they do not prescribe APIs, classes, exceptions, storage, or frameworks.
+This directory is the language-independent executable evidence for FinKore Draft 0.1. The specification remains the source of truth. Vectors describe observable domain behavior; they do not prescribe APIs, classes, exceptions, storage, or frameworks.
 
 ## Scope and discovery
 
@@ -49,7 +49,7 @@ Mutants killed
 Refactor
 ```
 
-Implementation code does not define FinFlow behavior. A new normative rule begins in the specification, receives a stable requirement ID, and receives conformance evidence before implementation.
+Implementation code does not define FinKore behavior. A new normative rule begins in the specification, receives a stable requirement ID, and receives conformance evidence before implementation.
 
 ## Requirement and vector stability
 
@@ -94,7 +94,7 @@ Issue references MAY be recorded as non-normative metadata, but repository-speci
 
 Mutation testing is first-class for official/reference implementations. Mutation score is a quality signal, not proof of financial correctness.
 
-The target mutation score for normative FinFlow Core behavior is at least 95%. In addition, no known critical financial mutant may survive, even when the aggregate score exceeds the target. A surviving currency check removal, rounding-mode substitution, guard bypass, immutability bypass, approval-validity bypass, or audit-history mutation makes an official implementation non-compliant with project quality policy.
+The target mutation score for normative FinKore Core behavior is at least 95%. In addition, no known critical financial mutant may survive, even when the aggregate score exceeds the target. A surviving currency check removal, rounding-mode substitution, guard bypass, immutability bypass, approval-validity bypass, or audit-history mutation makes an official implementation non-compliant with project quality policy.
 
 This policy applies to official/reference implementation quality, not to the language-independent specification and not as a tooling mandate for third-party implementations. Third parties may demonstrate conformance with any runner that faithfully evaluates these vectors.
 
@@ -112,7 +112,7 @@ The vector-level `guardsAgainst` field identifies especially relevant mutants wi
 
 ## Conformance and implementation quality
 
-FinFlow conformance asks whether observable behavior matches the specification and is measured by the portable vectors.
+FinKore conformance asks whether observable behavior matches the specification and is measured by the portable vectors.
 
 Reference implementation quality asks how strongly an implementation resists defects and is measured by conformance tests plus language unit tests, appropriate property tests, mutation testing, static analysis, and language-specific checks. Conformance does not require a production API to expose the normalized test protocol.
 

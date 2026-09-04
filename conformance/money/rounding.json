@@ -1,5 +1,5 @@
 {
-  "finflowVectorFile": "0.1",
+  "finkoreVectorFile": "0.1",
   "vectors": [
     {
       "id": "money.round.half-up.tie-positive-001",
@@ -10,7 +10,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Applies HALF_UP at a mutation-sensitive 10.005 boundary.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "10.005",
@@ -52,7 +52,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Applies HALF_UP at a mutation-sensitive -10.005 boundary.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "-10.005",
@@ -93,7 +93,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Applies HALF_EVEN at a mutation-sensitive 10.005 boundary.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "10.005",
@@ -135,7 +135,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Applies HALF_EVEN at a mutation-sensitive 10.015 boundary.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "10.015",
@@ -176,7 +176,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Applies HALF_EVEN at a mutation-sensitive -10.005 boundary.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "-10.005",
@@ -217,7 +217,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Applies DOWN at a mutation-sensitive 1.239 boundary.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "1.239",
@@ -258,7 +258,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Applies DOWN at a mutation-sensitive -1.239 boundary.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "-1.239",
@@ -299,7 +299,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Applies UP at a mutation-sensitive 1.231 boundary.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "1.231",
@@ -340,7 +340,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Applies UP at a mutation-sensitive -1.231 boundary.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "-1.231",
@@ -381,7 +381,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Applies FLOOR at a mutation-sensitive 1.239 boundary.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "1.239",
@@ -422,7 +422,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Applies FLOOR at a mutation-sensitive -1.231 boundary.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "-1.231",
@@ -463,7 +463,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Applies CEILING at a mutation-sensitive 1.231 boundary.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "1.231",
@@ -504,7 +504,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Applies CEILING at a mutation-sensitive -1.239 boundary.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "-1.239",
@@ -545,7 +545,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Applies HALF_UP at a mutation-sensitive 10.0049 boundary.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "10.0049",
@@ -586,7 +586,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Applies HALF_UP at a mutation-sensitive 10.0051 boundary.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "10.0051",
@@ -627,7 +627,7 @@
         "MONEY-ROUNDING-008"
       ],
       "description": "Uses explicit scale three rather than EUR customary scale.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "1.2345",
@@ -668,7 +668,7 @@
         "MONEY-ROUNDING-009"
       ],
       "description": "Leaves numeric value unchanged when no non-zero digits are discarded.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "1.230",
@@ -703,7 +703,7 @@
         "MONEY-ROUNDING-001"
       ],
       "description": "Rejects an unsupported rounding mode.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "1.235",
@@ -715,7 +715,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_MONEY_INVALID_ROUNDING"
+          "code": "FINKORE_MONEY_INVALID_ROUNDING"
         },
         "observations": {
           "operand": {
@@ -736,7 +736,7 @@
         "MONEY-ROUNDING-001"
       ],
       "description": "Rejects a negative target scale.",
-      "operation": "finflow.money.round",
+      "operation": "finkore.money.round",
       "input": {
         "value": {
           "amount": "1.235",
@@ -748,7 +748,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_MONEY_INVALID_ROUNDING"
+          "code": "FINKORE_MONEY_INVALID_ROUNDING"
         },
         "observations": {
           "operand": {

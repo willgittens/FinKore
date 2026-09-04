@@ -6,7 +6,7 @@ const VECTOR_ID = /^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$/
 const SPEC_PATH = /^[a-z]+\/[a-z-]+$/
 const REQUIREMENT_ID = /^[A-Z]+(?:-[A-Z]+)+-[0-9]{3}$/
 const OPERATION_ID = /^[a-z]+(?:\.[a-z]+)+$/
-const ERROR_CODE = /^FINFLOW_[A-Z]+(?:_[A-Z]+)+$/
+const ERROR_CODE = /^FINKORE_[A-Z]+(?:_[A-Z]+)+$/
 const GUARD_NAME = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 const VALID_TAGS = new Set(['positive', 'negative', 'boundary', 'invariant', 'regression', 'mutation-sensitive'])
 
@@ -87,7 +87,7 @@ export function validateVector(value: unknown, metadata: RunnerMetadata, source 
     invalid(`Vector ${value.id} has a missing or invalid operation id`, source)
   }
   if (!metadata.operationIds.has(value.operation)) invalid(`Vector ${value.id} references unknown operation ${value.operation}`, source)
-  if (value.operation.startsWith('finflow.') && !metadata.agenticOperationIds.has(value.operation)) {
+  if (value.operation.startsWith('finkore.') && !metadata.agenticOperationIds.has(value.operation)) {
     invalid(`Vector ${value.id} references unregistered Agentic operation ${value.operation}`, source)
   }
 
@@ -113,10 +113,10 @@ export function validateVector(value: unknown, metadata: RunnerMetadata, source 
 
 export function validateVectorFile(value: unknown, metadata: RunnerMetadata, source: string): VectorFile {
   if (!isRecord(value)) invalid('Vector file must be an object', source)
-  if (value.finflowVectorFile !== '0.1') invalid('Unsupported or missing finflowVectorFile version', source)
+  if (value.finkoreVectorFile !== '0.1') invalid('Unsupported or missing finkoreVectorFile version', source)
   if (!Array.isArray(value.vectors) || value.vectors.length === 0) invalid('Vector file must contain a non-empty vectors array', source)
   return {
-    finflowVectorFile: '0.1',
+    finkoreVectorFile: '0.1',
     vectors: value.vectors.map((vector, index) => validateVector(vector, metadata, `${source}#${index}`)),
   }
 }

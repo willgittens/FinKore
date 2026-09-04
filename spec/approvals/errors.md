@@ -12,11 +12,11 @@ This document defines initial portable approval failure categories.
 
 | Code | Meaning |
 | --- | --- |
-| `FINFLOW_APPROVAL_REQUIRED` | A domain action requires approval that is not satisfied. |
-| `FINFLOW_APPROVAL_INVALID_DECISION` | A proposed decision is missing, malformed, or not permitted. |
-| `FINFLOW_APPROVAL_INELIGIBLE_ACTOR` | The deciding actor does not satisfy the requirement. |
-| `FINFLOW_APPROVAL_INVALID_CHAIN` | A chain definition or evaluation is structurally invalid. |
-| `FINFLOW_APPROVAL_CONDITION_UNRESOLVED` | A required condition cannot be evaluated from available facts. |
+| `FINKORE_APPROVAL_REQUIRED` | A domain action requires approval that is not satisfied. |
+| `FINKORE_APPROVAL_INVALID_DECISION` | A proposed decision is missing, malformed, or not permitted. |
+| `FINKORE_APPROVAL_INELIGIBLE_ACTOR` | The deciding actor does not satisfy the requirement. |
+| `FINKORE_APPROVAL_INVALID_CHAIN` | A chain definition or evaluation is structurally invalid. |
+| `FINKORE_APPROVAL_CONDITION_UNRESOLVED` | A required condition cannot be evaluated from available facts. |
 
 ## Requirements
 

@@ -1,8 +1,8 @@
-# FinFlow Conformance Runner
+# FinKore Conformance Runner
 
-This package is the reference TypeScript runner for FinFlow's language-independent conformance vectors. It verifies an implementation's normalized observable behavior against the specification vectors.
+This package is the reference TypeScript runner for FinKore's language-independent conformance vectors. It verifies an implementation's normalized observable behavior against the specification vectors.
 
-It is not a financial library, a FinFlow domain implementation, an agent runtime, or a general-purpose application testing framework. Production code here contains no Money, Workflow, Audit, Approval, or Entity behavior.
+It is not a financial library, a FinKore domain implementation, an agent runtime, or a general-purpose application testing framework. Production code here contains no Money, Workflow, Audit, Approval, or Entity behavior.
 
 ## Architecture
 
@@ -23,10 +23,10 @@ The runner loads only files declared by `conformance/manifest.json`. It validate
 ## Canonical operations and requirements
 
 Canonical operation IDs are reused verbatim from the Agentic Contract, including
-`finflow.money.add`, `finflow.money.divide`, and
-`finflow.workflow.transition`. `src/metadata.ts` contains the small explicit
+`finkore.money.add`, `finkore.money.divide`, and
+`finkore.workflow.transition`. `src/metadata.ts` contains the small explicit
 Draft 0.1 Agentic ID set aligned with `agentic/operations.md`; it duplicates
-identifiers, not semantics. Operations without the `finflow.` prefix remain
+identifiers, not semantics. Operations without the `finkore.` prefix remain
 conformance-local adapter vocabulary as documented by
 `conformance/conventions.md`.
 
@@ -35,7 +35,7 @@ Requirement IDs and the existing critical classification are read conservatively
 ## Adapter API
 
 ```ts
-export interface FinFlowConformanceAdapter {
+export interface FinKoreConformanceAdapter {
   supports(operationId: string): boolean
 
   execute(request: {
@@ -56,14 +56,14 @@ export type NormalizedResult =
     }
 ```
 
-The normalized envelope is conformance infrastructure, not a required FinFlow implementation API. An adapter translates native values and errors into it. It must canonicalize domain representations before returning; the domain-neutral comparator applies exact recursive equality, with unordered object keys and ordered arrays. It never uses floating-point tolerance or invents domain equivalence.
+The normalized envelope is conformance infrastructure, not a required FinKore implementation API. An adapter translates native values and errors into it. It must canonicalize domain representations before returning; the domain-neutral comparator applies exact recursive equality, with unordered object keys and ordered arrays. It never uses floating-point tolerance or invents domain equivalence.
 
 An optional `reset` hook supports the vector-isolation requirement. It runs immediately before each supported execution.
 
 ## Programmatic usage
 
 ```ts
-import { createConformanceRunner } from '@finflow/conformance-runner'
+import { createConformanceRunner } from '@finkore/conformance-runner'
 import { adapter } from './my-adapter.js'
 
 const runner = createConformanceRunner({
@@ -117,7 +117,7 @@ Malformed manifests or vectors fail the run before execution and lead to CLI exi
 
 ## Validation
 
-The runner rejects unsupported versions, malformed or duplicate suite declarations, unsafe manifest paths, unreadable JSON, missing files, malformed vector files, missing/invalid/duplicate vector IDs, invalid specification references, empty descriptions, non-object input/context/observations, invalid or duplicate requirement references, invalid/unknown operation IDs, unregistered `finflow.*` IDs, invalid/duplicate tags and guards, malformed portable error codes, contradictory success/error expectations, and globally duplicate vector IDs.
+The runner rejects unsupported versions, malformed or duplicate suite declarations, unsafe manifest paths, unreadable JSON, missing files, malformed vector files, missing/invalid/duplicate vector IDs, invalid specification references, empty descriptions, non-object input/context/observations, invalid or duplicate requirement references, invalid/unknown operation IDs, unregistered `finkore.*` IDs, invalid/duplicate tags and guards, malformed portable error codes, contradictory success/error expectations, and globally duplicate vector IDs.
 
 Unknown vector members are ignored in accordance with `conformance/conventions.md`; they cannot alter defined-member semantics.
 

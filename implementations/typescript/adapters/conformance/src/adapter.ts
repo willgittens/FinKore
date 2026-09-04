@@ -1,19 +1,19 @@
-import type { AdapterRequest, FinFlowConformanceAdapter, NormalizedResult } from '@finflow/conformance-runner'
+import type { AdapterRequest, FinKoreConformanceAdapter, NormalizedResult } from '@finkore/conformance-runner'
 import { operationHandlers } from './operations.js'
 
 /**
- * Creates the TypeScript implementation adapter for the FinFlow Conformance
+ * Creates the TypeScript implementation adapter for the FinKore Conformance
  * Runner.
  *
  * The adapter maps conformance operation identifiers to the TypeScript
  * reference implementation and normalizes observable results for comparison.
  * It must not implement financial domain rules itself; those belong in
- * `@finflow/typescript`, with `/spec` remaining authoritative.
+ * `@finkore/typescript`, with `/spec` remaining authoritative.
  *
  * @returns A conformance adapter supporting only the operations implemented by
  * the current TypeScript Money milestone.
  */
-export function createTypeScriptConformanceAdapter(): FinFlowConformanceAdapter {
+export function createTypeScriptConformanceAdapter(): FinKoreConformanceAdapter {
   return {
     /**
      * Reports whether this adapter supports a conformance operation.

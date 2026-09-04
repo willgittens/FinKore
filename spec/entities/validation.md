@@ -17,7 +17,7 @@ This document defines validation of financial entity state and proposed domain o
 - **ENTITY-VALIDATION-001** — A Financial Entity MUST satisfy all Structural Validation and Business Validation rules applicable to its current State.
 - **ENTITY-VALIDATION-002** — A proposed Mutation or Transition MUST be validated before any resulting Change becomes observable.
 - **ENTITY-VALIDATION-003** — Validation MUST evaluate the complete proposed domain result when rules span multiple fields.
-- **ENTITY-VALIDATION-004** — Failure of a Structural Validation or Business Validation rule defined for the Financial Entity MUST identify `FINFLOW_ENTITY_VALIDATION_FAILED`. Stable violation identifiers follow **ENTITY-ERROR-002**, and preservation of a primary domain-specific code follows **ENTITY-ERROR-004**.
+- **ENTITY-VALIDATION-004** — Failure of a Structural Validation or Business Validation rule defined for the Financial Entity MUST identify `FINKORE_ENTITY_VALIDATION_FAILED`. Stable violation identifiers follow **ENTITY-ERROR-002**, and preservation of a primary domain-specific code follows **ENTITY-ERROR-004**.
 - **ENTITY-VALIDATION-005** — Validation details SHOULD identify relevant domain paths.
 - **ENTITY-VALIDATION-008** — Validation details MUST NOT expose sensitive values unnecessarily.
 - **ENTITY-VALIDATION-006** — Validation evaluation MUST NOT alter the observable Financial Entity.
@@ -33,7 +33,7 @@ The following JSON is illustrative and non-normative.
 
 ```json
 {
-  "code": "FINFLOW_ENTITY_VALIDATION_FAILED",
+  "code": "FINKORE_ENTITY_VALIDATION_FAILED",
   "violations": [
     { "rule": "AMOUNT_REQUIRED", "path": "amount" }
   ]

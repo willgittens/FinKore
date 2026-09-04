@@ -26,7 +26,7 @@ export interface CriticalFailure {
 }
 
 export interface ConformanceReport {
-  readonly finflowConformanceRunner: '0.1'
+  readonly finkoreConformanceRunner: '0.1'
   readonly summary: StatusCounts
   readonly mutationSensitive: StatusCounts
   readonly suites: readonly SuiteResult[]

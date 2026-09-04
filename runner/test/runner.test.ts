@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createConformanceRunner } from '../src/runner.js'
-import type { FinFlowConformanceAdapter } from '../src/adapter/types.js'
+import type { FinKoreConformanceAdapter } from '../src/adapter/types.js'
 import { createFixtureConformance, metadata, validVector } from './helpers.js'
 
-async function runWith(adapter: FinFlowConformanceAdapter, vectors: readonly unknown[] = [validVector]) {
+async function runWith(adapter: FinKoreConformanceAdapter, vectors: readonly unknown[] = [validVector]) {
   const fixture = await createFixtureConformance(vectors)
   return createConformanceRunner({ manifestPath: fixture.manifestPath, adapter, metadata }).run()
 }
@@ -16,14 +16,14 @@ describe('runner execution classification', () => {
   })
 
   it('passes a matching asynchronous portable error', async () => {
-    const vector = { ...validVector, expected: { status: 'error', error: { code: 'FINFLOW_MONEY_BAD_INPUT' } }, tags: ['negative'] }
-    const report = await runWith({ supports: () => true, execute: async () => ({ status: 'error', error: { code: 'FINFLOW_MONEY_BAD_INPUT' } }) }, [vector])
+    const vector = { ...validVector, expected: { status: 'error', error: { code: 'FINKORE_MONEY_BAD_INPUT' } }, tags: ['negative'] }
+    const report = await runWith({ supports: () => true, execute: async () => ({ status: 'error', error: { code: 'FINKORE_MONEY_BAD_INPUT' } }) }, [vector])
     expect(report.results[0]?.status).toBe('PASS')
   })
 
   it.each([
     [{ status: 'success', value: { answer: 'wrong' } }, 'FAIL'],
-    [{ status: 'error', error: { code: 'FINFLOW_MONEY_BAD_INPUT' } }, 'FAIL'],
+    [{ status: 'error', error: { code: 'FINKORE_MONEY_BAD_INPUT' } }, 'FAIL'],
   ] as const)('classifies an executed mismatch as FAIL', async (actual, status) => {
     const report = await runWith({ supports: () => true, execute: () => actual })
     expect(report.results[0]?.status).toBe(status)
@@ -42,7 +42,7 @@ describe('runner execution classification', () => {
     [{ supports: () => true, reset: () => { throw new Error('reset crash') }, execute: vi.fn() }, 'execution failed'],
     [{ supports: () => true, execute: () => ({ status: 'success' }) }, 'invalid normalized'],
   ] as const)('classifies adapter infrastructure failure %#', async (adapter, diagnostic) => {
-    const report = await runWith(adapter as FinFlowConformanceAdapter)
+    const report = await runWith(adapter as FinKoreConformanceAdapter)
     expect(report.results[0]?.status).toBe('INFRASTRUCTURE_ERROR')
     expect(report.results[0]?.diagnostic).toContain(diagnostic)
   })
@@ -70,7 +70,7 @@ describe('runner execution classification', () => {
 
   it('preserves exact classification diagnostics', async () => {
     const unsupported = await runWith({ supports: () => false, execute: vi.fn() })
-    expect(unsupported.results[0]?.diagnostic).toBe('Adapter does not support finflow.money.add')
+    expect(unsupported.results[0]?.diagnostic).toBe('Adapter does not support finkore.money.add')
     const mismatch = await runWith({
       supports: () => true,
       execute: () => ({ status: 'success', value: { answer: 'wrong' } }),
@@ -83,7 +83,7 @@ describe('runner execution classification', () => {
     const second = { ...validVector, id: 'money.add.second-001', tags: ['boundary'], input: { token: 'second' } }
     const first = { ...validVector, id: 'money.add.first-001', tags: ['positive'], input: { token: 'first' } }
     const fixture = await createFixtureConformance([second, first])
-    const adapter: FinFlowConformanceAdapter = {
+    const adapter: FinKoreConformanceAdapter = {
       supports: () => true,
       execute: async ({ input }) => {
         calls.push((input as { token: string }).token)

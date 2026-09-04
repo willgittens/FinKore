@@ -1,5 +1,5 @@
 export { createAdapterRegistry, type AdapterHandler } from './adapter/registry.js'
-export type { AdapterRequest, FinFlowConformanceAdapter } from './adapter/types.js'
+export type { AdapterRequest, FinKoreConformanceAdapter } from './adapter/types.js'
 export { compareResults, type Comparison } from './comparator.js'
 export { RunnerInfrastructureError, type RunnerErrorKind } from './errors/runner-errors.js'
 export { filterVectors, type RunFilters } from './filters.js'

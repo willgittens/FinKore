@@ -1,10 +1,10 @@
-# FinFlow
+# FinKore
 
 > CRUD is easy. Financial CRUD isn't.
 
-FinFlow is an open-source, specification-first, language-agnostic project for reusable financial domain behavior. It defines the rules that make financial software predictable and auditable, so teams can preserve the same meaning across services, frameworks, and programming languages.
+FinKore is an open-source, specification-first, language-agnostic project for reusable financial domain behavior. It defines the rules that make financial software predictable and auditable, so teams can preserve the same meaning across services, frameworks, and programming languages.
 
-## Why FinFlow?
+## Why FinKore?
 
 Ordinary CRUD gets harder as soon as financial requirements appear:
 
@@ -17,11 +17,11 @@ Ordinary CRUD gets harder as soon as financial requirements appear:
 
 These are domain problems, not framework problems. Yet teams repeatedly rebuild their own versions for every invoice, expense, purchase order, payment, and financial back-office workflow. The results often agree in the common case and diverge at exactly the boundary where correctness matters.
 
-FinFlow exists to define that behavior once, independently of the stack that implements it.
+FinKore exists to define that behavior once, independently of the stack that implements it.
 
-## What FinFlow Standardizes
+## What FinKore Standardizes
 
-FinFlow Core currently develops portable rules for:
+FinKore Core currently develops portable rules for:
 
 - exact Money representation, arithmetic, comparison, rounding, and serialization;
 - Financial Entity identity, lifecycle, mutability, and validation;
@@ -43,14 +43,14 @@ The same operation with incompatible currencies must not silently succeed:
 
 ```text
 10.20 EUR + 5.30 USD
-→ FINFLOW_MONEY_CURRENCY_MISMATCH
+→ FINKORE_MONEY_CURRENCY_MISMATCH
 ```
 
 TypeScript and Java may expose different APIs. They should still produce the same financial behavior.
 
 ## Specification First
 
-FinFlow is not defined by a particular package or implementation. The specification is the source of truth, and language implementations may provide idiomatic APIs while preserving its observable semantics.
+FinKore is not defined by a particular package or implementation. The specification is the source of truth, and language implementations may provide idiomatic APIs while preserving its observable semantics.
 
 Frameworks and architectures change; financial meaning should survive. A move from a monolith to services, from Node.js to Java, or from one frontend framework to another should not silently redefine what `APPROVED`, `POSTED`, `PAID`, or `REVERSED` means.
 
@@ -66,23 +66,23 @@ Reference Implementation
 Other Implementations
 ```
 
-This keeps financial meaning portable when a system moves from one framework, language, or architecture to another. See the [FinFlow Specification](./spec/README.md) for the normative rules and the non-normative implementation direction.
+This keeps financial meaning portable when a system moves from one framework, language, or architecture to another. See the [FinKore Specification](./spec/README.md) for the normative rules and the non-normative implementation direction.
 
 ## Built for Financial Reliability
 
-FinFlow uses language-independent conformance vectors, strict deterministic tests, boundary cases, and permanent regression vectors to verify observable behavior across implementations. Official implementations are also expected to use mutation testing against plausible financial defects.
+FinKore uses language-independent conformance vectors, strict deterministic tests, boundary cases, and permanent regression vectors to verify observable behavior across implementations. Official implementations are also expected to use mutation testing against plausible financial defects.
 
-> FinFlow tests are designed not only to demonstrate that a correct implementation works, but to demonstrate that plausible incorrect implementations fail.
+> FinKore tests are designed not only to demonstrate that a correct implementation works, but to demonstrate that plausible incorrect implementations fail.
 
 The [Conformance Suite](./conformance/README.md) documents the vector format, runner contract, traceability, regression policy, mutation policy, and quality model.
 
-FinFlow is also [agent-ready by contract](./agentic/README.md): operations,
+FinKore is also [agent-ready by contract](./agentic/README.md): operations,
 effects, portable errors, and domain constraints are machine-discoverable without
 bypassing financial rules.
 
 ## Who Is This For?
 
-FinFlow is intended for engineers and teams building:
+FinKore is intended for engineers and teams building:
 
 - accounts payable and expense management;
 - procurement and payment systems;
@@ -92,26 +92,26 @@ FinFlow is intended for engineers and teams building:
 
 It is especially useful when domain behavior must remain consistent across multiple services or technology stacks.
 
-## What FinFlow Is Not
+## What FinKore Is Not
 
-FinFlow is not an ERP, ORM, payment processor, UI framework, accounting application, or replacement for an accounting engine. It provides portable financial domain primitives and behavioral contracts; applications decide how to compose them.
+FinKore is not an ERP, ORM, payment processor, UI framework, accounting application, or replacement for an accounting engine. It provides portable financial domain primitives and behavioral contracts; applications decide how to compose them.
 
 ## Documentation
 
-- [FinFlow Specification](./spec/README.md) — normative financial behavior, conventions, and domain definitions.
+- [FinKore Specification](./spec/README.md) — normative financial behavior, conventions, and domain definitions.
 - [Conformance Suite](./conformance/README.md) — language-independent test vectors and reliability methodology.
 - [Agentic Contract](./agentic/README.md) — portable operational semantics for machine clients.
 - [Conformance Traceability](./conformance/traceability.md) — current vector coverage, known gaps, and readiness.
 
 ## Project Status
 
-FinFlow is experimental. Money is complete for Draft 0.1 in the TypeScript reference implementation, covering Money representation, canonical serialization, portable Money errors, exact Money arithmetic, exact compatible-currency Money comparison, and explicit Money rounding. Other FinFlow domains remain under active development, and their conformance vectors are still being expanded.
+FinKore is experimental. Money is complete for Draft 0.1 in the TypeScript reference implementation, covering Money representation, canonical serialization, portable Money errors, exact Money arithmetic, exact compatible-currency Money comparison, and explicit Money rounding. Other FinKore domains remain under active development, and their conformance vectors are still being expanded.
 
-The specification is expected to evolve significantly before version 1.0. Production use is not recommended yet, and no implementation should claim that its API defines FinFlow independently of the specification.
+The specification is expected to evolve significantly before version 1.0. Production use is not recommended yet, and no implementation should claim that its API defines FinKore independently of the specification.
 
 ## Contributing
 
-FinFlow is developed in the open. Contributions can begin with financial use cases, edge cases, specification proposals, conformance vectors, schemas, implementation work, documentation, or examples.
+FinKore is developed in the open. Contributions can begin with financial use cases, edge cases, specification proposals, conformance vectors, schemas, implementation work, documentation, or examples.
 
 Start with the behavior that needs to be portable. For example:
 

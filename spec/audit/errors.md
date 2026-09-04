@@ -12,11 +12,11 @@ This document defines initial portable audit failure categories.
 
 | Code | Meaning |
 | --- | --- |
-| `FINFLOW_AUDIT_INVALID_EVENT` | Required event content is missing, malformed, or inconsistent. |
-| `FINFLOW_AUDIT_DUPLICATE_EVENT` | The event identity has already been committed. |
-| `FINFLOW_AUDIT_APPEND_ONLY_VIOLATION` | An operation would replace, modify, or remove a committed event, or change an explicitly recorded ordering relationship, outside the redaction rules. |
-| `FINFLOW_AUDIT_REDACTION_INVALID` | A redaction violates policy or destroys required event meaning. |
-| `FINFLOW_AUDIT_ACTOR_INVALID` | Actor attribution is malformed or inconsistent. |
+| `FINKORE_AUDIT_INVALID_EVENT` | Required event content is missing, malformed, or inconsistent. |
+| `FINKORE_AUDIT_DUPLICATE_EVENT` | The event identity has already been committed. |
+| `FINKORE_AUDIT_APPEND_ONLY_VIOLATION` | An operation would replace, modify, or remove a committed event, or change an explicitly recorded ordering relationship, outside the redaction rules. |
+| `FINKORE_AUDIT_REDACTION_INVALID` | A redaction violates policy or destroys required event meaning. |
+| `FINKORE_AUDIT_ACTOR_INVALID` | Actor attribution is malformed or inconsistent. |
 
 ## Requirements
 
@@ -30,5 +30,5 @@ A failed append must leave committed logical history unchanged.
 
 ## Non-Goals
 
-This is not a complete error catalog and does not define transport behavior or errors for concurrency and ordering mechanisms outside FinFlow Core Draft 0.1.
+This is not a complete error catalog and does not define transport behavior or errors for concurrency and ordering mechanisms outside FinKore Core Draft 0.1.
 

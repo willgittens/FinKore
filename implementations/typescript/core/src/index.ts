@@ -1,25 +1,25 @@
 export { Currency, isValidCurrencyIdentifier } from './money/currency.js'
 export {
   CurrencyMismatchError,
-  FinFlowMoneyError,
+  FinKoreMoneyError,
   InvalidCurrencyError,
   InvalidMoneyAmountError,
   InvalidMoneyRoundingError,
   MoneyDivisionByZeroError,
   MoneyRoundingRequiredError,
-  isFinFlowMoneyError,
+  isFinKoreMoneyError,
 } from './money/errors.js'
 export { Money } from './money/money.js'
 export { serializeMoney, validateSerializedAmount } from './money/serialization.js'
 export { WorkflowDefinition } from './workflow/definition.js'
 export {
-  FinFlowWorkflowError,
+  FinKoreWorkflowError,
   InvalidWorkflowDefinitionError,
   InvalidWorkflowStateError,
   InvalidWorkflowTransitionError,
   WorkflowGuardRejectedError,
   WorkflowTerminalStateError,
-  isFinFlowWorkflowError,
+  isFinKoreWorkflowError,
 } from './workflow/errors.js'
 export { Workflow } from './workflow/workflow.js'
 export type {

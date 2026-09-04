@@ -1,7 +1,7 @@
 # Portable Errors
 
 Agentic consumers rely on the portable error codes defined by the
-[FinFlow Specification](../spec/conventions.md#error-codes), not Java exception
+[FinKore Specification](../spec/conventions.md#error-codes), not Java exception
 classes, TypeScript error names, localized messages, or stack traces.
 
 Operation descriptors enumerate normatively associated portable errors where
@@ -15,7 +15,7 @@ The following shape is illustrative and non-normative:
 
 ```json
 {
-  "code": "FINFLOW_MONEY_CURRENCY_MISMATCH"
+  "code": "FINKORE_MONEY_CURRENCY_MISMATCH"
 }
 ```
 
@@ -23,10 +23,10 @@ The following shape is illustrative and non-normative:
 
 The Agentic Contract defines no transport retry system. A portable error may
 nevertheless show that retrying the exact request unchanged is unlikely to help.
-For example, `FINFLOW_MONEY_CURRENCY_MISMATCH` is a deterministic domain failure
+For example, `FINKORE_MONEY_CURRENCY_MISMATCH` is a deterministic domain failure
 for unchanged operands. The client must change the inputs or choose another
 specified operation; repetition does not authorize implicit currency conversion.
 
 Transient network, rate-limit, process, and service errors belong to adapters or
-transports and are not FinFlow portable domain errors.
+transports and are not FinKore portable domain errors.
 

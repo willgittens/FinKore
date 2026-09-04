@@ -31,7 +31,7 @@ permission to mutate financial state.
 
 An operation with state mutation `yes` changes observable domain state on
 success and is not merely computational. This classification does not by itself
-mean dangerous or irreversible. `finflow.workflow.transition` changes current
+mean dangerous or irreversible. `finkore.workflow.transition` changes current
 State exactly once on success and leaves it unchanged on rejection.
 
 Generic state mutation and financial-state mutation are distinct. A generic

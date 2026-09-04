@@ -1,11 +1,11 @@
-import type { AdapterRequest, FinFlowConformanceAdapter } from './types.js'
+import type { AdapterRequest, FinKoreConformanceAdapter } from './types.js'
 import type { NormalizedResult } from '../types/normalized-result.js'
 
 export type AdapterHandler = (request: AdapterRequest) => Promise<NormalizedResult> | NormalizedResult
 
 export function createAdapterRegistry(
   handlers: Readonly<Record<string, AdapterHandler>>,
-): FinFlowConformanceAdapter {
+): FinKoreConformanceAdapter {
   return {
     supports: (operationId) => Object.hasOwn(handlers, operationId),
     execute: (request) => {

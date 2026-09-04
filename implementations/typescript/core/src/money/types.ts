@@ -1,9 +1,9 @@
 /**
- * Canonical portable JSON shape for a FinFlow Money value.
+ * Canonical portable JSON shape for a FinKore Money value.
  *
  * The amount is encoded as a plain base-10 decimal string and the currency is
  * encoded as its identifier. This type describes interchange shape only; it
- * does not make the TypeScript implementation canonical for FinFlow itself.
+ * does not make the TypeScript implementation canonical for FinKore itself.
  *
  * @see MONEY-SERIALIZATION-001
  * @see MONEY-SERIALIZATION-002
@@ -11,7 +11,7 @@
  */
 export interface SerializedMoney {
   /**
-   * Exact decimal monetary amount in FinFlow's portable string encoding.
+   * Exact decimal monetary amount in FinKore's portable string encoding.
    *
    * @see MONEY-REPRESENTATION-002
    * @see MONEY-SERIALIZATION-002
@@ -28,7 +28,7 @@ export interface SerializedMoney {
 }
 
 /**
- * Input accepted by {@link Money.from} before FinFlow Money validation.
+ * Input accepted by {@link Money.from} before FinKore Money validation.
  *
  * The fields are intentionally `unknown` so the constructor can reject invalid
  * portable values with the specified Money error codes.
@@ -53,7 +53,7 @@ export interface MoneyInput {
 }
 
 /**
- * Exact numeric ordering result for compatible FinFlow Money values.
+ * Exact numeric ordering result for compatible FinKore Money values.
  *
  * The result is independent of insignificant decimal trailing zeros and is
  * defined only after currency compatibility succeeds.
@@ -65,7 +65,7 @@ export interface MoneyInput {
 export type MoneyComparisonResult = 'LESS' | 'EQUAL' | 'GREATER'
 
 /**
- * FinFlow rounding modes supported by every conforming Money implementation.
+ * FinKore rounding modes supported by every conforming Money implementation.
  *
  * These identifiers are the canonical portable values defined by the Money
  * rounding specification. They intentionally do not include implementation
@@ -78,7 +78,7 @@ export type RoundingMode = 'HALF_UP' | 'HALF_EVEN' | 'DOWN' | 'UP' | 'FLOOR' | '
 /**
  * Explicit rounding context for {@link Money.round}.
  *
- * FinFlow rounding requires both a target scale and a rounding mode. The scale
+ * FinKore rounding requires both a target scale and a rounding mode. The scale
  * is the number of fractional decimal digits in the rounded result; it is not
  * implicitly derived from the currency.
  *
@@ -94,7 +94,7 @@ export interface MoneyRoundOptions {
   readonly scale: unknown
 
   /**
-   * Canonical FinFlow rounding mode.
+   * Canonical FinKore rounding mode.
    *
    * @see MONEY-ROUNDING-003
    */
@@ -102,7 +102,7 @@ export interface MoneyRoundOptions {
 }
 
 /**
- * Portable FinFlow Money error code.
+ * Portable FinKore Money error code.
  *
  * Consumers that need cross-language semantics should rely on these codes
  * rather than TypeScript-specific error class names or messages.
@@ -115,9 +115,9 @@ export interface MoneyRoundOptions {
  * @see MONEY-ERROR-006
  */
 export type MoneyErrorCode =
-  | 'FINFLOW_MONEY_INVALID_AMOUNT'
-  | 'FINFLOW_MONEY_INVALID_CURRENCY'
-  | 'FINFLOW_MONEY_CURRENCY_MISMATCH'
-  | 'FINFLOW_MONEY_DIVISION_BY_ZERO'
-  | 'FINFLOW_MONEY_ROUNDING_REQUIRED'
-  | 'FINFLOW_MONEY_INVALID_ROUNDING'
+  | 'FINKORE_MONEY_INVALID_AMOUNT'
+  | 'FINKORE_MONEY_INVALID_CURRENCY'
+  | 'FINKORE_MONEY_CURRENCY_MISMATCH'
+  | 'FINKORE_MONEY_DIVISION_BY_ZERO'
+  | 'FINKORE_MONEY_ROUNDING_REQUIRED'
+  | 'FINKORE_MONEY_INVALID_ROUNDING'

@@ -1,7 +1,7 @@
 import type { WorkflowErrorCode } from './types.js'
 
 /**
- * Base TypeScript error for portable FinFlow Workflow domain failures.
+ * Base TypeScript error for portable FinKore Workflow domain failures.
  *
  * Consumers requiring cross-language semantics should rely on {@link code}
  * rather than this TypeScript-specific class name or the human-readable
@@ -11,8 +11,8 @@ import type { WorkflowErrorCode } from './types.js'
  * @see SPEC-ERROR-002
  * @see WORKFLOW-ERROR-001
  */
-export class FinFlowWorkflowError extends Error {
-  /** Stable portable FinFlow Workflow error code. */
+export class FinKoreWorkflowError extends Error {
+  /** Stable portable FinKore Workflow error code. */
   readonly code: WorkflowErrorCode
 
   /**
@@ -25,7 +25,7 @@ export class FinFlowWorkflowError extends Error {
   readonly details?: unknown
 
   /**
-   * Creates a TypeScript Workflow error carrying a portable FinFlow code.
+   * Creates a TypeScript Workflow error carrying a portable FinKore code.
    *
    * @param code - Stable portable error category.
    * @param message - Non-normative human-readable message.
@@ -33,7 +33,7 @@ export class FinFlowWorkflowError extends Error {
    */
   constructor(code: WorkflowErrorCode, message: string, options: { readonly details?: unknown } = {}) {
     super(message)
-    this.name = 'FinFlowWorkflowError'
+    this.name = 'FinKoreWorkflowError'
     this.code = code
     if (options.details !== undefined) this.details = options.details
   }
@@ -41,15 +41,15 @@ export class FinFlowWorkflowError extends Error {
 
 /**
  * TypeScript representation of the portable
- * `FINFLOW_WORKFLOW_INVALID_DEFINITION` domain error.
+ * `FINKORE_WORKFLOW_INVALID_DEFINITION` domain error.
  *
- * @see FINFLOW_WORKFLOW_INVALID_DEFINITION
+ * @see FINKORE_WORKFLOW_INVALID_DEFINITION
  * @see WORKFLOW-STATES-001
  * @see WORKFLOW-STATES-002
  * @see WORKFLOW-TRANSITION-001
  * @see WORKFLOW-TERMINAL-002
  */
-export class InvalidWorkflowDefinitionError extends FinFlowWorkflowError {
+export class InvalidWorkflowDefinitionError extends FinKoreWorkflowError {
   /**
    * Creates an invalid-definition Workflow error.
    *
@@ -57,20 +57,20 @@ export class InvalidWorkflowDefinitionError extends FinFlowWorkflowError {
    * @param details - Optional implementation-provided diagnostic context.
    */
   constructor(message = 'Invalid Workflow definition', details?: unknown) {
-    super('FINFLOW_WORKFLOW_INVALID_DEFINITION', message, { details })
+    super('FINKORE_WORKFLOW_INVALID_DEFINITION', message, { details })
     this.name = 'InvalidWorkflowDefinitionError'
   }
 }
 
 /**
  * TypeScript representation of the portable
- * `FINFLOW_WORKFLOW_INVALID_STATE` domain error.
+ * `FINKORE_WORKFLOW_INVALID_STATE` domain error.
  *
- * @see FINFLOW_WORKFLOW_INVALID_STATE
+ * @see FINKORE_WORKFLOW_INVALID_STATE
  * @see WORKFLOW-STATES-004
  * @see WORKFLOW-STATES-007
  */
-export class InvalidWorkflowStateError extends FinFlowWorkflowError {
+export class InvalidWorkflowStateError extends FinKoreWorkflowError {
   /**
    * Creates an invalid-state Workflow error.
    *
@@ -78,21 +78,21 @@ export class InvalidWorkflowStateError extends FinFlowWorkflowError {
    * @param details - Optional implementation-provided diagnostic context.
    */
   constructor(message = 'Invalid Workflow state', details?: unknown) {
-    super('FINFLOW_WORKFLOW_INVALID_STATE', message, { details })
+    super('FINKORE_WORKFLOW_INVALID_STATE', message, { details })
     this.name = 'InvalidWorkflowStateError'
   }
 }
 
 /**
  * TypeScript representation of the portable
- * `FINFLOW_WORKFLOW_INVALID_TRANSITION` domain error.
+ * `FINKORE_WORKFLOW_INVALID_TRANSITION` domain error.
  *
- * @see FINFLOW_WORKFLOW_INVALID_TRANSITION
+ * @see FINKORE_WORKFLOW_INVALID_TRANSITION
  * @see WORKFLOW-TRANSITION-002
  * @see WORKFLOW-TRANSITION-003
  * @see WORKFLOW-TRANSITION-006
  */
-export class InvalidWorkflowTransitionError extends FinFlowWorkflowError {
+export class InvalidWorkflowTransitionError extends FinKoreWorkflowError {
   /**
    * Creates an invalid-transition Workflow error.
    *
@@ -100,20 +100,20 @@ export class InvalidWorkflowTransitionError extends FinFlowWorkflowError {
    * @param details - Optional implementation-provided diagnostic context.
    */
   constructor(message = 'Invalid Workflow transition', details?: unknown) {
-    super('FINFLOW_WORKFLOW_INVALID_TRANSITION', message, { details })
+    super('FINKORE_WORKFLOW_INVALID_TRANSITION', message, { details })
     this.name = 'InvalidWorkflowTransitionError'
   }
 }
 
 /**
  * TypeScript representation of the portable
- * `FINFLOW_WORKFLOW_GUARD_REJECTED` domain error.
+ * `FINKORE_WORKFLOW_GUARD_REJECTED` domain error.
  *
- * @see FINFLOW_WORKFLOW_GUARD_REJECTED
+ * @see FINKORE_WORKFLOW_GUARD_REJECTED
  * @see WORKFLOW-GUARD-002
  * @see WORKFLOW-GUARD-003
  */
-export class WorkflowGuardRejectedError extends FinFlowWorkflowError {
+export class WorkflowGuardRejectedError extends FinKoreWorkflowError {
   /**
    * Creates a guard-rejected Workflow error.
    *
@@ -121,21 +121,21 @@ export class WorkflowGuardRejectedError extends FinFlowWorkflowError {
    * @param details - Optional implementation-provided diagnostic context.
    */
   constructor(message = 'Workflow guard rejected transition', details?: unknown) {
-    super('FINFLOW_WORKFLOW_GUARD_REJECTED', message, { details })
+    super('FINKORE_WORKFLOW_GUARD_REJECTED', message, { details })
     this.name = 'WorkflowGuardRejectedError'
   }
 }
 
 /**
  * TypeScript representation of the portable
- * `FINFLOW_WORKFLOW_TERMINAL_STATE` domain error.
+ * `FINKORE_WORKFLOW_TERMINAL_STATE` domain error.
  *
- * @see FINFLOW_WORKFLOW_TERMINAL_STATE
+ * @see FINKORE_WORKFLOW_TERMINAL_STATE
  * @see WORKFLOW-ERROR-001
  * @see WORKFLOW-TERMINAL-003
  * @see WORKFLOW-TRANSITION-006
  */
-export class WorkflowTerminalStateError extends FinFlowWorkflowError {
+export class WorkflowTerminalStateError extends FinKoreWorkflowError {
   /**
    * Creates a terminal-state Workflow error.
    *
@@ -143,18 +143,18 @@ export class WorkflowTerminalStateError extends FinFlowWorkflowError {
    * @param details - Optional implementation-provided diagnostic context.
    */
   constructor(message = 'Workflow is in a terminal state', details?: unknown) {
-    super('FINFLOW_WORKFLOW_TERMINAL_STATE', message, { details })
+    super('FINKORE_WORKFLOW_TERMINAL_STATE', message, { details })
     this.name = 'WorkflowTerminalStateError'
   }
 }
 
 /**
- * Narrows an unknown thrown value to a TypeScript FinFlow Workflow error.
+ * Narrows an unknown thrown value to a TypeScript FinKore Workflow error.
  *
  * @param error - Unknown thrown value.
- * @returns `true` when the value is a FinFlow Workflow error from this
+ * @returns `true` when the value is a FinKore Workflow error from this
  * implementation.
  */
-export function isFinFlowWorkflowError(error: unknown): error is FinFlowWorkflowError {
-  return error instanceof FinFlowWorkflowError
+export function isFinKoreWorkflowError(error: unknown): error is FinKoreWorkflowError {
+  return error instanceof FinKoreWorkflowError
 }

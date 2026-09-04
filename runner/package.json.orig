@@ -1,10 +1,10 @@
 {
-  "name": "@finflow/conformance-runner",
+  "name": "@finkore/conformance-runner",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "bin": {
-    "finflow-conformance": "./dist/cli/cli.js"
+    "finkore-conformance": "./dist/cli/cli.js"
   },
   "exports": {
     ".": {

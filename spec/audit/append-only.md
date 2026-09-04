@@ -12,9 +12,9 @@ This document defines logical preservation rules for committed Audit Events, ind
 
 - **AUDIT-APPEND-001** — Within logical audit history, a committed Audit Event MUST NOT be replaced, modified, or removed. A policy-authorized redacted representation follows [Audit Redaction](redaction.md) and MUST leave evidence of the redaction.
 - **AUDIT-APPEND-002** — An ordering relationship explicitly recorded as part of committed logical history MUST NOT later be changed.
-- **AUDIT-APPEND-003** — Submission of an already committed Audit Event identity MUST fail with `FINFLOW_AUDIT_DUPLICATE_EVENT` and MUST NOT create another committed event.
+- **AUDIT-APPEND-003** — Submission of an already committed Audit Event identity MUST fail with `FINKORE_AUDIT_DUPLICATE_EVENT` and MUST NOT create another committed event.
 - **AUDIT-APPEND-004** — Any exceptional transformation required by law or policy MUST remain detectable through compliant [redaction](redaction.md) evidence.
-- FinFlow Core does not guarantee a total ordering of independently produced concurrent Audit Events.
+- FinKore Core does not guarantee a total ordering of independently produced concurrent Audit Events.
 - **AUDIT-APPEND-006** — When timestamps do not establish a reliable ordering between independently produced Audit Events, an implementation MUST NOT assign domain meaning to their arbitrary storage or retrieval order.
 
 ## Invariants
@@ -29,7 +29,7 @@ Reading logical history later must preserve the existence and identity of every 
 
 ## Errors
 
-An attempted prohibited mutation must report `FINFLOW_AUDIT_APPEND_ONLY_VIOLATION`.
+An attempted prohibited mutation must report `FINKORE_AUDIT_APPEND_ONLY_VIOLATION`.
 
 ## Open Questions
 
@@ -37,5 +37,5 @@ An attempted prohibited mutation must report `FINFLOW_AUDIT_APPEND_ONLY_VIOLATIO
 
 ## Non-Goals
 
-This document does not prescribe event stores, ledgers, hashes, signatures, replication protocols, global sequence numbers, Lamport clocks, vector clocks, broker offsets, distributed consensus, or database transaction ordering. Correction, reversal, void, cancellation, supersession, and adjustment semantics are outside FinFlow Core Draft 0.1.
+This document does not prescribe event stores, ledgers, hashes, signatures, replication protocols, global sequence numbers, Lamport clocks, vector clocks, broker offsets, distributed consensus, or database transaction ordering. Correction, reversal, void, cancellation, supersession, and adjustment semantics are outside FinKore Core Draft 0.1.
 

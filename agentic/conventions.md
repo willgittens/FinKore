@@ -5,23 +5,23 @@
 **Draft 0.1**
 
 The normative-language and portable-value conventions in the
-[FinFlow Specification](../spec/conventions.md) apply here. The Agentic Contract
+[FinKore Specification](../spec/conventions.md) apply here. The Agentic Contract
 adds operational metadata; it does not add or alter financial rules.
 
-## FinFlow Operation
+## FinKore Operation
 
-A **FinFlow Operation** is a stable, language-independent identifier for an
+A **FinKore Operation** is a stable, language-independent identifier for an
 observable domain capability. Its identifier has the form:
 
 ```text
-finflow.<domain>.<operation>
+finkore.<domain>.<operation>
 ```
 
-Examples are `finflow.money.add` and `finflow.workflow.transition`.
+Examples are `finkore.money.add` and `finkore.workflow.transition`.
 
 An operation ID:
 
-- MUST be globally unique within FinFlow;
+- MUST be globally unique within FinKore;
 - MUST remain independent of TypeScript methods, Java classes, package names,
   framework routes, HTTP URLs, and tool-provider naming;
 - MUST map to one clear semantic operation;
@@ -37,7 +37,7 @@ an open question.
 
 These identifiers serve different purposes. An operation ID names a capability;
 a requirement ID anchors a normative rule. For example,
-`finflow.money.add` is governed by multiple `MONEY-*` requirements. One
+`finkore.money.add` is governed by multiple `MONEY-*` requirements. One
 requirement may govern several operations, and one operation may reference many
 requirements. The two identifier systems MUST NOT be collapsed.
 
@@ -56,7 +56,7 @@ This illustrative JSON is non-normative:
 
 ```json
 {
-  "id": "finflow.money.add",
+  "id": "finkore.money.add",
   "domain": "money",
   "summary": "Adds two compatible Money values.",
   "requirements": [

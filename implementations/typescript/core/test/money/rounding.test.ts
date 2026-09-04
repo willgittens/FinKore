@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { FinFlowMoneyError, InvalidMoneyRoundingError, Money } from '../../src/index.js'
+import { FinKoreMoneyError, InvalidMoneyRoundingError, Money } from '../../src/index.js'
 import type { MoneyRoundOptions, RoundingMode } from '../../src/index.js'
 
 function rounded(amount: string, scale: number, mode: RoundingMode): string {
@@ -7,7 +7,7 @@ function rounded(amount: string, scale: number, mode: RoundingMode): string {
 }
 
 describe('Money rounding', () => {
-  it('requires an explicit target scale and supported FinFlow rounding mode', () => {
+  it('requires an explicit target scale and supported FinKore rounding mode', () => {
     const money = Money.from({ amount: '1.235', currency: 'EUR' })
     const invalidOptions: MoneyRoundOptions[] = [
       { scale: -1, mode: 'HALF_UP' },
@@ -24,8 +24,8 @@ describe('Money rounding', () => {
       try {
         money.round(options)
       } catch (error) {
-        expect(error).toBeInstanceOf(FinFlowMoneyError)
-        expect((error as FinFlowMoneyError).code).toBe('FINFLOW_MONEY_INVALID_ROUNDING')
+        expect(error).toBeInstanceOf(FinKoreMoneyError)
+        expect((error as FinKoreMoneyError).code).toBe('FINKORE_MONEY_INVALID_ROUNDING')
       }
     }
 

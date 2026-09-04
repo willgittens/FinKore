@@ -1,5 +1,5 @@
 {
-  "finflowVectorFile": "0.1",
+  "finkoreVectorFile": "0.1",
   "vectors": [
     {
       "id": "workflow.create.initial-state-001",
@@ -97,7 +97,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_WORKFLOW_INVALID_DEFINITION"
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
         }
       },
       "tags": [
@@ -136,7 +136,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_WORKFLOW_INVALID_DEFINITION"
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
         }
       },
       "tags": [
@@ -176,7 +176,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_WORKFLOW_INVALID_DEFINITION"
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
         }
       },
       "tags": [
@@ -195,7 +195,7 @@
         "WORKFLOW-TRANSITION-005"
       ],
       "description": "Applies one declared directed transition exactly once.",
-      "operation": "finflow.workflow.transition",
+      "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
           "states": [
@@ -259,7 +259,7 @@
         "WORKFLOW-ERROR-003"
       ],
       "description": "Does not infer the reverse of a declared transition.",
-      "operation": "finflow.workflow.transition",
+      "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
           "states": [
@@ -301,7 +301,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_WORKFLOW_INVALID_TRANSITION"
+          "code": "FINKORE_WORKFLOW_INVALID_TRANSITION"
         },
         "observations": {
           "currentState": "SUBMITTED"
@@ -326,7 +326,7 @@
         "WORKFLOW-ERROR-003"
       ],
       "description": "Rejects an undeclared direct transition and preserves state.",
-      "operation": "finflow.workflow.transition",
+      "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
           "states": [
@@ -368,7 +368,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_WORKFLOW_INVALID_TRANSITION"
+          "code": "FINKORE_WORKFLOW_INVALID_TRANSITION"
         },
         "observations": {
           "currentState": "DRAFT"
@@ -393,7 +393,7 @@
         "WORKFLOW-TRANSITION-004"
       ],
       "description": "Allows a declared transition when its required guard passes on supplied facts.",
-      "operation": "finflow.workflow.transition",
+      "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
           "states": [
@@ -456,7 +456,7 @@
         "WORKFLOW-GUARD-003"
       ],
       "description": "Rejects a transition when its guard fails and changes neither state nor facts.",
-      "operation": "finflow.workflow.transition",
+      "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
           "states": [
@@ -500,7 +500,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_WORKFLOW_GUARD_REJECTED"
+          "code": "FINKORE_WORKFLOW_GUARD_REJECTED"
         },
         "observations": {
           "currentState": "SUBMITTED",
@@ -529,7 +529,7 @@
         "WORKFLOW-TRANSITION-004"
       ],
       "description": "Allows a declared transition only when every applicable guard passes on supplied facts.",
-      "operation": "finflow.workflow.transition",
+      "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
           "states": [
@@ -596,7 +596,7 @@
         "WORKFLOW-TRANSITION-006"
       ],
       "description": "Rejects a transition when one of multiple guards fails and preserves supplied facts and current state.",
-      "operation": "finflow.workflow.transition",
+      "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
           "states": [
@@ -641,7 +641,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_WORKFLOW_GUARD_REJECTED"
+          "code": "FINKORE_WORKFLOW_GUARD_REJECTED"
         },
         "observations": {
           "currentState": "SUBMITTED",
@@ -672,7 +672,7 @@
         "WORKFLOW-TRANSITION-005"
       ],
       "description": "Allows a declared transition into an explicitly terminal target state.",
-      "operation": "finflow.workflow.transition",
+      "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
           "states": [
@@ -723,7 +723,7 @@
         "WORKFLOW-ERROR-003"
       ],
       "description": "A state with no outgoing transition is not terminal unless the definition explicitly identifies it as terminal.",
-      "operation": "finflow.workflow.transition",
+      "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
           "states": [
@@ -743,7 +743,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_WORKFLOW_INVALID_TRANSITION"
+          "code": "FINKORE_WORKFLOW_INVALID_TRANSITION"
         },
         "observations": {
           "currentState": "COMPLETE"
@@ -772,7 +772,7 @@
         "WORKFLOW-TRANSITION-006"
       ],
       "description": "A terminal-state request reports the terminal error even when no transition is declared.",
-      "operation": "finflow.workflow.transition",
+      "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
           "states": [
@@ -814,7 +814,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_WORKFLOW_TERMINAL_STATE"
+          "code": "FINKORE_WORKFLOW_TERMINAL_STATE"
         },
         "observations": {
           "currentState": "APPROVED"

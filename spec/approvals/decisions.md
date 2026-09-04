@@ -59,5 +59,5 @@ Invalid decisions must use an applicable [Approval Error](errors.md).
 
 ## Non-Goals
 
-FinFlow Core Draft 0.1 does not define withdrawal, supersession, delegation, expiration, escalation, approval-definition migration, or complex dependency graphs. Subject-state association is semantic; this document does not require revision identifiers, version numbers, hashes, snapshots, or immutable references.
+FinKore Core Draft 0.1 does not define withdrawal, supersession, delegation, expiration, escalation, approval-definition migration, or complex dependency graphs. Subject-state association is semantic; this document does not require revision identifiers, version numbers, hashes, snapshots, or immutable references.
 

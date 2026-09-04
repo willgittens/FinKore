@@ -1,5 +1,5 @@
 {
-  "finflowVectorFile": "0.1",
+  "finkoreVectorFile": "0.1",
   "vectors": [
     {
       "id": "money.compare.equal-trailing-zeros-001",
@@ -10,7 +10,7 @@
         "MONEY-REPRESENTATION-005"
       ],
       "description": "Treats insignificant trailing zeros as numerically equal.",
-      "operation": "finflow.money.compare",
+      "operation": "finkore.money.compare",
       "input": {
         "left": {
           "amount": "10.0",
@@ -50,7 +50,7 @@
         "MONEY-COMPARISON-003"
       ],
       "description": "Orders a smaller compatible-currency amount before a larger one.",
-      "operation": "finflow.money.compare",
+      "operation": "finkore.money.compare",
       "input": {
         "left": {
           "amount": "9.99",
@@ -90,7 +90,7 @@
         "MONEY-COMPARISON-003"
       ],
       "description": "Orders a less-negative value above a more-negative value.",
-      "operation": "finflow.money.compare",
+      "operation": "finkore.money.compare",
       "input": {
         "left": {
           "amount": "-1.00",
@@ -132,7 +132,7 @@
         "MONEY-COMPARISON-006"
       ],
       "description": "Compares zero representations numerically.",
-      "operation": "finflow.money.compare",
+      "operation": "finkore.money.compare",
       "input": {
         "left": {
           "amount": "0",
@@ -173,7 +173,7 @@
         "MONEY-ERROR-007"
       ],
       "description": "Rejects equality comparison across currencies.",
-      "operation": "finflow.money.compare",
+      "operation": "finkore.money.compare",
       "input": {
         "left": {
           "amount": "10.00",
@@ -187,7 +187,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_MONEY_CURRENCY_MISMATCH"
+          "code": "FINKORE_MONEY_CURRENCY_MISMATCH"
         },
         "observations": {
           "left": {
@@ -219,7 +219,7 @@
         "MONEY-ERROR-007"
       ],
       "description": "Rejects ordering comparison across currencies even when digits differ.",
-      "operation": "finflow.money.compare",
+      "operation": "finkore.money.compare",
       "input": {
         "left": {
           "amount": "1.00",
@@ -233,7 +233,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_MONEY_CURRENCY_MISMATCH"
+          "code": "FINKORE_MONEY_CURRENCY_MISMATCH"
         },
         "observations": {
           "left": {

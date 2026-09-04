@@ -6,14 +6,14 @@
 
 ## Purpose
 
-This document defines currency identity and compatibility for Money values that use ISO 4217 identifiers in FinFlow Core Draft 0.1.
+This document defines currency identity and compatibility for Money values that use ISO 4217 identifiers in FinKore Core Draft 0.1.
 
 ## Requirements
 
 - **MONEY-CURRENCY-001** — A currency identifier MUST be non-empty and unambiguous within its declared context.
 - **MONEY-CURRENCY-002** — Currency identifiers SHOULD use ISO 4217 alphabetic codes when representing currencies covered by ISO 4217.
 - **MONEY-CURRENCY-003** — Within this document's normative scope, two Money values MUST be considered currency-compatible only when they use the same ISO 4217 currency identifier.
-- **MONEY-CURRENCY-004** — Operations that require currency compatibility MUST fail with `FINFLOW_MONEY_CURRENCY_MISMATCH` when currencies are incompatible. Conversion is a separate explicit operation outside this specification.
+- **MONEY-CURRENCY-004** — Operations that require currency compatibility MUST fail with `FINKORE_MONEY_CURRENCY_MISMATCH` when currencies are incompatible. Conversion is a separate explicit operation outside this specification.
 - **MONEY-CURRENCY-005** — Currency metadata MUST NOT be treated as an exchange rate.
 The uppercase rule for ISO 4217 identifiers is **SPEC-CURRENCY-002** in [Specification Conventions](../conventions.md).
 
@@ -36,9 +36,9 @@ The applicable failure conditions are defined in [Money Errors](errors.md).
 
 ## Open Questions
 
-- Should a future FinFlow specification define a namespace for application-defined or non-ISO currency identifiers?
+- Should a future FinKore specification define a namespace for application-defined or non-ISO currency identifiers?
 
 ## Non-Goals
 
-This document does not define exchange rates, redenomination, currency availability dates, or display symbols. Application-defined currencies, crypto assets, tokens, loyalty points, internal credits, and other non-ISO identifiers are outside the normative scope of FinFlow Core Draft 0.1; this exclusion does not prohibit a composing application from supporting them.
+This document does not define exchange rates, redenomination, currency availability dates, or display symbols. Application-defined currencies, crypto assets, tokens, loyalty points, internal credits, and other non-ISO identifiers are outside the normative scope of FinKore Core Draft 0.1; this exclusion does not prohibit a composing application from supporting them.
 

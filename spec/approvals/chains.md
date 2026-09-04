@@ -44,5 +44,5 @@ The arrow denotes a sequential chain. `AND` denotes an unordered all-required ch
 
 ## Non-Goals
 
-FinFlow Core Draft 0.1 does not define quorum, any-of, delegation, complex dependency graphs, or migration between Approval Chain definitions.
+FinKore Core Draft 0.1 does not define quorum, any-of, delegation, complex dependency graphs, or migration between Approval Chain definitions.
 

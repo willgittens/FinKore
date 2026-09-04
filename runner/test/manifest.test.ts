@@ -3,7 +3,7 @@ import { RunnerInfrastructureError } from '../src/errors/runner-errors.js'
 import { validateManifest } from '../src/manifest.js'
 
 const valid = {
-  finflowConformance: '0.1',
+  finkoreConformance: '0.1',
   vectorSchema: './schema.json',
   suites: [{ id: 'money', vectorFiles: ['./money.json'] }],
 }
@@ -12,7 +12,7 @@ describe('manifest validation', () => {
   it('accepts a valid manifest', () => expect(validateManifest(valid)).toEqual(valid))
 
   it.each([
-    [{ ...valid, finflowConformance: '0.2' }, 'version'],
+    [{ ...valid, finkoreConformance: '0.2' }, 'version'],
     [{ ...valid, vectorSchema: '' }, 'vectorSchema'],
     [{ ...valid, suites: [] }, 'suites'],
     [{ ...valid, suites: [{ id: 'Money', vectorFiles: ['./x'] }] }, 'invalid id'],

@@ -58,7 +58,7 @@ function assertUnique(values: readonly string[]): void {
 }
 
 /**
- * Validated FinFlow Workflow definition.
+ * Validated FinKore Workflow definition.
  *
  * Definitions declare exactly one initial state, explicit terminal states,
  * directed transitions between declared states, and optional fact-equality
@@ -113,7 +113,7 @@ export class WorkflowDefinition {
    * @throws {InvalidWorkflowDefinitionError}
    * When the definition violates Draft 0.1 structural requirements.
    *
-   * @see FINFLOW_WORKFLOW_INVALID_DEFINITION
+   * @see FINKORE_WORKFLOW_INVALID_DEFINITION
    * @see WORKFLOW-STATES-001
    * @see WORKFLOW-STATES-002
    * @see WORKFLOW-GUARD-001

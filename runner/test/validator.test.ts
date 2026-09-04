@@ -5,7 +5,7 @@ import { metadata, validVector } from './helpers.js'
 describe('vector validation', () => {
   it('accepts valid success and error vectors', () => {
     expect(validateVector(validVector, metadata)).toEqual(validVector)
-    const error = { ...validVector, expected: { status: 'error', error: { code: 'FINFLOW_MONEY_BAD_INPUT' } }, tags: ['negative'] }
+    const error = { ...validVector, expected: { status: 'error', error: { code: 'FINKORE_MONEY_BAD_INPUT' } }, tags: ['negative'] }
     expect(validateVector(error, metadata).expected).toEqual(error.expected)
   })
 
@@ -33,21 +33,21 @@ describe('vector validation', () => {
     [{ ...validVector, requirements: ['UNKNOWN-RULE-001'] }, 'unknown requirement'],
     [{ ...validVector, operation: undefined }, 'operation id'],
     [{ ...validVector, operation: 4 }, 'operation id'],
-    [{ ...validVector, operation: ['finflow.money.add'] }, 'operation id'],
+    [{ ...validVector, operation: ['finkore.money.add'] }, 'operation id'],
     [{ ...validVector, operation: 'Money.add' }, 'operation id'],
-    [{ ...validVector, operation: 'finflow.money.unknown' }, 'unknown operation'],
+    [{ ...validVector, operation: 'finkore.money.unknown' }, 'unknown operation'],
     [{ ...validVector, tags: ['unknown'] }, 'tags'],
     [{ ...validVector, tags: ['positive', 'positive'] }, 'duplicates'],
     [{ ...validVector, guardsAgainst: ['Bad Guard'] }, 'guardsAgainst'],
     [{ ...validVector, guardsAgainst: [4] }, 'entries must be strings'],
     [{ ...validVector, expected: null }, 'expected must be an object'],
-    [{ ...validVector, expected: { status: 'success', value: 1, error: { code: 'FINFLOW_MONEY_BAD' } } }, 'both value and error'],
+    [{ ...validVector, expected: { status: 'success', value: 1, error: { code: 'FINKORE_MONEY_BAD' } } }, 'both value and error'],
     [{ ...validVector, expected: { status: 'success' } }, 'either value or error'],
-    [{ ...validVector, expected: { status: 'success', error: { code: 'FINFLOW_MONEY_BAD' } } }, 'success expectation'],
+    [{ ...validVector, expected: { status: 'success', error: { code: 'FINKORE_MONEY_BAD' } } }, 'success expectation'],
     [{ ...validVector, expected: { status: 'error', value: 1 } }, 'error expectation'],
     [{ ...validVector, expected: { status: 'error', error: null } }, 'portable error code'],
     [{ ...validVector, expected: { status: 'error', error: { code: 3 } } }, 'portable error code'],
-    [{ ...validVector, expected: { status: 'error', error: { code: ['FINFLOW_MONEY_BAD'] } } }, 'portable error code'],
+    [{ ...validVector, expected: { status: 'error', error: { code: ['FINKORE_MONEY_BAD'] } } }, 'portable error code'],
     [{ ...validVector, expected: { status: 'error', error: { code: 'bad' } } }, 'portable error code'],
     [{ ...validVector, expected: { status: 'other', value: 1 } }, 'status'],
     [{ ...validVector, expected: { status: 'success', value: 1, observations: [] } }, 'observations'],
@@ -55,9 +55,9 @@ describe('vector validation', () => {
     expect(() => validateVector(candidate, metadata)).toThrow(message)
   })
 
-  it('rejects a finflow-prefixed operation absent from the Agentic registry', () => {
-    const divergent = { ...metadata, operationIds: new Set([...metadata.operationIds, 'finflow.money.future']) }
-    expect(() => validateVector({ ...validVector, operation: 'finflow.money.future' }, divergent)).toThrow('unregistered Agentic')
+  it('rejects a finkore-prefixed operation absent from the Agentic registry', () => {
+    const divergent = { ...metadata, operationIds: new Set([...metadata.operationIds, 'finkore.money.future']) }
+    expect(() => validateVector({ ...validVector, operation: 'finkore.money.future' }, divergent)).toThrow('unregistered Agentic')
   })
 
   it('accepts registered conformance-local operation vocabulary', () => {
@@ -74,31 +74,31 @@ describe('vector validation', () => {
   })
 
   it('validates vector file version and contents', () => {
-    expect(validateVectorFile({ finflowVectorFile: '0.1', vectors: [validVector] }, metadata, 'x').vectors).toHaveLength(1)
+    expect(validateVectorFile({ finkoreVectorFile: '0.1', vectors: [validVector] }, metadata, 'x').vectors).toHaveLength(1)
     expect(() => validateVectorFile(null, metadata, 'x')).toThrow('Vector file must be an object')
-    expect(() => validateVectorFile({ finflowVectorFile: '0.1', vectors: null }, metadata, 'x')).toThrow('vectors array')
-    expect(() => validateVectorFile({ finflowVectorFile: '0.2', vectors: [validVector] }, metadata, 'x')).toThrow('version')
-    expect(() => validateVectorFile({ finflowVectorFile: '0.1', vectors: [] }, metadata, 'x')).toThrow('non-empty')
+    expect(() => validateVectorFile({ finkoreVectorFile: '0.1', vectors: null }, metadata, 'x')).toThrow('vectors array')
+    expect(() => validateVectorFile({ finkoreVectorFile: '0.2', vectors: [validVector] }, metadata, 'x')).toThrow('version')
+    expect(() => validateVectorFile({ finkoreVectorFile: '0.1', vectors: [] }, metadata, 'x')).toThrow('non-empty')
   })
 })
 
 describe('adapter result validation', () => {
   it.each([
     { status: 'success', value: null },
-    { status: 'error', error: { code: 'FINFLOW_MONEY_BAD_INPUT' } },
-    { status: 'error', error: { code: 'FINFLOW_MONEY_BAD_INPUT', details: { native: 3 } }, observations: {} },
+    { status: 'error', error: { code: 'FINKORE_MONEY_BAD_INPUT' } },
+    { status: 'error', error: { code: 'FINKORE_MONEY_BAD_INPUT', details: { native: 3 } }, observations: {} },
   ])('accepts a normalized result', (result) => expect(isNormalizedResult(result)).toBe(true))
 
   it.each([
     null,
     { status: 'success' },
     { status: 'success', value: 1, error: {} },
-    { status: 'error', value: 1, error: { code: 'FINFLOW_MONEY_BAD_INPUT' } },
+    { status: 'error', value: 1, error: { code: 'FINKORE_MONEY_BAD_INPUT' } },
     { status: 'error', error: { code: 'bad' } },
     { status: 'error', error: { code: 4 } },
-    { status: 'error', error: { code: ['FINFLOW_MONEY_BAD_INPUT'] } },
+    { status: 'error', error: { code: ['FINKORE_MONEY_BAD_INPUT'] } },
     { status: 'error', error: null },
-    { status: 'other', error: { code: 'FINFLOW_MONEY_BAD_INPUT' } },
+    { status: 'other', error: { code: 'FINKORE_MONEY_BAD_INPUT' } },
     { status: 'success', value: 1, observations: [] },
   ])('rejects invalid normalized result', (result) => expect(isNormalizedResult(result)).toBe(false))
 })

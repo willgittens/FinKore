@@ -1,5 +1,5 @@
 {
-  "finflowVectorFile": "0.1",
+  "finkoreVectorFile": "0.1",
   "vectors": [
     {
       "id": "approval.requirement.pending-001",
@@ -256,7 +256,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_APPROVAL_INVALID_DECISION"
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
         },
         "observations": {
           "history": []
@@ -309,7 +309,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_APPROVAL_INELIGIBLE_ACTOR"
+          "code": "FINKORE_APPROVAL_INELIGIBLE_ACTOR"
         },
         "observations": {
           "history": []
@@ -468,7 +468,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_APPROVAL_CONDITION_UNRESOLVED"
+          "code": "FINKORE_APPROVAL_CONDITION_UNRESOLVED"
         }
       },
       "tags": [

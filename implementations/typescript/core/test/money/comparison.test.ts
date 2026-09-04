@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { CurrencyMismatchError, FinFlowMoneyError, Money } from '../../src/index.js'
+import { CurrencyMismatchError, FinKoreMoneyError, Money } from '../../src/index.js'
 
 describe('Money comparison', () => {
   it('treats numerically equal decimal representations as equal', () => {
@@ -65,8 +65,8 @@ describe('Money comparison', () => {
       try {
         left.compare(other)
       } catch (error) {
-        expect(error).toBeInstanceOf(FinFlowMoneyError)
-        expect((error as FinFlowMoneyError).code).toBe('FINFLOW_MONEY_CURRENCY_MISMATCH')
+        expect(error).toBeInstanceOf(FinKoreMoneyError)
+        expect((error as FinKoreMoneyError).code).toBe('FINKORE_MONEY_CURRENCY_MISMATCH')
       }
     }
 

@@ -1,4 +1,4 @@
-# FinFlow Agentic Contract
+# FinKore Agentic Contract
 
 ## Status
 
@@ -6,19 +6,19 @@
 
 > Agent-ready by contract, not by convention.
 
-FinFlow's Agentic Contract describes portable operational semantics for agents,
+FinKore's Agentic Contract describes portable operational semantics for agents,
 autonomous systems, tool runtimes, and other machine clients. It lets a client
 discover a capability, understand its contract, and govern its use without
 depending on a programming language, framework, or transport.
 
-> FinFlow does not make financial operations safer by trusting agents. It makes
+> FinKore does not make financial operations safer by trusting agents. It makes
 > agent behavior safer by exposing the same explicit domain constraints that
 > govern every other client.
 
 ## Architectural position
 
 ```text
-                FinFlow
+                FinKore
                    │
         ┌──────────┴──────────┐
         │                     │
@@ -52,7 +52,7 @@ middleware, or reference implementation.
 
 ## Agentic readiness
 
-FinFlow separates four dimensions:
+FinKore separates four dimensions:
 
 1. **Discoverable** — a machine client can determine which operations exist and
    each operation's stable ID, domain, and purpose.
@@ -66,7 +66,7 @@ FinFlow separates four dimensions:
 The Core Agentic Contract defines Discoverable, Understandable, and Governable
 semantics. Executable adapters are outside Draft 0.1.
 
-For FinFlow Draft 0.1, an operation is **Agentic Ready** when it is Discoverable,
+For FinKore Draft 0.1, an operation is **Agentic Ready** when it is Discoverable,
 Understandable, Governable, and Conformance-traceable. Direct execution through
 an agent framework is not required.
 
@@ -101,10 +101,10 @@ An operation may be considered Agentic Contract-ready when:
 ## Open questions
 
 - How should incompatible operation-contract changes be versioned?
-- Should FinFlow define a machine-readable capability manifest?
+- Should FinKore define a machine-readable capability manifest?
 - Should all effects use booleans, or richer states such as `none`, `may`, and
   `required`?
 - Should operations declare idempotency semantics?
-- Should FinFlow define policy hints for autonomous execution?
+- Should FinKore define policy hints for autonomous execution?
 - How should future financial commitment and finality semantics be represented?
 

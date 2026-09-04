@@ -1,5 +1,5 @@
 {
-  "finflowVectorFile": "0.1",
+  "finkoreVectorFile": "0.1",
   "vectors": [
     {
       "id": "entity.create.initial-lifecycle-001",
@@ -237,7 +237,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_ENTITY_IMMUTABLE"
+          "code": "FINKORE_ENTITY_IMMUTABLE"
         },
         "observations": {
           "entity": {
@@ -430,7 +430,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_ENTITY_VALIDATION_FAILED"
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
         },
         "observations": {
           "entity": {
@@ -613,7 +613,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINFLOW_WORKFLOW_INVALID_TRANSITION"
+          "code": "FINKORE_WORKFLOW_INVALID_TRANSITION"
         },
         "observations": {
           "entity": {

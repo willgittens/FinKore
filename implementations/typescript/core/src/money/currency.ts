@@ -3,7 +3,7 @@ import { InvalidCurrencyError } from './errors.js'
 const ISO_4217_ALPHABETIC_CODE = /^[A-Z]{3}$/u
 
 /**
- * TypeScript representation of a FinFlow Money currency identifier.
+ * TypeScript representation of a FinKore Money currency identifier.
  *
  * This abstraction preserves and validates the identifier used with a Money
  * amount. It does not provide exchange rates, conversion, symbols, minor-unit
@@ -16,7 +16,7 @@ const ISO_4217_ALPHABETIC_CODE = /^[A-Z]{3}$/u
 export class Currency {
   /**
    * Uppercase ISO 4217 alphabetic currency identifier for this milestone's
-   * normative FinFlow scope.
+   * normative FinKore scope.
    */
   readonly code: string
 
@@ -31,10 +31,10 @@ export class Currency {
    * normalization.
    * @returns A Currency preserving the supplied identifier.
    * @throws {InvalidCurrencyError}
-   * When the identifier is missing or invalid for the current FinFlow Money
+   * When the identifier is missing or invalid for the current FinKore Money
    * scope.
    *
-   * @see FINFLOW_MONEY_INVALID_CURRENCY
+   * @see FINKORE_MONEY_INVALID_CURRENCY
    * @see MONEY-ERROR-002
    * @see SPEC-CURRENCY-002
    */

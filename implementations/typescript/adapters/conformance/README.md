@@ -1,17 +1,17 @@
-# FinFlow TypeScript Conformance Adapter
+# FinKore TypeScript Conformance Adapter
 
-Adapter from FinFlow conformance operation IDs to the TypeScript reference implementation.
+Adapter from FinKore conformance operation IDs to the TypeScript reference implementation.
 
 This milestone supports:
 
-- `finflow.money.add`
-- `finflow.money.compare`
-- `finflow.money.divide`
-- `finflow.money.multiply`
-- `finflow.money.negate`
-- `finflow.money.round`
-- `finflow.money.subtract`
-- `finflow.workflow.transition`
+- `finkore.money.add`
+- `finkore.money.compare`
+- `finkore.money.divide`
+- `finkore.money.multiply`
+- `finkore.money.negate`
+- `finkore.money.round`
+- `finkore.money.subtract`
+- `finkore.workflow.transition`
 - `money.deserialize`
 - `money.serialize`
 - `workflow.create`
@@ -21,7 +21,7 @@ boundary checks for portable Money JSON. They are not advertised as Agentic
 Contract operations in Draft 0.1.
 
 `workflow.create` is conformance-local vocabulary for validating Workflow
-definition and initial-state behavior. `finflow.workflow.transition` is the
+definition and initial-state behavior. `finkore.workflow.transition` is the
 canonical Workflow operation ID currently listed in the Agentic Contract.
 
 It does not claim support for audit, approvals, entities, MCP, executable agent

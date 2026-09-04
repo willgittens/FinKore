@@ -11,17 +11,17 @@ Illustrative, non-normative discovery data:
 {
   "operations": [
     {
-      "id": "finflow.money.add",
+      "id": "finkore.money.add",
       "domain": "money",
       "summary": "Adds two compatible Money values."
     },
     {
-      "id": "finflow.money.divide",
+      "id": "finkore.money.divide",
       "domain": "money",
       "summary": "Divides Money by a non-zero exact decimal scalar."
     },
     {
-      "id": "finflow.money.round",
+      "id": "finkore.money.round",
       "domain": "money",
       "summary": "Rounds Money using an explicit target scale and mode."
     }
@@ -35,7 +35,7 @@ then inspect the fuller contract described in [Operations](operations.md),
 
 The returned collection MUST reflect the implementation's actual supported
 subset. Collection order carries no meaning, and absence means the operation was
-not advertised; it does not prove that an equivalent non-FinFlow API is absent.
+not advertised; it does not prove that an equivalent non-FinKore API is absent.
 
 Draft 0.1 creates no `operations.json`. A machine-readable manifest should be
 added only after the descriptor model and its versioning policy are stable, with

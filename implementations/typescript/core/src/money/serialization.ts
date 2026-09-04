@@ -4,19 +4,19 @@ import type { SerializedMoney } from './types.js'
 const PLAIN_DECIMAL = /^-?\d+(?:\.\d+)?$/u
 
 /**
- * Validates a FinFlow serialized Money amount without converting through
+ * Validates a FinKore serialized Money amount without converting through
  * JavaScript `number`.
  *
  * Keeping validation in string space preserves exact base-10 semantics and
  * rejects host-language floating-point inputs, exponential notation,
  * non-finite tokens, and leading plus signs.
  *
- * @param value - Candidate amount in FinFlow's portable decimal encoding.
+ * @param value - Candidate amount in FinKore's portable decimal encoding.
  * @returns The validated decimal amount string.
  * @throws {InvalidMoneyAmountError}
  * When the value is missing, malformed, non-finite, or unsupported.
  *
- * @see FINFLOW_MONEY_INVALID_AMOUNT
+ * @see FINKORE_MONEY_INVALID_AMOUNT
  * @see MONEY-REPRESENTATION-002
  * @see MONEY-SERIALIZATION-002
  * @see MONEY-SERIALIZATION-003
@@ -39,7 +39,7 @@ export function validateSerializedAmount(value: unknown): string {
  *
  * @param amount - Validated exact decimal monetary amount.
  * @param currency - Validated currency identifier associated with the amount.
- * @returns A locale-independent FinFlow Money serialization.
+ * @returns A locale-independent FinKore Money serialization.
  *
  * @see MONEY-SERIALIZATION-001
  * @see MONEY-SERIALIZATION-002

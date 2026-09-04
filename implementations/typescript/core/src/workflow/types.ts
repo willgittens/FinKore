@@ -1,5 +1,5 @@
 /**
- * State identifier for FinFlow Workflow definitions and instances.
+ * State identifier for FinKore Workflow definitions and instances.
  *
  * Identifiers are domain names and are preserved exactly. The TypeScript core
  * does not normalize case, whitespace, or labels into alternate forms.
@@ -10,7 +10,7 @@
 export type WorkflowStateIdentifier = string
 
 /**
- * Portable FinFlow Workflow error code.
+ * Portable FinKore Workflow error code.
  *
  * Consumers that need cross-language semantics should rely on these codes
  * rather than TypeScript-specific error class names or messages.
@@ -19,11 +19,11 @@ export type WorkflowStateIdentifier = string
  * @see WORKFLOW-ERROR-003
  */
 export type WorkflowErrorCode =
-  | 'FINFLOW_WORKFLOW_INVALID_DEFINITION'
-  | 'FINFLOW_WORKFLOW_INVALID_STATE'
-  | 'FINFLOW_WORKFLOW_INVALID_TRANSITION'
-  | 'FINFLOW_WORKFLOW_GUARD_REJECTED'
-  | 'FINFLOW_WORKFLOW_TERMINAL_STATE'
+  | 'FINKORE_WORKFLOW_INVALID_DEFINITION'
+  | 'FINKORE_WORKFLOW_INVALID_STATE'
+  | 'FINKORE_WORKFLOW_INVALID_TRANSITION'
+  | 'FINKORE_WORKFLOW_GUARD_REJECTED'
+  | 'FINKORE_WORKFLOW_TERMINAL_STATE'
 
 /**
  * Guard condition supported by the Draft 0.1 TypeScript Workflow milestone.

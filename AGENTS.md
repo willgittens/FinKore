@@ -1,16 +1,16 @@
-# FinFlow — Codex Agent Instructions
+# FinKore — Codex Agent Instructions
 
 ## Project Overview
 
-FinFlow is an open-source, language-agnostic specification for building predictable, auditable, and portable financial domain logic.
+FinKore is an open-source, language-agnostic specification for building predictable, auditable, and portable financial domain logic.
 
 Core idea:
 
 > CRUD is easy. Financial CRUD isn't.
 
-FinFlow is **specification-first**.
+FinKore is **specification-first**.
 
-The FinFlow specification is the source of truth. TypeScript, Java, and future implementations are implementations of the specification, not the definition of FinFlow itself.
+The FinKore specification is the source of truth. TypeScript, Java, and future implementations are implementations of the specification, not the definition of FinKore itself.
 
 The project is designed around four major layers:
 
@@ -60,7 +60,7 @@ If behavior is ambiguous, stop and identify the specification gap rather than si
 
 ## `/conformance`
 
-Defines how FinFlow behavior is verified.
+Defines how FinKore behavior is verified.
 
 Contains:
 
@@ -81,7 +81,7 @@ If a test vector expects behavior that is not defined by `/spec`, report the inc
 
 ## `/agentic`
 
-Defines the FinFlow Agentic Contract.
+Defines the FinKore Agentic Contract.
 
 Purpose:
 
@@ -101,17 +101,17 @@ It provides machine-understandable operation semantics such as:
 Canonical operation identifiers use:
 
 ```text
-finflow.<domain>.<operation>
+finkore.<domain>.<operation>
 ```
 
 Examples:
 
 ```text
-finflow.money.add
-finflow.money.subtract
-finflow.money.compare
-finflow.money.round
-finflow.workflow.transition
+finkore.money.add
+finkore.money.subtract
+finkore.money.compare
+finkore.money.round
+finkore.workflow.transition
 ```
 
 Do NOT invent alternate operation IDs.
@@ -132,7 +132,7 @@ The runner:
 
 - loads conformance vectors;
 - validates them;
-- dispatches canonical FinFlow operation IDs;
+- dispatches canonical FinKore operation IDs;
 - calls an implementation adapter;
 - compares normalized results;
 - reports PASS / FAIL / UNSUPPORTED / INFRASTRUCTURE_ERROR.
@@ -167,7 +167,7 @@ Current runner quality baseline:
 
 ## `/implementations`
 
-Contains language-specific FinFlow implementations.
+Contains language-specific FinKore implementations.
 
 Expected structure:
 
@@ -181,7 +181,7 @@ implementations/
 └── future-language/
 ```
 
-The TypeScript implementation is a reference implementation, not the canonical FinFlow definition.
+The TypeScript implementation is a reference implementation, not the canonical FinKore definition.
 
 ---
 
@@ -198,7 +198,7 @@ implementations/typescript/
 
 ## `core`
 
-Implements FinFlow financial domain behavior.
+Implements FinKore financial domain behavior.
 
 It MAY depend on normal language/runtime libraries required to implement the specification.
 
@@ -234,7 +234,7 @@ Never reverse this dependency.
 Translates between:
 
 ```text
-canonical FinFlow operation IDs
+canonical FinKore operation IDs
         ↓
 TypeScript implementation API
         ↓
@@ -264,7 +264,7 @@ Incorrect:
 if (left.currency !== right.currency) {
   return {
     status: 'error',
-    error: { code: 'FINFLOW_MONEY_CURRENCY_MISMATCH' }
+    error: { code: 'FINKORE_MONEY_CURRENCY_MISMATCH' }
   }
 }
 ```
@@ -275,7 +275,7 @@ Currency compatibility belongs in the core implementation.
 
 # Development Methodology
 
-FinFlow uses strict specification-driven TDD.
+FinKore uses strict specification-driven TDD.
 
 For new financial behavior, use this sequence:
 
@@ -320,7 +320,7 @@ Before implementing a feature:
 
 # Testing Standards
 
-FinFlow is intended for financial and accounting software.
+FinKore is intended for financial and accounting software.
 
 Reliability is a primary engineering requirement.
 
@@ -339,7 +339,7 @@ Core testing strategy:
 
 Core philosophy:
 
-> FinFlow tests are designed not only to demonstrate that a correct implementation works, but to demonstrate that plausible incorrect implementations fail.
+> FinKore tests are designed not only to demonstrate that a correct implementation works, but to demonstrate that plausible incorrect implementations fail.
 
 ---
 
@@ -393,7 +393,7 @@ Forbidden:
 expect(Math.abs(actual - expected)).toBeLessThan(0.001)
 ```
 
-Financial values must be compared using exact FinFlow semantics.
+Financial values must be compared using exact FinKore semantics.
 
 ---
 
@@ -443,7 +443,7 @@ Use `unknown` at untrusted boundaries.
 
 Do not model conformance payloads as financial-domain types inside the runner.
 
-Keep implementation APIs idiomatic TypeScript while preserving FinFlow observable behavior.
+Keep implementation APIs idiomatic TypeScript while preserving FinKore observable behavior.
 
 ---
 
@@ -508,7 +508,7 @@ JSDoc should explain:
 - return behavior;
 - portable errors;
 - mutation behavior;
-- relevant FinFlow requirement IDs.
+- relevant FinKore requirement IDs.
 
 Use standard JSDoc tags:
 
@@ -522,13 +522,13 @@ Use standard JSDoc tags:
 @internal
 ```
 
-Use `@see` for stable FinFlow requirement IDs.
+Use `@see` for stable FinKore requirement IDs.
 
 Example:
 
 ```ts
 /**
- * Adds another Money value using FinFlow exact decimal semantics.
+ * Adds another Money value using FinKore exact decimal semantics.
  *
  * Both operands must use compatible currencies.
  * Neither operand is mutated.
@@ -571,12 +571,12 @@ Avoid comments that merely restate code.
 
 # Portable Errors
 
-FinFlow portable error codes are language-independent.
+FinKore portable error codes are language-independent.
 
 Example:
 
 ```text
-FINFLOW_MONEY_CURRENCY_MISMATCH
+FINKORE_MONEY_CURRENCY_MISMATCH
 ```
 
 TypeScript error classes are implementation-specific.
@@ -647,7 +647,7 @@ Always test boundary values and mutation-sensitive cases.
 
 # Agentic Readiness
 
-FinFlow is:
+FinKore is:
 
 > Agent-ready by contract, not by convention.
 
@@ -662,7 +662,7 @@ The Agentic Contract is meant to make operations:
 
 Executable MCP/OpenAI/agent adapters are separate future integrations.
 
-Agentic behavior MUST NOT bypass FinFlow financial semantics.
+Agentic behavior MUST NOT bypass FinKore financial semantics.
 
 ---
 
@@ -845,7 +845,7 @@ Documentation must not describe an architecture that no longer exists.
 
 ## Supported Capability Changes
 
-When a previously unsupported FinFlow capability becomes implemented, or an implementation status changes:
+When a previously unsupported FinKore capability becomes implemented, or an implementation status changes:
 
 ```text
 [ ] update unit tests
@@ -1010,7 +1010,7 @@ When encountering ambiguity:
 
 Prefer:
 
-> This behavior is not currently defined by FinFlow Draft 0.1.
+> This behavior is not currently defined by FinKore Draft 0.1.
 
 over inventing behavior.
 
@@ -1035,9 +1035,9 @@ The implementation should make it easy for another engineer to answer:
 ```text
 Why is this allowed?
 Why is this rejected?
-Which FinFlow requirement governs this?
+Which FinKore requirement governs this?
 Which test proves it?
 Which documentation describes it?
 ```
 
-That traceability is a core FinFlow engineering value.
+That traceability is a core FinKore engineering value.

@@ -38,9 +38,9 @@ Workflow failures use [Workflow Errors](../workflow/errors.md); entity-specific 
 
 ## Open Questions
 
-- How should imported entities with pre-existing lifecycle history establish their initial FinFlow state?
+- How should imported entities with pre-existing lifecycle history establish their initial FinKore state?
 
 ## Non-Goals
 
-FinFlow Core Draft 0.1 does not define Correction, Reversal, Void, Cancellation, Supersession, or Adjustment behavior.
+FinKore Core Draft 0.1 does not define Correction, Reversal, Void, Cancellation, Supersession, or Adjustment behavior.
 

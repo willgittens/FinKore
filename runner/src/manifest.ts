@@ -6,7 +6,7 @@ export interface ManifestSuite {
 }
 
 export interface ConformanceManifest {
-  readonly finflowConformance: '0.1'
+  readonly finkoreConformance: '0.1'
   readonly vectorSchema: string
   readonly suites: readonly ManifestSuite[]
 }
@@ -17,8 +17,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 export function validateManifest(value: unknown, source = 'manifest'): ConformanceManifest {
   if (!isRecord(value)) throw new RunnerInfrastructureError('MANIFEST', 'Manifest must be an object', source)
-  if (value.finflowConformance !== '0.1') {
-    throw new RunnerInfrastructureError('MANIFEST', 'Unsupported or missing finflowConformance version', source)
+  if (value.finkoreConformance !== '0.1') {
+    throw new RunnerInfrastructureError('MANIFEST', 'Unsupported or missing finkoreConformance version', source)
   }
   if (typeof value.vectorSchema !== 'string' || value.vectorSchema.length === 0) {
     throw new RunnerInfrastructureError('MANIFEST', 'Manifest vectorSchema must be a non-empty path', source)
@@ -47,5 +47,5 @@ export function validateManifest(value: unknown, source = 'manifest'): Conforman
     return { id, vectorFiles: vectorFiles as string[] }
   })
 
-  return { finflowConformance: '0.1', vectorSchema: value.vectorSchema, suites }
+  return { finkoreConformance: '0.1', vectorSchema: value.vectorSchema, suites }
 }

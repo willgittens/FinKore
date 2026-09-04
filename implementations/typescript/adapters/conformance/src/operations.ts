@@ -1,5 +1,5 @@
-import { Money, Workflow } from '@finflow/typescript'
-import type { AdapterRequest, NormalizedResult } from '@finflow/conformance-runner'
+import { Money, Workflow } from '@finkore/typescript'
+import type { AdapterRequest, NormalizedResult } from '@finkore/conformance-runner'
 import { normalizeThrown } from './normalization.js'
 
 /**
@@ -325,20 +325,20 @@ function executeWorkflowTransition(request: AdapterRequest): NormalizedResult {
  *
  * Public Money domain operations use canonical Agentic Contract identifiers.
  * `money.deserialize` and `money.serialize` remain conformance-local
- * representation boundary checks rather than public FinFlow operations.
+ * representation boundary checks rather than public FinKore operations.
  *
  * @see MONEY-SERIALIZATION-001
  */
 export const operationHandlers = {
-  'finflow.money.add': executeMoneyAdd,
-  'finflow.money.compare': executeMoneyCompare,
-  'finflow.money.round': executeMoneyRound,
-  'finflow.money.subtract': executeMoneySubtract,
+  'finkore.money.add': executeMoneyAdd,
+  'finkore.money.compare': executeMoneyCompare,
+  'finkore.money.round': executeMoneyRound,
+  'finkore.money.subtract': executeMoneySubtract,
   'money.deserialize': executeMoneySerialization,
-  'finflow.money.divide': executeMoneyDivide,
-  'finflow.money.multiply': executeMoneyMultiply,
-  'finflow.money.negate': executeMoneyNegate,
-  'finflow.workflow.transition': executeWorkflowTransition,
+  'finkore.money.divide': executeMoneyDivide,
+  'finkore.money.multiply': executeMoneyMultiply,
+  'finkore.money.negate': executeMoneyNegate,
+  'finkore.workflow.transition': executeWorkflowTransition,
   'money.serialize': executeMoneySerialization,
   'workflow.create': executeWorkflowCreate,
 } satisfies Readonly<Record<string, OperationHandler>>

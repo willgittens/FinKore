@@ -205,7 +205,7 @@ function roundDecimal(amount: string, targetScale: number, mode: RoundingMode): 
 }
 
 /**
- * TypeScript Money value for the first FinFlow reference implementation
+ * TypeScript Money value for the first FinKore reference implementation
  * milestone.
  *
  * A Money value binds an exact decimal amount to a currency identifier. This
@@ -217,7 +217,7 @@ function roundDecimal(amount: string, targetScale: number, mode: RoundingMode): 
  * @remarks
  * This TypeScript implementation stores the validated decimal representation
  * internally as a string. That is an implementation detail, not a requirement
- * imposed by the FinFlow specification.
+ * imposed by the FinKore specification.
  *
  * @see MONEY-REPRESENTATION-001
  * @see MONEY-REPRESENTATION-002
@@ -257,7 +257,7 @@ export class Money {
    * currency identifier.
    * @returns A new Money value preserving the validated amount and currency.
    * @throws {InvalidMoneyAmountError}
-   * When the amount violates FinFlow Money representation or serialization
+   * When the amount violates FinKore Money representation or serialization
    * requirements.
    * @throws {InvalidCurrencyError}
    * When the currency identifier is missing or invalid.
@@ -270,8 +270,8 @@ export class Money {
    * })
    * ```
    *
-   * @see FINFLOW_MONEY_INVALID_AMOUNT
-   * @see FINFLOW_MONEY_INVALID_CURRENCY
+   * @see FINKORE_MONEY_INVALID_AMOUNT
+   * @see FINKORE_MONEY_INVALID_CURRENCY
    * @see MONEY-REPRESENTATION-001
    * @see MONEY-SERIALIZATION-002
    * @see MONEY-SERIALIZATION-004
@@ -283,7 +283,7 @@ export class Money {
   }
 
   /**
-   * Parses a portable FinFlow Money JSON value.
+   * Parses a portable FinKore Money JSON value.
    *
    * Unknown object members may be present, but they do not alter the meaning of
    * `amount` or `currency`. This operation returns a new Money value and does
@@ -321,7 +321,7 @@ export class Money {
    * @throws {CurrencyMismatchError}
    * When the operands use incompatible currencies.
    *
-   * @see FINFLOW_MONEY_CURRENCY_MISMATCH
+   * @see FINKORE_MONEY_CURRENCY_MISMATCH
    * @see MONEY-ARITHMETIC-001
    * @see MONEY-ARITHMETIC-002
    * @see MONEY-ARITHMETIC-007
@@ -348,7 +348,7 @@ export class Money {
    * @throws {CurrencyMismatchError}
    * When the operands use incompatible currencies.
    *
-   * @see FINFLOW_MONEY_CURRENCY_MISMATCH
+   * @see FINKORE_MONEY_CURRENCY_MISMATCH
    * @see MONEY-ARITHMETIC-001
    * @see MONEY-ARITHMETIC-002
    * @see MONEY-ARITHMETIC-007
@@ -381,7 +381,7 @@ export class Money {
   /**
    * Multiplies this Money value by an exact decimal scalar.
    *
-   * The scalar must use FinFlow's plain base-10 decimal string representation.
+   * The scalar must use FinKore's plain base-10 decimal string representation.
    * The operation preserves exact decimal results and currency, and does not
    * mutate the current value.
    *
@@ -390,7 +390,7 @@ export class Money {
    * @throws {InvalidMoneyAmountError}
    * When the scalar is missing, malformed, non-finite, or unsupported.
    *
-   * @see FINFLOW_MONEY_INVALID_AMOUNT
+   * @see FINKORE_MONEY_INVALID_AMOUNT
    * @see MONEY-ARITHMETIC-004
    * @see MONEY-ARITHMETIC-007
    * @see MONEY-ARITHMETIC-009
@@ -406,7 +406,7 @@ export class Money {
    * exactly representable in base 10.
    *
    * This operation does not choose a rounding policy implicitly. Non-
-   * terminating decimal quotients fail with `FINFLOW_MONEY_ROUNDING_REQUIRED`.
+   * terminating decimal quotients fail with `FINKORE_MONEY_ROUNDING_REQUIRED`.
    * The returned Money value preserves this value's currency, and this
    * operation does not mutate the current value.
    *
@@ -420,9 +420,9 @@ export class Money {
    * When the exact quotient would require precision reduction and no rounding
    * policy is supplied.
    *
-   * @see FINFLOW_MONEY_INVALID_AMOUNT
-   * @see FINFLOW_MONEY_DIVISION_BY_ZERO
-   * @see FINFLOW_MONEY_ROUNDING_REQUIRED
+   * @see FINKORE_MONEY_INVALID_AMOUNT
+   * @see FINKORE_MONEY_DIVISION_BY_ZERO
+   * @see FINKORE_MONEY_ROUNDING_REQUIRED
    * @see MONEY-ARITHMETIC-005
    * @see MONEY-ARITHMETIC-006
    * @see MONEY-ARITHMETIC-007
@@ -450,7 +450,7 @@ export class Money {
    * @throws {CurrencyMismatchError}
    * When the operands use incompatible currencies.
    *
-   * @see FINFLOW_MONEY_CURRENCY_MISMATCH
+   * @see FINKORE_MONEY_CURRENCY_MISMATCH
    * @see MONEY-COMPARISON-001
    * @see MONEY-COMPARISON-002
    * @see MONEY-COMPARISON-003
@@ -467,19 +467,19 @@ export class Money {
   }
 
   /**
-   * Rounds this Money value to an explicit target scale using a FinFlow
+   * Rounds this Money value to an explicit target scale using a FinKore
    * rounding mode.
    *
    * The target scale is supplied by the caller and is not derived from the
    * currency's customary minor units. The returned Money value preserves this
    * value's currency, and this operation does not mutate the current value.
    *
-   * @param options - Explicit target scale and canonical FinFlow rounding mode.
+   * @param options - Explicit target scale and canonical FinKore rounding mode.
    * @returns A new Money value containing the rounded result.
    * @throws {InvalidMoneyRoundingError}
    * When the target scale or rounding mode is invalid or unsupported.
    *
-   * @see FINFLOW_MONEY_INVALID_ROUNDING
+   * @see FINKORE_MONEY_INVALID_ROUNDING
    * @see MONEY-ROUNDING-001
    * @see MONEY-ROUNDING-002
    * @see MONEY-ROUNDING-003
@@ -495,10 +495,10 @@ export class Money {
   }
 
   /**
-   * Returns the canonical FinFlow Money serialization.
+   * Returns the canonical FinKore Money serialization.
    *
    * The representation is locale-independent and intended for portable
-   * FinFlow interoperability. Calling this method does not mutate the Money
+   * FinKore interoperability. Calling this method does not mutate the Money
    * value.
    *
    * @returns A new object containing the serialized amount and currency.

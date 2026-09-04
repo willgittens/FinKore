@@ -6,7 +6,7 @@
 
 ## Purpose
 
-This document defines the writing, naming, and portable data conventions shared by FinFlow specifications.
+This document defines the writing, naming, and portable data conventions shared by FinKore specifications.
 
 ## Normative Language
 
@@ -49,7 +49,7 @@ Normative clauses selected for conformance traceability use a domain-prefixed id
 
 ## Error Codes
 
-Portable errors use `FINFLOW_<DOMAIN>_<ERROR>`, with uppercase ASCII words separated by underscores.
+Portable errors use `FINKORE_<DOMAIN>_<ERROR>`, with uppercase ASCII words separated by underscores.
 
 - **SPEC-ERROR-001** — A portable error code MUST identify a stable category of domain failure.
 - **SPEC-ERROR-002** — A portable error code MUST NOT embed localized prose or implementation details.
@@ -58,32 +58,32 @@ The following table is the consolidated catalog. Domain error documents define t
 
 | Domain | Code | Defined condition |
 | --- | --- | --- |
-| Money | `FINFLOW_MONEY_INVALID_AMOUNT` | [Money amount is invalid](money/errors.md). |
-| Money | `FINFLOW_MONEY_INVALID_CURRENCY` | [Currency identifier is invalid](money/errors.md). |
-| Money | `FINFLOW_MONEY_CURRENCY_MISMATCH` | [Compatible currencies were required](money/errors.md). |
-| Money | `FINFLOW_MONEY_DIVISION_BY_ZERO` | [A scalar divisor was zero](money/errors.md). |
-| Money | `FINFLOW_MONEY_ROUNDING_REQUIRED` | [Required precision reduction has no rounding rule](money/errors.md). |
-| Money | `FINFLOW_MONEY_INVALID_ROUNDING` | [A requested rounding rule is invalid or unsupported](money/errors.md). |
-| Workflow | `FINFLOW_WORKFLOW_INVALID_DEFINITION` | [Workflow structure is invalid](workflow/errors.md). |
-| Workflow | `FINFLOW_WORKFLOW_INVALID_STATE` | [A State is missing or undeclared](workflow/errors.md). |
-| Workflow | `FINFLOW_WORKFLOW_INVALID_TRANSITION` | [A requested directed Transition is undeclared](workflow/errors.md). |
-| Workflow | `FINFLOW_WORKFLOW_GUARD_REJECTED` | [A Transition Guard rejected a request](workflow/errors.md). |
-| Workflow | `FINFLOW_WORKFLOW_TERMINAL_STATE` | [A Transition Request would leave a terminal State](workflow/errors.md). |
-| Audit | `FINFLOW_AUDIT_INVALID_EVENT` | [Audit Event content is invalid](audit/errors.md). |
-| Audit | `FINFLOW_AUDIT_DUPLICATE_EVENT` | [An Audit Event identity is already committed](audit/errors.md). |
-| Audit | `FINFLOW_AUDIT_APPEND_ONLY_VIOLATION` | [Committed logical history would be altered](audit/errors.md). |
-| Audit | `FINFLOW_AUDIT_REDACTION_INVALID` | [Redaction violates its policy or required meaning](audit/errors.md). |
-| Audit | `FINFLOW_AUDIT_ACTOR_INVALID` | [Actor attribution is invalid](audit/errors.md). |
-| Approval | `FINFLOW_APPROVAL_REQUIRED` | [A required Approval is unsatisfied](approvals/errors.md). |
-| Approval | `FINFLOW_APPROVAL_INVALID_DECISION` | [An Approval Decision is invalid](approvals/errors.md). |
-| Approval | `FINFLOW_APPROVAL_INELIGIBLE_ACTOR` | [The deciding Actor is ineligible](approvals/errors.md). |
-| Approval | `FINFLOW_APPROVAL_INVALID_CHAIN` | [An Approval Chain is invalid](approvals/errors.md). |
-| Approval | `FINFLOW_APPROVAL_CONDITION_UNRESOLVED` | [An Approval Condition cannot be evaluated](approvals/errors.md). |
-| Entity | `FINFLOW_ENTITY_INVALID_IDENTITY` | [Financial Entity identity is invalid](entities/errors.md). |
-| Entity | `FINFLOW_ENTITY_IMMUTABLE` | [A Mutation targets immutable data](entities/errors.md). |
-| Entity | `FINFLOW_ENTITY_INVALID_MUTATION` | [A Mutation is not recognized or permitted](entities/errors.md). |
-| Entity | `FINFLOW_ENTITY_STATE_CONFLICT` | [Expected and current State differ](entities/errors.md). |
-| Entity | `FINFLOW_ENTITY_VALIDATION_FAILED` | [Structural or business validation failed](entities/errors.md). |
+| Money | `FINKORE_MONEY_INVALID_AMOUNT` | [Money amount is invalid](money/errors.md). |
+| Money | `FINKORE_MONEY_INVALID_CURRENCY` | [Currency identifier is invalid](money/errors.md). |
+| Money | `FINKORE_MONEY_CURRENCY_MISMATCH` | [Compatible currencies were required](money/errors.md). |
+| Money | `FINKORE_MONEY_DIVISION_BY_ZERO` | [A scalar divisor was zero](money/errors.md). |
+| Money | `FINKORE_MONEY_ROUNDING_REQUIRED` | [Required precision reduction has no rounding rule](money/errors.md). |
+| Money | `FINKORE_MONEY_INVALID_ROUNDING` | [A requested rounding rule is invalid or unsupported](money/errors.md). |
+| Workflow | `FINKORE_WORKFLOW_INVALID_DEFINITION` | [Workflow structure is invalid](workflow/errors.md). |
+| Workflow | `FINKORE_WORKFLOW_INVALID_STATE` | [A State is missing or undeclared](workflow/errors.md). |
+| Workflow | `FINKORE_WORKFLOW_INVALID_TRANSITION` | [A requested directed Transition is undeclared](workflow/errors.md). |
+| Workflow | `FINKORE_WORKFLOW_GUARD_REJECTED` | [A Transition Guard rejected a request](workflow/errors.md). |
+| Workflow | `FINKORE_WORKFLOW_TERMINAL_STATE` | [A Transition Request would leave a terminal State](workflow/errors.md). |
+| Audit | `FINKORE_AUDIT_INVALID_EVENT` | [Audit Event content is invalid](audit/errors.md). |
+| Audit | `FINKORE_AUDIT_DUPLICATE_EVENT` | [An Audit Event identity is already committed](audit/errors.md). |
+| Audit | `FINKORE_AUDIT_APPEND_ONLY_VIOLATION` | [Committed logical history would be altered](audit/errors.md). |
+| Audit | `FINKORE_AUDIT_REDACTION_INVALID` | [Redaction violates its policy or required meaning](audit/errors.md). |
+| Audit | `FINKORE_AUDIT_ACTOR_INVALID` | [Actor attribution is invalid](audit/errors.md). |
+| Approval | `FINKORE_APPROVAL_REQUIRED` | [A required Approval is unsatisfied](approvals/errors.md). |
+| Approval | `FINKORE_APPROVAL_INVALID_DECISION` | [An Approval Decision is invalid](approvals/errors.md). |
+| Approval | `FINKORE_APPROVAL_INELIGIBLE_ACTOR` | [The deciding Actor is ineligible](approvals/errors.md). |
+| Approval | `FINKORE_APPROVAL_INVALID_CHAIN` | [An Approval Chain is invalid](approvals/errors.md). |
+| Approval | `FINKORE_APPROVAL_CONDITION_UNRESOLVED` | [An Approval Condition cannot be evaluated](approvals/errors.md). |
+| Entity | `FINKORE_ENTITY_INVALID_IDENTITY` | [Financial Entity identity is invalid](entities/errors.md). |
+| Entity | `FINKORE_ENTITY_IMMUTABLE` | [A Mutation targets immutable data](entities/errors.md). |
+| Entity | `FINKORE_ENTITY_INVALID_MUTATION` | [A Mutation is not recognized or permitted](entities/errors.md). |
+| Entity | `FINKORE_ENTITY_STATE_CONFLICT` | [Expected and current State differ](entities/errors.md). |
+| Entity | `FINKORE_ENTITY_VALIDATION_FAILED` | [Structural or business validation failed](entities/errors.md). |
 
 - **SPEC-ERROR-003** — An implementation MAY attach human-readable messages and structured context to a portable error.
 - **SPEC-ERROR-004** — Additional error details MUST NOT change the meaning of the portable code.

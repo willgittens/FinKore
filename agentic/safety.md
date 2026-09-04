@@ -1,6 +1,6 @@
 # Agentic Safety
 
-> Agentic behavior MUST NOT bypass FinFlow domain behavior.
+> Agentic behavior MUST NOT bypass FinKore domain behavior.
 
 An autonomous client has no special semantic privileges. An invalid
 `DRAFT → PAID` transition remains invalid when requested by an agent. An
@@ -9,7 +9,7 @@ declared immutable by a composing Financial Entity policy remains immutable.
 
 ## No hidden agent mode
 
-> FinFlow does not define an "AI mode", "agent override", or privileged
+> FinKore does not define an "AI mode", "agent override", or privileged
 > autonomous execution path.
 
 The same normative semantics apply to human-driven applications, backend
@@ -19,7 +19,7 @@ portable errors, and failure atomicity.
 
 ## Policy boundaries
 
-FinFlow Approval and Authorization are distinct. The Agentic Contract neither
+FinKore Approval and Authorization are distinct. The Agentic Contract neither
 grants authorization nor invents a universal human-in-the-loop requirement.
 Applications decide when confirmation, authorization, Approval, or additional
 policy evaluation is required, using the exposed operation metadata and their

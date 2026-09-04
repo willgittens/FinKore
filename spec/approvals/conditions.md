@@ -36,7 +36,7 @@ The example assumes the amount comparison and any conversion basis are declared 
 
 ## Errors
 
-An unevaluable required condition must report `FINFLOW_APPROVAL_CONDITION_UNRESOLVED`.
+An unevaluable required condition must report `FINKORE_APPROVAL_CONDITION_UNRESOLVED`.
 
 ## Open Questions
 

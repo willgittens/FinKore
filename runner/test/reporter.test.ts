@@ -6,7 +6,7 @@ function result(status: ExecutionStatus, overrides: Partial<ExecutionResult> = {
   return {
     vectorId: 'money.round.tie-001',
     suiteId: 'money',
-    operationId: 'finflow.money.round',
+    operationId: 'finkore.money.round',
     requirementIds: ['MONEY-ROUNDING-003'],
     tags: ['mutation-sensitive'],
     critical: true,
@@ -26,7 +26,7 @@ describe('report aggregation', () => {
       result('PASS', { vectorId: 'money.round.plain-001', tags: ['positive'] }),
     ], new Set(['MONEY-ROUNDING-003']))
     expect(report.summary).toEqual({ total: 5, passed: 2, failed: 1, unsupported: 1, infrastructureErrors: 1 })
-    expect(report.finflowConformanceRunner).toBe('0.1')
+    expect(report.finkoreConformanceRunner).toBe('0.1')
     expect(report.suites[0]?.counts).toEqual(report.summary)
     expect(report.requirements[0]?.counts).toEqual(report.summary)
     expect(report.mutationSensitive).toEqual({ total: 4, passed: 1, failed: 1, unsupported: 1, infrastructureErrors: 1 })

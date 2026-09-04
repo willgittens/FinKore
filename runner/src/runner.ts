@@ -1,4 +1,4 @@
-import type { FinFlowConformanceAdapter } from './adapter/types.js'
+import type { FinKoreConformanceAdapter } from './adapter/types.js'
 import { compareResults } from './comparator.js'
 import { filterVectors, type RunFilters } from './filters.js'
 import { loadConformance } from './loader.js'
@@ -11,7 +11,7 @@ import { isNormalizedResult } from './validator.js'
 
 export interface ConformanceRunnerOptions {
   readonly manifestPath: string
-  readonly adapter: FinFlowConformanceAdapter
+  readonly adapter: FinKoreConformanceAdapter
   readonly metadata?: RunnerMetadata
 }
 
@@ -37,7 +37,7 @@ function baseResult(vector: LoadedVector, criticalRequirements: ReadonlySet<stri
 
 async function executeVector(
   vector: LoadedVector,
-  adapter: FinFlowConformanceAdapter,
+  adapter: FinKoreConformanceAdapter,
   criticalRequirements: ReadonlySet<string>,
 ): Promise<ExecutionResult> {
   const base = baseResult(vector, criticalRequirements)

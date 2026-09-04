@@ -12,7 +12,7 @@ This document defines States with no outgoing Transitions in their Workflow defi
 
 - **WORKFLOW-TERMINAL-001** — A Workflow definition MUST explicitly identify each terminal State.
 - **WORKFLOW-TERMINAL-002** — A terminal State MUST NOT have an outgoing Transition in that Workflow definition.
-- **WORKFLOW-TERMINAL-003** — A Transition Request from a terminal State MUST fail with `FINFLOW_WORKFLOW_TERMINAL_STATE`.
+- **WORKFLOW-TERMINAL-003** — A Transition Request from a terminal State MUST fail with `FINKORE_WORKFLOW_TERMINAL_STATE`.
 - **WORKFLOW-TERMINAL-004** — Terminal status MUST be determined from the Workflow definition, not inferred from naming.
 
 ## Invariants
@@ -29,7 +29,7 @@ Treating a state named `COMPLETE` as terminal without declaring it terminal is i
 
 ## Errors
 
-An ordinary transition from a terminal state must report `FINFLOW_WORKFLOW_TERMINAL_STATE`.
+An ordinary transition from a terminal state must report `FINKORE_WORKFLOW_TERMINAL_STATE`.
 
 ## Non-Goals
 
