@@ -26,11 +26,11 @@ export type WorkflowErrorCode =
   | 'FINFLOW_WORKFLOW_TERMINAL_STATE'
 
 /**
- * Minimal guard shape currently exercised by Draft 0.1 conformance vectors.
+ * Guard condition supported by the Draft 0.1 TypeScript Workflow milestone.
  *
- * The guard compares one supplied fact to an expected value. Broader guard
- * languages, authorization models, and external fact capture remain outside
- * this first Workflow milestone.
+ * The condition compares one supplied fact to an expected value. Broader guard
+ * languages, authorization models, callbacks, and external fact capture remain
+ * outside this Workflow milestone.
  *
  * @see WORKFLOW-GUARD-001
  * @see WORKFLOW-GUARD-002
@@ -59,8 +59,22 @@ export interface WorkflowTransitionDefinition {
   /** State that becomes current after a successful transition. */
   readonly target: WorkflowStateIdentifier
 
-  /** Optional Draft 0.1 fact-equality guard for this transition. */
+  /**
+   * Optional Draft 0.1 fact-equality guard for this transition.
+   *
+   * This single-guard form is accepted for existing conformance fixtures.
+   */
   readonly guard?: WorkflowTransitionGuard
+
+  /**
+   * Optional Draft 0.1 fact-equality guards that all apply to this transition.
+   *
+   * Every guard must pass before the transition succeeds.
+   *
+   * @see WORKFLOW-GUARD-002
+   * @see WORKFLOW-GUARD-006
+   */
+  readonly guards?: readonly WorkflowTransitionGuard[]
 }
 
 /**

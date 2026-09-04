@@ -135,9 +135,11 @@ describe('TypeScript conformance adapter', () => {
       'workflow.transition.undeclared-001',
       'workflow.guard.pass-001',
       'workflow.guard.reject-001',
+      'workflow.guard.multiple-pass-001',
+      'workflow.guard.multiple-order-invariant-001',
       'workflow.terminal.transition-rejected-001',
     ] })
 
-    expect(report.summary).toEqual({ total: 10, passed: 10, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 12, passed: 12, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 })

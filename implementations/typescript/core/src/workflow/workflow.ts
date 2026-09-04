@@ -8,6 +8,7 @@ import {
 import type {
   SerializedWorkflowInstance,
   WorkflowStateIdentifier,
+  WorkflowTransitionGuard,
   WorkflowTransitionOptions,
 } from './types.js'
 
@@ -20,6 +21,10 @@ function validateRequestedState(value: unknown): WorkflowStateIdentifier {
 
 function factsFrom(options: WorkflowTransitionOptions | undefined): Readonly<Record<string, unknown>> {
   return options?.facts ?? {}
+}
+
+function guardsPass(guards: readonly WorkflowTransitionGuard[], facts: Readonly<Record<string, unknown>>): boolean {
+  return guards.every((guard) => Object.is(facts[guard.fact], guard.equals))
 }
 
 /**
@@ -107,9 +112,9 @@ export class Workflow {
    * Requests a declared directed transition to a target state.
    *
    * The current state is checked as the transition source, terminal-state
-   * rejection takes precedence over undeclared-transition rejection, and any
-   * declared fact-equality guard must pass before the state changes. Failures
-   * leave current state unchanged.
+   * rejection takes precedence over undeclared-transition rejection, and every
+   * declared fact-equality guard for the matched transition must pass before
+   * the state changes. Failures leave current state unchanged.
    *
    * @param target - Requested target state.
    * @param options - Optional facts for declared guards.
@@ -129,8 +134,13 @@ export class Workflow {
    * @see FINFLOW_WORKFLOW_GUARD_REJECTED
    * @see WORKFLOW-ERROR-001
    * @see WORKFLOW-ERROR-003
+   * @see WORKFLOW-GUARD-001
+   * @see WORKFLOW-GUARD-002
+   * @see WORKFLOW-GUARD-003
+   * @see WORKFLOW-GUARD-006
    * @see WORKFLOW-TRANSITION-002
    * @see WORKFLOW-TRANSITION-003
+   * @see WORKFLOW-TRANSITION-004
    * @see WORKFLOW-TRANSITION-005
    * @see WORKFLOW-TRANSITION-006
    */
@@ -148,7 +158,7 @@ export class Workflow {
       throw new InvalidWorkflowTransitionError()
     }
 
-    if (transition.guard !== undefined && !Object.is(factsFrom(options)[transition.guard.fact], transition.guard.equals)) {
+    if (!guardsPass(transition.guards ?? [], factsFrom(options))) {
       throw new WorkflowGuardRejectedError()
     }
 

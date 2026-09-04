@@ -9,9 +9,9 @@ This package implements Money construction, validation, portable Money errors, c
 
 It also implements the first Workflow Core milestone: validated workflow
 definitions, exact state identifiers, one initial state, current state,
-explicit terminal states, directed transitions, simple Draft 0.1 fact-equality
-guards, successful state changes, rejected transition errors, and state
-preservation after rejected transitions.
+explicit terminal states, directed transitions, single or multiple simple Draft
+0.1 fact-equality guards, successful state changes, rejected transition errors,
+and state preservation after rejected transitions.
 
 It intentionally does not implement FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, audit integration, approvals integration, entities, corrections, or reversals.
 
@@ -35,7 +35,7 @@ The specification remains canonical. This package stores validated decimal amoun
 - `Workflow.create(definition)` validates a workflow definition and creates an instance in its declared initial state.
 - `Workflow.from(definition, { currentState })` validates an existing current-state observation against the definition.
 - `workflow.currentState` returns the instance's current state identifier exactly as declared.
-- `workflow.transition(target, { facts })` applies a declared directed transition and updates current state on success.
+- `workflow.transition(target, { facts })` applies a declared directed transition and updates current state on success only when every guard attached to the matched transition passes.
 - `workflow.toJSON()` returns `{ currentState }` for portable observation.
 
 Workflow failures expose portable codes: `FINFLOW_WORKFLOW_INVALID_DEFINITION`,
@@ -43,9 +43,16 @@ Workflow failures expose portable codes: `FINFLOW_WORKFLOW_INVALID_DEFINITION`,
 `FINFLOW_WORKFLOW_GUARD_REJECTED`, and
 `FINFLOW_WORKFLOW_TERMINAL_STATE`.
 
-This Workflow milestone does not define a production interchange format or a
-full guard language. The current fact-equality guard shape exists to satisfy
-Draft 0.1 conformance semantics without introducing broader workflow behavior.
+Transition definitions may use `guard` for one fact-equality condition or
+`guards` for multiple fact-equality conditions. If multiple guards are attached
+to the matched transition, every guard must pass against the supplied facts
+before current state changes. Failed guard evaluation throws
+`FINFLOW_WORKFLOW_GUARD_REJECTED` and leaves state unchanged.
+
+This Workflow milestone does not define a production interchange format,
+callback guard model, authorization system, or full guard language. The current
+fact-equality guard shape exists to satisfy Draft 0.1 conformance semantics
+without introducing broader workflow behavior.
 
 ## API Documentation
 

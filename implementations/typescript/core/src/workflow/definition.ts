@@ -26,16 +26,29 @@ function validateGuard(value: unknown): WorkflowTransitionGuard {
   return { fact: value.fact, equals: value.equals }
 }
 
+function validateGuards(value: unknown): readonly WorkflowTransitionGuard[] {
+  if (!Array.isArray(value)) {
+    throw new InvalidWorkflowDefinitionError()
+  }
+  return value.map(validateGuard)
+}
+
 function validateTransition(value: unknown): WorkflowTransitionDefinition {
   if (!isPlainRecord(value)) {
     throw new InvalidWorkflowDefinitionError()
   }
   const source = validateStateIdentifier(value.source)
   const target = validateStateIdentifier(value.target)
-  if ('guard' in value && value.guard !== undefined) {
-    return { source, target, guard: validateGuard(value.guard) }
+  if ('guard' in value && value.guard !== undefined && 'guards' in value && value.guards !== undefined) {
+    throw new InvalidWorkflowDefinitionError()
   }
-  return { source, target }
+  if ('guards' in value && value.guards !== undefined) {
+    return { source, target, guards: validateGuards(value.guards) }
+  }
+  if ('guard' in value && value.guard !== undefined) {
+    return { source, target, guards: [validateGuard(value.guard)] }
+  }
+  return { source, target, guards: [] }
 }
 
 function assertUnique(values: readonly string[]): void {
@@ -47,13 +60,17 @@ function assertUnique(values: readonly string[]): void {
 /**
  * Validated FinFlow Workflow definition.
  *
- * Definitions declare exactly one initial state, explicit terminal states, and
- * directed transitions between declared states. This TypeScript representation
- * is immutable from callers' perspective and contains no persistence,
- * versioning, or process-engine behavior.
+ * Definitions declare exactly one initial state, explicit terminal states,
+ * directed transitions between declared states, and optional fact-equality
+ * guards attached to those transitions. This TypeScript representation is
+ * immutable from callers' perspective and contains no persistence, versioning,
+ * authorization model, or process-engine behavior.
  *
  * @see WORKFLOW-STATES-001
  * @see WORKFLOW-STATES-002
+ * @see WORKFLOW-GUARD-001
+ * @see WORKFLOW-GUARD-002
+ * @see WORKFLOW-GUARD-006
  * @see WORKFLOW-TRANSITION-001
  * @see WORKFLOW-TERMINAL-001
  */
@@ -89,7 +106,7 @@ export class WorkflowDefinition {
    * Creates and validates a Workflow definition.
    *
    * @param input - Candidate definition containing states, initial state,
-   * terminal states, and directed transitions.
+   * terminal states, directed transitions, and transition guard conditions.
    * @returns A validated Workflow definition.
    * @throws {InvalidWorkflowDefinitionError}
    * When the definition violates Draft 0.1 structural requirements.
@@ -97,6 +114,8 @@ export class WorkflowDefinition {
    * @see FINFLOW_WORKFLOW_INVALID_DEFINITION
    * @see WORKFLOW-STATES-001
    * @see WORKFLOW-STATES-002
+   * @see WORKFLOW-GUARD-001
+   * @see WORKFLOW-GUARD-002
    * @see WORKFLOW-TRANSITION-001
    * @see WORKFLOW-TERMINAL-002
    */

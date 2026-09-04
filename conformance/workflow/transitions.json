@@ -521,6 +521,148 @@
       ]
     },
     {
+      "id": "workflow.guard.multiple-pass-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-TRANSITION-004"
+      ],
+      "description": "Allows a declared transition only when every applicable guard passes on supplied facts.",
+      "operation": "finflow.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "SUBMITTED",
+            "APPROVED",
+            "ESCALATED"
+          ],
+          "initialState": "SUBMITTED",
+          "terminalStates": [
+            "APPROVED"
+          ],
+          "transitions": [
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guards": [
+                {
+                  "fact": "approvalsSatisfied",
+                  "equals": true
+                },
+                {
+                  "fact": "withinLimit",
+                  "equals": true
+                }
+              ]
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "ESCALATED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "APPROVED",
+        "facts": {
+          "approvalsSatisfied": true,
+          "withinLimit": true
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "APPROVED"
+        }
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "guard-evaluation-skipped",
+        "only-first-guard-evaluated"
+      ]
+    },
+    {
+      "id": "workflow.guard.multiple-order-invariant-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-GUARD-003",
+        "WORKFLOW-GUARD-006",
+        "WORKFLOW-TRANSITION-006"
+      ],
+      "description": "Rejects a transition when one of multiple guards fails and preserves supplied facts and current state.",
+      "operation": "finflow.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "SUBMITTED",
+            "APPROVED",
+            "ESCALATED"
+          ],
+          "initialState": "SUBMITTED",
+          "terminalStates": [
+            "APPROVED"
+          ],
+          "transitions": [
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guards": [
+                {
+                  "fact": "withinLimit",
+                  "equals": true
+                },
+                {
+                  "fact": "approvalsSatisfied",
+                  "equals": true
+                }
+              ]
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "ESCALATED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "APPROVED",
+        "facts": {
+          "approvalsSatisfied": true,
+          "withinLimit": false
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINFLOW_WORKFLOW_GUARD_REJECTED"
+        },
+        "observations": {
+          "currentState": "SUBMITTED",
+          "facts": {
+            "approvalsSatisfied": true,
+            "withinLimit": false
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "guard-result-inverted",
+        "failed-guard-mutates-state",
+        "guard-order-changes-result"
+      ]
+    },
+    {
       "id": "workflow.terminal.transition-rejected-001",
       "spec": "workflow/terminal-states",
       "requirements": [

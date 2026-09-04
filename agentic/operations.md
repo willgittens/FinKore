@@ -161,7 +161,9 @@ and [MONEY-ERROR-006, -007](../spec/money/errors.md).
 
 **Input semantics:** A valid Workflow definition, an instance with one declared
 current State, requested target State, and facts required by applicable guards.
-The conformance fixture shape is not a production interchange format.
+Current conformance fixtures express fact-equality guards as `guard` for one
+condition or `guards` for multiple conditions; this fixture shape is not a
+production interchange format.
 
 **Preconditions:** States and directed Transition are declared; current State is
 the source and is not terminal; every applicable guard passes. A guard may use

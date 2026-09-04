@@ -8,7 +8,7 @@ const realManifest = resolve(import.meta.dirname, '../../conformance/manifest.js
 describe('real FinFlow artifact integration', () => {
   it('loads all manifest-declared vectors with valid operation and requirement references', async () => {
     const loaded = await loadConformance(realManifest)
-    expect(loaded.vectors).toHaveLength(96)
+    expect(loaded.vectors).toHaveLength(98)
     expect(new Set(loaded.vectors.map((vector) => vector.id)).size).toBe(loaded.vectors.length)
     expect(loaded.vectors.every((vector) => loaded.metadata.operationIds.has(vector.operation))).toBe(true)
     expect(loaded.vectors.every((vector) => vector.requirements.every((id) => loaded.metadata.requirementIds.has(id)))).toBe(true)

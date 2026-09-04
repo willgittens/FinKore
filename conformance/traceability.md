@@ -8,13 +8,13 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Shared | 29 | 23 | 5 | 1 | 1 | 0 | 0 | 28 |
 | Money | 50 | 45 | 1 | 4 | 45 | 0 | 0 | 5 |
-| Workflow | 27 | 25 | 1 | 1 | 17 | 0 | 8 | 2 |
+| Workflow | 27 | 25 | 1 | 1 | 18 | 0 | 7 | 2 |
 | Audit | 38 | 30 | 4 | 4 | 16 | 0 | 15 | 7 |
 | Approvals | 34 | 31 | 1 | 2 | 13 | 0 | 18 | 3 |
 | Entities | 34 | 29 | 3 | 2 | 17 | 0 | 13 | 4 |
-| **Total** | **212** | **183** | **15** | **14** | **109** | **0** | **54** | **49** |
+| **Total** | **212** | **183** | **15** | **14** | **110** | **0** | **53** | **49** |
 
-The suite contains 96 vectors. Overall: **109 covered (51.4%)**, **0 partially covered (0.0%)**, **54 uncovered (25.5%)**, and **49 not directly testable (23.1%)**.
+The suite contains 98 vectors. Overall: **110 covered (51.9%)**, **0 partially covered (0.0%)**, **53 uncovered (25.0%)**, and **49 not directly testable (23.1%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules and optional or recommended freedoms without one mandatory runtime observation. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -105,11 +105,11 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules and optional or recom
 | WORKFLOW-ERROR-002 | Workflow | MAY | NOT DIRECTLY TESTABLE | — |
 | WORKFLOW-ERROR-003 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.reverse-not-implied-001, workflow.transition.undeclared-001 |
 | WORKFLOW-GUARD-001 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.pass-001 |
-| WORKFLOW-GUARD-002 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.pass-001, workflow.guard.reject-001 |
-| WORKFLOW-GUARD-003 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.reject-001 |
+| WORKFLOW-GUARD-002 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001, workflow.guard.multiple-pass-001, workflow.guard.pass-001, workflow.guard.reject-001 |
+| WORKFLOW-GUARD-003 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001, workflow.guard.reject-001 |
 | WORKFLOW-GUARD-004 | Workflow | MUST / MUST NOT | UNCOVERED | — |
 | WORKFLOW-GUARD-005 | Workflow | MUST / MUST NOT | UNCOVERED | — |
-| WORKFLOW-GUARD-006 | Workflow | MUST / MUST NOT | UNCOVERED | — |
+| WORKFLOW-GUARD-006 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001 |
 | WORKFLOW-STATES-001 | Workflow | MUST / MUST NOT | COVERED | workflow.create.duplicate-state-001 |
 | WORKFLOW-STATES-002 | Workflow | MUST / MUST NOT | COVERED | workflow.create.initial-state-001, workflow.create.multiple-initial-001 |
 | WORKFLOW-STATES-003 | Workflow | MUST / MUST NOT | COVERED | workflow.create.initial-state-001 |
