@@ -104,6 +104,34 @@ describe('Workflow guards', () => {
     expect(reversed.currentState).toBe('SUBMITTED')
   })
 
+  it('is deterministic for the same declared facts', () => {
+    const first = Workflow.create(guardedDefinition)
+    const second = Workflow.create(guardedDefinition)
+    const facts = { approvalsSatisfied: true, withinLimit: true }
+
+    expect(first.transition('APPROVED', { facts }).currentState).toBe('APPROVED')
+    expect(second.transition('APPROVED', { facts }).currentState).toBe('APPROVED')
+  })
+
+  it('treats authorization evidence as supplied facts without assuming an authorization model', () => {
+    const workflow = Workflow.create({
+      states: ['PENDING', 'READY'],
+      initialState: 'PENDING',
+      terminalStates: ['READY'],
+      transitions: [
+        {
+          source: 'PENDING',
+          target: 'READY',
+          guard: { fact: 'applicationAuthorizationDecision', equals: 'ALLOW' },
+        },
+      ],
+    })
+
+    workflow.transition('READY', { facts: { applicationAuthorizationDecision: 'ALLOW' } })
+
+    expect(workflow.currentState).toBe('READY')
+  })
+
   it('rejects malformed multiple-guard declarations', () => {
     expect(() =>
       Workflow.create({

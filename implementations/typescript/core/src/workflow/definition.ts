@@ -1,6 +1,10 @@
 import { InvalidWorkflowDefinitionError } from './errors.js'
 import type { WorkflowStateIdentifier, WorkflowTransitionDefinition, WorkflowTransitionGuard } from './types.js'
 
+interface ValidatedWorkflowTransitionDefinition extends WorkflowTransitionDefinition {
+  readonly guards: readonly WorkflowTransitionGuard[]
+}
+
 function isPlainRecord(value: unknown): value is Readonly<Record<string, unknown>> {
   return typeof value === 'object' && value !== null
 }
@@ -33,20 +37,22 @@ function validateGuards(value: unknown): readonly WorkflowTransitionGuard[] {
   return value.map(validateGuard)
 }
 
-function validateTransition(value: unknown): WorkflowTransitionDefinition {
+function validateTransition(value: unknown): ValidatedWorkflowTransitionDefinition {
   if (!isPlainRecord(value)) {
     throw new InvalidWorkflowDefinitionError()
   }
   const source = validateStateIdentifier(value.source)
   const target = validateStateIdentifier(value.target)
-  if ('guard' in value && value.guard !== undefined && 'guards' in value && value.guards !== undefined) {
+  const guard = value.guard
+  const guards = value.guards
+  if (guard !== undefined && guards !== undefined) {
     throw new InvalidWorkflowDefinitionError()
   }
-  if ('guards' in value && value.guards !== undefined) {
-    return { source, target, guards: validateGuards(value.guards) }
+  if (guards !== undefined) {
+    return { source, target, guards: validateGuards(guards) }
   }
-  if ('guard' in value && value.guard !== undefined) {
-    return { source, target, guards: [validateGuard(value.guard)] }
+  if (guard !== undefined) {
+    return { source, target, guards: [validateGuard(guard)] }
   }
   return { source, target, guards: [] }
 }
@@ -79,7 +85,7 @@ function assertUnique(values: readonly string[]): void {
 export class WorkflowDefinition {
   private readonly stateSet: ReadonlySet<WorkflowStateIdentifier>
   private readonly terminalStateSet: ReadonlySet<WorkflowStateIdentifier>
-  private readonly transitionList: readonly WorkflowTransitionDefinition[]
+  private readonly transitionList: readonly ValidatedWorkflowTransitionDefinition[]
 
   /** State identifiers declared by this workflow definition. */
   readonly states: readonly WorkflowStateIdentifier[]
@@ -94,7 +100,7 @@ export class WorkflowDefinition {
     states: readonly WorkflowStateIdentifier[],
     initialState: WorkflowStateIdentifier,
     terminalStates: readonly WorkflowStateIdentifier[],
-    transitions: readonly WorkflowTransitionDefinition[],
+    transitions: readonly ValidatedWorkflowTransitionDefinition[],
   ) {
     this.states = states
     this.initialState = initialState

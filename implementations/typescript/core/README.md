@@ -1,13 +1,15 @@
 # FinKore TypeScript
 
-TypeScript reference implementation for the current FinKore Money milestone and
-the current Workflow Core milestones.
+TypeScript reference implementation for the current FinKore Money and Workflow
+Draft 0.1 milestones.
 
 FinKore Money Draft 0.1 is fully implemented by this TypeScript reference implementation. This statement applies only to the current Money specification draft; it does not imply that other FinKore domains are complete.
 
+FinKore Workflow Draft 0.1 is fully implemented by the TypeScript reference implementation. This statement applies only to the current Workflow specification draft; it does not imply that Audit, Approvals, Entities, or other FinKore domains are complete.
+
 This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact compatible-currency numeric comparison, and explicit Money rounding.
 
-It also implements the current Workflow Core milestones: validated workflow
+It implements Workflow Draft 0.1: validated workflow
 definitions, exact state identifiers, one initial state, current state,
 directed transitions, single or multiple simple Draft 0.1 fact-equality guards,
 explicit terminal-state detection, rejection of outgoing transitions in

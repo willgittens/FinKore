@@ -8,15 +8,15 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Shared | 29 | 23 | 5 | 1 | 1 | 0 | 0 | 28 |
 | Money | 50 | 45 | 1 | 4 | 45 | 0 | 0 | 5 |
-| Workflow | 27 | 25 | 1 | 1 | 18 | 0 | 7 | 2 |
+| Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 |
 | Audit | 38 | 30 | 4 | 4 | 16 | 0 | 15 | 7 |
 | Approvals | 34 | 31 | 1 | 2 | 13 | 0 | 18 | 3 |
 | Entities | 34 | 29 | 3 | 2 | 17 | 0 | 13 | 4 |
-| **Total** | **212** | **183** | **15** | **14** | **110** | **0** | **53** | **49** |
+| **Total** | **212** | **183** | **15** | **14** | **114** | **0** | **46** | **52** |
 
-The suite contains 100 vectors. Overall: **110 covered (51.9%)**, **0 partially covered (0.0%)**, **53 uncovered (25.0%)**, and **49 not directly testable (23.1%)**.
+The suite contains 105 vectors. Overall: **114 covered (53.8%)**, **0 partially covered (0.0%)**, **46 uncovered (21.7%)**, and **52 not directly testable (24.5%)**.
 
-NOT DIRECTLY TESTABLE covers specification-authoring rules and optional or recommended freedoms without one mandatory runtime observation. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
+NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, and guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove. These guarantees remain subject to implementation unit, mutation, and architectural review. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
 ## Requirement mapping
 
@@ -103,31 +103,31 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules and optional or recom
 | MONEY-SERIALIZATION-008 | Money | MUST / MUST NOT | COVERED | money.deserialize.positive-001, money.deserialize.unknown-members-001, money.serialize.roundtrip-001 |
 | WORKFLOW-ERROR-001 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.transition-rejected-001 |
 | WORKFLOW-ERROR-002 | Workflow | MAY | NOT DIRECTLY TESTABLE | — |
-| WORKFLOW-ERROR-003 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001, workflow.transition.reverse-not-implied-001, workflow.transition.undeclared-001 |
+| WORKFLOW-ERROR-003 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001, workflow.transition.reverse-not-implied-001, workflow.transition.state-identity-exact-001, workflow.transition.undeclared-001 |
 | WORKFLOW-GUARD-001 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.pass-001 |
 | WORKFLOW-GUARD-002 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001, workflow.guard.multiple-pass-001, workflow.guard.pass-001, workflow.guard.reject-001 |
 | WORKFLOW-GUARD-003 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001, workflow.guard.reject-001 |
-| WORKFLOW-GUARD-004 | Workflow | MUST / MUST NOT | UNCOVERED | — |
-| WORKFLOW-GUARD-005 | Workflow | MUST / MUST NOT | UNCOVERED | — |
+| WORKFLOW-GUARD-004 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| WORKFLOW-GUARD-005 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | WORKFLOW-GUARD-006 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001 |
 | WORKFLOW-STATES-001 | Workflow | MUST / MUST NOT | COVERED | workflow.create.duplicate-state-001 |
 | WORKFLOW-STATES-002 | Workflow | MUST / MUST NOT | COVERED | workflow.create.initial-state-001, workflow.create.multiple-initial-001 |
 | WORKFLOW-STATES-003 | Workflow | MUST / MUST NOT | COVERED | workflow.create.initial-state-001 |
-| WORKFLOW-STATES-004 | Workflow | MUST / MUST NOT | UNCOVERED | — |
-| WORKFLOW-STATES-005 | Workflow | MUST / MUST NOT | UNCOVERED | — |
+| WORKFLOW-STATES-004 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.undeclared-current-state-001 |
+| WORKFLOW-STATES-005 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.state-identity-exact-001 |
 | WORKFLOW-STATES-006 | Workflow | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
-| WORKFLOW-STATES-007 | Workflow | MUST / MUST NOT | UNCOVERED | — |
+| WORKFLOW-STATES-007 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.multiple-current-states-001 |
 | WORKFLOW-TERMINAL-001 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.entry-allowed-001, workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001 |
 | WORKFLOW-TERMINAL-002 | Workflow | MUST / MUST NOT | COVERED | workflow.create.terminal-outgoing-001 |
 | WORKFLOW-TERMINAL-003 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.transition-rejected-001 |
 | WORKFLOW-TERMINAL-004 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.entry-allowed-001, workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001 |
-| WORKFLOW-TRANSITION-001 | Workflow | MUST / MUST NOT | UNCOVERED | — |
+| WORKFLOW-TRANSITION-001 | Workflow | MUST / MUST NOT | COVERED | workflow.create.undeclared-transition-source-001, workflow.create.undeclared-transition-target-001 |
 | WORKFLOW-TRANSITION-002 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.reverse-not-implied-001 |
 | WORKFLOW-TRANSITION-003 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.entry-allowed-001, workflow.terminal.not-inferred-no-outgoing-001, workflow.transition.undeclared-001, workflow.transition.valid-001 |
 | WORKFLOW-TRANSITION-004 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.pass-001 |
 | WORKFLOW-TRANSITION-005 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.entry-allowed-001, workflow.transition.valid-001 |
 | WORKFLOW-TRANSITION-006 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001, workflow.transition.reverse-not-implied-001, workflow.transition.undeclared-001 |
-| WORKFLOW-TRANSITION-007 | Workflow | MUST / MUST NOT | UNCOVERED | — |
+| WORKFLOW-TRANSITION-007 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | AUDIT-ACTOR-001 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001 |
 | AUDIT-ACTOR-002 | Audit | MUST / MUST NOT | UNCOVERED | — |
 | AUDIT-ACTOR-003 | Audit | MUST / MUST NOT | UNCOVERED | — |
@@ -264,4 +264,4 @@ Vectors do not settle these open questions.
 
 **READY FOR CONFORMANCE RUNNER**
 
-The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money Draft 0.1 has complete vector coverage for current testable mandatory Money requirements and the TypeScript reference implementation passes the full Money suite. Other domains still have uncovered mandatory requirements before broad reference-implementation conformance can be claimed.
+The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money and Workflow Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes both full suites. Audit, Approvals, and Entities still have uncovered mandatory requirements before broader reference-implementation conformance can be claimed.

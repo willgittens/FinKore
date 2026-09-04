@@ -831,6 +831,230 @@
         "terminal-rejection-mutates-state",
         "guard-facts-bypass-terminal-state"
       ]
+    },
+    {
+      "id": "workflow.create.undeclared-transition-source-001",
+      "spec": "workflow/transitions",
+      "requirements": [
+        "WORKFLOW-TRANSITION-001"
+      ],
+      "description": "Rejects a transition whose source is not a declared state.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "ARCHIVED",
+              "target": "SUBMITTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "transition-source-declaration-ignored"
+      ]
+    },
+    {
+      "id": "workflow.create.undeclared-transition-target-001",
+      "spec": "workflow/transitions",
+      "requirements": [
+        "WORKFLOW-TRANSITION-001"
+      ],
+      "description": "Rejects a transition whose target is not a declared state.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "ARCHIVED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "transition-target-declaration-ignored"
+      ]
+    },
+    {
+      "id": "workflow.transition.undeclared-current-state-001",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-004"
+      ],
+      "description": "Rejects an instance whose current state is not declared by its workflow definition.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "ARCHIVED"
+        },
+        "target": "SUBMITTED",
+        "facts": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_STATE"
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "undeclared-current-state-accepted"
+      ]
+    },
+    {
+      "id": "workflow.transition.multiple-current-states-001",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-007"
+      ],
+      "description": "Rejects an instance observation that supplies multiple current states instead of exactly one.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentStates": [
+            "DRAFT",
+            "SUBMITTED"
+          ]
+        },
+        "target": "SUBMITTED",
+        "facts": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_STATE"
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "multiple-current-states-accepted"
+      ]
+    },
+    {
+      "id": "workflow.transition.state-identity-exact-001",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-005",
+        "WORKFLOW-ERROR-003"
+      ],
+      "description": "Treats state identifiers as exact domain names without case normalization and preserves current state on rejection.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "DRAFT"
+        },
+        "target": "submitted",
+        "facts": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_STATE"
+        },
+        "observations": {
+          "currentState": "DRAFT"
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "state-identifier-normalized",
+        "invalid-state-mutates-current-state"
+      ]
     }
   ]
 }

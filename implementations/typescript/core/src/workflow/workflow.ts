@@ -12,13 +12,6 @@ import type {
   WorkflowTransitionOptions,
 } from './types.js'
 
-function validateRequestedState(value: unknown): WorkflowStateIdentifier {
-  if (typeof value !== 'string' || value.length === 0) {
-    throw new InvalidWorkflowStateError()
-  }
-  return value
-}
-
 function factsFrom(options: WorkflowTransitionOptions | undefined): Readonly<Record<string, unknown>> {
   return options?.facts ?? {}
 }
@@ -99,11 +92,11 @@ export class Workflow {
     if (typeof instance !== 'object' || instance === null || !('currentState' in instance)) {
       throw new InvalidWorkflowStateError()
     }
-    const currentState = validateRequestedState((instance as { readonly currentState: unknown }).currentState)
-    if (!definition.hasState(currentState)) {
+    const currentState = (instance as { readonly currentState: unknown }).currentState
+    if (!definition.hasState(currentState as WorkflowStateIdentifier)) {
       throw new InvalidWorkflowStateError()
     }
-    return new Workflow(definition, currentState)
+    return new Workflow(definition, currentState as WorkflowStateIdentifier)
   }
 
   /**
@@ -150,14 +143,15 @@ export class Workflow {
    * @see WORKFLOW-TRANSITION-004
    * @see WORKFLOW-TRANSITION-005
    * @see WORKFLOW-TRANSITION-006
+   * @see WORKFLOW-TRANSITION-007
    * @see WORKFLOW-TERMINAL-003
    * @see WORKFLOW-TERMINAL-004
    */
   transition(target: unknown, options?: WorkflowTransitionOptions): Workflow {
-    const requestedTarget = validateRequestedState(target)
-    if (!this.definition.hasState(requestedTarget)) {
+    if (!this.definition.hasState(target as WorkflowStateIdentifier)) {
       throw new InvalidWorkflowStateError()
     }
+    const requestedTarget = target as WorkflowStateIdentifier
     if (this.definition.isTerminalState(this.state)) {
       throw new WorkflowTerminalStateError()
     }
@@ -167,7 +161,7 @@ export class Workflow {
       throw new InvalidWorkflowTransitionError()
     }
 
-    if (!guardsPass(transition.guards ?? [], factsFrom(options))) {
+    if (!guardsPass(transition.guards!, factsFrom(options))) {
       throw new WorkflowGuardRejectedError()
     }
 

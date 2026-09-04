@@ -110,6 +110,15 @@ describe('Workflow transitions', () => {
         states: ['DRAFT', 'SUBMITTED'],
         initialState: 'DRAFT',
         terminalStates: ['SUBMITTED'],
+        transitions: [null],
+      }),
+    ).toThrow(InvalidWorkflowDefinitionError)
+
+    expect(() =>
+      Workflow.create({
+        states: ['DRAFT', 'SUBMITTED'],
+        initialState: 'DRAFT',
+        terminalStates: ['SUBMITTED'],
         transitions: 'DRAFT->SUBMITTED',
       }),
     ).toThrow(InvalidWorkflowDefinitionError)
@@ -169,6 +178,21 @@ describe('Workflow transitions', () => {
     const missingFacts = Workflow.from(payableDefinition, { currentState: 'SUBMITTED' })
     expect(() => missingFacts.transition('APPROVED')).toThrow(WorkflowGuardRejectedError)
     expect(missingFacts.currentState).toBe('SUBMITTED')
+  })
+
+  it('does not expose an intermediate state while guards are evaluated', () => {
+    const workflow = Workflow.from(payableDefinition, { currentState: 'SUBMITTED' })
+    const facts = Object.defineProperty({}, 'approvalsSatisfied', {
+      enumerable: true,
+      get: () => {
+        expect(workflow.currentState).toBe('SUBMITTED')
+        return true
+      },
+    })
+
+    workflow.transition('APPROVED', { facts })
+
+    expect(workflow.currentState).toBe('APPROVED')
   })
 
   it('rejects malformed guard declarations', () => {

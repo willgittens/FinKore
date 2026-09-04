@@ -10,8 +10,8 @@ import { operationHandlers } from './operations.js'
  * It must not implement financial domain rules itself; those belong in
  * `@finkore/typescript`, with `/spec` remaining authoritative.
  *
- * @returns A conformance adapter supporting only the operations implemented by
- * the current TypeScript Money milestone.
+ * @returns A conformance adapter supporting the operations implemented by the
+ * current TypeScript Money and Workflow Draft 0.1 milestones.
  */
 export function createTypeScriptConformanceAdapter(): FinKoreConformanceAdapter {
   return {

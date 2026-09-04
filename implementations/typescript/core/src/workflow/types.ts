@@ -28,12 +28,15 @@ export type WorkflowErrorCode =
 /**
  * Guard condition supported by the Draft 0.1 TypeScript Workflow milestone.
  *
- * The condition compares one supplied fact to an expected value. Broader guard
- * languages, authorization models, callbacks, and external fact capture remain
- * outside this Workflow milestone.
+ * The condition deterministically compares one supplied fact to an expected
+ * value. Authorization evidence may be supplied as an ordinary fact, but this
+ * type assumes no authorization model. Broader guard languages, callbacks, and
+ * external fact capture remain outside this Workflow milestone.
  *
  * @see WORKFLOW-GUARD-001
  * @see WORKFLOW-GUARD-002
+ * @see WORKFLOW-GUARD-004
+ * @see WORKFLOW-GUARD-005
  */
 export interface WorkflowTransitionGuard {
   /** Fact key to read from a transition request's supplied facts. */

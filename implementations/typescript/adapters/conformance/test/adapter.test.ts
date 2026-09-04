@@ -130,9 +130,14 @@ describe('TypeScript conformance adapter', () => {
       'workflow.create.duplicate-state-001',
       'workflow.create.multiple-initial-001',
       'workflow.create.terminal-outgoing-001',
+      'workflow.create.undeclared-transition-source-001',
+      'workflow.create.undeclared-transition-target-001',
       'workflow.transition.valid-001',
       'workflow.transition.reverse-not-implied-001',
       'workflow.transition.undeclared-001',
+      'workflow.transition.undeclared-current-state-001',
+      'workflow.transition.multiple-current-states-001',
+      'workflow.transition.state-identity-exact-001',
       'workflow.guard.pass-001',
       'workflow.guard.reject-001',
       'workflow.guard.multiple-pass-001',
@@ -142,6 +147,6 @@ describe('TypeScript conformance adapter', () => {
       'workflow.terminal.transition-rejected-001',
     ] })
 
-    expect(report.summary).toEqual({ total: 14, passed: 14, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 19, passed: 19, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 })
