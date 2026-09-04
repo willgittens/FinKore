@@ -6,7 +6,7 @@ import { createTypeScriptConformanceAdapter } from '../src/adapter.js'
 const manifestPath = resolve(import.meta.dirname, '../../../../../conformance/manifest.json')
 
 describe('TypeScript conformance adapter', () => {
-  it('supports Money serialization, canonical arithmetic, comparison, and rounding operations', () => {
+  it('supports Money and first Workflow milestone operations', () => {
     const adapter = createTypeScriptConformanceAdapter()
 
     expect(adapter.supports('money.deserialize')).toBe(true)
@@ -18,9 +18,12 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('finflow.money.negate')).toBe(true)
     expect(adapter.supports('finflow.money.multiply')).toBe(true)
     expect(adapter.supports('finflow.money.divide')).toBe(true)
+    expect(adapter.supports('workflow.create')).toBe(true)
+    expect(adapter.supports('finflow.workflow.transition')).toBe(true)
     expect(adapter.supports('money.negate')).toBe(false)
     expect(adapter.supports('money.multiply')).toBe(false)
     expect(adapter.supports('money.divide')).toBe(false)
+    expect(adapter.supports('workflow.transition')).toBe(false)
   })
 
   it('passes current Money representation and serialization vectors', async () => {
@@ -116,5 +119,25 @@ describe('TypeScript conformance adapter', () => {
     ] })
 
     expect(report.summary).toEqual({ total: 19, passed: 19, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+  })
+
+  it('passes current Workflow state and transition vectors', async () => {
+    const report = await createConformanceRunner({
+      manifestPath,
+      adapter: createTypeScriptConformanceAdapter(),
+    }).run({ vectorIds: [
+      'workflow.create.initial-state-001',
+      'workflow.create.duplicate-state-001',
+      'workflow.create.multiple-initial-001',
+      'workflow.create.terminal-outgoing-001',
+      'workflow.transition.valid-001',
+      'workflow.transition.reverse-not-implied-001',
+      'workflow.transition.undeclared-001',
+      'workflow.guard.pass-001',
+      'workflow.guard.reject-001',
+      'workflow.terminal.transition-rejected-001',
+    ] })
+
+    expect(report.summary).toEqual({ total: 10, passed: 10, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 })

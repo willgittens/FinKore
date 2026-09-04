@@ -1,4 +1,4 @@
-import { Money } from '@finflow/typescript'
+import { Money, Workflow } from '@finflow/typescript'
 import type { AdapterRequest, NormalizedResult } from '@finflow/conformance-runner'
 import { normalizeThrown } from './normalization.js'
 
@@ -38,6 +38,41 @@ function inputUnaryArithmetic(input: unknown): { readonly value: unknown; readon
   }
   const candidate = input as { readonly value: unknown; readonly scalar?: unknown }
   return { value: candidate.value, scalar: candidate.scalar }
+}
+
+function inputWorkflowCreate(input: unknown): { readonly definition: unknown } {
+  if (typeof input !== 'object' || input === null || !('definition' in input)) {
+    return { definition: undefined }
+  }
+  return input as { readonly definition: unknown }
+}
+
+function inputWorkflowTransition(input: unknown): {
+  readonly definition: unknown
+  readonly instance: unknown
+  readonly target: unknown
+  readonly facts?: Readonly<Record<string, unknown>>
+} {
+  if (typeof input !== 'object' || input === null || !('definition' in input) || !('instance' in input)) {
+    return { definition: undefined, instance: undefined, target: undefined }
+  }
+  const candidate = input as {
+    readonly definition: unknown
+    readonly instance: unknown
+    readonly target?: unknown
+    readonly facts?: Readonly<Record<string, unknown>>
+  }
+  const result: {
+    readonly definition: unknown
+    readonly instance: unknown
+    readonly target: unknown
+    readonly facts?: Readonly<Record<string, unknown>>
+  } = {
+    definition: candidate.definition,
+    instance: candidate.instance,
+    target: candidate.target,
+  }
+  return candidate.facts === undefined ? result : { ...result, facts: candidate.facts }
 }
 
 /**
@@ -243,6 +278,49 @@ function executeMoneyRound(request: AdapterRequest): NormalizedResult {
 }
 
 /**
+ * Executes the conformance-local Workflow creation boundary.
+ *
+ * Definition validation and initial-state semantics remain in `Workflow.create`;
+ * this adapter only maps the fixture shape into the TypeScript API.
+ */
+function executeWorkflowCreate(request: AdapterRequest): NormalizedResult {
+  const input = inputWorkflowCreate(request.input)
+  try {
+    return { status: 'success', value: Workflow.create(input.definition).toJSON() }
+  } catch (error) {
+    return normalizeThrown(error)
+  }
+}
+
+/**
+ * Executes canonical Workflow transitions through the TypeScript core API.
+ *
+ * The adapter constructs an instance at the conformance fixture's current
+ * state, delegates transition validation and mutation to the core Workflow API,
+ * and returns current-state and fact observations for rejected transitions.
+ */
+function executeWorkflowTransition(request: AdapterRequest): NormalizedResult {
+  const input = inputWorkflowTransition(request.input)
+  let workflow: Workflow | undefined
+  try {
+    workflow = Workflow.from(input.definition, input.instance)
+    const options = input.facts === undefined ? undefined : { facts: input.facts }
+    return { status: 'success', value: workflow.transition(input.target, options).toJSON() }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && workflow !== undefined) {
+      const facts = input.facts
+      const observations =
+        facts === undefined || Object.keys(facts).length === 0
+          ? { currentState: workflow.currentState }
+          : { currentState: workflow.currentState, facts }
+      return { ...result, observations }
+    }
+    return result
+  }
+}
+
+/**
  * Operation handlers supported by the first TypeScript conformance adapter.
  *
  * Public Money domain operations use canonical Agentic Contract identifiers.
@@ -260,7 +338,9 @@ export const operationHandlers = {
   'finflow.money.divide': executeMoneyDivide,
   'finflow.money.multiply': executeMoneyMultiply,
   'finflow.money.negate': executeMoneyNegate,
+  'finflow.workflow.transition': executeWorkflowTransition,
   'money.serialize': executeMoneySerialization,
+  'workflow.create': executeWorkflowCreate,
 } satisfies Readonly<Record<string, OperationHandler>>
 
 /**

@@ -3,10 +3,13 @@
   "testRunner": "vitest",
   "mutate": [
     "src/money/money.ts",
-    "src/money/types.ts:34-74"
+    "src/money/types.ts:34-74",
+    "src/workflow/definition.ts",
+    "src/workflow/workflow.ts"
   ],
   "testFiles": [
-    "test/money/*.test.ts"
+    "test/money/*.test.ts",
+    "test/workflow/*.test.ts"
   ],
   "reporters": ["clear-text", "html", "json"],
   "thresholds": {

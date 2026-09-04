@@ -1,12 +1,19 @@
 # FinFlow TypeScript
 
-TypeScript reference implementation for the current FinFlow Money milestone.
+TypeScript reference implementation for the current FinFlow Money milestone and
+the first Workflow Core milestone.
 
 FinFlow Money Draft 0.1 is fully implemented by this TypeScript reference implementation. This statement applies only to the current Money specification draft; it does not imply that other FinFlow domains are complete.
 
 This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact compatible-currency numeric comparison, and explicit Money rounding.
 
-It intentionally does not implement FX conversion, persistence, framework integrations, or agent adapters.
+It also implements the first Workflow Core milestone: validated workflow
+definitions, exact state identifiers, one initial state, current state,
+explicit terminal states, directed transitions, simple Draft 0.1 fact-equality
+guards, successful state changes, rejected transition errors, and state
+preservation after rejected transitions.
+
+It intentionally does not implement FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, audit integration, approvals integration, entities, corrections, or reversals.
 
 The specification remains canonical. This package stores validated decimal amounts as strings and performs arithmetic and comparison with scaled integer arithmetic so observable behavior preserves exact base-10 semantics without using JavaScript `number`.
 
@@ -22,6 +29,23 @@ The specification remains canonical. This package stores validated decimal amoun
 - `money.divide(scalar)` returns a new Money value divided by a non-zero exact decimal scalar when the quotient terminates; zero divisors throw `FINFLOW_MONEY_DIVISION_BY_ZERO`, and non-terminating quotients without a rounding policy throw `FINFLOW_MONEY_ROUNDING_REQUIRED`.
 - `money.compare(other)` returns `LESS`, `EQUAL`, or `GREATER` for exact same-currency numeric comparison and throws `FINFLOW_MONEY_CURRENCY_MISMATCH` for incompatible currencies.
 - `money.round({ scale, mode })` returns a new Money value rounded to the explicit target scale using `HALF_UP`, `HALF_EVEN`, `DOWN`, `UP`, `FLOOR`, or `CEILING`; invalid scale or mode values throw `FINFLOW_MONEY_INVALID_ROUNDING`.
+
+## Current Workflow API
+
+- `Workflow.create(definition)` validates a workflow definition and creates an instance in its declared initial state.
+- `Workflow.from(definition, { currentState })` validates an existing current-state observation against the definition.
+- `workflow.currentState` returns the instance's current state identifier exactly as declared.
+- `workflow.transition(target, { facts })` applies a declared directed transition and updates current state on success.
+- `workflow.toJSON()` returns `{ currentState }` for portable observation.
+
+Workflow failures expose portable codes: `FINFLOW_WORKFLOW_INVALID_DEFINITION`,
+`FINFLOW_WORKFLOW_INVALID_STATE`, `FINFLOW_WORKFLOW_INVALID_TRANSITION`,
+`FINFLOW_WORKFLOW_GUARD_REJECTED`, and
+`FINFLOW_WORKFLOW_TERMINAL_STATE`.
+
+This Workflow milestone does not define a production interchange format or a
+full guard language. The current fact-equality guard shape exists to satisfy
+Draft 0.1 conformance semantics without introducing broader workflow behavior.
 
 ## API Documentation
 
