@@ -1,11 +1,13 @@
 # FinKore TypeScript
 
-TypeScript reference implementation for the current FinKore Money and Workflow
-Draft 0.1 milestones.
+TypeScript reference implementation for the current FinKore Money, Workflow,
+and Audit Stage 1 Draft 0.1 milestones.
 
 FinKore Money Draft 0.1 is fully implemented by this TypeScript reference implementation. This statement applies only to the current Money specification draft; it does not imply that other FinKore domains are complete.
 
 FinKore Workflow Draft 0.1 is fully implemented by the TypeScript reference implementation. This statement applies only to the current Workflow specification draft; it does not imply that Audit, Approvals, Entities, or other FinKore domains are complete.
+
+Audit Stage 1 is implemented for Events, Actors, and append-only logical history. This does not claim full Audit Draft 0.1 conformance; Audit changes beyond preservation, redaction, ordering semantics, persistence, and cross-domain integrations remain outside this milestone.
 
 This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact compatible-currency numeric comparison, and explicit Money rounding.
 
@@ -16,7 +18,7 @@ explicit terminal-state detection, rejection of outgoing transitions in
 terminal definitions, terminal-state transition rejection and portable error
 precedence, successful state changes, and state preservation after rejection.
 
-It intentionally does not implement FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, audit integration, approvals integration, entities, corrections, or reversals.
+It intentionally does not implement FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, audit redaction, distributed audit ordering, audit persistence, approvals integration, entities, corrections, or reversals.
 
 The specification remains canonical. This package stores validated decimal amounts as strings and performs arithmetic and comparison with scaled integer arithmetic so observable behavior preserves exact base-10 semantics without using JavaScript `number`.
 
@@ -65,6 +67,21 @@ This Workflow milestone does not define a production interchange format,
 callback guard model, authorization system, or full guard language. The current
 fact-equality guard shape exists to satisfy Draft 0.1 conformance semantics
 without introducing broader workflow behavior.
+
+## Current Audit API
+
+- `AuditActor.from(actor)` validates known actor attribution with a stable opaque identity and optional type/display metadata.
+- `AuditEvent.from(event)` validates a Stage 1 Audit Event with caller-supplied `eventId`, `eventType`, `entity`, optional `actor`, and explicit RFC 3339 `occurredAt` timestamp.
+- `AuditLog.create(history)` creates a logical audit history from existing committed events and rejects duplicate event identities.
+- `auditLog.append(event)` validates and appends one event, rejecting duplicate identities and failed appends without changing prior history.
+- `auditLog.replace()` and `auditLog.remove()` reject attempts to rewrite committed history with `FINKORE_AUDIT_APPEND_ONLY_VIOLATION`.
+- `auditLog.events()` and `auditLog.toJSON()` return defensive observations of committed history.
+
+Audit failures expose portable codes: `FINKORE_AUDIT_INVALID_EVENT`,
+`FINKORE_AUDIT_DUPLICATE_EVENT`,
+`FINKORE_AUDIT_APPEND_ONLY_VIOLATION`,
+`FINKORE_AUDIT_REDACTION_INVALID`, and
+`FINKORE_AUDIT_ACTOR_INVALID`. Redaction behavior is not implemented in Stage 1; its portable error class is exported only because the code is already defined by the specification.
 
 ## API Documentation
 

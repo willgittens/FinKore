@@ -1,3 +1,15 @@
+export { AuditActor } from './audit/actor.js'
+export { AuditEvent } from './audit/audit-event.js'
+export { AuditLog } from './audit/audit-log.js'
+export {
+  AuditAppendOnlyViolationError,
+  DuplicateAuditEventError,
+  FinKoreAuditError,
+  InvalidAuditActorError,
+  InvalidAuditEventError,
+  InvalidAuditRedactionError,
+  isFinKoreAuditError,
+} from './audit/errors.js'
 export { Currency, isValidCurrencyIdentifier } from './money/currency.js'
 export {
   CurrencyMismatchError,
@@ -39,3 +51,16 @@ export type {
   WorkflowTransitionGuard,
   WorkflowTransitionOptions,
 } from './workflow/types.js'
+export type {
+  AuditActorIdentifier,
+  AuditActorType,
+  AuditEntityIdentifier,
+  AuditEntityType,
+  AuditErrorCode,
+  AuditEventIdentifier,
+  SerializedAuditActor,
+  SerializedAuditChange,
+  SerializedAuditEntityReference,
+  SerializedAuditEvent,
+  SerializedAuditHistory,
+} from './audit/types.js'

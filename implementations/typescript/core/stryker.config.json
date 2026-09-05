@@ -5,11 +5,15 @@
     "src/money/money.ts",
     "src/money/types.ts:34-74",
     "src/workflow/definition.ts",
-    "src/workflow/workflow.ts"
+    "src/workflow/workflow.ts",
+    "src/audit/actor.ts",
+    "src/audit/audit-event.ts:17-135",
+    "src/audit/audit-log.ts"
   ],
   "testFiles": [
     "test/money/*.test.ts",
-    "test/workflow/*.test.ts"
+    "test/workflow/*.test.ts",
+    "test/audit/*.test.ts"
   ],
   "reporters": ["clear-text", "html", "json"],
   "thresholds": {

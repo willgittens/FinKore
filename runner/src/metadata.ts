@@ -16,6 +16,9 @@ export const AGENTIC_OPERATION_IDS = new Set([
   'finkore.money.compare',
   'finkore.money.round',
   'finkore.workflow.transition',
+  'finkore.audit.append',
+  'finkore.audit.replace',
+  'finkore.audit.remove',
 ])
 
 export const CONFORMANCE_OPERATION_IDS = new Set([
@@ -23,9 +26,6 @@ export const CONFORMANCE_OPERATION_IDS = new Set([
   'money.deserialize',
   'money.serialize',
   'workflow.create',
-  'audit.append',
-  'audit.replace',
-  'audit.remove',
   'audit.redact',
   'audit.order',
   'approval.requirement.evaluate',

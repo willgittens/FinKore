@@ -19,6 +19,9 @@ contract, effects, and inputs are reviewed.
 | `finkore.money.compare` | Money | No | No | Yes | None | None | `MONEY-COMPARISON-001`–`-004`, `-006` |
 | `finkore.money.round` | Money | No | No | Yes | None | None | `MONEY-ROUNDING-001`–`-004`, `-008`, `-009` |
 | `finkore.workflow.transition` | Workflow | Yes | Unspecified | Unspecified | May | May be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007` |
+| `finkore.audit.append` | Audit | Yes | No | Yes | Records | None | `AUDIT-EVENT-001`, `-002`, `-004`, `-005`, `AUDIT-ACTOR-001`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001` |
+| `finkore.audit.replace` | Audit | No | No | Yes | None | None | `AUDIT-APPEND-001` |
+| `finkore.audit.remove` | Audit | No | No | Yes | None | None | `AUDIT-APPEND-001` |
 
 `Unspecified` is deliberate. A generic Workflow may not be attached to a
 Financial Entity, and a guard may declare dependence on external facts. No
@@ -154,6 +157,72 @@ Money validation errors may apply; this list is not exhaustive.
 
 **Normative traceability:** [MONEY-ROUNDING-001 through -004, -008, and -009](../spec/money/rounding.md)
 and [MONEY-ERROR-006, -007](../spec/money/errors.md).
+
+## `finkore.audit.append`
+
+**Purpose:** Commit one valid Audit Event to a logical Audit history.
+
+**Input semantics:** Existing logical history and a candidate Audit Event with
+caller-supplied stable event identity, event type, entity reference, optional
+known Actor, and explicit occurrence timestamp. Current conformance fixtures use
+`history` and `event`; this fixture shape is not a production storage format.
+
+**Preconditions:** Event content is valid; known Actor attribution is valid when
+supplied; the event identity has not already been committed in the supplied
+logical history.
+
+**Success postcondition:** The event is appended to the logical history while
+all existing committed event identities and meanings are preserved.
+
+**Failure postcondition:** The supplied logical history remains unchanged.
+
+**Known operation-specific errors:** `FINKORE_AUDIT_INVALID_EVENT`,
+`FINKORE_AUDIT_ACTOR_INVALID`, and `FINKORE_AUDIT_DUPLICATE_EVENT`. This
+Stage 1 operation does not perform redaction.
+
+**Normative traceability:**
+[AUDIT-EVENT-001, -002, -004, -005](../spec/audit/events.md),
+[AUDIT-ACTOR-001 through -004 and -007 through -008](../spec/audit/actors.md),
+[AUDIT-APPEND-001 and -003](../spec/audit/append-only.md), and
+[AUDIT-ERROR-001](../spec/audit/errors.md).
+
+## `finkore.audit.replace`
+
+**Purpose:** Reject replacement of committed Audit Event content.
+
+**Input semantics:** Existing logical history and a replacement request. The
+replacement payload is intentionally not interpreted by the Agentic layer.
+
+**Preconditions:** None that permit replacement; committed logical Audit history
+is append-only.
+
+**Success postcondition:** None. Draft 0.1 defines no successful replacement of
+committed Audit Events outside future redaction policy semantics.
+
+**Failure postcondition:** The supplied logical history remains unchanged.
+
+**Known operation-specific error:** `FINKORE_AUDIT_APPEND_ONLY_VIOLATION`.
+
+**Normative traceability:** [AUDIT-APPEND-001](../spec/audit/append-only.md).
+
+## `finkore.audit.remove`
+
+**Purpose:** Reject removal of committed Audit Event content.
+
+**Input semantics:** Existing logical history and a removal request. The target
+identifier is not interpreted as permission to erase committed logical history.
+
+**Preconditions:** None that permit removal; committed logical Audit history is
+append-only.
+
+**Success postcondition:** None. Draft 0.1 defines no successful removal of
+committed Audit Events outside future redaction policy semantics.
+
+**Failure postcondition:** The supplied logical history remains unchanged.
+
+**Known operation-specific error:** `FINKORE_AUDIT_APPEND_ONLY_VIOLATION`.
+
+**Normative traceability:** [AUDIT-APPEND-001](../spec/audit/append-only.md).
 
 ## `finkore.workflow.transition`
 

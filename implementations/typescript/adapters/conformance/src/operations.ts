@@ -1,4 +1,4 @@
-import { Money, Workflow } from '@finkore/typescript'
+import { AuditLog, Money, Workflow } from '@finkore/typescript'
 import type { AdapterRequest, NormalizedResult } from '@finkore/conformance-runner'
 import { normalizeThrown } from './normalization.js'
 
@@ -73,6 +73,20 @@ function inputWorkflowTransition(input: unknown): {
     target: candidate.target,
   }
   return candidate.facts === undefined ? result : { ...result, facts: candidate.facts }
+}
+
+function inputAuditHistory(input: unknown): { readonly history: unknown } {
+  if (typeof input !== 'object' || input === null || !('history' in input)) {
+    return { history: undefined }
+  }
+  return input as { readonly history: unknown }
+}
+
+function inputAuditAppend(input: unknown): { readonly history: unknown; readonly event: unknown } {
+  if (typeof input !== 'object' || input === null || !('history' in input) || !('event' in input)) {
+    return { history: undefined, event: undefined }
+  }
+  return input as { readonly history: unknown; readonly event: unknown }
 }
 
 /**
@@ -321,6 +335,72 @@ function executeWorkflowTransition(request: AdapterRequest): NormalizedResult {
 }
 
 /**
+ * Executes canonical Audit append through the TypeScript core API.
+ *
+ * The adapter reconstructs the supplied logical history, delegates event
+ * validation, duplicate identity checks, and append-only behavior to
+ * `AuditLog.append`, and returns the normalized committed history.
+ */
+function executeAuditAppend(request: AdapterRequest): NormalizedResult {
+  const input = inputAuditAppend(request.input)
+  let log: AuditLog | undefined
+  try {
+    log = AuditLog.create(input.history as readonly unknown[])
+    return { status: 'success', value: log.append(input.event).toJSON() }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && log !== undefined) {
+      return { ...result, observations: { history: log.events() } }
+    }
+    return result
+  }
+}
+
+/**
+ * Executes canonical Audit replace attempts through the TypeScript core API.
+ *
+ * Replacement is rejected by core append-only semantics; the adapter only
+ * constructs the supplied history and reports the post-failure observation.
+ */
+function executeAuditReplace(request: AdapterRequest): NormalizedResult {
+  const input = inputAuditHistory(request.input)
+  let log: AuditLog | undefined
+  try {
+    log = AuditLog.create(input.history as readonly unknown[])
+    log.replace()
+    throw new Error('Unreachable Audit replace success')
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && log !== undefined) {
+      return { ...result, observations: { history: log.events() } }
+    }
+    return result
+  }
+}
+
+/**
+ * Executes canonical Audit remove attempts through the TypeScript core API.
+ *
+ * Removal is rejected by core append-only semantics; the adapter only
+ * constructs the supplied history and reports the post-failure observation.
+ */
+function executeAuditRemove(request: AdapterRequest): NormalizedResult {
+  const input = inputAuditHistory(request.input)
+  let log: AuditLog | undefined
+  try {
+    log = AuditLog.create(input.history as readonly unknown[])
+    log.remove()
+    throw new Error('Unreachable Audit remove success')
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && log !== undefined) {
+      return { ...result, observations: { history: log.events() } }
+    }
+    return result
+  }
+}
+
+/**
  * Operation handlers supported by the first TypeScript conformance adapter.
  *
  * Public Money domain operations use canonical Agentic Contract identifiers.
@@ -339,6 +419,9 @@ export const operationHandlers = {
   'finkore.money.multiply': executeMoneyMultiply,
   'finkore.money.negate': executeMoneyNegate,
   'finkore.workflow.transition': executeWorkflowTransition,
+  'finkore.audit.append': executeAuditAppend,
+  'finkore.audit.replace': executeAuditReplace,
+  'finkore.audit.remove': executeAuditRemove,
   'money.serialize': executeMoneySerialization,
   'workflow.create': executeWorkflowCreate,
 } satisfies Readonly<Record<string, OperationHandler>>

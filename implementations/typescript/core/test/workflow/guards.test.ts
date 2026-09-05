@@ -55,6 +55,19 @@ describe('Workflow guards', () => {
     }
   })
 
+  it('does not treat supplied facts as guards for unguarded transitions', () => {
+    const workflow = Workflow.create({
+      states: ['DRAFT', 'SUBMITTED'],
+      initialState: 'DRAFT',
+      terminalStates: ['SUBMITTED'],
+      transitions: [{ source: 'DRAFT', target: 'SUBMITTED' }],
+    })
+
+    workflow.transition('SUBMITTED', { facts: { undefined: 'not-a-guard', approvalsSatisfied: false } })
+
+    expect(workflow.currentState).toBe('SUBMITTED')
+  })
+
   it('does not let a passing guard validate an undeclared transition', () => {
     const workflow = Workflow.create(guardedDefinition)
 

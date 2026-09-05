@@ -1,0 +1,180 @@
+/**
+ * Stable identifier for a committed FinKore Audit Event.
+ *
+ * The TypeScript implementation treats event identifiers as caller-supplied,
+ * opaque domain values. It does not infer type, origin, time, or ordering from
+ * the identifier's characters.
+ *
+ * @see SPEC-IDENTIFIER-001
+ * @see SPEC-IDENTIFIER-002
+ * @see SPEC-IDENTIFIER-003
+ * @see AUDIT-EVENT-001
+ */
+export type AuditEventIdentifier = string
+
+/**
+ * Stable identifier for the Financial Entity affected by an Audit Event.
+ *
+ * @see AUDIT-EVENT-004
+ */
+export type AuditEntityIdentifier = string
+
+/**
+ * Domain type of the Financial Entity affected by an Audit Event.
+ *
+ * @see AUDIT-EVENT-004
+ */
+export type AuditEntityType = string
+
+/**
+ * Stable identifier for a known Audit Actor.
+ *
+ * Actor identifiers are opaque and must not be replaced by display names.
+ *
+ * @see AUDIT-ACTOR-001
+ * @see AUDIT-ACTOR-002
+ * @see AUDIT-ACTOR-003
+ */
+export type AuditActorIdentifier = string
+
+/**
+ * Optional actor type supplied by a composing domain or application.
+ *
+ * FinKore Draft 0.1 does not define a closed actor-type catalog.
+ *
+ * @see AUDIT-ACTOR-007
+ */
+export type AuditActorType = string
+
+/**
+ * Portable FinKore Audit error code.
+ *
+ * Consumers that need cross-language semantics should rely on these codes
+ * rather than TypeScript-specific error class names or messages.
+ *
+ * @see SPEC-ERROR-001
+ * @see SPEC-ERROR-002
+ */
+export type AuditErrorCode =
+  | 'FINKORE_AUDIT_INVALID_EVENT'
+  | 'FINKORE_AUDIT_DUPLICATE_EVENT'
+  | 'FINKORE_AUDIT_APPEND_ONLY_VIOLATION'
+  | 'FINKORE_AUDIT_REDACTION_INVALID'
+  | 'FINKORE_AUDIT_ACTOR_INVALID'
+
+/**
+ * Serialized reference to the Financial Entity affected by an Audit Event.
+ *
+ * Both members are stable domain identifiers. This type does not prescribe a
+ * storage model or entity lifecycle implementation.
+ *
+ * @see AUDIT-EVENT-004
+ */
+export interface SerializedAuditEntityReference {
+  /** Stable entity type. */
+  readonly type: AuditEntityType
+
+  /** Stable entity identifier within the relevant entity scope. */
+  readonly id: AuditEntityIdentifier
+}
+
+/**
+ * Serialized known Actor attribution for an Audit Event.
+ *
+ * Actor type and display metadata may be retained as context, but the stable
+ * identity remains the actor identifier. FinKore Draft 0.1 does not define
+ * authentication, authorization, RBAC, or an identity-provider binding.
+ *
+ * @see AUDIT-ACTOR-001
+ * @see AUDIT-ACTOR-002
+ * @see AUDIT-ACTOR-003
+ * @see AUDIT-ACTOR-007
+ */
+export interface SerializedAuditActor {
+  /** Stable actor identifier. */
+  readonly id: AuditActorIdentifier
+
+  /** Optional actor type, such as a user, service, system, or integration. */
+  readonly type?: AuditActorType
+
+  /** Optional historical display metadata that must not replace identity. */
+  readonly displayName?: string
+
+  /** Optional non-normative actor context. */
+  readonly metadata?: unknown
+}
+
+/**
+ * Serialized domain field change retained inside an Audit Event.
+ *
+ * Stage 1 preserves supplied change content exactly enough to keep existing
+ * conformance vectors meaningful; it does not define a full domain path syntax,
+ * redaction behavior, or Money-specific change validation.
+ *
+ * @see AUDIT-CHANGE-001
+ * @see AUDIT-CHANGE-002
+ * @see AUDIT-CHANGE-003
+ * @see AUDIT-CHANGE-007
+ */
+export interface SerializedAuditChange {
+  /** Domain path or field name supplied by the composing domain. */
+  readonly path: string
+
+  /** Prior value when safely retained by the composing domain. */
+  readonly before?: unknown
+
+  /** Resulting value when safely retained by the composing domain. */
+  readonly after?: unknown
+}
+
+/**
+ * Serialized FinKore Audit Event accepted by the Stage 1 TypeScript core.
+ *
+ * Event identity and timestamp are supplied explicitly; this implementation
+ * does not generate identifiers, read wall-clock time, or infer distributed
+ * ordering from timestamps or array positions.
+ *
+ * @see AUDIT-EVENT-001
+ * @see AUDIT-EVENT-002
+ * @see AUDIT-EVENT-004
+ * @see AUDIT-EVENT-005
+ * @see AUDIT-EVENT-006
+ * @see AUDIT-EVENT-007
+ */
+export interface SerializedAuditEvent {
+  /** Stable event identity within one logical audit history. */
+  readonly eventId: AuditEventIdentifier
+
+  /** Domain occurrence type recorded by this Audit Event. */
+  readonly eventType: string
+
+  /** Affected Financial Entity reference. */
+  readonly entity: SerializedAuditEntityReference
+
+  /** Known responsible Actor; omitted when actor attribution is unknown. */
+  readonly actor?: SerializedAuditActor
+
+  /** RFC 3339 date-time with an explicit numeric UTC offset or Z. */
+  readonly occurredAt: string
+
+  /** Optional domain-relevant changes preserved as event content. */
+  readonly changes?: readonly SerializedAuditChange[]
+
+  /** Optional event context that must not replace required event fields. */
+  readonly metadata?: unknown
+}
+
+/**
+ * Portable observation of one logical Audit history.
+ *
+ * The order is the local history's append observation only. It is not a global
+ * ordering guarantee for independently produced concurrent events.
+ *
+ * @see AUDIT-APPEND-001
+ * @see AUDIT-APPEND-002
+ * @see AUDIT-APPEND-006
+ */
+export interface SerializedAuditHistory {
+  /** Committed Audit Events in this logical history's append observation. */
+  readonly history: readonly SerializedAuditEvent[]
+}

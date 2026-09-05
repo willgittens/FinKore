@@ -20,6 +20,12 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('finkore.money.divide')).toBe(true)
     expect(adapter.supports('workflow.create')).toBe(true)
     expect(adapter.supports('finkore.workflow.transition')).toBe(true)
+    expect(adapter.supports('finkore.audit.append')).toBe(true)
+    expect(adapter.supports('finkore.audit.replace')).toBe(true)
+    expect(adapter.supports('finkore.audit.remove')).toBe(true)
+    expect(adapter.supports('audit.append')).toBe(false)
+    expect(adapter.supports('audit.redact')).toBe(false)
+    expect(adapter.supports('audit.order')).toBe(false)
     expect(adapter.supports('money.negate')).toBe(false)
     expect(adapter.supports('money.multiply')).toBe(false)
     expect(adapter.supports('money.divide')).toBe(false)
@@ -121,6 +127,15 @@ describe('TypeScript conformance adapter', () => {
     expect(report.summary).toEqual({ total: 19, passed: 19, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
+  it('passes current Stage 1 Audit vectors and leaves later Audit vectors unsupported', async () => {
+    const report = await createConformanceRunner({
+      manifestPath,
+      adapter: createTypeScriptConformanceAdapter(),
+    }).run({ suites: ['audit'] })
+
+    expect(report.summary).toEqual({ total: 11, passed: 9, failed: 0, unsupported: 2, infrastructureErrors: 0 })
+  })
+
   it('passes current Workflow state and transition vectors', async () => {
     const report = await createConformanceRunner({
       manifestPath,
@@ -134,6 +149,7 @@ describe('TypeScript conformance adapter', () => {
       'workflow.create.undeclared-transition-target-001',
       'workflow.transition.valid-001',
       'workflow.transition.reverse-not-implied-001',
+      'workflow.transition.unguarded-ignores-facts-001',
       'workflow.transition.undeclared-001',
       'workflow.transition.undeclared-current-state-001',
       'workflow.transition.multiple-current-states-001',
@@ -147,6 +163,6 @@ describe('TypeScript conformance adapter', () => {
       'workflow.terminal.transition-rejected-001',
     ] })
 
-    expect(report.summary).toEqual({ total: 19, passed: 19, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 20, passed: 20, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 })

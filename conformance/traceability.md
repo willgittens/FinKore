@@ -14,7 +14,7 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Entities | 34 | 29 | 3 | 2 | 17 | 0 | 13 | 4 |
 | **Total** | **212** | **183** | **15** | **14** | **114** | **0** | **46** | **52** |
 
-The suite contains 105 vectors. Overall: **114 covered (53.8%)**, **0 partially covered (0.0%)**, **46 uncovered (21.7%)**, and **52 not directly testable (24.5%)**.
+The suite contains 106 vectors. Overall: **114 covered (53.8%)**, **0 partially covered (0.0%)**, **46 uncovered (21.7%)**, and **52 not directly testable (24.5%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, and guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove. These guarantees remain subject to implementation unit, mutation, and architectural review. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -123,9 +123,9 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | WORKFLOW-TERMINAL-004 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.entry-allowed-001, workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001 |
 | WORKFLOW-TRANSITION-001 | Workflow | MUST / MUST NOT | COVERED | workflow.create.undeclared-transition-source-001, workflow.create.undeclared-transition-target-001 |
 | WORKFLOW-TRANSITION-002 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.reverse-not-implied-001 |
-| WORKFLOW-TRANSITION-003 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.entry-allowed-001, workflow.terminal.not-inferred-no-outgoing-001, workflow.transition.undeclared-001, workflow.transition.valid-001 |
-| WORKFLOW-TRANSITION-004 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.pass-001 |
-| WORKFLOW-TRANSITION-005 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.entry-allowed-001, workflow.transition.valid-001 |
+| WORKFLOW-TRANSITION-003 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.entry-allowed-001, workflow.terminal.not-inferred-no-outgoing-001, workflow.transition.undeclared-001, workflow.transition.unguarded-ignores-facts-001, workflow.transition.valid-001 |
+| WORKFLOW-TRANSITION-004 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.pass-001, workflow.transition.unguarded-ignores-facts-001 |
+| WORKFLOW-TRANSITION-005 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.entry-allowed-001, workflow.transition.unguarded-ignores-facts-001, workflow.transition.valid-001 |
 | WORKFLOW-TRANSITION-006 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001, workflow.transition.reverse-not-implied-001, workflow.transition.undeclared-001 |
 | WORKFLOW-TRANSITION-007 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | AUDIT-ACTOR-001 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001 |

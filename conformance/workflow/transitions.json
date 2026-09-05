@@ -318,6 +318,57 @@
       ]
     },
     {
+      "id": "workflow.transition.unguarded-ignores-facts-001",
+      "spec": "workflow/transitions",
+      "requirements": [
+        "WORKFLOW-TRANSITION-003",
+        "WORKFLOW-TRANSITION-004",
+        "WORKFLOW-TRANSITION-005"
+      ],
+      "description": "Applies an unguarded declared transition without treating supplied facts as guards.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "DRAFT"
+        },
+        "target": "SUBMITTED",
+        "facts": {
+          "undefined": "not-a-guard",
+          "approvalsSatisfied": false
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "SUBMITTED"
+        }
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unguarded-transition-treated-as-guarded",
+        "irrelevant-facts-block-unguarded-transition"
+      ]
+    },
+    {
       "id": "workflow.transition.undeclared-001",
       "spec": "workflow/transitions",
       "requirements": [

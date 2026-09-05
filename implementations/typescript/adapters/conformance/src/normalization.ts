@@ -1,4 +1,4 @@
-import { FinKoreMoneyError, FinKoreWorkflowError } from '@finkore/typescript'
+import { FinKoreAuditError, FinKoreMoneyError, FinKoreWorkflowError } from '@finkore/typescript'
 import type { NormalizedResult } from '@finkore/conformance-runner'
 
 /**
@@ -18,7 +18,7 @@ import type { NormalizedResult } from '@finkore/conformance-runner'
  * @see SPEC-ERROR-002
  */
 export function normalizeThrown(error: unknown): NormalizedResult {
-  if (error instanceof FinKoreMoneyError || error instanceof FinKoreWorkflowError) {
+  if (error instanceof FinKoreMoneyError || error instanceof FinKoreWorkflowError || error instanceof FinKoreAuditError) {
     return { status: 'error', error: { code: error.code } }
   }
   throw error

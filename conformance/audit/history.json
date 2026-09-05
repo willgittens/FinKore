@@ -12,7 +12,7 @@
         "AUDIT-ACTOR-001"
       ],
       "description": "Appends a complete event with stable identity, entity, actor, and explicit timestamp.",
-      "operation": "audit.append",
+      "operation": "finkore.audit.append",
       "input": {
         "history": [],
         "event": {
@@ -81,7 +81,7 @@
         "AUDIT-EVENT-002"
       ],
       "description": "Allows actor omission when the responsible actor is unknown.",
-      "operation": "audit.append",
+      "operation": "finkore.audit.append",
       "input": {
         "history": [],
         "event": {
@@ -138,7 +138,7 @@
         "AUDIT-ERROR-001"
       ],
       "description": "Rejects a missing occurrence timestamp without partially appending.",
-      "operation": "audit.append",
+      "operation": "finkore.audit.append",
       "input": {
         "history": [],
         "event": {
@@ -181,7 +181,7 @@
         "AUDIT-ERROR-001"
       ],
       "description": "Rejects an entity reference without stable identity.",
-      "operation": "audit.append",
+      "operation": "finkore.audit.append",
       "input": {
         "history": [],
         "event": {
@@ -225,7 +225,7 @@
         "AUDIT-APPEND-003"
       ],
       "description": "Rejects an already committed event identity without duplication.",
-      "operation": "audit.append",
+      "operation": "finkore.audit.append",
       "input": {
         "history": [
           {
@@ -316,7 +316,7 @@
         "AUDIT-APPEND-001"
       ],
       "description": "Forbids replacing a committed event.",
-      "operation": "audit.replace",
+      "operation": "finkore.audit.replace",
       "input": {
         "history": [
           {
@@ -408,7 +408,7 @@
         "AUDIT-APPEND-001"
       ],
       "description": "Forbids removing a committed event.",
-      "operation": "audit.remove",
+      "operation": "finkore.audit.remove",
       "input": {
         "history": [
           {
@@ -481,7 +481,7 @@
         "AUDIT-CHANGE-002"
       ],
       "description": "Preserves the direction of a recorded prior-to-resulting change.",
-      "operation": "audit.append",
+      "operation": "finkore.audit.append",
       "input": {
         "history": [],
         "event": {
@@ -547,7 +547,7 @@
         "AUDIT-CHANGE-003"
       ],
       "description": "Keeps an absent prior value distinct from an explicit null resulting value.",
-      "operation": "audit.append",
+      "operation": "finkore.audit.append",
       "input": {
         "history": [],
         "event": {
