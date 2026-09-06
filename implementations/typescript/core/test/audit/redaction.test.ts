@@ -68,6 +68,39 @@ describe('Audit redaction', () => {
     ])
   })
 
+  it('redacts optional actor context while preserving actor identity and type', () => {
+    const event = {
+      ...protectedEvent,
+      eventId: 'evt-actor-context',
+      actor: { type: 'user', id: 'user-7', displayName: 'Ada', metadata: { email: 'ada@example.test' } },
+    }
+    const log = AuditLog.create([event])
+
+    const result = log.redact({
+      policy: { id: 'actor-context-policy', protectedPaths: ['actor.displayName', 'actor.metadata'], authority: 'retention-policy' },
+      redactionEvent,
+    })
+
+    expect(result.event.actor).toEqual({
+      type: 'user',
+      id: 'user-7',
+      displayName: { presence: 'REDACTED' },
+      metadata: { presence: 'REDACTED' },
+    })
+    expect(log.toJSON()).toEqual({ history: [event, redactionEvent] })
+  })
+
+  it('rejects actor identity or type redaction without partial mutation', () => {
+    for (const protectedPaths of [['actor.id'], ['actor.type']]) {
+      const log = AuditLog.create([protectedEvent])
+
+      expect(() =>
+        log.redact({ policy: { id: 'bad-actor-policy', protectedPaths, authority: 'retention-policy' }, redactionEvent }),
+      ).toThrow(InvalidAuditRedactionError)
+      expect(log.toJSON()).toEqual({ history: [protectedEvent] })
+    }
+  })
+
   it('keeps redacted, absent, null, false, zero, empty string, arrays, and records distinguishable', () => {
     const event = {
       ...protectedEvent,
@@ -151,6 +184,7 @@ describe('Audit redaction', () => {
 
   it('rejects invalid, ambiguous, repeated, or non-targeting redactions without partial mutation', () => {
     for (const badRequest of [
+      undefined,
       null,
       'not-a-request',
       { policy: { id: '', protectedPaths: ['bankAccount'], authority: 'retention-policy' }, redactionEvent },

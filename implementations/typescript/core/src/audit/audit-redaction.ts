@@ -32,6 +32,9 @@ function redactValue(value: unknown): SerializedAuditRedactedValue {
   return { presence: 'REDACTED' }
 }
 
+const ACTOR_DISPLAY_NAME_TARGET = 'actor.displayName'
+const ACTOR_METADATA_TARGET = 'actor.metadata'
+
 function redactChange(change: SerializedAuditChange, protectedPaths: ReadonlySet<string>): SerializedAuditChange {
   if (!protectedPaths.has(change.path)) return cloneAuditValue(change)
 
@@ -49,10 +52,31 @@ function redactChange(change: SerializedAuditChange, protectedPaths: ReadonlySet
 function foundProtectedPaths(event: SerializedAuditEvent, policy: AuditRedactionPolicy): ReadonlySet<string> {
   const protectedPaths = new Set(policy.protectedPaths)
   const foundPaths = new Set<string>()
+  if (protectedPaths.has(ACTOR_DISPLAY_NAME_TARGET) && event.actor !== undefined && Object.hasOwn(event.actor, 'displayName')) {
+    foundPaths.add(ACTOR_DISPLAY_NAME_TARGET)
+  }
+  if (protectedPaths.has(ACTOR_METADATA_TARGET) && event.actor !== undefined && Object.hasOwn(event.actor, 'metadata')) {
+    foundPaths.add(ACTOR_METADATA_TARGET)
+  }
   for (const change of event.changes ?? []) {
     if (protectedPaths.has(change.path)) foundPaths.add(change.path)
   }
   return foundPaths
+}
+
+function redactActor(
+  actor: NonNullable<SerializedAuditEvent['actor']>,
+  protectedPaths: ReadonlySet<string>,
+): NonNullable<SerializedAuditEvent['actor']> {
+  return {
+    ...cloneAuditValue(actor),
+    ...(protectedPaths.has(ACTOR_DISPLAY_NAME_TARGET) && Object.hasOwn(actor, 'displayName')
+      ? { displayName: redactValue(actor.displayName) }
+      : {}),
+    ...(protectedPaths.has(ACTOR_METADATA_TARGET) && Object.hasOwn(actor, 'metadata')
+      ? { metadata: redactValue(actor.metadata) }
+      : {}),
+  }
 }
 
 /**
@@ -93,10 +117,10 @@ export function auditEventMatchesRedactionPolicy(event: SerializedAuditEvent, po
 }
 
 /**
- * Produces a redacted representation of one Audit Event for protected changes.
+ * Produces a redacted representation of one Audit Event for protected content.
  *
- * Required event identity, type, entity reference, timestamp, actor attribution,
- * and unrelated changes are preserved. The committed source event supplied by
+ * Required event identity, type, entity reference, timestamp, actor identity,
+ * actor type, and unrelated changes are preserved. The committed source event supplied by
  * the caller is not modified.
  *
  * @param event - Committed Audit Event observation to redact.
@@ -108,6 +132,7 @@ export function auditEventMatchesRedactionPolicy(event: SerializedAuditEvent, po
  * @see AUDIT-REDACTION-002
  * @see AUDIT-REDACTION-003
  * @see AUDIT-CHANGE-006
+ * @see AUDIT-ACTOR-006
  */
 export function redactAuditEvent(event: SerializedAuditEvent, policy: AuditRedactionPolicy): SerializedAuditEvent {
   const protectedPaths = new Set(policy.protectedPaths)
@@ -116,6 +141,7 @@ export function redactAuditEvent(event: SerializedAuditEvent, policy: AuditRedac
 
   return {
     ...cloneAuditValue(event),
+    ...(event.actor === undefined ? {} : { actor: redactActor(event.actor, protectedPaths) }),
     ...(event.changes === undefined ? {} : { changes: changes.map((change) => redactChange(change, protectedPaths)) }),
   }
 }

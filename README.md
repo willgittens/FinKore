@@ -105,7 +105,7 @@ FinKore is not an ERP, ORM, payment processor, UI framework, accounting applicat
 
 ## Project Status
 
-FinKore is experimental. Money and Workflow are complete for Draft 0.1 in the TypeScript reference implementation, and Audit Stage 1 implements Events, Actors, and append-only logical history. Money covers representation, canonical serialization, portable errors, exact arithmetic, exact compatible-currency comparison, and explicit rounding. Workflow covers definitions, exact state identity, initial and current state, directed transitions, guards, explicit terminal states, portable errors, and state preservation after rejection. Full Audit Draft 0.1, Approvals, Entities, and other FinKore domains remain under active development, and their conformance vectors are still being expanded.
+FinKore is experimental. Money, Workflow, and Audit are complete for Draft 0.1 in the TypeScript reference implementation. Money covers representation, canonical serialization, portable errors, exact arithmetic, exact compatible-currency comparison, and explicit rounding. Workflow covers definitions, exact state identity, initial and current state, directed transitions, guards, explicit terminal states, portable errors, and state preservation after rejection. Audit covers events, actors, append-only logical history, changes, redaction, and portable Audit errors. Approvals, Entities, and other FinKore domains remain under active development, and their conformance vectors are still being expanded.
 
 The specification is expected to evolve significantly before version 1.0. Production use is not recommended yet, and no implementation should claim that its API defines FinKore independently of the specification.
 

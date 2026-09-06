@@ -17,7 +17,7 @@ This document defines attribution of domain events to Actors. An Actor may be a 
 - **AUDIT-ACTOR-003** — Display names MAY be captured as historical metadata but MUST NOT replace stable identity.
 - **AUDIT-ACTOR-004** — If an unknown Actor is represented, that representation MUST distinguish unknown attribution from a known Actor and MUST NOT invent an identity. [Audit Events](events.md) also permits omission when no Actor is known.
 - **AUDIT-ACTOR-005** — Delegation or acting-on-behalf-of relationships SHOULD preserve both the initiating and represented subjects when domain-relevant.
-- **AUDIT-ACTOR-006** — Actor data MUST follow applicable [redaction](redaction.md) rules.
+- **AUDIT-ACTOR-006** — Actor data MUST follow applicable [redaction](redaction.md) rules. In Draft 0.1, actor redaction is limited to optional actor context: `actor.displayName` and `actor.metadata`. A redacted actor representation MUST preserve actor `id` and any supplied actor `type`, MUST replace each redacted optional actor member with the portable redacted-value marker defined by [Audit Redaction](redaction.md), and MUST leave an omitted actor member omitted. A redaction policy MUST identify these actor targets using exactly `actor.displayName` or `actor.metadata`. Draft 0.1 does not permit redacting actor identity or actor type because those fields carry audit attribution semantics.
 
 ## Invariants
 

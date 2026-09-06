@@ -121,7 +121,7 @@ export class AuditLog {
    * @see AUDIT-ERROR-001
    */
   redact(request: AuditRedactionRequest): AuditRedactionResult {
-    if (typeof request !== 'object' || request === null) throw new InvalidAuditRedactionError()
+    if (request === null || request === undefined) throw new InvalidAuditRedactionError()
     const policy = validateAuditRedactionPolicy(request.policy)
     const evidenceEvent = AuditEvent.from(request.redactionEvent)
     if (this.committedEventIds.has(evidenceEvent.eventId)) {

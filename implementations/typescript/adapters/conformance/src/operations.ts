@@ -378,7 +378,7 @@ function executeAuditRedact(request: AdapterRequest): NormalizedResult {
   try {
     log = AuditLog.create(input.history as readonly unknown[])
     const redactionRequest = { policy: input.policy, redactionEvent: input.redactionEvent } as AuditRedactionRequest
-    return { status: 'success', value: log.redact(redactionRequest) }
+    return { status: 'success', value: log.redact(redactionRequest), observations: { history: log.events() } }
   } catch (error) {
     const result = normalizeThrown(error)
     if (result.status === 'error' && log !== undefined) {

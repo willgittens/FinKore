@@ -28,7 +28,7 @@ Contract operations in Draft 0.1.
 definition and initial-state behavior. `finkore.workflow.transition` is the
 canonical Workflow operation ID currently listed in the Agentic Contract.
 
-Audit operation support covers the current Events, Actors, append-only history, Change representation, and Redaction milestones. It does not claim full Audit Draft 0.1 conformance because broader ordering semantics remain unsupported.
+Audit operation support covers FinKore Audit Draft 0.1: Events, Actors, append-only history, Change representation, Redaction, and portable Audit errors. Draft 0.1 does not define `audit.order` as an executable adapter operation.
 
 It does not claim support for approvals, entities, MCP, executable agent
 integrations, workflow versioning, concurrency resolution, persistence, or

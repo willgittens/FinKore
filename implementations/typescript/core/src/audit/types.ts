@@ -98,7 +98,7 @@ export interface SerializedAuditActor {
   readonly type?: AuditActorType
 
   /** Optional historical display metadata that must not replace identity. */
-  readonly displayName?: string
+  readonly displayName?: string | SerializedAuditRedactedValue
 
   /** Optional non-normative actor context. */
   readonly metadata?: unknown
@@ -150,7 +150,8 @@ export interface SerializedAuditRedactedValue {
  *
  * FinKore Draft 0.1 requires an audit policy to identify protected content and
  * the authority for redaction. This TypeScript milestone supports redaction of
- * Audit Change values whose `path` appears in `protectedPaths`.
+ * Audit Change values whose `path` appears in `protectedPaths`, plus the
+ * reserved actor-context targets `actor.displayName` and `actor.metadata`.
  *
  * @see AUDIT-REDACTION-001
  * @see AUDIT-CHANGE-006
@@ -159,7 +160,7 @@ export interface AuditRedactionPolicy {
   /** Stable policy identifier supplied by the composing domain. */
   readonly id: string
 
-  /** Change paths whose retained before/after values require redaction. */
+  /** Change paths or reserved actor-context targets requiring redaction. */
   readonly protectedPaths: readonly string[]
 
   /** Policy or legal authority under which redaction is applied. */

@@ -78,9 +78,10 @@
       "id": "audit.event.unknown-actor-omitted-001",
       "spec": "audit/events",
       "requirements": [
-        "AUDIT-EVENT-002"
+        "AUDIT-EVENT-002",
+        "AUDIT-ACTOR-004"
       ],
-      "description": "Allows actor omission when the responsible actor is unknown.",
+      "description": "Allows actor omission when the responsible actor is unknown without inventing an Actor identity.",
       "operation": "finkore.audit.append",
       "input": {
         "history": [],
@@ -127,6 +128,295 @@
       "tags": [
         "positive",
         "boundary"
+      ],
+      "guardsAgainst": [
+        "unknown-actor-identity-invented"
+      ]
+    },
+    {
+      "id": "audit.actor.opaque-identity-001",
+      "spec": "audit/actors",
+      "requirements": [
+        "AUDIT-ACTOR-002"
+      ],
+      "description": "Preserves actor identifiers as opaque values without case normalization or interpretation.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-opaque-actor",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "agent",
+            "id": "USER-7"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "evt-opaque-actor",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "agent",
+                "id": "USER-7"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "actor-id-normalized",
+        "actor-type-rejected"
+      ]
+    },
+    {
+      "id": "audit.actor.display-name-not-identity-001",
+      "spec": "audit/actors",
+      "requirements": [
+        "AUDIT-ACTOR-003"
+      ],
+      "description": "Preserves display metadata as context without replacing stable actor identity.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-actor-display",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7",
+            "displayName": "Pat Finance"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "evt-actor-display",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Pat Finance"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "display-name-used-as-actor-id",
+        "actor-identity-dropped"
+      ]
+    },
+    {
+      "id": "audit.actor.identity-preserved-in-history-001",
+      "spec": "audit/actors",
+      "requirements": [
+        "AUDIT-ACTOR-008"
+      ],
+      "description": "Preserves actor identity recorded on an existing committed event when later history is appended.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-original-actor",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Pat Finance"
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "event": {
+          "eventId": "evt-later",
+          "eventType": "ENTITY_APPROVED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-8",
+            "displayName": "Approver"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "evt-original-actor",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Pat Finance"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "eventId": "evt-later",
+              "eventType": "ENTITY_APPROVED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-8",
+                "displayName": "Approver"
+              },
+              "occurredAt": "2026-09-01T13:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "historical-actor-identity-rewritten",
+        "display-name-used-as-actor-id"
+      ]
+    },
+    {
+      "id": "audit.event.metadata-conflict-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-008",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Rejects event metadata that attempts to restate required Audit Event fields.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-metadata-conflict",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": {
+            "eventType": "ENTITY_APPROVED"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "metadata-contradicts-required-field",
+        "invalid-event-partially-appended"
+      ]
+    },
+    {
+      "id": "audit.event.implementation-type-rejected-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-003",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Rejects an implementation-mechanism event type instead of treating it as a domain event identifier.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-method-type",
+          "eventType": "AuditLog.append",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "implementation-method-used-as-event-type",
+        "invalid-event-partially-appended"
       ]
     },
     {
@@ -784,15 +1074,153 @@
       ]
     },
     {
+      "id": "audit.redaction.actor-context-001",
+      "spec": "audit/actors",
+      "requirements": [
+        "AUDIT-ACTOR-006",
+        "AUDIT-REDACTION-002",
+        "AUDIT-REDACTION-003",
+        "AUDIT-REDACTION-007"
+      ],
+      "description": "Redacts optional actor context while preserving actor identity and actor type.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": "actor-context-policy",
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "event": {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": {
+                "presence": "REDACTED"
+              },
+              "metadata": {
+                "presence": "REDACTED"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          },
+          "evidenceEvent": {
+            "eventId": "evt-redact-actor",
+            "eventType": "AUDIT_CONTENT_REDACTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "system",
+              "id": "retention-service"
+            },
+            "occurredAt": "2026-09-01T13:00:00Z"
+          }
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "eventId": "evt-redact-actor",
+              "eventType": "AUDIT_CONTENT_REDACTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "system",
+                "id": "retention-service"
+              },
+              "occurredAt": "2026-09-01T13:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "actor-identity-redacted",
+        "actor-type-redacted",
+        "actor-context-exposed",
+        "source-event-mutated-by-redaction"
+      ]
+    },
+    {
       "id": "audit.redaction.preserve-evidence-001",
       "spec": "audit/redaction",
       "requirements": [
         "AUDIT-REDACTION-002",
         "AUDIT-REDACTION-003",
         "AUDIT-REDACTION-006",
-        "AUDIT-REDACTION-001"
+        "AUDIT-REDACTION-001",
+        "AUDIT-REDACTION-007"
       ],
-      "description": "Redacts protected values while preserving event meaning and adding redaction evidence.",
+      "description": "Redacts protected values while preserving event meaning, leaving the committed source event unchanged, and adding redaction evidence.",
       "operation": "audit.redact",
       "input": {
         "history": [
@@ -878,6 +1306,43 @@
             },
             "occurredAt": "2026-09-01T13:00:00Z"
           }
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-1042",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "changes": [
+                {
+                  "path": "bankAccount",
+                  "before": "DE111",
+                  "after": "DE222"
+                }
+              ]
+            },
+            {
+              "eventId": "evt-redact-1",
+              "eventType": "AUDIT_CONTENT_REDACTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "system",
+                "id": "retention-service"
+              },
+              "occurredAt": "2026-09-01T13:00:00Z"
+            }
+          ]
         }
       },
       "tags": [
@@ -888,7 +1353,8 @@
       "guardsAgainst": [
         "redacted-value-exposed",
         "redaction-evidence-omitted",
-        "event-identity-lost"
+        "event-identity-lost",
+        "source-event-mutated-by-redaction"
       ]
     },
     {
@@ -983,71 +1449,6 @@
         "invalid-redaction-accepted",
         "failed-redaction-partially-mutates-history",
         "redaction-error-code-changed"
-      ]
-    },
-    {
-      "id": "audit.order.concurrent-unordered-001",
-      "spec": "audit/append-only",
-      "requirements": [
-        "AUDIT-APPEND-006"
-      ],
-      "description": "Does not infer causal order for independently produced events with no explicit ordering relation.",
-      "operation": "audit.order",
-      "input": {
-        "left": {
-          "eventId": "evt-a",
-          "eventType": "ENTITY_SUBMITTED",
-          "entity": {
-            "type": "expense",
-            "id": "exp-52"
-          },
-          "actor": {
-            "type": "user",
-            "id": "user-7"
-          },
-          "occurredAt": "2026-09-01T12:00:00Z",
-          "changes": [
-            {
-              "path": "state",
-              "before": "DRAFT",
-              "after": "SUBMITTED"
-            }
-          ]
-        },
-        "right": {
-          "eventId": "evt-b",
-          "eventType": "ENTITY_SUBMITTED",
-          "entity": {
-            "type": "expense",
-            "id": "exp-52"
-          },
-          "actor": {
-            "type": "user",
-            "id": "user-7"
-          },
-          "occurredAt": "2026-09-01T12:00:00Z",
-          "changes": [
-            {
-              "path": "state",
-              "before": "DRAFT",
-              "after": "SUBMITTED"
-            }
-          ]
-        },
-        "explicitRelations": []
-      },
-      "expected": {
-        "status": "success",
-        "value": "UNORDERED"
-      },
-      "tags": [
-        "positive",
-        "boundary",
-        "mutation-sensitive"
-      ],
-      "guardsAgainst": [
-        "storage-order-treated-as-causal",
-        "total-order-invented"
       ]
     }
   ]

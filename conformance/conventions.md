@@ -55,7 +55,6 @@ These identifiers name observable behavior, not implementation methods.
 | `audit.append` | Append one event to supplied committed logical history. |
 | `audit.replace`, `audit.remove` | Attempt the named change to committed logical history. |
 | `audit.redact` | Produce a policy-authorized redacted logical representation and evidence event. |
-| `audit.order` | Determine only the explicitly established ordering relation between two events. |
 | `approval.requirement.evaluate` | Derive one requirement's `PENDING`, `APPROVED`, or `REJECTED` state. |
 | `approval.decision.record` | Validate and commit a decision. |
 | `approval.decision.evaluate` | Determine whether a decision remains effective for supplied subject facts. |
@@ -71,6 +70,7 @@ Identifiers beginning with `finkore.` are canonical operations in the
 [Agentic Contract](../agentic/operations.md). Remaining catalog entries are
 conformance-local adapter operations until their stable public contracts are
 reviewed; vector use alone does not make them advertised FinKore capabilities.
+Audit ordering requirements are verified through append-only history and review of explicitly recorded relationships; Draft 0.1 does not define `audit.order` as an executable conformance operation or as an Agentic operation.
 For Money Draft 0.1, `money.deserialize` and `money.serialize` remain
 conformance-local representation boundary checks. They exercise normative Money
 serialization but are not separate public Agentic operations.

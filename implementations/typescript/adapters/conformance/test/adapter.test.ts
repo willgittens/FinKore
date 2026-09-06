@@ -127,13 +127,13 @@ describe('TypeScript conformance adapter', () => {
     expect(report.summary).toEqual({ total: 19, passed: 19, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
-  it('passes current supported Audit vectors and leaves ordering vectors unsupported', async () => {
+  it('passes current required Audit vectors', async () => {
     const report = await createConformanceRunner({
       manifestPath,
       adapter: createTypeScriptConformanceAdapter(),
     }).run({ suites: ['audit'] })
 
-    expect(report.summary).toEqual({ total: 14, passed: 13, failed: 0, unsupported: 1, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 19, passed: 19, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current Workflow state and transition vectors', async () => {

@@ -4,6 +4,9 @@ import { InvalidAuditEventError } from './errors.js'
 import type { SerializedAuditChange, SerializedAuditEntityReference, SerializedAuditEvent } from './types.js'
 
 // Timestamp pattern construction is excluded from mutation scope; timestamp behavior is covered by validation tests.
+const EVENT_TYPE = /^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*$/u
+
+// Stryker disable all: regex construction mechanics are equivalent noise; timestamp acceptance/rejection behavior is covered by validation tests.
 const RFC3339_DATE_TIME_WITH_OFFSET = new RegExp([
   '^\\d{4}-',
   '\\d{2}-',
@@ -14,6 +17,7 @@ const RFC3339_DATE_TIME_WITH_OFFSET = new RegExp([
   '(?:\\.\\d+)?',
   '(?:Z|[+-]\\d{2}:\\d{2})$',
 ].join(''), 'u')
+// Stryker restore all
 
 function isPlainRecord(value: unknown): value is Readonly<Record<string, unknown>> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -30,6 +34,12 @@ function cloneJsonValue<T>(value: T): T {
   } catch {
     throw new InvalidAuditEventError()
   }
+}
+
+function validateEventType(value: unknown): string {
+  const eventType = requiredString(value)
+  if (!EVENT_TYPE.test(eventType)) throw new InvalidAuditEventError()
+  return eventType
 }
 
 function validateTimestamp(value: unknown): string {
@@ -49,6 +59,16 @@ function validateChange(value: unknown): SerializedAuditChange {
   return AuditChange.from(value).toJSON()
 }
 
+function validateMetadata(value: unknown): unknown {
+  const metadata = cloneJsonValue(value)
+  if (isPlainRecord(metadata)) {
+    for (const field of ['eventId', 'eventType', 'entity', 'actor', 'occurredAt', 'changes']) {
+      if (Object.hasOwn(metadata, field)) throw new InvalidAuditEventError()
+    }
+  }
+  return metadata
+}
+
 function validateChanges(value: unknown): readonly SerializedAuditChange[] | undefined {
   if (value === undefined) return undefined
   if (!Array.isArray(value)) throw new InvalidAuditEventError()
@@ -60,11 +80,13 @@ function validateChanges(value: unknown): readonly SerializedAuditChange[] | und
  *
  * An Audit Event records what occurred, when it occurred, and which Financial
  * Entity was affected. The event preserves caller-supplied stable identity,
- * entity reference, optional known actor attribution, timestamp, changes, and
- * metadata without generating IDs or reading wall-clock time.
+ * event type, entity reference, optional known actor attribution, timestamp,
+ * changes, and metadata without generating IDs, event types, or reading
+ * wall-clock time.
  *
  * @see AUDIT-EVENT-001
  * @see AUDIT-EVENT-002
+ * @see AUDIT-EVENT-003
  * @see AUDIT-EVENT-004
  * @see AUDIT-EVENT-005
  * @see AUDIT-EVENT-006
@@ -91,8 +113,11 @@ export class AuditEvent {
    *
    * @see FINKORE_AUDIT_INVALID_EVENT
    * @see AUDIT-EVENT-001
+   * @see AUDIT-EVENT-003
    * @see AUDIT-EVENT-004
    * @see AUDIT-EVENT-005
+   * @see AUDIT-EVENT-007
+   * @see AUDIT-EVENT-008
    * @see AUDIT-CHANGE-001
    * @see AUDIT-CHANGE-005
    */
@@ -101,12 +126,12 @@ export class AuditEvent {
     const changes = validateChanges(input.changes)
     return new AuditEvent({
       eventId: requiredString(input.eventId),
-      eventType: requiredString(input.eventType),
+      eventType: validateEventType(input.eventType),
       entity: validateEntity(input.entity),
       occurredAt: validateTimestamp(input.occurredAt),
       ...(input.actor === undefined ? {} : { actor: AuditActor.from(input.actor).toJSON() }),
       ...(changes === undefined ? {} : { changes }),
-      ...(input.metadata === undefined ? {} : { metadata: cloneJsonValue(input.metadata) }),
+      ...(input.metadata === undefined ? {} : { metadata: validateMetadata(input.metadata) }),
     })
   }
 

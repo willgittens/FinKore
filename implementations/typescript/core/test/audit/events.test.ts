@@ -102,6 +102,26 @@ describe('Audit events', () => {
     })
   })
 
+  it('preserves explicit null event metadata', () => {
+    expect(AuditEvent.from({ ...completeEvent, eventId: 'evt-null-metadata', metadata: null }).toJSON().metadata).toBeNull()
+  })
+
+  it('rejects metadata that attempts to restate required event fields', () => {
+    for (const field of ['eventId', 'eventType', 'entity', 'actor', 'occurredAt', 'changes']) {
+      expect(() =>
+        AuditEvent.from({ ...completeEvent, eventId: 'evt-metadata-' + field, metadata: { [field]: 'conflict' } }),
+      ).toThrow(InvalidAuditEventError)
+    }
+  })
+
+  it('rejects implementation-looking or malformed event type values', () => {
+    for (const eventType of ['AuditLog.append', 'audit-log-append', 'POST /expenses', 'save()', 'entitySubmitted']) {
+      expect(() => AuditEvent.from({ ...completeEvent, eventId: 'evt-type-' + eventType, eventType })).toThrow(
+        InvalidAuditEventError,
+      )
+    }
+  })
+
   it('rejects events missing required identity, entity, type, or timestamp content', () => {
     expect(() => AuditEvent.from({ ...completeEvent, eventId: '' })).toThrow(InvalidAuditEventError)
     expect(() => AuditEvent.from({ ...completeEvent, eventType: '' })).toThrow(InvalidAuditEventError)

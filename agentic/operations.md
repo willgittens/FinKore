@@ -19,7 +19,7 @@ contract, effects, and inputs are reviewed.
 | `finkore.money.compare` | Money | No | No | Yes | None | None | `MONEY-COMPARISON-001`–`-004`, `-006` |
 | `finkore.money.round` | Money | No | No | Yes | None | None | `MONEY-ROUNDING-001`–`-004`, `-008`, `-009` |
 | `finkore.workflow.transition` | Workflow | Yes | Unspecified | Unspecified | May | May be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007` |
-| `finkore.audit.append` | Audit | Yes | No | Yes | Records | None | `AUDIT-EVENT-001`, `-002`, `-004`, `-005`, `AUDIT-ACTOR-001`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001` |
+| `finkore.audit.append` | Audit | Yes | No | Yes | Records | None | `AUDIT-EVENT-001`–`-005`, `-007`, `-008`, `AUDIT-ACTOR-001`–`-004`, `-007`, `-008`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001` |
 | `finkore.audit.replace` | Audit | No | No | Yes | None | None | `AUDIT-APPEND-001` |
 | `finkore.audit.remove` | Audit | No | No | Yes | None | None | `AUDIT-APPEND-001` |
 
@@ -163,7 +163,7 @@ and [MONEY-ERROR-006, -007](../spec/money/errors.md).
 **Purpose:** Commit one valid Audit Event to a logical Audit history.
 
 **Input semantics:** Existing logical history and a candidate Audit Event with
-caller-supplied stable event identity, event type, entity reference, optional
+caller-supplied stable event identity, stable domain event type, entity reference, optional
 known Actor, and explicit occurrence timestamp. Current conformance fixtures use
 `history` and `event`; this fixture shape is not a production storage format.
 
@@ -181,7 +181,7 @@ all existing committed event identities and meanings are preserved.
 Stage 1 operation does not perform redaction.
 
 **Normative traceability:**
-[AUDIT-EVENT-001, -002, -004, -005](../spec/audit/events.md),
+[AUDIT-EVENT-001 through -005, -007, and -008](../spec/audit/events.md),
 [AUDIT-ACTOR-001 through -004 and -007 through -008](../spec/audit/actors.md),
 [AUDIT-APPEND-001 and -003](../spec/audit/append-only.md), and
 [AUDIT-ERROR-001](../spec/audit/errors.md).

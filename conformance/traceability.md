@@ -4,19 +4,19 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 
 ## Inventory and coverage
 
-| Domain | Requirements | MUST / MUST NOT | SHOULD / SHOULD NOT | MAY | Covered | Partial | Uncovered | Not directly testable |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Shared | 29 | 23 | 5 | 1 | 1 | 0 | 0 | 28 |
-| Money | 50 | 45 | 1 | 4 | 45 | 0 | 0 | 5 |
-| Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 |
-| Audit | 38 | 30 | 4 | 4 | 20 | 0 | 11 | 7 |
-| Approvals | 34 | 31 | 1 | 2 | 13 | 0 | 18 | 3 |
-| Entities | 34 | 29 | 3 | 2 | 17 | 0 | 13 | 4 |
-| **Total** | **212** | **183** | **15** | **14** | **118** | **0** | **42** | **52** |
+| Domain | Requirements | MUST / MUST NOT | SHOULD / SHOULD NOT | MAY | Covered | Partial | Uncovered | Not directly testable | Deferred | Blocking spec gap |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Shared | 29 | 23 | 5 | 1 | 1 | 0 | 0 | 28 | 0 | 0 |
+| Money | 50 | 45 | 1 | 4 | 45 | 0 | 0 | 5 | 0 | 0 |
+| Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 | 0 | 0 |
+| Audit | 38 | 30 | 4 | 4 | 28 | 0 | 0 | 10 | 0 | 0 |
+| Approvals | 34 | 31 | 1 | 2 | 13 | 0 | 18 | 3 | 0 | 0 |
+| Entities | 34 | 29 | 3 | 2 | 17 | 0 | 13 | 4 | 0 | 0 |
+| **Total** | **212** | **183** | **15** | **14** | **126** | **0** | **31** | **55** | **0** | **0** |
 
-The suite contains 109 vectors. Overall: **118 covered (55.7%)**, **0 partially covered (0.0%)**, **42 uncovered (19.8%)**, and **52 not directly testable (24.5%)**.
+The suite contains 114 vectors. Overall: **126 covered (59.4%)**, **0 partially covered (0.0%)**, **31 uncovered (14.6%)**, **55 not directly testable (25.9%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
 
-NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, and guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove. These guarantees remain subject to implementation unit, mutation, and architectural review. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
+NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current draft. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
 ## Requirement mapping
 
@@ -129,18 +129,18 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | WORKFLOW-TRANSITION-006 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001, workflow.transition.reverse-not-implied-001, workflow.transition.undeclared-001 |
 | WORKFLOW-TRANSITION-007 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | AUDIT-ACTOR-001 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001 |
-| AUDIT-ACTOR-002 | Audit | MUST / MUST NOT | UNCOVERED | — |
-| AUDIT-ACTOR-003 | Audit | MUST / MUST NOT | UNCOVERED | — |
-| AUDIT-ACTOR-004 | Audit | MUST / MUST NOT | UNCOVERED | — |
+| AUDIT-ACTOR-002 | Audit | MUST / MUST NOT | COVERED | audit.actor.opaque-identity-001 |
+| AUDIT-ACTOR-003 | Audit | MUST / MUST NOT | COVERED | audit.actor.display-name-not-identity-001 |
+| AUDIT-ACTOR-004 | Audit | MUST / MUST NOT | COVERED | audit.event.unknown-actor-omitted-001 |
 | AUDIT-ACTOR-005 | Audit | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
-| AUDIT-ACTOR-006 | Audit | MUST / MUST NOT | UNCOVERED | — |
+| AUDIT-ACTOR-006 | Audit | MUST / MUST NOT | COVERED | audit.redaction.actor-context-001 |
 | AUDIT-ACTOR-007 | Audit | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
-| AUDIT-ACTOR-008 | Audit | MUST / MUST NOT | UNCOVERED | — |
+| AUDIT-ACTOR-008 | Audit | MUST / MUST NOT | COVERED | audit.actor.identity-preserved-in-history-001 |
 | AUDIT-APPEND-001 | Audit | MUST / MUST NOT | COVERED | audit.append-only.remove-forbidden-001, audit.append-only.replace-forbidden-001 |
-| AUDIT-APPEND-002 | Audit | MUST / MUST NOT | UNCOVERED | — |
+| AUDIT-APPEND-002 | Audit | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | AUDIT-APPEND-003 | Audit | MUST / MUST NOT | COVERED | audit.event.duplicate-identity-001 |
 | AUDIT-APPEND-004 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
-| AUDIT-APPEND-006 | Audit | MUST / MUST NOT | COVERED | audit.order.concurrent-unordered-001 |
+| AUDIT-APPEND-006 | Audit | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | AUDIT-CHANGE-001 | Audit | MUST / MUST NOT | COVERED | audit.change.before-after-001 |
 | AUDIT-CHANGE-002 | Audit | SHOULD / SHOULD NOT | COVERED | audit.change.before-after-001 |
 | AUDIT-CHANGE-003 | Audit | MUST / MUST NOT | COVERED | audit.change.absent-vs-null-001 |
@@ -149,23 +149,23 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | AUDIT-CHANGE-006 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
 | AUDIT-CHANGE-007 | Audit | MAY | NOT DIRECTLY TESTABLE | — |
 | AUDIT-ERROR-001 | Audit | MUST / MUST NOT | COVERED | audit.event.missing-entity-id-001, audit.event.missing-timestamp-001, audit.redaction.unknown-path-001 |
-| AUDIT-ERROR-002 | Audit | MUST / MUST NOT | UNCOVERED | — |
+| AUDIT-ERROR-002 | Audit | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | AUDIT-ERROR-003 | Audit | MAY | NOT DIRECTLY TESTABLE | — |
 | AUDIT-EVENT-001 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001, audit.event.missing-timestamp-001 |
 | AUDIT-EVENT-002 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001, audit.event.unknown-actor-omitted-001 |
-| AUDIT-EVENT-003 | Audit | MUST / MUST NOT | UNCOVERED | — |
+| AUDIT-EVENT-003 | Audit | MUST / MUST NOT | COVERED | audit.event.implementation-type-rejected-001 |
 | AUDIT-EVENT-004 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001, audit.event.missing-entity-id-001 |
 | AUDIT-EVENT-005 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001, audit.event.missing-timestamp-001 |
 | AUDIT-EVENT-006 | Audit | MAY | NOT DIRECTLY TESTABLE | — |
-| AUDIT-EVENT-007 | Audit | MUST / MUST NOT | UNCOVERED | — |
-| AUDIT-EVENT-008 | Audit | MUST / MUST NOT | UNCOVERED | — |
+| AUDIT-EVENT-007 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001, audit.event.missing-entity-id-001, audit.event.missing-timestamp-001 |
+| AUDIT-EVENT-008 | Audit | MUST / MUST NOT | COVERED | audit.event.metadata-conflict-001 |
 | AUDIT-REDACTION-001 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001, audit.redaction.unknown-path-001 |
 | AUDIT-REDACTION-002 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
 | AUDIT-REDACTION-003 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
 | AUDIT-REDACTION-004 | Audit | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
 | AUDIT-REDACTION-005 | Audit | MAY | NOT DIRECTLY TESTABLE | — |
 | AUDIT-REDACTION-006 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
-| AUDIT-REDACTION-007 | Audit | MUST / MUST NOT | UNCOVERED | — |
+| AUDIT-REDACTION-007 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
 | APPROVAL-CHAIN-001 | Approvals | MUST / MUST NOT | UNCOVERED | — |
 | APPROVAL-CHAIN-002 | Approvals | MUST / MUST NOT | UNCOVERED | — |
 | APPROVAL-CHAIN-003 | Approvals | MUST / MUST NOT | UNCOVERED | — |
@@ -235,6 +235,21 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-VALIDATION-007 | Entities | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
 | ENTITY-VALIDATION-008 | Entities | MUST / MUST NOT | UNCOVERED | — |
 
+## Audit Draft 0.1 traceability closure notes
+
+| Requirement | Final classification | Justification |
+| --- | --- | --- |
+| AUDIT-ACTOR-002 | COVERED | `audit.actor.opaque-identity-001` observes that actor identifiers are preserved exactly and actor types are not interpreted as an authorization or identity namespace. |
+| AUDIT-ACTOR-003 | COVERED | `audit.actor.display-name-not-identity-001` observes display metadata retained separately from stable actor identity. |
+| AUDIT-ACTOR-004 | COVERED | `audit.event.unknown-actor-omitted-001` observes the Draft 0.1 permitted unknown-actor path: actor attribution is omitted and no identity is invented. The explicit unknown-actor interchange representation remains an open question. |
+| AUDIT-ACTOR-006 | COVERED | `audit.redaction.actor-context-001` observes the Draft 0.1 reserved actor-context redaction targets: optional actor display name and metadata are redacted, while actor identity and type remain observable. |
+| AUDIT-ACTOR-008 | COVERED | `audit.actor.identity-preserved-in-history-001` observes that later appends preserve actor identity already recorded on committed history. |
+| AUDIT-APPEND-002 | NOT DIRECTLY TESTABLE | Draft 0.1 requires preservation of explicitly recorded ordering relationships, but no portable representation of such relationships exists in current Audit Event or history vectors. Append order remains observable under `AUDIT-APPEND-001`; distributed or causal ordering is outside Draft 0.1. |
+| AUDIT-ERROR-002 | NOT DIRECTLY TESTABLE | Current normalized conformance errors compare portable error codes and post-state only; messages are never compared and safe diagnostic details are optional. The TypeScript adapter omits implementation messages/details, but the current vector shape cannot independently prove absence of protected details. |
+| AUDIT-EVENT-003 | COVERED | `audit.event.implementation-type-rejected-001` observes the clarified stable domain event identifier rule and rejects implementation-mechanism event type syntax. |
+| AUDIT-EVENT-007 | COVERED | Draft 0.1 now defines structural completeness through required valid fields. Existing complete and missing-required-field vectors exercise that boundary. |
+| AUDIT-REDACTION-007 | COVERED | `audit.redaction.preserve-evidence-001` now observes that redaction returns a redacted representation and evidence event while preserving the committed source event in history. |
+
 ## Critical financial requirements
 
 | Requirement | Critical behavior | Mutation that should be killed |
@@ -265,4 +280,4 @@ Vectors do not settle these open questions.
 
 **READY FOR CONFORMANCE RUNNER**
 
-The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money and Workflow Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes both full suites. Audit, Approvals, and Entities still have uncovered mandatory requirements before broader reference-implementation conformance can be claimed.
+The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money and Workflow Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes both full suites. Audit has no remaining UNCOVERED rows or BLOCKING SPEC GAP items after this traceability pass. Approvals and Entities still have uncovered mandatory requirements before broader reference-implementation conformance can be claimed.
