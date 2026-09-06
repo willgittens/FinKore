@@ -40,7 +40,7 @@ describe('Audit append-only history', () => {
     expect(log.toJSON()).toEqual({ history: [submitted, approved] })
   })
 
-  it('preserves committed event values against later caller-side mutation', () => {
+  it('preserves committed event and change values against later caller-side mutation', () => {
     const mutableEvent = {
       eventId: 'evt-mutable',
       eventType: 'ENTITY_SUBMITTED',
@@ -54,6 +54,8 @@ describe('Audit append-only history', () => {
     log.append(mutableEvent)
     mutableEvent.eventType = 'ENTITY_APPROVED'
     mutableEvent.entity.id = 'exp-99'
+    mutableEvent.changes[0].path = 'approvalState'
+    mutableEvent.changes[0].before = 'SUBMITTED'
     mutableEvent.changes[0].after = 'APPROVED'
 
     expect(log.toJSON().history[0]).toEqual({

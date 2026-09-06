@@ -107,13 +107,15 @@ export interface SerializedAuditActor {
 /**
  * Serialized domain field change retained inside an Audit Event.
  *
- * Stage 1 preserves supplied change content exactly enough to keep existing
- * conformance vectors meaningful; it does not define a full domain path syntax,
+ * A change identifies the affected field or domain path and may preserve prior
+ * and resulting values. Omitted members and explicit `null` values are distinct.
+ * Draft 0.1 does not define a full domain path syntax, change-kind catalog,
  * redaction behavior, or Money-specific change validation.
  *
  * @see AUDIT-CHANGE-001
  * @see AUDIT-CHANGE-002
  * @see AUDIT-CHANGE-003
+ * @see AUDIT-CHANGE-005
  * @see AUDIT-CHANGE-007
  */
 export interface SerializedAuditChange {
@@ -128,7 +130,7 @@ export interface SerializedAuditChange {
 }
 
 /**
- * Serialized FinKore Audit Event accepted by the Stage 1 TypeScript core.
+ * Serialized FinKore Audit Event accepted by the TypeScript Audit core.
  *
  * Event identity and timestamp are supplied explicitly; this implementation
  * does not generate identifiers, read wall-clock time, or infer distributed

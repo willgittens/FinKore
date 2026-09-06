@@ -612,6 +612,178 @@
       ]
     },
     {
+      "id": "audit.change.money-value-preserved-001",
+      "spec": "audit/changes",
+      "requirements": [
+        "AUDIT-CHANGE-004"
+      ],
+      "description": "Preserves stable Money value representations recorded in before and after change values.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-money-change",
+          "eventType": "ENTITY_AMOUNT_CHANGED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "changes": [
+            {
+              "path": "amount",
+              "before": {
+                "amount": "100.00",
+                "currency": "USD"
+              },
+              "after": {
+                "amount": "125.00",
+                "currency": "USD"
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "evt-money-change",
+              "eventType": "ENTITY_AMOUNT_CHANGED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "changes": [
+                {
+                  "path": "amount",
+                  "before": {
+                    "amount": "100.00",
+                    "currency": "USD"
+                  },
+                  "after": {
+                    "amount": "125.00",
+                    "currency": "USD"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "money-change-value-coerced",
+        "change-before-or-after-dropped"
+      ]
+    },
+    {
+      "id": "audit.change.unchanged-rejected-001",
+      "spec": "audit/changes",
+      "requirements": [
+        "AUDIT-CHANGE-005",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Rejects a Change that claims a field changed when before and after values are equal.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-1042",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "occurredAt": "2026-09-01T12:00:00Z",
+            "changes": [
+              {
+                "path": "state",
+                "before": "DRAFT",
+                "after": "SUBMITTED"
+              }
+            ]
+          }
+        ],
+        "event": {
+          "eventId": "evt-unchanged",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z",
+          "changes": [
+            {
+              "path": "state",
+              "before": "SUBMITTED",
+              "after": "SUBMITTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-1042",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "changes": [
+                {
+                  "path": "state",
+                  "before": "DRAFT",
+                  "after": "SUBMITTED"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unchanged-field-accepted",
+        "invalid-change-partially-appended"
+      ]
+    },
+    {
       "id": "audit.redaction.preserve-evidence-001",
       "spec": "audit/redaction",
       "requirements": [

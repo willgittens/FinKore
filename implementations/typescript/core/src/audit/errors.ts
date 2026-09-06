@@ -100,7 +100,7 @@ export class AuditAppendOnlyViolationError extends FinKoreAuditError {
 /**
  * TypeScript representation of the portable `FINKORE_AUDIT_REDACTION_INVALID` error.
  *
- * Redaction behavior is outside the Stage 1 Audit implementation, but the
+ * Redaction behavior is outside the current Audit implementation, but the
  * portable code is exported because it is already defined by `/spec`.
  *
  * @see FINKORE_AUDIT_REDACTION_INVALID

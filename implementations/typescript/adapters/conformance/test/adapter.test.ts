@@ -6,7 +6,7 @@ import { createTypeScriptConformanceAdapter } from '../src/adapter.js'
 const manifestPath = resolve(import.meta.dirname, '../../../../../conformance/manifest.json')
 
 describe('TypeScript conformance adapter', () => {
-  it('supports Money and first Workflow milestone operations', () => {
+  it('supports current Money, Workflow, and Audit milestone operations', () => {
     const adapter = createTypeScriptConformanceAdapter()
 
     expect(adapter.supports('money.deserialize')).toBe(true)
@@ -127,13 +127,13 @@ describe('TypeScript conformance adapter', () => {
     expect(report.summary).toEqual({ total: 19, passed: 19, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
-  it('passes current Stage 1 Audit vectors and leaves later Audit vectors unsupported', async () => {
+  it('passes current supported Audit vectors and leaves redaction/order vectors unsupported', async () => {
     const report = await createConformanceRunner({
       manifestPath,
       adapter: createTypeScriptConformanceAdapter(),
     }).run({ suites: ['audit'] })
 
-    expect(report.summary).toEqual({ total: 11, passed: 9, failed: 0, unsupported: 2, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 13, passed: 11, failed: 0, unsupported: 2, infrastructureErrors: 0 })
   })
 
   it('passes current Workflow state and transition vectors', async () => {

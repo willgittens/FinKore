@@ -138,6 +138,10 @@ describe('Audit events', () => {
     }
   })
 
+  it('rejects uncloneable event metadata as invalid event content', () => {
+    expect(() => AuditEvent.from({ ...completeEvent, metadata: () => undefined })).toThrow(InvalidAuditEventError)
+  })
+
   it('rejects malformed actor attribution using the actor portable error category', () => {
     expect(() => AuditEvent.from({ ...completeEvent, actor: { type: 'user' } })).toThrow(InvalidAuditActorError)
   })

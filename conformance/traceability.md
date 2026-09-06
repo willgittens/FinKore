@@ -9,12 +9,12 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Shared | 29 | 23 | 5 | 1 | 1 | 0 | 0 | 28 |
 | Money | 50 | 45 | 1 | 4 | 45 | 0 | 0 | 5 |
 | Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 |
-| Audit | 38 | 30 | 4 | 4 | 16 | 0 | 15 | 7 |
+| Audit | 38 | 30 | 4 | 4 | 18 | 0 | 13 | 7 |
 | Approvals | 34 | 31 | 1 | 2 | 13 | 0 | 18 | 3 |
 | Entities | 34 | 29 | 3 | 2 | 17 | 0 | 13 | 4 |
-| **Total** | **212** | **183** | **15** | **14** | **114** | **0** | **46** | **52** |
+| **Total** | **212** | **183** | **15** | **14** | **116** | **0** | **44** | **52** |
 
-The suite contains 106 vectors. Overall: **114 covered (53.8%)**, **0 partially covered (0.0%)**, **46 uncovered (21.7%)**, and **52 not directly testable (24.5%)**.
+The suite contains 108 vectors. Overall: **116 covered (54.7%)**, **0 partially covered (0.0%)**, **44 uncovered (20.8%)**, and **52 not directly testable (24.5%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, and guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove. These guarantees remain subject to implementation unit, mutation, and architectural review. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -144,8 +144,8 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | AUDIT-CHANGE-001 | Audit | MUST / MUST NOT | COVERED | audit.change.before-after-001 |
 | AUDIT-CHANGE-002 | Audit | SHOULD / SHOULD NOT | COVERED | audit.change.before-after-001 |
 | AUDIT-CHANGE-003 | Audit | MUST / MUST NOT | COVERED | audit.change.absent-vs-null-001 |
-| AUDIT-CHANGE-004 | Audit | MUST / MUST NOT | UNCOVERED | — |
-| AUDIT-CHANGE-005 | Audit | MUST / MUST NOT | UNCOVERED | — |
+| AUDIT-CHANGE-004 | Audit | MUST / MUST NOT | COVERED | audit.change.money-value-preserved-001 |
+| AUDIT-CHANGE-005 | Audit | MUST / MUST NOT | COVERED | audit.change.unchanged-rejected-001 |
 | AUDIT-CHANGE-006 | Audit | MUST / MUST NOT | UNCOVERED | — |
 | AUDIT-CHANGE-007 | Audit | MAY | NOT DIRECTLY TESTABLE | — |
 | AUDIT-ERROR-001 | Audit | MUST / MUST NOT | COVERED | audit.event.missing-entity-id-001, audit.event.missing-timestamp-001 |

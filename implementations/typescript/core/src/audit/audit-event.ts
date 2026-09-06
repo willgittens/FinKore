@@ -1,4 +1,5 @@
 import { AuditActor } from './actor.js'
+import { AuditChange } from './audit-change.js'
 import { InvalidAuditEventError } from './errors.js'
 import type { SerializedAuditChange, SerializedAuditEntityReference, SerializedAuditEvent } from './types.js'
 
@@ -24,7 +25,11 @@ function requiredString(value: unknown): string {
 }
 
 function cloneJsonValue<T>(value: T): T {
-  return structuredClone(value)
+  try {
+    return structuredClone(value)
+  } catch {
+    throw new InvalidAuditEventError()
+  }
 }
 
 function validateTimestamp(value: unknown): string {
@@ -41,12 +46,7 @@ function validateEntity(value: unknown): SerializedAuditEntityReference {
 }
 
 function validateChange(value: unknown): SerializedAuditChange {
-  if (!isPlainRecord(value)) throw new InvalidAuditEventError()
-  return {
-    path: requiredString(value.path),
-    ...('before' in value ? { before: cloneJsonValue(value.before) } : {}),
-    ...('after' in value ? { after: cloneJsonValue(value.after) } : {}),
-  }
+  return AuditChange.from(value).toJSON()
 }
 
 function validateChanges(value: unknown): readonly SerializedAuditChange[] | undefined {
@@ -56,7 +56,7 @@ function validateChanges(value: unknown): readonly SerializedAuditChange[] | und
 }
 
 /**
- * FinKore Audit Event for Stage 1 event representation semantics.
+ * FinKore Audit Event for event and change representation semantics.
  *
  * An Audit Event records what occurred, when it occurred, and which Financial
  * Entity was affected. The event preserves caller-supplied stable identity,
@@ -80,9 +80,9 @@ export class AuditEvent {
   /**
    * Creates and validates an Audit Event from a portable candidate value.
    *
-   * The method validates only the Draft 0.1 Stage 1 structural semantics. It
-   * does not define a full change language, event-type catalog, redaction
-   * behavior, or production storage format.
+   * The method validates Draft 0.1 event and change representation semantics.
+   * It does not define a full path language, event-type catalog, redaction
+   * behavior, diff engine, or production storage format.
    *
    * @param input - Candidate serialized Audit Event.
    * @returns A validated Audit Event value.
@@ -93,6 +93,8 @@ export class AuditEvent {
    * @see AUDIT-EVENT-001
    * @see AUDIT-EVENT-004
    * @see AUDIT-EVENT-005
+   * @see AUDIT-CHANGE-001
+   * @see AUDIT-CHANGE-005
    */
   static from(input: unknown): AuditEvent {
     if (!isPlainRecord(input)) throw new InvalidAuditEventError()

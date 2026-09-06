@@ -3,7 +3,7 @@ import { AuditAppendOnlyViolationError, DuplicateAuditEventError } from './error
 import type { SerializedAuditEvent, SerializedAuditHistory } from './types.js'
 
 /**
- * FinKore Audit Log for Stage 1 append-only history semantics.
+ * FinKore Audit Log for append-only history semantics.
  *
  * The log commits validated Audit Events by appending them to one logical
  * history. Existing committed events are never replaced, modified, or removed;
@@ -90,7 +90,7 @@ export class AuditLog {
   /**
    * Rejects replacement of a committed Audit Event.
    *
-   * FinKore Stage 1 only permits appending. Replacing committed event content
+   * FinKore Draft 0.1 currently only permits appending. Replacing committed event content
    * would rewrite logical history and therefore always fails without mutation.
    *
    * @throws {AuditAppendOnlyViolationError}
@@ -106,7 +106,7 @@ export class AuditLog {
   /**
    * Rejects removal of a committed Audit Event.
    *
-   * FinKore Stage 1 only permits appending. Removing committed event content
+   * FinKore Draft 0.1 currently only permits appending. Removing committed event content
    * would erase logical history and therefore always fails without mutation.
    *
    * @throws {AuditAppendOnlyViolationError}
