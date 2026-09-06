@@ -229,6 +229,20 @@ Never reverse this dependency.
 
 ---
 
+# Node Toolchain
+
+Before running Node-based commands or tests, verify whether `node` is available on the machine environment.
+
+If `node` is not found in the machine environment:
+
+1. Look for a repository-local Node toolchain under `/.tools`.
+2. If `/.tools` exists and contains Node, run all Node-based commands and tests using that Node binary.
+3. If `/.tools` does not exist, or Node cannot be found there, download Node into `/.tools` and run all Node-based commands and tests from that downloaded toolchain.
+
+Do not skip required tests merely because the machine environment does not already provide Node.
+
+---
+
 ## `adapters/conformance`
 
 Translates between:
