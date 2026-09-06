@@ -15,6 +15,7 @@ This milestone supports:
 - `finkore.audit.append`
 - `finkore.audit.replace`
 - `finkore.audit.remove`
+- `audit.redact`
 - `money.deserialize`
 - `money.serialize`
 - `workflow.create`
@@ -27,9 +28,7 @@ Contract operations in Draft 0.1.
 definition and initial-state behavior. `finkore.workflow.transition` is the
 canonical Workflow operation ID currently listed in the Agentic Contract.
 
-Audit operation support is limited to the current Events, Actors, append-only
-history, and Change representation milestones. It does not claim full Audit
-Draft 0.1 conformance or implement redaction.
+Audit operation support covers the current Events, Actors, append-only history, Change representation, and Redaction milestones. It does not claim full Audit Draft 0.1 conformance because broader ordering semantics remain unsupported.
 
 It does not claim support for approvals, entities, MCP, executable agent
 integrations, workflow versioning, concurrency resolution, persistence, or

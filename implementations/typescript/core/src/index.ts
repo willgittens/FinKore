@@ -54,6 +54,9 @@ export type {
 } from './workflow/types.js'
 export type {
   AuditActorIdentifier,
+  AuditRedactionPolicy,
+  AuditRedactionRequest,
+  AuditRedactionResult,
   AuditActorType,
   AuditEntityIdentifier,
   AuditEntityType,
@@ -64,4 +67,5 @@ export type {
   SerializedAuditEntityReference,
   SerializedAuditEvent,
   SerializedAuditHistory,
+  SerializedAuditRedactedValue,
 } from './audit/types.js'

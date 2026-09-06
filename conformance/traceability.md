@@ -9,12 +9,12 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Shared | 29 | 23 | 5 | 1 | 1 | 0 | 0 | 28 |
 | Money | 50 | 45 | 1 | 4 | 45 | 0 | 0 | 5 |
 | Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 |
-| Audit | 38 | 30 | 4 | 4 | 18 | 0 | 13 | 7 |
+| Audit | 38 | 30 | 4 | 4 | 20 | 0 | 11 | 7 |
 | Approvals | 34 | 31 | 1 | 2 | 13 | 0 | 18 | 3 |
 | Entities | 34 | 29 | 3 | 2 | 17 | 0 | 13 | 4 |
-| **Total** | **212** | **183** | **15** | **14** | **116** | **0** | **44** | **52** |
+| **Total** | **212** | **183** | **15** | **14** | **118** | **0** | **42** | **52** |
 
-The suite contains 108 vectors. Overall: **116 covered (54.7%)**, **0 partially covered (0.0%)**, **44 uncovered (20.8%)**, and **52 not directly testable (24.5%)**.
+The suite contains 109 vectors. Overall: **118 covered (55.7%)**, **0 partially covered (0.0%)**, **42 uncovered (19.8%)**, and **52 not directly testable (24.5%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, and guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove. These guarantees remain subject to implementation unit, mutation, and architectural review. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -139,16 +139,16 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | AUDIT-APPEND-001 | Audit | MUST / MUST NOT | COVERED | audit.append-only.remove-forbidden-001, audit.append-only.replace-forbidden-001 |
 | AUDIT-APPEND-002 | Audit | MUST / MUST NOT | UNCOVERED | — |
 | AUDIT-APPEND-003 | Audit | MUST / MUST NOT | COVERED | audit.event.duplicate-identity-001 |
-| AUDIT-APPEND-004 | Audit | MUST / MUST NOT | UNCOVERED | — |
+| AUDIT-APPEND-004 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
 | AUDIT-APPEND-006 | Audit | MUST / MUST NOT | COVERED | audit.order.concurrent-unordered-001 |
 | AUDIT-CHANGE-001 | Audit | MUST / MUST NOT | COVERED | audit.change.before-after-001 |
 | AUDIT-CHANGE-002 | Audit | SHOULD / SHOULD NOT | COVERED | audit.change.before-after-001 |
 | AUDIT-CHANGE-003 | Audit | MUST / MUST NOT | COVERED | audit.change.absent-vs-null-001 |
 | AUDIT-CHANGE-004 | Audit | MUST / MUST NOT | COVERED | audit.change.money-value-preserved-001 |
 | AUDIT-CHANGE-005 | Audit | MUST / MUST NOT | COVERED | audit.change.unchanged-rejected-001 |
-| AUDIT-CHANGE-006 | Audit | MUST / MUST NOT | UNCOVERED | — |
+| AUDIT-CHANGE-006 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
 | AUDIT-CHANGE-007 | Audit | MAY | NOT DIRECTLY TESTABLE | — |
-| AUDIT-ERROR-001 | Audit | MUST / MUST NOT | COVERED | audit.event.missing-entity-id-001, audit.event.missing-timestamp-001 |
+| AUDIT-ERROR-001 | Audit | MUST / MUST NOT | COVERED | audit.event.missing-entity-id-001, audit.event.missing-timestamp-001, audit.redaction.unknown-path-001 |
 | AUDIT-ERROR-002 | Audit | MUST / MUST NOT | UNCOVERED | — |
 | AUDIT-ERROR-003 | Audit | MAY | NOT DIRECTLY TESTABLE | — |
 | AUDIT-EVENT-001 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001, audit.event.missing-timestamp-001 |
@@ -159,7 +159,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | AUDIT-EVENT-006 | Audit | MAY | NOT DIRECTLY TESTABLE | — |
 | AUDIT-EVENT-007 | Audit | MUST / MUST NOT | UNCOVERED | — |
 | AUDIT-EVENT-008 | Audit | MUST / MUST NOT | UNCOVERED | — |
-| AUDIT-REDACTION-001 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
+| AUDIT-REDACTION-001 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001, audit.redaction.unknown-path-001 |
 | AUDIT-REDACTION-002 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
 | AUDIT-REDACTION-003 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
 | AUDIT-REDACTION-004 | Audit | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
@@ -246,6 +246,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | WORKFLOW-TRANSITION-006 | State preservation after rejection. | Assign Target State before validation. |
 | WORKFLOW-TERMINAL-003 | No transition request may leave an explicitly terminal State. | Remove or invert the current-State terminal check. |
 | AUDIT-APPEND-001 | Append-only committed history. | Replace or remove a committed event. |
+| AUDIT-REDACTION-002, AUDIT-REDACTION-003, AUDIT-REDACTION-006 | Redacted representation remains distinguishable, preserves event meaning, and records evidence. | Expose protected values, collapse redaction to null or absence, change event identity, or omit evidence. |
 | APPROVAL-DECISION-003 | Validity against policy-relevant facts. | Ignore changed relevant facts. |
 | ENTITY-IDENTITY-002 | Lifecycle-stable identity. | Generate a new ID after mutation. |
 | ENTITY-MUTABILITY-002 | Configured immutability. | Skip current-State mutability check. |

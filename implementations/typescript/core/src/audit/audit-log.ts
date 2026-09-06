@@ -1,6 +1,7 @@
 import { AuditEvent } from './audit-event.js'
-import { AuditAppendOnlyViolationError, DuplicateAuditEventError } from './errors.js'
-import type { SerializedAuditEvent, SerializedAuditHistory } from './types.js'
+import { auditEventMatchesRedactionPolicy, redactAuditEvent, validateAuditRedactionPolicy } from './audit-redaction.js'
+import { AuditAppendOnlyViolationError, DuplicateAuditEventError, InvalidAuditRedactionError } from './errors.js'
+import type { AuditRedactionRequest, AuditRedactionResult, SerializedAuditEvent, SerializedAuditHistory } from './types.js'
 
 /**
  * FinKore Audit Log for append-only history semantics.
@@ -85,6 +86,62 @@ export class AuditLog {
     this.committedEvents.push(event)
     this.committedEventIds.add(event.eventId)
     return this
+  }
+
+  /**
+   * Produces a redacted representation and commits redaction evidence.
+   *
+   * Redaction preserves the affected event identity, event type, entity
+   * reference, timestamp, actor attribution, and unrelated changes. Protected
+   * change `before` and `after` values are replaced with an explicit redaction
+   * marker that remains distinct from missing values and `null`. The committed
+   * source event is not modified; the supplied evidence event is validated and
+   * appended as the audit fact that redaction occurred. Failed redactions leave
+   * history unchanged.
+   *
+   * @param request - Policy and evidence event for the redaction action.
+   * @returns The redacted affected event and committed evidence event.
+   * @throws {InvalidAuditRedactionError}
+   * When the policy is malformed, no protected target is found, or redaction
+   * would destroy required event meaning.
+   * @throws {InvalidAuditEventError}
+   * When the evidence event is invalid.
+   * @throws {InvalidAuditActorError}
+   * When evidence actor attribution is malformed.
+   * @throws {DuplicateAuditEventError}
+   * When the evidence event identity is already committed.
+   *
+   * @see FINKORE_AUDIT_REDACTION_INVALID
+   * @see FINKORE_AUDIT_DUPLICATE_EVENT
+   * @see AUDIT-REDACTION-001
+   * @see AUDIT-REDACTION-002
+   * @see AUDIT-REDACTION-003
+   * @see AUDIT-REDACTION-006
+   * @see AUDIT-APPEND-001
+   * @see AUDIT-ERROR-001
+   */
+  redact(request: AuditRedactionRequest): AuditRedactionResult {
+    if (typeof request !== 'object' || request === null) throw new InvalidAuditRedactionError()
+    const policy = validateAuditRedactionPolicy(request.policy)
+    const evidenceEvent = AuditEvent.from(request.redactionEvent)
+    if (this.committedEventIds.has(evidenceEvent.eventId)) {
+      throw new DuplicateAuditEventError()
+    }
+
+    const candidateEvents = this.committedEvents
+      .map((event) => event.toJSON())
+      .filter((event) => auditEventMatchesRedactionPolicy(event, policy))
+
+    if (candidateEvents.length !== 1) {
+      throw new InvalidAuditRedactionError()
+    }
+
+    const sourceEvent = candidateEvents[0]!
+    const redactedEvent = redactAuditEvent(sourceEvent, policy)
+
+    this.committedEvents.push(evidenceEvent)
+    this.committedEventIds.add(evidenceEvent.eventId)
+    return { event: redactedEvent, evidenceEvent: evidenceEvent.toJSON() }
   }
 
   /**

@@ -1,5 +1,6 @@
 import { AuditLog, Money, Workflow } from '@finkore/typescript'
 import type { AdapterRequest, NormalizedResult } from '@finkore/conformance-runner'
+import type { AuditRedactionRequest } from '@finkore/typescript'
 import { normalizeThrown } from './normalization.js'
 
 /**
@@ -87,6 +88,14 @@ function inputAuditAppend(input: unknown): { readonly history: unknown; readonly
     return { history: undefined, event: undefined }
   }
   return input as { readonly history: unknown; readonly event: unknown }
+}
+
+function inputAuditRedact(input: unknown): { readonly history: unknown; readonly policy: unknown; readonly redactionEvent: unknown } {
+  if (typeof input !== 'object' || input === null || !('history' in input)) {
+    return { history: undefined, policy: undefined, redactionEvent: undefined }
+  }
+  const candidate = input as { readonly history: unknown; readonly policy?: unknown; readonly redactionEvent?: unknown }
+  return { history: candidate.history, policy: candidate.policy, redactionEvent: candidate.redactionEvent }
 }
 
 /**
@@ -357,6 +366,29 @@ function executeAuditAppend(request: AdapterRequest): NormalizedResult {
 }
 
 /**
+ * Executes Audit redaction through the TypeScript core API.
+ *
+ * The adapter reconstructs supplied history and delegates policy validation,
+ * protected path selection, marker application, evidence validation, and
+ * failure atomicity to AuditLog.redact.
+ */
+function executeAuditRedact(request: AdapterRequest): NormalizedResult {
+  const input = inputAuditRedact(request.input)
+  let log: AuditLog | undefined
+  try {
+    log = AuditLog.create(input.history as readonly unknown[])
+    const redactionRequest = { policy: input.policy, redactionEvent: input.redactionEvent } as AuditRedactionRequest
+    return { status: 'success', value: log.redact(redactionRequest) }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && log !== undefined) {
+      return { ...result, observations: { history: log.events() } }
+    }
+    return result
+  }
+}
+
+/**
  * Executes canonical Audit replace attempts through the TypeScript core API.
  *
  * Replacement is rejected by core append-only semantics; the adapter only
@@ -422,6 +454,7 @@ export const operationHandlers = {
   'finkore.audit.append': executeAuditAppend,
   'finkore.audit.replace': executeAuditReplace,
   'finkore.audit.remove': executeAuditRemove,
+  'audit.redact': executeAuditRedact,
   'money.serialize': executeMoneySerialization,
   'workflow.create': executeWorkflowCreate,
 } satisfies Readonly<Record<string, OperationHandler>>

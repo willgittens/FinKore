@@ -892,6 +892,100 @@
       ]
     },
     {
+      "id": "audit.redaction.unknown-path-001",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-001",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Rejects a redaction policy that identifies no protected content in the supplied history without mutating history.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-1042",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "occurredAt": "2026-09-01T12:00:00Z",
+            "changes": [
+              {
+                "path": "bankAccount",
+                "before": "DE111",
+                "after": "DE222"
+              }
+            ]
+          }
+        ],
+        "policy": {
+          "id": "bank-redaction-v1",
+          "protectedPaths": [
+            "taxIdentifier"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-1",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_REDACTION_INVALID"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-1042",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "changes": [
+                {
+                  "path": "bankAccount",
+                  "before": "DE111",
+                  "after": "DE222"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "invalid-redaction-accepted",
+        "failed-redaction-partially-mutates-history",
+        "redaction-error-code-changed"
+      ]
+    },
+    {
       "id": "audit.order.concurrent-unordered-001",
       "spec": "audit/append-only",
       "requirements": [

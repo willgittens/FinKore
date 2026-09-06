@@ -130,6 +130,79 @@ export interface SerializedAuditChange {
 }
 
 /**
+ * Serialized marker for FinKore Audit content concealed by redaction.
+ *
+ * This marker is intentionally distinct from an omitted value, explicit
+ * `null`, an empty string, `false`, `0`, or an empty collection. It records
+ * that protected content occupied this position without disclosing the
+ * original value.
+ *
+ * @see AUDIT-REDACTION-002
+ * @see AUDIT-REDACTION-003
+ */
+export interface SerializedAuditRedactedValue {
+  /** Distinguishes policy-authorized redaction from absence or null. */
+  readonly presence: 'REDACTED'
+}
+
+/**
+ * Policy fixture used to request redaction of protected Audit content.
+ *
+ * FinKore Draft 0.1 requires an audit policy to identify protected content and
+ * the authority for redaction. This TypeScript milestone supports redaction of
+ * Audit Change values whose `path` appears in `protectedPaths`.
+ *
+ * @see AUDIT-REDACTION-001
+ * @see AUDIT-CHANGE-006
+ */
+export interface AuditRedactionPolicy {
+  /** Stable policy identifier supplied by the composing domain. */
+  readonly id: string
+
+  /** Change paths whose retained before/after values require redaction. */
+  readonly protectedPaths: readonly string[]
+
+  /** Policy or legal authority under which redaction is applied. */
+  readonly authority: string
+}
+
+/**
+ * Input for producing a redacted Audit representation with evidence.
+ *
+ * Redaction does not delete, replace, or regenerate the historical event. A
+ * successful redaction returns a redacted representation of the affected event
+ * and commits the supplied evidence event to the log.
+ *
+ * @see AUDIT-REDACTION-001
+ * @see AUDIT-REDACTION-006
+ * @see AUDIT-APPEND-001
+ */
+export interface AuditRedactionRequest {
+  /** Policy describing protected content and redaction authority. */
+  readonly policy: AuditRedactionPolicy
+
+  /** Audit Event recording that redaction occurred. */
+  readonly redactionEvent: unknown
+}
+
+/**
+ * Result of an Audit redaction operation.
+ *
+ * The affected event is returned as a redacted logical representation while the
+ * evidence event remains separately observable.
+ *
+ * @see AUDIT-REDACTION-003
+ * @see AUDIT-REDACTION-006
+ */
+export interface AuditRedactionResult {
+  /** Redacted representation of the affected historical Audit Event. */
+  readonly event: SerializedAuditEvent
+
+  /** Committed Audit Event identifying that redaction occurred. */
+  readonly evidenceEvent: SerializedAuditEvent
+}
+
+/**
  * Serialized FinKore Audit Event accepted by the TypeScript Audit core.
  *
  * Event identity and timestamp are supplied explicitly; this implementation
