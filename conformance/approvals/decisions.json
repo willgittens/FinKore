@@ -480,6 +480,168 @@
       ]
     },
     {
+      "id": "approval.condition.applicable-explicit-001",
+      "spec": "approvals/conditions",
+      "requirements": [
+        "APPROVAL-CONDITION-001",
+        "APPROVAL-CONDITION-002",
+        "APPROVAL-CONDITION-004",
+        "APPROVAL-CONDITION-005"
+      ],
+      "description": "Returns APPLICABLE only from an explicit composing-domain result after required facts are present.",
+      "operation": "approval.condition.evaluate",
+      "input": {
+        "condition": {
+          "id": "finance-required",
+          "requiredFacts": [
+            "totalAmount"
+          ],
+          "evaluation": "composing-domain"
+        },
+        "facts": {
+          "totalAmount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        },
+        "result": "APPLICABLE"
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPLICABLE"
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "all-conditions-treated-as-not-applicable",
+        "evaluation-result-ignored"
+      ]
+    },
+    {
+      "id": "approval.condition.not-applicable-explicit-001",
+      "spec": "approvals/conditions",
+      "requirements": [
+        "APPROVAL-CONDITION-001",
+        "APPROVAL-CONDITION-002",
+        "APPROVAL-CONDITION-004",
+        "APPROVAL-CONDITION-005"
+      ],
+      "description": "Returns NOT_APPLICABLE only from an explicit composing-domain result after required facts are present.",
+      "operation": "approval.condition.evaluate",
+      "input": {
+        "condition": {
+          "id": "finance-required",
+          "requiredFacts": [
+            "totalAmount"
+          ],
+          "evaluation": "composing-domain"
+        },
+        "facts": {
+          "totalAmount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        },
+        "result": "NOT_APPLICABLE"
+      },
+      "expected": {
+        "status": "success",
+        "value": "NOT_APPLICABLE"
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "all-conditions-treated-as-applicable",
+        "evaluation-result-ignored"
+      ]
+    },
+    {
+      "id": "approval.condition.falsey-facts-present-001",
+      "spec": "approvals/conditions",
+      "requirements": [
+        "APPROVAL-CONDITION-001",
+        "APPROVAL-CONDITION-006"
+      ],
+      "description": "Treats false, zero, empty string, and null as present required facts.",
+      "operation": "approval.condition.evaluate",
+      "input": {
+        "condition": {
+          "id": "falsey-facts",
+          "requiredFacts": [
+            "falseValue",
+            "zeroValue",
+            "emptyValue",
+            "nullValue"
+          ],
+          "evaluation": "composing-domain"
+        },
+        "facts": {
+          "falseValue": false,
+          "zeroValue": 0,
+          "emptyValue": "",
+          "nullValue": null
+        },
+        "result": "NOT_APPLICABLE"
+      },
+      "expected": {
+        "status": "success",
+        "value": "NOT_APPLICABLE"
+      },
+      "tags": [
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "false-fact-treated-as-missing",
+        "zero-fact-treated-as-missing",
+        "empty-string-fact-treated-as-missing",
+        "null-fact-treated-as-missing"
+      ]
+    },
+    {
+      "id": "approval.condition.missing-result-unresolved-001",
+      "spec": "approvals/conditions",
+      "requirements": [
+        "APPROVAL-CONDITION-002",
+        "APPROVAL-CONDITION-006"
+      ],
+      "description": "Does not invent condition applicability when the composing-domain result is absent.",
+      "operation": "approval.condition.evaluate",
+      "input": {
+        "condition": {
+          "id": "finance-required",
+          "requiredFacts": [
+            "totalAmount"
+          ],
+          "evaluation": "composing-domain"
+        },
+        "facts": {
+          "totalAmount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_CONDITION_UNRESOLVED"
+        }
+      },
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "missing-result-treated-as-applicable",
+        "missing-result-treated-as-not-applicable"
+      ]
+    },
+    {
       "id": "approval.chain.all-approved-001",
       "spec": "approvals/chains",
       "requirements": [

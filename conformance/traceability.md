@@ -10,11 +10,11 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Money | 50 | 45 | 1 | 4 | 45 | 0 | 0 | 5 | 0 | 0 |
 | Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 | 0 | 0 |
 | Audit | 38 | 30 | 4 | 4 | 28 | 0 | 0 | 10 | 0 | 0 |
-| Approvals | 34 | 31 | 1 | 2 | 13 | 0 | 18 | 3 | 0 | 0 |
+| Approvals | 34 | 31 | 1 | 2 | 16 | 0 | 15 | 3 | 0 | 0 |
 | Entities | 34 | 29 | 3 | 2 | 17 | 0 | 13 | 4 | 0 | 0 |
-| **Total** | **212** | **183** | **15** | **14** | **126** | **0** | **31** | **55** | **0** | **0** |
+| **Total** | **212** | **183** | **15** | **14** | **129** | **0** | **28** | **55** | **0** | **0** |
 
-The suite contains 114 vectors. Overall: **126 covered (59.4%)**, **0 partially covered (0.0%)**, **31 uncovered (14.6%)**, **55 not directly testable (25.9%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
+The suite contains 118 vectors. Overall: **129 covered (60.8%)**, **0 partially covered (0.0%)**, **28 uncovered (13.2%)**, **55 not directly testable (25.9%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current draft. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -175,11 +175,11 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-CHAIN-007 | Approvals | MUST / MUST NOT | COVERED | approval.chain.rejected-001 |
 | APPROVAL-CHAIN-008 | Approvals | MUST / MUST NOT | UNCOVERED | — |
 | APPROVAL-CONDITION-001 | Approvals | MUST / MUST NOT | COVERED | approval.condition.missing-fact-001 |
-| APPROVAL-CONDITION-002 | Approvals | MUST / MUST NOT | UNCOVERED | — |
+| APPROVAL-CONDITION-002 | Approvals | MUST / MUST NOT | COVERED | approval.condition.applicable-explicit-001, approval.condition.missing-result-unresolved-001, approval.condition.not-applicable-explicit-001 |
 | APPROVAL-CONDITION-003 | Approvals | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
-| APPROVAL-CONDITION-004 | Approvals | MUST / MUST NOT | UNCOVERED | — |
-| APPROVAL-CONDITION-005 | Approvals | MUST / MUST NOT | UNCOVERED | — |
-| APPROVAL-CONDITION-006 | Approvals | MUST / MUST NOT | COVERED | approval.condition.missing-fact-001 |
+| APPROVAL-CONDITION-004 | Approvals | MUST / MUST NOT | COVERED | approval.condition.applicable-explicit-001, approval.condition.not-applicable-explicit-001 |
+| APPROVAL-CONDITION-005 | Approvals | MUST / MUST NOT | COVERED | approval.condition.applicable-explicit-001, approval.condition.not-applicable-explicit-001 |
+| APPROVAL-CONDITION-006 | Approvals | MUST / MUST NOT | COVERED | approval.condition.falsey-facts-present-001, approval.condition.missing-fact-001, approval.condition.missing-result-unresolved-001 |
 | APPROVAL-DECISION-001 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.wrong-association-001 |
 | APPROVAL-DECISION-002 | Approvals | MUST / MUST NOT | COVERED | approval.decision.subject-facts-changed-001, approval.decision.subject-facts-unchanged-001 |
 | APPROVAL-DECISION-003 | Approvals | MUST / MUST NOT | COVERED | approval.decision.subject-facts-changed-001, approval.decision.subject-facts-unchanged-001 |

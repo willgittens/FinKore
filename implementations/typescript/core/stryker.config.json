@@ -9,12 +9,17 @@
     "src/audit/actor.ts",
     "src/audit/audit-change.ts",
     "src/audit/audit-event.ts:17-135",
-    "src/audit/audit-log.ts"
+    "src/audit/audit-log.ts",
+    "src/approvals/approval-condition.ts",
+    "src/approvals/approval-decision.ts",
+    "src/approvals/approval-decision-history.ts",
+    "src/approvals/approval-requirement.ts"
   ],
   "testFiles": [
     "test/money/*.test.ts",
     "test/workflow/*.test.ts",
-    "test/audit/*.test.ts"
+    "test/audit/*.test.ts",
+    "test/approvals/*.test.ts"
   ],
   "reporters": ["clear-text", "html", "json"],
   "thresholds": {

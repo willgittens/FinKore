@@ -6,7 +6,7 @@ import { createTypeScriptConformanceAdapter } from '../src/adapter.js'
 const manifestPath = resolve(import.meta.dirname, '../../../../../conformance/manifest.json')
 
 describe('TypeScript conformance adapter', () => {
-  it('supports current Money, Workflow, and Audit milestone operations', () => {
+  it('supports current Money, Workflow, Audit, and Approval milestone operations', () => {
     const adapter = createTypeScriptConformanceAdapter()
 
     expect(adapter.supports('money.deserialize')).toBe(true)
@@ -23,9 +23,14 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('finkore.audit.append')).toBe(true)
     expect(adapter.supports('finkore.audit.replace')).toBe(true)
     expect(adapter.supports('finkore.audit.remove')).toBe(true)
+    expect(adapter.supports('approval.requirement.evaluate')).toBe(true)
+    expect(adapter.supports('approval.decision.record')).toBe(true)
+    expect(adapter.supports('approval.decision.evaluate')).toBe(true)
+    expect(adapter.supports('approval.condition.evaluate')).toBe(true)
     expect(adapter.supports('audit.append')).toBe(false)
     expect(adapter.supports('audit.redact')).toBe(true)
     expect(adapter.supports('audit.order')).toBe(false)
+    expect(adapter.supports('approval.chain.evaluate')).toBe(false)
     expect(adapter.supports('money.negate')).toBe(false)
     expect(adapter.supports('money.multiply')).toBe(false)
     expect(adapter.supports('money.divide')).toBe(false)
@@ -134,6 +139,29 @@ describe('TypeScript conformance adapter', () => {
     }).run({ suites: ['audit'] })
 
     expect(report.summary).toEqual({ total: 19, passed: 19, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+  })
+
+  it('passes current Approval requirement, decision, and condition milestone vectors', async () => {
+    const report = await createConformanceRunner({
+      manifestPath,
+      adapter: createTypeScriptConformanceAdapter(),
+    }).run({ vectorIds: [
+      'approval.requirement.pending-001',
+      'approval.requirement.approved-001',
+      'approval.requirement.rejected-001',
+      'approval.requirement.wrong-association-001',
+      'approval.decision.pending-invalid-001',
+      'approval.decision.ineligible-actor-001',
+      'approval.decision.subject-facts-unchanged-001',
+      'approval.decision.subject-facts-changed-001',
+      'approval.condition.missing-fact-001',
+      'approval.condition.applicable-explicit-001',
+      'approval.condition.not-applicable-explicit-001',
+      'approval.condition.falsey-facts-present-001',
+      'approval.condition.missing-result-unresolved-001',
+    ] })
+
+    expect(report.summary).toEqual({ total: 13, passed: 13, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current Workflow state and transition vectors', async () => {

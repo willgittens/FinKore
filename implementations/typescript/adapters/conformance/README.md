@@ -16,6 +16,10 @@ This milestone supports:
 - `finkore.audit.replace`
 - `finkore.audit.remove`
 - `audit.redact`
+- `approval.requirement.evaluate`
+- `approval.decision.record`
+- `approval.decision.evaluate`
+- `approval.condition.evaluate`
 - `money.deserialize`
 - `money.serialize`
 - `workflow.create`
@@ -30,6 +34,14 @@ canonical Workflow operation ID currently listed in the Agentic Contract.
 
 Audit operation support covers FinKore Audit Draft 0.1: Events, Actors, append-only history, Change representation, Redaction, and portable Audit errors. Draft 0.1 does not define `audit.order` as an executable adapter operation.
 
-It does not claim support for approvals, entities, MCP, executable agent
-integrations, workflow versioning, concurrency resolution, persistence, or
-broader guard frameworks.
+Approval operation support covers only the first Approval milestones:
+Requirement evaluation, Decision recording, Decision effectiveness, eligible
+actor validation, subject-fact binding, append-only Decision history
+preservation, Condition representation, required-fact completeness, explicit
+Condition result boundaries, and portable Approval errors. The current Approval
+conformance operation labels remain conformance-local vocabulary; no canonical
+Approval operation is currently listed in `agentic/operations.md`.
+
+It does not claim support for rich condition expressions, approval chains,
+entities, MCP, executable agent integrations, workflow versioning, concurrency
+resolution, persistence, or broader guard frameworks.

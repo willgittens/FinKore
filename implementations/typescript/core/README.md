@@ -1,13 +1,20 @@
 # FinKore TypeScript
 
 TypeScript reference implementation for the current FinKore Money, Workflow,
-and Audit Draft 0.1 milestones.
+Audit, and first Approval Draft 0.1 milestones.
 
 FinKore Money Draft 0.1 is fully implemented by this TypeScript reference implementation. This statement applies only to the current Money specification draft; it does not imply that other FinKore domains are complete.
 
 FinKore Workflow Draft 0.1 is fully implemented by the TypeScript reference implementation. This statement applies only to the current Workflow specification draft; it does not imply that Approvals, Entities, or other FinKore domains are complete.
 
 FinKore Audit Draft 0.1 is fully implemented by the TypeScript reference implementation. Audit covers Events, Actors, append-only logical history, Change representation semantics, and Redaction semantics. Distributed ordering, persistence, and cross-domain integrations remain outside this milestone.
+
+The first FinKore Approval milestones are implemented for Approval Requirement
+representation, Approval Decision representation, Decision-to-Requirement
+binding, allowed Decision outcomes, Decision validation, relevant subject-fact
+effectiveness checks, append-only Decision history preservation, Approval
+Condition representation and evaluation-boundary validation, and portable
+Approval errors. This is not a full Approvals domain implementation.
 
 This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact compatible-currency numeric comparison, and explicit Money rounding.
 
@@ -18,7 +25,7 @@ explicit terminal-state detection, rejection of outgoing transitions in
 terminal definitions, terminal-state transition rejection and portable error
 precedence, successful state changes, and state preservation after rejection.
 
-It intentionally does not implement FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, distributed audit ordering, audit persistence, approvals integration, entities, corrections, or reversals.
+It intentionally does not implement FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, distributed audit ordering, audit persistence, approval chains, approval quorum, delegation, withdrawal, supersession, expiration, escalation, multi-stage approval graphs, dynamic approver resolution, authorization/RBAC, Workflow or Audit integration for approvals, entities, corrections, or reversals.
 
 The specification remains canonical. This package stores validated decimal amounts as strings and performs arithmetic and comparison with scaled integer arithmetic so observable behavior preserves exact base-10 semantics without using JavaScript `number`.
 
@@ -84,6 +91,35 @@ Audit failures expose portable codes: `FINKORE_AUDIT_INVALID_EVENT`,
 `FINKORE_AUDIT_APPEND_ONLY_VIOLATION`,
 `FINKORE_AUDIT_REDACTION_INVALID`, and
 `FINKORE_AUDIT_ACTOR_INVALID`. Redaction is representation-level concealment with audit evidence; it is not secure deletion, cryptographic erasure, authorization, retention automation, or a persistence guarantee.
+
+## Current Approval API
+
+- `ApprovalCondition.from(condition)` validates a condition with caller-supplied stable `id`, declared required facts, and an evaluation ownership/model string preserved exactly as supplied.
+- `approvalCondition.evaluate({ facts, result })` verifies all required facts are present and returns only the explicit composing-domain `APPLICABLE` or `NOT_APPLICABLE` result. Missing facts or missing/invalid explicit results throw `FINKORE_APPROVAL_CONDITION_UNRESOLVED`.
+- `ApprovalRequirement.from(requirement)` validates a requirement with caller-supplied stable `id`, subject reference, eligible actor identities, and explicit `APPROVED`/`REJECTED` outcome semantics.
+- `approvalRequirement.isEligibleActor(actorId)` reports whether an actor identity is declared eligible for the requirement.
+- `approvalRequirement.stateForOutcome(outcome)` maps an effective Decision outcome to `APPROVED` or `REJECTED`.
+- `ApprovalDecision.from(decision)` validates a decision with requirement identity, subject facts, `APPROVED` or `REJECTED` outcome, actor attribution, and explicit RFC 3339 timestamp.
+- `ApprovalDecision.forRequirement(requirement, decision)` validates Decision-to-Requirement association and actor eligibility.
+- `approvalDecision.evaluateEffectiveness(currentSubjectFacts, relevantFactPaths)` returns `EFFECTIVE` only when the decision remains associated with unchanged relevant subject facts.
+- `ApprovalDecisionHistory.create(history)` creates a logical append-only Approval Decision history.
+- `approvalDecisionHistory.record(requirement, decision)` validates and appends one Decision, leaving prior history unchanged on failure.
+- `approvalDecisionHistory.evaluateRequirement(requirement, options)` returns `PENDING`, `APPROVED`, or `REJECTED` from effective associated Decisions.
+- `approvalDecisionHistory.decisions()` and `approvalDecisionHistory.toJSON()` return defensive observations of committed history.
+
+Approval failures expose portable codes:
+`FINKORE_APPROVAL_REQUIRED`,
+`FINKORE_APPROVAL_INVALID_DECISION`,
+`FINKORE_APPROVAL_INELIGIBLE_ACTOR`,
+`FINKORE_APPROVAL_INVALID_CHAIN`, and
+`FINKORE_APPROVAL_CONDITION_UNRESOLVED`. Chain errors are exported for the
+portable catalog, but chain execution is outside this TypeScript milestone.
+
+FinKore Draft 0.1 does not define a portable rich condition expression model.
+This implementation therefore does not evaluate comparisons such as amount
+thresholds, logical `AND`/`OR` expressions, policy rules, JavaScript callbacks,
+or authorization predicates as FinKore semantics. Composing domains evaluate
+their own condition rule and supply the explicit boundary result.
 
 ## API Documentation
 

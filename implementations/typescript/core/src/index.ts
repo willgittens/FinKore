@@ -2,6 +2,19 @@ export { AuditActor } from './audit/actor.js'
 export { AuditChange } from './audit/audit-change.js'
 export { AuditEvent } from './audit/audit-event.js'
 export { AuditLog } from './audit/audit-log.js'
+export { ApprovalCondition } from './approvals/approval-condition.js'
+export { ApprovalDecision } from './approvals/approval-decision.js'
+export { ApprovalDecisionHistory } from './approvals/approval-decision-history.js'
+export { ApprovalRequirement } from './approvals/approval-requirement.js'
+export {
+  ApprovalConditionUnresolvedError,
+  ApprovalRequiredError,
+  FinKoreApprovalError,
+  IneligibleApprovalActorError,
+  InvalidApprovalChainError,
+  InvalidApprovalDecisionError,
+  isFinKoreApprovalError,
+} from './approvals/errors.js'
 export {
   AuditAppendOnlyViolationError,
   DuplicateAuditEventError,
@@ -52,6 +65,26 @@ export type {
   WorkflowTransitionGuard,
   WorkflowTransitionOptions,
 } from './workflow/types.js'
+export type {
+  ApprovalActorIdentifier,
+  ApprovalActorType,
+  ApprovalConditionEvaluationResult,
+  ApprovalConditionFactPath,
+  ApprovalConditionIdentifier,
+  ApprovalDecisionEffectiveness,
+  ApprovalDecisionOutcome,
+  ApprovalErrorCode,
+  ApprovalRequirementIdentifier,
+  ApprovalRequirementState,
+  ApprovalSubjectIdentifier,
+  ApprovalSubjectType,
+  SerializedApprovalActor,
+  SerializedApprovalCondition,
+  SerializedApprovalDecision,
+  SerializedApprovalDecisionHistory,
+  SerializedApprovalRequirement,
+  SerializedApprovalSubject,
+} from './approvals/types.js'
 export type {
   AuditActorIdentifier,
   AuditRedactionPolicy,

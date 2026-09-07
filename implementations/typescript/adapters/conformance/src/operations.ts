@@ -1,4 +1,4 @@
-import { AuditLog, Money, Workflow } from '@finkore/typescript'
+import { ApprovalCondition, ApprovalDecision, ApprovalDecisionHistory, AuditLog, Money, Workflow } from '@finkore/typescript'
 import type { AdapterRequest, NormalizedResult } from '@finkore/conformance-runner'
 import type { AuditRedactionRequest } from '@finkore/typescript'
 import { normalizeThrown } from './normalization.js'
@@ -96,6 +96,76 @@ function inputAuditRedact(input: unknown): { readonly history: unknown; readonly
   }
   const candidate = input as { readonly history: unknown; readonly policy?: unknown; readonly redactionEvent?: unknown }
   return { history: candidate.history, policy: candidate.policy, redactionEvent: candidate.redactionEvent }
+}
+
+function inputApprovalRequirementEvaluate(input: unknown): {
+  readonly requirement: unknown
+  readonly decisions: unknown
+  readonly currentSubjectFacts?: unknown
+  readonly relevantFactPaths?: readonly string[]
+} {
+  if (typeof input !== 'object' || input === null || !('requirement' in input) || !('decisions' in input)) {
+    return { requirement: undefined, decisions: undefined }
+  }
+  const candidate = input as {
+    readonly requirement: unknown
+    readonly decisions: unknown
+    readonly currentSubjectFacts?: unknown
+    readonly relevantFactPaths?: readonly string[]
+  }
+  return {
+    requirement: candidate.requirement,
+    decisions: candidate.decisions,
+    ...(Object.hasOwn(candidate, 'currentSubjectFacts') ? { currentSubjectFacts: candidate.currentSubjectFacts } : {}),
+    ...(candidate.relevantFactPaths === undefined ? {} : { relevantFactPaths: candidate.relevantFactPaths }),
+  }
+}
+
+function inputApprovalDecisionRecord(input: unknown): {
+  readonly requirement: unknown
+  readonly decision: unknown
+  readonly history: unknown
+} {
+  if (typeof input !== 'object' || input === null || !('requirement' in input) || !('decision' in input) || !('history' in input)) {
+    return { requirement: undefined, decision: undefined, history: undefined }
+  }
+  return input as { readonly requirement: unknown; readonly decision: unknown; readonly history: unknown }
+}
+
+function inputApprovalDecisionEvaluate(input: unknown): {
+  readonly decision: unknown
+  readonly currentSubjectFacts: unknown
+  readonly relevantFactPaths?: readonly string[]
+} {
+  if (typeof input !== 'object' || input === null || !('decision' in input) || !('currentSubjectFacts' in input)) {
+    return { decision: undefined, currentSubjectFacts: undefined }
+  }
+  const candidate = input as {
+    readonly decision: unknown
+    readonly currentSubjectFacts: unknown
+    readonly relevantFactPaths?: readonly string[]
+  }
+  return {
+    decision: candidate.decision,
+    currentSubjectFacts: candidate.currentSubjectFacts,
+    ...(candidate.relevantFactPaths === undefined ? {} : { relevantFactPaths: candidate.relevantFactPaths }),
+  }
+}
+
+function inputApprovalConditionEvaluate(input: unknown): {
+  readonly condition: unknown
+  readonly facts: unknown
+  readonly result?: unknown
+} {
+  if (typeof input !== 'object' || input === null || !('condition' in input) || !('facts' in input)) {
+    return { condition: undefined, facts: undefined }
+  }
+  const candidate = input as { readonly condition: unknown; readonly facts: unknown; readonly result?: unknown }
+  return {
+    condition: candidate.condition,
+    facts: candidate.facts,
+    ...(Object.hasOwn(candidate, 'result') ? { result: candidate.result } : {}),
+  }
 }
 
 /**
@@ -433,6 +503,89 @@ function executeAuditRemove(request: AdapterRequest): NormalizedResult {
 }
 
 /**
+ * Executes Approval Requirement evaluation through the TypeScript core API.
+ *
+ * The adapter reconstructs the supplied logical decision history and delegates
+ * requirement identity, eligibility, outcome, and relevant-facts effectiveness
+ * checks to the core Approval API.
+ */
+function executeApprovalRequirementEvaluate(request: AdapterRequest): NormalizedResult {
+  const input = inputApprovalRequirementEvaluate(request.input)
+  try {
+    const history = ApprovalDecisionHistory.create(input.decisions as readonly unknown[])
+    return {
+      status: 'success',
+      value: history.evaluateRequirement(input.requirement, {
+        ...(Object.hasOwn(input, 'currentSubjectFacts') ? { currentSubjectFacts: input.currentSubjectFacts } : {}),
+        ...(input.relevantFactPaths === undefined ? {} : { relevantFactPaths: input.relevantFactPaths }),
+      }),
+    }
+  } catch (error) {
+    return normalizeThrown(error)
+  }
+}
+
+/**
+ * Executes Approval Decision recording through the TypeScript core API.
+ *
+ * Validation and failure atomicity belong to `ApprovalDecisionHistory.record`;
+ * the adapter only reports committed history observations expected by
+ * conformance vectors.
+ */
+function executeApprovalDecisionRecord(request: AdapterRequest): NormalizedResult {
+  const input = inputApprovalDecisionRecord(request.input)
+  let history: ApprovalDecisionHistory | undefined
+  try {
+    history = ApprovalDecisionHistory.create(input.history as readonly unknown[])
+    return { status: 'success', value: history.record(input.requirement, input.decision).toJSON() }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && history !== undefined) {
+      return { ...result, observations: { history: history.decisions() } }
+    }
+    return result
+  }
+}
+
+/**
+ * Executes Approval Decision effectiveness checks through the TypeScript core API.
+ *
+ * The supplied Requirement fixture is intentionally not interpreted here; this
+ * operation observes whether a Decision's subject facts still match the current
+ * relevant subject facts.
+ */
+function executeApprovalDecisionEvaluate(request: AdapterRequest): NormalizedResult {
+  const input = inputApprovalDecisionEvaluate(request.input)
+  try {
+    return {
+      status: 'success',
+      value: ApprovalDecision.from(input.decision).evaluateEffectiveness(input.currentSubjectFacts, input.relevantFactPaths),
+    }
+  } catch (error) {
+    return normalizeThrown(error)
+  }
+}
+
+/**
+ * Executes Approval Condition evaluation-boundary checks through the TypeScript core API.
+ *
+ * The adapter delegates condition representation, required-fact completeness,
+ * and explicit result validation to `ApprovalCondition`. It does not implement
+ * condition expressions, comparisons, policy rules, or value interpretation.
+ */
+function executeApprovalConditionEvaluate(request: AdapterRequest): NormalizedResult {
+  const input = inputApprovalConditionEvaluate(request.input)
+  try {
+    return {
+      status: 'success',
+      value: ApprovalCondition.from(input.condition).evaluate({ facts: input.facts, result: input.result }),
+    }
+  } catch (error) {
+    return normalizeThrown(error)
+  }
+}
+
+/**
  * Operation handlers supported by the first TypeScript conformance adapter.
  *
  * Public Money domain operations use canonical Agentic Contract identifiers.
@@ -455,6 +608,10 @@ export const operationHandlers = {
   'finkore.audit.replace': executeAuditReplace,
   'finkore.audit.remove': executeAuditRemove,
   'audit.redact': executeAuditRedact,
+  'approval.decision.evaluate': executeApprovalDecisionEvaluate,
+  'approval.decision.record': executeApprovalDecisionRecord,
+  'approval.condition.evaluate': executeApprovalConditionEvaluate,
+  'approval.requirement.evaluate': executeApprovalRequirementEvaluate,
   'money.serialize': executeMoneySerialization,
   'workflow.create': executeWorkflowCreate,
 } satisfies Readonly<Record<string, OperationHandler>>
