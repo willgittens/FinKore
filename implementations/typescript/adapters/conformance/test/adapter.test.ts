@@ -27,10 +27,10 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('approval.decision.record')).toBe(true)
     expect(adapter.supports('approval.decision.evaluate')).toBe(true)
     expect(adapter.supports('approval.condition.evaluate')).toBe(true)
+    expect(adapter.supports('approval.chain.evaluate')).toBe(true)
     expect(adapter.supports('audit.append')).toBe(false)
     expect(adapter.supports('audit.redact')).toBe(true)
     expect(adapter.supports('audit.order')).toBe(false)
-    expect(adapter.supports('approval.chain.evaluate')).toBe(false)
     expect(adapter.supports('money.negate')).toBe(false)
     expect(adapter.supports('money.multiply')).toBe(false)
     expect(adapter.supports('money.divide')).toBe(false)
@@ -141,7 +141,7 @@ describe('TypeScript conformance adapter', () => {
     expect(report.summary).toEqual({ total: 19, passed: 19, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
-  it('passes current Approval requirement, decision, and condition milestone vectors', async () => {
+  it('passes current Approval requirement, decision, condition, and chain milestone vectors', async () => {
     const report = await createConformanceRunner({
       manifestPath,
       adapter: createTypeScriptConformanceAdapter(),
@@ -159,9 +159,13 @@ describe('TypeScript conformance adapter', () => {
       'approval.condition.not-applicable-explicit-001',
       'approval.condition.falsey-facts-present-001',
       'approval.condition.missing-result-unresolved-001',
+      'approval.chain.all-approved-001',
+      'approval.chain.pending-001',
+      'approval.chain.rejected-001',
+      'approval.chain.sequential-not-active-001',
     ] })
 
-    expect(report.summary).toEqual({ total: 13, passed: 13, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 17, passed: 17, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current Workflow state and transition vectors', async () => {

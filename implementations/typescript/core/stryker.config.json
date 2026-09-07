@@ -10,6 +10,7 @@
     "src/audit/audit-change.ts",
     "src/audit/audit-event.ts:17-135",
     "src/audit/audit-log.ts",
+    "src/approvals/approval-chain.ts",
     "src/approvals/approval-condition.ts",
     "src/approvals/approval-decision.ts",
     "src/approvals/approval-decision-history.ts",

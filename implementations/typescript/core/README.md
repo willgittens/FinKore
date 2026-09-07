@@ -14,7 +14,10 @@ representation, Approval Decision representation, Decision-to-Requirement
 binding, allowed Decision outcomes, Decision validation, relevant subject-fact
 effectiveness checks, append-only Decision history preservation, Approval
 Condition representation and evaluation-boundary validation, and portable
-Approval errors. This is not a full Approvals domain implementation.
+Approval errors. Approval Chains are implemented for Draft 0.1 all-required
+ordered or unordered composition, declared rejection outcomes, current
+sequential actionable Requirement reporting, and exclusion of explicitly
+not-applicable Requirements. This is not a full Approvals domain implementation.
 
 This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact compatible-currency numeric comparison, and explicit Money rounding.
 
@@ -25,7 +28,7 @@ explicit terminal-state detection, rejection of outgoing transitions in
 terminal definitions, terminal-state transition rejection and portable error
 precedence, successful state changes, and state preservation after rejection.
 
-It intentionally does not implement FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, distributed audit ordering, audit persistence, approval chains, approval quorum, delegation, withdrawal, supersession, expiration, escalation, multi-stage approval graphs, dynamic approver resolution, authorization/RBAC, Workflow or Audit integration for approvals, entities, corrections, or reversals.
+It intentionally does not implement FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, distributed audit ordering, audit persistence, approval quorum, N-of-M voting, parallel approval groups, delegation, withdrawal, supersession, expiration, escalation, multi-stage approval graphs, dynamic approver resolution, authorization/RBAC, Workflow or Audit integration for approvals, entities, corrections, or reversals.
 
 The specification remains canonical. This package stores validated decimal amounts as strings and performs arithmetic and comparison with scaled integer arithmetic so observable behavior preserves exact base-10 semantics without using JavaScript `number`.
 
@@ -106,14 +109,16 @@ Audit failures expose portable codes: `FINKORE_AUDIT_INVALID_EVENT`,
 - `approvalDecisionHistory.record(requirement, decision)` validates and appends one Decision, leaving prior history unchanged on failure.
 - `approvalDecisionHistory.evaluateRequirement(requirement, options)` returns `PENDING`, `APPROVED`, or `REJECTED` from effective associated Decisions.
 - `approvalDecisionHistory.decisions()` and `approvalDecisionHistory.toJSON()` return defensive observations of committed history.
+- `ApprovalChain.from(chain)` validates a chain with `SEQUENTIAL` or `UNORDERED` mode, one or more Requirement identities in declared order, and a declared `REJECTED` rejection outcome.
+- `approvalChain.evaluate(states)` returns `APPROVED` only when every applicable Requirement is approved, `PENDING` while at least one applicable Requirement remains pending, and `REJECTED` when an effective rejection exists. Pending sequential chains also report the single currently actionable Requirement identity.
+- Explicit `NOT_APPLICABLE` Requirement states are excluded from chain completion. Missing or malformed states throw `FINKORE_APPROVAL_INVALID_CHAIN`; explicit unresolved applicability throws `FINKORE_APPROVAL_CONDITION_UNRESOLVED`.
 
 Approval failures expose portable codes:
 `FINKORE_APPROVAL_REQUIRED`,
 `FINKORE_APPROVAL_INVALID_DECISION`,
 `FINKORE_APPROVAL_INELIGIBLE_ACTOR`,
 `FINKORE_APPROVAL_INVALID_CHAIN`, and
-`FINKORE_APPROVAL_CONDITION_UNRESOLVED`. Chain errors are exported for the
-portable catalog, but chain execution is outside this TypeScript milestone.
+`FINKORE_APPROVAL_CONDITION_UNRESOLVED`.
 
 FinKore Draft 0.1 does not define a portable rich condition expression model.
 This implementation therefore does not evaluate comparisons such as amount

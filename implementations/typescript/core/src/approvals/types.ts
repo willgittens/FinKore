@@ -63,6 +63,33 @@ export type ApprovalDecisionOutcome = 'APPROVED' | 'REJECTED'
 export type ApprovalRequirementState = 'APPROVED' | 'REJECTED' | 'PENDING'
 
 /**
+ * Portable Approval Chain outcome currently defined by Draft 0.1.
+ *
+ * `APPROVED` means every applicable Requirement is approved. `PENDING` means at
+ * least one applicable Requirement remains pending and no effective rejection
+ * determines the outcome. `REJECTED` is used when the chain's declared
+ * rejection outcome applies.
+ *
+ * @see APPROVAL-CHAIN-005
+ * @see APPROVAL-CHAIN-006
+ * @see APPROVAL-CHAIN-007
+ */
+export type ApprovalChainState = 'APPROVED' | 'REJECTED' | 'PENDING'
+
+/**
+ * Approval Chain composition mode.
+ *
+ * Sequential chains preserve declared Requirement order and expose only the
+ * first unsatisfied applicable Requirement as currently active. Unordered
+ * chains do not imply sequence.
+ *
+ * @see APPROVAL-CHAIN-002
+ * @see APPROVAL-CHAIN-003
+ * @see APPROVAL-CHAIN-004
+ */
+export type ApprovalChainMode = 'SEQUENTIAL' | 'UNORDERED'
+
+/**
  * Effectiveness observation for an Approval Decision against current facts.
  *
  * @see APPROVAL-DECISION-002
@@ -230,3 +257,57 @@ export interface SerializedApprovalCondition {
   /** Evaluation ownership or model identifier supplied by the composing domain. */
   readonly evaluation: string
 }
+
+/**
+ * Serialized Approval Chain accepted by the TypeScript Approval core.
+ *
+ * Chain identity is not part of the current Draft 0.1 portable chain model.
+ * Requirement references are caller-supplied stable Requirement identifiers and
+ * their declared order is preserved exactly.
+ *
+ * @see APPROVAL-CHAIN-001
+ * @see APPROVAL-CHAIN-002
+ * @see APPROVAL-CHAIN-007
+ */
+export interface SerializedApprovalChain {
+  /** Declares whether Requirements are evaluated sequentially or unordered. */
+  readonly mode: ApprovalChainMode
+
+  /** One or more Requirement identities in declared chain order. */
+  readonly requirements: readonly ApprovalRequirementIdentifier[]
+
+  /** Chain outcome to report when an effective rejection determines the result. */
+  readonly rejectionOutcome: 'REJECTED'
+}
+
+/**
+ * Current states for Requirements referenced by an Approval Chain.
+ *
+ * Only applicable Approval Requirements contribute to a chain's outcome. A
+ * `NOT_APPLICABLE` entry represents a condition-bound Requirement that the
+ * composing domain has explicitly evaluated as not applicable.
+ *
+ * @see APPROVAL-CONDITION-002
+ * @see APPROVAL-CONDITION-006
+ */
+export type ApprovalChainRequirementStates = Readonly<
+  Record<ApprovalRequirementIdentifier, ApprovalRequirementState | 'NOT_APPLICABLE'>
+>
+
+/**
+ * Observable Approval Chain evaluation result.
+ *
+ * Sequential pending chains include the currently actionable Requirement
+ * identity. Approved and rejected outcomes are returned as the portable state
+ * value because no Requirement is then currently actionable.
+ *
+ * @see APPROVAL-CHAIN-004
+ * @see APPROVAL-CHAIN-005
+ * @see APPROVAL-CHAIN-006
+ */
+export type ApprovalChainEvaluation =
+  | ApprovalChainState
+  | {
+      readonly state: 'PENDING'
+      readonly activeRequirements: readonly ApprovalRequirementIdentifier[]
+    }

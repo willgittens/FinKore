@@ -1,4 +1,12 @@
-import { ApprovalCondition, ApprovalDecision, ApprovalDecisionHistory, AuditLog, Money, Workflow } from '@finkore/typescript'
+import {
+  ApprovalChain,
+  ApprovalCondition,
+  ApprovalDecision,
+  ApprovalDecisionHistory,
+  AuditLog,
+  Money,
+  Workflow,
+} from '@finkore/typescript'
 import type { AdapterRequest, NormalizedResult } from '@finkore/conformance-runner'
 import type { AuditRedactionRequest } from '@finkore/typescript'
 import { normalizeThrown } from './normalization.js'
@@ -166,6 +174,16 @@ function inputApprovalConditionEvaluate(input: unknown): {
     facts: candidate.facts,
     ...(Object.hasOwn(candidate, 'result') ? { result: candidate.result } : {}),
   }
+}
+
+function inputApprovalChainEvaluate(input: unknown): {
+  readonly chain: unknown
+  readonly states: unknown
+} {
+  if (typeof input !== 'object' || input === null || !('chain' in input) || !('states' in input)) {
+    return { chain: undefined, states: undefined }
+  }
+  return input as { readonly chain: unknown; readonly states: unknown }
 }
 
 /**
@@ -586,6 +604,25 @@ function executeApprovalConditionEvaluate(request: AdapterRequest): NormalizedRe
 }
 
 /**
+ * Executes Approval Chain evaluation through the TypeScript core API.
+ *
+ * The adapter reconstructs the supplied Chain definition and delegates
+ * sequencing, all-required completion, rejection handling, and condition-bound
+ * applicability observations to `ApprovalChain`.
+ */
+function executeApprovalChainEvaluate(request: AdapterRequest): NormalizedResult {
+  const input = inputApprovalChainEvaluate(request.input)
+  try {
+    return {
+      status: 'success',
+      value: ApprovalChain.from(input.chain).evaluate(input.states),
+    }
+  } catch (error) {
+    return normalizeThrown(error)
+  }
+}
+
+/**
  * Operation handlers supported by the first TypeScript conformance adapter.
  *
  * Public Money domain operations use canonical Agentic Contract identifiers.
@@ -608,6 +645,7 @@ export const operationHandlers = {
   'finkore.audit.replace': executeAuditReplace,
   'finkore.audit.remove': executeAuditRemove,
   'audit.redact': executeAuditRedact,
+  'approval.chain.evaluate': executeApprovalChainEvaluate,
   'approval.decision.evaluate': executeApprovalDecisionEvaluate,
   'approval.decision.record': executeApprovalDecisionRecord,
   'approval.condition.evaluate': executeApprovalConditionEvaluate,
