@@ -155,6 +155,28 @@ describe('Approval decisions', () => {
     ).toBe('PENDING')
   })
 
+  it('preserves stale historical decisions without treating them as current satisfaction', () => {
+    const staleApproval = {
+      ...decision,
+      subjectFacts: { revision: '2', amount: { amount: '9000.00', currency: 'EUR' } },
+    }
+    const currentRejection = {
+      ...decision,
+      outcome: 'REJECTED',
+      subjectFacts: { revision: '3', amount: { amount: '9000.00', currency: 'EUR' } },
+      decidedAt: '2026-09-02T12:00:00Z',
+    }
+    const history = ApprovalDecisionHistory.create([staleApproval, currentRejection])
+
+    expect(
+      history.evaluateRequirement(requirement, {
+        currentSubjectFacts: { revision: '3', amount: { amount: '9000.00', currency: 'EUR' } },
+        relevantFactPaths: ['revision', 'amount'],
+      }),
+    ).toBe('REJECTED')
+    expect(history.toJSON()).toEqual({ history: [staleApproval, currentRejection] })
+  })
+
   it('validates relevant fact paths and requires every supplied path to match', () => {
     const approvalDecision = ApprovalDecision.from({
       ...decision,

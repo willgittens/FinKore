@@ -105,8 +105,8 @@ export class ApprovalRequiredError extends FinKoreApprovalError {
  * TypeScript representation of the portable
  * `FINKORE_APPROVAL_CONDITION_UNRESOLVED` error.
  *
- * This error is defined for the Approval catalog even though condition
- * evaluation is outside this TypeScript milestone.
+ * Chain evaluation uses this error when a Requirement's applicability is
+ * explicitly unresolved.
  *
  * @see FINKORE_APPROVAL_CONDITION_UNRESOLVED
  * @see APPROVAL-CONDITION-006
@@ -128,9 +128,13 @@ export class ApprovalConditionUnresolvedError extends FinKoreApprovalError {
  * TypeScript representation of the portable
  * `FINKORE_APPROVAL_INVALID_CHAIN` error.
  *
- * Chain evaluation is outside this TypeScript milestone.
+ * Used when a chain definition or chain-state evaluation input is structurally
+ * invalid.
  *
  * @see FINKORE_APPROVAL_INVALID_CHAIN
+ * @see APPROVAL-CHAIN-001
+ * @see APPROVAL-CHAIN-002
+ * @see APPROVAL-CHAIN-009
  */
 export class InvalidApprovalChainError extends FinKoreApprovalError {
   /**

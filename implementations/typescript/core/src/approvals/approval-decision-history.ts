@@ -79,10 +79,12 @@ export class ApprovalDecisionHistory {
   /**
    * Evaluates one Requirement against committed or supplied Decisions.
    *
-   * Decisions associated with other Requirements are ignored. Matching Decisions
-   * must be valid for the Requirement and must remain effective for the supplied
-   * current facts when current facts are available. An applicable Requirement
-   * with no effective Decision remains `PENDING`.
+ * Decisions associated with other Requirements are ignored. Matching Decisions
+ * must be valid for the Requirement and must remain effective for the supplied
+ * current facts when current facts are available. Historical Decisions whose
+ * relevant subject facts no longer match are preserved but do not satisfy or
+ * reject the Requirement for current evaluation. An applicable Requirement with
+ * no effective Decision remains `PENDING`.
    *
    * @param requirementInput - Requirement to evaluate.
    * @param options - Optional current subject facts and relevant fact paths.
@@ -98,6 +100,8 @@ export class ApprovalDecisionHistory {
    * @see APPROVAL-DECISION-002
    * @see APPROVAL-DECISION-003
    * @see APPROVAL-DECISION-004
+   * @see APPROVAL-DECISION-007
+   * @see APPROVAL-ERROR-005
    */
   evaluateRequirement(
     requirementInput: unknown,

@@ -17,7 +17,8 @@ Condition representation and evaluation-boundary validation, and portable
 Approval errors. Approval Chains are implemented for Draft 0.1 all-required
 ordered or unordered composition, declared rejection outcomes, current
 sequential actionable Requirement reporting, and exclusion of explicitly
-not-applicable Requirements. This is not a full Approvals domain implementation.
+not-applicable Requirements. Chain definitions reject duplicate Requirement
+identities. This is not a full Approvals domain implementation.
 
 This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact compatible-currency numeric comparison, and explicit Money rounding.
 
@@ -112,6 +113,9 @@ Audit failures expose portable codes: `FINKORE_AUDIT_INVALID_EVENT`,
 - `ApprovalChain.from(chain)` validates a chain with `SEQUENTIAL` or `UNORDERED` mode, one or more Requirement identities in declared order, and a declared `REJECTED` rejection outcome.
 - `approvalChain.evaluate(states)` returns `APPROVED` only when every applicable Requirement is approved, `PENDING` while at least one applicable Requirement remains pending, and `REJECTED` when an effective rejection exists. Pending sequential chains also report the single currently actionable Requirement identity.
 - Explicit `NOT_APPLICABLE` Requirement states are excluded from chain completion. Missing or malformed states throw `FINKORE_APPROVAL_INVALID_CHAIN`; explicit unresolved applicability throws `FINKORE_APPROVAL_CONDITION_UNRESOLVED`.
+- Approval Chain evaluation consumes explicit Requirement state observations. It does not prove which historical Decision satisfied a Requirement or which subject facts were bound to that Decision; use `ApprovalDecisionHistory.evaluateRequirement(requirement, { currentSubjectFacts, relevantFactPaths })` for current satisfaction from historical evidence.
+- Historical Decisions whose relevant subject facts no longer match current facts remain committed but do not satisfy or reject the Requirement for current evaluation. Without another effective Decision, the Requirement is `PENDING`.
+- Draft 0.1 does not define Approval Chain identity. Decisions bind to Requirements and relevant subject facts, not to Chain identifiers.
 
 Approval failures expose portable codes:
 `FINKORE_APPROVAL_REQUIRED`,

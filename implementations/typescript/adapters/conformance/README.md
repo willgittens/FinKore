@@ -46,6 +46,12 @@ current Approval conformance operation labels remain conformance-local
 vocabulary; no canonical Approval operation is currently listed in
 `agentic/operations.md`.
 
+`approval.chain.evaluate` remains a conformance-local operation. It evaluates a
+chain from explicit Requirement state observations so conformance can verify
+ordered and unordered composition. It does not replace Approval Decision history
+as evidence for Requirement binding, actor eligibility, or relevant subject
+facts.
+
 It does not claim support for rich condition expressions, approval quorum,
 N-of-M voting, parallel approval groups, delegation, withdrawal, supersession,
 escalation, dynamic approver resolution, authorization/RBAC, entities, MCP,

@@ -783,6 +783,44 @@
       "guardsAgainst": [
         "sequential-order-ignored"
       ]
+    },
+    {
+      "id": "approval.chain.duplicate-requirement-invalid-001",
+      "spec": "approvals/chains",
+      "requirements": [
+        "APPROVAL-CHAIN-009"
+      ],
+      "description": "Rejects a chain that declares the same requirement identifier more than once.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "SEQUENTIAL",
+          "requirements": [
+            "manager",
+            "finance",
+            "manager"
+          ],
+          "rejectionOutcome": "REJECTED"
+        },
+        "states": {
+          "manager": "APPROVED",
+          "finance": "APPROVED"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "duplicate-requirement-deduplicated",
+        "duplicate-requirement-accepted"
+      ]
     }
   ]
 }

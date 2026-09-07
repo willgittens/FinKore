@@ -163,9 +163,10 @@ describe('TypeScript conformance adapter', () => {
       'approval.chain.pending-001',
       'approval.chain.rejected-001',
       'approval.chain.sequential-not-active-001',
+      'approval.chain.duplicate-requirement-invalid-001',
     ] })
 
-    expect(report.summary).toEqual({ total: 17, passed: 17, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 18, passed: 18, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current Workflow state and transition vectors', async () => {

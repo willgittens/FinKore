@@ -262,12 +262,13 @@ export interface SerializedApprovalCondition {
  * Serialized Approval Chain accepted by the TypeScript Approval core.
  *
  * Chain identity is not part of the current Draft 0.1 portable chain model.
- * Requirement references are caller-supplied stable Requirement identifiers and
- * their declared order is preserved exactly.
+ * Requirement references are caller-supplied stable Requirement identifiers,
+ * their declared order is preserved exactly, and duplicates are invalid.
  *
  * @see APPROVAL-CHAIN-001
  * @see APPROVAL-CHAIN-002
  * @see APPROVAL-CHAIN-007
+ * @see APPROVAL-CHAIN-009
  */
 export interface SerializedApprovalChain {
   /** Declares whether Requirements are evaluated sequentially or unordered. */

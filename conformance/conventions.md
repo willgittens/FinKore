@@ -59,7 +59,7 @@ These identifiers name observable behavior, not implementation methods.
 | `approval.decision.record` | Validate and commit a decision. |
 | `approval.decision.evaluate` | Determine whether a decision remains effective for supplied subject facts. |
 | `approval.condition.evaluate` | Return `APPLICABLE` or `NOT_APPLICABLE` from explicit facts. |
-| `approval.chain.evaluate` | Derive chain state from its declared combination and effective decisions. |
+| `approval.chain.evaluate` | Derive chain state from its declared combination and explicit Requirement state observations. |
 | `entity.create` | Create under the supplied composing-domain definition. |
 | `entity.mutate` | Apply a declared mutation under supplied mutability and validation rules. |
 | `entity.transition` | Apply a lifecycle transition under the referenced workflow. |
@@ -74,6 +74,11 @@ Audit ordering requirements are verified through append-only history and review 
 For Money Draft 0.1, `money.deserialize` and `money.serialize` remain
 conformance-local representation boundary checks. They exercise normative Money
 serialization but are not separate public Agentic operations.
+For Approvals Draft 0.1, `approval.chain.evaluate` remains conformance-local.
+It observes deterministic chain composition from explicit Requirement state
+inputs; it is not a public Agentic operation and does not replace Decision
+history as evidence for which Decision satisfied a Requirement or which subject
+facts were bound to that Decision.
 
 ## Runner contract
 

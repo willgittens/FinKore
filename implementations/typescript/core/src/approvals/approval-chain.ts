@@ -27,7 +27,9 @@ function requiredString(value: unknown): string {
 
 function validateRequirements(value: unknown): readonly ApprovalRequirementIdentifier[] {
   if (!Array.isArray(value) || value.length === 0) throw new InvalidApprovalChainError()
-  return value.map(requiredString)
+  const requirements = value.map(requiredString)
+  if (new Set(requirements).size !== requirements.length) throw new InvalidApprovalChainError()
+  return requirements
 }
 
 function validateRejectionOutcome(value: unknown): 'REJECTED' {
@@ -47,10 +49,12 @@ function validateRequirementState(value: unknown): ChainRequirementEvaluationSta
  * A Chain contains one or more declared Approval Requirement identities,
  * declares whether the Requirements are sequential or unordered, and declares
  * the rejection outcome used when an effective rejection determines the chain
- * result. This class does not implement quorum, parallel voting groups,
- * delegation, withdrawal, supersession, escalation, dynamic approver
- * resolution, authorization, persistence, audit integration, or workflow
- * integration.
+ * result. Requirement identities must not repeat within a chain. Chain identity
+ * is intentionally absent in Draft 0.1; Decisions bind to Requirements and
+ * relevant subject facts rather than to a Chain identifier. This class does not
+ * implement quorum, parallel voting groups, delegation, withdrawal,
+ * supersession, escalation, dynamic approver resolution, authorization,
+ * persistence, audit integration, or workflow integration.
  *
  * @see APPROVAL-CHAIN-001
  * @see APPROVAL-CHAIN-002
@@ -71,8 +75,9 @@ export class ApprovalChain {
   /**
    * Creates and validates an Approval Chain from a portable candidate.
    *
-   * The declared Requirement order is preserved exactly. Chain identity is not
-   * generated because Draft 0.1 does not define a chain identity field.
+ * The declared Requirement order is preserved exactly. Chain identity is not
+ * generated because Draft 0.1 does not define a chain identity field. Duplicate
+ * Requirement identities are rejected instead of deduplicated.
    *
    * @param input - Candidate serialized Approval Chain.
    * @returns A validated Approval Chain value.
@@ -84,6 +89,7 @@ export class ApprovalChain {
    * @see APPROVAL-CHAIN-001
    * @see APPROVAL-CHAIN-002
    * @see APPROVAL-CHAIN-007
+   * @see APPROVAL-CHAIN-009
    */
   static from(input: unknown): ApprovalChain {
     if (!isPlainRecord(input)) throw new InvalidApprovalChainError()

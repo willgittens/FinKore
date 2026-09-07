@@ -18,10 +18,22 @@ This document defines how multiple Approval Requirements combine. The term Appro
 - **APPROVAL-CHAIN-006** — Such a chain MUST remain `PENDING` while at least one applicable Approval Requirement remains pending and no effective rejection determines the outcome.
 - **APPROVAL-CHAIN-007** — Every Approval Chain definition MUST state how an effective rejection determines its outcome.
 - **APPROVAL-CHAIN-008** — Evaluation MUST be deterministic from the chain definition, applicable requirements, and effective decisions.
+- **APPROVAL-CHAIN-009** — An Approval Chain MUST NOT declare the same Approval Requirement identifier more than once.
 
 ## Invariants
 
 An Approval Chain outcome must be consistent with its sequencing declaration and effective required Approval Decisions.
+
+Approval Chain evaluation is an outcome evaluation over declared Approval
+Requirements. A state-map representation MAY be used to evaluate which
+Requirements are currently satisfied, rejected, pending, or not applicable, but
+that representation does not replace Approval Decision history and MUST NOT be
+used as proof of which Decision satisfied a Requirement or which subject facts
+were bound to that Decision.
+
+Draft 0.1 does not define Approval Chain identity. A Decision binds to its
+Approval Requirement and relevant subject state or facts, not to a Chain
+identifier.
 
 ## Examples
 
@@ -36,6 +48,7 @@ The arrow denotes a sequential chain. `AND` denotes an unordered all-required ch
 
 - Reporting a chain as approved while a required step remains pending.
 - Reordering sequential requirements without changing the declared chain.
+- Declaring the same Approval Requirement identifier twice in one chain.
 
 ## Open Questions
 
@@ -45,4 +58,3 @@ The arrow denotes a sequential chain. `AND` denotes an unordered all-required ch
 ## Non-Goals
 
 FinKore Core Draft 0.1 does not define quorum, any-of, delegation, complex dependency graphs, or migration between Approval Chain definitions.
-

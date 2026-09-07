@@ -7,6 +7,13 @@ both the current specification and conformance vectors. Other conformance
 operation labels remain runner-adapter vocabulary until their stable agent-facing
 contract, effects, and inputs are reviewed.
 
+Approval conformance labels, including `approval.chain.evaluate`, remain
+conformance-local in Draft 0.1. Chain evaluation currently observes composition
+from explicit Requirement state inputs; it is not promoted to a canonical
+Agentic operation because the public approval binding model still depends on
+Approval Requirement identity, Decision history, and relevant subject facts
+rather than a standalone agent-facing chain command.
+
 ## Registry
 
 | Operation | Domain | State-changing | Financial state | Deterministic | Audit | Approval relation | Requirements |

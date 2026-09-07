@@ -27,6 +27,20 @@ An Approval Decision outcome is `APPROVED` or `REJECTED`. `PENDING` describes an
 
 Each effective Approval Decision must have exactly one outcome and exactly one attributable Actor.
 
+For current satisfaction, a Decision is effective only for the Approval
+Requirement it identifies and only while the relevant subject state or facts
+still correspond to the state or facts against which the Decision was made. If
+current relevant facts no longer correspond, the historical Decision remains in
+logical history but MUST NOT satisfy the Requirement for current evaluation.
+The observable Requirement state is therefore `PENDING` unless another
+effective Decision satisfies or rejects the Requirement.
+
+Draft 0.1 does not require a specific binding mechanism such as revision
+numbers, database versions, hashes, immutable snapshots, or stable fact
+references. A composing domain MAY use any mechanism that preserves the
+observable guarantee that the Decision can be associated with the relevant
+subject state or facts used when it was made.
+
 ## Example
 
 The following JSON is illustrative and non-normative; it does not prescribe serialized member names.
@@ -60,4 +74,3 @@ Invalid decisions must use an applicable [Approval Error](errors.md).
 ## Non-Goals
 
 FinKore Core Draft 0.1 does not define withdrawal, supersession, delegation, expiration, escalation, approval-definition migration, or complex dependency graphs. Subject-state association is semantic; this document does not require revision identifiers, version numbers, hashes, snapshots, or immutable references.
-

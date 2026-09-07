@@ -36,6 +36,9 @@ describe('Approval chains', () => {
     expect(() => ApprovalChain.from({ ...unorderedChain, requirements: ['manager', ''] })).toThrow(
       InvalidApprovalChainError,
     )
+    expect(() => ApprovalChain.from({ ...unorderedChain, requirements: ['manager', 'finance', 'manager'] })).toThrow(
+      InvalidApprovalChainError,
+    )
     expect(() => ApprovalChain.from({ ...unorderedChain, rejectionOutcome: undefined })).toThrow(
       InvalidApprovalChainError,
     )
