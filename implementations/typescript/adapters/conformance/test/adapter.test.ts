@@ -183,7 +183,7 @@ describe('TypeScript conformance adapter', () => {
     expect(report.summary).toEqual({ total: 20, passed: 20, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
-  it('passes current Entity identity, lifecycle, and mutability milestone vectors', async () => {
+  it('passes current Entity identity, lifecycle, mutability, and validation milestone vectors', async () => {
     const report = await createConformanceRunner({
       manifestPath,
       adapter: createTypeScriptConformanceAdapter(),
@@ -192,10 +192,11 @@ describe('TypeScript conformance adapter', () => {
       'entity.mutate.mutable-field-001',
       'entity.mutate.immutable-financial-field-001',
       'entity.mutate.terminal-metadata-001',
+      'entity.validation.complete-result-001',
       'entity.transition.success-identity-stable-001',
       'entity.transition.rejected-preserves-entity-001',
     ] })
 
-    expect(report.summary).toEqual({ total: 6, passed: 6, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 7, passed: 7, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 })

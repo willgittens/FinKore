@@ -50,6 +50,73 @@ export type EntityErrorCode =
   | 'FINKORE_ENTITY_VALIDATION_FAILED'
 
 /**
+ * Validation rule fixture supported by the current Entity conformance milestone.
+ *
+ * Draft 0.1 has not standardized a generic validation language. The current
+ * TypeScript reference implementation supports only the deterministic
+ * `positive-money` fixture predicate used by Entity conformance vectors.
+ *
+ * @see ENTITY-VALIDATION-001
+ */
+export type EntityValidationRule = 'positive-money'
+
+/**
+ * Declared Entity validation rule.
+ *
+ * The rule identifier is a stable composing-domain violation identity. The path
+ * names the top-level Entity data member inspected by this Draft 0.1 milestone.
+ *
+ * @see ENTITY-ERROR-002
+ * @see ENTITY-VALIDATION-005
+ */
+export interface EntityValidationRuleDefinition {
+  /** Stable violation identifier supplied by the composing domain. */
+  readonly id: string
+
+  /** Top-level Entity data path inspected by the rule. */
+  readonly path: string
+
+  /** Small conformance fixture predicate, not a general rule expression. */
+  readonly rule: EntityValidationRule
+}
+
+/**
+ * Portable validation finding emitted when a declared Entity rule fails.
+ *
+ * The fields are machine-readable and intentionally omit sensitive field values
+ * and localized human-readable messages.
+ *
+ * @see ENTITY-VALIDATION-004
+ * @see ENTITY-VALIDATION-005
+ * @see ENTITY-VALIDATION-008
+ */
+export interface EntityValidationFinding {
+  /** Stable violation identifier from the failed rule declaration. */
+  readonly rule: string
+
+  /** Domain path relevant to the failed rule. */
+  readonly path: string
+}
+
+/**
+ * Complete result of evaluating declared Entity validation rules.
+ *
+ * Findings are reported in declaration order for this TypeScript
+ * representation. Draft 0.1 conformance does not make finding array order a
+ * cross-language contract.
+ *
+ * @see ENTITY-VALIDATION-003
+ * @see ENTITY-VALIDATION-006
+ */
+export interface EntityValidationResult {
+  /** `true` only when every declared validation rule passes. */
+  readonly valid: boolean
+
+  /** Every failed validation rule, without early return. */
+  readonly findings: readonly EntityValidationFinding[]
+}
+
+/**
  * Financial Entity definition input for the current identity, lifecycle, and
  * mutability milestones.
  *
@@ -75,6 +142,9 @@ export interface EntityDefinitionInput {
 
   /** Top-level data fields declared mutable by lifecycle state. */
   readonly mutability?: unknown
+
+  /** Declared Entity validation rules for this conformance milestone. */
+  readonly validation?: unknown
 }
 
 /**
@@ -97,6 +167,9 @@ export interface EntityDefinition {
 
   /** Top-level data fields declared mutable by lifecycle state. */
   readonly mutability: Readonly<Record<WorkflowStateIdentifier, readonly string[]>>
+
+  /** Declared Entity validation rules evaluated against complete Entity data. */
+  readonly validation: readonly EntityValidationRuleDefinition[]
 }
 
 /**

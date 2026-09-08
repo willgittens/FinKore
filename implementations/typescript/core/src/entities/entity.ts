@@ -1,12 +1,20 @@
+import { Money } from '../money/money.js'
 import { Workflow } from '../workflow/workflow.js'
 import { InvalidWorkflowTransitionError } from '../workflow/errors.js'
 import {
+  EntityValidationFailedError,
   EntityStateConflictError,
   ImmutableEntityError,
   InvalidEntityIdentityError,
   InvalidEntityMutationError,
 } from './errors.js'
-import type { EntityDefinition, SerializedFinancialEntity } from './types.js'
+import type {
+  EntityDefinition,
+  EntityValidationFinding,
+  EntityValidationResult,
+  EntityValidationRuleDefinition,
+  SerializedFinancialEntity,
+} from './types.js'
 
 function isPlainRecord(value: unknown): value is Readonly<Record<string, unknown>> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -32,7 +40,27 @@ function validateDefinition(input: unknown): EntityDefinition {
     identityScope: requiredString(input.identityScope),
     workflow: input.workflow,
     mutability: validateMutability(input.mutability),
+    validation: validateValidationRules(input.validation),
   }
+}
+
+function validateValidationRules(value: unknown): readonly EntityValidationRuleDefinition[] {
+  if (value === undefined) return []
+  if (!Array.isArray(value)) throw new InvalidEntityMutationError()
+  return value.map((candidate) => {
+    if (!isPlainRecord(candidate)) throw new InvalidEntityMutationError()
+    if (candidate.rule !== 'positive-money') throw new InvalidEntityMutationError()
+    return {
+      id: requiredValidationString(candidate.id),
+      path: requiredValidationString(candidate.path),
+      rule: candidate.rule,
+    }
+  })
+}
+
+function requiredValidationString(value: unknown): string {
+  if (typeof value !== 'string' || value.length === 0) throw new InvalidEntityMutationError()
+  return value
 }
 
 function validateFieldList(value: unknown): readonly string[] {
@@ -77,8 +105,38 @@ function validateSerializedEntity(definition: EntityDefinition, input: unknown):
   }
 }
 
+function valueAtTopLevelPath(data: unknown, path: string): unknown {
+  if (!isPlainRecord(data)) return undefined
+  return data[path]
+}
+
+function isPositiveMoney(value: unknown): boolean {
+  if (!isPlainRecord(value) || typeof value.currency !== 'string') return false
+  try {
+    return Money.deserialize(value).compare(Money.deserialize({ amount: '0', currency: value.currency })) === 'GREATER'
+  } catch {
+    return false
+  }
+}
+
+function validateEntityData(definition: EntityDefinition, data: unknown): EntityValidationResult {
+  const findings: EntityValidationFinding[] = []
+  for (const rule of definition.validation) {
+    if (rule.rule === 'positive-money' && !isPositiveMoney(valueAtTopLevelPath(data, rule.path))) {
+      findings.push({ rule: rule.id, path: rule.path })
+    }
+  }
+  return { valid: findings.length === 0, findings }
+}
+
+function assertValidEntityData(definition: EntityDefinition, data: unknown): void {
+  const result = validateEntityData(definition, data)
+  if (!result.valid) throw new EntityValidationFailedError('Entity validation failed', { findings: result.findings })
+}
+
 /**
- * Generic FinKore Financial Entity for identity, lifecycle, and mutability behavior.
+ * Generic FinKore Financial Entity for identity, lifecycle, mutability, and
+ * declared validation behavior.
  *
  * An Entity has caller-supplied opaque identity within a declared scope and
  * exactly one current lifecycle state governed by its referenced Workflow.
@@ -88,11 +146,11 @@ function validateSerializedEntity(definition: EntityDefinition, input: unknown):
  * unchanged.
  *
  * Mutability means only whether a top-level Entity data field may change in the
- * current lifecycle state. It does not validate the proposed value against
- * composing-domain business rules. This milestone does not implement validation
- * rule engines, persistence, audit integration, workflow integration beyond the
- * referenced Workflow transition semantics, correction/reversal, supersession,
- * versioning, optimistic locking, or authorization.
+ * current lifecycle state. Validation separately evaluates declared Entity
+ * constraints against complete Entity data before a successful create, import,
+ * or mutation becomes observable. Draft 0.1 has not standardized a generic
+ * validation language; this implementation supports only the small
+ * `positive-money` conformance fixture predicate.
  *
  * @see ENTITY-IDENTITY-001
  * @see ENTITY-IDENTITY-002
@@ -108,6 +166,9 @@ function validateSerializedEntity(definition: EntityDefinition, input: unknown):
  * @see ENTITY-MUTABILITY-007
  * @see ENTITY-ERROR-001
  * @see ENTITY-ERROR-004
+ * @see ENTITY-VALIDATION-001
+ * @see ENTITY-VALIDATION-003
+ * @see ENTITY-VALIDATION-006
  */
 export class FinancialEntity {
   /** Validated Entity definition governing this entity. */
@@ -146,6 +207,7 @@ export class FinancialEntity {
     const definition = validateDefinition(definitionInput)
     const workflow = Workflow.create(definition.workflow)
     mutableFieldsFor(definition, workflow.currentState)
+    assertValidEntityData(definition, data)
     return new FinancialEntity(definition, {
       type: definition.type,
       id: requiredString(id),
@@ -180,6 +242,7 @@ export class FinancialEntity {
     const entity = validateSerializedEntity(definition, entityInput)
     Workflow.from(definition.workflow, { currentState: entity.state })
     mutableFieldsFor(definition, entity.state)
+    assertValidEntityData(definition, entity.data)
     return new FinancialEntity(definition, entity)
   }
 
@@ -249,8 +312,11 @@ export class FinancialEntity {
    * all Entity data unchanged. A terminal state is not treated as globally
    * immutable; only its declared mutability list governs what may change.
    *
-   * This method does not evaluate Entity Validation rules, business predicates,
-   * schemas, audit policy, authorization, or persistence.
+   * Validation evaluates the complete proposed data after all accepted changes
+   * are combined, so multi-field proposals either become observable together or
+   * are rejected together. This method does not implement schemas, audit
+   * policy, authorization, persistence, arbitrary expressions, or a generic
+   * rule registry.
    *
    * @param changesInput - Top-level data field changes keyed by field name.
    * @returns A new Financial Entity containing the accepted data changes.
@@ -258,6 +324,9 @@ export class FinancialEntity {
    * When any targeted field is not declared mutable in the current state.
    * @throws {InvalidEntityMutationError}
    * When the mutation request shape is not recognized by this milestone.
+   * @throws {EntityValidationFailedError}
+   * When one or more declared Entity validation rules fail for the complete
+   * proposed result.
    *
    * @see FINKORE_ENTITY_IMMUTABLE
    * @see FINKORE_ENTITY_INVALID_MUTATION
@@ -269,6 +338,10 @@ export class FinancialEntity {
    * @see ENTITY-MUTABILITY-006
    * @see ENTITY-MUTABILITY-007
    * @see ENTITY-ERROR-001
+   * @see ENTITY-VALIDATION-002
+   * @see ENTITY-VALIDATION-003
+   * @see ENTITY-VALIDATION-004
+   * @see ENTITY-VALIDATION-006
    */
   mutate(changesInput: unknown): FinancialEntity {
     if (!isPlainRecord(this.value.data)) throw new InvalidEntityMutationError()
@@ -282,7 +355,28 @@ export class FinancialEntity {
     }
 
     const data = cloneJsonValue({ ...this.value.data, ...changes })
+    assertValidEntityData(this.definition, data)
     return new FinancialEntity(this.definition, { ...this.value, data })
+  }
+
+  /**
+   * Evaluates declared Entity validation rules without changing this Entity.
+   *
+   * The returned result is complete for all validation rules declared in the
+   * Entity definition: every failed rule contributes one finding, and
+   * evaluation does not stop at the first failure. Findings expose only stable
+   * rule identifiers and paths; they do not include sensitive field values.
+   *
+   * @returns Complete validation result for this Entity's current data.
+   *
+   * @see ENTITY-VALIDATION-003
+   * @see ENTITY-VALIDATION-004
+   * @see ENTITY-VALIDATION-005
+   * @see ENTITY-VALIDATION-006
+   * @see ENTITY-VALIDATION-008
+   */
+  validate(): EntityValidationResult {
+    return cloneJsonValue(validateEntityData(this.definition, this.value.data))
   }
 
   /**

@@ -28,6 +28,7 @@ export {
 } from './audit/errors.js'
 export {
   EntityStateConflictError,
+  EntityValidationFailedError,
   FinKoreEntityError,
   ImmutableEntityError,
   InvalidEntityIdentityError,
@@ -107,6 +108,10 @@ export type {
   EntityIdentifier,
   EntityIdentityScope,
   EntityTypeIdentifier,
+  EntityValidationFinding,
+  EntityValidationResult,
+  EntityValidationRule,
+  EntityValidationRuleDefinition,
   SerializedFinancialEntity,
 } from './entities/types.js'
 export type {

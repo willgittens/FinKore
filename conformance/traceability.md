@@ -11,10 +11,10 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 | 0 | 0 |
 | Audit | 38 | 30 | 4 | 4 | 28 | 0 | 0 | 10 | 0 | 0 |
 | Approvals | 35 | 32 | 1 | 2 | 30 | 0 | 0 | 5 | 0 | 0 |
-| Entities | 34 | 29 | 3 | 2 | 17 | 0 | 13 | 4 | 0 | 0 |
-| **Total** | **213** | **184** | **15** | **14** | **143** | **0** | **13** | **57** | **0** | **0** |
+| Entities | 34 | 29 | 3 | 2 | 17 | 0 | 12 | 5 | 0 | 0 |
+| **Total** | **213** | **184** | **15** | **14** | **143** | **0** | **12** | **58** | **0** | **0** |
 
-The suite contains 128 vectors. Overall: **143 covered (67.1%)**, **0 partially covered (0.0%)**, **13 uncovered (6.1%)**, **57 not directly testable (26.8%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
+The suite contains 128 vectors. Overall: **143 covered (67.1%)**, **0 partially covered (0.0%)**, **12 uncovered (5.6%)**, **58 not directly testable (27.2%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current draft. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -234,7 +234,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-VALIDATION-005 | Entities | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
 | ENTITY-VALIDATION-006 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
 | ENTITY-VALIDATION-007 | Entities | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
-| ENTITY-VALIDATION-008 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-VALIDATION-008 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 
 ## Audit Draft 0.1 traceability closure notes
 
@@ -286,6 +286,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-DECISION-003 | Validity against policy-relevant facts. | Ignore changed relevant facts. |
 | ENTITY-IDENTITY-002 | Lifecycle-stable identity. | Generate a new ID after mutation. |
 | ENTITY-MUTABILITY-002 | Configured immutability. | Skip current-State mutability check. |
+| ENTITY-VALIDATION-003, ENTITY-VALIDATION-004, ENTITY-VALIDATION-006 | Complete validation before observable mutation with the portable validation code. | Stop after the first failed rule, return success for invalid data, apply part of a rejected mutation, or expose sensitive field values in findings. |
 
 ## Conformance gaps
 
@@ -293,7 +294,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 - Workflow: external fact capture, definition migration, transition identifiers, and concurrency remain open.
 - Audit: unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, and causal sequencing remain open.
 - Approvals: condition syntax, subject-state interchange, relevant-fact policy, supersession, withdrawal, expiration, delegation, quorum, and rejection codes remain open for future drafts; current standalone Draft 0.1 conformance has no uncovered mandatory Approval requirements.
-- Entities: concrete fields, lifecycle policy, validation catalog, import result, concurrency, and correction or reversal behavior remain outside Core. The current TypeScript Stage 2 implementation covers the conformance-local `entity.mutate` mutability vectors but intentionally leaves the validation-specific mutate vector for a later Validation milestone.
+- Entities: concrete fields, lifecycle policy, full validation catalog, import result, concurrency, and correction or reversal behavior remain outside Core. The current TypeScript Stage 3 implementation covers the conformance-local Entity identity, lifecycle, mutability, and validation vectors. `ENTITY-VALIDATION-008` is classified as not directly testable by current conformance because normalized errors compare portable code and post-state only, not diagnostic disclosure.
 
 Vectors do not settle these open questions.
 

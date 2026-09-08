@@ -12,16 +12,19 @@ FinKore Audit Draft 0.1 is fully implemented by the TypeScript reference impleme
 FinKore Approvals Draft 0.1 is fully implemented by the TypeScript reference implementation. Approvals covers Approval Requirement representation, Approval Decision representation, Decision-to-Requirement binding, allowed Decision outcomes, Decision validation, relevant subject-fact effectiveness checks, append-only Decision history preservation, Approval Condition representation and evaluation-boundary validation, Approval Chain all-required ordered or unordered composition, declared rejection outcomes, current sequential actionable Requirement reporting, exclusion of explicitly not-applicable Requirements, duplicate Requirement rejection in chains, and portable Approval errors.
 
 FinKore Entities Draft 0.1 is partially implemented by the TypeScript reference
-implementation for Entity Identity, Lifecycle, and Mutability. This covers
-caller-supplied stable Entity identity, declared identity scope, creation in the
-referenced Workflow initial state, exactly one current lifecycle state, valid
-directed lifecycle transitions, rejected transition failure atomicity, identity
-preservation through transitions and mutations, declared top-level field
-mutability by lifecycle state, terminal-state mutability distinction, and
-preservation of primary Workflow portable error codes. Validation rule engines,
-audit integration, correction/reversal, supersession, versioning, optimistic
-locking, persistence, authorization, and concrete financial entity types remain
-outside this milestone.
+implementation for Entity Identity, Lifecycle, Mutability, and the current
+Validation milestone. This covers caller-supplied stable Entity identity,
+declared identity scope, creation in the referenced Workflow initial state,
+exactly one current lifecycle state, valid directed lifecycle transitions,
+rejected transition failure atomicity, identity preservation through transitions
+and mutations, declared top-level field mutability by lifecycle state,
+terminal-state mutability distinction, preservation of primary Workflow
+portable error codes, complete validation of declared Entity data before
+mutation results become observable, validation failure atomicity, and safe
+validation findings. Generic validation rule engines, audit integration,
+correction/reversal, supersession, versioning, optimistic locking, persistence,
+authorization, and concrete financial entity types remain outside this
+milestone.
 
 This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact compatible-currency numeric comparison, and explicit Money rounding.
 
@@ -32,7 +35,7 @@ explicit terminal-state detection, rejection of outgoing transitions in
 terminal definitions, terminal-state transition rejection and portable error
 precedence, successful state changes, and state preservation after rejection.
 
-It intentionally does not implement FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, distributed audit ordering, audit persistence, approval quorum, N-of-M voting, parallel approval groups, delegation, withdrawal, supersession, expiration, escalation, multi-stage approval graphs, dynamic approver resolution, authorization/RBAC, Workflow or Audit integration for approvals, entity validation engines, corrections, or reversals.
+It intentionally does not implement FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, distributed audit ordering, audit persistence, approval quorum, N-of-M voting, parallel approval groups, delegation, withdrawal, supersession, expiration, escalation, multi-stage approval graphs, dynamic approver resolution, authorization/RBAC, Workflow or Audit integration for approvals, generic entity validation engines, corrections, or reversals.
 
 The specification remains canonical. This package stores validated decimal amounts as strings and performs arithmetic and comparison with scaled integer arithmetic so observable behavior preserves exact base-10 semantics without using JavaScript `number`.
 
@@ -140,15 +143,24 @@ their own condition rule and supply the explicit boundary result.
 - `financialEntity.id` returns the stable Entity identity exactly as supplied.
 - `financialEntity.state` returns the exactly one current lifecycle state.
 - `financialEntity.transition(target)` applies a valid directed lifecycle transition through the referenced Workflow and returns a new Entity preserving identity, type, and data.
-- `financialEntity.mutate(changes)` applies top-level data field changes only when every targeted field is declared mutable for the current lifecycle state, preserving identity and lifecycle state.
+- `financialEntity.mutate(changes)` applies top-level data field changes only when every targeted field is declared mutable for the current lifecycle state and the complete proposed data satisfies declared validation rules, preserving identity and lifecycle state.
+- `financialEntity.validate()` evaluates declared Entity validation rules against current data and returns a complete non-mutating `{ valid, findings }` result.
 - `financialEntity.toJSON()` returns a defensive portable observation `{ type, id, state, data }`.
 
 Entity failures currently introduced by these milestones expose
 `FINKORE_ENTITY_INVALID_IDENTITY`, `FINKORE_ENTITY_IMMUTABLE`,
-`FINKORE_ENTITY_INVALID_MUTATION`, and `FINKORE_ENTITY_STATE_CONFLICT`.
+`FINKORE_ENTITY_INVALID_MUTATION`, `FINKORE_ENTITY_STATE_CONFLICT`, and
+`FINKORE_ENTITY_VALIDATION_FAILED`.
 Lifecycle transition failures can expose Workflow portable errors such as
 `FINKORE_WORKFLOW_INVALID_TRANSITION`, preserving the primary Workflow error
 code required by Entity error semantics.
+
+Entity validation in this milestone intentionally supports only declared
+top-level validation entries with the deterministic `positive-money` fixture
+predicate used by conformance. It is not a generic rule DSL, JSON Schema
+adapter, callback system, persistence validator, authorization model, or
+cross-domain Workflow/Approval/Audit integration. Validation findings include
+stable rule identity and path only; they do not include sensitive field values.
 
 ### Entity Stage 2 Requirement Inventory
 
@@ -176,11 +188,24 @@ code required by Entity error semantics.
 | `ENTITY-ERROR-001` | IN SCOPE | Transition and mutation failures leave original Entity unchanged; unit tests and conformance rejected transition/immutable mutation vectors. |
 | `ENTITY-ERROR-004` | IN SCOPE | Workflow transition errors retain Workflow codes; unit tests and conformance `entity.transition.rejected-preserves-entity-001`. |
 
-General validation requirements (`ENTITY-VALIDATION-*`) remain out of scope for
-this milestone except where existing lifecycle and mutability behavior must
-avoid partial observable changes. The existing `entity.validation.complete-result-001`
-vector is normative for the future Validation milestone, not implemented here.
-No Stage 2 blocking spec gap was found.
+### Entity Stage 3 Validation Requirement Inventory
+
+| Requirement | Stage 3 classification | Implementation and tests |
+| --- | --- | --- |
+| `ENTITY-VALIDATION-001` | IN SCOPE | `FinancialEntity.create` and `from` validate declared rules for current data; unit tests cover valid and invalid creation/import; conformance `entity.create.initial-lifecycle-001`. |
+| `ENTITY-VALIDATION-002` | IN SCOPE | `FinancialEntity.mutate` validates the complete proposed result before returning a new Entity; unit tests and conformance `entity.validation.complete-result-001`; mutation protection checks mutation-before-validation. |
+| `ENTITY-VALIDATION-003` | IN SCOPE | `FinancialEntity.validate` and `mutate` evaluate all declared rules without early return; unit tests cover multiple findings; conformance `entity.validation.complete-result-001` covers complete proposed result validation. |
+| `ENTITY-VALIDATION-004` | IN SCOPE | Failed declared validation throws `EntityValidationFailedError` with portable `FINKORE_ENTITY_VALIDATION_FAILED`; unit tests and conformance `entity.validation.complete-result-001`. |
+| `ENTITY-VALIDATION-005` | IN SCOPE | Findings include the declared validation path; unit tests cover path preservation. This SHOULD requirement is not isolated by current conformance error comparison. |
+| `ENTITY-VALIDATION-006` | IN SCOPE | `validate` is observational and failed create/from/mutate do not alter observable Entity state; unit tests and conformance `entity.validation.complete-result-001`. |
+| `ENTITY-VALIDATION-007` | OUT OF SCOPE | Draft 0.1 recommends composing domains distinguish always-required and state/transition-specific rules, but the current generic Entity milestone has no state-dependent validation policy language. |
+| `ENTITY-VALIDATION-008` | IN SCOPE | Validation findings and normalized adapter errors omit field values and localized messages; unit tests inspect safe details. Current conformance vectors compare portable error code and post-state, not diagnostic disclosure. |
+| `ENTITY-ERROR-002` | IN SCOPE | Findings preserve stable declared violation identifiers as `rule`; unit tests cover identifier preservation. |
+| `ENTITY-ERROR-004` | IN SCOPE | Workflow transition failures continue to retain Workflow portable error codes; validation does not replace primary Workflow behavior. |
+
+No Stage 3 blocking spec gap was found. Entity operations remain
+conformance-local; the Agentic Contract still does not advertise canonical
+`finkore.entity.*` operation identifiers.
 
 ## API Documentation
 

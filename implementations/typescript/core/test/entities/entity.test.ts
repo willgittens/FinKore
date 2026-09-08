@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   EntityStateConflictError,
+  EntityValidationFailedError,
   FinancialEntity,
   ImmutableEntityError,
   InvalidEntityIdentityError,
@@ -33,6 +34,23 @@ const invoiceData = {
   amount: { amount: '100.00', currency: 'EUR' },
   memo: 'initial',
   deliveryStatus: 'NEW',
+}
+
+const validatedInvoiceDefinition = {
+  ...invoiceDefinition,
+  mutability: {
+    ...invoiceDefinition.mutability,
+    DRAFT: [...invoiceDefinition.mutability.DRAFT, 'tax'],
+  },
+  validation: [
+    { id: 'AMOUNT_POSITIVE', path: 'amount', rule: 'positive-money' },
+    { id: 'TAX_POSITIVE', path: 'tax', rule: 'positive-money' },
+  ],
+}
+
+const validatedInvoiceData = {
+  ...invoiceData,
+  tax: { amount: '20.00', currency: 'EUR' },
 }
 
 describe('Financial Entity identity and lifecycle', () => {
@@ -343,5 +361,143 @@ describe('Financial Entity mutability', () => {
         { type: 'invoice', id: 'inv-42', state: 'FINAL', data: invoiceData },
       ),
     ).toThrow(InvalidEntityMutationError)
+  })
+})
+
+describe('Financial Entity validation', () => {
+  it('returns a complete valid validation result without mutating the entity', () => {
+    const entity = FinancialEntity.create(validatedInvoiceDefinition, 'inv-42', validatedInvoiceData)
+    const before = entity.toJSON()
+
+    expect(entity.validate()).toEqual({ valid: true, findings: [] })
+    expect(entity.toJSON()).toEqual(before)
+  })
+
+  it('treats omitted validation declarations as no declared validation rules', () => {
+    const entity = FinancialEntity.create(invoiceDefinition, 'inv-42', invoiceData)
+
+    expect(entity.definition.validation).toEqual([])
+    expect(entity.validate()).toEqual({ valid: true, findings: [] })
+  })
+
+  it('rejects malformed validation declarations without inventing a rule language', () => {
+    expect(() => FinancialEntity.create({ ...invoiceDefinition, validation: 'positive-money' }, 'inv-42', invoiceData)).toThrow(
+      InvalidEntityMutationError,
+    )
+    expect(() => FinancialEntity.create({ ...invoiceDefinition, validation: [null] }, 'inv-42', invoiceData)).toThrow(
+      InvalidEntityMutationError,
+    )
+    expect(() =>
+      FinancialEntity.create({ ...invoiceDefinition, validation: [{ id: 'AMOUNT_POSITIVE', path: 'amount', rule: 'unknown' }] }, 'inv-42', invoiceData),
+    ).toThrow(InvalidEntityMutationError)
+    expect(() =>
+      FinancialEntity.create({ ...invoiceDefinition, validation: [{ id: '', path: 'amount', rule: 'positive-money' }] }, 'inv-42', invoiceData),
+    ).toThrow(InvalidEntityMutationError)
+    expect(() =>
+      FinancialEntity.create({ ...invoiceDefinition, validation: [{ id: 'AMOUNT_POSITIVE', path: '', rule: 'positive-money' }] }, 'inv-42', invoiceData),
+    ).toThrow(InvalidEntityMutationError)
+    expect(() =>
+      FinancialEntity.create({ ...invoiceDefinition, validation: [{ id: 7, path: 'amount', rule: 'positive-money' }] }, 'inv-42', invoiceData),
+    ).toThrow(InvalidEntityMutationError)
+  })
+
+  it('rejects invalid initial data with the portable validation code', () => {
+    expect(() =>
+      FinancialEntity.create(validatedInvoiceDefinition, 'inv-42', {
+        ...validatedInvoiceData,
+        amount: { amount: '0.00', currency: 'EUR' },
+      }),
+    ).toThrow(EntityValidationFailedError)
+
+    try {
+      FinancialEntity.create(validatedInvoiceDefinition, 'inv-42', {
+        ...validatedInvoiceData,
+        amount: { amount: '-1.00', currency: 'EUR' },
+      })
+      throw new Error('Expected validation failure')
+    } catch (error) {
+      expect(error).toBeInstanceOf(EntityValidationFailedError)
+      expect((error as EntityValidationFailedError).code).toBe('FINKORE_ENTITY_VALIDATION_FAILED')
+      expect((error as EntityValidationFailedError).details).toEqual({
+        findings: [{ rule: 'AMOUNT_POSITIVE', path: 'amount' }],
+      })
+    }
+  })
+
+  it('evaluates the complete proposed mutation result before any change becomes observable', () => {
+    const entity = FinancialEntity.create(validatedInvoiceDefinition, 'inv-42', validatedInvoiceData)
+    const before = entity.toJSON()
+
+    expect(() =>
+      entity.mutate({
+        amount: { amount: '-1.00', currency: 'EUR' },
+        tax: { amount: '0.00', currency: 'EUR' },
+        memo: 'should-not-stick',
+      }),
+    ).toThrow(EntityValidationFailedError)
+
+    expect(entity.toJSON()).toEqual(before)
+  })
+
+  it('collects every validation finding in declaration order', () => {
+    const entity = FinancialEntity.create(validatedInvoiceDefinition, 'inv-42', validatedInvoiceData)
+
+    try {
+      entity.mutate({
+        amount: { amount: '-1.00', currency: 'EUR' },
+        tax: { amount: '0.00', currency: 'EUR' },
+      })
+      throw new Error('Expected validation failure')
+    } catch (error) {
+      expect(error).toBeInstanceOf(EntityValidationFailedError)
+      expect((error as EntityValidationFailedError).details).toEqual({
+        findings: [
+          { rule: 'AMOUNT_POSITIVE', path: 'amount' },
+          { rule: 'TAX_POSITIVE', path: 'tax' },
+        ],
+      })
+    }
+  })
+
+  it('distinguishes falsey mutable values from missing or non-positive Money validation values', () => {
+    const falseyDefinition = {
+      ...invoiceDefinition,
+      validation: [{ id: 'AMOUNT_POSITIVE', path: 'amount', rule: 'positive-money' }],
+    }
+    const entity = FinancialEntity.create(falseyDefinition, 'inv-42', invoiceData)
+
+    expect(entity.mutate({ emptyValue: '' }).validate()).toEqual({ valid: true, findings: [] })
+    expect(entity.mutate({ falseValue: false }).validate()).toEqual({ valid: true, findings: [] })
+    expect(entity.mutate({ nullValue: null }).validate()).toEqual({ valid: true, findings: [] })
+    expect(entity.mutate({ zeroValue: 0 }).validate()).toEqual({ valid: true, findings: [] })
+
+    expect(() => entity.mutate({ amount: undefined })).toThrow(EntityValidationFailedError)
+    expect(() => entity.mutate({ amount: null })).toThrow(EntityValidationFailedError)
+    expect(() => entity.mutate({ amount: false })).toThrow(EntityValidationFailedError)
+    expect(() => entity.mutate({ amount: 0 })).toThrow(EntityValidationFailedError)
+    expect(() => entity.mutate({ amount: '' })).toThrow(EntityValidationFailedError)
+    expect(() => entity.mutate({ amount: { amount: 'not-decimal', currency: 'EUR' } })).toThrow(EntityValidationFailedError)
+    expect(() => entity.mutate({ amount: { amount: '1.00' } })).toThrow(EntityValidationFailedError)
+    expect(() => FinancialEntity.create(falseyDefinition, 'inv-42', null)).toThrow(EntityValidationFailedError)
+  })
+
+  it('rejects invalid imported observations without changing identity or lifecycle semantics', () => {
+    const valid = FinancialEntity.from(validatedInvoiceDefinition, {
+      type: 'invoice',
+      id: 'inv-42',
+      state: 'DRAFT',
+      data: validatedInvoiceData,
+    })
+
+    expect(valid.id).toBe('inv-42')
+    expect(valid.state).toBe('DRAFT')
+    expect(() =>
+      FinancialEntity.from(validatedInvoiceDefinition, {
+        type: 'invoice',
+        id: 'inv-42',
+        state: 'DRAFT',
+        data: { ...validatedInvoiceData, amount: { amount: '-1.00', currency: 'EUR' } },
+      }),
+    ).toThrow(EntityValidationFailedError)
   })
 })
