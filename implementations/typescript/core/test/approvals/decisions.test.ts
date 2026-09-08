@@ -58,10 +58,13 @@ describe('Approval decisions', () => {
   })
 
   it('preserves optional actor type only when supplied', () => {
-    expect(ApprovalDecision.from({ ...decision, actor: { id: 'user-7' } }).toJSON()).toEqual({
+    const serialized = ApprovalDecision.from({ ...decision, actor: { id: 'user-7' } }).toJSON()
+
+    expect(serialized).toEqual({
       ...decision,
       actor: { id: 'user-7' },
     })
+    expect(Object.hasOwn(serialized.actor, 'type')).toBe(false)
   })
 
   it('requires association with the correct requirement before committing', () => {
@@ -125,6 +128,12 @@ describe('Approval decisions', () => {
     expect(
       approvalDecision.evaluateEffectiveness(
         { revision: '3', amount: { amount: '9000.00', currency: 'EUR' } },
+        ['revision', 'missingFact'],
+      ),
+    ).toBe('INEFFECTIVE')
+    expect(
+      approvalDecision.evaluateEffectiveness(
+        { revision: '3', amount: { amount: '9000.00', currency: 'EUR' }, missingFact: undefined },
         ['revision', 'missingFact'],
       ),
     ).toBe('INEFFECTIVE')
@@ -237,6 +246,16 @@ describe('Approval decisions', () => {
         {
           amount: { amount: '9000.00', currency: 'EUR' },
           revision: '3',
+          approvals: ['manager', 'other'],
+        },
+        ['revision', 'amount', 'approvals'],
+      ),
+    ).toBe('INEFFECTIVE')
+    expect(
+      approvalDecision.evaluateEffectiveness(
+        {
+          amount: { amount: '9000.00', currency: 'EUR' },
+          revision: '3',
           approvals: ['manager'],
         },
         ['revision', 'amount', 'approvals'],
@@ -261,11 +280,15 @@ describe('Approval decisions', () => {
     })
 
     expect(approvalDecision.evaluateEffectiveness({ a: { x: false, y: true }, b: 2 })).toBe('EFFECTIVE')
+    expect(approvalDecision.evaluateEffectiveness({ a: { x: false, y: false }, b: 2 })).toBe('INEFFECTIVE')
+    expect(approvalDecision.evaluateEffectiveness({ a: { x: false, y: true }, b: 3 })).toBe('INEFFECTIVE')
+    expect(approvalDecision.evaluateEffectiveness({ c: { x: false, y: true }, b: 2 })).toBe('INEFFECTIVE')
     expect(approvalDecision.evaluateEffectiveness({ a: { x: false }, b: 2 })).toBe('INEFFECTIVE')
     expect(approvalDecision.evaluateEffectiveness({ a: { x: false, y: true }, b: 2, c: 3 })).toBe('INEFFECTIVE')
     expect(approvalDecision.evaluateEffectiveness([{ a: 1 }])).toBe('INEFFECTIVE')
     expect(approvalDecision.evaluateEffectiveness(7)).toBe('INEFFECTIVE')
     expect(ApprovalDecision.from({ ...decision, subjectFacts: [1, 2] }).evaluateEffectiveness([1])).toBe('INEFFECTIVE')
+    expect(ApprovalDecision.from({ ...decision, subjectFacts: [1] }).evaluateEffectiveness([1, 2])).toBe('INEFFECTIVE')
     expect(ApprovalDecision.from({ ...decision, subjectFacts: [1, 2] }).evaluateEffectiveness('not-array')).toBe(
       'INEFFECTIVE',
     )
