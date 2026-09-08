@@ -1,4 +1,10 @@
-import { FinKoreApprovalError, FinKoreAuditError, FinKoreMoneyError, FinKoreWorkflowError } from '@finkore/typescript'
+import {
+  FinKoreApprovalError,
+  FinKoreAuditError,
+  FinKoreEntityError,
+  FinKoreMoneyError,
+  FinKoreWorkflowError,
+} from '@finkore/typescript'
 import type { NormalizedResult } from '@finkore/conformance-runner'
 
 /**
@@ -22,5 +28,6 @@ export function normalizeThrown(error: unknown): NormalizedResult {
   if (error instanceof FinKoreWorkflowError) return { status: 'error', error: { code: error.code } }
   if (error instanceof FinKoreAuditError) return { status: 'error', error: { code: error.code } }
   if (error instanceof FinKoreApprovalError) return { status: 'error', error: { code: error.code } }
+  if (error instanceof FinKoreEntityError) return { status: 'error', error: { code: error.code } }
   throw error
 }

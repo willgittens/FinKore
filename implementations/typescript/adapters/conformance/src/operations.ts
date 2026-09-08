@@ -4,6 +4,7 @@ import {
   ApprovalDecision,
   ApprovalDecisionHistory,
   AuditLog,
+  FinancialEntity,
   Money,
   Workflow,
 } from '@finkore/typescript'
@@ -82,6 +83,30 @@ function inputWorkflowTransition(input: unknown): {
     target: candidate.target,
   }
   return candidate.facts === undefined ? result : { ...result, facts: candidate.facts }
+}
+
+function inputEntityCreate(input: unknown): {
+  readonly definition: unknown
+  readonly id: unknown
+  readonly data: unknown
+} {
+  if (typeof input !== 'object' || input === null || !('definition' in input)) {
+    return { definition: undefined, id: undefined, data: undefined }
+  }
+  const candidate = input as { readonly definition: unknown; readonly id?: unknown; readonly data?: unknown }
+  return { definition: candidate.definition, id: candidate.id, data: candidate.data }
+}
+
+function inputEntityTransition(input: unknown): {
+  readonly definition: unknown
+  readonly entity: unknown
+  readonly target: unknown
+} {
+  if (typeof input !== 'object' || input === null || !('definition' in input) || !('entity' in input)) {
+    return { definition: undefined, entity: undefined, target: undefined }
+  }
+  const candidate = input as { readonly definition: unknown; readonly entity: unknown; readonly target?: unknown }
+  return { definition: candidate.definition, entity: candidate.entity, target: candidate.target }
 }
 
 function inputAuditHistory(input: unknown): { readonly history: unknown } {
@@ -432,6 +457,48 @@ function executeWorkflowTransition(request: AdapterRequest): NormalizedResult {
 }
 
 /**
+ * Executes the conformance-local Entity creation boundary.
+ *
+ * Entity identity, declared identity scope, and lifecycle initialization remain
+ * in the TypeScript core API. This adapter only maps the current fixture shape
+ * to `FinancialEntity.create`.
+ */
+function executeEntityCreate(request: AdapterRequest): NormalizedResult {
+  const input = inputEntityCreate(request.input)
+  try {
+    return { status: 'success', value: FinancialEntity.create(input.definition, input.id, input.data).toJSON() }
+  } catch (error) {
+    return normalizeThrown(error)
+  }
+}
+
+/**
+ * Executes the conformance-local Entity lifecycle transition boundary.
+ *
+ * The adapter reconstructs the supplied Entity observation, delegates
+ * transition validity to core Entity/Workflow behavior, and reports the entire
+ * entity after rejected transitions for failure-atomicity checks.
+ */
+function executeEntityTransition(request: AdapterRequest): NormalizedResult {
+  const input = inputEntityTransition(request.input)
+  let entity: FinancialEntity | undefined
+  try {
+    entity = FinancialEntity.from(input.definition, input.entity)
+    return {
+      status: 'success',
+      value: entity.transition(input.target).toJSON(),
+      observations: { identity: entity.id },
+    }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && entity !== undefined) {
+      return { ...result, observations: { entity: entity.toJSON() } }
+    }
+    return result
+  }
+}
+
+/**
  * Executes canonical Audit append through the TypeScript core API.
  *
  * The adapter reconstructs the supplied logical history, delegates event
@@ -641,6 +708,8 @@ export const operationHandlers = {
   'finkore.money.multiply': executeMoneyMultiply,
   'finkore.money.negate': executeMoneyNegate,
   'finkore.workflow.transition': executeWorkflowTransition,
+  'entity.create': executeEntityCreate,
+  'entity.transition': executeEntityTransition,
   'finkore.audit.append': executeAuditAppend,
   'finkore.audit.replace': executeAuditReplace,
   'finkore.audit.remove': executeAuditRemove,

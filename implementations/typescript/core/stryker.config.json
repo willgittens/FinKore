@@ -10,6 +10,8 @@
     "src/audit/audit-change.ts",
     "src/audit/audit-event.ts:17-135",
     "src/audit/audit-log.ts",
+    "src/entities/entity.ts",
+    "src/entities/errors.ts",
     "src/approvals/approval-chain.ts",
     "src/approvals/approval-condition.ts",
     "src/approvals/approval-decision.ts",
@@ -20,6 +22,7 @@
     "test/money/*.test.ts",
     "test/workflow/*.test.ts",
     "test/audit/*.test.ts",
+    "test/entities/*.test.ts",
     "test/approvals/*.test.ts"
   ],
   "reporters": ["clear-text", "html", "json"],

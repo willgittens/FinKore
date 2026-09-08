@@ -7,6 +7,7 @@ export { ApprovalCondition } from './approvals/approval-condition.js'
 export { ApprovalDecision } from './approvals/approval-decision.js'
 export { ApprovalDecisionHistory } from './approvals/approval-decision-history.js'
 export { ApprovalRequirement } from './approvals/approval-requirement.js'
+export { FinancialEntity } from './entities/entity.js'
 export {
   ApprovalConditionUnresolvedError,
   ApprovalRequiredError,
@@ -25,6 +26,12 @@ export {
   InvalidAuditRedactionError,
   isFinKoreAuditError,
 } from './audit/errors.js'
+export {
+  EntityStateConflictError,
+  FinKoreEntityError,
+  InvalidEntityIdentityError,
+  isFinKoreEntityError,
+} from './entities/errors.js'
 export { Currency, isValidCurrencyIdentifier } from './money/currency.js'
 export {
   CurrencyMismatchError,
@@ -91,6 +98,15 @@ export type {
   SerializedApprovalRequirement,
   SerializedApprovalSubject,
 } from './approvals/types.js'
+export type {
+  EntityDefinition,
+  EntityDefinitionInput,
+  EntityErrorCode,
+  EntityIdentifier,
+  EntityIdentityScope,
+  EntityTypeIdentifier,
+  SerializedFinancialEntity,
+} from './entities/types.js'
 export type {
   AuditActorIdentifier,
   AuditRedactionPolicy,
