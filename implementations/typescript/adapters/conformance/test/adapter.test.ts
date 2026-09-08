@@ -1,11 +1,15 @@
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { createConformanceRunner } from '@finkore/conformance-runner'
-import { createTypeScriptConformanceAdapter } from '../src/adapter.js'
+import { adapter as cliAdapter, createTypeScriptConformanceAdapter } from '../src/adapter.js'
 
 const manifestPath = resolve(import.meta.dirname, '../../../../../conformance/manifest.json')
 
 describe('TypeScript conformance adapter', () => {
+  it('exports a concrete adapter for the conformance CLI', () => {
+    expect(cliAdapter.supports('entity.create')).toBe(true)
+  })
+
   it('supports current Money, Workflow, Audit, Approval, and Entity milestone operations', () => {
     const adapter = createTypeScriptConformanceAdapter()
 
@@ -189,6 +193,9 @@ describe('TypeScript conformance adapter', () => {
       adapter: createTypeScriptConformanceAdapter(),
     }).run({ vectorIds: [
       'entity.create.initial-lifecycle-001',
+      'entity.create.opaque-identity-preserved-001',
+      'entity.mutate.display-number-not-identity-001',
+      'entity.mutate.identity-and-state-protected-001',
       'entity.mutate.mutable-field-001',
       'entity.mutate.immutable-financial-field-001',
       'entity.mutate.terminal-metadata-001',
@@ -197,6 +204,6 @@ describe('TypeScript conformance adapter', () => {
       'entity.transition.rejected-preserves-entity-001',
     ] })
 
-    expect(report.summary).toEqual({ total: 7, passed: 7, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 10, passed: 10, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 })

@@ -162,48 +162,53 @@ adapter, callback system, persistence validator, authorization model, or
 cross-domain Workflow/Approval/Audit integration. Validation findings include
 stable rule identity and path only; they do not include sensitive field values.
 
-### Entity Stage 2 Requirement Inventory
+### Entity Draft 0.1 Requirement Inventory
 
-| Requirement | Stage 2 classification | Implementation and tests |
+| Requirement | Draft 0.1 classification | Implementation and tests |
 | --- | --- | --- |
+| `ENTITY-AUDIT-001` | NOT DIRECTLY TESTABLE | Composing domains identify which Entity operations require Audit Events; the generic Entity API has no standalone audit policy declaration surface. |
+| `ENTITY-AUDIT-002` | NOT DIRECTLY TESTABLE | Audit Event production is conditional on `ENTITY-AUDIT-001` and requires the out-of-scope Entity/Audit integration surface. |
+| `ENTITY-DEFINITION-001` | NOT DIRECTLY TESTABLE | Composing domains define fields, lifecycle, and invariants; Entity vectors observe supplied lifecycle, mutability, and validation fixtures but do not define a standalone definition-validation operation. |
 | `ENTITY-IDENTITY-001` | IN SCOPE | `FinancialEntity.create`/`from`; unit tests in `test/entities/entity.test.ts`; conformance `entity.create.initial-lifecycle-001`; mutation protection checks missing/generated identity. |
 | `ENTITY-IDENTITY-002` | IN SCOPE | `FinancialEntity.transition` and `mutate`; unit tests verify identity after success and failure; conformance `entity.transition.success-identity-stable-001` and mutate vectors; mutation protection checks identity changed during transition or mutation. |
-| `ENTITY-IDENTITY-003` | IN SCOPE | Entity IDs are opaque strings preserved exactly; unit tests verify no generation or inference; conformance currently uncovered. |
-| `ENTITY-IDENTITY-004` | OUT OF SCOPE | Revision/version/display-number behavior is not implemented by this milestone. |
-| `ENTITY-IDENTITY-005` | OUT OF SCOPE | Cross-entity uniqueness requires a composing-domain registry or persistence scope not defined by this milestone. |
-| `ENTITY-IDENTITY-006` | OUT OF SCOPE | Import/migration identity mapping is not implemented; `from` only reconstructs a supplied observation. |
+| `ENTITY-IDENTITY-003` | IN SCOPE | Entity IDs are opaque strings preserved exactly; unit tests verify no generation or inference; conformance `entity.create.opaque-identity-preserved-001`. |
+| `ENTITY-IDENTITY-004` | IN SCOPE | Revision/version/display-number data does not replace stable identity; conformance `entity.mutate.display-number-not-identity-001`. |
+| `ENTITY-IDENTITY-005` | NOT DIRECTLY TESTABLE | Cross-entity uniqueness requires a composing-domain registry or persistence scope not defined by this milestone. |
+| `ENTITY-IDENTITY-006` | NOT DIRECTLY TESTABLE | Import/migration identity mapping has no standalone Draft 0.1 operation; `from` only reconstructs a supplied observation. |
 | `ENTITY-LIFECYCLE-001` | IN SCOPE | Entity definitions require a valid referenced Workflow; unit tests and conformance `entity.create.initial-lifecycle-001`. |
 | `ENTITY-LIFECYCLE-002` | IN SCOPE | `FinancialEntity.create` uses `Workflow.create` initial state; unit tests and conformance `entity.create.initial-lifecycle-001`. |
 | `ENTITY-LIFECYCLE-003` | IN SCOPE | `FinancialEntity.transition` delegates to `Workflow.transition`; `mutate` never changes lifecycle state; unit tests and conformance transition/mutate vectors. |
-| `ENTITY-LIFECYCLE-004` | OUT OF SCOPE | Entity Audit integration remains unimplemented. |
-| `ENTITY-LIFECYCLE-005` | OUT OF SCOPE | Concrete domain consequences of states belong to composing domains. |
-| `ENTITY-LIFECYCLE-006` | IN SCOPE | Serialized Entity has a single `state`; `from` validates it against Workflow; unit tests cover undeclared state rejection. |
+| `ENTITY-LIFECYCLE-004` | NOT DIRECTLY TESTABLE | Entity Audit declaration is a composing-domain/cross-domain obligation without a standalone Draft 0.1 Entity operation. |
+| `ENTITY-LIFECYCLE-005` | NOT DIRECTLY TESTABLE | Concrete domain consequences of states belong to composing domains. |
+| `ENTITY-LIFECYCLE-006` | IN SCOPE | Serialized Entity has a single `state`; `from` validates it against Workflow; unit tests cover undeclared state rejection; conformance `entity.create.initial-lifecycle-001`. |
 | `ENTITY-MUTABILITY-001` | IN SCOPE | `FinancialEntity` requires per-state mutable field declarations; unit tests and conformance `entity.mutate.mutable-field-001`. |
 | `ENTITY-MUTABILITY-002` | IN SCOPE | `FinancialEntity.mutate` rejects any undeclared targeted field with `FINKORE_ENTITY_IMMUTABLE`; unit tests and conformance `entity.mutate.immutable-financial-field-001`. |
-| `ENTITY-MUTABILITY-003` | OUT OF SCOPE | Entity Audit integration remains unimplemented. |
+| `ENTITY-MUTABILITY-003` | NOT DIRECTLY TESTABLE | Mutation Audit declaration is a composing-domain/cross-domain obligation without a standalone Draft 0.1 Entity operation. |
 | `ENTITY-MUTABILITY-004` | IN SCOPE | `mutate` validates all targets before returning a new Entity; unit tests and conformance immutable vector cover failure atomicity. |
-| `ENTITY-MUTABILITY-005` | OUT OF SCOPE | Audit history attachment/preservation is not implemented. |
+| `ENTITY-MUTABILITY-005` | NOT DIRECTLY TESTABLE | Audit history attachment/preservation requires the out-of-scope Entity/Audit integration surface. |
 | `ENTITY-MUTABILITY-006` | IN SCOPE | Terminal states use their declared mutability list, not global immutability; unit tests and conformance `entity.mutate.terminal-metadata-001`. |
 | `ENTITY-MUTABILITY-007` | IN SCOPE | Declared terminal metadata mutation is allowed by mutability policy; unit tests and conformance `entity.mutate.terminal-metadata-001`. |
 | `ENTITY-ERROR-001` | IN SCOPE | Transition and mutation failures leave original Entity unchanged; unit tests and conformance rejected transition/immutable mutation vectors. |
+| `ENTITY-ERROR-003` | NOT DIRECTLY TESTABLE | Safe diagnostic context is optional and cannot be required by conformance without changing MAY behavior into mandatory behavior. |
 | `ENTITY-ERROR-004` | IN SCOPE | Workflow transition errors retain Workflow codes; unit tests and conformance `entity.transition.rejected-preserves-entity-001`. |
 
-### Entity Stage 3 Validation Requirement Inventory
+### Entity Validation Requirement Inventory
 
-| Requirement | Stage 3 classification | Implementation and tests |
+| Requirement | Draft 0.1 classification | Implementation and tests |
 | --- | --- | --- |
 | `ENTITY-VALIDATION-001` | IN SCOPE | `FinancialEntity.create` and `from` validate declared rules for current data; unit tests cover valid and invalid creation/import; conformance `entity.create.initial-lifecycle-001`. |
 | `ENTITY-VALIDATION-002` | IN SCOPE | `FinancialEntity.mutate` validates the complete proposed result before returning a new Entity; unit tests and conformance `entity.validation.complete-result-001`; mutation protection checks mutation-before-validation. |
 | `ENTITY-VALIDATION-003` | IN SCOPE | `FinancialEntity.validate` and `mutate` evaluate all declared rules without early return; unit tests cover multiple findings; conformance `entity.validation.complete-result-001` covers complete proposed result validation. |
 | `ENTITY-VALIDATION-004` | IN SCOPE | Failed declared validation throws `EntityValidationFailedError` with portable `FINKORE_ENTITY_VALIDATION_FAILED`; unit tests and conformance `entity.validation.complete-result-001`. |
-| `ENTITY-VALIDATION-005` | IN SCOPE | Findings include the declared validation path; unit tests cover path preservation. This SHOULD requirement is not isolated by current conformance error comparison. |
+| `ENTITY-VALIDATION-005` | IN SCOPE | Findings include the declared validation path; unit tests cover path preservation; conformance `entity.validation.complete-result-001`. |
 | `ENTITY-VALIDATION-006` | IN SCOPE | `validate` is observational and failed create/from/mutate do not alter observable Entity state; unit tests and conformance `entity.validation.complete-result-001`. |
-| `ENTITY-VALIDATION-007` | OUT OF SCOPE | Draft 0.1 recommends composing domains distinguish always-required and state/transition-specific rules, but the current generic Entity milestone has no state-dependent validation policy language. |
-| `ENTITY-VALIDATION-008` | IN SCOPE | Validation findings and normalized adapter errors omit field values and localized messages; unit tests inspect safe details. Current conformance vectors compare portable error code and post-state, not diagnostic disclosure. |
-| `ENTITY-ERROR-002` | IN SCOPE | Findings preserve stable declared violation identifiers as `rule`; unit tests cover identifier preservation. |
+| `ENTITY-VALIDATION-007` | NOT DIRECTLY TESTABLE | Draft 0.1 recommends composing domains distinguish always-required and state/transition-specific rules, but the current generic Entity milestone has no state-dependent validation policy language. |
+| `ENTITY-VALIDATION-008` | IN SCOPE | Validation findings and normalized adapter observations omit field values and localized messages; unit tests inspect safe details; conformance `entity.validation.complete-result-001`. |
+| `ENTITY-ERROR-002` | IN SCOPE | Findings preserve stable declared violation identifiers as `rule`; unit tests cover identifier preservation; conformance `entity.validation.complete-result-001`. |
 | `ENTITY-ERROR-004` | IN SCOPE | Workflow transition failures continue to retain Workflow portable error codes; validation does not replace primary Workflow behavior. |
 
-No Stage 3 blocking spec gap was found. Entity operations remain
+FinKore Entities Draft 0.1 is fully implemented by the TypeScript reference
+implementation. No blocking Entity spec gap remains. Entity operations remain
 conformance-local; the Agentic Contract still does not advertise canonical
 `finkore.entity.*` operation identifiers.
 

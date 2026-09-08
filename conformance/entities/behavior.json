@@ -7,6 +7,7 @@
       "requirements": [
         "ENTITY-LIFECYCLE-001",
         "ENTITY-LIFECYCLE-002",
+        "ENTITY-LIFECYCLE-006",
         "ENTITY-IDENTITY-001",
         "ENTITY-VALIDATION-001"
       ],
@@ -78,6 +79,241 @@
       "tags": [
         "positive",
         "invariant"
+      ]
+    },
+    {
+      "id": "entity.create.opaque-identity-preserved-001",
+      "spec": "entities/identity",
+      "requirements": [
+        "ENTITY-IDENTITY-003"
+      ],
+      "description": "Preserves an opaque caller-supplied identifier exactly without normalization or inference.",
+      "operation": "entity.create",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "id": " Inv-0042 ",
+        "data": {
+          "memo": "initial",
+          "deliveryStatus": "NEW"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": " Inv-0042 ",
+          "state": "DRAFT",
+          "data": {
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "identity-normalized",
+        "identity-coerced"
+      ]
+    },
+    {
+      "id": "entity.mutate.display-number-not-identity-001",
+      "spec": "entities/identity",
+      "requirements": [
+        "ENTITY-IDENTITY-004"
+      ],
+      "description": "Allows mutable display numbering data to change without replacing stable Entity identity.",
+      "operation": "entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "displayNumber",
+              "revision",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "displayNumber": "INV-2026-0001",
+            "revision": "1",
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "displayNumber": "INV-2026-0002",
+          "revision": "2"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "displayNumber": "INV-2026-0002",
+            "revision": "2",
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "observations": {
+          "identity": "inv-42",
+          "state": "DRAFT"
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "display-number-replaces-identity"
+      ]
+    },
+    {
+      "id": "entity.mutate.identity-and-state-protected-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-IDENTITY-002",
+        "ENTITY-LIFECYCLE-003",
+        "ENTITY-MUTABILITY-002",
+        "ENTITY-MUTABILITY-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Rejects attempts to rewrite identity, type, or lifecycle state through generic mutation even if declared as mutable data fields.",
+      "operation": "entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "id",
+              "type",
+              "state",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "id": "inv-99",
+          "type": "payment",
+          "state": "FINAL",
+          "memo": "should-not-stick"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_IMMUTABLE"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "identity-rewritten-by-mutation",
+        "state-rewritten-by-mutation",
+        "failed-mutation-partially-applied"
       ]
     },
     {
@@ -364,7 +600,10 @@
         "ENTITY-VALIDATION-002",
         "ENTITY-VALIDATION-003",
         "ENTITY-VALIDATION-004",
+        "ENTITY-VALIDATION-005",
         "ENTITY-VALIDATION-006",
+        "ENTITY-VALIDATION-008",
+        "ENTITY-ERROR-002",
         "ENTITY-ERROR-001"
       ],
       "description": "Validates the complete proposal and rejects it atomically when the resulting amount is invalid.",
@@ -445,7 +684,13 @@
               "memo": "initial",
               "deliveryStatus": "NEW"
             }
-          }
+          },
+          "findings": [
+            {
+              "rule": "AMOUNT_POSITIVE",
+              "path": "amount"
+            }
+          ]
         }
       },
       "tags": [

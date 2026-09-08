@@ -4,6 +4,7 @@ import {
   ApprovalDecision,
   ApprovalDecisionHistory,
   AuditLog,
+  EntityValidationFailedError,
   FinancialEntity,
   Money,
   Workflow,
@@ -531,10 +532,17 @@ function executeEntityMutate(request: AdapterRequest): NormalizedResult {
   } catch (error) {
     const result = normalizeThrown(error)
     if (result.status === 'error' && entity !== undefined) {
+      if (error instanceof EntityValidationFailedError && isEntityValidationDetails(error.details)) {
+        return { ...result, observations: { entity: entity.toJSON(), findings: error.details.findings } }
+      }
       return { ...result, observations: { entity: entity.toJSON() } }
     }
     return result
   }
+}
+
+function isEntityValidationDetails(value: unknown): value is { readonly findings: readonly unknown[] } {
+  return typeof value === 'object' && value !== null && Array.isArray((value as { readonly findings?: unknown }).findings)
 }
 
 /**

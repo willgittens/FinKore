@@ -11,10 +11,10 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 | 0 | 0 |
 | Audit | 38 | 30 | 4 | 4 | 28 | 0 | 0 | 10 | 0 | 0 |
 | Approvals | 35 | 32 | 1 | 2 | 30 | 0 | 0 | 5 | 0 | 0 |
-| Entities | 34 | 29 | 3 | 2 | 17 | 0 | 12 | 5 | 0 | 0 |
-| **Total** | **213** | **184** | **15** | **14** | **143** | **0** | **12** | **58** | **0** | **0** |
+| Entities | 34 | 29 | 3 | 2 | 23 | 0 | 0 | 11 | 0 | 0 |
+| **Total** | **213** | **184** | **15** | **14** | **149** | **0** | **0** | **64** | **0** | **0** |
 
-The suite contains 128 vectors. Overall: **143 covered (67.1%)**, **0 partially covered (0.0%)**, **12 uncovered (5.6%)**, **58 not directly testable (27.2%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
+The suite contains 131 vectors. Overall: **149 covered (70.0%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **64 not directly testable (30.0%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current draft. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -201,40 +201,40 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-REQUIREMENT-005 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.pending-001 |
 | APPROVAL-REQUIREMENT-006 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001 |
 | APPROVAL-REQUIREMENT-007 | Approvals | MAY | NOT DIRECTLY TESTABLE | — |
-| ENTITY-AUDIT-001 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-AUDIT-002 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-DEFINITION-001 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-ERROR-001 | Entities | MUST / MUST NOT | COVERED | entity.mutate.immutable-financial-field-001, entity.transition.rejected-preserves-entity-001, entity.validation.complete-result-001 |
-| ENTITY-ERROR-002 | Entities | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-AUDIT-001 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-AUDIT-002 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-DEFINITION-001 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-ERROR-001 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.mutate.immutable-financial-field-001, entity.transition.rejected-preserves-entity-001, entity.validation.complete-result-001 |
+| ENTITY-ERROR-002 | Entities | SHOULD / SHOULD NOT | COVERED | entity.validation.complete-result-001 |
 | ENTITY-ERROR-003 | Entities | MAY | NOT DIRECTLY TESTABLE | — |
 | ENTITY-ERROR-004 | Entities | MUST / MUST NOT | COVERED | entity.transition.rejected-preserves-entity-001 |
 | ENTITY-IDENTITY-001 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
-| ENTITY-IDENTITY-002 | Entities | MUST / MUST NOT | COVERED | entity.transition.success-identity-stable-001 |
-| ENTITY-IDENTITY-003 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-IDENTITY-004 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-IDENTITY-005 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-IDENTITY-006 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-IDENTITY-002 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.transition.success-identity-stable-001 |
+| ENTITY-IDENTITY-003 | Entities | MUST / MUST NOT | COVERED | entity.create.opaque-identity-preserved-001 |
+| ENTITY-IDENTITY-004 | Entities | MUST / MUST NOT | COVERED | entity.mutate.display-number-not-identity-001 |
+| ENTITY-IDENTITY-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-IDENTITY-006 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | ENTITY-LIFECYCLE-001 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
 | ENTITY-LIFECYCLE-002 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
-| ENTITY-LIFECYCLE-003 | Entities | MUST / MUST NOT | COVERED | entity.transition.rejected-preserves-entity-001, entity.transition.success-identity-stable-001 |
-| ENTITY-LIFECYCLE-004 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-LIFECYCLE-005 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-LIFECYCLE-006 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-LIFECYCLE-003 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.transition.rejected-preserves-entity-001, entity.transition.success-identity-stable-001 |
+| ENTITY-LIFECYCLE-004 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-LIFECYCLE-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-LIFECYCLE-006 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
 | ENTITY-MUTABILITY-001 | Entities | MUST / MUST NOT | COVERED | entity.mutate.mutable-field-001 |
-| ENTITY-MUTABILITY-002 | Entities | MUST / MUST NOT | COVERED | entity.mutate.immutable-financial-field-001 |
-| ENTITY-MUTABILITY-003 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-MUTABILITY-004 | Entities | MUST / MUST NOT | COVERED | entity.mutate.immutable-financial-field-001 |
-| ENTITY-MUTABILITY-005 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-MUTABILITY-002 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.mutate.immutable-financial-field-001 |
+| ENTITY-MUTABILITY-003 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-MUTABILITY-004 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.mutate.immutable-financial-field-001 |
+| ENTITY-MUTABILITY-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | ENTITY-MUTABILITY-006 | Entities | MUST / MUST NOT | COVERED | entity.mutate.terminal-metadata-001 |
 | ENTITY-MUTABILITY-007 | Entities | MAY | COVERED | entity.mutate.terminal-metadata-001 |
 | ENTITY-VALIDATION-001 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
 | ENTITY-VALIDATION-002 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
 | ENTITY-VALIDATION-003 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
 | ENTITY-VALIDATION-004 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
-| ENTITY-VALIDATION-005 | Entities | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-VALIDATION-005 | Entities | SHOULD / SHOULD NOT | COVERED | entity.validation.complete-result-001 |
 | ENTITY-VALIDATION-006 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
 | ENTITY-VALIDATION-007 | Entities | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
-| ENTITY-VALIDATION-008 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-VALIDATION-008 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
 
 ## Audit Draft 0.1 traceability closure notes
 
@@ -271,6 +271,28 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-ERROR-004 | NOT DIRECTLY TESTABLE | Current normalized conformance errors compare portable codes and post-state only; messages/details are intentionally outside vector comparison. The TypeScript adapter omits Approval diagnostic details, but absence of restricted disclosure cannot be isolated by the current vector shape. |
 | APPROVAL-ERROR-005 | COVERED | Failing Decision vectors with history observations, including `approval.decision.timestamp-ambiguous-001` and `approval.decision.ineligible-actor-001`, observe that existing committed Decisions remain unchanged after failed Approval operations. |
 
+## Entities Draft 0.1 traceability closure notes
+
+| Requirement | Final classification | Justification |
+| --- | --- | --- |
+| ENTITY-AUDIT-001 | NOT DIRECTLY TESTABLE | This is a composing-domain obligation to identify which Entity Mutations and Transitions require Audit Events. The generic Entity conformance operations do not include an audit policy declaration surface, and Draft 0.1 does not define an Entity/Audit integration operation to observe that declaration independently. |
+| ENTITY-AUDIT-002 | NOT DIRECTLY TESTABLE | This obligation is conditional on the audit policy identified by `ENTITY-AUDIT-001`. Because current Entity operations intentionally do not integrate Audit, no portable Entity operation can independently observe event production without adding the out-of-scope integration. |
+| ENTITY-DEFINITION-001 | NOT DIRECTLY TESTABLE | The requirement is a composing-domain definition responsibility: fields, lifecycle, and invariants must be defined by the domain using Entity primitives. Current vectors observe the lifecycle, mutability, and validation fixtures supplied to Entity operations, but there is no standalone portable definition-validation operation in Draft 0.1. |
+| ENTITY-IDENTITY-003 | COVERED | `entity.create.opaque-identity-preserved-001` observes exact preservation of an opaque identifier containing case and surrounding whitespace, guarding against normalization, coercion, or format inference. |
+| ENTITY-IDENTITY-004 | COVERED | `entity.mutate.display-number-not-identity-001` observes mutable display-number and revision data changing while stable Entity identity remains unchanged. |
+| ENTITY-IDENTITY-005 | NOT DIRECTLY TESTABLE | Uniqueness across distinct entities in the same scope requires a composing-domain registry, repository, or persistence boundary. Draft 0.1 Entity conformance operates on one supplied Entity observation at a time and cannot prove cross-entity uniqueness independently. |
+| ENTITY-IDENTITY-006 | NOT DIRECTLY TESTABLE | Import or migration identity mapping requires an import/migration operation or mapping record, neither of which is defined by current Entity Draft 0.1 conformance. Existing operations preserve supplied identity but cannot observe an explicit migration mapping contract. |
+| ENTITY-LIFECYCLE-004 | NOT DIRECTLY TESTABLE | This is the lifecycle-specific form of the Entity/Audit declaration obligation. Current Entity lifecycle operations intentionally do not couple to Audit and cannot observe audit declaration or event production. |
+| ENTITY-LIFECYCLE-005 | NOT DIRECTLY TESTABLE | Domain consequences of each state belong to composing domains. Generic Entity conformance can observe the current state and transition boundary, but it cannot prove concrete invoice, expense, or payment consequences absent a concrete domain specification. |
+| ENTITY-LIFECYCLE-006 | COVERED | `entity.create.initial-lifecycle-001` observes a portable Entity representation with exactly one current lifecycle `state` initialized through the referenced Workflow. |
+| ENTITY-MUTABILITY-003 | NOT DIRECTLY TESTABLE | This is the mutation-specific form of the Entity/Audit declaration obligation. Testing it would require the out-of-scope Entity/Audit integration surface. |
+| ENTITY-MUTABILITY-005 | NOT DIRECTLY TESTABLE | Preservation of prior audit history after a field becomes immutable requires an attached audit history or Entity/Audit integration operation. Current Entity conformance has no such portable observation. |
+| ENTITY-ERROR-002 | COVERED | `entity.validation.complete-result-001` observes a stable validation finding identifier through the safe `rule` field. |
+| ENTITY-ERROR-003 | NOT DIRECTLY TESTABLE | Safe diagnostic context is optional. Conformance can verify portable codes and safe findings when present, but cannot require optional diagnostics without turning a MAY into mandatory behavior. |
+| ENTITY-VALIDATION-005 | COVERED | `entity.validation.complete-result-001` observes the relevant domain path through the validation finding `path` field. |
+| ENTITY-VALIDATION-007 | NOT DIRECTLY TESTABLE | This is a composing-domain recommendation about distinguishing always-required rules from transition or target-state rules. Draft 0.1 has no generic state-dependent validation policy language to execute portably. |
+| ENTITY-VALIDATION-008 | COVERED | `entity.validation.complete-result-001` observes that validation failure details expose only `rule` and `path`, not the rejected Money value, TypeScript class name, message, or other sensitive value-bearing details. |
+
 ## Critical financial requirements
 
 | Requirement | Critical behavior | Mutation that should be killed |
@@ -294,7 +316,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 - Workflow: external fact capture, definition migration, transition identifiers, and concurrency remain open.
 - Audit: unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, and causal sequencing remain open.
 - Approvals: condition syntax, subject-state interchange, relevant-fact policy, supersession, withdrawal, expiration, delegation, quorum, and rejection codes remain open for future drafts; current standalone Draft 0.1 conformance has no uncovered mandatory Approval requirements.
-- Entities: concrete fields, lifecycle policy, full validation catalog, import result, concurrency, and correction or reversal behavior remain outside Core. The current TypeScript Stage 3 implementation covers the conformance-local Entity identity, lifecycle, mutability, and validation vectors. `ENTITY-VALIDATION-008` is classified as not directly testable by current conformance because normalized errors compare portable code and post-state only, not diagnostic disclosure.
+- Entities: concrete fields, lifecycle policy, full validation catalog, import or migration mapping, cross-entity identity registries, Audit integration, concurrency, and correction or reversal behavior remain outside Core. The current TypeScript reference implementation covers the conformance-local Entity identity, lifecycle, mutability, and validation vectors. Remaining Entity requirements classified as not directly testable are composing-domain, conditional Audit-integration, optional diagnostic, or registry/import obligations without a standalone portable Entity operation.
 
 Vectors do not settle these open questions.
 
@@ -302,4 +324,4 @@ Vectors do not settle these open questions.
 
 **READY FOR CONFORMANCE RUNNER**
 
-The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, and Approvals Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Entities still has uncovered mandatory requirements before broader reference-implementation conformance can be claimed.
+The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. FinKore Core Draft 0.1 cross-domain closure has not yet been performed.

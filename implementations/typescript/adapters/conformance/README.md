@@ -42,9 +42,12 @@ milestones. The current Agentic operation
 registry has not promoted Entity operations to canonical `finkore.entity.*`
 identifiers, so this adapter intentionally does not invent those identifiers.
 `entity.mutate` support covers declared top-level field mutability and complete
-validation of the proposed result through the core TypeScript Entity API. The
-adapter does not evaluate validation rules itself. Generic validation rule
-engines remain outside this milestone.
+validation of the proposed result through the core TypeScript Entity API. When
+core Entity validation fails with safe findings, the adapter exposes those
+findings as conformance observations so vectors can verify portable rule/path
+semantics without comparing TypeScript class names, messages, or sensitive
+values. The adapter does not evaluate validation rules itself. Generic
+validation rule engines remain outside this milestone.
 
 Audit operation support covers FinKore Audit Draft 0.1: Events, Actors, append-only history, Change representation, Redaction, and portable Audit errors. Draft 0.1 does not define `audit.order` as an executable adapter operation.
 

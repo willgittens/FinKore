@@ -11,7 +11,7 @@ import { operationHandlers } from './operations.js'
  * `@finkore/typescript`, with `/spec` remaining authoritative.
  *
  * @returns A conformance adapter supporting the operations implemented by the
- * current TypeScript Money and Workflow Draft 0.1 milestones.
+ * current TypeScript Draft 0.1 domain milestones.
  */
 export function createTypeScriptConformanceAdapter(): FinKoreConformanceAdapter {
   return {
@@ -49,3 +49,8 @@ export function createTypeScriptConformanceAdapter(): FinKoreConformanceAdapter 
  * Short alias for {@link createTypeScriptConformanceAdapter}.
  */
 export { createTypeScriptConformanceAdapter as createAdapter }
+
+/**
+ * Default concrete adapter consumed by the Conformance Runner CLI.
+ */
+export const adapter = createTypeScriptConformanceAdapter()
