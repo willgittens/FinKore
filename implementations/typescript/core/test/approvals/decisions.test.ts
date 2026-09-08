@@ -65,6 +65,7 @@ describe('Approval decisions', () => {
       actor: { id: 'user-7' },
     })
     expect(Object.hasOwn(serialized.actor, 'type')).toBe(false)
+    expect(ApprovalDecision.from(decision).actor).toEqual({ type: 'user', id: 'user-7' })
   })
 
   it('requires association with the correct requirement before committing', () => {
@@ -292,6 +293,36 @@ describe('Approval decisions', () => {
     expect(ApprovalDecision.from({ ...decision, subjectFacts: [1, 2] }).evaluateEffectiveness('not-array')).toBe(
       'INEFFECTIVE',
     )
+  })
+
+  it('distinguishes JSON fact shapes when evaluating decision effectiveness', () => {
+    expect(ApprovalDecision.from({ ...decision, subjectFacts: [] }).evaluateEffectiveness({})).toBe('INEFFECTIVE')
+    expect(ApprovalDecision.from({ ...decision, subjectFacts: {} }).evaluateEffectiveness([])).toBe('INEFFECTIVE')
+    expect(ApprovalDecision.from({ ...decision, subjectFacts: { value: [] } }).evaluateEffectiveness({ value: {} })).toBe(
+      'INEFFECTIVE',
+    )
+    expect(ApprovalDecision.from({ ...decision, subjectFacts: { value: {} } }).evaluateEffectiveness({ value: [] })).toBe(
+      'INEFFECTIVE',
+    )
+    expect(ApprovalDecision.from({ ...decision, subjectFacts: { a: 1 } }).evaluateEffectiveness({ b: 1 })).toBe(
+      'INEFFECTIVE',
+    )
+    expect(ApprovalDecision.from({ ...decision, subjectFacts: { a: undefined } }).evaluateEffectiveness({ b: undefined })).toBe(
+      'INEFFECTIVE',
+    )
+    expect(ApprovalDecision.from({ ...decision, subjectFacts: { a: { b: false } } }).evaluateEffectiveness({ a: 1 })).toBe(
+      'INEFFECTIVE',
+    )
+    expect(
+      ApprovalDecision.from({ ...decision, subjectFacts: { facts: [false, 0, null, ''] } }).evaluateEffectiveness({
+        facts: [false, 0, null, ''],
+      }),
+    ).toBe('EFFECTIVE')
+    expect(
+      ApprovalDecision.from({ ...decision, subjectFacts: { facts: [false, 0, null, ''] } }).evaluateEffectiveness({
+        facts: [false, null, 0, ''],
+      }),
+    ).toBe('INEFFECTIVE')
   })
 
   it('rejects malformed imported decision history', () => {

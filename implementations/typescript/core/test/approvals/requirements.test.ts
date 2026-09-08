@@ -24,6 +24,8 @@ describe('Approval requirements', () => {
   it('does not infer identity from object position or generate missing identity', () => {
     expect(() => ApprovalRequirement.from(null)).toThrow(InvalidApprovalDecisionError)
     expect(() => ApprovalRequirement.from([])).toThrow(InvalidApprovalDecisionError)
+    expect(() => ApprovalRequirement.from(7)).toThrow(InvalidApprovalDecisionError)
+    expect(() => ApprovalRequirement.from('finance-review')).toThrow(InvalidApprovalDecisionError)
     expect(() => ApprovalRequirement.from({ ...requirement, id: '' })).toThrow(InvalidApprovalDecisionError)
     expect(() => ApprovalRequirement.from({ ...requirement, id: undefined })).toThrow(InvalidApprovalDecisionError)
   })

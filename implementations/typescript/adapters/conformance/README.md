@@ -35,16 +35,16 @@ canonical Workflow operation ID currently listed in the Agentic Contract.
 
 Audit operation support covers FinKore Audit Draft 0.1: Events, Actors, append-only history, Change representation, Redaction, and portable Audit errors. Draft 0.1 does not define `audit.order` as an executable adapter operation.
 
-Approval operation support covers only the first Approval milestones:
-Requirement evaluation, Decision recording, Decision effectiveness, eligible
-actor validation, subject-fact binding, append-only Decision history
-preservation, Condition representation, required-fact completeness, explicit
-Condition result boundaries, Approval Chain all-required composition for
-sequential and unordered chains, declared rejection outcomes, current
-sequential actionable Requirement reporting, and portable Approval errors. The
-current Approval conformance operation labels remain conformance-local
-vocabulary; no canonical Approval operation is currently listed in
-`agentic/operations.md`.
+Approval operation support covers FinKore Approvals Draft 0.1: Requirement
+evaluation, Decision recording, Decision effectiveness, eligible actor
+validation, subject-fact binding, append-only Decision history preservation,
+Condition representation, required-fact completeness, explicit Condition result
+boundaries, Approval Chain all-required composition for sequential and unordered
+chains, declared rejection outcomes, current sequential actionable Requirement
+reporting, duplicate Requirement rejection in chains, and portable Approval
+errors. The current Approval conformance operation labels remain
+conformance-local vocabulary; no canonical Approval operation is currently
+listed in `agentic/operations.md`.
 
 `approval.chain.evaluate` remains a conformance-local operation. It evaluates a
 chain from explicit Requirement state observations so conformance can verify

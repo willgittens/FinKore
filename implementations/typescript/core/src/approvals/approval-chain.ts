@@ -64,6 +64,7 @@ function validateRequirementState(value: unknown): ChainRequirementEvaluationSta
  * @see APPROVAL-CHAIN-006
  * @see APPROVAL-CHAIN-007
  * @see APPROVAL-CHAIN-008
+ * @see APPROVAL-CHAIN-009
  */
 export class ApprovalChain {
   private readonly value: SerializedApprovalChain

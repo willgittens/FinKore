@@ -1,24 +1,15 @@
 # FinKore TypeScript
 
 TypeScript reference implementation for the current FinKore Money, Workflow,
-Audit, and first Approval Draft 0.1 milestones.
+Audit, and Approvals Draft 0.1 milestones.
 
 FinKore Money Draft 0.1 is fully implemented by this TypeScript reference implementation. This statement applies only to the current Money specification draft; it does not imply that other FinKore domains are complete.
 
-FinKore Workflow Draft 0.1 is fully implemented by the TypeScript reference implementation. This statement applies only to the current Workflow specification draft; it does not imply that Approvals, Entities, or other FinKore domains are complete.
+FinKore Workflow Draft 0.1 is fully implemented by the TypeScript reference implementation. This statement applies only to the current Workflow specification draft; it does not imply that Entities or other FinKore domains are complete.
 
 FinKore Audit Draft 0.1 is fully implemented by the TypeScript reference implementation. Audit covers Events, Actors, append-only logical history, Change representation semantics, and Redaction semantics. Distributed ordering, persistence, and cross-domain integrations remain outside this milestone.
 
-The first FinKore Approval milestones are implemented for Approval Requirement
-representation, Approval Decision representation, Decision-to-Requirement
-binding, allowed Decision outcomes, Decision validation, relevant subject-fact
-effectiveness checks, append-only Decision history preservation, Approval
-Condition representation and evaluation-boundary validation, and portable
-Approval errors. Approval Chains are implemented for Draft 0.1 all-required
-ordered or unordered composition, declared rejection outcomes, current
-sequential actionable Requirement reporting, and exclusion of explicitly
-not-applicable Requirements. Chain definitions reject duplicate Requirement
-identities. This is not a full Approvals domain implementation.
+FinKore Approvals Draft 0.1 is fully implemented by the TypeScript reference implementation. Approvals covers Approval Requirement representation, Approval Decision representation, Decision-to-Requirement binding, allowed Decision outcomes, Decision validation, relevant subject-fact effectiveness checks, append-only Decision history preservation, Approval Condition representation and evaluation-boundary validation, Approval Chain all-required ordered or unordered composition, declared rejection outcomes, current sequential actionable Requirement reporting, exclusion of explicitly not-applicable Requirements, duplicate Requirement rejection in chains, and portable Approval errors.
 
 This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact compatible-currency numeric comparison, and explicit Money rounding.
 

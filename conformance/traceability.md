@@ -10,11 +10,11 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Money | 50 | 45 | 1 | 4 | 45 | 0 | 0 | 5 | 0 | 0 |
 | Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 | 0 | 0 |
 | Audit | 38 | 30 | 4 | 4 | 28 | 0 | 0 | 10 | 0 | 0 |
-| Approvals | 35 | 32 | 1 | 2 | 17 | 0 | 15 | 3 | 0 | 0 |
+| Approvals | 35 | 32 | 1 | 2 | 30 | 0 | 0 | 5 | 0 | 0 |
 | Entities | 34 | 29 | 3 | 2 | 17 | 0 | 13 | 4 | 0 | 0 |
-| **Total** | **213** | **184** | **15** | **14** | **130** | **0** | **28** | **55** | **0** | **0** |
+| **Total** | **213** | **184** | **15** | **14** | **143** | **0** | **13** | **57** | **0** | **0** |
 
-The suite contains 119 vectors. Overall: **130 covered (61.0%)**, **0 partially covered (0.0%)**, **28 uncovered (13.1%)**, **55 not directly testable (25.8%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
+The suite contains 128 vectors. Overall: **143 covered (67.1%)**, **0 partially covered (0.0%)**, **13 uncovered (6.1%)**, **57 not directly testable (26.8%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current draft. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -166,14 +166,14 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | AUDIT-REDACTION-005 | Audit | MAY | NOT DIRECTLY TESTABLE | — |
 | AUDIT-REDACTION-006 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
 | AUDIT-REDACTION-007 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
-| APPROVAL-CHAIN-001 | Approvals | MUST / MUST NOT | UNCOVERED | — |
-| APPROVAL-CHAIN-002 | Approvals | MUST / MUST NOT | UNCOVERED | — |
-| APPROVAL-CHAIN-003 | Approvals | MUST / MUST NOT | UNCOVERED | — |
+| APPROVAL-CHAIN-001 | Approvals | MUST / MUST NOT | COVERED | approval.chain.empty-requirements-invalid-001 |
+| APPROVAL-CHAIN-002 | Approvals | MUST / MUST NOT | COVERED | approval.chain.missing-mode-invalid-001 |
+| APPROVAL-CHAIN-003 | Approvals | MUST / MUST NOT | COVERED | approval.chain.pending-001, approval.chain.unordered-not-sequential-001 |
 | APPROVAL-CHAIN-004 | Approvals | MUST / MUST NOT | COVERED | approval.chain.sequential-not-active-001 |
 | APPROVAL-CHAIN-005 | Approvals | MUST / MUST NOT | COVERED | approval.chain.all-approved-001, approval.chain.pending-001 |
 | APPROVAL-CHAIN-006 | Approvals | MUST / MUST NOT | COVERED | approval.chain.pending-001 |
 | APPROVAL-CHAIN-007 | Approvals | MUST / MUST NOT | COVERED | approval.chain.rejected-001 |
-| APPROVAL-CHAIN-008 | Approvals | MUST / MUST NOT | UNCOVERED | — |
+| APPROVAL-CHAIN-008 | Approvals | MUST / MUST NOT | COVERED | approval.chain.deterministic-declared-order-001 |
 | APPROVAL-CHAIN-009 | Approvals | MUST / MUST NOT | COVERED | approval.chain.duplicate-requirement-invalid-001 |
 | APPROVAL-CONDITION-001 | Approvals | MUST / MUST NOT | COVERED | approval.condition.missing-fact-001 |
 | APPROVAL-CONDITION-002 | Approvals | MUST / MUST NOT | COVERED | approval.condition.applicable-explicit-001, approval.condition.missing-result-unresolved-001, approval.condition.not-applicable-explicit-001 |
@@ -186,20 +186,20 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-DECISION-003 | Approvals | MUST / MUST NOT | COVERED | approval.decision.subject-facts-changed-001, approval.decision.subject-facts-unchanged-001 |
 | APPROVAL-DECISION-004 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001 |
 | APPROVAL-DECISION-005 | Approvals | MUST / MUST NOT | COVERED | approval.decision.pending-invalid-001 |
-| APPROVAL-DECISION-006 | Approvals | MUST / MUST NOT | UNCOVERED | — |
-| APPROVAL-DECISION-007 | Approvals | MUST / MUST NOT | UNCOVERED | — |
-| APPROVAL-DECISION-008 | Approvals | MUST / MUST NOT | UNCOVERED | — |
-| APPROVAL-ERROR-001 | Approvals | MUST / MUST NOT | UNCOVERED | — |
+| APPROVAL-DECISION-006 | Approvals | MUST / MUST NOT | COVERED | approval.decision.timestamp-ambiguous-001 |
+| APPROVAL-DECISION-007 | Approvals | MUST / MUST NOT | COVERED | approval.decision.append-history-001 |
+| APPROVAL-DECISION-008 | Approvals | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| APPROVAL-ERROR-001 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001, approval.decision.pending-invalid-001, approval.decision.timestamp-ambiguous-001 |
 | APPROVAL-ERROR-002 | Approvals | MAY | NOT DIRECTLY TESTABLE | — |
-| APPROVAL-ERROR-003 | Approvals | MUST / MUST NOT | UNCOVERED | — |
-| APPROVAL-ERROR-004 | Approvals | MUST / MUST NOT | UNCOVERED | — |
-| APPROVAL-ERROR-005 | Approvals | MUST / MUST NOT | UNCOVERED | — |
-| APPROVAL-REQUIREMENT-001 | Approvals | MUST / MUST NOT | UNCOVERED | — |
-| APPROVAL-REQUIREMENT-002 | Approvals | MUST / MUST NOT | UNCOVERED | — |
-| APPROVAL-REQUIREMENT-003 | Approvals | MUST / MUST NOT | UNCOVERED | — |
+| APPROVAL-ERROR-003 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.pending-001, approval.requirement.rejected-001 |
+| APPROVAL-ERROR-004 | Approvals | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| APPROVAL-ERROR-005 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001, approval.decision.pending-invalid-001, approval.decision.timestamp-ambiguous-001 |
+| APPROVAL-REQUIREMENT-001 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.missing-identity-001 |
+| APPROVAL-REQUIREMENT-002 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.missing-subject-001 |
+| APPROVAL-REQUIREMENT-003 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.missing-eligibility-001 |
 | APPROVAL-REQUIREMENT-004 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.approved-001, approval.requirement.rejected-001 |
 | APPROVAL-REQUIREMENT-005 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.pending-001 |
-| APPROVAL-REQUIREMENT-006 | Approvals | MUST / MUST NOT | UNCOVERED | — |
+| APPROVAL-REQUIREMENT-006 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001 |
 | APPROVAL-REQUIREMENT-007 | Approvals | MAY | NOT DIRECTLY TESTABLE | — |
 | ENTITY-AUDIT-001 | Entities | MUST / MUST NOT | UNCOVERED | — |
 | ENTITY-AUDIT-002 | Entities | MUST / MUST NOT | UNCOVERED | — |
@@ -251,6 +251,26 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | AUDIT-EVENT-007 | COVERED | Draft 0.1 now defines structural completeness through required valid fields. Existing complete and missing-required-field vectors exercise that boundary. |
 | AUDIT-REDACTION-007 | COVERED | `audit.redaction.preserve-evidence-001` now observes that redaction returns a redacted representation and evidence event while preserving the committed source event in history. |
 
+## Approvals Draft 0.1 traceability closure notes
+
+| Requirement | Final classification | Justification |
+| --- | --- | --- |
+| APPROVAL-REQUIREMENT-001 | COVERED | `approval.requirement.missing-identity-001` observes that a Requirement without a stable caller-supplied identifier is rejected instead of receiving inferred identity from position, structure, or implementation state. |
+| APPROVAL-REQUIREMENT-002 | COVERED | `approval.requirement.missing-subject-001` observes that the subject association is required for Requirement evaluation. |
+| APPROVAL-REQUIREMENT-003 | COVERED | `approval.requirement.missing-eligibility-001` observes that a Requirement must explicitly declare eligible actors or eligibility semantics accepted by this milestone representation. |
+| APPROVAL-REQUIREMENT-006 | COVERED | `approval.decision.ineligible-actor-001` observes domain eligibility independently from any technical ability to submit the candidate Decision fixture. |
+| APPROVAL-CHAIN-001 | COVERED | `approval.chain.empty-requirements-invalid-001` observes that a Chain cannot be evaluated without one or more declared Requirement identities. |
+| APPROVAL-CHAIN-002 | COVERED | `approval.chain.missing-mode-invalid-001` observes that Chain sequencing mode must be declared and is not inferred. |
+| APPROVAL-CHAIN-003 | COVERED | `approval.chain.unordered-not-sequential-001` observes that unordered Chains report aggregate state rather than sequential active work. |
+| APPROVAL-CHAIN-008 | COVERED | `approval.chain.deterministic-declared-order-001` observes deterministic sequential evaluation from declared order rather than sorted identifiers or ambient ordering. |
+| APPROVAL-DECISION-006 | COVERED | `approval.decision.timestamp-ambiguous-001` observes that serialized Decision timestamps must identify an unambiguous instant with an explicit offset. |
+| APPROVAL-DECISION-007 | COVERED | `approval.decision.append-history-001` observes append-only logical Decision history: committing a later Decision preserves prior committed Decisions. |
+| APPROVAL-DECISION-008 | NOT DIRECTLY TESTABLE | The requirement is conditional: it applies only when a composing domain requires an Audit Event for an Approval Decision. Standalone Approvals Draft 0.1 intentionally has no Audit coupling, and no current Approval operation emits Audit Events. |
+| APPROVAL-ERROR-001 | COVERED | Failing Decision vectors with history observations, including `approval.decision.timestamp-ambiguous-001`, observe that failed Decision attempts do not change Approval state or Chain inputs. |
+| APPROVAL-ERROR-003 | COVERED | `approval.requirement.pending-001` and `approval.requirement.rejected-001` observe distinct `PENDING` and `REJECTED` outcomes; missing approval is not collapsed into explicit rejection. |
+| APPROVAL-ERROR-004 | NOT DIRECTLY TESTABLE | Current normalized conformance errors compare portable codes and post-state only; messages/details are intentionally outside vector comparison. The TypeScript adapter omits Approval diagnostic details, but absence of restricted disclosure cannot be isolated by the current vector shape. |
+| APPROVAL-ERROR-005 | COVERED | Failing Decision vectors with history observations, including `approval.decision.timestamp-ambiguous-001` and `approval.decision.ineligible-actor-001`, observe that existing committed Decisions remain unchanged after failed Approval operations. |
+
 ## Critical financial requirements
 
 | Requirement | Critical behavior | Mutation that should be killed |
@@ -272,7 +292,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 - Money: precision or overflow limits, private or non-fiat currency namespaces, and currency-recommended scale remain open as deferred topics outside Draft 0.1 closure.
 - Workflow: external fact capture, definition migration, transition identifiers, and concurrency remain open.
 - Audit: unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, and causal sequencing remain open.
-- Approvals: condition syntax, subject-state interchange, relevant-fact policy, supersession, withdrawal, expiration, delegation, quorum, and rejection codes remain open.
+- Approvals: condition syntax, subject-state interchange, relevant-fact policy, supersession, withdrawal, expiration, delegation, quorum, and rejection codes remain open for future drafts; current standalone Draft 0.1 conformance has no uncovered mandatory Approval requirements.
 - Entities: concrete fields, lifecycle policy, validation catalog, import result, concurrency, and correction or reversal behavior remain outside Core.
 
 Vectors do not settle these open questions.
@@ -281,4 +301,4 @@ Vectors do not settle these open questions.
 
 **READY FOR CONFORMANCE RUNNER**
 
-The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money and Workflow Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes both full suites. Audit has no remaining UNCOVERED rows or BLOCKING SPEC GAP items after this traceability pass. Approvals and Entities still have uncovered mandatory requirements before broader reference-implementation conformance can be claimed.
+The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, and Approvals Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Entities still has uncovered mandatory requirements before broader reference-implementation conformance can be claimed.

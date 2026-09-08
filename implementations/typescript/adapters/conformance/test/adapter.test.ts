@@ -145,28 +145,9 @@ describe('TypeScript conformance adapter', () => {
     const report = await createConformanceRunner({
       manifestPath,
       adapter: createTypeScriptConformanceAdapter(),
-    }).run({ vectorIds: [
-      'approval.requirement.pending-001',
-      'approval.requirement.approved-001',
-      'approval.requirement.rejected-001',
-      'approval.requirement.wrong-association-001',
-      'approval.decision.pending-invalid-001',
-      'approval.decision.ineligible-actor-001',
-      'approval.decision.subject-facts-unchanged-001',
-      'approval.decision.subject-facts-changed-001',
-      'approval.condition.missing-fact-001',
-      'approval.condition.applicable-explicit-001',
-      'approval.condition.not-applicable-explicit-001',
-      'approval.condition.falsey-facts-present-001',
-      'approval.condition.missing-result-unresolved-001',
-      'approval.chain.all-approved-001',
-      'approval.chain.pending-001',
-      'approval.chain.rejected-001',
-      'approval.chain.sequential-not-active-001',
-      'approval.chain.duplicate-requirement-invalid-001',
-    ] })
+    }).run({ suites: ['approvals'] })
 
-    expect(report.summary).toEqual({ total: 18, passed: 18, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 27, passed: 27, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current Workflow state and transition vectors', async () => {

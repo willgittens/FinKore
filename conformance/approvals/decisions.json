@@ -38,6 +38,112 @@
       ]
     },
     {
+      "id": "approval.requirement.missing-identity-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-001"
+      ],
+      "description": "Rejects a requirement without a stable identifier instead of inferring identity from position or structure.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "requirement-identity-inferred"
+      ]
+    },
+    {
+      "id": "approval.requirement.missing-subject-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-002"
+      ],
+      "description": "Rejects a requirement that does not identify the subject whose approval is requested.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "requirement-subject-omitted"
+      ]
+    },
+    {
+      "id": "approval.requirement.missing-eligibility-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-003"
+      ],
+      "description": "Rejects a requirement without an explicit eligible actor or eligibility declaration.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "requirement-eligibility-omitted"
+      ]
+    },
+    {
       "id": "approval.requirement.approved-001",
       "spec": "approvals/requirements",
       "requirements": [
@@ -268,10 +374,95 @@
       ]
     },
     {
+      "id": "approval.decision.timestamp-ambiguous-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-006",
+        "APPROVAL-ERROR-001",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "Rejects an ambiguous decision timestamp without changing existing committed decision history.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "ambiguous-timestamp-accepted",
+        "failed-decision-mutates-history"
+      ]
+    },
+    {
       "id": "approval.decision.ineligible-actor-001",
       "spec": "approvals/decisions",
       "requirements": [
-        "APPROVAL-DECISION-004"
+        "APPROVAL-DECISION-004",
+        "APPROVAL-REQUIREMENT-006",
+        "APPROVAL-ERROR-001",
+        "APPROVAL-ERROR-005"
       ],
       "description": "Rejects a decision by an ineligible actor without changing history.",
       "operation": "approval.decision.record",
@@ -322,6 +513,95 @@
       ],
       "guardsAgainst": [
         "eligibility-check-removed"
+      ]
+    },
+    {
+      "id": "approval.decision.append-history-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-007"
+      ],
+      "description": "Commits a new decision by appending it without overwriting or removing prior logical decision history.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "REJECTED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "4"
+              },
+              "outcome": "REJECTED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "decision-history-overwritten",
+        "prior-decision-discarded"
       ]
     },
     {
@@ -679,6 +959,7 @@
       "id": "approval.chain.pending-001",
       "spec": "approvals/chains",
       "requirements": [
+        "APPROVAL-CHAIN-003",
         "APPROVAL-CHAIN-005",
         "APPROVAL-CHAIN-006"
       ],
@@ -708,6 +989,105 @@
       ],
       "guardsAgainst": [
         "pending-treated-as-approved"
+      ]
+    },
+    {
+      "id": "approval.chain.empty-requirements-invalid-001",
+      "spec": "approvals/chains",
+      "requirements": [
+        "APPROVAL-CHAIN-001"
+      ],
+      "description": "Rejects a chain without one or more declared Approval Requirements.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "UNORDERED",
+          "requirements": [],
+          "rejectionOutcome": "REJECTED"
+        },
+        "states": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "empty-chain-accepted"
+      ]
+    },
+    {
+      "id": "approval.chain.missing-mode-invalid-001",
+      "spec": "approvals/chains",
+      "requirements": [
+        "APPROVAL-CHAIN-002"
+      ],
+      "description": "Rejects a chain that does not declare whether its requirements are sequential or unordered.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "requirements": [
+            "manager"
+          ],
+          "rejectionOutcome": "REJECTED"
+        },
+        "states": {
+          "manager": "APPROVED"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "chain-mode-inferred"
+      ]
+    },
+    {
+      "id": "approval.chain.unordered-not-sequential-001",
+      "spec": "approvals/chains",
+      "requirements": [
+        "APPROVAL-CHAIN-003"
+      ],
+      "description": "An unordered chain with multiple pending requirements reports aggregate pending state rather than sequential active work.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "UNORDERED",
+          "requirements": [
+            "manager",
+            "finance"
+          ],
+          "rejectionOutcome": "REJECTED"
+        },
+        "states": {
+          "manager": "PENDING",
+          "finance": "PENDING"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unordered-chain-treated-as-sequential"
       ]
     },
     {
@@ -782,6 +1162,47 @@
       ],
       "guardsAgainst": [
         "sequential-order-ignored"
+      ]
+    },
+    {
+      "id": "approval.chain.deterministic-declared-order-001",
+      "spec": "approvals/chains",
+      "requirements": [
+        "APPROVAL-CHAIN-008"
+      ],
+      "description": "Sequential evaluation is deterministic from declared requirement order rather than identifier sort order.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "SEQUENTIAL",
+          "requirements": [
+            "z-review",
+            "a-review"
+          ],
+          "rejectionOutcome": "REJECTED"
+        },
+        "states": {
+          "z-review": "PENDING",
+          "a-review": "PENDING"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "state": "PENDING",
+          "activeRequirements": [
+            "z-review"
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "chain-order-sorted",
+        "chain-evaluation-nondeterministic"
       ]
     },
     {
