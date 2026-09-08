@@ -1,6 +1,11 @@
 import { Workflow } from '../workflow/workflow.js'
 import { InvalidWorkflowTransitionError } from '../workflow/errors.js'
-import { EntityStateConflictError, InvalidEntityIdentityError } from './errors.js'
+import {
+  EntityStateConflictError,
+  ImmutableEntityError,
+  InvalidEntityIdentityError,
+  InvalidEntityMutationError,
+} from './errors.js'
 import type { EntityDefinition, SerializedFinancialEntity } from './types.js'
 
 function isPlainRecord(value: unknown): value is Readonly<Record<string, unknown>> {
@@ -26,7 +31,37 @@ function validateDefinition(input: unknown): EntityDefinition {
     type: requiredString(input.type),
     identityScope: requiredString(input.identityScope),
     workflow: input.workflow,
+    mutability: validateMutability(input.mutability),
   }
+}
+
+function validateFieldList(value: unknown): readonly string[] {
+  if (!Array.isArray(value)) throw new InvalidEntityMutationError()
+  return value.map((field) => {
+    if (typeof field !== 'string' || field.length === 0) throw new InvalidEntityMutationError()
+    return field
+  })
+}
+
+function validateMutability(value: unknown): Readonly<Record<string, readonly string[]>> {
+  if (!isPlainRecord(value)) throw new InvalidEntityMutationError()
+  const mutability: Record<string, readonly string[]> = {}
+  for (const [state, fields] of Object.entries(value)) {
+    if (state.length === 0) throw new InvalidEntityMutationError()
+    mutability[state] = validateFieldList(fields)
+  }
+  return mutability
+}
+
+function validateChanges(value: unknown): Readonly<Record<string, unknown>> {
+  if (!isPlainRecord(value) || Object.keys(value).length === 0) throw new InvalidEntityMutationError()
+  return value
+}
+
+function mutableFieldsFor(definition: EntityDefinition, state: string): ReadonlySet<string> {
+  const fields = definition.mutability[state]
+  if (fields === undefined) throw new InvalidEntityMutationError()
+  return new Set(fields)
 }
 
 function validateSerializedEntity(definition: EntityDefinition, input: unknown): SerializedFinancialEntity {
@@ -43,7 +78,7 @@ function validateSerializedEntity(definition: EntityDefinition, input: unknown):
 }
 
 /**
- * Generic FinKore Financial Entity for Stage 1 identity and lifecycle behavior.
+ * Generic FinKore Financial Entity for identity, lifecycle, and mutability behavior.
  *
  * An Entity has caller-supplied opaque identity within a declared scope and
  * exactly one current lifecycle state governed by its referenced Workflow.
@@ -52,8 +87,10 @@ function validateSerializedEntity(definition: EntityDefinition, input: unknown):
  * retain their Workflow portable error code and leave the original Entity
  * unchanged.
  *
- * This milestone does not implement general field mutability, validation rule
- * engines, persistence, audit integration, workflow integration beyond the
+ * Mutability means only whether a top-level Entity data field may change in the
+ * current lifecycle state. It does not validate the proposed value against
+ * composing-domain business rules. This milestone does not implement validation
+ * rule engines, persistence, audit integration, workflow integration beyond the
  * referenced Workflow transition semantics, correction/reversal, supersession,
  * versioning, optimistic locking, or authorization.
  *
@@ -64,6 +101,11 @@ function validateSerializedEntity(definition: EntityDefinition, input: unknown):
  * @see ENTITY-LIFECYCLE-002
  * @see ENTITY-LIFECYCLE-003
  * @see ENTITY-LIFECYCLE-006
+ * @see ENTITY-MUTABILITY-001
+ * @see ENTITY-MUTABILITY-002
+ * @see ENTITY-MUTABILITY-004
+ * @see ENTITY-MUTABILITY-006
+ * @see ENTITY-MUTABILITY-007
  * @see ENTITY-ERROR-001
  * @see ENTITY-ERROR-004
  */
@@ -103,6 +145,7 @@ export class FinancialEntity {
   static create(definitionInput: unknown, id: unknown, data: unknown): FinancialEntity {
     const definition = validateDefinition(definitionInput)
     const workflow = Workflow.create(definition.workflow)
+    mutableFieldsFor(definition, workflow.currentState)
     return new FinancialEntity(definition, {
       type: definition.type,
       id: requiredString(id),
@@ -136,6 +179,7 @@ export class FinancialEntity {
     const definition = validateDefinition(definitionInput)
     const entity = validateSerializedEntity(definition, entityInput)
     Workflow.from(definition.workflow, { currentState: entity.state })
+    mutableFieldsFor(definition, entity.state)
     return new FinancialEntity(definition, entity)
   }
 
@@ -193,6 +237,52 @@ export class FinancialEntity {
     }
     workflow.transition(target)
     return new FinancialEntity(this.definition, { ...this.value, state: workflow.currentState })
+  }
+
+  /**
+   * Applies a declared top-level Entity data mutation.
+   *
+   * Every targeted field must be listed as mutable for the Entity's current
+   * lifecycle state. Identity (`id`), Entity type (`type`), and lifecycle state
+   * (`state`) are not data fields and cannot be changed through this generic
+   * mutation boundary. A rejected mutation leaves identity, lifecycle state, and
+   * all Entity data unchanged. A terminal state is not treated as globally
+   * immutable; only its declared mutability list governs what may change.
+   *
+   * This method does not evaluate Entity Validation rules, business predicates,
+   * schemas, audit policy, authorization, or persistence.
+   *
+   * @param changesInput - Top-level data field changes keyed by field name.
+   * @returns A new Financial Entity containing the accepted data changes.
+   * @throws {ImmutableEntityError}
+   * When any targeted field is not declared mutable in the current state.
+   * @throws {InvalidEntityMutationError}
+   * When the mutation request shape is not recognized by this milestone.
+   *
+   * @see FINKORE_ENTITY_IMMUTABLE
+   * @see FINKORE_ENTITY_INVALID_MUTATION
+   * @see ENTITY-IDENTITY-002
+   * @see ENTITY-LIFECYCLE-003
+   * @see ENTITY-MUTABILITY-001
+   * @see ENTITY-MUTABILITY-002
+   * @see ENTITY-MUTABILITY-004
+   * @see ENTITY-MUTABILITY-006
+   * @see ENTITY-MUTABILITY-007
+   * @see ENTITY-ERROR-001
+   */
+  mutate(changesInput: unknown): FinancialEntity {
+    if (!isPlainRecord(this.value.data)) throw new InvalidEntityMutationError()
+    const changes = validateChanges(changesInput)
+    const mutableFields = mutableFieldsFor(this.definition, this.value.state)
+
+    for (const field of Object.keys(changes)) {
+      if (field === 'id' || field === 'type' || field === 'state' || !mutableFields.has(field)) {
+        throw new ImmutableEntityError()
+      }
+    }
+
+    const data = cloneJsonValue({ ...this.value.data, ...changes })
+    return new FinancialEntity(this.definition, { ...this.value, data })
   }
 
   /**

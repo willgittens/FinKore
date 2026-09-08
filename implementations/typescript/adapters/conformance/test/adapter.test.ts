@@ -22,7 +22,7 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('finkore.workflow.transition')).toBe(true)
     expect(adapter.supports('entity.create')).toBe(true)
     expect(adapter.supports('entity.transition')).toBe(true)
-    expect(adapter.supports('entity.mutate')).toBe(false)
+    expect(adapter.supports('entity.mutate')).toBe(true)
     expect(adapter.supports('finkore.audit.append')).toBe(true)
     expect(adapter.supports('finkore.audit.replace')).toBe(true)
     expect(adapter.supports('finkore.audit.remove')).toBe(true)
@@ -183,16 +183,19 @@ describe('TypeScript conformance adapter', () => {
     expect(report.summary).toEqual({ total: 20, passed: 20, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
-  it('passes current Entity identity and lifecycle milestone vectors', async () => {
+  it('passes current Entity identity, lifecycle, and mutability milestone vectors', async () => {
     const report = await createConformanceRunner({
       manifestPath,
       adapter: createTypeScriptConformanceAdapter(),
     }).run({ vectorIds: [
       'entity.create.initial-lifecycle-001',
+      'entity.mutate.mutable-field-001',
+      'entity.mutate.immutable-financial-field-001',
+      'entity.mutate.terminal-metadata-001',
       'entity.transition.success-identity-stable-001',
       'entity.transition.rejected-preserves-entity-001',
     ] })
 
-    expect(report.summary).toEqual({ total: 3, passed: 3, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 6, passed: 6, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 })

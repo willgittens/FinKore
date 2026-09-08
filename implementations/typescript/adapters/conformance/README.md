@@ -13,6 +13,7 @@ This milestone supports:
 - `finkore.money.subtract`
 - `finkore.workflow.transition`
 - `entity.create`
+- `entity.mutate`
 - `entity.transition`
 - `finkore.audit.append`
 - `finkore.audit.replace`
@@ -35,12 +36,13 @@ Contract operations in Draft 0.1.
 definition and initial-state behavior. `finkore.workflow.transition` is the
 canonical Workflow operation ID currently listed in the Agentic Contract.
 
-`entity.create` and `entity.transition` are conformance-local labels for the
-first Entity Identity and Lifecycle milestone. The current Agentic operation
+`entity.create`, `entity.mutate`, and `entity.transition` are conformance-local
+labels for the current Entity Identity, Lifecycle, and Mutability milestones.
+The current Agentic operation
 registry has not promoted Entity operations to canonical `finkore.entity.*`
 identifiers, so this adapter intentionally does not invent those identifiers.
-`entity.mutate` remains unsupported because declared field mutability and
-general validation rule engines are outside this milestone.
+`entity.mutate` support covers declared top-level field mutability only; general
+validation rule engines remain outside this milestone.
 
 Audit operation support covers FinKore Audit Draft 0.1: Events, Actors, append-only history, Change representation, Redaction, and portable Audit errors. Draft 0.1 does not define `audit.order` as an executable adapter operation.
 
@@ -64,5 +66,5 @@ facts.
 It does not claim support for rich condition expressions, approval quorum,
 N-of-M voting, parallel approval groups, delegation, withdrawal, supersession,
 escalation, dynamic approver resolution, authorization/RBAC, MCP, executable
-agent integrations, entity mutation, entity validation rule engines, workflow
-versioning, concurrency resolution, persistence, or broader guard frameworks.
+agent integrations, entity validation rule engines, workflow versioning,
+concurrency resolution, persistence, or broader guard frameworks.

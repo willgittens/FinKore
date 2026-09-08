@@ -29,7 +29,9 @@ export {
 export {
   EntityStateConflictError,
   FinKoreEntityError,
+  ImmutableEntityError,
   InvalidEntityIdentityError,
+  InvalidEntityMutationError,
   isFinKoreEntityError,
 } from './entities/errors.js'
 export { Currency, isValidCurrencyIdentifier } from './money/currency.js'

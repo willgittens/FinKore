@@ -1,7 +1,7 @@
 # FinKore TypeScript
 
 TypeScript reference implementation for the current FinKore Money, Workflow,
-Audit, Approvals, and first Entities Draft 0.1 milestones.
+Audit, Approvals, and current Entities Draft 0.1 milestones.
 
 FinKore Money Draft 0.1 is fully implemented by this TypeScript reference implementation. This statement applies only to the current Money specification draft; it does not imply that other FinKore domains are complete.
 
@@ -12,15 +12,16 @@ FinKore Audit Draft 0.1 is fully implemented by the TypeScript reference impleme
 FinKore Approvals Draft 0.1 is fully implemented by the TypeScript reference implementation. Approvals covers Approval Requirement representation, Approval Decision representation, Decision-to-Requirement binding, allowed Decision outcomes, Decision validation, relevant subject-fact effectiveness checks, append-only Decision history preservation, Approval Condition representation and evaluation-boundary validation, Approval Chain all-required ordered or unordered composition, declared rejection outcomes, current sequential actionable Requirement reporting, exclusion of explicitly not-applicable Requirements, duplicate Requirement rejection in chains, and portable Approval errors.
 
 FinKore Entities Draft 0.1 is partially implemented by the TypeScript reference
-implementation for the first Entity Identity and Lifecycle milestone. This
-covers caller-supplied stable Entity identity, declared identity scope,
-creation in the referenced Workflow initial state, exactly one current
-lifecycle state, valid directed lifecycle transitions, rejected transition
-failure atomicity, identity preservation through transitions, and preservation
-of primary Workflow portable error codes. General field mutability, validation
-rule engines, audit integration, correction/reversal, supersession, versioning,
-optimistic locking, persistence, authorization, and concrete financial entity
-types remain outside this milestone.
+implementation for Entity Identity, Lifecycle, and Mutability. This covers
+caller-supplied stable Entity identity, declared identity scope, creation in the
+referenced Workflow initial state, exactly one current lifecycle state, valid
+directed lifecycle transitions, rejected transition failure atomicity, identity
+preservation through transitions and mutations, declared top-level field
+mutability by lifecycle state, terminal-state mutability distinction, and
+preservation of primary Workflow portable error codes. Validation rule engines,
+audit integration, correction/reversal, supersession, versioning, optimistic
+locking, persistence, authorization, and concrete financial entity types remain
+outside this milestone.
 
 This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact compatible-currency numeric comparison, and explicit Money rounding.
 
@@ -31,7 +32,7 @@ explicit terminal-state detection, rejection of outgoing transitions in
 terminal definitions, terminal-state transition rejection and portable error
 precedence, successful state changes, and state preservation after rejection.
 
-It intentionally does not implement FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, distributed audit ordering, audit persistence, approval quorum, N-of-M voting, parallel approval groups, delegation, withdrawal, supersession, expiration, escalation, multi-stage approval graphs, dynamic approver resolution, authorization/RBAC, Workflow or Audit integration for approvals, entity mutability or validation engines, corrections, or reversals.
+It intentionally does not implement FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, distributed audit ordering, audit persistence, approval quorum, N-of-M voting, parallel approval groups, delegation, withdrawal, supersession, expiration, escalation, multi-stage approval graphs, dynamic approver resolution, authorization/RBAC, Workflow or Audit integration for approvals, entity validation engines, corrections, or reversals.
 
 The specification remains canonical. This package stores validated decimal amounts as strings and performs arithmetic and comparison with scaled integer arithmetic so observable behavior preserves exact base-10 semantics without using JavaScript `number`.
 
@@ -134,42 +135,52 @@ their own condition rule and supply the explicit boundary result.
 
 ## Current Entity API
 
-- `FinancialEntity.create(definition, id, data)` validates the Entity type, identity scope, caller-supplied identity, and referenced Workflow definition, then creates an Entity in the Workflow initial state.
+- `FinancialEntity.create(definition, id, data)` validates the Entity type, identity scope, caller-supplied identity, referenced Workflow definition, and mutability declaration for the initial lifecycle state, then creates an Entity in the Workflow initial state.
 - `FinancialEntity.from(definition, entity)` reconstructs an existing Entity observation when its type and state match the supplied definition and Workflow.
 - `financialEntity.id` returns the stable Entity identity exactly as supplied.
 - `financialEntity.state` returns the exactly one current lifecycle state.
 - `financialEntity.transition(target)` applies a valid directed lifecycle transition through the referenced Workflow and returns a new Entity preserving identity, type, and data.
+- `financialEntity.mutate(changes)` applies top-level data field changes only when every targeted field is declared mutable for the current lifecycle state, preserving identity and lifecycle state.
 - `financialEntity.toJSON()` returns a defensive portable observation `{ type, id, state, data }`.
 
-Entity failures currently introduced by this milestone expose
-`FINKORE_ENTITY_INVALID_IDENTITY` and `FINKORE_ENTITY_STATE_CONFLICT`.
+Entity failures currently introduced by these milestones expose
+`FINKORE_ENTITY_INVALID_IDENTITY`, `FINKORE_ENTITY_IMMUTABLE`,
+`FINKORE_ENTITY_INVALID_MUTATION`, and `FINKORE_ENTITY_STATE_CONFLICT`.
 Lifecycle transition failures can expose Workflow portable errors such as
 `FINKORE_WORKFLOW_INVALID_TRANSITION`, preserving the primary Workflow error
 code required by Entity error semantics.
 
-### Entity Stage 1 Requirement Inventory
+### Entity Stage 2 Requirement Inventory
 
-| Requirement | Stage 1 classification | Implementation and tests |
+| Requirement | Stage 2 classification | Implementation and tests |
 | --- | --- | --- |
 | `ENTITY-IDENTITY-001` | IN SCOPE | `FinancialEntity.create`/`from`; unit tests in `test/entities/entity.test.ts`; conformance `entity.create.initial-lifecycle-001`; mutation protection checks missing/generated identity. |
-| `ENTITY-IDENTITY-002` | IN SCOPE | `FinancialEntity.transition`; unit tests verify identity after success and failure; conformance `entity.transition.success-identity-stable-001`; mutation protection checks identity changed during transition. |
+| `ENTITY-IDENTITY-002` | IN SCOPE | `FinancialEntity.transition` and `mutate`; unit tests verify identity after success and failure; conformance `entity.transition.success-identity-stable-001` and mutate vectors; mutation protection checks identity changed during transition or mutation. |
 | `ENTITY-IDENTITY-003` | IN SCOPE | Entity IDs are opaque strings preserved exactly; unit tests verify no generation or inference; conformance currently uncovered. |
-| `ENTITY-IDENTITY-004` | OUT OF SCOPE FOR STAGE 1 | Revision/version/display-number behavior is not implemented by this milestone. |
-| `ENTITY-IDENTITY-005` | OUT OF SCOPE FOR STAGE 1 | Cross-entity uniqueness requires a composing-domain registry or persistence scope not defined by this milestone. |
-| `ENTITY-IDENTITY-006` | OUT OF SCOPE FOR STAGE 1 | Import/migration identity mapping is not implemented; `from` only reconstructs a supplied observation. |
+| `ENTITY-IDENTITY-004` | OUT OF SCOPE | Revision/version/display-number behavior is not implemented by this milestone. |
+| `ENTITY-IDENTITY-005` | OUT OF SCOPE | Cross-entity uniqueness requires a composing-domain registry or persistence scope not defined by this milestone. |
+| `ENTITY-IDENTITY-006` | OUT OF SCOPE | Import/migration identity mapping is not implemented; `from` only reconstructs a supplied observation. |
 | `ENTITY-LIFECYCLE-001` | IN SCOPE | Entity definitions require a valid referenced Workflow; unit tests and conformance `entity.create.initial-lifecycle-001`. |
 | `ENTITY-LIFECYCLE-002` | IN SCOPE | `FinancialEntity.create` uses `Workflow.create` initial state; unit tests and conformance `entity.create.initial-lifecycle-001`. |
-| `ENTITY-LIFECYCLE-003` | IN SCOPE | `FinancialEntity.transition` delegates to `Workflow.transition`; unit tests and conformance transition vectors; mutation protection checks no direct state assignment on rejection. |
-| `ENTITY-LIFECYCLE-004` | OUT OF SCOPE FOR STAGE 1 | Entity Audit integration remains unimplemented. |
-| `ENTITY-LIFECYCLE-005` | OUT OF SCOPE FOR STAGE 1 | Concrete domain consequences of states belong to composing domains. |
+| `ENTITY-LIFECYCLE-003` | IN SCOPE | `FinancialEntity.transition` delegates to `Workflow.transition`; `mutate` never changes lifecycle state; unit tests and conformance transition/mutate vectors. |
+| `ENTITY-LIFECYCLE-004` | OUT OF SCOPE | Entity Audit integration remains unimplemented. |
+| `ENTITY-LIFECYCLE-005` | OUT OF SCOPE | Concrete domain consequences of states belong to composing domains. |
 | `ENTITY-LIFECYCLE-006` | IN SCOPE | Serialized Entity has a single `state`; `from` validates it against Workflow; unit tests cover undeclared state rejection. |
-| `ENTITY-ERROR-001` | IN SCOPE | Transition failures leave original Entity unchanged; unit tests and conformance `entity.transition.rejected-preserves-entity-001`. |
+| `ENTITY-MUTABILITY-001` | IN SCOPE | `FinancialEntity` requires per-state mutable field declarations; unit tests and conformance `entity.mutate.mutable-field-001`. |
+| `ENTITY-MUTABILITY-002` | IN SCOPE | `FinancialEntity.mutate` rejects any undeclared targeted field with `FINKORE_ENTITY_IMMUTABLE`; unit tests and conformance `entity.mutate.immutable-financial-field-001`. |
+| `ENTITY-MUTABILITY-003` | OUT OF SCOPE | Entity Audit integration remains unimplemented. |
+| `ENTITY-MUTABILITY-004` | IN SCOPE | `mutate` validates all targets before returning a new Entity; unit tests and conformance immutable vector cover failure atomicity. |
+| `ENTITY-MUTABILITY-005` | OUT OF SCOPE | Audit history attachment/preservation is not implemented. |
+| `ENTITY-MUTABILITY-006` | IN SCOPE | Terminal states use their declared mutability list, not global immutability; unit tests and conformance `entity.mutate.terminal-metadata-001`. |
+| `ENTITY-MUTABILITY-007` | IN SCOPE | Declared terminal metadata mutation is allowed by mutability policy; unit tests and conformance `entity.mutate.terminal-metadata-001`. |
+| `ENTITY-ERROR-001` | IN SCOPE | Transition and mutation failures leave original Entity unchanged; unit tests and conformance rejected transition/immutable mutation vectors. |
 | `ENTITY-ERROR-004` | IN SCOPE | Workflow transition errors retain Workflow codes; unit tests and conformance `entity.transition.rejected-preserves-entity-001`. |
 
-Mutability requirements (`ENTITY-MUTABILITY-*`) and general validation
-requirements (`ENTITY-VALIDATION-*`) are out of scope for this milestone except
-where existing lifecycle/identity behavior must avoid partial observable
-changes. No Stage 1 blocking spec gap was found.
+General validation requirements (`ENTITY-VALIDATION-*`) remain out of scope for
+this milestone except where existing lifecycle and mutability behavior must
+avoid partial observable changes. The existing `entity.validation.complete-result-001`
+vector is normative for the future Validation milestone, not implemented here.
+No Stage 2 blocking spec gap was found.
 
 ## API Documentation
 

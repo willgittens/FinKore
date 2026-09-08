@@ -50,15 +50,17 @@ export type EntityErrorCode =
   | 'FINKORE_ENTITY_VALIDATION_FAILED'
 
 /**
- * Stage 1 Financial Entity definition input.
+ * Financial Entity definition input for the current identity, lifecycle, and
+ * mutability milestones.
  *
  * This milestone validates the composing-domain type, declared identity scope,
- * and referenced Workflow. Field mutability policy, validation rule engines,
- * audit policy, persistence, versioning, and concrete financial invariants are
- * outside this Entity identity/lifecycle milestone.
+ * referenced Workflow, and top-level field mutability declarations. Validation
+ * rule engines, audit policy, persistence, versioning, and concrete financial
+ * invariants remain outside this Entity milestone.
  *
  * @see ENTITY-IDENTITY-001
  * @see ENTITY-LIFECYCLE-001
+ * @see ENTITY-MUTABILITY-001
  * @see ENTITY-DEFINITION-001
  */
 export interface EntityDefinitionInput {
@@ -70,13 +72,18 @@ export interface EntityDefinitionInput {
 
   /** Workflow definition that governs lifecycle state. */
   readonly workflow?: WorkflowDefinitionInput | unknown
+
+  /** Top-level data fields declared mutable by lifecycle state. */
+  readonly mutability?: unknown
 }
 
 /**
- * Validated Stage 1 Financial Entity definition.
+ * Validated Financial Entity definition for identity, lifecycle, and
+ * mutability behavior.
  *
  * @see ENTITY-IDENTITY-001
  * @see ENTITY-LIFECYCLE-001
+ * @see ENTITY-MUTABILITY-001
  */
 export interface EntityDefinition {
   /** Composing-domain entity type identifier. */
@@ -87,6 +94,9 @@ export interface EntityDefinition {
 
   /** Workflow definition that governs lifecycle state. */
   readonly workflow: WorkflowDefinitionInput | unknown
+
+  /** Top-level data fields declared mutable by lifecycle state. */
+  readonly mutability: Readonly<Record<WorkflowStateIdentifier, readonly string[]>>
 }
 
 /**
@@ -108,6 +118,6 @@ export interface SerializedFinancialEntity {
   /** Exactly one current lifecycle state. */
   readonly state: WorkflowStateIdentifier
 
-  /** Composing-domain data carried without interpretation in Stage 1. */
+  /** Composing-domain data carried without validation-rule interpretation. */
   readonly data: unknown
 }

@@ -109,6 +109,18 @@ function inputEntityTransition(input: unknown): {
   return { definition: candidate.definition, entity: candidate.entity, target: candidate.target }
 }
 
+function inputEntityMutate(input: unknown): {
+  readonly definition: unknown
+  readonly entity: unknown
+  readonly changes: unknown
+} {
+  if (typeof input !== 'object' || input === null || !('definition' in input) || !('entity' in input)) {
+    return { definition: undefined, entity: undefined, changes: undefined }
+  }
+  const candidate = input as { readonly definition: unknown; readonly entity: unknown; readonly changes?: unknown }
+  return { definition: candidate.definition, entity: candidate.entity, changes: candidate.changes }
+}
+
 function inputAuditHistory(input: unknown): { readonly history: unknown } {
   if (typeof input !== 'object' || input === null || !('history' in input)) {
     return { history: undefined }
@@ -499,6 +511,33 @@ function executeEntityTransition(request: AdapterRequest): NormalizedResult {
 }
 
 /**
+ * Executes the conformance-local Entity mutability boundary.
+ *
+ * The adapter reconstructs the supplied Entity observation, delegates declared
+ * field mutability, terminal-state distinction, and mutation atomicity to the
+ * core Entity API, and reports the original Entity after rejected mutations.
+ */
+function executeEntityMutate(request: AdapterRequest): NormalizedResult {
+  const input = inputEntityMutate(request.input)
+  let entity: FinancialEntity | undefined
+  try {
+    entity = FinancialEntity.from(input.definition, input.entity)
+    const mutated = entity.mutate(input.changes)
+    return {
+      status: 'success',
+      value: mutated.toJSON(),
+      observations: { identity: mutated.id, state: mutated.state },
+    }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && entity !== undefined) {
+      return { ...result, observations: { entity: entity.toJSON() } }
+    }
+    return result
+  }
+}
+
+/**
  * Executes canonical Audit append through the TypeScript core API.
  *
  * The adapter reconstructs the supplied logical history, delegates event
@@ -709,6 +748,7 @@ export const operationHandlers = {
   'finkore.money.negate': executeMoneyNegate,
   'finkore.workflow.transition': executeWorkflowTransition,
   'entity.create': executeEntityCreate,
+  'entity.mutate': executeEntityMutate,
   'entity.transition': executeEntityTransition,
   'finkore.audit.append': executeAuditAppend,
   'finkore.audit.replace': executeAuditReplace,

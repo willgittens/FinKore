@@ -2,23 +2,33 @@ import { describe, expect, it } from 'vitest'
 import {
   EntityStateConflictError,
   FinKoreEntityError,
+  ImmutableEntityError,
   InvalidEntityIdentityError,
+  InvalidEntityMutationError,
   isFinKoreEntityError,
 } from '../../src/index.js'
 
 describe('Entity errors', () => {
   it('exposes current portable Entity codes used by the identity and lifecycle milestone', () => {
     expect(new InvalidEntityIdentityError().code).toBe('FINKORE_ENTITY_INVALID_IDENTITY')
+    expect(new ImmutableEntityError().code).toBe('FINKORE_ENTITY_IMMUTABLE')
+    expect(new InvalidEntityMutationError().code).toBe('FINKORE_ENTITY_INVALID_MUTATION')
     expect(new EntityStateConflictError().code).toBe('FINKORE_ENTITY_STATE_CONFLICT')
     expect(new FinKoreEntityError('FINKORE_ENTITY_INVALID_MUTATION', 'custom').name).toBe('FinKoreEntityError')
     expect(new InvalidEntityIdentityError().name).toBe('InvalidEntityIdentityError')
+    expect(new ImmutableEntityError().name).toBe('ImmutableEntityError')
+    expect(new InvalidEntityMutationError().name).toBe('InvalidEntityMutationError')
     expect(new EntityStateConflictError().name).toBe('EntityStateConflictError')
     expect(new InvalidEntityIdentityError().message).toBe('Invalid Entity identity')
+    expect(new ImmutableEntityError().message).toBe('Entity data is immutable in the current state')
+    expect(new InvalidEntityMutationError().message).toBe('Invalid Entity mutation')
     expect(new EntityStateConflictError().message).toBe('Entity state conflict')
   })
 
   it('narrows FinKore Entity errors without relying on messages', () => {
     expect(isFinKoreEntityError(new InvalidEntityIdentityError())).toBe(true)
+    expect(isFinKoreEntityError(new ImmutableEntityError())).toBe(true)
+    expect(isFinKoreEntityError(new InvalidEntityMutationError())).toBe(true)
     expect(isFinKoreEntityError(new FinKoreEntityError('FINKORE_ENTITY_INVALID_MUTATION', 'custom'))).toBe(true)
     expect(isFinKoreEntityError(new Error('Invalid Entity identity'))).toBe(false)
   })
@@ -40,5 +50,17 @@ describe('Entity errors', () => {
 
     expect(error.code).toBe('FINKORE_ENTITY_STATE_CONFLICT')
     expect(error.details).toBe(details)
+  })
+
+  it('preserves mutability diagnostic details when supplied', () => {
+    const immutableDetails = { field: 'amount' }
+    const mutationDetails = { field: 'changes' }
+    const immutable = new ImmutableEntityError('custom', immutableDetails)
+    const invalidMutation = new InvalidEntityMutationError('custom', mutationDetails)
+
+    expect(immutable.code).toBe('FINKORE_ENTITY_IMMUTABLE')
+    expect(immutable.details).toBe(immutableDetails)
+    expect(invalidMutation.code).toBe('FINKORE_ENTITY_INVALID_MUTATION')
+    expect(invalidMutation.details).toBe(mutationDetails)
   })
 })

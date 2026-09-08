@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest'
 import {
   EntityStateConflictError,
   FinancialEntity,
+  ImmutableEntityError,
   InvalidEntityIdentityError,
+  InvalidEntityMutationError,
   InvalidWorkflowStateError,
   InvalidWorkflowTransitionError,
   WorkflowTerminalStateError,
@@ -19,6 +21,11 @@ const invoiceDefinition = {
       { source: 'DRAFT', target: 'SUBMITTED' },
       { source: 'SUBMITTED', target: 'FINAL' },
     ],
+  },
+  mutability: {
+    DRAFT: ['amount', 'memo', 'deliveryStatus', 'emptyValue', 'falseValue', 'nullValue', 'zeroValue', 'arrayValue', 'objectValue'],
+    SUBMITTED: ['memo'],
+    FINAL: ['deliveryStatus'],
   },
 }
 
@@ -151,5 +158,190 @@ describe('Financial Entity identity and lifecycle', () => {
       state: 'DRAFT',
       data: invoiceData,
     })
+  })
+})
+
+describe('Financial Entity mutability', () => {
+  it('mutates one declared mutable field while preserving identity, lifecycle state, and unrelated data', () => {
+    const entity = FinancialEntity.create(invoiceDefinition, 'inv-42', invoiceData)
+
+    const mutated = entity.mutate({ memo: 'revised' })
+
+    expect(mutated).not.toBe(entity)
+    expect(mutated.toJSON()).toEqual({
+      type: 'invoice',
+      id: 'inv-42',
+      state: 'DRAFT',
+      data: {
+        amount: { amount: '100.00', currency: 'EUR' },
+        memo: 'revised',
+        deliveryStatus: 'NEW',
+      },
+    })
+    expect(entity.toJSON()).toEqual({
+      type: 'invoice',
+      id: 'inv-42',
+      state: 'DRAFT',
+      data: invoiceData,
+    })
+  })
+
+  it('accepts falsey and structured values for declared mutable fields without truthiness validation', () => {
+    const entity = FinancialEntity.create(invoiceDefinition, 'inv-42', invoiceData)
+
+    const mutated = entity.mutate({
+      emptyValue: '',
+      falseValue: false,
+      nullValue: null,
+      zeroValue: 0,
+      arrayValue: [],
+      objectValue: {},
+    })
+
+    expect(mutated.toJSON()).toEqual({
+      type: 'invoice',
+      id: 'inv-42',
+      state: 'DRAFT',
+      data: {
+        ...invoiceData,
+        emptyValue: '',
+        falseValue: false,
+        nullValue: null,
+        zeroValue: 0,
+        arrayValue: [],
+        objectValue: {},
+      },
+    })
+  })
+
+  it('rejects immutable fields with the portable immutable code and no partial data change', () => {
+    const entity = FinancialEntity.from(invoiceDefinition, {
+      type: 'invoice',
+      id: 'inv-42',
+      state: 'SUBMITTED',
+      data: invoiceData,
+    })
+    const before = entity.toJSON()
+
+    expect(() => entity.mutate({ amount: { amount: '200.00', currency: 'EUR' }, memo: 'should-not-stick' })).toThrow(
+      ImmutableEntityError,
+    )
+
+    expect(entity.toJSON()).toEqual(before)
+  })
+
+  it('does not allow identity or lifecycle state to be changed through generic mutation', () => {
+    const permissiveDefinition = {
+      ...invoiceDefinition,
+      mutability: {
+        ...invoiceDefinition.mutability,
+        DRAFT: [...invoiceDefinition.mutability.DRAFT, 'id', 'type', 'state'],
+      },
+    }
+    const entity = FinancialEntity.create(permissiveDefinition, 'inv-42', invoiceData)
+    const before = entity.toJSON()
+
+    expect(() => entity.mutate({ id: 'inv-99' })).toThrow(ImmutableEntityError)
+    expect(() => entity.mutate({ state: 'FINAL' })).toThrow(ImmutableEntityError)
+    expect(() => entity.mutate({ type: 'payment' })).toThrow(ImmutableEntityError)
+
+    expect(entity.toJSON()).toEqual(before)
+  })
+
+  it('rejects unknown or malformed mutation targets without changing the entity', () => {
+    const entity = FinancialEntity.create(invoiceDefinition, 'inv-42', invoiceData)
+    const before = entity.toJSON()
+
+    expect(() => entity.mutate({ unknownField: 'value' })).toThrow(ImmutableEntityError)
+    expect(() => entity.mutate(null)).toThrow(InvalidEntityMutationError)
+    expect(() => entity.mutate([])).toThrow(InvalidEntityMutationError)
+    expect(() => entity.mutate({})).toThrow(InvalidEntityMutationError)
+
+    expect(entity.toJSON()).toEqual(before)
+  })
+
+  it('rejects mutation when entity data is not a field record', () => {
+    const entity = FinancialEntity.create(invoiceDefinition, 'inv-42', 'not-field-data')
+
+    expect(() => entity.mutate({ memo: 'revised' })).toThrow(InvalidEntityMutationError)
+  })
+
+  it('allows declared terminal-state metadata without making every terminal field mutable', () => {
+    const entity = FinancialEntity.from(invoiceDefinition, {
+      type: 'invoice',
+      id: 'inv-42',
+      state: 'FINAL',
+      data: invoiceData,
+    })
+
+    const mutated = entity.mutate({ deliveryStatus: 'SENT' })
+
+    expect(mutated.toJSON()).toEqual({
+      type: 'invoice',
+      id: 'inv-42',
+      state: 'FINAL',
+      data: {
+        amount: { amount: '100.00', currency: 'EUR' },
+        memo: 'initial',
+        deliveryStatus: 'SENT',
+      },
+    })
+    expect(() => entity.mutate({ amount: { amount: '200.00', currency: 'EUR' } })).toThrow(ImmutableEntityError)
+  })
+
+  it('defensively snapshots accepted structured mutation values', () => {
+    const entity = FinancialEntity.create(invoiceDefinition, 'inv-42', invoiceData)
+    const newObject = { nested: 1 }
+    const mutated = entity.mutate({ objectValue: newObject })
+
+    newObject.nested = 2
+
+    expect(mutated.toJSON()).toEqual({
+      type: 'invoice',
+      id: 'inv-42',
+      state: 'DRAFT',
+      data: {
+        ...invoiceData,
+        objectValue: { nested: 1 },
+      },
+    })
+  })
+
+  it('rejects definitions without per-state mutability declarations', () => {
+    expect(() => FinancialEntity.create({ ...invoiceDefinition, mutability: undefined }, 'inv-42', invoiceData)).toThrow(
+      InvalidEntityMutationError,
+    )
+    expect(() =>
+      FinancialEntity.create({ ...invoiceDefinition, mutability: { DRAFT: 'memo', SUBMITTED: ['memo'], FINAL: [] } }, 'inv-42', invoiceData),
+    ).toThrow(InvalidEntityMutationError)
+    expect(() =>
+      FinancialEntity.create({ ...invoiceDefinition, mutability: { DRAFT: [7], SUBMITTED: ['memo'], FINAL: [] } }, 'inv-42', invoiceData),
+    ).toThrow(InvalidEntityMutationError)
+    expect(() =>
+      FinancialEntity.create({ ...invoiceDefinition, mutability: { DRAFT: [''], SUBMITTED: ['memo'], FINAL: [] } }, 'inv-42', invoiceData),
+    ).toThrow(InvalidEntityMutationError)
+    expect(() =>
+      FinancialEntity.create({ ...invoiceDefinition, mutability: { '': ['memo'], DRAFT: ['memo'], SUBMITTED: ['memo'], FINAL: [] } }, 'inv-42', invoiceData),
+    ).toThrow(InvalidEntityMutationError)
+    expect(() =>
+      FinancialEntity.create(
+        {
+          ...invoiceDefinition,
+          workflow: { ...invoiceDefinition.workflow, initialState: 'SUBMITTED' },
+          mutability: { DRAFT: ['memo'], FINAL: [] },
+        },
+        'inv-42',
+        invoiceData,
+      ),
+    ).toThrow(InvalidEntityMutationError)
+    expect(() =>
+      FinancialEntity.create({ ...invoiceDefinition, mutability: { DRAFT: ['memo'] } }, 'inv-42', invoiceData),
+    ).not.toThrow()
+    expect(() =>
+      FinancialEntity.from(
+        { ...invoiceDefinition, mutability: { DRAFT: ['memo'] } },
+        { type: 'invoice', id: 'inv-42', state: 'FINAL', data: invoiceData },
+      ),
+    ).toThrow(InvalidEntityMutationError)
   })
 })

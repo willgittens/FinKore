@@ -56,6 +56,48 @@ export class InvalidEntityIdentityError extends FinKoreEntityError {
 
 /**
  * TypeScript representation of the portable
+ * `FINKORE_ENTITY_IMMUTABLE` domain error.
+ *
+ * @see FINKORE_ENTITY_IMMUTABLE
+ * @see ENTITY-MUTABILITY-002
+ * @see ENTITY-MUTABILITY-004
+ * @see ENTITY-ERROR-001
+ */
+export class ImmutableEntityError extends FinKoreEntityError {
+  /**
+   * Creates an immutable Entity data error.
+   *
+   * @param message - Non-normative human-readable message.
+   * @param details - Optional implementation-provided diagnostic context.
+   */
+  constructor(message = 'Entity data is immutable in the current state', details?: unknown) {
+    super('FINKORE_ENTITY_IMMUTABLE', message, { details })
+    this.name = 'ImmutableEntityError'
+  }
+}
+
+/**
+ * TypeScript representation of the portable
+ * `FINKORE_ENTITY_INVALID_MUTATION` domain error.
+ *
+ * @see FINKORE_ENTITY_INVALID_MUTATION
+ * @see ENTITY-ERROR-001
+ */
+export class InvalidEntityMutationError extends FinKoreEntityError {
+  /**
+   * Creates an invalid-mutation Entity error.
+   *
+   * @param message - Non-normative human-readable message.
+   * @param details - Optional implementation-provided diagnostic context.
+   */
+  constructor(message = 'Invalid Entity mutation', details?: unknown) {
+    super('FINKORE_ENTITY_INVALID_MUTATION', message, { details })
+    this.name = 'InvalidEntityMutationError'
+  }
+}
+
+/**
+ * TypeScript representation of the portable
  * `FINKORE_ENTITY_STATE_CONFLICT` domain error.
  *
  * @see FINKORE_ENTITY_STATE_CONFLICT

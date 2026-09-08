@@ -293,7 +293,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 - Workflow: external fact capture, definition migration, transition identifiers, and concurrency remain open.
 - Audit: unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, and causal sequencing remain open.
 - Approvals: condition syntax, subject-state interchange, relevant-fact policy, supersession, withdrawal, expiration, delegation, quorum, and rejection codes remain open for future drafts; current standalone Draft 0.1 conformance has no uncovered mandatory Approval requirements.
-- Entities: concrete fields, lifecycle policy, validation catalog, import result, concurrency, and correction or reversal behavior remain outside Core.
+- Entities: concrete fields, lifecycle policy, validation catalog, import result, concurrency, and correction or reversal behavior remain outside Core. The current TypeScript Stage 2 implementation covers the conformance-local `entity.mutate` mutability vectors but intentionally leaves the validation-specific mutate vector for a later Validation milestone.
 
 Vectors do not settle these open questions.
 
