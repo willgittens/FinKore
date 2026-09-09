@@ -26,6 +26,9 @@ describe('Approval requirements', () => {
     expect(() => ApprovalRequirement.from([])).toThrow(InvalidApprovalDecisionError)
     expect(() => ApprovalRequirement.from(7)).toThrow(InvalidApprovalDecisionError)
     expect(() => ApprovalRequirement.from('finance-review')).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalRequirement.from(Object.assign(() => undefined, requirement)),
+    ).toThrow(InvalidApprovalDecisionError)
     expect(() => ApprovalRequirement.from({ ...requirement, id: '' })).toThrow(InvalidApprovalDecisionError)
     expect(() => ApprovalRequirement.from({ ...requirement, id: undefined })).toThrow(InvalidApprovalDecisionError)
   })

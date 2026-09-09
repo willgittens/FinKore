@@ -14,7 +14,7 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Entities | 34 | 29 | 3 | 2 | 23 | 0 | 0 | 11 | 0 | 0 |
 | **Total** | **213** | **184** | **15** | **14** | **149** | **0** | **0** | **64** | **0** | **0** |
 
-The suite contains 131 vectors. Overall: **149 covered (70.0%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **64 not directly testable (30.0%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
+The suite contains 138 vectors. Overall: **149 covered (70.0%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **64 not directly testable (30.0%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current draft. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -182,8 +182,8 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-CONDITION-005 | Approvals | MUST / MUST NOT | COVERED | approval.condition.applicable-explicit-001, approval.condition.not-applicable-explicit-001 |
 | APPROVAL-CONDITION-006 | Approvals | MUST / MUST NOT | COVERED | approval.condition.falsey-facts-present-001, approval.condition.missing-fact-001, approval.condition.missing-result-unresolved-001 |
 | APPROVAL-DECISION-001 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.wrong-association-001 |
-| APPROVAL-DECISION-002 | Approvals | MUST / MUST NOT | COVERED | approval.decision.subject-facts-changed-001, approval.decision.subject-facts-unchanged-001 |
-| APPROVAL-DECISION-003 | Approvals | MUST / MUST NOT | COVERED | approval.decision.subject-facts-changed-001, approval.decision.subject-facts-unchanged-001 |
+| APPROVAL-DECISION-002 | Approvals | MUST / MUST NOT | COVERED | approval.decision.relevant-path-unchanged-unrelated-fact-changed-001, approval.decision.subject-facts-array-order-changed-001, approval.decision.subject-facts-array-to-object-001, approval.decision.subject-facts-changed-001, approval.decision.subject-facts-nested-shape-changed-001, approval.decision.subject-facts-object-key-changed-001, approval.decision.subject-facts-object-key-order-001, approval.decision.subject-facts-object-to-array-001, approval.decision.subject-facts-unchanged-001 |
+| APPROVAL-DECISION-003 | Approvals | MUST / MUST NOT | COVERED | approval.decision.relevant-path-unchanged-unrelated-fact-changed-001, approval.decision.subject-facts-array-order-changed-001, approval.decision.subject-facts-array-to-object-001, approval.decision.subject-facts-changed-001, approval.decision.subject-facts-nested-shape-changed-001, approval.decision.subject-facts-object-key-changed-001, approval.decision.subject-facts-object-key-order-001, approval.decision.subject-facts-object-to-array-001, approval.decision.subject-facts-unchanged-001 |
 | APPROVAL-DECISION-004 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001 |
 | APPROVAL-DECISION-005 | Approvals | MUST / MUST NOT | COVERED | approval.decision.pending-invalid-001 |
 | APPROVAL-DECISION-006 | Approvals | MUST / MUST NOT | COVERED | approval.decision.timestamp-ambiguous-001 |
@@ -264,6 +264,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-CHAIN-003 | COVERED | `approval.chain.unordered-not-sequential-001` observes that unordered Chains report aggregate state rather than sequential active work. |
 | APPROVAL-CHAIN-008 | COVERED | `approval.chain.deterministic-declared-order-001` observes deterministic sequential evaluation from declared order rather than sorted identifiers or ambient ordering. |
 | APPROVAL-DECISION-006 | COVERED | `approval.decision.timestamp-ambiguous-001` observes that serialized Decision timestamps must identify an unambiguous instant with an explicit offset. |
+| APPROVAL-DECISION-003 | COVERED | Decision vectors observe that relevant facts remain effective only under structural, deterministic JSON equivalence and caller-declared relevant paths: object key order is non-semantic, unrelated fact changes outside a relevant path are ignored, arrays remain order-sensitive, and object/array, key-set, null, and nested shape changes make the Decision ineffective. |
 | APPROVAL-DECISION-007 | COVERED | `approval.decision.append-history-001` observes append-only logical Decision history: committing a later Decision preserves prior committed Decisions. |
 | APPROVAL-DECISION-008 | NOT DIRECTLY TESTABLE | The requirement is conditional: it applies only when a composing domain requires an Audit Event for an Approval Decision. Standalone Approvals Draft 0.1 intentionally has no Audit coupling, and no current Approval operation emits Audit Events. |
 | APPROVAL-ERROR-001 | COVERED | Failing Decision vectors with history observations, including `approval.decision.timestamp-ambiguous-001`, observe that failed Decision attempts do not change Approval state or Chain inputs. |
@@ -324,4 +325,4 @@ Vectors do not settle these open questions.
 
 **READY FOR CONFORMANCE RUNNER**
 
-The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. FinKore Core Draft 0.1 cross-domain closure has not yet been performed.
+The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. FinKore Core Draft 0.1 cross-domain closure is complete for these directly testable mandatory requirements.

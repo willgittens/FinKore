@@ -31,6 +31,9 @@ describe('Approval chains', () => {
     expect(() => ApprovalChain.from([])).toThrow(InvalidApprovalChainError)
     expect(() => ApprovalChain.from(7)).toThrow(InvalidApprovalChainError)
     expect(() => ApprovalChain.from('manager')).toThrow(InvalidApprovalChainError)
+    expect(() =>
+      ApprovalChain.from(Object.assign(() => undefined, unorderedChain)),
+    ).toThrow(InvalidApprovalChainError)
     expect(() => ApprovalChain.from({ ...unorderedChain, mode: 'PARALLEL' })).toThrow(InvalidApprovalChainError)
     expect(() => ApprovalChain.from({ ...unorderedChain, mode: undefined })).toThrow(InvalidApprovalChainError)
     expect(() => ApprovalChain.from({ ...unorderedChain, requirements: [] })).toThrow(InvalidApprovalChainError)

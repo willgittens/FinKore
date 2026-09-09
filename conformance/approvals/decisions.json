@@ -727,6 +727,452 @@
       ]
     },
     {
+      "id": "approval.decision.subject-facts-object-key-order-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-DECISION-003"
+      ],
+      "description": "Keeps a decision effective when relevant object facts are structurally equal despite member order.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "facts": {
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              },
+              "approvals": [
+                "manager",
+                "finance"
+              ]
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "facts": {
+            "approvals": [
+              "manager",
+              "finance"
+            ],
+            "amount": {
+              "currency": "EUR",
+              "amount": "9000.00"
+            }
+          }
+        },
+        "relevantFactPaths": [
+          "facts"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "EFFECTIVE"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "object-member-order-treated-as-semantic"
+      ]
+    },
+    {
+      "id": "approval.decision.relevant-path-unchanged-unrelated-fact-changed-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-DECISION-003"
+      ],
+      "description": "Keeps a decision effective when the declared relevant nested path is unchanged even if an unrelated subject fact changes.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "facts": {
+              "approvalLevels": [
+                "manager",
+                "finance"
+              ],
+              "note": "original"
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "facts": {
+            "approvalLevels": [
+              "manager",
+              "finance"
+            ],
+            "note": "changed"
+          }
+        },
+        "relevantFactPaths": [
+          "facts.approvalLevels"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "EFFECTIVE"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "relevant-path-ignored",
+        "full-subject-compared-despite-relevant-paths"
+      ]
+    },
+    {
+      "id": "approval.decision.subject-facts-object-to-array-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-DECISION-003"
+      ],
+      "description": "Does not keep a decision effective when a relevant object fact becomes an array.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "facts": {}
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "facts": []
+        },
+        "relevantFactPaths": [
+          "facts"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "INEFFECTIVE"
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "object-array-shape-collapsed",
+        "fact-shape-change-ignored"
+      ]
+    },
+    {
+      "id": "approval.decision.subject-facts-array-to-object-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-DECISION-003"
+      ],
+      "description": "Does not keep a decision effective when a relevant array fact becomes an object with matching numeric member names.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "facts": [
+              1,
+              2
+            ]
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "facts": {
+            "0": 1,
+            "1": 2
+          }
+        },
+        "relevantFactPaths": [
+          "facts"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "INEFFECTIVE"
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "array-object-shape-collapsed",
+        "fact-shape-change-ignored"
+      ]
+    },
+    {
+      "id": "approval.decision.subject-facts-object-key-changed-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-DECISION-003"
+      ],
+      "description": "Does not keep a decision effective when relevant object member names change.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "facts": {
+              "a": 1
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "facts": {
+            "b": 1
+          }
+        },
+        "relevantFactPaths": [
+          "facts"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "INEFFECTIVE"
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "object-keys-ignored",
+        "fact-shape-change-ignored"
+      ]
+    },
+    {
+      "id": "approval.decision.subject-facts-nested-shape-changed-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-DECISION-003"
+      ],
+      "description": "Does not keep a decision effective when a nested relevant array fact becomes an object.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "facts": {
+              "approvals": [
+                "manager",
+                "finance"
+              ]
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "facts": {
+            "approvals": {
+              "0": "manager",
+              "1": "finance"
+            }
+          }
+        },
+        "relevantFactPaths": [
+          "facts"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "INEFFECTIVE"
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "nested-fact-shape-collapsed",
+        "fact-shape-change-ignored"
+      ]
+    },
+    {
+      "id": "approval.decision.subject-facts-array-order-changed-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-DECISION-003"
+      ],
+      "description": "Does not keep a decision effective when relevant array member order changes.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "facts": [
+              "manager",
+              "finance"
+            ]
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "facts": [
+            "finance",
+            "manager"
+          ]
+        },
+        "relevantFactPaths": [
+          "facts"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "INEFFECTIVE"
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "array-order-ignored",
+        "fact-shape-change-ignored"
+      ]
+    },
+    {
       "id": "approval.condition.missing-fact-001",
       "spec": "approvals/conditions",
       "requirements": [

@@ -11,7 +11,7 @@ FinKore Audit Draft 0.1 is fully implemented by the TypeScript reference impleme
 
 FinKore Approvals Draft 0.1 is fully implemented by the TypeScript reference implementation. Approvals covers Approval Requirement representation, Approval Decision representation, Decision-to-Requirement binding, allowed Decision outcomes, Decision validation, relevant subject-fact effectiveness checks, append-only Decision history preservation, Approval Condition representation and evaluation-boundary validation, Approval Chain all-required ordered or unordered composition, declared rejection outcomes, current sequential actionable Requirement reporting, exclusion of explicitly not-applicable Requirements, duplicate Requirement rejection in chains, and portable Approval errors.
 
-FinKore Entities Draft 0.1 is partially implemented by the TypeScript reference
+FinKore Entities Draft 0.1 is fully implemented by the TypeScript reference
 implementation for Entity Identity, Lifecycle, Mutability, and the current
 Validation milestone. This covers caller-supplied stable Entity identity,
 declared identity scope, creation in the referenced Workflow initial state,

@@ -62,31 +62,45 @@ function hasPath(value: unknown, path: string): boolean {
 }
 
 function valueAtPath(value: unknown, path: string): unknown {
-  return path.split('.').reduce<unknown>((current, segment) => {
-    if (!isPlainRecord(current)) return undefined
-    return current[segment]
-  }, value)
+  let current = value
+  for (const segment of path.split('.')) {
+    current = (current as Readonly<Record<string, unknown>>)[segment]
+  }
+  return current
+}
+
+type JsonFactShape = 'array' | 'record'
+
+function jsonFactShape(value: unknown): JsonFactShape | undefined {
+  if (Array.isArray(value)) return 'array'
+  if (isPlainRecord(value)) return 'record'
+  return undefined
 }
 
 function jsonEquivalent(left: unknown, right: unknown): boolean {
   if (Object.is(left, right)) return true
-  if (Array.isArray(left) || Array.isArray(right)) {
-    return (
-      Array.isArray(left) &&
-      Array.isArray(right) &&
-      left.length === right.length &&
-      left.every((item, index) => jsonEquivalent(item, right[index]))
-    )
+
+  const leftShape = jsonFactShape(left)
+  const rightShape = jsonFactShape(right)
+  if (leftShape !== rightShape) return false
+
+  if (leftShape === 'array') {
+    const leftArray = left as readonly unknown[]
+    const rightArray = right as readonly unknown[]
+    return leftArray.length === rightArray.length && leftArray.every((item, index) => jsonEquivalent(item, rightArray[index]))
   }
-  if (isPlainRecord(left) || isPlainRecord(right)) {
-    if (!isPlainRecord(left) || !isPlainRecord(right)) return false
-    const leftKeys = Object.keys(left).sort()
-    const rightKeys = Object.keys(right).sort()
+
+  if (leftShape === 'record') {
+    const leftRecord = left as Readonly<Record<string, unknown>>
+    const rightRecord = right as Readonly<Record<string, unknown>>
+    const leftKeys = Object.keys(leftRecord).sort()
+    const rightKeys = Object.keys(rightRecord).sort()
     return (
       leftKeys.length === rightKeys.length &&
-      leftKeys.every((key, index) => key === rightKeys[index] && jsonEquivalent(left[key], right[key]))
+      leftKeys.every((key, index) => key === rightKeys[index] && jsonEquivalent(leftRecord[key], rightRecord[key]))
     )
   }
+
   return false
 }
 

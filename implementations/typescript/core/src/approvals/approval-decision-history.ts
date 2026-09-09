@@ -123,7 +123,7 @@ export class ApprovalDecisionHistory {
       }
       const state = requirement.stateForOutcome(associatedDecision.outcome)
       if (state === 'REJECTED') return 'REJECTED'
-      if (state === 'APPROVED') hasEffectiveApproval = true
+      hasEffectiveApproval = true
     }
     return hasEffectiveApproval ? 'APPROVED' : 'PENDING'
   }

@@ -325,6 +325,127 @@ describe('Approval decisions', () => {
     ).toBe('INEFFECTIVE')
   })
 
+  it('makes decisions ineffective when relevant fact JSON shape changes', () => {
+    const base = {
+      ...decision,
+      subjectFacts: {
+        facts: {
+          amount: { amount: '9000.00', currency: 'EUR' },
+          approvals: ['manager', 'finance'],
+          nullable: null,
+        },
+      },
+    }
+    const approvalDecision = ApprovalDecision.from(base)
+
+    expect(
+      approvalDecision.evaluateEffectiveness(
+        {
+          facts: {
+            nullable: null,
+            approvals: ['manager', 'finance'],
+            amount: { currency: 'EUR', amount: '9000.00' },
+          },
+        },
+        ['facts'],
+      ),
+    ).toBe('EFFECTIVE')
+
+    expect(ApprovalDecision.from({ ...decision, subjectFacts: { facts: {} } }).evaluateEffectiveness({ facts: [] }, ['facts'])).toBe(
+      'INEFFECTIVE',
+    )
+    expect(ApprovalDecision.from({ ...decision, subjectFacts: { facts: [] } }).evaluateEffectiveness({ facts: {} }, ['facts'])).toBe(
+      'INEFFECTIVE',
+    )
+    expect(
+      ApprovalDecision.from({ ...decision, subjectFacts: { facts: [1, 2] } }).evaluateEffectiveness(
+        { facts: { '0': 1, '1': 2 } },
+        ['facts'],
+      ),
+    ).toBe('INEFFECTIVE')
+    expect(
+      ApprovalDecision.from({ ...decision, subjectFacts: { facts: { a: 1 } } }).evaluateEffectiveness({ facts: { b: 1 } }, [
+        'facts',
+      ]),
+    ).toBe('INEFFECTIVE')
+    expect(
+      ApprovalDecision.from({ ...decision, subjectFacts: { facts: { a: 1 } } }).evaluateEffectiveness(
+        { facts: { a: 1, b: 2 } },
+        ['facts'],
+      ),
+    ).toBe('INEFFECTIVE')
+    expect(
+      ApprovalDecision.from({ ...decision, subjectFacts: { facts: { amount: [1, 2] } } }).evaluateEffectiveness(
+        { facts: { amount: { '0': 1, '1': 2 } } },
+        ['facts'],
+      ),
+    ).toBe('INEFFECTIVE')
+    expect(
+      ApprovalDecision.from({ ...decision, subjectFacts: { facts: ['manager', 'finance'] } }).evaluateEffectiveness(
+        { facts: ['finance', 'manager'] },
+        ['facts'],
+      ),
+    ).toBe('INEFFECTIVE')
+    expect(
+      ApprovalDecision.from({ ...decision, subjectFacts: { facts: null } }).evaluateEffectiveness({ facts: {} }, ['facts']),
+    ).toBe('INEFFECTIVE')
+    expect(
+      ApprovalDecision.from({ ...decision, subjectFacts: { facts: null } }).evaluateEffectiveness({ facts: [] }, ['facts']),
+    ).toBe('INEFFECTIVE')
+  })
+
+  it('ignores unrelated fact changes when a relevant nested path remains unchanged', () => {
+    const approvalDecision = ApprovalDecision.from({
+      ...decision,
+      subjectFacts: {
+        facts: { approvalLevels: ['manager', 'finance'], note: 'original' },
+      },
+    })
+
+    expect(
+      approvalDecision.evaluateEffectiveness(
+        {
+          facts: { approvalLevels: ['manager', 'finance'], note: 'changed' },
+        },
+        ['facts.approvalLevels'],
+      ),
+    ).toBe('EFFECTIVE')
+  })
+
+  it('does not satisfy a requirement when relevant fact shape changes', () => {
+    const history = ApprovalDecisionHistory.create([
+      {
+        ...decision,
+        subjectFacts: {
+          facts: {
+            approvalLevels: ['manager', 'finance'],
+          },
+        },
+      },
+    ])
+
+    expect(
+      history.evaluateRequirement(requirement, {
+        currentSubjectFacts: {
+          facts: {
+            approvalLevels: ['manager', 'finance'],
+          },
+        },
+        relevantFactPaths: ['facts.approvalLevels'],
+      }),
+    ).toBe('APPROVED')
+    expect(
+      history.evaluateRequirement(requirement, {
+        currentSubjectFacts: {
+          facts: {
+            approvalLevels: { '0': 'manager', '1': 'finance' },
+          },
+        },
+        relevantFactPaths: ['facts.approvalLevels'],
+      }),
+    ).toBe('PENDING')
+  })
+
   it('rejects malformed imported decision history', () => {
     expect(() => ApprovalDecisionHistory.create('not-history' as never)).toThrow(InvalidApprovalDecisionError)
     expect(() => ApprovalDecisionHistory.create([{ ...decision, actor: { id: '' } }])).toThrow(

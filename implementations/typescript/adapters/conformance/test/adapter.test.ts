@@ -154,7 +154,7 @@ describe('TypeScript conformance adapter', () => {
       adapter: createTypeScriptConformanceAdapter(),
     }).run({ suites: ['approvals'] })
 
-    expect(report.summary).toEqual({ total: 27, passed: 27, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 34, passed: 34, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current Workflow state and transition vectors', async () => {

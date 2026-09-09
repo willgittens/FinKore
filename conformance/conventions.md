@@ -52,8 +52,8 @@ These identifiers name observable behavior, not implementation methods.
 | `finkore.money.round` | Reduce to the explicit `scale` using the explicit `mode`. |
 | `workflow.create` | Validate a definition and create an instance at its initial state. |
 | `finkore.workflow.transition` | Request the supplied target from the instance's current state using supplied guard facts. |
-| `audit.append` | Append one event to supplied committed logical history. |
-| `audit.replace`, `audit.remove` | Attempt the named change to committed logical history. |
+| `finkore.audit.append` | Append one event to supplied committed logical history. |
+| `finkore.audit.replace`, `finkore.audit.remove` | Attempt the named change to committed logical history. |
 | `audit.redact` | Produce a policy-authorized redacted logical representation and evidence event. |
 | `approval.requirement.evaluate` | Derive one requirement's `PENDING`, `APPROVED`, or `REJECTED` state. |
 | `approval.decision.record` | Validate and commit a decision. |
