@@ -52,6 +52,18 @@ function inputUnaryArithmetic(input: unknown): { readonly value: unknown; readon
   return { value: candidate.value, scalar: candidate.scalar }
 }
 
+function inputRateApplication(input: unknown): { readonly value: unknown; readonly rate: unknown; readonly rounding?: unknown } {
+  if (typeof input !== 'object' || input === null || !('value' in input) || !('rate' in input)) {
+    return { value: undefined, rate: undefined }
+  }
+  const candidate = input as { readonly value: unknown; readonly rate: unknown; readonly rounding?: unknown }
+  return {
+    value: candidate.value,
+    rate: candidate.rate,
+    ...(Object.hasOwn(candidate, 'rounding') ? { rounding: candidate.rounding } : {}),
+  }
+}
+
 function inputWorkflowCreate(input: unknown): { readonly definition: unknown } {
   if (typeof input !== 'object' || input === null || !('definition' in input)) {
     return { definition: undefined }
@@ -362,6 +374,33 @@ function executeMoneyDivide(request: AdapterRequest): NormalizedResult {
     return {
       status: 'success',
       value: value.divide(input.scalar).toJSON(),
+      observations: { operand: value.toJSON() },
+    }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && value !== undefined) {
+      return { ...result, observations: { operand: value.toJSON() } }
+    }
+    return result
+  }
+}
+
+/**
+ * Executes conformance-local Money Rate application through the TypeScript core API.
+ *
+ * Rate representation, exact percentage conversion, scalar multiplication, and
+ * explicit rounding behavior remain in `Money.applyRate`; the adapter only maps
+ * fixture fields and reports operand observations for non-mutation checks.
+ */
+function executeMoneyRateApply(request: AdapterRequest): NormalizedResult {
+  const input = inputRateApplication(request.input)
+  let value: Money | undefined
+  try {
+    value = Money.deserialize(input.value)
+    const options = input.rounding === undefined ? undefined : { rounding: input.rounding }
+    return {
+      status: 'success',
+      value: value.applyRate(input.rate, options).toJSON(),
       observations: { operand: value.toJSON() },
     }
   } catch (error) {
@@ -752,6 +791,7 @@ export const operationHandlers = {
   'finkore.money.round': executeMoneyRound,
   'finkore.money.subtract': executeMoneySubtract,
   'money.deserialize': executeMoneySerialization,
+  'money.rate.apply': executeMoneyRateApply,
   'finkore.money.divide': executeMoneyDivide,
   'finkore.money.multiply': executeMoneyMultiply,
   'finkore.money.negate': executeMoneyNegate,

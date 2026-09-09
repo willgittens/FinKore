@@ -3,7 +3,7 @@
 TypeScript reference implementation for the current FinKore Money, Workflow,
 Audit, Approvals, and current Entities Draft 0.1 milestones.
 
-FinKore Money Draft 0.1 is fully implemented by this TypeScript reference implementation. This statement applies only to the current Money specification draft; it does not imply that other FinKore domains are complete.
+FinKore Money Draft 0.1 is fully implemented by this TypeScript reference implementation. The Draft 0.2 Money Rates slice is also implemented. These statements apply only to the named Money specification slices; they do not imply that other FinKore domains are complete.
 
 FinKore Workflow Draft 0.1 is fully implemented by the TypeScript reference implementation. This statement applies only to the current Workflow specification draft; it does not imply that Entities or other FinKore domains are complete.
 
@@ -26,7 +26,7 @@ correction/reversal, supersession, versioning, optimistic locking, persistence,
 authorization, and concrete financial entity types remain outside this
 milestone.
 
-This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact compatible-currency numeric comparison, and explicit Money rounding.
+This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact decimal and percentage Rate application, exact compatible-currency numeric comparison, and explicit Money rounding.
 
 It implements Workflow Draft 0.1: validated workflow
 definitions, exact state identifiers, one initial state, current state,
@@ -35,7 +35,7 @@ explicit terminal-state detection, rejection of outgoing transitions in
 terminal definitions, terminal-state transition rejection and portable error
 precedence, successful state changes, and state preservation after rejection.
 
-It intentionally does not implement FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, distributed audit ordering, audit persistence, approval quorum, N-of-M voting, parallel approval groups, delegation, withdrawal, supersession, expiration, escalation, multi-stage approval graphs, dynamic approver resolution, authorization/RBAC, Workflow or Audit integration for approvals, generic entity validation engines, corrections, or reversals.
+It intentionally does not implement allocation, tax jurisdiction policy, interest conventions, FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, distributed audit ordering, audit persistence, approval quorum, N-of-M voting, parallel approval groups, delegation, withdrawal, supersession, expiration, escalation, multi-stage approval graphs, dynamic approver resolution, authorization/RBAC, Workflow or Audit integration for approvals, generic entity validation engines, corrections, or reversals.
 
 The specification remains canonical. This package stores validated decimal amounts as strings and performs arithmetic and comparison with scaled integer arithmetic so observable behavior preserves exact base-10 semantics without using JavaScript `number`.
 
@@ -49,6 +49,7 @@ The specification remains canonical. This package stores validated decimal amoun
 - `money.negate()` returns a new Money value with the amount sign reversed exactly.
 - `money.multiply(scalar)` returns a new Money value multiplied by an exact decimal scalar.
 - `money.divide(scalar)` returns a new Money value divided by a non-zero exact decimal scalar when the quotient terminates; zero divisors throw `FINKORE_MONEY_DIVISION_BY_ZERO`, and non-terminating quotients without a rounding policy throw `FINKORE_MONEY_ROUNDING_REQUIRED`.
+- `money.applyRate(rate, options)` applies an explicit `DECIMAL` or `PERCENTAGE` Rate, preserves currency, accepts zero and negative rates, returns the exact product unless `options.rounding` is supplied, and throws `FINKORE_MONEY_INVALID_AMOUNT` or `FINKORE_MONEY_INVALID_ROUNDING` for invalid rate or rounding inputs.
 - `money.compare(other)` returns `LESS`, `EQUAL`, or `GREATER` for exact same-currency numeric comparison and throws `FINKORE_MONEY_CURRENCY_MISMATCH` for incompatible currencies.
 - `money.round({ scale, mode })` returns a new Money value rounded to the explicit target scale using `HALF_UP`, `HALF_EVEN`, `DOWN`, `UP`, `FLOOR`, or `CEILING`; invalid scale or mode values throw `FINKORE_MONEY_INVALID_ROUNDING`.
 

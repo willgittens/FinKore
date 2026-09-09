@@ -8,7 +8,8 @@
         "./money/representation.json",
         "./money/arithmetic.json",
         "./money/comparison.json",
-        "./money/rounding.json"
+        "./money/rounding.json",
+        "./money/rates.json"
       ]
     },
     {

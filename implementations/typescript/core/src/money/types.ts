@@ -103,6 +103,61 @@ export interface MoneyRoundOptions {
 }
 
 /**
+ * Portable representation kind for a Money Rate.
+ *
+ * `DECIMAL` values are applied directly as exact scalar values. `PERCENTAGE`
+ * values are divided by 100 exactly before application.
+ *
+ * @see MONEY-RATE-001
+ * @see MONEY-RATE-002
+ */
+export type MoneyRateKind = 'DECIMAL' | 'PERCENTAGE'
+
+/**
+ * Input accepted by {@link Money.applyRate} before FinKore Rate validation.
+ *
+ * The value is intentionally `unknown` so invalid portable inputs are rejected
+ * with `FINKORE_MONEY_INVALID_AMOUNT` rather than coerced through JavaScript
+ * numbers or inferred representation semantics.
+ *
+ * @see MONEY-RATE-001
+ * @see MONEY-RATE-007
+ */
+export interface MoneyRateInput {
+  /**
+   * Candidate Rate representation kind.
+   *
+   * @see MONEY-RATE-001
+   */
+  readonly kind: unknown
+
+  /**
+   * Candidate exact decimal Rate value.
+   *
+   * @see MONEY-RATE-001
+   */
+  readonly value: unknown
+}
+
+/**
+ * Optional explicit rounding context for {@link Money.applyRate}.
+ *
+ * When omitted, Rate application returns the exact product. When supplied,
+ * rounding is applied after the exact product is computed.
+ *
+ * @see MONEY-RATE-005
+ * @see MONEY-RATE-006
+ */
+export interface MoneyRateApplicationOptions {
+  /**
+   * Explicit Money rounding policy applied after exact Rate multiplication.
+   *
+   * @see MONEY-RATE-006
+   */
+  readonly rounding?: unknown
+}
+
+/**
  * Portable FinKore Money error code.
  *
  * Consumers that need cross-language semantics should rely on these codes

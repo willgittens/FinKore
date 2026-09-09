@@ -25,11 +25,14 @@ This milestone supports:
 - `approval.condition.evaluate`
 - `approval.chain.evaluate`
 - `money.deserialize`
+- `money.rate.apply`
 - `money.serialize`
 - `workflow.create`
 
-`money.deserialize` and `money.serialize` are conformance-local representation
-boundary checks for portable Money JSON. They are not advertised as Agentic
+`money.deserialize`, `money.serialize`, and `money.rate.apply` are conformance-local
+Money operations. Serialization operations remain representation boundary checks
+for portable Money JSON; `money.rate.apply` observes Draft 0.2 Rate application
+until Agentic promotion is reviewed explicitly. They are not advertised as Agentic
 Contract operations in Draft 0.1.
 
 `workflow.create` is conformance-local vocabulary for validating Workflow

@@ -16,6 +16,7 @@ describe('TypeScript conformance adapter', () => {
 
     expect(adapter.supports('money.deserialize')).toBe(true)
     expect(adapter.supports('money.serialize')).toBe(true)
+    expect(adapter.supports('money.rate.apply')).toBe(true)
     expect(adapter.supports('finkore.money.add')).toBe(true)
     expect(adapter.supports('finkore.money.subtract')).toBe(true)
     expect(adapter.supports('finkore.money.compare')).toBe(true)
@@ -93,6 +94,29 @@ describe('TypeScript conformance adapter', () => {
     ] })
 
     expect(report.summary).toEqual({ total: 17, passed: 17, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+  })
+
+
+  it('passes current conformance-local Money rate vectors', async () => {
+    const report = await createConformanceRunner({
+      manifestPath,
+      adapter: createTypeScriptConformanceAdapter(),
+    }).run({ vectorIds: [
+      'money.rate.decimal-exact-001',
+      'money.rate.percentage-conversion-001',
+      'money.rate.zero-decimal-001',
+      'money.rate.negative-decimal-001',
+      'money.rate.fractional-base10-001',
+      'money.rate.fractional-percentage-001',
+      'money.rate.round.half-up-001',
+      'money.rate.round.half-even-001',
+      'money.rate.invalid-numeric-value-001',
+      'money.rate.invalid-exponent-value-001',
+      'money.rate.invalid-kind-001',
+      'money.rate.invalid-rounding-001',
+    ] })
+
+    expect(report.summary).toEqual({ total: 12, passed: 12, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current canonical Money comparison vectors', async () => {

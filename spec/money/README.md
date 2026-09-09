@@ -10,7 +10,7 @@ This domain defines exact monetary values and their fundamental behavior. A Mone
 
 ## Requirements
 
-The canonical Money requirements are defined by [Representation](representation.md), [Arithmetic](arithmetic.md), [Comparison](comparison.md), [Rounding](rounding.md), [Currency](currency.md), [Serialization](serialization.md), and [Errors](errors.md).
+The canonical Money requirements are defined by [Representation](representation.md), [Arithmetic](arithmetic.md), [Comparison](comparison.md), [Rounding](rounding.md), [Rates](rates.md), [Currency](currency.md), [Serialization](serialization.md), and [Errors](errors.md).
 
 ## Documents
 
@@ -18,6 +18,7 @@ The canonical Money requirements are defined by [Representation](representation.
 - [Arithmetic](arithmetic.md)
 - [Comparison](comparison.md)
 - [Rounding](rounding.md)
+- [Rates](rates.md)
 - [Currency](currency.md)
 - [Serialization](serialization.md)
 - [Errors](errors.md)

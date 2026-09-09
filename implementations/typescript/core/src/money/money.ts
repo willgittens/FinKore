@@ -8,7 +8,7 @@ import {
   MoneyRoundingRequiredError,
 } from './errors.js'
 import { serializeMoney, validateSerializedAmount } from './serialization.js'
-import type { MoneyComparisonResult, MoneyInput, MoneyRoundOptions, RoundingMode, SerializedMoney } from './types.js'
+import type { MoneyComparisonResult, MoneyInput, MoneyRateApplicationOptions, MoneyRoundOptions, RoundingMode, SerializedMoney } from './types.js'
 
 interface DecimalParts {
   readonly integer: bigint
@@ -53,6 +53,36 @@ function multiplyDecimals(left: string, right: string): string {
   const leftParts = decimalParts(left)
   const rightParts = decimalParts(right)
   return formatDecimal(leftParts.integer * rightParts.integer, leftParts.scale + rightParts.scale)
+}
+
+function percentageRateScalar(value: string): string {
+  const parts = decimalParts(value)
+  return formatDecimal(parts.integer, parts.scale + 2)
+}
+
+function validateRateScalar(value: unknown): string {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    throw new InvalidMoneyAmountError()
+  }
+  const candidate = value as { readonly kind?: unknown; readonly value?: unknown }
+  const rateValue = validateSerializedAmount(candidate.value)
+
+  switch (candidate.kind) {
+    case 'DECIMAL':
+      return rateValue
+    case 'PERCENTAGE':
+      return percentageRateScalar(rateValue)
+    default:
+      throw new InvalidMoneyAmountError()
+  }
+}
+
+function rateApplicationRounding(options: MoneyRateApplicationOptions | undefined): MoneyRoundOptions | undefined {
+  if (options === undefined) return undefined
+  if (typeof options !== 'object' || options === null || Array.isArray(options)) {
+    throw new InvalidMoneyRoundingError()
+  }
+  return options.rounding as MoneyRoundOptions | undefined
 }
 
 function gcd(left: bigint, right: bigint): bigint {
@@ -212,8 +242,8 @@ function roundDecimal(amount: string, targetScale: number, mode: RoundingMode): 
  * A Money value binds an exact decimal amount to a currency identifier. This
  * milestone supports construction, validation, canonical serialization,
  * compatible-currency addition, compatible-currency subtraction, negation,
- * exact decimal scalar multiplication and division, exact compatible-currency
- * numeric comparison, and explicit Money rounding.
+ * exact decimal scalar multiplication and division, exact Rate application,
+ * exact compatible-currency numeric comparison, and explicit Money rounding.
  *
  * @remarks
  * This TypeScript implementation stores the validated decimal representation
@@ -437,6 +467,43 @@ export class Money {
   divide(scalar: unknown): Money {
     const validatedScalar = validateSerializedAmount(scalar)
     return new Money(divideDecimals(this.amount, validatedScalar), this.currency)
+  }
+
+
+  /**
+   * Applies an exact decimal or percentage Rate to this Money value.
+   *
+   * `DECIMAL` Rate values are applied directly as scalars. `PERCENTAGE` Rate
+   * values are divided by 100 exactly before multiplication. Without explicit
+   * rounding options, this operation returns the exact decimal product and does
+   * not infer currency minor-unit rounding. When `options.rounding` is supplied,
+   * rounding is applied after the exact product is computed.
+   *
+   * @param rate - Candidate Rate representation and exact decimal value.
+   * @param options - Optional explicit rounding context for the Rate result.
+   * @returns A new Money value containing the exact or explicitly rounded Rate result.
+   * @throws {InvalidMoneyAmountError}
+   * When the Rate representation or value is missing, malformed, non-finite, or unsupported.
+   * @throws {InvalidMoneyRoundingError}
+   * When an explicit rounding policy is invalid or unsupported.
+   *
+   * @see FINKORE_MONEY_INVALID_AMOUNT
+   * @see FINKORE_MONEY_INVALID_ROUNDING
+   * @see MONEY-RATE-001
+   * @see MONEY-RATE-002
+   * @see MONEY-RATE-003
+   * @see MONEY-RATE-004
+   * @see MONEY-RATE-005
+   * @see MONEY-RATE-006
+   * @see MONEY-RATE-007
+   * @see MONEY-RATE-008
+   * @see MONEY-RATE-009
+   */
+  applyRate(rate: unknown, options?: MoneyRateApplicationOptions): Money {
+    const scalar = validateRateScalar(rate)
+    const exact = new Money(multiplyDecimals(this.amount, scalar), this.currency)
+    const rounding = rateApplicationRounding(options)
+    return rounding === undefined ? exact : exact.round(rounding)
   }
 
   /**

@@ -27,7 +27,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ### Draft 0.2
 
 - [x] Foundation: [TASK-001](#task-001)–[TASK-003](#task-003)
-- [ ] Money Rates: [TASK-004](#task-004)–[TASK-011](#task-011)
+- [x] Money Rates: [TASK-004](#task-004)–[TASK-011](#task-011)
 - [ ] Money Allocation: [TASK-012](#task-012)–[TASK-020](#task-020)
 - [ ] Entity Evolution Specification: [TASK-021](#task-021)–[TASK-024](#task-024)
 - [ ] Audit Relationships: [TASK-025](#task-025)–[TASK-032](#task-032)
@@ -52,7 +52,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-004
+NEXT TASK: TASK-012
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -470,7 +470,7 @@ Completion:
 
 <a id="task-004"></a>
 
-### - [ ] TASK-004 — Rate and Percentage Normative Semantics
+### - [x] TASK-004 — Rate and Percentage Normative Semantics
 
 **Release:** Draft 0.2
 
@@ -542,9 +542,9 @@ Rate and Percentage Normative Semantics.
 
 **Definition of Done**
 
-- [ ] Define MONEY-RATE-* input encoding, percentage conversion versus decimal scalar, currency preservation, zero/negative rates, precision-reduction trigger, explicit rounding and non-mutation.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Define MONEY-RATE-* input encoding, percentage conversion versus decimal scalar, currency preservation, zero/negative rates, precision-reduction trigger, explicit rounding and non-mutation.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -552,11 +552,17 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Spec and traceability edits reviewed; full verification summarized in `docs/tasks/draft-0.2-execution-evidence.md` under Money Rates.
+- Conformance: Rate requirements were made vector-ready with `money.rate.apply` kept conformance-local pending Agentic promotion review.
+- Mutation: Not applicable to this SPEC task; defect scenarios carried into TASK-009.
+- Notes: Added `spec/money/rates.md`, glossary/index links, and traceability rows for MONEY-RATE-001 through MONEY-RATE-009.
+
 
 <a id="task-005"></a>
 
-### - [ ] TASK-005 — Rate Portable Error Design
+### - [x] TASK-005 — Rate Portable Error Design
 
 **Release:** Draft 0.2
 
@@ -627,9 +633,9 @@ Rate Portable Error Design.
 
 **Definition of Done**
 
-- [ ] Evaluate existing INVALID_AMOUNT, ROUNDING_REQUIRED and INVALID_ROUNDING categories for rate failures; define a new category only for a distinct unmet portable condition.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Evaluate existing INVALID_AMOUNT, ROUNDING_REQUIRED and INVALID_ROUNDING categories for rate failures; define a new category only for a distinct unmet portable condition.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -637,11 +643,17 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Error semantics reviewed against existing Money error catalog; full verification summarized in `docs/tasks/draft-0.2-execution-evidence.md` under Money Rates.
+- Conformance: Invalid/malformed Rate inputs map to `FINKORE_MONEY_INVALID_AMOUNT`; invalid explicit rounding maps to `FINKORE_MONEY_INVALID_ROUNDING`.
+- Mutation: Not applicable to this SPEC task; invalid amount and invalid rounding cases were later mutation-hardened.
+- Notes: No new portable Money error was introduced; `FINKORE_MONEY_ROUNDING_REQUIRED` remains for operations that require precision reduction without policy, while Rate application returns exact results unless explicit rounding is supplied.
+
 
 <a id="task-006"></a>
 
-### - [ ] TASK-006 — Rate Conformance Vectors
+### - [x] TASK-006 — Rate Conformance Vectors
 
 **Release:** Draft 0.2
 
@@ -717,9 +729,9 @@ Rate Conformance Vectors.
 
 **Definition of Done**
 
-- [ ] Add exact, zero, negative, fractional, malformed/non-finite rate and rounding-boundary vectors with currency and operand preservation observations.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Add exact, zero, negative, fractional, malformed/non-finite rate and rounding-boundary vectors with currency and operand preservation observations.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -727,11 +739,17 @@ Named vectors are registered and traceable; new behavior is intentionally FAIL/U
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Runner build/tests passed after registering `money.rate.apply`; full verification summarized in `docs/tasks/draft-0.2-execution-evidence.md` under Money Rates.
+- Conformance: Added 12 manifest-listed Money Rate vectors covering exact decimal, percentage conversion, zero, negative, fractional, explicit rounding, invalid rate inputs, invalid representation, invalid rounding, and operand preservation. Initial pre-adapter Money run produced the expected 12 unsupported Rate vectors with no infrastructure errors.
+- Mutation: Not applicable to this CONFORMANCE task; vectors were later exercised by implementation and mutation hardening.
+- Notes: `money.rate.apply` is documented as conformance-local, not a promoted `finkore.*` Agentic operation.
+
 
 <a id="task-007"></a>
 
-### - [ ] TASK-007 — Rate Application Implementation
+### - [x] TASK-007 — Rate Application Implementation
 
 **Release:** Draft 0.2
 
@@ -806,9 +824,9 @@ Rate Application Implementation.
 
 **Definition of Done**
 
-- [ ] Implement the specified rate/percentage application operation using existing exact decimal arithmetic, with unit regression tests and meaningful public JSDoc.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement the specified rate/percentage application operation using existing exact decimal arithmetic, with unit regression tests and meaningful public JSDoc.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -816,11 +834,17 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Core typecheck, focused Money tests, workspace tests, coverage and mutation passed; detailed command evidence is in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: Core behavior was implemented before adapter closure; conformance pass is recorded in TASK-008/TASK-011 evidence.
+- Mutation: Final core mutation report shows Money at 100.00% with zero Money survivors.
+- Notes: Added public `Money.applyRate(rate, options)`, exported Rate types, exact percentage conversion, optional post-product rounding, public JSDoc and focused unit tests.
+
 
 <a id="task-008"></a>
 
-### - [ ] TASK-008 — Rate Adapter Support
+### - [x] TASK-008 — Rate Adapter Support
 
 **Release:** Draft 0.2
 
@@ -893,9 +917,9 @@ Rate Adapter Support.
 
 **Definition of Done**
 
-- [ ] Translate registered rate fixtures into the core operation and normalize exact Money/error observations; no rate conversion or rounding in the adapter.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Translate registered rate fixtures into the core operation and normalize exact Money/error observations; no rate conversion or rounding in the adapter.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -903,11 +927,17 @@ Named operation fixtures execute through core and all required slice vectors PAS
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Adapter build and tests passed; full verification summarized in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: `money.rate.apply` delegates to `Money.applyRate`; Money suite passed 67/67 and full manifest passed 150/150.
+- Mutation: Adapter is translation-only; core mutation evidence retained for financial behavior.
+- Notes: Adapter performs fixture mapping and observation reporting only; rate conversion and rounding remain in core.
+
 
 <a id="task-009"></a>
 
-### - [ ] TASK-009 — Money Rates Mutation Hardening
+### - [x] TASK-009 — Money Rates Mutation Hardening
 
 **Release:** Draft 0.2
 
@@ -980,9 +1010,9 @@ Money Rates Mutation Hardening.
 
 **Definition of Done**
 
-- [ ] Kill ignored/inverted rates, percentage factor mistakes, implicit rounding, changed currency, unjustified negative rejection and operand mutation.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Kill ignored/inverted rates, percentage factor mistakes, implicit rounding, changed currency, unjustified negative rejection and operand mutation.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -990,11 +1020,17 @@ A complete scoped mutation report and survivor classifications establish >=95% a
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Core coverage and full core mutation completed successfully; report paths and counts are recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: All Money Rate vectors pass before mutation closure.
+- Mutation: Overall core mutation score 99.58%; Money `money.ts` score 100.00%, 200 killed, 10 timeout, 0 survived, 0 no coverage. Remaining six survivors are pre-existing Entity-scope mutants and not Money Rates behavior.
+- Notes: Added malformed callable Rate and malformed rounding-option container assertions to kill validation-boundary survivors.
+
 
 <a id="task-010"></a>
 
-### - [ ] TASK-010 — Money Rates Traceability Closure
+### - [x] TASK-010 — Money Rates Traceability Closure
 
 **Release:** Draft 0.2
 
@@ -1067,10 +1103,10 @@ Money Rates Traceability Closure.
 
 **Definition of Done**
 
-- [ ] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -1078,11 +1114,17 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Requirement, vector, operation and implementation references were reconciled; full verification summarized in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: MONEY-RATE-001 through MONEY-RATE-009 map to manifest-listed vectors; closed Rate scope has UNCOVERED = 0 and BLOCKING SPEC GAPS = 0.
+- Mutation: Latest TASK-009 mutation evidence remains applicable.
+- Notes: Traceability inventory is now 222 total requirements, 158 covered, 64 not directly testable; 150 vectors are registered.
+
 
 <a id="task-011"></a>
 
-### - [ ] TASK-011 — Money Rates Slice Closure Gate
+### - [x] TASK-011 — Money Rates Slice Closure Gate
 
 **Release:** Draft 0.2
 
@@ -1157,10 +1199,10 @@ Money Rates Slice Closure Gate.
 
 **Definition of Done**
 
-- [ ] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -1168,7 +1210,13 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Workspace typecheck, tests, build, Money conformance, full conformance, coverage, mutation and `git diff --check` passed; details are recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: Money Rates slice passed 12/12 Rate vectors, Money passed 67/67, and full manifest passed 150/150 with 0 failed, 0 unsupported and 0 infrastructure errors.
+- Mutation: Latest core mutation evidence shows zero Money survivors and no critical Rate survivors.
+- Notes: Documentation, README status, JSDoc, conformance metadata and backlog pointer are synchronized. Next task is TASK-012 Money Allocation.
+
 
 ### Milestone: Money Allocation
 

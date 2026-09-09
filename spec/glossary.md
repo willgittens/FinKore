@@ -32,6 +32,10 @@
 
 **Money** — An exact decimal amount paired with a currency.
 
+**Percentage Rate** - A Rate whose exact decimal value is divided by 100 before being applied as a scalar.
+
+**Rate** - An exact decimal scalar, or explicitly identified percentage value, applied to Money.
+
 **Mutation** — A domain-recognized change to an entity's current data or state.
 
 **State** — A named lifecycle condition that determines currently permitted behavior.

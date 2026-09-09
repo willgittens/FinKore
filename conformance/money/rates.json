@@ -1,0 +1,545 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "money.rate.decimal-exact-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-001",
+        "MONEY-RATE-003",
+        "MONEY-RATE-005",
+        "MONEY-RATE-009"
+      ],
+      "description": "Applies a decimal Rate as the exact scalar and preserves currency and operand value.",
+      "operation": "money.rate.apply",
+      "input": {
+        "value": {
+          "amount": "200.00",
+          "currency": "USD"
+        },
+        "rate": {
+          "kind": "DECIMAL",
+          "value": "0.075"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "15.00000",
+          "currency": "USD"
+        },
+        "observations": {
+          "operand": {
+            "amount": "200.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "rate-ignored",
+        "currency-changed",
+        "operand-mutated"
+      ]
+    },
+    {
+      "id": "money.rate.percentage-conversion-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-001",
+        "MONEY-RATE-002",
+        "MONEY-RATE-003",
+        "MONEY-RATE-005",
+        "MONEY-RATE-009"
+      ],
+      "description": "Converts a percentage Rate by dividing by 100 before exact application.",
+      "operation": "money.rate.apply",
+      "input": {
+        "value": {
+          "amount": "200.00",
+          "currency": "USD"
+        },
+        "rate": {
+          "kind": "PERCENTAGE",
+          "value": "7.5"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "15.00000",
+          "currency": "USD"
+        },
+        "observations": {
+          "operand": {
+            "amount": "200.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "percentage-not-divided-by-100",
+        "rate-inverted"
+      ]
+    },
+    {
+      "id": "money.rate.zero-decimal-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-003",
+        "MONEY-RATE-004",
+        "MONEY-RATE-009"
+      ],
+      "description": "Applies a zero decimal Rate without rejecting it or changing currency.",
+      "operation": "money.rate.apply",
+      "input": {
+        "value": {
+          "amount": "19.99",
+          "currency": "EUR"
+        },
+        "rate": {
+          "kind": "DECIMAL",
+          "value": "0"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "0.00",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "19.99",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "zero-rate-rejected"
+      ]
+    },
+    {
+      "id": "money.rate.negative-decimal-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-003",
+        "MONEY-RATE-004",
+        "MONEY-RATE-009"
+      ],
+      "description": "Applies a negative decimal Rate with ordinary scalar sign semantics.",
+      "operation": "money.rate.apply",
+      "input": {
+        "value": {
+          "amount": "100.00",
+          "currency": "EUR"
+        },
+        "rate": {
+          "kind": "DECIMAL",
+          "value": "-0.10"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-10.0000",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "100.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "negative-rate-rejected",
+        "negative-sign-reversal"
+      ]
+    },
+    {
+      "id": "money.rate.fractional-base10-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-003",
+        "MONEY-RATE-005",
+        "MONEY-RATE-009"
+      ],
+      "description": "Preserves exact base-10 fractional multiplication without binary floating-point leakage.",
+      "operation": "money.rate.apply",
+      "input": {
+        "value": {
+          "amount": "0.10",
+          "currency": "EUR"
+        },
+        "rate": {
+          "kind": "DECIMAL",
+          "value": "0.20"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "0.0200",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "0.10",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "binary-floating-point-arithmetic",
+        "implicit-rounding"
+      ]
+    },
+    {
+      "id": "money.rate.fractional-percentage-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-001",
+        "MONEY-RATE-002",
+        "MONEY-RATE-003",
+        "MONEY-RATE-005"
+      ],
+      "description": "Applies a fractional percentage Rate exactly after percentage conversion.",
+      "operation": "money.rate.apply",
+      "input": {
+        "value": {
+          "amount": "80.00",
+          "currency": "EUR"
+        },
+        "rate": {
+          "kind": "PERCENTAGE",
+          "value": "12.345"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "9.8760000",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "80.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "percentage-scale-lost"
+      ]
+    },
+    {
+      "id": "money.rate.round.half-up-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-006",
+        "MONEY-RATE-009",
+        "MONEY-ROUNDING-001",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies explicit HALF_UP rounding after the exact Rate product reaches a tie boundary.",
+      "operation": "money.rate.apply",
+      "input": {
+        "value": {
+          "amount": "100.00",
+          "currency": "EUR"
+        },
+        "rate": {
+          "kind": "DECIMAL",
+          "value": "0.10005"
+        },
+        "rounding": {
+          "scale": 2,
+          "mode": "HALF_UP"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "10.01",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "100.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "implicit-rounding",
+        "rounding-before-rate",
+        "rounding-mode-substitution"
+      ]
+    },
+    {
+      "id": "money.rate.round.half-even-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-006",
+        "MONEY-RATE-009",
+        "MONEY-ROUNDING-001",
+        "MONEY-ROUNDING-003"
+      ],
+      "description": "Applies explicit HALF_EVEN rounding after the exact Rate product reaches a tie boundary.",
+      "operation": "money.rate.apply",
+      "input": {
+        "value": {
+          "amount": "100.00",
+          "currency": "EUR"
+        },
+        "rate": {
+          "kind": "DECIMAL",
+          "value": "0.10005"
+        },
+        "rounding": {
+          "scale": 2,
+          "mode": "HALF_EVEN"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "10.00",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "100.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "rounding-mode-substitution",
+        "half-even-tie-boundary"
+      ]
+    },
+    {
+      "id": "money.rate.invalid-numeric-value-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-001",
+        "MONEY-RATE-007",
+        "MONEY-RATE-009",
+        "MONEY-ERROR-001"
+      ],
+      "description": "Rejects a JSON number Rate value because portable Rate decimals must be strings.",
+      "operation": "money.rate.apply",
+      "input": {
+        "value": {
+          "amount": "100.00",
+          "currency": "EUR"
+        },
+        "rate": {
+          "kind": "DECIMAL",
+          "value": 0.1
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        },
+        "observations": {
+          "operand": {
+            "amount": "100.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "json-number-rate-accepted"
+      ]
+    },
+    {
+      "id": "money.rate.invalid-exponent-value-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-001",
+        "MONEY-RATE-007",
+        "MONEY-RATE-009",
+        "MONEY-ERROR-001"
+      ],
+      "description": "Rejects exponent notation in a percentage Rate value.",
+      "operation": "money.rate.apply",
+      "input": {
+        "value": {
+          "amount": "100.00",
+          "currency": "EUR"
+        },
+        "rate": {
+          "kind": "PERCENTAGE",
+          "value": "1e2"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        },
+        "observations": {
+          "operand": {
+            "amount": "100.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "non-plain-rate-accepted"
+      ]
+    },
+    {
+      "id": "money.rate.invalid-kind-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-001",
+        "MONEY-RATE-007",
+        "MONEY-RATE-009",
+        "MONEY-ERROR-001"
+      ],
+      "description": "Rejects an unsupported Rate representation instead of guessing semantics.",
+      "operation": "money.rate.apply",
+      "input": {
+        "value": {
+          "amount": "100.00",
+          "currency": "EUR"
+        },
+        "rate": {
+          "kind": "BASIS_POINTS",
+          "value": "125"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        },
+        "observations": {
+          "operand": {
+            "amount": "100.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unsupported-rate-kind-guessed"
+      ]
+    },
+    {
+      "id": "money.rate.invalid-rounding-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-006",
+        "MONEY-RATE-008",
+        "MONEY-RATE-009",
+        "MONEY-ERROR-006"
+      ],
+      "description": "Rejects an unsupported explicit rounding mode supplied for Rate application.",
+      "operation": "money.rate.apply",
+      "input": {
+        "value": {
+          "amount": "100.00",
+          "currency": "EUR"
+        },
+        "rate": {
+          "kind": "DECIMAL",
+          "value": "0.105"
+        },
+        "rounding": {
+          "scale": 2,
+          "mode": "HALF_AWAY"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_ROUNDING"
+        },
+        "observations": {
+          "operand": {
+            "amount": "100.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unsupported-rounding-mode-accepted",
+        "operand-mutated-on-error"
+      ]
+    }
+  ]
+}

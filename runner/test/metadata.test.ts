@@ -13,6 +13,8 @@ describe('metadata', () => {
     expect(AGENTIC_OPERATION_IDS.has('finkore.audit.remove')).toBe(true)
     expect(AGENTIC_OPERATION_IDS.has('money.deserialize')).toBe(false)
     expect(CONFORMANCE_OPERATION_IDS.has('money.deserialize')).toBe(true)
+    expect(CONFORMANCE_OPERATION_IDS.has('money.rate.apply')).toBe(true)
+    expect(AGENTIC_OPERATION_IDS.has('money.rate.apply')).toBe(false)
     expect(CONFORMANCE_OPERATION_IDS.has('audit.append')).toBe(false)
     expect(CONFORMANCE_OPERATION_IDS.has('money.negate')).toBe(false)
     expect(CONFORMANCE_OPERATION_IDS.has('money.multiply')).toBe(false)

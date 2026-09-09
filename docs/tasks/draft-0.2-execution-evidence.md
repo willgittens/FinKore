@@ -94,3 +94,72 @@ not a source of financial semantics.
     runner metadata allowlists and Agentic registry when applicable.
   - If a later task needs new vector syntax, that task must add a focused
     format/version compatibility change before publishing vectors that require it.
+
+## Money Rates
+
+### TASK-004 through TASK-011 - Draft 0.2 Money Rates Slice
+
+- Status: COMPLETE
+- Source revision: `e334de83b95109f88f961fd72461a6fec7d83729` plus working-tree Money Rates changes.
+- Date: 2026-09-09
+- Toolchain: system `node` absent; repository-local `.tools/node-v24.20.0-linux-x64/bin/node` reported `v24.20.0` in earlier TASK-001 verification and was used for all Node/npm commands.
+- Normative decisions:
+  - Added `MONEY-RATE-001` through `MONEY-RATE-009` in `spec/money/rates.md`.
+  - Portable Rate input has `kind: DECIMAL | PERCENTAGE` and a plain exact decimal string `value`.
+  - `DECIMAL` applies the value directly as scalar; `PERCENTAGE` divides by 100 exactly before multiplication.
+  - Zero and negative Rates are valid; Money currency is preserved; source Money is never mutated.
+  - Exact products are returned by default with no implicit minor-unit rounding; optional explicit rounding is applied after exact multiplication.
+  - Invalid/malformed/non-finite/unsupported Rate inputs use `FINKORE_MONEY_INVALID_AMOUNT`; invalid explicit rounding uses `FINKORE_MONEY_INVALID_ROUNDING`. No new portable Money error code was introduced.
+  - `money.rate.apply` is conformance-local until a later Agentic promotion review; no `finkore.*` operation was added.
+- Conformance vectors:
+  - Added `conformance/money/rates.json` with 12 vectors: exact decimal, percentage conversion, zero, negative, fractional decimal, fractional percentage, HALF_UP rounding, HALF_EVEN rounding, numeric rate rejection, exponent rejection, unsupported kind rejection, and invalid rounding rejection.
+  - Registered the file in `conformance/manifest.json`, updated `conformance/conventions.md`, runner metadata/tests, and `conformance/traceability.md`.
+  - Initial pre-adapter Money conformance run after vector registration exited 3 as expected: 55 passed / 67 total, 12 unsupported Rate vectors, 0 failed, 0 infrastructure errors.
+- Implementation and adapter:
+  - Added `Money.applyRate(rate, options)` and exported `MoneyRateKind`, `MoneyRateInput`, and `MoneyRateApplicationOptions` from the TypeScript core.
+  - Added focused Money Rate unit tests for exact scalar behavior, percentage conversion, rounding order, malformed rate inputs, malformed rounding options, portable errors and non-mutation.
+  - Added adapter support for `money.rate.apply` that delegates Rate semantics to core and reports normalized Money/error observations.
+  - Updated root README, TypeScript core README, adapter README, Money spec index and glossary.
+- Commands:
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.20.0-linux-x64/bin:$PATH npm run typecheck --workspaces` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.20.0-linux-x64/bin:$PATH npm run test --workspaces` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.20.0-linux-x64/bin:$PATH npm run build --workspaces` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.20.0-linux-x64/bin:$PATH npm run test:coverage --workspace @finkore/typescript` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.20.0-linux-x64/bin:$PATH npm run test:mutation --workspace @finkore/typescript` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.20.0-linux-x64/bin:$PATH node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --suite money --json` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.20.0-linux-x64/bin:$PATH node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json` exited 0.
+  - `git diff --check` exited 0.
+- Unit evidence:
+  - Runner: 10 files, 110 tests passed.
+  - TypeScript core: 26 files, 216 tests passed.
+  - Conformance adapter: 1 file, 11 tests passed.
+  - Focused Money Rates unit file: 5 tests passed.
+- Conformance evidence:
+  - Money suite: 67 passed / 67 total; 0 failed, 0 unsupported, 0 infrastructure errors.
+  - Full manifest: 150 passed / 150 total; 0 failed, 0 unsupported, 0 infrastructure errors.
+  - Mutation-sensitive vectors: 126 passed / 126 total.
+  - By suite: Money 67/67, Workflow 20/20, Audit 19/19, Approvals 34/34, Entities 10/10.
+- Coverage:
+  - TypeScript core all files: 99.03% statements, 98.19% branches, 100% functions, 99.58% lines.
+  - Money package: 98.34% statements, 98.05% branches, 100% functions, 98.83% lines.
+  - `src/money/money.ts`: 98.66% statements, 98.80% branches, 100% functions, 98.59% lines.
+- Mutation:
+  - TypeScript core final mutation score: 99.58%; report at `implementations/typescript/core/reports/mutation/mutation.html` and `implementations/typescript/core/reports/mutation/mutation.json`.
+  - Money `src/money/money.ts`: 100.00% mutation score, 200 killed, 10 timeout, 0 survived, 0 no coverage.
+  - No Money Rate or other Money critical mutants survived.
+  - Six remaining survivors are pre-existing Entity-scope mutants in `src/entities/entity.ts` and `src/entities/errors.ts`; they are outside the Money Rates slice.
+- Traceability inventory after closure:
+  - Manifest format `0.1`; five suites; nine manifest-listed vector files.
+  - Total requirements: 222; 158 covered; 64 not directly testable; 0 partial; 0 uncovered; 0 deferred; 0 blocking spec gaps.
+  - Money requirements: 59 total; 54 covered; 5 not directly testable; 0 uncovered; 0 blocking spec gaps.
+  - MONEY-RATE-001 through MONEY-RATE-009 are all COVERED and mapped to manifest-listed vectors.
+- Documentation/update applicability:
+  - Unit tests: updated.
+  - Conformance vectors: updated.
+  - Mutation-sensitive tests: updated and verified.
+  - JSDoc: updated for public API additions.
+  - README documentation: root, core and adapter READMEs updated.
+  - `/spec`: updated with Money Rates requirements and index/glossary links.
+  - `/conformance`: manifest, conventions and traceability updated.
+  - `/agentic`: no change; Rate operation intentionally remains conformance-local.
+  - `AGENTS.md`: no change required.

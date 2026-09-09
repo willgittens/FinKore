@@ -1,4 +1,4 @@
-# Draft 0.1 Requirement Traceability
+# Draft 0.1 and Draft 0.2 Money Rates Requirement Traceability
 
 This is the canonical human-readable requirement-to-vector index. Manifest-listed vectors remain the primary machine-readable mapping through each vector requirements field.
 
@@ -7,14 +7,14 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Domain | Requirements | MUST / MUST NOT | SHOULD / SHOULD NOT | MAY | Covered | Partial | Uncovered | Not directly testable | Deferred | Blocking spec gap |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Shared | 29 | 23 | 5 | 1 | 1 | 0 | 0 | 28 | 0 | 0 |
-| Money | 50 | 45 | 1 | 4 | 45 | 0 | 0 | 5 | 0 | 0 |
+| Money | 59 | 54 | 1 | 4 | 54 | 0 | 0 | 5 | 0 | 0 |
 | Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 | 0 | 0 |
 | Audit | 38 | 30 | 4 | 4 | 28 | 0 | 0 | 10 | 0 | 0 |
 | Approvals | 35 | 32 | 1 | 2 | 30 | 0 | 0 | 5 | 0 | 0 |
 | Entities | 34 | 29 | 3 | 2 | 23 | 0 | 0 | 11 | 0 | 0 |
-| **Total** | **213** | **184** | **15** | **14** | **149** | **0** | **0** | **64** | **0** | **0** |
+| **Total** | **222** | **193** | **15** | **14** | **158** | **0** | **0** | **64** | **0** | **0** |
 
-The suite contains 138 vectors. Overall: **149 covered (70.0%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **64 not directly testable (30.0%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
+The suite contains 150 vectors. Overall: **158 covered (71.2%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **64 not directly testable (28.8%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current draft. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -60,6 +60,15 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | MONEY-ARITHMETIC-007 | Money | MUST / MUST NOT | COVERED | money.add.differing-scale-001, money.add.exact-decimal-001, money.add.zero-001, money.divide.exact-001, money.multiply.decimal-001, money.subtract.differing-scale-001, money.subtract.negative-result-001, money.subtract.whole-number-001 |
 | MONEY-ARITHMETIC-008 | Money | MUST / MUST NOT | COVERED | money.divide.rounding-required-001 |
 | MONEY-ARITHMETIC-009 | Money | MUST / MUST NOT | COVERED | money.add.differing-scale-001, money.add.exact-decimal-001, money.add.negative-001, money.add.same-currency.basic-001, money.add.zero-001, money.divide.exact-001, money.multiply.decimal-001, money.negate.negative-001, money.negate.positive-001, money.subtract.basic-001, money.subtract.differing-scale-001, money.subtract.negative-result-001, money.subtract.whole-number-001 |
+| MONEY-RATE-001 | Money | MUST / MUST NOT | COVERED | money.rate.decimal-exact-001, money.rate.percentage-conversion-001, money.rate.fractional-percentage-001, money.rate.invalid-numeric-value-001, money.rate.invalid-exponent-value-001, money.rate.invalid-kind-001 |
+| MONEY-RATE-002 | Money | MUST / MUST NOT | COVERED | money.rate.percentage-conversion-001, money.rate.fractional-percentage-001 |
+| MONEY-RATE-003 | Money | MUST / MUST NOT | COVERED | money.rate.decimal-exact-001, money.rate.percentage-conversion-001, money.rate.zero-decimal-001, money.rate.negative-decimal-001, money.rate.fractional-base10-001, money.rate.fractional-percentage-001 |
+| MONEY-RATE-004 | Money | MUST / MUST NOT | COVERED | money.rate.zero-decimal-001, money.rate.negative-decimal-001 |
+| MONEY-RATE-005 | Money | MUST / MUST NOT | COVERED | money.rate.decimal-exact-001, money.rate.percentage-conversion-001, money.rate.fractional-base10-001, money.rate.fractional-percentage-001 |
+| MONEY-RATE-006 | Money | MUST / MUST NOT | COVERED | money.rate.round.half-up-001, money.rate.round.half-even-001, money.rate.invalid-rounding-001 |
+| MONEY-RATE-007 | Money | MUST / MUST NOT | COVERED | money.rate.invalid-numeric-value-001, money.rate.invalid-exponent-value-001, money.rate.invalid-kind-001 |
+| MONEY-RATE-008 | Money | MUST / MUST NOT | COVERED | money.rate.invalid-rounding-001 |
+| MONEY-RATE-009 | Money | MUST / MUST NOT | COVERED | money.rate.decimal-exact-001, money.rate.percentage-conversion-001, money.rate.zero-decimal-001, money.rate.negative-decimal-001, money.rate.fractional-base10-001, money.rate.round.half-up-001, money.rate.round.half-even-001, money.rate.invalid-numeric-value-001, money.rate.invalid-exponent-value-001, money.rate.invalid-kind-001, money.rate.invalid-rounding-001 |
 | MONEY-COMPARISON-001 | Money | MUST / MUST NOT | COVERED | money.compare.equal-trailing-zeros-001 |
 | MONEY-COMPARISON-002 | Money | MUST / MUST NOT | COVERED | money.compare.equal-trailing-zeros-001, money.compare.equal-zero-scale-001 |
 | MONEY-COMPARISON-003 | Money | MUST / MUST NOT | COVERED | money.compare.greater-negative-001, money.compare.less-001 |
@@ -301,6 +310,11 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | MONEY-ERROR-003 | Currency mismatch rejection and portable code. | Remove currency compatibility check. |
 | MONEY-ARITHMETIC-007 | Exact base-10 arithmetic. | Use binary floating point or implicit minor-unit rounding. |
 | MONEY-ROUNDING-003 | Six exact portable rounding modes. | Replace HALF_EVEN with HALF_UP or negative FLOOR with DOWN. |
+| MONEY-RATE-002 | Exact percentage-to-decimal Rate conversion. | Treat a percentage value as the direct scalar or divide by the wrong factor. |
+| MONEY-RATE-003 | Exact Rate application preserves Money currency. | Ignore the Rate, change the currency, or apply addition instead of multiplication. |
+| MONEY-RATE-005 | Exact Rate products are preserved without implicit minor-unit rounding. | Round every Rate result to currency minor units. |
+| MONEY-RATE-006 | Explicit Rate rounding is applied after exact multiplication. | Round before multiplication or substitute the requested rounding mode. |
+| MONEY-RATE-009 | Rate application leaves the source Money operand unchanged on success and failure. | Mutate the source Money while computing or rejecting a Rate result. |
 | WORKFLOW-TRANSITION-003 | Declared directed transitions only. | Ignore current Source State. |
 | WORKFLOW-TRANSITION-006 | State preservation after rejection. | Assign Target State before validation. |
 | WORKFLOW-TERMINAL-003 | No transition request may leave an explicitly terminal State. | Remove or invert the current-State terminal check. |
@@ -313,7 +327,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 
 ## Conformance gaps
 
-- Money: precision or overflow limits, private or non-fiat currency namespaces, and currency-recommended scale remain open as deferred topics outside Draft 0.1 closure.
+- Money: allocation, precision or overflow limits, private or non-fiat currency namespaces, and currency-recommended scale remain open as deferred topics outside the closed Draft 0.1 plus Draft 0.2 Money Rates scope.
 - Workflow: external fact capture, definition migration, transition identifiers, and concurrency remain open.
 - Audit: unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, and causal sequencing remain open.
 - Approvals: condition syntax, subject-state interchange, relevant-fact policy, supersession, withdrawal, expiration, delegation, quorum, and rejection codes remain open for future drafts; current standalone Draft 0.1 conformance has no uncovered mandatory Approval requirements.
@@ -325,4 +339,4 @@ Vectors do not settle these open questions.
 
 **READY FOR CONFORMANCE RUNNER**
 
-The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. FinKore Core Draft 0.1 cross-domain closure is complete for these directly testable mandatory requirements.
+The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Money conformance suite. FinKore Core Draft 0.1 cross-domain closure remains complete for its directly testable mandatory requirements.
