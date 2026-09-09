@@ -2,7 +2,16 @@
 
 ## Versions
 
-`finkoreConformance` versions the manifest and `finkoreVectorFile` versions vector-file syntax. Version `0.1` targets FinKore Core Draft 0.1. A runner MUST reject versions it does not support.
+`finkoreConformance` versions the manifest syntax and `finkoreVectorFile`
+versions vector-file syntax. These fields are compatibility versions, not Draft
+release numbers. Draft 0.2 and later artifacts MAY continue to use format `0.1`
+when their manifest and vector-file shape remains compatible with this contract.
+Release scope is discovered from manifest-listed files, requirement IDs, and
+traceability, not from bumping a format field.
+
+A format version MUST be bumped only when manifest syntax, vector-file syntax, or
+the meaning of a defined format member changes in a way that an older runner
+cannot faithfully validate. A runner MUST reject versions it does not support.
 
 ## File and vector shape
 

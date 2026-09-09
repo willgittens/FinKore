@@ -20,6 +20,11 @@ Implementation under test
 
 The runner loads only files declared by `conformance/manifest.json`. It validates every loaded vector and all cross-layer references before executing any vector. Execution is sequential and deterministic: manifest suite order, then vector ID within each suite.
 
+Manifest and vector-file versions are syntax compatibility versions. They do not
+need to match the FinKore Draft release number, so Draft 0.2 artifacts can
+remain on format `0.1` until the manifest or vector-file syntax changes. The
+runner rejects unsupported format versions instead of guessing compatibility.
+
 ## Canonical operations and requirements
 
 Canonical operation IDs are reused verbatim from the Agentic Contract, including

@@ -11,11 +11,11 @@ The source plans remain authoritative planning inputs: [Draft 0.2](draft-0.2-imp
 Planning audit: 2026-09-09, repository HEAD `fa7a2e888fe68f6a0f667fd002e7b7e4149676e8`, with both source plans present in the working tree. No feature was implemented and no execution task was completed during planning.
 
 - `README.md` and the TypeScript core README describe Money, Workflow, Audit, Approvals and Entities as Draft 0.1 complete. This is existing documented status, not a freshly executed test claim.
-- `conformance/manifest.json` uses format `0.1`, five suites and eight vector files totaling 138 vectors. Traceability reports 213 requirements: 149 covered, 64 not directly testable, zero uncovered and zero blocking spec gaps. TASK-001 must refresh runtime evidence.
+- `conformance/manifest.json` uses format `0.1`, five suites and eight vector files totaling 138 vectors. Traceability reports 213 requirements: 149 covered, 64 not directly testable, zero uncovered and zero blocking spec gaps. TASK-001 refreshed runtime evidence in `docs/tasks/draft-0.2-execution-evidence.md`.
 - No `MONEY-RATE-*`, `MONEY-ALLOCATION-*`, `ENTITY-EVOLUTION-*`, `AUDIT-RELATIONSHIP-*` or `APPROVAL-LIFECYCLE-*` requirement families currently exist. Exact scalar multiplication already exists; it is not completion of the planned Rate contract. None of the new backlog tasks qualifies for a pre-existing checked state.
 - Core exports Money, Workflow, Audit, Approval and Entity APIs from `implementations/typescript/core/src/index.ts`. Current Approvals compare relevant subject facts and preserve Decision history; they do not implement withdrawal, expiration, supersession or advanced composition. Current Entity `from` observations do not close the planned explicit import/mapping contract.
 - `agentic/operations.md` has 11 canonical operations: seven Money, Workflow transition, and Audit append/remove/replace. Entity and Approval operation labels remain conformance-local. `runner/src/metadata.ts` maintains explicit allowlists and reads requirement rows from traceability; adding an unregistered operation will fail before adapter dispatch.
-- `runner/src/manifest.ts` and vector validation support format `0.1` only. Release numbering must be reconciled with format compatibility in TASK-002/003. No financial validation belongs in the runner.
+- `runner/src/manifest.ts` and vector validation support format `0.1` only. TASK-002/003 record that format versions are syntax compatibility versions, not Draft release numbers; Draft 0.2/0.3 artifacts may use format `0.1` while the shape remains compatible. No financial validation belongs in the runner.
 - Core Stryker has an explicit source list and some line ranges. New financial files must enter mutation scope; a high score from the old list is insufficient. Coverage/mutation scripts exist in core and runner, but not the adapter. No dedicated architecture, traceability or Markdown-link script was found.
 - No CoreDoc file was found by repository file-name/content search. Milestone documentation tasks must recheck and record assumption impact or absence. Plans describe external review touchpoints; no reviewer signoff is assumed.
 - Machine `node` was not found during planning. No Node command/test was run for this documentation-only task. Future runtime tasks must follow the toolchain rule below.
@@ -26,7 +26,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 
 ### Draft 0.2
 
-- [ ] Foundation: [TASK-001](#task-001)–[TASK-003](#task-003)
+- [x] Foundation: [TASK-001](#task-001)–[TASK-003](#task-003)
 - [ ] Money Rates: [TASK-004](#task-004)–[TASK-011](#task-011)
 - [ ] Money Allocation: [TASK-012](#task-012)–[TASK-020](#task-020)
 - [ ] Entity Evolution Specification: [TASK-021](#task-021)–[TASK-024](#task-024)
@@ -52,7 +52,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-001
+NEXT TASK: TASK-004
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -190,7 +190,7 @@ No candidate portable error or candidate canonical operation ID in either plan i
 
 <a id="task-001"></a>
 
-### - [ ] TASK-001 — Draft 0.1 Baseline Verification and Draft 0.2 Scope Lock
+### - [x] TASK-001 — Draft 0.1 Baseline Verification and Draft 0.2 Scope Lock
 
 **Release:** Draft 0.2
 
@@ -262,9 +262,9 @@ Draft 0.1 Baseline Verification and Draft 0.2 Scope Lock.
 
 **Definition of Done**
 
-- [ ] Refresh the 213-requirement/138-vector baseline, verify all five Draft 0.1 domains, inventory errors and local/canonical operations, and lock the selected 0.2 scope from plan steps 1–10.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Refresh the 213-requirement/138-vector baseline, verify all five Draft 0.1 domains, inventory errors and local/canonical operations, and lock the selected 0.2 scope from plan steps 1–10.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -272,11 +272,16 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: `PATH=/home/will/Documents/FinFlow/.tools/node-v24.20.0-linux-x64/bin:$PATH npm run typecheck --workspaces`, `npm run test --workspaces`, `npm run build --workspaces`, and full conformance all exited 0 at source revision `79f2e683c8367d3e5266670b5de9b081e47c1516`; evidence recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: 138/138 PASS; suites Money 55/55, Workflow 20/20, Audit 19/19, Approvals 34/34, Entities 10/10; 114/114 mutation-sensitive vectors PASS.
+- Mutation: Not applicable for this artifact-only task; later feature tasks must record mutation evidence.
+- Notes: 213 requirements refreshed: 149 covered, 64 not directly testable, 0 partial, 0 uncovered, 0 deferred, 0 blocking spec gaps. Draft 0.2 scope locked without marking any new Draft 0.2 feature implemented.
 
 <a id="task-002"></a>
 
-### - [ ] TASK-002 — Conformance Draft Version Policy
+### - [x] TASK-002 — Conformance Draft Version Policy
 
 **Release:** Draft 0.2
 
@@ -347,9 +352,9 @@ Conformance Draft Version Policy.
 
 **Definition of Done**
 
-- [ ] Separate release scope from vector/manifest format compatibility; decide how Draft 0.2 and 0.3 artifacts will be discovered while preserving 0.1 support.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Separate release scope from vector/manifest format compatibility; decide how Draft 0.2 and 0.3 artifacts will be discovered while preserving 0.1 support.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -357,11 +362,16 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC policy update in `conformance/conventions.md`, `conformance/README.md`, `runner/README.md`, and `docs/tasks/draft-0.2-execution-evidence.md`; final `git diff --check` recorded by TASK-003.
+- Conformance: Not applicable; no vector or financial behavior changed.
+- Mutation: Not applicable; documentation-only policy task.
+- Notes: `finkoreConformance` and `finkoreVectorFile` are syntax compatibility versions, not Draft release numbers. Draft 0.2/0.3 artifacts may continue to use format `0.1` while their manifest and vector-file shape remains compatible; unsupported versions remain rejected.
 
 <a id="task-003"></a>
 
-### - [ ] TASK-003 — Conformance Version Compatibility Support
+### - [x] TASK-003 — Conformance Version Compatibility Support
 
 **Release:** Draft 0.2
 
@@ -439,9 +449,9 @@ Conformance Version Compatibility Support.
 
 **Definition of Done**
 
-- [ ] Implement only the format/version policy from TASK-002 in schema, runner types/validation and infrastructure tests, or verify that no code change is required by that policy.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement only the format/version policy from TASK-002 in schema, runner types/validation and infrastructure tests, or verify that no code change is required by that policy.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -449,7 +459,12 @@ The runner and schema support the approved draft/format policy while retaining D
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Existing schema/runner code verified sufficient for the TASK-002 policy; runner tests, runner coverage, runner mutation, workspace build/typecheck/tests, adapter tests and full conformance were run with the repository-local Node toolchain; evidence recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: Full Draft 0.1 conformance remains 138/138 PASS.
+- Mutation: Runner mutation completed with 99.73% mutation score, 1 non-critical diagnostic string-literal survivor, 0 timeout, 0 no-coverage; no critical runner compatibility mutant survived.
+- Notes: No runner, schema, type, or vector code change was required because the approved policy keeps format `0.1` as the compatible syntax for Draft 0.2/0.3 artifacts until a future syntax change requires a focused format task.
 
 ### Milestone: Money Rates
 

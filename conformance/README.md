@@ -12,6 +12,12 @@ This directory is the language-independent executable evidence for FinKore Draft
 
 [manifest.json](manifest.json) is the only normative discovery entry point. A runner MUST load only the listed vector files, resolve paths relative to the manifest, reject duplicate vector IDs, and reject unsupported format versions. Filesystem traversal order carries no meaning.
 
+The manifest and vector-file version fields describe syntax compatibility, not
+the FinKore Draft release number. Draft 0.2 and later vectors may remain on
+format `0.1` while they use the same manifest and vector-file shape. Draft scope
+is determined by the manifest contents, referenced requirement IDs, and
+traceability status.
+
 The initial suites are grouped by specification behavior:
 
 - Money: representation, serialization, arithmetic, comparison, currency, and rounding.
