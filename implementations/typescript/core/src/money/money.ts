@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { Currency } from './currency.js'
 import {
   CurrencyMismatchError,

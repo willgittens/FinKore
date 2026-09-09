@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { AuditEvent } from './audit-event.js'
 import { auditEventMatchesRedactionPolicy, redactAuditEvent, validateAuditRedactionPolicy } from './audit-redaction.js'
 import { AuditAppendOnlyViolationError, DuplicateAuditEventError, InvalidAuditRedactionError } from './errors.js'

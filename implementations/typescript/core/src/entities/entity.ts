@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { Money } from '../money/money.js'
 import { Workflow } from '../workflow/workflow.js'
 import { InvalidWorkflowTransitionError } from '../workflow/errors.js'

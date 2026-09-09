@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { RunnerInfrastructureError } from './errors/runner-errors.js'
 import type { RunnerMetadata } from './metadata.js'
 import type { ConformanceVector, ExpectedResult, VectorFile } from './types/vector.js'

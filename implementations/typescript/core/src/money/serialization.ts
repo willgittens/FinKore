@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { InvalidMoneyAmountError } from './errors.js'
 import type { SerializedMoney } from './types.js'
 

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { describe, expect, it } from 'vitest'
 import { filterVectors } from '../src/filters.js'
 import type { LoadedVector } from '../src/types/vector.js'

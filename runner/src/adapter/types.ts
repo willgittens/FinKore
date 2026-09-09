@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import type { NormalizedResult } from '../types/normalized-result.js'
 
 export interface AdapterRequest {

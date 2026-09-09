@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 /**
  * State identifier for FinKore Workflow definitions and instances.
  *

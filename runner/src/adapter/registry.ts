@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import type { AdapterRequest, FinKoreConformanceAdapter } from './types.js'
 import type { NormalizedResult } from '../types/normalized-result.js'
 

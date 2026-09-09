@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import type { ConformanceReport, StatusCounts } from './types/report.js'
 import type { ExecutionResult, ExecutionStatus } from './types/execution-result.js'
 

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { isDeepStrictEqual } from 'node:util'
 import type { NormalizedResult } from './types/normalized-result.js'
 import type { ExpectedResult } from './types/vector.js'

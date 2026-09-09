@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import type { NormalizedResult } from './normalized-result.js'
 import type { ExpectedResult } from './vector.js'
 

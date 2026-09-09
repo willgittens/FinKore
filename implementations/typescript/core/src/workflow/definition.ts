@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { InvalidWorkflowDefinitionError } from './errors.js'
 import type { WorkflowStateIdentifier, WorkflowTransitionDefinition, WorkflowTransitionGuard } from './types.js'
 

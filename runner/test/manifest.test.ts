@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { describe, expect, it } from 'vitest'
 import { RunnerInfrastructureError } from '../src/errors/runner-errors.js'
 import { validateManifest } from '../src/manifest.js'

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { loadConformance } from '../src/loader.js'

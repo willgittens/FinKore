@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 /**
  * Stable identifier for an Approval Requirement within its approval context.
  *

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 export { createAdapterRegistry, type AdapterHandler } from './adapter/registry.js'
 export type { AdapterRequest, FinKoreConformanceAdapter } from './adapter/types.js'
 export { compareResults, type Comparison } from './comparator.js'

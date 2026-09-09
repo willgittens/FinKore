@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { RunnerInfrastructureError } from './errors/runner-errors.js'
 
 export interface ManifestSuite {

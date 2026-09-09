@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { describe, expect, it } from 'vitest'
 import { buildReport, exitCodeForReport, formatConsoleReport, formatJsonReport } from '../src/reporter.js'
 import type { ExecutionResult, ExecutionStatus } from '../src/types/execution-result.js'

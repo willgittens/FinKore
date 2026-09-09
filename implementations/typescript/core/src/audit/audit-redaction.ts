@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { InvalidAuditRedactionError } from './errors.js'
 import type {
   AuditRedactionPolicy,

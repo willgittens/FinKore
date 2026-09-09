@@ -2,6 +2,7 @@
   "name": "finkore",
   "version": "0.1.0",
   "private": true,
+  "license": "MPL-2.0",
   "type": "module",
   "workspaces": [
     "runner",
@@ -11,6 +12,7 @@
   "scripts": {
     "build": "npm run build --workspaces",
     "typecheck": "npm run typecheck --workspaces",
-    "test": "npm run test --workspaces"
+    "test": "npm run test --workspaces",
+    "license:check": "node scripts/check-license.js"
   }
 }

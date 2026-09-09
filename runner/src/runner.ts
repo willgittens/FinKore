@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import type { FinKoreConformanceAdapter } from './adapter/types.js'
 import { compareResults } from './comparator.js'
 import { filterVectors, type RunFilters } from './filters.js'

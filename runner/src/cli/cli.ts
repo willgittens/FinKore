@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: MPL-2.0
 import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import type { FinKoreConformanceAdapter } from '../adapter/types.js'

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { ApprovalConditionUnresolvedError, InvalidApprovalChainError } from './errors.js'
 import type {
   ApprovalChainEvaluation,

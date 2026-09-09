@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { readFile } from 'node:fs/promises'
 import { dirname, relative, resolve, sep } from 'node:path'
 import { RunnerInfrastructureError } from './errors/runner-errors.js'

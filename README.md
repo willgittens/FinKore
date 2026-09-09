@@ -102,6 +102,7 @@ FinKore is not an ERP, ORM, payment processor, UI framework, accounting applicat
 - [Conformance Suite](./conformance/README.md) — language-independent test vectors and reliability methodology.
 - [Agentic Contract](./agentic/README.md) — portable operational semantics for machine clients.
 - [Conformance Traceability](./conformance/traceability.md) — current vector coverage, known gaps, and readiness.
+- [Licensing](./LICENSING.md) — community license policy, third-party notice policy, and commercial-use guidance.
 
 ## Project Status
 
@@ -121,6 +122,12 @@ That frames the domain problem more clearly than “we should add an `ApprovalVe
 
 Behavior first. API later.
 
+See [CONTRIBUTING.md](./CONTRIBUTING.md) and [Contributor Licensing](./docs/governance/contributor-licensing.md) for contribution licensing expectations.
+
 ## License
 
-MIT
+FinKore is licensed under the Mozilla Public License 2.0 (`MPL-2.0`).
+
+FinKore may be used in commercial and proprietary systems. MPL-2.0 applies file-level copyleft obligations to covered source files under the conditions defined by the license.
+
+See [LICENSE](./LICENSE) and [LICENSING.md](./LICENSING.md). The license text controls over explanatory project documentation.

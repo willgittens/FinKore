@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { describe, expect, it, vi } from 'vitest'
 import { createConformanceRunner } from '../src/runner.js'
 import type { FinKoreConformanceAdapter } from '../src/adapter/types.js'

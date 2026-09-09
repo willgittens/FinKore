@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 /**
  * Stable identifier for a committed FinKore Audit Event.
  *

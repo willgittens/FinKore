@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { ApprovalDecision } from './approval-decision.js'
 import { ApprovalRequirement } from './approval-requirement.js'
 import { InvalidApprovalDecisionError } from './errors.js'

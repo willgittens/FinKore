@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 export type ExpectedSuccess = {
   readonly status: 'success'
   readonly value: unknown

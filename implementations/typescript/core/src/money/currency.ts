@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { InvalidCurrencyError } from './errors.js'
 
 const ISO_4217_ALPHABETIC_CODE = /^[A-Z]{3}$/u

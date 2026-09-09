@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 export type RunnerErrorKind = 'MANIFEST' | 'VECTOR' | 'METADATA' | 'IO'
 
 export class RunnerInfrastructureError extends Error {

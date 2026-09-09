@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import type { WorkflowDefinitionInput, WorkflowStateIdentifier } from '../workflow/types.js'
 
 /**

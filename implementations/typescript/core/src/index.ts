@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 export { AuditActor } from './audit/actor.js'
 export { AuditChange } from './audit/audit-change.js'
 export { AuditEvent } from './audit/audit-event.js'

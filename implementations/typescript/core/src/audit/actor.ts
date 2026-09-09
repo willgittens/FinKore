@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import { InvalidAuditActorError } from './errors.js'
 import type { SerializedAuditActor } from './types.js'
 

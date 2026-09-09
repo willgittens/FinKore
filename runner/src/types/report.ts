@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import type { ExecutionResult, ExecutionStatus } from './execution-result.js'
 
 export interface StatusCounts {

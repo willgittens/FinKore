@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MPL-2.0
 import type { AdapterRequest, FinKoreConformanceAdapter, NormalizedResult } from '@finkore/conformance-runner'
 import { operationHandlers } from './operations.js'
 
