@@ -21,6 +21,7 @@ This domain defines audit history as logical records of financially relevant occ
 - [Changes](changes.md)
 - [Actors](actors.md)
 - [Redaction](redaction.md)
+- [Relationships](relationships.md)
 - [Append-Only History](append-only.md)
 - [Errors](errors.md)
 
@@ -30,5 +31,4 @@ Committed logical audit history must preserve the existence and meaning of its A
 
 ## Non-Goals
 
-This domain does not define operational logs, storage technology, database triggers, monitoring, analytics, event delivery, event-sourced reconstruction of domain state, or Correction, Reversal, Void, Cancellation, Supersession, and Adjustment semantics.
-
+This domain does not define operational logs, storage technology, database triggers, monitoring, analytics, event delivery, event-sourced reconstruction of domain state, or Entity Evolution operation semantics. Audit Relationships record evidence links for correction, reversal, void, and supersession without defining those operations.

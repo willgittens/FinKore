@@ -44,6 +44,7 @@ export class FinKoreAuditError extends Error {
  * @see AUDIT-EVENT-004
  * @see AUDIT-EVENT-005
  * @see AUDIT-ERROR-001
+ * @see AUDIT-RELATIONSHIP-013
  */
 export class InvalidAuditEventError extends FinKoreAuditError {
   /**

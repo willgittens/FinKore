@@ -2,10 +2,17 @@
 import { AuditActor } from './actor.js'
 import { AuditChange } from './audit-change.js'
 import { InvalidAuditEventError } from './errors.js'
-import type { SerializedAuditChange, SerializedAuditEntityReference, SerializedAuditEvent } from './types.js'
+import type {
+  AuditRelationshipType,
+  SerializedAuditChange,
+  SerializedAuditEntityReference,
+  SerializedAuditEvent,
+  SerializedAuditRelationship,
+} from './types.js'
 
-// Timestamp pattern construction is excluded from mutation scope; timestamp behavior is covered by validation tests.
+// Stryker disable all: regex construction mechanics are equivalent noise; event-type acceptance/rejection behavior is covered by validation tests.
 const EVENT_TYPE = /^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*$/u
+// Stryker restore all
 
 // Stryker disable all: regex construction mechanics are equivalent noise; timestamp acceptance/rejection behavior is covered by validation tests.
 const RFC3339_DATE_TIME_WITH_OFFSET = new RegExp([
@@ -56,6 +63,30 @@ function validateEntity(value: unknown): SerializedAuditEntityReference {
   return { type: requiredString(value.type), id: requiredString(value.id) }
 }
 
+function validateRelationshipType(value: unknown): AuditRelationshipType {
+  switch (value) {
+    case 'CORRECTS':
+    case 'REVERSES':
+    case 'VOIDS':
+    case 'SUPERSEDES':
+      return value
+    default:
+      throw new InvalidAuditEventError()
+  }
+}
+
+function validateRelationship(value: unknown): SerializedAuditRelationship {
+  if (!isPlainRecord(value) || !isPlainRecord(value.target)) throw new InvalidAuditEventError()
+  return {
+    relationshipId: requiredString(value.relationshipId),
+    type: validateRelationshipType(value.type),
+    target: {
+      eventId: requiredString(value.target.eventId),
+      entity: validateEntity(value.target.entity),
+    },
+  }
+}
+
 function validateChange(value: unknown): SerializedAuditChange {
   return AuditChange.from(value).toJSON()
 }
@@ -63,7 +94,7 @@ function validateChange(value: unknown): SerializedAuditChange {
 function validateMetadata(value: unknown): unknown {
   const metadata = cloneJsonValue(value)
   if (isPlainRecord(metadata)) {
-    for (const field of ['eventId', 'eventType', 'entity', 'actor', 'occurredAt', 'changes']) {
+    for (const field of ['eventId', 'eventType', 'entity', 'actor', 'occurredAt', 'changes', 'relationships']) {
       if (Object.hasOwn(metadata, field)) throw new InvalidAuditEventError()
     }
   }
@@ -76,14 +107,20 @@ function validateChanges(value: unknown): readonly SerializedAuditChange[] | und
   return value.map(validateChange)
 }
 
+function validateRelationships(value: unknown): readonly SerializedAuditRelationship[] | undefined {
+  if (value === undefined) return undefined
+  if (!Array.isArray(value) || value.length === 0) throw new InvalidAuditEventError()
+  return value.map(validateRelationship)
+}
+
 /**
  * FinKore Audit Event for event and change representation semantics.
  *
  * An Audit Event records what occurred, when it occurred, and which Financial
  * Entity was affected. The event preserves caller-supplied stable identity,
  * event type, entity reference, optional known actor attribution, timestamp,
- * changes, and metadata without generating IDs, event types, or reading
- * wall-clock time.
+ * changes, relationships, and metadata without generating IDs, event types, or
+ * reading wall-clock time.
  *
  * @see AUDIT-EVENT-001
  * @see AUDIT-EVENT-002
@@ -92,6 +129,7 @@ function validateChanges(value: unknown): readonly SerializedAuditChange[] | und
  * @see AUDIT-EVENT-005
  * @see AUDIT-EVENT-006
  * @see AUDIT-EVENT-007
+ * @see AUDIT-RELATIONSHIP-001
  */
 export class AuditEvent {
   private readonly value: SerializedAuditEvent
@@ -105,7 +143,9 @@ export class AuditEvent {
    *
    * The method validates Draft 0.1 event and change representation semantics.
    * It does not define a full path language, event-type catalog, redaction
-   * behavior, diff engine, or production storage format.
+   * behavior, relationship target existence, diff engine, or production storage
+   * format. Relationship target existence and uniqueness are validated by
+   * AuditLog because they depend on the surrounding logical history.
    *
    * @param input - Candidate serialized Audit Event.
    * @returns A validated Audit Event value.
@@ -121,10 +161,12 @@ export class AuditEvent {
    * @see AUDIT-EVENT-008
    * @see AUDIT-CHANGE-001
    * @see AUDIT-CHANGE-005
+   * @see AUDIT-RELATIONSHIP-001
    */
   static from(input: unknown): AuditEvent {
     if (!isPlainRecord(input)) throw new InvalidAuditEventError()
     const changes = validateChanges(input.changes)
+    const relationships = validateRelationships(input.relationships)
     return new AuditEvent({
       eventId: requiredString(input.eventId),
       eventType: validateEventType(input.eventType),
@@ -132,6 +174,7 @@ export class AuditEvent {
       occurredAt: validateTimestamp(input.occurredAt),
       ...(input.actor === undefined ? {} : { actor: AuditActor.from(input.actor).toJSON() }),
       ...(changes === undefined ? {} : { changes }),
+      ...(relationships === undefined ? {} : { relationships }),
       ...(input.metadata === undefined ? {} : { metadata: validateMetadata(input.metadata) }),
     })
   }

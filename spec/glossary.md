@@ -22,6 +22,8 @@
 
 **Audit Event** — A logical record that a domain-relevant occurrence happened. Once committed, it is part of append-only logical audit history. It may describe a Business Event but is not necessarily the Business Event itself.
 
+**Audit Relationship** — Event content identifying a relationship from one source Audit Event to one target Audit Event.
+
 **Business Event** — A domain occurrence. It may result in an Audit Event without requiring event-sourced state.
 
 **Change** — A description within an Audit Event of a difference between prior and resulting domain values. A Change may describe part of a Mutation but is not itself the Mutation.

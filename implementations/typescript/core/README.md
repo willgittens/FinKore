@@ -7,7 +7,7 @@ FinKore Money Draft 0.1 is fully implemented by this TypeScript reference implem
 
 FinKore Workflow Draft 0.1 is fully implemented by the TypeScript reference implementation. This statement applies only to the current Workflow specification draft; it does not imply that Entities or other FinKore domains are complete.
 
-FinKore Audit Draft 0.1 is fully implemented by the TypeScript reference implementation. Audit covers Events, Actors, append-only logical history, Change representation semantics, and Redaction semantics. Distributed ordering, persistence, and cross-domain integrations remain outside this milestone.
+FinKore Audit Draft 0.1 is fully implemented by the TypeScript reference implementation. The Draft 0.2 Audit Relationships slice is also implemented. Audit covers Events, Actors, append-only logical history, Change representation semantics, Redaction semantics, and relationship metadata. Distributed ordering, persistence, and cross-domain integrations remain outside this milestone.
 
 FinKore Approvals Draft 0.1 is fully implemented by the TypeScript reference implementation. Approvals covers Approval Requirement representation, Approval Decision representation, Decision-to-Requirement binding, allowed Decision outcomes, Decision validation, relevant subject-fact effectiveness checks, append-only Decision history preservation, Approval Condition representation and evaluation-boundary validation, Approval Chain all-required ordered or unordered composition, declared rejection outcomes, current sequential actionable Requirement reporting, exclusion of explicitly not-applicable Requirements, duplicate Requirement rejection in chains, and portable Approval errors.
 
@@ -91,10 +91,10 @@ without introducing broader workflow behavior.
 
 - `AuditActor.from(actor)` validates known actor attribution with a stable opaque identity and optional type/display metadata.
 - `AuditChange.from(change)` validates a change with a required field/path identity and preserved optional `before`/`after` values.
-- `AuditEvent.from(event)` validates an Audit Event with caller-supplied `eventId`, stable domain `eventType`, `entity`, optional `actor`, explicit RFC 3339 `occurredAt` timestamp, and optional validated changes.
-- `AuditLog.create(history)` creates a logical audit history from existing committed events and rejects duplicate event identities.
-- `auditLog.append(event)` validates and appends one event, rejecting duplicate identities and failed appends without changing prior history.
-- `auditLog.redact({ policy, redactionEvent })` returns a redacted representation of exactly one affected event with protected Change path values or reserved actor-context targets and appends an evidence event without mutating the committed source event.
+- `AuditEvent.from(event)` validates an Audit Event with caller-supplied `eventId`, stable domain `eventType`, `entity`, optional `actor`, explicit RFC 3339 `occurredAt` timestamp, optional validated changes, and optional Audit Relationships.
+- `AuditLog.create(history)` creates a logical audit history from existing committed events and rejects duplicate event or relationship identities, absent relationship targets, self-targets, and relationship target Entity mismatches.
+- `auditLog.append(event)` validates and appends one event, rejecting duplicate event identities and invalid Audit Relationships without changing prior history.
+- `auditLog.redact({ policy, redactionEvent })` returns a redacted representation of exactly one affected event with protected Change path values or reserved actor-context targets, preserves Audit Relationships, and appends an evidence event without mutating the committed source event.
 - `auditLog.replace()` and `auditLog.remove()` reject attempts to rewrite committed history with `FINKORE_AUDIT_APPEND_ONLY_VIOLATION`.
 - `auditLog.events()` and `auditLog.toJSON()` return defensive observations of committed history.
 

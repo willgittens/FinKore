@@ -54,7 +54,7 @@ semantics without comparing TypeScript class names, messages, or sensitive
 values. The adapter does not evaluate validation rules itself. Generic
 validation rule engines remain outside this milestone.
 
-Audit operation support covers FinKore Audit Draft 0.1: Events, Actors, append-only history, Change representation, Redaction, and portable Audit errors. Draft 0.1 does not define `audit.order` as an executable adapter operation.
+Audit operation support covers FinKore Audit Draft 0.1 plus the Draft 0.2 Audit Relationships slice: Events, Actors, append-only history, Change representation, Redaction, relationship metadata, and portable Audit errors. Draft 0.1 does not define `audit.order` as an executable adapter operation. Audit Relationships are observed through existing append/redaction fixtures; the adapter does not interpret relationships itself.
 
 Approval operation support covers FinKore Approvals Draft 0.1: Requirement
 evaluation, Decision recording, Decision effectiveness, eligible actor

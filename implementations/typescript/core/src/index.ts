@@ -123,6 +123,8 @@ export type {
 } from './entities/types.js'
 export type {
   AuditActorIdentifier,
+  AuditRelationshipIdentifier,
+  AuditRelationshipType,
   AuditRedactionPolicy,
   AuditRedactionRequest,
   AuditRedactionResult,
@@ -136,5 +138,7 @@ export type {
   SerializedAuditEntityReference,
   SerializedAuditEvent,
   SerializedAuditHistory,
+  SerializedAuditRelationship,
+  SerializedAuditRelationshipTarget,
   SerializedAuditRedactedValue,
 } from './audit/types.js'

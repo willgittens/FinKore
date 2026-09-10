@@ -9,12 +9,12 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Shared | 29 | 23 | 5 | 1 | 1 | 0 | 0 | 28 | 0 | 0 |
 | Money | 73 | 68 | 1 | 4 | 68 | 0 | 0 | 5 | 0 | 0 |
 | Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 | 0 | 0 |
-| Audit | 38 | 30 | 4 | 4 | 28 | 0 | 0 | 10 | 0 | 0 |
+| Audit | 52 | 44 | 4 | 4 | 42 | 0 | 0 | 10 | 0 | 0 |
 | Approvals | 35 | 32 | 1 | 2 | 30 | 0 | 0 | 5 | 0 | 0 |
 | Entities | 62 | 57 | 3 | 2 | 23 | 0 | 28 | 11 | 0 | 0 |
-| **Total** | **264** | **235** | **15** | **14** | **172** | **0** | **28** | **64** | **0** | **0** |
+| **Total** | **278** | **249** | **15** | **14** | **186** | **0** | **28** | **64** | **0** | **0** |
 
-The suite contains 166 vectors. Overall: **172 covered (65.2%)**, **0 partially covered (0.0%)**, **28 uncovered (10.6%)**, **64 not directly testable (24.2%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
+The suite contains 176 vectors. Overall: **186 covered (66.9%)**, **0 partially covered (0.0%)**, **28 uncovered (10.1%)**, **64 not directly testable (23.0%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current draft. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -189,6 +189,20 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | AUDIT-REDACTION-005 | Audit | MAY | NOT DIRECTLY TESTABLE | — |
 | AUDIT-REDACTION-006 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
 | AUDIT-REDACTION-007 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
+| AUDIT-RELATIONSHIP-001 | Audit | MUST / MUST NOT | COVERED | audit.relationship.corrects.append-001 |
+| AUDIT-RELATIONSHIP-002 | Audit | MUST / MUST NOT | COVERED | audit.relationship.corrects.append-001 |
+| AUDIT-RELATIONSHIP-003 | Audit | MUST / MUST NOT | COVERED | audit.relationship.all-types-order-001, audit.relationship.corrects.append-001, audit.relationship.invalid-type-001 |
+| AUDIT-RELATIONSHIP-004 | Audit | MUST / MUST NOT | COVERED | audit.relationship.self-target-001 |
+| AUDIT-RELATIONSHIP-005 | Audit | MUST / MUST NOT | COVERED | audit.relationship.duplicate-identity-001 |
+| AUDIT-RELATIONSHIP-006 | Audit | MUST / MUST NOT | COVERED | audit.relationship.corrects.append-001, audit.relationship.unknown-target-001 |
+| AUDIT-RELATIONSHIP-007 | Audit | MUST / MUST NOT | COVERED | audit.relationship.import-unknown-target-001 |
+| AUDIT-RELATIONSHIP-008 | Audit | MUST / MUST NOT | COVERED | audit.relationship.corrects.append-001, audit.relationship.target-entity-mismatch-001 |
+| AUDIT-RELATIONSHIP-009 | Audit | MUST / MUST NOT | COVERED | audit.relationship.all-types-order-001, audit.relationship.corrects.append-001 |
+| AUDIT-RELATIONSHIP-010 | Audit | MUST / MUST NOT | COVERED | audit.relationship.redaction-preserves-001 |
+| AUDIT-RELATIONSHIP-011 | Audit | MUST / MUST NOT | COVERED | audit.relationship.redaction-invalid-evidence-001, audit.relationship.redaction-preserves-001 |
+| AUDIT-RELATIONSHIP-012 | Audit | MUST / MUST NOT | COVERED | audit.relationship.duplicate-identity-001, audit.relationship.invalid-type-001, audit.relationship.redaction-invalid-evidence-001, audit.relationship.redaction-preserves-001, audit.relationship.self-target-001, audit.relationship.target-entity-mismatch-001, audit.relationship.unknown-target-001 |
+| AUDIT-RELATIONSHIP-013 | Audit | MUST / MUST NOT | COVERED | audit.relationship.duplicate-identity-001, audit.relationship.import-unknown-target-001, audit.relationship.invalid-type-001, audit.relationship.redaction-invalid-evidence-001, audit.relationship.self-target-001, audit.relationship.target-entity-mismatch-001, audit.relationship.unknown-target-001 |
+| AUDIT-RELATIONSHIP-014 | Audit | MUST / MUST NOT | COVERED | audit.relationship.all-types-order-001 |
 | APPROVAL-CHAIN-001 | Approvals | MUST / MUST NOT | COVERED | approval.chain.empty-requirements-invalid-001 |
 | APPROVAL-CHAIN-002 | Approvals | MUST / MUST NOT | COVERED | approval.chain.missing-mode-invalid-001 |
 | APPROVAL-CHAIN-003 | Approvals | MUST / MUST NOT | COVERED | approval.chain.pending-001, approval.chain.unordered-not-sequential-001 |
@@ -367,6 +381,9 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | WORKFLOW-TERMINAL-003 | No transition request may leave an explicitly terminal State. | Remove or invert the current-State terminal check. |
 | AUDIT-APPEND-001 | Append-only committed history. | Replace or remove a committed event. |
 | AUDIT-REDACTION-002, AUDIT-REDACTION-003, AUDIT-REDACTION-006 | Redacted representation remains distinguishable, preserves event meaning, and records evidence. | Expose protected values, collapse redaction to null or absence, change event identity, or omit evidence. |
+| AUDIT-RELATIONSHIP-005, AUDIT-RELATIONSHIP-012 | Relationship identity is unique and rejected relationship requests do not create partial state. | Accept duplicate relationship identities or append relationship-bearing invalid events. |
+| AUDIT-RELATIONSHIP-006, AUDIT-RELATIONSHIP-007, AUDIT-RELATIONSHIP-008 | Relationship targets must exist and match the recorded target Entity. | Accept absent target events or ignore target Entity mismatches. |
+| AUDIT-RELATIONSHIP-009, AUDIT-RELATIONSHIP-010, AUDIT-RELATIONSHIP-011 | Relationships are preserved through append and redaction evidence. | Drop, rewrite, sort, or conceal relationship identity/type/target during append or redaction. |
 | APPROVAL-DECISION-003 | Validity against policy-relevant facts. | Ignore changed relevant facts. |
 | ENTITY-IDENTITY-002 | Lifecycle-stable identity. | Generate a new ID after mutation. |
 | ENTITY-MUTABILITY-002 | Configured immutability. | Skip current-State mutability check. |
@@ -381,7 +398,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 
 - Money: allocation normative semantics and portable invalid-allocation error semantics are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance for Draft 0.2. Precision or overflow limits, private or non-fiat currency namespaces, and currency-recommended scale remain open as deferred topics outside the closed Draft 0.1 plus Draft 0.2 Money Rates and Allocation scope.
 - Workflow: external fact capture, definition migration, transition identifiers, and concurrency remain open.
-- Audit: unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, and causal sequencing remain open.
+- Audit: Draft 0.2 Audit Relationships are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, generic related links, relationship redaction policy, and causal sequencing remain open.
 - Approvals: condition syntax, subject-state interchange, relevant-fact policy, supersession, withdrawal, expiration, delegation, quorum, and rejection codes remain open for future drafts; current standalone Draft 0.1 conformance has no uncovered mandatory Approval requirements.
 - Entities: Draft 0.2 Entity Evolution terminology, correction, reversal, void, supersession, currentness, failure atomicity, and portable error mapping are specified and vector-ready, with conformance vectors and implementation still pending. Concrete fields, lifecycle policy, full validation catalog, import or migration mapping, cross-entity identity registries, Audit integration, concurrency, cancellation, adjustment, replacement, and amendment remain outside the current implemented Core. The current TypeScript reference implementation covers the conformance-local Entity identity, lifecycle, mutability, and validation vectors. Remaining Entity requirements classified as not directly testable are composing-domain, conditional Audit-integration, optional diagnostic, or registry/import obligations without a standalone portable Entity operation.
 
@@ -391,4 +408,4 @@ Vectors do not settle these open questions.
 
 **READY FOR CONFORMANCE RUNNER**
 
-The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates and Money Allocation requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Money conformance suite. Draft 0.2 Entity Evolution requirements are specified and vector-ready but intentionally uncovered and implementation-pending until the dedicated vector and implementation tasks. FinKore Core Draft 0.1 cross-domain closure remains complete for its directly testable mandatory requirements.
+The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates, Money Allocation, and Audit Relationships requirements are vector-covered, implemented by the TypeScript reference implementation, and pass their conformance suites. Draft 0.2 Entity Evolution requirements are specified and vector-ready but intentionally uncovered and implementation-pending until the dedicated vector and implementation tasks. FinKore Core Draft 0.1 cross-domain closure remains complete for its directly testable mandatory requirements.

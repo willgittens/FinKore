@@ -19,6 +19,8 @@ This document defines the minimum meaning and content of an Audit Event. An Audi
 - **AUDIT-EVENT-008** — Event metadata MUST NOT contradict required event fields.
 - **AUDIT-EVENT-007** — In Draft 0.1, an Audit Event is complete when every required Audit Event field is present and individually valid according to this document and referenced actor, timestamp, entity, change, and redaction requirements. No additional event-type-specific fields are required by Draft 0.1. Optional metadata or display text MUST NOT be required to recover the event identifier, event type, entity reference, timestamp, known actor identity, or recorded changes.
 
+Audit Relationships, when present, follow [Audit Relationships](relationships.md).
+
 ## Invariants
 
 Within one audit history, event identifiers must be unique and committed events must follow [append-only](append-only.md) behavior.
@@ -46,4 +48,3 @@ The following JSON is illustrative and non-normative; it does not prescribe seri
 ## Open Questions
 
 - Must ingestion time be recorded separately from occurrence time?
-

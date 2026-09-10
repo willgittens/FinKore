@@ -198,7 +198,27 @@ describe('TypeScript conformance adapter', () => {
       adapter: createTypeScriptConformanceAdapter(),
     }).run({ suites: ['audit'] })
 
-    expect(report.summary).toEqual({ total: 19, passed: 19, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 29, passed: 29, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+  })
+
+  it('passes current Audit relationship vectors', async () => {
+    const report = await createConformanceRunner({
+      manifestPath,
+      adapter: createTypeScriptConformanceAdapter(),
+    }).run({ vectorIds: [
+      'audit.relationship.corrects.append-001',
+      'audit.relationship.all-types-order-001',
+      'audit.relationship.invalid-type-001',
+      'audit.relationship.unknown-target-001',
+      'audit.relationship.import-unknown-target-001',
+      'audit.relationship.self-target-001',
+      'audit.relationship.target-entity-mismatch-001',
+      'audit.relationship.duplicate-identity-001',
+      'audit.relationship.redaction-preserves-001',
+      'audit.relationship.redaction-invalid-evidence-001',
+    ] })
+
+    expect(report.summary).toEqual({ total: 10, passed: 10, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current Approval requirement, decision, condition, and chain milestone vectors', async () => {

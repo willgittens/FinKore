@@ -80,6 +80,67 @@ export interface SerializedAuditEntityReference {
 }
 
 /**
+ * Portable Audit Relationship type supported by Draft 0.2.
+ *
+ * Relationship types are explicit event-content semantics. They are not
+ * inferred from event type, identifier format, or storage order.
+ *
+ * @see AUDIT-RELATIONSHIP-003
+ */
+export type AuditRelationshipType = 'CORRECTS' | 'REVERSES' | 'VOIDS' | 'SUPERSEDES'
+
+/**
+ * Stable identifier for an Audit Relationship.
+ *
+ * This identifier names the relationship itself, not the source event, target
+ * event, or affected Entity.
+ *
+ * @see AUDIT-RELATIONSHIP-001
+ * @see AUDIT-RELATIONSHIP-002
+ */
+export type AuditRelationshipIdentifier = string
+
+/**
+ * Target Audit Event reference for an Audit Relationship.
+ *
+ * The target event identity and its affected Entity reference are both
+ * recorded so a logical history can validate that the relationship points to
+ * the intended event and Entity.
+ *
+ * @see AUDIT-RELATIONSHIP-001
+ * @see AUDIT-RELATIONSHIP-008
+ */
+export interface SerializedAuditRelationshipTarget {
+  /** Stable target Audit Event identity. */
+  readonly eventId: AuditEventIdentifier
+
+  /** Affected Entity reference of the target Audit Event. */
+  readonly entity: SerializedAuditEntityReference
+}
+
+/**
+ * Serialized Audit Relationship retained as Audit Event content.
+ *
+ * A relationship points from the containing source Audit Event to one target
+ * Audit Event. Log-level validation checks target existence, self-targeting,
+ * target Entity consistency, and duplicate relationship identities.
+ *
+ * @see AUDIT-RELATIONSHIP-001
+ * @see AUDIT-RELATIONSHIP-004
+ * @see AUDIT-RELATIONSHIP-005
+ */
+export interface SerializedAuditRelationship {
+  /** Stable relationship identity. */
+  readonly relationshipId: AuditRelationshipIdentifier
+
+  /** Supported relationship type. */
+  readonly type: AuditRelationshipType
+
+  /** Target Audit Event and its affected Entity reference. */
+  readonly target: SerializedAuditRelationshipTarget
+}
+
+/**
  * Serialized known Actor attribution for an Audit Event.
  *
  * Actor type and display metadata may be retained as context, but the stable
@@ -239,6 +300,9 @@ export interface SerializedAuditEvent {
 
   /** Optional event context that must not replace required event fields. */
   readonly metadata?: unknown
+
+  /** Optional Audit Relationships from this source event to target events. */
+  readonly relationships?: readonly SerializedAuditRelationship[]
 }
 
 /**

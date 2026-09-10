@@ -30,7 +30,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 - [x] Money Rates: [TASK-004](#task-004)–[TASK-011](#task-011)
 - [x] Money Allocation: [TASK-012](#task-012)–[TASK-020](#task-020)
 - [x] Entity Evolution Specification: [TASK-021](#task-021)–[TASK-024](#task-024)
-- [ ] Audit Relationships: [TASK-025](#task-025)–[TASK-032](#task-032)
+- [x] Audit Relationships: [TASK-025](#task-025)–[TASK-032](#task-032)
 - [ ] Entity Evolution Implementation: [TASK-033](#task-033)–[TASK-044](#task-044)
 - [ ] Approval Validity: [TASK-045](#task-045)–[TASK-057](#task-057)
 - [ ] Draft 0.2 Alignment: [TASK-058](#task-058)–[TASK-060](#task-060)
@@ -52,7 +52,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-025
+NEXT TASK: TASK-033
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -2423,7 +2423,7 @@ Completion:
 
 <a id="task-025"></a>
 
-### - [ ] TASK-025 — Audit Relationship Normative Semantics
+### - [x] TASK-025 — Audit Relationship Normative Semantics
 
 **Release:** Draft 0.2
 
@@ -2495,9 +2495,9 @@ Audit Relationship Normative Semantics.
 
 **Definition of Done**
 
-- [ ] Define AUDIT-RELATIONSHIP-* corrects/reverses/voids/supersedes target identities, permitted types, duplicate/unknown target handling, serialization and redaction evidence preservation.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Define AUDIT-RELATIONSHIP-* corrects/reverses/voids/supersedes target identities, permitted types, duplicate/unknown target handling, serialization and redaction evidence preservation.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -2505,11 +2505,16 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Spec, index, glossary and traceability updates completed; full verification summarized in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: Relationship requirements were made vector-ready and later covered by 10 manifest-listed Audit vectors.
+- Mutation: Not applicable to this SPEC task; defect scenarios carried into TASK-030.
+- Notes: Added `AUDIT-RELATIONSHIP-001` through `AUDIT-RELATIONSHIP-014` in `spec/audit/relationships.md`.
 
 <a id="task-026"></a>
 
-### - [ ] TASK-026 — Audit Relationship Portable Error Review
+### - [x] TASK-026 — Audit Relationship Portable Error Review
 
 **Release:** Draft 0.2
 
@@ -2580,9 +2585,9 @@ Audit Relationship Portable Error Review.
 
 **Definition of Done**
 
-- [ ] Map malformed/missing target/type/duplicate relationship failures to INVALID_EVENT or a justified distinct category; specify rejection without history rewrite.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Map malformed/missing target/type/duplicate relationship failures to INVALID_EVENT or a justified distinct category; specify rejection without history rewrite.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -2590,11 +2595,16 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Audit relationship error semantics were specified and reconciled with `spec/audit/errors.md`; full verification summarized in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: Invalid relationship vectors expect `FINKORE_AUDIT_INVALID_EVENT`.
+- Mutation: Not applicable to this SPEC task; error-code mutants covered in TASK-030.
+- Notes: No new portable Audit relationship error code was introduced.
 
 <a id="task-027"></a>
 
-### - [ ] TASK-027 — Audit Relationship Conformance Vectors
+### - [x] TASK-027 — Audit Relationship Conformance Vectors
 
 **Release:** Draft 0.2
 
@@ -2670,9 +2680,9 @@ Audit Relationship Conformance Vectors.
 
 **Definition of Done**
 
-- [ ] Add relationship append, invalid target/type, duplicate and unknown-target cases per spec, defensive observation and redaction-preservation vectors.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Add relationship append, invalid target/type, duplicate and unknown-target cases per spec, defensive observation and redaction-preservation vectors.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -2680,11 +2690,16 @@ Named vectors are registered and traceable; new behavior is intentionally FAIL/U
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Runner tests and conformance completed successfully after vector registration; full verification summarized in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: Added `conformance/audit/relationships.json` with 10 manifest-listed vectors. Final Audit conformance passes 29/29; full manifest passes 176/176.
+- Mutation: Not applicable to this CONFORMANCE task; vectors include mutation-sensitive cases for relationship preservation, invalid targets/types, duplicate IDs, redaction evidence, and failure atomicity.
+- Notes: Relationship behavior uses existing `finkore.audit.append` and `audit.redact`; no new operation ID was added.
 
 <a id="task-028"></a>
 
-### - [ ] TASK-028 — Audit Relationship Implementation
+### - [x] TASK-028 — Audit Relationship Implementation
 
 **Release:** Draft 0.2
 
@@ -2759,9 +2774,9 @@ Audit Relationship Implementation.
 
 **Definition of Done**
 
-- [ ] Implement relationship representation, validation and preservation through Audit Event append/redaction observations using the existing append-only model.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement relationship representation, validation and preservation through Audit Event append/redaction observations using the existing append-only model.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -2769,11 +2784,16 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Core Audit unit tests, workspace typecheck/build, coverage and mutation passed; full verification summarized in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: Audit relationship vectors pass through the existing Audit adapter surface.
+- Mutation: Focused `audit-event.ts` and `audit-log.ts` mutation passed 100.00%; full core mutation passed 99.60% with Audit at 100.00%.
+- Notes: Added public relationship serialization types, validation in `AuditEvent`, history-level target/duplicate validation in `AuditLog`, redaction preservation, JSDoc, and Stryker coverage for the widened Audit event file.
 
 <a id="task-029"></a>
 
-### - [ ] TASK-029 — Audit Relationship Adapter Support
+### - [x] TASK-029 — Audit Relationship Adapter Support
 
 **Release:** Draft 0.2
 
@@ -2846,9 +2866,9 @@ Audit Relationship Adapter Support.
 
 **Definition of Done**
 
-- [ ] Pass relationship fixtures to Audit core and expose required evidence on success and error without interpreting relationships.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Pass relationship fixtures to Audit core and expose required evidence on success and error without interpreting relationships.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -2856,11 +2876,16 @@ Named operation fixtures execute through core and all required slice vectors PAS
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Adapter tests passed; full verification summarized in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: Adapter suite includes a focused 10-vector Audit relationship check and Audit suite total 29/29.
+- Mutation: Adapter is translation-only; core mutation evidence covers relationship behavior.
+- Notes: Existing Audit operations pass relationship payloads to core without adapter-level relationship interpretation.
 
 <a id="task-030"></a>
 
-### - [ ] TASK-030 — Audit Relationships Mutation Hardening
+### - [x] TASK-030 — Audit Relationships Mutation Hardening
 
 **Release:** Draft 0.2
 
@@ -2933,9 +2958,9 @@ Audit Relationships Mutation Hardening.
 
 **Definition of Done**
 
-- [ ] Kill dropped/rewritten relationship identity, hidden evidence during redaction, wrong duplicate handling, rewritten committed history and invented relationship order.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Kill dropped/rewritten relationship identity, hidden evidence during redaction, wrong duplicate handling, rewritten committed history and invented relationship order.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -2943,11 +2968,16 @@ A complete scoped mutation report and survivor classifications establish >=95% a
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Focused and full mutation reports completed successfully; full verification summarized in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: All Audit relationship vectors passed before mutation closure.
+- Mutation: Full core mutation score 99.60%; Audit domain 100.00%, with `audit-event.ts` 100.00% and `audit-log.ts` 100.00%. No critical Audit Relationship mutants survived.
+- Notes: Added mutation-sensitive assertions for malformed relationship entries, metadata relationship conflicts, omitted optional relationship fields, same-ID/different-type target mismatches, duplicate relationship IDs after append/redaction, and invalid redaction evidence failure atomicity.
 
 <a id="task-031"></a>
 
-### - [ ] TASK-031 — Audit Relationships Traceability Closure
+### - [x] TASK-031 — Audit Relationships Traceability Closure
 
 **Release:** Draft 0.2
 
@@ -3020,10 +3050,10 @@ Audit Relationships Traceability Closure.
 
 **Definition of Done**
 
-- [ ] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -3031,11 +3061,16 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Requirement, vector, operation and implementation references were reconciled; full verification summarized in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: `AUDIT-RELATIONSHIP-001` through `AUDIT-RELATIONSHIP-014` map to manifest-listed vectors; closed Audit Relationship scope has UNCOVERED = 0 and BLOCKING SPEC GAPS = 0.
+- Mutation: Latest TASK-030 mutation evidence remains applicable.
+- Notes: Traceability inventory is now 278 total requirements, 186 covered, 28 uncovered Entity Evolution requirements, and 64 not directly testable; 176 vectors are registered.
 
 <a id="task-032"></a>
 
-### - [ ] TASK-032 — Audit Relationships Slice Closure Gate
+### - [x] TASK-032 — Audit Relationships Slice Closure Gate
 
 **Release:** Draft 0.2
 
@@ -3110,10 +3145,10 @@ Audit Relationships Slice Closure Gate.
 
 **Definition of Done**
 
-- [ ] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -3121,7 +3156,12 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Workspace typecheck, build, core tests, runner tests, adapter tests, Audit conformance, full conformance, coverage, full core mutation and `git diff --check` passed; details are recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: Audit Relationships passed 10/10 relationship vectors, Audit passed 29/29, and full manifest passed 176/176 with 0 failed, 0 unsupported and 0 infrastructure errors.
+- Mutation: Latest core mutation evidence shows Audit at 100.00% mutation score and no critical Audit Relationship survivors.
+- Notes: Documentation, README status, JSDoc, conformance metadata and backlog pointer are synchronized. Next task is TASK-033 Entity and Audit Evolution Integration Contract.
 
 ### Milestone: Entity Evolution Implementation
 

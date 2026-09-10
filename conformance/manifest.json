@@ -22,7 +22,8 @@
     {
       "id": "audit",
       "vectorFiles": [
-        "./audit/history.json"
+        "./audit/history.json",
+        "./audit/relationships.json"
       ]
     },
     {

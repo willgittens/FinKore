@@ -8,7 +8,7 @@
     "src/workflow/workflow.ts",
     "src/audit/actor.ts",
     "src/audit/audit-change.ts",
-    "src/audit/audit-event.ts:17-135",
+    "src/audit/audit-event.ts",
     "src/audit/audit-log.ts",
     "src/entities/entity.ts",
     "src/entities/errors.ts",

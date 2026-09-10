@@ -355,3 +355,80 @@ not a source of financial semantics.
   - `/conformance`: traceability updated; conventions and manifest unchanged because no vector syntax or vector file changed.
   - `/agentic`: no change; no Entity Evolution operation was promoted.
   - `AGENTS.md`: no change required.
+
+## Audit Relationships
+
+### TASK-025 through TASK-032 - Draft 0.2 Audit Relationships Slice
+
+- Status: COMPLETE
+- Source revision: `0be7baaff8a00504692c2222579fd5126130e597` plus working-tree Audit Relationships specification, conformance, implementation, adapter-test, documentation, and closure changes.
+- Date: 2026-09-10
+- Toolchain: system `node` absent; repository-local `.tools/node-v24.11.1-linux-x64/bin/node` reported `v24.11.1` and was used for all Node/npm commands in this run.
+- Normative scope implemented:
+  - Added `AUDIT-RELATIONSHIP-001` through `AUDIT-RELATIONSHIP-014` in `spec/audit/relationships.md`.
+  - Audit Relationships are event content from a source Audit Event to one target Audit Event and record `relationshipId`, `type`, `target.eventId`, and `target.entity`.
+  - Supported relationship types are exactly `CORRECTS`, `REVERSES`, `VOIDS`, and `SUPERSEDES`.
+  - Relationship identifiers are unique within one logical history; self-targeting, unknown target events, malformed targets, empty relationship lists, and target-entity mismatches are invalid.
+  - Appending a relationship requires the target event to already be committed. Imported histories validate targets against the supplied logical history.
+  - Redaction preserves relationships on redacted event representations, and redaction evidence events may carry relationships subject to the same validation rules.
+  - Invalid relationship content uses `FINKORE_AUDIT_INVALID_EVENT`; no new portable Audit relationship error code was introduced.
+  - No generic related-link type, event-store causality model, distributed ordering, or Entity Evolution operation semantics were introduced.
+- Conformance vectors:
+  - Added `conformance/audit/relationships.json` with 10 vectors covering successful append preservation, all supported relationship types in declared order, unsupported type rejection, unknown target rejection, imported-history unknown target rejection, self-target rejection, target entity mismatch rejection, duplicate relationship identity rejection, redaction relationship preservation, and invalid redaction evidence failure atomicity.
+  - Registered the file in `conformance/manifest.json`.
+  - Updated `conformance/conventions.md`, `conformance/README.md`, runner integration expectations, adapter tests, and `conformance/traceability.md`.
+  - Relationship behavior uses existing `finkore.audit.append` and `audit.redact`; no new operation ID was added.
+- Implementation and adapter:
+  - Added public TypeScript Audit Relationship serialization types and exported them from the core package.
+  - `AuditEvent.from` now validates relationship shape, non-empty relationship lists, supported relationship types, target event identity shape, target entity shape, and metadata conflicts with `relationships`.
+  - `AuditLog.create`, `append`, and `redact` now validate relationship target existence, self-target rejection, target entity equality, duplicate relationship identity, preservation through append/redaction, and failure atomicity.
+  - Redaction JSDoc and portable Audit error documentation now reference relationship preservation/error semantics.
+  - The conformance adapter needed no new operation because it already passes Audit event payloads to core; adapter tests now include the full Audit suite and a focused 10-vector relationship check.
+- Commands:
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run typecheck --workspaces` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run build --workspaces` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test --workspace @finkore/typescript` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test --workspace @finkore/conformance-runner` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test --workspace @finkore/typescript-conformance-adapter` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --suite audit` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test:coverage --workspace @finkore/typescript` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test:mutation --workspace @finkore/typescript -- --mutate src/audit/audit-event.ts --testFiles test/audit/*.test.ts` exited 0 after escalation was required for Stryker's local logging server binding.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test:mutation --workspace @finkore/typescript -- --mutate src/audit/audit-log.ts --testFiles test/audit/*.test.ts` exited 0 after escalation was required for Stryker's local logging server binding.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test:mutation --workspace @finkore/typescript` exited 0 after escalation was required for Stryker's local logging server binding.
+- Unit evidence:
+  - Runner: 10 files, 110 tests passed.
+  - TypeScript core: 28 files, 231 tests passed.
+  - Focused Audit tests: 7 files, 62 tests passed.
+  - Conformance adapter: 1 file, 13 tests passed.
+- Conformance evidence:
+  - Audit Relationships: 10 passed / 10 total; 0 failed, 0 unsupported, 0 infrastructure errors.
+  - Audit suite: 29 passed / 29 total; 0 failed, 0 unsupported, 0 infrastructure errors.
+  - Full manifest: 176 passed / 176 total; 0 failed, 0 unsupported, 0 infrastructure errors.
+  - Mutation-sensitive vectors: 151 / 176 manifest-listed vectors.
+  - By suite: Money 83/83, Workflow 20/20, Audit 29/29, Approvals 34/34, Entities 10/10.
+- Coverage:
+  - TypeScript core all files: 98.69% statements, 97.81% branches, 100% functions, 99.24% lines.
+  - Audit package: 98.23% statements, 96.01% branches, 100% functions, 99.47% lines.
+- Mutation:
+  - TypeScript core final mutation score: 99.60%; report at `implementations/typescript/core/reports/mutation/mutation.html` and `implementations/typescript/core/reports/mutation/mutation.json`.
+  - Audit package: 100.00% mutation score, 354 killed, 0 timeout, 0 survived, 0 no coverage.
+  - `src/audit/audit-event.ts`: 100.00% mutation score, 122 killed, 0 timeout, 0 survived, 0 no coverage.
+  - `src/audit/audit-log.ts`: 100.00% mutation score, 101 killed, 0 timeout, 0 survived, 0 no coverage.
+  - No Audit Relationship critical mutants survived.
+  - Six remaining full-core survivors are Entity-scope mutants in `src/entities/entity.ts` and `src/entities/errors.ts`; they are outside the Audit Relationships slice and predate this slice.
+- Traceability inventory after closure:
+  - Manifest format `0.1`; five suites; eleven manifest-listed vector files.
+  - Total requirements: 278; 186 covered; 64 not directly testable; 28 uncovered Entity Evolution requirements; 0 partial; 0 deferred; 0 blocking spec gaps.
+  - Audit requirements: 52 total; 42 covered; 10 not directly testable; 0 uncovered; 0 blocking spec gaps.
+  - `AUDIT-RELATIONSHIP-001` through `AUDIT-RELATIONSHIP-014` are all COVERED and mapped to manifest-listed vectors.
+- Documentation/update applicability:
+  - Unit tests: updated.
+  - Conformance vectors: updated.
+  - Mutation-sensitive tests: updated and verified.
+  - JSDoc: updated for public relationship types and Audit Event/Log redaction semantics.
+  - README documentation: root, conformance, core, and adapter READMEs updated.
+  - `/spec`: Audit Relationships document, Audit index, Audit events/append-only/error notes, and glossary updated.
+  - `/conformance`: manifest, conventions and traceability updated.
+  - `/agentic`: no change; Audit Relationships are represented through existing Audit append/redact surfaces, and no new canonical operation was promoted.
+  - `AGENTS.md`: no change required.

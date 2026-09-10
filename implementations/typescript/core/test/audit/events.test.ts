@@ -69,6 +69,7 @@ describe('Audit events', () => {
 
     expect('actor' in serialized).toBe(false)
     expect('changes' in serialized).toBe(false)
+    expect('relationships' in serialized).toBe(false)
     expect('metadata' in serialized).toBe(false)
   })
 
@@ -108,7 +109,7 @@ describe('Audit events', () => {
   })
 
   it('rejects metadata that attempts to restate required event fields', () => {
-    for (const field of ['eventId', 'eventType', 'entity', 'actor', 'occurredAt', 'changes']) {
+    for (const field of ['eventId', 'eventType', 'entity', 'actor', 'occurredAt', 'changes', 'relationships']) {
       expect(() =>
         AuditEvent.from({ ...completeEvent, eventId: 'evt-metadata-' + field, metadata: { [field]: 'conflict' } }),
       ).toThrow(InvalidAuditEventError)
@@ -116,11 +117,28 @@ describe('Audit events', () => {
   })
 
   it('rejects implementation-looking or malformed event type values', () => {
-    for (const eventType of ['AuditLog.append', 'audit-log-append', 'POST /expenses', 'save()', 'entitySubmitted']) {
+    for (const eventType of [
+      'AuditLog.append',
+      'audit-log-append',
+      'POST /expenses',
+      'save()',
+      'entitySubmitted',
+      'a',
+      'A-',
+      'A_-',
+      'xENTITY_SUBMITTED',
+      'ENTITY_SUBMITTEDx',
+      'ENTITY_',
+    ]) {
       expect(() => AuditEvent.from({ ...completeEvent, eventId: 'evt-type-' + eventType, eventType })).toThrow(
         InvalidAuditEventError,
       )
     }
+  })
+
+  it('accepts event type boundaries without requiring underscores or multiple characters', () => {
+    expect(AuditEvent.from({ ...completeEvent, eventId: 'evt-type-a', eventType: 'A' }).toJSON().eventType).toBe('A')
+    expect(AuditEvent.from({ ...completeEvent, eventId: 'evt-type-nested', eventType: 'A_B_C' }).toJSON().eventType).toBe('A_B_C')
   })
 
   it('rejects events missing required identity, entity, type, or timestamp content', () => {

@@ -121,8 +121,8 @@ export function auditEventMatchesRedactionPolicy(event: SerializedAuditEvent, po
  * Produces a redacted representation of one Audit Event for protected content.
  *
  * Required event identity, type, entity reference, timestamp, actor identity,
- * actor type, and unrelated changes are preserved. The committed source event supplied by
- * the caller is not modified.
+ * actor type, relationships, and unrelated changes are preserved. The
+ * committed source event supplied by the caller is not modified.
  *
  * @param event - Committed Audit Event observation to redact.
  * @param policy - Validated redaction policy.
@@ -134,6 +134,7 @@ export function auditEventMatchesRedactionPolicy(event: SerializedAuditEvent, po
  * @see AUDIT-REDACTION-003
  * @see AUDIT-CHANGE-006
  * @see AUDIT-ACTOR-006
+ * @see AUDIT-RELATIONSHIP-010
  */
 export function redactAuditEvent(event: SerializedAuditEvent, policy: AuditRedactionPolicy): SerializedAuditEvent {
   const protectedPaths = new Set(policy.protectedPaths)

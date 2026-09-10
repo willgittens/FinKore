@@ -81,7 +81,7 @@ Identifiers beginning with `finkore.` are canonical operations in the
 [Agentic Contract](../agentic/operations.md). Remaining catalog entries are
 conformance-local adapter operations until their stable public contracts are
 reviewed; vector use alone does not make them advertised FinKore capabilities.
-Audit ordering requirements are verified through append-only history and review of explicitly recorded relationships; Draft 0.1 does not define `audit.order` as an executable conformance operation or as an Agentic operation.
+Audit ordering requirements are verified through append-only history and review of explicitly recorded relationships; Draft 0.1 does not define `audit.order` as an executable conformance operation or as an Agentic operation. Draft 0.2 Audit Relationships are observed through ordinary `finkore.audit.append` and `audit.redact` fixtures, not a separate relationship operation.
 For Money Draft 0.1, `money.deserialize` and `money.serialize` remain
 conformance-local representation boundary checks. They exercise normative Money
 serialization but are not separate public Agentic operations. For Money Draft 0.2,

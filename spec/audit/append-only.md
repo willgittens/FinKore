@@ -19,7 +19,7 @@ This document defines logical preservation rules for committed Audit Events, ind
 
 ## Invariants
 
-Reading logical history later must preserve the existence and identity of every committed Audit Event and every explicitly recorded ordering relationship. A redacted representation must preserve the event-level meaning required by [Audit Redaction](redaction.md).
+Reading logical history later must preserve the existence and identity of every committed Audit Event, every explicitly recorded ordering relationship, and every committed [Audit Relationship](relationships.md). A redacted representation must preserve the event-level meaning required by [Audit Redaction](redaction.md).
 
 ## Invalid Examples
 
@@ -37,5 +37,4 @@ An attempted prohibited mutation must report `FINKORE_AUDIT_APPEND_ONLY_VIOLATIO
 
 ## Non-Goals
 
-This document does not prescribe event stores, ledgers, hashes, signatures, replication protocols, global sequence numbers, Lamport clocks, vector clocks, broker offsets, distributed consensus, or database transaction ordering. Correction, reversal, void, cancellation, supersession, and adjustment semantics are outside FinKore Core Draft 0.1.
-
+This document does not prescribe event stores, ledgers, hashes, signatures, replication protocols, global sequence numbers, Lamport clocks, vector clocks, broker offsets, distributed consensus, or database transaction ordering. Entity Evolution operation semantics are defined outside Audit; Audit Relationships only preserve evidence links.
