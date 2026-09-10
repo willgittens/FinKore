@@ -163,3 +163,40 @@ not a source of financial semantics.
   - `/conformance`: manifest, conventions and traceability updated.
   - `/agentic`: no change; Rate operation intentionally remains conformance-local.
   - `AGENTS.md`: no change required.
+
+## Money Allocation
+
+### TASK-012 - Allocation Normative Semantics
+
+- Status: COMPLETE
+- Source revision: `941564830b2f2b824c4c052802f39f53677c4ac2` plus working-tree Money Allocation specification changes.
+- Date: 2026-09-10
+- Scope:
+  - Added `MONEY-ALLOCATION-001` through `MONEY-ALLOCATION-013` in `spec/money/allocation.md`.
+  - Equal-part allocation now requires a positive integer part count and returns exactly that many ordered Money results.
+  - Ratio allocation now requires a non-empty ordered list of positive integer ratios and returns one ordered Money result per ratio.
+  - Target scale is explicit calculation context and is not inferred from currency metadata, source amount scale, locale, or implementation defaults.
+  - Source zero and negative amounts are valid; negative-source remainder distribution uses the same declared order and increases the affected negative-result magnitude.
+  - The source must be exactly representable as whole allocation units at the target scale; otherwise allocation fails with `FINKORE_MONEY_ROUNDING_REQUIRED` and must not silently round the source total.
+  - Allocated results preserve source currency, sum exactly to the source amount, distribute remainders to earliest declared positions, and never mutate the source Money operand.
+- Traceability:
+  - Requirements inventory updated to 235 total requirements: 158 covered, 13 uncovered, 64 not directly testable, 0 partial, 0 deferred, 0 blocking spec gaps.
+  - Money inventory updated to 72 requirements: 54 covered, 13 uncovered, 5 not directly testable.
+  - All `MONEY-ALLOCATION-*` requirements are marked UNCOVERED until the dedicated conformance vector task publishes vector mappings.
+  - Critical later-test scenarios recorded for unrepresentable source rejection, exact total preservation, ordered remainder distribution including negative sources, and source non-mutation.
+- Commands:
+  - `git diff --check` exited 0.
+- Conformance:
+  - Not run; this task added no conformance vectors and no adapter operation. Allocation conformance coverage is intentionally pending TASK-014.
+- Mutation:
+  - Not applicable; this was an artifact-only specification task with no runtime code changes.
+- Documentation/update applicability:
+  - Unit tests: no change; implementation is pending.
+  - Conformance vectors: no change; TASK-014 owns vectors.
+  - Mutation-sensitive tests: no runtime tests added; critical scenarios were recorded for later tasks.
+  - JSDoc: no change; no public TypeScript API was added.
+  - README documentation: root and TypeScript package README status remain accurate because allocation is not yet implemented.
+  - `/spec`: added Allocation document and linked it from the Money index and glossary.
+  - `/conformance`: traceability updated; conventions and manifest unchanged because no vector syntax or vector file changed.
+  - `/agentic`: no change; allocation operation promotion remains a later review task.
+  - `AGENTS.md`: no change required.

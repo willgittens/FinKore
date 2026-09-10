@@ -18,6 +18,8 @@
 
 **Authorization** — A determination of whether an Actor may perform an operation; it does not establish Approval.
 
+**Allocation** — A deterministic split of one Money value into ordered Money values that preserve the exact source total and currency.
+
 **Audit Event** — A logical record that a domain-relevant occurrence happened. Once committed, it is part of append-only logical audit history. It may describe a Business Event but is not necessarily the Business Event itself.
 
 **Business Event** — A domain occurrence. It may result in an Audit Event without requiring event-sourced state.
@@ -31,6 +33,8 @@
 **Immutable State** — A lifecycle state in which specified data or behavior can no longer be changed directly.
 
 **Money** — An exact decimal amount paired with a currency.
+
+**Money Allocation** — An Allocation whose source and results are Money values.
 
 **Percentage Rate** - A Rate whose exact decimal value is divided by 100 before being applied as a scalar.
 
@@ -51,4 +55,3 @@
 ## Conventions
 
 Terms are technology-neutral. The rules for refining shared terms are defined by **SPEC-TERMINOLOGY-001** in [Conventions](conventions.md).
-

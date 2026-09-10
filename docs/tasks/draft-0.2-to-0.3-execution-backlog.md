@@ -52,7 +52,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-012
+NEXT TASK: TASK-013
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -1222,7 +1222,7 @@ Completion:
 
 <a id="task-012"></a>
 
-### - [ ] TASK-012 — Allocation Normative Semantics
+### - [x] TASK-012 — Allocation Normative Semantics
 
 **Release:** Draft 0.2
 
@@ -1294,9 +1294,9 @@ Allocation Normative Semantics.
 
 **Definition of Done**
 
-- [ ] Define MONEY-ALLOCATION-* equal parts and positive integer ratios, source sign/zero, explicit scale policy, exact sum preservation and deterministic remainder placement by declared order.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Define MONEY-ALLOCATION-* equal parts and positive integer ratios, source sign/zero, explicit scale policy, exact sum preservation and deterministic remainder placement by declared order.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -1304,7 +1304,12 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC review completed; `git diff --check` exited 0. Source revision before changes: `941564830b2f2b824c4c052802f39f53677c4ac2`.
+- Conformance: Not run; no conformance vectors were added by this spec-only task. Allocation requirements are recorded as 13 UNCOVERED requirements pending TASK-014.
+- Mutation: Not applicable for this artifact-only task. Critical later-test scenarios recorded for unrepresentable source rejection, exact total preservation, ordered remainder distribution including negative sources, and source non-mutation.
+- Notes: Added Draft 0.2 Money Allocation normative semantics in `spec/money/allocation.md`; updated Money index, glossary, and traceability. Invalid part-count, ratio, and target-scale portable error mapping remains intentionally assigned to TASK-013. No TypeScript public API, adapter operation, conformance vector, root README, package README, Agentic operation, or AGENTS.md change was required because allocation remains specified but not yet implemented.
 
 <a id="task-013"></a>
 
