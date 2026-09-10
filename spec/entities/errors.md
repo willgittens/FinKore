@@ -25,15 +25,18 @@ This document defines initial portable entity failure categories.
 - **ENTITY-ERROR-003** — Implementations MAY attach safe diagnostic context without changing portable code meaning.
 - **ENTITY-ERROR-004** — A Workflow, Money, Approval, or Audit failure MUST retain its domain-specific code when that condition is the primary failure; it MUST NOT be replaced by `FINKORE_ENTITY_VALIDATION_FAILED`.
 
+Entity evolution error mapping is defined by **ENTITY-EVOLUTION-024** through
+**ENTITY-EVOLUTION-028** in [Entity Evolution](evolution.md). Draft 0.2 does not
+introduce a dedicated evolution error code.
+
 ## Invariants
 
 A failed Financial Entity operation must not produce a partially valid Financial Entity.
 
 ## Open Questions
 
-- Should a future correction specification define a dedicated portable error catalog for Correction, Reversal, Void, Cancellation, Supersession, and Adjustment?
+- Should a future draft define a dedicated portable error catalog for additional evolution concepts if existing Entity errors become too broad?
 
 ## Non-Goals
 
 This is not a complete catalog and does not define concurrency control or transport errors.
-

@@ -1,4 +1,4 @@
-# Draft 0.1 and Draft 0.2 Money Requirement Traceability
+# Draft 0.1 and Draft 0.2 Requirement Traceability
 
 This is the canonical human-readable requirement-to-vector index. Manifest-listed vectors remain the primary machine-readable mapping through each vector requirements field.
 
@@ -11,10 +11,10 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 | 0 | 0 |
 | Audit | 38 | 30 | 4 | 4 | 28 | 0 | 0 | 10 | 0 | 0 |
 | Approvals | 35 | 32 | 1 | 2 | 30 | 0 | 0 | 5 | 0 | 0 |
-| Entities | 34 | 29 | 3 | 2 | 23 | 0 | 0 | 11 | 0 | 0 |
-| **Total** | **236** | **207** | **15** | **14** | **172** | **0** | **0** | **64** | **0** | **0** |
+| Entities | 62 | 57 | 3 | 2 | 23 | 0 | 28 | 11 | 0 | 0 |
+| **Total** | **264** | **235** | **15** | **14** | **172** | **0** | **28** | **64** | **0** | **0** |
 
-The suite contains 166 vectors. Overall: **172 covered (72.9%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **64 not directly testable (27.1%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
+The suite contains 166 vectors. Overall: **172 covered (65.2%)**, **0 partially covered (0.0%)**, **28 uncovered (10.6%)**, **64 not directly testable (24.2%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current draft. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -231,6 +231,34 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-ERROR-002 | Entities | SHOULD / SHOULD NOT | COVERED | entity.validation.complete-result-001 |
 | ENTITY-ERROR-003 | Entities | MAY | NOT DIRECTLY TESTABLE | — |
 | ENTITY-ERROR-004 | Entities | MUST / MUST NOT | COVERED | entity.transition.rejected-preserves-entity-001 |
+| ENTITY-EVOLUTION-001 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-002 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-003 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-004 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-005 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-006 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-007 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-008 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-009 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-010 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-011 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-012 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-013 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-014 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-015 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-016 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-017 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-018 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-019 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-020 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-021 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-022 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-023 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-024 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-025 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-026 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-027 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-028 | Entities | MUST / MUST NOT | UNCOVERED | — |
 | ENTITY-IDENTITY-001 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
 | ENTITY-IDENTITY-002 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.transition.success-identity-stable-001 |
 | ENTITY-IDENTITY-003 | Entities | MUST / MUST NOT | COVERED | entity.create.opaque-identity-preserved-001 |
@@ -343,6 +371,11 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-IDENTITY-002 | Lifecycle-stable identity. | Generate a new ID after mutation. |
 | ENTITY-MUTABILITY-002 | Configured immutability. | Skip current-State mutability check. |
 | ENTITY-VALIDATION-003, ENTITY-VALIDATION-004, ENTITY-VALIDATION-006 | Complete validation before observable mutation with the portable validation code. | Stop after the first failed rule, return success for invalid data, apply part of a rejected mutation, or expose sensitive field values in findings. |
+| ENTITY-EVOLUTION-001, ENTITY-EVOLUTION-008, ENTITY-EVOLUTION-011, ENTITY-EVOLUTION-021 | Evolution preserves stable identity and historical financial facts. | Rewrite the original Entity identity or facts during correction, reversal, or supersession. |
+| ENTITY-EVOLUTION-014, ENTITY-EVOLUTION-023 | Duplicate or rejected evolution requests do not create partial state. | Create a second relation, mutate currentness, or alter source/related data during a rejected evolution request. |
+| ENTITY-EVOLUTION-016, ENTITY-EVOLUTION-017 | Void is nullification without deletion. | Delete the source Entity or erase original facts/history while voiding. |
+| ENTITY-EVOLUTION-020 | Supersession currentness follows the declared scope. | Leave a superseded predecessor current or mark an unrelated Entity non-current. |
+| ENTITY-EVOLUTION-024, ENTITY-EVOLUTION-027 | Evolution errors use the specified portable error category and preserve primary domain codes. | Collapse state conflicts, validation failures, or downstream domain failures into an implementation-specific or generic error. |
 
 ## Conformance gaps
 
@@ -350,7 +383,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 - Workflow: external fact capture, definition migration, transition identifiers, and concurrency remain open.
 - Audit: unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, and causal sequencing remain open.
 - Approvals: condition syntax, subject-state interchange, relevant-fact policy, supersession, withdrawal, expiration, delegation, quorum, and rejection codes remain open for future drafts; current standalone Draft 0.1 conformance has no uncovered mandatory Approval requirements.
-- Entities: concrete fields, lifecycle policy, full validation catalog, import or migration mapping, cross-entity identity registries, Audit integration, concurrency, and correction or reversal behavior remain outside Core. The current TypeScript reference implementation covers the conformance-local Entity identity, lifecycle, mutability, and validation vectors. Remaining Entity requirements classified as not directly testable are composing-domain, conditional Audit-integration, optional diagnostic, or registry/import obligations without a standalone portable Entity operation.
+- Entities: Draft 0.2 Entity Evolution terminology, correction, reversal, void, supersession, currentness, failure atomicity, and portable error mapping are specified and vector-ready, with conformance vectors and implementation still pending. Concrete fields, lifecycle policy, full validation catalog, import or migration mapping, cross-entity identity registries, Audit integration, concurrency, cancellation, adjustment, replacement, and amendment remain outside the current implemented Core. The current TypeScript reference implementation covers the conformance-local Entity identity, lifecycle, mutability, and validation vectors. Remaining Entity requirements classified as not directly testable are composing-domain, conditional Audit-integration, optional diagnostic, or registry/import obligations without a standalone portable Entity operation.
 
 Vectors do not settle these open questions.
 
@@ -358,4 +391,4 @@ Vectors do not settle these open questions.
 
 **READY FOR CONFORMANCE RUNNER**
 
-The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates and Money Allocation requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Money conformance suite. FinKore Core Draft 0.1 cross-domain closure remains complete for its directly testable mandatory requirements.
+The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates and Money Allocation requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Money conformance suite. Draft 0.2 Entity Evolution requirements are specified and vector-ready but intentionally uncovered and implementation-pending until the dedicated vector and implementation tasks. FinKore Core Draft 0.1 cross-domain closure remains complete for its directly testable mandatory requirements.

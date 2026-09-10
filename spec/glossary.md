@@ -28,6 +28,12 @@
 
 **Currency** — A named unit in which a monetary amount is denominated.
 
+**Correction** — An Entity Evolution operation that preserves an original source Financial Entity while identifying corrected financial facts through a related Entity or Revision.
+
+**Entity Revision** — A stable, opaque identity for a declared observation or version of a continuing Financial Entity; it is distinct from stable Entity identity.
+
+**Evolution Relation** — A stable relationship between a source Financial Entity and a related Entity, Revision, or evolution outcome.
+
 **Financial Entity** — A domain concept distinguished by stable identity and continuity over time whose lifecycle or values represent financially relevant activity.
 
 **Immutable State** — A lifecycle state in which specified data or behavior can no longer be changed directly.
@@ -40,6 +46,10 @@
 
 **Rate** - An exact decimal scalar, or explicitly identified percentage value, applied to Money.
 
+**Reversal** — An Entity Evolution operation that preserves an original source Financial Entity while identifying a related cancelling or opposite-effect Entity or Revision.
+
+**Supersession** — An Entity Evolution operation that records a successor Entity or Revision as replacing a predecessor for current use within a declared scope while preserving predecessor history.
+
 **Mutation** — A domain-recognized change to an entity's current data or state.
 
 **State** — A named lifecycle condition that determines currently permitted behavior.
@@ -49,6 +59,8 @@
 **Transition Guard** — A domain predicate that determines whether a declared Transition Request may succeed.
 
 **Transition Request** — A request to perform a declared, directed Transition from an instance's current State.
+
+**Void** — An Entity Evolution operation that records source nullification without deleting the source Financial Entity or erasing its original facts.
 
 **Workflow** — The declared states, transitions, and constraints governing a lifecycle.
 

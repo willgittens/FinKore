@@ -308,3 +308,50 @@ not a source of financial semantics.
   - `/conformance`: manifest, conventions and traceability updated.
   - `/agentic`: no change; Allocation operation intentionally remains conformance-local.
   - `AGENTS.md`: no change required.
+
+## Entity Evolution Specification
+
+### TASK-021 through TASK-024 - Draft 0.2 Entity Evolution Specification
+
+- Status: COMPLETE
+- Source revision: `0be7baaff8a00504692c2222579fd5126130e597` plus working-tree Entity Evolution specification and traceability changes.
+- Date: 2026-09-10
+- Scope:
+  - Added `spec/entities/evolution.md`.
+  - Added `ENTITY-EVOLUTION-001` through `ENTITY-EVOLUTION-028`.
+  - Defined stable Entity identity versus Entity Revision identity and Evolution Relation identity.
+  - Defined Correction, Reversal, Void, and Supersession as distinct portable Entity Evolution concepts.
+  - Classified Replacement and Amendment as composing-domain terms unless explicitly defined and mapped by a composing specification.
+  - Clarified that Workflow State names, terminal-state status, and display labels do not by themselves establish evolution eligibility or financial finality.
+  - Defined correction and reversal preservation of source identity and original financial facts, related-Entity or Revision outcomes, composing-domain lifecycle prerequisites, duplicate relation rejection, and source fact observability.
+  - Defined void as source nullification without deletion or erasure.
+  - Defined supersession as predecessor/successor currentness within a declared scope while preserving predecessor identity, facts, and history.
+  - Defined observable evolution history or relationship observations and rejected-operation state preservation.
+- Portable error decision:
+  - No new portable Entity error code was introduced.
+  - Missing, malformed, unsupported, duplicate, or otherwise invalid evolution requests use `FINKORE_ENTITY_INVALID_MUTATION` unless a more specific primary domain error applies.
+  - Expected source State, Revision, or currentness mismatches use `FINKORE_ENTITY_STATE_CONFLICT`.
+  - Missing, malformed, unstable, or conflicting source or related Entity identities use `FINKORE_ENTITY_INVALID_IDENTITY`.
+  - Primary Workflow, Money, Approval, or Audit failures retain their domain-specific portable error codes.
+  - Evolution error diagnostics, when supplied, must remain safe and must not expose sensitive original or related financial values unnecessarily.
+- Traceability:
+  - Requirements inventory updated to 264 total requirements: 172 covered, 28 uncovered, 64 not directly testable, 0 partial, 0 deferred, 0 blocking spec gaps.
+  - Entities inventory updated to 62 requirements: 23 covered, 28 uncovered, 11 not directly testable.
+  - All `ENTITY-EVOLUTION-*` requirements are marked UNCOVERED until the dedicated conformance vector task publishes vector mappings.
+  - Critical later-test scenarios recorded for stable identity/history preservation, correction/reversal source fact preservation, void-without-delete, supersession currentness, duplicate/rejected evolution failure atomicity, portable error mapping, and safe diagnostics.
+- Commands:
+  - `git diff --check` exited 0.
+- Conformance:
+  - Not run; this milestone added no conformance vectors and no adapter operation. Entity Evolution conformance coverage is intentionally pending later vector tasks.
+- Mutation:
+  - Not applicable; this was an artifact-only specification milestone with no runtime code changes.
+- Documentation/update applicability:
+  - Unit tests: no change; implementation is pending.
+  - Conformance vectors: no change; later Entity Evolution vector tasks own vector publication.
+  - Mutation-sensitive tests: no runtime tests added; critical scenarios were recorded for later implementation tasks.
+  - JSDoc: no change; no public TypeScript API was added.
+  - README documentation: Entity spec index updated; root and TypeScript package READMEs remain accurate because Entity Evolution is specified but not implemented.
+  - `/spec`: Entity Evolution document, Entity index, Entity lifecycle/mutability/error notes, and glossary updated.
+  - `/conformance`: traceability updated; conventions and manifest unchanged because no vector syntax or vector file changed.
+  - `/agentic`: no change; no Entity Evolution operation was promoted.
+  - `AGENTS.md`: no change required.

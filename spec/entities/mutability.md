@@ -38,9 +38,12 @@ A prohibited mutation must report `FINKORE_ENTITY_IMMUTABLE`.
 ## Open Questions
 
 - What policy model, if any, should a future specification define for post-finalization operational metadata such as external synchronization, processing, or delivery metadata?
-- How should a future specification distinguish and model Correction, Reversal, Void, Cancellation, Supersession, and Adjustment?
+- Should a future specification define Cancellation or Adjustment as additional portable Entity evolution concepts?
 
 ## Non-Goals
 
-FinKore Core Draft 0.1 does not define Correction, Reversal, Void, Cancellation, Supersession, or Adjustment. These terms are not treated as synonyms. It also does not define a universal policy for post-finalization operational metadata.
-
+Ordinary Mutation does not define Correction, Reversal, Void, Supersession,
+Cancellation, or Adjustment. Draft 0.2 Entity Evolution defines portable
+correction, reversal, void, and supersession distinctions; those operations are
+not ordinary in-place mutation and are not synonyms. This document also does not
+define a universal policy for post-finalization operational metadata.

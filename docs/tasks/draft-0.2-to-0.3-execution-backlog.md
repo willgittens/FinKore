@@ -29,7 +29,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 - [x] Foundation: [TASK-001](#task-001)–[TASK-003](#task-003)
 - [x] Money Rates: [TASK-004](#task-004)–[TASK-011](#task-011)
 - [x] Money Allocation: [TASK-012](#task-012)–[TASK-020](#task-020)
-- [ ] Entity Evolution Specification: [TASK-021](#task-021)–[TASK-024](#task-024)
+- [x] Entity Evolution Specification: [TASK-021](#task-021)–[TASK-024](#task-024)
 - [ ] Audit Relationships: [TASK-025](#task-025)–[TASK-032](#task-032)
 - [ ] Entity Evolution Implementation: [TASK-033](#task-033)–[TASK-044](#task-044)
 - [ ] Approval Validity: [TASK-045](#task-045)–[TASK-057](#task-057)
@@ -52,7 +52,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-021
+NEXT TASK: TASK-025
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -2060,7 +2060,7 @@ Completion:
 
 <a id="task-021"></a>
 
-### - [ ] TASK-021 — Evolution Terminology and Revision Identity
+### - [x] TASK-021 — Evolution Terminology and Revision Identity
 
 **Release:** Draft 0.2
 
@@ -2132,9 +2132,9 @@ Evolution Terminology and Revision Identity.
 
 **Definition of Done**
 
-- [ ] Define ENTITY-EVOLUTION-* stable Entity identity versus revision/relation identity and correction/reversal/void/supersession distinctions; classify replacement/amendment as composing-domain terms unless separately justified.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Define ENTITY-EVOLUTION-* stable Entity identity versus revision/relation identity and correction/reversal/void/supersession distinctions; classify replacement/amendment as composing-domain terms unless separately justified.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -2142,11 +2142,16 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC review completed; `git diff --check` exited 0. Source revision before changes: `0be7baaff8a00504692c2222579fd5126130e597`.
+- Conformance: Not run; no conformance vectors were added by this spec-only task. `ENTITY-EVOLUTION-*` requirements are recorded as UNCOVERED pending vector work.
+- Mutation: Not applicable for this artifact-only task. Critical later-test scenarios were recorded for stable identity preservation and evolution-term separation.
+- Notes: Added `spec/entities/evolution.md` with stable Entity identity, Entity Revision identity, Evolution Relation identity, correction/reversal/void/supersession distinctions, and replacement/amendment as composing-domain terms unless explicitly mapped.
 
 <a id="task-022"></a>
 
-### - [ ] TASK-022 — Correction and Reversal Normative Semantics
+### - [x] TASK-022 — Correction and Reversal Normative Semantics
 
 **Release:** Draft 0.2
 
@@ -2217,9 +2222,9 @@ Correction and Reversal Normative Semantics.
 
 **Definition of Done**
 
-- [ ] Define correction versus reversal outcomes, lifecycle prerequisites, related-entity identity, duplicate behavior and preservation of original financial facts.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Define correction versus reversal outcomes, lifecycle prerequisites, related-entity identity, duplicate behavior and preservation of original financial facts.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -2227,11 +2232,16 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC review completed; `git diff --check` exited 0.
+- Conformance: Not run; this task added no vectors. Correction and Reversal requirements remain UNCOVERED pending TASK-033 and related vector tasks.
+- Mutation: Not applicable for this artifact-only task. Critical later-test scenarios were recorded for original-fact preservation, duplicate relation rejection, and failure atomicity.
+- Notes: Defined Correction and Reversal as related-Entity or Revision outcomes that preserve source identity and original facts, require composing-domain lifecycle eligibility, reject duplicates by relation identity or declared duplicate policy, and avoid in-place rewrites.
 
 <a id="task-023"></a>
 
-### - [ ] TASK-023 — Void and Supersession Normative Semantics
+### - [x] TASK-023 — Void and Supersession Normative Semantics
 
 **Release:** Draft 0.2
 
@@ -2302,9 +2312,9 @@ Void and Supersession Normative Semantics.
 
 **Definition of Done**
 
-- [ ] Define void without deletion, supersession/currentness and replacement relationships, history observations and rejected-operation state preservation.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Define void without deletion, supersession/currentness and replacement relationships, history observations and rejected-operation state preservation.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -2312,11 +2322,16 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC review completed; `git diff --check` exited 0.
+- Conformance: Not run; this task added no vectors. Void and Supersession requirements remain UNCOVERED pending later vector and implementation tasks.
+- Mutation: Not applicable for this artifact-only task. Critical later-test scenarios were recorded for void-without-delete, supersession currentness, predecessor history preservation, and rejected-operation state preservation.
+- Notes: Defined Void as nullification without deletion and Supersession as predecessor/successor currentness within a declared scope, with observable evolution history or relationship observations.
 
 <a id="task-024"></a>
 
-### - [ ] TASK-024 — Entity Evolution Portable Error Design
+### - [x] TASK-024 — Entity Evolution Portable Error Design
 
 **Release:** Draft 0.2
 
@@ -2387,9 +2402,9 @@ Entity Evolution Portable Error Design.
 
 **Definition of Done**
 
-- [ ] Reuse existing Entity/domain errors where sufficient; assign only justified evolution failure categories, preserve primary domain error codes and safe diagnostics.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Reuse existing Entity/domain errors where sufficient; assign only justified evolution failure categories, preserve primary domain error codes and safe diagnostics.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -2397,7 +2412,12 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC review completed; `git diff --check` exited 0.
+- Conformance: Not run; this task added no vectors. Entity Evolution error requirements remain UNCOVERED pending vector work.
+- Mutation: Not applicable for this artifact-only task. Critical later-test scenarios were recorded for invalid evolution requests, state/revision/currentness conflicts, identity errors, primary downstream domain error preservation, and safe diagnostics.
+- Notes: No new portable Entity error code was introduced. Invalid evolution requests use `FINKORE_ENTITY_INVALID_MUTATION`; state/revision/currentness mismatches use `FINKORE_ENTITY_STATE_CONFLICT`; identity failures use `FINKORE_ENTITY_INVALID_IDENTITY`; primary Workflow/Money/Approval/Audit failures retain their own codes. Execution pointer advanced to TASK-025.
 
 ### Milestone: Audit Relationships
 

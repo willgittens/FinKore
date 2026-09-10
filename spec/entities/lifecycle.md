@@ -42,5 +42,8 @@ Workflow failures use [Workflow Errors](../workflow/errors.md); entity-specific 
 
 ## Non-Goals
 
-FinKore Core Draft 0.1 does not define Correction, Reversal, Void, Cancellation, Supersession, or Adjustment behavior.
-
+Lifecycle State semantics do not by themselves define Correction, Reversal,
+Void, Supersession, Cancellation, or Adjustment behavior. Draft 0.2 Entity
+Evolution defines portable correction, reversal, void, and supersession
+distinctions; composing domains still define concrete lifecycle eligibility and
+consequences.
