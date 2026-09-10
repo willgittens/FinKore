@@ -1,408 +1,706 @@
 # FinKore CoreDoc
 
-**CoreDoc version:** v0.5  
-**Document date:** 2026-09-10  
+**CoreDoc version:** v0.5
+**Document date:** 2026-09-10
 **Status:** Initial normative draft
-
-The FinKore CoreDoc contains the foundational principles governing FinKore specifications. It identifies the financial-system obligations that must remain true for FinKore behavior to remain trustworthy, portable, auditable, and accountable across implementations and future specifications.
-
-The CoreDoc is technology-independent. It defines foundational financial meaning, not software design.
 
 ## Purpose
 
-The CoreDoc defines the principles behind FinKore domain specifications. Future FinKore specifications SHOULD remain compatible with these principles.
-
-A specification that intentionally diverges from a CoreDoc principle SHOULD explicitly identify the affected principle and justify the divergence. Such justification is important because CoreDoc principles may affect multiple downstream domain specifications, conformance requirements, implementations, and external review assumptions.
+The FinKore CoreDoc is a financial principles and rules standard. It states
+foundation-level obligations for financial meaning and control that FinKore domain
+specifications must refine. It is intended for accounting, audit, control,
+compliance, and financial-systems review.
 
 ## Scope
 
-The CoreDoc governs financial meaning and system behavior at the principle level.
+The CoreDoc governs financial meaning, evidence, control behaviour, and history.
+It does not prescribe software design, storage, interfaces, programming
+languages, or conformance mechanics.
 
-It does not define APIs, programming languages, implementation architecture, storage mechanisms, framework choices, concrete data structures, user interfaces, authorization systems, transport protocols, or individual conformance vectors.
+FinKore v0.5 does not define posting, double-entry ledgers, accounting dates or
+closed periods, tax, exchange-rate sourcing, reconciliation, settlement,
+accruals, depreciation, revenue recognition, statutory retention periods, or
+segregation-of-duties policy. This CoreDoc establishes none of them.
 
-The CoreDoc does not attempt to define a complete financial system. It records foundational principles that are supported by FinKore specifications and conformance evidence up to v0.5.
+## Normative language
 
-## Normative Language
+**SHALL**, **SHALL NOT**, **MUST**, and **MUST NOT** are mandatory. **SHOULD**
+is a recommendation that may be departed from with documented justification.
+**MAY** expresses permission.
 
-The terms **MUST**, **MUST NOT**, **SHALL**, and **SHALL NOT** express mandatory requirements and prohibitions. **SHOULD** expresses a recommendation that may be departed from with documented justification. **MAY** expresses permitted behavior.
+# Core Principles and Financial Rules
 
-Lowercase uses of these words have their ordinary meaning.
+## CORE-001 — Monetary Integrity
 
-# Core Principles
-
-### CORE-001 — Explicit Financial Meaning
-
-**Introduced:** v0.5  
-**Last updated:** v0.5  
+**Introduced:** v0.5
+**Last updated:** v0.5
 **Last updated on:** 2026-09-10
 
-**Principle**
+Monetary information must retain the amount, currency, precision, and allocation
+meaning needed to prevent a value from being silently changed or misapplied.
 
-Financial meaning SHALL be explicit. A system following FinKore principles MUST NOT infer material financial meaning from presentation labels, storage order, identifier format, implementation mechanisms, missing facts, or undeclared defaults.
+### CORE-001.1 — Amount and currency are inseparable
 
-**Rationale**
-
-Financial systems become unreliable when important meaning is guessed. Currency compatibility, lifecycle state, approval applicability, event type, terminal status, and ordering can materially affect financial outcomes and must therefore be grounded in declared domain facts.
-
-**Implications**
-
-Specifications should identify the facts, policies, declarations, and domain terms that determine an outcome. A system must not treat a display name as identity, a method name as a financial event type, a missing approval fact as non-applicability, a customary currency scale as calculation precision, or an arbitrary retrieval order as causality.
-
-**Scope and limitations**
-
-This principle does not prohibit convenient user interfaces, local display formats, or implementation-specific metadata. It requires that such conveniences do not become the source of material financial meaning unless a specification explicitly assigns that role.
-
-### CORE-002 — Monetary Semantic Integrity
-
-**Introduced:** v0.5  
-**Last updated:** v0.5  
+**Introduced:** v0.5
+**Last updated:** v0.5
 **Last updated on:** 2026-09-10
 
-**Principle**
+**Rule**
 
-Money SHALL preserve its exact monetary meaning. A monetary amount MUST remain associated with its currency, MUST use exact decimal semantics where monetary value is represented, and MUST NOT be rounded, converted, relabeled, or compared across currencies without an explicit governing rule.
+A monetary value SHALL contain an exact base-10 amount and a currency. An amount
+SHALL NOT be interpreted as monetary value without its currency.
 
-**Rationale**
+**Why this matters**
 
-Incorrect monetary arithmetic, implicit rounding, unsafe numeric representation, or silent currency treatment can create material financial misstatements. Monetary values are meaningful only when their amount and currency are preserved together.
+The same number has different financial meaning in different currencies.
+Treating currency as display-only can misstate a balance or transaction.
 
-**Implications**
+**Interpretation**
 
-Specifications should distinguish calculation scale from currency metadata, require explicit rounding when precision is reduced, reject incompatible-currency operations unless explicit conversion applies, and preserve exact monetary totals in allocations and rate application.
+Currency identifies the monetary unit; it does not supply an exchange rate.
+Negative and zero amounts retain ordinary numeric meaning unless a consuming
+domain declares a business restriction.
 
-**Scope and limitations**
+**Boundaries**
 
-This principle does not define exchange-rate sourcing, tax rules, interest conventions, market prices, or currency availability policy. Those subjects require separate specifications before they can govern FinKore behavior.
+This rule does not determine permitted currencies, private-currency treatment,
+or exchange-rate policy.
 
-### CORE-003 — Deterministic Financial Evaluation
+**Relevant FinKore domains**
 
-**Introduced:** v0.5  
-**Last updated:** v0.5  
+[Money representation](../../spec/money/representation.md) — MONEY-REPRESENTATION-001 to -004; [Currency](../../spec/money/currency.md) — MONEY-CURRENCY-005.
+
+### CORE-001.2 — Exact calculation and explicit rounding
+
+**Introduced:** v0.5
+**Last updated:** v0.5
 **Last updated on:** 2026-09-10
 
-**Principle**
+**Rule**
 
-For the same declared inputs, domain state, and relevant context, a FinKore financial evaluation SHALL produce the same observable outcome.
+Where a monetary calculation has an exactly representable result, it SHALL
+preserve that result. Precision reduction SHALL use a declared rounding rule and
+SHALL NOT select a rounding method or target scale implicitly.
 
-**Rationale**
+**Why this matters**
 
-Financial results must be reproducible for reconciliation, investigation, audit, dispute resolution, and cross-implementation comparison. Hidden dependence on locale, wall-clock time, uncontrolled randomness, storage order, or external services prevents reliable reconstruction.
+Undeclared rounding changes financial value without an accountable policy
+decision. Exact calculation identifies where rounding was intentionally applied.
 
-**Implications**
+**Interpretation**
 
-Specifications should require explicit timestamps, facts, policies, ordering relationships, rounding rules, and condition inputs where those matters affect an outcome. If an evaluation depends on external facts, that dependence should be identified so the evaluation can be reviewed against the facts used.
+A rounding rule identifies both target scale and mode. A currency's customary
+minor-unit scale is not, by itself, a rounding instruction.
 
-**Scope and limitations**
+**Boundaries**
 
-This principle does not require every real-world process to be free from external facts. It requires the domain result to be determined by the facts and context the specification treats as relevant.
+This rule does not select a business's rounding, tax, or statutory convention.
 
-### CORE-004 — Stable Identity and Continuity
+**Relevant FinKore domains**
 
-**Introduced:** v0.5  
-**Last updated:** v0.5  
+[Money arithmetic](../../spec/money/arithmetic.md) — MONEY-ARITHMETIC-007 and -008; [Money rounding](../../spec/money/rounding.md) — MONEY-ROUNDING-001 and -004 to -007; [Rates](../../spec/money/rates.md) — MONEY-RATE-005 and -006.
+
+### CORE-001.3 — Incompatible currencies are not combined or compared
+
+**Introduced:** v0.5
+**Last updated:** v0.5
 **Last updated on:** 2026-09-10
 
-**Principle**
+**Rule**
 
-Financially relevant subjects, entities, events, requirements, and actors SHALL preserve stable identity within their declared scope. A continuing financial subject MUST NOT silently receive a new identity, and a distinct subject MUST NOT silently reuse another subject's identity within the same scope.
+Monetary amounts SHALL be added, subtracted, ordered, or treated as numerically
+equal only when their currencies are compatible. Conversion SHALL be explicit;
+incompatibility SHALL NOT be silently resolved.
 
-**Rationale**
+**Why this matters**
 
-Stable identity is necessary to connect financial state, actions, approvals, audit history, corrections, and accountability over time. Identity instability prevents a reviewer from determining whether later information relates to the same financial subject.
+Combining EUR and USD without a stated conversion basis produces a number with
+no reliable financial interpretation.
 
-**Implications**
+**Interpretation**
 
-Specifications should distinguish stable identity from display numbers, revisions, versions, names, labels, profile data, storage keys, or presentation metadata. Import or migration should preserve identity or record an explicit mapping sufficient to maintain continuity.
+In the current Money specification, compatibility requires the same ISO 4217
+currency identifier. A mismatch is a rejected domain outcome, not zero or equal.
 
-**Scope and limitations**
+**Boundaries**
 
-This principle does not require one universal identifier format or global identity scope. It requires each relevant scope to preserve identity semantics consistently and transparently.
+FinKore v0.5 does not specify rate source, rate date, or foreign-exchange
+accounting.
 
-### CORE-005 — Lifecycle State Integrity
+**Relevant FinKore domains**
 
-**Introduced:** v0.5  
-**Last updated:** v0.5  
+[Currency](../../spec/money/currency.md) — MONEY-CURRENCY-003 and -004; [Money arithmetic](../../spec/money/arithmetic.md) — MONEY-ARITHMETIC-001 and -002; [Comparison](../../spec/money/comparison.md) — MONEY-COMPARISON-001 to -004.
+
+### CORE-001.4 — Allocation conserves the source value
+
+**Introduced:** v0.5
+**Last updated:** v0.5
 **Last updated on:** 2026-09-10
 
-**Principle**
+**Rule**
 
-Financial lifecycle state SHALL change only through declared, valid domain transitions. A financial subject MUST have exactly one current lifecycle state when a specification defines lifecycle behavior.
+An allocation SHALL preserve the source currency and return results whose exact
+sum equals the source amount. It SHALL NOT drop, duplicate, create, or destroy
+allocation units.
 
-**Rationale**
+**Why this matters**
 
-Lifecycle state determines what actions are permitted, what obligations apply, and what financial meaning a subject currently has. Direct, undeclared, ambiguous, or partially applied state changes undermine control and reviewability.
+An unexplained residual between a cost or payment and its assignments prevents
+reconciliation.
 
-**Implications**
+**Interpretation**
 
-Specifications should declare valid states, initial state, directed transitions, guard conditions, terminal states, and the consequences of each state where those matters affect financial behavior. The reverse of a transition must not be inferred from the forward transition.
+The allocation scale and method are declared inputs. The declared result order
+governs distribution of an indivisible remainder.
 
-**Scope and limitations**
+**Boundaries**
 
-This principle does not define a universal workflow model for every financial domain. It applies when lifecycle behavior is part of the domain meaning being specified.
+This rule does not determine which costs may be allocated or the commercial basis
+for an allocation ratio.
 
-### CORE-006 — Controlled Mutability
+**Relevant FinKore domains**
 
-**Introduced:** v0.5  
-**Last updated:** v0.5  
+[Money allocation](../../spec/money/allocation.md) — MONEY-ALLOCATION-001 to -013.
+
+## CORE-002 — Controlled Financial State
+
+**Introduced:** v0.5
+**Last updated:** v0.5
 **Last updated on:** 2026-09-10
 
-**Principle**
+A financial subject's current status and permitted changes must be determined by
+declared domain rules. A rejected action must not leave a partial outcome.
 
-Material financial information SHALL be mutable only under declared domain rules. A system MUST reject ordinary mutation of information that is immutable in the current domain state or policy.
+### CORE-002.1 — Lifecycle changes require a declared valid transition
 
-**Rationale**
-
-Financial trust depends on knowing when information can be changed directly and when later action must preserve the relationship to prior information. Uncontrolled mutation can obscure responsibility, alter approved facts, or detach current state from historical evidence.
-
-**Implications**
-
-Specifications should identify which fields or facts may change in each relevant state and which successful mutations require audit evidence. Final, approved, posted, or terminal status should not be treated as global immutability unless the applicable domain rule declares it.
-
-**Scope and limitations**
-
-This principle does not define correction, reversal, void, cancellation, supersession, or adjustment semantics. It also does not require all operational metadata to be immutable whenever financial fields are immutable.
-
-### CORE-007 — Failure Atomicity
-
-**Introduced:** v0.5  
-**Last updated:** v0.5  
+**Introduced:** v0.5
+**Last updated:** v0.5
 **Last updated on:** 2026-09-10
 
-**Principle**
+**Rule**
 
-A rejected financial operation SHALL NOT create a partially applied financial result. When a domain operation fails, the relevant observable financial state, operands, committed history, and existing decisions MUST remain unchanged except where a specification explicitly defines a different failure effect.
+Where a financial subject has a lifecycle, it SHALL have one declared current
+state. Its state SHALL change only through a declared transition from that state
+after all applicable conditions have passed.
 
-**Rationale**
+**Why this matters**
 
-Partial failure can leave financial systems in states that were never approved, validated, balanced, or auditable. Reviewers must be able to rely on the distinction between successful domain operations and rejected attempts.
+Lifecycle status can determine whether a financial action is permitted or final.
+An undeclared shortcut, including an assumed reverse transition, weakens control.
 
-**Implications**
+**Interpretation**
 
-Specifications should define failure postconditions for operations that affect money, lifecycle state, audit history, approvals, and entities. Validation should occur before resulting changes become observable when failure would otherwise expose incomplete or invalid financial state.
+Each lifecycle declares its initial state, directed transitions, and terminal
+states. Labels such as “posted” or “final” do not independently establish effect.
 
-**Scope and limitations**
+**Boundaries**
 
-This principle concerns domain-observable financial effects. It does not prescribe database transaction mechanisms, logging, retry systems, or transport failure handling.
+This rule does not prescribe universal states or which events require a lifecycle.
 
-### CORE-008 — Historical Integrity
+**Relevant FinKore domains**
 
-**Introduced:** v0.5  
-**Last updated:** v0.5  
+[Workflow states](../../spec/workflow/states.md) — WORKFLOW-STATES-002, -004, and -007; [Transitions](../../spec/workflow/transitions.md) — WORKFLOW-TRANSITION-001 to -005; [Terminal states](../../spec/workflow/terminal-states.md) — WORKFLOW-TERMINAL-001 to -004; [Entity lifecycle](../../spec/entities/lifecycle.md) — ENTITY-LIFECYCLE-001 to -006.
+
+### CORE-002.2 — Validation is complete, fact-based, and non-mutating
+
+**Introduced:** v0.5
+**Last updated:** v0.5
 **Last updated on:** 2026-09-10
 
-**Principle**
+**Rule**
 
-Committed material financial history SHALL NOT be destructively rewritten where doing so would prevent reconstruction of prior financial states, actions, decisions, or explicitly recorded ordering relationships.
+A proposed financial change SHALL be evaluated against the complete proposed
+result and declared relevant facts before it becomes observable. Validation or
+transition-condition evaluation SHALL NOT itself alter domain data.
 
-**Rationale**
+**Why this matters**
 
-Financial systems require historical reconstruction for audit, reconciliation, investigation, dispute resolution, approvals review, and accountability. Replacing or deleting committed history can conceal what happened and why later state exists.
+Controls spanning several facts fail if each fact is assessed alone. State changed
+while checking a condition obscures the difference between attempt and success.
 
-**Implications**
+**Interpretation**
 
-Corrections, redactions, later decisions, and exceptional transformations should preserve detectable evidence of their relationship to prior history. A later approval must not erase a prior rejection, and a redaction must not pretend that the event or protected value position never existed.
+All applicable conditions must pass. For the same declared facts, a condition has
+the same result unless it identifies an external fact on which it depends.
 
-**Scope and limitations**
+**Boundaries**
 
-This principle governs logical financial history, not a particular physical storage technology. It does not require every operational or non-material piece of application state to be retained indefinitely.
+This rule does not define a general authorization model or product-specific
+business validations.
 
-### CORE-009 — Evidentiary Sufficiency
+**Relevant FinKore domains**
 
-**Introduced:** v0.5  
-**Last updated:** v0.5  
+[Workflow guards](../../spec/workflow/guards.md) — WORKFLOW-GUARD-001 to -006; [Entity validation](../../spec/entities/validation.md) — ENTITY-VALIDATION-001 to -003 and -006.
+
+### CORE-002.3 — Rejected actions have no partial financial effect
+
+**Introduced:** v0.5
+**Last updated:** v0.5
 **Last updated on:** 2026-09-10
 
-**Principle**
+**Rule**
 
-Material financial actions SHALL preserve sufficient evidence to identify what occurred, when it occurred, the financially relevant subject affected, the responsible actor when known, and the domain facts necessary to evaluate the action's meaning.
+A rejected financial action SHALL leave relevant observable financial state,
+financial data, and committed history unchanged, unless a governing rule
+expressly defines another failure effect.
 
-**Rationale**
+**Why this matters**
 
-A financial action without adequate evidence cannot be reliably reconstructed, attributed, challenged, approved, or reconciled. Evidence links current financial state to prior decisions and events.
+A partly recognised failed change can create an unapproved balance, status,
+relationship, or audit trail that cannot be reconciled with the reported outcome.
 
-**Implications**
+**Interpretation**
 
-Specifications should define the minimum evidence required for domain events, changes, approvals, lifecycle transitions, and material mutations. Evidence should use stable domain representations rather than localized display text or implementation-specific names.
+This includes rejected transitions, entity mutations, audit appends and
+relationships, and evolution requests where the relevant specification defines
+non-mutation on failure.
 
-**Scope and limitations**
+**Boundaries**
 
-This principle does not require event sourcing, a universal audit schema, or disclosure of protected content. Evidence requirements may vary by domain and materiality.
+This rule concerns domain-observable effects, not database transactions, retries,
+logs, or network-failure handling.
 
-### CORE-010 — Approval Accountability
+**Relevant FinKore domains**
 
-**Introduced:** v0.5  
-**Last updated:** v0.5  
+[Workflow transitions](../../spec/workflow/transitions.md) — WORKFLOW-TRANSITION-006 and -007; [Entity mutability](../../spec/entities/mutability.md) — ENTITY-MUTABILITY-004; [Entity evolution](../../spec/entities/evolution.md) — ENTITY-EVOLUTION-023 to -025; [Audit errors](../../spec/audit/errors.md) — AUDIT-ERROR-001; [Audit relationships](../../spec/audit/relationships.md) — AUDIT-RELATIONSHIP-012.
+
+### CORE-002.4 — Mutability is declared by state and field
+
+**Introduced:** v0.5
+**Last updated:** v0.5
 **Last updated on:** 2026-09-10
 
-**Principle**
+**Rule**
 
-Approval SHALL be based on declared requirements, eligible decision-makers, explicit outcomes, and the relevant subject facts against which the decision was made. Authorization to perform an operation MUST NOT by itself be treated as approval.
+For a subject with state-dependent mutability, the governing domain SHALL declare
+which fields may change in each state. A change targeting an immutable field
+SHALL be rejected.
 
-**Rationale**
+**Why this matters**
 
-Approval is a business control, not merely technical access. Treating permission to act as approval, or treating an approval as valid after relevant facts have changed, can bypass financial controls.
+“Final” status alone is too vague to determine what can still change.
+Unrestricted change to protected facts can detach a record from approval and
+history evidence.
 
-**Implications**
+**Interpretation**
 
-Specifications should distinguish pending, approved, rejected, unresolved, and not-applicable states where they have different control meaning. Approval outcomes should be derivable from applicable requirements and effective decisions, and decisions should not remain effective for materially changed facts unless a declared policy so provides.
+Financial fields and operational metadata may have different rules, but a
+permitted exception must be expressly identified and meet audit requirements.
 
-**Scope and limitations**
+**Boundaries**
 
-This principle does not define RBAC, authentication, authorization policy, quorum, delegation, withdrawal, expiration, escalation, or approval-definition migration.
+This rule does not make every field immutable after approval, posting, or a
+terminal state, and does not select a domain's field policy.
 
-### CORE-011 — Semantic Distinction Preservation
+**Relevant FinKore domains**
 
-**Introduced:** v0.5  
-**Last updated:** v0.5  
+[Entity mutability](../../spec/entities/mutability.md) — ENTITY-MUTABILITY-001 to -007.
+
+## CORE-003 — Financial History and Evolution
+
+**Introduced:** v0.5
+**Last updated:** v0.5
 **Last updated on:** 2026-09-10
 
-**Principle**
+Material financial history must be attributable, reconstructible, and resistant
+to destructive rewriting. A later action may alter current effect but not conceal
+the earlier financial fact.
 
-Distinct financial meanings SHALL remain distinguishable. A system MUST NOT collapse materially different states such as absent, null, unknown, redacted, pending, rejected, not applicable, unresolved, or zero when the governing domain distinguishes them.
+### CORE-003.1 — A committed event preserves essential evidence
 
-**Rationale**
-
-Many financial controls depend on distinctions that may appear superficially similar. Missing evidence is not the same as evidence of absence. Unknown attribution is not a known actor. Pending approval is not rejection or approval. A zero monetary amount is not an omitted amount.
-
-**Implications**
-
-Specifications should define when omission, nullability, redaction, unknown attribution, unresolved conditions, and explicit negative outcomes have different meanings. Representations should preserve those distinctions across domain boundaries.
-
-**Scope and limitations**
-
-This principle applies only when the distinction is materially relevant or explicitly defined by the governing domain. It does not require every possible technical representation difference to carry financial meaning.
-
-### CORE-012 — Policy-Authorized Confidentiality Without Evidentiary Destruction
-
-**Introduced:** v0.5  
-**Last updated:** v0.5  
+**Introduced:** v0.5
+**Last updated:** v0.5
 **Last updated on:** 2026-09-10
 
-**Principle**
+**Rule**
 
-Protected financial or actor information MAY be withheld only under an identified policy or authority, and such withholding SHALL preserve the material evidence required to understand that an event, action, change, or attribution existed.
+A committed financial event SHALL preserve a stable event identity, declared
+event type, affected financial subject, and unambiguous occurrence time. It SHALL
+identify the responsible actor when known.
 
-**Rationale**
+**Why this matters**
 
-Financial systems must balance confidentiality with auditability. Removing protected content without preserving evidence can destroy the ability to reconstruct material history, while exposing protected content can violate confidentiality obligations.
+Without these facts, a reviewer cannot determine what occurred, what it affected,
+when it took effect, or who was accountable.
 
-**Implications**
+**Interpretation**
 
-Specifications should distinguish redaction from absence, preserve event identity and other required event meaning after redaction, and record evidence that a redaction occurred when committed logical history is affected. Error details and validation findings should avoid unnecessary disclosure of sensitive values.
+Event type is declared domain meaning, not an inference from a technical action
+or label. An unknown or absent actor shall not be represented as an invented one.
 
-**Scope and limitations**
+**Boundaries**
 
-This principle does not define jurisdiction-specific privacy, secrecy, or retention law. It also does not define cryptographic deletion, secure erasure, access-control models, or retention automation.
+This rule does not require an event for every operational occurrence or a
+universal event-type catalogue.
 
-### CORE-013 — Portable Domain Failure Semantics
+**Relevant FinKore domains**
 
-**Introduced:** v0.5  
-**Last updated:** v0.5  
+[Audit events](../../spec/audit/events.md) — AUDIT-EVENT-001 to -008; [Audit actors](../../spec/audit/actors.md) — AUDIT-ACTOR-001 to -004.
+
+### CORE-003.2 — Committed history is not destructively rewritten
+
+**Introduced:** v0.5
+**Last updated:** v0.5
 **Last updated on:** 2026-09-10
 
-**Principle**
+**Rule**
 
-Material domain failures SHALL be identified by stable, portable failure categories. Failure meaning MUST NOT depend on localized prose, implementation exception names, stack traces, transport status, or framework-specific diagnostics.
+A committed financial-history event and an explicitly recorded ordering
+relationship SHALL NOT be replaced, modified, removed, or silently reordered.
 
-**Rationale**
+**Why this matters**
 
-Financial systems often span multiple services, languages, and organizational boundaries. A portable failure category allows downstream systems, auditors, and operators to understand whether a failure was caused by invalid money, incompatible currency, rejected workflow transition, unsatisfied approval, immutable state, or another domain condition.
+History cannot support reconstruction, investigation, or accountability if past
+events can disappear or change without trace.
 
-**Implications**
+**Interpretation**
 
-Specifications should define stable portable error codes for material domain failures and preserve primary domain-specific codes when failures pass through composing domains. Additional diagnostic context may be supplied only when it does not alter code meaning or expose restricted information.
+Resubmitting an existing event identity is rejected rather than creating another
+committed instance. Arbitrary storage or retrieval order is not evidence of
+financial sequence when order was not explicitly recorded.
 
-**Scope and limitations**
+**Boundaries**
 
-This principle does not define transport status codes, exception class names, user-facing messages, localization formats, or a complete error taxonomy for every possible operational failure.
+This rule does not impose event sourcing, global distributed order, or indefinite
+record retention.
 
-### CORE-014 — Portable Financial Equivalence
+**Relevant FinKore domains**
 
-**Introduced:** v0.5  
-**Last updated:** v0.5  
+[Audit append-only history](../../spec/audit/append-only.md) — AUDIT-APPEND-001 to -004 and -006; [Audit relationships](../../spec/audit/relationships.md) — AUDIT-RELATIONSHIP-009 and -014.
+
+### CORE-003.3 — Corrections and related evolution preserve original facts
+
+**Introduced:** v0.5
+**Last updated:** v0.5
 **Last updated on:** 2026-09-10
 
-**Principle**
+**Rule**
 
-Equivalent financial facts SHALL retain equivalent domain meaning across conforming FinKore implementations, subject to the same declared specification, inputs, context, and state.
+A correction, reversal, void, or supersession SHALL preserve a verifiable
+relationship to the affected original subject or event. It SHALL NOT erase or
+rewrite original financial facts or history, and these concepts SHALL NOT be
+silently treated as interchangeable.
 
-**Rationale**
+**Why this matters**
 
-FinKore exists so financial behavior can remain consistent across languages, services, frameworks, and implementation choices. If equivalent facts produce incompatible meanings across implementations, the specification no longer provides trustworthy portability.
+These actions can have different financial effects. A reviewer must distinguish a
+correction from a reversal or void and reconstruct both original and later facts.
 
-**Implications**
+**Interpretation**
 
-Specifications should define observable behavior precisely enough for conformance evaluation. Conformance evidence should verify valid behavior, rejected behavior, boundary behavior, invariants, and plausible financial defects where appropriate.
+Eligibility and detailed consequences are declared by the composing domain or
+lifecycle policy, not inferred from state or display labels.
 
-**Scope and limitations**
+**Boundaries**
 
-This principle does not require identical APIs, internal representations, storage systems, or implementation architecture. It concerns observable financial behavior and meaning.
+This rule does not define accounting entries, effective dates, or business
+eligibility for these actions.
 
-### CORE-015 — Undefined Financial Semantics Shall Not Be Inferred
+**Relevant FinKore domains**
 
-**Introduced:** v0.5  
-**Last updated:** v0.5  
+[Entity evolution](../../spec/entities/evolution.md) — ENTITY-EVOLUTION-004, -006, and -008 to -023; [Audit relationships](../../spec/audit/relationships.md) — AUDIT-RELATIONSHIP-001 to -013.
+
+### CORE-003.4 — Redaction preserves evidence of history
+
+**Introduced:** v0.5
+**Last updated:** v0.5
 **Last updated on:** 2026-09-10
 
-**Principle**
+**Rule**
 
-Where FinKore has not defined a material financial behavior, a conforming specification or implementation MUST NOT silently invent that behavior and present it as FinKore semantics.
+Financial-history content MAY be redacted only under identified policy or
+authority. Redaction SHALL remain distinguishable from original absence and
+preserve the event identity, type, affected subject, occurrence time, actor
+attribution, and recorded relationships needed to evidence the event.
 
-**Rationale**
+**Why this matters**
 
-False precision is dangerous in financial systems. Undeclared semantics for correction, reversal, authorization, concurrency, retention, taxation, exchange conversion, or approval migration may appear plausible while materially changing financial obligations or controls.
+Confidentiality can be necessary, but deleting evidence of an event makes its
+history unreconstructible. A reviewer must know that a value was withheld.
 
-**Implications**
+**Interpretation**
 
-Specifications should mark deferred or out-of-scope subjects explicitly. Implementations may support additional application behavior, but they should not claim such behavior is defined by FinKore unless the relevant specification and conformance obligations exist.
+Redaction of committed logical history produces an event evidencing that
+redaction. Access-time masking may supplement it but is not source-event mutation.
 
-**Scope and limitations**
+**Boundaries**
 
-This principle does not prohibit experimentation, implementation extensions, or composing-domain rules. It requires that such behavior be identified as outside current FinKore semantics until standardized.
+This rule does not establish privacy law, retention law, cryptographic deletion,
+or access-control policy.
 
-# Principle Metadata and Audit Trail
+**Relevant FinKore domains**
 
-Every Core principle contains a stable `CORE-XXX` identifier, a canonical principle name, the version in which it was introduced, the version in which its normative meaning was most recently changed, and the date of that latest normative change.
+[Audit redaction](../../spec/audit/redaction.md) — AUDIT-REDACTION-001 to -007; [Audit append-only history](../../spec/audit/append-only.md) — AUDIT-APPEND-001 and -004; [Audit actors](../../spec/audit/actors.md) — AUDIT-ACTOR-006.
 
-A `CORE-XXX` identifier MUST remain stable once introduced. A principle MUST NOT receive a new identifier merely because its wording, name, interpretation, or scope changes. A removed, replaced, or superseded principle should preserve its identifier in historical records so prior references remain traceable.
+## CORE-004 — Approval Integrity
 
-`Introduced` identifies the FinKore/CoreDoc version in which the principle first became part of the CoreDoc. `Last updated` identifies the version in which the normative meaning of the principle most recently changed. `Last updated on` records the calendar date of that normative change in ISO `YYYY-MM-DD` format.
+**Introduced:** v0.5
+**Last updated:** v0.5
+**Last updated on:** 2026-09-10
 
-Editorial-only changes SHOULD NOT modify `Last updated` or `Last updated on`. The metadata represents changes in normative meaning, not ordinary document editing.
+An approval is a financial-control decision about a specified subject and facts.
+It is distinct from technical access to submit an action.
 
-# Relationship With Specifications
+### CORE-004.1 — Approval requirements state subject, eligibility, and outcome
 
-FinKore uses the following hierarchy:
+**Introduced:** v0.5
+**Last updated:** v0.5
+**Last updated on:** 2026-09-10
 
-```text
-CoreDoc
-  -> Domain Specifications
-  -> Conformance Requirements
-  -> Implementations
-```
+**Rule**
 
-The CoreDoc defines foundational principles. Domain specifications translate those principles into precise financial behavior. Conformance requirements verify portable observable behavior. Implementations determine how that behavior is technically achieved.
+An approval requirement SHALL identify the subject requiring approval, eligible
+decision-maker or eligibility rule, and the outcome that satisfies or rejects it.
+Eligibility SHALL be evaluated independently from technical ability to submit a
+request.
 
-The CoreDoc does not contain detailed conformance tests or implementation rules. A domain specification may refine a CoreDoc principle for a particular financial domain, but it should not silently contradict the foundational meaning of the principle.
+**Why this matters**
 
-# Evolution of CoreDoc
+Technical permission is not evidence that appropriate business approval was
+given. Declared eligibility and outcome criteria make the control testable.
 
-The CoreDoc is expected to evolve. Contributors may propose clarifications, challenges to assumptions, new principles, modifications to existing principles, changes in scope, or removal or replacement of principles that are no longer defensible.
+**Interpretation**
 
-Proposed changes should reference the affected stable `CORE-XXX` identifier where one exists. Changes affecting normative meaning require greater scrutiny than ordinary documentation edits because they may affect multiple downstream specifications, conformance requirements, implementations, and external review assumptions.
+A requirement may be conditional, but retains stable identity in its approval
+context. A decision-maker must meet the requirement at evaluation time.
 
-This section does not establish a formal governance board or certification process.
+**Boundaries**
 
-# External Review
+This rule does not establish authentication, role-based access control,
+maker-checker separation, delegated approval, or conflict-of-interest policy.
 
-Future CoreDoc versions may be independently reviewed by accountants, auditors, financial controllers, internal-control specialists, IT auditors, risk professionals, compliance professionals, financial-system architects, and distributed-systems specialists where relevant.
+**Relevant FinKore domains**
 
-External review exists to challenge assumptions. Review should attempt to identify where a principle may be incorrect, incomplete, ambiguous, overly broad, technically impossible, financially unsound, jurisdiction-dependent, or based on an assumption that does not hold in real financial systems.
+[Approval requirements](../../spec/approvals/requirements.md) — APPROVAL-REQUIREMENT-001 to -007; [Approval decisions](../../spec/approvals/decisions.md) — APPROVAL-DECISION-004.
 
-Review MUST NOT be described as certification unless an actual certification process has been defined and completed.
+### CORE-004.2 — Missing facts do not create an approval exemption
 
-# Relationship to FinKore v0.5
+**Introduced:** v0.5
+**Last updated:** v0.5
+**Last updated on:** 2026-09-10
 
-This initial CoreDoc describes principles that can be justified from FinKore specifications, conformance materials, agentic contract documents, documentation, and implemented domains up to v0.5.
+**Rule**
 
-The initial CoreDoc does not attempt to predict every future FinKore domain. Where repository evidence is not yet strong enough to establish a foundational principle, the subject remains outside the CoreDoc until future specifications support it.
+An approval condition SHALL be evaluated against identified domain facts. If a
+required fact is absent, the requirement SHALL fail or remain unresolved; it
+SHALL NOT be silently treated as not applicable.
+
+**Why this matters**
+
+Treating missing information as an exemption can bypass a control when its
+assessment information is unavailable.
+
+**Interpretation**
+
+For the same condition and facts, applicability is deterministic. Presentation
+state and unspecified authorization policy are not implicit approval inputs.
+
+**Boundaries**
+
+This rule does not determine which approval conditions a business must impose.
+
+**Relevant FinKore domains**
+
+[Approval conditions](../../spec/approvals/conditions.md) — APPROVAL-CONDITION-001 to -006.
+
+### CORE-004.3 — Decisions remain tied to their facts and history
+
+**Introduced:** v0.5
+**Last updated:** v0.5
+**Last updated on:** 2026-09-10
+
+**Rule**
+
+An approval decision SHALL identify its requirement, deciding actor, outcome,
+time, and relevant subject facts or state. It SHALL NOT be assumed valid after
+relevant facts change, and a committed decision SHALL NOT be overwritten or
+removed from logical approval history.
+
+**Why this matters**
+
+Approval is meaningful only in relation to what was approved. Preserving the
+decision and factual basis shows whether later change needs fresh consideration.
+
+**Interpretation**
+
+The application or a higher-level policy determines which changed facts are
+relevant or material. Portable decisions are approved and rejected.
+
+**Boundaries**
+
+This rule does not define materiality, expiry, withdrawal, delegation, or quorum.
+
+**Relevant FinKore domains**
+
+[Approval decisions](../../spec/approvals/decisions.md) — APPROVAL-DECISION-001 to -008; [Approval conditions](../../spec/approvals/conditions.md) — APPROVAL-CONDITION-003.
+
+### CORE-004.4 — Chain status follows declared requirements and decisions
+
+**Introduced:** v0.5
+**Last updated:** v0.5
+**Last updated on:** 2026-09-10
+
+**Rule**
+
+An approval chain SHALL declare whether its applicable requirements are
+sequential or unordered. It SHALL be approved only when every applicable
+requirement is approved; it SHALL remain pending while an applicable requirement
+is pending unless an effective rejection determines the declared outcome.
+
+**Why this matters**
+
+A chain that appears complete before every required approval is effective permits
+a financial action without its intended control.
+
+**Interpretation**
+
+A sequential chain does not activate a later requirement before its predecessor
+is satisfied. An unordered chain is not silently treated as sequential.
+
+**Boundaries**
+
+This rule does not define a universal sequence, rejection policy, or quorum.
+
+**Relevant FinKore domains**
+
+[Approval chains](../../spec/approvals/chains.md) — APPROVAL-CHAIN-001 to -009; [Approval requirements](../../spec/approvals/requirements.md) — APPROVAL-REQUIREMENT-005.
+
+## CORE-005 — Identifiable and Determinable Financial Meaning
+
+**Introduced:** v0.5
+**Last updated:** v0.5
+**Last updated on:** 2026-09-10
+
+Financial meaning must be attributable to stable subjects and declared facts. A
+reviewer must distinguish material conditions and reproduce results from stated
+context.
+
+### CORE-005.1 — Continuing financial subjects retain stable identity
+
+**Introduced:** v0.5
+**Last updated:** v0.5
+**Last updated on:** 2026-09-10
+
+**Rule**
+
+A continuing financial subject SHALL have an identifier unique within its
+declared scope and stable throughout its lifecycle. Distinct subjects SHALL NOT
+share that identifier within the same scope.
+
+**Why this matters**
+
+Stable identity connects state, approvals, corrections, evidence, and
+accountability over time. A mutable or reusable display number cannot do so.
+
+**Interpretation**
+
+Identifiers are opaque: their format does not establish mutable financial facts.
+Import or migration preserves identity or records an explicit continuity mapping.
+
+**Boundaries**
+
+This rule does not require a global identifier format or universal identity scope.
+
+**Relevant FinKore domains**
+
+[Entity identity](../../spec/entities/identity.md) — ENTITY-IDENTITY-001 to -006; [Audit events](../../spec/audit/events.md) — AUDIT-EVENT-004; [Audit actors](../../spec/audit/actors.md) — AUDIT-ACTOR-001 to -003.
+
+### CORE-005.2 — Materially distinct conditions remain distinguishable
+
+**Introduced:** v0.5
+**Last updated:** v0.5
+**Last updated on:** 2026-09-10
+
+**Rule**
+
+Where the governing domain gives materially different meaning to absence, an
+explicit null, an unknown actor, a redacted value, a pending approval, a rejected
+approval, a not-applicable requirement, or zero monetary amount, those conditions
+SHALL remain distinguishable.
+
+**Why this matters**
+
+Collapsing these conditions can turn missing evidence into an exemption, hide a
+redaction, misattribute an action, or turn an absent value into zero.
+
+**Interpretation**
+
+The rule applies only to distinctions made material by the governing domain. It
+does not make every representational difference a financial distinction.
+
+**Boundaries**
+
+This rule does not require all domains to use the same representation or define
+every possible form of missing information.
+
+**Relevant FinKore domains**
+
+[Audit changes](../../spec/audit/changes.md) — AUDIT-CHANGE-003; [Audit actors](../../spec/audit/actors.md) — AUDIT-ACTOR-004; [Audit redaction](../../spec/audit/redaction.md) — AUDIT-REDACTION-002; [Approval conditions](../../spec/approvals/conditions.md) — APPROVAL-CONDITION-002 and -006; [Approval requirements](../../spec/approvals/requirements.md) — APPROVAL-REQUIREMENT-005; [Money representation](../../spec/money/representation.md) — MONEY-REPRESENTATION-004.
+
+### CORE-005.3 — Evaluation follows declared facts and context
+
+**Introduced:** v0.5
+**Last updated:** v0.5
+**Last updated on:** 2026-09-10
+
+**Rule**
+
+For the same declared inputs, financial state, and relevant context, a financial
+evaluation SHALL produce the same observable outcome. A dependency on an external
+fact SHALL be identified when it affects that outcome.
+
+**Why this matters**
+
+Reconciliation, challenge, and audit require reproducible outcomes from their
+stated basis. Hidden dependence prevents that review.
+
+**Interpretation**
+
+This covers rounding, allocation, approval conditions and chains, and workflow
+guards. It does not make external facts impermissible; it requires their
+relevance to be stated.
+
+**Boundaries**
+
+This rule does not define accounting dates, market-data sourcing, or a general
+snapshotting and retention regime for external facts.
+
+**Relevant FinKore domains**
+
+[Money rounding](../../spec/money/rounding.md) — MONEY-ROUNDING-002; [Money allocation](../../spec/money/allocation.md) — MONEY-ALLOCATION-012; [Approval conditions](../../spec/approvals/conditions.md) — APPROVAL-CONDITION-005; [Approval chains](../../spec/approvals/chains.md) — APPROVAL-CHAIN-008; [Workflow guards](../../spec/workflow/guards.md) — WORKFLOW-GUARD-004 and -006; [Audit append-only history](../../spec/audit/append-only.md) — AUDIT-APPEND-006.
+
+## Relationship with specifications
+
+    CoreDoc
+      -> Domain specifications
+      -> Conformance requirements
+      -> Implementations
+
+The CoreDoc supplies foundation-level financial obligations. Domain
+specifications define precise scope and behaviour; conformance verifies observable
+requirements; implementations realise that behaviour. A lower layer may refine a
+CoreDoc rule but shall not silently contradict it.
+
+## Evolution of CoreDoc
+
+Core Principle and Financial Rule identifiers are stable references. A CORE-XXX
+or CORE-XXX.N identifier SHALL NOT be reused for an unrelated principle or rule.
+A removed, replaced, or superseded rule remains traceable in historical records
+rather than being silently reassigned.
+
+Introduced records entry into CoreDoc. Last updated and Last updated on record
+the most recent normative change. Editorial-only changes SHALL NOT update those
+fields.
+
+## External review
+
+Reviewers may challenge a Financial Rule by its stable identifier. A challenge
+may identify an accounting counterexample, control weakness, jurisdictional
+limitation, ambiguity, missing exception, or proposed replacement. Agreement with
+one rule does not imply approval of the CoreDoc as a whole.
+
+## Relationship to FinKore v0.5
+
+This draft is limited to the current Money, Workflow, Audit, Approvals, and
+Financial Entities specifications. It makes no claim that unspecified future
+domains or policy choices have already been standardised.
