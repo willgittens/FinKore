@@ -28,7 +28,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 
 - [x] Foundation: [TASK-001](#task-001)–[TASK-003](#task-003)
 - [x] Money Rates: [TASK-004](#task-004)–[TASK-011](#task-011)
-- [ ] Money Allocation: [TASK-012](#task-012)–[TASK-020](#task-020)
+- [x] Money Allocation: [TASK-012](#task-012)–[TASK-020](#task-020)
 - [ ] Entity Evolution Specification: [TASK-021](#task-021)–[TASK-024](#task-024)
 - [ ] Audit Relationships: [TASK-025](#task-025)–[TASK-032](#task-032)
 - [ ] Entity Evolution Implementation: [TASK-033](#task-033)–[TASK-044](#task-044)
@@ -52,7 +52,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-013
+NEXT TASK: TASK-021
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -1309,11 +1309,11 @@ Completion:
 - Verification: DOC review completed; `git diff --check` exited 0. Source revision before changes: `941564830b2f2b824c4c052802f39f53677c4ac2`.
 - Conformance: Not run; no conformance vectors were added by this spec-only task. Allocation requirements are recorded as 13 UNCOVERED requirements pending TASK-014.
 - Mutation: Not applicable for this artifact-only task. Critical later-test scenarios recorded for unrepresentable source rejection, exact total preservation, ordered remainder distribution including negative sources, and source non-mutation.
-- Notes: Added Draft 0.2 Money Allocation normative semantics in `spec/money/allocation.md`; updated Money index, glossary, and traceability. Invalid part-count, ratio, and target-scale portable error mapping remains intentionally assigned to TASK-013. No TypeScript public API, adapter operation, conformance vector, root README, package README, Agentic operation, or AGENTS.md change was required because allocation remains specified but not yet implemented.
+- Notes: Added Draft 0.2 Money Allocation normative semantics in `spec/money/allocation.md`; updated Money index, glossary, and traceability. Invalid part-count, ratio, and target-scale portable error mapping remained intentionally assigned to TASK-013. No TypeScript public API, adapter operation, conformance vector, root README, package README, Agentic operation, or AGENTS.md change was required at this task boundary because allocation was specified but not yet implemented.
 
 <a id="task-013"></a>
 
-### - [ ] TASK-013 — Allocation Portable Error Design
+### - [x] TASK-013 — Allocation Portable Error Design
 
 **Release:** Draft 0.2
 
@@ -1384,9 +1384,9 @@ Allocation Portable Error Design.
 
 **Definition of Done**
 
-- [ ] Decide whether existing Money errors suffice for invalid counts/ratios/scale; specify invalid-allocation category only if justified, including failure non-mutation.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Decide whether existing Money errors suffice for invalid counts/ratios/scale; specify invalid-allocation category only if justified, including failure non-mutation.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -1394,11 +1394,16 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC review completed; `git diff --check` exited 0. Source revision before changes: `0be7baaff8a00504692c2222579fd5126130e597`.
+- Conformance: Not run; no conformance vectors were added by this spec-only task. `MONEY-ERROR-008` is recorded as UNCOVERED pending TASK-014.
+- Mutation: Not applicable for this artifact-only task. Critical later-test scenario recorded for invalid allocation requests collapsing into an incorrect portable error code.
+- Notes: Existing Money errors do not suffice for invalid allocation method/count/ratio/target-scale inputs because those are allocation-contract failures rather than invalid Money amounts, currency mismatches, division-by-zero, or invalid rounding policies. Added `FINKORE_MONEY_INVALID_ALLOCATION` and `MONEY-ERROR-008`; unrepresentable source-at-scale remains `FINKORE_MONEY_ROUNDING_REQUIRED`. No TypeScript public API, adapter operation, conformance vector, root README, package README, Agentic operation, or AGENTS.md change was required at this task boundary because allocation was specified but not yet implemented.
 
 <a id="task-014"></a>
 
-### - [ ] TASK-014 — Allocation Conformance Vectors
+### - [x] TASK-014 — Allocation Conformance Vectors
 
 **Release:** Draft 0.2
 
@@ -1474,9 +1479,9 @@ Allocation Conformance Vectors.
 
 **Definition of Done**
 
-- [ ] Cover equal/ratio splits, zero/negative amounts, indivisible positive/negative remainders, reordered ratios, large ratios, invalid counts, zero/negative/malformed ratios and atomic failures.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Cover equal/ratio splits, zero/negative amounts, indivisible positive/negative remainders, reordered ratios, large ratios, invalid counts, zero/negative/malformed ratios and atomic failures.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -1484,11 +1489,16 @@ Named vectors are registered and traceable; new behavior is intentionally FAIL/U
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Added and registered `conformance/money/allocation.json` with 16 allocation vectors; `npm run build --workspaces` exited 0; `npm run test --workspace @finkore/conformance-runner` exited 0 with 10 files and 110 tests passed; `git diff --check` exited 0.
+- Conformance: Initial conformance-first run against the pre-allocation adapter exited 3 as expected: 150 passed / 166 total, 0 failed, 16 unsupported allocation vectors, 0 infrastructure errors. The prior closed 150-vector baseline remained PASS.
+- Mutation: Not applicable for vector-only work; mutation-sensitive allocation scenarios were encoded for later hardening.
+- Notes: `money.allocate` was added as a conformance-local operation only; no `finkore.*` Agentic operation was promoted.
 
 <a id="task-015"></a>
 
-### - [ ] TASK-015 — Equal Split Implementation
+### - [x] TASK-015 — Equal Split Implementation
 
 **Release:** Draft 0.2
 
@@ -1563,9 +1573,9 @@ Equal Split Implementation.
 
 **Definition of Done**
 
-- [ ] Implement equal-part splitting under the declared scale/remainder policy; compare sums exactly and preserve source currency/value.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement equal-part splitting under the declared scale/remainder policy; compare sums exactly and preserve source currency/value.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -1573,11 +1583,16 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Added `Money.allocate` equal-split behavior and focused unit coverage; `npm run typecheck --workspaces` exited 0; `npm run test --workspace @finkore/typescript -- test/money` exited 0 with 9 files and 52 tests passed.
+- Conformance: Adapter wiring remained scheduled for TASK-017, so allocation vectors were not claimed green at this task boundary.
+- Mutation: Full-core mutation was retained for TASK-018; no equal-allocation critical survivor remained after the TASK-018 run.
+- Notes: Public API exports and JSDoc were updated with allocation requirement/error references.
 
 <a id="task-016"></a>
 
-### - [ ] TASK-016 — Ratio Allocation Implementation
+### - [x] TASK-016 — Ratio Allocation Implementation
 
 **Release:** Draft 0.2
 
@@ -1652,9 +1667,9 @@ Ratio Allocation Implementation.
 
 **Definition of Done**
 
-- [ ] Implement positive integer ratio allocation with exact arithmetic and declared ordered remainder distribution; reuse specified equal-split behavior where appropriate.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement positive integer ratio allocation with exact arithmetic and declared ordered remainder distribution; reuse specified equal-split behavior where appropriate.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -1662,11 +1677,16 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Added positive-integer ratio allocation, ordered remainder distribution, large-ratio coverage, invalid ratio coverage, and source non-mutation assertions; `npm run typecheck --workspaces` exited 0; `npm run test --workspace @finkore/typescript -- test/money` exited 0 with 9 files and 52 tests passed.
+- Conformance: Adapter wiring remained scheduled for TASK-017, so allocation vectors were not claimed green at this task boundary.
+- Mutation: Full-core mutation was retained for TASK-018; no ratio-allocation critical survivor remained after the TASK-018 run.
+- Notes: Equal allocation and ratio allocation share exact integer allocation-unit distribution and preserve source currency/value.
 
 <a id="task-017"></a>
 
-### - [ ] TASK-017 — Allocation Adapter Support
+### - [x] TASK-017 — Allocation Adapter Support
 
 **Release:** Draft 0.2
 
@@ -1739,9 +1759,9 @@ Allocation Adapter Support.
 
 **Definition of Done**
 
-- [ ] Wire equal/ratio allocation fixtures and exact ordered result observations, retaining portable failures and source observations.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Wire equal/ratio allocation fixtures and exact ordered result observations, retaining portable failures and source observations.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -1749,11 +1769,16 @@ Named operation fixtures execute through core and all required slice vectors PAS
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Adapter support added for `money.allocate`; `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0 with 1 file and 12 tests passed.
+- Conformance: `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --suite money --json` exited 0: Money 83 passed / 83 total, 0 failed, 0 unsupported, 0 infrastructure errors.
+- Mutation: Adapter remained translation-only; full-core mutation was retained for TASK-018.
+- Notes: Adapter delegates allocation semantics to `Money.allocate` and normalizes ordered Money results, portable errors, and source observations.
 
 <a id="task-018"></a>
 
-### - [ ] TASK-018 — Money Allocation Mutation Hardening
+### - [x] TASK-018 — Money Allocation Mutation Hardening
 
 **Release:** Draft 0.2
 
@@ -1826,9 +1851,9 @@ Money Allocation Mutation Hardening.
 
 **Definition of Done**
 
-- [ ] Kill lost/duplicated remainder, ratio-order loss, zero-ratio acceptance, sum mismatch, sign errors, implicit minor-unit rounding and source mutation.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Kill lost/duplicated remainder, ratio-order loss, zero-ratio acceptance, sum mismatch, sign errors, implicit minor-unit rounding and source mutation.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -1836,11 +1861,16 @@ A complete scoped mutation report and survivor classifications establish >=95% a
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: `npm run test:coverage --workspace @finkore/typescript` exited 0; `npm run test:mutation --workspace @finkore/typescript` exited 0 after escalation for Stryker local logging server binding.
+- Conformance: Money suite remained green before mutation: 83 passed / 83 total, 0 failed, 0 unsupported, 0 infrastructure errors.
+- Mutation: Core final score 99.58%, report at `implementations/typescript/core/reports/mutation/mutation.json` and `.html`; Money `src/money/money.ts` scored 100.00%, 200 killed, 10 timeout, 0 survived, 0 no coverage. Six surviving mutants are Entity-scope only in `src/entities/entity.ts` and `src/entities/errors.ts`.
+- Notes: No Money Allocation critical mutants survived.
 
 <a id="task-019"></a>
 
-### - [ ] TASK-019 — Money Allocation Traceability Closure
+### - [x] TASK-019 — Money Allocation Traceability Closure
 
 **Release:** Draft 0.2
 
@@ -1913,10 +1943,10 @@ Money Allocation Traceability Closure.
 
 **Definition of Done**
 
-- [ ] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -1924,11 +1954,16 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Requirement/error/operation references were reviewed across spec, vectors, traceability, runner metadata, core tests, adapter tests and READMEs; `git diff --check` exited 0.
+- Conformance: Full conformance after traceability updates exited 0: 166 passed / 166 total, 0 failed, 0 unsupported, 0 infrastructure errors; mutation-sensitive vectors 142 passed / 142 total.
+- Mutation: Latest complete core mutation evidence remains applicable; Money scope has 0 survivors and no critical survivors.
+- Notes: Traceability inventory is 236 total requirements, 172 covered, 64 not directly testable, 0 uncovered, 0 deferred, 0 blocking spec gaps. Money is 73 total requirements, 68 covered, 5 not directly testable, 0 uncovered, 0 blocking spec gaps.
 
 <a id="task-020"></a>
 
-### - [ ] TASK-020 — Money Allocation Slice Closure Gate
+### - [x] TASK-020 — Money Allocation Slice Closure Gate
 
 **Release:** Draft 0.2
 
@@ -2003,10 +2038,10 @@ Money Allocation Slice Closure Gate.
 
 **Definition of Done**
 
-- [ ] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -2014,7 +2049,12 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: `npm run build --workspaces`, `npm run typecheck --workspaces`, `npm run test --workspaces`, focused Money conformance, full conformance, core coverage, runner coverage, core mutation, and `git diff --check` all exited 0 using repository-local Node `v24.11.1`.
+- Conformance: Full manifest 166 passed / 166 total; Money 83/83, Workflow 20/20, Audit 19/19, Approvals 34/34, Entities 10/10; 0 failed, 0 unsupported, 0 infrastructure errors.
+- Mutation: Core final mutation score 99.58%; Money `src/money/money.ts` 100.00% with 0 survivors and no critical Money survivors. Remaining six survivors are Entity-scope and outside the Money Allocation slice.
+- Notes: Money Allocation is closed through specification, conformance vectors, TypeScript core API, conformance adapter, JSDoc, root/core/adapter README status, traceability, and evidence. Execution pointer advanced to TASK-021.
 
 ### Milestone: Entity Evolution Specification
 

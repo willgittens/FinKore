@@ -64,6 +64,21 @@ function inputRateApplication(input: unknown): { readonly value: unknown; readon
   }
 }
 
+function inputMoneyAllocation(input: unknown): { readonly value: unknown; readonly allocation: unknown; readonly scale: unknown } {
+  if (typeof input !== 'object' || input === null || !('value' in input)) {
+    return { value: undefined, allocation: undefined, scale: undefined }
+  }
+  const candidate = input as { readonly value: unknown; readonly allocation?: unknown; readonly scale?: unknown }
+  return { value: candidate.value, allocation: candidate.allocation, scale: candidate.scale }
+}
+
+function allocationRequest(allocation: unknown, scale: unknown): unknown {
+  if (typeof allocation === 'object' && allocation !== null && !Array.isArray(allocation)) {
+    return { ...allocation, scale }
+  }
+  return allocation
+}
+
 function inputWorkflowCreate(input: unknown): { readonly definition: unknown } {
   if (typeof input !== 'object' || input === null || !('definition' in input)) {
     return { definition: undefined }
@@ -401,6 +416,32 @@ function executeMoneyRateApply(request: AdapterRequest): NormalizedResult {
     return {
       status: 'success',
       value: value.applyRate(input.rate, options).toJSON(),
+      observations: { operand: value.toJSON() },
+    }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && value !== undefined) {
+      return { ...result, observations: { operand: value.toJSON() } }
+    }
+    return result
+  }
+}
+
+/**
+ * Executes conformance-local Money Allocation through the TypeScript core API.
+ *
+ * Allocation method validation, target-scale handling, exact unit arithmetic,
+ * ordered remainder placement, and failure atomicity remain in `Money.allocate`;
+ * the adapter only maps fixture fields and reports source observations.
+ */
+function executeMoneyAllocate(request: AdapterRequest): NormalizedResult {
+  const input = inputMoneyAllocation(request.input)
+  let value: Money | undefined
+  try {
+    value = Money.deserialize(input.value)
+    return {
+      status: 'success',
+      value: value.allocate(allocationRequest(input.allocation, input.scale) as never).map((money) => money.toJSON()),
       observations: { operand: value.toJSON() },
     }
   } catch (error) {
@@ -790,6 +831,7 @@ export const operationHandlers = {
   'finkore.money.compare': executeMoneyCompare,
   'finkore.money.round': executeMoneyRound,
   'finkore.money.subtract': executeMoneySubtract,
+  'money.allocate': executeMoneyAllocate,
   'money.deserialize': executeMoneySerialization,
   'money.rate.apply': executeMoneyRateApply,
   'finkore.money.divide': executeMoneyDivide,

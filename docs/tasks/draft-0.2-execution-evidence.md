@@ -195,8 +195,116 @@ not a source of financial semantics.
   - Conformance vectors: no change; TASK-014 owns vectors.
   - Mutation-sensitive tests: no runtime tests added; critical scenarios were recorded for later tasks.
   - JSDoc: no change; no public TypeScript API was added.
-  - README documentation: root and TypeScript package README status remain accurate because allocation is not yet implemented.
+  - README documentation: root and TypeScript package README status remained accurate at this task boundary because allocation was specified but not yet implemented.
   - `/spec`: added Allocation document and linked it from the Money index and glossary.
   - `/conformance`: traceability updated; conventions and manifest unchanged because no vector syntax or vector file changed.
   - `/agentic`: no change; allocation operation promotion remains a later review task.
+  - `AGENTS.md`: no change required.
+
+### TASK-013 - Allocation Portable Error Design
+
+- Status: COMPLETE
+- Source revision: `0be7baaff8a00504692c2222579fd5126130e597` plus working-tree Money Allocation portable error specification changes.
+- Date: 2026-09-10
+- Decision:
+  - Existing Money errors do not suffice for invalid allocation methods, part counts, ratio lists, ratio values, or target scales.
+  - These failures are allocation-contract failures rather than invalid Money amount, invalid currency, currency mismatch, division-by-zero, or invalid Money rounding-policy failures.
+  - Added portable error code `FINKORE_MONEY_INVALID_ALLOCATION`.
+  - Added `MONEY-ERROR-008` requiring invalid allocation requests to fail with `FINKORE_MONEY_INVALID_ALLOCATION` and return no allocation result.
+  - Unrepresentable source-at-target-scale remains `FINKORE_MONEY_ROUNDING_REQUIRED` under `MONEY-ERROR-005`; it is precision-loss prevention, not an invalid allocation-shape failure.
+  - Failed allocation continues to leave the source Money operand unchanged under `MONEY-ERROR-007`.
+- Traceability:
+  - Requirements inventory updated to 236 total requirements: 158 covered, 14 uncovered, 64 not directly testable, 0 partial, 0 deferred, 0 blocking spec gaps.
+  - Money inventory updated to 73 requirements: 54 covered, 14 uncovered, 5 not directly testable.
+  - `MONEY-ERROR-008` is marked UNCOVERED until the dedicated conformance vector task publishes vector mappings.
+  - Critical later-test scenario recorded for invalid allocation requests collapsing into an incorrect portable error code.
+- Commands:
+  - `git diff --check` exited 0.
+- Conformance:
+  - Not run; this task added no conformance vectors and no adapter operation. Allocation error coverage is intentionally pending TASK-014.
+- Mutation:
+  - Not applicable; this was an artifact-only specification task with no runtime code changes.
+- Documentation/update applicability:
+  - Unit tests: no change; implementation is pending.
+  - Conformance vectors: no change; TASK-014 owns vectors.
+  - Mutation-sensitive tests: no runtime tests added; critical error-code scenario was recorded for later tasks.
+  - JSDoc: no change; no public TypeScript API was added.
+  - README documentation: root and TypeScript package README status remained accurate at this task boundary because allocation was specified but not yet implemented.
+  - `/spec`: Money errors, Allocation errors, and the shared error catalog were updated.
+  - `/conformance`: traceability updated; conventions and manifest unchanged because no vector syntax or vector file changed.
+  - `/agentic`: no change; `agentic/errors.md` delegates portable error authority to the specification catalog, and no allocation operation was promoted.
+  - `AGENTS.md`: no change required.
+
+### TASK-014 through TASK-020 - Draft 0.2 Money Allocation Slice
+
+- Status: COMPLETE
+- Source revision: `0be7baaff8a00504692c2222579fd5126130e597` plus working-tree Money Allocation conformance, implementation, adapter, documentation, and closure changes.
+- Date: 2026-09-10
+- Toolchain: system `node` absent; repository-local `.tools/node-v24.11.1-linux-x64/bin/node` reported `v24.11.1` and was used for all Node/npm commands in this run.
+- Normative scope implemented:
+  - `MONEY-ALLOCATION-001` through `MONEY-ALLOCATION-013` are implemented in the TypeScript Money core.
+  - Equal allocation uses a positive integer part count and explicit target scale.
+  - Ratio allocation uses a non-empty ordered list of positive integer ratios and explicit target scale.
+  - Source zero and negative amounts are valid; signed results preserve ordinary numeric semantics.
+  - The source amount must be exactly representable as whole units at the target scale or allocation fails with `FINKORE_MONEY_ROUNDING_REQUIRED`.
+  - Invalid allocation methods, part counts, ratio lists, ratio values, and target scales fail with `FINKORE_MONEY_INVALID_ALLOCATION`.
+  - Allocated Money results preserve source currency, sum exactly to the source amount, distribute remainders by declared order, and never mutate the source Money operand.
+- Conformance vectors:
+  - Added `conformance/money/allocation.json` with 16 vectors covering equal split, ratio split, zero and negative sources, positive and negative remainders, declared ratio order, large integer ratios, unrepresentable source scale, invalid part counts, invalid ratios, empty ratios, invalid scale, invalid method, portable error codes, and source observations.
+  - Registered the file in `conformance/manifest.json`.
+  - Updated `conformance/conventions.md`, `runner/src/metadata.ts`, runner metadata/integration tests, and `conformance/traceability.md`.
+  - Initial conformance-first run after vector registration and before adapter support exited 3 as expected: 150 passed / 166 total, 16 unsupported allocation vectors, 0 failed, 0 infrastructure errors. The previously closed 150-vector baseline remained PASS.
+- Implementation and adapter:
+  - Added `Money.allocate(request)` plus `MoneyAllocationMethod`, `MoneyAllocationRequest`, and `InvalidMoneyAllocationError`.
+  - Added focused core allocation tests for equal and ratio allocation, zero/negative sources, large ratios, invalid requests, unrepresentable source totals, portable errors, exact sum preservation, ordered remainder placement, and source non-mutation.
+  - Added conformance adapter support for `money.allocate`; the adapter delegates financial behavior to `Money.allocate` and normalizes results/errors/observations.
+  - `money.allocate` remains conformance-local until a later Agentic promotion review; no `finkore.*` operation was added.
+  - Updated root README, TypeScript core README, adapter README, conformance README, and traceability readiness/gap wording.
+- Commands:
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run build --workspaces` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run typecheck --workspaces` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test --workspaces` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test --workspace @finkore/typescript -- test/money` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test --workspace @finkore/typescript-conformance-adapter` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test --workspace @finkore/conformance-runner` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --suite money --json` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test:coverage --workspace @finkore/typescript` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test:coverage --workspace @finkore/conformance-runner` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test:mutation --workspace @finkore/typescript` exited 0 after escalation was required for Stryker's local logging server binding.
+  - `git diff --check` exited 0.
+- Unit evidence:
+  - Runner: 10 files, 110 tests passed.
+  - TypeScript core: 27 files, 222 tests passed.
+  - Conformance adapter: 1 file, 12 tests passed.
+  - Focused Money tests: 9 files, 52 tests passed.
+- Conformance evidence:
+  - Money suite: 83 passed / 83 total; 0 failed, 0 unsupported, 0 infrastructure errors.
+  - Full manifest: 166 passed / 166 total; 0 failed, 0 unsupported, 0 infrastructure errors.
+  - Mutation-sensitive vectors: 142 passed / 142 total.
+  - By suite: Money 83/83, Workflow 20/20, Audit 19/19, Approvals 34/34, Entities 10/10.
+- Coverage:
+  - TypeScript core all files: 98.63% statements, 97.70% branches, 100% functions, 99.21% lines.
+  - Money package: 96.99% statements, 95.94% branches, 100% functions, 97.72% lines.
+  - `src/money/money.ts`: 97.00% statements, 96.09% branches, 100% functions, 97.34% lines.
+  - Runner: 98.31% statements, 95.29% branches, 100% functions, 98.75% lines.
+- Mutation:
+  - TypeScript core final mutation score: 99.58%; report at `implementations/typescript/core/reports/mutation/mutation.html` and `implementations/typescript/core/reports/mutation/mutation.json`.
+  - Money `src/money/money.ts`: 100.00% mutation score, 200 killed, 10 timeout, 0 survived, 0 no coverage.
+  - No Money Allocation or other Money critical mutants survived.
+  - Six remaining survivors are Entity-scope mutants in `src/entities/entity.ts` and `src/entities/errors.ts`; they are outside the Money Allocation slice.
+- Traceability inventory after closure:
+  - Manifest format `0.1`; five suites; ten manifest-listed vector files.
+  - Total requirements: 236; 172 covered; 64 not directly testable; 0 partial; 0 uncovered; 0 deferred; 0 blocking spec gaps.
+  - Money requirements: 73 total; 68 covered; 5 not directly testable; 0 uncovered; 0 blocking spec gaps.
+  - `MONEY-ALLOCATION-001` through `MONEY-ALLOCATION-013` and `MONEY-ERROR-008` are all COVERED and mapped to manifest-listed vectors.
+- Documentation/update applicability:
+  - Unit tests: updated.
+  - Conformance vectors: updated.
+  - Mutation-sensitive tests: updated and verified.
+  - JSDoc: updated for public API and error additions.
+  - README documentation: root, conformance, core, and adapter READMEs updated.
+  - `/spec`: previously updated by TASK-012/TASK-013; reviewed and still authoritative for this implementation.
+  - `/conformance`: manifest, conventions and traceability updated.
+  - `/agentic`: no change; Allocation operation intentionally remains conformance-local.
   - `AGENTS.md`: no change required.

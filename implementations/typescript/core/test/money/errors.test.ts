@@ -4,6 +4,7 @@ import {
   CurrencyMismatchError,
   FinKoreMoneyError,
   InvalidCurrencyError,
+  InvalidMoneyAllocationError,
   InvalidMoneyAmountError,
   InvalidMoneyRoundingError,
   Money,
@@ -44,6 +45,7 @@ describe('Money errors', () => {
     expect(new MoneyDivisionByZeroError().code).toBe('FINKORE_MONEY_DIVISION_BY_ZERO')
     expect(new MoneyRoundingRequiredError().code).toBe('FINKORE_MONEY_ROUNDING_REQUIRED')
     expect(new InvalidMoneyRoundingError().code).toBe('FINKORE_MONEY_INVALID_ROUNDING')
+    expect(new InvalidMoneyAllocationError().code).toBe('FINKORE_MONEY_INVALID_ALLOCATION')
   })
 
   it('narrows FinKore Money errors without relying on messages', () => {

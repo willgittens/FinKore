@@ -158,6 +158,56 @@ export interface MoneyRateApplicationOptions {
 }
 
 /**
+ * Allocation method for splitting Money into ordered results.
+ *
+ * `EQUAL` allocation uses a positive part count. `RATIO` allocation uses a
+ * non-empty ordered list of positive integer ratios.
+ *
+ * @see MONEY-ALLOCATION-003
+ * @see MONEY-ALLOCATION-004
+ */
+export type MoneyAllocationMethod = 'EQUAL' | 'RATIO'
+
+/**
+ * Input accepted by {@link Money.allocate} before FinKore Allocation validation.
+ *
+ * The request includes an explicit target scale. FinKore allocation never
+ * infers this scale from currency metadata or source amount scale.
+ *
+ * @see MONEY-ALLOCATION-001
+ * @see MONEY-ALLOCATION-002
+ */
+export interface MoneyAllocationRequest {
+  /**
+   * Candidate allocation method.
+   *
+   * @see MONEY-ALLOCATION-001
+   */
+  readonly method: unknown
+
+  /**
+   * Target decimal scale for every allocated result.
+   *
+   * @see MONEY-ALLOCATION-002
+   */
+  readonly scale: unknown
+
+  /**
+   * Candidate positive integer part count for equal allocation.
+   *
+   * @see MONEY-ALLOCATION-003
+   */
+  readonly parts?: unknown
+
+  /**
+   * Candidate ordered positive integer ratios for ratio allocation.
+   *
+   * @see MONEY-ALLOCATION-004
+   */
+  readonly ratios?: unknown
+}
+
+/**
  * Portable FinKore Money error code.
  *
  * Consumers that need cross-language semantics should rely on these codes
@@ -169,6 +219,7 @@ export interface MoneyRateApplicationOptions {
  * @see MONEY-ERROR-004
  * @see MONEY-ERROR-005
  * @see MONEY-ERROR-006
+ * @see MONEY-ERROR-008
  */
 export type MoneyErrorCode =
   | 'FINKORE_MONEY_INVALID_AMOUNT'
@@ -177,3 +228,4 @@ export type MoneyErrorCode =
   | 'FINKORE_MONEY_DIVISION_BY_ZERO'
   | 'FINKORE_MONEY_ROUNDING_REQUIRED'
   | 'FINKORE_MONEY_INVALID_ROUNDING'
+  | 'FINKORE_MONEY_INVALID_ALLOCATION'

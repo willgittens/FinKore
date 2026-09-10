@@ -7,14 +7,14 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Domain | Requirements | MUST / MUST NOT | SHOULD / SHOULD NOT | MAY | Covered | Partial | Uncovered | Not directly testable | Deferred | Blocking spec gap |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Shared | 29 | 23 | 5 | 1 | 1 | 0 | 0 | 28 | 0 | 0 |
-| Money | 72 | 67 | 1 | 4 | 54 | 0 | 13 | 5 | 0 | 0 |
+| Money | 73 | 68 | 1 | 4 | 68 | 0 | 0 | 5 | 0 | 0 |
 | Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 | 0 | 0 |
 | Audit | 38 | 30 | 4 | 4 | 28 | 0 | 0 | 10 | 0 | 0 |
 | Approvals | 35 | 32 | 1 | 2 | 30 | 0 | 0 | 5 | 0 | 0 |
 | Entities | 34 | 29 | 3 | 2 | 23 | 0 | 0 | 11 | 0 | 0 |
-| **Total** | **235** | **206** | **15** | **14** | **158** | **0** | **13** | **64** | **0** | **0** |
+| **Total** | **236** | **207** | **15** | **14** | **172** | **0** | **0** | **64** | **0** | **0** |
 
-The suite contains 150 vectors. Overall: **158 covered (67.2%)**, **0 partially covered (0.0%)**, **13 uncovered (5.5%)**, **64 not directly testable (27.2%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
+The suite contains 166 vectors. Overall: **172 covered (72.9%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **64 not directly testable (27.1%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current draft. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -60,19 +60,19 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | MONEY-ARITHMETIC-007 | Money | MUST / MUST NOT | COVERED | money.add.differing-scale-001, money.add.exact-decimal-001, money.add.zero-001, money.divide.exact-001, money.multiply.decimal-001, money.subtract.differing-scale-001, money.subtract.negative-result-001, money.subtract.whole-number-001 |
 | MONEY-ARITHMETIC-008 | Money | MUST / MUST NOT | COVERED | money.divide.rounding-required-001 |
 | MONEY-ARITHMETIC-009 | Money | MUST / MUST NOT | COVERED | money.add.differing-scale-001, money.add.exact-decimal-001, money.add.negative-001, money.add.same-currency.basic-001, money.add.zero-001, money.divide.exact-001, money.multiply.decimal-001, money.negate.negative-001, money.negate.positive-001, money.subtract.basic-001, money.subtract.differing-scale-001, money.subtract.negative-result-001, money.subtract.whole-number-001 |
-| MONEY-ALLOCATION-001 | Money | MUST / MUST NOT | UNCOVERED | — |
-| MONEY-ALLOCATION-002 | Money | MUST / MUST NOT | UNCOVERED | — |
-| MONEY-ALLOCATION-003 | Money | MUST / MUST NOT | UNCOVERED | — |
-| MONEY-ALLOCATION-004 | Money | MUST / MUST NOT | UNCOVERED | — |
-| MONEY-ALLOCATION-005 | Money | MUST / MUST NOT | UNCOVERED | — |
-| MONEY-ALLOCATION-006 | Money | MUST / MUST NOT | UNCOVERED | — |
-| MONEY-ALLOCATION-007 | Money | MUST / MUST NOT | UNCOVERED | — |
-| MONEY-ALLOCATION-008 | Money | MUST / MUST NOT | UNCOVERED | — |
-| MONEY-ALLOCATION-009 | Money | MUST / MUST NOT | UNCOVERED | — |
-| MONEY-ALLOCATION-010 | Money | MUST / MUST NOT | UNCOVERED | — |
-| MONEY-ALLOCATION-011 | Money | MUST / MUST NOT | UNCOVERED | — |
-| MONEY-ALLOCATION-012 | Money | MUST / MUST NOT | UNCOVERED | — |
-| MONEY-ALLOCATION-013 | Money | MUST / MUST NOT | UNCOVERED | — |
+| MONEY-ALLOCATION-001 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.remainder-positive-001, money.allocate.invalid-method-001, money.allocate.invalid-scale-001, money.allocate.ratio.remainder-positive-001 |
+| MONEY-ALLOCATION-002 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.remainder-positive-001, money.allocate.invalid-scale-001, money.allocate.ratio.remainder-positive-001, money.allocate.unrepresentable-source-scale-001 |
+| MONEY-ALLOCATION-003 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.invalid-negative-parts-001, money.allocate.equal.invalid-zero-parts-001, money.allocate.equal.remainder-negative-001, money.allocate.equal.remainder-positive-001 |
+| MONEY-ALLOCATION-004 | Money | MUST / MUST NOT | COVERED | money.allocate.ratio.declared-order-001, money.allocate.ratio.invalid-empty-ratios-001, money.allocate.ratio.invalid-fractional-ratio-001, money.allocate.ratio.invalid-malformed-ratio-001, money.allocate.ratio.invalid-negative-ratio-001, money.allocate.ratio.invalid-zero-ratio-001, money.allocate.ratio.large-ratios-001, money.allocate.ratio.remainder-positive-001, money.allocate.ratio.zero-source-001 |
+| MONEY-ALLOCATION-005 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.remainder-negative-001, money.allocate.ratio.zero-source-001 |
+| MONEY-ALLOCATION-006 | Money | MUST / MUST NOT | COVERED | money.allocate.unrepresentable-source-scale-001 |
+| MONEY-ALLOCATION-007 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.remainder-negative-001, money.allocate.equal.remainder-positive-001, money.allocate.ratio.large-ratios-001, money.allocate.ratio.remainder-positive-001, money.allocate.ratio.zero-source-001 |
+| MONEY-ALLOCATION-008 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.remainder-negative-001, money.allocate.equal.remainder-positive-001, money.allocate.ratio.declared-order-001, money.allocate.ratio.large-ratios-001, money.allocate.ratio.remainder-positive-001, money.allocate.ratio.zero-source-001 |
+| MONEY-ALLOCATION-009 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.remainder-negative-001, money.allocate.equal.remainder-positive-001, money.allocate.ratio.declared-order-001, money.allocate.ratio.large-ratios-001, money.allocate.ratio.remainder-positive-001 |
+| MONEY-ALLOCATION-010 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.remainder-negative-001, money.allocate.equal.remainder-positive-001, money.allocate.ratio.declared-order-001, money.allocate.ratio.remainder-positive-001 |
+| MONEY-ALLOCATION-011 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.remainder-negative-001 |
+| MONEY-ALLOCATION-012 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.remainder-negative-001, money.allocate.equal.remainder-positive-001, money.allocate.ratio.declared-order-001, money.allocate.ratio.remainder-positive-001, money.allocate.ratio.zero-source-001 |
+| MONEY-ALLOCATION-013 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.invalid-zero-parts-001, money.allocate.equal.remainder-negative-001, money.allocate.equal.remainder-positive-001, money.allocate.ratio.remainder-positive-001, money.allocate.unrepresentable-source-scale-001 |
 | MONEY-RATE-001 | Money | MUST / MUST NOT | COVERED | money.rate.decimal-exact-001, money.rate.percentage-conversion-001, money.rate.fractional-percentage-001, money.rate.invalid-numeric-value-001, money.rate.invalid-exponent-value-001, money.rate.invalid-kind-001 |
 | MONEY-RATE-002 | Money | MUST / MUST NOT | COVERED | money.rate.percentage-conversion-001, money.rate.fractional-percentage-001 |
 | MONEY-RATE-003 | Money | MUST / MUST NOT | COVERED | money.rate.decimal-exact-001, money.rate.percentage-conversion-001, money.rate.zero-decimal-001, money.rate.negative-decimal-001, money.rate.fractional-base10-001, money.rate.fractional-percentage-001 |
@@ -100,6 +100,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | MONEY-ERROR-005 | Money | MUST / MUST NOT | COVERED | money.divide.rounding-required-001 |
 | MONEY-ERROR-006 | Money | MUST / MUST NOT | COVERED | money.round.invalid-mode-001, money.round.invalid-scale-001 |
 | MONEY-ERROR-007 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.divide.rounding-required-001, money.divide.zero-001, money.round.invalid-mode-001, money.round.invalid-scale-001, money.subtract.currency-mismatch-001 |
+| MONEY-ERROR-008 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.invalid-negative-parts-001, money.allocate.equal.invalid-zero-parts-001, money.allocate.invalid-method-001, money.allocate.invalid-scale-001, money.allocate.ratio.invalid-empty-ratios-001, money.allocate.ratio.invalid-fractional-ratio-001, money.allocate.ratio.invalid-malformed-ratio-001, money.allocate.ratio.invalid-negative-ratio-001, money.allocate.ratio.invalid-zero-ratio-001 |
 | MONEY-REPRESENTATION-001 | Money | MUST / MUST NOT | COVERED | money.deserialize.missing-amount-001, money.deserialize.missing-currency-001, money.deserialize.positive-001 |
 | MONEY-REPRESENTATION-002 | Money | MUST / MUST NOT | COVERED | money.deserialize.positive-001 |
 | MONEY-REPRESENTATION-003 | Money | MUST / MUST NOT | COVERED | money.deserialize.missing-currency-001, money.deserialize.positive-001 |
@@ -332,6 +333,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | MONEY-ALLOCATION-008 | Allocated outputs sum exactly to the source Money amount. | Drop, duplicate, create, or destroy one allocation unit. |
 | MONEY-ALLOCATION-010, MONEY-ALLOCATION-011 | Remainders are assigned to earliest declared positions, including negative-source magnitude. | Assign remainder to the last position, ignore declared order, or use positive-only logic for negatives. |
 | MONEY-ALLOCATION-013 | Allocation leaves the source Money operand unchanged on success and failure. | Mutate the source Money while computing or rejecting allocation. |
+| MONEY-ERROR-008 | Invalid allocation requests use the allocation-specific portable error code. | Collapse invalid counts, ratios, methods, or target scales into amount, rounding, or implementation-specific errors. |
 | WORKFLOW-TRANSITION-003 | Declared directed transitions only. | Ignore current Source State. |
 | WORKFLOW-TRANSITION-006 | State preservation after rejection. | Assign Target State before validation. |
 | WORKFLOW-TERMINAL-003 | No transition request may leave an explicitly terminal State. | Remove or invert the current-State terminal check. |
@@ -344,7 +346,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 
 ## Conformance gaps
 
-- Money: allocation normative semantics are specified for Draft 0.2 and await the dedicated portable error, vector, implementation, adapter, mutation and closure tasks. Precision or overflow limits, private or non-fiat currency namespaces, and currency-recommended scale remain open as deferred topics outside the closed Draft 0.1 plus Draft 0.2 Money Rates scope.
+- Money: allocation normative semantics and portable invalid-allocation error semantics are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance for Draft 0.2. Precision or overflow limits, private or non-fiat currency namespaces, and currency-recommended scale remain open as deferred topics outside the closed Draft 0.1 plus Draft 0.2 Money Rates and Allocation scope.
 - Workflow: external fact capture, definition migration, transition identifiers, and concurrency remain open.
 - Audit: unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, and causal sequencing remain open.
 - Approvals: condition syntax, subject-state interchange, relevant-fact policy, supersession, withdrawal, expiration, delegation, quorum, and rejection codes remain open for future drafts; current standalone Draft 0.1 conformance has no uncovered mandatory Approval requirements.
@@ -356,4 +358,4 @@ Vectors do not settle these open questions.
 
 **READY FOR CONFORMANCE RUNNER**
 
-The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Money conformance suite. Draft 0.2 Money Allocation normative semantics are vector-ready but intentionally not yet covered or implemented. FinKore Core Draft 0.1 cross-domain closure remains complete for its directly testable mandatory requirements.
+The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates and Money Allocation requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Money conformance suite. FinKore Core Draft 0.1 cross-domain closure remains complete for its directly testable mandatory requirements.

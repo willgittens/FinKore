@@ -17,6 +17,7 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('money.deserialize')).toBe(true)
     expect(adapter.supports('money.serialize')).toBe(true)
     expect(adapter.supports('money.rate.apply')).toBe(true)
+    expect(adapter.supports('money.allocate')).toBe(true)
     expect(adapter.supports('finkore.money.add')).toBe(true)
     expect(adapter.supports('finkore.money.subtract')).toBe(true)
     expect(adapter.supports('finkore.money.compare')).toBe(true)
@@ -43,6 +44,7 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('money.negate')).toBe(false)
     expect(adapter.supports('money.multiply')).toBe(false)
     expect(adapter.supports('money.divide')).toBe(false)
+    expect(adapter.supports('finkore.money.allocate')).toBe(false)
     expect(adapter.supports('workflow.transition')).toBe(false)
   })
 
@@ -117,6 +119,32 @@ describe('TypeScript conformance adapter', () => {
     ] })
 
     expect(report.summary).toEqual({ total: 12, passed: 12, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+  })
+
+  it('passes current conformance-local Money allocation vectors', async () => {
+    const report = await createConformanceRunner({
+      manifestPath,
+      adapter: createTypeScriptConformanceAdapter(),
+    }).run({ vectorIds: [
+      'money.allocate.equal.remainder-positive-001',
+      'money.allocate.ratio.remainder-positive-001',
+      'money.allocate.ratio.zero-source-001',
+      'money.allocate.equal.remainder-negative-001',
+      'money.allocate.ratio.declared-order-001',
+      'money.allocate.ratio.large-ratios-001',
+      'money.allocate.unrepresentable-source-scale-001',
+      'money.allocate.equal.invalid-zero-parts-001',
+      'money.allocate.equal.invalid-negative-parts-001',
+      'money.allocate.ratio.invalid-zero-ratio-001',
+      'money.allocate.ratio.invalid-negative-ratio-001',
+      'money.allocate.ratio.invalid-malformed-ratio-001',
+      'money.allocate.ratio.invalid-fractional-ratio-001',
+      'money.allocate.ratio.invalid-empty-ratios-001',
+      'money.allocate.invalid-scale-001',
+      'money.allocate.invalid-method-001',
+    ] })
+
+    expect(report.summary).toEqual({ total: 16, passed: 16, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current canonical Money comparison vectors', async () => {

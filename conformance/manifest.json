@@ -9,7 +9,8 @@
         "./money/arithmetic.json",
         "./money/comparison.json",
         "./money/rounding.json",
-        "./money/rates.json"
+        "./money/rates.json",
+        "./money/allocation.json"
       ]
     },
     {

@@ -97,14 +97,13 @@ allocate 0.00 USD by ratios [1, 2] at scale 2
 ## Errors
 
 Invalid source Money components fail according to [Money Errors](errors.md).
-When the source cannot be represented as whole allocation units at the target
-scale, the operation fails with `FINKORE_MONEY_ROUNDING_REQUIRED` under
+Missing, malformed, unsupported, or invalid allocation methods, part counts,
+ratio lists, ratio values, or target scales fail with
+`FINKORE_MONEY_INVALID_ALLOCATION` under **MONEY-ERROR-008**. When the source
+cannot be represented as whole allocation units at the target scale, the
+operation fails with `FINKORE_MONEY_ROUNDING_REQUIRED` under
 **MONEY-ERROR-005**. Failed allocation leaves the source Money operand
 unchanged under **MONEY-ERROR-007**.
-
-The portable error mapping for invalid part counts, invalid ratios, and invalid
-target-scale inputs is intentionally completed by the Allocation Portable Error
-Design task before conformance vectors are published.
 
 ## Non-Goals
 

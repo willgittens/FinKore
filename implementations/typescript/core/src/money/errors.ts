@@ -185,6 +185,30 @@ export class InvalidMoneyRoundingError extends FinKoreMoneyError {
 }
 
 /**
+ * TypeScript representation of the portable
+ * `FINKORE_MONEY_INVALID_ALLOCATION` domain error.
+ *
+ * This class represents an invalid allocation method, part count, ratio list,
+ * ratio value, or target scale. Cross-language consumers should rely on the
+ * portable code rather than this TypeScript-specific class name.
+ *
+ * @see FINKORE_MONEY_INVALID_ALLOCATION
+ * @see MONEY-ERROR-008
+ */
+export class InvalidMoneyAllocationError extends FinKoreMoneyError {
+  /**
+   * Creates an invalid-allocation Money error.
+   *
+   * @param message - Non-normative human-readable message.
+   * @param details - Optional implementation-provided diagnostic context.
+   */
+  constructor(message = 'Invalid Money allocation', details?: unknown) {
+    super('FINKORE_MONEY_INVALID_ALLOCATION', message, { details })
+    this.name = 'InvalidMoneyAllocationError'
+  }
+}
+
+/**
  * Narrows an unknown thrown value to a TypeScript FinKore Money error.
  *
  * Use the narrowed error's portable {@link FinKoreMoneyError.code} when mapping

@@ -2,13 +2,22 @@
 import { Currency } from './currency.js'
 import {
   CurrencyMismatchError,
+  InvalidMoneyAllocationError,
   InvalidMoneyAmountError,
   InvalidMoneyRoundingError,
   MoneyDivisionByZeroError,
   MoneyRoundingRequiredError,
 } from './errors.js'
 import { serializeMoney, validateSerializedAmount } from './serialization.js'
-import type { MoneyComparisonResult, MoneyInput, MoneyRateApplicationOptions, MoneyRoundOptions, RoundingMode, SerializedMoney } from './types.js'
+import type {
+  MoneyAllocationRequest,
+  MoneyComparisonResult,
+  MoneyInput,
+  MoneyRateApplicationOptions,
+  MoneyRoundOptions,
+  RoundingMode,
+  SerializedMoney,
+} from './types.js'
 
 interface DecimalParts {
   readonly integer: bigint
@@ -235,6 +244,92 @@ function roundDecimal(amount: string, targetScale: number, mode: RoundingMode): 
   return formatDecimal(roundedInteger, targetScale)
 }
 
+function validateAllocationScale(scale: unknown): number {
+  if (!Number.isSafeInteger(scale) || (scale as number) < 0) {
+    throw new InvalidMoneyAllocationError()
+  }
+  return scale as number
+}
+
+function validateAllocationPartCount(parts: unknown): number {
+  if (!Number.isSafeInteger(parts) || (parts as number) <= 0) {
+    throw new InvalidMoneyAllocationError()
+  }
+  return parts as number
+}
+
+function validateAllocationRatio(ratio: unknown): bigint {
+  if (typeof ratio === 'bigint') {
+    if (ratio <= 0n) throw new InvalidMoneyAllocationError()
+    return ratio
+  }
+  if (!Number.isSafeInteger(ratio) || (ratio as number) <= 0) {
+    throw new InvalidMoneyAllocationError()
+  }
+  return BigInt(ratio as number)
+}
+
+function validateAllocationRequest(input: MoneyAllocationRequest): { readonly scale: number; readonly weights: readonly bigint[] } {
+  if (typeof input !== 'object' || input === null || Array.isArray(input)) {
+    throw new InvalidMoneyAllocationError()
+  }
+  const candidate = input as {
+    readonly method?: unknown
+    readonly scale?: unknown
+    readonly parts?: unknown
+    readonly ratios?: unknown
+  }
+  const scale = validateAllocationScale(candidate.scale)
+
+  switch (candidate.method) {
+    case 'EQUAL': {
+      if (!Object.hasOwn(candidate, 'parts') || Object.hasOwn(candidate, 'ratios')) {
+        throw new InvalidMoneyAllocationError()
+      }
+      const parts = validateAllocationPartCount(candidate.parts)
+      return { scale, weights: Array.from({ length: parts }, () => 1n) }
+    }
+    case 'RATIO': {
+      if (!Object.hasOwn(candidate, 'ratios') || Object.hasOwn(candidate, 'parts') || !Array.isArray(candidate.ratios) || candidate.ratios.length === 0) {
+        throw new InvalidMoneyAllocationError()
+      }
+      return { scale, weights: candidate.ratios.map(validateAllocationRatio) }
+    }
+    default:
+      throw new InvalidMoneyAllocationError()
+  }
+}
+
+function allocationUnitsAtScale(amount: string, targetScale: number): bigint {
+  const parts = decimalParts(amount)
+  if (targetScale >= parts.scale) {
+    return scaleDecimal(parts, targetScale)
+  }
+
+  const divisor = 10n ** BigInt(parts.scale - targetScale)
+  if (parts.integer % divisor !== 0n) {
+    throw new MoneyRoundingRequiredError()
+  }
+  return parts.integer / divisor
+}
+
+function allocateUnitAmounts(sourceUnits: bigint, weights: readonly bigint[]): readonly bigint[] {
+  const negative = sourceUnits < 0n
+  const absoluteUnits = negative ? -sourceUnits : sourceUnits
+  const totalWeight = weights.reduce((sum, weight) => sum + weight, 0n)
+  let remainder = absoluteUnits
+  const baseUnits = weights.map((weight) => {
+    const units = (absoluteUnits * weight) / totalWeight
+    remainder -= units
+    return units
+  })
+
+  return baseUnits.map((units, index) => {
+    const allocatedMagnitude = units + (BigInt(index) < remainder ? 1n : 0n)
+    return negative ? -allocatedMagnitude : allocatedMagnitude
+  })
+}
+
 /**
  * TypeScript Money value for the first FinKore reference implementation
  * milestone.
@@ -243,7 +338,8 @@ function roundDecimal(amount: string, targetScale: number, mode: RoundingMode): 
  * milestone supports construction, validation, canonical serialization,
  * compatible-currency addition, compatible-currency subtraction, negation,
  * exact decimal scalar multiplication and division, exact Rate application,
- * exact compatible-currency numeric comparison, and explicit Money rounding.
+ * Money allocation by equal parts or positive integer ratios, exact
+ * compatible-currency numeric comparison, and explicit Money rounding.
  *
  * @remarks
  * This TypeScript implementation stores the validated decimal representation
@@ -504,6 +600,50 @@ export class Money {
     const exact = new Money(multiplyDecimals(this.amount, scalar), this.currency)
     const rounding = rateApplicationRounding(options)
     return rounding === undefined ? exact : exact.round(rounding)
+  }
+
+  /**
+   * Allocates this Money value into ordered Money results.
+   *
+   * Equal allocation uses a positive integer part count. Ratio allocation uses
+   * a non-empty ordered list of positive integer ratios. Every result is
+   * represented at the explicit target scale, preserves this value's currency,
+   * and the exact numeric sum of all results equals this value. Remainders are
+   * assigned to earliest declared positions, including negative sources where
+   * the affected result magnitudes increase.
+   *
+   * @param request - Allocation method, method-specific inputs, and explicit target scale.
+   * @returns Ordered allocated Money values preserving the source total and currency.
+   * @throws {InvalidMoneyAllocationError}
+   * When the method, part count, ratios, or target scale are missing, malformed,
+   * unsupported, or invalid.
+   * @throws {MoneyRoundingRequiredError}
+   * When the source amount cannot be represented as whole allocation units at
+   * the requested target scale.
+   *
+   * @see FINKORE_MONEY_INVALID_ALLOCATION
+   * @see FINKORE_MONEY_ROUNDING_REQUIRED
+   * @see MONEY-ALLOCATION-001
+   * @see MONEY-ALLOCATION-002
+   * @see MONEY-ALLOCATION-003
+   * @see MONEY-ALLOCATION-004
+   * @see MONEY-ALLOCATION-005
+   * @see MONEY-ALLOCATION-006
+   * @see MONEY-ALLOCATION-007
+   * @see MONEY-ALLOCATION-008
+   * @see MONEY-ALLOCATION-009
+   * @see MONEY-ALLOCATION-010
+   * @see MONEY-ALLOCATION-011
+   * @see MONEY-ALLOCATION-012
+   * @see MONEY-ALLOCATION-013
+   * @see MONEY-ERROR-005
+   * @see MONEY-ERROR-007
+   * @see MONEY-ERROR-008
+   */
+  allocate(request: MoneyAllocationRequest): readonly Money[] {
+    const { scale, weights } = validateAllocationRequest(request)
+    const sourceUnits = allocationUnitsAtScale(this.amount, scale)
+    return allocateUnitAmounts(sourceUnits, weights).map((units) => new Money(formatDecimal(units, scale), this.currency))
   }
 
   /**

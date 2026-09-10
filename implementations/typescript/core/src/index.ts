@@ -41,6 +41,7 @@ export {
   CurrencyMismatchError,
   FinKoreMoneyError,
   InvalidCurrencyError,
+  InvalidMoneyAllocationError,
   InvalidMoneyAmountError,
   InvalidMoneyRoundingError,
   MoneyDivisionByZeroError,
@@ -62,6 +63,8 @@ export {
 export { Workflow } from './workflow/workflow.js'
 export type {
   MoneyComparisonResult,
+  MoneyAllocationMethod,
+  MoneyAllocationRequest,
   MoneyErrorCode,
   MoneyInput,
   MoneyRateApplicationOptions,

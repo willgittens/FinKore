@@ -60,6 +60,7 @@ These identifiers name observable behavior, not implementation methods.
 | `finkore.money.compare` | Return `LESS`, `EQUAL`, or `GREATER`. |
 | `finkore.money.round` | Reduce to the explicit `scale` using the explicit `mode`. |
 | `money.rate.apply` | Apply an explicitly represented decimal or percentage Rate to Money, with optional explicit rounding. |
+| `money.allocate` | Allocate Money by equal parts or positive integer ratios using an explicit target scale and deterministic ordered remainder placement. |
 | `workflow.create` | Validate a definition and create an instance at its initial state. |
 | `finkore.workflow.transition` | Request the supplied target from the instance's current state using supplied guard facts. |
 | `finkore.audit.append` | Append one event to supplied committed logical history. |
@@ -84,8 +85,8 @@ Audit ordering requirements are verified through append-only history and review 
 For Money Draft 0.1, `money.deserialize` and `money.serialize` remain
 conformance-local representation boundary checks. They exercise normative Money
 serialization but are not separate public Agentic operations. For Money Draft 0.2,
-`money.rate.apply` remains conformance-local until Agentic operation promotion is
-reviewed explicitly.
+`money.rate.apply` and `money.allocate` remain conformance-local until Agentic
+operation promotion is reviewed explicitly.
 For Approvals Draft 0.1, `approval.chain.evaluate` remains conformance-local.
 It observes deterministic chain composition from explicit Requirement state
 inputs; it is not a public Agentic operation and does not replace Decision

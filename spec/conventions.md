@@ -64,6 +64,7 @@ The following table is the consolidated catalog. Domain error documents define t
 | Money | `FINKORE_MONEY_DIVISION_BY_ZERO` | [A scalar divisor was zero](money/errors.md). |
 | Money | `FINKORE_MONEY_ROUNDING_REQUIRED` | [Required precision reduction has no rounding rule](money/errors.md). |
 | Money | `FINKORE_MONEY_INVALID_ROUNDING` | [A requested rounding rule is invalid or unsupported](money/errors.md). |
+| Money | `FINKORE_MONEY_INVALID_ALLOCATION` | [A requested allocation is invalid](money/errors.md). |
 | Workflow | `FINKORE_WORKFLOW_INVALID_DEFINITION` | [Workflow structure is invalid](workflow/errors.md). |
 | Workflow | `FINKORE_WORKFLOW_INVALID_STATE` | [A State is missing or undeclared](workflow/errors.md). |
 | Workflow | `FINKORE_WORKFLOW_INVALID_TRANSITION` | [A requested directed Transition is undeclared](workflow/errors.md). |
@@ -107,4 +108,3 @@ All other JSON is illustrative and non-normative; omission in an example does no
 ## Non-Goals
 
 This document does not select a schema language, error transport, decimal library, identifier format, or timestamp storage mechanism.
-

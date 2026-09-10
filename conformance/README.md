@@ -6,7 +6,7 @@
 
 > In financial software, a passing test suite is useful only if it reliably rejects broken behavior.
 
-This directory is the language-independent executable evidence for FinKore Draft 0.1. The specification remains the source of truth. Vectors describe observable domain behavior; they do not prescribe APIs, classes, exceptions, storage, or frameworks.
+This directory is the language-independent executable evidence for FinKore Draft 0.1 plus the implemented Draft 0.2 Money Rates and Money Allocation slices. The specification remains the source of truth. Vectors describe observable domain behavior; they do not prescribe APIs, classes, exceptions, storage, or frameworks.
 
 ## Scope and discovery
 
@@ -20,7 +20,7 @@ traceability status.
 
 The initial suites are grouped by specification behavior:
 
-- Money: representation, serialization, arithmetic, comparison, currency, and rounding.
+- Money: representation, serialization, arithmetic, comparison, currency, rounding, Rates, and Allocation.
 - Workflow: states, directed transitions, guards, terminal states, and failure atomicity.
 - Audit: events, actors, changes, append-only history, redaction, and ordering.
 - Approvals: requirements, decisions, conditions, chains, and subject facts.

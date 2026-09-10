@@ -1,0 +1,803 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "money.allocate.equal.remainder-positive-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-001",
+        "MONEY-ALLOCATION-002",
+        "MONEY-ALLOCATION-003",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009",
+        "MONEY-ALLOCATION-010",
+        "MONEY-ALLOCATION-012",
+        "MONEY-ALLOCATION-013"
+      ],
+      "description": "Allocates a positive amount equally, assigning the indivisible remainder to the earliest result.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "EQUAL",
+          "parts": 3
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "3.34",
+            "currency": "USD"
+          },
+          {
+            "amount": "3.33",
+            "currency": "USD"
+          },
+          {
+            "amount": "3.33",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "remainder-dropped",
+        "remainder-assigned-to-last-position",
+        "operand-mutated"
+      ]
+    },
+    {
+      "id": "money.allocate.ratio.remainder-positive-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-001",
+        "MONEY-ALLOCATION-002",
+        "MONEY-ALLOCATION-004",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009",
+        "MONEY-ALLOCATION-010",
+        "MONEY-ALLOCATION-012",
+        "MONEY-ALLOCATION-013"
+      ],
+      "description": "Allocates by positive integer ratios using exact integer shares and ordered remainder placement.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            1,
+            2,
+            3
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "1.67",
+            "currency": "USD"
+          },
+          {
+            "amount": "3.33",
+            "currency": "USD"
+          },
+          {
+            "amount": "5.00",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "ratio-ignored",
+        "remainder-dropped",
+        "remainder-duplicated"
+      ]
+    },
+    {
+      "id": "money.allocate.ratio.zero-source-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-004",
+        "MONEY-ALLOCATION-005",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-012"
+      ],
+      "description": "Allocates a zero source amount without rejecting it or changing currency.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "0.00",
+          "currency": "EUR"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            1,
+            2
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "0.00",
+            "currency": "EUR"
+          },
+          {
+            "amount": "0.00",
+            "currency": "EUR"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "0.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "zero-source-rejected",
+        "currency-changed"
+      ]
+    },
+    {
+      "id": "money.allocate.equal.remainder-negative-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-003",
+        "MONEY-ALLOCATION-005",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009",
+        "MONEY-ALLOCATION-010",
+        "MONEY-ALLOCATION-011",
+        "MONEY-ALLOCATION-012",
+        "MONEY-ALLOCATION-013"
+      ],
+      "description": "Allocates a negative amount and applies ordered remainder placement to negative magnitudes.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "-10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "EQUAL",
+          "parts": 3
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "-3.34",
+            "currency": "USD"
+          },
+          {
+            "amount": "-3.33",
+            "currency": "USD"
+          },
+          {
+            "amount": "-3.33",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "-10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "negative-sign-reversal",
+        "positive-only-remainder-logic",
+        "operand-mutated"
+      ]
+    },
+    {
+      "id": "money.allocate.ratio.declared-order-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-004",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009",
+        "MONEY-ALLOCATION-010",
+        "MONEY-ALLOCATION-012"
+      ],
+      "description": "Preserves ratio declaration order instead of sorting ratios before distributing the remainder.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            3,
+            2,
+            1
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "5.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "3.33",
+            "currency": "USD"
+          },
+          {
+            "amount": "1.66",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "ratio-order-sorted",
+        "declared-order-ignored"
+      ]
+    },
+    {
+      "id": "money.allocate.ratio.large-ratios-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-004",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009"
+      ],
+      "description": "Allocates using large positive integer ratios without binary number arithmetic or overflow-sensitive shortcuts.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "100.00",
+          "currency": "EUR"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            4000000000000,
+            6000000000000
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "40.00",
+            "currency": "EUR"
+          },
+          {
+            "amount": "60.00",
+            "currency": "EUR"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "100.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "binary-floating-point-arithmetic",
+        "large-ratio-overflow"
+      ]
+    },
+    {
+      "id": "money.allocate.unrepresentable-source-scale-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-002",
+        "MONEY-ALLOCATION-006",
+        "MONEY-ALLOCATION-013",
+        "MONEY-ERROR-005",
+        "MONEY-ERROR-007"
+      ],
+      "description": "Rejects a source amount that cannot be represented as whole allocation units at the target scale.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.001",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "EQUAL",
+          "parts": 2
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_ROUNDING_REQUIRED"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.001",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "implicit-source-rounding",
+        "operand-mutated"
+      ]
+    },
+    {
+      "id": "money.allocate.equal.invalid-zero-parts-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-003",
+        "MONEY-ALLOCATION-013",
+        "MONEY-ERROR-007",
+        "MONEY-ERROR-008"
+      ],
+      "description": "Rejects an equal allocation request with zero parts and preserves the source value.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "EQUAL",
+          "parts": 0
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_ALLOCATION"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "zero-part-count-accepted",
+        "wrong-error-code"
+      ]
+    },
+    {
+      "id": "money.allocate.equal.invalid-negative-parts-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-003",
+        "MONEY-ERROR-008"
+      ],
+      "description": "Rejects an equal allocation request with a negative part count.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "EQUAL",
+          "parts": -1
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_ALLOCATION"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "negative-part-count-accepted"
+      ]
+    },
+    {
+      "id": "money.allocate.ratio.invalid-zero-ratio-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-004",
+        "MONEY-ERROR-008"
+      ],
+      "description": "Rejects a ratio allocation request containing a zero ratio.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            1,
+            0,
+            2
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_ALLOCATION"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "zero-ratio-accepted"
+      ]
+    },
+    {
+      "id": "money.allocate.ratio.invalid-negative-ratio-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-004",
+        "MONEY-ERROR-008"
+      ],
+      "description": "Rejects a ratio allocation request containing a negative ratio.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            1,
+            -2
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_ALLOCATION"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "negative-ratio-accepted"
+      ]
+    },
+    {
+      "id": "money.allocate.ratio.invalid-malformed-ratio-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-004",
+        "MONEY-ERROR-008"
+      ],
+      "description": "Rejects a ratio allocation request containing a malformed non-integer ratio value.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            1,
+            "2"
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_ALLOCATION"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "malformed-ratio-accepted"
+      ]
+    },
+    {
+      "id": "money.allocate.ratio.invalid-fractional-ratio-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-004",
+        "MONEY-ERROR-008"
+      ],
+      "description": "Rejects a ratio allocation request containing a fractional ratio value.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            1,
+            1.5
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_ALLOCATION"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "fractional-ratio-accepted"
+      ]
+    },
+    {
+      "id": "money.allocate.ratio.invalid-empty-ratios-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-004",
+        "MONEY-ERROR-008"
+      ],
+      "description": "Rejects a ratio allocation request with no declared ratios.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": []
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_ALLOCATION"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "empty-ratios-accepted"
+      ]
+    },
+    {
+      "id": "money.allocate.invalid-scale-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-001",
+        "MONEY-ALLOCATION-002",
+        "MONEY-ERROR-008"
+      ],
+      "description": "Rejects allocation when the target scale is not a non-negative integer.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "EQUAL",
+          "parts": 2
+        },
+        "scale": 2.5
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_ALLOCATION"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "fractional-scale-accepted",
+        "wrong-error-code"
+      ]
+    },
+    {
+      "id": "money.allocate.invalid-method-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-001",
+        "MONEY-ERROR-008"
+      ],
+      "description": "Rejects an unsupported allocation method.",
+      "operation": "money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "WEIGHTED",
+          "ratios": [
+            1,
+            2
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_ALLOCATION"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unsupported-method-accepted",
+        "wrong-error-code"
+      ]
+    }
+  ]
+}
