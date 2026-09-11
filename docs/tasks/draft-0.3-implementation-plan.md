@@ -11,18 +11,18 @@ Draft 0.3 should deepen FinKore's usefulness for complex corporate financial wor
 - Money portability research for precision, overflow, minor-unit metadata, and private currency namespace decisions.
 - Conservative Agentic review for state-changing Approval and Workflow capabilities.
 
-Draft 0.3 should not implement delegation, escalation, tax primitives, interest, audit retention, ledger behavior, payments, BPMN, IAM/RBAC, or persistence unless research produces a narrow portable Core rule. The plan assumes Draft 0.2 is not yet executed in this repository; every 0.3 milestone is therefore gated by verification that the 0.2 capabilities it depends on are actually closed.
+Draft 0.3 should not implement delegation, escalation, tax primitives, interest, audit retention, ledger behavior, payments, BPMN, IAM/RBAC, or persistence unless research produces a narrow portable Core rule. Draft 0.2 closure has now been verified in this repository; every 0.3 milestone remains gated by that closed baseline and by the specific 0.3 research/review decisions named below.
 
 ## 2. Actual Repository Baseline
 
-Draft 0.1 complete state:
+Draft 0.1 and Draft 0.2 closed baseline:
 
 | Area | Actual state |
 | --- | --- |
-| Specification | `/spec` contains Draft 0.1 Money, Workflow, Audit, Approvals, Entities, shared conventions, and glossary. |
-| Conformance | `conformance/manifest.json` is version `0.1`; `conformance/traceability.md` reports 213 requirements, 138 vectors, 149 covered, 64 not directly testable, 0 uncovered, and 0 blocking spec gaps. |
-| Agentic | Canonical Draft 0.1 operations include Money operations, `finkore.workflow.transition`, and Audit append/remove/replace. Entity and advanced Approval operations remain conformance-local. |
-| TypeScript | The TypeScript reference implementation README states Draft 0.1 is complete for Money, Workflow, Audit, Approvals, and Entities. It explicitly excludes 0.2/0.3 topics such as allocation, correction/reversal, supersession, workflow versioning, concurrency, quorum, delegation, withdrawal, expiration, and escalation. |
+| Specification | `/spec` contains Draft 0.1 Money, Workflow, Audit, Approvals, Entities, shared conventions, and glossary plus closed Draft 0.2 Money Rates, Money Allocation, Audit Relationships, Entity Evolution, and Approval Validity semantics. |
+| Conformance | `conformance/manifest.json` remains format `0.1` as a syntax compatibility version. `conformance/traceability.md` reports 297 requirements, 199 vectors, 231 covered, 66 not directly testable, 0 uncovered, and 0 blocking spec gaps. |
+| Agentic | Canonical operations include the Draft 0.1 Money, Workflow and Audit operations plus Draft 0.2 Money `finkore.money.applyrate`, `finkore.money.allocate`, and current Entity operation IDs. Advanced Approval lifecycle labels remain conformance-local. |
+| TypeScript | The TypeScript reference implementation covers Draft 0.1 and selected Draft 0.2 behavior for Money Rates/Allocation, Audit Relationships, Entity Evolution correction/reversal/void/supersession, and Approval withdrawal/expiration/supersession/current-effectiveness. It still explicitly excludes Draft 0.3 topics such as approval quorum, N-of-M voting, bounded nested groups, workflow versioning/import/conflict, entity import identity mapping, delegation, escalation, IAM/RBAC, persistence, and tax/interest behavior. |
 | Runner | The runner is domain-neutral and must remain so. |
 
 Draft 0.2 planned state:
@@ -39,17 +39,17 @@ Draft 0.2 actually implemented state in the current repository:
 
 | Area | Actual state |
 | --- | --- |
-| Docs | `docs/tasks/draft-0.2-implementation-plan.md` exists. |
-| Specification | No `MONEY-RATE-*`, `MONEY-ALLOCATION-*`, `ENTITY-EVOLUTION-*`, `AUDIT-RELATIONSHIP-*`, or `APPROVAL-LIFECYCLE-*` requirements are present. |
-| Conformance | No Draft 0.2 manifest, vectors, or traceability closure exist. |
-| Agentic | No Draft 0.2 operation promotions are present. |
-| TypeScript | No Draft 0.2 public APIs are present. |
+| Docs | Draft 0.2 closure is recorded in `docs/tasks/draft-0.2-execution-evidence.md` and the execution backlog. |
+| Specification | `MONEY-RATE-*`, `MONEY-ALLOCATION-*`, `ENTITY-EVOLUTION-*`, `AUDIT-RELATIONSHIP-*`, and `APPROVAL-VALIDITY-*` requirements are present and closed for the selected Draft 0.2 scope. |
+| Conformance | The manifest-listed suite contains 199 vectors, including all Draft 0.2 selected slices, with 199 PASS and 174/174 mutation-sensitive PASS in the TASK-067 refresh. |
+| Agentic | Draft 0.2 promoted Money Rates/Allocation and Entity operation IDs where mature; Approval lifecycle operations remain conformance-local pending Draft 0.3 Agentic review. |
+| TypeScript | Draft 0.2 public APIs and adapter handlers are present for Money Rates/Allocation, Audit Relationships, Entity Evolution, and Approval Validity; runtime regression remains green. |
 
-Planning assumption: Draft 0.3 will be executed only after Draft 0.2 is completed or explicitly re-scoped. If a future Codex run finds that Draft 0.2 was implemented differently from the 0.2 plan, it must update this 0.3 roadmap before beginning feature work.
+Planning assumption refresh: Draft 0.3 may proceed from the verified Draft 0.2 baseline recorded by TASK-066/TASK-067. The selected Draft 0.3 scope and non-goals remain unchanged.
 
 ## 3. Draft 0.2 Dependency Review
 
-Draft 0.3 depends on these expected Draft 0.2 outcomes:
+Draft 0.3 depends on these verified Draft 0.2 outcomes:
 
 | 0.2 capability | Why it matters for 0.3 |
 | --- | --- |
@@ -60,7 +60,7 @@ Draft 0.3 depends on these expected Draft 0.2 outcomes:
 | Money rate/allocation | Tax research and precision/overflow review should start from known exact Money expansion behavior. |
 | Agentic 0.2 review | 0.3 should not promote advanced state-changing operations unless 0.2 descriptors are aligned. |
 
-Hard gate: if Draft 0.2 is not closed, Step 1 of this plan must stop with `BLOCKED BY DRAFT 0.2 NOT CLOSED` unless the user explicitly asks to revise the 0.3 plan around a different baseline.
+Hard gate status: satisfied by TASK-066/TASK-067. Future 0.3 tasks must preserve the same closed baseline and stop if a regression, traceability gap, required review gap, or critical mutation survivor invalidates it.
 
 ## 4. Candidate Capability Assessment
 
@@ -169,21 +169,21 @@ Optional: Step 15.
 | Complexity | MEDIUM: broad audit with no feature implementation. |
 | Objective | Verify actual Draft 0.2 completion status and update this plan if implementation differs from the expected baseline. |
 | Why it belongs in 0.3 | 0.3 depends heavily on 0.2 Approval validity, Entity evolution, Audit relationships, and Money expansion. |
-| Prerequisites | Draft 0.2 plan exists; ideally Draft 0.2 closure has been executed. |
+| Prerequisites | Draft 0.2 plan exists and Draft 0.2 closure has been executed. |
 | Exact scope | Inspect repo state, compare to 0.2 closure criteria, identify implemented vs planned 0.2 capabilities, and amend this 0.3 plan if needed. |
 | Explicit non-scope | Do not implement any 0.2 or 0.3 feature. |
 | Artifacts to inspect | `README.md`, `AGENTS.md`, `docs/tasks/draft-0.2-implementation-plan.md`, `spec/**`, `conformance/**`, `agentic/**`, `runner/**`, `implementations/typescript/**`. |
-| Artifacts likely to change | `docs/tasks/draft-0.3-implementation-plan.md` only if the baseline changed. |
+| Artifacts likely to change | `docs/tasks/draft-0.3-implementation-plan.md`, `docs/tasks/draft-0.3-execution-evidence.md`, and the execution backlog when the baseline changed. |
 | Normative requirements | None. |
 | Conformance work | Confirm `UNCOVERED = 0` and `BLOCKING SPEC GAPS = 0` for closed 0.2 scope. |
 | Agentic impact | Confirm 0.2 operation promotions or conformance-local decisions. |
 | Portable errors | Confirm 0.2 error catalog alignment. |
 | TypeScript implementation | None. |
-| Tests | Run `node --version`; if dependencies are present, run `npm run typecheck --workspaces` and `npm run test --workspaces`. Follow AGENTS Node toolchain instructions if Node is unavailable. |
+| Tests | Run `node --version`; if dependencies are present, run `npm run build --workspaces`, `npm run typecheck --workspaces`, `npm run test --workspaces`, full conformance, and applicable coverage. Follow AGENTS Node toolchain instructions if Node is unavailable. |
 | Critical mutation scenarios | None for this planning gate. |
-| Documentation | Update this document if reality differs from assumptions. |
+| Documentation | Update this document if reality differs from assumptions, and record the closure refresh evidence. |
 | External review requirements | None. |
-| Stop conditions | `BLOCKED BY DRAFT 0.2 NOT CLOSED` if required 0.2 semantics are absent and the user has not approved a revised 0.3 baseline. |
+| Stop conditions | `BLOCKED BY DRAFT 0.2 NOT CLOSED` if required 0.2 semantics are absent; otherwise stop on an unexpected regression, traceability gap, missing required review, stale complete mutation evidence, or critical mutation survivor. |
 | Definition of Done | Actual 0.2 baseline is documented and 0.3 scope remains valid. |
 | Expected readiness status | READY FOR NEXT 0.3 MILESTONE. |
 
@@ -715,4 +715,4 @@ Priority order toward eventual FinKore v0.5:
 
 ## 16. First Milestone to Execute
 
-NEXT CODEX MILESTONE: Draft 0.2 Closure Verification and 0.3 Scope Refresh
+NEXT CODEX MILESTONE: TASK-068 - Approval Composition Requirement Inventory

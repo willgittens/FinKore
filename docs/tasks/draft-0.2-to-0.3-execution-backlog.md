@@ -38,7 +38,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 
 ### Draft 0.3
 
-- [ ] Draft 0.3 Foundation: [TASK-067](#task-067)–[TASK-067](#task-067)
+- [x] Draft 0.3 Foundation: [TASK-067](#task-067)–[TASK-067](#task-067)
 - [ ] Advanced Approvals: [TASK-068](#task-068)–[TASK-084](#task-084)
 - [ ] Workflow Versioning and Import: [TASK-085](#task-085)–[TASK-098](#task-098)
 - [ ] Entity Revision and Import: [TASK-099](#task-099)–[TASK-110](#task-110)
@@ -52,7 +52,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-067
+NEXT TASK: TASK-068
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -6291,7 +6291,7 @@ Completion:
 
 <a id="task-067"></a>
 
-### - [ ] TASK-067 — Draft 0.2 Closure Verification and Draft 0.3 Scope Refresh
+### - [x] TASK-067 — Draft 0.2 Closure Verification and Draft 0.3 Scope Refresh
 
 **Release:** Draft 0.3
 
@@ -6364,10 +6364,10 @@ Draft 0.2 Closure Verification and Draft 0.3 Scope Refresh.
 
 **Definition of Done**
 
-- [ ] Verify the actual closed 0.2 baseline against the 0.3 plan; lock mandatory composition, Workflow binding/import/conflict and Entity revision/import scope, plus required research and review gates.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Verify the actual closed 0.2 baseline against the 0.3 plan; lock mandatory composition, Workflow binding/import/conflict and Entity revision/import scope, plus required research and review gates.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -6375,7 +6375,12 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: `node --version`, `npm run build --workspaces`, `npm run typecheck --workspaces`, `npm run test --workspaces`, adapter tests, full conformance, core coverage, and runner coverage all exited 0 during the TASK-067 refresh; evidence recorded in `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: Full manifest PASS 199/199; mutation-sensitive vectors PASS 174/174; Money 83/83, Workflow 20/20, Audit 29/29, Approvals 47/47, Entities 20/20.
+- Mutation: No new financial behavior changed, so mutation was not rerun; latest complete core report remains 98.88% and latest runner report remains 99.73%, with zero critical survivors accepted under TASK-066 classification.
+- Notes: Draft 0.3 plan refreshed to the actual closed 0.2 baseline. Mandatory 0.3 scope and research/review gates remain unchanged. `NEXT TASK` advanced to TASK-068.
 
 ### Milestone: Advanced Approvals
 
