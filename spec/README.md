@@ -52,7 +52,7 @@ Later domain specifications can compose these areas. The rules for explicit refi
 
 FinKore Core deliberately begins with reusable primitives rather than concrete invoice, expense, purchase-order, payment, reimbursement, or journal-entry models. Applications may compose the primitives for those domains, but Core Draft 0.1 does not claim to standardize them.
 
-Possible later specifications may explore journal entries, debit and credit, general ledgers, reconciliation, fiscal periods, cost centers, purchase orders, invoice matching, payments, corrections, reversals, and tax primitives. These are not current capabilities or commitments. A topic should enter scope only when its semantics can be defined clearly, tested across implementations, and justified by a real financial software problem.
+Possible later specifications may explore journal entries, debit and credit, general ledgers, reconciliation, fiscal periods, cost centers, purchase orders, invoice matching, payments, concrete correction posting rules, ledger reversals, and tax primitives. These are not current capabilities or commitments. A topic should enter scope only when its semantics can be defined clearly, tested across implementations, and justified by a real financial software problem.
 
 ## Conformance
 

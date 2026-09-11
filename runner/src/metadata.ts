@@ -36,6 +36,10 @@ export const CONFORMANCE_OPERATION_IDS = new Set([
   'approval.condition.evaluate',
   'approval.chain.evaluate',
   'entity.create',
+  'entity.evolution.correct',
+  'entity.evolution.reverse',
+  'entity.evolution.supersede',
+  'entity.evolution.void',
   'entity.mutate',
   'entity.transition',
 ])

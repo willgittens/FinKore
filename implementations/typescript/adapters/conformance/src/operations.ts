@@ -5,6 +5,7 @@ import {
   ApprovalDecision,
   ApprovalDecisionHistory,
   AuditLog,
+  EntityEvolutionHistory,
   EntityValidationFailedError,
   FinancialEntity,
   Money,
@@ -148,6 +149,74 @@ function inputEntityMutate(input: unknown): {
   }
   const candidate = input as { readonly definition: unknown; readonly entity: unknown; readonly changes?: unknown }
   return { definition: candidate.definition, entity: candidate.entity, changes: candidate.changes }
+}
+
+function inputEntityEvolution(input: unknown): {
+  readonly definition: unknown
+  readonly evolutionHistory: unknown
+  readonly source: unknown
+  readonly sourceRevision: unknown
+  readonly related?: unknown
+  readonly relatedRevision?: unknown
+  readonly successor?: unknown
+  readonly successorRevision?: unknown
+  readonly supersessionScope?: unknown
+  readonly relationId: unknown
+  readonly eligible: unknown
+  readonly expectedSourceState?: unknown
+  readonly expectedSourceRevision?: unknown
+  readonly expectedSourceCurrent?: unknown
+  readonly auditHistory: unknown
+  readonly auditEvent: unknown
+} {
+  if (typeof input !== 'object' || input === null || !('definition' in input) || !('source' in input)) {
+    return {
+      definition: undefined,
+      evolutionHistory: undefined,
+      source: undefined,
+      sourceRevision: undefined,
+      relationId: undefined,
+      eligible: undefined,
+      auditHistory: undefined,
+      auditEvent: undefined,
+    }
+  }
+  const candidate = input as {
+    readonly definition: unknown
+    readonly evolutionHistory?: unknown
+    readonly source: unknown
+    readonly sourceRevision?: unknown
+    readonly related?: unknown
+    readonly relatedRevision?: unknown
+    readonly successor?: unknown
+    readonly successorRevision?: unknown
+    readonly supersessionScope?: unknown
+    readonly relationId?: unknown
+    readonly eligible?: unknown
+    readonly expectedSourceState?: unknown
+    readonly expectedSourceRevision?: unknown
+    readonly expectedSourceCurrent?: unknown
+    readonly auditHistory?: unknown
+    readonly auditEvent?: unknown
+  }
+  return {
+    definition: candidate.definition,
+    evolutionHistory: candidate.evolutionHistory,
+    source: candidate.source,
+    sourceRevision: candidate.sourceRevision,
+    ...(Object.hasOwn(candidate, 'related') ? { related: candidate.related } : {}),
+    ...(Object.hasOwn(candidate, 'relatedRevision') ? { relatedRevision: candidate.relatedRevision } : {}),
+    ...(Object.hasOwn(candidate, 'successor') ? { successor: candidate.successor } : {}),
+    ...(Object.hasOwn(candidate, 'successorRevision') ? { successorRevision: candidate.successorRevision } : {}),
+    ...(Object.hasOwn(candidate, 'supersessionScope') ? { supersessionScope: candidate.supersessionScope } : {}),
+    relationId: candidate.relationId,
+    eligible: candidate.eligible,
+    ...(Object.hasOwn(candidate, 'expectedSourceState') ? { expectedSourceState: candidate.expectedSourceState } : {}),
+    ...(Object.hasOwn(candidate, 'expectedSourceRevision') ? { expectedSourceRevision: candidate.expectedSourceRevision } : {}),
+    ...(Object.hasOwn(candidate, 'expectedSourceCurrent') ? { expectedSourceCurrent: candidate.expectedSourceCurrent } : {}),
+    auditHistory: candidate.auditHistory,
+    auditEvent: candidate.auditEvent,
+  }
 }
 
 function inputAuditHistory(input: unknown): { readonly history: unknown } {
@@ -626,6 +695,137 @@ function isEntityValidationDetails(value: unknown): value is { readonly findings
   return typeof value === 'object' && value !== null && Array.isArray((value as { readonly findings?: unknown }).findings)
 }
 
+function evolutionAuditHistory(input: { readonly auditHistory: unknown }): readonly unknown[] {
+  return input.auditHistory as readonly unknown[]
+}
+
+function evolutionObservations(
+  input: ReturnType<typeof inputEntityEvolution>,
+  history: EntityEvolutionHistory | undefined,
+  source: FinancialEntity | undefined,
+  related?: FinancialEntity | undefined,
+): Record<string, unknown> {
+  return {
+    ...(source === undefined ? {} : { source: source.toJSON() }),
+    ...(related === undefined ? {} : { related: related.toJSON() }),
+    ...(history === undefined ? {} : { evolutionHistory: history.toJSON() }),
+    auditHistory: { history: evolutionAuditHistory(input) },
+  }
+}
+
+function executeEntityEvolutionCorrect(request: AdapterRequest): NormalizedResult {
+  const input = inputEntityEvolution(request.input)
+  let history: EntityEvolutionHistory | undefined
+  let source: FinancialEntity | undefined
+  let related: FinancialEntity | undefined
+  try {
+    history = EntityEvolutionHistory.create(input.evolutionHistory as readonly unknown[])
+    source = FinancialEntity.from(input.definition, input.source)
+    related = FinancialEntity.from(input.definition, input.related)
+    const value = history.correct({
+      source,
+      sourceRevision: input.sourceRevision,
+      related,
+      relatedRevision: input.relatedRevision,
+      relationId: input.relationId,
+      eligible: input.eligible,
+      ...(Object.hasOwn(input, 'expectedSourceState') ? { expectedSourceState: input.expectedSourceState } : {}),
+      ...(Object.hasOwn(input, 'expectedSourceRevision') ? { expectedSourceRevision: input.expectedSourceRevision } : {}),
+      ...(Object.hasOwn(input, 'expectedSourceCurrent') ? { expectedSourceCurrent: input.expectedSourceCurrent } : {}),
+      audit: { history: evolutionAuditHistory(input), event: input.auditEvent },
+    })
+    return { status: 'success', value, observations: evolutionObservations(input, history, source) }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error') return { ...result, observations: evolutionObservations(input, history, source, related) }
+    return result
+  }
+}
+
+function executeEntityEvolutionReverse(request: AdapterRequest): NormalizedResult {
+  const input = inputEntityEvolution(request.input)
+  let history: EntityEvolutionHistory | undefined
+  let source: FinancialEntity | undefined
+  let related: FinancialEntity | undefined
+  try {
+    history = EntityEvolutionHistory.create(input.evolutionHistory as readonly unknown[])
+    source = FinancialEntity.from(input.definition, input.source)
+    related = FinancialEntity.from(input.definition, input.related)
+    const value = history.reverse({
+      source,
+      sourceRevision: input.sourceRevision,
+      related,
+      relatedRevision: input.relatedRevision,
+      relationId: input.relationId,
+      eligible: input.eligible,
+      ...(Object.hasOwn(input, 'expectedSourceState') ? { expectedSourceState: input.expectedSourceState } : {}),
+      ...(Object.hasOwn(input, 'expectedSourceRevision') ? { expectedSourceRevision: input.expectedSourceRevision } : {}),
+      ...(Object.hasOwn(input, 'expectedSourceCurrent') ? { expectedSourceCurrent: input.expectedSourceCurrent } : {}),
+      audit: { history: evolutionAuditHistory(input), event: input.auditEvent },
+    })
+    return { status: 'success', value, observations: evolutionObservations(input, history, source, related) }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error') return { ...result, observations: evolutionObservations(input, history, source, related) }
+    return result
+  }
+}
+
+function executeEntityEvolutionVoid(request: AdapterRequest): NormalizedResult {
+  const input = inputEntityEvolution(request.input)
+  let history: EntityEvolutionHistory | undefined
+  let source: FinancialEntity | undefined
+  try {
+    history = EntityEvolutionHistory.create(input.evolutionHistory as readonly unknown[])
+    source = FinancialEntity.from(input.definition, input.source)
+    const value = history.void({
+      source,
+      sourceRevision: input.sourceRevision,
+      relationId: input.relationId,
+      eligible: input.eligible,
+      ...(Object.hasOwn(input, 'expectedSourceState') ? { expectedSourceState: input.expectedSourceState } : {}),
+      ...(Object.hasOwn(input, 'expectedSourceRevision') ? { expectedSourceRevision: input.expectedSourceRevision } : {}),
+      ...(Object.hasOwn(input, 'expectedSourceCurrent') ? { expectedSourceCurrent: input.expectedSourceCurrent } : {}),
+      audit: { history: evolutionAuditHistory(input), event: input.auditEvent },
+    })
+    return { status: 'success', value, observations: evolutionObservations(input, history, source) }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error') return { ...result, observations: evolutionObservations(input, history, source) }
+    return result
+  }
+}
+
+function executeEntityEvolutionSupersede(request: AdapterRequest): NormalizedResult {
+  const input = inputEntityEvolution(request.input)
+  let history: EntityEvolutionHistory | undefined
+  let source: FinancialEntity | undefined
+  let successor: FinancialEntity | undefined
+  try {
+    history = EntityEvolutionHistory.create(input.evolutionHistory as readonly unknown[])
+    source = FinancialEntity.from(input.definition, input.source)
+    successor = FinancialEntity.from(input.definition, input.successor)
+    const value = history.supersede({
+      source,
+      sourceRevision: input.sourceRevision,
+      successor,
+      successorRevision: input.successorRevision,
+      supersessionScope: input.supersessionScope,
+      relationId: input.relationId,
+      eligible: input.eligible,
+      ...(Object.hasOwn(input, 'expectedSourceState') ? { expectedSourceState: input.expectedSourceState } : {}),
+      ...(Object.hasOwn(input, 'expectedSourceRevision') ? { expectedSourceRevision: input.expectedSourceRevision } : {}),
+      ...(Object.hasOwn(input, 'expectedSourceCurrent') ? { expectedSourceCurrent: input.expectedSourceCurrent } : {}),
+      audit: { history: evolutionAuditHistory(input), event: input.auditEvent },
+    })
+    return { status: 'success', value, observations: evolutionObservations(input, history, source, successor) }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error') return { ...result, observations: evolutionObservations(input, history, source, successor) }
+    return result
+  }
+}
+
 /**
  * Executes canonical Audit append through the TypeScript core API.
  *
@@ -839,6 +1039,10 @@ export const operationHandlers = {
   'finkore.money.negate': executeMoneyNegate,
   'finkore.workflow.transition': executeWorkflowTransition,
   'entity.create': executeEntityCreate,
+  'entity.evolution.correct': executeEntityEvolutionCorrect,
+  'entity.evolution.reverse': executeEntityEvolutionReverse,
+  'entity.evolution.supersede': executeEntityEvolutionSupersede,
+  'entity.evolution.void': executeEntityEvolutionVoid,
   'entity.mutate': executeEntityMutate,
   'entity.transition': executeEntityTransition,
   'finkore.audit.append': executeAuditAppend,

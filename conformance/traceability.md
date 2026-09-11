@@ -11,10 +11,10 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 | 0 | 0 |
 | Audit | 52 | 44 | 4 | 4 | 42 | 0 | 0 | 10 | 0 | 0 |
 | Approvals | 35 | 32 | 1 | 2 | 30 | 0 | 0 | 5 | 0 | 0 |
-| Entities | 62 | 57 | 3 | 2 | 23 | 0 | 28 | 11 | 0 | 0 |
-| **Total** | **278** | **249** | **15** | **14** | **186** | **0** | **28** | **64** | **0** | **0** |
+| Entities | 67 | 62 | 3 | 2 | 54 | 0 | 0 | 13 | 0 | 0 |
+| **Total** | **283** | **254** | **15** | **14** | **217** | **0** | **0** | **66** | **0** | **0** |
 
-The suite contains 176 vectors. Overall: **186 covered (66.9%)**, **0 partially covered (0.0%)**, **28 uncovered (10.1%)**, **64 not directly testable (23.0%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
+The suite contains 186 vectors. Overall: **217 covered (76.7%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **66 not directly testable (23.3%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current draft. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -245,34 +245,39 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-ERROR-002 | Entities | SHOULD / SHOULD NOT | COVERED | entity.validation.complete-result-001 |
 | ENTITY-ERROR-003 | Entities | MAY | NOT DIRECTLY TESTABLE | — |
 | ENTITY-ERROR-004 | Entities | MUST / MUST NOT | COVERED | entity.transition.rejected-preserves-entity-001 |
-| ENTITY-EVOLUTION-001 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-002 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-003 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-004 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-005 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-006 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-007 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-008 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-009 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-010 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-011 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-012 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-013 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-014 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-015 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-016 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-017 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-018 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-019 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-020 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-021 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-022 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-023 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-024 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-025 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-026 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-027 | Entities | MUST / MUST NOT | UNCOVERED | — |
-| ENTITY-EVOLUTION-028 | Entities | MUST / MUST NOT | UNCOVERED | — |
+| ENTITY-EVOLUTION-001 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001 |
+| ENTITY-EVOLUTION-002 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001 |
+| ENTITY-EVOLUTION-003 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001 |
+| ENTITY-EVOLUTION-004 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001 |
+| ENTITY-EVOLUTION-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-EVOLUTION-006 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.ineligible-001, entity.evolution.void.ineligible-001 |
+| ENTITY-EVOLUTION-007 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001 |
+| ENTITY-EVOLUTION-008 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001 |
+| ENTITY-EVOLUTION-009 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001 |
+| ENTITY-EVOLUTION-010 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.ineligible-001 |
+| ENTITY-EVOLUTION-011 | Entities | MUST / MUST NOT | COVERED | entity.evolution.reversal.audit-001, entity.evolution.reversal.duplicate-001 |
+| ENTITY-EVOLUTION-012 | Entities | MUST / MUST NOT | COVERED | entity.evolution.reversal.audit-001, entity.evolution.reversal.duplicate-001 |
+| ENTITY-EVOLUTION-013 | Entities | MUST / MUST NOT | COVERED | entity.evolution.invalid-related-identity-001, entity.evolution.reversal.audit-001 |
+| ENTITY-EVOLUTION-014 | Entities | MUST / MUST NOT | COVERED | entity.evolution.reversal.duplicate-001 |
+| ENTITY-EVOLUTION-015 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001 |
+| ENTITY-EVOLUTION-016 | Entities | MUST / MUST NOT | COVERED | entity.evolution.void.audit-001 |
+| ENTITY-EVOLUTION-017 | Entities | MUST / MUST NOT | COVERED | entity.evolution.void.audit-001 |
+| ENTITY-EVOLUTION-018 | Entities | MUST / MUST NOT | COVERED | entity.evolution.void.ineligible-001 |
+| ENTITY-EVOLUTION-019 | Entities | MUST / MUST NOT | COVERED | entity.evolution.supersession.currentness-001 |
+| ENTITY-EVOLUTION-020 | Entities | MUST / MUST NOT | COVERED | entity.evolution.supersession.currentness-001 |
+| ENTITY-EVOLUTION-021 | Entities | MUST / MUST NOT | COVERED | entity.evolution.supersession.currentness-001 |
+| ENTITY-EVOLUTION-022 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001, entity.evolution.void.audit-001, entity.evolution.supersession.currentness-001 |
+| ENTITY-EVOLUTION-023 | Entities | MUST / MUST NOT | COVERED | entity.evolution.audit-failure-001, entity.evolution.correction.ineligible-001, entity.evolution.invalid-related-identity-001, entity.evolution.reversal.duplicate-001, entity.evolution.stale-revision-001, entity.evolution.void.ineligible-001 |
+| ENTITY-EVOLUTION-024 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.ineligible-001, entity.evolution.reversal.duplicate-001, entity.evolution.void.ineligible-001 |
+| ENTITY-EVOLUTION-025 | Entities | MUST / MUST NOT | COVERED | entity.evolution.stale-revision-001 |
+| ENTITY-EVOLUTION-026 | Entities | MUST / MUST NOT | COVERED | entity.evolution.invalid-related-identity-001 |
+| ENTITY-EVOLUTION-027 | Entities | MUST / MUST NOT | COVERED | entity.evolution.audit-failure-001 |
+| ENTITY-EVOLUTION-028 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-EVOLUTION-029 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001, entity.evolution.void.audit-001, entity.evolution.supersession.currentness-001 |
+| ENTITY-EVOLUTION-030 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001 |
+| ENTITY-EVOLUTION-031 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.supersession.currentness-001 |
+| ENTITY-EVOLUTION-032 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001, entity.evolution.void.audit-001, entity.evolution.supersession.currentness-001 |
+| ENTITY-EVOLUTION-033 | Entities | MUST / MUST NOT | COVERED | entity.evolution.audit-failure-001 |
 | ENTITY-IDENTITY-001 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
 | ENTITY-IDENTITY-002 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.transition.success-identity-stable-001 |
 | ENTITY-IDENTITY-003 | Entities | MUST / MUST NOT | COVERED | entity.create.opaque-identity-preserved-001 |
@@ -400,7 +405,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 - Workflow: external fact capture, definition migration, transition identifiers, and concurrency remain open.
 - Audit: Draft 0.2 Audit Relationships are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, generic related links, relationship redaction policy, and causal sequencing remain open.
 - Approvals: condition syntax, subject-state interchange, relevant-fact policy, supersession, withdrawal, expiration, delegation, quorum, and rejection codes remain open for future drafts; current standalone Draft 0.1 conformance has no uncovered mandatory Approval requirements.
-- Entities: Draft 0.2 Entity Evolution terminology, correction, reversal, void, supersession, currentness, failure atomicity, and portable error mapping are specified and vector-ready, with conformance vectors and implementation still pending. Concrete fields, lifecycle policy, full validation catalog, import or migration mapping, cross-entity identity registries, Audit integration, concurrency, cancellation, adjustment, replacement, and amendment remain outside the current implemented Core. The current TypeScript reference implementation covers the conformance-local Entity identity, lifecycle, mutability, and validation vectors. Remaining Entity requirements classified as not directly testable are composing-domain, conditional Audit-integration, optional diagnostic, or registry/import obligations without a standalone portable Entity operation.
+- Entities: Draft 0.2 Entity Evolution terminology, correction, reversal, void, supersession, currentness, failure atomicity, mandatory Audit evidence, and portable error mapping are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Concrete fields, composing-domain lifecycle policy, full validation catalog, import or migration mapping, cross-entity identity registries, concurrency, cancellation, adjustment, replacement, amendment, and concrete ledger posting behavior remain outside the current implemented Core. The current TypeScript reference implementation covers the conformance-local Entity identity, lifecycle, mutability, validation, and evolution vectors. Remaining Entity requirements classified as not directly testable are composing-domain, optional diagnostic, or registry/import obligations without a standalone portable Entity operation.
 
 Vectors do not settle these open questions.
 
@@ -408,4 +413,4 @@ Vectors do not settle these open questions.
 
 **READY FOR CONFORMANCE RUNNER**
 
-The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates, Money Allocation, and Audit Relationships requirements are vector-covered, implemented by the TypeScript reference implementation, and pass their conformance suites. Draft 0.2 Entity Evolution requirements are specified and vector-ready but intentionally uncovered and implementation-pending until the dedicated vector and implementation tasks. FinKore Core Draft 0.1 cross-domain closure remains complete for its directly testable mandatory requirements.
+The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates, Money Allocation, Audit Relationships, and Entity Evolution requirements are vector-covered, implemented by the TypeScript reference implementation, and pass their conformance suites. FinKore Core Draft 0.1 cross-domain closure remains complete for its directly testable mandatory requirements.

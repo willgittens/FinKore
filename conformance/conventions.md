@@ -74,6 +74,10 @@ These identifiers name observable behavior, not implementation methods.
 | `entity.create` | Create under the supplied composing-domain definition. |
 | `entity.mutate` | Apply a declared mutation under supplied mutability and validation rules. |
 | `entity.transition` | Apply a lifecycle transition under the referenced workflow. |
+| `entity.evolution.correct` | Record a Correction relation with required Audit evidence. |
+| `entity.evolution.reverse` | Record a Reversal relation with required Audit evidence. |
+| `entity.evolution.void` | Record a Void relation with required Audit evidence. |
+| `entity.evolution.supersede` | Record a Supersession relation with required Audit evidence. |
 
 Logical fixtures in `input` are intentionally small declarative models. An adapter constructs any idiomatic implementation objects required to realize them. The fixtures do not define a production interchange format.
 
@@ -92,6 +96,12 @@ It observes deterministic chain composition from explicit Requirement state
 inputs; it is not a public Agentic operation and does not replace Decision
 history as evidence for which Decision satisfied a Requirement or which subject
 facts were bound to that Decision.
+For Entities Draft 0.2, `entity.evolution.correct`,
+`entity.evolution.reverse`, `entity.evolution.void`, and
+`entity.evolution.supersede` remain conformance-local until Agentic operation
+promotion is reviewed explicitly. They observe the portable correction,
+reversal, void, supersession, revision, relation, currentness, and Audit
+evidence semantics defined by Entity Evolution.
 
 ## Runner contract
 

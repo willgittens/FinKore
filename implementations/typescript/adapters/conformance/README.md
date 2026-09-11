@@ -13,6 +13,10 @@ This milestone supports:
 - `finkore.money.subtract`
 - `finkore.workflow.transition`
 - `entity.create`
+- `entity.evolution.correct`
+- `entity.evolution.reverse`
+- `entity.evolution.supersede`
+- `entity.evolution.void`
 - `entity.mutate`
 - `entity.transition`
 - `finkore.audit.append`
@@ -41,18 +45,20 @@ They are not advertised as Agentic Contract operations in Draft 0.1.
 definition and initial-state behavior. `finkore.workflow.transition` is the
 canonical Workflow operation ID currently listed in the Agentic Contract.
 
-`entity.create`, `entity.mutate`, and `entity.transition` are conformance-local
-labels for the current Entity Identity, Lifecycle, Mutability, and Validation
-milestones. The current Agentic operation
-registry has not promoted Entity operations to canonical `finkore.entity.*`
-identifiers, so this adapter intentionally does not invent those identifiers.
-`entity.mutate` support covers declared top-level field mutability and complete
-validation of the proposed result through the core TypeScript Entity API. When
-core Entity validation fails with safe findings, the adapter exposes those
-findings as conformance observations so vectors can verify portable rule/path
-semantics without comparing TypeScript class names, messages, or sensitive
-values. The adapter does not evaluate validation rules itself. Generic
-validation rule engines remain outside this milestone.
+`entity.create`, `entity.mutate`, `entity.transition`, and
+`entity.evolution.*` are conformance-local labels for the current Entity
+Identity, Lifecycle, Mutability, Validation, and Draft 0.2 Entity Evolution
+milestones. The current Agentic operation registry has not promoted Entity
+operations to canonical `finkore.entity.*` identifiers, so this adapter
+intentionally does not invent those identifiers. `entity.mutate` support covers
+declared top-level field mutability and complete validation of the proposed
+result through the core TypeScript Entity API. `entity.evolution.correct`,
+`entity.evolution.reverse`, `entity.evolution.void`, and
+`entity.evolution.supersede` reconstruct Entities and evolution history, call
+`EntityEvolutionHistory`, and normalize source/result/evolution/Audit
+observations. The adapter does not implement evolution rules, evaluate
+validation rules, construct Audit evidence, or infer identifiers itself.
+Generic validation rule engines remain outside this milestone.
 
 Audit operation support covers FinKore Audit Draft 0.1 plus the Draft 0.2 Audit Relationships slice: Events, Actors, append-only history, Change representation, Redaction, relationship metadata, and portable Audit errors. Draft 0.1 does not define `audit.order` as an executable adapter operation. Audit Relationships are observed through existing append/redaction fixtures; the adapter does not interpret relationships itself.
 
@@ -74,7 +80,8 @@ as evidence for Requirement binding, actor eligibility, or relevant subject
 facts.
 
 It does not claim support for rich condition expressions, approval quorum,
-N-of-M voting, parallel approval groups, delegation, withdrawal, supersession,
-escalation, dynamic approver resolution, authorization/RBAC, MCP, executable
-agent integrations, generic entity validation rule engines, workflow versioning,
-concurrency resolution, persistence, or broader guard frameworks.
+N-of-M voting, parallel approval groups, delegation, withdrawal, approval
+supersession, escalation, dynamic approver resolution, authorization/RBAC, MCP,
+executable agent integrations, generic entity validation rule engines, workflow
+versioning, concurrency resolution, persistence, concrete ledger reversal
+posting, or broader guard frameworks.

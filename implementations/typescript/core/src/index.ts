@@ -8,6 +8,7 @@ export { ApprovalCondition } from './approvals/approval-condition.js'
 export { ApprovalDecision } from './approvals/approval-decision.js'
 export { ApprovalDecisionHistory } from './approvals/approval-decision-history.js'
 export { ApprovalRequirement } from './approvals/approval-requirement.js'
+export { EntityEvolutionHistory } from './entities/entity-evolution.js'
 export { FinancialEntity } from './entities/entity.js'
 export {
   ApprovalConditionUnresolvedError,
@@ -113,12 +114,24 @@ export type {
   EntityDefinitionInput,
   EntityErrorCode,
   EntityIdentifier,
+  EntityEvolutionAuditEvidenceInput,
+  EntityEvolutionKind,
+  EntityEvolutionRelationIdentifier,
+  EntityEvolutionRequestBase,
+  EntityEvolutionResult,
+  EntityRelatedEvolutionRequest,
   EntityIdentityScope,
+  EntityRevisionIdentifier,
+  EntityRevisionReference,
+  EntitySupersessionRequest,
   EntityTypeIdentifier,
   EntityValidationFinding,
   EntityValidationResult,
   EntityValidationRule,
   EntityValidationRuleDefinition,
+  EntityVoidRequest,
+  SerializedEntityEvolutionHistory,
+  SerializedEntityEvolutionRelation,
   SerializedFinancialEntity,
 } from './entities/types.js'
 export type {

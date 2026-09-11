@@ -1,7 +1,7 @@
 # FinKore TypeScript
 
 TypeScript reference implementation for the current FinKore Money, Workflow,
-Audit, Approvals, and current Entities Draft 0.1 milestones.
+Audit, Approvals, and Entities milestones.
 
 FinKore Money Draft 0.1 is fully implemented by this TypeScript reference implementation. The Draft 0.2 Money Rates and Money Allocation slices are also implemented. These statements apply only to the named Money specification slices; they do not imply that other FinKore domains are complete.
 
@@ -13,18 +13,22 @@ FinKore Approvals Draft 0.1 is fully implemented by the TypeScript reference imp
 
 FinKore Entities Draft 0.1 is fully implemented by the TypeScript reference
 implementation for Entity Identity, Lifecycle, Mutability, and the current
-Validation milestone. This covers caller-supplied stable Entity identity,
+Validation milestone. The Draft 0.2 Entity Evolution slice is also implemented
+for correction, reversal, void, supersession, evolution history observations,
+and required Audit evidence. This covers caller-supplied stable Entity identity,
 declared identity scope, creation in the referenced Workflow initial state,
 exactly one current lifecycle state, valid directed lifecycle transitions,
 rejected transition failure atomicity, identity preservation through transitions
 and mutations, declared top-level field mutability by lifecycle state,
 terminal-state mutability distinction, preservation of primary Workflow
 portable error codes, complete validation of declared Entity data before
-mutation results become observable, validation failure atomicity, and safe
-validation findings. Generic validation rule engines, audit integration,
-correction/reversal, supersession, versioning, optimistic locking, persistence,
-authorization, and concrete financial entity types remain outside this
-milestone.
+mutation results become observable, validation failure atomicity, safe
+validation findings, source fact preservation during evolution, duplicate
+evolution relation/reversal rejection, scope-specific supersession currentness,
+void-without-delete, and evolution/Audit failure atomicity. Generic validation
+rule engines, concrete Entity/Audit policy selection, versioning, optimistic
+locking, persistence, authorization, and concrete financial entity types remain
+outside this milestone.
 
 This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact decimal and percentage Rate application, Money allocation by equal parts or positive integer ratios, exact compatible-currency numeric comparison, and explicit Money rounding.
 
@@ -35,7 +39,7 @@ explicit terminal-state detection, rejection of outgoing transitions in
 terminal definitions, terminal-state transition rejection and portable error
 precedence, successful state changes, and state preservation after rejection.
 
-It intentionally does not implement tax jurisdiction policy, interest conventions, FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, distributed audit ordering, audit persistence, approval quorum, N-of-M voting, parallel approval groups, delegation, withdrawal, supersession, expiration, escalation, multi-stage approval graphs, dynamic approver resolution, authorization/RBAC, Workflow or Audit integration for approvals, generic entity validation engines, corrections, or reversals.
+It intentionally does not implement tax jurisdiction policy, interest conventions, FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, distributed audit ordering, audit persistence, approval quorum, N-of-M voting, parallel approval groups, delegation, withdrawal, approval supersession, expiration, escalation, multi-stage approval graphs, dynamic approver resolution, authorization/RBAC, Workflow or Audit integration for approvals, generic entity validation engines, concrete correction posting rules, or ledger reversals.
 
 The specification remains canonical. This package stores validated decimal amounts as strings and performs arithmetic and comparison with scaled integer arithmetic so observable behavior preserves exact base-10 semantics without using JavaScript `number`.
 
@@ -148,6 +152,12 @@ their own condition rule and supply the explicit boundary result.
 - `financialEntity.mutate(changes)` applies top-level data field changes only when every targeted field is declared mutable for the current lifecycle state and the complete proposed data satisfies declared validation rules, preserving identity and lifecycle state.
 - `financialEntity.validate()` evaluates declared Entity validation rules against current data and returns a complete non-mutating `{ valid, findings }` result.
 - `financialEntity.toJSON()` returns a defensive portable observation `{ type, id, state, data }`.
+- `EntityEvolutionHistory.create(relations)` reconstructs an immutable evolution history from existing relation observations.
+- `entityEvolutionHistory.correct(request)` records a Correction relation with caller-supplied source/related Revision identities, required Audit evidence, and source fact preservation.
+- `entityEvolutionHistory.reverse(request)` records a Reversal relation with required Audit evidence and rejects duplicate reversal for the same source Revision.
+- `entityEvolutionHistory.void(request)` records Void nullification/currentness without deleting the source Entity, its facts, or prior history.
+- `entityEvolutionHistory.supersede(request)` records Supersession predecessor/successor Revision links and declared-scope currentness with required Audit evidence.
+- `entityEvolutionHistory.toJSON()` returns a defensive portable evolution history observation.
 
 Entity failures currently introduced by these milestones expose
 `FINKORE_ENTITY_INVALID_IDENTITY`, `FINKORE_ENTITY_IMMUTABLE`,
@@ -163,6 +173,13 @@ predicate used by conformance. It is not a generic rule DSL, JSON Schema
 adapter, callback system, persistence validator, authorization model, or
 cross-domain Workflow/Approval/Audit integration. Validation findings include
 stable rule identity and path only; they do not include sensitive field values.
+
+Entity Evolution in Draft 0.2 is audit-required. Callers provide Revision
+identity, Evolution Relation identity, composing-domain eligibility, and Audit
+Event/Relationship evidence. The TypeScript core validates that evidence and
+returns new evolution and Audit history observations atomically; it does not
+generate identifiers, compute financial replacement policy, authorize the
+operation, or mutate source Entity observations in place.
 
 ### Entity Draft 0.1 Requirement Inventory
 
@@ -209,8 +226,9 @@ stable rule identity and path only; they do not include sensitive field values.
 | `ENTITY-ERROR-002` | IN SCOPE | Findings preserve stable declared violation identifiers as `rule`; unit tests cover identifier preservation; conformance `entity.validation.complete-result-001`. |
 | `ENTITY-ERROR-004` | IN SCOPE | Workflow transition failures continue to retain Workflow portable error codes; validation does not replace primary Workflow behavior. |
 
-FinKore Entities Draft 0.1 is fully implemented by the TypeScript reference
-implementation. No blocking Entity spec gap remains. Entity operations remain
+FinKore Entities Draft 0.1 and the Draft 0.2 Entity Evolution slice are
+implemented by the TypeScript reference implementation. No blocking Entity spec
+gap remains for the implemented slices. Entity operations remain
 conformance-local; the Agentic Contract still does not advertise canonical
 `finkore.entity.*` operation identifiers.
 

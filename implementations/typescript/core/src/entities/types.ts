@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 import type { WorkflowDefinitionInput, WorkflowStateIdentifier } from '../workflow/types.js'
+import type { SerializedAuditEvent, SerializedAuditHistory } from '../audit/types.js'
 
 /**
  * Stable identifier for a FinKore Financial Entity.
@@ -194,4 +195,235 @@ export interface SerializedFinancialEntity {
 
   /** Composing-domain data carried without validation-rule interpretation. */
   readonly data: unknown
+}
+
+/**
+ * Stable identifier for a declared Entity Revision.
+ *
+ * A revision identifies one declared observation or version of a continuing
+ * Financial Entity. It remains distinct from stable Entity identity.
+ *
+ * @see ENTITY-EVOLUTION-002
+ */
+export type EntityRevisionIdentifier = string
+
+/**
+ * Stable identifier for an Entity Evolution Relation.
+ *
+ * The identifier names the relation itself, not the source Entity, related
+ * Entity, source Revision, related Revision, or Audit evidence.
+ *
+ * @see ENTITY-EVOLUTION-003
+ */
+export type EntityEvolutionRelationIdentifier = string
+
+/**
+ * Portable Entity evolution kinds supported by FinKore Draft 0.2.
+ *
+ * The four values are distinct; replacement and amendment are intentionally
+ * not portable Draft 0.2 operations.
+ *
+ * @see ENTITY-EVOLUTION-004
+ * @see ENTITY-EVOLUTION-005
+ */
+export type EntityEvolutionKind = 'CORRECTION' | 'REVERSAL' | 'VOID' | 'SUPERSESSION'
+
+/**
+ * Revision-qualified Entity reference retained in evolution history.
+ *
+ * @see ENTITY-EVOLUTION-001
+ * @see ENTITY-EVOLUTION-002
+ * @see ENTITY-EVOLUTION-022
+ */
+export interface EntityRevisionReference {
+  /** Stable Entity type. */
+  readonly type: EntityTypeIdentifier
+
+  /** Stable Entity identifier. */
+  readonly id: EntityIdentifier
+
+  /** Stable Revision identifier distinct from Entity identity. */
+  readonly revision: EntityRevisionIdentifier
+}
+
+/**
+ * Serialized Entity Evolution Relation observation.
+ *
+ * This value records portable evolution history. It does not define ledger
+ * effects, authorization, storage transactions, replacement semantics, or
+ * concrete invoice/payment behavior.
+ *
+ * @see ENTITY-EVOLUTION-003
+ * @see ENTITY-EVOLUTION-022
+ */
+export interface SerializedEntityEvolutionRelation {
+  /** Stable relation identity. */
+  readonly relationId: EntityEvolutionRelationIdentifier
+
+  /** Distinct evolution kind. */
+  readonly kind: EntityEvolutionKind
+
+  /** Source Entity and Revision preserved by the relation. */
+  readonly source: EntityRevisionReference
+
+  /** Related Entity and Revision, required except for Void. */
+  readonly related?: EntityRevisionReference
+
+  /** Supersession scope, required only for Supersession. */
+  readonly supersessionScope?: string
+
+  /** Source currentness after this relation becomes observable. */
+  readonly sourceCurrent: boolean
+
+  /** Related currentness after this relation becomes observable, when related exists. */
+  readonly relatedCurrent?: boolean
+
+  /** Audit Event identity that records the evolution. */
+  readonly auditEventId: string
+}
+
+/**
+ * Serialized Entity Evolution history.
+ *
+ * The relation array is an append observation for one logical history. It is
+ * not a global ordering guarantee or persistence format.
+ *
+ * @see ENTITY-EVOLUTION-022
+ */
+export interface SerializedEntityEvolutionHistory {
+  /** Recorded Entity Evolution Relations. */
+  readonly relations: readonly SerializedEntityEvolutionRelation[]
+}
+
+/**
+ * Audit evidence supplied for one Entity evolution operation.
+ *
+ * Both identifiers and event content are supplied by the composing domain or
+ * caller. The implementation validates and commits them; it does not generate
+ * missing evidence.
+ *
+ * @see ENTITY-EVOLUTION-029
+ * @see ENTITY-EVOLUTION-030
+ */
+export interface EntityEvolutionAuditEvidenceInput {
+  /** Committed logical Audit history before this evolution. */
+  readonly history: readonly unknown[]
+
+  /** Audit Event that records this evolution. */
+  readonly event: unknown
+}
+
+/**
+ * Shared request context for Draft 0.2 Entity evolution operations.
+ *
+ * @see ENTITY-EVOLUTION-006
+ * @see ENTITY-EVOLUTION-007
+ * @see ENTITY-EVOLUTION-025
+ */
+export interface EntityEvolutionRequestBase {
+  /** Source Entity preserved by the evolution operation. */
+  readonly source: FinancialEntityLike
+
+  /** Source Revision identity observed before the request. */
+  readonly sourceRevision: unknown
+
+  /** Evolution Relation identity supplied by the caller. */
+  readonly relationId: unknown
+
+  /** Explicit composing-domain eligibility decision. */
+  readonly eligible: unknown
+
+  /** Optional expected lifecycle state precondition. */
+  readonly expectedSourceState?: unknown
+
+  /** Optional expected source Revision precondition. */
+  readonly expectedSourceRevision?: unknown
+
+  /** Optional expected source currentness precondition. */
+  readonly expectedSourceCurrent?: unknown
+
+  /** Required Audit evidence. */
+  readonly audit: EntityEvolutionAuditEvidenceInput
+}
+
+/**
+ * Minimal structural shape consumed from FinancialEntity without creating a
+ * circular public type dependency in this module.
+ *
+ * @internal
+ */
+export interface FinancialEntityLike {
+  readonly id: EntityIdentifier
+  readonly state: WorkflowStateIdentifier
+  toJSON(): SerializedFinancialEntity
+}
+
+/**
+ * Correction or Reversal request.
+ *
+ * @see ENTITY-EVOLUTION-008
+ * @see ENTITY-EVOLUTION-011
+ */
+export interface EntityRelatedEvolutionRequest extends EntityEvolutionRequestBase {
+  /** Related corrected or reversing Entity. */
+  readonly related: FinancialEntityLike
+
+  /** Related Revision identity carrying corrected or reversing facts. */
+  readonly relatedRevision: unknown
+}
+
+/**
+ * Void request.
+ *
+ * @see ENTITY-EVOLUTION-016
+ */
+export type EntityVoidRequest = EntityEvolutionRequestBase
+
+/**
+ * Supersession request.
+ *
+ * @see ENTITY-EVOLUTION-019
+ * @see ENTITY-EVOLUTION-020
+ */
+export interface EntitySupersessionRequest extends EntityEvolutionRequestBase {
+  /** Successor Entity replacing the source for the declared scope. */
+  readonly successor: FinancialEntityLike
+
+  /** Successor Revision identity replacing the source revision for current use. */
+  readonly successorRevision: unknown
+
+  /** Declared composing-domain supersession scope. */
+  readonly supersessionScope: unknown
+}
+
+/**
+ * Result returned by a successful Entity evolution operation.
+ *
+ * The result preserves source and related observations defensively, exposes the
+ * new evolution relation, and returns committed Audit evidence in one
+ * observable value.
+ *
+ * @see ENTITY-EVOLUTION-015
+ * @see ENTITY-EVOLUTION-022
+ * @see ENTITY-EVOLUTION-029
+ * @see ENTITY-EVOLUTION-033
+ */
+export interface EntityEvolutionResult {
+  /** Preserved source Entity observation. */
+  readonly source: SerializedFinancialEntity
+
+  /** Related Entity observation when the operation has one. */
+  readonly related?: SerializedFinancialEntity
+
+  /** Newly recorded evolution relation. */
+  readonly relation: SerializedEntityEvolutionRelation
+
+  /** Evolution history after the relation is recorded. */
+  readonly evolutionHistory: SerializedEntityEvolutionHistory
+
+  /** Audit history after the evidence event is committed. */
+  readonly auditHistory: SerializedAuditHistory
+
+  /** Committed Audit Event for this evolution. */
+  readonly auditEvent: SerializedAuditEvent
 }

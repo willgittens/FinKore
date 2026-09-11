@@ -56,6 +56,25 @@ No request member defined by this document is nullable. Omission of the source
 Entity reference, evolution kind, or a related value required by the chosen
 evolution kind is invalid.
 
+Portable Entity evolution is audit-required in Draft 0.2. The composing domain
+or caller supplies every Entity Evolution Relation identifier, Audit Event
+identifier, and Audit Relationship identifier. A FinKore implementation MUST
+NOT generate those identifiers, derive them from mutable financial facts, or
+infer them from array order, timestamps, state names, or display labels.
+
+The Audit Event for a successful evolution operation records the affected
+source Entity and carries safe metadata identifying the evolution kind, source
+Entity identity, source Revision identity, related Entity or Revision identity
+when applicable, Evolution Relation identity, and supersession scope when
+applicable. The Audit Event also carries an Audit Relationship of the
+corresponding type: `CORRECTS`, `REVERSES`, `VOIDS`, or `SUPERSEDES`.
+
+Entity evolution and its Audit evidence are observed atomically. If the Entity
+evolution request is rejected, no evolution relation or currentness change is
+created. If required Audit evidence is missing or rejected by Audit semantics,
+the Entity evolution request fails with the primary Audit error and no Entity
+evolution result becomes observable.
+
 This draft does not require one serialized envelope or API shape. Conformance
 vectors may use fixture vocabulary to observe the same portable semantics.
 
@@ -89,6 +108,11 @@ vectors may use fixture vocabulary to observe the same portable semantics.
 - **ENTITY-EVOLUTION-026** - An evolution request with a missing, malformed, unstable, or conflicting source or related Entity identity MUST fail with `FINKORE_ENTITY_INVALID_IDENTITY`.
 - **ENTITY-EVOLUTION-027** - A Workflow, Money, Approval, or Audit failure encountered as the primary failure while evaluating an Entity evolution request MUST retain its domain-specific portable error code.
 - **ENTITY-EVOLUTION-028** - Evolution error diagnostics, when supplied, MUST remain safe diagnostic context and MUST NOT expose sensitive original or related financial values unnecessarily.
+- **ENTITY-EVOLUTION-029** - Every successful portable Entity evolution operation MUST produce corresponding Audit evidence in the same observable result.
+- **ENTITY-EVOLUTION-030** - Entity Evolution Relation identifiers, Audit Event identifiers, and Audit Relationship identifiers MUST be supplied by the composing domain or caller; an implementation MUST NOT generate, normalize, or infer them from Entity identity, Revision identity, state, time, display labels, or mutable financial facts.
+- **ENTITY-EVOLUTION-031** - Audit evidence for Entity evolution MUST identify the evolution kind, source Entity identity, source Revision identity, related Entity or Revision identity when applicable, Evolution Relation identity, and supersession scope when applicable without exposing unrelated sensitive financial values.
+- **ENTITY-EVOLUTION-032** - Audit evidence for Entity evolution MUST include an Audit Relationship whose relationship type corresponds to the evolution kind and whose target satisfies the Audit Relationship requirements.
+- **ENTITY-EVOLUTION-033** - Entity evolution and required Audit evidence MUST be atomic for portable observation: an Audit failure MUST prevent the evolution relation, currentness change, and success result from becoming observable.
 
 ## Invariants
 

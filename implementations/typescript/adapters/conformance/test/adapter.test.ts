@@ -28,6 +28,10 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('workflow.create')).toBe(true)
     expect(adapter.supports('finkore.workflow.transition')).toBe(true)
     expect(adapter.supports('entity.create')).toBe(true)
+    expect(adapter.supports('entity.evolution.correct')).toBe(true)
+    expect(adapter.supports('entity.evolution.reverse')).toBe(true)
+    expect(adapter.supports('entity.evolution.supersede')).toBe(true)
+    expect(adapter.supports('entity.evolution.void')).toBe(true)
     expect(adapter.supports('entity.transition')).toBe(true)
     expect(adapter.supports('entity.mutate')).toBe(true)
     expect(adapter.supports('finkore.audit.append')).toBe(true)
@@ -260,7 +264,7 @@ describe('TypeScript conformance adapter', () => {
     expect(report.summary).toEqual({ total: 20, passed: 20, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
-  it('passes current Entity identity, lifecycle, mutability, and validation milestone vectors', async () => {
+  it('passes current Entity identity, lifecycle, mutability, validation, and evolution milestone vectors', async () => {
     const report = await createConformanceRunner({
       manifestPath,
       adapter: createTypeScriptConformanceAdapter(),
@@ -275,8 +279,18 @@ describe('TypeScript conformance adapter', () => {
       'entity.validation.complete-result-001',
       'entity.transition.success-identity-stable-001',
       'entity.transition.rejected-preserves-entity-001',
+      'entity.evolution.correction.audit-001',
+      'entity.evolution.reversal.audit-001',
+      'entity.evolution.reversal.duplicate-001',
+      'entity.evolution.void.audit-001',
+      'entity.evolution.supersession.currentness-001',
+      'entity.evolution.stale-revision-001',
+      'entity.evolution.invalid-related-identity-001',
+      'entity.evolution.audit-failure-001',
+      'entity.evolution.correction.ineligible-001',
+      'entity.evolution.void.ineligible-001',
     ] })
 
-    expect(report.summary).toEqual({ total: 10, passed: 10, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 20, passed: 20, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 })

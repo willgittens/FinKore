@@ -432,3 +432,75 @@ not a source of financial semantics.
   - `/conformance`: manifest, conventions and traceability updated.
   - `/agentic`: no change; Audit Relationships are represented through existing Audit append/redact surfaces, and no new canonical operation was promoted.
   - `AGENTS.md`: no change required.
+
+## Entity Evolution Implementation
+
+### TASK-033 through TASK-044 - Draft 0.2 Entity Evolution Implementation Slice
+
+- Status: COMPLETE
+- Source revision: `93a176852a1be8b6de791ac43a69d4df0a9eef6b` plus working-tree Entity Evolution specification, conformance, implementation, adapter, documentation, and closure changes.
+- Date: 2026-09-11
+- Toolchain: system `node` was absent; repository-local `.tools/node/bin/node` reported `v24.11.1` and was used for all Node/npm commands in this run.
+- Normative scope implemented:
+  - Extended `spec/entities/evolution.md` with `ENTITY-EVOLUTION-029` through `ENTITY-EVOLUTION-033`.
+  - Entity Evolution is audit-required in Draft 0.2.
+  - Callers or composing domains supply source/related Entity Revision identities, Evolution Relation identity, Audit Event identity, Audit Relationship identity, eligibility, and optional expected source State/Revision/currentness preconditions.
+  - Correction, Reversal, Void, and Supersession preserve source Entity identity and historical financial facts.
+  - Void records nullification/currentness without deletion.
+  - Supersession currentness is scoped by a declared supersession scope.
+  - Successful evolution returns new evolution and Audit history observations atomically; rejected evolution preserves source/related Entity observations, previous evolution history, and previous Audit history.
+  - Primary Workflow, Money, Approval, or Audit errors retain their portable domain error codes.
+- Conformance vectors:
+  - Added `conformance/entities/evolution.json` with 10 vectors covering correction, reversal, duplicate reversal rejection, void, supersession currentness, stale revision rejection, invalid related identity rejection, Audit failure preservation, correction ineligibility, and void ineligibility.
+  - Registered the file in `conformance/manifest.json`.
+  - Added conformance-local operation labels `entity.evolution.correct`, `entity.evolution.reverse`, `entity.evolution.void`, and `entity.evolution.supersede` to conventions and runner metadata.
+  - No canonical `finkore.entity.*` Agentic operation was introduced.
+- Implementation and adapter:
+  - Added `EntityEvolutionHistory` to the TypeScript core and exported the public evolution request/result/serialization types.
+  - Added public JSDoc with requirement IDs and portable error semantics for the new public API.
+  - Added unit tests for successful evolution, failure atomicity, identity/revision validation, imported history validation, duplicate relation/reversal rejection, stale currentness, Audit evidence validation, and defensive observations.
+  - Added conformance adapter handlers for all four Entity Evolution operation labels; handlers reconstruct inputs and delegate behavior to core without financial rules in the adapter.
+  - Added `src/entities/entity-evolution.ts` to the core Stryker source list.
+- Commands:
+  - `PATH=/home/will/Documents/FinFlow/.tools/node/bin:$PATH npm run typecheck --workspaces` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node/bin:$PATH npm run build --workspaces` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node/bin:$PATH npm run test --workspace @finkore/typescript -- test/entities` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node/bin:$PATH npm run test --workspaces` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node/bin:$PATH node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --suite entities --json` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node/bin:$PATH node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node/bin:$PATH npm run test:coverage --workspace @finkore/typescript -- --coverage.exclude=.stryker-tmp/**` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node/bin:$PATH npm run test:coverage --workspace @finkore/conformance-runner` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node/bin:$PATH npx stryker run --mutate src/entities/entity-evolution.ts --testFiles 'test/entities/*.test.ts' --coverageAnalysis off --reporters clear-text,json` exited 0 after escalation was required for Stryker's local worker infrastructure.
+  - `git diff --check` exited 0.
+- Unit evidence:
+  - Focused Entity tests: 6 files, 88 tests passed.
+  - Workspace tests: Runner 10 files / 110 tests passed; TypeScript core 58 files / 490 tests passed; conformance adapter 1 file / 13 tests passed.
+- Conformance evidence:
+  - Entity suite: 20 passed / 20 total; 0 failed, 0 unsupported, 0 infrastructure errors.
+  - Full manifest: 186 passed / 186 total; 0 failed, 0 unsupported, 0 infrastructure errors.
+  - Mutation-sensitive vectors: 161 passed / 161 total.
+  - By suite: Money 83/83, Workflow 20/20, Audit 29/29, Approvals 34/34, Entities 20/20.
+- Coverage:
+  - TypeScript core filtered coverage: 98.78% statements, 98.01% branches, 100% functions, 99.34% lines.
+  - Entity package: 99.62% statements, 99.48% branches, 100% functions, 100% lines.
+  - `src/entities/entity-evolution.ts`: 99.33% statements, 99.17% branches, 100% functions, 100% lines.
+  - Runner: 98.31% statements, 95.29% branches, 100% functions, 98.75% lines.
+- Mutation:
+  - Scoped Entity Evolution mutation score: 97.66%; report at `implementations/typescript/core/reports/mutation/mutation.json`.
+  - `src/entities/entity-evolution.ts`: 342 mutants, 334 killed, 7 survived, 1 no coverage.
+  - No critical Entity Evolution mutant survived. Remaining survivors are noncritical equivalent/defensive branches around omitted optional properties in validated observations, the no-scope `currentKey` default string, unreachable post-append empty-event observation, and an inert extra non-current key for source-current imported relations.
+- Traceability inventory after closure:
+  - Manifest format `0.1`; five suites; twelve manifest-listed vector files.
+  - Total requirements: 283; 217 covered; 66 not directly testable; 0 partial; 0 uncovered; 0 deferred; 0 blocking spec gaps.
+  - Entities inventory: 67 total; 54 covered; 13 not directly testable; 0 uncovered; 0 blocking spec gaps.
+  - `ENTITY-EVOLUTION-001` through `ENTITY-EVOLUTION-033` are mapped in traceability; directly testable Entity Evolution requirements are covered by manifest-listed vectors.
+- Documentation/update applicability:
+  - Unit tests: updated.
+  - Conformance vectors: updated.
+  - Mutation-sensitive tests: updated and verified.
+  - JSDoc: updated for public Entity Evolution API and portable error semantics.
+  - README documentation: root, conformance, core, adapter, and spec READMEs updated.
+  - `/spec`: Entity Evolution document and Entity index updated.
+  - `/conformance`: manifest, conventions, README, and traceability updated.
+  - `/agentic`: no change; Entity Evolution operations remain conformance-local pending an explicit Agentic promotion review.
+  - `AGENTS.md`: no change required.

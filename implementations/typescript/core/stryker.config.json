@@ -10,6 +10,7 @@
     "src/audit/audit-change.ts",
     "src/audit/audit-event.ts",
     "src/audit/audit-log.ts",
+    "src/entities/entity-evolution.ts",
     "src/entities/entity.ts",
     "src/entities/errors.ts",
     "src/approvals/approval-chain.ts",

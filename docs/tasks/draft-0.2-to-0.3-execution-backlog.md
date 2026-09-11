@@ -31,7 +31,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 - [x] Money Allocation: [TASK-012](#task-012)–[TASK-020](#task-020)
 - [x] Entity Evolution Specification: [TASK-021](#task-021)–[TASK-024](#task-024)
 - [x] Audit Relationships: [TASK-025](#task-025)–[TASK-032](#task-032)
-- [ ] Entity Evolution Implementation: [TASK-033](#task-033)–[TASK-044](#task-044)
+- [x] Entity Evolution Implementation: [TASK-033](#task-033)–[TASK-044](#task-044)
 - [ ] Approval Validity: [TASK-045](#task-045)–[TASK-057](#task-057)
 - [ ] Draft 0.2 Alignment: [TASK-058](#task-058)–[TASK-060](#task-060)
 - [ ] Draft 0.2 Closure: [TASK-061](#task-061)–[TASK-066](#task-066)
@@ -52,7 +52,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-033
+NEXT TASK: TASK-045
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -3167,7 +3167,7 @@ Completion:
 
 <a id="task-033"></a>
 
-### - [ ] TASK-033 — Entity and Audit Evolution Integration Contract
+### - [x] TASK-033 — Entity and Audit Evolution Integration Contract
 
 **Release:** Draft 0.2
 
@@ -3239,9 +3239,9 @@ Entity and Audit Evolution Integration Contract.
 
 **Definition of Done**
 
-- [ ] Specify when evolution must produce audit evidence, who supplies event/relation identifiers, and observable atomicity across proposed entity result and audit history.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Specify when evolution must produce audit evidence, who supplies event/relation identifiers, and observable atomicity across proposed entity result and audit history.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -3249,11 +3249,13 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: Completed as part of the consolidated TASK-033 through TASK-044 Entity Evolution Implementation slice. Evidence is recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Notes: Spec now defines the required Entity/Audit evolution evidence contract. Next task is TASK-045 Approval Current-Effectiveness Contract.
 
 <a id="task-034"></a>
 
-### - [ ] TASK-034 — Entity Evolution Conformance Families
+### - [x] TASK-034 — Entity Evolution Conformance Families
 
 **Release:** Draft 0.2
 
@@ -3329,9 +3331,9 @@ Entity Evolution Conformance Families.
 
 **Definition of Done**
 
-- [ ] Add separate correction, reversal, void and supersession vector families with revision identity, lifecycle/duplicate rejection, original preservation and mandatory audit evidence.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Add separate correction, reversal, void and supersession vector families with revision identity, lifecycle/duplicate rejection, original preservation and mandatory audit evidence.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -3339,11 +3341,13 @@ Named vectors are registered and traceable; new behavior is intentionally FAIL/U
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: Completed as part of the consolidated TASK-033 through TASK-044 Entity Evolution Implementation slice. Evidence is recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Notes: Added manifest-listed Entity Evolution correction, reversal, void, and supersession vectors with audit evidence and failure-atomicity observations. Next task is TASK-045 Approval Current-Effectiveness Contract.
 
 <a id="task-035"></a>
 
-### - [ ] TASK-035 — Entity Revision Representation Implementation
+### - [x] TASK-035 — Entity Revision Representation Implementation
 
 **Release:** Draft 0.2
 
@@ -3418,9 +3422,9 @@ Entity Revision Representation Implementation.
 
 **Definition of Done**
 
-- [ ] Implement only the specified stable identity/revision/relation representation and defensive observations with validation tests.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement only the specified stable identity/revision/relation representation and defensive observations with validation tests.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -3428,11 +3432,13 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: Completed as part of the consolidated TASK-033 through TASK-044 Entity Evolution Implementation slice. Evidence is recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Notes: Added immutable `EntityEvolutionHistory`, public evolution types, defensive observations, and validation tests. Next task is TASK-045 Approval Current-Effectiveness Contract.
 
 <a id="task-036"></a>
 
-### - [ ] TASK-036 — Entity Correction Implementation
+### - [x] TASK-036 — Entity Correction Implementation
 
 **Release:** Draft 0.2
 
@@ -3507,9 +3513,9 @@ Entity Correction Implementation.
 
 **Definition of Done**
 
-- [ ] Create the specified correction result and relationship while preserving original facts and history.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Create the specified correction result and relationship while preserving original facts and history.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -3517,11 +3523,13 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: Completed as part of the consolidated TASK-033 through TASK-044 Entity Evolution Implementation slice. Evidence is recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Notes: Correction now records a relation and required Audit evidence while preserving source Entity facts and history. Next task is TASK-045 Approval Current-Effectiveness Contract.
 
 <a id="task-037"></a>
 
-### - [ ] TASK-037 — Entity Reversal Implementation
+### - [x] TASK-037 — Entity Reversal Implementation
 
 **Release:** Draft 0.2
 
@@ -3596,9 +3604,9 @@ Entity Reversal Implementation.
 
 **Definition of Done**
 
-- [ ] Create the specified reversal result; enforce lifecycle and duplicate-reversal policy without ledger postings.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Create the specified reversal result; enforce lifecycle and duplicate-reversal policy without ledger postings.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -3606,11 +3614,13 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: Completed as part of the consolidated TASK-033 through TASK-044 Entity Evolution Implementation slice. Evidence is recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Notes: Reversal now records a relation and rejects duplicate reversal for the same source Revision without ledger semantics. Next task is TASK-045 Approval Current-Effectiveness Contract.
 
 <a id="task-038"></a>
 
-### - [ ] TASK-038 — Entity Void Implementation
+### - [x] TASK-038 — Entity Void Implementation
 
 **Release:** Draft 0.2
 
@@ -3685,9 +3695,9 @@ Entity Void Implementation.
 
 **Definition of Done**
 
-- [ ] Implement void outcomes without deleting original facts, identity or history.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement void outcomes without deleting original facts, identity or history.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -3695,11 +3705,13 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: Completed as part of the consolidated TASK-033 through TASK-044 Entity Evolution Implementation slice. Evidence is recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Notes: Void now records nullification/currentness without deleting the source Entity, facts, history, or Audit evidence. Next task is TASK-045 Approval Current-Effectiveness Contract.
 
 <a id="task-039"></a>
 
-### - [ ] TASK-039 — Entity Supersession Implementation
+### - [x] TASK-039 — Entity Supersession Implementation
 
 **Release:** Draft 0.2
 
@@ -3774,9 +3786,9 @@ Entity Supersession Implementation.
 
 **Definition of Done**
 
-- [ ] Implement replacement/currentness and revision links without rewriting stable identity or historical observations.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement replacement/currentness and revision links without rewriting stable identity or historical observations.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -3784,11 +3796,13 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: Completed as part of the consolidated TASK-033 through TASK-044 Entity Evolution Implementation slice. Evidence is recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Notes: Supersession now records predecessor/successor Revision links and declared-scope currentness without rewriting historical observations. Next task is TASK-045 Approval Current-Effectiveness Contract.
 
 <a id="task-040"></a>
 
-### - [ ] TASK-040 — Entity Evolution Audit Evidence Composition
+### - [x] TASK-040 — Entity Evolution Audit Evidence Composition
 
 **Release:** Draft 0.2
 
@@ -3863,9 +3877,9 @@ Entity Evolution Audit Evidence Composition.
 
 **Definition of Done**
 
-- [ ] Compose the specified Entity/Audit contract so success produces required evidence and rejected evidence/validation exposes no partial Entity or Audit result.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Compose the specified Entity/Audit contract so success produces required evidence and rejected evidence/validation exposes no partial Entity or Audit result.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -3873,11 +3887,13 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: Completed as part of the consolidated TASK-033 through TASK-044 Entity Evolution Implementation slice. Evidence is recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Notes: Evolution operations now require matching Audit metadata and relationship evidence; rejected evidence exposes no partial evolution or Audit result. Next task is TASK-045 Approval Current-Effectiveness Contract.
 
 <a id="task-041"></a>
 
-### - [ ] TASK-041 — Entity Evolution Adapter Support
+### - [x] TASK-041 — Entity Evolution Adapter Support
 
 **Release:** Draft 0.2
 
@@ -3950,9 +3966,9 @@ Entity Evolution Adapter Support.
 
 **Definition of Done**
 
-- [ ] Wire each evolution operation separately in the handler table, delegating validation/evidence to core and observing original/result/history.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Wire each evolution operation separately in the handler table, delegating validation/evidence to core and observing original/result/history.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -3960,11 +3976,13 @@ Named operation fixtures execute through core and all required slice vectors PAS
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: Completed as part of the consolidated TASK-033 through TASK-044 Entity Evolution Implementation slice. Evidence is recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Notes: Adapter supports the four conformance-local Entity Evolution operations by delegating behavior to core and normalizing observations/errors. Next task is TASK-045 Approval Current-Effectiveness Contract.
 
 <a id="task-042"></a>
 
-### - [ ] TASK-042 — Entity Evolution Mutation Hardening
+### - [x] TASK-042 — Entity Evolution Mutation Hardening
 
 **Release:** Draft 0.2
 
@@ -4037,9 +4055,9 @@ Entity Evolution Mutation Hardening.
 
 **Definition of Done**
 
-- [ ] Kill original mutation, void-as-delete, identity rewrite, omitted audit relation, duplicate reversal acceptance, stale currentness and partial failure state.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Kill original mutation, void-as-delete, identity rewrite, omitted audit relation, duplicate reversal acceptance, stale currentness and partial failure state.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -4047,11 +4065,14 @@ A complete scoped mutation report and survivor classifications establish >=95% a
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: Completed as part of the consolidated TASK-033 through TASK-044 Entity Evolution Implementation slice. Evidence is recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Mutation: Scoped `src/entities/entity-evolution.ts` mutation passed at 97.66% with zero critical survivors.
+- Notes: Mutation-sensitive tests cover source preservation, void-without-delete, identity rewrite rejection, omitted/wrong audit relation rejection, duplicate reversal rejection, stale currentness, and partial failure state. Next task is TASK-045 Approval Current-Effectiveness Contract.
 
 <a id="task-043"></a>
 
-### - [ ] TASK-043 — Entity Evolution Traceability Closure
+### - [x] TASK-043 — Entity Evolution Traceability Closure
 
 **Release:** Draft 0.2
 
@@ -4124,10 +4145,10 @@ Entity Evolution Traceability Closure.
 
 **Definition of Done**
 
-- [ ] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -4135,11 +4156,13 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: Completed as part of the consolidated TASK-033 through TASK-044 Entity Evolution Implementation slice. Evidence is recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Notes: Traceability now maps Entity Evolution requirements to vectors and implementation evidence with zero uncovered directly testable Entity requirements and zero blocking spec gaps. Next task is TASK-045 Approval Current-Effectiveness Contract.
 
 <a id="task-044"></a>
 
-### - [ ] TASK-044 — Entity Evolution Slice Closure Gate
+### - [x] TASK-044 — Entity Evolution Slice Closure Gate
 
 **Release:** Draft 0.2
 
@@ -4214,10 +4237,10 @@ Entity Evolution Slice Closure Gate.
 
 **Definition of Done**
 
-- [ ] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -4225,7 +4248,11 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: Workspace typecheck, build, unit tests, adapter tests, focused Entity conformance, full conformance, coverage, scoped mutation and `git diff --check` passed; details are recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: Entity suite passed 20/20 and full manifest passed 186/186 with 0 failed, 0 unsupported, and 0 infrastructure errors.
+- Mutation: Scoped Entity Evolution mutation passed at 97.66%; remaining survivors are noncritical equivalent/defensive branches, with no critical Entity Evolution survivor.
+- Notes: Documentation, README status, JSDoc, conformance metadata and backlog pointer are synchronized. Next task is TASK-045 Approval Current-Effectiveness Contract.
 
 ### Milestone: Approval Validity
 

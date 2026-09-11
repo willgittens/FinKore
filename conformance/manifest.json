@@ -35,7 +35,8 @@
     {
       "id": "entities",
       "vectorFiles": [
-        "./entities/behavior.json"
+        "./entities/behavior.json",
+        "./entities/evolution.json"
       ]
     }
   ]
