@@ -9,7 +9,7 @@ FinKore Workflow Draft 0.1 is fully implemented by the TypeScript reference impl
 
 FinKore Audit Draft 0.1 is fully implemented by the TypeScript reference implementation. The Draft 0.2 Audit Relationships slice is also implemented. Audit covers Events, Actors, append-only logical history, Change representation semantics, Redaction semantics, and relationship metadata. Distributed ordering, persistence, and cross-domain integrations remain outside this milestone.
 
-FinKore Approvals Draft 0.1 is fully implemented by the TypeScript reference implementation. Approvals covers Approval Requirement representation, Approval Decision representation, Decision-to-Requirement binding, allowed Decision outcomes, Decision validation, relevant subject-fact effectiveness checks, append-only Decision history preservation, Approval Condition representation and evaluation-boundary validation, Approval Chain all-required ordered or unordered composition, declared rejection outcomes, current sequential actionable Requirement reporting, exclusion of explicitly not-applicable Requirements, duplicate Requirement rejection in chains, and portable Approval errors.
+FinKore Approvals Draft 0.1 is fully implemented by the TypeScript reference implementation. The Draft 0.2 Approval Validity slice is also implemented. Approvals covers Approval Requirement representation, Approval Decision representation, Decision-to-Requirement binding, allowed Decision outcomes, Decision validation, relevant subject-fact effectiveness checks, withdrawal, expiration, Decision supersession, Requirement supersession, append-only Decision and lifecycle history preservation, Approval Condition representation and evaluation-boundary validation, Approval Chain all-required ordered or unordered composition, declared rejection outcomes, current sequential actionable Requirement reporting, exclusion of explicitly not-applicable Requirements, duplicate Requirement rejection in chains, and portable Approval errors.
 
 FinKore Entities Draft 0.1 is fully implemented by the TypeScript reference
 implementation for Entity Identity, Lifecycle, Mutability, and the current
@@ -39,7 +39,7 @@ explicit terminal-state detection, rejection of outgoing transitions in
 terminal definitions, terminal-state transition rejection and portable error
 precedence, successful state changes, and state preservation after rejection.
 
-It intentionally does not implement tax jurisdiction policy, interest conventions, FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, distributed audit ordering, audit persistence, approval quorum, N-of-M voting, parallel approval groups, delegation, withdrawal, approval supersession, expiration, escalation, multi-stage approval graphs, dynamic approver resolution, authorization/RBAC, Workflow or Audit integration for approvals, generic entity validation engines, concrete correction posting rules, or ledger reversals.
+It intentionally does not implement tax jurisdiction policy, interest conventions, FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, distributed audit ordering, audit persistence, approval quorum, N-of-M voting, parallel approval groups, delegation, escalation, multi-stage approval graphs, dynamic approver resolution, authorization/RBAC, Workflow or Audit integration for approvals, generic entity validation engines, concrete correction posting rules, or ledger reversals.
 
 The specification remains canonical. This package stores validated decimal amounts as strings and performs arithmetic and comparison with scaled integer arithmetic so observable behavior preserves exact base-10 semantics without using JavaScript `number`.
 
@@ -115,26 +115,30 @@ Audit failures expose portable codes: `FINKORE_AUDIT_INVALID_EVENT`,
 - `ApprovalRequirement.from(requirement)` validates a requirement with caller-supplied stable `id`, subject reference, eligible actor identities, and explicit `APPROVED`/`REJECTED` outcome semantics.
 - `approvalRequirement.isEligibleActor(actorId)` reports whether an actor identity is declared eligible for the requirement.
 - `approvalRequirement.stateForOutcome(outcome)` maps an effective Decision outcome to `APPROVED` or `REJECTED`.
-- `ApprovalDecision.from(decision)` validates a decision with requirement identity, subject facts, `APPROVED` or `REJECTED` outcome, actor attribution, and explicit RFC 3339 timestamp.
+- `ApprovalDecision.from(decision)` validates a decision with requirement identity, subject facts, `APPROVED` or `REJECTED` outcome, actor attribution, explicit RFC 3339 timestamp, and optional explicit expiration timestamp.
 - `ApprovalDecision.forRequirement(requirement, decision)` validates Decision-to-Requirement association and actor eligibility.
 - `approvalDecision.evaluateEffectiveness(currentSubjectFacts, relevantFactPaths)` returns `EFFECTIVE` only when the decision remains associated with unchanged relevant subject facts.
-- `ApprovalDecisionHistory.create(history)` creates a logical append-only Approval Decision history.
+- `ApprovalDecisionHistory.create(history)` creates a logical append-only Approval Decision history from either the legacy Decision array shape or `{ history, lifecycle }` observations.
 - `approvalDecisionHistory.record(requirement, decision)` validates and appends one Decision, leaving prior history unchanged on failure.
-- `approvalDecisionHistory.evaluateRequirement(requirement, options)` returns `PENDING`, `APPROVED`, or `REJECTED` from effective associated Decisions.
-- `approvalDecisionHistory.decisions()` and `approvalDecisionHistory.toJSON()` return defensive observations of committed history.
+- `approvalDecisionHistory.withdraw(requirement, withdrawal)` appends withdrawal lifecycle evidence for exactly one committed Decision. The Decision remains historical, while current evaluation no longer counts it.
+- `approvalDecisionHistory.supersedeDecision(supersession)` appends lifecycle evidence that one committed Decision supersedes another committed Decision.
+- `approvalDecisionHistory.supersedeRequirement(supersession)` appends lifecycle evidence that a Requirement has been superseded; Decisions for the superseded Requirement do not transfer to the successor Requirement.
+- `approvalDecisionHistory.evaluateRequirement(requirement, options)` returns `PENDING`, `APPROVED`, or `REJECTED` from currently effective associated Decisions. Options may include `currentSubjectFacts`, `relevantFactPaths`, and explicit `evaluatedAt` for expiring Decisions.
+- `approvalDecisionHistory.decisions()`, `approvalDecisionHistory.lifecycleEvents()`, and `approvalDecisionHistory.toJSON()` return defensive observations of committed history.
 - `ApprovalChain.from(chain)` validates a chain with `SEQUENTIAL` or `UNORDERED` mode, one or more Requirement identities in declared order, and a declared `REJECTED` rejection outcome.
 - `approvalChain.evaluate(states)` returns `APPROVED` only when every applicable Requirement is approved, `PENDING` while at least one applicable Requirement remains pending, and `REJECTED` when an effective rejection exists. Pending sequential chains also report the single currently actionable Requirement identity.
 - Explicit `NOT_APPLICABLE` Requirement states are excluded from chain completion. Missing or malformed states throw `FINKORE_APPROVAL_INVALID_CHAIN`; explicit unresolved applicability throws `FINKORE_APPROVAL_CONDITION_UNRESOLVED`.
-- Approval Chain evaluation consumes explicit Requirement state observations. It does not prove which historical Decision satisfied a Requirement or which subject facts were bound to that Decision; use `ApprovalDecisionHistory.evaluateRequirement(requirement, { currentSubjectFacts, relevantFactPaths })` for current satisfaction from historical evidence.
-- Historical Decisions whose relevant subject facts no longer match current facts remain committed but do not satisfy or reject the Requirement for current evaluation. Without another effective Decision, the Requirement is `PENDING`.
+- Approval Chain evaluation consumes explicit Requirement state observations. It does not prove which historical Decision satisfied a Requirement or which subject facts were bound to that Decision; use `ApprovalDecisionHistory.evaluateRequirement(requirement, { currentSubjectFacts, relevantFactPaths, evaluatedAt })` for current satisfaction from historical evidence.
+- Historical Decisions whose relevant subject facts no longer match current facts, are withdrawn, expired, superseded, or address a superseded Requirement remain committed but do not satisfy or reject the Requirement for current evaluation. Without another effective Decision, the Requirement is `PENDING`.
 - Draft 0.1 does not define Approval Chain identity. Decisions bind to Requirements and relevant subject facts, not to Chain identifiers.
 
 Approval failures expose portable codes:
 `FINKORE_APPROVAL_REQUIRED`,
 `FINKORE_APPROVAL_INVALID_DECISION`,
 `FINKORE_APPROVAL_INELIGIBLE_ACTOR`,
-`FINKORE_APPROVAL_INVALID_CHAIN`, and
-`FINKORE_APPROVAL_CONDITION_UNRESOLVED`.
+`FINKORE_APPROVAL_INVALID_CHAIN`,
+`FINKORE_APPROVAL_CONDITION_UNRESOLVED`, and
+`FINKORE_APPROVAL_INVALID_CONTEXT`.
 
 FinKore Draft 0.1 does not define a portable rich condition expression model.
 This implementation therefore does not evaluate comparisons such as amount

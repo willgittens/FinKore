@@ -29,7 +29,8 @@
     {
       "id": "approvals",
       "vectorFiles": [
-        "./approvals/decisions.json"
+        "./approvals/decisions.json",
+        "./approvals/validity.json"
       ]
     },
     {

@@ -165,6 +165,7 @@ export class ApprovalDecision {
       outcome: validateOutcome(input.outcome),
       actor: validateActor(input.actor),
       decidedAt: validateTimestamp(input.decidedAt),
+      ...(Object.hasOwn(input, 'expiresAt') ? { expiresAt: validateTimestamp(input.expiresAt) } : {}),
     })
   }
 
@@ -219,6 +220,29 @@ export class ApprovalDecision {
    */
   get outcome(): ApprovalDecisionOutcome {
     return this.value.outcome
+  }
+
+  /**
+   * Timestamp when this Decision was made.
+   *
+   * @see APPROVAL-DECISION-001
+   * @see APPROVAL-DECISION-006
+   */
+  get decidedAt(): string {
+    return this.value.decidedAt
+  }
+
+  /**
+   * Optional instant at which this Decision expires for current evaluation.
+   *
+   * Expiration requires explicit evaluation context and is handled by
+   * `ApprovalDecisionHistory.evaluateRequirement`.
+   *
+   * @see APPROVAL-VALIDITY-007
+   * @see APPROVAL-VALIDITY-009
+   */
+  get expiresAt(): string | undefined {
+    return this.value.expiresAt
   }
 
   /**

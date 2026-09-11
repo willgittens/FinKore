@@ -32,7 +32,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 - [x] Entity Evolution Specification: [TASK-021](#task-021)–[TASK-024](#task-024)
 - [x] Audit Relationships: [TASK-025](#task-025)–[TASK-032](#task-032)
 - [x] Entity Evolution Implementation: [TASK-033](#task-033)–[TASK-044](#task-044)
-- [ ] Approval Validity: [TASK-045](#task-045)–[TASK-057](#task-057)
+- [ ] Approval Validity: [TASK-045](#task-045)–[TASK-057](#task-057) — BLOCKED at TASK-055 mutation evidence
 - [ ] Draft 0.2 Alignment: [TASK-058](#task-058)–[TASK-060](#task-060)
 - [ ] Draft 0.2 Closure: [TASK-061](#task-061)–[TASK-066](#task-066)
 
@@ -52,7 +52,9 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-045
+NEXT TASK: BLOCKED
+BLOCKED ON: TASK-055
+REASON: Approval Validity specification, conformance vectors, TypeScript implementation and adapter support are complete and passing, but Stryker mutation runs did not produce a fresh Approval mutation report. Full and targeted Approval Stryker executions started and completed dry runs, then their PTY wrappers hung without writing a new mutation JSON report.
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -4258,7 +4260,7 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 <a id="task-045"></a>
 
-### - [ ] TASK-045 — Approval Current-Effectiveness Contract
+### - [x] TASK-045 — Approval Current-Effectiveness Contract
 
 **Release:** Draft 0.2
 
@@ -4339,11 +4341,16 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC (`git diff --check`) passed; Approval validity requirements added in `spec/approvals/validity.md` and linked from Approval specs/docs.
+- Conformance: Implemented later in this same user-requested Approval Validity milestone; full conformance now passes 199/199 with Approvals 47/47.
+- Mutation: Not applicable for this spec-only task; runtime mutation gate is TASK-055.
+- Notes: Defines current-effectiveness over append-only Decision/lifecycle history, relevant facts, explicit evaluation instants, withdrawal, expiration and supersession.
 
 <a id="task-046"></a>
 
-### - [ ] TASK-046 — Approval Withdrawal and Supersession Semantics
+### - [x] TASK-046 — Approval Withdrawal and Supersession Semantics
 
 **Release:** Draft 0.2
 
@@ -4424,11 +4431,16 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC (`git diff --check`) passed; requirements APPROVAL-VALIDITY-004 through APPROVAL-VALIDITY-006 and APPROVAL-VALIDITY-010 through APPROVAL-VALIDITY-012 added.
+- Conformance: Implemented later in this same milestone; full conformance now passes 199/199 with Approvals 47/47.
+- Mutation: Not applicable for this spec-only task; runtime mutation gate is TASK-055.
+- Notes: Withdrawal, Decision supersession, Requirement supersession, retained history, repeated/invalid request behavior and eligibility boundary are specified.
 
 <a id="task-047"></a>
 
-### - [ ] TASK-047 — Approval Expiration Semantics
+### - [x] TASK-047 — Approval Expiration Semantics
 
 **Release:** Draft 0.2
 
@@ -4509,11 +4521,16 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC (`git diff --check`) passed; requirements APPROVAL-VALIDITY-007 through APPROVAL-VALIDITY-009 added.
+- Conformance: Implemented later in this same milestone; full conformance now passes 199/199 with Approvals 47/47.
+- Mutation: Not applicable for this spec-only task; runtime mutation gate is TASK-055.
+- Notes: Expiration requires explicit injected evaluation instants, uses RFC 3339 instants with offsets, and treats equality at `expiresAt` as expired.
 
 <a id="task-048"></a>
 
-### - [ ] TASK-048 — Approval Lifecycle Portable Error Design
+### - [x] TASK-048 — Approval Lifecycle Portable Error Design
 
 **Release:** Draft 0.2
 
@@ -4594,11 +4611,16 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC (`git diff --check`) passed; `FINKORE_APPROVAL_INVALID_CONTEXT`, APPROVAL-ERROR-006 and APPROVAL-ERROR-007 added and documented.
+- Conformance: Implemented later in this same milestone; full conformance now passes 199/199 with Approvals 47/47.
+- Mutation: Not applicable for this spec-only task; runtime mutation gate is TASK-055.
+- Notes: Existing invalid-decision/ineligible-actor errors cover invalid lifecycle requests; a new context error covers missing/malformed explicit evaluation context.
 
 <a id="task-049"></a>
 
-### - [ ] TASK-049 — Approval Validity Conformance Vectors
+### - [x] TASK-049 — Approval Validity Conformance Vectors
 
 **Release:** Draft 0.2
 
@@ -4684,11 +4706,16 @@ Named vectors are registered and traceable; new behavior is intentionally FAIL/U
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, RUNNER and CONF passed after implementation; vector schema and metadata validation pass through runner tests and full conformance.
+- Conformance: Added `conformance/approvals/validity.json` with 13 manifest-listed vectors. Full conformance passes 199/199; Approvals pass 47/47.
+- Mutation: Not applicable for vector authoring; runtime mutation gate is TASK-055.
+- Notes: Vectors cover withdrawal preservation/counting, duplicate withdrawal atomicity, expiration before/at/equivalent-offset/missing-context, Decision and Requirement supersession, stale revision and unchanged relevant facts.
 
 <a id="task-050"></a>
 
-### - [ ] TASK-050 — Approval Withdrawal Implementation
+### - [x] TASK-050 — Approval Withdrawal Implementation
 
 **Release:** Draft 0.2
 
@@ -4773,11 +4800,16 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(approvals), ADAPTER, CONF(approvals), UNIT and DOC passed with Node v24.11.1 from `.tools`.
+- Conformance: Approval suite passes 47/47; full conformance passes 199/199.
+- Mutation: Attempted in TASK-055; no fresh mutation report was produced.
+- Notes: `ApprovalDecisionHistory.withdraw` appends lifecycle evidence, validates target uniqueness and eligibility, preserves committed Decisions and rejects duplicate/missing/ambiguous withdrawal without partial lifecycle state.
 
 <a id="task-051"></a>
 
-### - [ ] TASK-051 — Approval Expiration Implementation
+### - [x] TASK-051 — Approval Expiration Implementation
 
 **Release:** Draft 0.2
 
@@ -4862,11 +4894,16 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(approvals), ADAPTER, CONF(approvals), UNIT and DOC passed with Node v24.11.1 from `.tools`.
+- Conformance: Approval suite passes 47/47; full conformance passes 199/199.
+- Mutation: Attempted in TASK-055; no fresh mutation report was produced.
+- Notes: Decisions may carry optional `expiresAt`; evaluation requires explicit `evaluatedAt`, compares instants by parsed time, and treats equality as expired.
 
 <a id="task-052"></a>
 
-### - [ ] TASK-052 — Approval Supersession Implementation
+### - [x] TASK-052 — Approval Supersession Implementation
 
 **Release:** Draft 0.2
 
@@ -4951,11 +4988,16 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(approvals), ADAPTER, CONF(approvals), UNIT and DOC passed with Node v24.11.1 from `.tools`.
+- Conformance: Approval suite passes 47/47; full conformance passes 199/199.
+- Mutation: Attempted in TASK-055; no fresh mutation report was produced.
+- Notes: `supersedeDecision` and `supersedeRequirement` append lifecycle evidence while preserving committed history and preventing Decision transfer to successor Requirements.
 
 <a id="task-053"></a>
 
-### - [ ] TASK-053 — Approval Current-Effectiveness Integration
+### - [x] TASK-053 — Approval Current-Effectiveness Integration
 
 **Release:** Draft 0.2
 
@@ -5040,11 +5082,16 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(approvals), ADAPTER, CONF(approvals), UNIT and DOC passed with Node v24.11.1 from `.tools`.
+- Conformance: Approval suite passes 47/47; full conformance passes 199/199.
+- Mutation: Attempted in TASK-055; no fresh mutation report was produced.
+- Notes: Requirement evaluation now uses one current-effectiveness path for relevant facts, withdrawal, expiration, Decision supersession and Requirement supersession.
 
 <a id="task-054"></a>
 
-### - [ ] TASK-054 — Approval Validity Adapter Support
+### - [x] TASK-054 — Approval Validity Adapter Support
 
 **Release:** Draft 0.2
 
@@ -5127,7 +5174,12 @@ Named operation fixtures execute through core and all required slice vectors PAS
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(approvals), ADAPTER, CONF(approvals), UNIT and DOC passed with Node v24.11.1 from `.tools`.
+- Conformance: Adapter supports `approval.decision.withdraw`, `approval.decision.supersede`, `approval.requirement.supersede` and extended `approval.requirement.evaluate`; Approval suite passes 47/47; full conformance passes 199/199.
+- Mutation: Translation-only adapter changes; core mutation gate is TASK-055.
+- Notes: Adapter delegates lifecycle behavior to core and normalizes only values, errors and post-state observations.
 
 <a id="task-055"></a>
 
@@ -5214,7 +5266,10 @@ A complete scoped mutation report and survivor classifications establish >=95% a
 
 **Completion**
 
-Pending.
+Completion:
+- Status: BLOCKED
+- Reason: Stryker mutation testing could not produce a fresh Approval Validity report in this environment. The first sandboxed `npm run test:mutation --workspace @finkore/typescript` failed with `listen EPERM` on Stryker's local logging server. Escalated full-core and targeted Approval runs both started, passed dry runs, and executed mutants, but their PTY wrappers hung after worker processes exited and no new `reports/mutation/mutation.json` was written.
+- Required decision: Re-run Approval/core mutation in an environment where Stryker exits cleanly and records a fresh report, or approve a tooling remediation task for the Stryker runner/session behavior.
 
 <a id="task-056"></a>
 

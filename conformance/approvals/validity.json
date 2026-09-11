@@ -1,0 +1,963 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "approval.validity.withdraw-preserves-history-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-006"
+      ],
+      "description": "Withdrawing a Decision appends lifecycle evidence and preserves the committed Decision.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3",
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              }
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "withdrawal-erases-history",
+        "withdrawal-ignores-eligibility"
+      ]
+    },
+    {
+      "id": "approval.validity.withdrawn-not-counted-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-001",
+        "APPROVAL-VALIDITY-004"
+      ],
+      "description": "A withdrawn approving Decision no longer satisfies the Requirement for current evaluation.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "withdrawn-decision-counted"
+      ]
+    },
+    {
+      "id": "approval.validity.withdraw-duplicate-invalid-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-005",
+        "APPROVAL-VALIDITY-012",
+        "APPROVAL-ERROR-006"
+      ],
+      "description": "A duplicate withdrawal is rejected without adding another lifecycle event.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z"
+            }
+          ]
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-03T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "duplicate-withdrawal-accepted",
+        "failed-withdrawal-mutates-history"
+      ]
+    },
+    {
+      "id": "approval.validity.expiration-before-boundary-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-007",
+        "APPROVAL-VALIDITY-008",
+        "APPROVAL-VALIDITY-009"
+      ],
+      "description": "An expiring Decision remains effective before its expiration instant.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "expiresAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "evaluatedAt": "2026-09-02T11:59:59Z"
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "expiration-boundary-inverted"
+      ]
+    },
+    {
+      "id": "approval.validity.expiration-at-boundary-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-009"
+      ],
+      "description": "At the exact expiration instant, the Decision is no longer effective.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "expiresAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "evaluatedAt": "2026-09-02T12:00:00Z"
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "expiration-boundary-inclusive"
+      ]
+    },
+    {
+      "id": "approval.validity.expiration-equivalent-offset-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-008",
+        "APPROVAL-VALIDITY-009"
+      ],
+      "description": "Expiration compares equivalent offsets by instant rather than lexical representation.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "expiresAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "evaluatedAt": "2026-09-02T14:00:00+02:00"
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "timestamp-offset-compared-lexically"
+      ]
+    },
+    {
+      "id": "approval.validity.expiration-missing-context-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-007",
+        "APPROVAL-ERROR-007"
+      ],
+      "description": "An expiring Decision cannot be evaluated from ambient wall-clock time.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "expiresAt": "2026-09-02T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CONTEXT"
+        }
+      },
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "host-clock-used-for-expiration"
+      ]
+    },
+    {
+      "id": "approval.validity.decision-superseded-not-counted-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-001",
+        "APPROVAL-VALIDITY-010"
+      ],
+      "description": "A superseded Decision no longer counts when the successor is not effective for the current facts.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "2"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-02T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "successor": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-02T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        },
+        "currentSubjectFacts": {
+          "revision": "2"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "superseded-decision-counted"
+      ]
+    },
+    {
+      "id": "approval.validity.decision-supersession-preserves-history-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-010"
+      ],
+      "description": "Decision supersession appends lifecycle evidence while preserving both historical Decisions.",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "2"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-02T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "successor": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-02T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "decision-supersession-erases-history"
+      ]
+    },
+    {
+      "id": "approval.validity.requirement-superseded-not-transferred-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-011"
+      ],
+      "description": "A Decision for a superseded Requirement does not satisfy the successor Requirement.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "controller-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "finance-review",
+              "successorRequirementId": "controller-review",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "superseded-requirement-decision-transferred"
+      ]
+    },
+    {
+      "id": "approval.validity.requirement-supersession-preserves-history-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-011"
+      ],
+      "description": "Requirement supersession appends lifecycle evidence without altering Decision history.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "finance-review",
+              "successorRequirementId": "controller-review",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "requirement-supersession-erases-history"
+      ]
+    },
+    {
+      "id": "approval.validity.stale-revision-not-effective-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-003"
+      ],
+      "description": "Relevant subject revision changes make a historical approving Decision ineffective for current evaluation.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3",
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              }
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "revision": "4",
+          "amount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        },
+        "relevantFactPaths": [
+          "revision",
+          "amount"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "stale-revision-counted"
+      ]
+    },
+    {
+      "id": "approval.validity.unchanged-relevant-facts-effective-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-003"
+      ],
+      "description": "Unchanged relevant facts keep a Decision effective even when unrelated facts change.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3",
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              },
+              "memo": "initial"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "revision": "3",
+          "amount": {
+            "currency": "EUR",
+            "amount": "9000.00"
+          },
+          "memo": "changed"
+        },
+        "relevantFactPaths": [
+          "revision",
+          "amount"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unrelated-facts-invalidate-decision",
+        "object-key-order-affects-facts"
+      ]
+    }
+  ]
+}

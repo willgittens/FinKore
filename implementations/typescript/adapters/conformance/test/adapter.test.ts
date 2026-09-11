@@ -225,13 +225,13 @@ describe('TypeScript conformance adapter', () => {
     expect(report.summary).toEqual({ total: 10, passed: 10, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
-  it('passes current Approval requirement, decision, condition, and chain milestone vectors', async () => {
+  it('passes current Approval requirement, decision, condition, chain, and validity milestone vectors', async () => {
     const report = await createConformanceRunner({
       manifestPath,
       adapter: createTypeScriptConformanceAdapter(),
     }).run({ suites: ['approvals'] })
 
-    expect(report.summary).toEqual({ total: 34, passed: 34, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 47, passed: 47, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current Workflow state and transition vectors', async () => {

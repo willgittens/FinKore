@@ -6,7 +6,7 @@
 
 > In financial software, a passing test suite is useful only if it reliably rejects broken behavior.
 
-This directory is the language-independent executable evidence for FinKore Draft 0.1 plus the implemented Draft 0.2 Money Rates, Money Allocation, Audit Relationships, and Entity Evolution slices. The specification remains the source of truth. Vectors describe observable domain behavior; they do not prescribe APIs, classes, exceptions, storage, or frameworks.
+This directory is the language-independent executable evidence for FinKore Draft 0.1 plus the implemented Draft 0.2 Money Rates, Money Allocation, Audit Relationships, Entity Evolution, and Approval Validity slices. The specification remains the source of truth. Vectors describe observable domain behavior; they do not prescribe APIs, classes, exceptions, storage, or frameworks.
 
 ## Scope and discovery
 
@@ -23,7 +23,7 @@ The initial suites are grouped by specification behavior:
 - Money: representation, serialization, arithmetic, comparison, currency, rounding, Rates, and Allocation.
 - Workflow: states, directed transitions, guards, terminal states, and failure atomicity.
 - Audit: events, actors, changes, append-only history, redaction, relationships, and ordering.
-- Approvals: requirements, decisions, conditions, chains, and subject facts.
+- Approvals: requirements, decisions, validity lifecycle events, explicit expiration context, conditions, chains, and subject facts.
 - Entities: identity, lifecycle, declared mutability, and validation.
 
 See [conventions.md](conventions.md) for the vector format and runner contract.
@@ -111,7 +111,7 @@ Developers MUST NOT game mutation scores by excluding meaningful business logic,
 - Money: swap addition/subtraction; reverse signs; remove or invert currency checks; use binary floating point; substitute rounding modes; ignore target scale; alter tie boundaries; replace `FLOOR` with `DOWN` or `CEILING` with `UP`.
 - Workflow: remove validation; reverse transition direction; accept undeclared or reject declared transitions; invert guard results; leave terminal states; omit state update; mutate state on failure.
 - Audit: omit actor/timestamp/entity identity; reverse before/after; replace or delete committed events; expose redacted values; infer causality from arbitrary order.
-- Approvals: swap approved/rejected; ignore requirements; bind a decision to the wrong requirement; retain effectiveness after relevant facts change; invert a condition; treat pending as approved.
+- Approvals: swap approved/rejected; ignore requirements; bind a decision to the wrong requirement; retain effectiveness after relevant facts change; count withdrawn, expired, or superseded decisions; invert a condition; treat pending as approved.
 - Entities: change identity; bypass declared immutability; mutate before failed validation; partially apply a failed operation; change lifecycle state unexpectedly.
 
 The vector-level `guardsAgainst` field identifies especially relevant mutants without making implementation technique normative.

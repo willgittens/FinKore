@@ -127,6 +127,32 @@ export class ApprovalConditionUnresolvedError extends FinKoreApprovalError {
 
 /**
  * TypeScript representation of the portable
+ * `FINKORE_APPROVAL_INVALID_CONTEXT` error.
+ *
+ * Used when current-effectiveness evaluation requires explicit context, such
+ * as an evaluation instant for expiring Decisions, and that context is missing
+ * or malformed.
+ *
+ * @see FINKORE_APPROVAL_INVALID_CONTEXT
+ * @see APPROVAL-VALIDITY-007
+ * @see APPROVAL-VALIDITY-008
+ * @see APPROVAL-ERROR-007
+ */
+export class InvalidApprovalContextError extends FinKoreApprovalError {
+  /**
+   * Creates an invalid-context Approval error.
+   *
+   * @param message - Non-normative human-readable message.
+   * @param details - Optional safe diagnostic context.
+   */
+  constructor(message = 'Invalid Approval evaluation context', details?: unknown) {
+    super('FINKORE_APPROVAL_INVALID_CONTEXT', message, { details })
+    this.name = 'InvalidApprovalContextError'
+  }
+}
+
+/**
+ * TypeScript representation of the portable
  * `FINKORE_APPROVAL_INVALID_CHAIN` error.
  *
  * Used when a chain definition or chain-state evaluation input is structurally

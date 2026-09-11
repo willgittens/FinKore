@@ -246,6 +246,7 @@ function inputApprovalRequirementEvaluate(input: unknown): {
   readonly decisions: unknown
   readonly currentSubjectFacts?: unknown
   readonly relevantFactPaths?: readonly string[]
+  readonly evaluatedAt?: unknown
 } {
   if (typeof input !== 'object' || input === null || !('requirement' in input) || !('decisions' in input)) {
     return { requirement: undefined, decisions: undefined }
@@ -255,13 +256,19 @@ function inputApprovalRequirementEvaluate(input: unknown): {
     readonly decisions: unknown
     readonly currentSubjectFacts?: unknown
     readonly relevantFactPaths?: readonly string[]
+    readonly evaluatedAt?: unknown
   }
   return {
     requirement: candidate.requirement,
     decisions: candidate.decisions,
     ...(Object.hasOwn(candidate, 'currentSubjectFacts') ? { currentSubjectFacts: candidate.currentSubjectFacts } : {}),
     ...(candidate.relevantFactPaths === undefined ? {} : { relevantFactPaths: candidate.relevantFactPaths }),
+    ...(Object.hasOwn(candidate, 'evaluatedAt') ? { evaluatedAt: candidate.evaluatedAt } : {}),
   }
+}
+
+function approvalHistoryObservations(history: ApprovalDecisionHistory): Readonly<Record<string, unknown>> {
+  return history.toJSON() as unknown as Readonly<Record<string, unknown>>
 }
 
 function inputApprovalDecisionRecord(input: unknown): {
@@ -273,6 +280,37 @@ function inputApprovalDecisionRecord(input: unknown): {
     return { requirement: undefined, decision: undefined, history: undefined }
   }
   return input as { readonly requirement: unknown; readonly decision: unknown; readonly history: unknown }
+}
+
+function inputApprovalDecisionWithdraw(input: unknown): {
+  readonly requirement: unknown
+  readonly withdrawal: unknown
+  readonly history: unknown
+} {
+  if (typeof input !== 'object' || input === null || !('requirement' in input) || !('withdrawal' in input) || !('history' in input)) {
+    return { requirement: undefined, withdrawal: undefined, history: undefined }
+  }
+  return input as { readonly requirement: unknown; readonly withdrawal: unknown; readonly history: unknown }
+}
+
+function inputApprovalDecisionSupersede(input: unknown): {
+  readonly supersession: unknown
+  readonly history: unknown
+} {
+  if (typeof input !== 'object' || input === null || !('supersession' in input) || !('history' in input)) {
+    return { supersession: undefined, history: undefined }
+  }
+  return input as { readonly supersession: unknown; readonly history: unknown }
+}
+
+function inputApprovalRequirementSupersede(input: unknown): {
+  readonly supersession: unknown
+  readonly history: unknown
+} {
+  if (typeof input !== 'object' || input === null || !('supersession' in input) || !('history' in input)) {
+    return { supersession: undefined, history: undefined }
+  }
+  return input as { readonly supersession: unknown; readonly history: unknown }
 }
 
 function inputApprovalDecisionEvaluate(input: unknown): {
@@ -931,10 +969,75 @@ function executeApprovalRequirementEvaluate(request: AdapterRequest): Normalized
       value: history.evaluateRequirement(input.requirement, {
         ...(Object.hasOwn(input, 'currentSubjectFacts') ? { currentSubjectFacts: input.currentSubjectFacts } : {}),
         ...(input.relevantFactPaths === undefined ? {} : { relevantFactPaths: input.relevantFactPaths }),
+        ...(Object.hasOwn(input, 'evaluatedAt') ? { evaluatedAt: input.evaluatedAt } : {}),
       }),
     }
   } catch (error) {
     return normalizeThrown(error)
+  }
+}
+
+/**
+ * Executes Approval Decision withdrawal through the TypeScript core API.
+ *
+ * The adapter reconstructs the supplied logical history and delegates target
+ * resolution, eligibility, duplicate rejection, and append-only lifecycle
+ * preservation to `ApprovalDecisionHistory.withdraw`.
+ */
+function executeApprovalDecisionWithdraw(request: AdapterRequest): NormalizedResult {
+  const input = inputApprovalDecisionWithdraw(request.input)
+  let history: ApprovalDecisionHistory | undefined
+  try {
+    history = ApprovalDecisionHistory.create(input.history)
+    return { status: 'success', value: history.withdraw(input.requirement, input.withdrawal).toJSON() }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && history !== undefined) {
+      return { ...result, observations: approvalHistoryObservations(history) }
+    }
+    return result
+  }
+}
+
+/**
+ * Executes Approval Decision supersession through the TypeScript core API.
+ *
+ * The adapter translates only fixture shape; supersession current-effectiveness
+ * behavior remains in core.
+ */
+function executeApprovalDecisionSupersede(request: AdapterRequest): NormalizedResult {
+  const input = inputApprovalDecisionSupersede(request.input)
+  let history: ApprovalDecisionHistory | undefined
+  try {
+    history = ApprovalDecisionHistory.create(input.history)
+    return { status: 'success', value: history.supersedeDecision(input.supersession).toJSON() }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && history !== undefined) {
+      return { ...result, observations: approvalHistoryObservations(history) }
+    }
+    return result
+  }
+}
+
+/**
+ * Executes Approval Requirement supersession through the TypeScript core API.
+ *
+ * Decisions for a superseded Requirement remain historical evidence and do not
+ * transfer to the successor Requirement.
+ */
+function executeApprovalRequirementSupersede(request: AdapterRequest): NormalizedResult {
+  const input = inputApprovalRequirementSupersede(request.input)
+  let history: ApprovalDecisionHistory | undefined
+  try {
+    history = ApprovalDecisionHistory.create(input.history)
+    return { status: 'success', value: history.supersedeRequirement(input.supersession).toJSON() }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && history !== undefined) {
+      return { ...result, observations: approvalHistoryObservations(history) }
+    }
+    return result
   }
 }
 
@@ -1052,8 +1155,11 @@ export const operationHandlers = {
   'approval.chain.evaluate': executeApprovalChainEvaluate,
   'approval.decision.evaluate': executeApprovalDecisionEvaluate,
   'approval.decision.record': executeApprovalDecisionRecord,
+  'approval.decision.supersede': executeApprovalDecisionSupersede,
+  'approval.decision.withdraw': executeApprovalDecisionWithdraw,
   'approval.condition.evaluate': executeApprovalConditionEvaluate,
   'approval.requirement.evaluate': executeApprovalRequirementEvaluate,
+  'approval.requirement.supersede': executeApprovalRequirementSupersede,
   'money.serialize': executeMoneySerialization,
   'workflow.create': executeWorkflowCreate,
 } satisfies Readonly<Record<string, OperationHandler>>

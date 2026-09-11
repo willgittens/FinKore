@@ -24,8 +24,11 @@ This milestone supports:
 - `finkore.audit.remove`
 - `audit.redact`
 - `approval.requirement.evaluate`
+- `approval.requirement.supersede`
 - `approval.decision.record`
 - `approval.decision.evaluate`
+- `approval.decision.withdraw`
+- `approval.decision.supersede`
 - `approval.condition.evaluate`
 - `approval.chain.evaluate`
 - `money.deserialize`
@@ -62,9 +65,12 @@ Generic validation rule engines remain outside this milestone.
 
 Audit operation support covers FinKore Audit Draft 0.1 plus the Draft 0.2 Audit Relationships slice: Events, Actors, append-only history, Change representation, Redaction, relationship metadata, and portable Audit errors. Draft 0.1 does not define `audit.order` as an executable adapter operation. Audit Relationships are observed through existing append/redaction fixtures; the adapter does not interpret relationships itself.
 
-Approval operation support covers FinKore Approvals Draft 0.1: Requirement
+Approval operation support covers FinKore Approvals Draft 0.1 and the Draft 0.2
+Approval Validity slice: Requirement
 evaluation, Decision recording, Decision effectiveness, eligible actor
 validation, subject-fact binding, append-only Decision history preservation,
+withdrawal lifecycle evidence, expiration with explicit evaluation instants,
+Decision supersession, Requirement supersession,
 Condition representation, required-fact completeness, explicit Condition result
 boundaries, Approval Chain all-required composition for sequential and unordered
 chains, declared rejection outcomes, current sequential actionable Requirement
@@ -73,15 +79,16 @@ errors. The current Approval conformance operation labels remain
 conformance-local vocabulary; no canonical Approval operation is currently
 listed in `agentic/operations.md`.
 
-`approval.chain.evaluate` remains a conformance-local operation. It evaluates a
-chain from explicit Requirement state observations so conformance can verify
-ordered and unordered composition. It does not replace Approval Decision history
-as evidence for Requirement binding, actor eligibility, or relevant subject
-facts.
+`approval.chain.evaluate`, `approval.decision.withdraw`,
+`approval.decision.supersede`, and `approval.requirement.supersede` remain
+conformance-local operations. They observe chain composition and Draft 0.2
+Approval Validity lifecycle behavior. They do not replace Approval Decision
+history as evidence for Requirement binding, actor eligibility, or relevant
+subject facts.
 
 It does not claim support for rich condition expressions, approval quorum,
-N-of-M voting, parallel approval groups, delegation, withdrawal, approval
-supersession, escalation, dynamic approver resolution, authorization/RBAC, MCP,
+N-of-M voting, parallel approval groups, delegation, escalation,
+dynamic approver resolution, authorization/RBAC, MCP,
 executable agent integrations, generic entity validation rule engines, workflow
 versioning, concurrency resolution, persistence, concrete ledger reversal
 posting, or broader guard frameworks.

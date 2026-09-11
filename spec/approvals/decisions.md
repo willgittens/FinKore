@@ -20,7 +20,7 @@ An Approval Decision outcome is `APPROVED` or `REJECTED`. `PENDING` describes an
 - **APPROVAL-DECISION-004** — The Actor MUST satisfy the Approval Requirement's eligibility rule at the domain-defined evaluation time.
 - **APPROVAL-DECISION-005** — An outcome MUST be either `APPROVED` or `REJECTED`.
 - **APPROVAL-DECISION-006** — The decision timestamp MUST identify an unambiguous instant and, when serialized, MUST follow [Timestamp conventions](../conventions.md#portable-values).
-- **APPROVAL-DECISION-007** — A committed Approval Decision MUST NOT be overwritten or removed from logical approval history.
+- **APPROVAL-DECISION-007** — A committed Approval Decision MUST NOT be overwritten or removed from logical approval history, including when later lifecycle evidence makes it no longer currently effective.
 - **APPROVAL-DECISION-008** — When a composing domain requires an [Audit Event](../audit/events.md) for an Approval Decision, that Audit Event MUST preserve the Approval Decision's domain meaning.
 
 ## Invariants
@@ -34,6 +34,11 @@ current relevant facts no longer correspond, the historical Decision remains in
 logical history but MUST NOT satisfy the Requirement for current evaluation.
 The observable Requirement state is therefore `PENDING` unless another
 effective Decision satisfies or rejects the Requirement.
+
+Draft 0.2 current-effectiveness also considers lifecycle evidence defined by
+[Approval Validity](validity.md), including withdrawal, expiration, and
+supersession. Those lifecycle events change current effectiveness without
+rewriting the committed Decision.
 
 Draft 0.1 does not require a specific binding mechanism such as revision
 numbers, database versions, hashes, immutable snapshots, or stable fact
@@ -67,10 +72,6 @@ For example, a manager approves an invoice for `9,000 EUR`. If its amount change
 
 Invalid decisions must use an applicable [Approval Error](errors.md).
 
-## Open Questions
-
-- What semantics should a future approval specification define for withdrawal, supersession, delegation, expiration, escalation, and approval-definition migration?
-
 ## Non-Goals
 
-FinKore Core Draft 0.1 does not define withdrawal, supersession, delegation, expiration, escalation, approval-definition migration, or complex dependency graphs. Subject-state association is semantic; this document does not require revision identifiers, version numbers, hashes, snapshots, or immutable references.
+FinKore Core does not define delegation, escalation, approval-definition migration, or complex dependency graphs. Subject-state association is semantic; this document does not require revision identifiers, version numbers, hashes, snapshots, or immutable references.

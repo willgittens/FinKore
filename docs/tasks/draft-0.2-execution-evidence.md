@@ -504,3 +504,69 @@ not a source of financial semantics.
   - `/conformance`: manifest, conventions, README, and traceability updated.
   - `/agentic`: no change; Entity Evolution operations remain conformance-local pending an explicit Agentic promotion review.
   - `AGENTS.md`: no change required.
+
+## Approval Validity
+
+### TASK-045 through TASK-054 - Draft 0.2 Approval Validity Specification, Vectors, Implementation, and Adapter
+
+- Status: IMPLEMENTED THROUGH ADAPTER; BLOCKED AT TASK-055 MUTATION HARDENING.
+- Date: 2026-09-11
+- Toolchain: system `node` and `npm` were absent; repository-local `.tools/node-v24.11.1-linux-x64/bin/node` reported `v24.11.1` and was used via PATH prefix.
+- Normative scope implemented:
+  - Added `spec/approvals/validity.md` with `APPROVAL-VALIDITY-001` through `APPROVAL-VALIDITY-012`.
+  - Defined current-effectiveness over committed Decisions, lifecycle events, relevant subject facts/revisions, and explicit evaluation context.
+  - Defined withdrawal, expiration, Decision supersession, Requirement supersession, retained historical observations, duplicate/missing/ambiguous lifecycle rejection, and failure atomicity.
+  - Added `FINKORE_APPROVAL_INVALID_CONTEXT` for missing or malformed explicit evaluation context.
+  - No delegation, authorization/RBAC, quorum, escalation, approval graphs, Workflow/Audit integration, or executable condition model was introduced.
+- Conformance vectors:
+  - Added `conformance/approvals/validity.json` with 13 vectors.
+  - Registered the file in `conformance/manifest.json`.
+  - Added conformance-local operation labels `approval.decision.withdraw`, `approval.decision.supersede`, and `approval.requirement.supersede` to conventions, runner metadata, and adapter support.
+  - No canonical `finkore.approval.*` Agentic operation was introduced.
+- Implementation and adapter:
+  - `ApprovalDecision` accepts optional `expiresAt`.
+  - `ApprovalDecisionHistory` accepts legacy Decision arrays and `{ history, lifecycle }` observations, exposes lifecycle observations defensively, and implements `withdraw`, `supersedeDecision`, `supersedeRequirement`, and integrated current-effectiveness evaluation.
+  - Current-effectiveness excludes stale relevant facts, withdrawn Decisions, expired Decisions, superseded Decisions, and Decisions for superseded Requirements.
+  - Added `InvalidApprovalContextError` and public lifecycle types.
+  - Added Approval unit tests for withdrawal preservation/failure atomicity, expiration boundary/offset/context, Decision supersession, Requirement supersession, and history preservation.
+- Commands:
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run typecheck --workspace @finkore/typescript` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test --workspace @finkore/typescript -- test/approvals` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test --workspace @finkore/conformance-runner` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run build --workspaces` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run typecheck --workspaces` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test --workspaces` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH .tools/node-v24.11.1-linux-x64/bin/node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test:coverage --workspace @finkore/typescript` exited 0.
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test:coverage --workspace @finkore/conformance-runner` exited 0.
+  - `git diff --check` exited 0.
+- Unit and conformance evidence:
+  - Focused Approval tests: 10 files, 101 tests passed.
+  - Workspace tests: Runner 10 files / 110 tests passed; TypeScript core 58 files / 495 tests passed; conformance adapter 1 file / 13 tests passed.
+  - Full conformance: 199 passed / 199 total; 0 failed, 0 unsupported, 0 infrastructure errors.
+  - By suite: Money 83/83, Workflow 20/20, Audit 29/29, Approvals 47/47, Entities 20/20.
+  - Mutation-sensitive vectors: 174 passed / 174 total.
+- Coverage:
+  - TypeScript core all files: 93.26% statements, 60.91% branches, 94.53% functions, 95.13% lines.
+  - Runner: 98.31% statements, 95.29% branches, 100% functions, 98.75% lines.
+- Mutation:
+  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test:mutation --workspace @finkore/typescript` in sandbox failed before mutation execution with Stryker local logging server `listen EPERM`.
+  - Escalated full-core mutation found 16 source files, 29 test files, and 2,425 mutants; dry run passed 255 tests. After mutant execution the PTY wrapper hung after worker processes exited and no fresh mutation report was written.
+  - Escalated targeted Approval mutation command `../../../node_modules/.bin/stryker run --mutate src/approvals/approval-decision.ts,src/approvals/approval-decision-history.ts,src/approvals/errors.ts --testFiles 'test/approvals/*.test.ts' --reporters clear-text,json --concurrency 2 --maxConcurrentTestRunners 2` found 3 source files, 5 test files, and 628 mutants; dry run passed 53 tests. After mutant execution the PTY wrapper hung after worker processes exited and no fresh mutation report was written.
+  - Existing `implementations/typescript/core/reports/mutation/mutation.json` remained the older Entity Evolution-only report and is not valid Approval Validity evidence.
+  - TASK-055 remains blocked pending a fresh Approval/core mutation report or a tooling remediation task.
+- Traceability inventory after implementation:
+  - Manifest format `0.1`; five suites; thirteen manifest-listed vector files.
+  - Total requirements: 297; 231 covered; 66 not directly testable; 0 partial; 0 uncovered; 0 deferred; 0 blocking spec gaps.
+  - Approvals inventory: 49 total; 44 covered; 5 not directly testable; 0 uncovered; 0 blocking spec gaps.
+  - `APPROVAL-VALIDITY-001` through `APPROVAL-VALIDITY-012`, `APPROVAL-ERROR-006`, and `APPROVAL-ERROR-007` are mapped in traceability.
+- Documentation/update applicability:
+  - Unit tests: updated.
+  - Conformance vectors: updated.
+  - Mutation-sensitive tests: updated but mutation evidence blocked.
+  - JSDoc: updated for public Approval validity API and portable error semantics.
+  - README documentation: root, conformance, core, adapter, and spec READMEs updated.
+  - `/spec`: Approval Validity document and Approval index/decisions/errors updated.
+  - `/conformance`: manifest, conventions, README, and traceability updated.
+  - `/agentic`: no change; Approval lifecycle operations remain conformance-local pending explicit Agentic review.
+  - `AGENTS.md`: no change required.

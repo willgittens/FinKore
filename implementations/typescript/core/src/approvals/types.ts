@@ -99,6 +99,16 @@ export type ApprovalChainMode = 'SEQUENTIAL' | 'UNORDERED'
 export type ApprovalDecisionEffectiveness = 'EFFECTIVE' | 'INEFFECTIVE'
 
 /**
+ * Lifecycle event kind that changes current effectiveness without rewriting
+ * committed Approval Decisions.
+ *
+ * @see APPROVAL-VALIDITY-004
+ * @see APPROVAL-VALIDITY-010
+ * @see APPROVAL-VALIDITY-011
+ */
+export type ApprovalLifecycleEventType = 'WITHDRAWN' | 'DECISION_SUPERSEDED' | 'REQUIREMENT_SUPERSEDED'
+
+/**
  * Stable identifier for an Approval Condition.
  *
  * @see APPROVAL-CONDITION-001
@@ -141,6 +151,7 @@ export type ApprovalErrorCode =
   | 'FINKORE_APPROVAL_INELIGIBLE_ACTOR'
   | 'FINKORE_APPROVAL_INVALID_CHAIN'
   | 'FINKORE_APPROVAL_CONDITION_UNRESOLVED'
+  | 'FINKORE_APPROVAL_INVALID_CONTEXT'
 
 /**
  * Serialized reference to the subject whose approval is requested.
@@ -226,6 +237,73 @@ export interface SerializedApprovalDecision {
 
   /** RFC 3339 date-time with an explicit numeric UTC offset or Z. */
   readonly decidedAt: string
+
+  /**
+   * Optional RFC 3339 date-time at which this Decision expires.
+   *
+   * A Decision is no longer effective when the explicit evaluation instant is
+   * equal to or later than this instant.
+   *
+   * @see APPROVAL-VALIDITY-007
+   * @see APPROVAL-VALIDITY-009
+   */
+  readonly expiresAt?: string
+}
+
+/**
+ * Stable structural reference to one committed Approval Decision.
+ *
+ * Draft 0.2 lifecycle events use the Requirement, deciding Actor, and decision
+ * timestamp to identify a historical Decision without adding generated identity
+ * to the Decision model. A lifecycle operation must resolve the reference to
+ * exactly one committed Decision.
+ *
+ * @see APPROVAL-VALIDITY-005
+ * @see APPROVAL-VALIDITY-010
+ */
+export interface SerializedApprovalDecisionReference {
+  /** Requirement identity addressed by the target Decision. */
+  readonly requirementId: ApprovalRequirementIdentifier
+
+  /** Actor identity attributed to the target Decision. */
+  readonly actorId: ApprovalActorIdentifier
+
+  /** Decision timestamp of the target Decision. */
+  readonly decidedAt: string
+}
+
+/**
+ * Serialized lifecycle event that changes Approval current effectiveness.
+ *
+ * Lifecycle events are append-only observations. They do not remove committed
+ * Decisions and do not define authorization, delegation, or RBAC.
+ *
+ * @see APPROVAL-VALIDITY-002
+ * @see APPROVAL-VALIDITY-004
+ * @see APPROVAL-VALIDITY-010
+ * @see APPROVAL-VALIDITY-011
+ */
+export interface SerializedApprovalLifecycleEvent {
+  /** Lifecycle relationship kind. */
+  readonly type: ApprovalLifecycleEventType
+
+  /** Target Decision for withdrawal or Decision supersession. */
+  readonly target?: SerializedApprovalDecisionReference
+
+  /** Successor Decision for Decision supersession. */
+  readonly successor?: SerializedApprovalDecisionReference
+
+  /** Superseded Requirement identity for Requirement supersession. */
+  readonly targetRequirementId?: ApprovalRequirementIdentifier
+
+  /** Successor Requirement identity for Requirement supersession. */
+  readonly successorRequirementId?: ApprovalRequirementIdentifier
+
+  /** Actor attributed to recording the lifecycle event. */
+  readonly actor: SerializedApprovalActor
+
+  /** RFC 3339 date-time when the lifecycle event was recorded. */
+  readonly recordedAt: string
 }
 
 /**
@@ -237,6 +315,9 @@ export interface SerializedApprovalDecision {
 export interface SerializedApprovalDecisionHistory {
   /** Committed Approval Decisions in this logical history's append observation. */
   readonly history: readonly SerializedApprovalDecision[]
+
+  /** Committed lifecycle events that affect current effectiveness. */
+  readonly lifecycle?: readonly SerializedApprovalLifecycleEvent[]
 }
 
 /**

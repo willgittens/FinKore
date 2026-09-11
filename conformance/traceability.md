@@ -10,11 +10,11 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Money | 73 | 68 | 1 | 4 | 68 | 0 | 0 | 5 | 0 | 0 |
 | Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 | 0 | 0 |
 | Audit | 52 | 44 | 4 | 4 | 42 | 0 | 0 | 10 | 0 | 0 |
-| Approvals | 35 | 32 | 1 | 2 | 30 | 0 | 0 | 5 | 0 | 0 |
+| Approvals | 49 | 46 | 1 | 2 | 44 | 0 | 0 | 5 | 0 | 0 |
 | Entities | 67 | 62 | 3 | 2 | 54 | 0 | 0 | 13 | 0 | 0 |
-| **Total** | **283** | **254** | **15** | **14** | **217** | **0** | **0** | **66** | **0** | **0** |
+| **Total** | **297** | **268** | **15** | **14** | **231** | **0** | **0** | **66** | **0** | **0** |
 
-The suite contains 186 vectors. Overall: **217 covered (76.7%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **66 not directly testable (23.3%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
+The suite contains 199 vectors. Overall: **231 covered (77.8%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **66 not directly testable (22.2%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current draft. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -231,6 +231,8 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-ERROR-003 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.pending-001, approval.requirement.rejected-001 |
 | APPROVAL-ERROR-004 | Approvals | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | APPROVAL-ERROR-005 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001, approval.decision.pending-invalid-001, approval.decision.timestamp-ambiguous-001 |
+| APPROVAL-ERROR-006 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-duplicate-invalid-001 |
+| APPROVAL-ERROR-007 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-missing-context-001 |
 | APPROVAL-REQUIREMENT-001 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.missing-identity-001 |
 | APPROVAL-REQUIREMENT-002 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.missing-subject-001 |
 | APPROVAL-REQUIREMENT-003 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.missing-eligibility-001 |
@@ -238,6 +240,18 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-REQUIREMENT-005 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.pending-001 |
 | APPROVAL-REQUIREMENT-006 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001 |
 | APPROVAL-REQUIREMENT-007 | Approvals | MAY | NOT DIRECTLY TESTABLE | — |
+| APPROVAL-VALIDITY-001 | Approvals | MUST / MUST NOT | COVERED | approval.validity.decision-superseded-not-counted-001, approval.validity.withdrawn-not-counted-001 |
+| APPROVAL-VALIDITY-002 | Approvals | MUST / MUST NOT | COVERED | approval.validity.decision-supersession-preserves-history-001, approval.validity.requirement-supersession-preserves-history-001, approval.validity.withdraw-preserves-history-001 |
+| APPROVAL-VALIDITY-003 | Approvals | MUST / MUST NOT | COVERED | approval.validity.stale-revision-not-effective-001, approval.validity.unchanged-relevant-facts-effective-001 |
+| APPROVAL-VALIDITY-004 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-preserves-history-001, approval.validity.withdrawn-not-counted-001 |
+| APPROVAL-VALIDITY-005 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-duplicate-invalid-001 |
+| APPROVAL-VALIDITY-006 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-preserves-history-001 |
+| APPROVAL-VALIDITY-007 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-before-boundary-001, approval.validity.expiration-missing-context-001 |
+| APPROVAL-VALIDITY-008 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-before-boundary-001, approval.validity.expiration-equivalent-offset-001 |
+| APPROVAL-VALIDITY-009 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-at-boundary-001, approval.validity.expiration-before-boundary-001, approval.validity.expiration-equivalent-offset-001 |
+| APPROVAL-VALIDITY-010 | Approvals | MUST / MUST NOT | COVERED | approval.validity.decision-superseded-not-counted-001, approval.validity.decision-supersession-preserves-history-001 |
+| APPROVAL-VALIDITY-011 | Approvals | MUST / MUST NOT | COVERED | approval.validity.requirement-superseded-not-transferred-001, approval.validity.requirement-supersession-preserves-history-001 |
+| APPROVAL-VALIDITY-012 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-duplicate-invalid-001 |
 | ENTITY-AUDIT-001 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | ENTITY-AUDIT-002 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | ENTITY-DEFINITION-001 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
@@ -390,6 +404,9 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | AUDIT-RELATIONSHIP-006, AUDIT-RELATIONSHIP-007, AUDIT-RELATIONSHIP-008 | Relationship targets must exist and match the recorded target Entity. | Accept absent target events or ignore target Entity mismatches. |
 | AUDIT-RELATIONSHIP-009, AUDIT-RELATIONSHIP-010, AUDIT-RELATIONSHIP-011 | Relationships are preserved through append and redaction evidence. | Drop, rewrite, sort, or conceal relationship identity/type/target during append or redaction. |
 | APPROVAL-DECISION-003 | Validity against policy-relevant facts. | Ignore changed relevant facts. |
+| APPROVAL-VALIDITY-004, APPROVAL-VALIDITY-005, APPROVAL-VALIDITY-012 | Withdrawal affects only current effectiveness and rejected lifecycle requests preserve history. | Count withdrawn Decisions, erase withdrawn Decisions, accept duplicate withdrawals, or append partial lifecycle evidence on failure. |
+| APPROVAL-VALIDITY-007, APPROVAL-VALIDITY-009 | Expiration uses explicit injected instants and an exclusive boundary. | Use host time, ignore equivalent offsets, or treat the expiration boundary as still effective. |
+| APPROVAL-VALIDITY-010, APPROVAL-VALIDITY-011 | Supersession preserves history while removing current effectiveness from superseded Decisions or Requirements. | Count superseded Decisions, transfer Decisions to successor Requirements, or rewrite historical observations. |
 | ENTITY-IDENTITY-002 | Lifecycle-stable identity. | Generate a new ID after mutation. |
 | ENTITY-MUTABILITY-002 | Configured immutability. | Skip current-State mutability check. |
 | ENTITY-VALIDATION-003, ENTITY-VALIDATION-004, ENTITY-VALIDATION-006 | Complete validation before observable mutation with the portable validation code. | Stop after the first failed rule, return success for invalid data, apply part of a rejected mutation, or expose sensitive field values in findings. |
@@ -404,7 +421,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 - Money: allocation normative semantics and portable invalid-allocation error semantics are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance for Draft 0.2. Precision or overflow limits, private or non-fiat currency namespaces, and currency-recommended scale remain open as deferred topics outside the closed Draft 0.1 plus Draft 0.2 Money Rates and Allocation scope.
 - Workflow: external fact capture, definition migration, transition identifiers, and concurrency remain open.
 - Audit: Draft 0.2 Audit Relationships are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, generic related links, relationship redaction policy, and causal sequencing remain open.
-- Approvals: condition syntax, subject-state interchange, relevant-fact policy, supersession, withdrawal, expiration, delegation, quorum, and rejection codes remain open for future drafts; current standalone Draft 0.1 conformance has no uncovered mandatory Approval requirements.
+- Approvals: Draft 0.2 Approval Validity withdrawal, expiration, supersession, explicit current-effectiveness context, and lifecycle failure atomicity are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Rich condition syntax, delegation, quorum, rejection-code specialization, escalation, approval-definition migration, and complex dependency graphs remain open for future drafts.
 - Entities: Draft 0.2 Entity Evolution terminology, correction, reversal, void, supersession, currentness, failure atomicity, mandatory Audit evidence, and portable error mapping are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Concrete fields, composing-domain lifecycle policy, full validation catalog, import or migration mapping, cross-entity identity registries, concurrency, cancellation, adjustment, replacement, amendment, and concrete ledger posting behavior remain outside the current implemented Core. The current TypeScript reference implementation covers the conformance-local Entity identity, lifecycle, mutability, validation, and evolution vectors. Remaining Entity requirements classified as not directly testable are composing-domain, optional diagnostic, or registry/import obligations without a standalone portable Entity operation.
 
 Vectors do not settle these open questions.
@@ -413,4 +430,4 @@ Vectors do not settle these open questions.
 
 **READY FOR CONFORMANCE RUNNER**
 
-The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates, Money Allocation, Audit Relationships, and Entity Evolution requirements are vector-covered, implemented by the TypeScript reference implementation, and pass their conformance suites. FinKore Core Draft 0.1 cross-domain closure remains complete for its directly testable mandatory requirements.
+The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the first runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates, Money Allocation, Audit Relationships, Entity Evolution, and Approval Validity requirements are vector-covered, implemented by the TypeScript reference implementation, and pass their conformance suites. FinKore Core Draft 0.1 cross-domain closure remains complete for its directly testable mandatory requirements.

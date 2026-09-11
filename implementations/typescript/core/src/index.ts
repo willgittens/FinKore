@@ -16,6 +16,7 @@ export {
   FinKoreApprovalError,
   IneligibleApprovalActorError,
   InvalidApprovalChainError,
+  InvalidApprovalContextError,
   InvalidApprovalDecisionError,
   isFinKoreApprovalError,
 } from './approvals/errors.js'
@@ -97,6 +98,7 @@ export type {
   ApprovalDecisionEffectiveness,
   ApprovalDecisionOutcome,
   ApprovalErrorCode,
+  ApprovalLifecycleEventType,
   ApprovalRequirementIdentifier,
   ApprovalRequirementState,
   ApprovalSubjectIdentifier,
@@ -105,7 +107,9 @@ export type {
   SerializedApprovalChain,
   SerializedApprovalCondition,
   SerializedApprovalDecision,
+  SerializedApprovalDecisionReference,
   SerializedApprovalDecisionHistory,
+  SerializedApprovalLifecycleEvent,
   SerializedApprovalRequirement,
   SerializedApprovalSubject,
 } from './approvals/types.js'

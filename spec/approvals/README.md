@@ -16,6 +16,7 @@ This domain defines approval requirements and decisions independently of any par
 - An [Approval Decision](decisions.md) must identify its Approval Requirement, outcome, Actor, time, and association with the relevant subject state or facts.
 - An [Approval Chain](chains.md) must define how its Approval Requirements combine and must declare sequencing only when sequencing applies.
 - [Conditional Approval Requirements](conditions.md) must use explicit domain facts.
+- [Approval Validity](validity.md) must derive current effectiveness from append-only history, explicit evaluation context, relevant subject facts or revisions, and lifecycle evidence such as withdrawal, expiration, or supersession.
 
 ## Invariants
 
@@ -23,5 +24,4 @@ An Approval outcome must be derivable from the applicable Approval Requirements 
 
 ## Non-Goals
 
-This domain does not define RBAC, authentication, organizational directories, UI inboxes, notification delivery, withdrawal, supersession, quorum, delegation, expiration, escalation, approval-definition migration, or complex dependency graphs.
-
+This domain does not define RBAC, authentication, organizational directories, UI inboxes, notification delivery, quorum, delegation, escalation, approval-definition migration, or complex dependency graphs.

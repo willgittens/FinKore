@@ -67,8 +67,11 @@ These identifiers name observable behavior, not implementation methods.
 | `finkore.audit.replace`, `finkore.audit.remove` | Attempt the named change to committed logical history. |
 | `audit.redact` | Produce a policy-authorized redacted logical representation and evidence event. |
 | `approval.requirement.evaluate` | Derive one requirement's `PENDING`, `APPROVED`, or `REJECTED` state. |
+| `approval.requirement.supersede` | Append Requirement supersession lifecycle evidence without altering Decision history. |
 | `approval.decision.record` | Validate and commit a decision. |
 | `approval.decision.evaluate` | Determine whether a decision remains effective for supplied subject facts. |
+| `approval.decision.withdraw` | Append Decision withdrawal lifecycle evidence without altering Decision history. |
+| `approval.decision.supersede` | Append Decision supersession lifecycle evidence without altering Decision history. |
 | `approval.condition.evaluate` | Return `APPLICABLE` or `NOT_APPLICABLE` from explicit facts. |
 | `approval.chain.evaluate` | Derive chain state from its declared combination and explicit Requirement state observations. |
 | `entity.create` | Create under the supplied composing-domain definition. |
@@ -91,11 +94,12 @@ conformance-local representation boundary checks. They exercise normative Money
 serialization but are not separate public Agentic operations. For Money Draft 0.2,
 `money.rate.apply` and `money.allocate` remain conformance-local until Agentic
 operation promotion is reviewed explicitly.
-For Approvals Draft 0.1, `approval.chain.evaluate` remains conformance-local.
-It observes deterministic chain composition from explicit Requirement state
-inputs; it is not a public Agentic operation and does not replace Decision
-history as evidence for which Decision satisfied a Requirement or which subject
-facts were bound to that Decision.
+For Approvals, `approval.chain.evaluate`, `approval.decision.withdraw`,
+`approval.decision.supersede`, and `approval.requirement.supersede` remain
+conformance-local. They observe deterministic chain composition and Draft 0.2
+current-effectiveness lifecycle behavior; they are not public Agentic operations
+and do not replace Decision history as evidence for which Decision satisfied a
+Requirement or which subject facts were bound to that Decision.
 For Entities Draft 0.2, `entity.evolution.correct`,
 `entity.evolution.reverse`, `entity.evolution.void`, and
 `entity.evolution.supersede` remain conformance-local until Agentic operation

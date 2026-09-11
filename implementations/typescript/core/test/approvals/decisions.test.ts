@@ -4,6 +4,7 @@ import {
   ApprovalDecision,
   ApprovalDecisionHistory,
   IneligibleApprovalActorError,
+  InvalidApprovalContextError,
   InvalidApprovalDecisionError,
 } from '../../src/index.js'
 
@@ -95,6 +96,153 @@ describe('Approval decisions', () => {
     expect(() => history.record(requirement, { ...decision, outcome: 'PENDING' })).toThrow(InvalidApprovalDecisionError)
 
     expect(history.toJSON()).toEqual({ history: [decision] })
+  })
+
+  it('withdraws one decision without removing it from append-only history', () => {
+    const withdrawal = {
+      target: {
+        requirementId: 'finance-review',
+        actorId: 'user-7',
+        decidedAt: '2026-09-01T12:00:00Z',
+      },
+      actor: { type: 'user', id: 'user-7' },
+      recordedAt: '2026-09-02T12:00:00Z',
+    }
+    const history = ApprovalDecisionHistory.create([decision])
+
+    expect(history.withdraw(requirement, withdrawal)).toBe(history)
+    expect(history.evaluateRequirement(requirement)).toBe('PENDING')
+    expect(history.toJSON()).toEqual({
+      history: [decision],
+      lifecycle: [{ type: 'WITHDRAWN', ...withdrawal }],
+    })
+  })
+
+  it('rejects duplicate, missing, ambiguous, and ineligible withdrawal requests without partial lifecycle state', () => {
+    const target = {
+      requirementId: 'finance-review',
+      actorId: 'user-7',
+      decidedAt: '2026-09-01T12:00:00Z',
+    }
+    const withdrawal = {
+      target,
+      actor: { type: 'user', id: 'user-7' },
+      recordedAt: '2026-09-02T12:00:00Z',
+    }
+    const withdrawn = ApprovalDecisionHistory.create([decision]).withdraw(requirement, withdrawal)
+
+    expect(() => withdrawn.withdraw(requirement, { ...withdrawal, recordedAt: '2026-09-03T12:00:00Z' })).toThrow(
+      InvalidApprovalDecisionError,
+    )
+    expect(withdrawn.toJSON()).toEqual({
+      history: [decision],
+      lifecycle: [{ type: 'WITHDRAWN', ...withdrawal }],
+    })
+
+    const missing = ApprovalDecisionHistory.create([decision])
+    expect(() =>
+      missing.withdraw(requirement, {
+        ...withdrawal,
+        target: { ...target, decidedAt: '2026-09-01T13:00:00Z' },
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(missing.toJSON()).toEqual({ history: [decision] })
+
+    const ambiguous = ApprovalDecisionHistory.create([decision, decision])
+    expect(() => ambiguous.withdraw(requirement, withdrawal)).toThrow(InvalidApprovalDecisionError)
+    expect(ambiguous.toJSON()).toEqual({ history: [decision, decision] })
+
+    const ineligible = ApprovalDecisionHistory.create([decision])
+    expect(() =>
+      ineligible.withdraw(requirement, {
+        ...withdrawal,
+        actor: { type: 'user', id: 'user-9' },
+      }),
+    ).toThrow(IneligibleApprovalActorError)
+    expect(ineligible.toJSON()).toEqual({ history: [decision] })
+  })
+
+  it('requires explicit evaluation instants for expiring decisions and applies an exclusive boundary', () => {
+    const expiringDecision = {
+      ...decision,
+      expiresAt: '2026-09-02T12:00:00Z',
+    }
+    const history = ApprovalDecisionHistory.create([expiringDecision])
+
+    expect(() => history.evaluateRequirement(requirement)).toThrow(InvalidApprovalContextError)
+    expect(() => history.evaluateRequirement(requirement, { evaluatedAt: '2026-09-02T12:00:00' })).toThrow(
+      InvalidApprovalContextError,
+    )
+    expect(history.evaluateRequirement(requirement, { evaluatedAt: '2026-09-02T11:59:59Z' })).toBe('APPROVED')
+    expect(history.evaluateRequirement(requirement, { evaluatedAt: '2026-09-02T12:00:00Z' })).toBe('PENDING')
+    expect(history.evaluateRequirement(requirement, { evaluatedAt: '2026-09-02T14:00:00+02:00' })).toBe('PENDING')
+  })
+
+  it('supersedes a decision while preserving target and successor decisions', () => {
+    const earlierApproval = {
+      ...decision,
+      subjectFacts: { revision: '2', amount: { amount: '9000.00', currency: 'EUR' } },
+      decidedAt: '2026-09-01T12:00:00Z',
+    }
+    const laterApproval = {
+      ...decision,
+      subjectFacts: { revision: '3', amount: { amount: '9000.00', currency: 'EUR' } },
+      decidedAt: '2026-09-02T12:00:00Z',
+    }
+    const supersession = {
+      target: {
+        requirementId: 'finance-review',
+        actorId: 'user-7',
+        decidedAt: '2026-09-01T12:00:00Z',
+      },
+      successor: {
+        requirementId: 'finance-review',
+        actorId: 'user-7',
+        decidedAt: '2026-09-02T12:00:00Z',
+      },
+      actor: { type: 'user', id: 'user-7' },
+      recordedAt: '2026-09-02T12:30:00Z',
+    }
+    const history = ApprovalDecisionHistory.create([earlierApproval, laterApproval])
+
+    history.supersedeDecision(supersession)
+
+    expect(
+      history.evaluateRequirement(requirement, {
+        currentSubjectFacts: { revision: '2', amount: { amount: '9000.00', currency: 'EUR' } },
+        relevantFactPaths: ['revision', 'amount'],
+      }),
+    ).toBe('PENDING')
+    expect(
+      history.evaluateRequirement(requirement, {
+        currentSubjectFacts: { revision: '3', amount: { amount: '9000.00', currency: 'EUR' } },
+        relevantFactPaths: ['revision', 'amount'],
+      }),
+    ).toBe('APPROVED')
+    expect(history.toJSON()).toEqual({
+      history: [earlierApproval, laterApproval],
+      lifecycle: [{ type: 'DECISION_SUPERSEDED', ...supersession }],
+    })
+  })
+
+  it('supersedes a requirement without transferring its decisions to the successor requirement', () => {
+    const successorRequirement = {
+      ...requirement,
+      id: 'controller-review',
+      eligibleActors: ['user-7'],
+    }
+    const history = ApprovalDecisionHistory.create([decision])
+
+    history.supersedeRequirement({
+      targetRequirementId: 'finance-review',
+      successorRequirementId: 'controller-review',
+      actor: { type: 'user', id: 'user-7' },
+      recordedAt: '2026-09-02T12:30:00Z',
+    })
+
+    expect(history.evaluateRequirement(requirement)).toBe('PENDING')
+    expect(history.evaluateRequirement(successorRequirement)).toBe('PENDING')
+    expect(history.decisions()).toEqual([decision])
   })
 
   it('evaluates a requirement as pending, approved, or rejected from effective associated decisions only', () => {
