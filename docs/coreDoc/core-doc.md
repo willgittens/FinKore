@@ -1,7 +1,7 @@
 # FinKore CoreDoc
 
 **CoreDoc version:** v0.5
-**Document date:** 2026-09-10
+**Document date:** 2026-09-12
 **Status:** Initial normative draft
 
 ## Purpose
@@ -34,7 +34,7 @@ is a recommendation that may be departed from with documented justification.
 
 **Introduced:** v0.5
 **Last updated:** v0.5
-**Last updated on:** 2026-09-10
+**Last updated on:** 2026-09-12
 
 Monetary information must retain the amount, currency, precision, and allocation
 meaning needed to prevent a value from being silently changed or misapplied.
@@ -524,15 +524,19 @@ decision and factual basis shows whether later change needs fresh consideration.
 **Interpretation**
 
 The application or a higher-level policy determines which changed facts are
-relevant or material. Portable decisions are approved and rejected.
+relevant or material. Portable decisions are approved and rejected. Current
+FinKore Approval validity rules define withdrawal, expiration, and supersession
+as lifecycle evidence that affects current effectiveness without rewriting the
+committed Decision.
 
 **Boundaries**
 
-This rule does not define materiality, expiry, withdrawal, delegation, or quorum.
+This rule does not define materiality, delegation, quorum, or authorization
+policy.
 
 **Relevant FinKore domains**
 
-[Approval decisions](../../spec/approvals/decisions.md) — APPROVAL-DECISION-001 to -008; [Approval conditions](../../spec/approvals/conditions.md) — APPROVAL-CONDITION-003.
+[Approval decisions](../../spec/approvals/decisions.md) — APPROVAL-DECISION-001 to -008; [Approval conditions](../../spec/approvals/conditions.md) — APPROVAL-CONDITION-003; [Approval validity](../../spec/approvals/validity.md) — APPROVAL-VALIDITY-001 to -012.
 
 ### CORE-004.4 — Chain status follows declared requirements and decisions
 

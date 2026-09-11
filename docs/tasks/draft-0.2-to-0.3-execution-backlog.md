@@ -33,7 +33,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 - [x] Audit Relationships: [TASK-025](#task-025)–[TASK-032](#task-032)
 - [x] Entity Evolution Implementation: [TASK-033](#task-033)–[TASK-044](#task-044)
 - [x] Approval Validity: [TASK-045](#task-045)–[TASK-057](#task-057)
-- [ ] Draft 0.2 Alignment: [TASK-058](#task-058)–[TASK-060](#task-060)
+- [x] Draft 0.2 Alignment: [TASK-058](#task-058)–[TASK-060](#task-060)
 - [ ] Draft 0.2 Closure: [TASK-061](#task-061)–[TASK-066](#task-066)
 
 ### Draft 0.3
@@ -52,7 +52,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-058
+NEXT TASK: TASK-061
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -555,7 +555,7 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 Completion:
 - Status: COMPLETE
 - Verification: Spec and traceability edits reviewed; full verification summarized in `docs/tasks/draft-0.2-execution-evidence.md` under Money Rates.
-- Conformance: Rate requirements were made vector-ready with `money.rate.apply` kept conformance-local pending Agentic promotion review.
+- Conformance: Rate requirements were made vector-ready; `money.rate.apply` was initially conformance-local and was later promoted by TASK-059 to canonical `finkore.money.applyrate`.
 - Mutation: Not applicable to this SPEC task; defect scenarios carried into TASK-009.
 - Notes: Added `spec/money/rates.md`, glossary/index links, and traceability rows for MONEY-RATE-001 through MONEY-RATE-009.
 
@@ -744,7 +744,7 @@ Completion:
 - Verification: Runner build/tests passed after registering `money.rate.apply`; full verification summarized in `docs/tasks/draft-0.2-execution-evidence.md` under Money Rates.
 - Conformance: Added 12 manifest-listed Money Rate vectors covering exact decimal, percentage conversion, zero, negative, fractional, explicit rounding, invalid rate inputs, invalid representation, invalid rounding, and operand preservation. Initial pre-adapter Money run produced the expected 12 unsupported Rate vectors with no infrastructure errors.
 - Mutation: Not applicable to this CONFORMANCE task; vectors were later exercised by implementation and mutation hardening.
-- Notes: `money.rate.apply` is documented as conformance-local, not a promoted `finkore.*` Agentic operation.
+- Notes: `money.rate.apply` was documented as conformance-local for this task and was later promoted by TASK-059 to canonical `finkore.money.applyrate`.
 
 
 <a id="task-007"></a>
@@ -930,7 +930,7 @@ Named operation fixtures execute through core and all required slice vectors PAS
 Completion:
 - Status: COMPLETE
 - Verification: Adapter build and tests passed; full verification summarized in `docs/tasks/draft-0.2-execution-evidence.md`.
-- Conformance: `money.rate.apply` delegates to `Money.applyRate`; Money suite passed 67/67 and full manifest passed 150/150.
+- Conformance: `money.rate.apply` delegates to `Money.applyRate`; TASK-059 later retained it as a compatibility alias for canonical `finkore.money.applyrate`. Money suite passed 67/67 and full manifest passed 150/150.
 - Mutation: Adapter is translation-only; core mutation evidence retained for financial behavior.
 - Notes: Adapter performs fixture mapping and observation reporting only; rate conversion and rounding remain in core.
 
@@ -5463,7 +5463,7 @@ Completion:
 
 <a id="task-058"></a>
 
-### - [ ] TASK-058 — Draft 0.2 Cross-Domain Invariants
+### - [x] TASK-058 — Draft 0.2 Cross-Domain Invariants
 
 **Release:** Draft 0.2
 
@@ -5534,9 +5534,9 @@ Draft 0.2 Cross-Domain Invariants.
 
 **Definition of Done**
 
-- [ ] Test correction/reversal/void/supersession, Audit evidence, Approval revision/fact invalidation and Workflow lifecycle composition together, including joint failure preservation.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Test correction/reversal/void/supersession, Audit evidence, Approval revision/fact invalidation and Workflow lifecycle composition together, including joint failure preservation.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -5544,11 +5544,16 @@ The named regression/coverage/conformance checks have durable results; no new se
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Added `implementations/typescript/core/test/integration/draft-0.2-alignment.test.ts`; focused integration test, `npm run build --workspaces`, `npm run typecheck --workspaces`, `npm run test --workspaces`, adapter tests, full conformance, scoped mutation, and docs checks passed.
+- Conformance: Full conformance 199/199 PASS across Money 83/83, Workflow 20/20, Audit 29/29, Approvals 47/47, Entities 20/20; mutation-sensitive vectors 174/174 PASS.
+- Mutation: Scoped Entity/Audit/Approval/Workflow Stryker run exited 0 with 95.32% score; report at `implementations/typescript/core/reports/mutation/mutation.json` and `.html`; no critical cross-domain alignment mutant was accepted as surviving.
+- Notes: Cross-domain regression covers approval fact/revision invalidation gating Workflow transition, Entity correction/reversal/void/supersession with Audit evidence, and preservation of source/evolution/Audit/Approval observations on joint failures. Next execution pointer advanced to TASK-059 during this milestone run.
 
 <a id="task-059"></a>
 
-### - [ ] TASK-059 — Draft 0.2 Agentic Review and Promotion
+### - [x] TASK-059 — Draft 0.2 Agentic Review and Promotion
 
 **Release:** Draft 0.2
 
@@ -5623,9 +5628,9 @@ Draft 0.2 Agentic Review and Promotion.
 
 **Definition of Done**
 
-- [ ] Review rates/allocation, existing and evolution Entity operations, Audit append relationships and Approval validity for canonical, conformance-local or structural status.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Review rates/allocation, existing and evolution Entity operations, Audit append relationships and Approval validity for canonical, conformance-local or structural status.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -5633,11 +5638,16 @@ Reviewed canonical/local/structural classifications and registry effects match t
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: `npm run build --workspaces`, `npm run typecheck --workspaces`, runner metadata/integration tests, adapter tests, full conformance, and docs checks passed after promotion.
+- Conformance: Manifest-listed vectors use promoted `finkore.money.applyrate`, `finkore.money.allocate`, and `finkore.entity.*` operation IDs; full conformance remains 199/199 PASS with 174/174 mutation-sensitive vectors PASS.
+- Mutation: Not rerun for this artifact/adapter-label task; no financial implementation behavior changed. TASK-058 scoped mutation evidence remains applicable for cross-domain behavior.
+- Notes: Promoted Money Rate, Money Allocation, Entity create/mutate/transition, and Entity Evolution operations to canonical Agentic IDs. Approval lifecycle operations remain conformance-local; Audit Relationships remain structural evidence observed through Audit append/redaction rather than a separate operation. Adapter retains old local labels as compatibility aliases only. Next execution pointer advanced to TASK-060 during this milestone run.
 
 <a id="task-060"></a>
 
-### - [ ] TASK-060 — Draft 0.2 Documentation and CoreDoc Review
+### - [x] TASK-060 — Draft 0.2 Documentation and CoreDoc Review
 
 **Release:** Draft 0.2
 
@@ -5707,9 +5717,9 @@ Draft 0.2 Documentation and CoreDoc Review.
 
 **Definition of Done**
 
-- [ ] Synchronize root/domain/spec/TypeScript/adapter/Agentic README status, JSDoc, deferred notes and CoreDoc assumptions for rates, remainder distribution, evolution and effectiveness.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Synchronize root/domain/spec/TypeScript/adapter/Agentic README status, JSDoc, deferred notes and CoreDoc assumptions for rates, remainder distribution, evolution and effectiveness.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -5717,7 +5727,12 @@ The named documentation surface describes current verified capability and explic
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: CoreDoc was found at `docs/coreDoc/core-doc.md`; documentation review, scoped Markdown/reference scans, `git diff --check`, and final runtime gates passed.
+- Conformance: Not a new behavior task; latest full conformance remains 199/199 PASS and reflects the promoted operation IDs.
+- Mutation: Not applicable for documentation synchronization; no financial implementation behavior changed.
+- Notes: Agentic status/effects/discovery/capability docs, conformance conventions, adapter README, root README, and CoreDoc approval-validity assumptions were synchronized. CoreDoc now records withdrawal, expiration, and supersession as current Approval validity semantics. `NEXT TASK` advanced to TASK-061.
 
 ## 8. Draft 0.2 Closure Gate
 

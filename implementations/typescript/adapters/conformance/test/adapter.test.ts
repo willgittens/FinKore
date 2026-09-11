@@ -8,7 +8,7 @@ const manifestPath = resolve(import.meta.dirname, '../../../../../conformance/ma
 
 describe('TypeScript conformance adapter', () => {
   it('exports a concrete adapter for the conformance CLI', () => {
-    expect(cliAdapter.supports('entity.create')).toBe(true)
+    expect(cliAdapter.supports('finkore.entity.create')).toBe(true)
   })
 
   it('supports current Money, Workflow, Audit, Approval, and Entity milestone operations', () => {
@@ -16,6 +16,8 @@ describe('TypeScript conformance adapter', () => {
 
     expect(adapter.supports('money.deserialize')).toBe(true)
     expect(adapter.supports('money.serialize')).toBe(true)
+    expect(adapter.supports('finkore.money.applyrate')).toBe(true)
+    expect(adapter.supports('finkore.money.allocate')).toBe(true)
     expect(adapter.supports('money.rate.apply')).toBe(true)
     expect(adapter.supports('money.allocate')).toBe(true)
     expect(adapter.supports('finkore.money.add')).toBe(true)
@@ -27,6 +29,13 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('finkore.money.divide')).toBe(true)
     expect(adapter.supports('workflow.create')).toBe(true)
     expect(adapter.supports('finkore.workflow.transition')).toBe(true)
+    expect(adapter.supports('finkore.entity.create')).toBe(true)
+    expect(adapter.supports('finkore.entity.evolution.correct')).toBe(true)
+    expect(adapter.supports('finkore.entity.evolution.reverse')).toBe(true)
+    expect(adapter.supports('finkore.entity.evolution.supersede')).toBe(true)
+    expect(adapter.supports('finkore.entity.evolution.void')).toBe(true)
+    expect(adapter.supports('finkore.entity.transition')).toBe(true)
+    expect(adapter.supports('finkore.entity.mutate')).toBe(true)
     expect(adapter.supports('entity.create')).toBe(true)
     expect(adapter.supports('entity.evolution.correct')).toBe(true)
     expect(adapter.supports('entity.evolution.reverse')).toBe(true)
@@ -48,7 +57,7 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('money.negate')).toBe(false)
     expect(adapter.supports('money.multiply')).toBe(false)
     expect(adapter.supports('money.divide')).toBe(false)
-    expect(adapter.supports('finkore.money.allocate')).toBe(false)
+    expect(adapter.supports('finkore.approval.decision.withdraw')).toBe(false)
     expect(adapter.supports('workflow.transition')).toBe(false)
   })
 
@@ -103,7 +112,7 @@ describe('TypeScript conformance adapter', () => {
   })
 
 
-  it('passes current conformance-local Money rate vectors', async () => {
+  it('passes current canonical Money rate vectors', async () => {
     const report = await createConformanceRunner({
       manifestPath,
       adapter: createTypeScriptConformanceAdapter(),
@@ -125,7 +134,7 @@ describe('TypeScript conformance adapter', () => {
     expect(report.summary).toEqual({ total: 12, passed: 12, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
-  it('passes current conformance-local Money allocation vectors', async () => {
+  it('passes current canonical Money allocation vectors', async () => {
     const report = await createConformanceRunner({
       manifestPath,
       adapter: createTypeScriptConformanceAdapter(),

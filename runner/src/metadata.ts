@@ -16,10 +16,19 @@ export const AGENTIC_OPERATION_IDS = new Set([
   'finkore.money.divide',
   'finkore.money.compare',
   'finkore.money.round',
+  'finkore.money.applyrate',
+  'finkore.money.allocate',
   'finkore.workflow.transition',
   'finkore.audit.append',
   'finkore.audit.replace',
   'finkore.audit.remove',
+  'finkore.entity.create',
+  'finkore.entity.mutate',
+  'finkore.entity.transition',
+  'finkore.entity.evolution.correct',
+  'finkore.entity.evolution.reverse',
+  'finkore.entity.evolution.supersede',
+  'finkore.entity.evolution.void',
 ])
 
 export const CONFORMANCE_OPERATION_IDS = new Set([
@@ -27,8 +36,6 @@ export const CONFORMANCE_OPERATION_IDS = new Set([
   'money.deserialize',
   'money.serialize',
   'workflow.create',
-  'money.rate.apply',
-  'money.allocate',
   'audit.redact',
   'approval.requirement.evaluate',
   'approval.requirement.supersede',
@@ -38,13 +45,6 @@ export const CONFORMANCE_OPERATION_IDS = new Set([
   'approval.decision.withdraw',
   'approval.condition.evaluate',
   'approval.chain.evaluate',
-  'entity.create',
-  'entity.evolution.correct',
-  'entity.evolution.reverse',
-  'entity.evolution.supersede',
-  'entity.evolution.void',
-  'entity.mutate',
-  'entity.transition',
 ])
 
 const REQUIREMENT_ROW = /^\|\s*([A-Z]+(?:-[A-Z]+)+-[0-9]{3})\s*\|/

@@ -184,7 +184,7 @@ Optional: Java or Go proof-of-portability for Money allocation and Entity evolut
 | Artifacts likely to change | New or updated `spec/money/rates.md`, `spec/money/README.md`, `spec/conventions.md`, `conformance/money/*.json`, `conformance/manifest.json`, `conformance/traceability.md`, `agentic/operations.md` if promoted. |
 | Normative requirements | Add stable `MONEY-RATE-*` requirements for exact rate representation, valid input, currency preservation, rounding-required behavior, and operand non-mutation. |
 | Conformance work | Add positive vectors for exact rates, negative vectors for malformed/non-finite rates, boundary vectors for zero/negative/fractional rates, rounding-required vectors, and mutation-sensitive vectors for input non-mutation. |
-| Agentic impact | Candidate canonical operation: `finkore.money.applyRate` or equivalent after naming review. |
+| Agentic impact | Promoted during Draft 0.2 Alignment as canonical operation `finkore.money.applyrate`. |
 | Portable error impact | Prefer existing `FINKORE_MONEY_INVALID_AMOUNT`, `FINKORE_MONEY_ROUNDING_REQUIRED`, and `FINKORE_MONEY_INVALID_ROUNDING` if semantically sufficient. Add a new code only if rate validity cannot fit existing Money invalid amount semantics. |
 | TypeScript implementation | None in this milestone. |
 | Tests | Spec/conformance validation only if available; do not change core yet. |

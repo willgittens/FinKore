@@ -12,7 +12,7 @@
         "ENTITY-VALIDATION-001"
       ],
       "description": "Creates a financial entity with stable identity in its workflow initial state.",
-      "operation": "entity.create",
+      "operation": "finkore.entity.create",
       "input": {
         "definition": {
           "type": "invoice",
@@ -88,7 +88,7 @@
         "ENTITY-IDENTITY-003"
       ],
       "description": "Preserves an opaque caller-supplied identifier exactly without normalization or inference.",
-      "operation": "entity.create",
+      "operation": "finkore.entity.create",
       "input": {
         "definition": {
           "type": "invoice",
@@ -153,7 +153,7 @@
         "ENTITY-IDENTITY-004"
       ],
       "description": "Allows mutable display numbering data to change without replacing stable Entity identity.",
-      "operation": "entity.mutate",
+      "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
           "type": "invoice",
@@ -239,7 +239,7 @@
         "ENTITY-ERROR-001"
       ],
       "description": "Rejects attempts to rewrite identity, type, or lifecycle state through generic mutation even if declared as mutable data fields.",
-      "operation": "entity.mutate",
+      "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
           "type": "invoice",
@@ -323,7 +323,7 @@
         "ENTITY-MUTABILITY-001"
       ],
       "description": "Allows a field explicitly declared mutable in the current state.",
-      "operation": "entity.mutate",
+      "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
           "type": "invoice",
@@ -412,7 +412,7 @@
         "ENTITY-ERROR-001"
       ],
       "description": "Rejects a financial-field mutation declared immutable in the current state without partial change.",
-      "operation": "entity.mutate",
+      "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
           "type": "invoice",
@@ -509,7 +509,7 @@
         "ENTITY-MUTABILITY-007"
       ],
       "description": "Allows operational metadata explicitly declared mutable even in a terminal state.",
-      "operation": "entity.mutate",
+      "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
           "type": "invoice",
@@ -607,7 +607,7 @@
         "ENTITY-ERROR-001"
       ],
       "description": "Validates the complete proposal and rejects it atomically when the resulting amount is invalid.",
-      "operation": "entity.mutate",
+      "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
           "type": "invoice",
@@ -711,7 +711,7 @@
         "ENTITY-IDENTITY-002"
       ],
       "description": "A successful lifecycle transition preserves entity identity.",
-      "operation": "entity.transition",
+      "operation": "finkore.entity.transition",
       "input": {
         "definition": {
           "type": "invoice",
@@ -802,7 +802,7 @@
         "ENTITY-ERROR-001"
       ],
       "description": "Retains the Workflow error and entire entity when a transition is undeclared.",
-      "operation": "entity.transition",
+      "operation": "finkore.entity.transition",
       "input": {
         "definition": {
           "type": "invoice",

@@ -110,7 +110,7 @@ not a source of financial semantics.
   - Zero and negative Rates are valid; Money currency is preserved; source Money is never mutated.
   - Exact products are returned by default with no implicit minor-unit rounding; optional explicit rounding is applied after exact multiplication.
   - Invalid/malformed/non-finite/unsupported Rate inputs use `FINKORE_MONEY_INVALID_AMOUNT`; invalid explicit rounding uses `FINKORE_MONEY_INVALID_ROUNDING`. No new portable Money error code was introduced.
-  - `money.rate.apply` is conformance-local until a later Agentic promotion review; no `finkore.*` operation was added.
+  - `money.rate.apply` was conformance-local for the initial Money Rates slice; TASK-059 later promoted the behavior to canonical `finkore.money.applyrate` while retaining the local label as an adapter compatibility alias.
 - Conformance vectors:
   - Added `conformance/money/rates.json` with 12 vectors: exact decimal, percentage conversion, zero, negative, fractional decimal, fractional percentage, HALF_UP rounding, HALF_EVEN rounding, numeric rate rejection, exponent rejection, unsupported kind rejection, and invalid rounding rejection.
   - Registered the file in `conformance/manifest.json`, updated `conformance/conventions.md`, runner metadata/tests, and `conformance/traceability.md`.
@@ -118,7 +118,7 @@ not a source of financial semantics.
 - Implementation and adapter:
   - Added `Money.applyRate(rate, options)` and exported `MoneyRateKind`, `MoneyRateInput`, and `MoneyRateApplicationOptions` from the TypeScript core.
   - Added focused Money Rate unit tests for exact scalar behavior, percentage conversion, rounding order, malformed rate inputs, malformed rounding options, portable errors and non-mutation.
-  - Added adapter support for `money.rate.apply` that delegates Rate semantics to core and reports normalized Money/error observations.
+  - Added adapter support for `money.rate.apply`, later retained as a compatibility alias for canonical `finkore.money.applyrate`, that delegates Rate semantics to core and reports normalized Money/error observations.
   - Updated root README, TypeScript core README, adapter README, Money spec index and glossary.
 - Commands:
   - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.20.0-linux-x64/bin:$PATH npm run typecheck --workspaces` exited 0.
@@ -453,8 +453,7 @@ not a source of financial semantics.
 - Conformance vectors:
   - Added `conformance/entities/evolution.json` with 10 vectors covering correction, reversal, duplicate reversal rejection, void, supersession currentness, stale revision rejection, invalid related identity rejection, Audit failure preservation, correction ineligibility, and void ineligibility.
   - Registered the file in `conformance/manifest.json`.
-  - Added conformance-local operation labels `entity.evolution.correct`, `entity.evolution.reverse`, `entity.evolution.void`, and `entity.evolution.supersede` to conventions and runner metadata.
-  - No canonical `finkore.entity.*` Agentic operation was introduced.
+  - Added initial conformance-local operation labels `entity.evolution.correct`, `entity.evolution.reverse`, `entity.evolution.void`, and `entity.evolution.supersede`; TASK-059 later promoted these to canonical `finkore.entity.evolution.*` operation IDs while retaining local labels as adapter compatibility aliases.
 - Implementation and adapter:
   - Added `EntityEvolutionHistory` to the TypeScript core and exported the public evolution request/result/serialization types.
   - Added public JSDoc with requirement IDs and portable error semantics for the new public API.
@@ -624,4 +623,117 @@ not a source of financial semantics.
   - `/spec`: no change required.
   - `/conformance`: no change required.
   - `/agentic`: no change required.
+  - `AGENTS.md`: no change required.
+
+## Draft 0.2 Alignment
+
+### TASK-058 - Draft 0.2 Cross-Domain Invariants
+
+- Status: COMPLETE.
+- Source revision: `1157b603929bb287df6ef3547e17cad52c4b578f` plus working-tree Draft 0.2 Alignment changes.
+- Date: 2026-09-12.
+- Toolchain: system `node` reported `v24.15.0`; `npm` was available from the same toolchain.
+- Scope:
+  - Added `implementations/typescript/core/test/integration/draft-0.2-alignment.test.ts`.
+  - The regression composes existing specified behavior only: Approval relevant-fact/revision effectiveness, Workflow guard preservation, Entity correction/reversal/void/supersession, required Audit relationship evidence, and source/evolution/Audit/Approval history preservation on rejected operations.
+  - No new financial semantics, public API, portable error, conformance vector, or Agentic operation was introduced by this test task.
+- Commands:
+  - `npm run test --workspace @finkore/typescript -- test/integration/draft-0.2-alignment.test.ts` exited 0: 1 file / 2 tests passed.
+  - `npm run build --workspaces` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0: 1 file / 13 tests passed.
+  - `npm run test --workspaces` exited 0: runner 10 files / 110 tests passed; TypeScript core 30 files / 264 tests passed; conformance adapter 1 file / 13 tests passed.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json` exited 0.
+  - `npm exec --workspace @finkore/typescript -- stryker run --help` exited 0 and confirmed scoped `--mutate` support.
+  - Sandboxed scoped mutation initially failed before execution with Stryker local logging server `listen EPERM`.
+  - Escalated scoped mutation `npm run test:mutation --workspace @finkore/typescript -- --mutate "src/entities/**/*.ts,src/audit/**/*.ts,src/approvals/**/*.ts,src/workflow/**/*.ts"` exited 0.
+- Conformance:
+  - Full conformance: 199 passed / 199 total; 0 failed, 0 unsupported, 0 infrastructure errors.
+  - By suite: Money 83/83, Workflow 20/20, Audit 29/29, Approvals 47/47, Entities 20/20.
+  - Mutation-sensitive vectors: 174 passed / 174 total.
+- Mutation:
+  - Scoped Entity/Audit/Approval/Workflow Stryker run: 95.32% mutation score; 2,054 killed, 3 timeout, 88 survived, 13 no coverage, 0 errors.
+  - Report paths: `implementations/typescript/core/reports/mutation/mutation.json` and `implementations/typescript/core/reports/mutation/mutation.html`.
+  - Survivors were reviewed as diagnostic/error-message, optional-shape, redaction-policy, or non-critical/equivalent branch survivors for this cross-domain alignment gate. No accepted survivor permits the named critical cross-domain defects: approval stale-fact satisfaction, Workflow guard state mutation on rejection, source Entity fact rewrite during evolution, missing required Audit evidence, dropped Audit history, or partial Approval lifecycle mutation after rejection.
+- Documentation/update applicability:
+  - Unit tests: updated with cross-domain regression coverage.
+  - Conformance vectors: no change required for TASK-058.
+  - Mutation-sensitive tests: existing domain tests plus the new regression were exercised by scoped mutation.
+  - JSDoc: no public API behavior changed.
+  - README documentation: no immediate status change from TASK-058 alone.
+  - `/spec`: no change required.
+  - `/conformance`: no change required.
+  - `/agentic`: no change required until TASK-059.
+  - `AGENTS.md`: no change required.
+
+### TASK-059 - Draft 0.2 Agentic Review and Promotion
+
+- Status: COMPLETE.
+- Date: 2026-09-12.
+- Decisions:
+  - Promoted Money Rate application to canonical `finkore.money.applyrate`.
+  - Promoted Money Allocation to canonical `finkore.money.allocate`.
+  - Promoted Entity create, mutate, transition, correction, reversal, void, and supersession to canonical `finkore.entity.*` operation IDs.
+  - Kept Approval Requirement/Decision lifecycle and Chain operation labels conformance-local for Draft 0.2 because they still expose fixture-level history/evaluation boundaries rather than a stable public `finkore.approval.*` command surface.
+  - Kept Audit Relationships structural: relationship semantics are observed through existing Audit append/redaction operations and Entity Evolution evidence, not a separate relationship operation.
+  - Kept Money serialization operations conformance-local representation boundary checks.
+  - Adapter support retains previous local Money Rate/Allocation and Entity labels as compatibility aliases; current manifest-listed vectors use the canonical IDs.
+- Changed artifacts:
+  - `agentic/operations.md`, `agentic/README.md`, `agentic/conventions.md`, `agentic/capabilities.md`, `agentic/discovery.md`, `agentic/effects.md`.
+  - `conformance/conventions.md`, `conformance/money/rates.json`, `conformance/money/allocation.json`, `conformance/entities/behavior.json`, `conformance/entities/evolution.json`.
+  - `runner/src/metadata.ts`, `runner/test/metadata.test.ts`.
+  - `implementations/typescript/adapters/conformance/src/operations.ts`, `implementations/typescript/adapters/conformance/test/adapter.test.ts`, and adapter README.
+  - Root `README.md` status language for canonical Entity operation IDs.
+- Commands:
+  - `npm run build --workspaces` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspace @finkore/conformance-runner -- metadata.test.ts integration.test.ts` exited 0: 2 files / 5 tests passed.
+  - `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0: 1 file / 13 tests passed.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json` exited 0.
+- Conformance:
+  - Full conformance: 199 passed / 199 total; 0 failed, 0 unsupported, 0 infrastructure errors.
+  - Manifest-listed promoted operation IDs validated successfully.
+  - Mutation-sensitive vectors: 174 passed / 174 total.
+- Mutation:
+  - Not rerun for TASK-059; this was a registry/vector-label/adapter-dispatch alignment task with no financial implementation behavior change. TASK-058 scoped mutation remains the latest mutation evidence for the aligned domains.
+- Documentation/update applicability:
+  - Unit tests: runner metadata and adapter tests updated.
+  - Conformance vectors: operation IDs updated for promoted Money and Entity operations.
+  - Mutation-sensitive tests: no change required.
+  - JSDoc: no public TypeScript API behavior changed.
+  - README documentation: root README and adapter README updated.
+  - `/spec`: no normative behavior changed.
+  - `/conformance`: conventions and vector operation IDs updated.
+  - `/agentic`: registry, status, effects, capabilities, discovery, and conventions updated.
+  - `AGENTS.md`: no change required.
+
+### TASK-060 - Draft 0.2 Documentation and CoreDoc Review
+
+- Status: COMPLETE.
+- Date: 2026-09-12.
+- CoreDoc:
+  - Contrary to the planning baseline, CoreDoc exists at `docs/coreDoc/core-doc.md`.
+  - Reviewed CoreDoc assumptions for Money exact calculation/rates, allocation remainder conservation, Entity evolution, failure atomicity, and Approval effectiveness.
+  - Updated `CORE-004.3` to stop implying withdrawal and expiration are undefined; it now references Approval Validity withdrawal, expiration, and supersession as current effectiveness semantics.
+- Documentation synchronization:
+  - Root README now names canonical `finkore.entity.*` Agentic operation IDs for the current Entity operation surface.
+  - Agentic docs now report Draft 0.2 status and no longer describe Entity correction/reversal/void/supersession as deferred for operation metadata.
+  - Conformance conventions and adapter README describe promoted Money and Entity operation IDs and retained conformance-local Approval lifecycle labels.
+  - TypeScript core README, spec indexes, traceability, JSDoc, and AGENTS.md were reviewed; no additional changes were required for TASK-060.
+- Verification:
+  - Scoped reference scans used `rg` for promoted operation IDs, local compatibility aliases, Draft labels, CoreDoc approval validity terms, and stale conformance-local claims.
+  - Final `git diff --check` was run after the documentation updates and exited 0.
+- Conformance:
+  - Not a new behavior task; latest full conformance remains 199/199 PASS with promoted operation IDs.
+- Mutation:
+  - Not applicable for documentation synchronization; no financial implementation behavior changed.
+- Documentation/update applicability:
+  - Unit tests: no additional change required beyond TASK-059 metadata/adapter tests.
+  - Conformance vectors: no additional change required beyond TASK-059 operation IDs.
+  - Mutation-sensitive tests: no change required.
+  - JSDoc: reviewed; no public API behavior changed.
+  - README documentation: root, adapter, and Agentic documentation updated.
+  - `/spec`: no normative behavior changed.
+  - `/conformance`: conventions already synchronized.
+  - `/agentic`: synchronized.
   - `AGENTS.md`: no change required.

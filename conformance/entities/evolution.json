@@ -20,7 +20,7 @@
         "ENTITY-EVOLUTION-032"
       ],
       "description": "Records a correction relation with related revision and mandatory Audit evidence while preserving original source facts.",
-      "operation": "entity.evolution.correct",
+      "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
           "type": "invoice",
@@ -231,7 +231,7 @@
         "ENTITY-EVOLUTION-032"
       ],
       "description": "Records a reversal relation with a caller-supplied reversing Entity and required Audit evidence while preserving source facts.",
-      "operation": "entity.evolution.reverse",
+      "operation": "finkore.entity.evolution.reverse",
       "input": {
         "definition": {
           "type": "invoice",
@@ -421,7 +421,7 @@
         "ENTITY-EVOLUTION-024"
       ],
       "description": "Rejects a duplicate reversal for the same source revision without adding another relation or audit event.",
-      "operation": "entity.evolution.reverse",
+      "operation": "finkore.entity.evolution.reverse",
       "input": {
         "definition": {
           "type": "invoice",
@@ -588,7 +588,7 @@
         "ENTITY-EVOLUTION-032"
       ],
       "description": "Records void as nullification with audit evidence without deleting the source Entity.",
-      "operation": "entity.evolution.void",
+      "operation": "finkore.entity.evolution.void",
       "input": {
         "definition": {
           "type": "invoice",
@@ -754,7 +754,7 @@
         "ENTITY-EVOLUTION-032"
       ],
       "description": "Supersession marks the predecessor non-current within a declared scope and preserves both stable Entity identities.",
-      "operation": "entity.evolution.supersede",
+      "operation": "finkore.entity.evolution.supersede",
       "input": {
         "definition": {
           "type": "invoice",
@@ -948,7 +948,7 @@
         "ENTITY-EVOLUTION-025"
       ],
       "description": "Rejects a stale expected source revision without relation or audit mutation.",
-      "operation": "entity.evolution.correct",
+      "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
           "type": "invoice",
@@ -1050,7 +1050,7 @@
         "ENTITY-EVOLUTION-026"
       ],
       "description": "Rejects conflicting related revision identity without inferring identity from mutable source facts.",
-      "operation": "entity.evolution.correct",
+      "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
           "type": "invoice",
@@ -1115,7 +1115,7 @@
         "ENTITY-EVOLUTION-033"
       ],
       "description": "Preserves the primary Audit error when required evidence cannot be appended and leaves evolution state unchanged.",
-      "operation": "entity.evolution.correct",
+      "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
           "type": "invoice",
@@ -1201,7 +1201,7 @@
         "ENTITY-EVOLUTION-024"
       ],
       "description": "Rejects correction when the composing-domain lifecycle policy declares the source ineligible.",
-      "operation": "entity.evolution.correct",
+      "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
           "type": "invoice",
@@ -1267,7 +1267,7 @@
         "ENTITY-EVOLUTION-024"
       ],
       "description": "Rejects void when the composing-domain lifecycle policy declares the source ineligible.",
-      "operation": "entity.evolution.void",
+      "operation": "finkore.entity.evolution.void",
       "input": {
         "definition": {
           "type": "invoice",

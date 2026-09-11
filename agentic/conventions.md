@@ -2,7 +2,7 @@
 
 ## Status
 
-**Draft 0.1**
+**Draft 0.2**
 
 The normative-language and portable-value conventions in the
 [FinKore Specification](../spec/conventions.md) apply here. The Agentic Contract
@@ -29,7 +29,7 @@ An operation ID:
 - SHOULD be reusable by conformance vectors, runner adapters, discovery data,
   future tool adapters, and reference implementations.
 
-Versions are not encoded in Draft 0.1 operation IDs. Operation identifiers are
+Versions are not encoded in Draft 0.2 operation IDs. Operation identifiers are
 intended to remain stable; a mechanism for incompatible contract changes remains
 an open question.
 
@@ -68,7 +68,7 @@ This illustrative JSON is non-normative:
 }
 ```
 
-The semantic fields are the contract in Draft 0.1; this object shape is not a
+The semantic fields are the contract in Draft 0.2; this object shape is not a
 normative serialization.
 
 ## Representation layers
@@ -83,4 +83,3 @@ These layers MUST NOT be treated as interchangeable merely because examples look
 similar. In particular, Money operation metadata reuses the normative
 [Money serialization](../spec/money/serialization.md); production APIs are not
 required to return the conformance runner's normalized envelope.
-

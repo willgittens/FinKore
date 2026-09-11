@@ -2,7 +2,7 @@
 
 ## Status
 
-**Draft 0.1**
+**Draft 0.2**
 
 > Agent-ready by contract, not by convention.
 
@@ -64,9 +64,9 @@ FinKore separates four dimensions:
    tool or transport.
 
 The Core Agentic Contract defines Discoverable, Understandable, and Governable
-semantics. Executable adapters are outside Draft 0.1.
+semantics. Executable adapters are outside Draft 0.2.
 
-For FinKore Draft 0.1, an operation is **Agentic Ready** when it is Discoverable,
+For FinKore Draft 0.2, an operation is **Agentic Ready** when it is Discoverable,
 Understandable, Governable, and Conformance-traceable. Direct execution through
 an agent framework is not required.
 
@@ -107,4 +107,3 @@ An operation may be considered Agentic Contract-ready when:
 - Should operations declare idempotency semantics?
 - Should FinKore define policy hints for autonomous execution?
 - How should future financial commitment and finality semantics be represented?
-

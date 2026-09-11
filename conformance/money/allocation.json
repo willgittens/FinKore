@@ -16,7 +16,7 @@
         "MONEY-ALLOCATION-013"
       ],
       "description": "Allocates a positive amount equally, assigning the indivisible remainder to the earliest result.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "10.00",
@@ -78,7 +78,7 @@
         "MONEY-ALLOCATION-013"
       ],
       "description": "Allocates by positive integer ratios using exact integer shares and ordered remainder placement.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "10.00",
@@ -140,7 +140,7 @@
         "MONEY-ALLOCATION-012"
       ],
       "description": "Allocates a zero source amount without rejecting it or changing currency.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "0.00",
@@ -200,7 +200,7 @@
         "MONEY-ALLOCATION-013"
       ],
       "description": "Allocates a negative amount and applies ordered remainder placement to negative magnitudes.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "-10.00",
@@ -258,7 +258,7 @@
         "MONEY-ALLOCATION-012"
       ],
       "description": "Preserves ratio declaration order instead of sorting ratios before distributing the remainder.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "10.00",
@@ -317,7 +317,7 @@
         "MONEY-ALLOCATION-009"
       ],
       "description": "Allocates using large positive integer ratios without binary number arithmetic or overflow-sensitive shortcuts.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "100.00",
@@ -372,7 +372,7 @@
         "MONEY-ERROR-007"
       ],
       "description": "Rejects a source amount that cannot be represented as whole allocation units at the target scale.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "10.001",
@@ -417,7 +417,7 @@
         "MONEY-ERROR-008"
       ],
       "description": "Rejects an equal allocation request with zero parts and preserves the source value.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "10.00",
@@ -460,7 +460,7 @@
         "MONEY-ERROR-008"
       ],
       "description": "Rejects an equal allocation request with a negative part count.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "10.00",
@@ -501,7 +501,7 @@
         "MONEY-ERROR-008"
       ],
       "description": "Rejects a ratio allocation request containing a zero ratio.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "10.00",
@@ -546,7 +546,7 @@
         "MONEY-ERROR-008"
       ],
       "description": "Rejects a ratio allocation request containing a negative ratio.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "10.00",
@@ -590,7 +590,7 @@
         "MONEY-ERROR-008"
       ],
       "description": "Rejects a ratio allocation request containing a malformed non-integer ratio value.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "10.00",
@@ -634,7 +634,7 @@
         "MONEY-ERROR-008"
       ],
       "description": "Rejects a ratio allocation request containing a fractional ratio value.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "10.00",
@@ -678,7 +678,7 @@
         "MONEY-ERROR-008"
       ],
       "description": "Rejects a ratio allocation request with no declared ratios.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "10.00",
@@ -720,7 +720,7 @@
         "MONEY-ERROR-008"
       ],
       "description": "Rejects allocation when the target scale is not a non-negative integer.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "10.00",
@@ -762,7 +762,7 @@
         "MONEY-ERROR-008"
       ],
       "description": "Rejects an unsupported allocation method.",
-      "operation": "money.allocate",
+      "operation": "finkore.money.allocate",
       "input": {
         "value": {
           "amount": "10.00",

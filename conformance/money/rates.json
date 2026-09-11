@@ -11,7 +11,7 @@
         "MONEY-RATE-009"
       ],
       "description": "Applies a decimal Rate as the exact scalar and preserves currency and operand value.",
-      "operation": "money.rate.apply",
+      "operation": "finkore.money.applyrate",
       "input": {
         "value": {
           "amount": "200.00",
@@ -57,7 +57,7 @@
         "MONEY-RATE-009"
       ],
       "description": "Converts a percentage Rate by dividing by 100 before exact application.",
-      "operation": "money.rate.apply",
+      "operation": "finkore.money.applyrate",
       "input": {
         "value": {
           "amount": "200.00",
@@ -101,7 +101,7 @@
         "MONEY-RATE-009"
       ],
       "description": "Applies a zero decimal Rate without rejecting it or changing currency.",
-      "operation": "money.rate.apply",
+      "operation": "finkore.money.applyrate",
       "input": {
         "value": {
           "amount": "19.99",
@@ -144,7 +144,7 @@
         "MONEY-RATE-009"
       ],
       "description": "Applies a negative decimal Rate with ordinary scalar sign semantics.",
-      "operation": "money.rate.apply",
+      "operation": "finkore.money.applyrate",
       "input": {
         "value": {
           "amount": "100.00",
@@ -188,7 +188,7 @@
         "MONEY-RATE-009"
       ],
       "description": "Preserves exact base-10 fractional multiplication without binary floating-point leakage.",
-      "operation": "money.rate.apply",
+      "operation": "finkore.money.applyrate",
       "input": {
         "value": {
           "amount": "0.10",
@@ -233,7 +233,7 @@
         "MONEY-RATE-005"
       ],
       "description": "Applies a fractional percentage Rate exactly after percentage conversion.",
-      "operation": "money.rate.apply",
+      "operation": "finkore.money.applyrate",
       "input": {
         "value": {
           "amount": "80.00",
@@ -276,7 +276,7 @@
         "MONEY-ROUNDING-003"
       ],
       "description": "Applies explicit HALF_UP rounding after the exact Rate product reaches a tie boundary.",
-      "operation": "money.rate.apply",
+      "operation": "finkore.money.applyrate",
       "input": {
         "value": {
           "amount": "100.00",
@@ -326,7 +326,7 @@
         "MONEY-ROUNDING-003"
       ],
       "description": "Applies explicit HALF_EVEN rounding after the exact Rate product reaches a tie boundary.",
-      "operation": "money.rate.apply",
+      "operation": "finkore.money.applyrate",
       "input": {
         "value": {
           "amount": "100.00",
@@ -375,7 +375,7 @@
         "MONEY-ERROR-001"
       ],
       "description": "Rejects a JSON number Rate value because portable Rate decimals must be strings.",
-      "operation": "money.rate.apply",
+      "operation": "finkore.money.applyrate",
       "input": {
         "value": {
           "amount": "100.00",
@@ -418,7 +418,7 @@
         "MONEY-ERROR-001"
       ],
       "description": "Rejects exponent notation in a percentage Rate value.",
-      "operation": "money.rate.apply",
+      "operation": "finkore.money.applyrate",
       "input": {
         "value": {
           "amount": "100.00",
@@ -461,7 +461,7 @@
         "MONEY-ERROR-001"
       ],
       "description": "Rejects an unsupported Rate representation instead of guessing semantics.",
-      "operation": "money.rate.apply",
+      "operation": "finkore.money.applyrate",
       "input": {
         "value": {
           "amount": "100.00",
@@ -503,7 +503,7 @@
         "MONEY-ERROR-006"
       ],
       "description": "Rejects an unsupported explicit rounding mode supplied for Rate application.",
-      "operation": "money.rate.apply",
+      "operation": "finkore.money.applyrate",
       "input": {
         "value": {
           "amount": "100.00",

@@ -1123,15 +1123,19 @@ function executeApprovalChainEvaluate(request: AdapterRequest): NormalizedResult
 /**
  * Operation handlers supported by the first TypeScript conformance adapter.
  *
- * Public Money domain operations use canonical Agentic Contract identifiers.
- * `money.deserialize` and `money.serialize` remain conformance-local
- * representation boundary checks rather than public FinKore operations.
+ * Public Money and Entity domain operations use canonical Agentic Contract
+ * identifiers. `money.deserialize`, `money.serialize`, and `workflow.create`
+ * remain conformance-local boundary checks rather than public FinKore
+ * operations. Legacy local labels for promoted Draft 0.2 operations remain
+ * accepted by this adapter only as compatibility aliases.
  *
  * @see MONEY-SERIALIZATION-001
  */
 export const operationHandlers = {
   'finkore.money.add': executeMoneyAdd,
   'finkore.money.compare': executeMoneyCompare,
+  'finkore.money.allocate': executeMoneyAllocate,
+  'finkore.money.applyrate': executeMoneyRateApply,
   'finkore.money.round': executeMoneyRound,
   'finkore.money.subtract': executeMoneySubtract,
   'money.allocate': executeMoneyAllocate,
@@ -1141,6 +1145,13 @@ export const operationHandlers = {
   'finkore.money.multiply': executeMoneyMultiply,
   'finkore.money.negate': executeMoneyNegate,
   'finkore.workflow.transition': executeWorkflowTransition,
+  'finkore.entity.create': executeEntityCreate,
+  'finkore.entity.evolution.correct': executeEntityEvolutionCorrect,
+  'finkore.entity.evolution.reverse': executeEntityEvolutionReverse,
+  'finkore.entity.evolution.supersede': executeEntityEvolutionSupersede,
+  'finkore.entity.evolution.void': executeEntityEvolutionVoid,
+  'finkore.entity.mutate': executeEntityMutate,
+  'finkore.entity.transition': executeEntityTransition,
   'entity.create': executeEntityCreate,
   'entity.evolution.correct': executeEntityEvolutionCorrect,
   'entity.evolution.reverse': executeEntityEvolutionReverse,

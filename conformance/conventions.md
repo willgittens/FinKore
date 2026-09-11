@@ -59,8 +59,8 @@ These identifiers name observable behavior, not implementation methods.
 | `finkore.money.multiply`, `finkore.money.divide` | Exact scalar arithmetic, with an optional explicit rounding policy where needed. |
 | `finkore.money.compare` | Return `LESS`, `EQUAL`, or `GREATER`. |
 | `finkore.money.round` | Reduce to the explicit `scale` using the explicit `mode`. |
-| `money.rate.apply` | Apply an explicitly represented decimal or percentage Rate to Money, with optional explicit rounding. |
-| `money.allocate` | Allocate Money by equal parts or positive integer ratios using an explicit target scale and deterministic ordered remainder placement. |
+| `finkore.money.applyrate` | Apply an explicitly represented decimal or percentage Rate to Money, with optional explicit rounding. |
+| `finkore.money.allocate` | Allocate Money by equal parts or positive integer ratios using an explicit target scale and deterministic ordered remainder placement. |
 | `workflow.create` | Validate a definition and create an instance at its initial state. |
 | `finkore.workflow.transition` | Request the supplied target from the instance's current state using supplied guard facts. |
 | `finkore.audit.append` | Append one event to supplied committed logical history. |
@@ -74,13 +74,13 @@ These identifiers name observable behavior, not implementation methods.
 | `approval.decision.supersede` | Append Decision supersession lifecycle evidence without altering Decision history. |
 | `approval.condition.evaluate` | Return `APPLICABLE` or `NOT_APPLICABLE` from explicit facts. |
 | `approval.chain.evaluate` | Derive chain state from its declared combination and explicit Requirement state observations. |
-| `entity.create` | Create under the supplied composing-domain definition. |
-| `entity.mutate` | Apply a declared mutation under supplied mutability and validation rules. |
-| `entity.transition` | Apply a lifecycle transition under the referenced workflow. |
-| `entity.evolution.correct` | Record a Correction relation with required Audit evidence. |
-| `entity.evolution.reverse` | Record a Reversal relation with required Audit evidence. |
-| `entity.evolution.void` | Record a Void relation with required Audit evidence. |
-| `entity.evolution.supersede` | Record a Supersession relation with required Audit evidence. |
+| `finkore.entity.create` | Create under the supplied composing-domain definition. |
+| `finkore.entity.mutate` | Apply a declared mutation under supplied mutability and validation rules. |
+| `finkore.entity.transition` | Apply a lifecycle transition under the referenced workflow. |
+| `finkore.entity.evolution.correct` | Record a Correction relation with required Audit evidence. |
+| `finkore.entity.evolution.reverse` | Record a Reversal relation with required Audit evidence. |
+| `finkore.entity.evolution.void` | Record a Void relation with required Audit evidence. |
+| `finkore.entity.evolution.supersede` | Record a Supersession relation with required Audit evidence. |
 
 Logical fixtures in `input` are intentionally small declarative models. An adapter constructs any idiomatic implementation objects required to realize them. The fixtures do not define a production interchange format.
 
@@ -91,21 +91,20 @@ reviewed; vector use alone does not make them advertised FinKore capabilities.
 Audit ordering requirements are verified through append-only history and review of explicitly recorded relationships; Draft 0.1 does not define `audit.order` as an executable conformance operation or as an Agentic operation. Draft 0.2 Audit Relationships are observed through ordinary `finkore.audit.append` and `audit.redact` fixtures, not a separate relationship operation.
 For Money Draft 0.1, `money.deserialize` and `money.serialize` remain
 conformance-local representation boundary checks. They exercise normative Money
-serialization but are not separate public Agentic operations. For Money Draft 0.2,
-`money.rate.apply` and `money.allocate` remain conformance-local until Agentic
-operation promotion is reviewed explicitly.
+serialization but are not separate public Agentic operations. For Money Draft
+0.2, Rate application and Allocation are promoted to
+`finkore.money.applyrate` and `finkore.money.allocate` after Agentic review.
 For Approvals, `approval.chain.evaluate`, `approval.decision.withdraw`,
 `approval.decision.supersede`, and `approval.requirement.supersede` remain
 conformance-local. They observe deterministic chain composition and Draft 0.2
 current-effectiveness lifecycle behavior; they are not public Agentic operations
 and do not replace Decision history as evidence for which Decision satisfied a
 Requirement or which subject facts were bound to that Decision.
-For Entities Draft 0.2, `entity.evolution.correct`,
-`entity.evolution.reverse`, `entity.evolution.void`, and
-`entity.evolution.supersede` remain conformance-local until Agentic operation
-promotion is reviewed explicitly. They observe the portable correction,
-reversal, void, supersession, revision, relation, currentness, and Audit
-evidence semantics defined by Entity Evolution.
+For Entities Draft 0.2, Entity create, mutate, transition, and evolution
+operations are promoted to canonical `finkore.entity.*` operation identifiers.
+They observe identity, lifecycle, mutability, validation, correction, reversal,
+void, supersession, revision, relation, currentness, and Audit evidence
+semantics defined by the Entity specifications.
 
 ## Runner contract
 

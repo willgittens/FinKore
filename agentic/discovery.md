@@ -1,7 +1,7 @@
 # Capability Discovery
 
 A machine client should be able to obtain a collection of available operation
-descriptors. Discovery is conceptual and transport-neutral in Draft 0.1. A
+descriptors. Discovery is conceptual and transport-neutral in Draft 0.2. A
 future adapter could expose it through MCP, OpenAPI, HTTP, a local API, a CLI, or
 a tool runtime without changing operation semantics.
 
@@ -24,6 +24,16 @@ Illustrative, non-normative discovery data:
       "id": "finkore.money.round",
       "domain": "money",
       "summary": "Rounds Money using an explicit target scale and mode."
+    },
+    {
+      "id": "finkore.money.allocate",
+      "domain": "money",
+      "summary": "Allocates Money with exact total preservation."
+    },
+    {
+      "id": "finkore.entity.evolution.supersede",
+      "domain": "entities",
+      "summary": "Records Entity Revision supersession with required Audit evidence."
     }
   ]
 }
@@ -37,7 +47,7 @@ The returned collection MUST reflect the implementation's actual supported
 subset. Collection order carries no meaning, and absence means the operation was
 not advertised; it does not prove that an equivalent non-FinKore API is absent.
 
-Draft 0.1 creates no `operations.json`. A machine-readable manifest should be
+Draft 0.2 creates no `operations.json`. A machine-readable manifest should be
 added only after the descriptor model and its versioning policy are stable, with
 Markdown retaining its explanatory role and one data artifact becoming the
 portable registry rather than creating conflicting sources of truth.

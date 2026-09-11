@@ -4,14 +4,15 @@
 
 A capability states that an implementation exposes a named FinKore Operation.
 Its descriptor makes the operation Discoverable, Understandable, and Governable.
-Invocation bindings are implementation-specific and outside Draft 0.1.
+Invocation bindings are implementation-specific and outside Draft 0.2.
 
 An adapter MAY expose only a subset of the registry. A Money-only implementation,
 for example, may expose Money operations such as `finkore.money.add`,
-`finkore.money.divide`, and `finkore.money.round` without exposing
-`finkore.workflow.transition`. Its capability list MUST accurately describe what
-is available; clients MUST NOT assume that every FinKore implementation supports
-every registered operation.
+`finkore.money.divide`, `finkore.money.round`, and
+`finkore.money.allocate` without exposing `finkore.workflow.transition` or
+`finkore.entity.evolution.correct`. Its capability list MUST accurately
+describe what is available; clients MUST NOT assume that every FinKore
+implementation supports every registered operation.
 
 ## Capability and conformance
 
@@ -22,7 +23,9 @@ The Agentic Contract describes capabilities. The
 [Conformance Suite](../conformance/README.md) proves observable behavior. An
 implementation advertising `finkore.money.add` should be verified against the
 applicable vectors and requirements before a client relies on a conformance
-claim.
+claim. The same principle applies to promoted Draft 0.2 operations such as
+`finkore.money.applyrate`, `finkore.money.allocate`, and
+`finkore.entity.evolution.supersede`.
 
 ## Suitability for autonomy
 
@@ -34,5 +37,7 @@ conformance status. FinKore Core does not assign subjective `LOW`, `MEDIUM`,
 
 Some operations may be suitable for autonomous execution. Others may require
 human confirmation, an Approval, authorization, or application policy. Draft
-0.1 exposes available facts and does not impose human confirmation on every
-mutation.
+0.2 exposes available facts and does not impose human confirmation on every
+mutation. Draft 0.2 adds governable metadata for Money Rate/Allocation and
+Entity operations, but it still does not make universal execution decisions for
+clients.

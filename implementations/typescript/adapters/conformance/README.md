@@ -7,18 +7,20 @@ This milestone supports:
 - `finkore.money.add`
 - `finkore.money.compare`
 - `finkore.money.divide`
+- `finkore.money.applyrate`
+- `finkore.money.allocate`
 - `finkore.money.multiply`
 - `finkore.money.negate`
 - `finkore.money.round`
 - `finkore.money.subtract`
 - `finkore.workflow.transition`
-- `entity.create`
-- `entity.evolution.correct`
-- `entity.evolution.reverse`
-- `entity.evolution.supersede`
-- `entity.evolution.void`
-- `entity.mutate`
-- `entity.transition`
+- `finkore.entity.create`
+- `finkore.entity.evolution.correct`
+- `finkore.entity.evolution.reverse`
+- `finkore.entity.evolution.supersede`
+- `finkore.entity.evolution.void`
+- `finkore.entity.mutate`
+- `finkore.entity.transition`
 - `finkore.audit.append`
 - `finkore.audit.replace`
 - `finkore.audit.remove`
@@ -32,36 +34,36 @@ This milestone supports:
 - `approval.condition.evaluate`
 - `approval.chain.evaluate`
 - `money.deserialize`
-- `money.allocate`
-- `money.rate.apply`
 - `money.serialize`
 - `workflow.create`
 
-`money.deserialize`, `money.serialize`, `money.rate.apply`, and
-`money.allocate` are conformance-local Money operations. Serialization
-operations remain representation boundary checks for portable Money JSON;
-`money.rate.apply` observes Draft 0.2 Rate application and `money.allocate`
-observes Draft 0.2 Allocation until Agentic promotion is reviewed explicitly.
-They are not advertised as Agentic Contract operations in Draft 0.1.
+`money.deserialize` and `money.serialize` are conformance-local Money
+operations. Serialization operations remain representation boundary checks for
+portable Money JSON. Draft 0.2 Rate application and Allocation are promoted as
+`finkore.money.applyrate` and `finkore.money.allocate`. This adapter still
+accepts the previous `money.rate.apply` and `money.allocate` labels as
+compatibility aliases, but current manifest-listed vectors use the canonical
+operation IDs.
 
 `workflow.create` is conformance-local vocabulary for validating Workflow
 definition and initial-state behavior. `finkore.workflow.transition` is the
 canonical Workflow operation ID currently listed in the Agentic Contract.
 
-`entity.create`, `entity.mutate`, `entity.transition`, and
-`entity.evolution.*` are conformance-local labels for the current Entity
-Identity, Lifecycle, Mutability, Validation, and Draft 0.2 Entity Evolution
-milestones. The current Agentic operation registry has not promoted Entity
-operations to canonical `finkore.entity.*` identifiers, so this adapter
-intentionally does not invent those identifiers. `entity.mutate` support covers
-declared top-level field mutability and complete validation of the proposed
-result through the core TypeScript Entity API. `entity.evolution.correct`,
-`entity.evolution.reverse`, `entity.evolution.void`, and
-`entity.evolution.supersede` reconstruct Entities and evolution history, call
-`EntityEvolutionHistory`, and normalize source/result/evolution/Audit
-observations. The adapter does not implement evolution rules, evaluate
-validation rules, construct Audit evidence, or infer identifiers itself.
-Generic validation rule engines remain outside this milestone.
+`finkore.entity.create`, `finkore.entity.mutate`,
+`finkore.entity.transition`, and `finkore.entity.evolution.*` are canonical
+Draft 0.2 Entity operation IDs for the current Identity, Lifecycle,
+Mutability, Validation, and Entity Evolution milestones. The adapter still
+accepts the previous local `entity.*` labels as compatibility aliases.
+`finkore.entity.mutate` support covers declared top-level field mutability and
+complete validation of the proposed result through the core TypeScript Entity
+API. `finkore.entity.evolution.correct`,
+`finkore.entity.evolution.reverse`, `finkore.entity.evolution.void`, and
+`finkore.entity.evolution.supersede` reconstruct Entities and evolution
+history, call `EntityEvolutionHistory`, and normalize
+source/result/evolution/Audit observations. The adapter does not implement
+evolution rules, evaluate validation rules, construct Audit evidence, or infer
+identifiers itself. Generic validation rule engines remain outside this
+milestone.
 
 Audit operation support covers FinKore Audit Draft 0.1 plus the Draft 0.2 Audit Relationships slice: Events, Actors, append-only history, Change representation, Redaction, relationship metadata, and portable Audit errors. Draft 0.1 does not define `audit.order` as an executable adapter operation. Audit Relationships are observed through existing append/redaction fixtures; the adapter does not interpret relationships itself.
 
