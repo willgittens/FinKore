@@ -737,3 +737,129 @@ not a source of financial semantics.
   - `/conformance`: conventions already synchronized.
   - `/agentic`: synchronized.
   - `AGENTS.md`: no change required.
+
+## Draft 0.2 Closure
+
+### TASK-061 - Draft 0.2 Requirements and Traceability Gate
+
+- Status: COMPLETE.
+- Source revision: `14ff449ac5911b872aed82dcbe281d20777e495f` plus working-tree Draft 0.2 Closure changes.
+- Date: 2026-09-12.
+- Inventory:
+  - `conformance/traceability.md` contains 297 requirements.
+  - Coverage classifications: 231 COVERED, 0 PARTIAL, 0 UNCOVERED, 66 NOT DIRECTLY TESTABLE, 0 DEFERRED, 0 BLOCKING SPEC GAP.
+  - Domain totals: Shared 29, Money 73, Workflow 27, Audit 52, Approvals 49, Entities 67.
+  - Manifest-listed vector requirement references: 227 unique requirement IDs, all present in traceability.
+- Manifest vectors:
+  - Total 199 vectors.
+  - By suite: Money 83, Workflow 20, Audit 29, Approvals 47, Entities 20.
+  - Operation IDs include the promoted canonical Money Rate, Money Allocation, and Entity operation IDs, with Approval lifecycle labels remaining conformance-local.
+- Verification:
+  - Node inventory scripts reconciled manifest vector counts, operation IDs, vector requirement IDs, and traceability coverage counts.
+  - Full conformance later in this closure run confirmed the manifest inventory executes cleanly.
+- Result:
+  - UNCOVERED = 0.
+  - BLOCKING SPEC GAPS = 0.
+
+### TASK-062 - Draft 0.2 Public API and Portable Error Audit
+
+- Status: COMPLETE.
+- Portable errors:
+  - 28 portable error codes are now listed in `spec/conventions.md`.
+  - Audit found `FINKORE_APPROVAL_INVALID_CONTEXT` in Approval validity spec, conformance vector, TypeScript core types/errors, and JSDoc but missing from the shared convention catalog.
+  - Updated `spec/conventions.md` to include `FINKORE_APPROVAL_INVALID_CONTEXT`.
+  - Pure Node filesystem audit confirmed every `FINKORE_*` code used in `spec`, `conformance`, TypeScript core, adapter, and `agentic` is present in `spec/conventions.md`, with no convention-listed code unused elsewhere.
+- Public API/JSDoc:
+  - Exported TypeScript declarations were scanned for JSDoc-like public documentation.
+  - Actual declarations remain documented; `src/index.ts` re-export blocks are grouping exports and not independent API symbols needing duplicate JSDoc.
+- Focused hardening:
+  - Added Approval lifecycle tests for optional actor type preservation, malformed lifecycle actor/target inputs, wrong requirement context rejection when the target decision exists, and unrelated requirement supersession isolation.
+  - Added Entity Evolution tests for correction currentness and optional relation-shape preservation on correction/void.
+- Result:
+  - UNCOVERED = 0.
+  - BLOCKING SPEC GAPS = 0.
+
+### TASK-063 - Draft 0.2 Architecture Gate
+
+- Status: COMPLETE.
+- Dependency direction:
+  - `implementations/typescript/core/package.json` has no runtime dependencies.
+  - TypeScript core source has no imports from runner, conformance, agentic, spec, UI frameworks, persistence, or HTTP frameworks.
+  - TypeScript conformance adapter depends on `@finkore/conformance-runner` and `@finkore/typescript`.
+  - Runner does not depend on TypeScript core or adapter packages.
+- Runner neutrality:
+  - `runner/src` contains generic validation, loading, filtering, comparison, reporting, execution classification, and operation metadata.
+  - Searches found no runner-side financial rule implementation such as currency compatibility, workflow state transition logic, approval evaluation, audit append semantics, or entity mutability rules.
+- Spec-backed core cross-domain imports:
+  - Entity core imports Money for declared validation, Workflow for lifecycle composition, and Audit types/logs for required Entity Evolution evidence.
+  - These imports match Draft 0.2 normative composition and do not reverse runner/adapter dependency direction.
+- Result:
+  - UNCOVERED = 0.
+  - BLOCKING SPEC GAPS = 0.
+
+### TASK-064 - Draft 0.2 Full Regression and Coverage Gate
+
+- Status: COMPLETE.
+- Commands:
+  - `npm run build --workspaces` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspaces` exited 0:
+    - Runner: 10 files / 110 tests passed.
+    - TypeScript core: 30 files / 268 tests passed.
+    - TypeScript conformance adapter: 1 file / 13 tests passed.
+  - `npm run test:coverage --workspace @finkore/typescript` exited 0.
+  - `npm run test:coverage --workspace @finkore/conformance-runner` exited 0.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json` exited 0.
+- Coverage:
+  - TypeScript core: 98.75% statements, 98.16% branches, 100% functions, 99.31% lines.
+  - Runner: 98.31% statements, 95.29% branches, 100% functions, 98.75% lines.
+- Conformance:
+  - Full conformance: 199 passed / 199 total; 0 failed, 0 unsupported, 0 infrastructure errors.
+  - By suite: Money 83/83, Workflow 20/20, Audit 29/29, Approvals 47/47, Entities 20/20.
+  - Mutation-sensitive vectors: 174 passed / 174 total.
+
+### TASK-065 - Draft 0.2 Full-Core Mutation Gate
+
+- Status: COMPLETE.
+- Stryker source inventory:
+  - Core mutation run found 16 of 185 files to mutate and 29 test files matching configured test patterns.
+  - Runner mutation run found 5 of 89 files to mutate and 9 test files matching configured test patterns.
+- Commands:
+  - Initial sandboxed core mutation failed before execution with Stryker local logging server `listen EPERM`.
+  - Escalated `npm run test:mutation --workspace @finkore/typescript` exited 0 after focused test additions.
+  - Escalated `npm run test:mutation --workspace @finkore/conformance-runner` exited 0.
+- Core mutation result:
+  - Score: 98.88%.
+  - Mutants: 2,371 total; 2,099 killed, 13 timeout, 20 survived, 4 no coverage, 235 ignored, 0 runtime/compile errors.
+  - Domain/file summary: Money 100%, Workflow 100%, Audit 100%, Approvals 98.74%, Entities 97.61%.
+  - Report paths: `implementations/typescript/core/reports/mutation/mutation.json` and `.html`.
+- Runner mutation result:
+  - Score: 99.73%.
+  - Mutants: 368 total; 367 killed, 1 survived, 0 no coverage, 0 errors.
+  - Report paths: `runner/reports/mutation/mutation.json` and `.html`.
+- Survivor classification:
+  - Core Approval survivors are noncritical validation helper edge cases, evaluation timestamp alternatives that still reject invalid contexts, import-shape guards where paired validation still rejects, or an event-type predicate equivalent under the validated lifecycle event shape.
+  - Core Entity Evolution survivors are optional serialized-shape branches that preserve the same observable JSON semantics, supersession-scope paired validation that still rejects mismatches, an append-postcondition that is unreachable after successful `AuditLog.append`, and currentness key/array alternatives not permitting stale currentness after the added correction/currentness regression.
+  - Core Entity validation survivors are equivalent under `Money.deserialize` and validated rule declarations, or non-normative error message/detail branches.
+  - Runner survivor is the default source-label string in `validateVector`; it affects diagnostics only, not validation or classification semantics.
+  - No accepted survivor permits a critical financial defect: unsafe Money arithmetic/rounding/allocation, Workflow invalid transition acceptance or mutation on rejection, Audit append-only violation, missing required Audit relationship evidence, Approval stale-fact satisfaction or lifecycle bypass, Entity identity/state rewrite, immutable financial mutation, evolution currentness bypass, or portable error-code substitution.
+
+### TASK-066 - DRAFT 0.2 CLOSURE GATE
+
+- Status: COMPLETE.
+- Dependency review:
+  - Mandatory Draft 0.2 tasks TASK-001 through TASK-065 are complete.
+  - Draft 0.2 Alignment was previously completed and remains applicable.
+  - Release publishing was not performed; this gate closes implementation readiness only.
+- Closure result:
+  - UNCOVERED = 0.
+  - BLOCKING SPEC GAPS = 0.
+  - Required vectors all PASS: 199/199.
+  - Mutation-sensitive vectors all PASS: 174/174.
+  - Core mutation score >= 95%: 98.88%.
+  - Runner mutation score >= 95%: 99.73%.
+  - Critical surviving mutants accepted: 0.
+  - Documentation/status artifacts updated: backlog, evidence log, and shared portable error convention catalog.
+  - `NEXT TASK` advanced to TASK-067.
+- Required status line:
+  - `FINKORE CORE DRAFT 0.2 COMPLETE`

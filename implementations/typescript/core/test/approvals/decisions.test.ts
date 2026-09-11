@@ -118,6 +118,27 @@ describe('Approval decisions', () => {
     })
   })
 
+  it('accepts lifecycle actors without optional type while preserving exact actor shape', () => {
+    const withdrawal = {
+      target: {
+        requirementId: 'finance-review',
+        actorId: 'user-7',
+        decidedAt: '2026-09-01T12:00:00Z',
+      },
+      actor: { id: 'user-7' },
+      recordedAt: '2026-09-02T12:00:00Z',
+    }
+    const history = ApprovalDecisionHistory.create([decision])
+
+    history.withdraw(requirement, withdrawal)
+
+    expect(history.toJSON()).toEqual({
+      history: [decision],
+      lifecycle: [{ type: 'WITHDRAWN', ...withdrawal }],
+    })
+    expect(Object.hasOwn((history.toJSON().lifecycle?.[0] as { actor: Record<string, unknown> }).actor, 'type')).toBe(false)
+  })
+
   it('rejects duplicate, missing, ambiguous, and ineligible withdrawal requests without partial lifecycle state', () => {
     const target = {
       requirementId: 'finance-review',
@@ -160,6 +181,25 @@ describe('Approval decisions', () => {
       }),
     ).toThrow(IneligibleApprovalActorError)
     expect(ineligible.toJSON()).toEqual({ history: [decision] })
+
+    expect(() =>
+      ApprovalDecisionHistory.create([decision]).withdraw(requirement, {
+        ...withdrawal,
+        actor: null,
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create([decision]).withdraw(requirement, {
+        ...withdrawal,
+        actor: { id: 'user-7', type: 7 },
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create([decision]).withdraw(requirement, {
+        ...withdrawal,
+        target: null,
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
   })
 
   it('requires explicit evaluation instants for expiring decisions and applies an exclusive boundary', () => {
@@ -530,6 +570,40 @@ describe('Approval decisions', () => {
     ).toBe('PENDING')
   })
 
+  it('rejects lifecycle operations evaluated against a different requirement even when the target decision exists', () => {
+    const controllerRequirement = {
+      ...requirement,
+      id: 'controller-review',
+    }
+    const controllerDecision = {
+      ...decision,
+      requirementId: 'controller-review',
+    }
+    const history = ApprovalDecisionHistory.create([controllerDecision])
+
+    expect(() =>
+      history.withdraw(requirement, {
+        target: {
+          requirementId: 'controller-review',
+          actorId: 'user-7',
+          decidedAt: '2026-09-01T12:00:00Z',
+        },
+        actor: { type: 'user', id: 'user-7' },
+        recordedAt: '2026-09-02T12:00:00Z',
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(history.toJSON()).toEqual({ history: [controllerDecision] })
+    expect(history.withdraw(controllerRequirement, {
+      target: {
+        requirementId: 'controller-review',
+        actorId: 'user-7',
+        decidedAt: '2026-09-01T12:00:00Z',
+      },
+      actor: { type: 'user', id: 'user-7' },
+      recordedAt: '2026-09-02T12:00:00Z',
+    })).toBe(history)
+  })
+
   it('rejects imported lifecycle events that do not resolve exactly once or duplicate prior invalidation', () => {
     const target = {
       requirementId: 'finance-review',
@@ -783,6 +857,23 @@ describe('Approval decisions', () => {
     expect(ApprovalDecisionHistory.create([{ ...decision, outcome: 'REJECTED' }]).evaluateRequirement(requirement)).toBe(
       'REJECTED',
     )
+  })
+
+  it('does not let an unrelated requirement supersession invalidate another requirement', () => {
+    const history = ApprovalDecisionHistory.create({
+      history: [decision],
+      lifecycle: [
+        {
+          type: 'REQUIREMENT_SUPERSEDED',
+          targetRequirementId: 'manager-review',
+          successorRequirementId: 'director-review',
+          actor: { type: 'user', id: 'user-7' },
+          recordedAt: '2026-09-03T12:30:00Z',
+        },
+      ],
+    })
+
+    expect(history.evaluateRequirement(requirement)).toBe('APPROVED')
   })
 
   it('does not assume a decision remains effective after relevant subject facts change', () => {

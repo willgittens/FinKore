@@ -80,6 +80,7 @@ The following table is the consolidated catalog. Domain error documents define t
 | Approval | `FINKORE_APPROVAL_INELIGIBLE_ACTOR` | [The deciding Actor is ineligible](approvals/errors.md). |
 | Approval | `FINKORE_APPROVAL_INVALID_CHAIN` | [An Approval Chain is invalid](approvals/errors.md). |
 | Approval | `FINKORE_APPROVAL_CONDITION_UNRESOLVED` | [An Approval Condition cannot be evaluated](approvals/errors.md). |
+| Approval | `FINKORE_APPROVAL_INVALID_CONTEXT` | [Required explicit Approval evaluation context is missing or malformed](approvals/errors.md). |
 | Entity | `FINKORE_ENTITY_INVALID_IDENTITY` | [Financial Entity identity is invalid](entities/errors.md). |
 | Entity | `FINKORE_ENTITY_IMMUTABLE` | [A Mutation targets immutable data](entities/errors.md). |
 | Entity | `FINKORE_ENTITY_INVALID_MUTATION` | [A Mutation is not recognized or permitted](entities/errors.md). |

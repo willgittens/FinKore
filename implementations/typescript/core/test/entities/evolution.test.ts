@@ -161,9 +161,33 @@ describe('Entity Evolution history', () => {
       relatedCurrent: true,
       auditEventId: 'evt-correction',
     })
+    expect(Object.hasOwn(result.relation, 'supersessionScope')).toBe(false)
     expect(result.auditHistory.history).toEqual([originalAuditEvent, event])
     expect(history.toJSON()).toEqual(before)
     expect(source.toJSON().data).toEqual(sourceData)
+  })
+
+  it('does not treat corrections as source-current invalidation for later evolution', () => {
+    const correction = EntityEvolutionHistory.create().correct(correctionRequest())
+    const next = EntityEvolutionHistory.create(correction.evolutionHistory.relations)
+
+    expect(
+      next.void({
+        source: sourceEntity(),
+        sourceRevision: 'rev-1',
+        relationId: 'rel-void-after-correction',
+        eligible: true,
+        expectedSourceCurrent: true,
+        audit: {
+          history: correction.auditHistory.history,
+          event: auditEvent('evt-void-after-correction', 'VOIDS', {
+            kind: 'VOID',
+            relationId: 'rel-void-after-correction',
+            source: { type: 'invoice', id: 'inv-10', revision: 'rev-1' },
+          }),
+        },
+      }).relation,
+    ).toMatchObject({ kind: 'VOID', sourceCurrent: false })
   })
 
   it('records reversal once for a source revision and rejects a duplicate without partial state', () => {
@@ -227,6 +251,9 @@ describe('Entity Evolution history', () => {
 
     expect(result.source).toEqual(source.toJSON())
     expect(result.relation.sourceCurrent).toBe(false)
+    expect(Object.hasOwn(result.relation, 'related')).toBe(false)
+    expect(Object.hasOwn(result.relation, 'relatedCurrent')).toBe(false)
+    expect(Object.hasOwn(result.relation, 'supersessionScope')).toBe(false)
     expect(result.evolutionHistory.relations).toHaveLength(1)
     expect(result.auditHistory.history).toEqual([originalAuditEvent, event])
   })

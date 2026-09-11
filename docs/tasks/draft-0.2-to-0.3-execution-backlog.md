@@ -34,7 +34,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 - [x] Entity Evolution Implementation: [TASK-033](#task-033)–[TASK-044](#task-044)
 - [x] Approval Validity: [TASK-045](#task-045)–[TASK-057](#task-057)
 - [x] Draft 0.2 Alignment: [TASK-058](#task-058)–[TASK-060](#task-060)
-- [ ] Draft 0.2 Closure: [TASK-061](#task-061)–[TASK-066](#task-066)
+- [x] Draft 0.2 Closure: [TASK-061](#task-061)–[TASK-066](#task-066)
 
 ### Draft 0.3
 
@@ -52,7 +52,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-061
+NEXT TASK: TASK-067
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -5740,7 +5740,7 @@ Completion:
 
 <a id="task-061"></a>
 
-### - [ ] TASK-061 — Draft 0.2 Requirements and Traceability Gate
+### - [x] TASK-061 — Draft 0.2 Requirements and Traceability Gate
 
 **Release:** Draft 0.2
 
@@ -5810,10 +5810,10 @@ Draft 0.2 Requirements and Traceability Gate.
 
 **Definition of Done**
 
-- [ ] Reconcile all selected 0.2 requirements, directly testable coverage and former integration gaps; require UNCOVERED = 0 and BLOCKING SPEC GAPS = 0.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Reconcile all selected 0.2 requirements, directly testable coverage and former integration gaps; require UNCOVERED = 0 and BLOCKING SPEC GAPS = 0.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -5821,11 +5821,16 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Requirement inventory, manifest vectors, vector requirement references, operation IDs, and coverage classifications were recomputed and recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: Traceability inventory is 297 requirements: 231 COVERED, 66 NOT DIRECTLY TESTABLE, 0 PARTIAL, 0 UNCOVERED, 0 DEFERRED, 0 BLOCKING SPEC GAP. Manifest contains 199 vectors across Money 83, Workflow 20, Audit 29, Approvals 47, Entities 20.
+- Mutation: Not a runtime mutation task; TASK-065 full-core mutation evidence closes the runtime survivor requirement.
+- Notes: No requirement was hidden by reclassification. Next execution pointer advanced to TASK-062 during this milestone run.
 
 <a id="task-062"></a>
 
-### - [ ] TASK-062 — Draft 0.2 Public API and Portable Error Audit
+### - [x] TASK-062 — Draft 0.2 Public API and Portable Error Audit
 
 **Release:** Draft 0.2
 
@@ -5895,10 +5900,10 @@ Draft 0.2 Public API and Portable Error Audit.
 
 **Definition of Done**
 
-- [ ] Audit error categories across spec/conventions, vectors, core, adapter, JSDoc and Agentic descriptors; check every intentional public export and example.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Audit error categories across spec/conventions, vectors, core, adapter, JSDoc and Agentic descriptors; check every intentional public export and example.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -5906,11 +5911,16 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Portable error references were reconciled across `spec/`, `conformance/`, TypeScript core, adapter normalization, Agentic descriptors, and examples; public TypeScript declaration JSDoc was reviewed.
+- Conformance: All 28 portable error codes referenced by current spec/conformance/core/adapter/Agentic artifacts are listed in `spec/conventions.md`.
+- Mutation: Not a mutation task. Focused unit tests were added for Approval lifecycle and Entity Evolution survivor hardening before TASK-065.
+- Notes: Added missing `FINKORE_APPROVAL_INVALID_CONTEXT` to the shared spec convention error catalog. Public declaration JSDoc was current; `src/index.ts` re-export groups are not independent public declarations. Next execution pointer advanced to TASK-063 during this milestone run.
 
 <a id="task-063"></a>
 
-### - [ ] TASK-063 — Draft 0.2 Architecture Gate
+### - [x] TASK-063 — Draft 0.2 Architecture Gate
 
 **Release:** Draft 0.2
 
@@ -5983,10 +5993,10 @@ Draft 0.2 Architecture Gate.
 
 **Definition of Done**
 
-- [ ] Verify core dependency direction, runner neutrality, translation-only adapters and language-neutral canonical artifacts; inspect explicit spec-backed cross-domain imports.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Verify core dependency direction, runner neutrality, translation-only adapters and language-neutral canonical artifacts; inspect explicit spec-backed cross-domain imports.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -5994,11 +6004,16 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Package dependencies and imports were inspected with `rg`; build, typecheck, workspace tests, coverage, conformance, core mutation, runner mutation, and docs checks passed in the closure run.
+- Conformance: Full conformance remains 199/199 PASS with 174/174 mutation-sensitive vectors PASS.
+- Mutation: TASK-065 core and runner mutation evidence applies.
+- Notes: Core has no dependency on runner/conformance/agentic/frameworks; adapter depends on runner/core only; runner contains generic validation/reporting/dispatch metadata and no financial rule implementation. Explicit core cross-domain imports are spec-backed Entity composition of Money, Workflow, and Audit. Next execution pointer advanced to TASK-064 during this milestone run.
 
 <a id="task-064"></a>
 
-### - [ ] TASK-064 — Draft 0.2 Full Regression and Coverage Gate
+### - [x] TASK-064 — Draft 0.2 Full Regression and Coverage Gate
 
 **Release:** Draft 0.2
 
@@ -6069,9 +6084,9 @@ Draft 0.2 Full Regression and Coverage Gate.
 
 **Definition of Done**
 
-- [ ] Run workspace build/typecheck/tests, full conformance and available coverage; report five domains and totals for all required 0.1/0.2 vectors with zero FAIL, UNSUPPORTED and INFRASTRUCTURE_ERROR.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Run workspace build/typecheck/tests, full conformance and available coverage; report five domains and totals for all required 0.1/0.2 vectors with zero FAIL, UNSUPPORTED and INFRASTRUCTURE_ERROR.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -6079,11 +6094,16 @@ The named regression/coverage/conformance checks have durable results; no new se
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: `npm run build --workspaces`, `npm run typecheck --workspaces`, `npm run test --workspaces`, core coverage, runner coverage, and full conformance all exited 0.
+- Conformance: Full conformance 199/199 PASS; Money 83/83, Workflow 20/20, Audit 29/29, Approvals 47/47, Entities 20/20; zero FAIL, UNSUPPORTED, and INFRASTRUCTURE_ERROR; mutation-sensitive vectors 174/174 PASS.
+- Coverage: TypeScript core coverage 98.75% statements, 98.16% branches, 100% functions, 99.31% lines. Runner coverage 98.31% statements, 95.29% branches, 100% functions, 98.75% lines.
+- Notes: No new semantics were introduced by this regression gate. Next execution pointer advanced to TASK-065 during this milestone run.
 
 <a id="task-065"></a>
 
-### - [ ] TASK-065 — Draft 0.2 Full-Core Mutation Gate
+### - [x] TASK-065 — Draft 0.2 Full-Core Mutation Gate
 
 **Release:** Draft 0.2
 
@@ -6155,9 +6175,9 @@ Draft 0.2 Full-Core Mutation Gate.
 
 **Definition of Done**
 
-- [ ] Produce a complete valid full-core report including all new files and legacy critical behavior, inspect every survivor, require at least 95% and zero critical survivors; run runner mutation after infrastructure changes.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Produce a complete valid full-core report including all new files and legacy critical behavior, inspect every survivor, require at least 95% and zero critical survivors; run runner mutation after infrastructure changes.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -6165,11 +6185,16 @@ A complete scoped mutation report and survivor classifications establish >=95% a
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Full-core Stryker and runner Stryker both exited 0 after focused survivor-hardening tests; reports are recorded in `docs/tasks/draft-0.2-execution-evidence.md`.
+- Conformance: Full conformance remains 199/199 PASS after the mutation hardening tests.
+- Mutation: Core full mutation 98.88% with 2,099 killed, 13 timeout, 20 survived, 4 no coverage, 0 errors. Runner mutation 99.73% with 367 killed, 1 survived, 0 no coverage, 0 errors. No critical survivor accepted.
+- Notes: Remaining core survivors are validation-equivalent, optional-shape serialization, unreachable append-postcondition, or diagnostic-message/details branches; runner survivor is a diagnostic source-label default. Next execution pointer advanced to TASK-066 during this milestone run.
 
 <a id="task-066"></a>
 
-### - [ ] TASK-066 — DRAFT 0.2 CLOSURE GATE
+### - [x] TASK-066 — DRAFT 0.2 CLOSURE GATE
 
 **Release:** Draft 0.2
 
@@ -6242,10 +6267,10 @@ DRAFT 0.2 CLOSURE GATE.
 
 **Definition of Done**
 
-- [ ] Verify all preceding mandatory 0.2 tasks and reports, cross-domain invariants, errors/registry, public JSDoc, README/status and manifest release policy.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Verify all preceding mandatory 0.2 tasks and reports, cross-domain invariants, errors/registry, public JSDoc, README/status and manifest release policy.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -6253,7 +6278,12 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: All mandatory Draft 0.2 task dependencies through TASK-065 are complete and current closure gates passed; `git diff --check` passed after documentation updates.
+- Conformance: Required Draft 0.1/0.2 vectors all PASS: 199/199 total, 174/174 mutation-sensitive, zero fail/unsupported/infrastructure error.
+- Mutation: Full-core and runner mutation reports are complete and above 95%, with zero critical survivors accepted.
+- Notes: `FINKORE CORE DRAFT 0.2 COMPLETE`. Draft 0.3 implementation may begin. `NEXT TASK` advanced to TASK-067.
 
 ## 9. Draft 0.3 Task Backlog
 
