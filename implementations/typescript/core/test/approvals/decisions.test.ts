@@ -225,6 +225,29 @@ describe('Approval decisions', () => {
     })
   })
 
+  it('imports withdrawal lifecycle events as append-only evidence without reactivating decisions', () => {
+    const withdrawal = {
+      type: 'WITHDRAWN',
+      target: {
+        requirementId: 'finance-review',
+        actorId: 'user-7',
+        decidedAt: '2026-09-01T12:00:00Z',
+      },
+      actor: { type: 'user', id: 'user-7' },
+      recordedAt: '2026-09-02T12:00:00Z',
+    } as const
+    const history = ApprovalDecisionHistory.create({ history: [decision], lifecycle: [withdrawal] })
+
+    expect(history.evaluateRequirement(requirement)).toBe('PENDING')
+    expect(history.toJSON()).toEqual({ history: [decision], lifecycle: [withdrawal] })
+
+    const snapshot = history.toJSON() as { lifecycle: [{ actor: { id: string }; target: { actorId: string } }] }
+    snapshot.lifecycle[0].actor.id = 'user-9'
+    snapshot.lifecycle[0].target.actorId = 'user-9'
+
+    expect(history.toJSON()).toEqual({ history: [decision], lifecycle: [withdrawal] })
+  })
+
   it('supersedes a requirement without transferring its decisions to the successor requirement', () => {
     const successorRequirement = {
       ...requirement,
@@ -243,6 +266,510 @@ describe('Approval decisions', () => {
     expect(history.evaluateRequirement(requirement)).toBe('PENDING')
     expect(history.evaluateRequirement(successorRequirement)).toBe('PENDING')
     expect(history.decisions()).toEqual([decision])
+  })
+
+  it('imports decision and requirement supersession lifecycle events with current effectiveness semantics', () => {
+    const earlierApproval = {
+      ...decision,
+      subjectFacts: { revision: '2', amount: { amount: '9000.00', currency: 'EUR' } },
+      decidedAt: '2026-09-01T12:00:00Z',
+    }
+    const laterApproval = {
+      ...decision,
+      subjectFacts: { revision: '3', amount: { amount: '9000.00', currency: 'EUR' } },
+      decidedAt: '2026-09-02T12:00:00Z',
+    }
+    const decisionSupersession = {
+      type: 'DECISION_SUPERSEDED',
+      target: {
+        requirementId: 'finance-review',
+        actorId: 'user-7',
+        decidedAt: '2026-09-01T12:00:00Z',
+      },
+      successor: {
+        requirementId: 'finance-review',
+        actorId: 'user-7',
+        decidedAt: '2026-09-02T12:00:00Z',
+      },
+      actor: { type: 'user', id: 'user-7' },
+      recordedAt: '2026-09-02T12:30:00Z',
+    } as const
+    const requirementSupersession = {
+      type: 'REQUIREMENT_SUPERSEDED',
+      targetRequirementId: 'finance-review',
+      successorRequirementId: 'controller-review',
+      actor: { type: 'user', id: 'user-7' },
+      recordedAt: '2026-09-03T12:30:00Z',
+    } as const
+
+    const decisionHistory = ApprovalDecisionHistory.create({
+      history: [earlierApproval, laterApproval],
+      lifecycle: [decisionSupersession],
+    })
+    expect(
+      decisionHistory.evaluateRequirement(requirement, {
+        currentSubjectFacts: { revision: '2', amount: { amount: '9000.00', currency: 'EUR' } },
+        relevantFactPaths: ['revision', 'amount'],
+      }),
+    ).toBe('PENDING')
+    expect(
+      decisionHistory.evaluateRequirement(requirement, {
+        currentSubjectFacts: { revision: '3', amount: { amount: '9000.00', currency: 'EUR' } },
+        relevantFactPaths: ['revision', 'amount'],
+      }),
+    ).toBe('APPROVED')
+    expect(decisionHistory.toJSON()).toEqual({
+      history: [earlierApproval, laterApproval],
+      lifecycle: [decisionSupersession],
+    })
+
+    const requirementHistory = ApprovalDecisionHistory.create({
+      history: [decision],
+      lifecycle: [requirementSupersession],
+    })
+    expect(requirementHistory.evaluateRequirement(requirement)).toBe('PENDING')
+    expect(
+      requirementHistory.evaluateRequirement({
+        ...requirement,
+        id: 'controller-review',
+      }),
+    ).toBe('PENDING')
+    expect(requirementHistory.toJSON()).toEqual({ history: [decision], lifecycle: [requirementSupersession] })
+  })
+
+  it('rejects malformed imported lifecycle history before accepting partial lifecycle state', () => {
+    const target = {
+      requirementId: 'finance-review',
+      actorId: 'user-7',
+      decidedAt: '2026-09-01T12:00:00Z',
+    }
+    const successor = {
+      requirementId: 'finance-review',
+      actorId: 'user-7',
+      decidedAt: '2026-09-02T12:00:00Z',
+    }
+    const validWithdrawal = {
+      type: 'WITHDRAWN',
+      target,
+      actor: { type: 'user', id: 'user-7' },
+      recordedAt: '2026-09-02T12:00:00Z',
+    }
+
+    expect(() => ApprovalDecisionHistory.create({ history: [decision], lifecycle: validWithdrawal })).toThrow(
+      InvalidApprovalDecisionError,
+    )
+    expect(() => ApprovalDecisionHistory.create({ history: [decision], lifecycle: [null] })).toThrow(
+      InvalidApprovalDecisionError,
+    )
+    expect(() =>
+      ApprovalDecisionHistory.create({ history: [decision], lifecycle: [{ ...validWithdrawal, type: 'VOID' }] }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision],
+        lifecycle: [
+          {
+            type: 'VOID',
+            targetRequirementId: 'finance-review',
+            successorRequirementId: 'controller-review',
+            actor: { type: 'user', id: 'user-7' },
+            recordedAt: '2026-09-02T12:30:00Z',
+          },
+        ],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({ history: [decision], lifecycle: [{ ...validWithdrawal, actor: { id: '' } }] }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision],
+        lifecycle: [{ ...validWithdrawal, actor: { id: 'user-7', type: '' } }],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision],
+        lifecycle: [{ ...validWithdrawal, recordedAt: '2026-09-02T12:00:00' }],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision],
+        lifecycle: [{ ...validWithdrawal, target: { ...target, actorId: '' } }],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({ history: [decision], lifecycle: [{ ...validWithdrawal, successor }] }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision],
+        lifecycle: [{ ...validWithdrawal, targetRequirementId: 'finance-review' }],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision],
+        lifecycle: [{ ...validWithdrawal, successorRequirementId: 'controller-review' }],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision],
+        lifecycle: [
+          {
+            type: 'REQUIREMENT_SUPERSEDED',
+            targetRequirementId: 'finance-review',
+            successorRequirementId: 'controller-review',
+            successor,
+            actor: { type: 'user', id: 'user-7' },
+            recordedAt: '2026-09-02T12:30:00Z',
+          },
+        ],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision],
+        lifecycle: [
+          {
+            type: 'DECISION_SUPERSEDED',
+            target,
+            successor: target,
+            actor: { type: 'user', id: 'user-7' },
+            recordedAt: '2026-09-02T12:30:00Z',
+          },
+        ],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision],
+        lifecycle: [
+          {
+            type: 'DECISION_SUPERSEDED',
+            target,
+            successor,
+            actor: { type: 'user', id: 'user-7' },
+            recordedAt: '2026-09-02T12:30:00Z',
+            targetRequirementId: 'finance-review',
+          },
+        ],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision],
+        lifecycle: [
+          {
+            type: 'REQUIREMENT_SUPERSEDED',
+            targetRequirementId: 'finance-review',
+            successorRequirementId: 'finance-review',
+            actor: { type: 'user', id: 'user-7' },
+            recordedAt: '2026-09-02T12:30:00Z',
+          },
+        ],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision],
+        lifecycle: [
+          {
+            type: 'REQUIREMENT_SUPERSEDED',
+            targetRequirementId: 'finance-review',
+            successorRequirementId: 'controller-review',
+            target,
+            actor: { type: 'user', id: 'user-7' },
+            recordedAt: '2026-09-02T12:30:00Z',
+          },
+        ],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() => ApprovalDecisionHistory.create({ history: [decision], lifecycle: [validWithdrawal] }).toJSON()).not.toThrow()
+    expect(ApprovalDecisionHistory.create({ history: [decision] }).toJSON()).toEqual({ history: [decision] })
+  })
+
+  it('resolves decision lifecycle references by requirement, actor, and timestamp together', () => {
+    const target = {
+      requirementId: 'finance-review',
+      actorId: 'user-7',
+      decidedAt: '2026-09-01T12:00:00Z',
+    }
+    const sameInstantOtherActor = {
+      ...decision,
+      actor: { type: 'user', id: 'user-9' },
+    }
+    const sameInstantOtherRequirement = {
+      ...decision,
+      requirementId: 'controller-review',
+    }
+    const broadenedRequirement = {
+      ...requirement,
+      eligibleActors: ['user-7', 'user-9'],
+    }
+
+    expect(
+      ApprovalDecisionHistory.create([decision, sameInstantOtherActor])
+        .withdraw(broadenedRequirement, {
+          target,
+          actor: { type: 'user', id: 'user-7' },
+          recordedAt: '2026-09-02T12:00:00Z',
+        })
+        .evaluateRequirement(broadenedRequirement),
+    ).toBe('APPROVED')
+    expect(
+      ApprovalDecisionHistory.create([decision, sameInstantOtherRequirement])
+        .withdraw(requirement, {
+          target,
+          actor: { type: 'user', id: 'user-7' },
+          recordedAt: '2026-09-02T12:00:00Z',
+        })
+        .evaluateRequirement(requirement),
+    ).toBe('PENDING')
+  })
+
+  it('rejects imported lifecycle events that do not resolve exactly once or duplicate prior invalidation', () => {
+    const target = {
+      requirementId: 'finance-review',
+      actorId: 'user-7',
+      decidedAt: '2026-09-01T12:00:00Z',
+    }
+    const laterApproval = {
+      ...decision,
+      decidedAt: '2026-09-02T12:00:00Z',
+    }
+    const successor = {
+      requirementId: 'finance-review',
+      actorId: 'user-7',
+      decidedAt: '2026-09-02T12:00:00Z',
+    }
+    const withdrawal = {
+      type: 'WITHDRAWN',
+      target,
+      actor: { type: 'user', id: 'user-7' },
+      recordedAt: '2026-09-02T12:00:00Z',
+    } as const
+    const supersession = {
+      type: 'DECISION_SUPERSEDED',
+      target,
+      successor,
+      actor: { type: 'user', id: 'user-7' },
+      recordedAt: '2026-09-02T12:30:00Z',
+    } as const
+    const requirementSupersession = {
+      type: 'REQUIREMENT_SUPERSEDED',
+      targetRequirementId: 'finance-review',
+      successorRequirementId: 'controller-review',
+      actor: { type: 'user', id: 'user-7' },
+      recordedAt: '2026-09-03T12:30:00Z',
+    } as const
+
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision],
+        lifecycle: [{ ...withdrawal, target: { ...target, decidedAt: '2026-09-01T13:00:00Z' } }],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision],
+        lifecycle: [{ ...withdrawal, target: { ...target, actorId: 'user-9' } }],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision],
+        lifecycle: [{ ...withdrawal, target: { ...target, requirementId: 'controller-review' } }],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision, laterApproval],
+        lifecycle: [{ ...supersession, target: { ...target, decidedAt: '2026-09-01T13:00:00Z' } }],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision, laterApproval],
+        lifecycle: [{ ...supersession, target: { ...target, actorId: 'user-9' } }],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision, laterApproval],
+        lifecycle: [{ ...supersession, target: { ...target, requirementId: 'controller-review' } }],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision, laterApproval],
+        lifecycle: [{ ...supersession, successor: { ...successor, decidedAt: '2026-09-03T12:00:00Z' } }],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision, laterApproval],
+        lifecycle: [{ ...supersession, successor: { ...successor, actorId: 'user-9' } }],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision, laterApproval],
+        lifecycle: [{ ...supersession, successor: { ...successor, requirementId: 'controller-review' } }],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() => ApprovalDecisionHistory.create({ history: [decision, decision], lifecycle: [withdrawal] })).toThrow(
+      InvalidApprovalDecisionError,
+    )
+    expect(() => ApprovalDecisionHistory.create({ history: [decision], lifecycle: [withdrawal, withdrawal] })).toThrow(
+      InvalidApprovalDecisionError,
+    )
+    expect(() =>
+      ApprovalDecisionHistory.create({ history: [decision, laterApproval], lifecycle: [withdrawal, supersession] }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({ history: [decision, laterApproval], lifecycle: [supersession, withdrawal] }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      ApprovalDecisionHistory.create({
+        history: [decision],
+        lifecycle: [requirementSupersession, { ...requirementSupersession, successorRequirementId: 'audit-review' }],
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+  })
+
+  it('rejects malformed direct lifecycle operations without partial lifecycle state', () => {
+    const target = {
+      requirementId: 'finance-review',
+      actorId: 'user-7',
+      decidedAt: '2026-09-01T12:00:00Z',
+    }
+    const successor = {
+      requirementId: 'finance-review',
+      actorId: 'user-7',
+      decidedAt: '2026-09-02T12:00:00Z',
+    }
+    const laterApproval = {
+      ...decision,
+      decidedAt: '2026-09-02T12:00:00Z',
+    }
+    const baseEvent = {
+      target,
+      successor,
+      actor: { type: 'user', id: 'user-7' },
+      recordedAt: '2026-09-02T12:30:00Z',
+    }
+
+    const withdrawalHistory = ApprovalDecisionHistory.create([decision])
+    expect(() => withdrawalHistory.withdraw(requirement, { ...baseEvent, successor })).toThrow(InvalidApprovalDecisionError)
+    expect(() => withdrawalHistory.withdraw(requirement, { ...baseEvent, targetRequirementId: 'finance-review' })).toThrow(
+      InvalidApprovalDecisionError,
+    )
+    expect(() => withdrawalHistory.withdraw(requirement, { ...baseEvent, successorRequirementId: 'controller-review' })).toThrow(
+      InvalidApprovalDecisionError,
+    )
+    expect(() =>
+      withdrawalHistory.withdraw(requirement, { ...baseEvent, target: { ...target, requirementId: 'controller-review' } }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(withdrawalHistory.toJSON()).toEqual({ history: [decision] })
+
+    const decisionSupersessionHistory = ApprovalDecisionHistory.create([decision, laterApproval])
+    expect(() => decisionSupersessionHistory.supersedeDecision({ ...baseEvent, targetRequirementId: 'finance-review' })).toThrow(
+      InvalidApprovalDecisionError,
+    )
+    expect(() => decisionSupersessionHistory.supersedeDecision({ ...baseEvent, successorRequirementId: 'controller-review' })).toThrow(
+      InvalidApprovalDecisionError,
+    )
+    expect(() => decisionSupersessionHistory.supersedeDecision({ ...baseEvent, successor: target })).toThrow(
+      InvalidApprovalDecisionError,
+    )
+    expect(() =>
+      decisionSupersessionHistory.supersedeDecision({ ...baseEvent, successor: { ...successor, decidedAt: '2026-09-03T12:00:00Z' } }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      decisionSupersessionHistory.supersedeDecision({ ...baseEvent, target: { ...target, actorId: 'user-9' } }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      decisionSupersessionHistory.supersedeDecision({ ...baseEvent, target: { ...target, requirementId: 'controller-review' } }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(decisionSupersessionHistory.toJSON()).toEqual({ history: [decision, laterApproval] })
+
+    const requirementSupersessionHistory = ApprovalDecisionHistory.create([decision])
+    expect(() =>
+      requirementSupersessionHistory.supersedeRequirement({
+        targetRequirementId: 'finance-review',
+        successorRequirementId: 'controller-review',
+        target,
+        actor: { type: 'user', id: 'user-7' },
+        recordedAt: '2026-09-02T12:30:00Z',
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(() =>
+      requirementSupersessionHistory.supersedeRequirement({
+        targetRequirementId: '',
+        successorRequirementId: 'controller-review',
+        actor: { type: 'user', id: 'user-7' },
+        recordedAt: '2026-09-02T12:30:00Z',
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(requirementSupersessionHistory.toJSON()).toEqual({ history: [decision] })
+  })
+
+  it('rejects direct lifecycle supersession duplicates without altering committed lifecycle evidence', () => {
+    const target = {
+      requirementId: 'finance-review',
+      actorId: 'user-7',
+      decidedAt: '2026-09-01T12:00:00Z',
+    }
+    const successor = {
+      requirementId: 'finance-review',
+      actorId: 'user-7',
+      decidedAt: '2026-09-02T12:00:00Z',
+    }
+    const laterApproval = {
+      ...decision,
+      decidedAt: '2026-09-02T12:00:00Z',
+    }
+    const supersession = {
+      target,
+      successor,
+      actor: { type: 'user', id: 'user-7' },
+      recordedAt: '2026-09-02T12:30:00Z',
+    } as const
+    const decisionHistory = ApprovalDecisionHistory.create([decision, laterApproval])
+
+    decisionHistory.supersedeDecision(supersession)
+
+    expect(() =>
+      decisionHistory.supersedeDecision({ ...supersession, recordedAt: '2026-09-03T12:30:00Z' }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(decisionHistory.toJSON()).toEqual({
+      history: [decision, laterApproval],
+      lifecycle: [{ type: 'DECISION_SUPERSEDED', ...supersession }],
+    })
+
+    const requirementSupersession = {
+      targetRequirementId: 'finance-review',
+      successorRequirementId: 'controller-review',
+      actor: { type: 'user', id: 'user-7' },
+      recordedAt: '2026-09-02T12:30:00Z',
+    } as const
+    const requirementHistory = ApprovalDecisionHistory.create([decision])
+    requirementHistory.supersedeRequirement(requirementSupersession)
+
+    expect(() =>
+      requirementHistory.supersedeRequirement({
+        ...requirementSupersession,
+        successorRequirementId: 'audit-review',
+        recordedAt: '2026-09-03T12:30:00Z',
+      }),
+    ).toThrow(InvalidApprovalDecisionError)
+    expect(requirementHistory.toJSON()).toEqual({
+      history: [decision],
+      lifecycle: [{ type: 'REQUIREMENT_SUPERSEDED', ...requirementSupersession }],
+    })
   })
 
   it('evaluates a requirement as pending, approved, or rejected from effective associated decisions only', () => {

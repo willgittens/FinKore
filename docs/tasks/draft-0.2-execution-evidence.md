@@ -509,7 +509,7 @@ not a source of financial semantics.
 
 ### TASK-045 through TASK-054 - Draft 0.2 Approval Validity Specification, Vectors, Implementation, and Adapter
 
-- Status: IMPLEMENTED THROUGH ADAPTER; BLOCKED AT TASK-055 MUTATION HARDENING.
+- Status: IMPLEMENTED THROUGH ADAPTER; historical TASK-055 mutation blocker resolved by the later TASK-055 through TASK-057 closure evidence below.
 - Date: 2026-09-11
 - Toolchain: system `node` and `npm` were absent; repository-local `.tools/node-v24.11.1-linux-x64/bin/node` reported `v24.11.1` and was used via PATH prefix.
 - Normative scope implemented:
@@ -550,11 +550,10 @@ not a source of financial semantics.
   - TypeScript core all files: 93.26% statements, 60.91% branches, 94.53% functions, 95.13% lines.
   - Runner: 98.31% statements, 95.29% branches, 100% functions, 98.75% lines.
 - Mutation:
-  - `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test:mutation --workspace @finkore/typescript` in sandbox failed before mutation execution with Stryker local logging server `listen EPERM`.
-  - Escalated full-core mutation found 16 source files, 29 test files, and 2,425 mutants; dry run passed 255 tests. After mutant execution the PTY wrapper hung after worker processes exited and no fresh mutation report was written.
-  - Escalated targeted Approval mutation command `../../../node_modules/.bin/stryker run --mutate src/approvals/approval-decision.ts,src/approvals/approval-decision-history.ts,src/approvals/errors.ts --testFiles 'test/approvals/*.test.ts' --reporters clear-text,json --concurrency 2 --maxConcurrentTestRunners 2` found 3 source files, 5 test files, and 628 mutants; dry run passed 53 tests. After mutant execution the PTY wrapper hung after worker processes exited and no fresh mutation report was written.
-  - Existing `implementations/typescript/core/reports/mutation/mutation.json` remained the older Entity Evolution-only report and is not valid Approval Validity evidence.
-  - TASK-055 remains blocked pending a fresh Approval/core mutation report or a tooling remediation task.
+  - Historical blocker: `PATH=/home/will/Documents/FinFlow/.tools/node-v24.11.1-linux-x64/bin:$PATH npm run test:mutation --workspace @finkore/typescript` in sandbox failed before mutation execution with Stryker local logging server `listen EPERM`.
+  - Historical blocker: escalated full-core mutation found 16 source files, 29 test files, and 2,425 mutants; dry run passed 255 tests. After mutant execution the PTY wrapper hung after worker processes exited and no fresh mutation report was written.
+  - Historical blocker: escalated targeted Approval mutation command `../../../node_modules/.bin/stryker run --mutate src/approvals/approval-decision.ts,src/approvals/approval-decision-history.ts,src/approvals/errors.ts --testFiles 'test/approvals/*.test.ts' --reporters clear-text,json --concurrency 2 --maxConcurrentTestRunners 2` found 3 source files, 5 test files, and 628 mutants; dry run passed 53 tests. After mutant execution the PTY wrapper hung after worker processes exited and no fresh mutation report was written.
+  - Historical blocker resolved by TASK-055 through TASK-057: fresh Approval and full-core mutation reports now exist and pass the required thresholds.
 - Traceability inventory after implementation:
   - Manifest format `0.1`; five suites; thirteen manifest-listed vector files.
   - Total requirements: 297; 231 covered; 66 not directly testable; 0 partial; 0 uncovered; 0 deferred; 0 blocking spec gaps.
@@ -569,4 +568,60 @@ not a source of financial semantics.
   - `/spec`: Approval Validity document and Approval index/decisions/errors updated.
   - `/conformance`: manifest, conventions, README, and traceability updated.
   - `/agentic`: no change; Approval lifecycle operations remain conformance-local pending explicit Agentic review.
+  - `AGENTS.md`: no change required.
+
+### TASK-055 through TASK-057 - Approval Validity Mutation Hardening, Traceability, and Slice Closure
+
+- Status: COMPLETE.
+- Date: 2026-09-11.
+- Toolchain: system `node` reported `v24.15.0`; `npm` reported `11.12.1`.
+- Dependency setup:
+  - Initial workspace commands failed because `node_modules` was absent and workspace dev tools (`tsc`, `vitest`) were unavailable.
+  - Sandboxed `npm ci` failed inside npm while writing under `/home/will/.npm/_logs`.
+  - Escalated `npm ci` exited 0 and installed 229 locked packages.
+- Implementation and test hardening:
+  - Added Approval DecisionHistory unit coverage for imported lifecycle replay, malformed imported lifecycle records, exact Decision reference resolution by requirement/actor/timestamp, duplicate lifecycle invalidation, and direct lifecycle failure atomicity.
+  - Simplified private Approval lifecycle replay by using a validated discriminated lifecycle event shape internally, removing redundant unreachable optional-field checks after validation.
+  - No public API, portable error, conformance vector, or normative specification behavior changed.
+- Commands:
+  - `npm run build --workspaces` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspace @finkore/typescript -- test/approvals` exited 0: 5 files / 60 tests passed.
+  - `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0: 1 file / 13 tests passed.
+  - `npm run test --workspaces` exited 0: runner 10 files / 110 tests passed; TypeScript core 29 files / 262 tests passed; conformance adapter 1 file / 13 tests passed.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --suite approvals --json` exited 0.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json` exited 0.
+  - `npm run test:coverage --workspace @finkore/typescript` exited 0.
+  - `npm run test:coverage --workspace @finkore/conformance-runner` exited 0.
+  - Targeted Approval mutation `npm run test:mutation --workspace @finkore/typescript -- --mutate src/approvals/approval-chain.ts,src/approvals/approval-condition.ts,src/approvals/approval-decision.ts,src/approvals/approval-decision-history.ts,src/approvals/approval-requirement.ts --testFiles 'test/approvals/*.test.ts' --reporters clear-text,json` exited 0 after escalation for Stryker worker/logging infrastructure.
+  - Full-core mutation `npm run test:mutation --workspace @finkore/typescript` exited 0 after escalation for Stryker worker/logging infrastructure.
+  - `rg` audit covered `APPROVAL-VALIDITY-*`, `APPROVAL-ERROR-006`, `APPROVAL-ERROR-007`, lifecycle operation labels, and Approval Validity status text across spec, conformance, Agentic, core/adapter README, and this evidence file.
+  - `git diff --check` exited 0.
+- Conformance:
+  - Approval suite: 47 passed / 47 total; 0 failed, 0 unsupported, 0 infrastructure errors.
+  - Full conformance: 199 passed / 199 total; 0 failed, 0 unsupported, 0 infrastructure errors.
+  - By suite: Money 83/83, Workflow 20/20, Audit 29/29, Approvals 47/47, Entities 20/20.
+  - Mutation-sensitive vectors: 174 passed / 174 total.
+- Coverage:
+  - TypeScript core all files: 98.51% statements, 97.72% branches, 100% functions, 99.31% lines.
+  - TypeScript Approval files: 98.68% statements, 98.38% branches, 100% functions, 99.66% lines.
+  - Runner: 98.31% statements, 95.29% branches, 100% functions, 98.75% lines.
+- Mutation:
+  - Fresh full-core Stryker report: 98.27% mutation score; 2,086 killed, 13 timeout, 30 survived, 7 no coverage, 0 errors.
+  - Full-core report paths: `implementations/typescript/core/reports/mutation/mutation.json` and `implementations/typescript/core/reports/mutation/mutation.html`.
+  - Approval sources: 97.11% mutation score; 770 killed, 3 timeout, 17 survived, 6 no coverage.
+  - Approval file scores: `approval-chain.ts` 100.00%, `approval-condition.ts` 100.00%, `approval-decision.ts` 100.00%, `approval-requirement.ts` 100.00%, `approval-decision-history.ts` 92.86%.
+  - Remaining Approval survivors were reviewed as non-critical or equivalent validation-discrimination/lifecycle-kind-isolation mutants. They do not permit the named critical behaviors: inverted expiration boundary, host-time access, counted withdrawn/superseded/stale Decisions, relevant-fact loss, erased history, or partial lifecycle mutation on failure.
+- Traceability and documentation:
+  - Traceability already maps `APPROVAL-VALIDITY-001` through `APPROVAL-VALIDITY-012`, `APPROVAL-ERROR-006`, and `APPROVAL-ERROR-007` to manifest-listed vectors.
+  - Approvals inventory remains 49 total; 44 covered; 5 not directly testable; 0 uncovered; 0 blocking spec gaps.
+  - No Agentic canonical Approval operation was introduced; lifecycle labels remain conformance-local pending explicit Agentic review.
+  - Unit tests: updated.
+  - Conformance vectors: no change required.
+  - Mutation-sensitive tests: updated.
+  - JSDoc: reviewed; no public API behavior changed in this hardening pass.
+  - README documentation: reviewed; current Draft 0.2 Approval Validity status remains accurate.
+  - `/spec`: no change required.
+  - `/conformance`: no change required.
+  - `/agentic`: no change required.
   - `AGENTS.md`: no change required.

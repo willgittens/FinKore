@@ -11,6 +11,28 @@ import type {
   SerializedApprovalLifecycleEvent,
 } from './types.js'
 
+type ApprovalLifecycleEvent =
+  | {
+      readonly type: 'WITHDRAWN'
+      readonly target: SerializedApprovalDecisionReference
+      readonly actor: SerializedApprovalActor
+      readonly recordedAt: string
+    }
+  | {
+      readonly type: 'DECISION_SUPERSEDED'
+      readonly target: SerializedApprovalDecisionReference
+      readonly successor: SerializedApprovalDecisionReference
+      readonly actor: SerializedApprovalActor
+      readonly recordedAt: string
+    }
+  | {
+      readonly type: 'REQUIREMENT_SUPERSEDED'
+      readonly targetRequirementId: string
+      readonly successorRequirementId: string
+      readonly actor: SerializedApprovalActor
+      readonly recordedAt: string
+    }
+
 function isPlainRecord(value: unknown): value is Readonly<Record<string, unknown>> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
@@ -72,7 +94,7 @@ function decisionRef(decision: ApprovalDecision): SerializedApprovalDecisionRefe
   }
 }
 
-function validateLifecycleEvent(input: unknown): SerializedApprovalLifecycleEvent {
+function validateLifecycleEvent(input: unknown): ApprovalLifecycleEvent {
   if (!isPlainRecord(input)) throw new InvalidApprovalDecisionError()
   const type = input.type
   const actor = validateActor(input.actor)
@@ -138,11 +160,11 @@ const RFC3339_DATE_TIME_WITH_OFFSET = new RegExp([
  */
 export class ApprovalDecisionHistory {
   private readonly committedDecisions: ApprovalDecision[]
-  private readonly committedLifecycleEvents: SerializedApprovalLifecycleEvent[]
+  private readonly committedLifecycleEvents: ApprovalLifecycleEvent[]
 
-  private constructor(decisions: readonly ApprovalDecision[], lifecycleEvents: readonly SerializedApprovalLifecycleEvent[] = []) {
+  private constructor(decisions: readonly ApprovalDecision[]) {
     this.committedDecisions = [...decisions]
-    this.committedLifecycleEvents = lifecycleEvents.map((event) => cloneJsonValue(event))
+    this.committedLifecycleEvents = []
   }
 
   /**
@@ -231,8 +253,11 @@ export class ApprovalDecisionHistory {
    */
   withdraw(requirementInput: unknown, withdrawalInput: unknown): ApprovalDecisionHistory {
     const requirement = ApprovalRequirement.from(requirementInput)
-    const event = validateLifecycleEvent(lifecycleCandidate(withdrawalInput, 'WITHDRAWN'))
-    if (event.target === undefined || event.target.requirementId !== requirement.id) throw new InvalidApprovalDecisionError()
+    const event = validateLifecycleEvent(lifecycleCandidate(withdrawalInput, 'WITHDRAWN')) as Extract<
+      ApprovalLifecycleEvent,
+      { readonly type: 'WITHDRAWN' }
+    >
+    if (event.target.requirementId !== requirement.id) throw new InvalidApprovalDecisionError()
     if (!requirement.isEligibleActor(event.actor.id)) throw new IneligibleApprovalActorError()
     this.assertResolvableDecision(event.target)
     if (this.isDecisionWithdrawn(event.target) || this.isDecisionSuperseded(event.target)) throw new InvalidApprovalDecisionError()
@@ -258,8 +283,10 @@ export class ApprovalDecisionHistory {
    * @see APPROVAL-VALIDITY-012
    */
   supersedeDecision(supersessionInput: unknown): ApprovalDecisionHistory {
-    const event = validateLifecycleEvent(lifecycleCandidate(supersessionInput, 'DECISION_SUPERSEDED'))
-    if (event.target === undefined || event.successor === undefined) throw new InvalidApprovalDecisionError()
+    const event = validateLifecycleEvent(lifecycleCandidate(supersessionInput, 'DECISION_SUPERSEDED')) as Extract<
+      ApprovalLifecycleEvent,
+      { readonly type: 'DECISION_SUPERSEDED' }
+    >
     this.assertResolvableDecision(event.target)
     this.assertResolvableDecision(event.successor)
     if (this.isDecisionWithdrawn(event.target) || this.isDecisionSuperseded(event.target)) throw new InvalidApprovalDecisionError()
@@ -285,8 +312,10 @@ export class ApprovalDecisionHistory {
    * @see APPROVAL-VALIDITY-012
    */
   supersedeRequirement(supersessionInput: unknown): ApprovalDecisionHistory {
-    const event = validateLifecycleEvent(lifecycleCandidate(supersessionInput, 'REQUIREMENT_SUPERSEDED'))
-    if (event.targetRequirementId === undefined) throw new InvalidApprovalDecisionError()
+    const event = validateLifecycleEvent(lifecycleCandidate(supersessionInput, 'REQUIREMENT_SUPERSEDED')) as Extract<
+      ApprovalLifecycleEvent,
+      { readonly type: 'REQUIREMENT_SUPERSEDED' }
+    >
     if (this.isRequirementSuperseded(event.targetRequirementId)) throw new InvalidApprovalDecisionError()
     this.committedLifecycleEvents.push(event)
     return this
@@ -397,13 +426,11 @@ export class ApprovalDecisionHistory {
   }
 
   private isDecisionWithdrawn(ref: SerializedApprovalDecisionReference): boolean {
-    return this.committedLifecycleEvents.some((event) => event.type === 'WITHDRAWN' && event.target !== undefined && sameDecisionRef(event.target, ref))
+    return this.committedLifecycleEvents.some((event) => event.type === 'WITHDRAWN' && sameDecisionRef(event.target, ref))
   }
 
   private isDecisionSuperseded(ref: SerializedApprovalDecisionReference): boolean {
-    return this.committedLifecycleEvents.some(
-      (event) => event.type === 'DECISION_SUPERSEDED' && event.target !== undefined && sameDecisionRef(event.target, ref),
-    )
+    return this.committedLifecycleEvents.some((event) => event.type === 'DECISION_SUPERSEDED' && sameDecisionRef(event.target, ref))
   }
 
   private isRequirementSuperseded(requirementId: string): boolean {
@@ -418,28 +445,22 @@ export class ApprovalDecisionHistory {
     return Date.parse(evaluatedAtTimestamp) < Date.parse(decision.expiresAt)
   }
 
-  private commitLifecycleEvent(event: SerializedApprovalLifecycleEvent): void {
-    if (event.type === 'WITHDRAWN') {
-      if (event.target === undefined) throw new InvalidApprovalDecisionError()
-      this.assertResolvableDecision(event.target)
-      if (this.isDecisionWithdrawn(event.target) || this.isDecisionSuperseded(event.target)) throw new InvalidApprovalDecisionError()
-      this.committedLifecycleEvents.push(event)
-      return
+  private commitLifecycleEvent(event: ApprovalLifecycleEvent): void {
+    switch (event.type) {
+      case 'WITHDRAWN':
+        this.assertResolvableDecision(event.target)
+        if (this.isDecisionWithdrawn(event.target) || this.isDecisionSuperseded(event.target)) throw new InvalidApprovalDecisionError()
+        this.committedLifecycleEvents.push(event)
+        return
+      case 'DECISION_SUPERSEDED':
+        this.assertResolvableDecision(event.target)
+        this.assertResolvableDecision(event.successor)
+        if (this.isDecisionWithdrawn(event.target) || this.isDecisionSuperseded(event.target)) throw new InvalidApprovalDecisionError()
+        this.committedLifecycleEvents.push(event)
+        return
+      case 'REQUIREMENT_SUPERSEDED':
+        if (this.isRequirementSuperseded(event.targetRequirementId)) throw new InvalidApprovalDecisionError()
+        this.committedLifecycleEvents.push(event)
     }
-    if (event.type === 'DECISION_SUPERSEDED') {
-      if (event.target === undefined || event.successor === undefined) throw new InvalidApprovalDecisionError()
-      this.assertResolvableDecision(event.target)
-      this.assertResolvableDecision(event.successor)
-      if (this.isDecisionWithdrawn(event.target) || this.isDecisionSuperseded(event.target)) throw new InvalidApprovalDecisionError()
-      this.committedLifecycleEvents.push(event)
-      return
-    }
-    if (event.type === 'REQUIREMENT_SUPERSEDED') {
-      if (event.targetRequirementId === undefined) throw new InvalidApprovalDecisionError()
-      if (this.isRequirementSuperseded(event.targetRequirementId)) throw new InvalidApprovalDecisionError()
-      this.committedLifecycleEvents.push(event)
-      return
-    }
-    throw new InvalidApprovalDecisionError()
   }
 }

@@ -32,7 +32,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 - [x] Entity Evolution Specification: [TASK-021](#task-021)–[TASK-024](#task-024)
 - [x] Audit Relationships: [TASK-025](#task-025)–[TASK-032](#task-032)
 - [x] Entity Evolution Implementation: [TASK-033](#task-033)–[TASK-044](#task-044)
-- [ ] Approval Validity: [TASK-045](#task-045)–[TASK-057](#task-057) — BLOCKED at TASK-055 mutation evidence
+- [x] Approval Validity: [TASK-045](#task-045)–[TASK-057](#task-057)
 - [ ] Draft 0.2 Alignment: [TASK-058](#task-058)–[TASK-060](#task-060)
 - [ ] Draft 0.2 Closure: [TASK-061](#task-061)–[TASK-066](#task-066)
 
@@ -52,9 +52,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: BLOCKED
-BLOCKED ON: TASK-055
-REASON: Approval Validity specification, conformance vectors, TypeScript implementation and adapter support are complete and passing, but Stryker mutation runs did not produce a fresh Approval mutation report. Full and targeted Approval Stryker executions started and completed dry runs, then their PTY wrappers hung without writing a new mutation JSON report.
+NEXT TASK: TASK-058
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -5183,7 +5181,7 @@ Completion:
 
 <a id="task-055"></a>
 
-### - [ ] TASK-055 — Approval Validity Mutation Hardening
+### - [x] TASK-055 — Approval Validity Mutation Hardening
 
 **Release:** Draft 0.2
 
@@ -5256,9 +5254,9 @@ Approval Validity Mutation Hardening.
 
 **Definition of Done**
 
-- [ ] Kill inverted expiration boundary, host-time access, counted withdrawn/superseded/stale decisions, relevant-fact loss and erased/partially mutated history.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Kill inverted expiration boundary, host-time access, counted withdrawn/superseded/stale decisions, relevant-fact loss and erased/partially mutated history.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -5267,13 +5265,15 @@ A complete scoped mutation report and survivor classifications establish >=95% a
 **Completion**
 
 Completion:
-- Status: BLOCKED
-- Reason: Stryker mutation testing could not produce a fresh Approval Validity report in this environment. The first sandboxed `npm run test:mutation --workspace @finkore/typescript` failed with `listen EPERM` on Stryker's local logging server. Escalated full-core and targeted Approval runs both started, passed dry runs, and executed mutants, but their PTY wrappers hung after worker processes exited and no new `reports/mutation/mutation.json` was written.
-- Required decision: Re-run Approval/core mutation in an environment where Stryker exits cleanly and records a fresh report, or approve a tooling remediation task for the Stryker runner/session behavior.
+- Status: COMPLETE
+- Verification: `npm ci` exited 0 after escalation to install locked workspace dependencies; system `node` reported `v24.15.0`. `npm run build --workspaces`, `npm run typecheck --workspaces`, `npm run test --workspace @finkore/typescript -- test/approvals`, `npm run test --workspace @finkore/typescript-conformance-adapter`, `npm run test --workspaces`, `npm run test:coverage --workspace @finkore/typescript`, `npm run test:coverage --workspace @finkore/conformance-runner`, Approval/full conformance, and `git diff --check` exited 0.
+- Conformance: Approval suite 47/47 PASS; full conformance 199/199 PASS with mutation-sensitive vectors 174/174 PASS.
+- Mutation: Fresh full-core Stryker report exited 0 with 98.27% score, 2,086 killed, 13 timeout, 30 survived, 7 no coverage; Approval sources scored 97.11%, with 17 survived and 6 no coverage, report at `implementations/typescript/core/reports/mutation/mutation.json` and `.html`. Remaining Approval survivors are non-critical/equivalent validation-discrimination or lifecycle-kind isolation mutants; no named Approval Validity critical mutant survived.
+- Notes: Added focused Approval DecisionHistory tests for imported lifecycle replay, malformed imported lifecycle records, exact lifecycle reference resolution, duplicate lifecycle invalidation, and direct lifecycle failure atomicity. Simplified internal lifecycle replay to use a validated discriminated event shape; no public API or normative behavior changed.
 
 <a id="task-056"></a>
 
-### - [ ] TASK-056 — Approval Validity Traceability Closure
+### - [x] TASK-056 — Approval Validity Traceability Closure
 
 **Release:** Draft 0.2
 
@@ -5346,10 +5346,10 @@ Approval Validity Traceability Closure.
 
 **Definition of Done**
 
-- [ ] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -5357,11 +5357,16 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: `rg` audit of `APPROVAL-VALIDITY-*`, `APPROVAL-ERROR-006`, `APPROVAL-ERROR-007`, lifecycle operation labels, and status text across `spec/approvals`, `conformance/traceability.md`, `agentic/operations.md`, TypeScript core/adapter READMEs, and Draft 0.2 evidence; `git diff --check` exited 0.
+- Conformance: Approval suite 47/47 PASS; full conformance 199/199 PASS.
+- Mutation: Reused fresh TASK-055 full-core mutation evidence: 98.27% full-core, Approval sources 97.11%, zero critical Approval Validity survivors.
+- Notes: Traceability already maps `APPROVAL-VALIDITY-001` through `APPROVAL-VALIDITY-012`, `APPROVAL-ERROR-006`, and `APPROVAL-ERROR-007` to manifest-listed vectors. Approvals inventory remains 49 total, 44 covered, 5 not directly testable, 0 uncovered, 0 blocking spec gaps; no Agentic canonical Approval operation was introduced.
 
 <a id="task-057"></a>
 
-### - [ ] TASK-057 — Approval Validity Slice Closure Gate
+### - [x] TASK-057 — Approval Validity Slice Closure Gate
 
 **Release:** Draft 0.2
 
@@ -5436,10 +5441,10 @@ Approval Validity Slice Closure Gate.
 
 **Definition of Done**
 
-- [ ] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -5447,7 +5452,12 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: `npm run build --workspaces`, `npm run typecheck --workspaces`, `npm run test --workspaces`, `npm run test --workspace @finkore/typescript-conformance-adapter`, `npm run test:coverage --workspace @finkore/typescript`, `npm run test:coverage --workspace @finkore/conformance-runner`, Approval/full conformance, full-core mutation, and `git diff --check` exited 0.
+- Conformance: Approval suite 47/47 PASS; full conformance 199/199 PASS across Money 83/83, Workflow 20/20, Audit 29/29, Approvals 47/47, Entities 20/20; mutation-sensitive vectors 174/174 PASS.
+- Mutation: Full-core Stryker 98.27% with report at `implementations/typescript/core/reports/mutation/mutation.json` and `.html`; Approval sources 97.11%, zero critical Approval Validity survivors.
+- Notes: Approval Validity is closed for Draft 0.2. Documentation reviewed: spec/index, traceability, core README, adapter README, conformance-local operation labels, and JSDoc remain synchronized. Next execution pointer advanced to TASK-058.
 
 ### Milestone: Draft 0.2 Alignment
 
