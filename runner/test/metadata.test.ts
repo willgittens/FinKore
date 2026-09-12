@@ -25,6 +25,8 @@ describe('metadata', () => {
     expect(CONFORMANCE_OPERATION_IDS.has('approval.decision.withdraw')).toBe(true)
     expect(CONFORMANCE_OPERATION_IDS.has('approval.decision.supersede')).toBe(true)
     expect(CONFORMANCE_OPERATION_IDS.has('approval.requirement.supersede')).toBe(true)
+    expect(CONFORMANCE_OPERATION_IDS.has('approval.composition.evaluate')).toBe(true)
+    expect(AGENTIC_OPERATION_IDS.has('approval.composition.evaluate')).toBe(false)
     expect(AGENTIC_OPERATION_IDS.has('money.allocate')).toBe(false)
     expect(AGENTIC_OPERATION_IDS.has('money.rate.apply')).toBe(false)
     expect(AGENTIC_OPERATION_IDS.has('entity.evolution.correct')).toBe(false)

@@ -17,7 +17,7 @@ Planning audit: 2026-09-09, repository HEAD `fa7a2e888fe68f6a0f667fd002e7b7e4149
 - `agentic/operations.md` has 11 canonical operations: seven Money, Workflow transition, and Audit append/remove/replace. Entity and Approval operation labels remain conformance-local. `runner/src/metadata.ts` maintains explicit allowlists and reads requirement rows from traceability; adding an unregistered operation will fail before adapter dispatch.
 - `runner/src/manifest.ts` and vector validation support format `0.1` only. TASK-002/003 record that format versions are syntax compatibility versions, not Draft release numbers; Draft 0.2/0.3 artifacts may use format `0.1` while the shape remains compatible. No financial validation belongs in the runner.
 - Core Stryker has an explicit source list and some line ranges. New financial files must enter mutation scope; a high score from the old list is insufficient. Coverage/mutation scripts exist in core and runner, but not the adapter. No dedicated architecture, traceability or Markdown-link script was found.
-- No CoreDoc file was found by repository file-name/content search. Milestone documentation tasks must recheck and record assumption impact or absence. Plans describe external review touchpoints; no reviewer signoff is assumed.
+- Historical planning observation: no CoreDoc file was found at initial planning. TASK-060 corrected that observation; CoreDoc exists at `docs/coreDoc/core-doc.md` and was re-read for D03-REVIEW-001 on 2026-09-12. Review its foundation-level obligations and record assumption impact. No independent reviewer signoff is assumed.
 - Machine `node` was not found during planning. No Node command/test was run for this documentation-only task. Future runtime tasks must follow the toolchain rule below.
 
 ## 3. Progress Dashboard
@@ -39,7 +39,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ### Draft 0.3
 
 - [x] Draft 0.3 Foundation: [TASK-067](#task-067)–[TASK-067](#task-067)
-- [ ] Advanced Approvals: [TASK-068](#task-068)–[TASK-084](#task-084)
+- [ ] Advanced Approvals: [TASK-068](#task-068)–[TASK-084](#task-084) — complete through [TASK-075](#task-075); next [TASK-076](#task-076) any/all evaluation
 - [ ] Workflow Versioning and Import: [TASK-085](#task-085)–[TASK-098](#task-098)
 - [ ] Entity Revision and Import: [TASK-099](#task-099)–[TASK-110](#task-110)
 - [ ] Money Portability Research: [TASK-111](#task-111)–[TASK-121](#task-121)
@@ -52,7 +52,9 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-068
+NEXT TASK: TASK-076
+LAST COMPLETED: TASK-075
+REASON: Approval Composition TypeScript definition model/API is implemented, documented, unit-tested, covered, mutation-hardened, and exported. Composition evaluation and adapter support remain pending; the expected conformance red set is still 19 unsupported approval.composition.evaluate vectors with zero failures or infrastructure errors.
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -67,7 +69,7 @@ The default sequence is numeric, skipping only unselected OPTIONAL tasks. A bloc
 6. Update documentation required by the task in the same change. Every task reviews applicability to unit tests, vectors, mutation tests, JSDoc, root/package READMEs, `/spec`, `/conformance`, `/agentic` and `AGENTS.md`; record no-change rationale where relevant. Later documentation tasks audit synchronization; they do not excuse stale docs now.
 7. If Definition of Done passes, check the task and its DoD items, append a concise completion note, update dashboard summaries when their gates pass, and advance `NEXT TASK` to the next eligible task. Report results and **STOP**.
 8. If blocked, keep the task unchecked, record the exact blocker and required decision, set the pointer as below, report it and **STOP**. Do not invent semantics or external reviewer approval.
-9. Review requests require concrete reviewable artifacts first. Do not send email/Slack or other messages to reviewers without user authorization. Where the plan requires external domain/security/technical review, missing evidence blocks that review task. Draft 0.2 section 10 review touchpoints are recommendations unless TASK-001 records a stronger existing requirement; Draft 0.3 expressly required reviews are mandatory. Optional pre-v0.5 review/proof does not block closure unless it reveals an actual mandatory defect.
+9. Review requests require concrete reviewable artifacts first. Do not send email/Slack or other messages to reviewers without user authorization. Draft 0.2 section 10 review touchpoints are recommendations unless TASK-001 records a stronger existing requirement. Draft 0.3 uses [D03-REVIEW-001](draft-0.3-research-decisions.md#d03-review-001--draft-review-policy): required domain/security/technical/privacy analysis and explicit scoped maintainer acceptance remain mandatory; external review does not block draft development or closure. Record exact artifact revision, attributed findings, resolutions, decision rationale, CoreDoc/requirement references, and future review topics. Mark absent external review NOT EXTERNALLY REVIEWED. Missing maintainer acceptance, unresolved semantics, CoreDoc conflicts, and failed verification remain blockers. Optional proof does not block closure unless it reveals an actual mandatory defect.
 10. Never renumber completed IDs. Insert future tasks as `TASK-023A`, `TASK-023B` or other unused stable suffixes and use the complete template. For a closure blocker, add focused remediation after the gate, followed by a recheck task; remediation depends on the completed feature tasks and the recorded failed gate attempt, not on the blocked gate checkbox. The recheck depends on remediation, retries the original gate, and checks it only when its original DoD passes. Downstream tasks must depend on successful recheck as well. This avoids circular dependencies. Do not execute inserted tasks during the discovery session.
 
 Blocked pointer:
@@ -4330,8 +4332,8 @@ Approval Current-Effectiveness Contract.
 **Definition of Done**
 
 - [ ] Define current-effectiveness over append-only history, subject revisions/relevant facts and explicit evaluation context; refine existing APPROVAL-DECISION-002/003/007.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -6386,7 +6388,7 @@ Completion:
 
 <a id="task-068"></a>
 
-### - [ ] TASK-068 — Approval Composition Requirement Inventory
+### - [x] TASK-068 — Approval Composition Requirement Inventory
 
 **Release:** Draft 0.3
 
@@ -6459,9 +6461,9 @@ Approval Composition Requirement Inventory.
 
 **Definition of Done**
 
-- [ ] Inventory ANY_OF, ALL_OF, N_OF_M, ordered stages and bounded nested groups; map dependencies on 0.2 effectiveness, actor/requirement identity and history.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Inventory ANY_OF, ALL_OF, N_OF_M, ordered stages and bounded nested groups; map dependencies on 0.2 effectiveness, actor/requirement identity and history.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -6469,11 +6471,16 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC inventory used `rg` over `spec/approvals`, `conformance/approvals`, `conformance/traceability.md`, `agentic/operations.md`, approval core tests, and adapter operations; `git diff --check` passed.
+- Conformance: Existing Approval suite remains 47 vectors before TASK-074. The new Draft 0.3 composition slice has 23 planned directly testable requirements and 0 blocking spec gaps; vectors are intentionally pending.
+- Mutation: Not applicable for this traceability inventory. Recorded critical scenarios include quorum off-by-one, duplicate voter counted twice, ineffective Decision counted, order bypass, nested early return, cycle/depth bypass, and mutable observation defects.
+- Notes: Inventory maps ANY_OF, ALL_OF, N_OF_M, ordered stages, and bounded nested groups to Draft 0.2 current-effectiveness, actor/voter identity, requirement identity, and Decision history. `NEXT TASK` advanced to TASK-069.
 
 <a id="task-069"></a>
 
-### - [ ] TASK-069 — Any-of All-of and Quorum Normative Semantics
+### - [x] TASK-069 — Any-of All-of and Quorum Normative Semantics
 
 **Release:** Draft 0.3
 
@@ -6544,9 +6551,9 @@ Any-of All-of and Quorum Normative Semantics.
 
 **Definition of Done**
 
-- [ ] Define APPROVAL-COMPOSITION-* and APPROVAL-QUORUM-* group/member identity, voter counting, thresholds, rejection/pending, duplicates and eligibility; no implied abstention.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Define APPROVAL-COMPOSITION-* and APPROVAL-QUORUM-* group/member identity, voter counting, thresholds, rejection/pending, duplicates and eligibility; no implied abstention.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -6554,11 +6561,16 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC review and `git diff --check` passed.
+- Conformance: 23 Draft 0.3 Approval Composition/Error/Quorum requirements are traceability-listed as UNCOVERED until TASK-074 adds manifest-listed vectors.
+- Mutation: Not applicable for this spec-only task; mutation scenarios are recorded for later implementation and hardening tasks.
+- Notes: Added vector-ready `APPROVAL-COMPOSITION-*` and `APPROVAL-QUORUM-*` semantics for group identity, member identity, any/all/quorum outcomes, thresholds, rejection/pending handling, duplicate voters, eligibility, and no implied abstention. `NEXT TASK` advanced to TASK-070.
 
 <a id="task-070"></a>
 
-### - [ ] TASK-070 — Composition and Current-Effectiveness Interaction
+### - [x] TASK-070 — Composition and Current-Effectiveness Interaction
 
 **Release:** Draft 0.3
 
@@ -6629,9 +6641,9 @@ Composition and Current-Effectiveness Interaction.
 
 **Definition of Done**
 
-- [ ] Require composition to reuse closed 0.2 effectiveness; define how withdrawn, expired, superseded, stale and ineligible decisions affect quorum/any/all outcomes.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Require composition to reuse closed 0.2 effectiveness; define how withdrawn, expired, superseded, stale and ineligible decisions affect quorum/any/all outcomes.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -6639,11 +6651,16 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC review and `git diff --check` passed.
+- Conformance: Current-effectiveness interaction requirements remain UNCOVERED until TASK-074 publishes vectors; no closed Draft 0.2 vector semantics were changed.
+- Mutation: Not applicable for this spec-only task.
+- Notes: Composition now explicitly reuses Draft 0.2 effectiveness and excludes withdrawn, expired, superseded, stale-fact, stale-revision, ineligible, malformed, and rejected Decisions from quorum approval counts. `NEXT TASK` advanced to TASK-071.
 
 <a id="task-071"></a>
 
-### - [ ] TASK-071 — Ordered Stages and Bounded Groups Semantics
+### - [x] TASK-071 — Ordered Stages and Bounded Groups Semantics
 
 **Release:** Draft 0.3
 
@@ -6714,9 +6731,9 @@ Ordered Stages and Bounded Groups Semantics.
 
 **Definition of Done**
 
-- [ ] Specify stage progression, independent parallel group meaning, bounded nesting/depth, cycle rejection, deterministic traversal and actionable requirements; no scheduling engine.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Specify stage progression, independent parallel group meaning, bounded nesting/depth, cycle rejection, deterministic traversal and actionable requirements; no scheduling engine.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -6724,11 +6741,16 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC review and `git diff --check` passed.
+- Conformance: Stage, deterministic traversal, cycle, depth, and actionable-requirement requirements are UNCOVERED until TASK-074.
+- Mutation: Not applicable for this spec-only task.
+- Notes: Specified declared-order stage progression, same-stage parallel group meaning, maximum group depth of four including the root, cycle rejection, deterministic traversal, and first non-approved stage actionability. `NEXT TASK` advanced to TASK-072.
 
 <a id="task-072"></a>
 
-### - [ ] TASK-072 — Approval Composition Portable Error Design
+### - [x] TASK-072 — Approval Composition Portable Error Design
 
 **Release:** Draft 0.3
 
@@ -6799,9 +6821,9 @@ Approval Composition Portable Error Design.
 
 **Definition of Done**
 
-- [ ] Reuse INVALID_CHAIN, REQUIRED and CONDITION_UNRESOLVED where applicable; resolve invalid group shape, missing states and threshold errors without arbitrary categories.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Reuse INVALID_CHAIN, REQUIRED and CONDITION_UNRESOLVED where applicable; resolve invalid group shape, missing states and threshold errors without arbitrary categories.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -6809,11 +6831,16 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC review and `git diff --check` passed.
+- Conformance: New error requirements `APPROVAL-ERROR-008` and `APPROVAL-ERROR-009` are UNCOVERED until TASK-074 adds vectors.
+- Mutation: Not applicable for this spec-only task.
+- Notes: Reused `FINKORE_APPROVAL_INVALID_CHAIN`, `FINKORE_APPROVAL_REQUIRED`, and `FINKORE_APPROVAL_CONDITION_UNRESOLVED`; no quorum-specific portable error was introduced. `NEXT TASK` advanced to TASK-073.
 
 <a id="task-073"></a>
 
-### - [ ] TASK-073 — Approval Composition Domain and Security Review
+### - [x] TASK-073 — Approval Composition Domain and Security Review
 
 **Release:** Draft 0.3
 
@@ -6832,7 +6859,7 @@ Approval Composition Domain and Security Review.
 **Scope**
 
 - Obtain and record required accounting/domain review of counting/rejection/duplicates and technical/security review of bounded nesting and safe diagnostics.
-- Required review gate from 0.3 plan sections 8 and 11. Prepare concrete semantics and contrast cases first. Missing reviewer evidence is BLOCKED BY REVIEW; no self-invented external signoff.
+- Required review gate from 0.3 plan sections 8 and 11, governed by D03-REVIEW-001. Prepare concrete semantics and contrast cases first. Missing scoped maintainer acceptance is BLOCKED BY REVIEW; unresolved semantics remain BLOCKED BY SPEC GAP. Record external review status separately.
 
 **Non-scope**
 
@@ -6861,7 +6888,7 @@ Approval Composition Domain and Security Review.
 **Implementation instructions**
 
 1. Prepare the scoped evidence/options or review packet using repository requirements and primary sources where standards research is needed. Record source versions/links and unresolved questions. No normative or runtime changes in research.
-2. For a review, record reviewer role, reviewed artifact revision, findings and resolution; missing required external evidence is a blocker. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
+2. For a review, apply D03-REVIEW-001: record attributed analysis, maintainer authority and scoped acceptance, exact artifact revision, findings and resolutions, and future external review topics/status. Missing required maintainer acceptance or unresolved findings are blockers; absent external review alone is not. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
 3. If a decision activates work, bind its narrow scope to the conditional follow-up tasks before any normative edit. If the scope exceeds one focused task, insert suffixed tasks with all template fields and dependencies; do not execute them now.
 
 **Verification**
@@ -6885,9 +6912,9 @@ Approval Composition Domain and Security Review.
 
 **Definition of Done**
 
-- [ ] Obtain and record required accounting/domain review of counting/rejection/duplicates and technical/security review of bounded nesting and safe diagnostics.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Obtain and record required accounting/domain review of counting/rejection/duplicates and technical/security review of bounded nesting and safe diagnostics.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -6895,11 +6922,18 @@ A scoped research decision or required reviewer report exists; no new normative 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE — 2026-09-12.
+- Decisions: D03-REVIEW-001, D03-QUORUM-001/002/003, and D03-COMPOSITION-001 through 006. All six review findings resolved; scoped recommendations accepted by the maintainer, including explicit auto-accept authority for this review.
+- Review: attributed domain/accounting and technical/security analysis, alternatives, contrast cases, findings/resolutions, and limitations in [the final review record](draft-0.3-research-decisions.md#task-073-final-review-record). External review: NOT EXTERNALLY REVIEWED.
+- Revision: [final SHA-256 manifest](review-snapshots/task-073-final.json). Earlier decision manifests remain historical records.
+- Scope: normative remediation was explicitly authorized during the decision discussion, separately from this research task's default scope. No runtime implementation or conformance completion is implied.
+- Verification: documentation links/anchors, requirement mapping and totals, unchanged closed coverage, stable task IDs/dependency state, final artifact hashes, and git diff --check passed. See [execution evidence](draft-0.3-execution-evidence.md). Runtime tests and mutation do not apply to this artifact-only review.
+- Next: TASK-074 remains unchecked and ready; 37 Draft 0.3 requirements remain UNCOVERED, with zero identified blocking specification gaps in the inventory.
 
 <a id="task-074"></a>
 
-### - [ ] TASK-074 — Approval Composition Conformance Families
+### - [x] TASK-074 — Approval Composition Conformance Families
 
 **Release:** Draft 0.3
 
@@ -6918,6 +6952,7 @@ Approval Composition Conformance Families.
 **Scope**
 
 - Add any/all/quorum, ordered stages and nesting vector families, threshold boundaries, duplicates, rejection, missing states, cycles and depth cases.
+- Carry forward the accepted TASK-073 contrast cases: fixed N under applicability changes, recursively inapplicable groups, parallel stage aggregation, complete validation and error priority, eligible actionable paths, opposing effective votes, and member-specific voter evidence. Derive all expectations from APPROVAL-COMPOSITION-001 through 024, APPROVAL-QUORUM-001 through 010, and APPROVAL-ERROR-008 through 010.
 
 **Non-scope**
 
@@ -6933,6 +6968,7 @@ Approval Composition Conformance Families.
 - `conformance/approvals/`
 - `conformance/traceability.md`
 - `conformance/conventions.md`
+- `docs/tasks/draft-0.3-research-decisions.md` — accepted review rationale and contrast cases; `/spec` remains normative.
 - `agentic/operations.md`
 - `implementations/typescript/core/src/approvals/`
 - `implementations/typescript/core/test/approvals/`
@@ -6975,9 +7011,9 @@ Approval Composition Conformance Families.
 
 **Definition of Done**
 
-- [ ] Add any/all/quorum, ordered stages and nesting vector families, threshold boundaries, duplicates, rejection, missing states, cycles and depth cases.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Add any/all/quorum, ordered stages and nesting vector families, threshold boundaries, duplicates, rejection, missing states, cycles and depth cases.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -6985,11 +7021,16 @@ Named vectors are registered and traceable; new behavior is intentionally FAIL/U
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD exited 0; RUNNER exited 0 with 10 files / 110 tests passing; full CONF exited 3 with the expected conformance-first red set only. DOC (`git diff --check`) passed. Evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: 218 total vectors; 199 PASS, 0 FAIL, 19 UNSUPPORTED, 0 INFRASTRUCTURE_ERROR. The unsupported set is exactly the new `approval.composition.evaluate` vector family; previously closed Money 83/83, Workflow 20/20, Audit 29/29, existing Approvals 47/47, and Entities 20/20 remain passing.
+- Mutation: Not applicable for this conformance-first artifact task; the 19 new mutation-sensitive vectors define later implementation hardening targets.
+- Notes: Added and registered `conformance/approvals/composition.json`; documented the conformance-local operation; updated traceability to 268 covered, 0 uncovered, 66 not directly testable, 0 blocking spec gaps. `NEXT TASK` advanced to TASK-075.
 
 <a id="task-075"></a>
 
-### - [ ] TASK-075 — Approval Composition TypeScript Model and API
+### - [x] TASK-075 — Approval Composition TypeScript Model and API
 
 **Release:** Draft 0.3
 
@@ -7064,9 +7105,9 @@ Approval Composition TypeScript Model and API.
 
 **Definition of Done**
 
-- [ ] Implement only group representation/validation and public types from the approved spec, with JSDoc and boundary unit tests.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement only group representation/validation and public types from the approved spec, with JSDoc and boundary unit tests.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -7074,7 +7115,11 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: Node v24.20.0 from `.tools/node-v24.20.0-linux-x64`; `npm run build --workspaces` exited 0; `npm run typecheck --workspaces` exited 0; `npm run test --workspace @finkore/typescript -- test/approvals` exited 0 with 8 files / 84 tests passing; `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0 with 1 file / 13 tests passing; `npm run test:coverage --workspace @finkore/typescript` exited 0 with 33 files / 289 tests passing and 98.87% statement coverage; `git diff --check` passed.
+- Conformance: `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --suite approvals --json` exited 3 as expected: 66 total, 47 passed, 0 failed, 19 unsupported, 0 infrastructure errors. The unsupported set remains the TASK-074 `approval.composition.evaluate` vectors scheduled for later adapter/evaluation tasks.
+- Mutation: targeted core mutation `npm run test:mutation --workspace @finkore/typescript -- --mutate src/approvals/approval-composition.ts` exited 0 with 100.00% score, 238 killed, 3 timeout, 0 survived, 0 no coverage. Reports: `implementations/typescript/core/reports/mutation/mutation.json` and `mutation.html`.
+- Notes: Added the `ApprovalComposition` public model/API, serialized composition public types, exports, JSDoc, boundary and mutation-sensitive unit tests, Stryker coverage for the new source file, adapter expectation synchronization, and TypeScript core README status/API updates. No `/spec`, `/conformance`, `/agentic`, AGENTS.md, CoreDoc, root README, or conformance vectors changed in this task because no evaluation operation or canonical Agentic operation was implemented. `NEXT TASK` advanced to TASK-076.
 
 <a id="task-076"></a>
 
@@ -8261,7 +8306,7 @@ Workflow Versioning Technical and Domain Review.
 **Implementation instructions**
 
 1. Prepare the scoped evidence/options or review packet using repository requirements and primary sources where standards research is needed. Record source versions/links and unresolved questions. No normative or runtime changes in research.
-2. For a review, record reviewer role, reviewed artifact revision, findings and resolution; missing required external evidence is a blocker. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
+2. For a review, apply D03-REVIEW-001: record attributed analysis, maintainer authority and scoped acceptance, exact artifact revision, findings and resolutions, and future external review topics/status. Missing required maintainer acceptance or unresolved findings are blockers; absent external review alone is not. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
 3. If a decision activates work, bind its narrow scope to the conditional follow-up tasks before any normative edit. If the scope exceeds one focused task, insert suffixed tasks with all template fields and dependencies; do not execute them now.
 
 **Verification**
@@ -9402,7 +9447,7 @@ Entity Import Domain and Security Review.
 **Implementation instructions**
 
 1. Prepare the scoped evidence/options or review packet using repository requirements and primary sources where standards research is needed. Record source versions/links and unresolved questions. No normative or runtime changes in research.
-2. For a review, record reviewer role, reviewed artifact revision, findings and resolution; missing required external evidence is a blocker. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
+2. For a review, apply D03-REVIEW-001: record attributed analysis, maintainer authority and scoped acceptance, exact artifact revision, findings and resolutions, and future external review topics/status. Missing required maintainer acceptance or unresolved findings are blockers; absent external review alone is not. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
 3. If a decision activates work, bind its narrow scope to the conditional follow-up tasks before any normative edit. If the scope exceeds one focused task, insert suffixed tasks with all template fields and dependencies; do not execute them now.
 
 **Verification**
@@ -10199,7 +10244,7 @@ Cross-Language Numeric Capability Matrix.
 **Implementation instructions**
 
 1. Prepare the scoped evidence/options or review packet using repository requirements and primary sources where standards research is needed. Record source versions/links and unresolved questions. No normative or runtime changes in research.
-2. For a review, record reviewer role, reviewed artifact revision, findings and resolution; missing required external evidence is a blocker. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
+2. For a review, apply D03-REVIEW-001: record attributed analysis, maintainer authority and scoped acceptance, exact artifact revision, findings and resolutions, and future external review topics/status. Missing required maintainer acceptance or unresolved findings are blockers; absent external review alone is not. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
 3. If a decision activates work, bind its narrow scope to the conditional follow-up tasks before any normative edit. If the scope exceeds one focused task, insert suffixed tasks with all template fields and dependencies; do not execute them now.
 
 **Verification**
@@ -10285,7 +10330,7 @@ Precision and Overflow Minimum Guarantee Decision.
 **Implementation instructions**
 
 1. Prepare the scoped evidence/options or review packet using repository requirements and primary sources where standards research is needed. Record source versions/links and unresolved questions. No normative or runtime changes in research.
-2. For a review, record reviewer role, reviewed artifact revision, findings and resolution; missing required external evidence is a blocker. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
+2. For a review, apply D03-REVIEW-001: record attributed analysis, maintainer authority and scoped acceptance, exact artifact revision, findings and resolutions, and future external review topics/status. Missing required maintainer acceptance or unresolved findings are blockers; absent external review alone is not. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
 3. If a decision activates work, bind its narrow scope to the conditional follow-up tasks before any normative edit. If the scope exceeds one focused task, insert suffixed tasks with all template fields and dependencies; do not execute them now.
 
 **Verification**
@@ -10371,7 +10416,7 @@ Minor-Unit Metadata Policy Research.
 **Implementation instructions**
 
 1. Prepare the scoped evidence/options or review packet using repository requirements and primary sources where standards research is needed. Record source versions/links and unresolved questions. No normative or runtime changes in research.
-2. For a review, record reviewer role, reviewed artifact revision, findings and resolution; missing required external evidence is a blocker. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
+2. For a review, apply D03-REVIEW-001: record attributed analysis, maintainer authority and scoped acceptance, exact artifact revision, findings and resolutions, and future external review topics/status. Missing required maintainer acceptance or unresolved findings are blockers; absent external review alone is not. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
 3. If a decision activates work, bind its narrow scope to the conditional follow-up tasks before any normative edit. If the scope exceeds one focused task, insert suffixed tasks with all template fields and dependencies; do not execute them now.
 
 **Verification**
@@ -10457,7 +10502,7 @@ Private Currency Namespace Research.
 **Implementation instructions**
 
 1. Prepare the scoped evidence/options or review packet using repository requirements and primary sources where standards research is needed. Record source versions/links and unresolved questions. No normative or runtime changes in research.
-2. For a review, record reviewer role, reviewed artifact revision, findings and resolution; missing required external evidence is a blocker. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
+2. For a review, apply D03-REVIEW-001: record attributed analysis, maintainer authority and scoped acceptance, exact artifact revision, findings and resolutions, and future external review topics/status. Missing required maintainer acceptance or unresolved findings are blockers; absent external review alone is not. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
 3. If a decision activates work, bind its narrow scope to the conditional follow-up tasks before any normative edit. If the scope exceeds one focused task, insert suffixed tasks with all template fields and dependencies; do not execute them now.
 
 **Verification**
@@ -11197,7 +11242,7 @@ Audit Provenance Research and Security Decision.
 **Implementation instructions**
 
 1. Prepare the scoped evidence/options or review packet using repository requirements and primary sources where standards research is needed. Record source versions/links and unresolved questions. No normative or runtime changes in research.
-2. For a review, record reviewer role, reviewed artifact revision, findings and resolution; missing required external evidence is a blocker. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
+2. For a review, apply D03-REVIEW-001: record attributed analysis, maintainer authority and scoped acceptance, exact artifact revision, findings and resolutions, and future external review topics/status. Missing required maintainer acceptance or unresolved findings are blockers; absent external review alone is not. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
 3. If a decision activates work, bind its narrow scope to the conditional follow-up tasks before any normative edit. If the scope exceeds one focused task, insert suffixed tasks with all template fields and dependencies; do not execute them now.
 
 **Verification**
@@ -11936,7 +11981,7 @@ Portable Condition Standards Research.
 **Implementation instructions**
 
 1. Prepare the scoped evidence/options or review packet using repository requirements and primary sources where standards research is needed. Record source versions/links and unresolved questions. No normative or runtime changes in research.
-2. For a review, record reviewer role, reviewed artifact revision, findings and resolution; missing required external evidence is a blocker. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
+2. For a review, apply D03-REVIEW-001: record attributed analysis, maintainer authority and scoped acceptance, exact artifact revision, findings and resolutions, and future external review topics/status. Missing required maintainer acceptance or unresolved findings are blockers; absent external review alone is not. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
 3. If a decision activates work, bind its narrow scope to the conditional follow-up tasks before any normative edit. If the scope exceeds one focused task, insert suffixed tasks with all template fields and dependencies; do not execute them now.
 
 **Verification**
@@ -12022,7 +12067,7 @@ Condition Model Decision and Pre-Spec Security Review.
 **Implementation instructions**
 
 1. Prepare the scoped evidence/options or review packet using repository requirements and primary sources where standards research is needed. Record source versions/links and unresolved questions. No normative or runtime changes in research.
-2. For a review, record reviewer role, reviewed artifact revision, findings and resolution; missing required external evidence is a blocker. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
+2. For a review, apply D03-REVIEW-001: record attributed analysis, maintainer authority and scoped acceptance, exact artifact revision, findings and resolutions, and future external review topics/status. Missing required maintainer acceptance or unresolved findings are blockers; absent external review alone is not. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
 3. If a decision activates work, bind its narrow scope to the conditional follow-up tasks before any normative edit. If the scope exceeds one focused task, insert suffixed tasks with all template fields and dependencies; do not execute them now.
 
 **Verification**
@@ -12939,7 +12984,7 @@ Condition Implementation Security Review.
 **Implementation instructions**
 
 1. Prepare the scoped evidence/options or review packet using repository requirements and primary sources where standards research is needed. Record source versions/links and unresolved questions. No normative or runtime changes in research.
-2. For a review, record reviewer role, reviewed artifact revision, findings and resolution; missing required external evidence is a blocker. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
+2. For a review, apply D03-REVIEW-001: record attributed analysis, maintainer authority and scoped acceptance, exact artifact revision, findings and resolutions, and future external review topics/status. Missing required maintainer acceptance or unresolved findings are blockers; absent external review alone is not. For a research decision, document rationale, review status and INCLUDE/DEFER/REJECT (or the specified condition decision vocabulary).
 3. If a decision activates work, bind its narrow scope to the conditional follow-up tasks before any normative edit. If the scope exceeds one focused task, insert suffixed tasks with all template fields and dependencies; do not execute them now.
 
 For a documented non-selection, make only the disposition/documentation checks; do not create the proposed financial artifacts.
@@ -13366,7 +13411,7 @@ Draft 0.3 Agentic Operation Review.
 **Scope**
 
 - Classify every new operation as canonical, conformance-local or structural; review complete effects/preconditions/errors/determinism and requirement references, including existing descriptors affected by new inputs.
-- Required security review for state-changing Approval/Workflow exposure and diagnostics. Record actual reviewer evidence. Align canonical IDs, runner metadata, adapter dispatch and docs without premature promotion or AI bypasses.
+- Required security review for state-changing Approval/Workflow exposure and diagnostics. Record attributed security analysis and explicit scoped maintainer acceptance under D03-REVIEW-001; keep external review status separate. Align canonical IDs, runner metadata, adapter dispatch and docs without premature promotion or AI bypasses.
 
 **Non-scope**
 
@@ -14477,7 +14522,7 @@ Draft 0.3 Final Agentic Audit.
 
 **Scope**
 
-- Verify promoted descriptors have accurate inputs/outputs, effects, determinism, mutatesState, mutatesFinancialState, audit/approval relevance, errors and requirement links; retain required security signoff.
+- Verify promoted descriptors have accurate inputs/outputs, effects, determinism, mutatesState, mutatesFinancialState, audit/approval relevance, errors and requirement links; retain required security analysis and scoped maintainer acceptance under D03-REVIEW-001.
 
 **Non-scope**
 
@@ -14533,7 +14578,7 @@ Draft 0.3 Final Agentic Audit.
 
 **Definition of Done**
 
-- [ ] Verify promoted descriptors have accurate inputs/outputs, effects, determinism, mutatesState, mutatesFinancialState, audit/approval relevance, errors and requirement links; retain required security signoff.
+- [ ] Verify promoted descriptors have accurate inputs/outputs, effects, determinism, mutatesState, mutatesFinancialState, audit/approval relevance, errors and requirement links; retain required security analysis and scoped maintainer acceptance under D03-REVIEW-001.
 - [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
 - [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
@@ -15146,7 +15191,7 @@ The optional cross-language proof is TASK-148–TASK-150, fully specified in the
 | Money precision/overflow, minor-unit guidance, private currency | Required separate research decisions; normative/code changes only via approved conditional follow-ups. No live metadata service or full registry. |
 | Audit provenance | Required research/security decision; approved narrow semantics require the complete conditional track. Retention remains deferred. |
 | Draft 0.2 accountant/domain/security touchpoints | Recommended review of rates, allocation, evolution, validity and Audit redaction; capture concrete packets/evidence through scope/spec/docs tasks. Optional pre-v0.5 follow-up unless explicitly made required at scope lock. |
-| Draft 0.3 quorum/stages/nesting, Workflow versioning, Entity import, Conditions and Agentic review | Required as specified in the source plan; dedicated tasks are mandatory or conditionally mandatory and cannot be replaced by an optional follow-up note. |
+| Draft 0.3 quorum/stages/nesting, Workflow versioning, Entity import, Conditions and Agentic review | Required analysis and scoped maintainer acceptance under D03-REVIEW-001; dedicated tasks remain mandatory or conditionally mandatory. Future external review is recorded separately and does not block draft development or closure. |
 | Workflow migration | DEFER 0.4+ after bound definition identity/import/conflict closes. Importing an existing state is not migrating between definitions. |
 | Delegation / escalation | Delegation remains RESEARCH FIRST, default future backlog; escalation DEFER 0.4+. No IAM/RBAC, timers, notifications or actor directory. |
 | Global identity registry | RESEARCH FIRST, default DEFER; 0.3 import aliases do not authorize a registry or deduplication service. |
@@ -15163,7 +15208,7 @@ The optional cross-language proof is TASK-148–TASK-150, fully specified in the
 TASK-166 is the final mandatory task. `FINKORE CORE DRAFT 0.3 COMPLETE` requires all earlier mandatory tasks (including activated follow-ups and inserted remediation) checked and their evidence applicable to the final source. An unchecked unselected optional proof is permitted; an approved but unimplemented condition/portability/provenance feature is not.
 
 - Draft 0.2 explicitly closed with all selected Rates, Allocation, Entity evolution, Audit relationships, Approval validity and Agentic alignment complete.
-- Every selected 0.3 financial behavior is normative, implemented, adapted and independently closed; all research outcomes and required external reviews are evidenced.
+- Every selected 0.3 financial behavior is normative, implemented, adapted and independently closed; all research outcomes, required analysis, and scoped maintainer acceptance under D03-REVIEW-001 are evidenced; external review status is explicit.
 - Every directly testable required requirement is covered. `UNCOVERED = 0`, `BLOCKING SPEC GAPS = 0`. NOT DIRECTLY TESTABLE requirements retain defensible architectural/unit/review evidence.
 - All required 0.1/0.2/0.3 vectors PASS with per-domain/total results: `FAIL = 0`, `UNSUPPORTED = 0`, `INFRASTRUCTURE_ERROR = 0`.
 - Workspace build, strict typecheck and all tests pass; available coverage checks pass. Complete valid mutation reports cover all core behavior with score >=95% and `critical surviving mutants = 0`; no hidden new source exclusions or tooling failures.

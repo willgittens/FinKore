@@ -340,6 +340,140 @@ export interface SerializedApprovalCondition {
   readonly evaluation: string
 }
 
+
+/**
+ * Stable identifier for an Approval Composition Group.
+ *
+ * Group identifiers are unique only within one Approval Composition definition.
+ *
+ * @see APPROVAL-COMPOSITION-002
+ */
+export type ApprovalCompositionGroupIdentifier = string
+
+/**
+ * Stable identifier for one member within an Approval Group.
+ *
+ * Member identifiers must not repeat within the containing group.
+ *
+ * @see APPROVAL-COMPOSITION-005
+ */
+export type ApprovalCompositionMemberIdentifier = string
+
+/**
+ * Stable identifier for an ordered Approval Stage.
+ *
+ * Stage identity is scoped to one Approval Composition definition.
+ *
+ * @see APPROVAL-COMPOSITION-001
+ */
+export type ApprovalCompositionStageIdentifier = string
+
+/**
+ * Supported Draft 0.3 Approval Group kind.
+ *
+ * @see APPROVAL-COMPOSITION-003
+ */
+export type ApprovalCompositionGroupKind = "ALL_OF" | "ANY_OF" | "N_OF_M"
+
+/**
+ * Serialized member reference in an Approval Group.
+ *
+ * Requirement members reference an Approval Requirement identity. Group members
+ * reference a child Approval Group identity. Quorum groups accept only
+ * requirement members with an explicit voter Actor.
+ *
+ * @see APPROVAL-COMPOSITION-004
+ * @see APPROVAL-QUORUM-007
+ */
+export type SerializedApprovalCompositionMember =
+  | {
+      /** Member kind for a Requirement reference. */
+      readonly type: "requirement"
+
+      /** Stable member identifier unique within the containing Group. */
+      readonly id: ApprovalCompositionMemberIdentifier
+
+      /** Referenced Approval Requirement identity. */
+      readonly requirementId: ApprovalRequirementIdentifier
+
+      /** Explicit voter Actor for quorum members. */
+      readonly voter?: SerializedApprovalActor
+    }
+  | {
+      /** Member kind for a child Group reference. */
+      readonly type: "group"
+
+      /** Stable member identifier unique within the containing Group. */
+      readonly id: ApprovalCompositionMemberIdentifier
+
+      /** Referenced child Approval Group identity. */
+      readonly groupId: ApprovalCompositionGroupIdentifier
+    }
+
+/**
+ * Serialized Approval Group accepted by the TypeScript Approval core.
+ *
+ * Groups are bounded composition nodes. Threshold is required only for N_OF_M
+ * groups and is validated against declared voting members before applicability
+ * is evaluated.
+ *
+ * @see APPROVAL-COMPOSITION-002
+ * @see APPROVAL-COMPOSITION-003
+ * @see APPROVAL-COMPOSITION-004
+ * @see APPROVAL-QUORUM-001
+ */
+export interface SerializedApprovalCompositionGroup {
+  /** Stable group identity unique within one Composition. */
+  readonly id: ApprovalCompositionGroupIdentifier
+
+  /** Declared group-combination kind. */
+  readonly kind: ApprovalCompositionGroupKind
+
+  /** Nonempty member declarations in deterministic evaluation order. */
+  readonly members: readonly SerializedApprovalCompositionMember[]
+
+  /** Positive fixed quorum threshold for N_OF_M groups. */
+  readonly threshold?: number
+}
+
+/**
+ * Serialized ordered Approval Stage.
+ *
+ * Stages sequence root group references. Stage containers are not counted as
+ * group nesting levels.
+ *
+ * @see APPROVAL-COMPOSITION-001
+ * @see APPROVAL-COMPOSITION-007
+ * @see APPROVAL-COMPOSITION-016
+ */
+export interface SerializedApprovalCompositionStage {
+  /** Stable stage identity within the Composition. */
+  readonly id: ApprovalCompositionStageIdentifier
+
+  /** Nonempty root group references for this stage, in declared order. */
+  readonly groups: readonly ApprovalCompositionGroupIdentifier[]
+}
+
+/**
+ * Serialized Approval Composition accepted by the TypeScript Approval core.
+ *
+ * Exactly one of rootGroup or stages must be present. The Composition definition
+ * does not itself contain Approval Decisions or runtime state.
+ *
+ * @see APPROVAL-COMPOSITION-001
+ * @see APPROVAL-COMPOSITION-008
+ */
+export interface SerializedApprovalComposition {
+  /** Standalone root group identity for non-staged compositions. */
+  readonly rootGroup?: ApprovalCompositionGroupIdentifier
+
+  /** Ordered stage list for staged compositions. */
+  readonly stages?: readonly SerializedApprovalCompositionStage[]
+
+  /** Declared groups available to the root or stage references. */
+  readonly groups: readonly SerializedApprovalCompositionGroup[]
+}
+
 /**
  * Serialized Approval Chain accepted by the TypeScript Approval core.
  *

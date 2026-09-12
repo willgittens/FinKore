@@ -45,6 +45,7 @@ export const CONFORMANCE_OPERATION_IDS = new Set([
   'approval.decision.withdraw',
   'approval.condition.evaluate',
   'approval.chain.evaluate',
+  'approval.composition.evaluate',
 ])
 
 const REQUIREMENT_ROW = /^\|\s*([A-Z]+(?:-[A-Z]+)+-[0-9]{3})\s*\|/

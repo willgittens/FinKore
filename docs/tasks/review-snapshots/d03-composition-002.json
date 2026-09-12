@@ -1,0 +1,29 @@
+{
+  "decision": "D03-COMPOSITION-002",
+  "date": "2026-09-12",
+  "scope": "Specification translation of accepted ALL_OF aggregation between applicable stage groups and no-obligation stage progression; structure, validation/actionability, and error review remain pending.",
+  "externalReview": "NOT EXTERNALLY REVIEWED",
+  "algorithm": "SHA-256",
+  "files": [
+    {
+      "path": "docs/coreDoc/core-doc.md",
+      "sha256": "53d5565c6ac0cad831ec9409c86c1648c93f15c15325530eca7581cb6d6fdf1f"
+    },
+    {
+      "path": "spec/approvals/composition.md",
+      "sha256": "b39085a1a7737577d01625f2b2eab471da0ca0522405f436dc7bd1a3f415d8e7"
+    },
+    {
+      "path": "spec/approvals/README.md",
+      "sha256": "eb89895510f811409c3e24267e8fb253013b7c13d7f997f7d5620b9d25796b48"
+    },
+    {
+      "path": "conformance/traceability.md",
+      "sha256": "296d1764a725c3754da328f2d3b29cc7e20cf382c6dd52cafddf22b2eb82efd0"
+    },
+    {
+      "path": "docs/tasks/draft-0.3-research-decisions.md",
+      "sha256": "3a67d332ce5f027182405fc5675dee74ba2ade4a26a3ce5080bf31c6d7103b75"
+    }
+  ]
+}

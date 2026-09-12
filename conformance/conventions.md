@@ -74,6 +74,7 @@ These identifiers name observable behavior, not implementation methods.
 | `approval.decision.supersede` | Append Decision supersession lifecycle evidence without altering Decision history. |
 | `approval.condition.evaluate` | Return `APPLICABLE` or `NOT_APPLICABLE` from explicit facts. |
 | `approval.chain.evaluate` | Derive chain state from its declared combination and explicit Requirement state observations. |
+| `approval.composition.evaluate` | Derive Draft 0.3 composition outcome and actionable Requirement identifiers from declared groups, stages, applicability, current-effective evidence, and explicit evaluation context. |
 | `finkore.entity.create` | Create under the supplied composing-domain definition. |
 | `finkore.entity.mutate` | Apply a declared mutation under supplied mutability and validation rules. |
 | `finkore.entity.transition` | Apply a lifecycle transition under the referenced workflow. |
@@ -94,6 +95,8 @@ conformance-local representation boundary checks. They exercise normative Money
 serialization but are not separate public Agentic operations. For Money Draft
 0.2, Rate application and Allocation are promoted to
 `finkore.money.applyrate` and `finkore.money.allocate` after Agentic review.
+For Approval Composition, `approval.composition.evaluate` uses a conformance-local logical fixture. `composition` declares exactly one `rootGroup` or ordered `stages`, plus declared `groups` with `ALL_OF`, `ANY_OF`, or `N_OF_M` kind. `requirements` supplies explicit applicability and, for non-quorum members, current state observations. Quorum vectors use explicit voter members and `decisions` entries to observe current-effective voter evidence; an `effective: false` decision is retained history that does not count toward current approval. The normalized success value is `{ "outcome": "APPROVED" | "PENDING" | "REJECTED", "actionableRequirements": [...] }`.
+
 For Approvals, `approval.chain.evaluate`, `approval.decision.withdraw`,
 `approval.decision.supersede`, and `approval.requirement.supersede` remain
 conformance-local. They observe deterministic chain composition and Draft 0.2

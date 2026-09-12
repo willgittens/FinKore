@@ -1,0 +1,33 @@
+{
+  "decision": "D03-COMPOSITION-003",
+  "date": "2026-09-12",
+  "scope": "Specification translation of accepted nonempty stage/group declarations and depth counted from each root group; validation/actionability and error review remain pending.",
+  "externalReview": "NOT EXTERNALLY REVIEWED",
+  "algorithm": "SHA-256",
+  "files": [
+    {
+      "path": "docs/coreDoc/core-doc.md",
+      "sha256": "53d5565c6ac0cad831ec9409c86c1648c93f15c15325530eca7581cb6d6fdf1f"
+    },
+    {
+      "path": "spec/approvals/composition.md",
+      "sha256": "6b2f5eff96acb7e48b2f386979daa80c71a23be10be8d1a89559c44afb02a2e2"
+    },
+    {
+      "path": "spec/approvals/errors.md",
+      "sha256": "13682c10361f83ebdf41c2e376cc0d25a31e3eb84b827a0f2924f0868944d89e"
+    },
+    {
+      "path": "spec/approvals/README.md",
+      "sha256": "ab391a02f6055c3e391c58b0c55e81abd29314c35cf66906b2d3c347698eaad6"
+    },
+    {
+      "path": "conformance/traceability.md",
+      "sha256": "80712ba39e530dc2477c826bcb9b39c970d3389985dc9d538bd6f22772510648"
+    },
+    {
+      "path": "docs/tasks/draft-0.3-research-decisions.md",
+      "sha256": "06127299bc30a539e930d7491e04088d84eda21d43a88708301e9aab5a68c225"
+    }
+  ]
+}

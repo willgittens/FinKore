@@ -1,4 +1,4 @@
-# Draft 0.1 and Draft 0.2 Requirement Traceability
+# Draft 0.1, Draft 0.2, and Draft 0.3 Requirement Traceability
 
 This is the canonical human-readable requirement-to-vector index. Manifest-listed vectors remain the primary machine-readable mapping through each vector requirements field.
 
@@ -10,11 +10,11 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Money | 73 | 68 | 1 | 4 | 68 | 0 | 0 | 5 | 0 | 0 |
 | Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 | 0 | 0 |
 | Audit | 52 | 44 | 4 | 4 | 42 | 0 | 0 | 10 | 0 | 0 |
-| Approvals | 49 | 46 | 1 | 2 | 44 | 0 | 0 | 5 | 0 | 0 |
+| Approvals | 86 | 83 | 1 | 2 | 81 | 0 | 0 | 5 | 0 | 0 |
 | Entities | 67 | 62 | 3 | 2 | 54 | 0 | 0 | 13 | 0 | 0 |
-| **Total** | **297** | **268** | **15** | **14** | **231** | **0** | **0** | **66** | **0** | **0** |
+| **Total** | **334** | **305** | **15** | **14** | **268** | **0** | **0** | **66** | **0** | **0** |
 
-The suite contains 199 vectors. Overall: **231 covered (77.8%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **66 not directly testable (22.2%)**, **0 deferred (0.0%)**, and **0 blocking spec gaps (0.0%)**.
+The suite contains 218 vectors. Overall: **268 covered (80.2%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **66 not directly testable (19.8%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current draft. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -212,6 +212,30 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-CHAIN-007 | Approvals | MUST / MUST NOT | COVERED | approval.chain.rejected-001 |
 | APPROVAL-CHAIN-008 | Approvals | MUST / MUST NOT | COVERED | approval.chain.deterministic-declared-order-001 |
 | APPROVAL-CHAIN-009 | Approvals | MUST / MUST NOT | COVERED | approval.chain.duplicate-requirement-invalid-001 |
+| APPROVAL-COMPOSITION-001 | Approvals | MUST / MUST NOT | COVERED | approval.composition.all-of-pending-001, approval.composition.structure-empty-stage-kind-invalid-001 |
+| APPROVAL-COMPOSITION-002 | Approvals | MUST / MUST NOT | COVERED | approval.composition.all-of-pending-001, approval.composition.structure-invalid-duplicates-001 |
+| APPROVAL-COMPOSITION-003 | Approvals | MUST / MUST NOT | COVERED | approval.composition.all-of-pending-001, approval.composition.structure-empty-stage-kind-invalid-001 |
+| APPROVAL-COMPOSITION-004 | Approvals | MUST / MUST NOT | COVERED | approval.composition.all-of-pending-001, approval.composition.structure-empty-stage-kind-invalid-001 |
+| APPROVAL-COMPOSITION-005 | Approvals | MUST / MUST NOT | COVERED | approval.composition.structure-invalid-duplicates-001 |
+| APPROVAL-COMPOSITION-006 | Approvals | MUST / MUST NOT | COVERED | approval.composition.structure-cycle-depth-invalid-001 |
+| APPROVAL-COMPOSITION-007 | Approvals | MUST / MUST NOT | COVERED | approval.composition.structure-cycle-depth-invalid-001 |
+| APPROVAL-COMPOSITION-008 | Approvals | MUST / MUST NOT | COVERED | approval.composition.all-of-pending-001 |
+| APPROVAL-COMPOSITION-009 | Approvals | MUST / MUST NOT | COVERED | approval.composition.unresolved-applicability-complete-validation-001 |
+| APPROVAL-COMPOSITION-010 | Approvals | MUST / MUST NOT | COVERED | approval.composition.error-priority-context-before-state-001, approval.composition.error-priority-structure-over-context-001 |
+| APPROVAL-COMPOSITION-011 | Approvals | MUST / MUST NOT | COVERED | approval.composition.any-of-inapplicable-child-pending-001, approval.composition.none-applicable-approved-001, approval.composition.quorum-fixed-threshold-unreachable-001 |
+| APPROVAL-COMPOSITION-012 | Approvals | MUST / MUST NOT | COVERED | approval.composition.any-of-inapplicable-child-pending-001, approval.composition.none-applicable-approved-001 |
+| APPROVAL-COMPOSITION-013 | Approvals | MUST / MUST NOT | COVERED | approval.composition.all-of-pending-001 |
+| APPROVAL-COMPOSITION-014 | Approvals | MUST / MUST NOT | COVERED | approval.composition.any-of-inapplicable-child-pending-001 |
+| APPROVAL-COMPOSITION-015 | Approvals | MUST / MUST NOT | COVERED | approval.composition.all-of-pending-001, approval.composition.quorum-reachable-pending-001 |
+| APPROVAL-COMPOSITION-016 | Approvals | MUST / MUST NOT | COVERED | approval.composition.stage-first-pending-actionable-001, approval.composition.stage-inapplicable-allows-later-001 |
+| APPROVAL-COMPOSITION-017 | Approvals | MUST / MUST NOT | COVERED | approval.composition.stage-parallel-rejected-001 |
+| APPROVAL-COMPOSITION-018 | Approvals | MUST / MUST NOT | COVERED | approval.composition.stage-first-pending-actionable-001, approval.composition.stage-parallel-rejected-001 |
+| APPROVAL-COMPOSITION-019 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-reachable-pending-001, approval.composition.stage-first-pending-actionable-001 |
+| APPROVAL-COMPOSITION-020 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-member-specific-evidence-001 |
+| APPROVAL-COMPOSITION-021 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-ineffective-decision-not-counted-001 |
+| APPROVAL-COMPOSITION-022 | Approvals | MUST / MUST NOT | COVERED | approval.composition.none-applicable-approved-001, approval.composition.stage-inapplicable-allows-later-001 |
+| APPROVAL-COMPOSITION-023 | Approvals | MUST / MUST NOT | COVERED | approval.composition.stage-inapplicable-allows-later-001, approval.composition.stage-parallel-rejected-001 |
+| APPROVAL-COMPOSITION-024 | Approvals | MUST / MUST NOT | COVERED | approval.composition.stage-first-pending-actionable-001, approval.composition.unresolved-applicability-complete-validation-001 |
 | APPROVAL-CONDITION-001 | Approvals | MUST / MUST NOT | COVERED | approval.condition.missing-fact-001 |
 | APPROVAL-CONDITION-002 | Approvals | MUST / MUST NOT | COVERED | approval.condition.applicable-explicit-001, approval.condition.missing-result-unresolved-001, approval.condition.not-applicable-explicit-001 |
 | APPROVAL-CONDITION-003 | Approvals | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
@@ -233,6 +257,19 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-ERROR-005 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001, approval.decision.pending-invalid-001, approval.decision.timestamp-ambiguous-001 |
 | APPROVAL-ERROR-006 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-duplicate-invalid-001 |
 | APPROVAL-ERROR-007 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-missing-context-001 |
+| APPROVAL-ERROR-008 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-invalid-member-voter-001, approval.composition.quorum-opposing-effective-votes-invalid-001, approval.composition.structure-cycle-depth-invalid-001, approval.composition.structure-empty-stage-kind-invalid-001, approval.composition.structure-invalid-duplicates-001 |
+| APPROVAL-ERROR-009 | Approvals | MUST / MUST NOT | COVERED | approval.composition.error-priority-context-before-state-001, approval.composition.error-priority-structure-over-context-001, approval.composition.unresolved-applicability-complete-validation-001 |
+| APPROVAL-ERROR-010 | Approvals | MUST / MUST NOT | COVERED | approval.composition.error-priority-context-before-state-001, approval.composition.error-priority-structure-over-context-001, approval.composition.quorum-opposing-effective-votes-invalid-001 |
+| APPROVAL-QUORUM-001 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-fixed-threshold-unreachable-001, approval.composition.quorum-two-of-three-approved-boundary-001 |
+| APPROVAL-QUORUM-002 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-member-specific-evidence-001, approval.composition.quorum-two-of-three-approved-boundary-001 |
+| APPROVAL-QUORUM-003 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-two-of-three-approved-boundary-001 |
+| APPROVAL-QUORUM-004 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-ineffective-decision-not-counted-001 |
+| APPROVAL-QUORUM-005 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-two-of-three-approved-boundary-001 |
+| APPROVAL-QUORUM-006 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-fixed-threshold-unreachable-001, approval.composition.quorum-reachable-pending-001 |
+| APPROVAL-QUORUM-007 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-invalid-member-voter-001 |
+| APPROVAL-QUORUM-008 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-invalid-member-voter-001 |
+| APPROVAL-QUORUM-009 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-opposing-effective-votes-invalid-001 |
+| APPROVAL-QUORUM-010 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-ineffective-decision-not-counted-001, approval.composition.quorum-member-specific-evidence-001, approval.composition.quorum-opposing-effective-votes-invalid-001 |
 | APPROVAL-REQUIREMENT-001 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.missing-identity-001 |
 | APPROVAL-REQUIREMENT-002 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.missing-subject-001 |
 | APPROVAL-REQUIREMENT-003 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.missing-eligibility-001 |
@@ -293,6 +330,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-EVOLUTION-032 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001, entity.evolution.void.audit-001, entity.evolution.supersession.currentness-001 |
 | ENTITY-EVOLUTION-033 | Entities | MUST / MUST NOT | COVERED | entity.evolution.audit-failure-001 |
 | ENTITY-IDENTITY-001 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
+| APPROVAL-QUORUM-009, APPROVAL-QUORUM-010 | Reject opposing effective votes for a named voter; derive its state only from matching current evidence. | Select latest/first vote or favor either outcome; hide conflicts behind a satisfied branch; use another Actor's rejection or approval; double-count repeated evidence; mutate history while resolving a conflict. |
 | ENTITY-IDENTITY-002 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.transition.success-identity-stable-001 |
 | ENTITY-IDENTITY-003 | Entities | MUST / MUST NOT | COVERED | entity.create.opaque-identity-preserved-001 |
 | ENTITY-IDENTITY-004 | Entities | MUST / MUST NOT | COVERED | entity.mutate.display-number-not-identity-001 |
@@ -407,6 +445,18 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-VALIDITY-004, APPROVAL-VALIDITY-005, APPROVAL-VALIDITY-012 | Withdrawal affects only current effectiveness and rejected lifecycle requests preserve history. | Count withdrawn Decisions, erase withdrawn Decisions, accept duplicate withdrawals, or append partial lifecycle evidence on failure. |
 | APPROVAL-VALIDITY-007, APPROVAL-VALIDITY-009 | Expiration uses explicit injected instants and an exclusive boundary. | Use host time, ignore equivalent offsets, or treat the expiration boundary as still effective. |
 | APPROVAL-VALIDITY-010, APPROVAL-VALIDITY-011 | Supersession preserves history while removing current effectiveness from superseded Decisions or Requirements. | Count superseded Decisions, transfer Decisions to successor Requirements, or rewrite historical observations. |
+| APPROVAL-COMPOSITION-013, APPROVAL-COMPOSITION-014 | All-of and any-of group outcomes follow declared member states and do not collapse pending members into approval or rejection. | Treat any rejected any-of member as group rejection, or treat any approved all-of member as group approval. |
+| APPROVAL-COMPOSITION-016, APPROVAL-COMPOSITION-019 | Ordered stages expose only the first non-approved stage as actionable. | Allow later-stage action before earlier approval or report actionable requirements from later stages. |
+| APPROVAL-COMPOSITION-021, APPROVAL-QUORUM-004 | Composition and quorum reuse current-effectiveness and never count ineffective Decisions. | Count withdrawn, expired, superseded, stale, ineligible, or rejected Decisions toward group approval. |
+| APPROVAL-QUORUM-001, APPROVAL-QUORUM-002, APPROVAL-QUORUM-003, APPROVAL-QUORUM-005, APPROVAL-QUORUM-006 | Quorum thresholds count distinct effective eligible voters with exact N-of-M boundary behavior. | Use `>` instead of `>=`, count duplicate voters twice, infer abstentions, or reject while threshold can still be met. |
+| APPROVAL-QUORUM-002, APPROVAL-QUORUM-007, APPROVAL-QUORUM-008, APPROVAL-ERROR-008 | Quorums have explicit distinct voter identities on Requirement members; a group's outcome is not voter evidence. | Accept child groups or missing/role-only voter identities, accept duplicate declared voters, count an eligible but undeclared voter, or change the invalid-definition error code. |
+| APPROVAL-QUORUM-001, APPROVAL-QUORUM-006, APPROVAL-ERROR-008 | Validate N against declared M; retain N after applicability filtering and reject a nonempty quorum when approvals plus pending capacity cannot reach N. | Lower N after filtering, compare N to applicable membership during definition validation, use <= at the reachability boundary, or return INVALID_CHAIN/PENDING for an unreachable nonempty quorum. |
+| APPROVAL-COMPOSITION-011, APPROVAL-COMPOSITION-012, APPROVAL-COMPOSITION-014, APPROVAL-COMPOSITION-022 | Entirely inapplicable child groups contribute nothing to their parent; an entirely inapplicable valid composition has no approval obligation. | Count a skipped child as an approving ANY_OF branch, fail to propagate nested omission, reject an all-inapplicable composition, fabricate Decisions, or treat missing facts/invalid definitions as exemptions. |
+| APPROVAL-COMPOSITION-017, APPROVAL-COMPOSITION-018, APPROVAL-COMPOSITION-023 | Applicable parallel groups combine as ALL_OF; a stage with no applicable groups adds no obligation; the first non-approved stage determines the composition outcome. | Use ANY_OF between stage groups, let pending mask a same-stage rejection, block on an inapplicable stage, turn group order into prerequisites, or let later rejection override an earlier pending stage. |
+| APPROVAL-COMPOSITION-001, APPROVAL-COMPOSITION-007, APPROVAL-ERROR-008 | Stage lists and stage group declarations are nonempty; every standalone or staged root starts at group depth one, bounded to four along every path. | Accept an empty stage/list, accept an unresolved stage root, count stages as groups, ignore roots in depth counting, permit depth five, or accumulate depth across parallel roots/stages. |
+| APPROVAL-COMPOSITION-009, APPROVAL-COMPOSITION-024 | Validate all declared structure, applicability, and required evidence before an outcome, including later stages and otherwise unnecessary alternatives. | Return early approval/pending/rejection while another branch is invalid, treat missing state as PENDING, treat unresolved applicability as exemption, or activate later stages during validation. |
+| APPROVAL-COMPOSITION-019 | Report unique pending applicable Requirements only through pending groups in the first pending stage, in recursive declared order; terminal outcomes expose none. | Include later stages, descend into satisfied/rejected branches, suppress an eligible occurrence because of an earlier ineligible path, duplicate IDs, sort names, or report actionables after approval/rejection. |
+| APPROVAL-COMPOSITION-008, APPROVAL-COMPOSITION-010, APPROVAL-ERROR-009, APPROVAL-ERROR-010 | Return the highest-priority applicable error category: structure, applicability, required context, then state/effectiveness. | Collapse context into INVALID_CHAIN, let traversal order choose the category, confuse structural with evidence INVALID_CHAIN priority, or expose restricted diagnostics. |
 | ENTITY-IDENTITY-002 | Lifecycle-stable identity. | Generate a new ID after mutation. |
 | ENTITY-MUTABILITY-002 | Configured immutability. | Skip current-State mutability check. |
 | ENTITY-VALIDATION-003, ENTITY-VALIDATION-004, ENTITY-VALIDATION-006 | Complete validation before observable mutation with the portable validation code. | Stop after the first failed rule, return success for invalid data, apply part of a rejected mutation, or expose sensitive field values in findings. |
@@ -416,15 +466,26 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-EVOLUTION-020 | Supersession currentness follows the declared scope. | Leave a superseded predecessor current or mark an unrelated Entity non-current. |
 | ENTITY-EVOLUTION-024, ENTITY-EVOLUTION-027 | Evolution errors use the specified portable error category and preserve primary domain codes. | Collapse state conflicts, validation failures, or downstream domain failures into an implementation-specific or generic error. |
 
+
 ## Conformance gaps
 
 - Money: allocation normative semantics and portable invalid-allocation error semantics are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance for Draft 0.2. Precision or overflow limits, private or non-fiat currency namespaces, and currency-recommended scale remain open as deferred topics outside the closed Draft 0.1 plus Draft 0.2 Money Rates and Allocation scope.
 - Workflow: external fact capture, definition migration, transition identifiers, and concurrency remain open.
 - Audit: Draft 0.2 Audit Relationships are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, generic related links, relationship redaction policy, and causal sequencing remain open.
-- Approvals: Draft 0.2 Approval Validity withdrawal, expiration, supersession, explicit current-effectiveness context, and lifecycle failure atomicity are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Rich condition syntax, delegation, quorum, rejection-code specialization, escalation, approval-definition migration, and complex dependency graphs remain open for future drafts.
+- Approvals: Draft 0.2 Approval Validity withdrawal, expiration, supersession, explicit current-effectiveness context, and lifecycle failure atomicity are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Draft 0.3 quorum membership is specified by D03-QUORUM-001, fixed thresholds with nonempty unreachable-quorum rejection by D03-QUORUM-002, entirely inapplicable group treatment by D03-COMPOSITION-001, stage aggregation by D03-COMPOSITION-002, stage structure/depth by D03-COMPOSITION-003, complete validation by D03-COMPOSITION-004, staged actionability by D03-COMPOSITION-005, and error mapping/precedence by D03-COMPOSITION-006, with implementation, adapter wiring, runtime conformance, and mutation closure pending. D03-QUORUM-003 resolves opposing effective votes and member-specific evidence. TASK-073 is complete with no remaining identified composition specification gaps, and TASK-074 now supplies manifest-listed conformance vectors. Runtime Draft 0.3 composition conformance is not claimed until implementation and adapter support land. Rich condition syntax, delegation, escalation, approval-definition migration, dynamic approver resolution, and unrestricted dependency graphs remain open for future drafts.
 - Entities: Draft 0.2 Entity Evolution terminology, correction, reversal, void, supersession, currentness, failure atomicity, mandatory Audit evidence, and portable error mapping are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Concrete fields, composing-domain lifecycle policy, full validation catalog, import or migration mapping, cross-entity identity registries, concurrency, cancellation, adjustment, replacement, amendment, and concrete ledger posting behavior remain outside the current implemented Core. The current TypeScript reference implementation covers the conformance-local Entity identity, lifecycle, mutability, validation, and evolution vectors. Remaining Entity requirements classified as not directly testable are composing-domain, optional diagnostic, or registry/import obligations without a standalone portable Entity operation.
 
-Vectors do not settle these open questions.
+### Draft 0.3 Approval review gaps
+
+The [decision worklist](../docs/tasks/draft-0.3-research-decisions.md#decision-worklist--2026-09-12)
+is resolved. D03-QUORUM-003 closes the final opposing-vote finding through
+APPROVAL-QUORUM-009/010 and preserves member-specific counting, pending capacity,
+and actionability. There are zero currently identified blocking specification
+gaps in this inventory. This does not close future-draft questions outside it.
+
+TASK-073 review is complete under D03-REVIEW-001; external review remains NOT
+EXTERNALLY REVIEWED. All 37 directly testable Draft 0.3 composition/quorum/error requirements now have manifest-listed TASK-074 vectors. The TypeScript implementation and adapter wiring remain pending, so runtime composition conformance is not claimed; mutation closure remains pending later Advanced Approvals tasks.
+Closed Draft 0.1/0.2 coverage classifications and vector references are unchanged.
 
 ## Readiness
 

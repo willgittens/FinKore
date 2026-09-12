@@ -4,6 +4,7 @@ export { AuditChange } from './audit/audit-change.js'
 export { AuditEvent } from './audit/audit-event.js'
 export { AuditLog } from './audit/audit-log.js'
 export { ApprovalChain } from './approvals/approval-chain.js'
+export { ApprovalComposition } from './approvals/approval-composition.js'
 export { ApprovalCondition } from './approvals/approval-condition.js'
 export { ApprovalDecision } from './approvals/approval-decision.js'
 export { ApprovalDecisionHistory } from './approvals/approval-decision-history.js'
@@ -88,6 +89,10 @@ export type {
 export type {
   ApprovalActorIdentifier,
   ApprovalActorType,
+  ApprovalCompositionGroupIdentifier,
+  ApprovalCompositionGroupKind,
+  ApprovalCompositionMemberIdentifier,
+  ApprovalCompositionStageIdentifier,
   ApprovalChainEvaluation,
   ApprovalChainMode,
   ApprovalChainRequirementStates,
@@ -105,6 +110,10 @@ export type {
   ApprovalSubjectType,
   SerializedApprovalActor,
   SerializedApprovalChain,
+  SerializedApprovalComposition,
+  SerializedApprovalCompositionGroup,
+  SerializedApprovalCompositionMember,
+  SerializedApprovalCompositionStage,
   SerializedApprovalCondition,
   SerializedApprovalDecision,
   SerializedApprovalDecisionReference,

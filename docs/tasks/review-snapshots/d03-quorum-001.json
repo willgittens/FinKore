@@ -1,0 +1,45 @@
+{
+  "decision": "D03-QUORUM-001",
+  "date": "2026-09-12",
+  "scope": "Specification translation of the maintainer-accepted explicit voter membership proposal; full composition review remains pending.",
+  "externalReview": "NOT EXTERNALLY REVIEWED",
+  "algorithm": "SHA-256",
+  "files": [
+    {
+      "path": "docs/coreDoc/core-doc.md",
+      "sha256": "53d5565c6ac0cad831ec9409c86c1648c93f15c15325530eca7581cb6d6fdf1f"
+    },
+    {
+      "path": "spec/approvals/composition.md",
+      "sha256": "c7f0d6972dc578ac93ff896763fd057ebecdc7ee9d337448613cb005980f14c6"
+    },
+    {
+      "path": "spec/approvals/requirements.md",
+      "sha256": "0ea531d2a8c73faff7c1e8076ca060024e9f7e7bd750ce85dd8bb2f703cc815f"
+    },
+    {
+      "path": "spec/approvals/decisions.md",
+      "sha256": "82f1a5dcbddfd27a6e8116378b592ac3aa508008976e4af98eca9c7c0f12415d"
+    },
+    {
+      "path": "spec/approvals/validity.md",
+      "sha256": "868caa9caaff6f0e47f5457d954b4921d817275ae55fdaaebe654cf73cd46205"
+    },
+    {
+      "path": "spec/approvals/errors.md",
+      "sha256": "c6a9ba6a1d09174ac1299adb5a62f061d4ebb74ce5673d0f5bcf3fe92334f849"
+    },
+    {
+      "path": "spec/approvals/README.md",
+      "sha256": "0991b2b787fa3b355a0a78707efdec0e018aeda7a71924482c178dd7a88b6c5b"
+    },
+    {
+      "path": "conformance/traceability.md",
+      "sha256": "c42c49cdb65c8cf1a91c0c423451cc143499fe7593742b2d907a7488b4e90438"
+    },
+    {
+      "path": "docs/tasks/draft-0.3-research-decisions.md",
+      "sha256": "5fb75be73665c186d09f358fd4b312cb3ced1d1df4b675a73fa56e6833430186"
+    }
+  ]
+}

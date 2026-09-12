@@ -6,7 +6,10 @@
 
 ## Purpose
 
-This document defines how multiple Approval Requirements combine. The term Approval Chain does not by itself imply sequencing.
+This document defines the Draft 0.1 all-required Approval Chain model. The term
+Approval Chain does not by itself imply sequencing. Draft 0.3 bounded any-of,
+all-of, quorum, staged, and nested group semantics are defined by
+[Approval Composition](composition.md).
 
 ## Requirements
 
@@ -33,7 +36,9 @@ were bound to that Decision.
 
 Draft 0.1 does not define Approval Chain identity. A Decision binds to its
 Approval Requirement and relevant subject state or facts, not to a Chain
-identifier.
+identifier. Draft 0.3 Approval Composition adds group identity for composition
+definitions; that group identity still does not replace Decision-to-Requirement
+binding.
 
 ## Examples
 
@@ -52,9 +57,10 @@ The arrow denotes a sequential chain. `AND` denotes an unordered all-required ch
 
 ## Open Questions
 
-- Which future approval semantics should define quorum, any-of, or other non-all-required combination rules?
 - How should a future specification version and migrate Approval Chain definitions when a definition changes mid-process?
 
 ## Non-Goals
 
-FinKore Core Draft 0.1 does not define quorum, any-of, delegation, complex dependency graphs, or migration between Approval Chain definitions.
+FinKore Core Draft 0.1 chains do not define delegation, unrestricted dependency
+graphs, or migration between Approval Chain definitions. Non-all-required
+bounded composition is defined separately by Draft 0.3 Approval Composition.

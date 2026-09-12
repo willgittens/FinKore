@@ -1,0 +1,861 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "approval.composition.all-of-pending-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-001",
+        "APPROVAL-COMPOSITION-002",
+        "APPROVAL-COMPOSITION-003",
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-008",
+        "APPROVAL-COMPOSITION-013",
+        "APPROVAL-COMPOSITION-015"
+      ],
+      "description": "An ALL_OF group with one approved and one pending applicable requirement remains pending.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "root",
+              "kind": "ALL_OF",
+              "members": [
+                { "type": "requirement", "id": "manager-member", "requirementId": "manager-review" },
+                { "type": "requirement", "id": "finance-member", "requirementId": "finance-review" }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          { "id": "manager-review", "applicability": "APPLICABLE", "state": "APPROVED" },
+          { "id": "finance-review", "applicability": "APPLICABLE", "state": "PENDING" }
+        ],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "PENDING",
+          "actionableRequirements": [
+            "finance-review"
+          ]
+        }
+      },
+      "tags": ["positive", "mutation-sensitive"],
+      "guardsAgainst": ["all-of-approved-too-early", "pending-treated-as-abstention"]
+    },
+    {
+      "id": "approval.composition.any-of-inapplicable-child-pending-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-011",
+        "APPROVAL-COMPOSITION-012",
+        "APPROVAL-COMPOSITION-014"
+      ],
+      "description": "An entirely inapplicable child group does not satisfy an ANY_OF parent with another pending applicable branch.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "root",
+              "kind": "ANY_OF",
+              "members": [
+                { "type": "group", "id": "exempt-branch", "groupId": "exemptions" },
+                { "type": "requirement", "id": "legal-member", "requirementId": "legal-review" }
+              ]
+            },
+            {
+              "id": "exemptions",
+              "kind": "ALL_OF",
+              "members": [
+                { "type": "requirement", "id": "small-invoice-member", "requirementId": "small-invoice-review" }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          { "id": "small-invoice-review", "applicability": "NOT_APPLICABLE", "state": "PENDING" },
+          { "id": "legal-review", "applicability": "APPLICABLE", "state": "PENDING" }
+        ],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "PENDING",
+          "actionableRequirements": [
+            "legal-review"
+          ]
+        }
+      },
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["inapplicable-child-counted-as-approval"]
+    },
+    {
+      "id": "approval.composition.none-applicable-approved-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-011",
+        "APPROVAL-COMPOSITION-012",
+        "APPROVAL-COMPOSITION-022"
+      ],
+      "description": "A structurally valid composition with no applicable requirements has no current approval obligation and creates no approving evidence.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "root",
+              "kind": "ALL_OF",
+              "members": [
+                { "type": "requirement", "id": "manager-member", "requirementId": "manager-review" },
+                { "type": "requirement", "id": "finance-member", "requirementId": "finance-review" }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          { "id": "manager-review", "applicability": "NOT_APPLICABLE", "state": "PENDING" },
+          { "id": "finance-review", "applicability": "NOT_APPLICABLE", "state": "PENDING" }
+        ],
+        "decisions": [],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "APPROVED",
+          "actionableRequirements": []
+        },
+        "observations": {
+          "decisions": []
+        }
+      },
+      "tags": ["positive", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["no-obligation-fabricates-decision"]
+    },
+    {
+      "id": "approval.composition.stage-first-pending-actionable-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-016",
+        "APPROVAL-COMPOSITION-018",
+        "APPROVAL-COMPOSITION-019",
+        "APPROVAL-COMPOSITION-024"
+      ],
+      "description": "A staged composition reports only pending requirements in the first pending stage, while still validating later stages.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "stages": [
+            { "id": "stage-1", "groups": ["review-options"] },
+            { "id": "stage-2", "groups": ["cfo-stage"] }
+          ],
+          "groups": [
+            {
+              "id": "review-options",
+              "kind": "ANY_OF",
+              "members": [
+                { "type": "requirement", "id": "manager-member", "requirementId": "manager-review" },
+                { "type": "requirement", "id": "controller-member", "requirementId": "controller-review" }
+              ]
+            },
+            {
+              "id": "cfo-stage",
+              "kind": "ALL_OF",
+              "members": [
+                { "type": "requirement", "id": "cfo-member", "requirementId": "cfo-review" }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          { "id": "manager-review", "applicability": "APPLICABLE", "state": "PENDING" },
+          { "id": "controller-review", "applicability": "APPLICABLE", "state": "PENDING" },
+          { "id": "cfo-review", "applicability": "APPLICABLE", "state": "REJECTED" }
+        ],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "PENDING",
+          "actionableRequirements": [
+            "manager-review",
+            "controller-review"
+          ]
+        }
+      },
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["later-stage-actionable-too-early", "later-rejection-overrides-earlier-pending"]
+    },
+    {
+      "id": "approval.composition.stage-parallel-rejected-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-017",
+        "APPROVAL-COMPOSITION-018",
+        "APPROVAL-COMPOSITION-023"
+      ],
+      "description": "Parallel applicable groups in one stage combine as all-required obligations and a same-stage rejection rejects the stage.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "stages": [
+            { "id": "stage-1", "groups": ["manager-stage", "finance-stage"] }
+          ],
+          "groups": [
+            {
+              "id": "manager-stage",
+              "kind": "ALL_OF",
+              "members": [
+                { "type": "requirement", "id": "manager-member", "requirementId": "manager-review" }
+              ]
+            },
+            {
+              "id": "finance-stage",
+              "kind": "ALL_OF",
+              "members": [
+                { "type": "requirement", "id": "finance-member", "requirementId": "finance-review" }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          { "id": "manager-review", "applicability": "APPLICABLE", "state": "APPROVED" },
+          { "id": "finance-review", "applicability": "APPLICABLE", "state": "REJECTED" }
+        ],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "REJECTED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["stage-groups-treated-as-any-of", "stage-pending-masks-rejection"]
+    },
+    {
+      "id": "approval.composition.stage-inapplicable-allows-later-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-016",
+        "APPROVAL-COMPOSITION-022",
+        "APPROVAL-COMPOSITION-023"
+      ],
+      "description": "A valid stage with only inapplicable groups imposes no obligation and does not block a later approved stage.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "stages": [
+            { "id": "stage-1", "groups": ["exempt-stage"] },
+            { "id": "stage-2", "groups": ["finance-stage"] }
+          ],
+          "groups": [
+            {
+              "id": "exempt-stage",
+              "kind": "ALL_OF",
+              "members": [
+                { "type": "requirement", "id": "small-invoice-member", "requirementId": "small-invoice-review" }
+              ]
+            },
+            {
+              "id": "finance-stage",
+              "kind": "ALL_OF",
+              "members": [
+                { "type": "requirement", "id": "finance-member", "requirementId": "finance-review" }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          { "id": "small-invoice-review", "applicability": "NOT_APPLICABLE", "state": "PENDING" },
+          { "id": "finance-review", "applicability": "APPLICABLE", "state": "APPROVED" }
+        ],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "APPROVED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["inapplicable-stage-blocks-progression"]
+    },
+    {
+      "id": "approval.composition.structure-invalid-duplicates-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-002",
+        "APPROVAL-COMPOSITION-005",
+        "APPROVAL-ERROR-008"
+      ],
+      "description": "Duplicate group identifiers and duplicate member identifiers are invalid composition structure.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "root",
+              "kind": "ALL_OF",
+              "members": [
+                { "type": "requirement", "id": "finance-member", "requirementId": "finance-review" },
+                { "type": "requirement", "id": "finance-member", "requirementId": "legal-review" }
+              ]
+            },
+            {
+              "id": "root",
+              "kind": "ANY_OF",
+              "members": [
+                { "type": "requirement", "id": "manager-member", "requirementId": "manager-review" }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          { "id": "finance-review", "applicability": "APPLICABLE", "state": "PENDING" },
+          { "id": "legal-review", "applicability": "APPLICABLE", "state": "PENDING" },
+          { "id": "manager-review", "applicability": "APPLICABLE", "state": "PENDING" }
+        ],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["duplicate-group-accepted", "duplicate-member-accepted"]
+    },
+    {
+      "id": "approval.composition.structure-cycle-depth-invalid-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-ERROR-008"
+      ],
+      "description": "Cycles and group paths deeper than four levels are invalid composition structure.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "g1",
+          "groups": [
+            { "id": "g1", "kind": "ALL_OF", "members": [{ "type": "group", "id": "to-g2", "groupId": "g2" }] },
+            { "id": "g2", "kind": "ALL_OF", "members": [{ "type": "group", "id": "to-g3", "groupId": "g3" }] },
+            { "id": "g3", "kind": "ALL_OF", "members": [{ "type": "group", "id": "to-g4", "groupId": "g4" }] },
+            { "id": "g4", "kind": "ALL_OF", "members": [{ "type": "group", "id": "to-g5", "groupId": "g5" }] },
+            { "id": "g5", "kind": "ALL_OF", "members": [{ "type": "group", "id": "to-g2-again", "groupId": "g2" }] }
+          ]
+        },
+        "requirements": [],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["cycle-accepted", "depth-five-accepted"]
+    },
+    {
+      "id": "approval.composition.structure-empty-stage-kind-invalid-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-001",
+        "APPROVAL-COMPOSITION-003",
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-ERROR-008"
+      ],
+      "description": "Empty stage declarations, invalid group kinds, and groups without members are invalid composition structure.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "stages": [
+            { "id": "stage-1", "groups": [] }
+          ],
+          "groups": [
+            { "id": "root", "kind": "SOME_OF", "members": [] }
+          ]
+        },
+        "requirements": [],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["empty-stage-accepted", "invalid-kind-accepted", "empty-group-accepted"]
+    },
+    {
+      "id": "approval.composition.unresolved-applicability-complete-validation-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-009",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-009"
+      ],
+      "description": "A decisive approved branch cannot hide unresolved applicability in an alternative branch.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "root",
+              "kind": "ANY_OF",
+              "members": [
+                { "type": "requirement", "id": "approved-member", "requirementId": "manager-review" },
+                { "type": "requirement", "id": "unknown-member", "requirementId": "legal-review" }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          { "id": "manager-review", "applicability": "APPLICABLE", "state": "APPROVED" },
+          { "id": "legal-review", "applicability": "UNRESOLVED", "state": "PENDING" }
+        ],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_CONDITION_UNRESOLVED"
+        }
+      },
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["decisive-branch-skips-validation", "unresolved-applicability-treated-as-exempt"]
+    },
+    {
+      "id": "approval.composition.error-priority-structure-over-context-001",
+      "spec": "approvals/errors",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-ERROR-009",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Invalid structure takes priority over unresolved applicability and missing evaluation context.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            { "id": "root", "kind": "N_OF_M", "threshold": 3, "members": [
+              { "type": "requirement", "id": "alice-seat", "requirementId": "board-review", "voter": { "type": "user", "id": "alice" } },
+              { "type": "requirement", "id": "bob-seat", "requirementId": "board-review", "voter": { "type": "user", "id": "bob" } }
+            ] }
+          ]
+        },
+        "requirements": [
+          { "id": "board-review", "applicability": "UNRESOLVED", "state": "PENDING", "requiresEvaluationContext": true }
+        ],
+        "context": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["error-priority-uses-traversal-order", "threshold-error-hidden-by-context-error"]
+    },
+    {
+      "id": "approval.composition.error-priority-context-before-state-001",
+      "spec": "approvals/errors",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-ERROR-009",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Missing required current-effectiveness context is reported before malformed required state evidence.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "root",
+              "kind": "ALL_OF",
+              "members": [
+                { "type": "requirement", "id": "finance-member", "requirementId": "finance-review" }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          { "id": "finance-review", "applicability": "APPLICABLE", "state": "MALFORMED", "requiresEvaluationContext": true }
+        ],
+        "context": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CONTEXT"
+        }
+      },
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["missing-context-collapsed-to-invalid-chain"]
+    },
+    {
+      "id": "approval.composition.quorum-two-of-three-approved-boundary-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-QUORUM-001",
+        "APPROVAL-QUORUM-002",
+        "APPROVAL-QUORUM-003",
+        "APPROVAL-QUORUM-005"
+      ],
+      "description": "Two distinct effective eligible approving voters satisfy a two-of-three quorum, and repeated approvals by one voter count once.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                { "type": "requirement", "id": "alice-seat", "requirementId": "board-review", "voter": { "type": "user", "id": "alice" } },
+                { "type": "requirement", "id": "bob-seat", "requirementId": "board-review", "voter": { "type": "user", "id": "bob" } },
+                { "type": "requirement", "id": "carol-seat", "requirementId": "board-review", "voter": { "type": "user", "id": "carol" } }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          { "id": "board-review", "applicability": "APPLICABLE", "eligibleActors": ["alice", "bob", "carol"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED" }
+        ],
+        "decisions": [
+          { "requirementId": "board-review", "actor": { "type": "user", "id": "alice" }, "outcome": "APPROVED", "effective": true },
+          { "requirementId": "board-review", "actor": { "type": "user", "id": "alice" }, "outcome": "APPROVED", "effective": true },
+          { "requirementId": "board-review", "actor": { "type": "user", "id": "bob" }, "outcome": "APPROVED", "effective": true }
+        ],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "APPROVED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["quorum-uses-greater-than", "duplicate-voter-counted-twice"]
+    },
+    {
+      "id": "approval.composition.quorum-fixed-threshold-unreachable-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-011",
+        "APPROVAL-QUORUM-001",
+        "APPROVAL-QUORUM-006"
+      ],
+      "description": "A two-of-three quorum with only one applicable approving voter is rejected because the fixed threshold is unreachable.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                { "type": "requirement", "id": "alice-seat", "requirementId": "alice-review", "voter": { "type": "user", "id": "alice" } },
+                { "type": "requirement", "id": "bob-seat", "requirementId": "bob-review", "voter": { "type": "user", "id": "bob" } },
+                { "type": "requirement", "id": "carol-seat", "requirementId": "carol-review", "voter": { "type": "user", "id": "carol" } }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          { "id": "alice-review", "applicability": "APPLICABLE", "eligibleActors": ["alice"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED" },
+          { "id": "bob-review", "applicability": "NOT_APPLICABLE", "eligibleActors": ["bob"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED" },
+          { "id": "carol-review", "applicability": "NOT_APPLICABLE", "eligibleActors": ["carol"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED" }
+        ],
+        "decisions": [
+          { "requirementId": "alice-review", "actor": { "type": "user", "id": "alice" }, "outcome": "APPROVED", "effective": true }
+        ],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "REJECTED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["quorum-threshold-lowered-after-applicability"]
+    },
+    {
+      "id": "approval.composition.quorum-reachable-pending-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-015",
+        "APPROVAL-COMPOSITION-019",
+        "APPROVAL-QUORUM-006"
+      ],
+      "description": "An unmet quorum remains pending when current approvals plus pending applicable voters can still reach the threshold.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                { "type": "requirement", "id": "alice-seat", "requirementId": "alice-review", "voter": { "type": "user", "id": "alice" } },
+                { "type": "requirement", "id": "bob-seat", "requirementId": "bob-review", "voter": { "type": "user", "id": "bob" } },
+                { "type": "requirement", "id": "carol-seat", "requirementId": "carol-review", "voter": { "type": "user", "id": "carol" } }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          { "id": "alice-review", "applicability": "APPLICABLE", "eligibleActors": ["alice"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED" },
+          { "id": "bob-review", "applicability": "APPLICABLE", "eligibleActors": ["bob"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED" },
+          { "id": "carol-review", "applicability": "NOT_APPLICABLE", "eligibleActors": ["carol"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED" }
+        ],
+        "decisions": [
+          { "requirementId": "alice-review", "actor": { "type": "user", "id": "alice" }, "outcome": "APPROVED", "effective": true }
+        ],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "PENDING",
+          "actionableRequirements": [
+            "bob-review"
+          ]
+        }
+      },
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["pending-voter-treated-as-abstention", "reachable-quorum-rejected"]
+    },
+    {
+      "id": "approval.composition.quorum-invalid-member-voter-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-QUORUM-007",
+        "APPROVAL-QUORUM-008",
+        "APPROVAL-ERROR-008"
+      ],
+      "description": "Quorum members must be requirement references with exactly one explicit distinct voter identity.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "root",
+              "kind": "N_OF_M",
+              "threshold": 1,
+              "members": [
+                { "type": "group", "id": "finance-group-member", "groupId": "finance-options", "voter": { "type": "user", "id": "alice" } },
+                { "type": "requirement", "id": "missing-voter", "requirementId": "finance-review" },
+                { "type": "requirement", "id": "duplicate-voter", "requirementId": "legal-review", "voter": { "type": "user", "id": "alice" } }
+              ]
+            },
+            {
+              "id": "finance-options",
+              "kind": "ALL_OF",
+              "members": [
+                { "type": "requirement", "id": "manager-member", "requirementId": "manager-review" }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          { "id": "finance-review", "applicability": "APPLICABLE", "state": "PENDING" },
+          { "id": "legal-review", "applicability": "APPLICABLE", "state": "PENDING" },
+          { "id": "manager-review", "applicability": "APPLICABLE", "state": "PENDING" }
+        ],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["quorum-child-group-counted", "quorum-voter-inferred", "duplicate-quorum-voter-accepted"]
+    },
+    {
+      "id": "approval.composition.quorum-opposing-effective-votes-invalid-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-QUORUM-009",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-008",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Opposing effective votes from the declared voter for one quorum member are invalid evidence and do not mutate history.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 1,
+              "members": [
+                { "type": "requirement", "id": "alice-seat", "requirementId": "board-review", "voter": { "type": "user", "id": "alice" } }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          { "id": "board-review", "applicability": "APPLICABLE", "eligibleActors": ["alice"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED" }
+        ],
+        "decisions": [
+          { "id": "d1", "requirementId": "board-review", "actor": { "type": "user", "id": "alice" }, "outcome": "APPROVED", "effective": true },
+          { "id": "d2", "requirementId": "board-review", "actor": { "type": "user", "id": "alice" }, "outcome": "REJECTED", "effective": true }
+        ],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            { "id": "d1", "requirementId": "board-review", "actor": { "type": "user", "id": "alice" }, "outcome": "APPROVED", "effective": true },
+            { "id": "d2", "requirementId": "board-review", "actor": { "type": "user", "id": "alice" }, "outcome": "REJECTED", "effective": true }
+          ]
+        }
+      },
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["opposing-votes-resolved-by-order", "conflict-mutates-history"]
+    },
+    {
+      "id": "approval.composition.quorum-member-specific-evidence-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-020",
+        "APPROVAL-QUORUM-002",
+        "APPROVAL-QUORUM-010"
+      ],
+      "description": "A decision by another eligible actor and an aggregate requirement state cannot satisfy a named quorum member.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                { "type": "requirement", "id": "alice-seat", "requirementId": "board-review", "voter": { "type": "user", "id": "alice" } },
+                { "type": "requirement", "id": "carol-seat", "requirementId": "board-review", "voter": { "type": "user", "id": "carol" } }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED",
+            "eligibleActors": ["alice", "bob", "carol"],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          { "requirementId": "board-review", "actor": { "type": "user", "id": "bob" }, "outcome": "APPROVED", "effective": true },
+          { "requirementId": "board-review", "actor": { "type": "user", "id": "carol" }, "outcome": "APPROVED", "effective": true }
+        ],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "PENDING",
+          "actionableRequirements": [
+            "board-review"
+          ]
+        }
+      },
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["aggregate-requirement-state-used-as-vote", "undeclared-voter-counted"]
+    },
+    {
+      "id": "approval.composition.quorum-ineffective-decision-not-counted-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-021",
+        "APPROVAL-QUORUM-004",
+        "APPROVAL-QUORUM-010"
+      ],
+      "description": "Withdrawn, expired, superseded, stale, ineligible, and rejected decisions do not increase a quorum approval count.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 1,
+              "members": [
+                { "type": "requirement", "id": "alice-seat", "requirementId": "alice-review", "voter": { "type": "user", "id": "alice" } },
+                { "type": "requirement", "id": "bob-seat", "requirementId": "bob-review", "voter": { "type": "user", "id": "bob" } },
+                { "type": "requirement", "id": "carol-seat", "requirementId": "carol-review", "voter": { "type": "user", "id": "carol" } }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          { "id": "alice-review", "applicability": "APPLICABLE", "eligibleActors": ["alice"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED" },
+          { "id": "bob-review", "applicability": "APPLICABLE", "eligibleActors": ["bob"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED" },
+          { "id": "carol-review", "applicability": "APPLICABLE", "eligibleActors": ["carol"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED" }
+        ],
+        "decisions": [
+          { "requirementId": "alice-review", "actor": { "type": "user", "id": "alice" }, "outcome": "APPROVED", "effective": false, "ineffectiveBecause": "WITHDRAWN" },
+          { "requirementId": "bob-review", "actor": { "type": "user", "id": "bob" }, "outcome": "APPROVED", "effective": false, "ineffectiveBecause": "EXPIRED" },
+          { "requirementId": "carol-review", "actor": { "type": "user", "id": "carol" }, "outcome": "REJECTED", "effective": true }
+        ],
+        "context": { "evaluatedAt": "2026-09-12T10:00:00Z" }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "PENDING",
+          "actionableRequirements": [
+            "alice-review",
+            "bob-review"
+          ]
+        }
+      },
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["ineffective-decision-counted", "rejected-decision-counted-as-approval"]
+    }
+  ]
+}

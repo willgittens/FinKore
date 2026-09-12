@@ -13,6 +13,22 @@ Draft 0.3 should deepen FinKore's usefulness for complex corporate financial wor
 
 Draft 0.3 should not implement delegation, escalation, tax primitives, interest, audit retention, ledger behavior, payments, BPMN, IAM/RBAC, or persistence unless research produces a narrow portable Core rule. Draft 0.2 closure has now been verified in this repository; every 0.3 milestone remains gated by that closed baseline and by the specific 0.3 research/review decisions named below.
 
+### Draft 0.3 Review Authority
+
+The maintainer's [D03-REVIEW-001 decision](draft-0.3-research-decisions.md#d03-review-001--draft-review-policy)
+governs all review requirements in this plan. Domain/accounting, technical,
+security, and privacy analysis remain mandatory where specified, with explicit
+scoped maintainer acceptance, findings and resolutions, and an exact artifact
+revision. External reviewers are not a prerequisite for Draft 0.3 development or
+closure. Keep future community and independent review topics visible and mark
+unreviewed artifacts NOT EXTERNALLY REVIEWED; never infer independent signoff.
+
+[CoreDoc](../coreDoc/core-doc.md) supplies the foundation-level rules. Domain
+specifications must refine them without silent contradiction. Its external-review
+mechanism supports later challenges by stable rule ID. Unresolved semantics,
+CoreDoc conflicts, failed verification, and critical surviving mutants remain
+blockers. Acceptance of this policy does not accept individual financial choices.
+
 ## 2. Actual Repository Baseline
 
 Draft 0.1 and Draft 0.2 closed baseline:
@@ -64,7 +80,7 @@ Hard gate status: satisfied by TASK-066/TASK-067. Future 0.3 tasks must preserve
 
 ## 4. Candidate Capability Assessment
 
-| Capability | Domain | Decision | Reason | 0.2 Dependency | Complexity | External Review |
+| Capability | Domain | Decision | Reason | 0.2 Dependency | Complexity | Review topics |
 | --- | --- | --- | --- | --- | --- | --- |
 | Any-of Approval composition | Approvals | IN 0.3 | Covers common "Finance Manager OR CFO" scenarios without full graph engine. | Current-effectiveness. | MEDIUM | Domain review. |
 | All-of explicit group composition | Approvals | IN 0.3 | Generalizes existing all-required chains into reusable grouped composition. | Current chain semantics. | MEDIUM | Domain review. |
@@ -99,7 +115,7 @@ Hard gate status: satisfied by TASK-066/TASK-067. Future 0.3 tasks must preserve
 Recommended in 0.3:
 
 1. Approval composition spec and implementation for `ANY_OF`, `ALL_OF`, `N_OF_M`, ordered stages, and bounded nested groups.
-2. Quorum counting semantics that compose with Draft 0.2 current-effectiveness, including expired, withdrawn, superseded, ineligible, duplicate, rejected, and stale decisions.
+2. Quorum counting semantics that compose with Draft 0.2 current-effectiveness, including expired, withdrawn, superseded, ineligible, duplicate, rejected, and stale decisions. D03-QUORUM-001 limits quorum members to Requirement references with explicit distinct voter identities; child groups cannot be votes, while quorums may be nested beneath any-of/all-of groups. D03-QUORUM-002 fixes N against declared membership and rejects an unreachable quorum with at least one applicable voter; D03-COMPOSITION-001 omits entirely inapplicable children from parent evaluation and approves a valid composition with no applicable obligations. D03-COMPOSITION-002 uses ALL_OF between applicable stage groups and treats an entirely inapplicable stage as no obligation. D03-COMPOSITION-003 requires nonempty stage/group declarations and counts depth from each stage root. D03-COMPOSITION-004 requires complete validation of structure and required evidence before outcomes, including later stages and alternatives. D03-COMPOSITION-005 reports unique pending applicable Requirements through pending groups in the first pending stage, in recursive declared order; terminal outcomes report none. D03-COMPOSITION-006 specifies structure/applicability/context/evidence error priority. D03-QUORUM-003 rejects opposing effective votes as invalid evidence and defines member-specific state. TASK-073 review is complete; TASK-074 conformance families are next.
 3. Research milestone for portable condition standards, followed by a minimal deterministic condition model only if the research gate passes.
 4. Workflow definition identity/version binding and import semantics.
 5. Portable expected-state or expected-revision conflict contract for Workflow/Entity operations, without persistence or locking.
@@ -182,7 +198,7 @@ Optional: Step 15.
 | Tests | Run `node --version`; if dependencies are present, run `npm run build --workspaces`, `npm run typecheck --workspaces`, `npm run test --workspaces`, full conformance, and applicable coverage. Follow AGENTS Node toolchain instructions if Node is unavailable. |
 | Critical mutation scenarios | None for this planning gate. |
 | Documentation | Update this document if reality differs from assumptions, and record the closure refresh evidence. |
-| External review requirements | None. |
+| Review requirements under D03-REVIEW-001 | None. |
 | Stop conditions | `BLOCKED BY DRAFT 0.2 NOT CLOSED` if required 0.2 semantics are absent; otherwise stop on an unexpected regression, traceability gap, missing required review, stale complete mutation evidence, or critical mutation survivor. |
 | Definition of Done | Actual 0.2 baseline is documented and 0.3 scope remains valid. |
 | Expected readiness status | READY FOR NEXT 0.3 MILESTONE. |
@@ -210,7 +226,7 @@ Optional: Step 15.
 | Tests | Spec/conformance validation only if available. |
 | Critical mutation scenarios | Quorum threshold off by one, rejected counted as approved, withdrawn counted, expired counted, superseded counted, duplicate voter counted twice, order ignored, missing state treated as approval. |
 | Documentation | Update Approval README and traceability with planned implementation status. |
-| External review requirements | Domain/accounting review for quorum semantics. |
+| Review requirements under D03-REVIEW-001 | Domain/accounting review for quorum semantics. |
 | Stop conditions | `BLOCKED BY SPEC GAP` if quorum voter identity or current-effectiveness composition is ambiguous. |
 | Definition of Done | Approval composition requirements are precise and vector-ready. |
 | Expected readiness status | READY FOR Approval Composition Implementation. |
@@ -238,7 +254,7 @@ Optional: Step 15.
 | Tests | Unit, adapter, conformance, build, typecheck, coverage. |
 | Critical mutation scenarios | Same as Step 2, plus nested group early return, threshold comparison mutation, branch order dependence, mutable input state. |
 | Documentation | JSDoc for every public API; update TypeScript README and root status if capability is implemented. |
-| External review requirements | None beyond Step 2 unless semantics changed. |
+| Review requirements under D03-REVIEW-001 | None beyond Step 2 unless semantics changed. |
 | Stop conditions | `BLOCKED BY SPEC GAP` if implementation needs behavior Step 2 did not define. |
 | Definition of Done | Implementation and conformance pass; docs and JSDoc current; no adapter domain logic. |
 | Expected readiness status | Approval composition implemented, pending closure. |
@@ -266,7 +282,7 @@ Optional: Step 15.
 | Tests | Run approval unit tests, adapter tests, relevant conformance, coverage, and mutation. |
 | Critical mutation scenarios | Any critical composition mutant from Steps 2-3 surviving. |
 | Documentation | Finalize status in approval and root docs. |
-| External review requirements | Domain review signoff or documented follow-up. |
+| Review requirements under D03-REVIEW-001 | Domain analysis and scoped maintainer acceptance; record future external review separately. |
 | Stop conditions | `BLOCKED BY CRITICAL MUTANT` or `BLOCKED BY TRACEABILITY GAP`. |
 | Definition of Done | Approval composition slice is closed and ready for Agentic review. |
 | Expected readiness status | Approval composition 0.3 slice closed. |
@@ -294,7 +310,7 @@ Optional: Step 15.
 | Tests | Spec/conformance validation only if available. |
 | Critical mutation scenarios | Instance silently uses newer definition, version ignored, expected state mismatch accepted, import invents version, failure mutates state. |
 | Documentation | Update Workflow README and traceability. |
-| External review requirements | Technical/domain review for version identity semantics. |
+| Review requirements under D03-REVIEW-001 | Technical/domain review for version identity semantics. |
 | Stop conditions | `BLOCKED BY SPEC GAP` if version identity vs migration semantics cannot be separated. |
 | Definition of Done | Workflow versioning semantics are vector-ready and migration remains explicitly deferred. |
 | Expected readiness status | READY FOR Workflow Versioning Implementation. |
@@ -322,7 +338,7 @@ Optional: Step 15.
 | Tests | Unit, adapter, conformance, build, typecheck, coverage. |
 | Critical mutation scenarios | Version ignored, newer definition used, expected-state check inverted, failed transition mutates state, import accepts undeclared version/state. |
 | Documentation | Public APIs documented with JSDoc; README/status updated. |
-| External review requirements | Technical review for portability of version fields. |
+| Review requirements under D03-REVIEW-001 | Technical review for portability of version fields. |
 | Stop conditions | `BLOCKED BY SPEC GAP` if implementation requires migration behavior. |
 | Definition of Done | Workflow versioning and conflict behavior passes tests/conformance and docs are current. |
 | Expected readiness status | Workflow versioning implemented, pending closure. |
@@ -350,7 +366,7 @@ Optional: Step 15.
 | Tests | Workflow tests, adapter tests, conformance, mutation. |
 | Critical mutation scenarios | Any Step 5-6 critical mutant surviving. |
 | Documentation | Finalize Workflow/root/TypeScript README status. |
-| External review requirements | Technical review signoff or documented issue. |
+| Review requirements under D03-REVIEW-001 | Technical analysis and scoped maintainer acceptance; unresolved issues remain blockers. |
 | Stop conditions | `BLOCKED BY TRACEABILITY GAP` or `BLOCKED BY CRITICAL MUTANT`. |
 | Definition of Done | Workflow versioning slice closed. |
 | Expected readiness status | Workflow 0.3 versioning slice closed. |
@@ -378,7 +394,7 @@ Optional: Step 15.
 | Tests | Spec/conformance validation only if available. |
 | Critical mutation scenarios | Generated new identity on import, external ID replaces FinKore ID, revision identity ignored, database version treated as business revision, sensitive source data in error details. |
 | Documentation | Entity README, glossary, traceability. |
-| External review requirements | Domain/security review for source-system identifiers. |
+| Review requirements under D03-REVIEW-001 | Domain/security review for source-system identifiers. |
 | Stop conditions | `BLOCKED BY SPEC GAP` if mapping ownership requires a registry. |
 | Definition of Done | Entity import/revision semantics are precise and vector-ready. |
 | Expected readiness status | READY FOR Entity Import and Revision Implementation. |
@@ -406,7 +422,7 @@ Optional: Step 15.
 | Tests | Unit, adapter, conformance, build, typecheck, coverage, mutation for critical identity behavior. |
 | Critical mutation scenarios | Identity generated, mapping dropped, source identity leaked in error, revision overwritten, input mutated. |
 | Documentation | JSDoc, Entity README, root status, traceability. |
-| External review requirements | Security/domain review if source identity metadata contains sensitive values. |
+| Review requirements under D03-REVIEW-001 | Security/domain review if source identity metadata contains sensitive values. |
 | Stop conditions | `BLOCKED BY SPEC GAP` if code would need registry semantics. |
 | Definition of Done | Entity import/revision slice passes verification and docs are synchronized. |
 | Expected readiness status | Entity import/revision 0.3 slice closed. |
@@ -434,7 +450,7 @@ Optional: Step 15.
 | Tests | None. |
 | Critical mutation scenarios | Calculation scale confused with minor unit, overflow silently truncates, private currency collides with ISO code, metadata treated as exchange rate. |
 | Documentation | Record decision and deferred items. |
-| External review requirements | Technical review; domain/accounting review for minor-unit guidance. |
+| Review requirements under D03-REVIEW-001 | Technical review; domain/accounting review for minor-unit guidance. |
 | Stop conditions | `BLOCKED BY RESEARCH` if cross-language behavior cannot be characterized. |
 | Definition of Done | Clear decision: IN 0.3 spec follow-up, DEFER 0.4+, or REJECT, with rationale. |
 | Expected readiness status | Money portability decision ready for 0.3 closure or future backlog. |
@@ -462,7 +478,7 @@ Optional: Step 15.
 | Tests | None. |
 | Critical mutation scenarios | Missing treated as false, null treated as missing, JS truthiness used, unsafe cross-currency Money comparison, object key order treated as meaningful, arbitrary expression executed. |
 | Documentation | Record ADOPT, ADAPT SUBSET, BUILD MINIMAL FINKORE MODEL, or DEFER decision. |
-| External review requirements | Security review required before any normative model. Domain review for amount threshold semantics. |
+| Review requirements under D03-REVIEW-001 | Security review required before any normative model. Domain review for amount threshold semantics. |
 | Stop conditions | `BLOCKED BY SECURITY RISK` if no safe deterministic subset can be defined. |
 | Definition of Done | A documented standard/subset/defer decision exists. |
 | Expected readiness status | READY FOR Minimal Condition Model only if research passes. |
@@ -490,7 +506,7 @@ Optional: Step 15.
 | Tests | None. |
 | Critical mutation scenarios | Provenance lost, sensitive source fields exposed in errors, redaction removes required evidence, correlation identity treated as ordering guarantee. |
 | Documentation | Record decision and security considerations. |
-| External review requirements | Security/privacy review. |
+| Review requirements under D03-REVIEW-001 | Security/privacy review. |
 | Stop conditions | `BLOCKED BY SECURITY RISK` if provenance cannot be represented safely. |
 | Definition of Done | Decision documented: include narrow spec, defer, or reject. |
 | Expected readiness status | Audit provenance decision ready. |
@@ -518,7 +534,7 @@ Optional: Step 15.
 | Tests | Unit, adapter, conformance, typecheck, build, coverage, mutation for predicate boundaries. |
 | Critical mutation scenarios | Missing/null confusion, comparison operator inversion, cross-currency comparison succeeds, AND/OR inversion, NOT ignored, object order sensitivity, unsafe expression execution. |
 | Documentation | Specs, README, JSDoc, traceability, security notes. |
-| External review requirements | Security review before completion. |
+| Review requirements under D03-REVIEW-001 | Security review before completion. |
 | Stop conditions | `BLOCKED BY SECURITY RISK` or `BLOCKED BY SPEC GAP`. |
 | Definition of Done | Approved condition subset is implemented and closed with no critical mutants. |
 | Expected readiness status | Condition model 0.3 slice closed, or skipped by research decision. |
@@ -546,7 +562,7 @@ Optional: Step 15.
 | Tests | Link/reference checks if available; conformance if operation labels change. |
 | Critical mutation scenarios | Not direct mutation; review metadata defects such as state-changing marked pure or audit-producing omitted. |
 | Documentation | Root and Agentic README status updated. |
-| External review requirements | Security review for state-changing agent-facing operations. |
+| Review requirements under D03-REVIEW-001 | Security review for state-changing agent-facing operations. |
 | Stop conditions | `BLOCKED BY SPEC GAP` if operation effects are not stable. |
 | Definition of Done | Agentic registry accurately reflects 0.3 closed capabilities. |
 | Expected readiness status | Agentic 0.3 aligned. |
@@ -574,7 +590,7 @@ Optional: Step 15.
 | Tests | Language-native unit tests plus selected conformance if practical. |
 | Critical mutation scenarios | Same as selected slice. |
 | Documentation | Mark as optional proof, not official full port. |
-| External review requirements | Technical review. |
+| Review requirements under D03-REVIEW-001 | Technical review. |
 | Stop conditions | `BLOCKED BY TOOLCHAIN` if language toolchain is unavailable and user does not approve setup. |
 | Definition of Done | Proof either validates portability or records concrete spec issues. |
 | Expected readiness status | Optional portability evidence collected. |
@@ -602,7 +618,7 @@ Optional: Step 15.
 | Tests | Run build, typecheck, unit tests, coverage, conformance, and mutation for affected packages. |
 | Critical mutation scenarios | All critical mutants from approval composition, workflow versioning, entity import, and optional condition model must be killed or justified as equivalent. |
 | Documentation | Sync root README, TypeScript README, spec indexes, traceability, Agentic docs, CoreDoc assumptions, and deferred backlog. |
-| External review requirements | Confirm required domain/security/technical reviews are completed or documented as blockers. |
+| Review requirements under D03-REVIEW-001 | Confirm required analysis and scoped maintainer acceptance are evidenced; unresolved findings remain blockers. Record external review status separately. |
 | Stop conditions | `BLOCKED BY SPEC GAP`, `BLOCKED BY TRACEABILITY GAP`, `BLOCKED BY CRITICAL MUTANT`, or `BLOCKED BY REVIEW`. |
 | Definition of Done | `FINKORE CORE DRAFT 0.3 COMPLETE` is justified by green checks, clean traceability, aligned docs, and explicit 0.4+ backlog. |
 | Expected readiness status | FINKORE CORE DRAFT 0.3 COMPLETE. |
@@ -629,6 +645,10 @@ Optional: Step 15.
 - Version identifiers must not rely on numeric width, monotonic database counters, or object identity.
 
 ## 11. Security / Domain Review Touchpoints
+
+These are required analysis topics under D03-REVIEW-001; maintainer acceptance
+is sufficient for the draft gate. Future external review remains separately
+identified and must not be represented as completed.
 
 Domain/accounting review required:
 
@@ -694,7 +714,7 @@ Keep as implementation detail:
 - Cross-language assumptions are reviewed and unresolved risks are explicitly deferred.
 - README/status documentation is synchronized.
 - CoreDoc assumptions are updated where relevant.
-- Required domain/security/technical reviews are complete or recorded as blockers.
+- Required domain/security/technical analysis and scoped maintainer acceptance under D03-REVIEW-001 are evidenced; unresolved findings are blockers and external review status is explicit.
 
 ## 15. Draft 0.4+ Backlog
 
@@ -713,6 +733,10 @@ Priority order toward eventual FinKore v0.5:
 11. Ledger, journal entries, reconciliation, fiscal periods, purchase orders, invoice matching, payments, and settlement as separate future domain tracks.
 12. Full Java, Go, and .NET ports after the v0.5 core behavior is stable enough to justify maintenance.
 
-## 16. First Milestone to Execute
+## 16. Next Task to Execute
 
-NEXT CODEX MILESTONE: TASK-068 - Approval Composition Requirement Inventory
+NEXT CODEX TASK: TASK-074 - Approval Composition Conformance Families
+
+TASK-073 scoped domain/security review is complete. Decisions and final artifact
+revision are recorded in the research decision packet. Conformance, implementation,
+and mutation closure remain outstanding; external review is NOT EXTERNALLY REVIEWED.
