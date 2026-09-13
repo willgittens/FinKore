@@ -39,7 +39,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ### Draft 0.3
 
 - [x] Draft 0.3 Foundation: [TASK-067](#task-067)–[TASK-067](#task-067)
-- [ ] Advanced Approvals: [TASK-068](#task-068)–[TASK-084](#task-084) — complete through [TASK-082](#task-082); next [TASK-083](#task-083) traceability closure
+- [x] Advanced Approvals: [TASK-068](#task-068)–[TASK-084](#task-084)
 - [ ] Workflow Versioning and Import: [TASK-085](#task-085)–[TASK-098](#task-098)
 - [ ] Entity Revision and Import: [TASK-099](#task-099)–[TASK-110](#task-110)
 - [ ] Money Portability Research: [TASK-111](#task-111)–[TASK-121](#task-121)
@@ -52,9 +52,9 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-083
-LAST COMPLETED: TASK-082
-REASON: Advanced Approvals mutation hardening is complete for Approval Composition. Focused mutation over approval-composition.ts passed at 97.88% with 689 killed, 3 timeout, 15 survived, 0 no coverage, and zero critical survivors for quorum off-by-one, duplicate counting, ineffective/rejected vote counting, order bypass, early nested return, ignored depth/cycles, or mutable input state.
+NEXT TASK: TASK-085
+LAST COMPLETED: TASK-084
+REASON: Advanced Approvals is closed. Draft 0.3 Approval Composition has stable reviewed specification, 19 manifest-listed composition vectors, complete TypeScript implementation and translation-only adapter support, 66/66 Approval conformance, 218/218 full conformance across all closed domains, synchronized docs, and focused mutation evidence at 97.88% with zero critical Advanced Approval survivors.
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -7773,7 +7773,7 @@ Completion:
 
 <a id="task-083"></a>
 
-### - [ ] TASK-083 — Advanced Approvals Traceability Closure
+### - [x] TASK-083 — Advanced Approvals Traceability Closure
 
 **Release:** Draft 0.3
 
@@ -7846,10 +7846,10 @@ Advanced Approvals Traceability Closure.
 
 **Definition of Done**
 
-- [ ] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -7857,11 +7857,15 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: `node --version` reported `v24.15.0`; initial stale-dist Approval conformance exited 2 with unknown `approval.composition.evaluate`, then `npm run build --workspaces`, `npm run typecheck --workspaces`, traceability consistency script, Approval conformance, and `git diff --check` exited 0.
+- Conformance: Approval suite 66/66 PASS with 64/64 mutation-sensitive vectors after rebuild; manifest 218 vectors total, including 19 `approval.composition.evaluate` vectors.
+- Mutation: No runtime mutation run for this documentation/traceability task. TASK-082 focused mutation evidence remains applicable: 97.88%, 707 mutants, 689 killed, 3 timeout, 15 survived, 0 no coverage, 0 errors, and zero critical Advanced Approval survivors.
+- Notes: Updated root README, conformance README, traceability notes, Approval spec README, TypeScript core README, and Draft 0.3 implementation plan to remove stale pending claims. No normative `/spec`, vector, core source, adapter source, public API, JSDoc, `/agentic`, AGENTS.md, or CoreDoc change was required. `NEXT TASK` advanced to TASK-084.
 
 <a id="task-084"></a>
 
-### - [ ] TASK-084 — Advanced Approvals Slice Closure Gate
+### - [x] TASK-084 — Advanced Approvals Slice Closure Gate
 
 **Release:** Draft 0.3
 
@@ -7936,10 +7940,10 @@ Advanced Approvals Slice Closure Gate.
 
 **Definition of Done**
 
-- [ ] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -7947,7 +7951,11 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: `node --version` reported `v24.15.0`; `npm run build --workspaces`, `npm run typecheck --workspaces`, `npm run test --workspace @finkore/typescript -- test/approvals`, `npm run test --workspace @finkore/typescript-conformance-adapter`, both coverage commands, full/scoped conformance, focused mutation after sandbox escalation, mutation report parse, and `git diff --check` exited 0.
+- Conformance: Approval suite 66/66 PASS with 64/64 mutation-sensitive Approval vectors; full conformance 218/218 PASS with 193/193 mutation-sensitive vectors. By suite: Money 83/83, Workflow 20/20, Audit 29/29, Approvals 66/66, Entities 20/20.
+- Mutation: Focused `approval-composition.ts` mutation report mtime `2026-09-13T20:27:38.748Z`; 707 total mutants, 689 killed, 3 timeout, 15 survived, 0 no coverage, 0 errors, 97.88% score. Zero critical Advanced Approval survivors remain; surviving mutants retain the TASK-082 noncritical/equivalent classification.
+- Notes: Advanced Approvals dashboard summary is checked. Approval Composition remains conformance-local in Agentic terms; no canonical Approval operation was promoted. External review remains NOT EXTERNALLY REVIEWED under D03-REVIEW-001. `NEXT TASK` advanced to TASK-085.
 
 ### Milestone: Workflow Versioning and Import
 

@@ -696,3 +696,140 @@ review prerequisite is superseded by D03-REVIEW-001 below.
 - Critical survivor classification: zero critical survivors remain for quorum off-by-one thresholds, duplicate counting, ineffective/rejected vote counting, wrong voter/Requirement evidence, ordered stage progression, early nested return, depth/cycle validation, or defensive snapshot/input mutation. Remaining survivors are noncritical/equivalent internal bookkeeping: optional empty Decision defaults, state-requirement collector sentinels/group-member pushes, unused quorum observation `applicability`, rejected-member state spelling that remains non-approved/non-pending for aggregate capacity, inapplicable member/stage object shape, approved-stage applicability/no-obligation progression, and pending-actionable metadata ignored for non-pending outcomes. Outcome-pair guard survivors either preserve accepted behavior or only over-tighten unused optional metadata, not the normative quorum evidence path.
 - Documentation synchronization: no `/spec`, `/conformance`, `/agentic`, AGENTS.md, CoreDoc, root README, adapter README, TypeScript core README, public API, or JSDoc update was required because this task added test hardening and mutation evidence without changing normative behavior, vector inventory, canonical operation IDs, capability status, or public semantics.
 - Next task: TASK-083 — Advanced Approvals Traceability Closure.
+
+### TASK-083 — Advanced Approvals Traceability Closure (2026-09-13)
+
+- Status: COMPLETE. Closed the Advanced Approvals traceability audit for Draft
+  0.3 Approval Composition without changing financial behavior.
+- Source revision: `3cd784bfeab7670780dd9741f13b32569b7abc6d` plus this
+  documentation closeout.
+- Traceability inventory:
+  - `conformance/traceability.md` reports 334 requirements, 218 manifest-listed
+    vectors, 268 covered, 66 not directly testable, 0 uncovered, and 0 blocking
+    spec gaps.
+  - Approvals reports 86 requirements: 81 covered, 5 not directly testable, 0
+    uncovered, and 0 blocking spec gaps.
+  - Advanced Approvals has 37 directly testable covered rows:
+    `APPROVAL-COMPOSITION-001` through `APPROVAL-COMPOSITION-024`,
+    `APPROVAL-QUORUM-001` through `APPROVAL-QUORUM-010`, and
+    `APPROVAL-ERROR-008` through `APPROVAL-ERROR-010`.
+  - The manifest lists 66 Approval vectors, including 19
+    `approval.composition.evaluate` vectors. No vector requirement references an
+    unknown traceability row.
+- Operation and Agentic mapping:
+  - `approval.composition.evaluate` remains conformance-local in
+    `conformance/conventions.md` and `runner/src/metadata.ts`.
+  - No canonical `finkore.approval.*` operation was added; promotion remains
+    reserved for the later Draft 0.3 Agentic review.
+- Verification:
+  - `node --version` reported `v24.15.0`.
+  - A first Approval conformance run before rebuilding exited 2 with an
+    infrastructure error from stale `dist` output: unknown operation
+    `approval.composition.evaluate`. No financial failure was accepted from that
+    stale build.
+  - `npm run build --workspaces` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - Traceability consistency script exited 0 with 218 manifest vectors, 66
+    Approval vectors, 19 composition vectors, 334 traceability rows, no missing
+    vector requirement rows, 0 uncovered rows, 0 blocking spec gaps, and 37
+    Advanced Approval rows all covered.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json --suite approvals`
+    exited 0 with 66 total, 66 passed, 0 failed, 0 unsupported, 0
+    infrastructure errors, and 64/64 mutation-sensitive vectors passing.
+  - `git diff --check` exited 0.
+  - Stale-status `rg` inspection found no remaining claims that composition
+    implementation, adapter wiring, runtime conformance, mutation closure, or
+    TASK-074 are still pending in the scoped docs.
+- Documentation synchronization:
+  - Updated `README.md`, `conformance/README.md`,
+    `conformance/traceability.md`, `spec/approvals/README.md`,
+    `implementations/typescript/core/README.md`, and
+    `docs/tasks/draft-0.3-implementation-plan.md` to reflect that the Draft 0.3
+    Approval Composition conformance, implementation, adapter wiring, and
+    mutation hardening are complete.
+  - No `/spec` normative text, conformance vector, adapter source, core source,
+    public API, JSDoc, `/agentic`, AGENTS.md, or CoreDoc update was required
+    because this task only corrected traceability/status documentation.
+- Mutation: no new mutation run; no production financial behavior changed.
+  TASK-082 focused mutation evidence remains applicable at 97.88%, 707 mutants,
+  689 killed, 3 timeout, 15 survived, 0 no coverage, 0 errors, and zero critical
+  Advanced Approval survivors.
+- Review status: TASK-073 scoped review remains complete under D03-REVIEW-001;
+  external review is NOT EXTERNALLY REVIEWED.
+- Next task: TASK-084 — Advanced Approvals Slice Closure Gate.
+
+### TASK-084 — Advanced Approvals Slice Closure Gate (2026-09-13)
+
+- Status: COMPLETE. Closed the selected Draft 0.3 Advanced Approvals Approval
+  Composition slice.
+- Scope closed:
+  - Stable specification: `spec/approvals/composition.md`,
+    `spec/approvals/errors.md`, and `spec/approvals/README.md` define the
+    reviewed any-of, all-of, N-of-M quorum, ordered-stage, and bounded nested
+    group surface.
+  - Conformance: `conformance/approvals/composition.json` supplies 19
+    manifest-listed `approval.composition.evaluate` vectors; traceability covers
+    all 37 directly testable composition/quorum/error rows.
+  - Implementation: `ApprovalComposition` validates definitions and evaluates
+    any/all groups, fixed-threshold quorums from explicit current-effective
+    Decision observations, ordered stages, nested groups, complete validation,
+    safe error precedence, and actionable Requirement reporting.
+  - Adapter: `approval.composition.evaluate` is wired through the TypeScript
+    conformance adapter as a translation-only conformance-local operation.
+  - Agentic: no canonical Approval operation is promoted in this slice; later
+    Draft 0.3 Agentic review owns that decision.
+- Verification:
+  - `node --version` reported `v24.15.0`.
+  - `npm run build --workspaces` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspace @finkore/typescript -- test/approvals` exited 0
+    with 14 files / 129 tests passed.
+  - `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0
+    with 1 file / 14 tests passed.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json --suite approvals`
+    exited 0 with 66 total, 66 passed, 0 failed, 0 unsupported, 0
+    infrastructure errors, and 64/64 mutation-sensitive Approval vectors
+    passing.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json`
+    exited 0 with 218 total, 218 passed, 0 failed, 0 unsupported, 0
+    infrastructure errors, and 193/193 mutation-sensitive vectors passing. By
+    suite: Money 83/83, Workflow 20/20, Audit 29/29, Approvals 66/66, Entities
+    20/20.
+  - `npm run test:coverage --workspace @finkore/typescript` exited 0 with 39
+    files / 334 tests passed and 99.02% statements, 98.54% branches, 100%
+    functions, 99.44% lines.
+  - `npm run test:coverage --workspace @finkore/conformance-runner` exited 0
+    with 10 files / 110 tests passed and 98.31% statements, 95.29% branches,
+    100% functions, 98.75% lines.
+  - Mutation first failed under sandbox restrictions with `listen EPERM:
+    operation not permitted 0.0.0.0` before running mutants. The same focused
+    command was rerun with escalation and exited 0.
+  - `npm run test:mutation --workspace @finkore/typescript -- --mutate src/approvals/approval-composition.ts`
+    produced current reports at
+    `implementations/typescript/core/reports/mutation/mutation.json` and
+    `mutation.html`: 707 total mutants, 689 killed, 3 timeout, 15 survived, 0
+    no coverage, 0 errors, 97.88% mutation score.
+  - Mutation report parse confirmed the only mutated file was
+    `src/approvals/approval-composition.ts`, with report mtime
+    `2026-09-13T20:27:38.748Z`.
+  - `git diff --check` exited 0.
+- Mutation survivor disposition: zero critical survivors remain for quorum
+  off-by-one thresholds, duplicate counting, ineffective/rejected vote counting,
+  wrong voter/Requirement evidence, ordered-stage progression, early nested
+  return, depth/cycle validation, complete validation, error priority, or
+  defensive snapshot/input mutation. The 15 survivors match the noncritical or
+  equivalent internal observation-shape/bookkeeping classification recorded by
+  TASK-082.
+- Documentation synchronization:
+  - `README.md`, `conformance/README.md`, `conformance/traceability.md`,
+    `spec/approvals/README.md`, `implementations/typescript/core/README.md`,
+    and `docs/tasks/draft-0.3-implementation-plan.md` now describe the
+    implemented/passing Approval Composition slice.
+  - No normative `/spec` rule, conformance vector, operation ID, public API,
+    JSDoc, AGENTS.md, or CoreDoc update was required at this gate.
+- Review status: TASK-073 scoped domain/security review remains complete under
+  D03-REVIEW-001. External community/accounting/security/audit review remains
+  NOT EXTERNALLY REVIEWED and is a future review opportunity, not a Draft 0.3
+  blocker.
+- Result: Advanced Approvals is closed. Next task: TASK-085 — Workflow
+  Definition Version Identity Specification.

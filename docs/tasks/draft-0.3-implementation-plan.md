@@ -31,14 +31,15 @@ blockers. Acceptance of this policy does not accept individual financial choices
 
 ## 2. Actual Repository Baseline
 
-Draft 0.1 and Draft 0.2 closed baseline:
+Draft 0.1 and Draft 0.2 closed baseline, plus the current Draft 0.3 Approval
+Composition slice state:
 
 | Area | Actual state |
 | --- | --- |
 | Specification | `/spec` contains Draft 0.1 Money, Workflow, Audit, Approvals, Entities, shared conventions, and glossary plus closed Draft 0.2 Money Rates, Money Allocation, Audit Relationships, Entity Evolution, and Approval Validity semantics. |
-| Conformance | `conformance/manifest.json` remains format `0.1` as a syntax compatibility version. `conformance/traceability.md` reports 297 requirements, 199 vectors, 231 covered, 66 not directly testable, 0 uncovered, and 0 blocking spec gaps. |
-| Agentic | Canonical operations include the Draft 0.1 Money, Workflow and Audit operations plus Draft 0.2 Money `finkore.money.applyrate`, `finkore.money.allocate`, and current Entity operation IDs. Advanced Approval lifecycle labels remain conformance-local. |
-| TypeScript | The TypeScript reference implementation covers Draft 0.1 and selected Draft 0.2 behavior for Money Rates/Allocation, Audit Relationships, Entity Evolution correction/reversal/void/supersession, and Approval withdrawal/expiration/supersession/current-effectiveness. It still explicitly excludes Draft 0.3 topics such as approval quorum, N-of-M voting, bounded nested groups, workflow versioning/import/conflict, entity import identity mapping, delegation, escalation, IAM/RBAC, persistence, and tax/interest behavior. |
+| Conformance | `conformance/manifest.json` remains format `0.1` as a syntax compatibility version. `conformance/traceability.md` reports 334 requirements, 218 vectors, 268 covered, 66 not directly testable, 0 uncovered, and 0 blocking spec gaps after the Draft 0.3 Approval Composition vectors. |
+| Agentic | Canonical operations include the Draft 0.1 Money, Workflow and Audit operations plus Draft 0.2 Money `finkore.money.applyrate`, `finkore.money.allocate`, and current Entity operation IDs. Approval lifecycle and composition labels remain conformance-local pending the Draft 0.3 Agentic review. |
+| TypeScript | The TypeScript reference implementation covers Draft 0.1, selected Draft 0.2 behavior for Money Rates/Allocation, Audit Relationships, Entity Evolution correction/reversal/void/supersession, and Approval withdrawal/expiration/supersession/current-effectiveness, plus Draft 0.3 Approval Composition for any/all groups, N-of-M quorum, ordered stages, bounded nested groups, and adapter conformance. It still explicitly excludes workflow versioning/import/conflict, entity import identity mapping, delegation, escalation, IAM/RBAC, persistence, and tax/interest behavior. |
 | Runner | The runner is domain-neutral and must remain so. |
 
 Draft 0.2 planned state:
@@ -115,7 +116,7 @@ Hard gate status: satisfied by TASK-066/TASK-067. Future 0.3 tasks must preserve
 Recommended in 0.3:
 
 1. Approval composition spec and implementation for `ANY_OF`, `ALL_OF`, `N_OF_M`, ordered stages, and bounded nested groups.
-2. Quorum counting semantics that compose with Draft 0.2 current-effectiveness, including expired, withdrawn, superseded, ineligible, duplicate, rejected, and stale decisions. D03-QUORUM-001 limits quorum members to Requirement references with explicit distinct voter identities; child groups cannot be votes, while quorums may be nested beneath any-of/all-of groups. D03-QUORUM-002 fixes N against declared membership and rejects an unreachable quorum with at least one applicable voter; D03-COMPOSITION-001 omits entirely inapplicable children from parent evaluation and approves a valid composition with no applicable obligations. D03-COMPOSITION-002 uses ALL_OF between applicable stage groups and treats an entirely inapplicable stage as no obligation. D03-COMPOSITION-003 requires nonempty stage/group declarations and counts depth from each stage root. D03-COMPOSITION-004 requires complete validation of structure and required evidence before outcomes, including later stages and alternatives. D03-COMPOSITION-005 reports unique pending applicable Requirements through pending groups in the first pending stage, in recursive declared order; terminal outcomes report none. D03-COMPOSITION-006 specifies structure/applicability/context/evidence error priority. D03-QUORUM-003 rejects opposing effective votes as invalid evidence and defines member-specific state. TASK-073 review is complete; TASK-074 conformance families are next.
+2. Quorum counting semantics that compose with Draft 0.2 current-effectiveness, including expired, withdrawn, superseded, ineligible, duplicate, rejected, and stale decisions. D03-QUORUM-001 limits quorum members to Requirement references with explicit distinct voter identities; child groups cannot be votes, while quorums may be nested beneath any-of/all-of groups. D03-QUORUM-002 fixes N against declared membership and rejects an unreachable quorum with at least one applicable voter; D03-COMPOSITION-001 omits entirely inapplicable children from parent evaluation and approves a valid composition with no applicable obligations. D03-COMPOSITION-002 uses ALL_OF between applicable stage groups and treats an entirely inapplicable stage as no obligation. D03-COMPOSITION-003 requires nonempty stage/group declarations and counts depth from each stage root. D03-COMPOSITION-004 requires complete validation of structure and required evidence before outcomes, including later stages and alternatives. D03-COMPOSITION-005 reports unique pending applicable Requirements through pending groups in the first pending stage, in recursive declared order; terminal outcomes report none. D03-COMPOSITION-006 specifies structure/applicability/context/evidence error priority. D03-QUORUM-003 rejects opposing effective votes as invalid evidence and defines member-specific state. TASK-073 review, TASK-074 conformance families, TASK-075 through TASK-080 implementation/adapter work, TASK-081 boundary tests, and TASK-082 mutation hardening are complete.
 3. Research milestone for portable condition standards, followed by a minimal deterministic condition model only if the research gate passes.
 4. Workflow definition identity/version binding and import semantics.
 5. Portable expected-state or expected-revision conflict contract for Workflow/Entity operations, without persistence or locking.
@@ -735,8 +736,12 @@ Priority order toward eventual FinKore v0.5:
 
 ## 16. Next Task to Execute
 
-NEXT CODEX TASK: TASK-074 - Approval Composition Conformance Families
+NEXT CODEX TASK: TASK-085 - Workflow Definition Version Identity Specification
 
 TASK-073 scoped domain/security review is complete. Decisions and final artifact
 revision are recorded in the research decision packet. Conformance, implementation,
-and mutation closure remain outstanding; external review is NOT EXTERNALLY REVIEWED.
+adapter support, boundary coverage, and mutation hardening through TASK-082 are
+complete for the Advanced Approvals composition slice. TASK-083 traceability
+closure and TASK-084 slice closure are complete; external review remains NOT
+EXTERNALLY REVIEWED. The next required Draft 0.3 milestone is Workflow Versioning
+and Import.

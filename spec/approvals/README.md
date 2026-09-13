@@ -33,8 +33,9 @@ This domain defines approval requirements and decisions independently of any par
   order. Coexisting validation failures follow structure, applicability, required
   context, then state/effectiveness priority. Opposing effective Decisions from
   one declared quorum voter are invalid evidence; each member's state uses only
-  its matching voter/Requirement evidence. The scoped Draft 0.3 review is complete;
-  composition conformance and implementation remain pending.
+  its matching voter/Requirement evidence. The scoped Draft 0.3 review,
+  conformance vectors, TypeScript implementation, adapter wiring, and mutation
+  hardening are complete for this composition surface.
 - [Conditional Approval Requirements](conditions.md) must use explicit domain facts.
 - [Approval Validity](validity.md) must derive current effectiveness from append-only history, explicit evaluation context, relevant subject facts or revisions, and lifecycle evidence such as withdrawal, expiration, or supersession.
 
