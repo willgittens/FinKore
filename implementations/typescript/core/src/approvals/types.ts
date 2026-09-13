@@ -136,6 +136,117 @@ export type ApprovalConditionFactPath = string
  */
 export type ApprovalConditionEvaluationResult = 'APPLICABLE' | 'NOT_APPLICABLE'
 
+
+/**
+ * Explicit applicability observation for a Requirement member during Approval
+ * Composition evaluation.
+ *
+ * @see APPROVAL-COMPOSITION-009
+ * @see APPROVAL-COMPOSITION-011
+ */
+export type ApprovalCompositionRequirementApplicability = 'APPLICABLE' | 'NOT_APPLICABLE' | 'UNRESOLVED'
+
+/**
+ * Portable Approval Composition outcome.
+ *
+ * @see APPROVAL-COMPOSITION-013
+ * @see APPROVAL-COMPOSITION-014
+ * @see APPROVAL-COMPOSITION-018
+ */
+export type ApprovalCompositionOutcome = 'APPROVED' | 'REJECTED' | 'PENDING'
+
+/**
+ * Requirement state evidence supplied to Approval Composition evaluation.
+ *
+ * This is an explicit current observation. The Composition evaluator does not
+ * derive it from ambient state or external fact lookup.
+ *
+ * @see APPROVAL-COMPOSITION-008
+ * @see APPROVAL-COMPOSITION-010
+ */
+export interface SerializedApprovalCompositionRequirementObservation {
+  /** Referenced Approval Requirement identity. */
+  readonly id: ApprovalRequirementIdentifier
+
+  /** Explicit applicability result for the Requirement member. */
+  readonly applicability: ApprovalCompositionRequirementApplicability
+
+  /** Current state for applicable Requirement members. */
+  readonly state?: ApprovalRequirementState
+
+  /** Actor identities eligible to satisfy or reject a quorum member. */
+  readonly eligibleActors?: readonly ApprovalActorIdentifier[]
+
+  /** Decision outcome that satisfies this Requirement for quorum evidence. */
+  readonly approvedOutcome?: ApprovalDecisionOutcome
+
+  /** Decision outcome that rejects this Requirement for quorum evidence. */
+  readonly rejectedOutcome?: ApprovalDecisionOutcome
+
+  /** Whether current-effectiveness semantics require an explicit evaluation context. */
+  readonly requiresEvaluationContext?: boolean
+}
+
+/**
+ * Current-effective Decision observation supplied to Approval Composition quorum
+ * evaluation.
+ *
+ * The observation is already reduced by Draft 0.2 effectiveness rules; this
+ * type does not define lifecycle derivation or mutate committed history.
+ *
+ * @see APPROVAL-COMPOSITION-008
+ * @see APPROVAL-COMPOSITION-021
+ * @see APPROVAL-QUORUM-002
+ * @see APPROVAL-QUORUM-004
+ */
+export interface SerializedApprovalCompositionDecisionObservation {
+  /** Optional external Decision identity preserved by callers and vectors. */
+  readonly id?: string
+
+  /** Requirement identity this Decision observation addresses. */
+  readonly requirementId: ApprovalRequirementIdentifier
+
+  /** Actor attributable for the Decision observation. */
+  readonly actor: SerializedApprovalActor
+
+  /** Observed Decision outcome. */
+  readonly outcome: ApprovalDecisionOutcome
+
+  /** Whether this Decision is currently effective for the supplied context. */
+  readonly effective: boolean
+}
+
+/**
+ * Evaluation input for the Draft 0.3 Approval Composition model.
+ *
+ * @see APPROVAL-COMPOSITION-008
+ * @see APPROVAL-COMPOSITION-024
+ */
+export interface ApprovalCompositionEvaluationInput {
+  /** Current observations for referenced Requirements. */
+  readonly requirements: readonly SerializedApprovalCompositionRequirementObservation[]
+
+  /** Current-effective Decision observations for quorum member evaluation. */
+  readonly decisions?: readonly SerializedApprovalCompositionDecisionObservation[]
+
+  /** Explicit evaluation context, such as an evaluation instant when required. */
+  readonly context?: Readonly<Record<string, unknown>>
+}
+
+/**
+ * Observable Approval Composition evaluation result.
+ *
+ * @see APPROVAL-COMPOSITION-018
+ * @see APPROVAL-COMPOSITION-019
+ */
+export interface ApprovalCompositionEvaluation {
+  /** Aggregate Composition outcome. */
+  readonly outcome: ApprovalCompositionOutcome
+
+  /** Pending applicable Requirement identities currently actionable. */
+  readonly actionableRequirements: readonly ApprovalRequirementIdentifier[]
+}
+
 /**
  * Portable FinKore Approval error code.
  *

@@ -51,6 +51,7 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('approval.decision.evaluate')).toBe(true)
     expect(adapter.supports('approval.condition.evaluate')).toBe(true)
     expect(adapter.supports('approval.chain.evaluate')).toBe(true)
+    expect(adapter.supports('approval.composition.evaluate')).toBe(true)
     expect(adapter.supports('audit.append')).toBe(false)
     expect(adapter.supports('audit.redact')).toBe(true)
     expect(adapter.supports('audit.order')).toBe(false)
@@ -234,13 +235,42 @@ describe('TypeScript conformance adapter', () => {
     expect(report.summary).toEqual({ total: 10, passed: 10, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
-  it('passes current Approval vectors while composition remains unsupported', async () => {
+  it('passes current Approval Composition vectors through the TypeScript core evaluator', async () => {
+    const report = await createConformanceRunner({
+      manifestPath,
+      adapter: createTypeScriptConformanceAdapter(),
+    }).run({ vectorIds: [
+      'approval.composition.all-of-pending-001',
+      'approval.composition.any-of-inapplicable-child-pending-001',
+      'approval.composition.none-applicable-approved-001',
+      'approval.composition.stage-first-pending-actionable-001',
+      'approval.composition.stage-parallel-rejected-001',
+      'approval.composition.stage-inapplicable-allows-later-001',
+      'approval.composition.structure-invalid-duplicates-001',
+      'approval.composition.structure-cycle-depth-invalid-001',
+      'approval.composition.structure-empty-stage-kind-invalid-001',
+      'approval.composition.unresolved-applicability-complete-validation-001',
+      'approval.composition.error-priority-structure-over-context-001',
+      'approval.composition.error-priority-context-before-state-001',
+      'approval.composition.quorum-two-of-three-approved-boundary-001',
+      'approval.composition.quorum-fixed-threshold-unreachable-001',
+      'approval.composition.quorum-reachable-pending-001',
+      'approval.composition.quorum-invalid-member-voter-001',
+      'approval.composition.quorum-opposing-effective-votes-invalid-001',
+      'approval.composition.quorum-member-specific-evidence-001',
+      'approval.composition.quorum-ineffective-decision-not-counted-001',
+    ] })
+
+    expect(report.summary).toEqual({ total: 19, passed: 19, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+  })
+
+  it('passes current Approval vectors', async () => {
     const report = await createConformanceRunner({
       manifestPath,
       adapter: createTypeScriptConformanceAdapter(),
     }).run({ suites: ['approvals'] })
 
-    expect(report.summary).toEqual({ total: 66, passed: 47, failed: 0, unsupported: 19, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 66, passed: 66, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current Workflow state and transition vectors', async () => {

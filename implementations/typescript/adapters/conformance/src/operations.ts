@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 import {
   ApprovalChain,
+  ApprovalComposition,
   ApprovalCondition,
   ApprovalDecision,
   ApprovalDecisionHistory,
@@ -357,6 +358,35 @@ function inputApprovalChainEvaluate(input: unknown): {
     return { chain: undefined, states: undefined }
   }
   return input as { readonly chain: unknown; readonly states: unknown }
+}
+
+function inputApprovalCompositionEvaluate(input: unknown): {
+  readonly composition: unknown
+  readonly requirements: unknown
+  readonly decisions?: unknown
+  readonly context?: Readonly<Record<string, unknown>>
+} {
+  if (typeof input !== 'object' || input === null || !('composition' in input) || !('requirements' in input)) {
+    return { composition: undefined, requirements: undefined }
+  }
+  const candidate = input as {
+    readonly composition: unknown
+    readonly requirements: unknown
+    readonly decisions?: unknown
+    readonly context?: Readonly<Record<string, unknown>>
+  }
+  return {
+    composition: candidate.composition,
+    requirements: candidate.requirements,
+    ...(Object.hasOwn(candidate, 'decisions') ? { decisions: candidate.decisions } : {}),
+    ...(Object.hasOwn(candidate, 'context') ? { context: candidate.context } : {}),
+  }
+}
+
+function compositionDecisionObservations(input: { readonly decisions?: unknown }, result: NormalizedResult): Readonly<Record<string, unknown>> | undefined {
+  if (!Array.isArray(input.decisions)) return undefined
+  if (input.decisions.length === 0 || result.status === 'error') return { decisions: input.decisions }
+  return undefined
 }
 
 /**
@@ -1121,6 +1151,33 @@ function executeApprovalChainEvaluate(request: AdapterRequest): NormalizedResult
 }
 
 /**
+ * Executes Approval Composition evaluation through the TypeScript core API.
+ *
+ * The adapter translates the conformance fixture into explicit current
+ * Requirement and Decision observations, then delegates group, quorum, stage,
+ * nesting, and portable error behavior to `ApprovalComposition`.
+ */
+function executeApprovalCompositionEvaluate(request: AdapterRequest): NormalizedResult {
+  const input = inputApprovalCompositionEvaluate(request.input)
+  try {
+    const result: NormalizedResult = {
+      status: 'success',
+      value: ApprovalComposition.from(input.composition).evaluate({
+        requirements: input.requirements as never,
+        ...(Object.hasOwn(input, 'decisions') ? { decisions: input.decisions as never } : {}),
+        ...(Object.hasOwn(input, 'context') ? { context: input.context } : {}),
+      }),
+    }
+    const observations = compositionDecisionObservations(input, result)
+    return observations === undefined ? result : { ...result, observations }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    const observations = compositionDecisionObservations(input, result)
+    return observations === undefined ? result : { ...result, observations }
+  }
+}
+
+/**
  * Operation handlers supported by the first TypeScript conformance adapter.
  *
  * Public Money and Entity domain operations use canonical Agentic Contract
@@ -1164,6 +1221,7 @@ export const operationHandlers = {
   'finkore.audit.remove': executeAuditRemove,
   'audit.redact': executeAuditRedact,
   'approval.chain.evaluate': executeApprovalChainEvaluate,
+  'approval.composition.evaluate': executeApprovalCompositionEvaluate,
   'approval.decision.evaluate': executeApprovalDecisionEvaluate,
   'approval.decision.record': executeApprovalDecisionRecord,
   'approval.decision.supersede': executeApprovalDecisionSupersede,

@@ -39,7 +39,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ### Draft 0.3
 
 - [x] Draft 0.3 Foundation: [TASK-067](#task-067)–[TASK-067](#task-067)
-- [ ] Advanced Approvals: [TASK-068](#task-068)–[TASK-084](#task-084) — complete through [TASK-075](#task-075); next [TASK-076](#task-076) any/all evaluation
+- [ ] Advanced Approvals: [TASK-068](#task-068)–[TASK-084](#task-084) — complete through [TASK-082](#task-082); next [TASK-083](#task-083) traceability closure
 - [ ] Workflow Versioning and Import: [TASK-085](#task-085)–[TASK-098](#task-098)
 - [ ] Entity Revision and Import: [TASK-099](#task-099)–[TASK-110](#task-110)
 - [ ] Money Portability Research: [TASK-111](#task-111)–[TASK-121](#task-121)
@@ -52,9 +52,9 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-076
-LAST COMPLETED: TASK-075
-REASON: Approval Composition TypeScript definition model/API is implemented, documented, unit-tested, covered, mutation-hardened, and exported. Composition evaluation and adapter support remain pending; the expected conformance red set is still 19 unsupported approval.composition.evaluate vectors with zero failures or infrastructure errors.
+NEXT TASK: TASK-083
+LAST COMPLETED: TASK-082
+REASON: Advanced Approvals mutation hardening is complete for Approval Composition. Focused mutation over approval-composition.ts passed at 97.88% with 689 killed, 3 timeout, 15 survived, 0 no coverage, and zero critical survivors for quorum off-by-one, duplicate counting, ineffective/rejected vote counting, order bypass, early nested return, ignored depth/cycles, or mutable input state.
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -7123,7 +7123,7 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 <a id="task-076"></a>
 
-### - [ ] TASK-076 — Any-of and All-of Evaluation Implementation
+### - [x] TASK-076 — Any-of and All-of Evaluation Implementation
 
 **Release:** Draft 0.3
 
@@ -7198,9 +7198,9 @@ Any-of and All-of Evaluation Implementation.
 
 **Definition of Done**
 
-- [ ] Implement any/all evaluation over the specified effective decision/requirement observations; preserve legacy sequential/unordered chain behavior.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement any/all evaluation over the specified effective decision/requirement observations; preserve legacy sequential/unordered chain behavior.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -7208,11 +7208,15 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+- Status: COMPLETE
+- Verification: Node v24.20.0 from `.tools/node-v24.20.0-linux-x64`; initial red `npm run test --workspace @finkore/typescript -- test/approvals` failed with `composition.evaluate is not a function`; final `npm run test --workspace @finkore/typescript -- test/approvals` exited 0 with 10 files / 103 tests passing; `npm run typecheck --workspaces` exited 0; `npm run build --workspaces` exited 0; `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0 with 1 file / 13 tests passing; `npm run test:coverage --workspace @finkore/typescript` exited 0 with 35 files / 308 tests passing and 98.89% statement coverage; `git diff --check` passed.
+- Conformance: `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --suite approvals --json` exited 3 as expected: 66 total, 47 passed, 0 failed, 19 unsupported, 0 infrastructure errors. Adapter wiring remains later, so the TASK-074 `approval.composition.evaluate` vector set is still the known unsupported set.
+- Mutation: targeted core mutation `npm run test:mutation --workspace @finkore/typescript -- --mutate src/approvals/approval-composition.ts` exited 0 with 97.29% score, 536 killed, 3 timeout, 14 survived, 1 no coverage. No critical survivor affects implemented any/all behavior; remaining survivors are redundant defensive branches or unreachable post-validation guards. Reports: `implementations/typescript/core/reports/mutation/mutation.json` and `mutation.html`.
+- Notes: Added `ApprovalComposition.evaluate`, public evaluation input/result types, any/all and staged evaluation tests, complete-validation/error-priority tests, README/API synchronization, and no adapter dispatch. Quorum vote counting remains TASK-077; conformance support remains pending adapter work. No `/spec`, `/conformance`, `/agentic`, AGENTS.md, CoreDoc, or root README update was required because the normative vector set and canonical operation inventory did not change. `NEXT TASK` advanced to TASK-077.
 
 <a id="task-077"></a>
 
-### - [ ] TASK-077 — N-of-M Quorum Evaluation Implementation
+### - [x] TASK-077 — N-of-M Quorum Evaluation Implementation
 
 **Release:** Draft 0.3
 
@@ -7287,9 +7291,9 @@ N-of-M Quorum Evaluation Implementation.
 
 **Definition of Done**
 
-- [ ] Implement distinct eligible effective counting, threshold outcome and rejection/pending rules; reuse 0.2 effectiveness without adapter-side counting.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement distinct eligible effective counting, threshold outcome and rejection/pending rules; reuse 0.2 effectiveness without adapter-side counting.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -7297,11 +7301,16 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Red `npm run test --workspace @finkore/typescript -- test/approvals` failed before implementation on the new quorum behavior tests; after implementation, `npm run test --workspace @finkore/typescript -- test/approvals` passed 11 files / 115 tests, `npm run typecheck --workspaces` passed, `npm run build --workspaces` passed, `npm run test --workspace @finkore/typescript-conformance-adapter` passed 1 file / 13 tests, `npm run test:coverage --workspace @finkore/typescript` passed 36 files / 320 tests with 99.02% statements and 98.54% branches; `npm run test:coverage --workspace @finkore/conformance-runner` passed 10 files / 110 tests with 98.31% statements and 95.29% branches, and `git diff --check` passed.
+- Conformance: `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json --suite approvals` exited 3 as expected: 66 total, 47 passed, 0 failed, 19 unsupported, 0 infrastructure errors. The unsupported set remains the TASK-074 `approval.composition.evaluate` family because adapter dispatch is scheduled later.
+- Mutation: Targeted `npm run test:mutation --workspace @finkore/typescript -- --mutate src/approvals/approval-composition.ts` passed at 97.45% mutation score, 686 killed, 3 timeout, 18 survived, 0 no coverage; no critical quorum-counting, duplicate-vote, ineffective-vote, eligibility, fixed-threshold, or opposing-effective-vote survivor was accepted. Report: `implementations/typescript/core/reports/mutation/mutation.html`.
+- Notes: Added explicit Decision-observation quorum evaluation input/types, unit and mutation-sensitive quorum tests, public exports/JSDoc, and TypeScript core README status/API updates. No `/spec`, `/conformance`, `/agentic`, AGENTS.md, CoreDoc, or root README update was required because the normative requirements, vector set, canonical operation inventory, governance, and project-level slice closure did not change. `NEXT TASK` advanced to TASK-078.
 
 <a id="task-078"></a>
 
-### - [ ] TASK-078 — Ordered Approval Stage Evaluation Implementation
+### - [x] TASK-078 — Ordered Approval Stage Evaluation Implementation
 
 **Release:** Draft 0.3
 
@@ -7376,9 +7385,9 @@ Ordered Approval Stage Evaluation Implementation.
 
 **Definition of Done**
 
-- [ ] Implement declared stage progression/actionability using closed group evaluation and current-effectiveness.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement declared stage progression/actionability using closed group evaluation and current-effectiveness.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -7386,11 +7395,16 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Added focused ordered-stage tests over closed quorum group evaluation in `composition-stage-quorum.test.ts`; the behavior passed immediately because prior stage evaluation and TASK-077 quorum closure already supplied the implementation. `npm run test --workspace @finkore/typescript -- test/approvals` passed 12 files / 118 tests, `npm run typecheck --workspaces` passed, `npm run build --workspaces` passed, `npm run test --workspace @finkore/typescript-conformance-adapter` passed 1 file / 13 tests, `npm run test:coverage --workspace @finkore/typescript` passed 37 files / 323 tests with 99.02% statements and 98.54% branches, `npm run test:coverage --workspace @finkore/conformance-runner` passed 10 files / 110 tests with 98.31% statements and 95.29% branches, and `git diff --check` passed.
+- Conformance: `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json --suite approvals` exited 3 as expected: 66 total, 47 passed, 0 failed, 19 unsupported, 0 infrastructure errors. The unsupported set remains the TASK-074 `approval.composition.evaluate` family because adapter dispatch is scheduled later.
+- Mutation: Targeted `npm run test:mutation --workspace @finkore/typescript -- --mutate src/approvals/approval-composition.ts` passed at 97.45% mutation score, 686 killed, 3 timeout, 18 survived, 0 no coverage; no critical ordered-stage, first-pending-stage actionability, inapplicable-stage progression, same-stage rejection, or stage/quorum composition survivor was accepted. Report: `implementations/typescript/core/reports/mutation/mutation.html`.
+- Notes: No production source change was required for TASK-078 because ordered stage evaluation was already implemented by TASK-076 and now composes with TASK-077 quorum evaluation. Added focused tests and recorded verification. README/JSDoc remained current; no `/spec`, `/conformance`, `/agentic`, AGENTS.md, CoreDoc, or root README update was required because no normative requirement, vector set, canonical operation inventory, governance, or project-level slice closure changed. `NEXT TASK` advanced to TASK-079.
 
 <a id="task-079"></a>
 
-### - [ ] TASK-079 — Bounded Nested Group Evaluation Implementation
+### - [x] TASK-079 — Bounded Nested Group Evaluation Implementation
 
 **Release:** Draft 0.3
 
@@ -7465,9 +7479,9 @@ Bounded Nested Group Evaluation Implementation.
 
 **Definition of Done**
 
-- [ ] Implement bounded deterministic nested/parallel group evaluation with specified cycle/depth handling and defensive observations.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement bounded deterministic nested/parallel group evaluation with specified cycle/depth handling and defensive observations.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -7475,11 +7489,16 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Added focused bounded nested-group tests in `composition-nested.test.ts`; the behavior passed immediately because prior recursive group evaluation and TASK-077 quorum closure already supplied the implementation. `npm run test --workspace @finkore/typescript -- test/approvals` passed 13 files / 121 tests, `npm run typecheck --workspaces` passed, `npm run build --workspaces` passed, `npm run test --workspace @finkore/typescript-conformance-adapter` passed 1 file / 13 tests, `npm run test:coverage --workspace @finkore/typescript` passed 38 files / 326 tests with 99.02% statements and 98.54% branches, `npm run test:coverage --workspace @finkore/conformance-runner` passed 10 files / 110 tests with 98.31% statements and 95.29% branches, and `git diff --check` passed.
+- Conformance: `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json --suite approvals` exited 3 as expected: 66 total, 47 passed, 0 failed, 19 unsupported, 0 infrastructure errors. The unsupported set remains the TASK-074 `approval.composition.evaluate` family because adapter dispatch is scheduled later.
+- Mutation: Targeted `npm run test:mutation --workspace @finkore/typescript -- --mutate src/approvals/approval-composition.ts` passed at 97.45% mutation score, 686 killed, 3 timeout, 18 survived, 0 no coverage; no critical nested evaluation, child-group omission, depth/cycle, or nested quorum composition survivor was accepted. Report: `implementations/typescript/core/reports/mutation/mutation.html`.
+- Notes: No production source change was required for TASK-079 because bounded nested group validation/evaluation already existed and now composes with TASK-077 quorum evaluation. Added focused tests and recorded verification. README/JSDoc remained current; no `/spec`, `/conformance`, `/agentic`, AGENTS.md, CoreDoc, or root README update was required because no normative requirement, vector set, canonical operation inventory, governance, or project-level slice closure changed. `NEXT TASK` advanced to TASK-080.
 
 <a id="task-080"></a>
 
-### - [ ] TASK-080 — Approval Composition Adapter Support
+### - [x] TASK-080 — Approval Composition Adapter Support
 
 **Release:** Draft 0.3
 
@@ -7552,9 +7571,9 @@ Approval Composition Adapter Support.
 
 **Definition of Done**
 
-- [ ] Wire registered group/stage operations to core; preserve fixture semantics without treating caller-declared approved states as a substitute for required evidence.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Wire registered group/stage operations to core; preserve fixture semantics without treating caller-declared approved states as a substitute for required evidence.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -7562,11 +7581,16 @@ Named operation fixtures execute through core and all required slice vectors PAS
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Added `approval.composition.evaluate` adapter support through `ApprovalComposition.from(...).evaluate(...)`, registered support in the adapter, and added focused adapter coverage for all 19 manifest-listed Approval Composition vectors. `npm run test --workspace @finkore/typescript-conformance-adapter` passed 1 file / 14 tests, `npm run test --workspace @finkore/typescript -- test/approvals` passed 13 files / 121 tests, `npm run typecheck --workspaces` passed, and `npm run build --workspaces` passed.
+- Conformance: Before this adapter task, the approvals suite had the expected red adapter gap: 66 total, 47 passed, 0 failed, 19 unsupported, 0 infrastructure errors. After wiring, `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json --suite approvals` exited 0: 66 total, 66 passed, 0 failed, 0 unsupported, 0 infrastructure errors; mutation-sensitive approvals vectors were 64/64.
+- Mutation: Adapter remained translation-only, with no new financial rule implementation or adapter mutation script. Core Approval Composition mutation evidence from TASK-077/TASK-079 remains retained for the underlying group, stage, nested, and quorum behavior.
+- Notes: Adapter dispatch preserves fixture semantics by delegating all composition behavior to core and only echoing Decision observations where required by vector expectations; caller-declared approved Requirement states are not used as a substitute for quorum Decision evidence. Adapter/core READMEs were synchronized. No `/spec`, `/conformance`, `/agentic`, AGENTS.md, CoreDoc, root README, or conformance vector update was required because no normative requirement, vector set, canonical operation inventory, governance, or project-level slice closure changed. `NEXT TASK` advanced to TASK-081.
 
 <a id="task-081"></a>
 
-### - [ ] TASK-081 — Approval Composition Contrast and Boundary Tests
+### - [x] TASK-081 — Approval Composition Contrast and Boundary Tests
 
 **Release:** Draft 0.3
 
@@ -7637,9 +7661,9 @@ Approval Composition Contrast and Boundary Tests.
 
 **Definition of Done**
 
-- [ ] Pair effective versus withdrawn/expired/superseded/stale cases across quorum, any-of, all-of and parallel groups; test N−1/N/N+1 counts, duplicates, exact expiration instant, missing states and nested rejection.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Pair effective versus withdrawn/expired/superseded/stale cases across quorum, any-of, all-of and parallel groups; test N−1/N/N+1 counts, duplicates, exact expiration instant, missing states and nested rejection.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -7647,11 +7671,16 @@ The named regression/coverage/conformance checks have durable results; no new se
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Added `composition-contrast-boundaries.test.ts` covering Draft 0.2 current-effectiveness observations through any/all composition, exact expiration before/at boundary behavior, quorum N-1/N/N+1 vote counts, duplicate-vote non-inflation, ineffective quorum observations, missing current states, and nested rejection through parallel stage evaluation. `npm run test --workspace @finkore/typescript -- test/approvals` passed 14 files / 125 tests, `npm run typecheck --workspaces` passed, `npm run build --workspaces` passed, and `npm run test --workspace @finkore/typescript-conformance-adapter` passed 1 file / 14 tests.
+- Conformance: `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json --suite approvals` exited 0: 66 total, 66 passed, 0 failed, 0 unsupported, 0 infrastructure errors; mutation-sensitive approvals vectors were 64/64.
+- Mutation: No production financial behavior changed in this test-only task, and no targeted mutation run was required here. Prior Approval Composition mutation evidence remains retained; TASK-082 is the dedicated Advanced Approvals mutation hardening gate.
+- Notes: No `/spec`, `/conformance`, `/agentic`, AGENTS.md, CoreDoc, root README, adapter README, TypeScript core README, public API, or JSDoc update was required because this task added durable regression coverage without changing normative behavior, vector families, operation IDs, capability status, or public semantics. `NEXT TASK` advanced to TASK-082.
 
 <a id="task-082"></a>
 
-### - [ ] TASK-082 — Advanced Approvals Mutation Hardening
+### - [x] TASK-082 — Advanced Approvals Mutation Hardening
 
 **Release:** Draft 0.3
 
@@ -7724,9 +7753,9 @@ Advanced Approvals Mutation Hardening.
 
 **Definition of Done**
 
-- [ ] Kill quorum off-by-one, duplicate counting, ineffective/rejected votes counted, order bypass, early nested return, ignored depth/cycles and mutable input state.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Kill quorum off-by-one, duplicate counting, ineffective/rejected votes counted, order bypass, early nested return, ignored depth/cycles and mutable input state.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -7734,7 +7763,13 @@ A complete scoped mutation report and survivor classifications establish >=95% a
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Confirmed Stryker scope includes `src/approvals/approval-composition.ts` and all `test/approvals/*.test.ts` files, then added mutation-hardening assertions in `composition-contrast-boundaries.test.ts` for malformed inapplicable state evidence, unused non-quorum outcome metadata, effective rejecting quorum votes, and independently applicable approved nested all-of/any-of groups. `npm run test --workspace @finkore/typescript -- test/approvals` passed 14 files / 129 tests, `npm run typecheck --workspaces` passed, `npm run build --workspaces` passed, `npm run test --workspace @finkore/typescript-conformance-adapter` passed 1 file / 14 tests, and `npm run test:coverage --workspace @finkore/typescript` passed 39 files / 334 tests with 99.02% statements, 98.54% branches, 100% functions, 99.44% lines.
+- Conformance: `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json --suite approvals` exited 0: 66 total, 66 passed, 0 failed, 0 unsupported, 0 infrastructure errors; mutation-sensitive approvals vectors were 64/64.
+- Mutation: Focused `npm run test:mutation --workspace @finkore/typescript -- --mutate src/approvals/approval-composition.ts` completed with 707 mutants, 689 killed, 3 timeout, 15 survived, 0 no coverage, 0 errors, and 97.88% score. Report: `implementations/typescript/core/reports/mutation/mutation.html` and `.json`. Zero critical survivors remain for quorum threshold/off-by-one behavior, duplicate approvals, ineffective/rejected approval counting, member-specific voter evidence, same-stage/stage-order behavior, nested group outcome propagation, cycle/depth validation, or defensive snapshot/input mutation.
+- Survivor classification: Remaining survivors are noncritical or equivalent internal observation-shape/bookkeeping variants: default optional Decision list sentinel values have no effective Decision semantics; state-requirement collection sentinels/group-member pushes are not referenced by required Requirement observations; outcome-pair guard variants either preserve current accepted behavior or only over-tighten unused optional metadata; the returned quorum observation `applicability` field is not read after the applicable-member check; rejected-member state spelling is unobservable because aggregate quorum capacity distinguishes only approvals and pending members; inapplicable member/stage empty-object and approved-stage applicability variants are equivalent to no-obligation progression at the public aggregate boundary; and pending-actionable metadata on approved/rejected members is ignored unless the member outcome is pending.
+- Notes: No `/spec`, `/conformance`, `/agentic`, AGENTS.md, CoreDoc, root README, adapter README, TypeScript core README, public API, or JSDoc update was required because this task hardened tests/mutation evidence without changing normative behavior, vector families, operation IDs, capability status, or public semantics. `NEXT TASK` advanced to TASK-083.
 
 <a id="task-083"></a>
 

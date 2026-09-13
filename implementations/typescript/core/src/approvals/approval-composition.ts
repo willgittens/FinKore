@@ -1,13 +1,20 @@
 // SPDX-License-Identifier: MPL-2.0
-import { InvalidApprovalChainError } from './errors.js'
+import { ApprovalConditionUnresolvedError, InvalidApprovalChainError, InvalidApprovalContextError } from './errors.js'
 import type {
   ApprovalActorIdentifier,
+  ApprovalDecisionOutcome,
+  ApprovalCompositionEvaluation,
+  ApprovalCompositionEvaluationInput,
   ApprovalCompositionGroupIdentifier,
   ApprovalCompositionGroupKind,
   ApprovalCompositionMemberIdentifier,
+  ApprovalCompositionOutcome,
+  ApprovalCompositionRequirementApplicability,
   ApprovalRequirementIdentifier,
+  ApprovalRequirementState,
   SerializedApprovalActor,
   SerializedApprovalComposition,
+  SerializedApprovalCompositionDecisionObservation,
   SerializedApprovalCompositionGroup,
   SerializedApprovalCompositionMember,
   SerializedApprovalCompositionStage,
@@ -176,6 +183,178 @@ function assertReferencesAndBounded(
   for (const groupId of rootIds) visit(groupId, 1)
 }
 
+
+type CompositionRequirementObservation = {
+  readonly applicability: Exclude<ApprovalCompositionRequirementApplicability, 'UNRESOLVED'>
+  readonly state: ApprovalRequirementState | undefined
+  readonly eligibleActors: readonly ApprovalActorIdentifier[] | undefined
+  readonly approvedOutcome: ApprovalDecisionOutcome | undefined
+  readonly rejectedOutcome: ApprovalDecisionOutcome | undefined
+}
+
+type QuorumRequirementObservation = CompositionRequirementObservation & {
+  readonly applicability: 'APPLICABLE'
+  readonly eligibleActors: readonly ApprovalActorIdentifier[]
+  readonly approvedOutcome: ApprovalDecisionOutcome
+  readonly rejectedOutcome: ApprovalDecisionOutcome
+}
+
+type ApplicableGroupEvaluation =
+  | { readonly applicable: true; readonly outcome: Exclude<ApprovalCompositionOutcome, 'PENDING'> }
+  | {
+      readonly applicable: true
+      readonly outcome: 'PENDING'
+      readonly actionableRequirements: readonly ApprovalRequirementIdentifier[]
+    }
+
+type GroupEvaluation = { readonly applicable: false } | ApplicableGroupEvaluation
+
+function validateApplicability(value: unknown): ApprovalCompositionRequirementApplicability {
+  if (value === 'APPLICABLE' || value === 'NOT_APPLICABLE' || value === 'UNRESOLVED') return value
+  throw new InvalidApprovalChainError()
+}
+
+function validateRequirementState(value: unknown): ApprovalRequirementState {
+  if (value === 'APPROVED' || value === 'REJECTED' || value === 'PENDING') return value
+  throw new InvalidApprovalChainError()
+}
+
+function validateDecisionOutcome(value: unknown): ApprovalDecisionOutcome {
+  if (value === 'APPROVED' || value === 'REJECTED') return value
+  throw new InvalidApprovalChainError()
+}
+
+function validateEligibleActors(value: unknown): readonly ApprovalActorIdentifier[] | undefined {
+  if (value === undefined) return undefined
+  if (!Array.isArray(value)) throw new InvalidApprovalChainError()
+  return value.map(requiredString)
+}
+
+function validateDecisionObservation(value: unknown): SerializedApprovalCompositionDecisionObservation {
+  if (!isPlainRecord(value)) throw new InvalidApprovalChainError()
+  if (typeof value.effective !== 'boolean') throw new InvalidApprovalChainError()
+  return {
+    requirementId: requiredString(value.requirementId),
+    actor: validateActor(value.actor),
+    outcome: validateDecisionOutcome(value.outcome),
+    effective: value.effective,
+  }
+}
+
+function validateDecisionObservations(value: unknown): readonly SerializedApprovalCompositionDecisionObservation[] {
+  if (value === undefined) return []
+  if (!Array.isArray(value)) throw new InvalidApprovalChainError()
+  return value.map(validateDecisionObservation)
+}
+
+function hasValidEvaluationContext(value: unknown): boolean {
+  return isPlainRecord(value) && typeof value.evaluatedAt === 'string' && value.evaluatedAt.length > 0
+}
+
+function uniqueInOrder(values: readonly ApprovalRequirementIdentifier[]): readonly ApprovalRequirementIdentifier[] {
+  const seen = new Set<ApprovalRequirementIdentifier>()
+  const result: ApprovalRequirementIdentifier[] = []
+  for (const value of values) {
+    if (seen.has(value)) continue
+    seen.add(value)
+    result.push(value)
+  }
+  return result
+}
+
+
+function isApplicableEvaluation(value: GroupEvaluation): value is ApplicableGroupEvaluation {
+  return value.applicable === true
+}
+
+
+function isOpenStage(value: GroupEvaluation): value is ApplicableGroupEvaluation {
+  return value.applicable === true && value.outcome !== 'APPROVED'
+}
+
+function pendingActionables(values: readonly ApplicableGroupEvaluation[]): readonly ApprovalRequirementIdentifier[] {
+  return uniqueInOrder(
+    values.flatMap((value) => value.outcome === 'PENDING' ? value.actionableRequirements : []),
+  )
+}
+
+function collectRequirementIds(groups: readonly SerializedApprovalCompositionGroup[]): readonly ApprovalRequirementIdentifier[] {
+  const ids: ApprovalRequirementIdentifier[] = []
+  for (const group of groups) {
+    for (const member of group.members) {
+      if (member.type === 'requirement') ids.push(member.requirementId)
+    }
+  }
+  return uniqueInOrder(ids)
+}
+
+function collectStateRequirementIds(groups: readonly SerializedApprovalCompositionGroup[]): readonly ApprovalRequirementIdentifier[] {
+  const ids: ApprovalRequirementIdentifier[] = []
+  for (const group of groups) {
+    if (group.kind === 'N_OF_M') continue
+    for (const member of group.members) {
+      if (member.type === 'requirement') ids.push(member.requirementId)
+    }
+  }
+  return uniqueInOrder(ids)
+}
+
+function validateEvaluationInput(
+  input: unknown,
+  requiredRequirementIds: readonly ApprovalRequirementIdentifier[],
+  stateRequirementIds: readonly ApprovalRequirementIdentifier[],
+): ReadonlyMap<ApprovalRequirementIdentifier, CompositionRequirementObservation> {
+  if (!isPlainRecord(input) || !Array.isArray(input.requirements)) throw new InvalidApprovalChainError()
+  const rawById = new Map<ApprovalRequirementIdentifier, Readonly<Record<string, unknown>>>()
+  for (const raw of input.requirements) {
+    if (!isPlainRecord(raw)) throw new InvalidApprovalChainError()
+    const id = requiredString(raw.id)
+    if (rawById.has(id)) throw new InvalidApprovalChainError()
+    rawById.set(id, raw)
+    if (raw.requiresEvaluationContext !== undefined && typeof raw.requiresEvaluationContext !== 'boolean') {
+      throw new InvalidApprovalChainError()
+    }
+  }
+
+  for (const requirementId of requiredRequirementIds) {
+    if (!rawById.has(requirementId)) throw new InvalidApprovalChainError()
+  }
+  for (const requirementId of requiredRequirementIds) {
+    const raw = rawById.get(requirementId)!
+    if (raw.requiresEvaluationContext === true && !hasValidEvaluationContext(input.context)) {
+      throw new InvalidApprovalContextError()
+    }
+  }
+
+  const stateRequirementSet = new Set(stateRequirementIds)
+  const observations = new Map<ApprovalRequirementIdentifier, CompositionRequirementObservation>()
+  for (const requirementId of requiredRequirementIds) {
+    const raw = rawById.get(requirementId)!
+    const applicability = validateApplicability(raw.applicability)
+    if (applicability === 'UNRESOLVED') throw new ApprovalConditionUnresolvedError()
+    const state = raw.state === undefined ? undefined : validateRequirementState(raw.state)
+    if (applicability === 'APPLICABLE' && stateRequirementSet.has(requirementId) && state === undefined) {
+      throw new InvalidApprovalChainError()
+    }
+
+    const eligibleActors = validateEligibleActors(raw.eligibleActors)
+    const approvedOutcome = raw.approvedOutcome === undefined ? undefined : validateDecisionOutcome(raw.approvedOutcome)
+    const rejectedOutcome = raw.rejectedOutcome === undefined ? undefined : validateDecisionOutcome(raw.rejectedOutcome)
+    if (approvedOutcome !== undefined && rejectedOutcome !== undefined && approvedOutcome === rejectedOutcome) {
+      throw new InvalidApprovalChainError()
+    }
+
+    observations.set(requirementId, {
+      applicability,
+      state,
+      eligibleActors,
+      approvedOutcome,
+      rejectedOutcome,
+    })
+  }
+  return observations
+}
+
 /**
  * FinKore Approval Composition definition for Draft 0.3 bounded groups.
  *
@@ -185,10 +364,11 @@ function assertReferencesAndBounded(
  * no cycles, and a maximum root-to-child group depth of four. Quorum groups
  * require a fixed positive threshold over distinct declared voting members.
  *
- * This class validates and preserves the Composition definition only. It does
- * not evaluate approval outcomes, count Decisions, authorize Actors, resolve
- * dynamic approvers, execute callbacks, mutate history, or implement adapter
- * normalization.
+ * This class validates Composition definitions and evaluates `ALL_OF`, `ANY_OF`,
+ * and `N_OF_M` groups from explicit current Requirement and Decision
+ * observations. Decision-history effectiveness derivation, authorization,
+ * dynamic approvers, callbacks, history mutation, and adapter normalization
+ * remain outside this class's current scope.
  *
  * @see APPROVAL-COMPOSITION-001
  * @see APPROVAL-COMPOSITION-002
@@ -274,6 +454,185 @@ export class ApprovalComposition {
    */
   get groups(): readonly SerializedApprovalCompositionGroup[] {
     return structuredClone(this.value.groups)
+  }
+
+
+  /**
+   * Evaluates this Composition from explicit current Requirement and Decision
+   * observations.
+   *
+   * Evaluation validates every referenced Requirement observation before
+   * returning an outcome, including alternative branches and later stages.
+   * Quorum members are counted only from currently effective eligible Decision
+   * observations matching the declared voter and referenced Requirement.
+   *
+   * @param input - Explicit current Requirement and Decision observations plus evaluation context.
+   * @returns Aggregate Composition outcome and current pending actionable Requirements.
+   * @throws {InvalidApprovalChainError}
+   * When state/effectiveness evidence is missing, malformed, or contradictory.
+   * @throws {ApprovalConditionUnresolvedError}
+   * When a referenced Requirement has unresolved applicability.
+   * @throws {InvalidApprovalContextError}
+   * When required current-effectiveness context is missing or malformed.
+   *
+   * @see FINKORE_APPROVAL_INVALID_CHAIN
+   * @see FINKORE_APPROVAL_CONDITION_UNRESOLVED
+   * @see FINKORE_APPROVAL_INVALID_CONTEXT
+   * @see APPROVAL-COMPOSITION-008
+   * @see APPROVAL-COMPOSITION-009
+   * @see APPROVAL-COMPOSITION-010
+   * @see APPROVAL-COMPOSITION-011
+   * @see APPROVAL-COMPOSITION-013
+   * @see APPROVAL-COMPOSITION-014
+   * @see APPROVAL-COMPOSITION-016
+   * @see APPROVAL-COMPOSITION-017
+   * @see APPROVAL-COMPOSITION-018
+   * @see APPROVAL-COMPOSITION-019
+   * @see APPROVAL-COMPOSITION-022
+   * @see APPROVAL-COMPOSITION-023
+   * @see APPROVAL-COMPOSITION-024
+   * @see APPROVAL-QUORUM-002
+   * @see APPROVAL-QUORUM-003
+   * @see APPROVAL-QUORUM-004
+   * @see APPROVAL-QUORUM-005
+   * @see APPROVAL-QUORUM-006
+   * @see APPROVAL-QUORUM-009
+   * @see APPROVAL-QUORUM-010
+   */
+  evaluate(input: ApprovalCompositionEvaluationInput): ApprovalCompositionEvaluation {
+    const groupsById = new Map(this.value.groups.map((group) => [group.id, group]))
+    const observations = validateEvaluationInput(
+      input,
+      collectRequirementIds(this.value.groups),
+      collectStateRequirementIds(this.value.groups),
+    )
+    const decisions = validateDecisionObservations(input.decisions)
+
+    const requireQuorumObservation = (
+      observation: CompositionRequirementObservation,
+    ): QuorumRequirementObservation => {
+      if (observation.eligibleActors === undefined) throw new InvalidApprovalChainError()
+      if (observation.approvedOutcome === undefined) throw new InvalidApprovalChainError()
+      if (observation.rejectedOutcome === undefined) throw new InvalidApprovalChainError()
+      return {
+        applicability: 'APPLICABLE',
+        state: observation.state,
+        eligibleActors: observation.eligibleActors,
+        approvedOutcome: observation.approvedOutcome,
+        rejectedOutcome: observation.rejectedOutcome,
+      }
+    }
+
+    const evaluateQuorumMember = (member: SerializedApprovalCompositionRequirementMember): ApprovalRequirementState => {
+      const quorumObservation = requireQuorumObservation(observations.get(member.requirementId)!)
+      const voter = member.voter!
+
+      let hasApproval = false
+      let hasRejection = false
+      for (const decision of decisions) {
+        if (!decision.effective) continue
+        if (decision.requirementId !== member.requirementId) continue
+        if (decision.actor.id !== voter.id) continue
+        if (!quorumObservation.eligibleActors.includes(decision.actor.id)) continue
+
+        if (decision.outcome === quorumObservation.approvedOutcome) hasApproval = true
+        if (decision.outcome === quorumObservation.rejectedOutcome) hasRejection = true
+      }
+
+      if (hasApproval && hasRejection) throw new InvalidApprovalChainError()
+      if (hasApproval) return 'APPROVED'
+      if (hasRejection) return 'REJECTED'
+      return 'PENDING'
+    }
+
+    const evaluateQuorumGroup = (group: SerializedApprovalCompositionGroup): GroupEvaluation => {
+      let hasApplicableMember = false
+      let approvals = 0
+      const pendingRequirements: ApprovalRequirementIdentifier[] = []
+      const members = group.members as readonly SerializedApprovalCompositionRequirementMember[]
+
+      for (const member of members) {
+        const observation = observations.get(member.requirementId)!
+        if (observation.applicability === 'NOT_APPLICABLE') continue
+
+        hasApplicableMember = true
+        const state = evaluateQuorumMember(member)
+        if (state === 'APPROVED') approvals += 1
+        if (state === 'PENDING') pendingRequirements.push(member.requirementId)
+      }
+
+      if (!hasApplicableMember) return { applicable: false }
+      if (approvals >= group.threshold!) return { applicable: true, outcome: 'APPROVED' }
+      if (approvals + pendingRequirements.length < group.threshold!) return { applicable: true, outcome: 'REJECTED' }
+      return { applicable: true, outcome: 'PENDING', actionableRequirements: uniqueInOrder(pendingRequirements) }
+    }
+
+    const evaluateMember = (member: SerializedApprovalCompositionMember): GroupEvaluation => {
+      if (member.type === 'requirement') {
+        const observation = observations.get(member.requirementId)!
+        if (observation.applicability === 'NOT_APPLICABLE') return { applicable: false }
+        const outcome = observation.state!
+        if (outcome === 'PENDING') {
+          return { applicable: true, outcome, actionableRequirements: [member.requirementId] }
+        }
+        return { applicable: true, outcome }
+      }
+      return evaluateGroup(member.groupId)
+    }
+
+    const evaluateGroup = (groupId: ApprovalCompositionGroupIdentifier): GroupEvaluation => {
+      const group = groupsById.get(groupId)!
+      if (group.kind === 'N_OF_M') return evaluateQuorumGroup(group)
+      const applicableMembers = group.members.map(evaluateMember).filter(isApplicableEvaluation)
+      if (applicableMembers.length === 0) return { applicable: false }
+
+      if (group.kind === 'ALL_OF') {
+        if (applicableMembers.some((member) => member.outcome === 'REJECTED')) {
+          return { applicable: true, outcome: 'REJECTED' }
+        }
+        if (applicableMembers.some((member) => member.outcome === 'PENDING')) {
+          return { applicable: true, outcome: 'PENDING', actionableRequirements: pendingActionables(applicableMembers) }
+        }
+        return { applicable: true, outcome: 'APPROVED' }
+      }
+
+      if (applicableMembers.some((member) => member.outcome === 'APPROVED')) {
+        return { applicable: true, outcome: 'APPROVED' }
+      }
+      if (applicableMembers.every((member) => member.outcome === 'REJECTED')) {
+        return { applicable: true, outcome: 'REJECTED' }
+      }
+      return { applicable: true, outcome: 'PENDING', actionableRequirements: pendingActionables(applicableMembers) }
+    }
+
+    const evaluateStage = (stage: SerializedApprovalCompositionStage): GroupEvaluation => {
+      const groups = stage.groups.map(evaluateGroup).filter(isApplicableEvaluation)
+      if (groups.length === 0) return { applicable: false }
+      if (groups.some((group) => group.outcome === 'REJECTED')) {
+        return { applicable: true, outcome: 'REJECTED' }
+      }
+      if (groups.some((group) => group.outcome === 'PENDING')) {
+        return { applicable: true, outcome: 'PENDING', actionableRequirements: pendingActionables(groups) }
+      }
+      return { applicable: true, outcome: 'APPROVED' }
+    }
+
+    if (this.value.rootGroup !== undefined) {
+      const root = evaluateGroup(this.value.rootGroup)
+      if (root.applicable === false) return { outcome: 'APPROVED', actionableRequirements: [] }
+      return {
+        outcome: root.outcome,
+        actionableRequirements: root.outcome === 'PENDING' ? root.actionableRequirements : [],
+      }
+    }
+
+    const stages = this.value.stages!.map(evaluateStage)
+    const firstOpenStage = stages.find(isOpenStage)
+    if (firstOpenStage === undefined) return { outcome: 'APPROVED', actionableRequirements: [] }
+    return {
+      outcome: firstOpenStage.outcome,
+      actionableRequirements: firstOpenStage.outcome === 'PENDING' ? firstOpenStage.actionableRequirements : [],
+    }
   }
 
   /**
