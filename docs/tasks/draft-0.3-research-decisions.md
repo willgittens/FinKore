@@ -875,3 +875,91 @@ Future work may introduce an explicit portability profile, capability discovery,
 an unsupported-precision portable error, an advisory minor-unit metadata profile,
 or a private currency namespace. Any such work needs new spec/vector/adapter/API
 tasks and review; it is not implied by closing this research track.
+
+## Audit Provenance Research Packet
+
+### TASK-122 - Audit Provenance Research and Security Decision
+
+- Status: COMPLETE — research recorded; Draft 0.3 normative follow-up DEFERRED.
+- Date: 2026-09-14.
+- Decision authority: project maintainer, through the instruction to run the
+  complete Draft 0.3 Audit Provenance Research backlog slice.
+- Analysis attribution: assistant analysis of the required technical,
+  security, privacy, and domain topics, using the primary sources listed below.
+  No external reviewer or professional credential is represented.
+- Exact reviewed artifact:
+  [SHA-256 manifest](review-snapshots/task-122-audit-provenance.json).
+- External review: NOT EXTERNALLY REVIEWED. Future community, accounting,
+  audit, privacy, and security review may challenge these decisions by source
+  URL, stable FinKore requirement ID, and artifact hash.
+
+#### Primary Sources
+
+| Topic | Source | Finding |
+| --- | --- | --- |
+| Distributed correlation | W3C Trace Context Recommendation, 23 November 2021: `https://www.w3.org/TR/trace-context/` | Trace Context standardizes propagation of request correlation identifiers (`traceparent` and `tracestate`) for distributed tracing. It also documents privacy and security risks: trace identifiers can correlate requests and vendor state can expose confidential information. |
+| Log/event correlation fields | OpenTelemetry Logs Data Model, Stable: `https://opentelemetry.io/docs/specs/otel/logs/data-model/` | OpenTelemetry models optional `TraceId`, `SpanId`, and `TraceFlags` fields and a flexible attribute collection. This is useful evidence for correlation terminology, but it is an observability log model rather than a financial Audit provenance contract. |
+| Event source context | CNCF CloudEvents specification: `https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md` | CloudEvents requires `id` and `source`; `source` identifies the producer context and has producer-defined syntax/semantics. Extension attributes allow metadata, but do not define a FinKore-safe financial provenance vocabulary. |
+| General provenance model | W3C PROV-DM Recommendation: `https://www.w3.org/TR/prov-dm/` | PROV-DM models entities, activities, agents, responsibility, derivation, and provenance-of-provenance. It is much broader than FinKore Audit Events and would require a separate mapping and constraint review before adoption. |
+| Secure logging and sensitive data | OWASP Logging Cheat Sheet: `https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html` | Logging guidance warns against recording sensitive data directly, calls for masking/sanitization/encryption where needed, and recommends validation and sanitization of event data from other trust zones. |
+| Privacy minimisation | European Commission GDPR principles page: `https://commission.europa.eu/law/law-topic/data-protection/information-business-and-organisations/principles-gdpr_en` | Data minimisation requires personal data to be adequate, relevant, and limited to what is necessary. Source, reason, and correlation metadata can become personal or commercially sensitive depending on deployment context. |
+| Log management scope | NIST SP 800-92 final page: `https://csrc.nist.gov/pubs/sp/800/92/final` | NIST frames log management as an organizational process for generating, transmitting, storing, accessing, and disposing of logs. That scope is operational infrastructure, outside FinKore Core's current logical Audit model. |
+
+#### Local FinKore Baseline
+
+| Baseline artifact | Current behavior relevant to provenance |
+| --- | --- |
+| `spec/audit/events.md` | `AUDIT-EVENT-006` allows event metadata as relevant context, while `AUDIT-EVENT-008` forbids metadata from contradicting required event fields. No named `reason`, `source`, `correlationId`, or `causationId` field is standardized. |
+| `spec/audit/relationships.md` | Audit Relationships preserve explicit evidence links for `CORRECTS`, `REVERSES`, `VOIDS`, and `SUPERSEDES`, and `AUDIT-RELATIONSHIP-014` forbids treating relationships as a global ordering or distributed causality guarantee. |
+| `spec/audit/redaction.md` and `spec/audit/errors.md` | Redaction must preserve event meaning while concealing protected content, and portable error details must not disclose protected content. |
+| TypeScript Audit implementation | `AuditEvent.from` already validates and preserves generic cloneable metadata that does not restate required event fields. It does not assign standardized provenance semantics to metadata keys. |
+
+#### Options Considered
+
+| Option | Assessment |
+| --- | --- |
+| INCLUDE narrow named fields in Draft 0.3 | Useful for imports and workflow/approval diagnostics, but premature without a portable authority model, redaction target model for provenance fields, safe diagnostic rules, source trust boundaries, and correlation/causation constraints. |
+| INCLUDE only W3C Trace Context identifiers | Too observability-specific. Trace identifiers can correlate requests across contexts and are not equivalent to financial causation or audit evidence. |
+| ADOPT CloudEvents source/subject semantics | Source/subject semantics are producer-defined and event-delivery oriented. Direct adoption could imply transport or event-bus behavior outside FinKore Core. |
+| ADOPT W3C PROV-DM | Too broad for this milestone. A PROV mapping would need entity/activity/agent/derivation constraints and could collide with current FinKore Actor, Entity, Audit Relationship, and append-only semantics. |
+| DEFER standardized provenance fields | Preserves current generic metadata support while avoiding a false portable contract. Allows future work to design a bounded model with explicit redaction/privacy/security review. |
+
+#### Security and Privacy Review
+
+| Finding | Resolution |
+| --- | --- |
+| Source-system identifiers can expose tenant, vendor, integration, network, or migration details. | DEFER named source metadata until FinKore defines safe identifier shape, authority, redaction targetability, and diagnostic handling. |
+| Correlation identifiers can join events, users, requests, or systems across boundaries and may become personal or confidential metadata. | DEFER correlation/causation semantics. A future model must say they are opaque evidence only and never a total ordering, trust, or authorization signal. |
+| Human-readable reasons can contain personal data, protected financial facts, secrets, or legal/compliance-sensitive details. | DEFER reason semantics until a structured, minimal, redaction-aware representation exists. Free-form reason text is not promoted to a portable field. |
+| Provenance metadata must coexist with Audit Relationships without weakening append-only evidence. | Existing `AUDIT-RELATIONSHIP-*` requirements remain authoritative. No new provenance field may reinterpret relationship order or create hidden causality. |
+| Generic metadata is already allowed and implemented. | Keep existing generic metadata support as non-normative context under `AUDIT-EVENT-006`; do not standardize key names or conformance expectations in Draft 0.3. |
+
+#### Decision
+
+| Decision ID | Task | Disposition | Rationale |
+| --- | --- | --- | --- |
+| D03-AUDIT-PROVENANCE-001 | TASK-122 | DEFER | Draft 0.3 does not add standardized Audit provenance fields for reason, source, correlation identity, causation identity, or trace context. Existing generic Audit Event metadata remains available under `AUDIT-EVENT-006`, but its keys have no portable provenance semantics. The privacy/security review found credible disclosure, correlation, and false-causality risks that require a future bounded model rather than a quick named-field addition. |
+
+#### Conditional Follow-Up Disposition
+
+TASK-123 through TASK-129 are COMPLETE as NOT APPLICABLE for Draft 0.3. No
+Audit provenance normative proposal was approved, so no new Audit requirements,
+vectors, adapter operations, public TypeScript APIs, portable errors, Agentic
+metadata, mutation targets, or traceability rows are created by this slice.
+
+The following behavior remains mandatory from the existing Audit specification:
+
+- Audit Event metadata may provide relevant context but must not contradict
+  required event fields.
+- Audit Relationships remain explicit evidence links and do not create a global
+  ordering, distributed causality guarantee, or event-sourced reconstruction
+  requirement.
+- Redaction and portable error diagnostics must not disclose protected content.
+- Access-time masking remains separate from mutation of committed source events.
+
+Future work may introduce a bounded provenance metadata model, including safe
+source identity, structured reason codes, correlation/causation identifiers,
+provenance redaction targets, diagnostic disclosure rules, and optional mapping
+to W3C Trace Context, CloudEvents, OpenTelemetry, or PROV. Any such work needs
+new spec/vector/adapter/API tasks and review; it is not implied by closing this
+research track.

@@ -1,0 +1,126 @@
+{
+  "id": "task-122-audit-provenance",
+  "date": "2026-09-14",
+  "sourceRevision": "9649e1fd53cea4fe734aadd992e8e72d6d040908 plus TASK-122 through TASK-129 Audit Provenance Research working-tree changes",
+  "status": "complete-deferred",
+  "externalReview": "NOT EXTERNALLY REVIEWED",
+  "artifacts": [
+    {
+      "path": "docs/coreDoc/core-doc.md",
+      "sha256": "53d5565c6ac0cad831ec9409c86c1648c93f15c15325530eca7581cb6d6fdf1f"
+    },
+    {
+      "path": "docs/tasks/draft-0.3-research-decisions.md",
+      "sha256": "5e412d218ce2860bc4a55a3e8a4500d35ccf9a355007fb5c5f5eba8b6cfff5c1"
+    },
+    {
+      "path": "docs/tasks/draft-0.3-implementation-plan.md",
+      "sha256": "1c5727be6d24e410f7054c0ec8d98a0731dd3fd43511e3dee0f88464bf76d1a0"
+    },
+    {
+      "path": "docs/tasks/draft-0.3-execution-evidence.md",
+      "sha256": "e04aacf70f5f269cb8fb51f818fb05c0a45b96da356136c3f6cb9c20c96fc1a3"
+    },
+    {
+      "path": "docs/tasks/draft-0.2-to-0.3-execution-backlog.md",
+      "sha256": "a9501558c70050544064c505aab0a72928af1d155c29d8e2d8d6805975f40fb8"
+    },
+    {
+      "path": "spec/audit/README.md",
+      "sha256": "c9b18da52b6cfcb202dbebf5a82251393be51800c1b89062b16b7b537011c94e"
+    },
+    {
+      "path": "spec/audit/events.md",
+      "sha256": "53ae68c7069190d8ae8bd56eb4e6b056eabb54a960c60d3b34d2f234acc36c3b"
+    },
+    {
+      "path": "spec/audit/relationships.md",
+      "sha256": "f0bf3f3cfe37c579b6121acfd06d0c494e184c17fa5a1f0eef71113edddf0e63"
+    },
+    {
+      "path": "spec/audit/redaction.md",
+      "sha256": "404f3e37fb120c3a9ec3d7fafeaa3211eef7b9ab80e1e9e8c04c31224ca65427"
+    },
+    {
+      "path": "spec/audit/errors.md",
+      "sha256": "000fcb3e4ebd8261ec26c3c96872f4348cf10c84fcc0a8af8186f098d89a95c6"
+    },
+    {
+      "path": "conformance/traceability.md",
+      "sha256": "30214f2ec3810489ad5bfc92ae674a9360324a6c38742463d3d680facc6fd1d6"
+    },
+    {
+      "path": "conformance/audit/history.json",
+      "sha256": "6b5a4027751d46a0d85a61f38bfa6d57bf4e2f25dde592c9c50bb43e9c4d6f62"
+    },
+    {
+      "path": "conformance/audit/relationships.json",
+      "sha256": "b0b7b0477b80f6ba64bae179287c04bcf2eeab8b58e4b061b58eeeab7cd14e9a"
+    },
+    {
+      "path": "implementations/typescript/core/src/audit/audit-event.ts",
+      "sha256": "4ce29a890dfb1dad0f9b0b5006f19523e49fa13d47aa350febb8ae444ced9743"
+    },
+    {
+      "path": "implementations/typescript/core/src/audit/audit-log.ts",
+      "sha256": "b016dd2ce908be742911c5342fad0ad2fc6ec3713a8432b703f004e868ebf827"
+    },
+    {
+      "path": "implementations/typescript/core/src/audit/types.ts",
+      "sha256": "6ea9e5dd18a0811e2906a1065d84dda2aa7a9c31ac434c655418d08c01804c70"
+    },
+    {
+      "path": "implementations/typescript/core/test/audit/events.test.ts",
+      "sha256": "74184b149492d94a2178d131b33ff92f087017af0c85b0567213f5de96b4d3df"
+    },
+    {
+      "path": "implementations/typescript/core/test/audit/redaction.test.ts",
+      "sha256": "5af635bfa5e9e0e9f8d8ac722e30a6d95534e1f380226413688e284a76506b09"
+    },
+    {
+      "path": "implementations/typescript/core/test/audit/relationships.test.ts",
+      "sha256": "bdbb1f3bf72d142f4afd2096d3e9c07eb81dacca9780d875bea89a3a906618fb"
+    },
+    {
+      "path": "implementations/typescript/adapters/conformance/src/operations.ts",
+      "sha256": "4f46240793972dddfdd1b8e655bfb469ff77790ae41af2e4217ca845d7c69ac0"
+    },
+    {
+      "path": "implementations/typescript/core/README.md",
+      "sha256": "5476946d9d904f0bc345a757b33f1b65eb5b1c9c347247fe9c55f748c5ee0bb7"
+    },
+    {
+      "path": "implementations/typescript/adapters/conformance/README.md",
+      "sha256": "84954796d32b41d37973b96a85f2df836b9bdd565e299a67a61a5388c58ada80"
+    }
+  ],
+  "primarySources": [
+    "https://www.w3.org/TR/trace-context/",
+    "https://opentelemetry.io/docs/specs/otel/logs/data-model/",
+    "https://github.com/cloudevents/spec/blob/main/cloudevents/spec.md",
+    "https://www.w3.org/TR/prov-dm/",
+    "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+    "https://commission.europa.eu/law/law-topic/data-protection/information-business-and-organisations/principles-gdpr_en",
+    "https://csrc.nist.gov/pubs/sp/800/92/final"
+  ],
+  "decisions": [
+    {
+      "id": "D03-AUDIT-PROVENANCE-001",
+      "task": "TASK-122",
+      "disposition": "DEFER",
+      "summary": "No Draft 0.3 standardized Audit provenance fields for reason, source, correlation identity, causation identity, or trace context."
+    }
+  ],
+  "conditionalFollowUps": [
+    "TASK-123 through TASK-129 complete as NOT APPLICABLE for Draft 0.3 because no Audit provenance normative proposal was approved."
+  ],
+  "futureReviewTopics": [
+    "Bounded source identity shape and authority model",
+    "Structured reason code model versus free-form reason text",
+    "Correlation and causation identifiers as opaque evidence without ordering or trust semantics",
+    "Redaction targets for provenance metadata",
+    "Safe diagnostics and cross-boundary disclosure controls",
+    "Optional mapping to Trace Context, CloudEvents, OpenTelemetry, or PROV",
+    "External accounting, audit, privacy, security, and community review"
+  ]
+}

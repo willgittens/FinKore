@@ -1700,3 +1700,83 @@ review prerequisite is superseded by D03-REVIEW-001 below.
     required because the research disposition deferred normative behavior.
 - Result:
   - READY FOR TASK-122.
+
+### TASK-122 through TASK-129 - Audit Provenance Research
+
+- Status: COMPLETE.
+- Date: 2026-09-14.
+- Source revision inspected before task completion:
+  `9649e1fd53cea4fe734aadd992e8e72d6d040908`, with existing uncommitted Draft
+  0.3 changes through TASK-121 in the working tree.
+- Result:
+  - Audit Provenance Research is closed for Draft 0.3 as an explicit deferral;
+    no Audit normative behavior, conformance vector, adapter operation, public
+    TypeScript API, portable error, or Agentic metadata change was approved.
+- Research evidence:
+  - TASK-122 security/privacy decision is recorded in
+    `docs/tasks/draft-0.3-research-decisions.md`.
+  - Reviewed primary sources:
+    W3C Trace Context Recommendation, OpenTelemetry Logs Data Model, CNCF
+    CloudEvents specification, W3C PROV-DM, OWASP Logging Cheat Sheet, European
+    Commission GDPR principles, and NIST SP 800-92.
+  - Exact decision artifact:
+    `docs/tasks/review-snapshots/task-122-audit-provenance.json`.
+  - Local baseline reviewed:
+    `spec/audit/events.md`, `spec/audit/relationships.md`,
+    `spec/audit/redaction.md`, `spec/audit/errors.md`, Audit conformance
+    vectors, TypeScript Audit core implementation/tests, and conformance adapter
+    dispatch.
+- Decision:
+  - D03-AUDIT-PROVENANCE-001: DEFER. No Draft 0.3 standardized Audit
+    provenance fields are added for reason, source, correlation identity,
+    causation identity, or trace context.
+  - Existing generic Audit Event metadata remains available under
+    `AUDIT-EVENT-006`, but its keys have no portable provenance semantics.
+  - TASK-123 through TASK-129 are complete as NOT APPLICABLE under the
+    research-gated follow-up protocol; no false implementation claim is made.
+- Security/privacy findings:
+  - Source-system identifiers can disclose tenant, vendor, integration, network,
+    or migration details.
+  - Correlation identifiers can join events, users, requests, or systems across
+    boundaries and must not become ordering, trust, or authorization evidence.
+  - Free-form reason metadata can carry personal data, protected financial facts,
+    secrets, or legal/compliance-sensitive details.
+  - Existing Audit Relationships remain explicit evidence links and continue to
+    forbid global ordering or distributed causality guarantees.
+- Traceability:
+  - No new requirements or vectors were added. Existing Audit traceability
+    remains unchanged for closed Draft 0.1 plus Draft 0.2 Audit Relationships.
+  - `conformance/traceability.md` now records the explicit Draft 0.3 deferral
+    status for standardized provenance metadata.
+- Verification:
+  - Node v24.15.0 / npm 11.12.1 were available in the machine environment.
+  - `npm run build --workspaces` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspace @finkore/typescript -- --run test/audit` exited 0
+    with 7 files / 62 tests passed.
+  - `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0
+    with 1 file / 15 tests passed.
+  - `npm run test --workspaces` exited 0 with runner 10 files / 110 tests, core
+    40 files / 371 tests, and adapter 1 file / 15 tests passed.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json --suite audit`
+    exited 0 with Audit 29 passed, 0 failed, 0 unsupported, 0 infrastructure
+    errors.
+  - Full conformance exited 0 with 244 passed, 0 failed, 0 unsupported, 0
+    infrastructure errors across Money 83, Workflow 41, Audit 29, Approvals 66,
+    and Entities 25.
+  - `git diff --check` exited 0.
+- Mutation:
+  - No new Audit runtime behavior was accepted, so no new mutation target was
+    created for TASK-123 through TASK-129.
+  - Latest applicable complete core mutation evidence remains
+    `implementations/typescript/core/reports/mutation/mutation.json` from
+    TASK-108: 98.28% aggregate, with existing Audit critical mutants covered by
+    the closed Draft 0.1 plus Draft 0.2 Audit Relationships mutation suite.
+- Completion applicability:
+  - Updated Draft 0.3 research decisions, review snapshot, implementation plan,
+    traceability deferred-status wording, execution evidence, and backlog.
+  - No `/spec/audit`, conformance vectors, runner metadata, adapter source,
+    TypeScript public API/JSDoc, root README, AGENTS.md, or CoreDoc change was
+    required because the research disposition deferred normative behavior.
+- Result:
+  - READY FOR TASK-130.

@@ -9,6 +9,8 @@ Draft 0.3 should deepen FinKore's usefulness for complex corporate financial wor
 - Workflow definition versioning and a small expected-state or expected-revision conflict contract.
 - Entity import and migration identity semantics that preserve stable FinKore identity without creating a master-data registry.
 - Money portability research for precision, overflow, minor-unit metadata, and private currency namespace decisions; Draft 0.3 research defers normative changes in these areas.
+- Audit provenance research for reason, source, correlation, and causation
+  metadata; Draft 0.3 research defers normative changes in these areas.
 - Conservative Agentic review for state-changing Approval and Workflow capabilities.
 
 Draft 0.3 should not implement delegation, escalation, tax primitives, interest, audit retention, ledger behavior, payments, BPMN, IAM/RBAC, or persistence unless research produces a narrow portable Core rule. Draft 0.2 closure has now been verified in this repository; every 0.3 milestone remains gated by that closed baseline and by the specific 0.3 research/review decisions named below.
@@ -102,11 +104,11 @@ Hard gate status: satisfied by TASK-066/TASK-067. Future 0.3 tasks must preserve
 | Entity revision identity refinement | Entities | IN 0.3 | Needed to distinguish business revisions from database versions. | 0.2 revision/evolution baseline. | MEDIUM | Domain review. |
 | Entity import/migration identity mapping | Entities | IN 0.3 | Common legacy migration need; can define identity aliases without a registry. | Entity identity and revision semantics. | HIGH | Domain/security review. |
 | Cross-entity identity registry | Entities | RESEARCH FIRST | Default defer; may not belong in Core without concrete need. | Import identity research. | HIGH | Technical/security review. |
-| Audit provenance reason/source/correlation | Audit | RESEARCH FIRST | Useful for imports and advanced approvals, but must avoid tracing platform scope. | 0.2 relationship metadata. | MEDIUM | Security review. |
+| Audit provenance reason/source/correlation | Audit | DEFERRED after research | Useful for imports and advanced approvals, but source, reason, correlation, and causation metadata need a future bounded privacy/redaction model. | 0.2 relationship metadata. | MEDIUM | Security/privacy review recorded in D03-AUDIT-PROVENANCE-001. |
 | Audit retention | Audit | DEFER 0.4+ | Legal/security policy varies too much for 0.3. | Audit relationship maturity. | VERY HIGH | Legal/security review later. |
 | Money precision/overflow portability | Money | DEFERRED after research | Cross-language reliability issue remains important, but no Draft 0.3 portable capability floor or overflow error is accepted. | 0.2 Money expansion. | HIGH | Technical review recorded in D03-MONEY-PORTABILITY-002. |
 | Currency minor-unit metadata | Money | DEFERRED after research | Useful if kept separate from calculation scale, but stale data and authority ownership require a future metadata profile. | 0.2 rounding/allocation. | MEDIUM | Domain review recorded in D03-MONEY-PORTABILITY-003. |
-| Private/non-ISO currency namespace | Money | RESEARCH FIRST | Important interoperability issue, but universal registry would be overreach. | Currency semantics. | HIGH | Domain/security review. |
+| Private/non-ISO currency namespace | Money | DEFERRED after research | Important interoperability issue, but namespace syntax, collision boundaries, authority, and spoofing resistance need a separate future design. | Currency semantics. | HIGH | Domain/security review recorded in D03-MONEY-PORTABILITY-004. |
 | Accountant-reviewed tax primitives | Financial utilities | RESEARCH FIRST | Only a jurisdiction-neutral core should enter FinKore. | Rate application. | VERY HIGH | Accountant review. |
 | Interest/accrual/day-count | Financial utilities | DEFER 0.4+ | Requires calendars, compounding, periods, and conventions. | Rate semantics. | VERY HIGH | Accountant review later. |
 | Optional Java or Go proof slice | Portability | IN 0.3 as OPTIONAL | Validates language independence before v0.5 without turning 0.3 into ports. | Stable mature slice. | MEDIUM | Technical review. |
@@ -122,7 +124,10 @@ Recommended in 0.3:
 5. Portable expected-state or expected-revision conflict contract for Workflow/Entity operations, without persistence or locking.
 6. Entity revision identity refinement and import/migration identity mapping.
 7. Money portability research for precision/overflow limits, minor-unit metadata, and private currency namespaces, producing decisions or deferrals rather than automatic implementation. TASK-111 through TASK-121 close this as explicit Draft 0.3 deferral with no normative Money change.
-8. Conservative Audit provenance research for source/correlation/reason metadata.
+8. Conservative Audit provenance research for source/correlation/reason
+   metadata, producing a decision or deferral rather than automatic
+   implementation. TASK-122 through TASK-129 close this as explicit Draft 0.3
+   deferral with no normative Audit change.
 9. Agentic review for new state-changing Approval and Workflow operations.
 10. Optional Java or Go proof-of-portability for a mature, isolated slice.
 
@@ -510,7 +515,7 @@ Optional: Step 15.
 | Review requirements under D03-REVIEW-001 | Security/privacy review. |
 | Stop conditions | `BLOCKED BY SECURITY RISK` if provenance cannot be represented safely. |
 | Definition of Done | Decision documented: include narrow spec, defer, or reject. |
-| Expected readiness status | Audit provenance decision ready. |
+| Expected readiness status | Audit provenance decision recorded as explicit Draft 0.3 deferral; no normative Audit change. |
 
 ### Step 13. Minimal Condition Model Specification and Implementation
 

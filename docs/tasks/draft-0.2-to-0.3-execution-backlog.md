@@ -43,7 +43,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 - [x] Workflow Versioning and Import: [TASK-085](#task-085)–[TASK-098](#task-098)
 - [x] Entity Revision and Import: [TASK-099](#task-099)–[TASK-110](#task-110)
 - [x] Money Portability Research: [TASK-111](#task-111)–[TASK-121](#task-121)
-- [ ] Audit Provenance Research: [TASK-122](#task-122)–[TASK-129](#task-129)
+- [x] Audit Provenance Research: [TASK-122](#task-122)–[TASK-129](#task-129)
 - [ ] Portable Conditions: [TASK-130](#task-130)–[TASK-144](#task-144)
 - [ ] Draft 0.3 Alignment: [TASK-145](#task-145)–[TASK-147](#task-147)
 - [ ] Optional Cross-Language Proof: [TASK-148](#task-148)–[TASK-150](#task-150) — OPTIONAL / recommended before v0.5
@@ -52,9 +52,9 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-122
-LAST COMPLETED: TASK-121
-REASON: Money Portability Research is closed for Draft 0.3 as an explicit deferral: the cross-language matrix and primary-source review are recorded, precision/overflow limits, minor-unit metadata, and private/non-fiat namespace behavior are deferred by D03-MONEY-PORTABILITY-002 through D03-MONEY-PORTABILITY-004, conditional follow-up tasks are complete as NOT APPLICABLE with no normative/API/vector change, and Money/full conformance remain green at 83/83 and 244/244.
+NEXT TASK: TASK-130
+LAST COMPLETED: TASK-129
+REASON: Audit Provenance Research is closed for Draft 0.3 as an explicit deferral: the standards/security/privacy review is recorded, reason/source/correlation/causation/trace-context metadata are deferred by D03-AUDIT-PROVENANCE-001, conditional follow-up tasks are complete as NOT APPLICABLE with no normative/API/vector change, and Audit/full conformance remain green at 29/29 and 244/244.
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -11669,7 +11669,7 @@ Completion:
 
 <a id="task-122"></a>
 
-### - [ ] TASK-122 — Audit Provenance Research and Security Decision
+### - [x] TASK-122 — Audit Provenance Research and Security Decision
 
 **Release:** Draft 0.3
 
@@ -11741,9 +11741,9 @@ Audit Provenance Research and Security Decision.
 
 **Definition of Done**
 
-- [ ] Evaluate reason/source/correlation/causation metadata, relationship coexistence and redaction; obtain security/privacy review and record INCLUDE/DEFER/REJECT.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Evaluate reason/source/correlation/causation metadata, relationship coexistence and redaction; obtain security/privacy review and record INCLUDE/DEFER/REJECT.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -11751,11 +11751,23 @@ A scoped research decision or required reviewer report exists; no new normative 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Primary-source standards/security/privacy review, Audit
+  conformance, full conformance, and DOC checks are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: No new vectors were added; Audit suite remains 29/29 and full
+  manifest remains 244/244.
+- Mutation: Not applicable for research-only task; latest complete core mutation
+  evidence remains applicable.
+- Notes: D03-AUDIT-PROVENANCE-001 DEFERs standardized reason, source,
+  correlation, causation, and trace-context metadata for Draft 0.3. Existing
+  generic Audit Event metadata remains available without portable provenance
+  key semantics.
 
 <a id="task-123"></a>
 
-### - [ ] TASK-123 — Approved Audit Provenance Specification and Errors
+### - [x] TASK-123 — Approved Audit Provenance Specification and Errors
 
 **Release:** Draft 0.3
 
@@ -11830,10 +11842,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Define only approved provenance fields, safe serialization/redaction behavior and existing INVALID_EVENT sufficiency; otherwise verify deferral.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] Define only approved provenance fields, safe serialization/redaction behavior and existing INVALID_EVENT sufficiency; otherwise verify deferral.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -11841,11 +11853,21 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Decision D03-AUDIT-PROVENANCE-001, DOC checks, Audit
+  conformance, and full conformance are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: NOT APPLICABLE — no approved provenance specification exists;
+  existing Audit suite remains 29/29 and full manifest remains 244/244.
+- Mutation: NOT APPLICABLE — no Audit runtime behavior was created.
+- Notes: NOT APPLICABLE — no `/spec/audit` normative field, portable error, or
+  glossary/conventions change was made because the research decision defers the
+  proposed provenance contract.
 
 <a id="task-124"></a>
 
-### - [ ] TASK-124 — Approved Audit Provenance Conformance
+### - [x] TASK-124 — Approved Audit Provenance Conformance
 
 **Release:** Draft 0.3
 
@@ -11925,10 +11947,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Cover preservation, malformed values, redaction, relationship coexistence and safe disclosure under the approved provenance contract.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] Cover preservation, malformed values, redaction, relationship coexistence and safe disclosure under the approved provenance contract.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -11936,11 +11958,21 @@ Named vectors are registered and traceable; new behavior is intentionally FAIL/U
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Decision D03-AUDIT-PROVENANCE-001, BUILD, runner tests, Audit
+  conformance, full conformance, and DOC checks are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: NOT APPLICABLE — no approved provenance vectors were created;
+  existing Audit suite remains 29/29 and full manifest remains 244/244.
+- Mutation: NOT APPLICABLE — no conformance-only artifact was added.
+- Notes: NOT APPLICABLE — no vector file, manifest entry, runner metadata, or
+  conformance conventions change was made because no provenance behavior was
+  selected for Draft 0.3.
 
 <a id="task-125"></a>
 
-### - [ ] TASK-125 — Approved Audit Provenance Implementation
+### - [x] TASK-125 — Approved Audit Provenance Implementation
 
 **Release:** Draft 0.3
 
@@ -12019,10 +12051,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Implement approved provenance representation/preservation in Audit core without retention, tracing or storage infrastructure.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] Implement approved provenance representation/preservation in Audit core without retention, tracing or storage infrastructure.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -12030,11 +12062,23 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Decision D03-AUDIT-PROVENANCE-001, BUILD, TYPE, UNIT(audit),
+  ADAPTER, CONF(audit), full CONF, and DOC checks are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: NOT APPLICABLE — no approved provenance core behavior exists;
+  existing Audit suite remains 29/29 and full manifest remains 244/244.
+- Mutation: NOT APPLICABLE — no new Audit runtime behavior or mutation target
+  was created. Latest complete core mutation evidence remains
+  `implementations/typescript/core/reports/mutation/mutation.json` at 98.28%.
+- Notes: NOT APPLICABLE — no TypeScript source, public API, JSDoc, README, or
+  Stryker scope change was made because provenance implementation was not
+  activated.
 
 <a id="task-126"></a>
 
-### - [ ] TASK-126 — Approved Audit Provenance Adapter Support
+### - [x] TASK-126 — Approved Audit Provenance Adapter Support
 
 **Release:** Draft 0.3
 
@@ -12111,10 +12155,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Translate approved provenance input and safe observations through Audit core; retain append-only evidence.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] Translate approved provenance input and safe observations through Audit core; retain append-only evidence.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -12122,11 +12166,22 @@ Named operation fixtures execute through core and all required slice vectors PAS
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Decision D03-AUDIT-PROVENANCE-001, BUILD, TYPE, UNIT(audit),
+  ADAPTER, CONF(audit), full CONF, and DOC checks are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: NOT APPLICABLE — no approved provenance vectors or operation
+  changes exist; existing Audit suite remains 29/29 and full manifest remains
+  244/244.
+- Mutation: NOT APPLICABLE — adapter work was not activated.
+- Notes: NOT APPLICABLE — no adapter translation, normalization, test, README,
+  or supported-operation change was made because no provenance operation or
+  field contract was selected for Draft 0.3.
 
 <a id="task-127"></a>
 
-### - [ ] TASK-127 — Approved Audit Provenance Mutation Hardening
+### - [x] TASK-127 — Approved Audit Provenance Mutation Hardening
 
 **Release:** Draft 0.3
 
@@ -12203,10 +12258,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Kill provenance loss, inappropriate disclosure/redaction, relationship loss and correlation-as-order assumptions.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] Kill provenance loss, inappropriate disclosure/redaction, relationship loss and correlation-as-order assumptions.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -12214,11 +12269,22 @@ A complete scoped mutation report and survivor classifications establish >=95% a
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Decision D03-AUDIT-PROVENANCE-001, BUILD, TYPE, UNIT(audit),
+  ADAPTER, CONF(audit), full CONF, and DOC checks are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: NOT APPLICABLE — no approved behavior was activated; existing
+  Audit suite remains 29/29.
+- Mutation: NOT APPLICABLE — no new Audit runtime behavior or mutation target
+  was created. Latest complete core mutation evidence remains
+  `implementations/typescript/core/reports/mutation/mutation.json` at 98.28%.
+- Notes: NOT APPLICABLE — critical scenarios remain future-work notes for an
+  eventual provenance profile, not Draft 0.3 implemented behavior.
 
 <a id="task-128"></a>
 
-### - [ ] TASK-128 — Approved Audit Provenance Traceability Closure
+### - [x] TASK-128 — Approved Audit Provenance Traceability Closure
 
 **Release:** Draft 0.3
 
@@ -12295,11 +12361,11 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -12307,11 +12373,21 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC reference review, Audit conformance, and full conformance
+  are recorded in `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: NOT APPLICABLE — no new requirements or vectors were added.
+  Existing Audit suite remains 29/29 and full manifest remains 244/244.
+- Mutation: NOT APPLICABLE — latest complete core mutation evidence remains
+  applicable.
+- Notes: NOT APPLICABLE — traceability was not extended with new Audit
+  provenance rows. `conformance/traceability.md` records explicit deferred
+  status for reason/source/correlation/causation/trace-context metadata.
 
 <a id="task-129"></a>
 
-### - [ ] TASK-129 — Approved Audit Provenance Slice Closure Gate
+### - [x] TASK-129 — Approved Audit Provenance Slice Closure Gate
 
 **Release:** Draft 0.3
 
@@ -12390,11 +12466,11 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -12402,7 +12478,21 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(audit), ADAPTER, full UNIT, CONF(audit), full
+  CONF, and DOC checks pass; details are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: Audit suite passes 29/29 and full manifest passes 244/244 with 0
+  failed, 0 unsupported, and 0 infrastructure errors.
+- Mutation: NOT APPLICABLE for new behavior because the research track deferred
+  normative implementation. Latest complete core mutation evidence remains
+  `implementations/typescript/core/reports/mutation/mutation.json` at 98.28%.
+- Notes: Audit Provenance Research is closed for Draft 0.3 as an explicit
+  deferral. D03-AUDIT-PROVENANCE-001 defers standardized reason, source,
+  correlation, causation, and trace-context metadata. TASK-123 through TASK-129
+  are complete as NOT APPLICABLE with no false implementation claim. `NEXT TASK`
+  advanced to TASK-130.
 
 ### Milestone: Portable Conditions
 
