@@ -533,46 +533,44 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 
 ## Conformance gaps
 
-- Money: allocation normative semantics and portable invalid-allocation error semantics are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance for Draft 0.2. Draft 0.3 Money portability research explicitly deferred precision/overflow limits, capability reporting, private or non-fiat currency namespaces, and currency-recommended/minor-unit scale guidance under D03-MONEY-PORTABILITY-002 through D03-MONEY-PORTABILITY-004; these remain outside the closed Draft 0.1 plus Draft 0.2 Money Rates and Allocation scope.
+- Money: allocation normative semantics and portable invalid-allocation error semantics are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance for Draft 0.2. Draft 0.3 explicitly deferred precision/overflow limits, capability reporting, private or non-fiat currency namespaces, and currency-recommended/minor-unit scale guidance; these remain outside the closed Draft 0.1 plus Draft 0.2 Money Rates and Allocation scope.
 - Workflow: Draft 0.3 Workflow definition identity, version identity, immutable instance binding, older-version observation, version-mismatch semantics, import of existing state/version observations, and expected-state/revision conflict preconditions are specified, vector-covered, implemented by the TypeScript reference implementation, and passing through the conformance adapter. Version identity reuse, Entity/storage separation, safe diagnostic disclosure, and non-locking/non-concurrency guarantees are not directly testable through one portable vector and remain subject to implementation, architecture, and review checks. External fact capture, definition migration, state mapping across versions, transition identifiers, storage locking, and distributed concurrency remain open.
-- Audit: Draft 0.2 Audit Relationships are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Draft 0.3 Audit provenance research explicitly deferred standardized reason, source, correlation, causation, and trace-context metadata under D03-AUDIT-PROVENANCE-001; generic Audit Event metadata remains available only as non-standardized context under `AUDIT-EVENT-006`. Unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, generic related links, relationship redaction policy, and causal sequencing remain open.
-- Approvals: Draft 0.2 Approval Validity withdrawal, expiration, supersession, explicit current-effectiveness context, and lifecycle failure atomicity are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Draft 0.3 quorum membership is specified by D03-QUORUM-001, fixed thresholds with nonempty unreachable-quorum rejection by D03-QUORUM-002, entirely inapplicable group treatment by D03-COMPOSITION-001, stage aggregation by D03-COMPOSITION-002, stage structure/depth by D03-COMPOSITION-003, complete validation by D03-COMPOSITION-004, staged actionability by D03-COMPOSITION-005, and error mapping/precedence by D03-COMPOSITION-006. D03-QUORUM-003 resolves opposing effective votes and member-specific evidence. TASK-073 is complete with no remaining identified composition specification gaps, TASK-074 supplies manifest-listed conformance vectors, and TASK-075 through TASK-082 supply TypeScript implementation, adapter wiring, runtime conformance, focused boundary coverage, and mutation hardening evidence. Draft 0.3 Portable Conditions research explicitly deferred a portable condition expression/operator model under D03-CONDITION-MODEL-001; existing condition behavior remains the explicit required-fact/result boundary only. Rich condition syntax, delegation, escalation, approval-definition migration, dynamic approver resolution, and unrestricted dependency graphs remain open for future drafts.
+- Audit: Draft 0.2 Audit Relationships are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Draft 0.3 explicitly deferred standardized reason, source, correlation, causation, and trace-context metadata; generic Audit Event metadata remains available only as non-standardized context under `AUDIT-EVENT-006`. Unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, generic related links, relationship redaction policy, and causal sequencing remain open.
+- Approvals: Draft 0.2 Approval Validity withdrawal, expiration, supersession, explicit current-effectiveness context, and lifecycle failure atomicity are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Draft 0.3 composition requirements define explicit quorum membership, fixed thresholds with nonempty unreachable-quorum rejection, entirely inapplicable group treatment, stage aggregation and structure, bounded group depth, complete validation, staged actionability, deterministic error precedence, opposing effective votes, and member-specific evidence. These requirements are manifest-vector-covered, implemented through the TypeScript core and adapter, and mutation-hardened with zero classified critical survivors. Draft 0.3 explicitly deferred a portable condition expression/operator model; existing condition behavior remains the explicit required-fact/result boundary only. Rich condition syntax, delegation, escalation, approval-definition migration, dynamic approver resolution, and unrestricted dependency graphs remain open for future drafts.
 - Entities: Draft 0.2 Entity Evolution terminology, correction, reversal, void, supersession, currentness, failure atomicity, mandatory Audit evidence, and portable error mapping are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Draft 0.3 Entity Revision and Import business revision identity, source identity mapping, conflict-version separation, and expected-state/revision/conflict-version preconditions are specified and vector-covered. Concrete fields, composing-domain lifecycle policy, full validation catalog, cross-entity identity registries, concurrency, cancellation, adjustment, replacement, amendment, concrete migration formats, and concrete ledger posting behavior remain outside the current implemented Core. The current TypeScript reference implementation covers the conformance-local Entity identity, lifecycle, mutability, validation, evolution, and import vectors. Remaining Entity requirements classified as not directly testable are composing-domain, optional diagnostic, or registry obligations without a standalone portable Entity operation.
 
 ### Draft 0.3 Approval review gaps
 
-The [decision worklist](../docs/tasks/draft-0.3-research-decisions.md#decision-worklist--2026-09-12)
-is resolved. D03-QUORUM-003 closes the final opposing-vote finding through
-APPROVAL-QUORUM-009/010 and preserves member-specific counting, pending capacity,
+`APPROVAL-QUORUM-009` and `APPROVAL-QUORUM-010` close the identified
+opposing-vote ambiguity and preserve member-specific counting, pending capacity,
 and actionability. There are zero currently identified blocking specification
 gaps in this inventory. This does not close future-draft questions outside it.
 
-TASK-073 review is complete under D03-REVIEW-001; external review remains NOT
-EXTERNALLY REVIEWED. All 37 directly testable Draft 0.3 composition/quorum/error
-requirements have manifest-listed TASK-074 vectors and pass against the TypeScript
-reference implementation through the conformance adapter. TASK-082 records
-focused mutation hardening with zero critical survivors for the Advanced
-Approvals composition surface.
+All 37 directly testable Draft 0.3 composition/quorum/error requirements have
+manifest-listed vectors and pass against the TypeScript reference implementation
+through the conformance adapter. Focused mutation hardening recorded zero
+critical survivors for the Advanced Approvals composition surface. External
+review status is recorded in the [Draft 0.3 release note](../docs/releases/draft-0.3.md).
 Closed Draft 0.1/0.2 coverage classifications and vector references are unchanged.
 
 ### Draft 0.3 Workflow versioning review gaps
 
-TASK-089 review is complete under D03-REVIEW-001; external review remains NOT
-EXTERNALLY REVIEWED. All 26 directly testable Draft 0.3 Workflow
-version/import/conflict/error requirements have manifest-listed TASK-090 vectors
-and pass against the TypeScript reference implementation through the conformance
-adapter. The scoped Workflow inventory has 0 UNCOVERED and 0 BLOCKING SPEC GAP
-rows. The 9 Workflow rows classified as NOT DIRECTLY TESTABLE are the Draft 0.1
+All 26 directly testable Draft 0.3 Workflow version/import/conflict/error
+requirements have manifest-listed vectors and pass against the TypeScript
+reference implementation through the conformance adapter. The scoped Workflow
+inventory has 0 UNCOVERED and 0 BLOCKING SPEC GAP rows. The 9 Workflow rows
+classified as NOT DIRECTLY TESTABLE are the Draft 0.1
 Workflow authoring or non-observable requirements plus `WORKFLOW-VERSION-003`,
 `WORKFLOW-VERSION-004`, `WORKFLOW-VERSION-012`, and `WORKFLOW-CONFLICT-008`;
 none hides a feasible deterministic vector for the closed Workflow 0.3 slice.
-TASK-096 records focused mutation hardening with zero critical survivors for the
-Workflow definition/version identity, import, instance binding/mismatch, and
+Focused mutation hardening recorded zero critical survivors for the Workflow
+definition/version identity, import, instance binding/mismatch, and
 expected-state/revision conflict surface. Canonical Agentic metadata for these
-Draft 0.3 Workflow refinements is aligned by D03-AGENTIC-001; the canonical
+Draft 0.3 Workflow refinements is aligned; the canonical
 `finkore.workflow.transition` descriptor includes version binding and
 expected-state/revision preconditions, while `workflow.import` remains
-conformance-local.
+conformance-local. External review status is recorded in the
+[Draft 0.3 release note](../docs/releases/draft-0.3.md).
 Closed Draft 0.1/0.2 coverage classifications and vector references are
 unchanged.
 

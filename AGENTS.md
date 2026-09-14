@@ -1010,18 +1010,23 @@ Not every trivial rule needs every test category, but critical financial behavio
 
 ---
 
-# Draft 0.3 Review Governance
+# CoreDoc and Release Review Governance
 
 Read [CoreDoc](docs/coreDoc/core-doc.md) for foundation-level financial obligations;
 `/spec` refines the precise domain behavior and must not silently contradict it.
 
-Draft 0.3 review tasks follow
-[D03-REVIEW-001](docs/tasks/draft-0.3-research-decisions.md#d03-review-001--draft-review-policy).
+CoreDoc is the durable record for foundation-level normative evolution. Record
+attributed material findings, resolutions, exact artifact revision, stable rule
+or requirement identifiers, and explicit scoped maintainer acceptance there or
+in the affected specification. [Release notes](docs/releases/README.md) record
+shipped scope, compatibility, verification, and actual external-review status.
+Developer plans organize active work but are not normative or release evidence.
+
 Required domain, accounting, technical, security, and privacy analysis remains
-mandatory where specified. Record attributed findings, resolutions, exact artifact
-revision, and explicit scoped maintainer acceptance. External community or
-independent review is not a Draft 0.3 prerequisite; record its actual status and
-future review topics without inventing signoff or reviewer credentials.
+mandatory where specified. External community or independent review is not a
+prerequisite unless a current scope explicitly makes it one; record its actual
+status and future review topics without inventing signoff or reviewer
+credentials.
 
 This policy does not resolve financial ambiguity, accept later domain decisions,
 or waive conformance, mutation, traceability, or other verification gates.

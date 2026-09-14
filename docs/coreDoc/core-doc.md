@@ -696,6 +696,24 @@ Introduced records entry into CoreDoc. Last updated and Last updated on record
 the most recent normative change. Editorial-only changes SHALL NOT update those
 fields.
 
+## Normative evolution and release accountability
+
+CoreDoc is the durable record for foundation-level financial rules and their
+normative evolution. A material change SHALL remain attributable to its stable
+`CORE-*` identifier, the reviewed artifact revision, the accepted rationale, and
+the release in which the change takes effect. Superseded meaning SHALL remain
+recoverable rather than being replaced by an unattributed edit.
+
+The domain specification containing a changed requirement carries the precise
+behavioral rule and stable requirement identity. CoreDoc records the associated
+foundation-level effect. Release notes record shipped scope, compatibility, and
+verification facts. Developer plans may organize work, but they are not the
+normative history or release evidence.
+
+Historical and current release summaries are indexed in
+[FinKore Release Notes](../releases/README.md). A release note does not override
+CoreDoc or `/spec`.
+
 ## External review
 
 Reviewers may challenge a Financial Rule by its stable identifier. A challenge
