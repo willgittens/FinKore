@@ -1,0 +1,95 @@
+{
+  "snapshotId": "task-130-131-portable-conditions",
+  "date": "2026-09-14",
+  "sourceRevision": "021908c77168b2a65cd62ab85c8e2a0b5c15eefa",
+  "workingTreeContext": "Existing uncommitted Draft 0.3 changes through TASK-129 were present when the Portable Conditions research packet was prepared.",
+  "decisions": [
+    {
+      "id": "D03-CONDITION-STANDARDS-001",
+      "task": "TASK-130",
+      "disposition": "COMPLETE",
+      "summary": "Compared CEL, JSON Logic, DMN/FEEL, and a minimal FinKore model for deterministic Approval condition evaluation."
+    },
+    {
+      "id": "D03-CONDITION-MODEL-001",
+      "task": "TASK-131",
+      "disposition": "DEFER",
+      "summary": "Draft 0.3 does not adopt, adapt, or build a portable Approval condition expression/operator model."
+    }
+  ],
+  "conditionalFollowUps": {
+    "tasks": "TASK-132 through TASK-144",
+    "disposition": "COMPLETE as NOT APPLICABLE",
+    "normativeChangesApproved": false,
+    "implementationChangesApproved": false
+  },
+  "externalSources": [
+    {
+      "label": "CEL overview",
+      "url": "https://cel.dev/overview/cel-overview?hl=en"
+    },
+    {
+      "label": "CEL specification repository",
+      "url": "https://github.com/cel-expr/cel-spec"
+    },
+    {
+      "label": "CEL language definition",
+      "url": "https://github.com/cel-expr/cel-spec/blob/master/doc/langdef.md"
+    },
+    {
+      "label": "JSON Logic home page",
+      "url": "https://jsonlogic.com/"
+    },
+    {
+      "label": "JSON Logic truthiness documentation",
+      "url": "https://jsonlogic.com/truthy.html"
+    },
+    {
+      "label": "JSON Logic custom-operation documentation",
+      "url": "https://jsonlogic.com/add_operation.html"
+    },
+    {
+      "label": "OMG DMN 1.5",
+      "url": "https://www.omg.org/spec/DMN/1.5/About-DMN"
+    },
+    {
+      "label": "OMG DMN overview",
+      "url": "https://www.omg.org/dmn/"
+    }
+  ],
+  "localArtifacts": [
+    {
+      "path": "spec/approvals/conditions.md",
+      "sha256": "a7de36aa2af2a86abbb34adf72bf1a1b1844a4661d1a0da34016bbd7d69f12ae"
+    },
+    {
+      "path": "spec/approvals/errors.md",
+      "sha256": "334962c0bc3c270fd601ff6536d2cd54d0c4f3d422b20ae7851f836fcd024ece"
+    },
+    {
+      "path": "conformance/approvals/decisions.json",
+      "sha256": "a964bf6e4c0c6abefda4300b3649df8a813d85538e0f54cfac4ee4f19feb1420"
+    },
+    {
+      "path": "implementations/typescript/core/src/approvals/approval-condition.ts",
+      "sha256": "14ef66f7a8caf801f618db5643141fffa751f3e8dce74a0d78f66e62ec282d4d"
+    },
+    {
+      "path": "implementations/typescript/core/test/approvals/conditions.test.ts",
+      "sha256": "a28c580a5eeec2935d93d161c7991dfeb15e56e74f45e66570a5a138a7eb0dc6"
+    }
+  ],
+  "result": {
+    "conditionModel": "deferred",
+    "existingBoundaryRetained": "explicit required facts and explicit applicable/not-applicable result",
+    "futureWorkRequires": [
+      "new specification tasks",
+      "conformance vectors",
+      "adapter and public API review",
+      "security and domain review",
+      "missing/null and exact Money comparison semantics",
+      "serialization/versioning rules",
+      "mutation hardening"
+    ]
+  }
+}

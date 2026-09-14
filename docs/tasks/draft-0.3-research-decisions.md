@@ -963,3 +963,92 @@ provenance redaction targets, diagnostic disclosure rules, and optional mapping
 to W3C Trace Context, CloudEvents, OpenTelemetry, or PROV. Any such work needs
 new spec/vector/adapter/API tasks and review; it is not implied by closing this
 research track.
+
+## Portable Conditions Research Packet
+
+### TASK-130 through TASK-144 - Portable Condition Standards and Model Decision
+
+- Status: COMPLETE - research recorded; Draft 0.3 normative follow-up DEFERRED.
+- Date: 2026-09-14.
+- Decision authority: project maintainer, through the instruction to run the
+  complete Draft 0.3 Portable Conditions backlog slice.
+- Analysis attribution: assistant analysis of the required standards,
+  technical, security, and domain topics, using the primary sources listed
+  below. No external reviewer or professional credential is represented.
+- Exact reviewed artifact:
+  [SHA-256 manifest](review-snapshots/task-130-131-portable-conditions.json).
+- External review: NOT EXTERNALLY REVIEWED. Future community, accounting,
+  audit, privacy, and security review may challenge these decisions by source
+  URL, stable FinKore requirement ID, and artifact hash.
+
+#### Primary Sources
+
+| Topic | Source | Finding |
+| --- | --- | --- |
+| CEL language and execution model | CEL overview: `https://cel.dev/overview/cel-overview?hl=en`; CEL spec repository: `https://github.com/cel-expr/cel-spec`; CEL language definition: `https://github.com/cel-expr/cel-spec/blob/master/doc/langdef.md` | CEL is designed for portable, safe embedded expression evaluation and is intentionally not Turing complete. It still requires environment declarations, parsing/checking, evaluator bindings, type decisions, error handling, and resource review. CEL's logical operators can absorb errors, `has()` is field-oriented, `null` has specific type behavior, and JSON numeric mapping uses double/limited integer interoperability. |
+| JSON Logic | JSON Logic home page: `https://jsonlogic.com/`; truthiness documentation: `https://jsonlogic.com/truthy.html`; custom-operation documentation: `https://jsonlogic.com/add_operation.html` | JSON Logic provides a compact JSON AST shape and data lookup model. Its cross-language truthiness rules would conflict with FinKore's need to distinguish missing, null, false, zero, and empty string deliberately. Custom operations can have side effects and weaken the "no write access" safety property unless forbidden by a separate FinKore profile. |
+| DMN/FEEL | OMG DMN 1.5 page: `https://www.omg.org/spec/DMN/1.5/About-DMN`; OMG DMN overview: `https://www.omg.org/dmn/` | DMN is a business decision modeling standard with decision tables, FEEL, and broader notation/execution semantics. Its scope is far larger than a Draft 0.3 approval-applicability predicate and would require a separate constrained mapping before adoption. |
+
+#### Local FinKore Baseline
+
+| Baseline artifact | Current behavior relevant to conditions |
+| --- | --- |
+| `spec/approvals/conditions.md` | Conditions are expressed over identified domain facts and evaluate to applicable or not-applicable. Missing required facts must fail or remain unresolved and must not silently become not-applicable. The file explicitly leaves the portable expression model open. |
+| `spec/approvals/errors.md` | `FINKORE_APPROVAL_CONDITION_UNRESOLVED` exists for unevaluable required conditions; composition error precedence already treats condition unresolved as a distinct category. |
+| TypeScript Approval condition implementation | The current public API validates condition identity, required fact names, and an opaque evaluation label. Evaluation accepts explicit caller-supplied `APPLICABLE` or `NOT_APPLICABLE` results only, checks that required facts are present, and treats `null`, `false`, `0`, and empty string as present values. It does not interpret expressions, comparisons, callbacks, or policy. |
+| Approval conformance vectors and traceability | Existing vectors cover the current explicit-result boundary, missing-fact unresolved behavior, and falsey fact preservation. No conformance vector claims a portable predicate/operator language. |
+
+#### Options Considered
+
+| Option | Assessment |
+| --- | --- |
+| ADOPT CEL | Strong safety posture and mature semantics, but direct adoption would import a full expression language, type environment, evaluator binding surface, serialized AST choice, and nuanced error/null/numeric behavior. A bounded CEL profile might be viable later, but "ADOPT" alone is too broad for Draft 0.3. |
+| ADAPT a CEL subset | Plausible future path. Draft 0.3 lacks enough reviewed FinKore-specific constraints for allowed functions, field presence, Money values, decimal/numeric behavior, logical error absorption, and serialized representation. |
+| ADOPT or ADAPT JSON Logic | JSON representation is attractive for conformance vectors, but the standard truthiness model, permissive extension model, and lack of built-in exact Money semantics make it unsafe as a quick Approval condition model. A future FinKore profile would need to forbid unsafe extensions and replace or constrain truthiness. |
+| ADOPT or ADAPT DMN/FEEL | Too broad for the current Core scope. DMN/FEEL is suitable for decision modeling, not a small approval-applicability predicate without a substantial mapping and security profile. |
+| BUILD MINIMAL FINKORE MODEL now | A minimal model could eventually define exists/equality/comparison/logical operators over explicit facts. However, doing so correctly requires stable fact-path syntax, serialization/versioning, Money comparison behavior, missing/null/error priority, resource bounds, and mutation hardening. That is a new mini-language and should not be invented in this research task. |
+| DEFER standardized portable condition model | Preserves the existing safe explicit-result boundary, avoids false financial precision, and keeps all future condition-language work behind a fresh spec/vector/security-review track. |
+
+#### Security and Domain Review
+
+| Finding | Resolution |
+| --- | --- |
+| General expression engines can expose arbitrary functions, host bindings, resource exhaustion paths, or unexpected error absorption. | DEFER any expression engine adoption. A future profile must whitelist operations, bindings, depth/size limits, diagnostics, and serialization. |
+| Truthiness coercion is financially dangerous: `false`, `0`, empty string, `null`, and missing facts carry different meanings in approval facts. | Preserve current explicit-result semantics and required-fact presence checks. No JSON Logic truthiness or JavaScript truthiness is adopted. |
+| Money comparisons require exact decimal and currency compatibility semantics. | No generic numeric comparison operator is standardized in Draft 0.3. A future condition model must reuse Money requirements rather than inventing condition-local arithmetic. |
+| External fact lookup or policy callbacks could turn condition evaluation into an authorization/rules engine. | Preserve the current no-callback/no-external-lookup boundary. Facts remain caller-provided, identified domain observations. |
+| Serialization/versioning decisions affect auditability and conformance stability. | DEFER structural model design until versioning and roundtrip requirements can be reviewed alongside vectors and mutation targets. |
+
+#### Decision
+
+| Decision ID | Task | Disposition | Rationale |
+| --- | --- | --- | --- |
+| D03-CONDITION-STANDARDS-001 | TASK-130 | COMPLETE | CEL, JSON Logic, DMN/FEEL, and a minimal FinKore model were compared against deterministic fact access, missing/null behavior, Money comparison, logical composition, serialization/versioning, resource bounds, and safe evaluation. |
+| D03-CONDITION-MODEL-001 | TASK-131 | DEFER | Draft 0.3 does not adopt, adapt, or build a portable Approval condition expression/operator model. The existing Approval condition boundary remains: explicit required facts, explicit caller-supplied applicable/not-applicable result, unresolved missing facts, deterministic evaluation, and no expression interpretation. |
+
+#### Conditional Follow-Up Disposition
+
+TASK-132 through TASK-144 are COMPLETE as NOT APPLICABLE for Draft 0.3. No
+condition model was selected, so no `APPROVAL-CONDITION-MODEL-*` requirements,
+primitive operators, null/missing semantics beyond the existing boundary,
+logical composition, serialization/versioning model, vectors, adapter
+operations, public TypeScript APIs, portable errors, Agentic metadata, mutation
+targets, or traceability rows are created by this slice.
+
+The following behavior remains mandatory from the existing Approval condition
+specification:
+
+- Approval conditions are expressed in terms of identified domain facts.
+- Evaluation produces applicable or not-applicable only through the current
+  explicit boundary.
+- Required facts that are absent must fail or remain unresolved and must not be
+  silently treated as not applicable.
+- Evaluation must not depend on presentation state, unspecified authorization
+  policy, callbacks, external lookup, or implementation-language expressions.
+- The same condition and facts must evaluate deterministically.
+
+Future work may introduce a bounded FinKore condition profile or a carefully
+reviewed subset of CEL, JSON Logic, DMN/FEEL, or another standard. Any such work
+needs new spec/vector/adapter/API tasks, security/domain review, exact Money and
+missing/null semantics, serialization/versioning rules, conformance vectors, and
+mutation hardening; it is not implied by closing this research track.

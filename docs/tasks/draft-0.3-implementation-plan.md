@@ -5,7 +5,8 @@
 Draft 0.3 should deepen FinKore's usefulness for complex corporate financial workflows by building on the expected Draft 0.2 foundation rather than adding unrelated domains. The recommended theme is advanced but bounded orchestration:
 
 - Approval composition beyond all-required chains: any-of, all-of, N-of-M quorum, ordered stages, and bounded nested groups.
-- Portable condition research and, only if justified, a small deterministic condition model over explicit facts.
+- Portable condition research for a small deterministic condition model over
+  explicit facts; Draft 0.3 research defers normative changes in this area.
 - Workflow definition versioning and a small expected-state or expected-revision conflict contract.
 - Entity import and migration identity semantics that preserve stable FinKore identity without creating a master-data registry.
 - Money portability research for precision, overflow, minor-unit metadata, and private currency namespace decisions; Draft 0.3 research defers normative changes in these areas.
@@ -93,8 +94,8 @@ Hard gate status: satisfied by TASK-066/TASK-067. Future 0.3 tasks must preserve
 | Unrestricted approval graph engine | Approvals | REJECT | Would turn Core into a BPM/rules product. | None. | VERY HIGH | Not applicable. |
 | Delegation | Approvals | RESEARCH FIRST | Useful, but authority validation may require IAM/RBAC. | Current-effectiveness and actor semantics. | HIGH | Security/domain review. |
 | Escalation | Approvals | DEFER 0.4+ | Usually depends on timers, notifications, task routing, and policy infrastructure. | Delegation/time model. | HIGH | Security/domain review later. |
-| Portable condition model research | Conditions/Approvals | RESEARCH FIRST | Needed before adding richer deterministic predicates; must avoid executable DSL risk. | Current condition boundary and subject facts. | VERY HIGH | Security/domain review. |
-| Minimal deterministic condition model | Conditions/Approvals | IN 0.3 if research passes | Could unlock portable amount thresholds and fact checks without a general rules engine. | Research milestone approval. | HIGH | Security/domain review. |
+| Portable condition model research | Conditions/Approvals | DEFERRED after research | Needed before adding richer deterministic predicates; must avoid executable DSL risk. Draft 0.3 records the standards/security decision but adds no condition expression model. | Current condition boundary and subject facts. | VERY HIGH | Security/domain review recorded in D03-CONDITION-MODEL-001. |
+| Minimal deterministic condition model | Conditions/Approvals | DEFERRED after research | Could unlock portable amount thresholds and fact checks without a general rules engine, but Draft 0.3 does not approve a model. | Future research milestone approval. | HIGH | Security/domain review required before any future inclusion. |
 | CEL/JSON Logic/FEEL adoption | Conditions/Approvals | RESEARCH FIRST | Existing standards may be better than inventing a DSL, but only a restricted subset may fit. | Condition research. | VERY HIGH | Security review. |
 | Workflow definition versioning | Workflow | IN 0.3 | Prevents existing instances from silently changing behavior after definition changes. | Entity revision concepts helpful but not mandatory. | HIGH | Technical/domain review. |
 | Workflow migration semantics | Workflow | DEFER 0.4+ | State mapping and migration policy are composing-domain heavy. | Versioning. | VERY HIGH | Domain review later. |
@@ -119,7 +120,9 @@ Recommended in 0.3:
 
 1. Approval composition spec and implementation for `ANY_OF`, `ALL_OF`, `N_OF_M`, ordered stages, and bounded nested groups.
 2. Quorum counting semantics that compose with Draft 0.2 current-effectiveness, including expired, withdrawn, superseded, ineligible, duplicate, rejected, and stale decisions. D03-QUORUM-001 limits quorum members to Requirement references with explicit distinct voter identities; child groups cannot be votes, while quorums may be nested beneath any-of/all-of groups. D03-QUORUM-002 fixes N against declared membership and rejects an unreachable quorum with at least one applicable voter; D03-COMPOSITION-001 omits entirely inapplicable children from parent evaluation and approves a valid composition with no applicable obligations. D03-COMPOSITION-002 uses ALL_OF between applicable stage groups and treats an entirely inapplicable stage as no obligation. D03-COMPOSITION-003 requires nonempty stage/group declarations and counts depth from each stage root. D03-COMPOSITION-004 requires complete validation of structure and required evidence before outcomes, including later stages and alternatives. D03-COMPOSITION-005 reports unique pending applicable Requirements through pending groups in the first pending stage, in recursive declared order; terminal outcomes report none. D03-COMPOSITION-006 specifies structure/applicability/context/evidence error priority. D03-QUORUM-003 rejects opposing effective votes as invalid evidence and defines member-specific state. TASK-073 review, TASK-074 conformance families, TASK-075 through TASK-080 implementation/adapter work, TASK-081 boundary tests, and TASK-082 mutation hardening are complete.
-3. Research milestone for portable condition standards, followed by a minimal deterministic condition model only if the research gate passes.
+3. Research milestone for portable condition standards; TASK-130 through
+   TASK-144 close as an explicit Draft 0.3 deferral with no normative Approval
+   condition model change.
 4. Workflow definition identity/version binding and import semantics.
 5. Portable expected-state or expected-revision conflict contract for Workflow/Entity operations, without persistence or locking.
 6. Entity revision identity refinement and import/migration identity mapping.
@@ -166,6 +169,7 @@ Step 6 -> Step 7: Workflow Versioning Closure
 Step 8 -> Step 9: Entity Import and Revision Implementation
 
 Step 11 -> Step 13: Minimal Condition Model Specification and Implementation
+  (skipped for Draft 0.3 by D03-CONDITION-MODEL-001)
 
 Steps 4, 7, 9, 10, 12, 13 -> Step 14: Agentic 0.3 Review
 Step 14 -> Step 15: Optional Cross-Language Proof
@@ -487,7 +491,7 @@ Optional: Step 15.
 | Review requirements under D03-REVIEW-001 | Security review required before any normative model. Domain review for amount threshold semantics. |
 | Stop conditions | `BLOCKED BY SECURITY RISK` if no safe deterministic subset can be defined. |
 | Definition of Done | A documented standard/subset/defer decision exists. |
-| Expected readiness status | READY FOR Minimal Condition Model only if research passes. |
+| Expected readiness status | Portable condition model decision recorded as explicit Draft 0.3 deferral; no normative Approval condition change. |
 
 ### Step 12. Audit Provenance Research
 
@@ -523,11 +527,11 @@ Optional: Step 15.
 | --- | --- |
 | Title | Minimal Condition Model Specification and Implementation |
 | Type | IMPLEMENTATION |
-| Criticality | CAN RUN IN PARALLEL after Step 11; skip if research defers |
+| Criticality | SKIPPED for Draft 0.3 by Step 11 decision |
 | Complexity | HIGH. |
-| Objective | Add a small deterministic condition model only if Step 11 approves one. |
+| Objective | Add a small deterministic condition model only if a future Step 11-style decision approves one. |
 | Why it belongs in 0.3 | It enables portable approval thresholds while avoiding arbitrary rules. |
-| Prerequisites | Step 11 decision is ADAPT SUBSET or BUILD MINIMAL FINKORE MODEL. |
+| Prerequisites | Step 11 decision is ADAPT SUBSET or BUILD MINIMAL FINKORE MODEL; Draft 0.3 D03-CONDITION-MODEL-001 did not satisfy this prerequisite. |
 | Exact scope | Implement approved predicates only, likely equals/not-equals, exists, and carefully selected numeric/Money comparisons; add logical composition only if explicitly approved. |
 | Explicit non-scope | General rules engine, callbacks, arbitrary expressions, unbounded recursion, external fact lookup. |
 | Artifacts to inspect | Approval condition specs/source/tests, Money comparison specs, conformance approvals. |
@@ -543,7 +547,7 @@ Optional: Step 15.
 | Review requirements under D03-REVIEW-001 | Security review before completion. |
 | Stop conditions | `BLOCKED BY SECURITY RISK` or `BLOCKED BY SPEC GAP`. |
 | Definition of Done | Approved condition subset is implemented and closed with no critical mutants. |
-| Expected readiness status | Condition model 0.3 slice closed, or skipped by research decision. |
+| Expected readiness status | Condition model 0.3 slice skipped by D03-CONDITION-MODEL-001; explicit-result boundary remains the only implemented Approval condition behavior. |
 
 ### Step 14. Agentic 0.3 Review
 
@@ -729,7 +733,9 @@ Priority order toward eventual FinKore v0.5:
 1. Workflow migration semantics, after 0.3 version binding is stable.
 2. Delegation, after security review proves it can be modeled without IAM/RBAC.
 3. Approval escalation, after delegation and time/context semantics are clear.
-4. Full condition standard adoption or broader predicate model, only after the minimal 0.3 decision is proven safe.
+4. Full condition standard adoption or broader predicate model after a future
+   reviewed condition-model decision; Draft 0.3 deferred this work under
+   D03-CONDITION-MODEL-001.
 5. Cross-entity identity registry, only if import/migration work demonstrates Core need.
 6. Audit retention and stronger provenance/security policy, with legal/security review.
 7. Tax primitives beyond generic rates, only if accountant-reviewed jurisdiction-neutral semantics emerge.

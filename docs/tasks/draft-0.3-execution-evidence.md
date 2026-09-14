@@ -1780,3 +1780,88 @@ review prerequisite is superseded by D03-REVIEW-001 below.
     required because the research disposition deferred normative behavior.
 - Result:
   - READY FOR TASK-130.
+
+### TASK-130 through TASK-144 - Portable Conditions
+
+- Status: COMPLETE.
+- Date: 2026-09-14.
+- Source revision inspected before task completion:
+  `021908c77168b2a65cd62ab85c8e2a0b5c15eefa`, with existing uncommitted Draft
+  0.3 changes through TASK-129 in the working tree.
+- Result:
+  - Portable Conditions are closed for Draft 0.3 as an explicit deferral; no
+    Approval condition expression/operator model, conformance vector, adapter
+    operation, public TypeScript API, portable error, or Agentic metadata change
+    was approved.
+- Research evidence:
+  - TASK-130 standards research and TASK-131 model decision are recorded in
+    `docs/tasks/draft-0.3-research-decisions.md`.
+  - Reviewed primary sources:
+    CEL overview/spec/language definition, JSON Logic home/truthiness/custom
+    operation documentation, and OMG DMN 1.5/DMN overview.
+  - Exact decision artifact:
+    `docs/tasks/review-snapshots/task-130-131-portable-conditions.json`.
+  - Local baseline reviewed:
+    `spec/approvals/conditions.md`, `spec/approvals/errors.md`, Approval
+    conformance vectors, TypeScript Approval condition implementation/tests,
+    and conformance adapter dispatch.
+- Decision:
+  - D03-CONDITION-STANDARDS-001: COMPLETE. CEL, JSON Logic, DMN/FEEL, and a
+    minimal FinKore model were compared against deterministic fact access,
+    missing/null behavior, Money comparison, logical composition,
+    serialization/versioning, resource bounds, and safe evaluation.
+  - D03-CONDITION-MODEL-001: DEFER. Draft 0.3 does not adopt, adapt, or build a
+    portable Approval condition expression/operator model.
+  - TASK-132 through TASK-144 are complete as NOT APPLICABLE under the
+    research-gated follow-up protocol; no false implementation claim is made.
+- Security/domain findings:
+  - General expression engines require whitelisted operations, host bindings,
+    resource bounds, serialization/versioning rules, safe diagnostics, and
+    hardening against unexpected error absorption or arbitrary execution.
+  - Truthiness coercion is unsafe for approval facts because missing, null,
+    false, zero, and empty string observations must remain distinguishable.
+  - Money comparisons require exact decimal and currency compatibility semantics
+    from the Money domain and must not be implemented as generic numeric
+    condition-local arithmetic.
+  - External fact lookup, callbacks, and policy hooks remain outside FinKore
+    Core condition evaluation.
+- Traceability:
+  - No new requirements or vectors were added. Existing Approval condition
+    traceability remains unchanged for the explicit required-fact/result
+    boundary.
+  - `conformance/traceability.md` now records the explicit Draft 0.3 deferral
+    status for a standardized portable condition model.
+- Verification:
+  - Node v24.15.0 / npm 11.12.1 were available in the machine environment.
+  - `npm run build --workspaces` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspace @finkore/typescript -- --run test/approvals`
+    exited 0 with 14 files / 129 tests passed.
+  - `npm run test --workspace @finkore/typescript-conformance-adapter` exited
+    0 with 1 file / 15 tests passed.
+  - `npm run test --workspaces` exited 0 with runner 10 files / 110 tests,
+    core 40 files / 371 tests, and adapter 1 file / 15 tests passed.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json --suite approvals`
+    exited 0 with Approvals 66 passed, 0 failed, 0 unsupported, 0
+    infrastructure errors.
+  - Full conformance exited 0 with 244 passed, 0 failed, 0 unsupported, 0
+    infrastructure errors across Money 83, Workflow 41, Audit 29, Approvals
+    66, and Entities 25.
+  - `git diff --check` exited 0.
+  - `node -e "JSON.parse(require('fs').readFileSync('docs/tasks/review-snapshots/task-130-131-portable-conditions.json','utf8')); console.log('snapshot ok')"`
+    exited 0.
+- Mutation:
+  - No new Approval condition runtime behavior was accepted, so no new mutation
+    target was created for TASK-132 through TASK-144.
+  - Latest applicable complete core mutation evidence remains
+    `implementations/typescript/core/reports/mutation/mutation.json` from
+    TASK-108: 98.28% aggregate, with existing Approval critical mutants covered
+    by the closed Approval Validity and Composition mutation suites.
+- Completion applicability:
+  - Updated Draft 0.3 research decisions, review snapshot, implementation plan,
+    traceability deferred-status wording, execution evidence, and backlog.
+  - No `/spec/approvals`, conformance vectors, runner metadata, adapter source,
+    TypeScript public API/JSDoc, root README, AGENTS.md, or CoreDoc change was
+    required because the research disposition deferred normative behavior.
+- Result:
+  - READY FOR TASK-145.

@@ -44,7 +44,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 - [x] Entity Revision and Import: [TASK-099](#task-099)–[TASK-110](#task-110)
 - [x] Money Portability Research: [TASK-111](#task-111)–[TASK-121](#task-121)
 - [x] Audit Provenance Research: [TASK-122](#task-122)–[TASK-129](#task-129)
-- [ ] Portable Conditions: [TASK-130](#task-130)–[TASK-144](#task-144)
+- [x] Portable Conditions: [TASK-130](#task-130)–[TASK-144](#task-144)
 - [ ] Draft 0.3 Alignment: [TASK-145](#task-145)–[TASK-147](#task-147)
 - [ ] Optional Cross-Language Proof: [TASK-148](#task-148)–[TASK-150](#task-150) — OPTIONAL / recommended before v0.5
 - [ ] Draft 0.3 Closure: [TASK-151](#task-151)–[TASK-166](#task-166)
@@ -52,9 +52,9 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-130
-LAST COMPLETED: TASK-129
-REASON: Audit Provenance Research is closed for Draft 0.3 as an explicit deferral: the standards/security/privacy review is recorded, reason/source/correlation/causation/trace-context metadata are deferred by D03-AUDIT-PROVENANCE-001, conditional follow-up tasks are complete as NOT APPLICABLE with no normative/API/vector change, and Audit/full conformance remain green at 29/29 and 244/244.
+NEXT TASK: TASK-145
+LAST COMPLETED: TASK-144
+REASON: Portable Conditions are closed for Draft 0.3 as an explicit deferral: CEL, JSON Logic, DMN/FEEL and a minimal FinKore model were reviewed; D03-CONDITION-MODEL-001 defers a portable condition expression/operator model; TASK-132 through TASK-144 are complete as NOT APPLICABLE with no normative/API/vector change; and Approvals/full conformance remain green.
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -12498,7 +12498,7 @@ Completion:
 
 <a id="task-130"></a>
 
-### - [ ] TASK-130 — Portable Condition Standards Research
+### - [x] TASK-130 — Portable Condition Standards Research
 
 **Release:** Draft 0.3
 
@@ -12570,9 +12570,9 @@ Portable Condition Standards Research.
 
 **Definition of Done**
 
-- [ ] Compare CEL, JSON Logic, DMN FEEL subsets and a minimal FinKore model for explicit facts, exact Money, missing/null, logical composition, serialization and bounded safe evaluation.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Compare CEL, JSON Logic, DMN FEEL subsets and a minimal FinKore model for explicit facts, exact Money, missing/null, logical composition, serialization and bounded safe evaluation.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -12580,11 +12580,14 @@ A scoped research decision or required reviewer report exists; no new normative 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Research documentation and source review recorded in D03-CONDITION-STANDARDS-001; final regression evidence is recorded on TASK-144.
+- Notes: Compared CEL, JSON Logic, DMN/FEEL, and a minimal FinKore model against deterministic fact access, missing/null behavior, Money comparison, logical composition, serialization/versioning, resource bounds, and safe evaluation. No normative condition model or runtime behavior was approved by this research task.
 
 <a id="task-131"></a>
 
-### - [ ] TASK-131 — Condition Model Decision and Pre-Spec Security Review
+### - [x] TASK-131 — Condition Model Decision and Pre-Spec Security Review
 
 **Release:** Draft 0.3
 
@@ -12656,9 +12659,9 @@ Condition Model Decision and Pre-Spec Security Review.
 
 **Definition of Done**
 
-- [ ] Record ADOPT, ADAPT SUBSET, BUILD MINIMAL FINKORE MODEL or DEFER with required security/domain review before normative changes.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Record ADOPT, ADAPT SUBSET, BUILD MINIMAL FINKORE MODEL or DEFER with required security/domain review before normative changes.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -12666,11 +12669,14 @@ A scoped research decision or required reviewer report exists; no new normative 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Research documentation, security/domain findings, and source review recorded in D03-CONDITION-MODEL-001; final regression evidence is recorded on TASK-144.
+- Notes: Decision is DEFER. Draft 0.3 does not adopt, adapt, or build a portable Approval condition expression/operator model. TASK-132 through TASK-144 are therefore disposition-only follow-ups under the research-gated protocol.
 
 <a id="task-132"></a>
 
-### - [ ] TASK-132 — Condition Primitive Operator Specification
+### - [x] TASK-132 — Condition Primitive Operator Specification
 
 **Release:** Draft 0.3
 
@@ -12745,10 +12751,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Define APPROVAL-CONDITION-MODEL-* approved primitive equals/not-equals/exists and selected numeric/Money comparisons with exact types and compatible currencies.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] NOT APPLICABLE: D03-CONDITION-MODEL-001 deferred primitive operator specification for Draft 0.3.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -12756,11 +12762,14 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE AS NOT APPLICABLE
+- Verification: D03-CONDITION-MODEL-001 cites the reviewed DEFER decision; final regression evidence is recorded on TASK-144.
+- Notes: No `APPROVAL-CONDITION-MODEL-*` primitive operator requirements were added. Implementation remains absent; no false implementation claim is made.
 
 <a id="task-133"></a>
 
-### - [ ] TASK-133 — Condition Missing and Null Semantics
+### - [x] TASK-133 — Condition Missing and Null Semantics
 
 **Release:** Draft 0.3
 
@@ -12835,10 +12844,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Define distinct missing, null, false, zero and empty-string observations and invalid versus unresolved errors; first assess existing CONDITION_UNRESOLVED.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] NOT APPLICABLE: D03-CONDITION-MODEL-001 deferred new missing/null expression semantics for Draft 0.3.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -12846,11 +12855,14 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE AS NOT APPLICABLE
+- Verification: D03-CONDITION-MODEL-001 cites the reviewed DEFER decision; final regression evidence is recorded on TASK-144.
+- Notes: Existing required-fact semantics remain unchanged: missing facts are unresolved, while `null`, `false`, `0`, and empty string remain present observations at the current explicit-result boundary.
 
 <a id="task-134"></a>
 
-### - [ ] TASK-134 — Condition Logical Composition Specification
+### - [x] TASK-134 — Condition Logical Composition Specification
 
 **Release:** Draft 0.3
 
@@ -12925,10 +12937,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Specify only explicitly approved AND/OR/NOT behavior, bounded depth, evaluation/error ordering and cycle rejection; document non-selection if logical composition is excluded.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] NOT APPLICABLE: D03-CONDITION-MODEL-001 deferred logical composition semantics for Draft 0.3.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -12936,11 +12948,14 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE AS NOT APPLICABLE
+- Verification: D03-CONDITION-MODEL-001 cites the reviewed DEFER decision; final regression evidence is recorded on TASK-144.
+- Notes: No portable condition AND/OR/NOT model, depth bound, cycle rule, or expression error ordering was added.
 
 <a id="task-135"></a>
 
-### - [ ] TASK-135 — Condition Serialization and Version Specification
+### - [x] TASK-135 — Condition Serialization and Version Specification
 
 **Release:** Draft 0.3
 
@@ -13015,10 +13030,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Specify portable structural descriptors, fact paths, object/array meaning and model version handling; no implementation-language callbacks.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] NOT APPLICABLE: D03-CONDITION-MODEL-001 deferred structural descriptor, fact-path, and model-version semantics for Draft 0.3.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -13026,11 +13041,14 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE AS NOT APPLICABLE
+- Verification: D03-CONDITION-MODEL-001 cites the reviewed DEFER decision; final regression evidence is recorded on TASK-144.
+- Notes: No portable condition serialization or version model was added.
 
 <a id="task-136"></a>
 
-### - [ ] TASK-136 — Condition Primitive and Missing-Value Vectors
+### - [x] TASK-136 — Condition Primitive and Missing-Value Vectors
 
 **Release:** Draft 0.3
 
@@ -13110,10 +13128,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Add approved operator truth boundaries, missing/null/type contrasts, Money currency mismatch and object-key-order invariance.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] NOT APPLICABLE: D03-CONDITION-MODEL-001 deferred primitive/missing-value vector creation for Draft 0.3.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -13121,11 +13139,14 @@ Named vectors are registered and traceable; new behavior is intentionally FAIL/U
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE AS NOT APPLICABLE
+- Verification: D03-CONDITION-MODEL-001 cites the reviewed DEFER decision; final regression evidence is recorded on TASK-144.
+- Notes: No new condition primitive, missing/null, Money comparison, or object-order vectors were added.
 
 <a id="task-137"></a>
 
-### - [ ] TASK-137 — Condition Composition and Serialization Vectors
+### - [x] TASK-137 — Condition Composition and Serialization Vectors
 
 **Release:** Draft 0.3
 
@@ -13205,10 +13226,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Add selected logic, error ordering, depth/cycle and model roundtrip/version cases; preserve existing explicit condition-result boundary vectors.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] NOT APPLICABLE: D03-CONDITION-MODEL-001 deferred composition and serialization vector creation for Draft 0.3.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -13216,11 +13237,14 @@ Named vectors are registered and traceable; new behavior is intentionally FAIL/U
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE AS NOT APPLICABLE
+- Verification: D03-CONDITION-MODEL-001 cites the reviewed DEFER decision; final regression evidence is recorded on TASK-144.
+- Notes: Existing explicit condition-result boundary vectors are preserved; no new condition composition, ordering, roundtrip, or version vectors were added.
 
 <a id="task-138"></a>
 
-### - [ ] TASK-138 — Condition Representation and Primitive Implementation
+### - [x] TASK-138 — Condition Representation and Primitive Implementation
 
 **Release:** Draft 0.3
 
@@ -13299,10 +13323,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Implement approved structural validation and primitive operators over explicit facts; use Money semantics, avoid JS truthiness and eval.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] NOT APPLICABLE: D03-CONDITION-MODEL-001 deferred condition representation and primitive implementation for Draft 0.3.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -13310,11 +13334,14 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE AS NOT APPLICABLE
+- Verification: D03-CONDITION-MODEL-001 cites the reviewed DEFER decision; final regression evidence is recorded on TASK-144.
+- Notes: TypeScript condition evaluation remains the existing explicit required-fact/result boundary. No primitive interpreter, Money comparison, JavaScript truthiness, or eval behavior was added.
 
 <a id="task-139"></a>
 
-### - [ ] TASK-139 — Condition Composition and Serialization Implementation
+### - [x] TASK-139 — Condition Composition and Serialization Implementation
 
 **Release:** Draft 0.3
 
@@ -13393,10 +13420,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Implement selected bounded composition and serialization/version behavior; preserve rejected/missing/null distinctions without arbitrary expressions.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] NOT APPLICABLE: D03-CONDITION-MODEL-001 deferred condition composition and serialization implementation for Draft 0.3.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -13404,11 +13431,14 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE AS NOT APPLICABLE
+- Verification: D03-CONDITION-MODEL-001 cites the reviewed DEFER decision; final regression evidence is recorded on TASK-144.
+- Notes: No bounded condition composition, serialization, version handling, or expression evaluation implementation was added.
 
 <a id="task-140"></a>
 
-### - [ ] TASK-140 — Condition Model Adapter Support
+### - [x] TASK-140 — Condition Model Adapter Support
 
 **Release:** Draft 0.3
 
@@ -13485,10 +13515,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Translate descriptors/facts and normalize evaluator outputs; adapter must not interpret conditions or substitute true/false for unresolved results.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] NOT APPLICABLE: D03-CONDITION-MODEL-001 deferred condition model adapter support for Draft 0.3.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -13496,11 +13526,14 @@ Named operation fixtures execute through core and all required slice vectors PAS
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE AS NOT APPLICABLE
+- Verification: D03-CONDITION-MODEL-001 cites the reviewed DEFER decision; final regression evidence is recorded on TASK-144.
+- Notes: The adapter remains translation-only for existing condition behavior and does not interpret condition expressions or substitute truthy/falsey results.
 
 <a id="task-141"></a>
 
-### - [ ] TASK-141 — Condition Implementation Security Review
+### - [x] TASK-141 — Condition Implementation Security Review
 
 **Release:** Draft 0.3
 
@@ -13575,10 +13608,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Obtain required review of the implemented evaluator, resource bounds, unsafe keys/prototypes, diagnostics and prohibition of arbitrary execution before slice closure.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] NOT APPLICABLE: D03-CONDITION-MODEL-001 deferred implementation security review for an evaluator because no evaluator was approved or implemented.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -13586,11 +13619,14 @@ A scoped research decision or required reviewer report exists; no new normative 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE AS NOT APPLICABLE
+- Verification: D03-CONDITION-MODEL-001 cites the reviewed DEFER decision; final regression evidence is recorded on TASK-144.
+- Notes: No implemented evaluator exists to review. The research packet records the security findings that caused the Draft 0.3 deferral.
 
 <a id="task-142"></a>
 
-### - [ ] TASK-142 — Portable Conditions Mutation Hardening
+### - [x] TASK-142 — Portable Conditions Mutation Hardening
 
 **Release:** Draft 0.3
 
@@ -13667,10 +13703,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Kill comparison inversions, missing/null conflation, truthiness coercion, cross-currency success, AND/OR inversion, ignored NOT, object-order dependence and bounds bypass.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] NOT APPLICABLE: D03-CONDITION-MODEL-001 deferred condition model mutation hardening because no new condition model runtime behavior was accepted.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -13678,11 +13714,15 @@ A complete scoped mutation report and survivor classifications establish >=95% a
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE AS NOT APPLICABLE
+- Verification: D03-CONDITION-MODEL-001 cites the reviewed DEFER decision; final regression evidence is recorded on TASK-144.
+- Mutation: No new runtime behavior was accepted, so no new mutation target was created. Latest applicable complete core mutation evidence remains the TASK-108 report at 98.28% aggregate.
+- Notes: Future condition-model work must still kill the listed comparison, missing/null, truthiness, currency, logic, order, and bounds mutants before claiming implementation closure.
 
 <a id="task-143"></a>
 
-### - [ ] TASK-143 — Portable Conditions Traceability Closure
+### - [x] TASK-143 — Portable Conditions Traceability Closure
 
 **Release:** Draft 0.3
 
@@ -13759,11 +13799,11 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] NOT APPLICABLE: D03-CONDITION-MODEL-001 deferred new condition-model traceability rows because no new requirements, vectors, errors, APIs, or operation metadata were created.
+- [x] For the deferred scope: no new UNCOVERED requirements or BLOCKING SPEC GAPS were created; existing Approval condition traceability remains unchanged.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -13771,11 +13811,14 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE AS NOT APPLICABLE
+- Verification: D03-CONDITION-MODEL-001 cites the reviewed DEFER decision; final regression evidence is recorded on TASK-144.
+- Notes: `conformance/traceability.md` records the Draft 0.3 deferral. No `APPROVAL-CONDITION-MODEL-*` rows, vectors, errors, APIs, or operation metadata were added.
 
 <a id="task-144"></a>
 
-### - [ ] TASK-144 — Portable Conditions Slice Closure Gate
+### - [x] TASK-144 — Portable Conditions Slice Closure Gate
 
 **Release:** Draft 0.3
 
@@ -13854,11 +13897,11 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] NOT APPLICABLE: D03-CONDITION-MODEL-001 deferred condition model slice closure because no stable spec, implementation, adapter, or vectors were approved for this conditional feature.
+- [x] For the deferred scope: no new UNCOVERED requirements or BLOCKING SPEC GAPS were created; existing Approval condition traceability remains unchanged.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -13866,7 +13909,21 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE AS NOT APPLICABLE
+- Verification:
+  - Node v24.15.0 / npm 11.12.1 were available in the machine environment.
+  - `npm run build --workspaces` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspace @finkore/typescript -- --run test/approvals` exited 0 with 14 files / 129 tests passed.
+  - `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0 with 1 file / 15 tests passed.
+  - `npm run test --workspaces` exited 0 with runner 10 files / 110 tests, core 40 files / 371 tests, and adapter 1 file / 15 tests passed.
+  - Approval conformance exited 0 with 66 passed, 0 failed, 0 unsupported, 0 infrastructure errors.
+  - Full conformance exited 0 with 244 passed, 0 failed, 0 unsupported, 0 infrastructure errors across Money 83, Workflow 41, Audit 29, Approvals 66, and Entities 25.
+  - `git diff --check` exited 0.
+  - `node -e "JSON.parse(require('fs').readFileSync('docs/tasks/review-snapshots/task-130-131-portable-conditions.json','utf8')); console.log('snapshot ok')"` exited 0.
+- Mutation: No new runtime behavior was accepted, so no new mutation target was created. Latest applicable complete core mutation evidence remains the TASK-108 report at 98.28% aggregate.
+- Notes: Portable Conditions are closed for Draft 0.3 as an explicit deferral. No normative Approval condition expression/operator model, vectors, adapter support, TypeScript API, portable error, Agentic metadata, README/JSDoc change, or mutation target was added.
 
 ### Milestone: Draft 0.3 Alignment
 
