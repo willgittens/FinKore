@@ -42,7 +42,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 - [x] Advanced Approvals: [TASK-068](#task-068)–[TASK-084](#task-084)
 - [x] Workflow Versioning and Import: [TASK-085](#task-085)–[TASK-098](#task-098)
 - [x] Entity Revision and Import: [TASK-099](#task-099)–[TASK-110](#task-110)
-- [ ] Money Portability Research: [TASK-111](#task-111)–[TASK-121](#task-121)
+- [x] Money Portability Research: [TASK-111](#task-111)–[TASK-121](#task-121)
 - [ ] Audit Provenance Research: [TASK-122](#task-122)–[TASK-129](#task-129)
 - [ ] Portable Conditions: [TASK-130](#task-130)–[TASK-144](#task-144)
 - [ ] Draft 0.3 Alignment: [TASK-145](#task-145)–[TASK-147](#task-147)
@@ -52,9 +52,9 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-111
-LAST COMPLETED: TASK-110
-REASON: Entity Revision and Import is closed for Draft 0.3: stable spec, accepted scoped review, complete TypeScript implementation, translation-only adapter support, 25/25 Entity conformance, full 244/244 conformance, synchronized docs, traceability with 0 uncovered and 0 blocking gaps, and complete core mutation evidence at 98.28% with zero critical Entity Revision/Import survivors.
+NEXT TASK: TASK-122
+LAST COMPLETED: TASK-121
+REASON: Money Portability Research is closed for Draft 0.3 as an explicit deferral: the cross-language matrix and primary-source review are recorded, precision/overflow limits, minor-unit metadata, and private/non-fiat namespace behavior are deferred by D03-MONEY-PORTABILITY-002 through D03-MONEY-PORTABILITY-004, conditional follow-up tasks are complete as NOT APPLICABLE with no normative/API/vector change, and Money/full conformance remain green at 83/83 and 244/244.
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -10553,7 +10553,7 @@ Completion:
 
 <a id="task-111"></a>
 
-### - [ ] TASK-111 — Cross-Language Numeric Capability Matrix
+### - [x] TASK-111 — Cross-Language Numeric Capability Matrix
 
 **Release:** Draft 0.3
 
@@ -10625,9 +10625,9 @@ Cross-Language Numeric Capability Matrix.
 
 **Definition of Done**
 
-- [ ] Compare TypeScript, Java, Go and .NET exact decimal capacity, scale/exponent representation, overflow and rounding using primary runtime/library sources; record sources and reproducible probes.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Compare TypeScript, Java, Go and .NET exact decimal capacity, scale/exponent representation, overflow and rounding using primary runtime/library sources; record sources and reproducible probes.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -10635,11 +10635,22 @@ A scoped research decision or required reviewer report exists; no new normative 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Primary-source review, Node probe, Java probe, DOC checks, Money
+  conformance, and full conformance are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: No new vectors were added; Money suite remains 83/83 and full
+  manifest remains 244/244.
+- Mutation: Not applicable for research-only task; latest complete core mutation
+  evidence remains applicable.
+- Notes: Cross-language matrix recorded in
+  `docs/tasks/draft-0.3-research-decisions.md` with exact artifact snapshot
+  `docs/tasks/review-snapshots/task-111-114-money-portability.json`.
 
 <a id="task-112"></a>
 
-### - [ ] TASK-112 — Precision and Overflow Minimum Guarantee Decision
+### - [x] TASK-112 — Precision and Overflow Minimum Guarantee Decision
 
 **Release:** Draft 0.3
 
@@ -10711,9 +10722,9 @@ Precision and Overflow Minimum Guarantee Decision.
 
 **Definition of Done**
 
-- [ ] Decide unbounded semantics, minimum declared capability, hard limits or DEFER using the matrix; record overflow/unsupported precision implications and technical review.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Decide unbounded semantics, minimum declared capability, hard limits or DEFER using the matrix; record overflow/unsupported precision implications and technical review.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -10721,11 +10732,22 @@ A scoped research decision or required reviewer report exists; no new normative 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Decision D03-MONEY-PORTABILITY-002, DOC checks, Money
+  conformance, and full conformance are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: No new vectors were added; Money suite remains 83/83 and full
+  manifest remains 244/244.
+- Mutation: Not applicable for research-only deferral; latest complete core
+  mutation evidence remains applicable.
+- Notes: DEFERRED for Draft 0.3. No precision/scale floor, unbounded guarantee,
+  hard limit, capability reporting, overflow behavior, or unsupported-precision
+  portable error is introduced.
 
 <a id="task-113"></a>
 
-### - [ ] TASK-113 — Minor-Unit Metadata Policy Research
+### - [x] TASK-113 — Minor-Unit Metadata Policy Research
 
 **Release:** Draft 0.3
 
@@ -10797,9 +10819,9 @@ Minor-Unit Metadata Policy Research.
 
 **Definition of Done**
 
-- [ ] Decide metadata recommendation/data freshness ownership versus calculation scale; obtain required domain/accounting review for selected guidance and record INCLUDE/DEFER/REJECT.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Decide metadata recommendation/data freshness ownership versus calculation scale; obtain required domain/accounting review for selected guidance and record INCLUDE/DEFER/REJECT.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -10807,11 +10829,22 @@ A scoped research decision or required reviewer report exists; no new normative 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Decision D03-MONEY-PORTABILITY-003, ISO 4217 source review, DOC
+  checks, Money conformance, and full conformance are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: No new vectors were added; Money suite remains 83/83 and full
+  manifest remains 244/244.
+- Mutation: Not applicable for research-only deferral; latest complete core
+  mutation evidence remains applicable.
+- Notes: DEFERRED for Draft 0.3. No minor-unit metadata provider, freshness
+  obligation, recommended-scale rule, or implicit minor-unit rounding is
+  introduced.
 
 <a id="task-114"></a>
 
-### - [ ] TASK-114 — Private Currency Namespace Research
+### - [x] TASK-114 — Private Currency Namespace Research
 
 **Release:** Draft 0.3
 
@@ -10883,9 +10916,9 @@ Private Currency Namespace Research.
 
 **Definition of Done**
 
-- [ ] Research naming, ISO collision boundaries, compatibility and identifier preservation; record domain/security review and narrow INCLUDE or explicit DEFER/REJECT decision.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Research naming, ISO collision boundaries, compatibility and identifier preservation; record domain/security review and narrow INCLUDE or explicit DEFER/REJECT decision.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -10893,11 +10926,22 @@ A scoped research decision or required reviewer report exists; no new normative 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: Decision D03-MONEY-PORTABILITY-004, ISO 4217 source review, DOC
+  checks, Money conformance, and full conformance are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: No new vectors were added; Money suite remains 83/83 and full
+  manifest remains 244/244.
+- Mutation: Not applicable for research-only deferral; latest complete core
+  mutation evidence remains applicable.
+- Notes: DEFERRED for Draft 0.3. No private/non-fiat currency namespace,
+  collision rule, compatibility rule, registry, FX behavior, or currency
+  namespace implementation is introduced.
 
 <a id="task-115"></a>
 
-### - [ ] TASK-115 — Approved Money Portability Normative Follow-up
+### - [x] TASK-115 — Approved Money Portability Normative Follow-up
 
 **Release:** Draft 0.3
 
@@ -10973,10 +11017,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] For each approved narrow decision, define minimum guarantees, precision/overflow behavior or metadata/namespace semantics and justified errors; otherwise verify documented deferral.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] For each approved narrow decision, define minimum guarantees, precision/overflow behavior or metadata/namespace semantics and justified errors; otherwise verify documented deferral.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -10984,11 +11028,21 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC checks, Money conformance, and full conformance are recorded
+  in `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: NOT APPLICABLE — no normative Money portability proposal was
+  approved; no new vectors were created. Existing Money suite remains 83/83.
+- Mutation: NOT APPLICABLE — no runtime behavior changed; latest complete core
+  mutation evidence remains applicable.
+- Notes: NOT APPLICABLE — D03-MONEY-PORTABILITY-002 through
+  D03-MONEY-PORTABILITY-004 defer precision/overflow, minor-unit metadata, and
+  private/non-fiat namespace work. No `/spec/money` change was made.
 
 <a id="task-116"></a>
 
-### - [ ] TASK-116 — Approved Money Portability Conformance
+### - [x] TASK-116 — Approved Money Portability Conformance
 
 **Release:** Draft 0.3
 
@@ -11068,10 +11122,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Add approved precision/overflow boundaries, metadata-not-scale contrasts or namespace identity/collision vectors; no behavior beyond the selected normative proposal.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] Add approved precision/overflow boundaries, metadata-not-scale contrasts or namespace identity/collision vectors; no behavior beyond the selected normative proposal.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -11079,11 +11133,20 @@ Named vectors are registered and traceable; new behavior is intentionally FAIL/U
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC checks, Money conformance, and full conformance are recorded
+  in `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: NOT APPLICABLE — no approved normative proposal exists, so no
+  precision/overflow, metadata, namespace, runner metadata, or manifest changes
+  were created. Existing Money suite remains 83/83.
+- Mutation: NOT APPLICABLE — vector-only work was not activated.
+- Notes: NOT APPLICABLE — documented Draft 0.3 deferral prevents a false
+  conformance claim for unimplemented portability behavior.
 
 <a id="task-117"></a>
 
-### - [ ] TASK-117 — Approved Money Portability TypeScript Adjustment
+### - [x] TASK-117 — Approved Money Portability TypeScript Adjustment
 
 **Release:** Draft 0.3
 
@@ -11162,10 +11225,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Implement one approved portability adjustment at a time with exact arithmetic and public capability/error documentation; preserve 0.1/0.2 semantics.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] Implement one approved portability adjustment at a time with exact arithmetic and public capability/error documentation; preserve 0.1/0.2 semantics.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -11173,11 +11236,21 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(money), ADAPTER, CONF(money), full UNIT, full
+  CONF, and DOC checks are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: NOT APPLICABLE — no approved normative proposal exists; existing
+  Money suite remains 83/83 and full manifest remains 244/244.
+- Mutation: NOT APPLICABLE — no TypeScript Money runtime behavior changed; latest
+  complete core mutation evidence remains applicable.
+- Notes: NOT APPLICABLE — no Money public API, JSDoc, portable error, or
+  TypeScript implementation adjustment was created.
 
 <a id="task-118"></a>
 
-### - [ ] TASK-118 — Approved Money Portability Adapter Adjustment
+### - [x] TASK-118 — Approved Money Portability Adapter Adjustment
 
 **Release:** Draft 0.3
 
@@ -11254,10 +11327,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Translate approved capability/precision/currency fixtures and normalized portable failures; do not implement numeric limits in the runner.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] Translate approved capability/precision/currency fixtures and normalized portable failures; do not implement numeric limits in the runner.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -11265,11 +11338,20 @@ Named operation fixtures execute through core and all required slice vectors PAS
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(money), ADAPTER, CONF(money), full CONF, and
+  DOC checks are recorded in `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: NOT APPLICABLE — no approved vectors or operation changes exist;
+  existing Money suite remains 83/83 and full manifest remains 244/244.
+- Mutation: NOT APPLICABLE — adapter work was not activated.
+- Notes: NOT APPLICABLE — no adapter translation or runner metadata change was
+  made because D03-MONEY-PORTABILITY-002 through D03-MONEY-PORTABILITY-004 defer
+  all proposed Money portability behavior.
 
 <a id="task-119"></a>
 
-### - [ ] TASK-119 — Approved Money Portability Mutation Hardening
+### - [x] TASK-119 — Approved Money Portability Mutation Hardening
 
 **Release:** Draft 0.3
 
@@ -11346,10 +11428,10 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Kill silent truncation/overflow, capability misreporting, minor-unit-as-scale and private/ISO identity collision for activated behavior.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] Kill silent truncation/overflow, capability misreporting, minor-unit-as-scale and private/ISO identity collision for activated behavior.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -11357,11 +11439,21 @@ A complete scoped mutation report and survivor classifications establish >=95% a
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(money), ADAPTER, CONF(money), full CONF, and
+  DOC checks are recorded in `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: NOT APPLICABLE — no approved behavior was activated; existing
+  Money suite remains 83/83.
+- Mutation: NOT APPLICABLE — no new Money runtime behavior or mutation target was
+  created. Latest complete core mutation evidence remains
+  `implementations/typescript/core/reports/mutation/mutation.json` at 98.28%.
+- Notes: NOT APPLICABLE — critical scenarios remain future-work notes for an
+  eventual portability profile, not Draft 0.3 implemented behavior.
 
 <a id="task-120"></a>
 
-### - [ ] TASK-120 — Approved Money Portability Traceability Closure
+### - [x] TASK-120 — Approved Money Portability Traceability Closure
 
 **Release:** Draft 0.3
 
@@ -11438,11 +11530,11 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -11450,11 +11542,22 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC reference review, Money conformance, and full conformance are
+  recorded in `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: NOT APPLICABLE — no new requirements or vectors were added.
+  Existing Money suite remains 83/83 and full manifest remains 244/244.
+- Mutation: NOT APPLICABLE — latest complete core mutation evidence remains
+  applicable.
+- Notes: NOT APPLICABLE — traceability was not extended with new Money
+  portability rows. `conformance/traceability.md` records explicit deferred
+  status for precision/overflow, capability reporting, minor-unit metadata, and
+  private/non-fiat currency namespace behavior.
 
 <a id="task-121"></a>
 
-### - [ ] TASK-121 — Approved Money Portability Slice Closure Gate
+### - [x] TASK-121 — Approved Money Portability Slice Closure Gate
 
 **Release:** Draft 0.3
 
@@ -11533,11 +11636,11 @@ For a documented non-selection, make only the disposition/documentation checks; 
 
 **Definition of Done**
 
-- [ ] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
-- [ ] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
+- [x] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Either approved scope satisfies every normal DoD item, or a reviewed DEFER/REJECT decision is cited, implementation remains absent and docs explicitly say NOT APPLICABLE; no false implementation claim.
 
 **Expected repository state**
 
@@ -11545,7 +11648,22 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(money), ADAPTER, full UNIT, CONF(money), full
+  CONF, and DOC checks pass; details are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: Money suite passes 83/83 and full manifest passes 244/244 with 0
+  failed, 0 unsupported, and 0 infrastructure errors.
+- Mutation: NOT APPLICABLE for new behavior because the research track deferred
+  normative implementation. Latest complete core mutation evidence remains
+  `implementations/typescript/core/reports/mutation/mutation.json` at 98.28%.
+- Notes: Money Portability Research is closed for Draft 0.3 as an explicit
+  deferral. D03-MONEY-PORTABILITY-002 through D03-MONEY-PORTABILITY-004 defer
+  precision/overflow limits, capability reporting, minor-unit metadata, and
+  private/non-fiat currency namespace behavior. TASK-115 through TASK-121 are
+  complete as NOT APPLICABLE with no false implementation claim. `NEXT TASK`
+  advanced to TASK-122.
 
 ### Milestone: Audit Provenance Research
 

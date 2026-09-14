@@ -1,0 +1,95 @@
+{
+  "id": "task-111-114-money-portability",
+  "date": "2026-09-14",
+  "sourceRevision": "ddd3a3a3e4be4ff11959fa06ad09be3a1a308df5 plus TASK-111 through TASK-114 Money Portability Research working-tree changes",
+  "status": "complete-deferred",
+  "externalReview": "NOT EXTERNALLY REVIEWED",
+  "artifacts": [
+    {
+      "path": "docs/coreDoc/core-doc.md",
+      "sha256": "53d5565c6ac0cad831ec9409c86c1648c93f15c15325530eca7581cb6d6fdf1f"
+    },
+    {
+      "path": "docs/tasks/draft-0.3-research-decisions.md",
+      "sha256": "32bcce4c712cf47551c4b7f9f2cdb374056a13e36291d3645552cf26f6d9ed4e"
+    },
+    {
+      "path": "docs/tasks/draft-0.3-implementation-plan.md",
+      "sha256": "a6fbb80d566dbbf85279a8db50939e11b4a4d1641c36ce784254b990329603d7"
+    },
+    {
+      "path": "spec/money/README.md",
+      "sha256": "124b0a43cb1efe4d8f598c863ee5bb93c32360240d3b9d9087072d12a98490c7"
+    },
+    {
+      "path": "spec/money/representation.md",
+      "sha256": "07f0f3880201500832d52266598327aad23cb68cbddaa28ed8f9652768ff2c94"
+    },
+    {
+      "path": "spec/money/currency.md",
+      "sha256": "c9177e22c570b73e6952657fbada233ff49d21185ca9b2555dc198ba61e35362"
+    },
+    {
+      "path": "spec/money/rounding.md",
+      "sha256": "0cd7b0dc45c9092b76a656a32d2cf72f2643f6e997f05a4ea5722017f50a40e7"
+    },
+    {
+      "path": "spec/money/serialization.md",
+      "sha256": "20f6bc84eaf25eb64917f0d54f161a9fa3e3e0fc831fc6cb2616420dcfa9dd26"
+    },
+    {
+      "path": "spec/money/errors.md",
+      "sha256": "44fd01903f4bcbbfa7cb0f4853035f3fe43c57f5483ad0b84a5a09cab0ef610c"
+    },
+    {
+      "path": "conformance/traceability.md",
+      "sha256": "4f70c6a1ece26529d8a1c5ae562b53ff566e498ae366f8868fd8d43bbe469e84"
+    }
+  ],
+  "primarySources": [
+    "https://tc39.es/ecma262/2024/multipage/ecmascript-data-types-and-values.html#sec-ecmascript-language-types-bigint-type",
+    "https://www.typescriptlang.org/docs/handbook/basic-types.html",
+    "https://github.com/tc39/proposal-decimal",
+    "https://docs.oracle.com/en/java/javase/26/docs/api/java.base/java/math/BigDecimal.html",
+    "https://pkg.go.dev/math/big",
+    "https://learn.microsoft.com/en-us/dotnet/api/system.decimal?view=net-10.0",
+    "https://learn.microsoft.com/en-us/dotnet/api/system.numerics.biginteger?view=net-10.0",
+    "https://www.iso.org/iso-4217-currency-codes.html"
+  ],
+  "decisions": [
+    {
+      "id": "D03-MONEY-PORTABILITY-001",
+      "task": "TASK-111",
+      "disposition": "COMPLETE",
+      "summary": "Cross-language numeric capability matrix recorded."
+    },
+    {
+      "id": "D03-MONEY-PORTABILITY-002",
+      "task": "TASK-112",
+      "disposition": "DEFER",
+      "summary": "No Draft 0.3 precision, scale, overflow, capability-reporting, or unsupported-precision normative change."
+    },
+    {
+      "id": "D03-MONEY-PORTABILITY-003",
+      "task": "TASK-113",
+      "disposition": "DEFER",
+      "summary": "No Draft 0.3 currency minor-unit metadata or data freshness obligation."
+    },
+    {
+      "id": "D03-MONEY-PORTABILITY-004",
+      "task": "TASK-114",
+      "disposition": "DEFER",
+      "summary": "No Draft 0.3 private/non-fiat currency namespace."
+    }
+  ],
+  "conditionalFollowUps": [
+    "TASK-115 through TASK-121 complete as NOT APPLICABLE for Draft 0.3 because no Money portability normative proposal was approved."
+  ],
+  "futureReviewTopics": [
+    "Portable precision/scale capability profiles",
+    "Unsupported precision or overflow portable error design",
+    "Minor-unit metadata authority and freshness model",
+    "Private/non-fiat currency namespace syntax, collision boundaries, and security review",
+    "External accounting, language implementation, security, and community review"
+  ]
+}

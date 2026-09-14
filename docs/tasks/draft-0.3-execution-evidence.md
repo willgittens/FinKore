@@ -1621,3 +1621,82 @@ review prerequisite is superseded by D03-REVIEW-001 below.
     intentionally not promoted for `entity.import`.
 - Result:
   - READY FOR TASK-111.
+
+### TASK-111 through TASK-121 - Money Portability Research
+
+- Status: COMPLETE.
+- Date: 2026-09-14.
+- Source revision inspected before task completion:
+  `ddd3a3a3e4be4ff11959fa06ad09be3a1a308df5`, with existing uncommitted Draft
+  0.3 changes through TASK-110 in the working tree.
+- Result:
+  - Money Portability Research is closed for Draft 0.3 as an explicit deferral;
+    no Money normative behavior, conformance vector, adapter operation, public
+    TypeScript API, portable error, or Agentic metadata change was approved.
+- Research evidence:
+  - TASK-111 cross-language numeric matrix is recorded in
+    `docs/tasks/draft-0.3-research-decisions.md`.
+  - Reviewed primary sources:
+    ECMAScript BigInt, TypeScript numeric types, TC39 Decimal proposal, Java
+    `BigDecimal`, Go `math/big`, .NET `System.Decimal`, .NET
+    `System.Numerics.BigInteger`, and ISO 4217 currency codes.
+  - Exact decision artifact:
+    `docs/tasks/review-snapshots/task-111-114-money-portability.json`.
+  - Local probes:
+    - Node v24.15.0 showed BigInt arbitrary-width integer arithmetic, integer
+      division truncation, and mixed `number`/`bigint` arithmetic rejection.
+    - Java 11 source-file launcher showed `BigDecimal` large decimal operation,
+      representation scale preservation, exact non-terminating division failure
+      without rounding, and explicit rounded division.
+  - Go and .NET toolchains were not present locally; their matrix rows rely on
+    primary official documentation rather than local probes.
+- Decisions:
+  - D03-MONEY-PORTABILITY-001: COMPLETE. Cross-language matrix recorded.
+  - D03-MONEY-PORTABILITY-002: DEFER. No Draft 0.3 precision/scale floor,
+    unbounded guarantee, hard limit, overflow/capability-reporting behavior, or
+    unsupported-precision portable error.
+  - D03-MONEY-PORTABILITY-003: DEFER. No Draft 0.3 minor-unit metadata provider,
+    freshness obligation, recommended-scale rule, or implicit minor-unit
+    rounding.
+  - D03-MONEY-PORTABILITY-004: DEFER. No Draft 0.3 private/non-fiat currency
+    namespace.
+  - TASK-115 through TASK-121 are complete as NOT APPLICABLE under the
+    research-gated follow-up protocol; no false implementation claim is made.
+- Traceability:
+  - No new requirements or vectors were added. Existing Money traceability
+    remains unchanged for closed Draft 0.1 plus Draft 0.2 Money Rates and
+    Allocation behavior.
+  - `conformance/traceability.md` now records the explicit Draft 0.3 deferral
+    status for portability topics.
+- Verification:
+  - Node v24.15.0 / npm 11.12.1 were available in the machine environment.
+  - `npm run build --workspaces` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspace @finkore/typescript -- --run test/money` exited 0
+    with 9 files / 52 tests passed.
+  - `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0
+    with 1 file / 15 tests passed.
+  - `npm run test --workspaces` exited 0 with runner 10 files / 110 tests, core
+    40 files / 371 tests, and adapter 1 file / 15 tests passed.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json --suite money`
+    exited 0 with Money 83 passed, 0 failed, 0 unsupported, 0 infrastructure
+    errors.
+  - Full conformance exited 0 with 244 passed, 0 failed, 0 unsupported, 0
+    infrastructure errors across Money 83, Workflow 41, Audit 29, Approvals 66,
+    and Entities 25.
+  - `git diff --check` exited 0.
+- Mutation:
+  - No new Money runtime behavior was accepted, so no new mutation target was
+    created for TASK-115 through TASK-121.
+  - Latest applicable complete core mutation evidence remains
+    `implementations/typescript/core/reports/mutation/mutation.json` from
+    TASK-108: 98.28% aggregate, with existing Money critical mutants covered by
+    the closed Draft 0.1 plus Draft 0.2 Money mutation suite.
+- Completion applicability:
+  - Updated Draft 0.3 research decisions, review snapshot, implementation plan,
+    traceability deferred-status wording, execution evidence, and backlog.
+  - No `/spec/money`, conformance vectors, runner metadata, adapter source,
+    TypeScript public API/JSDoc, root README, AGENTS.md, or CoreDoc change was
+    required because the research disposition deferred normative behavior.
+- Result:
+  - READY FOR TASK-122.

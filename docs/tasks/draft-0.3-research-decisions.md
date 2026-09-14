@@ -785,3 +785,93 @@ privacy controls beyond the portable diagnostic boundary. TASK-103 may publish
 conformance vectors from these accepted requirements, and TASK-104 through
 TASK-107 may implement the TypeScript core and translation-only adapter support
 only within this scope.
+
+## Money Portability Research Packet
+
+### TASK-111 through TASK-114 - Money Portability Research Decisions
+
+- Status: COMPLETE — research recorded; Draft 0.3 normative follow-up DEFERRED.
+- Date: 2026-09-14.
+- Decision authority: project maintainer, through the instruction to run the
+  complete Draft 0.3 Money Portability Research backlog slice.
+- Analysis attribution: assistant analysis of the required technical,
+  domain/accounting, and security topics, using the primary sources listed
+  below. No external reviewer or professional credential is represented.
+- Exact reviewed artifact:
+  [SHA-256 manifest](review-snapshots/task-111-114-money-portability.json).
+- External review: NOT EXTERNALLY REVIEWED. Future community, accounting,
+  language-implementation, and security review may challenge these decisions by
+  source URL, stable FinKore requirement ID, and artifact hash.
+
+#### Primary Sources and Local Probes
+
+| Topic | Source / probe | Finding |
+| --- | --- | --- |
+| TypeScript / ECMAScript numeric surface | ECMAScript 2024 BigInt type: `https://tc39.es/ecma262/2024/multipage/ecmascript-data-types-and-values.html#sec-ecmascript-language-types-bigint-type`; TypeScript basic types: `https://www.typescriptlang.org/docs/handbook/basic-types.html`; TC39 Decimal proposal: `https://github.com/tc39/proposal-decimal` | TypeScript exposes JavaScript `number` and `bigint`. BigInt is integer-only and arbitrary-width; JavaScript exact decimal remains proposal work, not a standardized runtime primitive. |
+| Java decimal capability | Oracle Java `BigDecimal`: `https://docs.oracle.com/en/java/javase/26/docs/api/java.base/java/math/BigDecimal.html`; local Java 11 source-file probe | `BigDecimal` is arbitrary-precision decimal over an arbitrary-precision unscaled integer and a bounded 32-bit scale. Exact non-terminating division throws unless a rounding mode/context is supplied. |
+| Go numeric capability | Go `math/big`: `https://pkg.go.dev/math/big` | Go standard library provides arbitrary-precision `Int`, `Rat`, and binary `Float`, but not a built-in base-10 `BigDecimal` equivalent. FinKore decimal behavior would need an implementation-specific decimal model or careful rational-backed representation. |
+| .NET decimal capability | Microsoft `System.Decimal`: `https://learn.microsoft.com/en-us/dotnet/api/system.decimal?view=net-10.0`; Microsoft `System.Numerics.BigInteger`: `https://learn.microsoft.com/en-us/dotnet/api/system.numerics.biginteger?view=net-10.0` | `decimal` is financial-friendly but fixed: 96-bit integer with scale 0 through 28 and finite range. `BigInteger` has no theoretical integer bound but is not decimal by itself. |
+| ISO currency metadata | ISO 4217 overview: `https://www.iso.org/iso-4217-currency-codes.html` | ISO 4217 publishes alphabetic/numeric currency codes and shows minor-unit relationships for currencies that have minor units; amendments are maintained by the ISO Maintenance Agency Secretariat at SIX. |
+
+Local probe results:
+
+```text
+Node v24.15.0:
+  10n ** 120n + 10n ** 120n has 121 decimal digits
+  1n / 3n evaluates to 0n
+  mixing number and bigint in arithmetic throws TypeError
+
+Java 11 source-file launcher:
+  BigDecimal("1" + "0".repeat(120)).add(BigDecimal.ONE) has 121 digits
+  BigDecimal("1.2300").scale() is 4
+  BigDecimal.ONE.divide(new BigDecimal("3")) throws ArithmeticException
+  rounded divide with HALF_EVEN at scale 2 returns 0.33
+```
+
+Go and .NET toolchains were not present in the local environment, so no local
+runtime probe was executed for those languages. The reviewed primary source
+APIs are sufficient for this research decision because the task requires a
+capability matrix and scoped disposition, not a cross-language proof build.
+
+#### Capability Matrix
+
+| Platform | Exact decimal strategy available from primary/runtime sources | Scale / exponent | Overflow / limit implication | FinKore Draft 0.3 implication |
+| --- | --- | --- | --- | --- |
+| TypeScript | No standardized exact decimal primitive; current FinKore TypeScript implementation uses decimal strings and BigInt-backed integer arithmetic internally. | BigInt has no decimal scale; scale is library/model metadata. | BigInt avoids fixed-width integer overflow but remains memory/resource bounded in practice. | Existing implementation can preserve current vectors, but a portable language-level precision floor would describe FinKore's custom model, not TypeScript itself. |
+| Java | `BigDecimal` supports arbitrary-precision signed decimal values. | Decimal scale is a 32-bit integer. | Unscaled value is arbitrary precision; scale overflow/underflow can throw. | Java can naturally host current semantics, but its bounded scale argues against claiming mathematically unbounded portable scale. |
+| Go | Standard `math/big` supports arbitrary `Int`, exact `Rat`, and rounded binary `Float`; no standard decimal type. | Decimal scale must be implemented above `Int`/`Rat` or by a third-party decimal package. | Big values are resource bounded; Float precision is explicit and rounded. | A Go port can implement FinKore, but Draft 0.3 should not prescribe a Go-specific decimal package or rational/decimal encoding. |
+| .NET | `decimal` is built in and suitable for many financial calculations; `BigInteger` can support custom decimal implementations. | Built-in `decimal` scale is 0 through 28. | Built-in range and scale are finite; BigInteger-backed custom decimals can exceed them. | Requiring unbounded or high fixed precision would force custom decimal implementation rather than idiomatic `decimal`; no minimum is accepted in this slice. |
+
+#### Decisions
+
+| Decision ID | Task | Disposition | Rationale |
+| --- | --- | --- | --- |
+| D03-MONEY-PORTABILITY-001 | TASK-111 | COMPLETE | The matrix shows materially different native decimal surfaces across TypeScript, Java, Go, and .NET. Reproducible probes were recorded for available Node and Java runtimes; Go/.NET probe recipes remain future proof work. |
+| D03-MONEY-PORTABILITY-002 | TASK-112 | DEFER | Draft 0.3 does not add unbounded semantics, a minimum declared capability, hard precision/scale limits, capability reporting, or a portable overflow/unsupported-precision error. A premature floor would either overfit Java/TypeScript custom implementations or exclude idiomatic .NET `decimal` and standard-library Go implementations. Current exact Money semantics and conformance vectors remain unchanged: implementations must not silently truncate, round, overflow, or narrow observed values that they claim to support. |
+| D03-MONEY-PORTABILITY-003 | TASK-113 | DEFER | Draft 0.3 does not add currency minor-unit metadata, provider freshness obligations, or recommended-scale behavior. ISO 4217 minor-unit data exists and changes through the Maintenance Agency process, but FinKore currently separates calculation scale from customary minor-unit scale. Adding metadata without a freshness and authority model would create false precision and accidental implicit rounding pressure. |
+| D03-MONEY-PORTABILITY-004 | TASK-114 | DEFER | Draft 0.3 does not define private/non-fiat currency namespaces. Current `MONEY-CURRENCY-*` scope remains ISO-oriented, and application-defined currencies remain composing-application concerns. Namespace syntax, collision boundaries, authority, spoofing resistance, and compatibility rules need a separate design review. |
+
+#### Conditional Follow-Up Disposition
+
+TASK-115 through TASK-121 are COMPLETE as NOT APPLICABLE for Draft 0.3. No
+Money portability normative proposal was approved, so no new Money requirements,
+vectors, adapter operations, public TypeScript APIs, portable errors, Agentic
+metadata, mutation targets, or traceability rows are created by this slice.
+
+The following behavior remains mandatory from the existing Money specification:
+
+- Money amounts remain exact base-10 decimal quantities where supported by an
+  implementation.
+- Portable serialized amounts remain decimal strings, not JSON numbers.
+- Rounding remains explicit and must not be inferred from currency minor-unit
+  metadata.
+- Currency compatibility remains based on the existing FinKore currency scope;
+  application-defined currencies are still outside the current normative scope.
+- Implementations must not claim support for values while silently truncating,
+  overflowing, rounding, coercing binary floats, or substituting unsupported
+  private currency semantics.
+
+Future work may introduce an explicit portability profile, capability discovery,
+an unsupported-precision portable error, an advisory minor-unit metadata profile,
+or a private currency namespace. Any such work needs new spec/vector/adapter/API
+tasks and review; it is not implied by closing this research track.

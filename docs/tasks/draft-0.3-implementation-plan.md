@@ -8,7 +8,7 @@ Draft 0.3 should deepen FinKore's usefulness for complex corporate financial wor
 - Portable condition research and, only if justified, a small deterministic condition model over explicit facts.
 - Workflow definition versioning and a small expected-state or expected-revision conflict contract.
 - Entity import and migration identity semantics that preserve stable FinKore identity without creating a master-data registry.
-- Money portability research for precision, overflow, minor-unit metadata, and private currency namespace decisions.
+- Money portability research for precision, overflow, minor-unit metadata, and private currency namespace decisions; Draft 0.3 research defers normative changes in these areas.
 - Conservative Agentic review for state-changing Approval and Workflow capabilities.
 
 Draft 0.3 should not implement delegation, escalation, tax primitives, interest, audit retention, ledger behavior, payments, BPMN, IAM/RBAC, or persistence unless research produces a narrow portable Core rule. Draft 0.2 closure has now been verified in this repository; every 0.3 milestone remains gated by that closed baseline and by the specific 0.3 research/review decisions named below.
@@ -104,8 +104,8 @@ Hard gate status: satisfied by TASK-066/TASK-067. Future 0.3 tasks must preserve
 | Cross-entity identity registry | Entities | RESEARCH FIRST | Default defer; may not belong in Core without concrete need. | Import identity research. | HIGH | Technical/security review. |
 | Audit provenance reason/source/correlation | Audit | RESEARCH FIRST | Useful for imports and advanced approvals, but must avoid tracing platform scope. | 0.2 relationship metadata. | MEDIUM | Security review. |
 | Audit retention | Audit | DEFER 0.4+ | Legal/security policy varies too much for 0.3. | Audit relationship maturity. | VERY HIGH | Legal/security review later. |
-| Money precision/overflow portability | Money | RESEARCH FIRST | Cross-language reliability issue that should be decided before v0.5. | 0.2 Money expansion. | HIGH | Technical review. |
-| Currency minor-unit metadata | Money | RESEARCH FIRST | Useful if kept separate from calculation scale; stale data risk is real. | 0.2 rounding/allocation. | MEDIUM | Domain review. |
+| Money precision/overflow portability | Money | DEFERRED after research | Cross-language reliability issue remains important, but no Draft 0.3 portable capability floor or overflow error is accepted. | 0.2 Money expansion. | HIGH | Technical review recorded in D03-MONEY-PORTABILITY-002. |
+| Currency minor-unit metadata | Money | DEFERRED after research | Useful if kept separate from calculation scale, but stale data and authority ownership require a future metadata profile. | 0.2 rounding/allocation. | MEDIUM | Domain review recorded in D03-MONEY-PORTABILITY-003. |
 | Private/non-ISO currency namespace | Money | RESEARCH FIRST | Important interoperability issue, but universal registry would be overreach. | Currency semantics. | HIGH | Domain/security review. |
 | Accountant-reviewed tax primitives | Financial utilities | RESEARCH FIRST | Only a jurisdiction-neutral core should enter FinKore. | Rate application. | VERY HIGH | Accountant review. |
 | Interest/accrual/day-count | Financial utilities | DEFER 0.4+ | Requires calendars, compounding, periods, and conventions. | Rate semantics. | VERY HIGH | Accountant review later. |
@@ -121,7 +121,7 @@ Recommended in 0.3:
 4. Workflow definition identity/version binding and import semantics.
 5. Portable expected-state or expected-revision conflict contract for Workflow/Entity operations, without persistence or locking.
 6. Entity revision identity refinement and import/migration identity mapping.
-7. Money portability research for precision/overflow limits, minor-unit metadata, and private currency namespaces, producing decisions or deferrals rather than automatic implementation.
+7. Money portability research for precision/overflow limits, minor-unit metadata, and private currency namespaces, producing decisions or deferrals rather than automatic implementation. TASK-111 through TASK-121 close this as explicit Draft 0.3 deferral with no normative Money change.
 8. Conservative Audit provenance research for source/correlation/reason metadata.
 9. Agentic review for new state-changing Approval and Workflow operations.
 10. Optional Java or Go proof-of-portability for a mature, isolated slice.
@@ -454,7 +454,7 @@ Optional: Step 15.
 | Review requirements under D03-REVIEW-001 | Technical review; domain/accounting review for minor-unit guidance. |
 | Stop conditions | `BLOCKED BY RESEARCH` if cross-language behavior cannot be characterized. |
 | Definition of Done | Clear decision: IN 0.3 spec follow-up, DEFER 0.4+, or REJECT, with rationale. |
-| Expected readiness status | Money portability decision ready for 0.3 closure or future backlog. |
+| Expected readiness status | Money portability decisions recorded; Draft 0.3 normative follow-up deferred to future backlog. |
 
 ### Step 11. Portable Condition Model Research
 
@@ -688,7 +688,7 @@ Include in CoreDoc:
 - Workflow definition versioning and expected-state/revision conflict semantics.
 - Condition model decision and security rationale.
 - Entity import/revision identity semantics.
-- Money portability decisions or explicit deferrals.
+- Money portability decisions are explicit deferrals under D03-MONEY-PORTABILITY-002 through D03-MONEY-PORTABILITY-004.
 - Agentic governance for state-changing operations.
 
 Keep as implementation detail:
