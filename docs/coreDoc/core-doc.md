@@ -1,8 +1,8 @@
 # FinKore CoreDoc
 
-**CoreDoc version:** v0.5
-**Document date:** 2026-09-12
-**Status:** Initial normative draft
+**CoreDoc version:** Draft 0.4
+**Document date:** 2026-09-15
+**Status:** Draft 0.4 foundation baseline
 
 ## Purpose
 
@@ -11,13 +11,17 @@ foundation-level obligations for financial meaning and control that FinKore doma
 specifications must refine. It is intended for accounting, audit, control,
 compliance, and financial-systems review.
 
+FinKore Core Draft versions identify the shared language-neutral behavioral
+baseline. They are distinct from conformance manifest/vector-file format
+versions and from language package versions.
+
 ## Scope
 
 The CoreDoc governs financial meaning, evidence, control behaviour, and history.
 It does not prescribe software design, storage, interfaces, programming
 languages, or conformance mechanics.
 
-FinKore v0.5 does not define posting, double-entry ledgers, accounting dates or
+FinKore Core Draft 0.4 does not define posting, double-entry ledgers, accounting dates or
 closed periods, tax, exchange-rate sourcing, reconciliation, settlement,
 accruals, depreciation, revenue recognition, statutory retention periods, or
 segregation-of-duties policy. This CoreDoc establishes none of them.
@@ -32,8 +36,8 @@ is a recommendation that may be departed from with documented justification.
 
 ## CORE-001 — Monetary Integrity
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-12
 
 Monetary information must retain the amount, currency, precision, and allocation
@@ -41,8 +45,8 @@ meaning needed to prevent a value from being silently changed or misapplied.
 
 ### CORE-001.1 — Amount and currency are inseparable
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -72,8 +76,8 @@ or exchange-rate policy.
 
 ### CORE-001.2 — Exact calculation and explicit rounding
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -102,8 +106,8 @@ This rule does not select a business's rounding, tax, or statutory convention.
 
 ### CORE-001.3 — Incompatible currencies are not combined or compared
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -124,7 +128,7 @@ currency identifier. A mismatch is a rejected domain outcome, not zero or equal.
 
 **Boundaries**
 
-FinKore v0.5 does not specify rate source, rate date, or foreign-exchange
+FinKore Core Draft 0.4 does not specify rate source, rate date, or foreign-exchange
 accounting.
 
 **Relevant FinKore domains**
@@ -133,8 +137,8 @@ accounting.
 
 ### CORE-001.4 — Allocation conserves the source value
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -164,8 +168,8 @@ for an allocation ratio.
 
 ## CORE-002 — Controlled Financial State
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 A financial subject's current status and permitted changes must be determined by
@@ -173,8 +177,8 @@ declared domain rules. A rejected action must not leave a partial outcome.
 
 ### CORE-002.1 — Lifecycle changes require a declared valid transition
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -203,8 +207,8 @@ This rule does not prescribe universal states or which events require a lifecycl
 
 ### CORE-002.2 — Validation is complete, fact-based, and non-mutating
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -234,8 +238,8 @@ business validations.
 
 ### CORE-002.3 — Rejected actions have no partial financial effect
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -266,8 +270,8 @@ logs, or network-failure handling.
 
 ### CORE-002.4 — Mutability is declared by state and field
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -298,8 +302,8 @@ terminal state, and does not select a domain's field policy.
 
 ## CORE-003 — Financial History and Evolution
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 Material financial history must be attributable, reconstructible, and resistant
@@ -308,8 +312,8 @@ the earlier financial fact.
 
 ### CORE-003.1 — A committed event preserves essential evidence
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -339,8 +343,8 @@ universal event-type catalogue.
 
 ### CORE-003.2 — Committed history is not destructively rewritten
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -370,8 +374,8 @@ record retention.
 
 ### CORE-003.3 — Corrections and related evolution preserve original facts
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -402,8 +406,8 @@ eligibility for these actions.
 
 ### CORE-003.4 — Redaction preserves evidence of history
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -434,8 +438,8 @@ or access-control policy.
 
 ## CORE-004 — Approval Integrity
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 An approval is a financial-control decision about a specified subject and facts.
@@ -443,8 +447,8 @@ It is distinct from technical access to submit an action.
 
 ### CORE-004.1 — Approval requirements state subject, eligibility, and outcome
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -475,8 +479,8 @@ maker-checker separation, delegated approval, or conflict-of-interest policy.
 
 ### CORE-004.2 — Missing facts do not create an approval exemption
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -505,8 +509,8 @@ This rule does not determine which approval conditions a business must impose.
 
 ### CORE-004.3 — Decisions remain tied to their facts and history
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -540,8 +544,8 @@ policy.
 
 ### CORE-004.4 — Chain status follows declared requirements and decisions
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -571,8 +575,8 @@ This rule does not define a universal sequence, rejection policy, or quorum.
 
 ## CORE-005 — Identifiable and Determinable Financial Meaning
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 Financial meaning must be attributable to stable subjects and declared facts. A
@@ -581,8 +585,8 @@ context.
 
 ### CORE-005.1 — Continuing financial subjects retain stable identity
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -611,8 +615,8 @@ This rule does not require a global identifier format or universal identity scop
 
 ### CORE-005.2 — Materially distinct conditions remain distinguishable
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -643,8 +647,8 @@ every possible form of missing information.
 
 ### CORE-005.3 — Evaluation follows declared facts and context
 
-**Introduced:** v0.5
-**Last updated:** v0.5
+**Introduced:** Draft 0.4
+**Last updated:** Draft 0.4
 **Last updated on:** 2026-09-10
 
 **Rule**
@@ -685,6 +689,21 @@ specifications define precise scope and behaviour; conformance verifies observab
 requirements; implementations realise that behaviour. A lower layer may refine a
 CoreDoc rule but shall not silently contradict it.
 
+When labels differ, `/spec` remains authoritative for precise domain behavior,
+and this CoreDoc remains authoritative for foundation-level rules and their
+normative evolution. `/conformance` is executable evidence for observable
+requirements; it is not a second specification. `/agentic` describes
+machine-understandable operation semantics and must reference, not replace,
+`/spec`. Language implementations, including TypeScript, are implementation
+evidence and regression oracles, not sources of financial semantics.
+
+FinKore Core Draft 0.4 is the current shared behavioral stabilization baseline.
+Draft 0.5 is reserved for the later Python and Java implementation milestone and
+must not be inferred from this CoreDoc. The conformance format value `0.1`
+continues to identify manifest and vector syntax compatibility unless that
+syntax changes. TypeScript, runner, and future Python or Java package versions
+remain independently governed implementation-package versions.
+
 ## Evolution of CoreDoc
 
 Core Principle and Financial Rule identifiers are stable references. A CORE-XXX
@@ -714,6 +733,34 @@ Historical and current release summaries are indexed in
 [FinKore Release Notes](../releases/README.md). A release note does not override
 CoreDoc or `/spec`.
 
+## Draft 0.4 decision and review record
+
+Draft 0.4 foundation stabilization accepted the authority and version taxonomy
+recorded in the [Draft 0.4 Foundation Plan](../plans/draft-0.4-foundation-task-list.md):
+FinKore Core Draft 0.4 names the shared specification/CoreDoc baseline; Draft
+0.5 is the future Python and Java implementation milestone; conformance format
+and language package versions are separate compatibility dimensions.
+
+Material findings during Draft 0.4 review must record:
+
+- finding classification and owner;
+- affected `CORE-*`, specification requirement, conformance vector, Agentic
+  operation, or documentation identifiers;
+- exact artifact revision reviewed;
+- domain, accounting, technical, security, and privacy analysis required by the
+  finding scope;
+- alternatives considered, recommendation, compatibility impact, and
+  maintainer acceptance;
+- whether a decision supersedes earlier normative meaning and where the
+  superseded meaning remains recoverable; and
+- factual external-review status.
+
+Release-level implementation results, coverage, mutation reports, and
+conformance pass/fail evidence belong in the release note. No review credential,
+community signoff, independent review, or external acceptance may be inferred
+unless it is explicitly recorded. A material semantic finding cannot close as an
+editorial correction.
+
 ## External review
 
 Reviewers may challenge a Financial Rule by its stable identifier. A challenge
@@ -721,13 +768,31 @@ may identify an accounting counterexample, control weakness, jurisdictional
 limitation, ambiguity, missing exception, or proposed replacement. Agreement with
 one rule does not imply approval of the CoreDoc as a whole.
 
-## Relationship to FinKore v0.5
+## Relationship to FinKore Core Draft 0.4
 
 This draft is limited to the current Money, Workflow, Audit, Approvals, and
 Financial Entities specifications. It makes no claim that unspecified future
 domains or policy choices have already been standardised.
 
-### Draft 0.3 implementation touchpoints
+### Draft 0.4 foundation scope and deferred topics
+
+Draft 0.4 stabilizes the existing Draft 0.1 through Draft 0.3 Money, Workflow,
+Audit, Approvals, and Entities behavior. It does not add new financial domains,
+Python or Java production code, or previously deferred financial capabilities.
+Open or deferred topics remain outside Draft 0.4 unless a later accepted finding
+shows that one blocks an unambiguous implementation of already accepted
+behavior.
+
+Current deferred topics include private/non-fiat currency namespace design,
+minor-unit metadata policy, decimal precision floors, overflow and capability
+reporting, standardized Audit provenance fields, portable condition expression
+syntax, Workflow migration and distributed version coordination, approval
+delegation and escalation, dynamic approver resolution, broader identity
+registries, concrete ledger/correction posting effects, post-finalization
+metadata policy, distributed audit total ordering, and future ledger,
+reconciliation, payment, tax, and settlement domains.
+
+### Draft 0.3 implementation touchpoints retained in Draft 0.4
 
 Draft 0.3 domain specifications refine this CoreDoc without introducing new
 CoreDoc rule identifiers:

@@ -2,6 +2,10 @@
 
 Adapter from FinKore conformance operation IDs to the TypeScript reference implementation.
 
+Draft 0.4 stabilizes this adapter contract for the existing Draft 0.1 through
+Draft 0.3 behavior. It keeps conformance-local fixtures separate from production
+API requirements and does not add Python or Java conformance claims.
+
 This milestone supports:
 
 - `finkore.money.add`

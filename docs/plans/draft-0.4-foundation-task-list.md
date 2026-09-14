@@ -31,8 +31,8 @@ later evolution deliberate and traceable.
   0.4 specification finding.
 - Python and Java readiness reviews are mandatory Draft 0.4 work, but Python and
   Java implementation begins in Draft 0.5.
-- The current CoreDoc `v0.5` label is incorrect for the repository's release
-  sequence. Draft 0.4 will align the CoreDoc title metadata, rule
+- The pre-Draft-0.4 CoreDoc `v0.5` label is incorrect for the repository's
+  release sequence. Draft 0.4 will align the CoreDoc title metadata, rule
   `Introduced`/`Last updated` metadata, status, and current-release references to
   Draft 0.4. Draft 0.5 is reserved for the later Python and Java implementation
   milestone.
@@ -54,10 +54,11 @@ The starting point is the closed Draft 0.3 repository summarized in
 - The manifest contains 244 vectors, all passing through the TypeScript
   conformance adapter at Draft 0.3 closure.
 - Money, Workflow, Audit, Approvals, and Entities are the existing domains.
-- The CoreDoc contains `CORE-001` through `CORE-005` but incorrectly identifies
-  itself and its rules as `v0.5`, while current repository status identifies
-  FinKore Core as Draft 0.3. Draft 0.4 will correct the CoreDoc to Draft 0.4 and
-  document the separate version dimensions before other stabilization edits.
+- The CoreDoc contains `CORE-001` through `CORE-005` but, at Draft 0.4 planning
+  start, incorrectly identified itself and its rules as `v0.5`, while the
+  then-current repository status identified FinKore Core as Draft 0.3. Draft 0.4
+  will correct the CoreDoc to Draft 0.4 and document the separate version
+  dimensions before other stabilization edits.
 - Draft 0.3 explicitly deferred Money portability limits and metadata, Audit
   provenance, portable condition expressions, Workflow migration, delegation,
   escalation, broader identity registries, and other future domains.
@@ -153,8 +154,8 @@ not choose the behavior that happens to match TypeScript.
 Recommended status block:
 
 ```text
-NEXT TASK: TASK-167
-LAST COMPLETED: TASK-166 (Draft 0.3)
+NEXT TASK: TASK-172
+LAST COMPLETED: TASK-171 (Milestone A — Foundation and Authority)
 BLOCKED ON: NONE
 ```
 
@@ -171,7 +172,7 @@ Completion:
 
 ## 8. Milestone Dashboard
 
-- [ ] Foundation and authority: TASK-167–TASK-171
+- [x] Foundation and authority: TASK-167–TASK-171
 - [ ] CoreDoc alignment: TASK-172–TASK-176
 - [ ] Domain specification stabilization: TASK-177–TASK-185
 - [ ] Cross-language portability contract: TASK-186–TASK-193
@@ -246,7 +247,7 @@ serially.
 
 ### Milestone A — Foundation and Authority
 
-### - [ ] TASK-167 — Refresh the Closed Draft 0.3 Baseline
+### - [x] TASK-167 — Refresh the Closed Draft 0.3 Baseline
 
 **Depends on:** TASK-166.
 
@@ -266,7 +267,7 @@ are identified rather than copied from TASK-166; no normative behavior changes.
 **Stop:** Any regression, uncovered mandatory requirement, blocking spec gap, or
 critical surviving mutant blocks reliance on the Draft 0.3 baseline.
 
-### - [ ] TASK-168 — Lock Draft 0.4 Scope and Deferred Topics
+### - [x] TASK-168 — Lock Draft 0.4 Scope and Deferred Topics
 
 **Depends on:** TASK-167.
 
@@ -281,7 +282,7 @@ Draft 0.3 release note, conformance gap notes, CoreDoc boundaries, READMEs, and
 **Acceptance:** No deferred feature silently becomes 0.4 work; each existing
 domain and artifact layer is included in the stabilization review.
 
-### - [ ] TASK-169 — Align Authority, Release, Draft, and Format Version Taxonomy
+### - [x] TASK-169 — Align Authority, Release, Draft, and Format Version Taxonomy
 
 **Depends on:** TASK-168.
 
@@ -308,7 +309,7 @@ implies Python or Java implementation already exists.
 value would erase a published provenance fact, preserve that fact and request a
 specific metadata migration decision rather than silently rewriting history.
 
-### - [ ] TASK-170 — Define the Draft 0.5 Implementation-Readiness Contract
+### - [x] TASK-170 — Define the Draft 0.5 Implementation-Readiness Contract
 
 **Depends on:** TASK-169.
 
@@ -323,7 +324,7 @@ verification. Separate mandatory readiness from desirable later enhancements.
 **Acceptance:** The checklist can be applied independently to both Python and
 Java without requiring either language's architecture to be chosen in Draft 0.4.
 
-### - [ ] TASK-171 — Establish Draft 0.4 Review and Decision Governance
+### - [x] TASK-171 — Establish Draft 0.4 Review and Decision Governance
 
 **Depends on:** TASK-169.
 
@@ -337,6 +338,15 @@ implementation and verification facts belong in the release note, not CoreDoc.
 
 **Acceptance:** No review credential or signoff is inferred; external review
 status is factual; material semantic findings cannot close as editorial edits.
+
+**Completion:** COMPLETE. Milestone A is recorded in
+[Draft 0.4 release notes](../releases/draft-0.4.md) and
+[CoreDoc](../coreDoc/core-doc.md). Findings were classified as EDITORIAL and
+CLARIFICATION only; no normative financial behavior changed. Verification used
+source revision `68e576b` with a clean starting worktree: build, strict
+TypeScript, unit tests, coverage, full conformance, TypeScript core mutation,
+runner mutation, and license validation passed. No configured Markdown link
+checker was found. Next task: TASK-172.
 
 ### Milestone B — CoreDoc Alignment
 
@@ -928,12 +938,11 @@ is hidden by a deferral or by the TypeScript reference behavior.
 - [ ] Final documentation distinguishes implemented, passing conformance,
   unsupported, not yet specified, and deferred behavior.
 
-## 12. Recommended First Task
+## 12. Next Task
 
 ```text
-NEXT CODEX TASK: TASK-167 — Refresh the Closed Draft 0.3 Baseline
+NEXT CODEX TASK: TASK-172 — Inventory CoreDoc Rules and Metadata
 ```
 
-TASK-167 is evidence-only. It must not begin correcting specifications or
-CoreDoc. Its result determines whether Draft 0.4 can safely proceed from the
-recorded TASK-166 closure.
+TASK-172 begins Milestone B. It must use the completed Milestone A authority,
+version, review, and evidence records before changing CoreDoc rule substance.

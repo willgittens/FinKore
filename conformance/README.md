@@ -6,7 +6,16 @@
 
 > In financial software, a passing test suite is useful only if it reliably rejects broken behavior.
 
-This directory is the language-independent executable evidence for FinKore Draft 0.1 plus the implemented Draft 0.2 Money Rates, Money Allocation, Audit Relationships, Entity Evolution, and Approval Validity slices, the implemented Draft 0.3 Approval Composition slice, the implemented Draft 0.3 Workflow definition/version identity, import, instance binding/mismatch, and conflict slice, and the implemented Draft 0.3 Entity Revision and Import slice. The specification remains the source of truth. Vectors describe observable domain behavior; they do not prescribe APIs, classes, exceptions, storage, or frameworks.
+This directory is the language-independent executable evidence for FinKore Draft
+0.1 plus the implemented Draft 0.2 Money Rates, Money Allocation, Audit
+Relationships, Entity Evolution, and Approval Validity slices, the implemented
+Draft 0.3 Approval Composition slice, the implemented Draft 0.3 Workflow
+definition/version identity, import, instance binding/mismatch, and conflict
+slice, and the implemented Draft 0.3 Entity Revision and Import slice. Draft
+0.4 stabilizes this behavioral baseline and authority model; it does not add new
+vector syntax or new financial behavior. The specification remains the source of
+truth. Vectors describe observable domain behavior; they do not prescribe APIs,
+classes, exceptions, storage, or frameworks.
 
 ## Scope and discovery
 
@@ -14,9 +23,10 @@ This directory is the language-independent executable evidence for FinKore Draft
 
 The manifest and vector-file version fields describe syntax compatibility, not
 the FinKore Draft release number. Draft 0.2 and later vectors may remain on
-format `0.1` while they use the same manifest and vector-file shape. Draft scope
-is determined by the manifest contents, referenced requirement IDs, and
-traceability status.
+format `0.1` while they use the same manifest and vector-file shape; Draft 0.4
+keeps format `0.1` because no manifest or vector-file syntax change is made.
+Draft scope is determined by the manifest contents, referenced requirement IDs,
+and traceability status.
 
 The initial suites are grouped by specification behavior:
 

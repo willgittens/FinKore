@@ -4,7 +4,7 @@
 
 A capability states that an implementation exposes a named FinKore Operation.
 Its descriptor makes the operation Discoverable, Understandable, and Governable.
-Invocation bindings are implementation-specific and outside Draft 0.3.
+Invocation bindings are implementation-specific and outside Draft 0.4.
 
 An adapter MAY expose only a subset of the registry. A Money-only implementation,
 for example, may expose Money operations such as `finkore.money.add`,
@@ -29,8 +29,9 @@ applicable vectors and requirements before a client relies on a conformance
 claim. The same principle applies to promoted operations such as
 `finkore.money.applyrate`, `finkore.money.allocate`,
 `finkore.workflow.transition`, and `finkore.entity.evolution.supersede`.
-Draft 0.3 version/conflict refinements to `finkore.workflow.transition` are part
-of that canonical operation's current descriptor; `workflow.import` and
+Draft 0.4 retains the version/conflict refinements to
+`finkore.workflow.transition` as part of that canonical operation's current
+descriptor; `workflow.import` and
 `entity.import` remain conformance-local.
 
 ## Suitability for autonomy
@@ -44,6 +45,6 @@ conformance status. FinKore Core does not assign subjective `LOW`, `MEDIUM`,
 Some operations may be suitable for autonomous execution. Others may require
 human confirmation, an Approval, authorization, or application policy. Draft
 0.3 exposes available facts and does not impose human confirmation on every
-mutation. Draft 0.3 keeps Approval composition/lifecycle fixtures
+mutation. Draft 0.4 keeps Approval composition/lifecycle fixtures
 conformance-local and adds no AI-specific bypass or universal execution decision
 for clients.

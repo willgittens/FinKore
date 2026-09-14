@@ -1047,9 +1047,9 @@ When encountering ambiguity:
 
 Prefer:
 
-> This behavior is not currently defined by FinKore Draft 0.1.
+> This behavior is not currently defined by FinKore Core Draft 0.4.
 
-over inventing behavior.
+Prefer that kind of explicit gap statement over inventing behavior.
 
 Correct incompleteness is better than false financial precision.
 

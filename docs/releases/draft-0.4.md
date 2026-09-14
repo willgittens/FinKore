@@ -14,8 +14,8 @@ The active work is tracked in the
 
 ## Planned scope
 
-- Resolve authority and version terminology, including correction of the current
-  CoreDoc `v0.5` label to Draft 0.4.
+- Resolve authority and version terminology, including correction of the
+  pre-Draft-0.4 CoreDoc `v0.5` label to Draft 0.4.
 - Establish bidirectional CoreDoc/specification traceability.
 - Stabilize shared conventions and the existing Money, Workflow, Audit,
   Approvals, and Entities specifications.
@@ -38,14 +38,123 @@ The active work is tracked in the
 
 ## Starting baseline
 
-Draft 0.4 starts from the closed Draft 0.3 baseline of 381 normative clauses and
-244 passing manifest-listed vectors. These figures must be refreshed before
-Draft 0.4 relies on them.
+Draft 0.4 baseline refresh was performed on repository revision `68e576b`
+(`Organizing Release Notes`) with a clean worktree before Draft 0.4 edits began.
+
+Inventory:
+
+- Specification Markdown files: 47.
+- Unique specification requirement IDs indexed in
+  [traceability](../../conformance/traceability.md): 381.
+- Traceability status: 312 covered, 69 not directly testable, 0 partial, 0
+  uncovered, 0 deferred, and 0 blocking specification gaps.
+- Conformance format: `finkoreConformance` `0.1`.
+- Manifest-listed vector files: 16.
+- Manifest-listed vectors: 244 total, including 217 mutation-sensitive vectors.
+- Manifest-listed operation labels: 35 total; 20 canonical `finkore.*`
+  operations and 15 conformance-local operations.
+- Agentic registry: 20 canonical operations with matching descriptor sections.
+- Portable error codes referenced across specification, conformance, Agentic
+  contract, runner, adapter, and TypeScript core source: 31.
+- Node toolchain used for baseline verification: Node `v24.15.0`, npm `11.12.1`.
+
+Current deferred or non-capability topics remain outside Draft 0.4 unless a
+later accepted finding shows that one blocks an unambiguous implementation of
+already accepted behavior. They include private/non-fiat currency namespace
+design, minor-unit metadata policy, decimal precision floors, overflow and
+capability reporting, standardized Audit provenance, portable condition
+expressions, Workflow migration and distributed coordination, approval
+delegation/escalation/dynamic approver resolution, broader identity registries,
+concrete ledger or correction posting effects, post-finalization metadata
+policy, distributed audit total ordering, and future ledger, reconciliation,
+payment, tax, and settlement domains.
+
+## Authority and version taxonomy
+
+Draft 0.4 records the accepted foundation decision that FinKore Core Draft
+versions name the shared specification/CoreDoc behavioral baseline. The
+conformance manifest/vector-file format and language package versions are
+separate compatibility dimensions:
+
+- CoreDoc and `/spec` are aligned to FinKore Core Draft 0.4 terminology.
+- Draft 0.5 is reserved for the later Python and Java implementation milestone.
+- Conformance format `0.1` remains a syntax compatibility version because the
+  manifest and vector-file shapes did not change.
+- TypeScript package versions remain implementation-package versions and do not
+  define the FinKore Core draft.
+- No Draft 0.4 artifact claims Python or Java implementation or conformance.
+
+When labels differ, `/spec` is authoritative for precise domain behavior,
+CoreDoc is authoritative for foundation rules and their evolution,
+`/conformance` is executable evidence, `/agentic` describes canonical operation
+semantics, and language implementations are evidence and regression oracles, not
+sources of financial semantics.
+
+## Draft 0.5 implementation-readiness contract
+
+Python and Java implementation work may begin in Draft 0.5 only after Draft 0.4
+records evidence that a prospective implementer can determine, for each
+supported capability:
+
+- authoritative behavior and stable requirement IDs;
+- portable value representations, optionality, nullability, ordering,
+  timestamps, identity, revisions, versions, and deterministic context;
+- exact success outputs, portable errors, failure atomicity, mutation behavior,
+  preconditions, postconditions, and unsupported behavior;
+- canonical versus conformance-local operation labels;
+- conformance adapter obligations and normalized-result boundaries;
+- test vectors for directly testable requirements and justification for `NOT
+  DIRECTLY TESTABLE` classifications;
+- documentation and examples that do not require reading TypeScript source to
+  infer financial semantics; and
+- verification evidence for the TypeScript reference oracle, including build,
+  typecheck, unit tests, conformance, coverage, mutation, and any available
+  documentation-link checks.
+
+Desirable later enhancements, such as machine-readable operation manifests,
+additional property-test guidance, richer discovery metadata, or language-
+specific architecture recommendations, are not prerequisites for beginning
+Draft 0.5 language implementation work unless a Draft 0.4 finding reclassifies
+one as portability-blocking.
+
+## Review and decision governance
+
+Draft 0.4 adapts the Draft 0.3 review model for a stabilization release.
+Material findings must be classified under the categories in the foundation
+plan and must record affected identifiers, owner, reviewed revision, domain,
+accounting, technical, security, and privacy analysis, alternatives,
+recommendation, compatibility impact, maintainer acceptance, superseded
+normative decisions where applicable, and factual external-review status.
+
+CoreDoc is the durable record for foundation-level normative evolution. The
+affected specification remains the home of precise domain behavior. Release
+notes record implementation and verification facts. Developer plans organize
+work but are not release evidence or normative history.
+
+No external review, independent review, community signoff, or reviewer
+credential is implied by Draft 0.4 unless explicitly recorded. Material semantic
+findings cannot close as editorial-only edits.
 
 ## Verification
 
-Not yet recorded. This section will be populated only with completed, reproducible
-Draft 0.4 closure evidence.
+Baseline verification for Milestone A:
+
+| Check | Command | Result |
+| --- | --- | --- |
+| Build | `npm run build` | PASS |
+| Strict TypeScript | `npm run typecheck` | PASS |
+| Unit tests | `npm test` | PASS: runner 110/110, TypeScript core 371/371, TypeScript conformance adapter 15/15 |
+| Runner coverage | `npm run test:coverage -w @finkore/conformance-runner` | PASS: 98.31% statements, 95.29% branches, 100% functions, 98.75% lines |
+| TypeScript core coverage | `npm run test:coverage -w @finkore/typescript` | PASS: 99.09% statements, 98.69% branches, 100% functions, 99.49% lines |
+| Full conformance | `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json` | PASS: 244/244 vectors, 217/217 mutation-sensitive vectors |
+| TypeScript core mutation | `npm run test:mutation -w @finkore/typescript` | PASS: 98.28% total, 98.40% covered, 3129 killed, 16 timeout, 51 survived, 4 no coverage, 0 errors |
+| Runner mutation | `npm run test:mutation -w @finkore/conformance-runner` | PASS: 99.73% total and covered, 367 killed, 1 survived, 0 no coverage, 0 errors |
+| License metadata | `npm run license:check` | PASS |
+| Documentation links | repository script/tool search | No configured Markdown link checker was found |
+
+The first sandboxed TypeScript core mutation attempt failed before testing with
+`listen EPERM` when Stryker tried to bind its local logging server. The same
+command was rerun outside the sandbox and passed.
 
 ## Release status rule
 

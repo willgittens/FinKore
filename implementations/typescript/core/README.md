@@ -3,6 +3,10 @@
 TypeScript reference implementation for the current FinKore Money, Workflow,
 Audit, Approvals, and Entities milestones.
 
+Draft 0.4 is a foundation-stabilization baseline for the existing Draft 0.1
+through Draft 0.3 behavior. It does not add TypeScript financial behavior and it
+does not claim Python or Java implementation or conformance.
+
 FinKore Money Draft 0.1 is fully implemented by this TypeScript reference implementation. The Draft 0.2 Money Rates and Money Allocation slices are also implemented. These statements apply only to the named Money specification slices; they do not imply that other FinKore domains are complete.
 
 FinKore Workflow Draft 0.1 is fully implemented by the TypeScript reference implementation. Draft 0.3 Workflow definition/version identity, immutable instance binding/mismatch, import, and expected-state/revision conflict semantics are specified, vector-covered, implemented in core, and supported by the TypeScript conformance adapter. This statement applies only to the implemented Workflow slice; it does not imply that the full Workflow specification, Entities, or other FinKore domains are complete.
