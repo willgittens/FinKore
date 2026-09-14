@@ -34,6 +34,12 @@
 
 **Entity Revision** — A stable, opaque identity for a declared observation or version of a continuing Financial Entity; it is distinct from stable Entity identity.
 
+**Entity Conflict Version** — An optional opaque precondition token for detecting stale Entity observations; it is distinct from Entity Revision and stable Entity identity.
+
+**Entity Identity Mapping** — Explicit evidence relating an external Source Identity to a stable FinKore Entity identity during import or migration.
+
+**Entity Import** — Validation and observation of a supplied existing Financial Entity, optional revision history, optional conflict version, and explicit source identity mapping.
+
 **Evolution Relation** — A stable relationship between a source Financial Entity and a related Entity, Revision, or evolution outcome.
 
 **Financial Entity** — A domain concept distinguished by stable identity and continuity over time whose lifecycle or values represent financially relevant activity.
@@ -55,6 +61,8 @@
 **Mutation** — A domain-recognized change to an entity's current data or state.
 
 **State** — A named lifecycle condition that determines currently permitted behavior.
+
+**Source Identity** — An opaque external or legacy identifier supplied during import; it does not replace stable FinKore Entity identity.
 
 **Transition** — A validated change from one workflow State to another.
 

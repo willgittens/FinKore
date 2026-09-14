@@ -15,7 +15,10 @@ FinKore Entities Draft 0.1 is fully implemented by the TypeScript reference
 implementation for Entity Identity, Lifecycle, Mutability, and the current
 Validation milestone. The Draft 0.2 Entity Evolution slice is also implemented
 for correction, reversal, void, supersession, evolution history observations,
-and required Audit evidence. This covers caller-supplied stable Entity identity,
+and required Audit evidence. The Draft 0.3 Entity Revision and Import slice is
+also implemented for source identity mapping, current and historical business
+revision observations, and distinct Entity Conflict Version preconditions. This
+covers caller-supplied stable Entity identity,
 declared identity scope, creation in the referenced Workflow initial state,
 exactly one current lifecycle state, valid directed lifecycle transitions,
 rejected transition failure atomicity, identity preservation through transitions
@@ -26,9 +29,9 @@ mutation results become observable, validation failure atomicity, safe
 validation findings, source fact preservation during evolution, duplicate
 evolution relation/reversal rejection, scope-specific supersession currentness,
 void-without-delete, and evolution/Audit failure atomicity. Generic validation
-rule engines, concrete Entity/Audit policy selection, versioning, optimistic
-locking, persistence, authorization, and concrete financial entity types remain
-outside this milestone.
+rule engines, concrete Entity/Audit policy selection, global identity
+registries, Workflow migration, persistence, authorization, and concrete
+financial entity types remain outside this milestone.
 
 This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact decimal and percentage Rate application, Money allocation by equal parts or positive integer ratios, exact compatible-currency numeric comparison, and explicit Money rounding.
 
@@ -171,6 +174,7 @@ their own condition rule and supply the explicit boundary result.
 
 - `FinancialEntity.create(definition, id, data)` validates the Entity type, identity scope, caller-supplied identity, referenced Workflow definition, and mutability declaration for the initial lifecycle state, then creates an Entity in the Workflow initial state.
 - `FinancialEntity.from(definition, entity)` reconstructs an existing Entity observation when its type and state match the supplied definition and Workflow.
+- `FinancialEntity.import(definition, importObservation)` validates an existing Entity import observation and preserves optional source identity mapping, current and historical Entity Revisions, and Entity Conflict Version preconditions without creating a registry or replacing stable identity.
 - `financialEntity.id` returns the stable Entity identity exactly as supplied.
 - `financialEntity.state` returns the exactly one current lifecycle state.
 - `financialEntity.transition(target)` applies a valid directed lifecycle transition through the referenced Workflow and returns a new Entity preserving identity, type, and data.

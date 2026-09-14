@@ -18,7 +18,9 @@ authorization, or legal cancellation policy.
 
 An **Entity Revision** is a stable, opaque identifier for a declared observation
 or version of a continuing Financial Entity's data or lifecycle State. A
-Revision is not the stable Entity identity.
+Revision is not the stable Entity identity. Draft 0.3 refines current,
+historical, import, and conflict-version distinctions in
+[Entity Revisions](revisions.md) and [Entity Import](import.md).
 
 An **Evolution Relation** is a stable, opaque relationship between one source
 Financial Entity and another Entity, Revision, or evolution outcome. The

@@ -745,3 +745,43 @@ concurrency, Workflow Instance Revision generation, state mapping across
 versions, or production interchange schemas. TASK-090 may publish conformance
 vectors from these accepted requirements, and TASK-091 may implement only the
 definition identity/version representation and validation subset.
+
+## Entity Revision and Import Review Packet
+
+### TASK-102 - Entity Import Domain and Security Review
+
+- Status: ACCEPTED for continued Draft 0.3 Entity Revision and Import
+  implementation.
+- Date: 2026-09-14.
+- Decision authority: project maintainer, through the instruction to run the
+  complete Draft 0.3 Entity Revision and Import backlog slice after TASK-098.
+- Analysis attribution: assistant analysis of the required domain/accounting,
+  technical, security, and privacy topics; no external reviewer or professional
+  credential is represented. Acceptance applies to the scoped specification
+  translation and implementation work, not to future registries, persistence,
+  authorization, concrete migrations, or Workflow migration decisions.
+- Exact reviewed artifact:
+  [SHA-256 manifest](review-snapshots/task-102-entity-revision-import.json).
+- External review: NOT EXTERNALLY REVIEWED. Future community, accounting,
+  audit, privacy, and security review may challenge these decisions by stable
+  requirement ID and artifact hash.
+
+The review covered the following obligations and resolutions:
+
+| Review topic | CoreDoc / canonical requirements | Finding and resolution |
+| --- | --- | --- |
+| Business revision identity | CORE-002.1, CORE-002.3, CORE-005.1, ENTITY-REVISION-001 to -007 | Entity Revision is caller/composing-domain supplied, stable, and opaque. It remains separate from stable Entity identity, source identifiers, display numbers, timestamps, storage counters, and conflict versions. |
+| Source identity and mapping ownership | CORE-005.1, ENTITY-IDENTITY-006, ENTITY-IMPORT-001 to -005 | Import preserves the supplied FinKore Entity identity and records explicit source identity mapping evidence when Source Identity exists. Mapping evidence is opaque and does not create a global registry, tenancy inference, deduplication, or source-format parser. |
+| Historical evidence preservation | CORE-002.3, ENTITY-REVISION-003 to -006, ENTITY-IMPORT-006, ENTITY-IMPORT-008 | Current and historical business revision observations, mapping evidence, Entity state, and optional conflict version are preserved as supplied. Failed import returns no partial imported observations. |
+| Conflict preconditions | CORE-002.2, ENTITY-REVISION-006, ENTITY-IMPORT-007 | Expected current state, expected business revision, and expected conflict version are optional exact preconditions. Mismatches reject with the existing Entity state conflict category and do not define persistence locks or distributed concurrency behavior. |
+| Portable errors and diagnostics | CORE-005.2, CORE-005.3, ENTITY-IMPORT-009, ENTITY-IMPORT-010, ENTITY-ERROR-004 | Existing `FINKORE_ENTITY_INVALID_IDENTITY` and `FINKORE_ENTITY_STATE_CONFLICT` are sufficient for this slice. Diagnostics may identify safe fields or categories, but must not expose source identity values, financial values, or implementation storage identifiers by default. |
+| Security and scope boundaries | ENTITY-IMPORT non-goals, ENTITY-REVISION non-goals | No authorization model, source ownership enforcement, persistence transaction, registry lookup, Workflow migration, concrete invoice/ledger logic, or audit event production is introduced by import. |
+
+No unresolved finding remains within this review's defined scope. The review
+does not approve concrete migration formats, storage/version generation policy,
+entity deduplication, cross-system master-data registry behavior, source-system
+trust or authorization policy, Workflow definition migration, or production data
+privacy controls beyond the portable diagnostic boundary. TASK-103 may publish
+conformance vectors from these accepted requirements, and TASK-104 through
+TASK-107 may implement the TypeScript core and translation-only adapter support
+only within this scope.

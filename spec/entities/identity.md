@@ -17,6 +17,10 @@ This document defines stable domain identity and continuity for a Financial Enti
 - **ENTITY-IDENTITY-005** — Two distinct entities MUST NOT share the same identifier within the same scope.
 - **ENTITY-IDENTITY-006** — Import or migration MUST preserve identity or record an explicit identity mapping.
 
+Draft 0.3 refines import mapping in [Entity Import](import.md). That refinement
+does not create a global registry or permit Source Identity to replace stable
+FinKore Entity identity.
+
 ## Invariants
 
 A Mutation, Transition, or other domain operation must not silently create a new identity for the same continuing Financial Entity.
@@ -40,4 +44,3 @@ The following JSON is illustrative and non-normative. It does not prescribe comm
 ## Open Questions
 
 - Should the specification define a common identity scope model across entity types and tenants?
-

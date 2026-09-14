@@ -198,6 +198,18 @@ export interface SerializedFinancialEntity {
 }
 
 /**
+ * Optional opaque Entity Conflict Version used for stale-observation
+ * preconditions.
+ *
+ * The value is distinct from Entity Revision, stable Entity identity, storage
+ * row identity, display numbers, and timestamps.
+ *
+ * @see ENTITY-REVISION-006
+ * @see ENTITY-IMPORT-006
+ */
+export type EntityConflictVersion = string
+
+/**
  * Stable identifier for a declared Entity Revision.
  *
  * A revision identifies one declared observation or version of a continuing
@@ -206,6 +218,93 @@ export interface SerializedFinancialEntity {
  * @see ENTITY-EVOLUTION-002
  */
 export type EntityRevisionIdentifier = string
+
+/**
+ * Revision observation preserved at an Entity import boundary.
+ *
+ * The revision qualifies one stable Entity identity and indicates whether the
+ * supplied revision is current for the import observation.
+ *
+ * @see ENTITY-REVISION-003
+ * @see ENTITY-REVISION-004
+ * @see ENTITY-IMPORT-006
+ */
+export interface EntityRevisionObservation {
+  /** Stable Entity type qualified by this revision. */
+  readonly type: EntityTypeIdentifier
+
+  /** Stable Entity identity qualified by this revision. */
+  readonly id: EntityIdentifier
+
+  /** Opaque business revision identity. */
+  readonly revision: EntityRevisionIdentifier
+
+  /** Whether this is the current revision for the import observation. */
+  readonly current: boolean
+}
+
+/**
+ * External or legacy identity supplied during Entity import.
+ *
+ * Source identity is opaque and never replaces stable FinKore Entity identity.
+ *
+ * @see ENTITY-IMPORT-001
+ * @see ENTITY-IMPORT-003
+ */
+export interface EntityImportSourceIdentity {
+  /** Opaque source-system identifier supplied by the caller. */
+  readonly sourceSystem: string
+
+  /** Opaque entity identifier in the source system. */
+  readonly sourceId: string
+}
+
+/**
+ * Explicit mapping evidence relating source identity to FinKore Entity identity.
+ *
+ * This is not a registry lookup or deduplication result; it is preserved
+ * caller-supplied continuity evidence.
+ *
+ * @see ENTITY-IDENTITY-006
+ * @see ENTITY-IMPORT-003
+ * @see ENTITY-IMPORT-004
+ */
+export interface EntityIdentityMapping extends EntityImportSourceIdentity {
+  /** Opaque mapping evidence identity supplied by the caller. */
+  readonly mappingId: string
+
+  /** Stable FinKore Entity identity reached by this mapping. */
+  readonly entity: {
+    readonly type: EntityTypeIdentifier
+    readonly id: EntityIdentifier
+  }
+}
+
+/**
+ * Result returned by a successful Entity import observation.
+ *
+ * The result preserves Entity identity, optional revision history, optional
+ * source identity mapping, and optional conflict version as distinct values.
+ *
+ * @see ENTITY-IMPORT-001
+ * @see ENTITY-IMPORT-006
+ */
+export interface EntityImportResult {
+  /** Imported Entity observation. */
+  readonly entity: SerializedFinancialEntity
+
+  /** Current business revision when supplied. */
+  readonly currentRevision?: EntityRevisionObservation
+
+  /** Historical business revisions preserved from the import observation. */
+  readonly historicalRevisions: readonly EntityRevisionObservation[]
+
+  /** Explicit source identity mapping evidence when supplied. */
+  readonly identityMapping?: EntityIdentityMapping
+
+  /** Optional stale-observation conflict token, distinct from business revision. */
+  readonly conflictVersion?: EntityConflictVersion
+}
 
 /**
  * Stable identifier for an Entity Evolution Relation.

@@ -44,6 +44,7 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('entity.evolution.void')).toBe(true)
     expect(adapter.supports('entity.transition')).toBe(true)
     expect(adapter.supports('entity.mutate')).toBe(true)
+    expect(adapter.supports('entity.import')).toBe(true)
     expect(adapter.supports('finkore.audit.append')).toBe(true)
     expect(adapter.supports('finkore.audit.replace')).toBe(true)
     expect(adapter.supports('finkore.audit.remove')).toBe(true)
@@ -335,7 +336,7 @@ describe('TypeScript conformance adapter', () => {
     expect(report.summary).toEqual({ total: 21, passed: 21, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
-  it('passes current Entity identity, lifecycle, mutability, validation, and evolution milestone vectors', async () => {
+  it('passes current Entity identity, lifecycle, mutability, validation, evolution, and import vectors', async () => {
     const report = await createConformanceRunner({
       manifestPath,
       adapter: createTypeScriptConformanceAdapter(),
@@ -360,8 +361,13 @@ describe('TypeScript conformance adapter', () => {
       'entity.evolution.audit-failure-001',
       'entity.evolution.correction.ineligible-001',
       'entity.evolution.void.ineligible-001',
+      'entity.import.identity-mapping-preserved-001',
+      'entity.import.missing-mapping-invalid-identity-001',
+      'entity.import.expected-state-conflict-001',
+      'entity.import.expected-revision-conflict-001',
+      'entity.import.expected-conflict-version-conflict-001',
     ] })
 
-    expect(report.summary).toEqual({ total: 20, passed: 20, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 25, passed: 25, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 })

@@ -83,6 +83,7 @@ These identifiers name observable behavior, not implementation methods.
 | `finkore.entity.evolution.reverse` | Record a Reversal relation with required Audit evidence. |
 | `finkore.entity.evolution.void` | Record a Void relation with required Audit evidence. |
 | `finkore.entity.evolution.supersede` | Record a Supersession relation with required Audit evidence. |
+| `entity.import` | Validate and observe an existing Entity with optional source identity mapping, business revision history, and conflict-version preconditions. |
 
 Logical fixtures in `input` are intentionally small declarative models. An adapter constructs any idiomatic implementation objects required to realize them. The fixtures do not define a production interchange format.
 
@@ -116,6 +117,11 @@ operations are promoted to canonical `finkore.entity.*` operation identifiers.
 They observe identity, lifecycle, mutability, validation, correction, reversal,
 void, supersession, revision, relation, currentness, and Audit evidence
 semantics defined by the Entity specifications.
+For Entities Draft 0.3, `entity.import` remains conformance-local pending the
+Draft 0.3 Agentic review. It observes import identity mapping, current and
+historical Entity Revision identity, Entity Conflict Version separation, and
+expected-state/revision/conflict-version preconditions without defining a
+registry, storage lock, or concrete migration format.
 
 ## Runner contract
 

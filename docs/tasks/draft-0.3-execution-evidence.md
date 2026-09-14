@@ -1523,3 +1523,101 @@ review prerequisite is superseded by D03-REVIEW-001 below.
     or CoreDoc change was required during this closure gate.
 - Result:
   - READY FOR TASK-099.
+
+### TASK-099 through TASK-110 - Entity Revision and Import
+
+- Status: COMPLETE.
+- Date: 2026-09-14.
+- Source revision inspected before slice work:
+  `ddd3a3a3e4be4ff11959fa06ad09be3a1a308df5`, with existing uncommitted Draft
+  0.3 changes from earlier slices in the working tree.
+- Result:
+  - Entity Revision and Import is closed for Draft 0.3.
+- Spec and review evidence:
+  - Added `spec/entities/revisions.md` with `ENTITY-REVISION-001` through
+    `ENTITY-REVISION-007`.
+  - Added `spec/entities/import.md` with `ENTITY-IMPORT-001` through
+    `ENTITY-IMPORT-010`.
+  - Updated Entity index, identity/evolution text, and glossary so business
+    revision, source identity mapping, and conflict version remain distinct.
+  - TASK-102 review evidence is accepted under D03-REVIEW-001 in
+    `docs/tasks/draft-0.3-research-decisions.md`; exact reviewed artifact is
+    `docs/tasks/review-snapshots/task-102-entity-revision-import.json`.
+  - External community/accounting/security/audit/privacy review remains NOT
+    EXTERNALLY REVIEWED and is not a Draft 0.3 blocker for this slice.
+- Conformance and adapter evidence:
+  - Added `conformance/entities/import.json` with 5 manifest-listed vectors for
+    identity preservation, explicit source mapping, invalid mapping, expected
+    state conflict, expected business revision conflict, and expected conflict
+    version conflict.
+  - Registered conformance-local `entity.import` in conventions and runner
+    metadata. It is intentionally not a canonical Agentic operation pending the
+    later Draft 0.3 Agentic review.
+  - TypeScript conformance adapter delegates `entity.import` to
+    `FinancialEntity.import` and normalizes results/errors without implementing
+    Entity financial rules.
+- Implementation evidence:
+  - TypeScript core added `FinancialEntity.import` and public import/revision
+    observation types with JSDoc requirement references.
+  - Unit tests cover identity and mapping preservation, malformed/incomplete
+    mapping, source/mapping mismatch, current/historical revision preservation,
+    duplicate and identity-conflicting revision observations, expected
+    state/revision/conflict-version conflicts, invalid entity envelope, and safe
+    diagnostics.
+- Traceability:
+  - Entity inventory: 84 rows, 72 COVERED, 12 NOT DIRECTLY TESTABLE, 0
+    UNCOVERED, 0 BLOCKING SPEC GAP.
+  - Scoped Draft 0.3 Entity Revision and Import inventory: 18 directly covered
+    rows including `ENTITY-IDENTITY-006`, `ENTITY-REVISION-001` through
+    `ENTITY-REVISION-007`, and `ENTITY-IMPORT-001` through `ENTITY-IMPORT-010`.
+  - Repository traceability totals: 381 requirements, 312 COVERED, 69 NOT
+    DIRECTLY TESTABLE, 0 UNCOVERED, 0 BLOCKING SPEC GAP, and 244 manifest-listed
+    vectors.
+- Verification:
+  - Node v24.15.0 / npm 11.12.1 were available in the machine environment.
+  - `npm run build --workspaces` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspace @finkore/typescript -- --run test/entities`
+    exited 0 with 3 files / 57 tests passed.
+  - `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0
+    with 1 file / 15 tests passed.
+  - `npm run test --workspaces` exited 0 with runner 10 files / 110 tests, core
+    40 files / 371 tests, and adapter 1 file / 15 tests passed.
+  - `npm run test:coverage --workspace @finkore/typescript` exited 0 with 40
+    files / 371 tests passed and 99.09% statements, 98.69% branches, 100%
+    functions, 99.49% lines. Entity coverage was 99.69% statements, 99.61%
+    branches, 100% functions, 100% lines.
+  - `npm run test:coverage --workspace @finkore/conformance-runner` exited 0
+    with 10 files / 110 tests passed and 98.31% statements, 95.29% branches,
+    100% functions, 98.75% lines.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json --suite entities`
+    exited 0 with Entity 25 passed, 0 failed, 0 unsupported, 0 infrastructure
+    errors, and 23 mutation-sensitive vectors passed.
+  - Full conformance exited 0 with 244 passed, 0 failed, 0 unsupported, 0
+    infrastructure errors across Money 83, Workflow 41, Audit 29, Approvals 66,
+    and Entities 25.
+- Mutation:
+  - Initial sandboxed `npm run test:mutation --workspace @finkore/typescript`
+    failed with `listen EPERM` from the Stryker logging server; the command was
+    rerun with approved escalation because mutation testing was required.
+  - Final complete core mutation report:
+    `implementations/typescript/core/reports/mutation/mutation.json`.
+  - Final score: 98.28% aggregate, 98.40% covered, 3129 killed, 16 timeout, 51
+    survived, 4 no coverage, 0 errors.
+  - Entity score: 96.92% aggregate, 97.05% covered. `entity.ts` score: 96.25%.
+  - Critical Entity Revision and Import mutants for generated/replaced identity,
+    dropped mapping, overwritten historical revision, business/conflict version
+    confusion, conflict bypass, partial failure output, and sensitive diagnostic
+    leaks were killed. Remaining import-related survivors are equivalent or
+    defensive shape/default-error branches where removing the mutated condition
+    still raises the same portable `FINKORE_ENTITY_INVALID_IDENTITY` or preserves
+    the same optional-value semantics.
+- Completion applicability:
+  - Updated root README, TypeScript core README, TypeScript adapter README,
+    conformance README/conventions/traceability, runner metadata/tests, Entity
+    specs, JSDoc, unit tests, conformance vectors, research decisions, review
+    snapshot, implementation plan status, and backlog state.
+  - AGENTS.md and CoreDoc required no change. Agentic metadata was reviewed and
+    intentionally not promoted for `entity.import`.
+- Result:
+  - READY FOR TASK-111.

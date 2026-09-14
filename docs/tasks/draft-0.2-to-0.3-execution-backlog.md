@@ -41,7 +41,7 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 - [x] Draft 0.3 Foundation: [TASK-067](#task-067)–[TASK-067](#task-067)
 - [x] Advanced Approvals: [TASK-068](#task-068)–[TASK-084](#task-084)
 - [x] Workflow Versioning and Import: [TASK-085](#task-085)–[TASK-098](#task-098)
-- [ ] Entity Revision and Import: [TASK-099](#task-099)–[TASK-110](#task-110)
+- [x] Entity Revision and Import: [TASK-099](#task-099)–[TASK-110](#task-110)
 - [ ] Money Portability Research: [TASK-111](#task-111)–[TASK-121](#task-121)
 - [ ] Audit Provenance Research: [TASK-122](#task-122)–[TASK-129](#task-129)
 - [ ] Portable Conditions: [TASK-130](#task-130)–[TASK-144](#task-144)
@@ -52,9 +52,9 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-099
-LAST COMPLETED: TASK-098
-REASON: Workflow Versioning and Import is closed for Draft 0.3: stable spec, complete TypeScript implementation, translation-only adapter support, 41/41 Workflow conformance, full 239/239 conformance, synchronized docs, traceability with 0 uncovered and 0 blocking gaps, and semantic mutation evidence at 98.19% with zero critical survivors.
+NEXT TASK: TASK-111
+LAST COMPLETED: TASK-110
+REASON: Entity Revision and Import is closed for Draft 0.3: stable spec, accepted scoped review, complete TypeScript implementation, translation-only adapter support, 25/25 Entity conformance, full 244/244 conformance, synchronized docs, traceability with 0 uncovered and 0 blocking gaps, and complete core mutation evidence at 98.28% with zero critical Entity Revision/Import survivors.
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -9369,7 +9369,7 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 <a id="task-099"></a>
 
-### - [ ] TASK-099 — Entity Business Revision Refinement
+### - [x] TASK-099 — Entity Business Revision Refinement
 
 **Release:** Draft 0.3
 
@@ -9440,9 +9440,9 @@ Entity Business Revision Refinement.
 
 **Definition of Done**
 
-- [ ] Define ENTITY-REVISION-* current/historical revision references versus stable identity and conflict version, preserving 0.2 evolution semantics.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Define ENTITY-REVISION-* current/historical revision references versus stable identity and conflict version, preserving 0.2 evolution semantics.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -9450,11 +9450,20 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC checks passed during TASK-110 closure; `spec/entities/revisions.md`,
+  Entity index/glossary updates, traceability, and evidence are synchronized.
+- Conformance: Implemented later in this same user-requested slice; Entity
+  conformance now passes 25/25 and full conformance passes 244/244.
+- Mutation: Not applicable for this spec-only task; complete runtime mutation
+  evidence is recorded under TASK-108.
+- Notes: Defines opaque Entity Revision identity, current/historical revision
+  observations, and separation from stable Entity identity and conflict version.
 
 <a id="task-100"></a>
 
-### - [ ] TASK-100 — Entity Import Mapping and Conflict Contract
+### - [x] TASK-100 — Entity Import Mapping and Conflict Contract
 
 **Release:** Draft 0.3
 
@@ -9526,9 +9535,9 @@ Entity Import Mapping and Conflict Contract.
 
 **Definition of Done**
 
-- [ ] Define ENTITY-IMPORT-* stable FinKore identity, opaque external/source identity and explicit mapping evidence; specify Entity expected-state/revision preconditions and history preservation.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Define ENTITY-IMPORT-* stable FinKore identity, opaque external/source identity and explicit mapping evidence; specify Entity expected-state/revision preconditions and history preservation.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -9536,11 +9545,23 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC checks passed during TASK-110 closure; `spec/entities/import.md`,
+  identity/evolution/glossary updates, traceability, and evidence are
+  synchronized.
+- Conformance: Implemented later in this same user-requested slice; Entity
+  conformance now passes 25/25 and full conformance passes 244/244.
+- Mutation: Not applicable for this spec-only task; complete runtime mutation
+  evidence is recorded under TASK-108.
+- Notes: Defines identity preservation, explicit source identity mapping,
+  history preservation, expected-state/revision/conflict-version preconditions,
+  and non-goals for registries, deduplication, persistence, and Workflow
+  migration.
 
 <a id="task-101"></a>
 
-### - [ ] TASK-101 — Entity Import and Conflict Portable Error Review
+### - [x] TASK-101 — Entity Import and Conflict Portable Error Review
 
 **Release:** Draft 0.3
 
@@ -9611,9 +9632,9 @@ Entity Import and Conflict Portable Error Review.
 
 **Definition of Done**
 
-- [ ] Determine sufficiency of INVALID_IDENTITY and STATE_CONFLICT, mapping validation categories and safe source-identity diagnostics; retain primary Workflow/Audit errors.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Determine sufficiency of INVALID_IDENTITY and STATE_CONFLICT, mapping validation categories and safe source-identity diagnostics; retain primary Workflow/Audit errors.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -9621,11 +9642,21 @@ Named normative slice is stable and vector-ready; its implementation is pending.
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC checks passed during TASK-110 closure; Entity error mapping
+  is synchronized across spec, vectors, adapter normalization, and traceability.
+- Conformance: Import vectors now observe `FINKORE_ENTITY_INVALID_IDENTITY` and
+  `FINKORE_ENTITY_STATE_CONFLICT` through 25/25 passing Entity conformance.
+- Mutation: Not applicable for this spec-only task; complete runtime mutation
+  evidence is recorded under TASK-108.
+- Notes: Existing portable Entity invalid-identity and state-conflict categories
+  are sufficient for the scoped import contract; diagnostics remain safe and
+  primary Workflow/Audit errors were not redefined.
 
 <a id="task-102"></a>
 
-### - [ ] TASK-102 — Entity Import Domain and Security Review
+### - [x] TASK-102 — Entity Import Domain and Security Review
 
 **Release:** Draft 0.3
 
@@ -9696,9 +9727,9 @@ Entity Import Domain and Security Review.
 
 **Definition of Done**
 
-- [ ] Record required review of revision/mapping ownership, source-system identifiers, historical evidence and safe diagnostic disclosure.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Record required review of revision/mapping ownership, source-system identifiers, historical evidence and safe diagnostic disclosure.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -9706,11 +9737,22 @@ A scoped research decision or required reviewer report exists; no new normative 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC checks passed during TASK-110 closure; review record and
+  exact artifact manifest were added to Draft 0.3 research decisions and
+  `docs/tasks/review-snapshots/task-102-entity-revision-import.json`.
+- Conformance: Not applicable for research-only review; subsequent slice work
+  now passes Entity 25/25 and full 244/244 conformance.
+- Mutation: Not applicable for research-only review; complete runtime mutation
+  evidence is recorded under TASK-108.
+- Notes: Scoped maintainer acceptance is recorded under D03-REVIEW-001.
+  External community/accounting/security/audit/privacy review remains NOT
+  EXTERNALLY REVIEWED.
 
 <a id="task-103"></a>
 
-### - [ ] TASK-103 — Entity Revision Import and Conflict Vectors
+### - [x] TASK-103 — Entity Revision Import and Conflict Vectors
 
 **Release:** Draft 0.3
 
@@ -9786,9 +9828,9 @@ Entity Revision Import and Conflict Vectors.
 
 **Definition of Done**
 
-- [ ] Cover identity preservation, explicit external mapping, malformed/missing mapping, historical/current revision, business versus conflict revision, mismatching expected state and failure non-mutation.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Cover identity preservation, explicit external mapping, malformed/missing mapping, historical/current revision, business versus conflict revision, mismatching expected state and failure non-mutation.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -9796,11 +9838,22 @@ Named vectors are registered and traceable; new behavior is intentionally FAIL/U
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, runner metadata tests, adapter tests, Entity conformance,
+  full conformance, and DOC checks pass after later implementation in this same
+  user-requested slice.
+- Conformance: Added `conformance/entities/import.json` with 5 manifest-listed
+  vectors; Entity conformance passes 25/25 and full conformance passes 244/244.
+- Mutation: Not applicable for vector authoring; runtime mutation gate is
+  TASK-108.
+- Notes: `entity.import` is a conformance-local operation label pending later
+  Agentic review. It is registered in runner metadata and conventions, not in
+  canonical Agentic operations.
 
 <a id="task-104"></a>
 
-### - [ ] TASK-104 — Entity Revision Refinement Implementation
+### - [x] TASK-104 — Entity Revision Refinement Implementation
 
 **Release:** Draft 0.3
 
@@ -9875,9 +9928,9 @@ Entity Revision Refinement Implementation.
 
 **Definition of Done**
 
-- [ ] Implement current/historical business revision observations without overwriting stable identity or conflating storage counters.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement current/historical business revision observations without overwriting stable identity or conflating storage counters.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -9885,11 +9938,21 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(entities), ADAPTER, CONF(entities), COV, full
+  UNIT, full CONF, MUT(core), and DOC checks pass; details are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: Entity suite passes 25/25; full manifest passes 244/244.
+- Mutation: Complete core mutation evidence is recorded under TASK-108 with
+  zero critical Entity Revision/Import survivors.
+- Notes: `FinancialEntity.import` preserves current and historical business
+  revision observations, keeps stable Entity identity intact, and does not infer
+  revisions from storage/order/timestamp values.
 
 <a id="task-105"></a>
 
-### - [ ] TASK-105 — Entity Import Identity Mapping Implementation
+### - [x] TASK-105 — Entity Import Identity Mapping Implementation
 
 **Release:** Draft 0.3
 
@@ -9964,9 +10027,9 @@ Entity Import Identity Mapping Implementation.
 
 **Definition of Done**
 
-- [ ] Implement supplied identity/mapping validation and evidence preservation; do not generate or infer a replacement identity.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement supplied identity/mapping validation and evidence preservation; do not generate or infer a replacement identity.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -9974,11 +10037,21 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(entities), ADAPTER, CONF(entities), COV, full
+  UNIT, full CONF, MUT(core), and DOC checks pass; details are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: Entity suite passes 25/25; full manifest passes 244/244.
+- Mutation: Complete core mutation evidence is recorded under TASK-108 with
+  zero critical Entity Revision/Import survivors.
+- Notes: Import validates supplied mapping evidence, preserves source identity
+  and mapping as opaque observations, and never replaces stable FinKore identity
+  with source identity.
 
 <a id="task-106"></a>
 
-### - [ ] TASK-106 — Entity Conflict Precondition Implementation
+### - [x] TASK-106 — Entity Conflict Precondition Implementation
 
 **Release:** Draft 0.3
 
@@ -10053,9 +10126,9 @@ Entity Conflict Precondition Implementation.
 
 **Definition of Done**
 
-- [ ] Implement the specified expected-state/revision guard for selected Entity operations and preserve primary domain error precedence.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement the specified expected-state/revision guard for selected Entity operations and preserve primary domain error precedence.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -10063,11 +10136,21 @@ Named core behavior and unit tests exist with JSDoc; only operations wired by pr
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(entities), ADAPTER, CONF(entities), COV, full
+  UNIT, full CONF, MUT(core), and DOC checks pass; details are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: Entity suite passes 25/25; full manifest passes 244/244.
+- Mutation: Complete core mutation evidence is recorded under TASK-108 with
+  zero critical Entity Revision/Import survivors.
+- Notes: Expected state, expected business revision, and expected conflict
+  version are optional exact preconditions that reject stale input with
+  `FINKORE_ENTITY_STATE_CONFLICT` without producing partial import output.
 
 <a id="task-107"></a>
 
-### - [ ] TASK-107 — Entity Revision and Import Adapter Support
+### - [x] TASK-107 — Entity Revision and Import Adapter Support
 
 **Release:** Draft 0.3
 
@@ -10140,9 +10223,9 @@ Entity Revision and Import Adapter Support.
 
 **Definition of Done**
 
-- [ ] Wire import/revision/conflict operations and mapping/history observations, delegating all identity/effectiveness rules to core.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Wire import/revision/conflict operations and mapping/history observations, delegating all identity/effectiveness rules to core.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -10150,11 +10233,21 @@ Named operation fixtures execute through core and all required slice vectors PAS
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(entities), ADAPTER, CONF(entities), full CONF,
+  and DOC checks pass; details are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: Entity suite passes 25/25; full manifest passes 244/244.
+- Mutation: Adapter translation change has no separate mutation script; complete
+  core mutation evidence is recorded under TASK-108.
+- Notes: The TypeScript conformance adapter supports `entity.import` by
+  translating fixtures to `FinancialEntity.import` and normalizing
+  success/error observations without implementing Entity financial rules.
 
 <a id="task-108"></a>
 
-### - [ ] TASK-108 — Entity Revision and Import Mutation Hardening
+### - [x] TASK-108 — Entity Revision and Import Mutation Hardening
 
 **Release:** Draft 0.3
 
@@ -10227,9 +10320,9 @@ Entity Revision and Import Mutation Hardening.
 
 **Definition of Done**
 
-- [ ] Kill generated/replaced identity, dropped mapping, overwritten historical revision, business/storage version confusion, conflict bypass and sensitive diagnostic leaks.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Kill generated/replaced identity, dropped mapping, overwritten historical revision, business/storage version confusion, conflict bypass and sensitive diagnostic leaks.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -10237,11 +10330,25 @@ A complete scoped mutation report and survivor classifications establish >=95% a
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(entities), ADAPTER, CONF(entities), COV, full
+  UNIT, full CONF, MUT(core), and DOC checks pass; details are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: Entity suite passes 25/25; full manifest passes 244/244.
+- Mutation: Complete core report at
+  `implementations/typescript/core/reports/mutation/mutation.json` scores 98.28%
+  aggregate and 96.92% for Entities; `entity.ts` scores 96.25%. No critical
+  Entity Revision/Import survivor remains.
+- Notes: Killed critical mutants for generated/replaced identity, dropped or
+  mismatched mapping, lost/overwritten revisions, business/conflict-version
+  substitution, stale-precondition bypass, partial failure output, and source
+  identity diagnostic leakage. Remaining import-related survivors are equivalent
+  or defensive invalid-shape/default-error branches.
 
 <a id="task-109"></a>
 
-### - [ ] TASK-109 — Entity Revision and Import Traceability Closure
+### - [x] TASK-109 — Entity Revision and Import Traceability Closure
 
 **Release:** Draft 0.3
 
@@ -10314,10 +10421,10 @@ Entity Revision and Import Traceability Closure.
 
 **Definition of Done**
 
-- [ ] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Map every slice requirement to manifest-listed vectors, core tests, errors, and operation metadata; revisit formerly NOT DIRECTLY TESTABLE rows now observable.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -10325,11 +10432,22 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: DOC reference review, Entity conformance, full conformance,
+  coverage, and mutation evidence are recorded in
+  `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: Entity suite passes 25/25; full manifest passes 244/244.
+- Mutation: Complete core mutation evidence from TASK-108 remains applicable.
+- Notes: `ENTITY-IDENTITY-006`, `ENTITY-REVISION-001` through
+  `ENTITY-REVISION-007`, and `ENTITY-IMPORT-001` through `ENTITY-IMPORT-010`
+  are mapped to vectors/tests/errors/metadata. Global traceability is 381
+  requirements, 312 COVERED, 69 NOT DIRECTLY TESTABLE, 0 UNCOVERED, and 0
+  BLOCKING SPEC GAP.
 
 <a id="task-110"></a>
 
-### - [ ] TASK-110 — Entity Revision and Import Slice Closure Gate
+### - [x] TASK-110 — Entity Revision and Import Slice Closure Gate
 
 **Release:** Draft 0.3
 
@@ -10404,10 +10522,10 @@ Entity Revision and Import Slice Closure Gate.
 
 **Definition of Done**
 
-- [ ] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Verify stable spec, complete implementation and translation-only adapter, green slice conformance, aligned errors, synchronized README/JSDoc, and required review evidence. Regress every previously closed domain.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -10415,7 +10533,21 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 **Completion**
 
-Pending.
+Completion:
+- Status: COMPLETE
+- Verification: BUILD, TYPE, UNIT(entities), ADAPTER, full UNIT, COV(core),
+  COV(runner), CONF(entities), full CONF, MUT(core), and DOC checks pass; details
+  are recorded in `docs/tasks/draft-0.3-execution-evidence.md`.
+- Conformance: Entity suite passes 25/25 and full manifest passes 244/244 with
+  0 failed, 0 unsupported, and 0 infrastructure errors.
+- Mutation: Complete core mutation report scores 98.28% aggregate, 96.92% for
+  Entities, and has zero critical Entity Revision/Import survivors.
+- Notes: Entity Revision and Import is closed for Draft 0.3. Stable requirements
+  exist in `/spec/entities`, directly testable scoped requirements have
+  manifest-listed vectors, the TypeScript core and conformance adapter support
+  the slice, root/TypeScript/adapter/conformance/status docs are synchronized,
+  TASK-102 review evidence is accepted under D03-REVIEW-001, and external review
+  remains NOT EXTERNALLY REVIEWED. `NEXT TASK` advanced to TASK-111.
 
 ### Milestone: Money Portability Research
 

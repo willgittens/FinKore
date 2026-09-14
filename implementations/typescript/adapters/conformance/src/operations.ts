@@ -170,6 +170,17 @@ function inputEntityMutate(input: unknown): {
   return { definition: candidate.definition, entity: candidate.entity, changes: candidate.changes }
 }
 
+function inputEntityImport(input: unknown): {
+  readonly definition: unknown
+  readonly imported: unknown
+} {
+  if (typeof input !== 'object' || input === null || !('definition' in input) || !('import' in input)) {
+    return { definition: undefined, imported: undefined }
+  }
+  const candidate = input as { readonly definition: unknown; readonly import?: unknown }
+  return { definition: candidate.definition, imported: candidate.import }
+}
+
 function inputEntityEvolution(input: unknown): {
   readonly definition: unknown
   readonly evolutionHistory: unknown
@@ -829,6 +840,29 @@ function executeEntityMutate(request: AdapterRequest): NormalizedResult {
   }
 }
 
+/**
+ * Executes the conformance-local Entity import boundary.
+ *
+ * The adapter delegates Entity identity, source mapping, revision preservation,
+ * conflict-version separation, and expected precondition checks to
+ * `FinancialEntity.import`.
+ */
+function executeEntityImport(request: AdapterRequest): NormalizedResult {
+  const input = inputEntityImport(request.input)
+  let entity: FinancialEntity | undefined
+  try {
+    const imported = input.imported as { readonly entity?: unknown }
+    entity = FinancialEntity.from(input.definition, imported.entity)
+    return { status: 'success', value: FinancialEntity.import(input.definition, input.imported) }
+  } catch (error) {
+    const result = normalizeThrown(error)
+    if (result.status === 'error' && entity !== undefined) {
+      return { ...result, observations: { entity: entity.toJSON() } }
+    }
+    return result
+  }
+}
+
 function isEntityValidationDetails(value: unknown): value is { readonly findings: readonly unknown[] } {
   return typeof value === 'object' && value !== null && Array.isArray((value as { readonly findings?: unknown }).findings)
 }
@@ -1279,6 +1313,7 @@ export const operationHandlers = {
   'finkore.entity.evolution.void': executeEntityEvolutionVoid,
   'finkore.entity.mutate': executeEntityMutate,
   'finkore.entity.transition': executeEntityTransition,
+  'entity.import': executeEntityImport,
   'entity.create': executeEntityCreate,
   'entity.evolution.correct': executeEntityEvolutionCorrect,
   'entity.evolution.reverse': executeEntityEvolutionReverse,

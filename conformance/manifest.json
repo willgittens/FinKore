@@ -39,7 +39,8 @@
       "id": "entities",
       "vectorFiles": [
         "./entities/behavior.json",
-        "./entities/evolution.json"
+        "./entities/evolution.json",
+        "./entities/import.json"
       ]
     }
   ]

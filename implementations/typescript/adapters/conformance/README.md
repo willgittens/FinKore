@@ -21,6 +21,7 @@ This milestone supports:
 - `finkore.entity.evolution.void`
 - `finkore.entity.mutate`
 - `finkore.entity.transition`
+- `entity.import`
 - `finkore.audit.append`
 - `finkore.audit.replace`
 - `finkore.audit.remove`
@@ -71,6 +72,10 @@ source/result/evolution/Audit observations. The adapter does not implement
 evolution rules, evaluate validation rules, construct Audit evidence, or infer
 identifiers itself. Generic validation rule engines remain outside this
 milestone.
+`entity.import` is a Draft 0.3 conformance-local import boundary. It delegates
+stable identity preservation, source identity mapping, Entity Revision history,
+Entity Conflict Version separation, and expected precondition checks to core;
+it is not yet a canonical Agentic operation.
 
 Audit operation support covers FinKore Audit Draft 0.1 plus the Draft 0.2 Audit Relationships slice: Events, Actors, append-only history, Change representation, Redaction, relationship metadata, and portable Audit errors. Draft 0.1 does not define `audit.order` as an executable adapter operation. Audit Relationships are observed through existing append/redaction fixtures; the adapter does not interpret relationships itself.
 

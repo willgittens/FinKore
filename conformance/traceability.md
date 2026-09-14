@@ -11,10 +11,10 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | Workflow | 57 | 55 | 1 | 1 | 48 | 0 | 0 | 9 | 0 | 0 |
 | Audit | 52 | 44 | 4 | 4 | 42 | 0 | 0 | 10 | 0 | 0 |
 | Approvals | 86 | 83 | 1 | 2 | 81 | 0 | 0 | 5 | 0 | 0 |
-| Entities | 67 | 62 | 3 | 2 | 54 | 0 | 0 | 13 | 0 | 0 |
-| **Total** | **364** | **335** | **15** | **14** | **294** | **0** | **0** | **70** | **0** | **0** |
+| Entities | 84 | 79 | 3 | 2 | 72 | 0 | 0 | 12 | 0 | 0 |
+| **Total** | **381** | **352** | **15** | **14** | **312** | **0** | **0** | **69** | **0** | **0** |
 
-The suite contains 239 vectors. Overall: **294 covered (80.8%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **70 not directly testable (19.2%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
+The suite contains 244 vectors. Overall: **312 covered (81.9%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **69 not directly testable (18.1%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current draft. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -364,7 +364,17 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-IDENTITY-003 | Entities | MUST / MUST NOT | COVERED | entity.create.opaque-identity-preserved-001 |
 | ENTITY-IDENTITY-004 | Entities | MUST / MUST NOT | COVERED | entity.mutate.display-number-not-identity-001 |
 | ENTITY-IDENTITY-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| ENTITY-IDENTITY-006 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-IDENTITY-006 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
+| ENTITY-IMPORT-001 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
+| ENTITY-IMPORT-002 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
+| ENTITY-IMPORT-003 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001, entity.import.missing-mapping-invalid-identity-001 |
+| ENTITY-IMPORT-004 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
+| ENTITY-IMPORT-005 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
+| ENTITY-IMPORT-006 | Entities | MUST / MUST NOT | COVERED | entity.import.expected-conflict-version-conflict-001, entity.import.expected-revision-conflict-001, entity.import.identity-mapping-preserved-001 |
+| ENTITY-IMPORT-007 | Entities | MUST / MUST NOT | COVERED | entity.import.expected-conflict-version-conflict-001, entity.import.expected-revision-conflict-001, entity.import.expected-state-conflict-001 |
+| ENTITY-IMPORT-008 | Entities | MUST / MUST NOT | COVERED | entity.import.expected-conflict-version-conflict-001, entity.import.expected-revision-conflict-001, entity.import.expected-state-conflict-001, entity.import.missing-mapping-invalid-identity-001 |
+| ENTITY-IMPORT-009 | Entities | MUST / MUST NOT | COVERED | entity.import.missing-mapping-invalid-identity-001 |
+| ENTITY-IMPORT-010 | Entities | MUST / MUST NOT | COVERED | entity.import.missing-mapping-invalid-identity-001 |
 | ENTITY-LIFECYCLE-001 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
 | ENTITY-LIFECYCLE-002 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
 | ENTITY-LIFECYCLE-003 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.transition.rejected-preserves-entity-001, entity.transition.success-identity-stable-001 |
@@ -378,6 +388,13 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-MUTABILITY-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | ENTITY-MUTABILITY-006 | Entities | MUST / MUST NOT | COVERED | entity.mutate.terminal-metadata-001 |
 | ENTITY-MUTABILITY-007 | Entities | MAY | COVERED | entity.mutate.terminal-metadata-001 |
+| ENTITY-REVISION-001 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
+| ENTITY-REVISION-002 | Entities | MUST / MUST NOT | COVERED | entity.import.expected-conflict-version-conflict-001, entity.import.expected-revision-conflict-001 |
+| ENTITY-REVISION-003 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
+| ENTITY-REVISION-004 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
+| ENTITY-REVISION-005 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
+| ENTITY-REVISION-006 | Entities | MUST / MUST NOT | COVERED | entity.import.expected-conflict-version-conflict-001, entity.import.expected-revision-conflict-001, entity.import.identity-mapping-preserved-001 |
+| ENTITY-REVISION-007 | Entities | MUST / MUST NOT | COVERED | entity.import.missing-mapping-invalid-identity-001 |
 | ENTITY-VALIDATION-001 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
 | ENTITY-VALIDATION-002 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
 | ENTITY-VALIDATION-003 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
@@ -433,7 +450,10 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-IDENTITY-003 | COVERED | `entity.create.opaque-identity-preserved-001` observes exact preservation of an opaque identifier containing case and surrounding whitespace, guarding against normalization, coercion, or format inference. |
 | ENTITY-IDENTITY-004 | COVERED | `entity.mutate.display-number-not-identity-001` observes mutable display-number and revision data changing while stable Entity identity remains unchanged. |
 | ENTITY-IDENTITY-005 | NOT DIRECTLY TESTABLE | Uniqueness across distinct entities in the same scope requires a composing-domain registry, repository, or persistence boundary. Draft 0.1 Entity conformance operates on one supplied Entity observation at a time and cannot prove cross-entity uniqueness independently. |
-| ENTITY-IDENTITY-006 | NOT DIRECTLY TESTABLE | Import or migration identity mapping requires an import/migration operation or mapping record, neither of which is defined by current Entity Draft 0.1 conformance. Existing operations preserve supplied identity but cannot observe an explicit migration mapping contract. |
+| ENTITY-IDENTITY-006 | COVERED | `entity.import.identity-mapping-preserved-001` observes explicit mapping evidence that preserves stable FinKore Entity identity while retaining opaque source identity. |
+| ENTITY-IMPORT-001 to ENTITY-IMPORT-006 | COVERED | Import vectors observe stable FinKore identity preservation, source identity mapping evidence, current and historical business revision preservation, and distinct conflict-version preservation. |
+| ENTITY-IMPORT-007 to ENTITY-IMPORT-009 | COVERED | Import vectors reject stale expected state, stale expected business revision, stale expected conflict version, and missing mapping evidence with the required portable Entity errors and no partial import result. |
+| ENTITY-IMPORT-010 | COVERED | `entity.import.missing-mapping-invalid-identity-001` observes that the normalized error surface contains only the portable code and does not expose the supplied source identity value. |
 | ENTITY-LIFECYCLE-004 | NOT DIRECTLY TESTABLE | This is the lifecycle-specific form of the Entity/Audit declaration obligation. Current Entity lifecycle operations intentionally do not couple to Audit and cannot observe audit declaration or event production. |
 | ENTITY-LIFECYCLE-005 | NOT DIRECTLY TESTABLE | Domain consequences of each state belong to composing domains. Generic Entity conformance can observe the current state and transition boundary, but it cannot prove concrete invoice, expense, or payment consequences absent a concrete domain specification. |
 | ENTITY-LIFECYCLE-006 | COVERED | `entity.create.initial-lifecycle-001` observes a portable Entity representation with exactly one current lifecycle `state` initialized through the referenced Workflow. |
@@ -444,6 +464,8 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-VALIDATION-005 | COVERED | `entity.validation.complete-result-001` observes the relevant domain path through the validation finding `path` field. |
 | ENTITY-VALIDATION-007 | NOT DIRECTLY TESTABLE | This is a composing-domain recommendation about distinguishing always-required rules from transition or target-state rules. Draft 0.1 has no generic state-dependent validation policy language to execute portably. |
 | ENTITY-VALIDATION-008 | COVERED | `entity.validation.complete-result-001` observes that validation failure details expose only `rule` and `path`, not the rejected Money value, TypeScript class name, message, or other sensitive value-bearing details. |
+| ENTITY-REVISION-001 to ENTITY-REVISION-006 | COVERED | `entity.import.identity-mapping-preserved-001` and the expected-revision/conflict-version contrast vectors observe opaque caller-supplied business revisions, stable Entity identity qualification, historical revision preservation, and separation from conflict-version tokens. |
+| ENTITY-REVISION-007 | COVERED | `entity.import.missing-mapping-invalid-identity-001` covers invalid identity handling for malformed import evidence; implementation unit tests additionally cover duplicate and identity-conflicting revision observations. |
 
 ## Critical financial requirements
 
@@ -503,6 +525,10 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-EVOLUTION-016, ENTITY-EVOLUTION-017 | Void is nullification without deletion. | Delete the source Entity or erase original facts/history while voiding. |
 | ENTITY-EVOLUTION-020 | Supersession currentness follows the declared scope. | Leave a superseded predecessor current or mark an unrelated Entity non-current. |
 | ENTITY-EVOLUTION-024, ENTITY-EVOLUTION-027 | Evolution errors use the specified portable error category and preserve primary domain codes. | Collapse state conflicts, validation failures, or downstream domain failures into an implementation-specific or generic error. |
+| ENTITY-IMPORT-001, ENTITY-IMPORT-003, ENTITY-IMPORT-005 | Import preserves FinKore identity and explicit mapping evidence. | Replace stable Entity identity with Source Identity, accept incomplete mapping evidence, or map evidence to a different Entity. |
+| ENTITY-REVISION-004, ENTITY-IMPORT-006 | Import preserves current and historical business revision observations. | Drop historical revisions, overwrite the current revision, or derive revision identity from state/order/storage values. |
+| ENTITY-REVISION-006, ENTITY-IMPORT-007 | Business revision and conflict version remain distinct precondition values. | Use conflict version as business revision, use business revision as conflict version, or bypass stale expected values. |
+| ENTITY-IMPORT-008, ENTITY-IMPORT-010 | Failed import returns no partial import and exposes safe diagnostics. | Return partial import output after failure or leak source identity/financial values in normalized error details. |
 
 
 ## Conformance gaps
@@ -511,7 +537,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 - Workflow: Draft 0.3 Workflow definition identity, version identity, immutable instance binding, older-version observation, version-mismatch semantics, import of existing state/version observations, and expected-state/revision conflict preconditions are specified, vector-covered, implemented by the TypeScript reference implementation, and passing through the conformance adapter. Version identity reuse, Entity/storage separation, safe diagnostic disclosure, and non-locking/non-concurrency guarantees are not directly testable through one portable vector and remain subject to implementation, architecture, and review checks. External fact capture, definition migration, state mapping across versions, transition identifiers, storage locking, and distributed concurrency remain open.
 - Audit: Draft 0.2 Audit Relationships are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, generic related links, relationship redaction policy, and causal sequencing remain open.
 - Approvals: Draft 0.2 Approval Validity withdrawal, expiration, supersession, explicit current-effectiveness context, and lifecycle failure atomicity are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Draft 0.3 quorum membership is specified by D03-QUORUM-001, fixed thresholds with nonempty unreachable-quorum rejection by D03-QUORUM-002, entirely inapplicable group treatment by D03-COMPOSITION-001, stage aggregation by D03-COMPOSITION-002, stage structure/depth by D03-COMPOSITION-003, complete validation by D03-COMPOSITION-004, staged actionability by D03-COMPOSITION-005, and error mapping/precedence by D03-COMPOSITION-006. D03-QUORUM-003 resolves opposing effective votes and member-specific evidence. TASK-073 is complete with no remaining identified composition specification gaps, TASK-074 supplies manifest-listed conformance vectors, and TASK-075 through TASK-082 supply TypeScript implementation, adapter wiring, runtime conformance, focused boundary coverage, and mutation hardening evidence. Rich condition syntax, delegation, escalation, approval-definition migration, dynamic approver resolution, and unrestricted dependency graphs remain open for future drafts.
-- Entities: Draft 0.2 Entity Evolution terminology, correction, reversal, void, supersession, currentness, failure atomicity, mandatory Audit evidence, and portable error mapping are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Concrete fields, composing-domain lifecycle policy, full validation catalog, import or migration mapping, cross-entity identity registries, concurrency, cancellation, adjustment, replacement, amendment, and concrete ledger posting behavior remain outside the current implemented Core. The current TypeScript reference implementation covers the conformance-local Entity identity, lifecycle, mutability, validation, and evolution vectors. Remaining Entity requirements classified as not directly testable are composing-domain, optional diagnostic, or registry/import obligations without a standalone portable Entity operation.
+- Entities: Draft 0.2 Entity Evolution terminology, correction, reversal, void, supersession, currentness, failure atomicity, mandatory Audit evidence, and portable error mapping are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Draft 0.3 Entity Revision and Import business revision identity, source identity mapping, conflict-version separation, and expected-state/revision/conflict-version preconditions are specified and vector-covered. Concrete fields, composing-domain lifecycle policy, full validation catalog, cross-entity identity registries, concurrency, cancellation, adjustment, replacement, amendment, concrete migration formats, and concrete ledger posting behavior remain outside the current implemented Core. The current TypeScript reference implementation covers the conformance-local Entity identity, lifecycle, mutability, validation, evolution, and import vectors. Remaining Entity requirements classified as not directly testable are composing-domain, optional diagnostic, or registry obligations without a standalone portable Entity operation.
 
 ### Draft 0.3 Approval review gaps
 

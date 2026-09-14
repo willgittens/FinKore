@@ -502,3 +502,308 @@ describe('Financial Entity validation', () => {
     ).toThrow(EntityValidationFailedError)
   })
 })
+
+describe('Financial Entity import', () => {
+  it('imports a minimal observation without optional revision, mapping, or conflict fields', () => {
+    const result = FinancialEntity.import(invoiceDefinition, {
+      entity: {
+        type: 'invoice',
+        id: 'inv-42',
+        state: 'SUBMITTED',
+        data: invoiceData,
+      },
+    })
+
+    expect(result).toEqual({
+      entity: {
+        type: 'invoice',
+        id: 'inv-42',
+        state: 'SUBMITTED',
+        data: invoiceData,
+      },
+      historicalRevisions: [],
+    })
+    expect(Object.hasOwn(result, 'currentRevision')).toBe(false)
+    expect(Object.hasOwn(result, 'identityMapping')).toBe(false)
+    expect(Object.hasOwn(result, 'conflictVersion')).toBe(false)
+  })
+
+  it('preserves supplied entity identity, revision history, mapping evidence, and conflict version', () => {
+    const result = FinancialEntity.import(invoiceDefinition, {
+      entity: {
+        type: 'invoice',
+        id: 'inv-42',
+        state: 'SUBMITTED',
+        data: invoiceData,
+      },
+      currentRevision: { type: 'invoice', id: 'inv-42', revision: 'business-rev-2' },
+      historicalRevisions: [{ type: 'invoice', id: 'inv-42', revision: 'business-rev-1' }],
+      sourceIdentity: { sourceSystem: 'legacy-ar', sourceId: 'LEGACY-000042' },
+      identityMapping: {
+        mappingId: 'map-legacy-ar-42',
+        sourceSystem: 'legacy-ar',
+        sourceId: 'LEGACY-000042',
+        entity: { type: 'invoice', id: 'inv-42' },
+      },
+      conflictVersion: 'storage-token-9',
+      expectedState: 'SUBMITTED',
+      expectedRevision: 'business-rev-2',
+      expectedConflictVersion: 'storage-token-9',
+    })
+
+    expect(result).toEqual({
+      entity: {
+        type: 'invoice',
+        id: 'inv-42',
+        state: 'SUBMITTED',
+        data: invoiceData,
+      },
+      currentRevision: { type: 'invoice', id: 'inv-42', revision: 'business-rev-2', current: true },
+      historicalRevisions: [{ type: 'invoice', id: 'inv-42', revision: 'business-rev-1', current: false }],
+      identityMapping: {
+        mappingId: 'map-legacy-ar-42',
+        sourceSystem: 'legacy-ar',
+        sourceId: 'LEGACY-000042',
+        entity: { type: 'invoice', id: 'inv-42' },
+      },
+      conflictVersion: 'storage-token-9',
+    })
+  })
+
+  it('requires source identity mapping to match the imported FinKore identity', () => {
+    expect(() =>
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        sourceIdentity: { sourceSystem: 'legacy-ar', sourceId: 'LEGACY-000042' },
+      }),
+    ).toThrow(InvalidEntityIdentityError)
+
+    expect(() =>
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        sourceIdentity: { sourceSystem: 'legacy-ar', sourceId: 'LEGACY-000042' },
+        identityMapping: {
+          mappingId: 'map-legacy-ar-42',
+          sourceSystem: 'legacy-ar',
+          sourceId: 'LEGACY-000042',
+          entity: { type: 'invoice', id: 'LEGACY-000042' },
+        },
+      }),
+    ).toThrow(InvalidEntityIdentityError)
+
+    expect(() =>
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        identityMapping: {
+          mappingId: 'map-legacy-ar-42',
+          sourceSystem: 'legacy-ar',
+          sourceId: 'LEGACY-000042',
+          entity: { type: 'invoice', id: 'inv-42' },
+        },
+      }),
+    ).toThrow(InvalidEntityIdentityError)
+
+    for (const identityMapping of [
+      {
+        mappingId: 'map-legacy-ar-42',
+        sourceSystem: 'other-system',
+        sourceId: 'LEGACY-000042',
+        entity: { type: 'invoice', id: 'inv-42' },
+      },
+      {
+        mappingId: 'map-legacy-ar-42',
+        sourceSystem: 'legacy-ar',
+        sourceId: 'OTHER-ID',
+        entity: { type: 'invoice', id: 'inv-42' },
+      },
+      {
+        mappingId: 'map-legacy-ar-42',
+        sourceSystem: 'legacy-ar',
+        sourceId: 'LEGACY-000042',
+        entity: { type: 'payment', id: 'inv-42' },
+      },
+    ]) {
+      expect(() =>
+        FinancialEntity.import(invoiceDefinition, {
+          entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+          sourceIdentity: { sourceSystem: 'legacy-ar', sourceId: 'LEGACY-000042' },
+          identityMapping,
+        }),
+      ).toThrow(InvalidEntityIdentityError)
+    }
+
+    expect(() =>
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        sourceIdentity: 'legacy-ar:LEGACY-000042',
+        identityMapping: {
+          mappingId: 'map-legacy-ar-42',
+          sourceSystem: 'legacy-ar',
+          sourceId: 'LEGACY-000042',
+          entity: { type: 'invoice', id: 'inv-42' },
+        },
+      }),
+    ).toThrow(InvalidEntityIdentityError)
+
+    expect(() =>
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        sourceIdentity: { sourceSystem: 'legacy-ar', sourceId: 'LEGACY-000042' },
+        identityMapping: 'map-legacy-ar-42',
+      }),
+    ).toThrow(InvalidEntityIdentityError)
+
+    expect(() =>
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        sourceIdentity: { sourceSystem: 'legacy-ar', sourceId: 'LEGACY-000042' },
+        identityMapping: {
+          mappingId: 'map-legacy-ar-42',
+          sourceSystem: 'legacy-ar',
+          sourceId: 'LEGACY-000042',
+          entity: 'inv-42',
+        },
+      }),
+    ).toThrow(InvalidEntityIdentityError)
+  })
+
+  it('rejects conflicting or duplicate business revision observations', () => {
+    expect(
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        currentRevision: { type: 'invoice', id: 'inv-42', revision: 'business-rev-2', current: true },
+      }).currentRevision,
+    ).toEqual({ type: 'invoice', id: 'inv-42', revision: 'business-rev-2', current: true })
+
+    expect(() =>
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        currentRevision: 7,
+      }),
+    ).toThrow(InvalidEntityIdentityError)
+
+    expect(() =>
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        currentRevision: { type: 'invoice', id: 'other-entity', revision: 'business-rev-2' },
+      }),
+    ).toThrow(InvalidEntityIdentityError)
+
+    expect(() =>
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        currentRevision: 'business-rev-2',
+        historicalRevisions: ['business-rev-2'],
+      }),
+    ).toThrow(InvalidEntityIdentityError)
+
+    expect(() =>
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        currentRevision: 'same-token',
+        conflictVersion: 'same-token',
+      }),
+    ).toThrow(InvalidEntityIdentityError)
+
+    expect(() =>
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        currentRevision: { type: 'payment', id: 'inv-42', revision: 'business-rev-2' },
+      }),
+    ).toThrow(InvalidEntityIdentityError)
+
+    expect(() =>
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        currentRevision: { type: 'invoice', id: 'inv-42', revision: 'inv-42' },
+      }),
+    ).toThrow(InvalidEntityIdentityError)
+
+    expect(() =>
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        currentRevision: { type: 'invoice', id: 'inv-42', revision: 'business-rev-2', current: false },
+      }),
+    ).toThrow(InvalidEntityIdentityError)
+
+    expect(() =>
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        historicalRevisions: { revision: 'business-rev-1' },
+      }),
+    ).toThrow(InvalidEntityIdentityError)
+  })
+
+  it('checks expected state, business revision, and conflict version without returning partial import results', () => {
+    const input = {
+      entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+      currentRevision: 'business-rev-2',
+      conflictVersion: 'storage-token-9',
+    }
+
+    expect(() => FinancialEntity.import(invoiceDefinition, { ...input, expectedState: 'DRAFT' })).toThrow(EntityStateConflictError)
+    expect(() => FinancialEntity.import(invoiceDefinition, { ...input, expectedRevision: 'business-rev-1' })).toThrow(
+      EntityStateConflictError,
+    )
+    expect(() => FinancialEntity.import(invoiceDefinition, { ...input, expectedConflictVersion: 'storage-token-8' })).toThrow(
+      EntityStateConflictError,
+    )
+    expect(() =>
+      FinancialEntity.import(invoiceDefinition, {
+        entity: input.entity,
+        expectedRevision: 'business-rev-2',
+      }),
+    ).toThrow(EntityStateConflictError)
+    expect(FinancialEntity.import(invoiceDefinition, { entity: input.entity, conflictVersion: 'storage-token-9' })).toEqual({
+      entity: input.entity,
+      historicalRevisions: [],
+      conflictVersion: 'storage-token-9',
+    })
+    expect(FinancialEntity.import(invoiceDefinition, { entity: input.entity, currentRevision: 'business-rev-2' })).toEqual({
+      entity: input.entity,
+      currentRevision: { type: 'invoice', id: 'inv-42', revision: 'business-rev-2', current: true },
+      historicalRevisions: [],
+    })
+  })
+
+  it('rejects malformed import envelopes and invalid imported entity observations', () => {
+    expect(() => FinancialEntity.import(invoiceDefinition, null)).toThrow(InvalidEntityIdentityError)
+    expect(() => FinancialEntity.import(invoiceDefinition, {})).toThrow(InvalidEntityIdentityError)
+    expect(() =>
+      FinancialEntity.import(
+        { ...invoiceDefinition, mutability: { DRAFT: ['memo'] } },
+        { entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData } },
+      ),
+    ).toThrow(InvalidEntityMutationError)
+    expect(() =>
+      FinancialEntity.import(validatedInvoiceDefinition, {
+        entity: {
+          type: 'invoice',
+          id: 'inv-42',
+          state: 'SUBMITTED',
+          data: { ...validatedInvoiceData, amount: { amount: '-1.00', currency: 'EUR' } },
+        },
+      }),
+    ).toThrow(EntityValidationFailedError)
+  })
+
+  it('does not expose sensitive source identity values in default import errors', () => {
+    try {
+      FinancialEntity.import(invoiceDefinition, {
+        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
+        sourceIdentity: { sourceSystem: 'legacy-ar', sourceId: 'SECRET-LEGACY-ID' },
+        identityMapping: {
+          mappingId: 'map-legacy-ar-42',
+          sourceSystem: 'legacy-ar',
+          sourceId: 'SECRET-LEGACY-ID',
+          entity: { type: 'invoice', id: 'other-entity' },
+        },
+      })
+      throw new Error('Expected invalid identity')
+    } catch (error) {
+      expect(error).toBeInstanceOf(InvalidEntityIdentityError)
+      expect((error as InvalidEntityIdentityError).details).toBeUndefined()
+      expect(String((error as InvalidEntityIdentityError).message)).not.toContain('SECRET-LEGACY-ID')
+    }
+  })
+})

@@ -1,0 +1,85 @@
+{
+  "id": "task-102-entity-revision-import",
+  "date": "2026-09-14",
+  "sourceRevision": "ddd3a3a3e4be4ff11959fa06ad09be3a1a308df5 plus TASK-099 through TASK-102 Entity Revision and Import working-tree changes",
+  "status": "accepted",
+  "externalReview": "NOT EXTERNALLY REVIEWED",
+  "artifacts": [
+    {
+      "path": "docs/coreDoc/core-doc.md",
+      "sha256": "53d5565c6ac0cad831ec9409c86c1648c93f15c15325530eca7581cb6d6fdf1f"
+    },
+    {
+      "path": "spec/entities/README.md",
+      "sha256": "78f2a69f99267bab32bc7c17ec906cd649b44a4a4135b9945e151bc195ef62da"
+    },
+    {
+      "path": "spec/entities/identity.md",
+      "sha256": "58a65cda55b3bc30a23f7bb5b6271d1829c117a91d76a1f9c61611a7145c256e"
+    },
+    {
+      "path": "spec/entities/evolution.md",
+      "sha256": "77c0d31f20bf78a9441c410b4eb78e5123a09d696c2ddc9379c5594e08efe11e"
+    },
+    {
+      "path": "spec/entities/revisions.md",
+      "sha256": "82bee29f13319ccd138c92c4d91cab4890d6613fc34087d9a2ad2448c2ec5270"
+    },
+    {
+      "path": "spec/entities/import.md",
+      "sha256": "73b9cb10b2107493c59e554ab0f5ea32168d9e5f856ba45019e966cee5484fae"
+    },
+    {
+      "path": "spec/glossary.md",
+      "sha256": "32d73d9ca7054679ca1b3c2d3f378d889e7ee3c570d0d6781431d6b2db78316f"
+    },
+    {
+      "path": "conformance/entities/import.json",
+      "sha256": "585882f7d719dfb915b13eeb10f2940e8580d5077075262521ca5798c13bdb83"
+    },
+    {
+      "path": "conformance/conventions.md",
+      "sha256": "e67b5fcfa45b4a38d27957ad9aa1667e1e7954c291ec2c570735a58648e3a321"
+    },
+    {
+      "path": "conformance/traceability.md",
+      "sha256": "b67944899e84460796e881036081bcc891089f583399dfc9c07be1b44192dbb9"
+    },
+    {
+      "path": "agentic/operations.md",
+      "sha256": "2339ac9bf2b89f34b11f5fd6191e158b7e097b3c232b98749d4fc0ee636fde08"
+    },
+    {
+      "path": "implementations/typescript/core/src/entities/entity.ts",
+      "sha256": "ca9c1aacf4514f1a9717e62edfde3cac11965152e7a7fc28787c44a8a1398521"
+    },
+    {
+      "path": "implementations/typescript/core/src/entities/types.ts",
+      "sha256": "889d0f73e2e55be15c81f59b5b8d599d822ae8155e0c12d9f1dbecc440f34a5d"
+    },
+    {
+      "path": "implementations/typescript/core/test/entities/entity.test.ts",
+      "sha256": "0dd9b8cefd670c26bf1e48b0e6f88bb5ee0625a20f316d977655ad06ba461fff"
+    },
+    {
+      "path": "implementations/typescript/adapters/conformance/src/operations.ts",
+      "sha256": "4f46240793972dddfdd1b8e655bfb469ff77790ae41af2e4217ca845d7c69ac0"
+    }
+  ],
+  "acceptedScope": [
+    "Entity Revision as opaque business revision distinct from stable Entity identity and conflict version",
+    "Entity Import preservation of supplied stable FinKore Entity identity",
+    "Explicit source identity mapping evidence without global registry, deduplication, or source format interpretation",
+    "Import preservation of current and historical business revisions and optional conflict version",
+    "Optional expected state, business revision, and conflict version preconditions",
+    "Reuse of existing portable Entity invalid identity and state conflict errors with safe diagnostics"
+  ],
+  "futureReviewTopics": [
+    "Concrete migration interchange formats",
+    "Cross-entity or cross-system identity registry design",
+    "Persistence transactions, locks, and distributed conflict handling",
+    "Authorization and source-system ownership policy",
+    "Workflow definition migration or state mapping",
+    "External accounting, audit, security, privacy, and community review"
+  ]
+}

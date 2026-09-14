@@ -37,6 +37,7 @@ export const CONFORMANCE_OPERATION_IDS = new Set([
   'money.serialize',
   'workflow.create',
   'workflow.import',
+  'entity.import',
   'audit.redact',
   'approval.requirement.evaluate',
   'approval.requirement.supersede',

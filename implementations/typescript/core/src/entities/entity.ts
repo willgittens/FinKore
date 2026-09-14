@@ -11,6 +11,10 @@ import {
 } from './errors.js'
 import type {
   EntityDefinition,
+  EntityIdentityMapping,
+  EntityImportResult,
+  EntityImportSourceIdentity,
+  EntityRevisionObservation,
   EntityValidationFinding,
   EntityValidationResult,
   EntityValidationRuleDefinition,
@@ -24,6 +28,11 @@ function isPlainRecord(value: unknown): value is Readonly<Record<string, unknown
 function requiredString(value: unknown): string {
   if (typeof value !== 'string' || value.length === 0) throw new InvalidEntityIdentityError()
   return value
+}
+
+function optionalIdentityString(value: unknown): string | undefined {
+  if (value === undefined) return undefined
+  return requiredString(value)
 }
 
 function cloneJsonValue<T>(value: T): T {
@@ -104,6 +113,108 @@ function validateSerializedEntity(definition: EntityDefinition, input: unknown):
     state: requiredString(input.state),
     data: cloneJsonValue(input.data),
   }
+}
+
+function validateSourceIdentity(input: unknown): EntityImportSourceIdentity {
+  if (!isPlainRecord(input)) throw new InvalidEntityIdentityError()
+  return {
+    sourceSystem: requiredString(input.sourceSystem),
+    sourceId: requiredString(input.sourceId),
+  }
+}
+
+function validateIdentityMapping(input: unknown, sourceIdentity: EntityImportSourceIdentity, entity: SerializedFinancialEntity): EntityIdentityMapping {
+  if (!isPlainRecord(input)) throw new InvalidEntityIdentityError()
+  const mappedEntity = input.entity
+  if (!isPlainRecord(mappedEntity)) throw new InvalidEntityIdentityError()
+  const mapping = {
+    mappingId: requiredString(input.mappingId),
+    sourceSystem: requiredString(input.sourceSystem),
+    sourceId: requiredString(input.sourceId),
+    entity: {
+      type: requiredString(mappedEntity.type),
+      id: requiredString(mappedEntity.id),
+    },
+  }
+  if (
+    mapping.sourceSystem !== sourceIdentity.sourceSystem ||
+    mapping.sourceId !== sourceIdentity.sourceId ||
+    mapping.entity.type !== entity.type ||
+    mapping.entity.id !== entity.id
+  ) {
+    throw new InvalidEntityIdentityError()
+  }
+  return mapping
+}
+
+function validateRevisionObservation(input: unknown, entity: SerializedFinancialEntity, current: boolean): EntityRevisionObservation {
+  const candidate = typeof input === 'string' ? { type: entity.type, id: entity.id, revision: input } : input
+  if (!isPlainRecord(candidate)) throw new InvalidEntityIdentityError()
+  const observation = {
+    type: requiredString(candidate.type),
+    id: requiredString(candidate.id),
+    revision: requiredString(candidate.revision),
+    current,
+  }
+  if (observation.type !== entity.type || observation.id !== entity.id || observation.revision === entity.id) {
+    throw new InvalidEntityIdentityError()
+  }
+  if (candidate.current !== undefined && candidate.current !== current) throw new InvalidEntityIdentityError()
+  return observation
+}
+
+function validateHistoricalRevisions(input: unknown, entity: SerializedFinancialEntity): readonly EntityRevisionObservation[] {
+  if (input === undefined) return []
+  if (!Array.isArray(input)) throw new InvalidEntityIdentityError()
+  return input.map((revision) => validateRevisionObservation(revision, entity, false))
+}
+
+function assertNoDuplicateRevisions(revisions: readonly EntityRevisionObservation[]): void {
+  const seen = new Set<string>()
+  for (const revision of revisions) {
+    if (seen.has(revision.revision)) throw new InvalidEntityIdentityError()
+    seen.add(revision.revision)
+  }
+}
+
+function assertExpected(value: unknown, expected: unknown): void {
+  if (expected !== undefined && value !== expected) throw new EntityStateConflictError()
+}
+
+function validateEntityImportResult(definition: EntityDefinition, input: unknown): EntityImportResult {
+  if (!isPlainRecord(input) || !Object.hasOwn(input, 'entity')) throw new InvalidEntityIdentityError()
+  const entity = validateSerializedEntity(definition, input.entity)
+  Workflow.from(definition.workflow, { currentState: entity.state })
+  mutableFieldsFor(definition, entity.state)
+  assertValidEntityData(definition, entity.data)
+
+  const currentRevision =
+    input.currentRevision === undefined ? undefined : validateRevisionObservation(input.currentRevision, entity, true)
+  const historicalRevisions = validateHistoricalRevisions(input.historicalRevisions, entity)
+  assertNoDuplicateRevisions(currentRevision === undefined ? historicalRevisions : [currentRevision, ...historicalRevisions])
+
+  const conflictVersion = optionalIdentityString(input.conflictVersion)
+  if (currentRevision !== undefined && conflictVersion !== undefined && currentRevision.revision === conflictVersion) {
+    throw new InvalidEntityIdentityError()
+  }
+
+  const sourceIdentity =
+    input.sourceIdentity === undefined ? undefined : validateSourceIdentity(input.sourceIdentity)
+  if ((sourceIdentity === undefined) !== (input.identityMapping === undefined)) throw new InvalidEntityIdentityError()
+  const identityMapping =
+    sourceIdentity === undefined ? undefined : validateIdentityMapping(input.identityMapping, sourceIdentity, entity)
+
+  assertExpected(entity.state, input.expectedState)
+  assertExpected(currentRevision?.revision, input.expectedRevision)
+  assertExpected(conflictVersion, input.expectedConflictVersion)
+
+  return cloneJsonValue({
+    entity,
+    ...(currentRevision === undefined ? {} : { currentRevision }),
+    historicalRevisions,
+    ...(identityMapping === undefined ? {} : { identityMapping }),
+    ...(conflictVersion === undefined ? {} : { conflictVersion }),
+  })
 }
 
 function valueAtTopLevelPath(data: unknown, path: string): unknown {
@@ -245,6 +356,43 @@ export class FinancialEntity {
     mutableFieldsFor(definition, entity.state)
     assertValidEntityData(definition, entity.data)
     return new FinancialEntity(definition, entity)
+  }
+
+  /**
+   * Imports an existing Financial Entity observation with optional revision,
+   * source identity mapping, and conflict-version context.
+   *
+   * Import preserves the supplied FinKore Entity identity and validates any
+   * Source Identity mapping as explicit continuity evidence. Current and
+   * historical Entity Revisions are preserved as business revision identity,
+   * while the optional conflict version remains a distinct stale-observation
+   * token. Expected state, revision, and conflict-version preconditions are
+   * checked after the supplied observation is structurally valid.
+   *
+   * @param definitionInput - Candidate composing-domain Entity definition.
+   * @param importInput - Existing Entity import observation and optional
+   * mapping, revision history, conflict version, and expected preconditions.
+   * @returns A defensive import observation preserving supplied identity,
+   * revision, mapping, and conflict-version values.
+   * @throws {InvalidEntityIdentityError}
+   * When Entity, revision, mapping, or conflict-version identity is missing,
+   * malformed, incomplete, or internally conflicting.
+   * @throws {EntityStateConflictError}
+   * When an expected state, revision, or conflict version does not match the
+   * supplied observation.
+   *
+   * @see FINKORE_ENTITY_INVALID_IDENTITY
+   * @see FINKORE_ENTITY_STATE_CONFLICT
+   * @see ENTITY-IDENTITY-006
+   * @see ENTITY-REVISION-001
+   * @see ENTITY-REVISION-006
+   * @see ENTITY-IMPORT-001
+   * @see ENTITY-IMPORT-006
+   * @see ENTITY-IMPORT-007
+   */
+  static import(definitionInput: unknown, importInput: unknown): EntityImportResult {
+    const definition = validateDefinition(definitionInput)
+    return validateEntityImportResult(definition, importInput)
   }
 
   /**

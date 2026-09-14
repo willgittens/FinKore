@@ -1,0 +1,272 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "entity.import.identity-mapping-preserved-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IDENTITY-006",
+        "ENTITY-REVISION-001",
+        "ENTITY-REVISION-003",
+        "ENTITY-REVISION-004",
+        "ENTITY-REVISION-005",
+        "ENTITY-IMPORT-001",
+        "ENTITY-IMPORT-002",
+        "ENTITY-IMPORT-003",
+        "ENTITY-IMPORT-004",
+        "ENTITY-IMPORT-005",
+        "ENTITY-IMPORT-006"
+      ],
+      "description": "Imports an existing Entity while preserving FinKore identity, explicit source mapping, current revision, historical revision, and conflict version.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": ["DRAFT", "SUBMITTED", "FINAL"],
+            "initialState": "DRAFT",
+            "terminalStates": ["FINAL"],
+            "transitions": [
+              { "source": "DRAFT", "target": "SUBMITTED" },
+              { "source": "SUBMITTED", "target": "FINAL" }
+            ]
+          },
+          "mutability": {
+            "DRAFT": ["amount", "memo"],
+            "SUBMITTED": ["memo"],
+            "FINAL": ["deliveryStatus"]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": { "amount": "100.00", "currency": "EUR" },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": { "type": "invoice", "id": "inv-42", "revision": "business-rev-2" },
+          "historicalRevisions": [{ "type": "invoice", "id": "inv-42", "revision": "business-rev-1" }],
+          "sourceIdentity": { "sourceSystem": "legacy-ar", "sourceId": "LEGACY-000042" },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": { "type": "invoice", "id": "inv-42" }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": { "amount": "100.00", "currency": "EUR" },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": { "type": "invoice", "id": "inv-42", "revision": "business-rev-2", "current": true },
+          "historicalRevisions": [{ "type": "invoice", "id": "inv-42", "revision": "business-rev-1", "current": false }],
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": { "type": "invoice", "id": "inv-42" }
+          },
+          "conflictVersion": "storage-token-9"
+        }
+      },
+      "tags": ["positive", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["source-identity-replaces-finkore-identity", "revision-history-dropped", "conflict-version-overwrites-business-revision"]
+    },
+    {
+      "id": "entity.import.missing-mapping-invalid-identity-001",
+      "spec": "entities/import",
+      "requirements": ["ENTITY-IMPORT-003", "ENTITY-IMPORT-008", "ENTITY-IMPORT-009", "ENTITY-IMPORT-010"],
+      "description": "Rejects source identity import without explicit mapping evidence and returns no partial import result.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": ["DRAFT", "SUBMITTED"],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [{ "source": "DRAFT", "target": "SUBMITTED" }]
+          },
+          "mutability": { "DRAFT": ["amount"], "SUBMITTED": ["memo"] }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": { "amount": { "amount": "100.00", "currency": "EUR" } }
+          },
+          "sourceIdentity": { "sourceSystem": "legacy-ar", "sourceId": "LEGACY-000042" }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_ENTITY_INVALID_IDENTITY" },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": { "amount": { "amount": "100.00", "currency": "EUR" } }
+          }
+        }
+      },
+      "tags": ["negative", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["mapping-evidence-omitted", "sensitive-source-identity-leaked"]
+    },
+    {
+      "id": "entity.import.expected-state-conflict-001",
+      "spec": "entities/import",
+      "requirements": ["ENTITY-IMPORT-007", "ENTITY-IMPORT-008"],
+      "description": "Rejects an import whose expected Entity state does not match the supplied observation.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": ["DRAFT", "SUBMITTED"],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [{ "source": "DRAFT", "target": "SUBMITTED" }]
+          },
+          "mutability": { "DRAFT": ["amount"], "SUBMITTED": ["memo"] }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": { "amount": { "amount": "100.00", "currency": "EUR" } }
+          },
+          "expectedState": "DRAFT"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_ENTITY_STATE_CONFLICT" },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": { "amount": { "amount": "100.00", "currency": "EUR" } }
+          }
+        }
+      },
+      "tags": ["negative", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["expected-state-bypassed", "partial-import-returned"]
+    },
+    {
+      "id": "entity.import.expected-revision-conflict-001",
+      "spec": "entities/import",
+      "requirements": ["ENTITY-REVISION-006", "ENTITY-IMPORT-006", "ENTITY-IMPORT-007", "ENTITY-IMPORT-008"],
+      "description": "Rejects an import whose expected business revision does not match the supplied current revision.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": ["DRAFT", "SUBMITTED"],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [{ "source": "DRAFT", "target": "SUBMITTED" }]
+          },
+          "mutability": { "DRAFT": ["amount"], "SUBMITTED": ["memo"] }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": { "amount": { "amount": "100.00", "currency": "EUR" } }
+          },
+          "currentRevision": "business-rev-2",
+          "conflictVersion": "storage-token-9",
+          "expectedRevision": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_ENTITY_STATE_CONFLICT" },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": { "amount": { "amount": "100.00", "currency": "EUR" } }
+          }
+        }
+      },
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["conflict-version-used-as-business-revision"]
+    },
+    {
+      "id": "entity.import.expected-conflict-version-conflict-001",
+      "spec": "entities/import",
+      "requirements": ["ENTITY-REVISION-006", "ENTITY-IMPORT-006", "ENTITY-IMPORT-007", "ENTITY-IMPORT-008"],
+      "description": "Rejects an import whose expected conflict version does not match while the business revision does match.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": ["DRAFT", "SUBMITTED"],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [{ "source": "DRAFT", "target": "SUBMITTED" }]
+          },
+          "mutability": { "DRAFT": ["amount"], "SUBMITTED": ["memo"] }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": { "amount": { "amount": "100.00", "currency": "EUR" } }
+          },
+          "currentRevision": "business-rev-2",
+          "conflictVersion": "storage-token-9",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "business-rev-2"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_ENTITY_STATE_CONFLICT" },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": { "amount": { "amount": "100.00", "currency": "EUR" } }
+          }
+        }
+      },
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["business-revision-used-as-conflict-version"]
+    }
+  ]
+}
