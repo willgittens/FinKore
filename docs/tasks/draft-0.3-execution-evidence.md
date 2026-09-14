@@ -833,3 +833,693 @@ review prerequisite is superseded by D03-REVIEW-001 below.
   blocker.
 - Result: Advanced Approvals is closed. Next task: TASK-085 — Workflow
   Definition Version Identity Specification.
+
+## Workflow Versioning and Import
+
+### TASK-085 - Workflow Definition Identity and Version Terminology
+
+- Status: COMPLETE
+- Date: 2026-09-13
+- Source revision: `ccea217e647dca76a70605e1ca67ab971f41a192` plus TASK-085/TASK-086 documentation changes.
+- Changes:
+  - Added `spec/workflow/versioning.md`.
+  - Defined `WORKFLOW-VERSION-001` through `WORKFLOW-VERSION-006` for versioned Workflow Definition identity, version identity, immutability of declared version semantics, separation from Entity Revision and storage counters, opaque identifier interpretation, and the default numeric sequence.
+  - Updated Workflow index/non-goals, shared glossary, conformance traceability, root README status, TypeScript core README status, Draft 0.3 plan status, and Agentic pending-status note.
+- Traceability:
+  - TASK-085 contributes six UNCOVERED Workflow requirements pending Workflow vector publication.
+  - No existing Draft 0.1/0.2 or Approval Composition coverage row was reclassified.
+- Verification:
+  - `git diff --check` passed after TASK-085/TASK-086.
+  - Scoped `rg` inspections checked WORKFLOW-VERSION references, Workflow links, and portable error catalog alignment.
+- Mutation:
+  - Not applicable; no runtime behavior changed.
+  - Future mutation targets include deriving identifiers from storage counters, inferring behavior from opaque ID format, reusing a version identity for changed semantics, and treating the numeric sequence as a database counter or migration rule.
+- Completion applicability:
+  - `/spec`, `/conformance` traceability, root README, TypeScript core README, Draft 0.3 plan, `/agentic`, and the execution backlog were updated.
+  - Unit tests, runtime conformance vectors, mutation-sensitive tests, JSDoc, adapter code/docs, AGENTS.md, and CoreDoc need no updates for this spec-only terminology task.
+
+### TASK-086 - Workflow Instance Binding and Version Mismatch
+
+- Status: COMPLETE
+- Date: 2026-09-13
+- Source revision: `ccea217e647dca76a70605e1ca67ab971f41a192` plus TASK-085/TASK-086 documentation changes.
+- Changes:
+  - Added `WORKFLOW-VERSION-007` through `WORKFLOW-VERSION-012` for immutable instance binding, transition validation against the bound definition version, older-version observation, safe diagnostics, and prohibition on silently switching instances to newer definitions.
+  - Added `FINKORE_WORKFLOW_VERSION_MISMATCH` and `WORKFLOW-ERROR-004`.
+  - Updated Workflow errors, transitions, states, shared conventions, conformance traceability, root README status, TypeScript core README status, Draft 0.3 plan status, and Agentic pending-status note.
+- Traceability:
+  - `conformance/traceability.md` now reports 347 total requirements: 268 covered, 13 uncovered, 66 not directly testable, and 0 blocking spec gaps.
+  - Workflow reports 40 requirements: 22 covered, 13 uncovered, and 5 not directly testable.
+  - The 13 uncovered rows are the new WORKFLOW-VERSION-001 through WORKFLOW-VERSION-012 and WORKFLOW-ERROR-004 rows pending TASK-090 vectors and later implementation.
+- Verification:
+  - `git diff --check` passed after TASK-085/TASK-086.
+  - Scoped `rg` inspections checked WORKFLOW-VERSION references, `FINKORE_WORKFLOW_VERSION_MISMATCH` references, local Workflow links, and traceability rows.
+- Mutation:
+  - Not applicable; no runtime behavior changed.
+  - Future mutation targets include evaluating old instances against latest definitions, changing binding during transition, accepting supplied-version mismatch, returning transition/guard/terminal errors before mismatch, and mutating state or binding after mismatch failure.
+- Completion applicability:
+  - `/spec`, `/conformance` traceability, root README, TypeScript core README, Draft 0.3 plan, `/agentic`, and the execution backlog were updated.
+  - Unit tests, runtime conformance vectors, mutation-sensitive tests, JSDoc, adapter code/docs, AGENTS.md, and CoreDoc need no updates for this spec-only binding/error task.
+- Result:
+  - READY FOR TASK-087.
+
+### TASK-087 - Workflow Import and Conflict Semantics
+
+- Status: COMPLETE
+- Date: 2026-09-13
+- Source revision: `ccea217e647dca76a70605e1ca67ab971f41a192` plus TASK-085 through TASK-088 documentation changes.
+- Changes:
+  - Added `spec/workflow/import.md`.
+  - Added `spec/workflow/conflicts.md`.
+  - Defined `WORKFLOW-IMPORT-001` through `WORKFLOW-IMPORT-006` for import of a declared current State, supplied version binding, optional opaque Workflow Instance Revision, non-transition import behavior, and failure preservation.
+  - Defined `WORKFLOW-CONFLICT-001` through `WORKFLOW-CONFLICT-008` for optional expected-current-state and expected-revision preconditions, omission semantics, exact mismatch behavior, post-conflict preservation, and the non-locking/non-concurrency boundary.
+  - Updated Workflow index/non-goals, transitions, glossary, conformance conventions, conformance traceability, root README, conformance README, TypeScript core README status, Draft 0.3 plan status, and Agentic pending-status note.
+- Traceability:
+  - TASK-087 contributes 14 UNCOVERED Workflow requirements pending Workflow vector publication.
+  - No existing Draft 0.1/0.2 or Approval Composition coverage row was reclassified.
+- Verification:
+  - `git diff --check` passed after TASK-087/TASK-088.
+  - Scoped `rg` inspections checked WORKFLOW-IMPORT references, WORKFLOW-CONFLICT references, local Workflow links, and conformance operation-catalog wording.
+- Mutation:
+  - Not applicable; no runtime behavior changed.
+  - Future mutation targets include inferring imported state from the initial state, inventing imported binding or revision, replaying import as a transition, treating omitted expected preconditions as defaults, accepting stale expected state/revision, and mutating state/binding/revision after conflict failure.
+- Completion applicability:
+  - `/spec`, `/conformance` conventions and traceability, root README, conformance README, TypeScript core README, Draft 0.3 plan, `/agentic`, and the execution backlog were updated.
+  - Unit tests, runtime conformance vectors, mutation-sensitive tests, JSDoc, adapter source, AGENTS.md, and CoreDoc need no updates for this spec-only import/conflict task.
+
+### TASK-088 - Workflow Version and Conflict Portable Error Design
+
+- Status: COMPLETE
+- Date: 2026-09-13
+- Source revision: `ccea217e647dca76a70605e1ca67ab971f41a192` plus TASK-085 through TASK-088 documentation changes.
+- Changes:
+  - Added `FINKORE_WORKFLOW_INVALID_INSTANCE` for malformed imported or observed Workflow instance structure.
+  - Added `FINKORE_WORKFLOW_STATE_CONFLICT` for expected-current-state or expected-revision precondition mismatches.
+  - Added `WORKFLOW-ERROR-005` through `WORKFLOW-ERROR-007`, including deterministic error precedence: invalid definition, invalid instance observation, version mismatch, invalid State value, expected-state/revision conflict, terminal State, invalid Transition, then guard rejection.
+  - Preserved Draft 0.1 terminal-state precedence over invalid Transition after earlier structural, binding, State, and conflict preconditions have passed.
+  - Updated Workflow errors, shared error catalog, conformance conventions, conformance traceability, root README, conformance README, TypeScript core README status, Draft 0.3 plan status, and Agentic pending-status note.
+- Traceability:
+  - `conformance/traceability.md` now reports 364 total requirements: 268 covered, 30 uncovered, 66 not directly testable, and 0 blocking spec gaps.
+  - Workflow reports 57 requirements: 22 covered, 30 uncovered, and 5 not directly testable.
+  - The 30 uncovered Workflow rows are the new WORKFLOW-VERSION-001 through WORKFLOW-VERSION-012, WORKFLOW-IMPORT-001 through WORKFLOW-IMPORT-006, WORKFLOW-CONFLICT-001 through WORKFLOW-CONFLICT-008, and WORKFLOW-ERROR-004 through WORKFLOW-ERROR-007 rows pending TASK-090 vectors and later implementation.
+- Verification:
+  - `git diff --check` passed after TASK-087/TASK-088.
+  - `awk` traceability checks reported `rows=364 covered=268 uncovered=30 ndt=66 partial=0 deferred=0 gaps=0` and `workflow=57 covered=22 uncovered=30 ndt=5`.
+  - Scoped `rg` inspections checked portable error references, stale pointer/error-code searches, Workflow local links, and Agentic pending-status wording.
+- Mutation:
+  - Not applicable; no runtime behavior changed.
+  - Future mutation targets include collapsing malformed instance observations into transition errors, accepting missing version binding, collapsing expected-state/revision conflict into invalid transition or terminal-state errors, using branch order instead of defined precedence, and mutating state/binding/revision after error.
+- Completion applicability:
+  - `/spec`, `/conformance` conventions and traceability, root README, conformance README, TypeScript core README, Draft 0.3 plan, `/agentic`, and the execution backlog were updated.
+  - Unit tests, runtime conformance vectors, mutation-sensitive tests, JSDoc, adapter source, AGENTS.md, and CoreDoc need no updates for this spec-only error-design task.
+- Result:
+  - READY FOR TASK-089.
+
+### TASK-089 - Workflow Versioning Technical and Domain Review
+
+- Status: COMPLETE
+- Date: 2026-09-13
+- Changes:
+  - Added `docs/tasks/review-snapshots/task-089-workflow-versioning.json`.
+  - Recorded scoped review in
+    `docs/tasks/draft-0.3-research-decisions.md`.
+- Review:
+  - D03-REVIEW-001 applied to Workflow opaque definition/version identity,
+    immutable bound-instance behavior, import boundaries,
+    expected-state/revision portability, errors, precedence, and non-goals.
+  - Maintainer authority is the explicit instruction to continue with
+    TASK-089/TASK-090/TASK-091 after TASK-085 through TASK-088.
+  - External community/accounting/security/audit review remains NOT EXTERNALLY
+    REVIEWED and recorded as future review opportunity, not a Draft 0.3
+    blocker.
+- Verification:
+  - `git diff --check` later exited 0 after the combined
+    TASK-089/TASK-090/TASK-091 work.
+  - Runtime tests and mutation are not applicable to this research-only task.
+- Result:
+  - READY FOR TASK-090.
+
+### TASK-090 - Workflow Versioning Import and Conflict Vectors
+
+- Status: COMPLETE
+- Date: 2026-09-13
+- Changes:
+  - Added and registered `conformance/workflow/versioning.json` with 21
+    manifest-listed vectors.
+  - Added conformance-local `workflow.import` metadata to the runner.
+  - Updated traceability to 364 requirements, 239 vectors, 294 covered, 0
+    uncovered, 70 not directly testable, and 0 blocking spec gaps.
+- Verification:
+  - `npm run test --workspace @finkore/conformance-runner` exited 0 with 10
+    files / 110 tests passed after updating the manifest vector-count sentinel.
+  - `npm run build --workspaces` exited 0.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --suite workflow`
+    exited 1 with the expected pending Workflow implementation set only: 25
+    passed, 10 failed, 6 unsupported, 0 infrastructure errors.
+  - `git diff --check` later exited 0.
+- Expected red set:
+  - All six `workflow.import.*` vectors are unsupported pending import support.
+  - Ten Workflow binding/conflict/preference vectors fail pending TASK-092 and
+    later Workflow implementation tasks.
+- Mutation:
+  - Not applicable; no runtime financial behavior changed.
+- Result:
+  - READY FOR TASK-091.
+
+### TASK-091 - Workflow Definition Version API Implementation
+
+- Status: COMPLETE
+- Date: 2026-09-13
+- Changes:
+  - Added Workflow definition/version identity, default sequence, and binding
+    public types.
+  - `WorkflowDefinition.from` now validates paired definition/version identity
+    fields, preserves identifiers exactly, accepts unversioned Draft 0.1
+    definitions, and enforces `versionSequence: "DEFAULT"` only for positive
+    base-10 integer version identities.
+  - Added public `WorkflowDefinition` version metadata accessors and
+    `versionBinding()` with requirement-linked JSDoc.
+  - Added focused Workflow versioning unit tests and updated TypeScript exports
+    plus public status documentation.
+- Red test:
+  - Focused `test/workflow/versioning.test.ts` initially failed 6/6 tests
+    against the old implementation before the core change.
+- Verification:
+  - `command -v node` reported
+    `/home/will/.nvm/versions/node/v24.15.0/bin/node`; `node --version`
+    reported `v24.15.0`.
+  - `npm run test --workspace @finkore/typescript -- --run test/workflow/versioning.test.ts`
+    exited 0 with 1 file / 7 tests passed.
+  - `npm run typecheck --workspace @finkore/typescript` exited 0.
+  - `npm run test --workspace @finkore/typescript` exited 0 with 40 files /
+    340 tests passed.
+  - `npm run test:coverage --workspace @finkore/typescript` exited 0 with 40
+    files / 340 tests passed and 99.03% statements, 98.57% branches, 100%
+    functions, 99.45% lines.
+  - `npm run build --workspaces` exited 0.
+  - `npm run test --workspace @finkore/conformance-runner` exited 0 with 10
+    files / 110 tests passed.
+  - Workflow conformance remains intentionally partial after TASK-091: 25
+    passed, 10 failed, 6 unsupported, 0 infrastructure errors.
+  - `git diff --check` later exited 0.
+- Mutation:
+  - Initial targeted mutation failed under sandbox socket restrictions with
+    `listen EPERM: operation not permitted 0.0.0.0`; rerun with escalation.
+  - First targeted mutation run scored 93.61%, below the 95% gate. Additional
+    tests/refactoring were added and mutation was rerun.
+  - `npm run test:mutation --workspace @finkore/typescript -- --mutate src/workflow/definition.ts --testFiles test/workflow/*.test.ts --reporters clear-text --reporters json`
+    exited 0 with 223 mutants and 96.86% mutation score.
+  - Remaining survivors were inspected and classified noncritical/equivalent
+    for this slice.
+- Result:
+  - READY FOR TASK-092.
+
+### TASK-092 - Workflow Instance Binding Implementation
+
+- Status: COMPLETE.
+- Date: 2026-09-14.
+- Source revision inspected before task completion: `ccea217e647dca76a70605e1ca67ab971f41a192`
+  with existing uncommitted Draft 0.3 Workflow changes from TASK-085 through
+  TASK-091 in the working tree.
+- Changes:
+  - `Workflow.create` now binds versioned instances to the validated
+    `definitionIdentity` and `definitionVersionIdentity` supplied by
+    `WorkflowDefinition`.
+  - `Workflow.from` now requires a matching bound definition version for
+    versioned instance observations, rejects malformed/missing version bindings
+    with `FINKORE_WORKFLOW_INVALID_INSTANCE`, and rejects definition/binding
+    mismatches with `FINKORE_WORKFLOW_VERSION_MISMATCH`.
+  - `Workflow.versionBinding()` returns a defensive observation of the immutable
+    instance binding; `Workflow.toJSON()` includes `binding` for versioned
+    instances and omits it for unversioned instances.
+  - Added public `InvalidWorkflowInstanceError`,
+    `WorkflowVersionMismatchError`, and `WorkflowStateConflictError` classes so
+    the TypeScript error surface matches the Draft 0.3 Workflow portable error
+    catalog. `WorkflowStateConflictError` is exposed for the specified code;
+    transition precondition behavior remains scheduled for TASK-094.
+  - Added Workflow versioning tests for created bindings, transition binding
+    preservation, older-version governance, version mismatch, malformed
+    binding, unversioned observations, defensive binding copies, and portable
+    error-code exposure.
+  - Updated root and TypeScript README status to say core instance
+    binding/mismatch is implemented while Workflow import, revision conflict
+    checks, and final adapter support remain pending.
+- Red test:
+  - `npm run test --workspace @finkore/typescript -- --run test/workflow/versioning.test.ts`
+    initially exited 1 with 5 failing instance-binding tests against the old
+    implementation: missing `Workflow.versionBinding()`, missing serialized
+    binding, older-version binding not preserved, and no mismatch rejection.
+- Verification:
+  - `command -v node` reported
+    `/home/will/.nvm/versions/node/v24.15.0/bin/node`; `node --version`
+    reported `v24.15.0`.
+  - `npm run test --workspace @finkore/typescript -- --run test/workflow/versioning.test.ts`
+    exited 0 with 1 file / 16 tests passed.
+  - `npm run test --workspace @finkore/typescript -- --run test/workflow`
+    exited 0 with 6 files / 55 tests passed.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspace @finkore/typescript` exited 0 with 40 files /
+    350 tests passed.
+  - `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0
+    with 1 file / 14 tests passed.
+  - `npm run build --workspaces` exited 0.
+  - `npm run test:coverage --workspace @finkore/typescript` exited 0 with 40
+    files / 350 tests passed and 99.05% statements, 98.60% branches, 100%
+    functions, 99.46% lines.
+  - `npm run test:coverage --workspace @finkore/conformance-runner` exited 0
+    with 10 files / 110 tests passed and 98.31% statements, 95.29% branches,
+    100% functions, 98.75% lines.
+  - Workflow conformance after TASK-092 intentionally remains partial:
+    27 passed, 8 failed, 6 unsupported, 0 infrastructure errors. Newly passing
+    binding vectors include `workflow.create.versioned-binding-001` and
+    `workflow.transition.bound-older-version-001`.
+  - Remaining pending Workflow conformance set: all six `workflow.import.*`
+    vectors unsupported; `workflow.transition.version-mismatch-preserves-state-001`
+    fails only because adapter observations are not yet reported when
+    `Workflow.from` rejects the mismatch; expected-state/revision and precedence
+    vectors remain scheduled for TASK-094/TASK-095.
+- Mutation:
+  - Initial targeted mutation failed under sandbox socket restrictions with
+    `listen EPERM: operation not permitted 0.0.0.0`; rerun with escalation.
+  - First targeted run over `src/workflow/workflow.ts` scored 93.39%, below the
+    95% gate. The surviving branches exposed weak tests around supplied binding
+    shape and unversioned serialized observations.
+  - After behavior-level test additions and simplifying the missing-binding
+    path, `npm run test:mutation --workspace @finkore/typescript -- --mutate src/workflow/workflow.ts --testFiles test/workflow/*.test.ts --reporters clear-text --reporters json`
+    exited 0 with 112 mutants and 100.00% mutation score. Report:
+    `implementations/typescript/core/reports/mutation/mutation.json`.
+- Completion applicability:
+  - Unit tests, mutation-sensitive tests, JSDoc, TypeScript exports, root/core
+    README status, execution evidence, implementation plan pointer, and backlog
+    pointer were updated.
+  - No new `/spec`, conformance vectors, runner metadata, Agentic canonical
+    operation metadata, AGENTS.md, or CoreDoc change was required; this task
+    implemented already accepted and vector-covered Workflow semantics.
+- Result:
+  - READY FOR TASK-093.
+
+### TASK-093 - Workflow Import Implementation
+
+- Status: COMPLETE.
+- Date: 2026-09-14.
+- Source revision inspected before task completion: `ccea217e647dca76a70605e1ca67ab971f41a192`
+  with existing uncommitted Draft 0.3 Workflow changes through TASK-092 in the
+  working tree.
+- Changes:
+  - Added `Workflow.import(definition, instance)` as the explicit TypeScript
+    core import boundary for existing Workflow instance observations.
+  - `Workflow.import` uses the supplied `currentState` instead of the
+    definition initial state, validates it against the supplied definition,
+    validates/preserves required version binding for versioned definitions, and
+    preserves optional opaque Workflow Instance Revision values exactly.
+  - `Workflow.from` now delegates to `Workflow.import` as the compatibility
+    existing-observation API.
+  - Added public `WorkflowInstanceRevision` and `workflow.revision`; `toJSON()`
+    now preserves `revision` when supplied and omits absent optional fields.
+  - Updated malformed instance handling so missing singular `currentState`
+    observations now use `FINKORE_WORKFLOW_INVALID_INSTANCE`, while undeclared
+    supplied state values remain `FINKORE_WORKFLOW_INVALID_STATE`.
+  - Synchronized the legacy `workflow.transition.multiple-current-states-001`
+    vector with `WORKFLOW-ERROR-005` because it supplies `currentStates` without
+    singular `currentState`; this aligns the vector with the accepted Draft 0.3
+    error precedence rather than changing implementation behavior to match a
+    stale expectation.
+  - Updated root and TypeScript README status to say core Workflow import is
+    implemented while revision conflict checks and final adapter support remain
+    pending.
+- Red test:
+  - `npm run test --workspace @finkore/typescript -- --run test/workflow/versioning.test.ts`
+    initially exited 1 with 6 failing import tests: missing `Workflow.import`,
+    missing revision preservation, malformed import observations not mapped
+    through the new import API, and `Workflow.from` not preserving revisions.
+- Verification:
+  - `npm run test --workspace @finkore/typescript -- --run test/workflow/versioning.test.ts`
+    exited 0 with 1 file / 24 tests passed.
+  - `npm run test --workspace @finkore/typescript -- --run test/workflow`
+    exited 0 with 6 files / 63 tests passed.
+  - `npm run typecheck --workspace @finkore/typescript` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspace @finkore/typescript` exited 0 with 40 files /
+    358 tests passed.
+  - `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0
+    with 1 file / 14 tests passed.
+  - `npm run build --workspaces` exited 0.
+  - `npm run test --workspace @finkore/conformance-runner` exited 0 with 10
+    files / 110 tests passed after the stale multiple-current-states vector
+    error expectation was corrected.
+  - Workflow conformance after TASK-093 intentionally remains partial:
+    30 passed, 5 failed, 6 unsupported, 0 infrastructure errors. Import vectors
+    remain unsupported until TASK-095 adapter wiring; expected-state/revision
+    conflict failures remain scheduled for TASK-094; version-mismatch
+    transition observation remains scheduled for TASK-095.
+- Mutation:
+  - `npm run test:mutation --workspace @finkore/typescript -- --mutate src/workflow/workflow.ts --testFiles test/workflow/*.test.ts --reporters clear-text --reporters json`
+    required escalation because Stryker's local logging server is blocked by the
+    sandbox. The final rerun exited 0 with 134 mutants and 100.00% mutation
+    score. Report: `implementations/typescript/core/reports/mutation/mutation.json`.
+- Completion applicability:
+  - Unit tests, conformance vector expectation/traceability, mutation-sensitive
+    tests, JSDoc, TypeScript exports, root/core README status, execution
+    evidence, implementation plan pointer, and backlog pointer were updated.
+  - No new `/spec`, Agentic canonical operation metadata, AGENTS.md, or CoreDoc
+    change was required; this task implemented already accepted and
+    vector-covered Workflow import semantics.
+- Result:
+  - READY FOR TASK-094.
+
+### TASK-094 - Workflow Conflict Precondition Implementation
+
+- Status: COMPLETE.
+- Date: 2026-09-14.
+- Source revision inspected before task completion: `ccea217e647dca76a70605e1ca67ab971f41a192`
+  with existing uncommitted Draft 0.3 Workflow changes through TASK-093 in the
+  working tree.
+- Changes:
+  - Added `expectedCurrentState` and `expectedRevision` to
+    `WorkflowTransitionOptions`.
+  - `Workflow.transition` now validates supplied expected current states as
+    declared states before conflict comparison, rejects stale expected current
+    state or expected revision with `FINKORE_WORKFLOW_STATE_CONFLICT`, and
+    evaluates these preconditions before terminal-state, transition, or guard
+    behavior.
+  - Successful transitions preserve the imported opaque Workflow Instance
+    Revision and do not generate or increment revisions.
+  - Added focused unit tests covering expected-current-state match/mismatch,
+    undeclared expected-state precedence, conflict-before-terminal precedence,
+    expected-revision match/mismatch, omitted expected values, and failure
+    preservation.
+  - Updated root and TypeScript README status to say core Workflow conflict
+    preconditions are implemented while adapter support remains pending.
+- Red test:
+  - `npm run test --workspace @finkore/typescript -- --run test/workflow/versioning.test.ts`
+    initially exited 1 with 4 failing conflict tests: stale expected current
+    state accepted, undeclared expected current state accepted, terminal-state
+    reported before expected-state conflict, and stale/unavailable expected
+    revision accepted.
+- Verification:
+  - `npm run test --workspace @finkore/typescript -- --run test/workflow/versioning.test.ts`
+    exited 0 with 1 file / 30 tests passed.
+  - `npm run test --workspace @finkore/typescript -- --run test/workflow`
+    exited 0 with 6 files / 69 tests passed.
+  - `npm run typecheck --workspace @finkore/typescript` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspace @finkore/typescript` exited 0 with 40 files /
+    364 tests passed.
+  - `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0
+    with 1 file / 14 tests passed.
+  - `npm run build --workspaces` exited 0.
+  - `npm run test:coverage --workspace @finkore/typescript` exited 0 with 40
+    files / 364 tests passed and 99.06% statements, 98.62% branches, 100%
+    functions, 99.47% lines.
+  - Workflow conformance after TASK-094 intentionally remains partial:
+    30 passed, 5 failed, 6 unsupported, 0 infrastructure errors. The remaining
+    failures/unsupported vectors are adapter translation/observation work for
+    TASK-095.
+- Mutation:
+  - Targeted Stryker required escalation because the sandbox blocks its local
+    logging server.
+  - `npm run test:mutation --workspace @finkore/typescript -- --mutate src/workflow/workflow.ts --testFiles test/workflow/*.test.ts --reporters clear-text --reporters json`
+    exited 0 with 164 mutants and 100.00% mutation score. Report:
+    `implementations/typescript/core/reports/mutation/mutation.json`.
+- Completion applicability:
+  - Unit tests, mutation-sensitive tests, JSDoc, public option types, root/core
+    README status, execution evidence, implementation plan pointer, and backlog
+    pointer were updated.
+  - No new `/spec`, conformance vectors, runner metadata, Agentic canonical
+    operation metadata, AGENTS.md, or CoreDoc change was required; this task
+    implemented already accepted and vector-covered Workflow conflict semantics.
+- Result:
+  - READY FOR TASK-095.
+
+### TASK-095 - Workflow Versioning Adapter Support
+
+- Status: COMPLETE.
+- Date: 2026-09-14.
+- Source revision inspected before task completion: `ccea217e647dca76a70605e1ca67ab971f41a192`
+  with existing uncommitted Draft 0.3 Workflow changes through TASK-094 in the
+  working tree.
+- Changes:
+  - Added TypeScript conformance adapter support for the conformance-local
+    `workflow.import` operation.
+  - Updated Workflow transition fixture translation to pass
+    `expectedCurrentState`, `expectedRevision`, and existing `facts` through to
+    the core `Workflow.transition` API without implementing transition rules in
+    the adapter.
+  - Added portable Workflow transition observations for version mismatch,
+    conflict, terminal, invalid transition, and guard-rejection vectors while
+    avoiding raw observations for malformed instance observations.
+  - Added focused adapter coverage for all 21
+    `conformance/workflow/versioning.json` vectors and updated supported
+    operation assertions.
+  - Updated root, TypeScript core, TypeScript conformance adapter, Draft 0.3
+    plan, and backlog status documentation to reflect implemented adapter
+    support while keeping migration, concurrency resolution, persistence, and
+    broader guard frameworks out of scope.
+- Red test:
+  - `npm run test --workspace @finkore/typescript-conformance-adapter`
+    initially exited 1 with the new Workflow versioning adapter test reporting
+    21 total, 10 passed, 5 failed, 6 unsupported, 0 infrastructure errors.
+  - After initial adapter wiring, the focused workflow CLI diagnostic reported
+    41 total, 39 passed, 2 failed, 0 unsupported, 0 infrastructure errors. The
+    remaining failures were observation mismatches for
+    `workflow.transition.error-precedence-invalid-instance-before-version-001`
+    and `workflow.transition.undeclared-current-state-001`.
+- Verification:
+  - Node v24.15.0 / npm 11.12.1 were available in the machine environment.
+  - `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0
+    with 1 file / 15 tests passed.
+  - `npm run build --workspaces` exited 0.
+  - `npm run test --workspace @finkore/typescript -- --run test/workflow/versioning.test.ts`
+    exited 0 with 1 file / 30 tests passed.
+  - `npm run test --workspace @finkore/typescript -- --run test/workflow`
+    exited 0 with 6 files / 69 tests passed.
+  - `npm run typecheck --workspace @finkore/typescript` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspace @finkore/typescript` exited 0 with 40 files /
+    364 tests passed.
+  - `npm run test --workspace @finkore/conformance-runner` exited 0 with 10
+    files / 110 tests passed.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --suite workflow`
+    exited 0 with Workflow 41 passed, 0 failed, 0 unsupported, 0 infrastructure
+    errors.
+  - Full conformance exited 0 with 239 passed, 0 failed, 0 unsupported, 0
+    infrastructure errors across Money 83, Workflow 41, Audit 29, Approvals 66,
+    and Entities 20.
+- Mutation:
+  - Not applicable for this adapter-only translation/documentation task because
+    no new Workflow core financial behavior was introduced.
+  - TASK-094 retains the current targeted Workflow core mutation evidence:
+    `implementations/typescript/core/reports/mutation/mutation.json`, 164
+    mutants, 100.00% mutation score.
+- Completion applicability:
+  - Adapter tests, adapter supported-operation documentation, root/core README
+    status, execution evidence, implementation plan pointer, and backlog pointer
+    were updated.
+  - No new `/spec`, conformance vectors, runner metadata, Agentic canonical
+    operation metadata, AGENTS.md, or CoreDoc change was required; this task
+    wired already accepted and vector-covered Workflow behavior through the
+    TypeScript conformance adapter.
+- Result:
+  - READY FOR TASK-096.
+
+### TASK-096 - Workflow Versioning Mutation Hardening
+
+- Status: COMPLETE.
+- Date: 2026-09-14.
+- Source revision inspected before task completion:
+  `ccea217e647dca76a70605e1ca67ab971f41a192` with existing uncommitted Draft
+  0.3 Workflow changes through TASK-095 in the working tree.
+- Changes:
+  - Closed the Workflow versioning/import/conflict semantic mutation gate.
+  - No runtime source changes were required; the existing Workflow tests kill
+    the named critical mutants for version binding, import, conflict
+    preconditions, terminal precedence, and failed-transition preservation.
+  - Updated Draft 0.3 evidence, implementation-plan pointer, and backlog
+    pointer/status.
+- Mutation:
+  - The initial sandbox run failed with Stryker `listen EPERM`, so the mutation
+    command required escalation for Stryker's local logging server.
+  - A repeated-flag command,
+    `npm run test:mutation --workspace @finkore/typescript -- --mutate src/workflow/definition.ts --mutate src/workflow/workflow.ts --testFiles test/workflow/*.test.ts --reporters clear-text --reporters json`,
+    exited 0 but instrumented only 1 file / 164 mutants. That run was treated
+    as incomplete inventory evidence.
+  - An exploratory whole-Workflow glob,
+    `npm run test:mutation --workspace @finkore/typescript -- --mutate 'src/workflow/*.ts' --testFiles 'test/workflow/*.test.ts' --reporters clear-text --reporters json`,
+    instrumented 4 files / 433 mutants and scored 91.92%. The score was pulled
+    below the threshold by non-normative `errors.ts` message/default-detail
+    mutants, not by Workflow versioning/import/conflict behavior.
+  - The accepted semantic Workflow-domain run,
+    `npm run test:mutation --workspace @finkore/typescript -- --mutate 'src/workflow/definition.ts,src/workflow/workflow.ts' --testFiles 'test/workflow/*.test.ts' --reporters clear-text --reporters json`,
+    exited 0, instrumented 2 files, ran 69 Workflow tests, generated 387
+    mutants, killed 380, left 7 noncritical/equivalent survivors, and scored
+    98.19%. Report:
+    `implementations/typescript/core/reports/mutation/mutation.json`.
+  - Critical survivor classification: zero critical survivors remain for
+    version ignored/replaced, invented import version, undeclared state
+    accepted, inverted expected-state/revision conflict checks, terminal
+    precedence loss, guard/transition precedence loss, or mutation after
+    failed transition.
+  - Noncritical/equivalent survivors: four `definition.ts` mutants at the
+    missing-version-field branch still throw the same portable
+    `FINKORE_WORKFLOW_INVALID_DEFINITION` through later validation, and three
+    unversioned getter conditional mutants still return `undefined` because
+    unversioned metadata has no definition/version identity or sequence fields.
+- Verification:
+  - Node v24.15.0 / npm 11.12.1 were available in the machine environment.
+  - `npm run test:coverage --workspace @finkore/typescript` exited 0 with 40
+    files / 364 tests passed and 99.06% statements, 98.62% branches, 100%
+    functions, 99.47% lines. Workflow coverage was 99.42% statements, 99.31%
+    branches, 100% functions, 100% lines.
+  - `npm run build --workspaces` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspace @finkore/typescript -- --run test/workflow`
+    exited 0 with 6 files / 69 tests passed.
+  - `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0
+    with 1 file / 15 tests passed.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --suite workflow`
+    exited 0 with Workflow 41 passed, 0 failed, 0 unsupported, 0 infrastructure
+    errors.
+  - Full conformance exited 0 with 239 passed, 0 failed, 0 unsupported, 0
+    infrastructure errors across Money 83, Workflow 41, Audit 29, Approvals 66,
+    and Entities 20.
+- Completion applicability:
+  - Mutation evidence, survivor classification, execution evidence,
+    implementation-plan pointer, and backlog pointer/status were updated.
+  - No new unit tests, `/spec`, conformance vectors, runner metadata,
+    TypeScript public API/JSDoc, root/package README, Agentic canonical
+    operation metadata, AGENTS.md, or CoreDoc change was required.
+- Result:
+  - READY FOR TASK-097.
+
+### TASK-097 - Workflow Versioning Traceability Closure
+
+- Status: COMPLETE.
+- Date: 2026-09-14.
+- Source revision inspected before task completion:
+  `ccea217e647dca76a70605e1ca67ab971f41a192` with existing uncommitted Draft
+  0.3 Workflow changes through TASK-096 in the working tree.
+- Changes:
+  - Updated `conformance/traceability.md` to state that Draft 0.3 Workflow
+    definition/version identity, immutable instance binding/mismatch, import,
+    and expected-state/revision conflict semantics are specified,
+    vector-covered, implemented by the TypeScript reference implementation, and
+    passing through the conformance adapter.
+  - Added a Workflow versioning review-gaps note recording scoped
+    traceability status, not-directly-testable rows, mutation evidence, and
+    pending Draft 0.3 Agentic metadata review.
+  - Updated `conformance/README.md` to include Workflow versioning/import/conflict
+    in the implemented conformance evidence and Workflow suite overview.
+  - Updated `agentic/operations.md` to remove stale implementation-pending
+    wording while preserving that canonical Agentic metadata for Draft 0.3
+    Workflow refinements is pending the later Agentic review.
+  - Updated Draft 0.3 evidence, implementation-plan pointer, and backlog
+    pointer/status.
+- Traceability audit:
+  - Scripted spec/traceability audit found 57 Workflow requirement IDs in
+    `spec/workflow/**` and 57 Workflow rows in `conformance/traceability.md`,
+    with no missing or extra IDs.
+  - Scripted manifest/vector audit found 2 Workflow vector files, 41
+    manifest-listed Workflow vectors, 48 referenced Workflow requirements, no
+    uncovered Workflow rows, no blocking Workflow spec gaps, no bad
+    traceability vector references, and no vector requirement missing from
+    traceability.
+  - Scoped Draft 0.3 Workflow version/import/conflict/error inventory covers 30
+    rows: 26 COVERED and 4 NOT DIRECTLY TESTABLE.
+  - The 4 scoped NOT DIRECTLY TESTABLE rows are `WORKFLOW-VERSION-003`,
+    `WORKFLOW-VERSION-004`, `WORKFLOW-VERSION-012`, and
+    `WORKFLOW-CONFLICT-008`; they are authoring, separation, diagnostic-safety,
+    or non-locking/non-concurrency requirements that one portable vector cannot
+    isolate, not hidden runtime coverage gaps.
+- Verification:
+  - Node v24.15.0 / npm 11.12.1 were available in the machine environment.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --suite workflow`
+    exited 0 with Workflow 41 passed, 0 failed, 0 unsupported, 0 infrastructure
+    errors.
+- Mutation:
+  - No runtime mutation run was required for this artifact-only traceability
+    task.
+  - TASK-096 remains the current applicable semantic Workflow mutation evidence:
+    `implementations/typescript/core/reports/mutation/mutation.json`, 387
+    mutants, 98.19% mutation score, zero critical Workflow
+    versioning/import/conflict survivors.
+- Completion applicability:
+  - Traceability/status documentation, execution evidence, implementation-plan
+    pointer, and backlog pointer/status were updated.
+  - No new `/spec`, conformance vectors, runner metadata, TypeScript public
+    API/JSDoc, root/core README, AGENTS.md, or CoreDoc change was required.
+- Result:
+  - READY FOR TASK-098.
+
+### TASK-098 - Workflow Versioning Slice Closure Gate
+
+- Status: COMPLETE.
+- Date: 2026-09-14.
+- Source revision inspected before task completion:
+  `ccea217e647dca76a70605e1ca67ab971f41a192` with existing uncommitted Draft
+  0.3 Workflow changes through TASK-097 in the working tree.
+- Result:
+  - Workflow Versioning and Import is closed for Draft 0.3.
+- Closure evidence:
+  - Stable normative requirements exist in `spec/workflow/versioning.md`,
+    `spec/workflow/import.md`, `spec/workflow/conflicts.md`, and
+    `spec/workflow/errors.md`.
+  - All directly testable scoped requirements have manifest-listed vectors in
+    `conformance/workflow/versioning.json` or existing Workflow transition
+    vectors.
+  - The TypeScript core implements Workflow definition/version identity,
+    immutable instance binding/mismatch, import with optional opaque revision,
+    expected-current-state/revision conflict preconditions, portable errors, and
+    failure preservation.
+  - The TypeScript conformance adapter supports `workflow.create`,
+    conformance-local `workflow.import`, and canonical
+    `finkore.workflow.transition` fixture translation without implementing
+    Workflow transition rules in the adapter.
+  - Root, TypeScript core, TypeScript conformance adapter, conformance,
+    traceability, Agentic status, Draft 0.3 plan, and backlog documentation are
+    synchronized. Canonical Agentic metadata for the Draft 0.3 Workflow
+    refinements remains pending the later Draft 0.3 Agentic review by design.
+  - TASK-089 review evidence remains accepted under D03-REVIEW-001. External
+    community/accounting/security/audit review remains NOT EXTERNALLY REVIEWED
+    and is not a Draft 0.3 Workflow Versioning and Import blocker.
+- Traceability:
+  - Workflow inventory: 57 rows, 48 COVERED, 9 NOT DIRECTLY TESTABLE, 0
+    UNCOVERED, 0 BLOCKING SPEC GAP.
+  - Scoped Draft 0.3 Workflow version/import/conflict/error inventory: 30 rows,
+    26 COVERED, 4 NOT DIRECTLY TESTABLE, 0 UNCOVERED, 0 BLOCKING SPEC GAP.
+  - The 4 scoped NOT DIRECTLY TESTABLE rows remain
+    `WORKFLOW-VERSION-003`, `WORKFLOW-VERSION-004`, `WORKFLOW-VERSION-012`,
+    and `WORKFLOW-CONFLICT-008`; they are authoring, separation,
+    diagnostic-safety, or non-locking/non-concurrency requirements that one
+    portable vector cannot isolate, not hidden runtime coverage gaps.
+- Verification:
+  - Node v24.15.0 / npm 11.12.1 were available in the machine environment.
+  - `npm run build --workspaces` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspace @finkore/typescript` exited 0 with 40 files / 364
+    tests passed.
+  - `npm run test --workspace @finkore/conformance-runner` exited 0 with 10
+    files / 110 tests passed.
+  - `npm run test --workspace @finkore/typescript-conformance-adapter` exited 0
+    with 1 file / 15 tests passed.
+  - `npm run test:coverage --workspace @finkore/typescript` exited 0 with 40
+    files / 364 tests passed and 99.06% statements, 98.62% branches, 100%
+    functions, 99.47% lines. Workflow coverage was 99.42% statements, 99.31%
+    branches, 100% functions, 100% lines.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --suite workflow`
+    exited 0 with Workflow 41 passed, 0 failed, 0 unsupported, 0 infrastructure
+    errors.
+  - Full conformance exited 0 with 239 passed, 0 failed, 0 unsupported, 0
+    infrastructure errors across Money 83, Workflow 41, Audit 29, Approvals 66,
+    and Entities 20.
+- Mutation:
+  - TASK-096 remains the current applicable semantic Workflow mutation evidence:
+    `implementations/typescript/core/reports/mutation/mutation.json`, 387
+    mutants, 380 killed, 7 noncritical/equivalent survivors, 98.19% mutation
+    score, and zero critical Workflow versioning/import/conflict survivors.
+- Completion applicability:
+  - Backlog dashboard, execution pointer, implementation-plan pointer, and
+    execution evidence were updated.
+  - No runtime source, new vectors, runner metadata, public API/JSDoc, AGENTS.md,
+    or CoreDoc change was required during this closure gate.
+- Result:
+  - READY FOR TASK-099.

@@ -28,6 +28,7 @@ describe('TypeScript conformance adapter', () => {
     expect(adapter.supports('finkore.money.multiply')).toBe(true)
     expect(adapter.supports('finkore.money.divide')).toBe(true)
     expect(adapter.supports('workflow.create')).toBe(true)
+    expect(adapter.supports('workflow.import')).toBe(true)
     expect(adapter.supports('finkore.workflow.transition')).toBe(true)
     expect(adapter.supports('finkore.entity.create')).toBe(true)
     expect(adapter.supports('finkore.entity.evolution.correct')).toBe(true)
@@ -301,6 +302,37 @@ describe('TypeScript conformance adapter', () => {
     ] })
 
     expect(report.summary).toEqual({ total: 20, passed: 20, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+  })
+
+  it('passes Workflow versioning, import, and conflict vectors through core Workflow behavior', async () => {
+    const report = await createConformanceRunner({
+      manifestPath,
+      adapter: createTypeScriptConformanceAdapter(),
+    }).run({ vectorIds: [
+      'workflow.create.versioned-binding-001',
+      'workflow.create.version-missing-invalid-001',
+      'workflow.create.default-version-sequence-zero-invalid-001',
+      'workflow.import.current-state-preserved-001',
+      'workflow.import.version-binding-preserved-001',
+      'workflow.import.undeclared-current-state-001',
+      'workflow.import.missing-current-state-invalid-instance-001',
+      'workflow.import.version-mismatch-001',
+      'workflow.import.malformed-revision-invalid-instance-001',
+      'workflow.transition.bound-older-version-001',
+      'workflow.transition.version-mismatch-preserves-state-001',
+      'workflow.transition.expected-state-matches-001',
+      'workflow.transition.expected-state-mismatch-001',
+      'workflow.transition.expected-state-omitted-no-default-001',
+      'workflow.transition.expected-revision-matches-001',
+      'workflow.transition.expected-revision-mismatch-001',
+      'workflow.transition.expected-revision-omitted-no-default-001',
+      'workflow.transition.error-precedence-invalid-instance-before-version-001',
+      'workflow.transition.error-precedence-invalid-state-before-conflict-001',
+      'workflow.transition.error-precedence-terminal-before-invalid-transition-001',
+      'workflow.transition.error-precedence-conflict-before-terminal-001',
+    ] })
+
+    expect(report.summary).toEqual({ total: 21, passed: 21, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current Entity identity, lifecycle, mutability, validation, and evolution milestone vectors', async () => {

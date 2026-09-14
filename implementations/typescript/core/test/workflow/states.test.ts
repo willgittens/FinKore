@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: MPL-2.0
 import { describe, expect, it } from 'vitest'
-import { InvalidWorkflowDefinitionError, InvalidWorkflowStateError, Workflow } from '../../src/index.js'
+import {
+  InvalidWorkflowDefinitionError,
+  InvalidWorkflowInstanceError,
+  InvalidWorkflowStateError,
+  Workflow,
+} from '../../src/index.js'
 
 const payableDefinition = {
   states: ['DRAFT', 'SUBMITTED', 'APPROVED', 'REJECTED'],
@@ -99,9 +104,9 @@ describe('Workflow states', () => {
     expect(Workflow.from(payableDefinition, { currentState: 'SUBMITTED' }).currentState).toBe('SUBMITTED')
 
     expect(() => Workflow.from(payableDefinition, { currentState: 'submitted' })).toThrow(InvalidWorkflowStateError)
-    expect(() => Workflow.from(payableDefinition, {})).toThrow(InvalidWorkflowStateError)
-    expect(() => Workflow.from(payableDefinition, null)).toThrow(InvalidWorkflowStateError)
-    expect(() => Workflow.from(payableDefinition, 7)).toThrow(InvalidWorkflowStateError)
+    expect(() => Workflow.from(payableDefinition, {})).toThrow(InvalidWorkflowInstanceError)
+    expect(() => Workflow.from(payableDefinition, null)).toThrow(InvalidWorkflowInstanceError)
+    expect(() => Workflow.from(payableDefinition, 7)).toThrow(InvalidWorkflowInstanceError)
     expect(() => Workflow.from(payableDefinition, { currentState: '' })).toThrow(InvalidWorkflowStateError)
   })
 })

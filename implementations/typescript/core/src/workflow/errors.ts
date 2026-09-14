@@ -86,6 +86,27 @@ export class InvalidWorkflowStateError extends FinKoreWorkflowError {
 
 /**
  * TypeScript representation of the portable
+ * `FINKORE_WORKFLOW_INVALID_INSTANCE` domain error.
+ *
+ * @see FINKORE_WORKFLOW_INVALID_INSTANCE
+ * @see WORKFLOW-ERROR-005
+ * @see WORKFLOW-VERSION-007
+ */
+export class InvalidWorkflowInstanceError extends FinKoreWorkflowError {
+  /**
+   * Creates an invalid-instance Workflow error.
+   *
+   * @param message - Non-normative human-readable message.
+   * @param details - Optional implementation-provided diagnostic context.
+   */
+  constructor(message = 'Invalid Workflow instance observation', details?: unknown) {
+    super('FINKORE_WORKFLOW_INVALID_INSTANCE', message, { details })
+    this.name = 'InvalidWorkflowInstanceError'
+  }
+}
+
+/**
+ * TypeScript representation of the portable
  * `FINKORE_WORKFLOW_INVALID_TRANSITION` domain error.
  *
  * @see FINKORE_WORKFLOW_INVALID_TRANSITION
@@ -146,6 +167,58 @@ export class WorkflowTerminalStateError extends FinKoreWorkflowError {
   constructor(message = 'Workflow is in a terminal state', details?: unknown) {
     super('FINKORE_WORKFLOW_TERMINAL_STATE', message, { details })
     this.name = 'WorkflowTerminalStateError'
+  }
+}
+
+/**
+ * TypeScript representation of the portable
+ * `FINKORE_WORKFLOW_VERSION_MISMATCH` domain error.
+ *
+ * The error is raised before transition validation when a versioned Workflow
+ * instance observation is paired with a different supplied definition identity
+ * or version identity. The rejected operation must leave current State and
+ * binding unchanged.
+ *
+ * @see FINKORE_WORKFLOW_VERSION_MISMATCH
+ * @see WORKFLOW-ERROR-004
+ * @see WORKFLOW-VERSION-010
+ */
+export class WorkflowVersionMismatchError extends FinKoreWorkflowError {
+  /**
+   * Creates a version-mismatch Workflow error.
+   *
+   * @param message - Non-normative human-readable message.
+   * @param details - Optional implementation-provided safe diagnostic context.
+   */
+  constructor(message = 'Workflow definition version does not match instance binding', details?: unknown) {
+    super('FINKORE_WORKFLOW_VERSION_MISMATCH', message, { details })
+    this.name = 'WorkflowVersionMismatchError'
+  }
+}
+
+/**
+ * TypeScript representation of the portable
+ * `FINKORE_WORKFLOW_STATE_CONFLICT` domain error.
+ *
+ * This category is reserved for expected-current-state and expected-revision
+ * precondition mismatches. It is distinct from storage locks, retry policy, or
+ * distributed concurrency winner selection.
+ *
+ * @see FINKORE_WORKFLOW_STATE_CONFLICT
+ * @see WORKFLOW-ERROR-006
+ * @see WORKFLOW-CONFLICT-003
+ * @see WORKFLOW-CONFLICT-005
+ */
+export class WorkflowStateConflictError extends FinKoreWorkflowError {
+  /**
+   * Creates a state-conflict Workflow error.
+   *
+   * @param message - Non-normative human-readable message.
+   * @param details - Optional implementation-provided diagnostic context.
+   */
+  constructor(message = 'Workflow state precondition does not match instance observation', details?: unknown) {
+    super('FINKORE_WORKFLOW_STATE_CONFLICT', message, { details })
+    this.name = 'WorkflowStateConflictError'
   }
 }
 

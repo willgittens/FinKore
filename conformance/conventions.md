@@ -62,6 +62,7 @@ These identifiers name observable behavior, not implementation methods.
 | `finkore.money.applyrate` | Apply an explicitly represented decimal or percentage Rate to Money, with optional explicit rounding. |
 | `finkore.money.allocate` | Allocate Money by equal parts or positive integer ratios using an explicit target scale and deterministic ordered remainder placement. |
 | `workflow.create` | Validate a definition and create an instance at its initial state. |
+| `workflow.import` | Validate and observe an existing Workflow instance with supplied current state, optional instance revision, and version binding when versioned. |
 | `finkore.workflow.transition` | Request the supplied target from the instance's current state using supplied guard facts. |
 | `finkore.audit.append` | Append one event to supplied committed logical history. |
 | `finkore.audit.replace`, `finkore.audit.remove` | Attempt the named change to committed logical history. |
@@ -95,6 +96,13 @@ conformance-local representation boundary checks. They exercise normative Money
 serialization but are not separate public Agentic operations. For Money Draft
 0.2, Rate application and Allocation are promoted to
 `finkore.money.applyrate` and `finkore.money.allocate` after Agentic review.
+For Workflow Draft 0.3, `workflow.import` remains conformance-local until the
+Workflow versioning slice is implemented and reviewed. Versioned Workflow
+fixtures may include definition identity, definition version identity, instance
+binding, Workflow Instance Revision, Expected Current State, and Expected
+Workflow Instance Revision. These fixture members observe specification behavior
+only; they do not define storage schemas or persistence locks.
+
 For Approval Composition, `approval.composition.evaluate` uses a conformance-local logical fixture. `composition` declares exactly one `rootGroup` or ordered `stages`, plus declared `groups` with `ALL_OF`, `ANY_OF`, or `N_OF_M` kind. `requirements` supplies explicit applicability and, for non-quorum members, current state observations. Quorum vectors use explicit voter members and `decisions` entries to observe current-effective voter evidence; an `effective: false` decision is retained history that does not count toward current approval. The normalized success value is `{ "outcome": "APPROVED" | "PENDING" | "REJECTED", "actionableRequirements": [...] }`.
 
 For Approvals, `approval.chain.evaluate`, `approval.decision.withdraw`,

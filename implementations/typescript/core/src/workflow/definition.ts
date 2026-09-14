@@ -1,10 +1,27 @@
 // SPDX-License-Identifier: MPL-2.0
 import { InvalidWorkflowDefinitionError } from './errors.js'
-import type { WorkflowStateIdentifier, WorkflowTransitionDefinition, WorkflowTransitionGuard } from './types.js'
+import type {
+  WorkflowDefinitionIdentity,
+  WorkflowDefinitionVersionBinding,
+  WorkflowDefinitionVersionIdentity,
+  WorkflowDefinitionVersionSequence,
+  WorkflowStateIdentifier,
+  WorkflowTransitionDefinition,
+  WorkflowTransitionGuard,
+} from './types.js'
 
 interface ValidatedWorkflowTransitionDefinition extends WorkflowTransitionDefinition {
   readonly guards: readonly WorkflowTransitionGuard[]
 }
+
+type WorkflowDefinitionVersionMetadata =
+  | { readonly kind: 'unversioned' }
+  | {
+      readonly kind: 'versioned'
+      readonly definitionIdentity: WorkflowDefinitionIdentity
+      readonly definitionVersionIdentity: WorkflowDefinitionVersionIdentity
+      readonly versionSequence?: WorkflowDefinitionVersionSequence
+    }
 
 function isPlainRecord(value: unknown): value is Readonly<Record<string, unknown>> {
   return typeof value === 'object' && value !== null
@@ -15,6 +32,37 @@ function validateStateIdentifier(value: unknown): WorkflowStateIdentifier {
     throw new InvalidWorkflowDefinitionError()
   }
   return value
+}
+
+function validateVersionIdentifier(value: unknown): string {
+  if (typeof value !== 'string' || value.length === 0) {
+    throw new InvalidWorkflowDefinitionError()
+  }
+  return value
+}
+
+function validateVersionMetadata(input: Readonly<Record<string, unknown>>): WorkflowDefinitionVersionMetadata {
+  const hasDefinitionIdentity = 'definitionIdentity' in input
+  const hasDefinitionVersionIdentity = 'definitionVersionIdentity' in input
+  const hasVersionSequence = 'versionSequence' in input
+
+  if (!hasDefinitionIdentity && !hasDefinitionVersionIdentity && !hasVersionSequence) {
+    return { kind: 'unversioned' }
+  }
+  if (!hasDefinitionIdentity || !hasDefinitionVersionIdentity) {
+    throw new InvalidWorkflowDefinitionError()
+  }
+
+  const definitionIdentity = validateVersionIdentifier(input.definitionIdentity)
+  const definitionVersionIdentity = validateVersionIdentifier(input.definitionVersionIdentity)
+
+  if (!hasVersionSequence) {
+    return { kind: 'versioned', definitionIdentity, definitionVersionIdentity }
+  }
+  if (input.versionSequence !== 'DEFAULT' || !/^[1-9][0-9]*$/.test(definitionVersionIdentity)) {
+    throw new InvalidWorkflowDefinitionError()
+  }
+  return { kind: 'versioned', definitionIdentity, definitionVersionIdentity, versionSequence: 'DEFAULT' }
 }
 
 function validateStateList(value: unknown): readonly WorkflowStateIdentifier[] {
@@ -69,9 +117,10 @@ function assertUnique(values: readonly string[]): void {
  *
  * Definitions declare exactly one initial state, explicit terminal states,
  * directed transitions between declared states, and optional fact-equality
- * guards attached to those transitions. This TypeScript representation is
- * immutable from callers' perspective and contains no persistence, versioning,
- * authorization model, or process-engine behavior.
+ * guards attached to those transitions. They may also carry caller-supplied
+ * opaque Workflow definition and version identities. This TypeScript
+ * representation is immutable from callers' perspective and contains no
+ * persistence, migration, authorization model, or process-engine behavior.
  *
  * @see WORKFLOW-STATES-001
  * @see WORKFLOW-STATES-002
@@ -82,11 +131,16 @@ function assertUnique(values: readonly string[]): void {
  * @see WORKFLOW-TERMINAL-001
  * @see WORKFLOW-TERMINAL-002
  * @see WORKFLOW-TERMINAL-004
+ * @see WORKFLOW-VERSION-001
+ * @see WORKFLOW-VERSION-002
+ * @see WORKFLOW-VERSION-005
+ * @see WORKFLOW-VERSION-006
  */
 export class WorkflowDefinition {
   private readonly stateSet: ReadonlySet<WorkflowStateIdentifier>
   private readonly terminalStateSet: ReadonlySet<WorkflowStateIdentifier>
   private readonly transitionList: readonly ValidatedWorkflowTransitionDefinition[]
+  private readonly versionMetadata: WorkflowDefinitionVersionMetadata
 
   /** State identifiers declared by this workflow definition. */
   readonly states: readonly WorkflowStateIdentifier[]
@@ -102,11 +156,13 @@ export class WorkflowDefinition {
     initialState: WorkflowStateIdentifier,
     terminalStates: readonly WorkflowStateIdentifier[],
     transitions: readonly ValidatedWorkflowTransitionDefinition[],
+    metadata: WorkflowDefinitionVersionMetadata,
   ) {
     this.states = states
     this.initialState = initialState
     this.terminalStates = terminalStates
     this.transitionList = transitions
+    this.versionMetadata = metadata
     this.stateSet = new Set(states)
     this.terminalStateSet = new Set(terminalStates)
   }
@@ -115,10 +171,12 @@ export class WorkflowDefinition {
    * Creates and validates a Workflow definition.
    *
    * @param input - Candidate definition containing states, initial state,
-   * terminal states, directed transitions, and transition guard conditions.
+   * terminal states, directed transitions, transition guard conditions, and
+   * optional Workflow definition version metadata.
    * @returns A validated Workflow definition.
    * @throws {InvalidWorkflowDefinitionError}
-   * When the definition violates Draft 0.1 structural requirements.
+   * When the definition violates Workflow structural or version metadata
+   * requirements.
    *
    * @see FINKORE_WORKFLOW_INVALID_DEFINITION
    * @see WORKFLOW-STATES-001
@@ -127,6 +185,8 @@ export class WorkflowDefinition {
    * @see WORKFLOW-GUARD-002
    * @see WORKFLOW-TRANSITION-001
    * @see WORKFLOW-TERMINAL-002
+   * @see WORKFLOW-VERSION-001
+   * @see WORKFLOW-VERSION-006
    */
   static from(input: unknown): WorkflowDefinition {
     if (!isPlainRecord(input)) {
@@ -135,6 +195,8 @@ export class WorkflowDefinition {
     if ('initialStates' in input) {
       throw new InvalidWorkflowDefinitionError()
     }
+
+    const versionMetadata = validateVersionMetadata(input)
 
     const states = validateStateList(input.states)
     assertUnique(states)
@@ -166,7 +228,77 @@ export class WorkflowDefinition {
       }
     }
 
-    return new WorkflowDefinition([...states], initialState, [...terminalStates], transitions)
+    return new WorkflowDefinition([...states], initialState, [...terminalStates], transitions, versionMetadata)
+  }
+
+  /**
+   * Reports whether this definition carries Workflow version metadata.
+   *
+   * @returns `true` when both definition and version identities are present.
+   *
+   * @see WORKFLOW-VERSION-001
+   */
+  get isVersioned(): boolean {
+    return this.versionMetadata.kind === 'versioned'
+  }
+
+  /**
+   * Opaque logical Workflow definition identity, when this definition is versioned.
+   *
+   * @returns The exact caller-supplied identity, or `undefined` for unversioned
+   * definitions.
+   *
+   * @see WORKFLOW-VERSION-001
+   * @see WORKFLOW-VERSION-002
+   */
+  get definitionIdentity(): WorkflowDefinitionIdentity | undefined {
+    return this.versionMetadata.kind === 'versioned' ? this.versionMetadata.definitionIdentity : undefined
+  }
+
+  /**
+   * Opaque Workflow definition version identity, when this definition is versioned.
+   *
+   * @returns The exact caller-supplied version identity, or `undefined` for
+   * unversioned definitions.
+   *
+   * @see WORKFLOW-VERSION-001
+   * @see WORKFLOW-VERSION-002
+   * @see WORKFLOW-VERSION-004
+   */
+  get definitionVersionIdentity(): WorkflowDefinitionVersionIdentity | undefined {
+    return this.versionMetadata.kind === 'versioned' ? this.versionMetadata.definitionVersionIdentity : undefined
+  }
+
+  /**
+   * FinKore default sequence marker, when the caller elected to use it.
+   *
+   * @returns `DEFAULT` for definitions validated under FinKore's positive
+   * integer sequence convention, otherwise `undefined`.
+   *
+   * @see WORKFLOW-VERSION-006
+   */
+  get versionSequence(): WorkflowDefinitionVersionSequence | undefined {
+    return this.versionMetadata.kind === 'versioned' ? this.versionMetadata.versionSequence : undefined
+  }
+
+  /**
+   * Returns the portable definition-version binding for versioned definitions.
+   *
+   * Calling this method does not mutate the definition. Unversioned Draft 0.1
+   * definitions return `undefined`.
+   *
+   * @returns The exact caller-supplied binding pair, or `undefined`.
+   *
+   * @see WORKFLOW-VERSION-007
+   */
+  versionBinding(): WorkflowDefinitionVersionBinding | undefined {
+    if (this.versionMetadata.kind === 'unversioned') {
+      return undefined
+    }
+    return {
+      definitionIdentity: this.versionMetadata.definitionIdentity,
+      definitionVersionIdentity: this.versionMetadata.definitionVersionIdentity,
+    }
   }
 
   /**

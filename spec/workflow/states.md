@@ -20,7 +20,7 @@ This document defines named lifecycle conditions and workflow initialization.
 
 ## Invariants
 
-A Workflow instance must not occupy multiple current States simultaneously. A State change must occur only through a [Successful Transition](transitions.md).
+A Workflow instance must not occupy multiple current States simultaneously. A State change must occur only through a [Successful Transition](transitions.md). For a versioned Workflow instance, the current State is interpreted under the instance's [Bound Workflow Definition Version](versioning.md).
 
 ## Invalid Examples
 
@@ -33,5 +33,4 @@ Invalid definitions or state values must report an applicable code from [Workflo
 
 ## Open Questions
 
-- How should a future specification identify Workflow definition versions, migrate active instances, and determine transition behavior after a definition changes?
-
+- How should a future migration specification map active instances and states between Workflow Definition Versions?

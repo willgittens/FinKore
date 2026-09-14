@@ -56,11 +56,14 @@ export { serializeMoney, validateSerializedAmount } from './money/serialization.
 export { WorkflowDefinition } from './workflow/definition.js'
 export {
   FinKoreWorkflowError,
+  InvalidWorkflowInstanceError,
   InvalidWorkflowDefinitionError,
   InvalidWorkflowStateError,
   InvalidWorkflowTransitionError,
   WorkflowGuardRejectedError,
+  WorkflowStateConflictError,
   WorkflowTerminalStateError,
+  WorkflowVersionMismatchError,
   isFinKoreWorkflowError,
 } from './workflow/errors.js'
 export { Workflow } from './workflow/workflow.js'
@@ -78,9 +81,14 @@ export type {
   SerializedMoney,
 } from './money/types.js'
 export type {
+  WorkflowDefinitionIdentity,
   SerializedWorkflowInstance,
+  WorkflowDefinitionVersionBinding,
+  WorkflowDefinitionVersionIdentity,
+  WorkflowDefinitionVersionSequence,
   WorkflowDefinitionInput,
   WorkflowErrorCode,
+  WorkflowInstanceRevision,
   WorkflowStateIdentifier,
   WorkflowTransitionDefinition,
   WorkflowTransitionGuard,

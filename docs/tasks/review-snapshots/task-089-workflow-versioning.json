@@ -1,0 +1,82 @@
+{
+  "id": "task-089-workflow-versioning",
+  "date": "2026-09-13",
+  "sourceRevision": "ccea217e647dca76a70605e1ca67ab971f41a192 plus TASK-085 through TASK-089 documentation changes",
+  "status": "accepted",
+  "externalReview": "NOT EXTERNALLY REVIEWED",
+  "artifacts": [
+    {
+      "path": "docs/coreDoc/core-doc.md",
+      "sha256": "53d5565c6ac0cad831ec9409c86c1648c93f15c15325530eca7581cb6d6fdf1f"
+    },
+    {
+      "path": "spec/workflow/README.md",
+      "sha256": "054505299df5e21b1750c10db9b190d09b755247dc06de9d9b35e7cd328c4c1e"
+    },
+    {
+      "path": "spec/workflow/versioning.md",
+      "sha256": "f34d7a18f7d343eba53c6edb15462c1af987d6df6f396d6de9a824ac076b66e0"
+    },
+    {
+      "path": "spec/workflow/import.md",
+      "sha256": "159b847006bb3fb80d2cc666bc7b7395a7e94c4e15a02e7a212d5aef983b069d"
+    },
+    {
+      "path": "spec/workflow/conflicts.md",
+      "sha256": "819de4bf1aba8af08af0b85c033ffe1c3ec75ae4d2e726bfe64c6113be5acf2d"
+    },
+    {
+      "path": "spec/workflow/errors.md",
+      "sha256": "e1f66ee8c52de6a8a8980ef5b16fce1cf7c60f939c94837c833230e31b078b4c"
+    },
+    {
+      "path": "spec/workflow/states.md",
+      "sha256": "60758de309efa71ae3f7be1f5b0a502c3fec8266d6f489d9d2bda7adaa9177c5"
+    },
+    {
+      "path": "spec/workflow/transitions.md",
+      "sha256": "f6f23ca2263f8fdbb31c5853d02b373fdf6de69ae8ff004108f3eaec9fa227d4"
+    },
+    {
+      "path": "spec/workflow/guards.md",
+      "sha256": "ee05b5011a0c6833216a4efabd6dec13928fe59489cea39a8a601977dc8e2c83"
+    },
+    {
+      "path": "spec/workflow/terminal-states.md",
+      "sha256": "737bbf07ffedadbe4ca7f3705bbe58be75d492883dd19b21445306cb92e3d38c"
+    },
+    {
+      "path": "spec/conventions.md",
+      "sha256": "3df81f634ca85fc97c2dc5489881066460c6ae1e4fcbd39c07cb3917cd1b3f2b"
+    },
+    {
+      "path": "spec/glossary.md",
+      "sha256": "ffd46cf69840bcd20f1349d8972520dfca9470d3f87f58d8e62c63908352bab8"
+    },
+    {
+      "path": "agentic/operations.md",
+      "sha256": "6b88fa3a4d1c010b4e0667c6a885de9e9b40a0644eb757690baa05449abfd699"
+    },
+    {
+      "path": "conformance/conventions.md",
+      "sha256": "668ee046ef82689aedc61e349e37ffe0be6cdbdebb8d013474cf033d8eabe704"
+    },
+    {
+      "path": "conformance/traceability.md",
+      "sha256": "60d7fa56ed0dde27113922cf23645336012a8b014f12e3d8690e31ade51a591f"
+    }
+  ],
+  "acceptedScope": [
+    "Opaque Workflow Definition Identity and Workflow Definition Version Identity",
+    "Immutable versioned Workflow instance binding",
+    "Workflow Import as observation of existing state and binding, not transition or migration",
+    "Optional expected-current-state and expected-revision conflict preconditions",
+    "Distinct portable errors and deterministic error precedence"
+  ],
+  "futureReviewTopics": [
+    "Workflow migration and state mapping across versions",
+    "Workflow Instance Revision generation and persistence policy",
+    "Agentic promotion of version/import/conflict preconditions",
+    "External accounting, audit, security, and community review"
+  ]
+}

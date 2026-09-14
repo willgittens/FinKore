@@ -36,10 +36,10 @@ Composition slice state:
 
 | Area | Actual state |
 | --- | --- |
-| Specification | `/spec` contains Draft 0.1 Money, Workflow, Audit, Approvals, Entities, shared conventions, and glossary plus closed Draft 0.2 Money Rates, Money Allocation, Audit Relationships, Entity Evolution, and Approval Validity semantics. |
-| Conformance | `conformance/manifest.json` remains format `0.1` as a syntax compatibility version. `conformance/traceability.md` reports 334 requirements, 218 vectors, 268 covered, 66 not directly testable, 0 uncovered, and 0 blocking spec gaps after the Draft 0.3 Approval Composition vectors. |
-| Agentic | Canonical operations include the Draft 0.1 Money, Workflow and Audit operations plus Draft 0.2 Money `finkore.money.applyrate`, `finkore.money.allocate`, and current Entity operation IDs. Approval lifecycle and composition labels remain conformance-local pending the Draft 0.3 Agentic review. |
-| TypeScript | The TypeScript reference implementation covers Draft 0.1, selected Draft 0.2 behavior for Money Rates/Allocation, Audit Relationships, Entity Evolution correction/reversal/void/supersession, and Approval withdrawal/expiration/supersession/current-effectiveness, plus Draft 0.3 Approval Composition for any/all groups, N-of-M quorum, ordered stages, bounded nested groups, and adapter conformance. It still explicitly excludes workflow versioning/import/conflict, entity import identity mapping, delegation, escalation, IAM/RBAC, persistence, and tax/interest behavior. |
+| Specification | `/spec` contains Draft 0.1 Money, Workflow, Audit, Approvals, Entities, shared conventions, and glossary plus closed Draft 0.2 Money Rates, Money Allocation, Audit Relationships, Entity Evolution, Approval Validity semantics, Draft 0.3 Approval Composition, and Draft 0.3 Workflow definition/version identity, immutable instance binding/mismatch, import, and expected-state/revision conflict semantics. |
+| Conformance | `conformance/manifest.json` remains format `0.1` as a syntax compatibility version. `conformance/traceability.md` reports 364 requirements, 239 vectors, 294 covered, 0 uncovered, 70 not directly testable, and 0 blocking spec gaps after Draft 0.3 Workflow Versioning and Import closure. |
+| Agentic | Canonical operations include the Draft 0.1 Money, Workflow and Audit operations plus Draft 0.2 Money `finkore.money.applyrate`, `finkore.money.allocate`, and current Entity operation IDs. Approval lifecycle and composition labels remain conformance-local pending the Draft 0.3 Agentic review. Workflow version/import/conflict preconditions and related errors are specified but not yet represented as canonical Agentic operation metadata. |
+| TypeScript | The TypeScript reference implementation covers Draft 0.1, selected Draft 0.2 behavior for Money Rates/Allocation, Audit Relationships, Entity Evolution correction/reversal/void/supersession, and Approval withdrawal/expiration/supersession/current-effectiveness, plus Draft 0.3 Approval Composition for any/all groups, N-of-M quorum, ordered stages, bounded nested groups, and adapter conformance. It also implements and adapts the Draft 0.3 Workflow definition/version identity, immutable instance binding/mismatch, import, and expected-state/revision conflict slice. It still explicitly excludes workflow migration, entity import identity mapping, delegation, escalation, IAM/RBAC, persistence, and tax/interest behavior. |
 | Runner | The runner is domain-neutral and must remain so. |
 
 Draft 0.2 planned state:
@@ -306,7 +306,7 @@ Optional: Step 15.
 | Normative requirements | Add `WORKFLOW-VERSION-*`, `WORKFLOW-IMPORT-*`, and possibly `WORKFLOW-CONFLICT-*` requirements. |
 | Conformance work | Design vectors for stable binding, newer definition ignored unless explicit migration exists, import with version, missing version if required, expected state mismatch, and failed transition state preservation. |
 | Agentic impact | `finkore.workflow.transition` descriptor may need expected-state/version preconditions. |
-| Portable errors | Existing `FINKORE_WORKFLOW_INVALID_DEFINITION`, `FINKORE_WORKFLOW_INVALID_STATE`, and `FINKORE_WORKFLOW_INVALID_TRANSITION` may be insufficient; likely add `FINKORE_WORKFLOW_VERSION_CONFLICT` only if a stable conflict category is needed. |
+| Portable errors | TASK-086 adds `FINKORE_WORKFLOW_VERSION_MISMATCH` for supplied definition-version mismatches; import and expected-state/revision conflict tasks must assess whether any additional stable conflict category is needed. |
 | TypeScript implementation | None. |
 | Tests | Spec/conformance validation only if available. |
 | Critical mutation scenarios | Instance silently uses newer definition, version ignored, expected state mismatch accepted, import invents version, failure mutates state. |
@@ -736,12 +736,27 @@ Priority order toward eventual FinKore v0.5:
 
 ## 16. Next Task to Execute
 
-NEXT CODEX TASK: TASK-085 - Workflow Definition Version Identity Specification
+NEXT CODEX TASK: TASK-099 - Entity Business Revision Refinement
 
 TASK-073 scoped domain/security review is complete. Decisions and final artifact
 revision are recorded in the research decision packet. Conformance, implementation,
 adapter support, boundary coverage, and mutation hardening through TASK-082 are
 complete for the Advanced Approvals composition slice. TASK-083 traceability
 closure and TASK-084 slice closure are complete; external review remains NOT
-EXTERNALLY REVIEWED. The next required Draft 0.3 milestone is Workflow Versioning
-and Import.
+EXTERNALLY REVIEWED. TASK-085 specifies Workflow definition/version identity and
+TASK-086 specifies immutable instance binding and version-mismatch behavior.
+TASK-087 specifies Workflow import and expected-state/revision conflict
+preconditions, and TASK-088 specifies the portable error categories and
+precedence. TASK-089 records the scoped technical/domain review, TASK-090 adds
+manifest-listed Workflow version/import/conflict vectors, TASK-091 implements
+the TypeScript Workflow definition version API and validation, TASK-092
+implements core Workflow instance binding and version-mismatch rejection,
+TASK-093 implements core Workflow import with optional opaque revision
+preservation, TASK-094 implements core expected-current-state/revision conflict
+preconditions, and TASK-095 implements TypeScript conformance adapter support
+for Workflow versioning, import, conflict preconditions, and error
+observations, TASK-096 closes the semantic Workflow mutation hardening gate with
+zero critical survivors, TASK-097 closes Workflow versioning/import/conflict
+traceability with zero uncovered rows and zero blocking specification gaps, and
+TASK-098 closes Workflow Versioning and Import for Draft 0.3. The next required
+Draft 0.3 milestone task is Entity Business Revision Refinement.

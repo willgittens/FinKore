@@ -710,3 +710,38 @@ READMEs, and Agentic metadata require no edits for this review closure: runtime
 behavior, public APIs, canonical operation IDs, and implemented capabilities are
 unchanged. Conformance creation remains TASK-074; runtime tests and mandatory
 financial mutation testing remain gates for their named implementation tasks.
+
+### TASK-089 — Workflow Versioning Technical and Domain Review
+
+- Status: ACCEPTED for continued Draft 0.3 Workflow versioning implementation.
+- Date: 2026-09-13.
+- Decision authority: project maintainer, through the instruction to continue
+  with TASK-089, TASK-090, and TASK-091 after the already recorded
+  TASK-085 through TASK-088 specification work.
+- Analysis attribution: assistant analysis of the required domain/accounting and
+  technical/security topics; no external reviewer or professional credential is
+  represented. Acceptance applies to the scoped specification translation and
+  the next implementation step, not to future migration, storage, concurrency,
+  or Agentic promotion decisions.
+- Exact reviewed artifact: [SHA-256 manifest](review-snapshots/task-089-workflow-versioning.json).
+- External review: NOT EXTERNALLY REVIEWED. Future community, accounting,
+  audit, and security review may challenge these decisions by stable requirement
+  ID and artifact hash.
+
+The review covered the following obligations and resolutions:
+
+| Review topic | CoreDoc / canonical requirements | Finding and resolution |
+| --- | --- | --- |
+| Opaque definition and version identity | CORE-002.1, CORE-002.3, SPEC-IDENTIFIER-001 to -003, WORKFLOW-VERSION-001 to -006 | Definition/version identity is caller or composing-domain supplied, stable, opaque, and separated from Entity Revision and storage counters. Default numeric sequence is ordering metadata only and does not create migration semantics. |
+| Bound-instance stability | CORE-002.1, CORE-002.3, WORKFLOW-VERSION-007 to -011 | A versioned instance remains governed by its bound definition version. Newer definitions cannot silently add, remove, or reinterpret transitions for existing instances. |
+| Import boundary | CORE-002.1, CORE-002.2, CORE-002.3, WORKFLOW-IMPORT-001 to -006 | Import observes a supplied current State, binding, and optional Workflow Instance Revision. It is not create, transition, event replay, Audit evidence, or migration. |
+| Expected-state/revision portability | CORE-002.2, CORE-002.3, WORKFLOW-CONFLICT-001 to -008 | Expected-current-state and expected-revision are optional exact preconditions. Omission has no default; mismatch is a rejected operation, not a storage lock or distributed concurrency winner. |
+| Portable errors and precedence | CORE-005.2, CORE-005.3, WORKFLOW-ERROR-004 to -007 | Distinct version mismatch, invalid instance, and state conflict categories are justified. Deterministic precedence keeps structural/binding/precondition failures stable while preserving terminal-state precedence over invalid transition. |
+| Security and privacy boundary | CORE-005.2, WORKFLOW-VERSION-012, WORKFLOW-ERROR-002 | Diagnostics may include expected/supplied identifiers when safe but must not expose unrelated guard facts, Actor data, or domain records. No authorization or IAM model is introduced. |
+
+No unresolved finding remains within this review's defined scope. The review
+does not approve Workflow migration, BPMN, locking, persistence, distributed
+concurrency, Workflow Instance Revision generation, state mapping across
+versions, or production interchange schemas. TASK-090 may publish conformance
+vectors from these accepted requirements, and TASK-091 may implement only the
+definition identity/version representation and validation subset.

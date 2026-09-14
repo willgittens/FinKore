@@ -16,7 +16,8 @@
     {
       "id": "workflow",
       "vectorFiles": [
-        "./workflow/transitions.json"
+        "./workflow/transitions.json",
+        "./workflow/versioning.json"
       ]
     },
     {

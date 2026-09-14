@@ -1011,7 +1011,8 @@
       "id": "workflow.transition.multiple-current-states-001",
       "spec": "workflow/states",
       "requirements": [
-        "WORKFLOW-STATES-007"
+        "WORKFLOW-STATES-007",
+        "WORKFLOW-ERROR-005"
       ],
       "description": "Rejects an instance observation that supplies multiple current states instead of exactly one.",
       "operation": "finkore.workflow.transition",
@@ -1044,7 +1045,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINKORE_WORKFLOW_INVALID_STATE"
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
         }
       },
       "tags": [

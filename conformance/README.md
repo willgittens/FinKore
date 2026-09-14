@@ -6,7 +6,7 @@
 
 > In financial software, a passing test suite is useful only if it reliably rejects broken behavior.
 
-This directory is the language-independent executable evidence for FinKore Draft 0.1 plus the implemented Draft 0.2 Money Rates, Money Allocation, Audit Relationships, Entity Evolution, and Approval Validity slices, and the implemented Draft 0.3 Approval Composition slice. The specification remains the source of truth. Vectors describe observable domain behavior; they do not prescribe APIs, classes, exceptions, storage, or frameworks.
+This directory is the language-independent executable evidence for FinKore Draft 0.1 plus the implemented Draft 0.2 Money Rates, Money Allocation, Audit Relationships, Entity Evolution, and Approval Validity slices, the implemented Draft 0.3 Approval Composition slice, and the implemented Draft 0.3 Workflow definition/version identity, import, instance binding/mismatch, and conflict slice. The specification remains the source of truth. Vectors describe observable domain behavior; they do not prescribe APIs, classes, exceptions, storage, or frameworks.
 
 ## Scope and discovery
 
@@ -21,7 +21,7 @@ traceability status.
 The initial suites are grouped by specification behavior:
 
 - Money: representation, serialization, arithmetic, comparison, currency, rounding, Rates, and Allocation.
-- Workflow: states, directed transitions, guards, terminal states, and failure atomicity.
+- Workflow: states, directed transitions, guards, terminal states, definition versioning, import, conflict preconditions, and failure atomicity.
 - Audit: events, actors, changes, append-only history, redaction, relationships, and ordering.
 - Approvals: requirements, decisions, validity lifecycle events, explicit expiration context, conditions, chains, subject facts, and Draft 0.3 composition groups/stages/quorums.
 - Entities: identity, lifecycle, declared mutability, and validation.
@@ -109,7 +109,7 @@ Developers MUST NOT game mutation scores by excluding meaningful business logic,
 ### Initial mutation model
 
 - Money: swap addition/subtraction; reverse signs; remove or invert currency checks; use binary floating point; substitute rounding modes; ignore target scale; alter tie boundaries; replace `FLOOR` with `DOWN` or `CEILING` with `UP`.
-- Workflow: remove validation; reverse transition direction; accept undeclared or reject declared transitions; invert guard results; leave terminal states; omit state update; mutate state on failure.
+- Workflow: remove validation; reverse transition direction; accept undeclared or reject declared transitions; invert guard results; leave terminal states; omit state update; mutate state on failure; ignore version binding; infer imported state or revision; accept stale expected-current-state or expected-revision preconditions; return the wrong portable error precedence.
 - Audit: omit actor/timestamp/entity identity; reverse before/after; replace or delete committed events; expose redacted values; infer causality from arbitrary order.
 - Approvals: swap approved/rejected; ignore requirements; bind a decision to the wrong requirement; retain effectiveness after relevant facts change; count withdrawn, expired, superseded, rejected, duplicate, ineligible, or stale decisions toward quorum approval; invert a condition; treat pending as approved; bypass ordered-stage or nested-group validation.
 - Entities: change identity; bypass declared immutability; mutate before failed validation; partially apply a failed operation; change lifecycle state unexpectedly.

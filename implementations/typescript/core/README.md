@@ -5,7 +5,7 @@ Audit, Approvals, and Entities milestones.
 
 FinKore Money Draft 0.1 is fully implemented by this TypeScript reference implementation. The Draft 0.2 Money Rates and Money Allocation slices are also implemented. These statements apply only to the named Money specification slices; they do not imply that other FinKore domains are complete.
 
-FinKore Workflow Draft 0.1 is fully implemented by the TypeScript reference implementation. This statement applies only to the current Workflow specification draft; it does not imply that Entities or other FinKore domains are complete.
+FinKore Workflow Draft 0.1 is fully implemented by the TypeScript reference implementation. Draft 0.3 Workflow definition/version identity, immutable instance binding/mismatch, import, and expected-state/revision conflict semantics are specified, vector-covered, implemented in core, and supported by the TypeScript conformance adapter. This statement applies only to the implemented Workflow slice; it does not imply that the full Workflow specification, Entities, or other FinKore domains are complete.
 
 FinKore Audit Draft 0.1 is fully implemented by the TypeScript reference implementation. The Draft 0.2 Audit Relationships slice is also implemented. Audit covers Events, Actors, append-only logical history, Change representation semantics, Redaction semantics, and relationship metadata. Distributed ordering, persistence, and cross-domain integrations remain outside this milestone.
 
@@ -39,7 +39,7 @@ explicit terminal-state detection, rejection of outgoing transitions in
 terminal definitions, terminal-state transition rejection and portable error
 precedence, successful state changes, and state preservation after rejection.
 
-It intentionally does not implement tax jurisdiction policy, interest conventions, FX conversion, persistence, framework integrations, agent adapters, workflow versioning, concurrency resolution, distributed audit ordering, audit persistence, automatic derivation of composition observations from a full Decision history, delegation, escalation, dynamic approver resolution, authorization/RBAC, Workflow or Audit integration for approvals, generic entity validation engines, concrete correction posting rules, or ledger reversals.
+It intentionally does not implement tax jurisdiction policy, interest conventions, FX conversion, persistence, framework integrations, agent adapters, concurrency resolution, distributed audit ordering, audit persistence, automatic derivation of composition observations from a full Decision history, delegation, escalation, dynamic approver resolution, authorization/RBAC, Workflow or Audit integration for approvals, generic entity validation engines, concrete correction posting rules, or ledger reversals.
 
 The specification remains canonical. This package stores validated decimal amounts as strings and performs arithmetic and comparison with scaled integer arithmetic so observable behavior preserves exact base-10 semantics without using JavaScript `number`.
 
@@ -60,25 +60,43 @@ The specification remains canonical. This package stores validated decimal amoun
 
 ## Current Workflow API
 
-- `Workflow.create(definition)` validates a workflow definition and creates an instance in its declared initial state.
-- `Workflow.from(definition, { currentState })` validates an existing current-state observation against the definition.
+- `Workflow.create(definition)` validates a workflow definition and creates an instance in its declared initial state, with an immutable bound definition version when the definition is versioned.
+- `Workflow.import(definition, { currentState, binding, revision })` validates an existing current-state observation against the definition instead of inferring the initial state, requires a matching supplied binding for versioned definitions, and preserves any supplied opaque instance revision exactly.
+- `Workflow.from(definition, { currentState, binding, revision })` is a compatibility alias for `Workflow.import`.
+- `WorkflowDefinition.from(definition)` accepts paired `definitionIdentity` and `definitionVersionIdentity` values for versioned definitions, preserves them exactly, and rejects a versioned definition missing either field.
+- `workflow.definition.isVersioned`, `workflow.definition.definitionIdentity`, `workflow.definition.definitionVersionIdentity`, `workflow.definition.versionSequence`, and `workflow.definition.versionBinding()` expose validated definition version metadata. `versionSequence: "DEFAULT"` requires the version identity to be a positive base-10 integer string.
+- `workflow.versionBinding()` returns the instance's immutable bound definition version for versioned instances and `undefined` for unversioned instances.
+- `workflow.revision` returns the opaque Workflow Instance Revision supplied during import, or `undefined` when none was supplied.
 - `workflow.currentState` returns the instance's current state identifier exactly as declared.
 - `workflow.definition.isTerminalState(state)` reports terminal status only
   when the definition explicitly lists the state; names and empty outgoing
   transition sets do not imply terminality.
-- `workflow.transition(target, { facts })` applies a declared directed
+- `workflow.transition(target, { facts, expectedCurrentState, expectedRevision })` applies a declared directed
   transition and updates current state on success only when the current state is
-  non-terminal and every guard attached to the matched transition passes.
-- `workflow.toJSON()` returns `{ currentState }` for portable observation.
+  non-terminal, any supplied expected-current-state or expected-revision
+  precondition matches the imported instance observation, and every guard
+  attached to the matched transition passes.
+- `workflow.toJSON()` returns `{ currentState }` for unversioned instances and includes `binding` for versioned instances and `revision` when an opaque revision was supplied during import.
 
 Workflow failures expose portable codes: `FINKORE_WORKFLOW_INVALID_DEFINITION`,
-`FINKORE_WORKFLOW_INVALID_STATE`, `FINKORE_WORKFLOW_INVALID_TRANSITION`,
-`FINKORE_WORKFLOW_GUARD_REJECTED`, and
-`FINKORE_WORKFLOW_TERMINAL_STATE`. A request from an explicitly terminal
+`FINKORE_WORKFLOW_INVALID_INSTANCE`, `FINKORE_WORKFLOW_INVALID_STATE`,
+`FINKORE_WORKFLOW_INVALID_TRANSITION`, `FINKORE_WORKFLOW_GUARD_REJECTED`,
+`FINKORE_WORKFLOW_TERMINAL_STATE`, `FINKORE_WORKFLOW_VERSION_MISMATCH`, and
+`FINKORE_WORKFLOW_STATE_CONFLICT`. A malformed instance observation or malformed
+revision reports `FINKORE_WORKFLOW_INVALID_INSTANCE`; an undeclared supplied
+current state reports `FINKORE_WORKFLOW_INVALID_STATE`; a definition/binding
+mismatch reports `FINKORE_WORKFLOW_VERSION_MISMATCH` and does not mutate the
+original observation. A request from an explicitly terminal
 current state reports `FINKORE_WORKFLOW_TERMINAL_STATE` before undeclared
 transition errors and leaves current state unchanged. Entering a declared
 terminal target through a valid transition remains allowed. Terminal Workflow
 status does not imply broader entity or metadata immutability.
+
+Expected-current-state and expected-revision preconditions are exact
+caller-supplied checks. Omitted expected values perform no conflict check,
+undeclared expected current states report `FINKORE_WORKFLOW_INVALID_STATE`, and
+mismatches report `FINKORE_WORKFLOW_STATE_CONFLICT` before terminal-state,
+transition, or guard behavior.
 
 Transition definitions may use `guard` for one fact-equality condition or
 `guards` for multiple fact-equality conditions. If multiple guards are attached

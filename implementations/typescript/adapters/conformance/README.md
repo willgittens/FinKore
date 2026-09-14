@@ -37,6 +37,7 @@ This milestone supports:
 - `money.deserialize`
 - `money.serialize`
 - `workflow.create`
+- `workflow.import`
 
 `money.deserialize` and `money.serialize` are conformance-local Money
 operations. Serialization operations remain representation boundary checks for
@@ -46,9 +47,14 @@ accepts the previous `money.rate.apply` and `money.allocate` labels as
 compatibility aliases, but current manifest-listed vectors use the canonical
 operation IDs.
 
-`workflow.create` is conformance-local vocabulary for validating Workflow
-definition and initial-state behavior. `finkore.workflow.transition` is the
-canonical Workflow operation ID currently listed in the Agentic Contract.
+`workflow.create` and `workflow.import` are conformance-local vocabulary for
+validating Workflow definition, initial-state, existing-observation import,
+version binding, and opaque revision behavior. `finkore.workflow.transition` is
+the canonical Workflow operation ID currently listed in the Agentic Contract.
+Transition fixtures delegate version binding checks, expected-current-state and
+expected-revision conflict checks, terminal-state precedence, transition
+validation, guard evaluation, and state preservation to the core TypeScript
+Workflow API.
 
 `finkore.entity.create`, `finkore.entity.mutate`,
 `finkore.entity.transition`, and `finkore.entity.evolution.*` are canonical
@@ -97,5 +103,5 @@ observations.
 It does not claim support for rich condition expressions, delegation,
 escalation, dynamic approver resolution, authorization/RBAC, MCP,
 executable agent integrations, generic entity validation rule engines, workflow
-versioning, concurrency resolution, persistence, concrete ledger reversal
+migration, concurrency resolution, persistence, concrete ledger reversal
 posting, or broader guard frameworks.

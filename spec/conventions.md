@@ -66,10 +66,13 @@ The following table is the consolidated catalog. Domain error documents define t
 | Money | `FINKORE_MONEY_INVALID_ROUNDING` | [A requested rounding rule is invalid or unsupported](money/errors.md). |
 | Money | `FINKORE_MONEY_INVALID_ALLOCATION` | [A requested allocation is invalid](money/errors.md). |
 | Workflow | `FINKORE_WORKFLOW_INVALID_DEFINITION` | [Workflow structure is invalid](workflow/errors.md). |
+| Workflow | `FINKORE_WORKFLOW_INVALID_INSTANCE` | [A Workflow instance observation is malformed](workflow/errors.md). |
 | Workflow | `FINKORE_WORKFLOW_INVALID_STATE` | [A State is missing or undeclared](workflow/errors.md). |
 | Workflow | `FINKORE_WORKFLOW_INVALID_TRANSITION` | [A requested directed Transition is undeclared](workflow/errors.md). |
 | Workflow | `FINKORE_WORKFLOW_GUARD_REJECTED` | [A Transition Guard rejected a request](workflow/errors.md). |
 | Workflow | `FINKORE_WORKFLOW_TERMINAL_STATE` | [A Transition Request would leave a terminal State](workflow/errors.md). |
+| Workflow | `FINKORE_WORKFLOW_VERSION_MISMATCH` | [A supplied Workflow definition version does not match the instance binding](workflow/errors.md). |
+| Workflow | `FINKORE_WORKFLOW_STATE_CONFLICT` | [An expected current State or Workflow Instance Revision does not match](workflow/errors.md). |
 | Audit | `FINKORE_AUDIT_INVALID_EVENT` | [Audit Event content is invalid](audit/errors.md). |
 | Audit | `FINKORE_AUDIT_DUPLICATE_EVENT` | [An Audit Event identity is already committed](audit/errors.md). |
 | Audit | `FINKORE_AUDIT_APPEND_ONLY_VIOLATION` | [Committed logical history would be altered](audit/errors.md). |

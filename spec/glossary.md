@@ -66,6 +66,18 @@
 
 **Workflow** — The declared states, transitions, and constraints governing a lifecycle.
 
+**Workflow Definition Identity** — A stable, opaque identity for a logical Workflow definition family.
+
+**Workflow Definition Version Identity** — A stable, opaque identity for one immutable declared version of a Workflow definition.
+
+**Workflow Import** — Validation of a supplied existing Workflow instance observation against a supplied Workflow definition.
+
+**Workflow Instance Binding** — The association between a versioned Workflow instance and the Workflow Definition Identity and Workflow Definition Version Identity that govern it.
+
+**Workflow Instance Revision** — An optional, stable, opaque revision of a Workflow instance observation used for conflict preconditions; it is distinct from Entity Revision and storage counters.
+
+**Workflow State Conflict** — A failed Transition Request caused by an expected current State or expected Workflow Instance Revision not matching the observed Workflow instance.
+
 ## Conventions
 
 Terms are technology-neutral. The rules for refining shared terms are defined by **SPEC-TERMINOLOGY-001** in [Conventions](conventions.md).

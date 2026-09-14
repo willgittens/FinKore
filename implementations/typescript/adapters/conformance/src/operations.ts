@@ -93,6 +93,8 @@ function inputWorkflowTransition(input: unknown): {
   readonly instance: unknown
   readonly target: unknown
   readonly facts?: Readonly<Record<string, unknown>>
+  readonly expectedCurrentState?: unknown
+  readonly expectedRevision?: unknown
 } {
   if (typeof input !== 'object' || input === null || !('definition' in input) || !('instance' in input)) {
     return { definition: undefined, instance: undefined, target: undefined }
@@ -102,18 +104,34 @@ function inputWorkflowTransition(input: unknown): {
     readonly instance: unknown
     readonly target?: unknown
     readonly facts?: Readonly<Record<string, unknown>>
+    readonly expectedCurrentState?: unknown
+    readonly expectedRevision?: unknown
   }
   const result: {
     readonly definition: unknown
     readonly instance: unknown
     readonly target: unknown
     readonly facts?: Readonly<Record<string, unknown>>
+    readonly expectedCurrentState?: unknown
+    readonly expectedRevision?: unknown
   } = {
     definition: candidate.definition,
     instance: candidate.instance,
     target: candidate.target,
   }
-  return candidate.facts === undefined ? result : { ...result, facts: candidate.facts }
+  return {
+    ...result,
+    ...(candidate.facts === undefined ? {} : { facts: candidate.facts }),
+    ...(Object.hasOwn(candidate, 'expectedCurrentState') ? { expectedCurrentState: candidate.expectedCurrentState } : {}),
+    ...(Object.hasOwn(candidate, 'expectedRevision') ? { expectedRevision: candidate.expectedRevision } : {}),
+  }
+}
+
+function inputWorkflowImport(input: unknown): { readonly definition: unknown; readonly instance: unknown } {
+  if (typeof input !== 'object' || input === null || !('definition' in input) || !('instance' in input)) {
+    return { definition: undefined, instance: undefined }
+  }
+  return input as { readonly definition: unknown; readonly instance: unknown }
 }
 
 function inputEntityCreate(input: unknown): {
@@ -389,6 +407,35 @@ function compositionDecisionObservations(input: { readonly decisions?: unknown }
   return undefined
 }
 
+function workflowInstanceObservation(instance: unknown): Readonly<Record<string, unknown>> | undefined {
+  if (typeof instance !== 'object' || instance === null || Array.isArray(instance)) return undefined
+  const candidate = instance as {
+    readonly currentState?: unknown
+    readonly binding?: unknown
+    readonly revision?: unknown
+  }
+  const observation: Record<string, unknown> = {}
+  if (Object.hasOwn(candidate, 'currentState')) observation.currentState = candidate.currentState
+  if (Object.hasOwn(candidate, 'binding')) observation.binding = candidate.binding
+  if (Object.hasOwn(candidate, 'revision')) observation.revision = candidate.revision
+  return Object.keys(observation).length === 0 ? undefined : observation
+}
+
+function workflowObservation(workflow: Workflow): Readonly<Record<string, unknown>> {
+  return workflowInstanceObservation(workflow.toJSON()) ?? {}
+}
+
+function workflowTransitionObservations(
+  input: ReturnType<typeof inputWorkflowTransition>,
+  workflow: Workflow | undefined,
+): Readonly<Record<string, unknown>> | undefined {
+  const observation = workflow === undefined ? workflowInstanceObservation(input.instance) : workflowObservation(workflow)
+  if (observation === undefined) return undefined
+  const facts = input.facts
+  if (facts === undefined || Object.keys(facts).length === 0) return observation
+  return { ...observation, facts }
+}
+
 /**
  * Executes the first-milestone Money serialization boundary.
  *
@@ -660,6 +707,22 @@ function executeWorkflowCreate(request: AdapterRequest): NormalizedResult {
 }
 
 /**
+ * Executes the conformance-local Workflow import boundary.
+ *
+ * Import validation, version binding checks, current-state validation, and
+ * opaque revision preservation remain in `Workflow.import`; this adapter only
+ * maps the fixture shape into the TypeScript API.
+ */
+function executeWorkflowImport(request: AdapterRequest): NormalizedResult {
+  const input = inputWorkflowImport(request.input)
+  try {
+    return { status: 'success', value: Workflow.import(input.definition, input.instance).toJSON() }
+  } catch (error) {
+    return normalizeThrown(error)
+  }
+}
+
+/**
  * Executes canonical Workflow transitions through the TypeScript core API.
  *
  * The adapter constructs an instance at the conformance fixture's current
@@ -671,16 +734,23 @@ function executeWorkflowTransition(request: AdapterRequest): NormalizedResult {
   let workflow: Workflow | undefined
   try {
     workflow = Workflow.from(input.definition, input.instance)
-    const options = input.facts === undefined ? undefined : { facts: input.facts }
+    const options =
+      input.facts === undefined &&
+      !Object.hasOwn(input, 'expectedCurrentState') &&
+      !Object.hasOwn(input, 'expectedRevision')
+        ? undefined
+        : {
+            ...(input.facts === undefined ? {} : { facts: input.facts }),
+            ...(Object.hasOwn(input, 'expectedCurrentState') ? { expectedCurrentState: input.expectedCurrentState } : {}),
+            ...(Object.hasOwn(input, 'expectedRevision') ? { expectedRevision: input.expectedRevision } : {}),
+          }
     return { status: 'success', value: workflow.transition(input.target, options).toJSON() }
   } catch (error) {
     const result = normalizeThrown(error)
-    if (result.status === 'error' && workflow !== undefined) {
-      const facts = input.facts
-      const observations =
-        facts === undefined || Object.keys(facts).length === 0
-          ? { currentState: workflow.currentState }
-          : { currentState: workflow.currentState, facts }
+    if (result.status === 'error') {
+      if (workflow === undefined && result.error.code !== 'FINKORE_WORKFLOW_VERSION_MISMATCH') return result
+      const observations = workflowTransitionObservations(input, workflow)
+      if (observations === undefined) return result
       return { ...result, observations }
     }
     return result
@@ -1182,8 +1252,8 @@ function executeApprovalCompositionEvaluate(request: AdapterRequest): Normalized
  *
  * Public Money and Entity domain operations use canonical Agentic Contract
  * identifiers. `money.deserialize`, `money.serialize`, and `workflow.create`
- * remain conformance-local boundary checks rather than public FinKore
- * operations. Legacy local labels for promoted Draft 0.2 operations remain
+ * plus `workflow.import` remain conformance-local boundary checks rather than
+ * public FinKore operations. Legacy local labels for promoted Draft 0.2 operations remain
  * accepted by this adapter only as compatibility aliases.
  *
  * @see MONEY-SERIALIZATION-001
@@ -1231,6 +1301,7 @@ export const operationHandlers = {
   'approval.requirement.supersede': executeApprovalRequirementSupersede,
   'money.serialize': executeMoneySerialization,
   'workflow.create': executeWorkflowCreate,
+  'workflow.import': executeWorkflowImport,
 } satisfies Readonly<Record<string, OperationHandler>>
 
 /**

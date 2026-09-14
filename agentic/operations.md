@@ -16,6 +16,14 @@ Agentic operation because the public approval binding model still depends on
 Approval Requirement identity, Decision history, and relevant subject facts
 rather than a standalone agent-facing chain command.
 
+Draft 0.3 Workflow definition/version identity, import, instance binding, and
+expected-state/revision conflict semantics are specified in `/spec`, including
+`FINKORE_WORKFLOW_VERSION_MISMATCH`, `FINKORE_WORKFLOW_INVALID_INSTANCE`, and
+`FINKORE_WORKFLOW_STATE_CONFLICT`, but are not yet represented as canonical
+Agentic operation metadata. The TypeScript reference implementation and
+conformance adapter support the Workflow version/import/conflict slice; canonical
+Agentic metadata remains pending the Draft 0.3 Agentic review.
+
 ## Registry
 
 | Operation | Domain | State-changing | Financial state | Deterministic | Audit | Approval relation | Requirements |
@@ -315,6 +323,11 @@ Validation and change are observable as one domain operation.
 `FINKORE_WORKFLOW_TERMINAL_STATE`. Definition validation can also fail with
 `FINKORE_WORKFLOW_INVALID_DEFINITION`; this list is not exhaustive. Terminal
 State error precedence follows `WORKFLOW-ERROR-001`.
+
+Draft 0.3 versioned Workflow transition preconditions, version-mismatch errors,
+and expected-state/revision conflict errors are specified, implemented, and
+covered by conformance vectors, but not yet included in this canonical operation
+descriptor pending the Draft 0.3 Agentic review.
 
 **Normative traceability:**
 [WORKFLOW-TRANSITION-001 through -007](../spec/workflow/transitions.md),

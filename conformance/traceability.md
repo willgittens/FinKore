@@ -8,13 +8,13 @@ This is the canonical human-readable requirement-to-vector index. Manifest-liste
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Shared | 29 | 23 | 5 | 1 | 1 | 0 | 0 | 28 | 0 | 0 |
 | Money | 73 | 68 | 1 | 4 | 68 | 0 | 0 | 5 | 0 | 0 |
-| Workflow | 27 | 25 | 1 | 1 | 22 | 0 | 0 | 5 | 0 | 0 |
+| Workflow | 57 | 55 | 1 | 1 | 48 | 0 | 0 | 9 | 0 | 0 |
 | Audit | 52 | 44 | 4 | 4 | 42 | 0 | 0 | 10 | 0 | 0 |
 | Approvals | 86 | 83 | 1 | 2 | 81 | 0 | 0 | 5 | 0 | 0 |
 | Entities | 67 | 62 | 3 | 2 | 54 | 0 | 0 | 13 | 0 | 0 |
-| **Total** | **334** | **305** | **15** | **14** | **268** | **0** | **0** | **66** | **0** | **0** |
+| **Total** | **364** | **335** | **15** | **14** | **294** | **0** | **0** | **70** | **0** | **0** |
 
-The suite contains 218 vectors. Overall: **268 covered (80.2%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **66 not directly testable (19.8%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
+The suite contains 239 vectors. Overall: **294 covered (80.8%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **70 not directly testable (19.2%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current draft. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -127,12 +127,30 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | WORKFLOW-ERROR-001 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.transition-rejected-001 |
 | WORKFLOW-ERROR-002 | Workflow | MAY | NOT DIRECTLY TESTABLE | — |
 | WORKFLOW-ERROR-003 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001, workflow.transition.reverse-not-implied-001, workflow.transition.state-identity-exact-001, workflow.transition.undeclared-001 |
+| WORKFLOW-ERROR-004 | Workflow | MUST / MUST NOT | COVERED | workflow.import.version-mismatch-001, workflow.transition.version-mismatch-preserves-state-001 |
+| WORKFLOW-ERROR-005 | Workflow | MUST / MUST NOT | COVERED | workflow.import.malformed-revision-invalid-instance-001, workflow.import.missing-current-state-invalid-instance-001, workflow.import.undeclared-current-state-001, workflow.transition.error-precedence-invalid-instance-before-version-001, workflow.transition.multiple-current-states-001 |
+| WORKFLOW-ERROR-006 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.expected-revision-mismatch-001, workflow.transition.expected-state-mismatch-001 |
+| WORKFLOW-ERROR-007 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.error-precedence-conflict-before-terminal-001, workflow.transition.error-precedence-invalid-instance-before-version-001, workflow.transition.error-precedence-invalid-state-before-conflict-001, workflow.transition.error-precedence-terminal-before-invalid-transition-001 |
+| WORKFLOW-CONFLICT-001 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.expected-state-omitted-no-default-001 |
+| WORKFLOW-CONFLICT-002 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.error-precedence-invalid-state-before-conflict-001, workflow.transition.expected-state-matches-001 |
+| WORKFLOW-CONFLICT-003 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.expected-state-mismatch-001 |
+| WORKFLOW-CONFLICT-004 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.expected-revision-omitted-no-default-001 |
+| WORKFLOW-CONFLICT-005 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.expected-revision-matches-001, workflow.transition.expected-revision-mismatch-001 |
+| WORKFLOW-CONFLICT-006 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.bound-older-version-001, workflow.transition.expected-revision-matches-001, workflow.transition.expected-state-matches-001 |
+| WORKFLOW-CONFLICT-007 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.expected-revision-mismatch-001, workflow.transition.expected-state-mismatch-001 |
+| WORKFLOW-CONFLICT-008 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | WORKFLOW-GUARD-001 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.pass-001 |
 | WORKFLOW-GUARD-002 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001, workflow.guard.multiple-pass-001, workflow.guard.pass-001, workflow.guard.reject-001 |
 | WORKFLOW-GUARD-003 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001, workflow.guard.reject-001 |
 | WORKFLOW-GUARD-004 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | WORKFLOW-GUARD-005 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | WORKFLOW-GUARD-006 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001 |
+| WORKFLOW-IMPORT-001 | Workflow | MUST / MUST NOT | COVERED | workflow.import.current-state-preserved-001, workflow.import.missing-current-state-invalid-instance-001 |
+| WORKFLOW-IMPORT-002 | Workflow | MUST / MUST NOT | COVERED | workflow.import.undeclared-current-state-001 |
+| WORKFLOW-IMPORT-003 | Workflow | MUST / MUST NOT | COVERED | workflow.import.version-binding-preserved-001, workflow.import.version-mismatch-001 |
+| WORKFLOW-IMPORT-004 | Workflow | MUST / MUST NOT | COVERED | workflow.import.malformed-revision-invalid-instance-001, workflow.import.version-binding-preserved-001 |
+| WORKFLOW-IMPORT-005 | Workflow | MUST / MUST NOT | COVERED | workflow.import.current-state-preserved-001, workflow.import.version-binding-preserved-001 |
+| WORKFLOW-IMPORT-006 | Workflow | MUST / MUST NOT | COVERED | workflow.import.malformed-revision-invalid-instance-001, workflow.import.missing-current-state-invalid-instance-001, workflow.import.version-mismatch-001 |
 | WORKFLOW-STATES-001 | Workflow | MUST / MUST NOT | COVERED | workflow.create.duplicate-state-001 |
 | WORKFLOW-STATES-002 | Workflow | MUST / MUST NOT | COVERED | workflow.create.initial-state-001, workflow.create.multiple-initial-001 |
 | WORKFLOW-STATES-003 | Workflow | MUST / MUST NOT | COVERED | workflow.create.initial-state-001 |
@@ -151,6 +169,18 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | WORKFLOW-TRANSITION-005 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.entry-allowed-001, workflow.transition.unguarded-ignores-facts-001, workflow.transition.valid-001 |
 | WORKFLOW-TRANSITION-006 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001, workflow.transition.reverse-not-implied-001, workflow.transition.undeclared-001 |
 | WORKFLOW-TRANSITION-007 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| WORKFLOW-VERSION-001 | Workflow | MUST / MUST NOT | COVERED | workflow.create.version-missing-invalid-001, workflow.create.versioned-binding-001 |
+| WORKFLOW-VERSION-002 | Workflow | MUST / MUST NOT | COVERED | workflow.create.versioned-binding-001 |
+| WORKFLOW-VERSION-003 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| WORKFLOW-VERSION-004 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| WORKFLOW-VERSION-005 | Workflow | MUST / MUST NOT | COVERED | workflow.create.versioned-binding-001 |
+| WORKFLOW-VERSION-006 | Workflow | MUST / MUST NOT | COVERED | workflow.create.default-version-sequence-zero-invalid-001 |
+| WORKFLOW-VERSION-007 | Workflow | MUST / MUST NOT | COVERED | workflow.create.versioned-binding-001, workflow.import.version-binding-preserved-001 |
+| WORKFLOW-VERSION-008 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.bound-older-version-001 |
+| WORKFLOW-VERSION-009 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.bound-older-version-001 |
+| WORKFLOW-VERSION-010 | Workflow | MUST / MUST NOT | COVERED | workflow.import.version-mismatch-001, workflow.transition.version-mismatch-preserves-state-001 |
+| WORKFLOW-VERSION-011 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.bound-older-version-001 |
+| WORKFLOW-VERSION-012 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | AUDIT-ACTOR-001 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001 |
 | AUDIT-ACTOR-002 | Audit | MUST / MUST NOT | COVERED | audit.actor.opaque-identity-001 |
 | AUDIT-ACTOR-003 | Audit | MUST / MUST NOT | COVERED | audit.actor.display-name-not-identity-001 |
@@ -330,7 +360,6 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-EVOLUTION-032 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001, entity.evolution.void.audit-001, entity.evolution.supersession.currentness-001 |
 | ENTITY-EVOLUTION-033 | Entities | MUST / MUST NOT | COVERED | entity.evolution.audit-failure-001 |
 | ENTITY-IDENTITY-001 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
-| APPROVAL-QUORUM-009, APPROVAL-QUORUM-010 | Reject opposing effective votes for a named voter; derive its state only from matching current evidence. | Select latest/first vote or favor either outcome; hide conflicts behind a satisfied branch; use another Actor's rejection or approval; double-count repeated evidence; mutate history while resolving a conflict. |
 | ENTITY-IDENTITY-002 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.transition.success-identity-stable-001 |
 | ENTITY-IDENTITY-003 | Entities | MUST / MUST NOT | COVERED | entity.create.opaque-identity-preserved-001 |
 | ENTITY-IDENTITY-004 | Entities | MUST / MUST NOT | COVERED | entity.mutate.display-number-not-identity-001 |
@@ -436,6 +465,14 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | WORKFLOW-TRANSITION-003 | Declared directed transitions only. | Ignore current Source State. |
 | WORKFLOW-TRANSITION-006 | State preservation after rejection. | Assign Target State before validation. |
 | WORKFLOW-TERMINAL-003 | No transition request may leave an explicitly terminal State. | Remove or invert the current-State terminal check. |
+| WORKFLOW-VERSION-002, WORKFLOW-VERSION-003, WORKFLOW-VERSION-005 | Definition/version identities are opaque, stable, and not reused for changed semantics. | Infer behavior from identifier format, storage position, timestamps, state names, or transition lists; reuse a version identity after changing declared behavior. |
+| WORKFLOW-VERSION-008, WORKFLOW-VERSION-009, WORKFLOW-VERSION-011 | Versioned instances remain governed by the bound definition version. | Evaluate an existing instance against the latest definition, let a newer version add/remove old-instance transitions, or change binding during transition. |
+| WORKFLOW-VERSION-010, WORKFLOW-ERROR-004 | Definition/version mismatch fails with the portable mismatch code and preserves state and binding. | Ignore supplied-version mismatch, return transition/guard/terminal errors first, or mutate current state or binding on failure. |
+| WORKFLOW-IMPORT-001, WORKFLOW-IMPORT-005 | Import observes supplied existing state without replaying or creating a transition. | Infer initial state, evaluate guards, append audit evidence, or report a state change during import. |
+| WORKFLOW-IMPORT-003, WORKFLOW-IMPORT-004, WORKFLOW-ERROR-005 | Versioned import preserves explicit binding and opaque instance revision without invention or storage interpretation. | Invent binding/revision, accept missing binding, derive revision from transition count or storage version, or collapse malformed instance shape into a transition error. |
+| WORKFLOW-CONFLICT-001, WORKFLOW-CONFLICT-004 | Omitted expected-state/revision preconditions do not imply defaults. | Treat omission as initial/latest state or storage revision, or reject because a caller omitted an optional precondition. |
+| WORKFLOW-CONFLICT-003, WORKFLOW-CONFLICT-005, WORKFLOW-CONFLICT-007, WORKFLOW-ERROR-006 | Expected-state or expected-revision conflicts fail with the portable conflict code and preserve state, binding, and revision. | Ignore stale expected values, accept missing observed revision as matched, return invalid-transition/terminal/guard codes first, or mutate state/binding/revision on conflict. |
+| WORKFLOW-ERROR-007 | Error precedence is deterministic across versioning, import, conflict, terminal, transition, and guard failures. | Let branch order choose error code, report terminal/transition/guard before structural or conflict failures, or invert terminal precedence over invalid transition. |
 | AUDIT-APPEND-001 | Append-only committed history. | Replace or remove a committed event. |
 | AUDIT-REDACTION-002, AUDIT-REDACTION-003, AUDIT-REDACTION-006 | Redacted representation remains distinguishable, preserves event meaning, and records evidence. | Expose protected values, collapse redaction to null or absence, change event identity, or omit evidence. |
 | AUDIT-RELATIONSHIP-005, AUDIT-RELATIONSHIP-012 | Relationship identity is unique and rejected relationship requests do not create partial state. | Accept duplicate relationship identities or append relationship-bearing invalid events. |
@@ -450,6 +487,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-COMPOSITION-021, APPROVAL-QUORUM-004 | Composition and quorum reuse current-effectiveness and never count ineffective Decisions. | Count withdrawn, expired, superseded, stale, ineligible, or rejected Decisions toward group approval. |
 | APPROVAL-QUORUM-001, APPROVAL-QUORUM-002, APPROVAL-QUORUM-003, APPROVAL-QUORUM-005, APPROVAL-QUORUM-006 | Quorum thresholds count distinct effective eligible voters with exact N-of-M boundary behavior. | Use `>` instead of `>=`, count duplicate voters twice, infer abstentions, or reject while threshold can still be met. |
 | APPROVAL-QUORUM-002, APPROVAL-QUORUM-007, APPROVAL-QUORUM-008, APPROVAL-ERROR-008 | Quorums have explicit distinct voter identities on Requirement members; a group's outcome is not voter evidence. | Accept child groups or missing/role-only voter identities, accept duplicate declared voters, count an eligible but undeclared voter, or change the invalid-definition error code. |
+| APPROVAL-QUORUM-009, APPROVAL-QUORUM-010 | Reject opposing effective votes for a named voter; derive its state only from matching current evidence. | Select latest/first vote or favor either outcome; hide conflicts behind a satisfied branch; use another Actor's rejection or approval; double-count repeated evidence; mutate history while resolving a conflict. |
 | APPROVAL-QUORUM-001, APPROVAL-QUORUM-006, APPROVAL-ERROR-008 | Validate N against declared M; retain N after applicability filtering and reject a nonempty quorum when approvals plus pending capacity cannot reach N. | Lower N after filtering, compare N to applicable membership during definition validation, use <= at the reachability boundary, or return INVALID_CHAIN/PENDING for an unreachable nonempty quorum. |
 | APPROVAL-COMPOSITION-011, APPROVAL-COMPOSITION-012, APPROVAL-COMPOSITION-014, APPROVAL-COMPOSITION-022 | Entirely inapplicable child groups contribute nothing to their parent; an entirely inapplicable valid composition has no approval obligation. | Count a skipped child as an approving ANY_OF branch, fail to propagate nested omission, reject an all-inapplicable composition, fabricate Decisions, or treat missing facts/invalid definitions as exemptions. |
 | APPROVAL-COMPOSITION-017, APPROVAL-COMPOSITION-018, APPROVAL-COMPOSITION-023 | Applicable parallel groups combine as ALL_OF; a stage with no applicable groups adds no obligation; the first non-approved stage determines the composition outcome. | Use ANY_OF between stage groups, let pending mask a same-stage rejection, block on an inapplicable stage, turn group order into prerequisites, or let later rejection override an earlier pending stage. |
@@ -470,7 +508,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 ## Conformance gaps
 
 - Money: allocation normative semantics and portable invalid-allocation error semantics are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance for Draft 0.2. Precision or overflow limits, private or non-fiat currency namespaces, and currency-recommended scale remain open as deferred topics outside the closed Draft 0.1 plus Draft 0.2 Money Rates and Allocation scope.
-- Workflow: external fact capture, definition migration, transition identifiers, and concurrency remain open.
+- Workflow: Draft 0.3 Workflow definition identity, version identity, immutable instance binding, older-version observation, version-mismatch semantics, import of existing state/version observations, and expected-state/revision conflict preconditions are specified, vector-covered, implemented by the TypeScript reference implementation, and passing through the conformance adapter. Version identity reuse, Entity/storage separation, safe diagnostic disclosure, and non-locking/non-concurrency guarantees are not directly testable through one portable vector and remain subject to implementation, architecture, and review checks. External fact capture, definition migration, state mapping across versions, transition identifiers, storage locking, and distributed concurrency remain open.
 - Audit: Draft 0.2 Audit Relationships are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, generic related links, relationship redaction policy, and causal sequencing remain open.
 - Approvals: Draft 0.2 Approval Validity withdrawal, expiration, supersession, explicit current-effectiveness context, and lifecycle failure atomicity are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Draft 0.3 quorum membership is specified by D03-QUORUM-001, fixed thresholds with nonempty unreachable-quorum rejection by D03-QUORUM-002, entirely inapplicable group treatment by D03-COMPOSITION-001, stage aggregation by D03-COMPOSITION-002, stage structure/depth by D03-COMPOSITION-003, complete validation by D03-COMPOSITION-004, staged actionability by D03-COMPOSITION-005, and error mapping/precedence by D03-COMPOSITION-006. D03-QUORUM-003 resolves opposing effective votes and member-specific evidence. TASK-073 is complete with no remaining identified composition specification gaps, TASK-074 supplies manifest-listed conformance vectors, and TASK-075 through TASK-082 supply TypeScript implementation, adapter wiring, runtime conformance, focused boundary coverage, and mutation hardening evidence. Rich condition syntax, delegation, escalation, approval-definition migration, dynamic approver resolution, and unrestricted dependency graphs remain open for future drafts.
 - Entities: Draft 0.2 Entity Evolution terminology, correction, reversal, void, supersession, currentness, failure atomicity, mandatory Audit evidence, and portable error mapping are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Concrete fields, composing-domain lifecycle policy, full validation catalog, import or migration mapping, cross-entity identity registries, concurrency, cancellation, adjustment, replacement, amendment, and concrete ledger posting behavior remain outside the current implemented Core. The current TypeScript reference implementation covers the conformance-local Entity identity, lifecycle, mutability, validation, and evolution vectors. Remaining Entity requirements classified as not directly testable are composing-domain, optional diagnostic, or registry/import obligations without a standalone portable Entity operation.
@@ -491,8 +529,26 @@ focused mutation hardening with zero critical survivors for the Advanced
 Approvals composition surface.
 Closed Draft 0.1/0.2 coverage classifications and vector references are unchanged.
 
+### Draft 0.3 Workflow versioning review gaps
+
+TASK-089 review is complete under D03-REVIEW-001; external review remains NOT
+EXTERNALLY REVIEWED. All 26 directly testable Draft 0.3 Workflow
+version/import/conflict/error requirements have manifest-listed TASK-090 vectors
+and pass against the TypeScript reference implementation through the conformance
+adapter. The scoped Workflow inventory has 0 UNCOVERED and 0 BLOCKING SPEC GAP
+rows. The 9 Workflow rows classified as NOT DIRECTLY TESTABLE are the Draft 0.1
+Workflow authoring or non-observable requirements plus `WORKFLOW-VERSION-003`,
+`WORKFLOW-VERSION-004`, `WORKFLOW-VERSION-012`, and `WORKFLOW-CONFLICT-008`;
+none hides a feasible deterministic vector for the closed Workflow 0.3 slice.
+TASK-096 records focused mutation hardening with zero critical survivors for the
+Workflow definition/version identity, import, instance binding/mismatch, and
+expected-state/revision conflict surface. Canonical Agentic metadata for these
+Draft 0.3 Workflow refinements remains pending the Draft 0.3 Agentic review.
+Closed Draft 0.1/0.2 coverage classifications and vector references are
+unchanged.
+
 ## Readiness
 
 **READY FOR CONFORMANCE RUNNER**
 
-The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the current runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates, Money Allocation, Audit Relationships, Entity Evolution, and Approval Validity requirements are vector-covered, implemented by the TypeScript reference implementation, and pass their conformance suites. Draft 0.3 Approval Composition requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Approval conformance suite. FinKore Core Draft 0.1 cross-domain closure remains complete for its directly testable mandatory requirements.
+The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the current runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates, Money Allocation, Audit Relationships, Entity Evolution, and Approval Validity requirements are vector-covered, implemented by the TypeScript reference implementation, and pass their conformance suites. Draft 0.3 Approval Composition requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Approval conformance suite. Draft 0.3 Workflow definition/version identity, import, instance binding/mismatch, and expected-state/revision conflict requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Workflow conformance suite. FinKore Core Draft 0.1 cross-domain closure remains complete for its directly testable mandatory requirements.

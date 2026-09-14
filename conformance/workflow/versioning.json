@@ -1,0 +1,672 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "workflow.create.versioned-binding-001",
+      "spec": "workflow/versioning",
+      "requirements": [
+        "WORKFLOW-VERSION-001",
+        "WORKFLOW-VERSION-002",
+        "WORKFLOW-VERSION-005",
+        "WORKFLOW-VERSION-007"
+      ],
+      "description": "Creates a versioned instance with the supplied opaque definition identity and version identity.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice approval :: us-east",
+          "definitionVersionIdentity": "v:01",
+          "states": ["DRAFT", "SUBMITTED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["SUBMITTED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "invoice approval :: us-east",
+            "definitionVersionIdentity": "v:01"
+          }
+        }
+      },
+      "tags": ["positive", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["workflow-version-identity-derived-or-normalized"]
+    },
+    {
+      "id": "workflow.create.version-missing-invalid-001",
+      "spec": "workflow/versioning",
+      "requirements": ["WORKFLOW-VERSION-001"],
+      "description": "Rejects a partly versioned definition that declares identity without version identity.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "states": ["DRAFT", "SUBMITTED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["SUBMITTED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_INVALID_DEFINITION" }
+      },
+      "tags": ["negative", "mutation-sensitive"],
+      "guardsAgainst": ["partial-versioned-definition-accepted"]
+    },
+    {
+      "id": "workflow.create.default-version-sequence-zero-invalid-001",
+      "spec": "workflow/versioning",
+      "requirements": ["WORKFLOW-VERSION-006"],
+      "description": "Rejects zero as a default numeric sequence version position.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "0",
+          "versionSequence": "DEFAULT",
+          "states": ["DRAFT", "SUBMITTED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["SUBMITTED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_INVALID_DEFINITION" }
+      },
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["default-version-sequence-zero-accepted"]
+    },
+    {
+      "id": "workflow.import.current-state-preserved-001",
+      "spec": "workflow/import",
+      "requirements": ["WORKFLOW-IMPORT-001", "WORKFLOW-IMPORT-005"],
+      "description": "Imports an existing instance in its supplied current state instead of the definition initial state.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": ["DRAFT", "SUBMITTED", "APPROVED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["APPROVED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" },
+            { "source": "SUBMITTED", "target": "APPROVED" }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": { "currentState": "SUBMITTED" }
+      },
+      "tags": ["positive", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["import-infers-initial-state"]
+    },
+    {
+      "id": "workflow.import.version-binding-preserved-001",
+      "spec": "workflow/import",
+      "requirements": [
+        "WORKFLOW-IMPORT-003",
+        "WORKFLOW-IMPORT-004",
+        "WORKFLOW-IMPORT-005",
+        "WORKFLOW-VERSION-007"
+      ],
+      "description": "Imports a versioned instance with supplied binding and opaque instance revision preserved.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "1",
+          "states": ["DRAFT", "SUBMITTED", "APPROVED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["APPROVED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" },
+            { "source": "SUBMITTED", "target": "APPROVED" }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED",
+          "binding": {
+            "definitionIdentity": "invoice-approval",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "wf-rev:0007"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "SUBMITTED",
+          "binding": {
+            "definitionIdentity": "invoice-approval",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "wf-rev:0007"
+        }
+      },
+      "tags": ["positive", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["import-binding-or-revision-invented"]
+    },
+    {
+      "id": "workflow.import.undeclared-current-state-001",
+      "spec": "workflow/import",
+      "requirements": ["WORKFLOW-IMPORT-002", "WORKFLOW-ERROR-005"],
+      "description": "Rejects an otherwise well-formed import whose current state is not declared.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": ["DRAFT", "SUBMITTED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["SUBMITTED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" }
+          ]
+        },
+        "instance": {
+          "currentState": "PAID"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_INVALID_STATE" }
+      },
+      "tags": ["negative", "mutation-sensitive"],
+      "guardsAgainst": ["undeclared-import-state-accepted"]
+    },
+    {
+      "id": "workflow.import.missing-current-state-invalid-instance-001",
+      "spec": "workflow/import",
+      "requirements": ["WORKFLOW-IMPORT-001", "WORKFLOW-IMPORT-006", "WORKFLOW-ERROR-005"],
+      "description": "Reports malformed instance observation when import has no current state.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": ["DRAFT", "SUBMITTED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["SUBMITTED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" }
+          ]
+        },
+        "instance": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_INVALID_INSTANCE" }
+      },
+      "tags": ["negative", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["missing-current-state-treated-as-initial-state"]
+    },
+    {
+      "id": "workflow.import.version-mismatch-001",
+      "spec": "workflow/import",
+      "requirements": [
+        "WORKFLOW-IMPORT-003",
+        "WORKFLOW-IMPORT-006",
+        "WORKFLOW-VERSION-010",
+        "WORKFLOW-ERROR-004"
+      ],
+      "description": "Rejects import when supplied definition version does not match the instance binding.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "2",
+          "states": ["DRAFT", "SUBMITTED", "APPROVED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["APPROVED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" },
+            { "source": "SUBMITTED", "target": "APPROVED" }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED",
+          "binding": {
+            "definitionIdentity": "invoice-approval",
+            "definitionVersionIdentity": "1"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_VERSION_MISMATCH" }
+      },
+      "tags": ["negative", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["version-mismatch-import-accepted"]
+    },
+    {
+      "id": "workflow.import.malformed-revision-invalid-instance-001",
+      "spec": "workflow/import",
+      "requirements": ["WORKFLOW-IMPORT-004", "WORKFLOW-IMPORT-006", "WORKFLOW-ERROR-005"],
+      "description": "Rejects a malformed Workflow Instance Revision without deriving a replacement.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": ["DRAFT", "SUBMITTED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["SUBMITTED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" }
+          ]
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "revision": 7
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_INVALID_INSTANCE" }
+      },
+      "tags": ["negative", "mutation-sensitive"],
+      "guardsAgainst": ["workflow-instance-revision-generated-from-counter"]
+    },
+    {
+      "id": "workflow.transition.bound-older-version-001",
+      "spec": "workflow/versioning",
+      "requirements": [
+        "WORKFLOW-VERSION-008",
+        "WORKFLOW-VERSION-009",
+        "WORKFLOW-VERSION-011",
+        "WORKFLOW-CONFLICT-006"
+      ],
+      "description": "Uses the bound older definition version even when a newer version with different transitions is available.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "1",
+          "states": ["DRAFT", "SUBMITTED", "APPROVED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["APPROVED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" },
+            { "source": "SUBMITTED", "target": "APPROVED" }
+          ]
+        },
+        "availableDefinitions": [
+          {
+            "definitionIdentity": "invoice-approval",
+            "definitionVersionIdentity": "2",
+            "states": ["DRAFT", "SUBMITTED", "PAID"],
+            "initialState": "DRAFT",
+            "terminalStates": ["PAID"],
+            "transitions": [
+              { "source": "DRAFT", "target": "SUBMITTED" },
+              { "source": "SUBMITTED", "target": "PAID" }
+            ]
+          }
+        ],
+        "instance": {
+          "currentState": "SUBMITTED",
+          "binding": {
+            "definitionIdentity": "invoice-approval",
+            "definitionVersionIdentity": "1"
+          }
+        },
+        "target": "APPROVED"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "APPROVED",
+          "binding": {
+            "definitionIdentity": "invoice-approval",
+            "definitionVersionIdentity": "1"
+          }
+        }
+      },
+      "tags": ["positive", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["latest-definition-used-for-bound-instance"]
+    },
+    {
+      "id": "workflow.transition.version-mismatch-preserves-state-001",
+      "spec": "workflow/versioning",
+      "requirements": ["WORKFLOW-VERSION-010", "WORKFLOW-ERROR-004"],
+      "description": "Rejects a transition when the supplied definition version differs from the instance binding and preserves state.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "2",
+          "states": ["DRAFT", "SUBMITTED", "PAID"],
+          "initialState": "DRAFT",
+          "terminalStates": ["PAID"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" },
+            { "source": "SUBMITTED", "target": "PAID" }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED",
+          "binding": {
+            "definitionIdentity": "invoice-approval",
+            "definitionVersionIdentity": "1"
+          }
+        },
+        "target": "PAID"
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_VERSION_MISMATCH" },
+        "observations": {
+          "currentState": "SUBMITTED",
+          "binding": {
+            "definitionIdentity": "invoice-approval",
+            "definitionVersionIdentity": "1"
+          }
+        }
+      },
+      "tags": ["negative", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["version-mismatch-transition-accepted"]
+    },
+    {
+      "id": "workflow.transition.expected-state-matches-001",
+      "spec": "workflow/conflicts",
+      "requirements": ["WORKFLOW-CONFLICT-002", "WORKFLOW-CONFLICT-006"],
+      "description": "Allows transition validation to proceed when Expected Current State exactly matches current state.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["DRAFT", "SUBMITTED", "APPROVED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["APPROVED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" },
+            { "source": "SUBMITTED", "target": "APPROVED" }
+          ]
+        },
+        "instance": { "currentState": "SUBMITTED" },
+        "target": "APPROVED",
+        "expectedCurrentState": "SUBMITTED"
+      },
+      "expected": {
+        "status": "success",
+        "value": { "currentState": "APPROVED" }
+      },
+      "tags": ["positive", "boundary"]
+    },
+    {
+      "id": "workflow.transition.expected-state-mismatch-001",
+      "spec": "workflow/conflicts",
+      "requirements": ["WORKFLOW-CONFLICT-003", "WORKFLOW-CONFLICT-007", "WORKFLOW-ERROR-006"],
+      "description": "Rejects a stale Expected Current State before transition validation and preserves the instance.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["DRAFT", "SUBMITTED", "APPROVED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["APPROVED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" },
+            { "source": "SUBMITTED", "target": "APPROVED" }
+          ]
+        },
+        "instance": { "currentState": "SUBMITTED" },
+        "target": "APPROVED",
+        "expectedCurrentState": "DRAFT"
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_STATE_CONFLICT" },
+        "observations": { "currentState": "SUBMITTED" }
+      },
+      "tags": ["negative", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["expected-current-state-mismatch-accepted"]
+    },
+    {
+      "id": "workflow.transition.expected-state-omitted-no-default-001",
+      "spec": "workflow/conflicts",
+      "requirements": ["WORKFLOW-CONFLICT-001"],
+      "description": "Does not infer an Expected Current State when the precondition is omitted.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["DRAFT", "SUBMITTED", "APPROVED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["APPROVED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" },
+            { "source": "SUBMITTED", "target": "APPROVED" }
+          ]
+        },
+        "instance": { "currentState": "SUBMITTED" },
+        "target": "APPROVED"
+      },
+      "expected": {
+        "status": "success",
+        "value": { "currentState": "APPROVED" }
+      },
+      "tags": ["positive", "mutation-sensitive"],
+      "guardsAgainst": ["omitted-expected-state-treated-as-initial"]
+    },
+    {
+      "id": "workflow.transition.expected-revision-matches-001",
+      "spec": "workflow/conflicts",
+      "requirements": ["WORKFLOW-CONFLICT-005", "WORKFLOW-CONFLICT-006"],
+      "description": "Allows transition validation to proceed when Expected Workflow Instance Revision exactly matches.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["DRAFT", "SUBMITTED", "APPROVED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["APPROVED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" },
+            { "source": "SUBMITTED", "target": "APPROVED" }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED",
+          "revision": "wf-rev:0007"
+        },
+        "target": "APPROVED",
+        "expectedRevision": "wf-rev:0007"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "APPROVED",
+          "revision": "wf-rev:0007"
+        }
+      },
+      "tags": ["positive", "boundary"]
+    },
+    {
+      "id": "workflow.transition.expected-revision-mismatch-001",
+      "spec": "workflow/conflicts",
+      "requirements": ["WORKFLOW-CONFLICT-005", "WORKFLOW-CONFLICT-007", "WORKFLOW-ERROR-006"],
+      "description": "Rejects a stale Expected Workflow Instance Revision and preserves the instance observation.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["DRAFT", "SUBMITTED", "APPROVED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["APPROVED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" },
+            { "source": "SUBMITTED", "target": "APPROVED" }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED",
+          "revision": "wf-rev:0007"
+        },
+        "target": "APPROVED",
+        "expectedRevision": "wf-rev:0006"
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_STATE_CONFLICT" },
+        "observations": {
+          "currentState": "SUBMITTED",
+          "revision": "wf-rev:0007"
+        }
+      },
+      "tags": ["negative", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["expected-revision-mismatch-accepted"]
+    },
+    {
+      "id": "workflow.transition.expected-revision-omitted-no-default-001",
+      "spec": "workflow/conflicts",
+      "requirements": ["WORKFLOW-CONFLICT-004"],
+      "description": "Does not infer an Expected Workflow Instance Revision when the precondition is omitted.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["DRAFT", "SUBMITTED", "APPROVED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["APPROVED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" },
+            { "source": "SUBMITTED", "target": "APPROVED" }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED",
+          "revision": "wf-rev:0007"
+        },
+        "target": "APPROVED"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "APPROVED",
+          "revision": "wf-rev:0007"
+        }
+      },
+      "tags": ["positive", "mutation-sensitive"],
+      "guardsAgainst": ["omitted-expected-revision-treated-as-latest"]
+    },
+    {
+      "id": "workflow.transition.error-precedence-invalid-instance-before-version-001",
+      "spec": "workflow/errors",
+      "requirements": ["WORKFLOW-ERROR-005", "WORKFLOW-ERROR-007"],
+      "description": "Reports invalid instance before checking version mismatch.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "2",
+          "states": ["DRAFT", "SUBMITTED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["SUBMITTED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" }
+          ]
+        },
+        "instance": {
+          "binding": {
+            "definitionIdentity": "invoice-approval",
+            "definitionVersionIdentity": "1"
+          }
+        },
+        "target": "SUBMITTED"
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_INVALID_INSTANCE" }
+      },
+      "tags": ["negative", "mutation-sensitive"],
+      "guardsAgainst": ["version-mismatch-reported-before-invalid-instance"]
+    },
+    {
+      "id": "workflow.transition.error-precedence-invalid-state-before-conflict-001",
+      "spec": "workflow/errors",
+      "requirements": ["WORKFLOW-CONFLICT-002", "WORKFLOW-ERROR-007"],
+      "description": "Reports undeclared Expected Current State as invalid state before conflict comparison.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["DRAFT", "SUBMITTED", "APPROVED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["APPROVED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" },
+            { "source": "SUBMITTED", "target": "APPROVED" }
+          ]
+        },
+        "instance": { "currentState": "SUBMITTED" },
+        "target": "APPROVED",
+        "expectedCurrentState": "ARCHIVED"
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_INVALID_STATE" },
+        "observations": { "currentState": "SUBMITTED" }
+      },
+      "tags": ["negative", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["expected-state-validity-skipped-before-conflict"]
+    },
+    {
+      "id": "workflow.transition.error-precedence-terminal-before-invalid-transition-001",
+      "spec": "workflow/errors",
+      "requirements": ["WORKFLOW-ERROR-007"],
+      "description": "Preserves terminal-state precedence over invalid transition after earlier preconditions pass.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["DRAFT", "SUBMITTED", "APPROVED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["APPROVED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" },
+            { "source": "SUBMITTED", "target": "APPROVED" }
+          ]
+        },
+        "instance": { "currentState": "APPROVED" },
+        "target": "DRAFT",
+        "expectedCurrentState": "APPROVED"
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_TERMINAL_STATE" },
+        "observations": { "currentState": "APPROVED" }
+      },
+      "tags": ["negative", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["invalid-transition-reported-before-terminal-state"]
+    },
+    {
+      "id": "workflow.transition.error-precedence-conflict-before-terminal-001",
+      "spec": "workflow/errors",
+      "requirements": ["WORKFLOW-ERROR-007"],
+      "description": "Reports expected-state conflict before terminal-state checks.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["DRAFT", "SUBMITTED", "APPROVED"],
+          "initialState": "DRAFT",
+          "terminalStates": ["APPROVED"],
+          "transitions": [
+            { "source": "DRAFT", "target": "SUBMITTED" },
+            { "source": "SUBMITTED", "target": "APPROVED" }
+          ]
+        },
+        "instance": { "currentState": "APPROVED" },
+        "target": "DRAFT",
+        "expectedCurrentState": "SUBMITTED"
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_STATE_CONFLICT" },
+        "observations": { "currentState": "APPROVED" }
+      },
+      "tags": ["negative", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["terminal-state-reported-before-state-conflict"]
+    }
+  ]
+}
