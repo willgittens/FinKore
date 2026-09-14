@@ -154,8 +154,8 @@ not choose the behavior that happens to match TypeScript.
 Recommended status block:
 
 ```text
-NEXT TASK: TASK-177
-LAST COMPLETED: TASK-176 (Milestone B — CoreDoc Alignment)
+NEXT TASK: TASK-186
+LAST COMPLETED: TASK-185 (Milestone C — Domain Specification Stabilization)
 BLOCKED ON: NONE
 ```
 
@@ -174,7 +174,7 @@ Completion:
 
 - [x] Foundation and authority: TASK-167–TASK-171
 - [x] CoreDoc alignment: TASK-172–TASK-176
-- [ ] Domain specification stabilization: TASK-177–TASK-185
+- [x] Domain specification stabilization: TASK-177–TASK-185
 - [ ] Cross-language portability contract: TASK-186–TASK-193
 - [ ] Conformance and implementer documentation: TASK-194–TASK-198
 - [ ] Alignment and Draft 0.5 handoff: TASK-199–TASK-202
@@ -434,7 +434,7 @@ Verification: `npm run docs:check`, `npm run typecheck`, `npm run license:check`
 
 ### Milestone C — Domain Specification Stabilization
 
-### - [ ] TASK-177 — Stabilize Shared Conventions and Glossary
+### - [x] TASK-177 — Stabilize Shared Conventions and Glossary
 
 **Depends on:** TASK-176.
 
@@ -452,7 +452,7 @@ explicit refinement.
 not create obligations; every portable value states omission/null behavior at
 the appropriate layer.
 
-### - [ ] TASK-178 — Stabilize the Money Specification
+### - [x] TASK-178 — Stabilize the Money Specification
 
 **Depends on:** TASK-177.
 
@@ -471,7 +471,7 @@ implementation could agree without copying TypeScript decimal internals. Draft
 0.3 precision limits, minor-unit policy, and private currencies stay deferred
 unless an existing operation is otherwise indeterminate.
 
-### - [ ] TASK-179 — Stabilize the Workflow Specification
+### - [x] TASK-179 — Stabilize the Workflow Specification
 
 **Depends on:** TASK-177.
 
@@ -487,7 +487,7 @@ locking semantics.
 **Acceptance:** Existing transition/import observations are deterministic;
 Workflow migration and distributed concurrency remain explicit non-capabilities.
 
-### - [ ] TASK-180 — Stabilize the Audit Specification
+### - [x] TASK-180 — Stabilize the Audit Specification
 
 **Depends on:** TASK-177.
 
@@ -502,7 +502,7 @@ and non-mutating failure.
 **Acceptance:** Implementers can preserve required evidence without inventing an
 event store, global order, retention law, or expanded provenance model.
 
-### - [ ] TASK-181 — Stabilize the Approvals Specification
+### - [x] TASK-181 — Stabilize the Approvals Specification
 
 **Depends on:** TASK-177.
 
@@ -518,7 +518,7 @@ actionable requirements, complete validation, and error precedence.
 **Acceptance:** Existing bounded composition is deterministic without a rules
 engine, IAM/RBAC, delegation, escalation, or dynamic approver lookup.
 
-### - [ ] TASK-182 — Stabilize the Entities Specification
+### - [x] TASK-182 — Stabilize the Entities Specification
 
 **Depends on:** TASK-177.
 
@@ -535,7 +535,7 @@ atomicity.
 assuming a database version, registry, migration file format, or concrete
 accounting posting effect.
 
-### - [ ] TASK-183 — Resolve Cross-Domain Terminology and Invariant Findings
+### - [x] TASK-183 — Resolve Cross-Domain Terminology and Invariant Findings
 
 **Depends on:** TASK-178–TASK-182.
 
@@ -549,7 +549,7 @@ decision process; document legitimate refinements explicitly.
 **Acceptance:** The same term is not assigned incompatible meanings silently;
 dependency direction between domain rules remains explicit.
 
-### - [ ] TASK-184 — Audit the Consolidated Portable Error Contract
+### - [x] TASK-184 — Audit the Consolidated Portable Error Contract
 
 **Depends on:** TASK-183.
 
@@ -566,7 +566,7 @@ non-portable.
 future Python and Java exceptions can map to the same category without matching
 TypeScript class names.
 
-### - [ ] TASK-185 — Close the Specification Stabilization Gate
+### - [x] TASK-185 — Close the Specification Stabilization Gate
 
 **Depends on:** TASK-184.
 
@@ -577,6 +577,15 @@ baseline before authoring portability guidance.
 zero unresolved contradictions and zero blocking gaps; requirement IDs remain
 stable; directly testable changes have failing-then-passing vectors; affected
 TypeScript behavior and documentation are synchronized.
+
+Status: Complete. Milestone C is recorded in
+[Draft 0.4 Domain Specification Stabilization Record](../../spec/draft-0.4-stabilization.md)
+and summarized in the [Draft 0.4 release note](../releases/draft-0.4.md).
+Findings were CLARIFICATION or ACCEPTED only; no normative financial behavior,
+conformance vectors, TypeScript behavior, Agentic descriptors, or portable error
+codes changed. Verification: `npm run docs:check`, `npm run typecheck`,
+`npm test`, `npm run license:check`, and `git diff --check` passed. Next task:
+TASK-186.
 
 ### Milestone D — Cross-Language Portability Contract
 
@@ -949,9 +958,10 @@ is hidden by a deferral or by the TypeScript reference behavior.
 ## 12. Next Task
 
 ```text
-NEXT CODEX TASK: TASK-177 — Stabilize Shared Conventions and Glossary
+NEXT CODEX TASK: TASK-186 — Define the Abstract Value and Representation Boundary
 ```
 
-TASK-177 begins Milestone C. It must use the completed Milestone A authority
-records and Milestone B CoreDoc alignment record before changing shared
-conventions or glossary terms.
+TASK-186 begins Milestone D. It must use the completed Milestone A authority
+records, Milestone B CoreDoc alignment record, and Milestone C domain
+specification stabilization record before defining cross-language portability
+boundaries.

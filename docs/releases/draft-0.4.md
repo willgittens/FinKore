@@ -156,6 +156,31 @@ Results:
   portability blockers, and zero normative behavior changes were recorded.
 - No external review is claimed.
 
+## Domain specification stabilization
+
+Milestone C, Domain specification stabilization, is complete. The durable review
+record is [Draft 0.4 Domain Specification Stabilization Record](../../spec/draft-0.4-stabilization.md).
+
+Results:
+
+- 47 specification Markdown files and 388 normative-keyword occurrences were
+  audited for shared terminology and domain consistency.
+- 30 existing open questions were classified as future-scope questions; none
+  blocks the Draft 0.4 baseline.
+- The glossary now explicitly defines Absent, Current, Invalid, Null, Revision,
+  Unsupported, and Version for cross-domain use.
+- Money, Workflow, Audit, Approvals, and Entities were accepted as stable for
+  Draft 0.4 without new financial behavior.
+- The cross-domain matrix records identity, revision/version, currentness,
+  applicability, validation, atomicity, Audit evidence, timestamps, portable
+  values, and portable error priority.
+- The consolidated portable error contract remains 31 cataloged codes with zero
+  missing or orphan catalog entries in the reviewed scope.
+- Findings were `CLARIFICATION` or `ACCEPTED`; zero contradictions, zero
+  blocking gaps, zero conformance-vector changes, and zero TypeScript behavior
+  changes were recorded.
+- No external review is claimed.
+
 ## Verification
 
 Baseline verification for Milestone A:
@@ -184,6 +209,16 @@ Additional verification for Milestone B:
 | CoreDoc requirement and Markdown links | `npm run docs:check` | PASS: 269 CoreDoc specification references checked; Markdown links resolve |
 | Strict TypeScript | `npm run typecheck` | PASS |
 | Unit tests | `npm test` | PASS: runner 110/110, TypeScript core 371/371, TypeScript conformance adapter 15/15 |
+| License metadata | `npm run license:check` | PASS |
+| Whitespace | `git diff --check` | PASS |
+
+Additional verification for Milestone C:
+
+| Check | Command | Result |
+| --- | --- | --- |
+| Domain specification links | `npm run docs:check` | PASS |
+| Strict TypeScript | `npm run typecheck` | PASS |
+| Unit tests | `npm test` | PASS |
 | License metadata | `npm run license:check` | PASS |
 | Whitespace | `git diff --check` | PASS |
 
