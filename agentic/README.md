@@ -2,7 +2,7 @@
 
 ## Status
 
-**Draft 0.2**
+**Draft 0.3 alignment**
 
 > Agent-ready by contract, not by convention.
 
@@ -64,11 +64,15 @@ FinKore separates four dimensions:
    tool or transport.
 
 The Core Agentic Contract defines Discoverable, Understandable, and Governable
-semantics. Executable adapters are outside Draft 0.2.
+semantics. Executable agent or transport adapters remain outside Draft 0.3.
 
-For FinKore Draft 0.2, an operation is **Agentic Ready** when it is Discoverable,
-Understandable, Governable, and Conformance-traceable. Direct execution through
-an agent framework is not required.
+For FinKore Draft 0.3, an operation is **Agentic Ready** when it is
+Discoverable, Understandable, Governable, and Conformance-traceable. Direct
+execution through an agent framework is not required. Draft 0.3 aligns the
+canonical `finkore.workflow.transition` descriptor with version binding and
+expected-state/revision conflict preconditions while keeping Approval
+composition/lifecycle fixtures, Workflow import, and Entity import
+conformance-local until stable public operation contracts exist.
 
 ## Documents
 

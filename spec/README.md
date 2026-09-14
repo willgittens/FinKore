@@ -2,7 +2,12 @@
 
 ## Status
 
-**Draft**
+**Draft.** FinKore Core Draft 0.3 is closed for the current repository scope:
+Draft 0.1 Money, Workflow, Audit, Approvals, and Entities; selected Draft 0.2
+Money Rates, Money Allocation, Audit Relationships, Entity Evolution, and
+Approval Validity; and selected Draft 0.3 Approval Composition, Workflow
+version/import/conflict, and Entity Revision/Import behavior. The specification
+remains pre-1.0 and experimental.
 
 ## Purpose
 

@@ -1052,3 +1052,51 @@ reviewed subset of CEL, JSON Logic, DMN/FEEL, or another standard. Any such work
 needs new spec/vector/adapter/API tasks, security/domain review, exact Money and
 missing/null semantics, serialization/versioning rules, conformance vectors, and
 mutation hardening; it is not implied by closing this research track.
+
+## Draft 0.3 Agentic Operation Review Packet
+
+### TASK-146 - Draft 0.3 Agentic Operation Review
+
+- Status: COMPLETE - scoped classification and security review accepted.
+- Date: 2026-09-14.
+- Decision authority: project maintainer, through the instruction to run the
+  complete Draft 0.3 Alignment backlog slice.
+- Analysis attribution: assistant analysis of canonical operation readiness,
+  conformance-local fixture boundaries, state-changing exposure, diagnostics,
+  and no-bypass safety under D03-REVIEW-001. No external reviewer or
+  professional credential is represented.
+- Exact reviewed artifact: working tree based on
+  `021908c77168b2a65cd62ab85c8e2a0b5c15eefa`, plus the recorded Draft 0.3
+  research and implementation changes through TASK-145.
+- External review: NOT EXTERNALLY REVIEWED. Future community, accounting,
+  security, and audit review may challenge these operation classifications by
+  operation ID, requirement ID, and source revision.
+
+#### Operation Classification
+
+| Operation or label | TASK-146 classification | Resolution |
+| --- | --- | --- |
+| `finkore.workflow.transition` | Canonical Agentic operation | Keep the existing canonical ID and update its descriptor to include Draft 0.3 version binding, immutable instance binding, version mismatch, invalid instance, and expected-state/revision conflict preconditions/errors. No new Workflow operation ID is introduced. |
+| `workflow.create` | Conformance-local structural boundary | Remains a fixture for validating Workflow definition and initial instance observation. Not promoted because Draft 0.3 does not define a public creation command contract beyond the existing conformance setup boundary. |
+| `workflow.import` | Conformance-local structural boundary | Remains a fixture for observing existing Workflow state/version binding and instance revision. Not promoted because Draft 0.3 does not define a public import operation contract or persistence/migration schema. |
+| `approval.composition.evaluate` | Conformance-local evaluation fixture | Remains local. It observes bounded Draft 0.3 composition behavior, but its fixture shape is not a public Approval operation contract and does not authorize state-changing approval execution. |
+| `approval.chain.evaluate`, `approval.condition.evaluate`, `approval.requirement.evaluate`, `approval.decision.*`, `approval.requirement.supersede` | Conformance-local Approval labels | Remain local. Draft 0.3 does not promote canonical Approval operations because public binding, diagnostics, authorization distinction, and state-changing exposure need a separate operation design. |
+| `entity.import` | Conformance-local import boundary | Remains local. It observes identity mapping, business revision history, conflict-version separation, and expected preconditions, but Draft 0.3 does not define a public migration/import command, global registry, concrete migration format, storage lock, or source-system authority model. |
+| `finkore.entity.create`, `finkore.entity.mutate`, `finkore.entity.transition`, `finkore.entity.evolution.*` | Canonical Agentic operations | No classification change. Current descriptors remain aligned with selected Draft 0.1 plus Draft 0.2 Entity behavior; Draft 0.3 import is not folded into them. |
+| Money Rate/Allocation and Audit Draft 0.1 operation IDs | Canonical Agentic operations | No classification change. Draft 0.3 Money portability and Audit provenance research did not approve new canonical operations or metadata fields. |
+
+#### Security Review Findings
+
+| Finding | Resolution |
+| --- | --- |
+| State-changing operations exposed to agents must not bypass domain preconditions, current-effectiveness rules, or conflict checks. | `agentic/safety.md` now states that Workflow version binding and expected-state/revision conflicts are ordinary domain preconditions; adapters must not ignore them for autonomous requesters. |
+| Approval composition and lifecycle fixtures could be mistaken for public approval/authorization commands. | Keep all Approval operation labels conformance-local. Documentation states they are fixture vocabulary and do not create an authorization mechanism or agent-facing Approval bypass. |
+| Import fixtures can carry source-system and mapping facts that look like operational authority. | Keep `workflow.import` and `entity.import` conformance-local. Documentation states they do not define persistence, migration, source-system authority, identity registry, or storage locking. |
+| Diagnostics for state-changing operations could disclose restricted eligibility, source mapping, or condition details if over-specified in Agentic metadata. | Agentic descriptors list portable error categories and requirement links but do not require sensitive details. Safe diagnostics remain governed by domain specs and adapter normalization. |
+| Agentic metadata could over-promise determinism or financial-state mutation for composing-domain-dependent operations. | `finkore.workflow.transition` is deterministic only when supplied guards are deterministic for declared facts; financial-state mutation remains `unspecified` for Workflow and Entity operations where Core cannot decide materiality. |
+
+#### Decision
+
+| Decision ID | Task | Disposition | Rationale |
+| --- | --- | --- | --- |
+| D03-AGENTIC-001 | TASK-146 | ACCEPTED | Align current canonical/local/structural operation classifications with selected Draft 0.3 behavior. Update `finkore.workflow.transition` metadata for version/conflict semantics; keep Approval composition/lifecycle labels, Workflow import, and Entity import conformance-local. No AI-specific bypass, new canonical operation ID, or executable agent adapter is introduced. |

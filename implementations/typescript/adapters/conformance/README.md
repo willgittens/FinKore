@@ -75,7 +75,9 @@ milestone.
 `entity.import` is a Draft 0.3 conformance-local import boundary. It delegates
 stable identity preservation, source identity mapping, Entity Revision history,
 Entity Conflict Version separation, and expected precondition checks to core;
-it is not yet a canonical Agentic operation.
+the Draft 0.3 Agentic review keeps it conformance-local because Core does not
+yet define a public migration/import operation contract, identity registry,
+persistence schema, or source-system authority model.
 
 Audit operation support covers FinKore Audit Draft 0.1 plus the Draft 0.2 Audit Relationships slice: Events, Actors, append-only history, Change representation, Redaction, relationship metadata, and portable Audit errors. Draft 0.1 does not define `audit.order` as an executable adapter operation. Audit Relationships are observed through existing append/redaction fixtures; the adapter does not interpret relationships itself.
 

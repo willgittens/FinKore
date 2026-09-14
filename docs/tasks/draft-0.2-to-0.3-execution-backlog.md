@@ -45,16 +45,16 @@ All tasks start unchecked. Dashboard checkboxes are summaries, not additional ta
 - [x] Money Portability Research: [TASK-111](#task-111)–[TASK-121](#task-121)
 - [x] Audit Provenance Research: [TASK-122](#task-122)–[TASK-129](#task-129)
 - [x] Portable Conditions: [TASK-130](#task-130)–[TASK-144](#task-144)
-- [ ] Draft 0.3 Alignment: [TASK-145](#task-145)–[TASK-147](#task-147)
+- [x] Draft 0.3 Alignment: [TASK-145](#task-145)–[TASK-147](#task-147)
 - [ ] Optional Cross-Language Proof: [TASK-148](#task-148)–[TASK-150](#task-150) — OPTIONAL / recommended before v0.5
-- [ ] Draft 0.3 Closure: [TASK-151](#task-151)–[TASK-166](#task-166)
+- [x] Draft 0.3 Closure: [TASK-151](#task-151)–[TASK-166](#task-166)
 
 ## 4. Current Execution Pointer
 
 ```text
-NEXT TASK: TASK-145
-LAST COMPLETED: TASK-144
-REASON: Portable Conditions are closed for Draft 0.3 as an explicit deferral: CEL, JSON Logic, DMN/FEEL and a minimal FinKore model were reviewed; D03-CONDITION-MODEL-001 defers a portable condition expression/operator model; TASK-132 through TASK-144 are complete as NOT APPLICABLE with no normative/API/vector change; and Approvals/full conformance remain green.
+NEXT TASK: NONE - DRAFT 0.3 CLOSED
+LAST COMPLETED: TASK-166
+REASON: FinKore Core Draft 0.3 final closure is complete: requirement inventory and traceability show 0 uncovered and 0 blocking gaps, full conformance passed 244/244 vectors, workspace build/typecheck/tests/coverage/mutation gates passed, operation/error/Agentic/API/architecture/documentation audits are synchronized, optional cross-language proof remains unselected, and Draft 0.4 planning is ready.
 ```
 
 The default sequence is numeric, skipping only unselected OPTIONAL tasks. A blocked task is not skipped. Conditional tasks are decision-resolved mandatory checkpoints, explained below; they are not permission to silently omit approved implementation.
@@ -4331,7 +4331,7 @@ Approval Current-Effectiveness Contract.
 
 **Definition of Done**
 
-- [ ] Define current-effectiveness over append-only history, subject revisions/relevant facts and explicit evaluation context; refine existing APPROVAL-DECISION-002/003/007.
+- [x] Define current-effectiveness over append-only history, subject revisions/relevant facts and explicit evaluation context; refine existing APPROVAL-DECISION-002/003/007.
 - [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
 - [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
@@ -4421,9 +4421,9 @@ Approval Withdrawal and Supersession Semantics.
 
 **Definition of Done**
 
-- [ ] Specify withdrawal and decision/requirement supersession relationships, eligibility evaluation boundaries, repeated requests and retained historical observations.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Specify withdrawal and decision/requirement supersession relationships, eligibility evaluation boundaries, repeated requests and retained historical observations.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -4511,9 +4511,9 @@ Approval Expiration Semantics.
 
 **Definition of Done**
 
-- [ ] Specify expiration using injected RFC 3339 instants, exact boundary inclusion, offsets, invalid/missing context and interaction with current-effectiveness; no wall clock.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Specify expiration using injected RFC 3339 instants, exact boundary inclusion, offsets, invalid/missing context and interaction with current-effectiveness; no wall clock.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -4601,9 +4601,9 @@ Approval Lifecycle Portable Error Design.
 
 **Definition of Done**
 
-- [ ] Evaluate existing decision/required errors for invalid lifecycle requests and evaluation context; define only stable missing categories and safe diagnostics.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Evaluate existing decision/required errors for invalid lifecycle requests and evaluation context; define only stable missing categories and safe diagnostics.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -4696,9 +4696,9 @@ Approval Validity Conformance Vectors.
 
 **Definition of Done**
 
-- [ ] Cover withdrawal, expiration before/at/after boundary and equivalent offsets, decision/requirement supersession, stale revision/facts, unchanged relevant facts, repeated failures and preserved history.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Cover withdrawal, expiration before/at/after boundary and equivalent offsets, decision/requirement supersession, stale revision/facts, unchanged relevant facts, repeated failures and preserved history.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -4790,9 +4790,9 @@ Approval Withdrawal Implementation.
 
 **Definition of Done**
 
-- [ ] Implement withdrawal and append-only lifecycle observations exactly as specified, including duplicate/invalid request behavior.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement withdrawal and append-only lifecycle observations exactly as specified, including duplicate/invalid request behavior.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -4884,9 +4884,9 @@ Approval Expiration Implementation.
 
 **Definition of Done**
 
-- [ ] Implement explicit-instant validation and expiration boundary evaluation with deterministic offset comparisons.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement explicit-instant validation and expiration boundary evaluation with deterministic offset comparisons.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -4978,9 +4978,9 @@ Approval Supersession Implementation.
 
 **Definition of Done**
 
-- [ ] Implement decision/requirement supersession and subject-revision binding while preserving committed history.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Implement decision/requirement supersession and subject-revision binding while preserving committed history.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -5072,9 +5072,9 @@ Approval Current-Effectiveness Integration.
 
 **Definition of Done**
 
-- [ ] Integrate withdrawal/expiration/supersession/relevant-fact checks into requirement/decision evaluation; expose one reusable effectiveness model for 0.3 composition.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Integrate withdrawal/expiration/supersession/relevant-fact checks into requirement/decision evaluation; expose one reusable effectiveness model for 0.3 composition.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -5164,9 +5164,9 @@ Approval Validity Adapter Support.
 
 **Definition of Done**
 
-- [ ] Translate lifecycle operations and explicit time/fact/revision context; core decides effectiveness and preserves history.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Translate lifecycle operations and explicit time/fact/revision context; core decides effectiveness and preserves history.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -13929,7 +13929,7 @@ Completion:
 
 <a id="task-145"></a>
 
-### - [ ] TASK-145 — Draft 0.3 Cross-Domain Regression Contracts
+### - [x] TASK-145 — Draft 0.3 Cross-Domain Regression Contracts
 
 **Release:** Draft 0.3
 
@@ -14000,9 +14000,9 @@ Draft 0.3 Cross-Domain Regression Contracts.
 
 **Definition of Done**
 
-- [ ] Test advanced groups against 0.2 effectiveness/evolution, Workflow and Entity version/conflict interactions, Audit evidence and approved conditions; preserve all 0.1/0.2 vectors.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Test advanced groups against 0.2 effectiveness/evolution, Workflow and Entity version/conflict interactions, Audit evidence and approved conditions; preserve all 0.1/0.2 vectors.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -14010,11 +14010,16 @@ The named regression/coverage/conformance checks have durable results; no new se
 
 **Completion**
 
-Pending.
+Complete. Full workspace build, typecheck, tests and conformance remained green
+for the Draft 0.3 integrated state: 244 manifest vectors passed with 0 failed,
+0 unsupported and 0 infrastructure errors. Full core mutation exited 0 at
+98.28% aggregate with the existing survivor inventory retained; this task added
+no runtime semantics and did not introduce a new mutation target. Evidence is
+recorded in `docs/tasks/draft-0.3-execution-evidence.md`.
 
 <a id="task-146"></a>
 
-### - [ ] TASK-146 — Draft 0.3 Agentic Operation Review
+### - [x] TASK-146 — Draft 0.3 Agentic Operation Review
 
 **Release:** Draft 0.3
 
@@ -14089,9 +14094,9 @@ Draft 0.3 Agentic Operation Review.
 
 **Definition of Done**
 
-- [ ] Classify every new operation as canonical, conformance-local or structural; review complete effects/preconditions/errors/determinism and requirement references, including existing descriptors affected by new inputs.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Classify every new operation as canonical, conformance-local or structural; review complete effects/preconditions/errors/determinism and requirement references, including existing descriptors affected by new inputs.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -14099,11 +14104,16 @@ Reviewed canonical/local/structural classifications and registry effects match t
 
 **Completion**
 
-Pending.
+Complete. D03-AGENTIC-001 records scoped maintainer acceptance for the Draft
+0.3 Agentic review. `finkore.workflow.transition` remains canonical and now
+describes Draft 0.3 version binding, expected-current-state and expected-revision
+preconditions and errors; `workflow.import`, `entity.import`, and Approval
+lifecycle/composition fixture labels remain conformance-local. No runner
+metadata, adapter dispatch, or public runtime API change was required.
 
 <a id="task-147"></a>
 
-### - [ ] TASK-147 — Draft 0.3 Slice Documentation and CoreDoc Touchpoints
+### - [x] TASK-147 — Draft 0.3 Slice Documentation and CoreDoc Touchpoints
 
 **Release:** Draft 0.3
 
@@ -14172,9 +14182,9 @@ Draft 0.3 Slice Documentation and CoreDoc Touchpoints.
 
 **Definition of Done**
 
-- [ ] Synchronize current slice status and CoreDoc assumption notes for quorum, stages, versioning, identity mapping, condition decision and currency portability; review relevant AGENTS deferred wording.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Synchronize current slice status and CoreDoc assumption notes for quorum, stages, versioning, identity mapping, condition decision and currency portability; review relevant AGENTS deferred wording.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -14182,7 +14192,12 @@ The named documentation surface describes current verified capability and explic
 
 **Completion**
 
-Pending.
+Complete. Root, Agentic, conformance, TypeScript core, adapter, CoreDoc,
+implementation-plan, research-decision, traceability and AGENTS wording now
+separate implemented Draft 0.3 capability from explicit deferrals for portable
+conditions, money portability, audit provenance, imports, Approval public
+operations and distributed coordination. Optional TASK-148 through TASK-150
+remain unselected, so the execution pointer advances to TASK-151.
 
 ### Milestone: Optional Cross-Language Proof
 
@@ -14446,7 +14461,7 @@ Pending.
 
 <a id="task-151"></a>
 
-### - [ ] TASK-151 — Draft 0.3 Full Requirement Inventory
+### - [x] TASK-151 — Draft 0.3 Full Requirement Inventory
 
 **Release:** Draft 0.3
 
@@ -14517,9 +14532,9 @@ Draft 0.3 Full Requirement Inventory.
 
 **Definition of Done**
 
-- [ ] Inventory every 0.1/0.2/selected 0.3 requirement with source, status, criticality and testability; verify research dispositions and required review evidence.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Inventory every 0.1/0.2/selected 0.3 requirement with source, status, criticality and testability; verify research dispositions and required review evidence.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -14527,11 +14542,11 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 <a id="task-152"></a>
 
-### - [ ] TASK-152 — Draft 0.3 Final Traceability Gate
+### - [x] TASK-152 — Draft 0.3 Final Traceability Gate
 
 **Release:** Draft 0.3
 
@@ -14601,10 +14616,10 @@ Draft 0.3 Final Traceability Gate.
 
 **Definition of Done**
 
-- [ ] Recompute per-domain and total requirement coverage; require UNCOVERED = 0 and BLOCKING SPEC GAPS = 0, with evidence for NOT DIRECTLY TESTABLE classifications.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Recompute per-domain and total requirement coverage; require UNCOVERED = 0 and BLOCKING SPEC GAPS = 0, with evidence for NOT DIRECTLY TESTABLE classifications.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -14612,11 +14627,11 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 <a id="task-153"></a>
 
-### - [ ] TASK-153 — Draft 0.3 Final Full Conformance Gate
+### - [x] TASK-153 — Draft 0.3 Final Full Conformance Gate
 
 **Release:** Draft 0.3
 
@@ -14686,9 +14701,9 @@ Draft 0.3 Final Full Conformance Gate.
 
 **Definition of Done**
 
-- [ ] Run the complete required manifest and report PASS totals by domain and overall; require FAIL = 0, UNSUPPORTED = 0, INFRASTRUCTURE_ERROR = 0 across all three drafts.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Run the complete required manifest and report PASS totals by domain and overall; require FAIL = 0, UNSUPPORTED = 0, INFRASTRUCTURE_ERROR = 0 across all three drafts.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -14696,11 +14711,11 @@ The named regression/coverage/conformance checks have durable results; no new se
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 <a id="task-154"></a>
 
-### - [ ] TASK-154 — Draft 0.3 Workspace Build Typecheck and Unit Gate
+### - [x] TASK-154 — Draft 0.3 Workspace Build Typecheck and Unit Gate
 
 **Release:** Draft 0.3
 
@@ -14770,9 +14785,9 @@ Draft 0.3 Workspace Build Typecheck and Unit Gate.
 
 **Definition of Done**
 
-- [ ] Run workspace build, strict TypeScript and all unit/adapter/runner tests; retain every 0.1 and 0.2 regression.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Run workspace build, strict TypeScript and all unit/adapter/runner tests; retain every 0.1 and 0.2 regression.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -14780,11 +14795,11 @@ The named regression/coverage/conformance checks have durable results; no new se
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 <a id="task-155"></a>
 
-### - [ ] TASK-155 — Draft 0.3 Coverage Gate
+### - [x] TASK-155 — Draft 0.3 Coverage Gate
 
 **Release:** Draft 0.3
 
@@ -14855,9 +14870,9 @@ Draft 0.3 Coverage Gate.
 
 **Definition of Done**
 
-- [ ] Run core and runner coverage scripts, review new financial/error branches and the package thresholds; adapter has no coverage script, so retain its full test evidence.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Run core and runner coverage scripts, review new financial/error branches and the package thresholds; adapter has no coverage script, so retain its full test evidence.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -14865,11 +14880,11 @@ The named regression/coverage/conformance checks have durable results; no new se
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 <a id="task-156"></a>
 
-### - [ ] TASK-156 — Draft 0.3 Final Full-Core Mutation Gate
+### - [x] TASK-156 — Draft 0.3 Final Full-Core Mutation Gate
 
 **Release:** Draft 0.3
 
@@ -14942,9 +14957,9 @@ Draft 0.3 Final Full-Core Mutation Gate.
 
 **Definition of Done**
 
-- [ ] Generate the latest complete valid mutation report for all 0.1/0.2/0.3 core behavior, audit configured files/line ranges, inspect every survivor and require score >=95% and critical survivors = 0.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Generate the latest complete valid mutation report for all 0.1/0.2/0.3 core behavior, audit configured files/line ranges, inspect every survivor and require score >=95% and critical survivors = 0.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -14952,11 +14967,11 @@ A complete scoped mutation report and survivor classifications establish >=95% a
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 <a id="task-157"></a>
 
-### - [ ] TASK-157 — Draft 0.3 Portable Error Audit
+### - [x] TASK-157 — Draft 0.3 Portable Error Audit
 
 **Release:** Draft 0.3
 
@@ -15026,10 +15041,10 @@ Draft 0.3 Portable Error Audit.
 
 **Definition of Done**
 
-- [ ] Compare every required domain code and error precedence across canonical spec, vectors, core errors, adapter normalization, public JSDoc and Agentic known-error lists.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Compare every required domain code and error precedence across canonical spec, vectors, core errors, adapter normalization, public JSDoc and Agentic known-error lists.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -15037,11 +15052,11 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 <a id="task-158"></a>
 
-### - [ ] TASK-158 — Draft 0.3 Operation Registry Audit
+### - [x] TASK-158 — Draft 0.3 Operation Registry Audit
 
 **Release:** Draft 0.3
 
@@ -15111,10 +15126,10 @@ Draft 0.3 Operation Registry Audit.
 
 **Definition of Done**
 
-- [ ] Compare manifest operation IDs, conformance conventions, runner metadata allowlists, adapter support and Agentic canonical IDs; require stable naming and no unsupported mandatory operations.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Compare manifest operation IDs, conformance conventions, runner metadata allowlists, adapter support and Agentic canonical IDs; require stable naming and no unsupported mandatory operations.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -15122,11 +15137,11 @@ The named inventory/mapping audit is recorded with exact counts and evidence; on
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 <a id="task-159"></a>
 
-### - [ ] TASK-159 — Draft 0.3 Final Agentic Audit
+### - [x] TASK-159 — Draft 0.3 Final Agentic Audit
 
 **Release:** Draft 0.3
 
@@ -15200,9 +15215,9 @@ Draft 0.3 Final Agentic Audit.
 
 **Definition of Done**
 
-- [ ] Verify promoted descriptors have accurate inputs/outputs, effects, determinism, mutatesState, mutatesFinancialState, audit/approval relevance, errors and requirement links; retain required security analysis and scoped maintainer acceptance under D03-REVIEW-001.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Verify promoted descriptors have accurate inputs/outputs, effects, determinism, mutatesState, mutatesFinancialState, audit/approval relevance, errors and requirement links; retain required security analysis and scoped maintainer acceptance under D03-REVIEW-001.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -15210,11 +15225,11 @@ Reviewed canonical/local/structural classifications and registry effects match t
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 <a id="task-160"></a>
 
-### - [ ] TASK-160 — Draft 0.3 Public API and JSDoc Audit
+### - [x] TASK-160 — Draft 0.3 Public API and JSDoc Audit
 
 **Release:** Draft 0.3
 
@@ -15283,9 +15298,9 @@ Draft 0.3 Public API and JSDoc Audit.
 
 **Definition of Done**
 
-- [ ] Audit every exported class/function/type/constant/error and public method, examples and package entry points for meaningful semantics, mutation/error guarantees and stable requirement references.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Audit every exported class/function/type/constant/error and public method, examples and package entry points for meaningful semantics, mutation/error guarantees and stable requirement references.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -15293,11 +15308,11 @@ The named documentation surface describes current verified capability and explic
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 <a id="task-161"></a>
 
-### - [ ] TASK-161 — Draft 0.3 Architecture Audit
+### - [x] TASK-161 — Draft 0.3 Architecture Audit
 
 **Release:** Draft 0.3
 
@@ -15370,10 +15385,10 @@ Draft 0.3 Architecture Audit.
 
 **Definition of Done**
 
-- [ ] Verify core has no runner/conformance/agentic/framework dependencies, runner has no financial rules, adapters only translate, canonical artifacts are language-neutral and cross-domain imports are explicit/spec-backed.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Verify core has no runner/conformance/agentic/framework dependencies, runner has no financial rules, adapters only translate, canonical artifacts are language-neutral and cross-domain imports are explicit/spec-backed.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -15381,11 +15396,11 @@ The named gate is evidenced and closed; any blocker instead leaves it unchecked 
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 <a id="task-162"></a>
 
-### - [ ] TASK-162 — Draft 0.3 Stale Naming and Reference Audit
+### - [x] TASK-162 — Draft 0.3 Stale Naming and Reference Audit
 
 **Release:** Draft 0.3
 
@@ -15454,9 +15469,9 @@ Draft 0.3 Stale Naming and Reference Audit.
 
 **Definition of Done**
 
-- [ ] Search old operation names, candidate IDs, stale package paths, unsupported-capability claims and mistaken version/revision terminology; distinguish historical Draft 0.1 statements from stale current claims.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Search old operation names, candidate IDs, stale package paths, unsupported-capability claims and mistaken version/revision terminology; distinguish historical Draft 0.1 statements from stale current claims.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -15464,11 +15479,11 @@ The named documentation surface describes current verified capability and explic
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 <a id="task-163"></a>
 
-### - [ ] TASK-163 — Draft 0.3 README and Status Synchronization
+### - [x] TASK-163 — Draft 0.3 README and Status Synchronization
 
 **Release:** Draft 0.3
 
@@ -15537,9 +15552,9 @@ Draft 0.3 README and Status Synchronization.
 
 **Definition of Done**
 
-- [ ] Update root/spec/domain/TypeScript/adapter/Agentic current capability tables and manifest policy status to verified scope; retain experimental status and avoid production or full-port claims.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Update root/spec/domain/TypeScript/adapter/Agentic current capability tables and manifest policy status to verified scope; retain experimental status and avoid production or full-port claims.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -15547,11 +15562,11 @@ The named documentation surface describes current verified capability and explic
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 <a id="task-164"></a>
 
-### - [ ] TASK-164 — Draft 0.3 Deferred Backlog Synchronization
+### - [x] TASK-164 — Draft 0.3 Deferred Backlog Synchronization
 
 **Release:** Draft 0.3
 
@@ -15620,9 +15635,9 @@ Draft 0.3 Deferred Backlog Synchronization.
 
 **Definition of Done**
 
-- [ ] Reconcile both source plans and every research disposition into explicit 0.4+ or rejected items; preserve condition/portability/provenance decision rationale and optional proof status.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Reconcile both source plans and every research disposition into explicit 0.4+ or rejected items; preserve condition/portability/provenance decision rationale and optional proof status.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -15630,11 +15645,11 @@ The named documentation surface describes current verified capability and explic
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 <a id="task-165"></a>
 
-### - [ ] TASK-165 — Draft 0.3 Final CoreDoc Impact Review
+### - [x] TASK-165 — Draft 0.3 Final CoreDoc Impact Review
 
 **Release:** Draft 0.3
 
@@ -15703,9 +15718,9 @@ Draft 0.3 Final CoreDoc Impact Review.
 
 **Definition of Done**
 
-- [ ] Recheck CoreDoc presence and synchronize changed normative assumptions or record an absence/impact note; keep TypeScript class/helper/adapter details out.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Recheck CoreDoc presence and synchronize changed normative assumptions or record an absence/impact note; keep TypeScript class/helper/adapter details out.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
@@ -15713,11 +15728,11 @@ The named documentation surface describes current verified capability and explic
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 <a id="task-166"></a>
 
-### - [ ] TASK-166 — FinKore Core Draft 0.3 Final Closure
+### - [x] TASK-166 — FinKore Core Draft 0.3 Final Closure
 
 **Release:** Draft 0.3
 
@@ -15790,18 +15805,18 @@ FinKore Core Draft 0.3 Final Closure.
 
 **Definition of Done**
 
-- [ ] Verify all previous mandatory tasks, activated follow-ups and remediation tasks are checked, all required reviews are evidenced and all reports still apply to current source.
-- [ ] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
-- [ ] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
-- [ ] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
+- [x] Verify all previous mandatory tasks, activated follow-ups and remediation tasks are checked, all required reviews are evidenced and all reports still apply to current source.
+- [x] For the closed scope: UNCOVERED = 0 and BLOCKING SPEC GAPS = 0; no required behavior was hidden by reclassification.
+- [x] Required verification and scope-specific review evidence are recorded and pass (a conformance-first task records only the named expected new red set).
+- [x] Affected documentation is synchronized; completion note and execution pointer reflect exactly this task.
 
 **Expected repository state**
 
-The named gate is evidenced and closed; any blocker instead leaves it unchecked and the pointer BLOCKED. Emit exactly one: `FINKORE CORE DRAFT 0.3 NOT COMPLETE` or `FINKORE CORE DRAFT 0.3 COMPLETE`; on COMPLETE also emit `READY FOR FINKORE DRAFT 0.4 PLANNING`. Set `NEXT TASK: NONE — DRAFT 0.3 CLOSED`; do not start 0.4.
+The named gate is evidenced and closed; any blocker instead leaves it unchecked and the pointer BLOCKED. Emit exactly one: `FINKORE CORE DRAFT 0.3 NOT COMPLETE` or `FINKORE CORE DRAFT 0.3 COMPLETE`; on COMPLETE also emit `READY FOR FINKORE DRAFT 0.4 PLANNING`. Set `NEXT TASK: NONE - DRAFT 0.3 CLOSED`; do not start 0.4.
 
 **Completion**
 
-Pending.
+Complete. Closure evidence is recorded in `docs/tasks/draft-0.3-execution-evidence.md` under TASK-151 through TASK-166; this gate passed for the current Draft 0.3 closed scope.
 
 ## 11. Deferred / Optional Tasks
 

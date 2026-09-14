@@ -713,9 +713,9 @@ Some topics are intentionally deferred.
 Examples include areas such as:
 
 - private/non-fiat currency namespace design;
-- advanced approval quorum/delegation/withdrawal;
-- workflow concurrency and versioning;
-- correction/reversal semantics;
+- approval delegation, escalation, dynamic approver resolution, and quorum extensions beyond the implemented bounded composition model;
+- workflow migration, concurrency, and distributed version coordination beyond the implemented definition/version binding and expected-precondition model;
+- concrete correction/reversal accounting effects beyond the implemented Entity Evolution relation semantics;
 - post-finalization metadata policy;
 - distributed audit total ordering.
 

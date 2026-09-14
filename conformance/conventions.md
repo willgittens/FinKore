@@ -97,12 +97,14 @@ conformance-local representation boundary checks. They exercise normative Money
 serialization but are not separate public Agentic operations. For Money Draft
 0.2, Rate application and Allocation are promoted to
 `finkore.money.applyrate` and `finkore.money.allocate` after Agentic review.
-For Workflow Draft 0.3, `workflow.import` remains conformance-local until the
-Workflow versioning slice is implemented and reviewed. Versioned Workflow
-fixtures may include definition identity, definition version identity, instance
-binding, Workflow Instance Revision, Expected Current State, and Expected
-Workflow Instance Revision. These fixture members observe specification behavior
-only; they do not define storage schemas or persistence locks.
+For Workflow Draft 0.3, `workflow.import` remains conformance-local after the
+Agentic review. Versioned Workflow fixtures may include definition identity,
+definition version identity, instance binding, Workflow Instance Revision,
+Expected Current State, and Expected Workflow Instance Revision. These fixture
+members observe specification behavior only; they do not define storage schemas,
+persistence locks, or a canonical import operation contract. The canonical
+`finkore.workflow.transition` operation includes version binding and
+expected-state/revision conflict preconditions.
 
 For Approval Composition, `approval.composition.evaluate` uses a conformance-local logical fixture. `composition` declares exactly one `rootGroup` or ordered `stages`, plus declared `groups` with `ALL_OF`, `ANY_OF`, or `N_OF_M` kind. `requirements` supplies explicit applicability and, for non-quorum members, current state observations. Quorum vectors use explicit voter members and `decisions` entries to observe current-effective voter evidence; an `effective: false` decision is retained history that does not count toward current approval. The normalized success value is `{ "outcome": "APPROVED" | "PENDING" | "REJECTED", "actionableRequirements": [...] }`.
 
@@ -117,7 +119,7 @@ operations are promoted to canonical `finkore.entity.*` operation identifiers.
 They observe identity, lifecycle, mutability, validation, correction, reversal,
 void, supersession, revision, relation, currentness, and Audit evidence
 semantics defined by the Entity specifications.
-For Entities Draft 0.3, `entity.import` remains conformance-local pending the
+For Entities Draft 0.3, `entity.import` remains conformance-local after the
 Draft 0.3 Agentic review. It observes import identity mapping, current and
 historical Entity Revision identity, Entity Conflict Version separation, and
 expected-state/revision/conflict-version preconditions without defining a

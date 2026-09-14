@@ -2,7 +2,7 @@
 
 ## Status
 
-**Draft 0.2**
+**Draft 0.3 alignment**
 
 The normative-language and portable-value conventions in the
 [FinKore Specification](../spec/conventions.md) apply here. The Agentic Contract
@@ -29,7 +29,7 @@ An operation ID:
 - SHOULD be reusable by conformance vectors, runner adapters, discovery data,
   future tool adapters, and reference implementations.
 
-Versions are not encoded in Draft 0.2 operation IDs. Operation identifiers are
+Versions are not encoded in Draft 0.3 operation IDs. Operation identifiers are
 intended to remain stable; a mechanism for incompatible contract changes remains
 an open question.
 
@@ -68,7 +68,7 @@ This illustrative JSON is non-normative:
 }
 ```
 
-The semantic fields are the contract in Draft 0.2; this object shape is not a
+The semantic fields are the contract in Draft 0.3; this object shape is not a
 normative serialization.
 
 ## Representation layers

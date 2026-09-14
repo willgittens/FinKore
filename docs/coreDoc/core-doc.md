@@ -708,3 +708,31 @@ one rule does not imply approval of the CoreDoc as a whole.
 This draft is limited to the current Money, Workflow, Audit, Approvals, and
 Financial Entities specifications. It makes no claim that unspecified future
 domains or policy choices have already been standardised.
+
+### Draft 0.3 implementation touchpoints
+
+Draft 0.3 domain specifications refine this CoreDoc without introducing new
+CoreDoc rule identifiers:
+
+- Approval composition adds bounded any-of/all-of groups, N-of-M quorum,
+  ordered stages, and bounded nesting while preserving `CORE-004.1` through
+  `CORE-004.4`; delegation, escalation, dynamic approver lookup, unrestricted
+  graphs, and rich condition expressions remain outside the current Core.
+- Workflow version binding and expected-state/revision conflicts refine
+  `CORE-002.1` through `CORE-002.3` by making version mismatch and stale
+  expected preconditions rejected non-mutating outcomes, not persistence locks
+  or distributed concurrency rules.
+- Entity revision and import identity mapping refine `CORE-005.1` by preserving
+  stable FinKore identity and explicit source identity mapping without creating
+  a global registry, concrete migration format, or source-system authority
+  model.
+- Money portability research preserves `CORE-001.1` through `CORE-001.4` and
+  explicitly defers private/non-fiat namespaces, minor-unit metadata policy,
+  precision floors, and overflow/capability reporting.
+- Audit provenance research preserves `CORE-003.1` through `CORE-003.4` and
+  explicitly defers standardized reason, source, correlation, causation, and
+  trace-context metadata.
+- Agentic operation metadata exposes preconditions, effects, portable errors,
+  and conformance-local boundaries for machine clients; it does not create an
+  AI-specific bypass, authorization model, or financial behavior outside the
+  domain specifications.

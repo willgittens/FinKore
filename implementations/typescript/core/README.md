@@ -257,9 +257,10 @@ operation, or mutate source Entity observations in place.
 
 FinKore Entities Draft 0.1 and the Draft 0.2 Entity Evolution slice are
 implemented by the TypeScript reference implementation. No blocking Entity spec
-gap remains for the implemented slices. Entity operations remain
-conformance-local; the Agentic Contract still does not advertise canonical
-`finkore.entity.*` operation identifiers.
+gap remains for the implemented slices. Current Entity create, mutate,
+transition, and evolution operations are advertised through canonical
+`finkore.entity.*` Agentic operation identifiers; Draft 0.3 `entity.import`
+remains conformance-local after the Agentic review.
 
 ## API Documentation
 

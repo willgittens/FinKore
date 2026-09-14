@@ -41,7 +41,7 @@ slice state:
 | --- | --- |
 | Specification | `/spec` contains Draft 0.1 Money, Workflow, Audit, Approvals, Entities, shared conventions, and glossary plus closed Draft 0.2 Money Rates, Money Allocation, Audit Relationships, Entity Evolution, Approval Validity semantics, Draft 0.3 Approval Composition, Draft 0.3 Workflow definition/version identity, immutable instance binding/mismatch, import, and expected-state/revision conflict semantics, and Draft 0.3 Entity Revision and Import semantics. |
 | Conformance | `conformance/manifest.json` remains format `0.1` as a syntax compatibility version. `conformance/traceability.md` reports 381 requirements, 244 vectors, 312 covered, 0 uncovered, 69 not directly testable, and 0 blocking spec gaps after Draft 0.3 Entity Revision and Import closure. |
-| Agentic | Canonical operations include the Draft 0.1 Money, Workflow and Audit operations plus Draft 0.2 Money `finkore.money.applyrate`, `finkore.money.allocate`, and current Entity operation IDs. Approval lifecycle/composition labels, Workflow import/version refinements, and Entity import remain conformance-local or specification-only pending the Draft 0.3 Agentic review. |
+| Agentic | Canonical operations include the Draft 0.1 Money, Workflow and Audit operations plus Draft 0.2 Money `finkore.money.applyrate`, `finkore.money.allocate`, and current Entity operation IDs. D03-AGENTIC-001 aligns `finkore.workflow.transition` with Draft 0.3 version binding and expected-state/revision conflict preconditions. Approval lifecycle/composition labels, Workflow import, and Entity import remain conformance-local after review. |
 | TypeScript | The TypeScript reference implementation covers Draft 0.1, selected Draft 0.2 behavior for Money Rates/Allocation, Audit Relationships, Entity Evolution correction/reversal/void/supersession, and Approval withdrawal/expiration/supersession/current-effectiveness, plus Draft 0.3 Approval Composition for any/all groups, N-of-M quorum, ordered stages, bounded nested groups, and adapter conformance. It also implements and adapts Draft 0.3 Workflow definition/version identity, immutable instance binding/mismatch, import, expected-state/revision conflict, Entity business revision/import identity mapping, history preservation, and expected-state/revision/conflict-version preconditions. It still explicitly excludes workflow migration, delegation, escalation, IAM/RBAC, persistence, tax/interest behavior, concrete migration formats, and global entity registries. |
 | Runner | The runner is domain-neutral and must remain so. |
 
@@ -62,7 +62,7 @@ Draft 0.2 actually implemented state in the current repository:
 | Docs | Draft 0.2 closure is recorded in `docs/tasks/draft-0.2-execution-evidence.md` and the execution backlog. |
 | Specification | `MONEY-RATE-*`, `MONEY-ALLOCATION-*`, `ENTITY-EVOLUTION-*`, `AUDIT-RELATIONSHIP-*`, and `APPROVAL-VALIDITY-*` requirements are present and closed for the selected Draft 0.2 scope. |
 | Conformance | The manifest-listed suite contains 199 vectors, including all Draft 0.2 selected slices, with 199 PASS and 174/174 mutation-sensitive PASS in the TASK-067 refresh. |
-| Agentic | Draft 0.2 promoted Money Rates/Allocation and Entity operation IDs where mature; Approval lifecycle operations remain conformance-local pending Draft 0.3 Agentic review. |
+| Agentic | Draft 0.2 promoted Money Rates/Allocation and Entity operation IDs where mature. D03-AGENTIC-001 keeps Approval lifecycle/composition labels conformance-local after Draft 0.3 review. |
 | TypeScript | Draft 0.2 public APIs and adapter handlers are present for Money Rates/Allocation, Audit Relationships, Entity Evolution, and Approval Validity; runtime regression remains green. |
 
 Planning assumption refresh: Draft 0.3 may proceed from the verified Draft 0.2 baseline recorded by TASK-066/TASK-067. The selected Draft 0.3 scope and non-goals remain unchanged.
@@ -719,7 +719,7 @@ Keep as implementation detail:
 - Draft 0.1 and 0.2 regression tests and conformance vectors remain green.
 - Critical surviving mutants are zero for new Approval, Workflow, Entity, and condition behavior.
 - Portable errors are aligned across spec, conformance, TypeScript, adapter normalization, JSDoc, and Agentic docs.
-- Agentic registry is aligned and does not over-promote unstable or structural concepts.
+- Agentic registry is aligned by D03-AGENTIC-001 and does not over-promote unstable or structural concepts.
 - Public TypeScript APIs have meaningful JSDoc with requirement IDs.
 - Cross-language assumptions are reviewed and unresolved risks are explicitly deferred.
 - README/status documentation is synchronized.
@@ -747,7 +747,7 @@ Priority order toward eventual FinKore v0.5:
 
 ## 16. Next Task to Execute
 
-NEXT CODEX TASK: TASK-099 - Entity Business Revision Refinement
+NEXT CODEX TASK: NONE - DRAFT 0.3 CLOSED
 
 TASK-073 scoped domain/security review is complete. Decisions and final artifact
 revision are recorded in the research decision packet. Conformance, implementation,

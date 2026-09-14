@@ -1865,3 +1865,207 @@ review prerequisite is superseded by D03-REVIEW-001 below.
     required because the research disposition deferred normative behavior.
 - Result:
   - READY FOR TASK-145.
+
+### TASK-145 through TASK-147 - Draft 0.3 Alignment
+
+- Date: 2026-09-14.
+- Scope:
+  - TASK-145 cross-domain regression contracts.
+  - TASK-146 Draft 0.3 Agentic operation review.
+  - TASK-147 slice documentation and CoreDoc touchpoints.
+- Source baseline:
+  - Working tree based on `021908c77168b2a65cd62ab85c8e2a0b5c15eefa`,
+    plus existing Draft 0.3 changes through TASK-144.
+- Cross-domain regression result:
+  - Advanced Approval composition, Workflow version/import/conflict, Entity
+    revision/import, Audit evidence, Money portability deferrals and Portable
+    Conditions deferrals were reviewed against the integrated Draft 0.3 state.
+  - No new conformance vector or runtime test was required: the alignment task
+    did not introduce new financial behavior, and the existing manifest
+    preserved all 0.1/0.2 vectors while covering the selected 0.3 slices.
+- Agentic review result:
+  - Added `D03-AGENTIC-001` in
+    `docs/tasks/draft-0.3-research-decisions.md` with scoped maintainer
+    acceptance under D03-REVIEW-001.
+  - `finkore.workflow.transition` remains canonical and now documents Draft 0.3
+    version binding, expected-current-state and expected-revision preconditions,
+    portable errors and requirement references.
+  - `workflow.import`, `entity.import`, and Approval lifecycle/composition
+    fixture labels remain conformance-local; no premature public Agentic
+    operation was promoted.
+  - Security review found no AI bypass, no authorization shortcut, no import
+    source-authority claim, no unsafe diagnostic disclosure and no new
+    state-changing Approval command surface.
+- Documentation result:
+  - Updated root README, Agentic README/capabilities/conventions/discovery/
+    effects/operations/safety, conformance conventions/traceability, TypeScript
+    core README, conformance adapter README, CoreDoc touchpoints, implementation
+    plan, research decisions and AGENTS deferred-topic wording.
+  - Current documentation now distinguishes implemented, conformance-local,
+    unsupported and explicitly deferred Draft 0.3 behavior for quorum/stages,
+    Workflow versioning, Entity identity/import, portable conditions, money
+    portability, audit provenance and Agentic exposure.
+- Verification:
+  - `command -v node` found `/home/will/.nvm/versions/node/v24.15.0/bin/node`;
+    `node --version` returned `v24.15.0`; `npm --version` returned `11.12.1`.
+  - `npm run build --workspaces` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspaces` exited 0 with runner 10 files / 110 tests,
+    core 40 files / 371 tests and adapter 1 file / 15 tests passed.
+  - `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json`
+    exited 0 with 244 passed, 0 failed, 0 unsupported, 0 infrastructure errors
+    across Money 83, Workflow 41, Audit 29, Approvals 66 and Entities 25.
+  - `npm run test:mutation --workspace @finkore/typescript` exited 0 after
+    escalation for Stryker's local logging server. Final core mutation score:
+    98.28% aggregate, 98.40% covered, 3129 killed, 16 timeout, 51 survived,
+    4 no coverage, 0 errors. Report:
+    `implementations/typescript/core/reports/mutation/mutation.json`.
+  - `git diff --check` exited 0.
+- Mutation disposition:
+  - TASK-145 through TASK-147 changed documentation and Agentic descriptors, not
+    runtime financial behavior. The complete core mutation report remains above
+    the 95% threshold; the existing survivor inventory remains for closure
+    re-audit and no new alignment-specific runtime mutant was introduced.
+- Result:
+  - READY FOR TASK-151.
+
+### TASK-151 through TASK-166 - Draft 0.3 Closure
+
+- Date: 2026-09-14.
+- Scope:
+  - TASK-151 full requirement inventory.
+  - TASK-152 final traceability gate.
+  - TASK-153 final full conformance gate.
+  - TASK-154 workspace build, typecheck and unit gate.
+  - TASK-155 coverage gate.
+  - TASK-156 full-core and runner mutation gate.
+  - TASK-157 portable error audit.
+  - TASK-158 operation registry audit.
+  - TASK-159 final Agentic audit.
+  - TASK-160 public API and JSDoc audit.
+  - TASK-161 architecture audit.
+  - TASK-162 stale naming and reference audit.
+  - TASK-163 README and status synchronization.
+  - TASK-164 deferred backlog synchronization.
+  - TASK-165 final CoreDoc impact review.
+  - TASK-166 FinKore Core Draft 0.3 final closure.
+- Optional proof:
+  - TASK-148 through TASK-150 remain unselected optional tasks. No Java or other
+    cross-language proof is claimed for Draft 0.3.
+- Requirement inventory:
+  - `conformance/traceability.md` records 381 total requirements: Shared 29,
+    Money 73, Workflow 57, Audit 52, Approvals 86, Entities 84.
+  - Coverage totals: 312 COVERED, 0 PARTIAL, 0 UNCOVERED, 69 NOT DIRECTLY
+    TESTABLE, 0 DEFERRED, 0 BLOCKING SPEC GAP.
+  - Spec-vs-traceability audit found 124 unique normative requirement IDs in
+    `/spec` and 124 unique traceability rows; no missing spec requirement ID was
+    identified for the closed Draft 0.3 scope.
+  - Research/review decisions remain accepted under D03-REVIEW-001 with external
+    review explicitly marked NOT EXTERNALLY REVIEWED where applicable.
+- Full conformance:
+  - Manifest inventory: 244 vectors total, by suite: Money 83, Workflow 41,
+    Audit 29, Approvals 66, Entities 25.
+  - Full conformance command exited 0 with 244 passed, 0 failed, 0 unsupported,
+    0 infrastructure errors; mutation-sensitive vectors: 217 passed, 0 failed,
+    0 unsupported, 0 infrastructure errors.
+- Workspace verification:
+  - `command -v node` found `/home/will/.nvm/versions/node/v24.15.0/bin/node`;
+    `node --version` returned `v24.15.0`; `npm --version` returned `11.12.1`.
+  - `npm run build --workspaces` exited 0.
+  - `npm run typecheck --workspaces` exited 0.
+  - `npm run test --workspaces` exited 0 with runner 10 files / 110 tests,
+    core 40 files / 371 tests, and adapter 1 file / 15 tests passed.
+  - `npm run license:check` exited 0.
+- Coverage:
+  - `npm run test:coverage --workspace @finkore/typescript` exited 0 with core
+    coverage: statements 99.09%, branches 98.69%, functions 100%, lines 99.49%.
+  - `npm run test:coverage --workspace @finkore/conformance-runner` exited 0
+    with runner coverage: statements 98.31%, branches 95.29%, functions 100%,
+    lines 98.75%.
+  - Adapter has no dedicated coverage script; its full adapter test evidence is
+    retained in the workspace test gate.
+- Mutation:
+  - `npm run test:mutation --workspace @finkore/typescript` exited 0. Stryker
+    mutated 17 of 200 core files and 3435 mutants. Final score: 98.28%
+    aggregate, 98.40% covered, 3129 killed, 16 timeout, 51 survived,
+    4 no coverage, 0 errors. Report:
+    `implementations/typescript/core/reports/mutation/mutation.json`.
+  - Critical survivor classification: 0 critical surviving mutants. Remaining
+    core survivors are classified as noncritical or equivalent defensive
+    bookkeeping: Approval Composition optional empty decision/default outcome and
+    stage/actionable metadata shape; Approval Decision History helper/default
+    timestamp and history-container validation sentinels where later validation
+    or existing lifecycle tests preserve behavior; Entity Evolution optional
+    relation metadata/default-current bookkeeping and unreachable post-append
+    guard; Entity Import validation sentinels where subsequent required-string,
+    mapping, duplicate, or conflict checks preserve the portable error category;
+    Entity validation safe-message/default-details mutants; and Workflow
+    version metadata accessors or redundant missing-field guard mutants where
+    later identifier validation preserves the same rejection. None changes a
+    covered portable error code, accepted transition/import/evolution outcome,
+    financial value, current-state mutation, audit evidence requirement, or
+    approval quorum/effectiveness decision.
+  - `npm run test:mutation --workspace @finkore/conformance-runner` exited 0.
+    Stryker mutated 5 of 89 runner files and 368 mutants. Final score: 99.73%,
+    367 killed, 1 survived, 0 no coverage, 0 errors. The only runner survivor is
+    the noncritical `validateVector` default diagnostic source string; it does
+    not alter validation acceptance, runner neutrality, comparison, status
+    classification, exit precedence, or report counts.
+- Portable error audit:
+  - Error inventory across spec, core, adapter, and Agentic docs contains 31
+    portable codes: 7 Money, 8 Workflow, 5 Audit, 6 Approval, and 5 Entity.
+  - Codes are aligned with `spec/conventions.md`, domain error specs, TypeScript
+    error classes/types, adapter normalization, conformance vectors, README
+    status, and Agentic known-error surfaces where canonical operations exist.
+  - No new Draft 0.3 portable error code was required for money portability,
+    audit provenance, portable condition model deferrals, Workflow import,
+    Entity import, or Approval composition fixtures.
+- Operation registry audit:
+  - Manifest operation inventory contains 35 labels: canonical `finkore.*`
+    operations plus conformance-local `money.deserialize`, `money.serialize`,
+    `workflow.create`, `workflow.import`, `audit.redact`, `approval.*`, and
+    `entity.import` fixtures.
+  - Runner metadata, metadata tests, conformance conventions, adapter dispatch,
+    adapter tests, and Agentic operations are aligned. Canonical operation IDs
+    are stable; conformance-local labels are not promoted as public Agentic
+    operations.
+- Final Agentic audit:
+  - D03-AGENTIC-001 remains accepted. `finkore.workflow.transition` accurately
+    documents Draft 0.3 version binding, expected-current-state/revision
+    preconditions, portable errors, determinism, mutation, and requirement links.
+  - Approval lifecycle/composition fixtures, Workflow import, and Entity import
+    remain conformance-local; no AI-specific bypass, authorization shortcut,
+    import source-authority claim, or executable agent transport adapter was
+    added.
+- Public API and JSDoc audit:
+  - Public TypeScript exports remain routed through
+    `implementations/typescript/core/src/index.ts`; exported domain classes,
+    functions, public methods, types, and portable error classes retain
+    requirement-oriented JSDoc and portable error references.
+  - No new public API was introduced during the closure gate.
+- Architecture audit:
+  - Core imports are internal domain modules only, plus explicit cross-domain
+    imports from Money, Workflow, and Audit where the Entity specification
+    requires composition. Core does not import runner, conformance, Agentic,
+    React, Vue, HTTP, persistence, or framework packages.
+  - Runner source remains domain-neutral and contains no financial rules.
+    Adapter source imports runner contracts and TypeScript core APIs, and
+    dispatch delegates to core behavior before normalization.
+- Stale naming and status audit:
+  - Current-status documents were reviewed for stale pending Agentic wording,
+    unsupported-capability claims, mistaken version/revision terminology, old
+    operation names, and stale package paths. Historical completion notes remain
+    historical.
+  - Root README, spec README, conformance traceability readiness, implementation
+    plan, CoreDoc touchpoints, Agentic docs, TypeScript READMEs, and AGENTS
+    deferred-topic wording are synchronized to current Draft 0.3 scope.
+- Deferred backlog:
+  - 0.4+ work remains explicit for Workflow migration/distributed coordination,
+    delegation, escalation, portable condition expression/operator model,
+    audit provenance metadata, private/non-ISO currency namespaces, currency
+    metadata, precision/overflow capability policy, global identity registries,
+    concrete Entity/Audit integration policy, full ports, and future accounting
+    domains.
+- Final closure:
+  - FINKORE CORE DRAFT 0.3 COMPLETE.
+  - READY FOR FINKORE DRAFT 0.4 PLANNING.

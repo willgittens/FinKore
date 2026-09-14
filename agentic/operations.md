@@ -2,27 +2,33 @@
 
 ## Scope
 
-This Draft 0.2 registry includes only operation boundaries clearly supported by
-both the current specification and conformance vectors. Other conformance
+This registry includes only operation boundaries clearly supported by both the
+current specification and conformance vectors. Other conformance
 operation labels remain runner-adapter vocabulary until their stable agent-facing
 contract, effects, and inputs are reviewed.
 
 Approval conformance labels, including `approval.chain.evaluate`,
-`approval.decision.withdraw`, `approval.decision.supersede`, and
-`approval.requirement.supersede`, remain conformance-local in Draft 0.2.
-Chain evaluation currently observes composition
-from explicit Requirement state inputs; it is not promoted to a canonical
-Agentic operation because the public approval binding model still depends on
-Approval Requirement identity, Decision history, and relevant subject facts
-rather than a standalone agent-facing chain command.
+`approval.composition.evaluate`, `approval.decision.withdraw`,
+`approval.decision.supersede`, and `approval.requirement.supersede`, remain
+conformance-local after the Draft 0.3 Agentic review. They observe Approval
+evaluation and lifecycle behavior through test fixtures; they are not promoted
+to canonical Agentic operations because public Approval operation contracts still
+need a stable agent-facing input model, diagnostics policy, and security review
+separate from conformance fixtures.
 
-Draft 0.3 Workflow definition/version identity, import, instance binding, and
-expected-state/revision conflict semantics are specified in `/spec`, including
-`FINKORE_WORKFLOW_VERSION_MISMATCH`, `FINKORE_WORKFLOW_INVALID_INSTANCE`, and
-`FINKORE_WORKFLOW_STATE_CONFLICT`, but are not yet represented as canonical
-Agentic operation metadata. The TypeScript reference implementation and
-conformance adapter support the Workflow version/import/conflict slice; canonical
-Agentic metadata remains pending the Draft 0.3 Agentic review.
+Draft 0.3 Workflow definition/version identity, immutable instance binding,
+version mismatch, import, and expected-state/revision conflict semantics are
+specified in `/spec`, implemented by the TypeScript reference implementation,
+and vector-covered. The canonical `finkore.workflow.transition` operation now
+includes the version binding and conflict preconditions listed below.
+`workflow.create` and `workflow.import` remain conformance-local structural
+boundary checks rather than canonical Agentic operations.
+
+`entity.import` remains conformance-local after the Draft 0.3 Agentic review. It
+observes import identity mapping, business revision history, and conflict-version
+preconditions through fixture-shaped inputs, but Draft 0.3 does not define a
+public migration/import operation contract, identity registry, persistence
+schema, or source-system authority model.
 
 ## Registry
 
@@ -37,7 +43,7 @@ Agentic metadata remains pending the Draft 0.3 Agentic review.
 | `finkore.money.round` | Money | No | No | Yes | None | None | `MONEY-ROUNDING-001`–`-004`, `-008`, `-009` |
 | `finkore.money.applyrate` | Money | No | No | Yes | None | None | `MONEY-RATE-001`–`-009` |
 | `finkore.money.allocate` | Money | No | No | Yes | None | None | `MONEY-ALLOCATION-001`–`-013`, `MONEY-ERROR-008` |
-| `finkore.workflow.transition` | Workflow | Yes | Unspecified | Unspecified | May | May be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007` |
+| `finkore.workflow.transition` | Workflow | Yes | Unspecified | Yes when supplied guards are deterministic for declared facts | May | May be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007`, `WORKFLOW-VERSION-005`–`-012`, `WORKFLOW-CONFLICT-001`–`-008` |
 | `finkore.audit.append` | Audit | Yes | No | Yes | Records | None | `AUDIT-EVENT-001`–`-005`, `-007`, `-008`, `AUDIT-ACTOR-001`–`-004`, `-007`, `-008`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001` |
 | `finkore.audit.replace` | Audit | No | No | Yes | None | None | `AUDIT-APPEND-001` |
 | `finkore.audit.remove` | Audit | No | No | Yes | None | None | `AUDIT-APPEND-001` |
@@ -51,7 +57,7 @@ Agentic metadata remains pending the Draft 0.3 Agentic review.
 
 `Unspecified` is deliberate. A generic Workflow may not be attached to a
 Financial Entity, an Entity may carry non-financial or composing-domain facts,
-and a guard may declare dependence on external facts. Draft 0.2 defines
+and a guard may declare dependence on external facts. Draft 0.3 includes
 correction, reversal, void, and supersession observations, but no operation is
 labeled irreversible because Core still does not define accounting finality,
 ledger posting, or transport idempotency.
@@ -304,13 +310,18 @@ committed Audit Events outside future redaction policy semantics.
 **Purpose:** Request a declared, directed transition from current State to target.
 
 **Input semantics:** A valid Workflow definition, an instance with one declared
-current State, requested target State, and facts required by applicable guards.
-Current conformance fixtures express fact-equality guards as `guard` for one
-condition or `guards` for multiple conditions; this fixture shape is not a
-production interchange format.
+current State, requested target State, facts required by applicable guards, and
+when versioned, the instance's bound Workflow Definition Version. Draft 0.3
+fixtures may also supply optional expected-current-state and expected-revision
+preconditions. Current conformance fixtures express fact-equality guards as
+`guard` for one condition or `guards` for multiple conditions; this fixture shape
+is not a production interchange format.
 
 **Preconditions:** States and directed Transition are declared; current State is
-the source and is not terminal; every applicable guard passes. A guard may use
+the source and is not terminal; every applicable guard passes. For versioned
+instances, the supplied definition identity/version must match the instance's
+immutable binding. Optional expected-current-state and expected-revision
+preconditions, when supplied, must match the observed instance. A guard may use
 supplied authorization or approval facts without defining an authorization model.
 
 **Success postcondition:** Current State becomes the target exactly once.
@@ -319,22 +330,22 @@ Validation and change are observable as one domain operation.
 **Failure postcondition:** Current State remains unchanged.
 
 **Known operation-specific errors:** `FINKORE_WORKFLOW_INVALID_STATE`,
-`FINKORE_WORKFLOW_INVALID_TRANSITION`, `FINKORE_WORKFLOW_GUARD_REJECTED`, and
-`FINKORE_WORKFLOW_TERMINAL_STATE`. Definition validation can also fail with
-`FINKORE_WORKFLOW_INVALID_DEFINITION`; this list is not exhaustive. Terminal
-State error precedence follows `WORKFLOW-ERROR-001`.
-
-Draft 0.3 versioned Workflow transition preconditions, version-mismatch errors,
-and expected-state/revision conflict errors are specified, implemented, and
-covered by conformance vectors, but not yet included in this canonical operation
-descriptor pending the Draft 0.3 Agentic review.
+`FINKORE_WORKFLOW_INVALID_TRANSITION`, `FINKORE_WORKFLOW_GUARD_REJECTED`,
+`FINKORE_WORKFLOW_TERMINAL_STATE`, `FINKORE_WORKFLOW_VERSION_MISMATCH`, and
+`FINKORE_WORKFLOW_STATE_CONFLICT`. Definition validation can also fail with
+`FINKORE_WORKFLOW_INVALID_DEFINITION`; malformed instance/version binding can
+fail with `FINKORE_WORKFLOW_INVALID_INSTANCE`. This list is not exhaustive.
+Terminal State error precedence follows `WORKFLOW-ERROR-001` after structural,
+binding, and expected-precondition checks have passed.
 
 **Normative traceability:**
 [WORKFLOW-TRANSITION-001 through -007](../spec/workflow/transitions.md),
 [WORKFLOW-GUARD-001 through -006](../spec/workflow/guards.md),
 [WORKFLOW-TERMINAL-001 through -004](../spec/workflow/terminal-states.md),
 [WORKFLOW-STATES-004 and -007](../spec/workflow/states.md), and
-[WORKFLOW-ERROR-001 through -003](../spec/workflow/errors.md).
+[WORKFLOW-ERROR-001 through -007](../spec/workflow/errors.md),
+[WORKFLOW-VERSION-005 through -012](../spec/workflow/versioning.md), and
+[WORKFLOW-CONFLICT-001 through -008](../spec/workflow/conflicts.md).
 
 ## `finkore.entity.create`
 

@@ -3,7 +3,7 @@
 Effects describe observable consequences supported by the specification. They
 do not prescribe implementation style.
 
-## Draft 0.2 dimensions
+## Draft 0.3 dimensions
 
 | Dimension | Values | Meaning |
 | --- | --- | --- |
@@ -12,7 +12,7 @@ do not prescribe implementation style.
 | Deterministic | `yes`, `no`, `unspecified` | Whether the observable result is fixed for the same input, context, and domain state. |
 | Audit production | `none`, `may`, `required`, `unspecified` | Whether execution has a specified audit consequence. |
 | Approval relation | explicit relation or `none` | Whether the operation makes a decision, may be blocked by approval, or may invalidate a decision. |
-| Irreversibility | `unspecified` in Draft 0.2 | Core defines Entity correction, reversal, void, and supersession observations but not accounting finality, ledger posting, or legal irreversibility. |
+| Irreversibility | `unspecified` in Draft 0.3 | Core defines Entity correction, reversal, void, and supersession observations but not accounting finality, ledger posting, or legal irreversibility. |
 
 The mixed value sets are intentional. Booleans are adequate for direct
 state-change and determinism facts, while audit and approval semantics would be
@@ -36,11 +36,16 @@ State exactly once on success and leaves it unchanged on rejection.
 
 Generic state mutation and financial-state mutation are distinct. A generic
 Workflow transition changes state, but whether that state represents a changed
-financial fact depends on the composing domain. Draft 0.2 therefore marks its
+financial fact depends on the composing domain. Draft 0.3 therefore marks its
 financial-state effect `unspecified`. Entity creation, mutation, transition,
 and evolution are also `unspecified` for financial-state mutation because Core
 does not know which carried facts a composing domain treats as financially
 material.
+
+Draft 0.3 version binding and expected-state/revision checks on
+`finkore.workflow.transition` are preconditions. A mismatch rejects the
+operation and leaves the Workflow instance unchanged; it does not define a
+persistence lock, distributed consensus, or retry/idempotency rule.
 
 ## Determinism
 
@@ -67,12 +72,12 @@ Approval specifications.
 
 ## Irreversibility and idempotency
 
-Mutation does not establish irreversibility. Core Draft 0.2 defines Entity
+Mutation does not establish irreversibility. Core Draft 0.3 defines Entity
 Correction, Reversal, Void, and Supersession observations, but it still does not
 define accounting finality, cancellation, adjustment, ledger posting, or legal
 irreversibility. The registry therefore does not claim that any operation is
 irreversible.
 
-Idempotency is also not a Draft 0.2 metadata dimension. Pure Money operations can
+Idempotency is also not a Draft 0.3 metadata dimension. Pure Money operations can
 be recomputed without mutating their operands, but this does not define transport
 retries or idempotency keys. State-changing idempotency remains open.
