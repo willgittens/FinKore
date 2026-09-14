@@ -135,6 +135,27 @@ No external review, independent review, community signoff, or reviewer
 credential is implied by Draft 0.4 unless explicitly recorded. Material semantic
 findings cannot close as editorial-only edits.
 
+## CoreDoc alignment
+
+Milestone B, CoreDoc alignment, is complete. The durable review record is
+[Draft 0.4 CoreDoc Alignment Record](../coreDoc/draft-0.4-alignment.md).
+
+Results:
+
+- 24 CoreDoc identifiers inventoried: 5 principles and 19 rule-level entries.
+- Every CoreDoc identifier has introduced/updated metadata and a finding
+  classification.
+- Every rule-level CoreDoc identifier maps to exact specification requirement
+  refinements.
+- Every requirement family in `conformance/traceability.md` maps back to a
+  CoreDoc rule or an explicit `DOMAIN-LOCAL` rationale.
+- Counterexample review covered negative amounts, currency mismatch,
+  rounding/allocation, failed state changes, history/redaction, approval
+  applicability/effectiveness, and identity/revision/version separation.
+- Findings were `EDITORIAL` or `CLARIFICATION`; zero contradictions, zero
+  portability blockers, and zero normative behavior changes were recorded.
+- No external review is claimed.
+
 ## Verification
 
 Baseline verification for Milestone A:
@@ -155,6 +176,16 @@ Baseline verification for Milestone A:
 The first sandboxed TypeScript core mutation attempt failed before testing with
 `listen EPERM` when Stryker tried to bind its local logging server. The same
 command was rerun outside the sandbox and passed.
+
+Additional verification for Milestone B:
+
+| Check | Command | Result |
+| --- | --- | --- |
+| CoreDoc requirement and Markdown links | `npm run docs:check` | PASS: 269 CoreDoc specification references checked; Markdown links resolve |
+| Strict TypeScript | `npm run typecheck` | PASS |
+| Unit tests | `npm test` | PASS: runner 110/110, TypeScript core 371/371, TypeScript conformance adapter 15/15 |
+| License metadata | `npm run license:check` | PASS |
+| Whitespace | `git diff --check` | PASS |
 
 ## Release status rule
 

@@ -13,6 +13,7 @@
     "build": "npm run build --workspaces",
     "typecheck": "npm run typecheck --workspaces",
     "test": "npm run test --workspaces",
+    "docs:check": "node scripts/check-doc-references.js",
     "license:check": "node scripts/check-license.js"
   }
 }

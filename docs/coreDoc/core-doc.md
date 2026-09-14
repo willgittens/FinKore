@@ -704,6 +704,10 @@ continues to identify manifest and vector syntax compatibility unless that
 syntax changes. TypeScript, runner, and future Python or Java package versions
 remain independently governed implementation-package versions.
 
+Draft 0.4 CoreDoc inventory, bidirectional CoreDoc/specification traceability,
+counterexample review, accepted corrections, and the alignment gate result are
+recorded in the [Draft 0.4 CoreDoc Alignment Record](draft-0.4-alignment.md).
+
 ## Evolution of CoreDoc
 
 Core Principle and Financial Rule identifiers are stable references. A CORE-XXX

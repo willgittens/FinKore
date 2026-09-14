@@ -154,8 +154,8 @@ not choose the behavior that happens to match TypeScript.
 Recommended status block:
 
 ```text
-NEXT TASK: TASK-172
-LAST COMPLETED: TASK-171 (Milestone A — Foundation and Authority)
+NEXT TASK: TASK-177
+LAST COMPLETED: TASK-176 (Milestone B — CoreDoc Alignment)
 BLOCKED ON: NONE
 ```
 
@@ -173,7 +173,7 @@ Completion:
 ## 8. Milestone Dashboard
 
 - [x] Foundation and authority: TASK-167–TASK-171
-- [ ] CoreDoc alignment: TASK-172–TASK-176
+- [x] CoreDoc alignment: TASK-172–TASK-176
 - [ ] Domain specification stabilization: TASK-177–TASK-185
 - [ ] Cross-language portability contract: TASK-186–TASK-193
 - [ ] Conformance and implementer documentation: TASK-194–TASK-198
@@ -350,7 +350,7 @@ checker was found. Next task: TASK-172.
 
 ### Milestone B — CoreDoc Alignment
 
-### - [ ] TASK-172 — Inventory CoreDoc Rules and Metadata
+### - [x] TASK-172 — Inventory CoreDoc Rules and Metadata
 
 **Depends on:** TASK-169 and TASK-171.
 
@@ -364,7 +364,7 @@ missing, stale, contradictory, circular, or over-broad references.
 **Acceptance:** Every CoreDoc identifier has one inventory row and a finding
 classification; editorial-only metadata rules are respected.
 
-### - [ ] TASK-173 — Build Bidirectional CoreDoc-to-Spec Traceability
+### - [x] TASK-173 — Build Bidirectional CoreDoc-to-Spec Traceability
 
 **Depends on:** TASK-172.
 
@@ -379,7 +379,7 @@ without establishing the relationship.
 **Acceptance:** Both directions are complete; a mapping does not claim that
 CoreDoc itself defines detailed domain behavior.
 
-### - [ ] TASK-174 — Review CoreDoc Counterexamples and Contradictions
+### - [x] TASK-174 — Review CoreDoc Counterexamples and Contradictions
 
 **Depends on:** TASK-173.
 
@@ -398,7 +398,7 @@ refinement or an intentionally bounded non-goal.
 **Stop:** Unresolved financial meaning or a silent CoreDoc/spec contradiction is
 `BLOCKED BY SPEC GAP`.
 
-### - [ ] TASK-175 — Apply Accepted CoreDoc Corrections
+### - [x] TASK-175 — Apply Accepted CoreDoc Corrections
 
 **Depends on:** TASK-174 and accepted decision records.
 
@@ -413,7 +413,7 @@ historical traceability.
 domains into scope; normative changes receive tests and traceability where
 observable.
 
-### - [ ] TASK-176 — Close the CoreDoc Alignment Gate
+### - [x] TASK-176 — Close the CoreDoc Alignment Gate
 
 **Depends on:** TASK-175.
 
@@ -423,6 +423,14 @@ specifications and the Draft 0.5 implementation work.
 **Acceptance:** Bidirectional mapping is complete; zero unresolved
 contradictions; version/status language is consistent; review evidence and
 external-review status are explicit; Markdown links and stable references pass.
+
+**Completion:** COMPLETE. Milestone B is recorded in the
+[Draft 0.4 CoreDoc Alignment Record](../coreDoc/draft-0.4-alignment.md), linked
+from [CoreDoc](../coreDoc/core-doc.md), and summarized in the
+[Draft 0.4 release note](../releases/draft-0.4.md). Findings were classified as
+EDITORIAL or CLARIFICATION only; no normative financial behavior changed.
+Verification: `npm run docs:check`, `npm run typecheck`, `npm run license:check`,
+`npm test`, and `git diff --check` passed. Next task: TASK-177.
 
 ### Milestone C — Domain Specification Stabilization
 
@@ -941,8 +949,9 @@ is hidden by a deferral or by the TypeScript reference behavior.
 ## 12. Next Task
 
 ```text
-NEXT CODEX TASK: TASK-172 — Inventory CoreDoc Rules and Metadata
+NEXT CODEX TASK: TASK-177 — Stabilize Shared Conventions and Glossary
 ```
 
-TASK-172 begins Milestone B. It must use the completed Milestone A authority,
-version, review, and evidence records before changing CoreDoc rule substance.
+TASK-177 begins Milestone C. It must use the completed Milestone A authority
+records and Milestone B CoreDoc alignment record before changing shared
+conventions or glossary terms.
