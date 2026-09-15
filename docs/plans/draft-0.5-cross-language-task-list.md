@@ -393,7 +393,7 @@ supported.
 
 ### Milestone B — Python Full-Conformance Track
 
-### - [ ] TASK-213 — Create the Python Core Skeleton and Portable Error Model
+### - [x] TASK-213 — Create the Python Core Skeleton and Portable Error Model
 
 **Depends on:** TASK-210 and TASK-212.
 
@@ -408,7 +408,7 @@ documentation conventions, and dependency-boundary tests.
 public errors expose stable FinKore codes without making Python class names
 portable; package build, static checks, and initial tests pass.
 
-### - [ ] TASK-214 — Create the Python Conformance Bridge and Unsupported Smoke Test
+### - [x] TASK-214 — Create the Python Conformance Bridge and Unsupported Smoke Test
 
 **Depends on:** TASK-211 and TASK-213.
 
@@ -424,7 +424,7 @@ process failure, malformed output, and timeout handling.
 unimplemented FinKore operations report `UNSUPPORTED`; bridge failures report
 `INFRASTRUCTURE_ERROR`; and no financial rule exists in bridge code.
 
-### - [ ] TASK-215 — Implement Python Money Representation, Currency, and Serialization
+### - [x] TASK-215 — Implement Python Money Representation, Currency, and Serialization
 
 **Depends on:** TASK-213 and TASK-214.
 
@@ -441,7 +441,7 @@ numbers, exponent notation, leading plus, non-finite values, missing members,
 and invalid currency fail with the specified portable codes; unknown-member and
 canonicalization behavior matches `/spec`.
 
-### - [ ] TASK-216 — Implement Python Money Addition, Subtraction, Negation, and Comparison
+### - [x] TASK-216 — Implement Python Money Addition, Subtraction, Negation, and Comparison
 
 **Depends on:** TASK-215.
 
@@ -455,7 +455,7 @@ negative and zero boundaries, and public documentation.
 uses binary floating point; operands remain unchanged on success and failure;
 currency mismatch is never normalized or converted.
 
-### - [ ] TASK-217 — Implement Python Money Multiplication, Division, and Rates
+### - [x] TASK-217 — Implement Python Money Multiplication, Division, and Rates
 
 **Depends on:** TASK-216.
 
@@ -471,7 +471,7 @@ boundary tests.
 division never rounds implicitly; percentage conversion is exact; source Money
 remains unchanged.
 
-### - [ ] TASK-218 — Implement Python Money Rounding
+### - [x] TASK-218 — Implement Python Money Rounding
 
 **Depends on:** TASK-215.
 
@@ -486,7 +486,7 @@ and no-discard tests; and API documentation.
 `FLOOR` and `UP` versus `CEILING`; scale is never derived silently from
 currency metadata.
 
-### - [ ] TASK-219 — Implement Python Money Allocation
+### - [x] TASK-219 — Implement Python Money Allocation
 
 **Depends on:** TASK-216 and TASK-218.
 
@@ -517,7 +517,11 @@ infrastructure outcomes; mutation score meets the project target; zero critical
 Money mutants survive; documentation lists exact supported and deferred Money
 behavior.
 
-### - [ ] TASK-221 — Implement the Python Workflow Domain
+**Current status:** Python Money implementation and conformance are complete:
+83 Money vectors pass with zero failures, unsupported results, or infrastructure
+errors. Packaged Python coverage and mutation evidence remain open.
+
+### - [x] TASK-221 — Implement the Python Workflow Domain
 
 **Depends on:** TASK-220.
 
@@ -534,7 +538,7 @@ conflicts, error precedence, and failure state preservation.
 or distributed concurrency behavior is introduced; rejected operations preserve
 state, revision, and binding as specified; critical mutants are killed.
 
-### - [ ] TASK-222 — Implement the Python Audit Domain
+### - [x] TASK-222 — Implement the Python Audit Domain
 
 **Depends on:** TASK-221.
 
@@ -550,7 +554,7 @@ observations, and requirement-linked tests.
 silently rewritten; redaction remains distinguishable from absence; failed
 operations preserve history; critical Audit mutants are killed.
 
-### - [ ] TASK-223 — Implement the Python Approvals Domain
+### - [x] TASK-223 — Implement the Python Approvals Domain
 
 **Depends on:** TASK-222.
 
@@ -567,7 +571,7 @@ approval; stale, withdrawn, expired, rejected, and superseded states remain
 distinguishable; no IAM, delegation, escalation, dynamic lookup, or unrestricted
 graph behavior is invented; critical Approval mutants are killed.
 
-### - [ ] TASK-224 — Implement the Python Entities Domain
+### - [x] TASK-224 — Implement the Python Entities Domain
 
 **Depends on:** TASK-221 through TASK-223.
 
@@ -601,6 +605,11 @@ unsupported results, or infrastructure errors; all critical financial mutants
 are killed; no test depends on TypeScript behavior, host locale/timezone, wall
 clock, network, or uncontrolled randomness; the full-Python claim is precisely
 scoped to the Draft 0.5 baseline.
+
+**Current status:** The Python adapter passes the complete current manifest: 244
+vectors pass with zero failures, unsupported results, or infrastructure errors.
+Packaged coverage, mutation, and critical-mutant evidence remain open before
+TASK-225 can close.
 
 ### Milestone C — Java Independent Money Track
 

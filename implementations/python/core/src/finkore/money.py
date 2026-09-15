@@ -1,0 +1,260 @@
+# SPDX-License-Identifier: MPL-2.0
+"""FinKore Money value behavior implemented with exact base-10 decimals."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from decimal import Decimal, InvalidOperation, ROUND_CEILING, ROUND_DOWN, ROUND_FLOOR, ROUND_HALF_EVEN, ROUND_HALF_UP, ROUND_UP
+from fractions import Fraction
+import re
+from typing import Any
+
+from .errors import FinKoreError
+
+INVALID_AMOUNT = "FINKORE_MONEY_INVALID_AMOUNT"
+INVALID_CURRENCY = "FINKORE_MONEY_INVALID_CURRENCY"
+CURRENCY_MISMATCH = "FINKORE_MONEY_CURRENCY_MISMATCH"
+DIVISION_BY_ZERO = "FINKORE_MONEY_DIVISION_BY_ZERO"
+ROUNDING_REQUIRED = "FINKORE_MONEY_ROUNDING_REQUIRED"
+INVALID_ROUNDING = "FINKORE_MONEY_INVALID_ROUNDING"
+INVALID_ALLOCATION = "FINKORE_MONEY_INVALID_ALLOCATION"
+
+_AMOUNT_RE = re.compile(r"^-?(?:0|[0-9]+)(?:\.[0-9]+)?$")
+_CURRENCY_RE = re.compile(r"^[A-Z]{3}$")
+_ROUNDING = {
+    "HALF_UP": ROUND_HALF_UP,
+    "HALF_EVEN": ROUND_HALF_EVEN,
+    "DOWN": ROUND_DOWN,
+    "UP": ROUND_UP,
+    "FLOOR": ROUND_FLOOR,
+    "CEILING": ROUND_CEILING,
+}
+
+
+def _plain_decimal(value: str) -> Decimal:
+    if not isinstance(value, str) or _AMOUNT_RE.fullmatch(value) is None:
+        raise FinKoreError(INVALID_AMOUNT)
+    try:
+        decimal = Decimal(value)
+    except InvalidOperation as error:
+        raise FinKoreError(INVALID_AMOUNT) from error
+    if not decimal.is_finite():
+        raise FinKoreError(INVALID_AMOUNT)
+    return decimal
+
+
+def _scale(value: str) -> int:
+    return len(value.partition(".")[2])
+
+
+def _format_decimal(value: Decimal, scale: int | None = None) -> str:
+    if value.is_zero():
+        if scale is None or scale == 0:
+            text = format(value, "f")
+            return text[1:] if text.startswith("-") else text
+        return f"0.{''.join('0' for _ in range(scale))}"
+    text = format(value, "f")
+    if text.startswith("-0") and Decimal(text).is_zero():
+        text = text[1:]
+    if scale is not None:
+        integer, dot, fraction = text.partition(".")
+        if scale == 0:
+            return integer
+        fraction = (fraction if dot else "").ljust(scale, "0")
+        return f"{integer}.{fraction[:scale]}"
+    return text
+
+
+def _valid_scale(value: Any, error_code: str = INVALID_ROUNDING) -> int:
+    if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+        raise FinKoreError(error_code)
+    return value
+
+
+def _quantum(scale: int) -> Decimal:
+    return Decimal(1).scaleb(-scale)
+
+
+def _whole_units(amount: Decimal, scale: int) -> int | None:
+    scaled = amount.scaleb(scale)
+    if scaled != scaled.to_integral_value():
+        return None
+    return int(scaled)
+
+
+def _finite_decimal_quotient(dividend: Decimal, divisor: Decimal) -> tuple[Decimal, int] | None:
+    ratio = Fraction(*dividend.as_integer_ratio()) / Fraction(*divisor.as_integer_ratio())
+    denominator = ratio.denominator
+    twos = 0
+    fives = 0
+    while denominator % 2 == 0:
+        denominator //= 2
+        twos += 1
+    while denominator % 5 == 0:
+        denominator //= 5
+        fives += 1
+    if denominator != 1:
+        return None
+    scale = max(twos, fives)
+    integer = ratio.numerator * (2 ** (scale - twos)) * (5 ** (scale - fives))
+    return Decimal(integer).scaleb(-scale), scale
+
+
+@dataclass(frozen=True)
+class Money:
+    """A FinKore Money value containing one exact amount and one currency.
+
+    Money arithmetic uses exact decimal semantics, preserves currency, and never
+    mutates operands.
+
+    @see MONEY-REPRESENTATION-001
+    @see MONEY-SERIALIZATION-001
+    """
+
+    amount: Decimal
+    currency: str
+    presentation_scale: int | None = None
+
+    @staticmethod
+    def from_portable(value: Any) -> "Money":
+        """Parse FinKore portable Money JSON.
+
+        Unknown members are ignored and cannot alter amount or currency meaning.
+
+        @throws FinKoreError with ``FINKORE_MONEY_INVALID_AMOUNT`` or
+        ``FINKORE_MONEY_INVALID_CURRENCY``.
+        @see MONEY-SERIALIZATION-001
+        @see MONEY-SERIALIZATION-006
+        """
+
+        if not isinstance(value, dict):
+            raise FinKoreError(INVALID_AMOUNT)
+        if "amount" not in value:
+            raise FinKoreError(INVALID_AMOUNT)
+        amount_text = value["amount"]
+        amount = _plain_decimal(amount_text)
+        if "currency" not in value or not isinstance(value["currency"], str) or _CURRENCY_RE.fullmatch(value["currency"]) is None:
+            raise FinKoreError(INVALID_CURRENCY)
+        return Money(amount=amount, currency=value["currency"], presentation_scale=_scale(amount_text))
+
+    def to_portable(self, scale: int | None = None) -> dict[str, str]:
+        """Serialize this value to FinKore portable Money JSON.
+
+        @returns a dictionary containing ``amount`` and ``currency``.
+        @see MONEY-SERIALIZATION-008
+        """
+
+        return {"amount": _format_decimal(self.amount, self.presentation_scale if scale is None else scale), "currency": self.currency}
+
+    def _compatible(self, other: "Money") -> None:
+        if self.currency != other.currency:
+            raise FinKoreError(CURRENCY_MISMATCH)
+
+    def add(self, other: "Money") -> "Money":
+        """Add compatible Money values exactly without mutating either operand."""
+
+        self._compatible(other)
+        return Money(self.amount + other.amount, self.currency)
+
+    def subtract(self, other: "Money") -> "Money":
+        """Subtract compatible Money values exactly without mutating either operand."""
+
+        self._compatible(other)
+        return Money(self.amount - other.amount, self.currency)
+
+    def negate(self) -> "Money":
+        """Return the exact additive inverse while preserving currency."""
+
+        return Money(-self.amount, self.currency, self.presentation_scale)
+
+    def multiply(self, scalar: Any) -> "Money":
+        """Multiply by an exact decimal scalar while preserving currency."""
+
+        return Money(self.amount * _plain_decimal(scalar), self.currency)
+
+    def divide(self, scalar: Any) -> "Money":
+        """Divide by a non-zero exact decimal scalar or fail when rounding is required."""
+
+        divisor = _plain_decimal(scalar)
+        if divisor.is_zero():
+            raise FinKoreError(DIVISION_BY_ZERO)
+        quotient = _finite_decimal_quotient(self.amount, divisor)
+        if quotient is None:
+            raise FinKoreError(ROUNDING_REQUIRED)
+        result, scale = quotient
+        return Money(result, self.currency, scale)
+
+    def compare(self, other: "Money") -> str:
+        """Compare compatible Money values numerically."""
+
+        self._compatible(other)
+        if self.amount < other.amount:
+            return "LESS"
+        if self.amount > other.amount:
+            return "GREATER"
+        return "EQUAL"
+
+    def round(self, scale: Any, mode: Any) -> "Money":
+        """Round to an explicit target scale using a portable rounding mode."""
+
+        target_scale = _valid_scale(scale)
+        if not isinstance(mode, str) or mode not in _ROUNDING:
+            raise FinKoreError(INVALID_ROUNDING)
+        rounded = self.amount.quantize(_quantum(target_scale), rounding=_ROUNDING[mode])
+        return Money(rounded, self.currency, target_scale)
+
+    def apply_rate(self, rate: Any, rounding: Any | None = None) -> "Money":
+        """Apply an exact decimal or percentage Rate to this Money value."""
+
+        if not isinstance(rate, dict):
+            raise FinKoreError(INVALID_AMOUNT)
+        kind = rate.get("kind")
+        if kind not in {"DECIMAL", "PERCENTAGE"}:
+            raise FinKoreError(INVALID_AMOUNT)
+        value = _plain_decimal(rate.get("value"))
+        scalar = value if kind == "DECIMAL" else value / Decimal("100")
+        result = Money(self.amount * scalar, self.currency)
+        if rounding is None:
+            return result
+        if not isinstance(rounding, dict):
+            raise FinKoreError(INVALID_ROUNDING)
+        try:
+            return result.round(rounding.get("scale"), rounding.get("mode"))
+        except FinKoreError as error:
+            if error.code == INVALID_ROUNDING:
+                raise
+            raise FinKoreError(INVALID_ROUNDING) from error
+
+    def allocate(self, allocation: Any, scale: Any) -> list["Money"]:
+        """Allocate this Money value in declared order at an explicit target scale."""
+
+        target_scale = _valid_scale(scale, INVALID_ALLOCATION)
+        if not isinstance(allocation, dict):
+            raise FinKoreError(INVALID_ALLOCATION)
+        method = allocation.get("method")
+        if method == "EQUAL":
+            parts = allocation.get("parts")
+            if not isinstance(parts, int) or isinstance(parts, bool) or parts <= 0:
+                raise FinKoreError(INVALID_ALLOCATION)
+            weights = [1] * parts
+        elif method == "RATIO":
+            ratios = allocation.get("ratios")
+            if not isinstance(ratios, list) or len(ratios) == 0:
+                raise FinKoreError(INVALID_ALLOCATION)
+            if any(not isinstance(ratio, int) or isinstance(ratio, bool) or ratio <= 0 for ratio in ratios):
+                raise FinKoreError(INVALID_ALLOCATION)
+            weights = ratios
+        else:
+            raise FinKoreError(INVALID_ALLOCATION)
+
+        units = _whole_units(self.amount, target_scale)
+        if units is None:
+            raise FinKoreError(ROUNDING_REQUIRED)
+        sign = -1 if units < 0 else 1
+        absolute_units = abs(units)
+        total_weight = sum(weights)
+        base_units = [(absolute_units * weight) // total_weight for weight in weights]
+        remainder = absolute_units - sum(base_units)
+        for index in range(remainder):
+            base_units[index] += 1
+        return [Money(Decimal(sign * units_for_part).scaleb(-target_scale), self.currency, target_scale) for units_for_part in base_units]
