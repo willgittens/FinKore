@@ -239,6 +239,38 @@ Results:
   descriptors, or Python/Java implementation/conformance claims changed.
 - No external review is claimed.
 
+## Alignment and Draft 0.5 handoff
+
+Milestone F, Alignment and Draft 0.5 handoff, is complete. The durable Agentic
+review record is
+[Draft 0.4 Agentic Alignment Record](../../agentic/draft-0.4-alignment.md), and
+the forward-looking implementation handoff is
+[Draft 0.5 Python and Java Handoff Checklist](../draft-0.5-python-java-handoff.md).
+
+Results:
+
+- The Agentic Contract remains aligned with the stabilized Draft 0.4 baseline.
+  The registry keeps 20 canonical `finkore.*` operations and does not promote
+  the 15 conformance-local labels.
+- Effects, preconditions, postconditions, deterministic context, mutation,
+  safety, portable errors, discovery, and capability statements were reviewed
+  against the specification, conformance audit, and portability contract.
+- No AI-specific bypass, new financial behavior, premature operation promotion,
+  or version-taxonomy conflict was found.
+- Current-status documentation and navigation were synchronized across the
+  root, specification, conformance, Agentic Contract, runner, TypeScript adapter,
+  and implementation-guide entry points.
+- Stale Draft 0.3 current-status wording in conformance traceability and
+  Agentic capability guidance was corrected to describe the Draft 0.4
+  stabilized baseline.
+- The Draft 0.5 checklist defines bounded Python and Java bootstrap work with a
+  recommended first vertical slice limited to Money representation,
+  serialization, addition, subtraction, comparison, and rounding.
+- No Python implementation, Java implementation, full-domain conformance claim,
+  new conformance vectors, TypeScript behavior, runner behavior, adapter
+  behavior, portable error codes, or normative financial behavior changed.
+- No external review is claimed.
+
 ## Verification
 
 Baseline verification for Milestone A:
@@ -301,6 +333,43 @@ Additional verification for Milestone E:
 | Full conformance | `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json` | PASS: 244/244 vectors |
 | License metadata | `npm run license:check` | PASS |
 | Whitespace | `git diff --check` | PASS |
+
+Additional verification for Milestone F:
+
+| Check | Command | Result |
+| --- | --- | --- |
+| Documentation links | `npm run docs:check` | PASS: 269 CoreDoc specification references checked; Markdown links resolve |
+| Workspace build | `npm run build` | PASS |
+| Strict TypeScript | `npm run typecheck` | PASS |
+| Unit tests | `npm test` | PASS: runner 110/110, TypeScript core 371/371, TypeScript conformance adapter 15/15 |
+| Full conformance | `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json` | PASS: 244/244 vectors, 217/217 mutation-sensitive vectors |
+| Runner coverage | `npm run test:coverage -w @finkore/conformance-runner` | PASS: 98.31% statements, 95.29% branches, 100% functions, 98.75% lines |
+| TypeScript core coverage | `npm run test:coverage -w @finkore/typescript` | PASS: 99.09% statements, 98.69% branches, 100% functions, 99.49% lines |
+| TypeScript core mutation | `npm run test:mutation -w @finkore/typescript` | PASS: 98.28% total, 98.40% covered, 3129 killed, 16 timeout, 51 survived, 4 no coverage, 0 errors |
+| Runner mutation | `npm run test:mutation -w @finkore/conformance-runner` | PASS: 99.73% total and covered, 367 killed, 1 survived, 0 no coverage, 0 errors |
+| Architecture boundaries | package script/tool search plus runner, adapter, and documentation boundary audit | PASS: no standalone architecture-check script is configured; no dependency-direction or domain-neutrality violation was found |
+| License metadata | `npm run license:check` | PASS |
+| Whitespace | `git diff --check` | PASS |
+
+Mutation survivor inspection for Milestone F:
+
+| Report | Path | Survived | No coverage | Errors |
+| --- | --- | ---: | ---: | ---: |
+| TypeScript core | `src/approvals/approval-composition.ts` | 15 | 0 | 0 |
+| TypeScript core | `src/entities/entity.ts` | 14 | 0 | 0 |
+| TypeScript core | `src/approvals/approval-decision-history.ts` | 7 | 3 | 0 |
+| TypeScript core | `src/entities/entity-evolution.ts` | 7 | 1 | 0 |
+| TypeScript core | `src/workflow/definition.ts` | 7 | 0 | 0 |
+| TypeScript core | `src/entities/errors.ts` | 1 | 0 | 0 |
+| Conformance runner | `src/validator.ts` | 1 | 0 | 0 |
+
+The surviving core mutants are within the accepted aggregate threshold and were
+reviewed as diagnostic, defensive validation/import, getter, or equivalent
+normalization cases rather than critical financial behavior waivers. The single
+runner survivor mutates the default validation source label in `src/validator.ts`
+and does not affect vector validation, dispatch, comparison, pass/fail status,
+or normalized result behavior. Zero critical financial or runner mutants are
+accepted as surviving.
 
 ## Release status rule
 

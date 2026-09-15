@@ -154,8 +154,8 @@ not choose the behavior that happens to match TypeScript.
 Recommended status block:
 
 ```text
-NEXT TASK: TASK-199
-LAST COMPLETED: TASK-198 (Milestone E — Conformance and Implementer Documentation)
+NEXT TASK: TASK-203
+LAST COMPLETED: TASK-202 (Milestone F — Alignment and Draft 0.5 Handoff)
 BLOCKED ON: NONE
 ```
 
@@ -177,7 +177,7 @@ Completion:
 - [x] Domain specification stabilization: TASK-177–TASK-185
 - [x] Cross-language portability contract: TASK-186–TASK-193
 - [x] Conformance and implementer documentation: TASK-194–TASK-198
-- [ ] Alignment and Draft 0.5 handoff: TASK-199–TASK-202
+- [x] Alignment and Draft 0.5 handoff: TASK-199–TASK-202
 - [ ] Draft 0.4 closure: TASK-203–TASK-206
 
 ## 9. Dependency Overview
@@ -883,7 +883,7 @@ implementation/conformance claims changed. Verification: `npm run docs:check`,
 
 ### Milestone F — Alignment and Draft 0.5 Handoff
 
-### - [ ] TASK-199 — Align the Agentic Contract with the Stabilized Baseline
+### - [x] TASK-199 — Align the Agentic Contract with the Stabilized Baseline
 
 **Depends on:** TASK-198.
 
@@ -897,7 +897,15 @@ capabilities, and conformance-local boundaries.
 **Acceptance:** No AI-specific bypass; no new financial behavior; no premature
 operation promotion; descriptor version terminology follows TASK-169.
 
-### - [ ] TASK-200 — Synchronize Repository Documentation and Navigation
+**Completion:** COMPLETE. Recorded in the
+[Draft 0.4 Agentic Alignment Record](../../agentic/draft-0.4-alignment.md).
+Findings `D04-AGENTIC-199-001` through `D04-AGENTIC-199-005` are ACCEPTED.
+Twenty canonical `finkore.*` operations remain aligned with Draft 0.4
+requirements, and fifteen manifest-listed labels remain conformance-local. No
+AI-specific bypass, new financial behavior, premature operation promotion, or
+version-taxonomy conflict was found. Next task: TASK-200.
+
+### - [x] TASK-200 — Synchronize Repository Documentation and Navigation
 
 **Depends on:** TASK-199.
 
@@ -913,7 +921,18 @@ implementation and adapter guides.
 described as implemented, no Python/Java conformance claim, and historical
 records remain clearly historical.
 
-### - [ ] TASK-201 — Create the Draft 0.5 Python and Java Handoff Checklist
+**Completion:** COMPLETE. Current-status navigation was synchronized across
+the root, Agentic, conformance traceability, runner, TypeScript adapter, and
+implementation-guide documentation. The repository now links to the
+[Language-Neutral Implementation Guide](../implementation-guide.md),
+[Conformance Adapter Onboarding Guide](../conformance-adapter-onboarding.md),
+[Draft 0.4 Agentic Alignment Record](../../agentic/draft-0.4-alignment.md), and
+[Draft 0.5 Python and Java Handoff Checklist](../draft-0.5-python-java-handoff.md).
+Stale Draft 0.3 current-status wording in conformance traceability and Agentic
+capabilities was corrected to the Draft 0.4 stabilized baseline. No Python or
+Java conformance claim was added. Next task: TASK-201.
+
+### - [x] TASK-201 — Create the Draft 0.5 Python and Java Handoff Checklist
 
 **Depends on:** TASK-200.
 
@@ -930,7 +949,14 @@ unspecified behavior.
 the full spec-to-conformance path; choosing it does not imply full-domain
 conformance.
 
-### - [ ] TASK-202 — Revalidate the TypeScript Reference Oracle
+**Completion:** COMPLETE. Published the
+[Draft 0.5 Python and Java Handoff Checklist](../draft-0.5-python-java-handoff.md).
+The recommended first slice is bounded to Money representation, serialization,
+addition, subtraction, comparison, and rounding so future Python and Java work
+can exercise specification, conformance, adapter, documentation, and mutation
+expectations without implying full-domain conformance. Next task: TASK-202.
+
+### - [x] TASK-202 — Revalidate the TypeScript Reference Oracle
 
 **Depends on:** TASK-192, TASK-196, and TASK-200.
 
@@ -945,6 +971,16 @@ survivors and report complete paths/counts.
 **Acceptance:** All 0.4 vectors pass; aggregate mutation targets remain satisfied;
 zero critical financial or runner mutants survive; no implementation behavior is
 used to waive a specification finding.
+
+**Completion:** COMPLETE. Revalidation is recorded in the
+[Draft 0.4 release note](../releases/draft-0.4.md). `npm run build`,
+`npm run typecheck`, `npm test`, full TypeScript conformance, runner coverage,
+TypeScript core coverage, full runner mutation, full core mutation,
+`npm run license:check`, `npm run docs:check`, and `git diff --check` passed.
+All 244 Draft 0.4 vectors passed, including all 217 mutation-sensitive vectors.
+Mutation survivor paths/counts were inspected and recorded; aggregate mutation
+targets remain satisfied and no critical financial or runner mutant is accepted
+as waiving a specification finding. Next task: TASK-203.
 
 ### Milestone G — Draft 0.4 Closure
 

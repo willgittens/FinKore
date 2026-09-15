@@ -1,6 +1,11 @@
-# Draft 0.1, Draft 0.2, and Draft 0.3 Requirement Traceability
+# FinKore Core Draft 0.4 Requirement Traceability
 
 This is the canonical human-readable requirement-to-vector index. Manifest-listed vectors remain the primary machine-readable mapping through each vector requirements field.
+
+Draft 0.4 stabilizes the closed Draft 0.1 through Draft 0.3 behavior without
+adding financial behavior or vector syntax. The counts and mappings below
+therefore remain the current Draft 0.4 traceability baseline for the existing
+Money, Workflow, Audit, Approvals, and Entities scope.
 
 ## Inventory and coverage
 
@@ -576,6 +581,9 @@ unchanged.
 
 ## Readiness
 
-**READY FOR CONFORMANCE RUNNER — DRAFT 0.3 CLOSED**
+**READY FOR CONFORMANCE RUNNER — DRAFT 0.4 STABILIZED BASELINE**
 
-The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the current runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates, Money Allocation, Audit Relationships, Entity Evolution, and Approval Validity requirements are vector-covered, implemented by the TypeScript reference implementation, and pass their conformance suites. Draft 0.3 Approval Composition requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Approval conformance suite. Draft 0.3 Workflow definition/version identity, import, instance binding/mismatch, and expected-state/revision conflict requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Workflow conformance suite. Draft 0.3 Entity Revision and Import requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Entities conformance suite. FinKore Core Draft 0.3 closure is complete for directly testable mandatory requirements in the selected closed scope.
+The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the current runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates, Money Allocation, Audit Relationships, Entity Evolution, and Approval Validity requirements are vector-covered, implemented by the TypeScript reference implementation, and pass their conformance suites. Draft 0.3 Approval Composition requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Approval conformance suite. Draft 0.3 Workflow definition/version identity, import, instance binding/mismatch, and expected-state/revision conflict requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Workflow conformance suite. Draft 0.3 Entity Revision and Import requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Entities conformance suite. FinKore Core Draft 0.4 stabilizes this selected closed scope for directly testable mandatory requirements.
+Draft 0.4 adds stabilization, portability, conformance-documentation, Agentic
+alignment, and implementation-handoff evidence for this baseline. It does not
+claim Python or Java implementation or conformance.

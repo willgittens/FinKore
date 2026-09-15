@@ -28,6 +28,8 @@ evidence that the same behavior can be realized idiomatically.
    [Adapter Onboarding Guide](conformance-adapter-onboarding.md).
 6. Read [Agentic Operations](../agentic/operations.md) when implementing a
    canonical `finkore.*` operation.
+7. For Python or Java bootstrap work, use the
+   [Draft 0.5 Python and Java Handoff Checklist](draft-0.5-python-java-handoff.md).
 
 ## Architecture Boundaries
 

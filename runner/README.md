@@ -30,9 +30,9 @@ runner rejects unsupported format versions instead of guessing compatibility.
 Canonical operation IDs are reused verbatim from the Agentic Contract, including
 `finkore.money.add`, `finkore.money.divide`, and
 `finkore.workflow.transition`. `src/metadata.ts` contains the small explicit
-Draft 0.1 Agentic ID set aligned with `agentic/operations.md`; it duplicates
-identifiers, not semantics. Operations without the `finkore.` prefix remain
-conformance-local adapter vocabulary as documented by
+Draft 0.4 canonical Agentic ID set aligned with `agentic/operations.md`; it
+duplicates identifiers, not semantics. Operations without the `finkore.` prefix
+remain conformance-local adapter vocabulary as documented by
 `conformance/conventions.md`.
 
 Requirement IDs and the existing critical classification are read conservatively from the canonical tables in `conformance/traceability.md`. The loader fails if that inventory is missing, and vector references outside it are rejected. This focused table reader is deliberately not a generalized Markdown or specification parser.
@@ -64,6 +64,10 @@ export type NormalizedResult =
 The normalized envelope is conformance infrastructure, not a required FinKore implementation API. An adapter translates native values and errors into it. It must canonicalize domain representations before returning; the domain-neutral comparator applies exact recursive equality, with unordered object keys and ordered arrays. It never uses floating-point tolerance or invents domain equivalence.
 
 An optional `reset` hook supports the vector-isolation requirement. It runs immediately before each supported execution.
+
+See the [Conformance Adapter Onboarding Guide](../docs/conformance-adapter-onboarding.md)
+for the language-neutral integration workflow, reporting expectations, and
+conformance-claim evidence.
 
 ## Programmatic usage
 

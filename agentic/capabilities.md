@@ -44,7 +44,7 @@ conformance status. FinKore Core does not assign subjective `LOW`, `MEDIUM`,
 
 Some operations may be suitable for autonomous execution. Others may require
 human confirmation, an Approval, authorization, or application policy. Draft
-0.3 exposes available facts and does not impose human confirmation on every
-mutation. Draft 0.4 keeps Approval composition/lifecycle fixtures
-conformance-local and adds no AI-specific bypass or universal execution decision
-for clients.
+0.4 preserves the available facts and does not impose human confirmation on
+every mutation. It keeps Approval composition/lifecycle fixtures
+conformance-local and adds no AI-specific bypass or universal execution
+decision for clients.

@@ -84,6 +84,7 @@ import conformance-local until stable public operation contracts exist.
 - [Discovery](discovery.md)
 - [Portable errors](errors.md)
 - [Examples](examples.md)
+- [Draft 0.4 Agentic Alignment Record](draft-0.4-alignment.md)
 
 ## Readiness checklist
 
