@@ -211,6 +211,34 @@ Results:
   claimed.
 - No external review is claimed.
 
+## Conformance and implementer documentation
+
+Milestone E, Conformance and implementer documentation, is complete. The durable
+review record is
+[Draft 0.4 Conformance and Implementer Documentation Audit](../../conformance/draft-0.4-audit.md).
+
+Results:
+
+- Conformance schema and manifest portability were reviewed for schema dialect,
+  format-version handling, unknown-member policy, path resolution, unique IDs,
+  operation registration, input/context separation, expected-result
+  exclusivity, JSON-number avoidance, deterministic ordering, and diagnostics.
+- Vector and traceability language neutrality were reviewed. The manifest
+  remains at 16 vector files and 244 unique vectors across 35 operation labels;
+  traceability remains 381 indexed requirements, 312 covered, 69 not directly
+  testable, and zero partial, uncovered, deferred, or blocking specification-gap
+  rows.
+- Runner and adapter boundaries were reviewed. The runner remains
+  domain-neutral; adapters own translation and normalized result mapping;
+  unsupported and infrastructure outcomes cannot be reported as passing.
+- Published the
+  [Language-Neutral Implementation Guide](../implementation-guide.md) and
+  [Conformance Adapter Onboarding Guide](../conformance-adapter-onboarding.md).
+- No manifest format, vector-file format, conformance vectors, runner behavior,
+  adapter behavior, TypeScript behavior, portable error codes, Agentic
+  descriptors, or Python/Java implementation/conformance claims changed.
+- No external review is claimed.
+
 ## Verification
 
 Baseline verification for Milestone A:
@@ -259,6 +287,18 @@ Additional verification for Milestone D:
 | Portability contract links | `npm run docs:check` | PASS |
 | Strict TypeScript | `npm run typecheck` | PASS |
 | Unit tests | `npm test` | PASS |
+| License metadata | `npm run license:check` | PASS |
+| Whitespace | `git diff --check` | PASS |
+
+Additional verification for Milestone E:
+
+| Check | Command | Result |
+| --- | --- | --- |
+| Conformance and guide links | `npm run docs:check` | PASS |
+| Workspace build | `npm run build` | PASS |
+| Strict TypeScript | `npm run typecheck` | PASS |
+| Unit tests | `npm test` | PASS |
+| Full conformance | `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json` | PASS: 244/244 vectors |
 | License metadata | `npm run license:check` | PASS |
 | Whitespace | `git diff --check` | PASS |
 

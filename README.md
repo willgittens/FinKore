@@ -101,6 +101,8 @@ FinKore is not an ERP, ORM, payment processor, UI framework, accounting applicat
 - [FinKore Specification](./spec/README.md) — normative financial behavior, conventions, and domain definitions.
 - [Conformance Suite](./conformance/README.md) — language-independent test vectors and reliability methodology.
 - [Agentic Contract](./agentic/README.md) — portable operational semantics for machine clients.
+- [Language-Neutral Implementation Guide](./docs/implementation-guide.md) — implementation reading order, boundaries, value semantics, errors, effects, and gap handling.
+- [Conformance Adapter Onboarding](./docs/conformance-adapter-onboarding.md) — adapter integration, normalization, reporting, and conformance-claim evidence.
 - [Conformance Traceability](./conformance/traceability.md) — current vector coverage, known gaps, and readiness.
 - [Release Notes](./docs/releases/README.md) — shipped scope, exclusions, review status, and verification by Core draft.
 - [Draft 0.4 Foundation Plan](./docs/plans/draft-0.4-foundation-task-list.md) — active stabilization work for the current unreleased draft.

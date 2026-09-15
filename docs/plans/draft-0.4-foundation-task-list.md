@@ -154,8 +154,8 @@ not choose the behavior that happens to match TypeScript.
 Recommended status block:
 
 ```text
-NEXT TASK: TASK-194
-LAST COMPLETED: TASK-193 (Milestone D — Cross-Language Portability Contract)
+NEXT TASK: TASK-199
+LAST COMPLETED: TASK-198 (Milestone E — Conformance and Implementer Documentation)
 BLOCKED ON: NONE
 ```
 
@@ -176,7 +176,7 @@ Completion:
 - [x] CoreDoc alignment: TASK-172–TASK-176
 - [x] Domain specification stabilization: TASK-177–TASK-185
 - [x] Cross-language portability contract: TASK-186–TASK-193
-- [ ] Conformance and implementer documentation: TASK-194–TASK-198
+- [x] Conformance and implementer documentation: TASK-194–TASK-198
 - [ ] Alignment and Draft 0.5 handoff: TASK-199–TASK-202
 - [ ] Draft 0.4 closure: TASK-203–TASK-206
 
@@ -766,7 +766,7 @@ passed. Next task: TASK-194.
 
 ### Milestone E — Conformance and Implementer Documentation
 
-### - [ ] TASK-194 — Audit Conformance Schema and Manifest Portability
+### - [x] TASK-194 — Audit Conformance Schema and Manifest Portability
 
 **Depends on:** TASK-193.
 
@@ -782,7 +782,12 @@ file/vector ordering, and validation diagnostics.
 no financial validation enters the runner; manifest version is not confused
 with Core Draft 0.4.
 
-### - [ ] TASK-195 — Audit Vectors and Traceability for Language Neutrality
+**Completion:** COMPLETE. Recorded in the
+[Draft 0.4 Conformance and Implementer Documentation Audit](../../conformance/draft-0.4-audit.md).
+Finding `D04-CONF-194-001` is ACCEPTED. No format change was required; no
+financial validation entered the runner. Next task: TASK-195.
+
+### - [x] TASK-195 — Audit Vectors and Traceability for Language Neutrality
 
 **Depends on:** TASK-194.
 
@@ -798,7 +803,13 @@ TESTABLE` row.
 **Acceptance:** Zero orphan vectors, invalid requirement references, partial or
 uncovered directly testable mandatory requirements, and blocking spec gaps.
 
-### - [ ] TASK-196 — Audit the Runner and Adapter Contract Boundary
+**Completion:** COMPLETE. Recorded in the
+[Draft 0.4 Conformance and Implementer Documentation Audit](../../conformance/draft-0.4-audit.md).
+Finding `D04-CONF-195-001` is ACCEPTED. The manifest has 244 unique vectors and
+traceability has zero partial, uncovered, deferred, or blocking specification-gap
+rows. Next task: TASK-196.
+
+### - [x] TASK-196 — Audit the Runner and Adapter Contract Boundary
 
 **Depends on:** TASK-195.
 
@@ -815,7 +826,13 @@ core or conformance docs.
 unsupported behavior cannot be reported as passing; Python and Java adapters may
 use different internal APIs.
 
-### - [ ] TASK-197 — Publish the Language-Neutral Implementation Guide
+**Completion:** COMPLETE. Recorded in the
+[Draft 0.4 Conformance and Implementer Documentation Audit](../../conformance/draft-0.4-audit.md).
+Finding `D04-CONF-196-001` is ACCEPTED. Runner behavior remains domain-neutral;
+adapter translation and normalized-result mapping remain adapter responsibilities.
+Next task: TASK-197.
+
+### - [x] TASK-197 — Publish the Language-Neutral Implementation Guide
 
 **Depends on:** TASK-196.
 
@@ -831,7 +848,12 @@ and how to report a specification gap.
 as a second specification; examples for Python and Java are explicitly
 non-normative unless backed by a normative serialization.
 
-### - [ ] TASK-198 — Publish the Conformance Adapter Onboarding Guide
+**Completion:** COMPLETE. Published
+[Language-Neutral Implementation Guide](../implementation-guide.md). Finding
+`D04-CONF-197-001` is ACCEPTED. The guide links to authoritative rules and marks
+Python and Java API sketches as non-normative. Next task: TASK-198.
+
+### - [x] TASK-198 — Publish the Conformance Adapter Onboarding Guide
 
 **Depends on:** TASK-197.
 
@@ -845,6 +867,19 @@ and evidence needed before claiming conformance.
 
 **Acceptance:** A Python or Java contributor can identify every integration step
 without treating the TypeScript adapter as normative architecture.
+
+**Completion:** COMPLETE. Milestone E is recorded in the
+[Draft 0.4 Conformance and Implementer Documentation Audit](../../conformance/draft-0.4-audit.md),
+published through the [Language-Neutral Implementation Guide](../implementation-guide.md)
+and [Conformance Adapter Onboarding Guide](../conformance-adapter-onboarding.md),
+and summarized in the [Draft 0.4 release note](../releases/draft-0.4.md).
+Findings were ACCEPTED only; zero conformance or implementer-documentation
+blockers were found. No normative financial behavior, manifest format,
+vector-file format, conformance vectors, runner behavior, adapter behavior,
+TypeScript behavior, Agentic descriptors, portable error codes, or Python/Java
+implementation/conformance claims changed. Verification: `npm run docs:check`,
+`npm run build`, `npm run typecheck`, `npm test`, full TypeScript conformance,
+`npm run license:check`, and `git diff --check` passed. Next task: TASK-199.
 
 ### Milestone F — Alignment and Draft 0.5 Handoff
 
@@ -1009,11 +1044,11 @@ is hidden by a deferral or by the TypeScript reference behavior.
 ## 12. Next Task
 
 ```text
-NEXT CODEX TASK: TASK-194 — Audit Conformance Schema and Manifest Portability
+NEXT CODEX TASK: TASK-199 — Align the Agentic Contract with the Stabilized Baseline
 ```
 
-TASK-194 begins Milestone E. It must use the completed Milestone A authority
+TASK-199 begins Milestone F. It must use the completed Milestone A authority
 records, Milestone B CoreDoc alignment record, Milestone C domain specification
-stabilization record, and Milestone D portability contract before auditing the
-conformance schema, manifest, vectors, runner, adapter boundary, and implementer
-documentation.
+stabilization record, Milestone D portability contract, and Milestone E
+conformance/implementer documentation before aligning the Agentic Contract,
+repository documentation, Draft 0.5 handoff, and TypeScript reference oracle.
