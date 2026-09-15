@@ -154,8 +154,8 @@ not choose the behavior that happens to match TypeScript.
 Recommended status block:
 
 ```text
-NEXT TASK: TASK-203
-LAST COMPLETED: TASK-202 (Milestone F — Alignment and Draft 0.5 Handoff)
+NEXT TASK: NONE
+LAST COMPLETED: TASK-206 (Milestone G — Draft 0.4 Closure)
 BLOCKED ON: NONE
 ```
 
@@ -178,7 +178,7 @@ Completion:
 - [x] Cross-language portability contract: TASK-186–TASK-193
 - [x] Conformance and implementer documentation: TASK-194–TASK-198
 - [x] Alignment and Draft 0.5 handoff: TASK-199–TASK-202
-- [ ] Draft 0.4 closure: TASK-203–TASK-206
+- [x] Draft 0.4 closure: TASK-203–TASK-206
 
 ## 9. Dependency Overview
 
@@ -984,7 +984,7 @@ as waiving a specification finding. Next task: TASK-203.
 
 ### Milestone G — Draft 0.4 Closure
 
-### - [ ] TASK-203 — Close Final Requirement, Vector, Error, and Operation Inventories
+### - [x] TASK-203 — Close Final Requirement, Vector, Error, and Operation Inventories
 
 **Depends on:** TASK-202.
 
@@ -999,7 +999,16 @@ and changes from the TASK-167 baseline.
 blocking spec gaps, invalid references, orphan portable codes, or unclassified
 operation labels.
 
-### - [ ] TASK-204 — Close Review Findings and Decisions
+**Completion:** COMPLETE. Recorded in the
+[FinKore Core Draft 0.4 Closure Record](../releases/draft-0.4-closure.md).
+The final inventory records 381 traceability requirements, 244 manifest-listed
+vectors, 217 mutation-sensitive vectors, 31 portable error codes, 20 canonical
+Agentic operations, and 15 conformance-local operation labels. There are zero
+partial, uncovered, deferred, or blocking specification-gap rows, zero orphan
+portable error catalog entries, and zero unclassified operation labels. Next
+task: TASK-204.
+
+### - [x] TASK-204 — Close Review Findings and Decisions
 
 **Depends on:** TASK-203.
 
@@ -1014,7 +1023,14 @@ required. Record release verification separately in the Draft 0.4 release note.
 issue, or portability blocker; deferred topics are explicit and do not affect
 the implementation-ready claim.
 
-### - [ ] TASK-205 — Record the Draft 0.4 Implementation Baseline
+**Completion:** COMPLETE. Recorded in the
+[FinKore Core Draft 0.4 Closure Record](../releases/draft-0.4-closure.md).
+The durable Draft 0.4 records contain 37 unique `D04-*` findings: 26 ACCEPTED,
+10 CLARIFICATION, and 1 EDITORIAL. No unresolved contradiction, normative
+behavior change, security/privacy issue, or portability blocker remains. No
+external review is claimed. Next task: TASK-205.
+
+### - [x] TASK-205 — Record the Draft 0.4 Implementation Baseline
 
 **Depends on:** TASK-204.
 
@@ -1031,7 +1047,16 @@ maintainer separately authorizes creating them.
 not imply permanent immutability, publication, or unimplemented-language
 conformance.
 
-### - [ ] TASK-206 — Close FinKore Core Draft 0.4
+**Completion:** COMPLETE. Recorded in the
+[FinKore Core Draft 0.4 Closure Record](../releases/draft-0.4-closure.md).
+The Draft 0.5 implementation baseline identifies source revision
+`b514f870712689014fbf0007eab18e6512fb2ccf`, FinKore Core Draft 0.4,
+conformance format `0.1`, vector schema `conformance/vector.schema.json`,
+package versions `0.1.0`, accepted decision records, verification results, and
+the bounded Python/Java handoff checklist. No immutable release tag was created,
+and no Python or Java conformance is claimed. Next task: TASK-206.
+
+### - [x] TASK-206 — Close FinKore Core Draft 0.4
 
 **Depends on:** TASK-205.
 
@@ -1054,37 +1079,41 @@ or Java implementation or conformance.
 green; documentation is current; external review status is factual; no blocker
 is hidden by a deferral or by the TypeScript reference behavior.
 
+**Completion:** COMPLETE. FinKore Core Draft 0.4 is closed in the
+[Draft 0.4 release note](../releases/draft-0.4.md) and
+[FinKore Core Draft 0.4 Closure Record](../releases/draft-0.4-closure.md).
+All TASK-167 through TASK-205 items are complete, mandatory checks are green,
+documentation is current, external review status remains factual, and no blocker
+is hidden by a deferral or by TypeScript reference behavior.
+
 ## 11. Final Draft 0.4 Closure Checklist
 
-- [ ] Scope remained foundation-only.
-- [ ] Authority and version terminology are explicit.
-- [ ] CoreDoc/spec traceability is complete in both directions.
-- [ ] Existing domain specifications have zero unresolved contradictions or
+- [x] Scope remained foundation-only.
+- [x] Authority and version terminology are explicit.
+- [x] CoreDoc/spec traceability is complete in both directions.
+- [x] Existing domain specifications have zero unresolved contradictions or
   blocking gaps.
-- [ ] Deferred Draft 0.3 topics were not silently implemented.
-- [ ] Portable value, decimal, time, order, identity, error, effect, and atomicity
+- [x] Deferred Draft 0.3 topics were not silently implemented.
+- [x] Portable value, decimal, time, order, identity, error, effect, and atomicity
   semantics are sufficient for Python and Java.
-- [ ] Python and Java desk reviews have zero unresolved portability blockers.
-- [ ] Conformance schema, vectors, runner, and adapter contract are
+- [x] Python and Java desk reviews have zero unresolved portability blockers.
+- [x] Conformance schema, vectors, runner, and adapter contract are
   language-neutral.
-- [ ] Directly testable mandatory requirements have vector coverage.
-- [ ] TypeScript remains green as a reference oracle, including critical mutation
+- [x] Directly testable mandatory requirements have vector coverage.
+- [x] TypeScript remains green as a reference oracle, including critical mutation
   review.
-- [ ] Agentic metadata adds no separate financial behavior.
-- [ ] Implementer and adapter onboarding guides are current.
-- [ ] The Draft 0.5 handoff is bounded and does not claim full conformance early.
-- [ ] Every material finding has scoped maintainer acceptance and exact evidence.
-- [ ] Final documentation distinguishes implemented, passing conformance,
+- [x] Agentic metadata adds no separate financial behavior.
+- [x] Implementer and adapter onboarding guides are current.
+- [x] The Draft 0.5 handoff is bounded and does not claim full conformance early.
+- [x] Every material finding has scoped maintainer acceptance and exact evidence.
+- [x] Final documentation distinguishes implemented, passing conformance,
   unsupported, not yet specified, and deferred behavior.
 
 ## 12. Next Task
 
 ```text
-NEXT CODEX TASK: TASK-199 — Align the Agentic Contract with the Stabilized Baseline
+NEXT CODEX TASK: NONE — FinKore Core Draft 0.4 is closed
 ```
 
-TASK-199 begins Milestone F. It must use the completed Milestone A authority
-records, Milestone B CoreDoc alignment record, Milestone C domain specification
-stabilization record, Milestone D portability contract, and Milestone E
-conformance/implementer documentation before aligning the Agentic Contract,
-repository documentation, Draft 0.5 handoff, and TypeScript reference oracle.
+Draft 0.4 closure is complete. Draft 0.5 Python and Java implementation work may
+begin from the bounded handoff checklist after maintainers open that scope.

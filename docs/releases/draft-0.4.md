@@ -1,18 +1,20 @@
 # FinKore Core Draft 0.4 Release Notes
 
-**Status:** UNRELEASED
+**Status:** CLOSED
 
-## Planned purpose
+## Purpose
 
-Draft 0.4 is a foundation-stabilization release. It will finalize and align the
+Draft 0.4 is a foundation-stabilization release. It finalizes and aligns the
 existing specifications, CoreDoc, conformance contract, Agentic Contract, and
 implementation documentation so that Draft 0.5 can add Python and Java
 implementations against one language-neutral behavioral baseline.
 
-The active work is tracked in the
+The closure record is
+[FinKore Core Draft 0.4 Closure Record](draft-0.4-closure.md). The completed
+work plan is the
 [Draft 0.4 Specification Foundation Plan](../plans/draft-0.4-foundation-task-list.md).
 
-## Planned scope
+## Scope
 
 - Resolve authority and version terminology, including correction of the
   pre-Draft-0.4 CoreDoc `v0.5` label to Draft 0.4.
@@ -271,6 +273,23 @@ Results:
   behavior, portable error codes, or normative financial behavior changed.
 - No external review is claimed.
 
+## Closure
+
+Draft 0.4 is closed. See the
+[FinKore Core Draft 0.4 Closure Record](draft-0.4-closure.md) for the final
+requirement, vector, error, operation, finding, baseline, deferred-topic, and
+verification inventories.
+
+```text
+FINKORE CORE DRAFT 0.4 COMPLETE
+
+The existing Money, Workflow, Audit, Approvals, and Entities specification
+baseline is aligned with CoreDoc, traceable to language-neutral conformance,
+documented for independent implementation, and ready to begin bounded Python
+and Java implementation work in Draft 0.5. This statement does not claim Python
+or Java implementation or conformance.
+```
+
 ## Verification
 
 Baseline verification for Milestone A:
@@ -371,9 +390,24 @@ and does not affect vector validation, dispatch, comparison, pass/fail status,
 or normalized result behavior. Zero critical financial or runner mutants are
 accepted as surviving.
 
+Additional verification for Milestone G:
+
+| Check | Command | Result |
+| --- | --- | --- |
+| Documentation links | `npm run docs:check` | PASS: 269 CoreDoc specification references checked; Markdown links resolve |
+| Workspace build | `npm run build` | PASS |
+| Strict TypeScript | `npm run typecheck` | PASS |
+| Unit tests | `npm test` | PASS: runner 110/110, TypeScript core 371/371, TypeScript conformance adapter 15/15 |
+| Full conformance | `node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json` | PASS: 244/244 vectors, 217/217 mutation-sensitive vectors |
+| Runner coverage | `npm run test:coverage -w @finkore/conformance-runner` | PASS: 98.31% statements, 95.29% branches, 100% functions, 98.75% lines |
+| TypeScript core coverage | `npm run test:coverage -w @finkore/typescript` | PASS: 99.09% statements, 98.69% branches, 100% functions, 99.49% lines |
+| TypeScript core mutation | `npm run test:mutation -w @finkore/typescript` | PASS: 98.28% total, 98.40% covered, 3129 killed, 16 timeout, 51 survived, 4 no coverage, 0 errors |
+| Runner mutation | `npm run test:mutation -w @finkore/conformance-runner` | PASS: 99.73% total and covered, 367 killed, 1 survived, 0 no coverage, 0 errors |
+| License metadata | `npm run license:check` | PASS |
+| Whitespace | `git diff --check` | PASS |
+
 ## Release status rule
 
-This document describes planned work while its status is `UNRELEASED`. Items must
-not be described as delivered until their specification, conformance,
-implementation-alignment, documentation, and review gates have passed. Draft 0.4
-closure does not itself claim Python or Java implementation or conformance.
+This document describes the closed Draft 0.4 foundation-stabilization baseline.
+Draft 0.4 closure does not itself claim Python or Java implementation or
+conformance.

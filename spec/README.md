@@ -2,7 +2,7 @@
 
 ## Status
 
-**Draft.** FinKore Core Draft 0.4 is the active unreleased
+**Draft.** FinKore Core Draft 0.4 is the closed
 foundation-stabilization baseline. It aligns authority, version terminology, and
 implementation-readiness evidence for the closed Draft 0.3 behavioral scope:
 Draft 0.1 Money, Workflow, Audit, Approvals, and Entities; selected Draft 0.2

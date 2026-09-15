@@ -26,8 +26,8 @@ Future Python and Java work starts from these Draft 0.4 artifacts:
 - [Draft 0.4 Agentic Alignment Record](../agentic/draft-0.4-alignment.md)
 
 Before implementation begins, the contributor should confirm the working tree
-still reports Draft 0.4 as the active unreleased stabilization baseline and
-does not claim Python or Java conformance.
+reports Draft 0.4 as the closed stabilization baseline and does not claim Python
+or Java conformance.
 
 ## Shared Prerequisites
 
