@@ -5,11 +5,12 @@ import { fileURLToPath } from 'node:url'
 
 const adapterDirectory = dirname(fileURLToPath(import.meta.url))
 const repositoryRoot = resolve(adapterDirectory, '../../../..')
-const defaultJavaPath = resolve(repositoryRoot, '.tools/bin/java')
+const defaultJavaPath = process.env.FINKORE_JAVA_PATH ?? resolve(repositoryRoot, '.tools/bin/java')
 const defaultClasspath = [
   resolve(repositoryRoot, 'implementations/java/target/classes'),
 ].join(delimiter)
-const defaultBridgeMain = 'org.finkore.conformance.Bridge'
+const defaultClasspathOverride = process.env.FINKORE_JAVA_CLASSPATH
+const defaultBridgeMain = process.env.FINKORE_JAVA_BRIDGE_MAIN ?? 'org.finkore.conformance.Bridge'
 
 function parseJson(text, diagnostic) {
   try {
@@ -40,7 +41,7 @@ function runBridge(javaPath, classpath, bridgeMain, request, timeoutMs) {
 
 export function createJavaConformanceAdapter(options = {}) {
   const javaPath = options.javaPath ?? defaultJavaPath
-  const classpath = options.classpath ?? defaultClasspath
+  const classpath = options.classpath ?? defaultClasspathOverride ?? defaultClasspath
   const bridgeMain = options.bridgeMain ?? defaultBridgeMain
   const timeoutMs = options.timeoutMs ?? 5_000
   let supportedOperations

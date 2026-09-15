@@ -26,9 +26,12 @@ npm run python:compile
 npm run python:unit
 npm run python:coverage:setup
 npm run python:coverage
+npm run python:mutation:critical
 npm run conformance:python
 ```
 
 The packaged Python coverage gate runs unit tests and the complete conformance
 manifest through coverage. It currently enforces at least 85% line coverage
-across `finkore` source. Mutation tooling is not yet packaged for this module.
+across `finkore` source. The critical-mutant probe mutates temporary copies of
+Money, Workflow, Audit, Approvals, and Entities and requires the real
+conformance runner to kill every probe.

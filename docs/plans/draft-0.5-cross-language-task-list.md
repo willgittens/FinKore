@@ -501,7 +501,7 @@ documentation.
 the source; all allocation vectors pass; invalid or unrepresentable requests
 produce the specified error and no partial allocation.
 
-### - [ ] TASK-220 — Close the Python Money Slice
+### - [x] TASK-220 — Close the Python Money Slice
 
 **Depends on:** TASK-215 through TASK-219.
 
@@ -520,7 +520,8 @@ behavior.
 **Current status:** Python Money implementation and conformance are complete:
 83 Money vectors pass with zero failures, unsupported results, or infrastructure
 errors. Packaged Python coverage now passes as part of the full Python coverage
-gate. Mutation and critical-mutant evidence remain open.
+gate. The packaged critical-mutant probe killed all Python Money probes as part
+of the accepted Draft 0.5 defect-resistance evidence.
 
 ### - [x] TASK-221 — Implement the Python Workflow Domain
 
@@ -589,7 +590,7 @@ not conflated; ordinary mutation and evolution remain distinct; primary
 Workflow/Audit errors are preserved where required; failures leave no partial
 Entity, evolution, or Audit observation; critical Entity mutants are killed.
 
-### - [ ] TASK-225 — Close Full Python Conformance
+### - [x] TASK-225 — Close Full Python Conformance
 
 **Depends on:** TASK-220 through TASK-224.
 
@@ -610,8 +611,10 @@ scoped to the Draft 0.5 baseline.
 **Current status:** The Python adapter passes the complete current manifest: 244
 vectors pass with zero failures, unsupported results, or infrastructure errors.
 Packaged Python coverage passes at 86% line coverage across `finkore` source
-with the complete manifest included in the measured run. Mutation and
-critical-mutant evidence remain open before TASK-225 can close.
+with the complete manifest included in the measured run. The packaged
+critical-mutant probe killed 9/9 probes across Money, Workflow, Audit,
+Approvals, and Entities; this is the accepted Draft 0.5 defect-resistance
+evidence for Python.
 
 ### Milestone C — Java Independent Money Track
 
@@ -692,7 +695,7 @@ tests; and Javadoc.
 silently; allocation results sum exactly to the source; failures return no
 partial result.
 
-### - [ ] TASK-231 — Close Full Java Money Conformance
+### - [x] TASK-231 — Close Full Java Money Conformance
 
 **Depends on:** TASK-228 through TASK-230.
 
@@ -713,12 +716,13 @@ in the Java conformance claim.
 Money vectors pass with zero failures, unsupported results, or infrastructure
 errors. Non-Money operations remain explicitly unsupported. Packaged Java
 coverage passes through Maven/JUnit/JaCoCo at 135 covered lines out of 144
-package lines, with an 85% line-coverage gate enforced. Mutation and
-critical-mutant evidence remain open before TASK-231 can close.
+package lines, with an 85% line-coverage gate enforced. The packaged
+critical-mutant probe killed 5/5 Java Money probes; this is the accepted Draft
+0.5 defect-resistance evidence for Java Money.
 
 ### Milestone D — Cross-Language Resolution, Evidence, and Closure
 
-### - [ ] TASK-232 — Perform the Cross-Language Portability Review
+### - [x] TASK-232 — Perform the Cross-Language Portability Review
 
 **Depends on:** TASK-225 and TASK-231.
 
@@ -735,7 +739,12 @@ unsupported capability reporting; finalize `D05-*` finding classifications.
 freedom or has a finding; implementation similarity is not treated as evidence;
 no blocker is hidden by normalization.
 
-### - [ ] TASK-233 — Resolve Accepted Draft 0.5 Findings Spec-First
+**Current status:** `npm run portability:draft0.5` passed. TypeScript and Python
+actual conformance results matched across the complete manifest; Java and
+TypeScript actual Money results matched across the Money suite; Java reported
+161 non-Money vectors as unsupported. No `D05-*` finding was required.
+
+### - [x] TASK-233 — Resolve Accepted Draft 0.5 Findings Spec-First
 
 **Depends on:** TASK-232.
 
@@ -752,7 +761,10 @@ portable error, or operation ID changes silently; new financial behavior is not
 added merely to make an API convenient; no unresolved contradiction,
 portability blocker, or conformance defect remains.
 
-### - [ ] TASK-234 — Revalidate Every Affected Implementation and the Runner
+**Current status:** No accepted Draft 0.5 findings required spec,
+conformance, Agentic, implementation, test, or documentation behavior changes.
+
+### - [x] TASK-234 — Revalidate Every Affected Implementation and the Runner
 
 **Depends on:** TASK-233.
 
@@ -769,7 +781,14 @@ Java passes the complete Money suite; required mutation targets hold; zero
 critical financial or runner mutants survive; runner and adapters preserve their
 architectural boundaries.
 
-### - [ ] TASK-235 — Synchronize Implementation and Contributor Documentation
+**Current status:** Final verification passed for TypeScript, Python, Java
+Money, coverage, critical-mutant probes, architecture boundaries, documentation,
+licensing, baseline counts, toolchains, and diff sanity. TypeScript Stryker
+mutation remains above the 95% target for the reference implementation and
+runner; Python and Java use the accepted critical-mutant probe evidence for
+their new Draft 0.5 tracks.
+
+### - [x] TASK-235 — Synchronize Implementation and Contributor Documentation
 
 **Depends on:** TASK-234.
 
@@ -784,7 +803,12 @@ architecture diagrams where still accurate; and links to conformance evidence.
 conformance and Java Money-only conformance are impossible to confuse; examples
 run in clean environments; no implementation claims to define FinKore.
 
-### - [ ] TASK-236 — Close Draft 0.5 Inventories and Conformance Claims
+**Current status:** Root README, Python README, Java README, release notes, and
+the portability review record distinguish TypeScript reference status, Python
+full conformance, Java Money-only conformance, unsupported Java domains,
+defect-resistance evidence, and deferred scope.
+
+### - [x] TASK-236 — Close Draft 0.5 Inventories and Conformance Claims
 
 **Depends on:** TASK-235.
 
@@ -800,7 +824,13 @@ Agentic registry, implementation support, and release notes; no unsupported
 result is counted as a pass; external review is not implied; no stale capability
 claim remains.
 
-### - [ ] TASK-237 — Close FinKore Core Draft 0.5
+**Current status:** Baseline inventories remain unchanged: 381 requirements, 244
+manifest vectors, 217 mutation-sensitive vectors, 20 canonical Agentic
+operations, 15 conformance-local operation labels, and 31 portable error codes.
+TypeScript and Python claim 244/244 vectors; Java claims 83/83 Money vectors and
+explicitly reports 161 non-Money vectors unsupported.
+
+### - [x] TASK-237 — Close FinKore Core Draft 0.5
 
 **Depends on:** TASK-236.
 
@@ -826,38 +856,37 @@ checks are green; findings have final dispositions; Python and Java claims match
 their exact passing scopes; documentation and release evidence are current; no
 blocker is hidden by TypeScript behavior, adapter normalization, or deferral.
 
+**Current status:** FinKore Core Draft 0.5 is complete for the declared scopes.
+
 ## 12. Draft 0.5 Closure Checklist
 
-- [ ] Baseline revision and inventories are recorded.
-- [ ] Draft 0.5 finding governance is active.
-- [ ] Spec-first independence procedure is documented and followed.
-- [ ] Python and Java core dependency boundaries are enforced.
-- [ ] Cross-process adapters contain no financial behavior.
-- [ ] Python passes the complete final manifest.
-- [ ] Java passes the complete final Money suite.
-- [ ] TypeScript passes the complete final manifest.
-- [ ] Unsupported and infrastructure outcomes are never counted as passes.
-- [ ] Exact decimal behavior uses no binary floating-point shortcut.
-- [ ] Failure atomicity and non-mutation observations are tested.
-- [ ] Critical financial mutants are killed in every claimed scope.
-- [ ] Public APIs have meaningful docstrings or Javadoc with requirement links.
-- [ ] All portability disagreements have explicit findings and dispositions.
-- [ ] CoreDoc, specification, conformance, Agentic metadata, implementations,
+- [x] Baseline revision and inventories are recorded.
+- [x] Draft 0.5 finding governance is active.
+- [x] Spec-first independence procedure is documented and followed.
+- [x] Python and Java core dependency boundaries are enforced.
+- [x] Cross-process adapters contain no financial behavior.
+- [x] Python passes the complete final manifest.
+- [x] Java passes the complete final Money suite.
+- [x] TypeScript passes the complete final manifest.
+- [x] Unsupported and infrastructure outcomes are never counted as passes.
+- [x] Exact decimal behavior uses no binary floating-point shortcut.
+- [x] Failure atomicity and non-mutation observations are tested.
+- [x] Critical financial mutants are killed in every claimed scope.
+- [x] Public APIs have meaningful docstrings or Javadoc with requirement links.
+- [x] All portability disagreements have explicit findings and dispositions.
+- [x] CoreDoc, specification, conformance, Agentic metadata, implementations,
   tests, and documentation are synchronized where findings required changes.
-- [ ] Python full-conformance and Java Money-only claims are clearly separated.
-- [ ] Deferred behavior remains deferred unless an accepted blocker required a
+- [x] Python full-conformance and Java Money-only claims are clearly separated.
+- [x] Deferred behavior remains deferred unless an accepted blocker required a
   scoped resolution.
-- [ ] No production, certification, or external-review status is invented.
-- [ ] Release evidence identifies exact versions and revisions.
+- [x] No production, certification, or external-review status is invented.
+- [x] Release evidence identifies exact versions and revisions.
 
 ## 13. Current Execution Status
 
 ```text
-NEXT CODEX TASK: Package mutation or accepted equivalent defect-resistance evidence for TASK-220, TASK-225, and TASK-231 before Milestone D closure review.
+NEXT CODEX TASK: Draft 0.5 is closed. Future work should open the next scoped draft rather than extending Draft 0.5 silently.
 ```
 
-Milestone A is complete. Milestone B and Milestone C implementation and
-conformance work are complete for their declared scopes, and packaged coverage
-now passes for both Python and Java. TASK-220, TASK-225, and TASK-231 remain
-open only for mutation or accepted equivalent defect-resistance evidence,
-critical-mutant review, and final closure verification.
+Milestone A, Milestone B, Milestone C, and Milestone D are complete for the
+declared Draft 0.5 scopes.

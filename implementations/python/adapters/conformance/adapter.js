@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 
 const adapterDirectory = dirname(fileURLToPath(import.meta.url))
 const repositoryRoot = resolve(adapterDirectory, '../../../..')
-const defaultBridgePath = resolve(adapterDirectory, 'bridge.py')
+const defaultBridgePath = process.env.FINKORE_PYTHON_BRIDGE_PATH ?? resolve(adapterDirectory, 'bridge.py')
 const defaultPythonPath = process.env.FINKORE_PYTHON_PATH ?? resolve(repositoryRoot, '.tools/bin/python3.12')
 
 function bridgeArgs(bridgePath, extraArgs = []) {

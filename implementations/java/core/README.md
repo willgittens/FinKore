@@ -19,9 +19,11 @@ Run the current local checks from the repository root:
 npm run java:compile
 npm run java:test
 npm run java:coverage
+npm run java:mutation:critical
 npm run conformance:java:money
 ```
 
 The packaged Java coverage gate uses Maven, JUnit Jupiter, and JaCoCo. It
 currently enforces at least 85% line coverage for the Java core package.
-Mutation tooling is not yet packaged for this module.
+The critical-mutant probe mutates temporary Java Money implementations and
+requires the real Money conformance suite to kill every probe.
