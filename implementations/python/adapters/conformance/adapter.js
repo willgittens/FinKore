@@ -6,7 +6,15 @@ import { fileURLToPath } from 'node:url'
 const adapterDirectory = dirname(fileURLToPath(import.meta.url))
 const repositoryRoot = resolve(adapterDirectory, '../../../..')
 const defaultBridgePath = resolve(adapterDirectory, 'bridge.py')
-const defaultPythonPath = resolve(repositoryRoot, '.tools/bin/python3.12')
+const defaultPythonPath = process.env.FINKORE_PYTHON_PATH ?? resolve(repositoryRoot, '.tools/bin/python3.12')
+
+function bridgeArgs(bridgePath, extraArgs = []) {
+  const coverageRcfile = process.env.FINKORE_PYTHON_COVERAGE_RCFILE
+  if (coverageRcfile !== undefined && coverageRcfile.length > 0) {
+    return ['-m', 'coverage', 'run', '--parallel-mode', '--rcfile', coverageRcfile, bridgePath, ...extraArgs]
+  }
+  return [bridgePath, ...extraArgs]
+}
 
 function parseJson(text, diagnostic) {
   try {
@@ -17,7 +25,7 @@ function parseJson(text, diagnostic) {
 }
 
 function runBridge(pythonPath, bridgePath, request, timeoutMs) {
-  const child = spawnSync(pythonPath, [bridgePath], {
+  const child = spawnSync(pythonPath, bridgeArgs(bridgePath), {
     input: JSON.stringify(request),
     encoding: 'utf8',
     timeout: timeoutMs,
@@ -39,7 +47,7 @@ export function createPythonConformanceAdapter(options = {}) {
 
   function operations() {
     if (supportedOperations !== undefined) return supportedOperations
-    const child = spawnSync(pythonPath, [bridgePath, '--operations'], {
+    const child = spawnSync(pythonPath, bridgeArgs(bridgePath, ['--operations']), {
       encoding: 'utf8',
       timeout: timeoutMs,
       cwd: repositoryRoot,

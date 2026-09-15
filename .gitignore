@@ -3,7 +3,10 @@ node_modules
 .npm-cache
 dist/
 coverage/
+.coverage*
+*.egg-info/
 reports/
 .stryker-tmp/
+target/
 __pycache__/
 *.pyc

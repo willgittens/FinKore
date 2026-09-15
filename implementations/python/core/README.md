@@ -24,8 +24,11 @@ Run the current local checks from the repository root:
 ```bash
 npm run python:compile
 npm run python:unit
+npm run python:coverage:setup
+npm run python:coverage
 npm run conformance:python
 ```
 
-Coverage and mutation tooling for the Python track are not yet packaged in this
-module.
+The packaged Python coverage gate runs unit tests and the complete conformance
+manifest through coverage. It currently enforces at least 85% line coverage
+across `finkore` source. Mutation tooling is not yet packaged for this module.

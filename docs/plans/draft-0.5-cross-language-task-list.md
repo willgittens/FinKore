@@ -519,7 +519,8 @@ behavior.
 
 **Current status:** Python Money implementation and conformance are complete:
 83 Money vectors pass with zero failures, unsupported results, or infrastructure
-errors. Packaged Python coverage and mutation evidence remain open.
+errors. Packaged Python coverage now passes as part of the full Python coverage
+gate. Mutation and critical-mutant evidence remain open.
 
 ### - [x] TASK-221 — Implement the Python Workflow Domain
 
@@ -608,12 +609,13 @@ scoped to the Draft 0.5 baseline.
 
 **Current status:** The Python adapter passes the complete current manifest: 244
 vectors pass with zero failures, unsupported results, or infrastructure errors.
-Packaged coverage, mutation, and critical-mutant evidence remain open before
-TASK-225 can close.
+Packaged Python coverage passes at 86% line coverage across `finkore` source
+with the complete manifest included in the measured run. Mutation and
+critical-mutant evidence remain open before TASK-225 can close.
 
 ### Milestone C — Java Independent Money Track
 
-### - [ ] TASK-226 — Create the Java Core Skeleton and Portable Error Model
+### - [x] TASK-226 — Create the Java Core Skeleton and Portable Error Model
 
 **Depends on:** TASK-210 and TASK-212.
 
@@ -628,7 +630,7 @@ Javadoc conventions, and dependency-boundary tests.
 code; error types expose portable codes without making Java class names
 portable; build, static checks, and initial tests pass.
 
-### - [ ] TASK-227 — Create the Java Conformance Bridge and Unsupported Smoke Test
+### - [x] TASK-227 — Create the Java Conformance Bridge and Unsupported Smoke Test
 
 **Depends on:** TASK-211 and TASK-226.
 
@@ -643,7 +645,7 @@ crash, malformed output, timeout, and diagnostic handling.
 distinctions; no financial behavior exists in adapter code; the protocol remains
 implementation infrastructure.
 
-### - [ ] TASK-228 — Implement Java Money Representation, Currency, and Serialization
+### - [x] TASK-228 — Implement Java Money Representation, Currency, and Serialization
 
 **Depends on:** TASK-226 and TASK-227.
 
@@ -660,7 +662,7 @@ tests.
 numeric equality; exponent/numeric/non-finite invalid inputs are rejected as
 specified; no value is parsed through `double`.
 
-### - [ ] TASK-229 — Implement Java Money Arithmetic, Comparison, and Rounding
+### - [x] TASK-229 — Implement Java Money Arithmetic, Comparison, and Rounding
 
 **Depends on:** TASK-228.
 
@@ -674,7 +676,7 @@ mismatch, division/rounding errors, non-mutation tests, and Javadoc.
 no implicit `MathContext` precision loss occurs; negative rounding boundaries
 match the FinKore definitions; operands remain unchanged.
 
-### - [ ] TASK-230 — Implement Java Money Rates and Allocation
+### - [x] TASK-230 — Implement Java Money Rates and Allocation
 
 **Depends on:** TASK-229.
 
@@ -706,6 +708,13 @@ evidence revision.
 unsupported results, or infrastructure errors; zero critical Money mutants
 survive; non-Money operations remain explicitly unsupported and are not included
 in the Java conformance claim.
+
+**Current status:** Java Money implementation and conformance are complete: 83
+Money vectors pass with zero failures, unsupported results, or infrastructure
+errors. Non-Money operations remain explicitly unsupported. Packaged Java
+coverage passes through Maven/JUnit/JaCoCo at 135 covered lines out of 144
+package lines, with an 85% line-coverage gate enforced. Mutation and
+critical-mutant evidence remain open before TASK-231 can close.
 
 ### Milestone D — Cross-Language Resolution, Evidence, and Closure
 
@@ -841,12 +850,14 @@ blocker is hidden by TypeScript behavior, adapter normalization, or deferral.
 - [ ] No production, certification, or external-review status is invented.
 - [ ] Release evidence identifies exact versions and revisions.
 
-## 13. First Execution Task
+## 13. Current Execution Status
 
 ```text
-NEXT CODEX TASK: TASK-213 — Create the Python Core skeleton and portable error model
+NEXT CODEX TASK: Package mutation or accepted equivalent defect-resistance evidence for TASK-220, TASK-225, and TASK-231 before Milestone D closure review.
 ```
 
-Milestone A is complete. Python full-track implementation can now begin with
-TASK-213. Java Money-track implementation can proceed in parallel from TASK-226
-when maintainers choose to start that lane.
+Milestone A is complete. Milestone B and Milestone C implementation and
+conformance work are complete for their declared scopes, and packaged coverage
+now passes for both Python and Java. TASK-220, TASK-225, and TASK-231 remain
+open only for mutation or accepted equivalent defect-resistance evidence,
+critical-mutant review, and final closure verification.

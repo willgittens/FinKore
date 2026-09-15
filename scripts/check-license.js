@@ -34,6 +34,7 @@ const excludedDirectories = new Set([
   'dist',
   'node_modules',
   'reports',
+  'target',
 ])
 
 function repositoryFiles(directory = '.') {

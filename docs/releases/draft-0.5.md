@@ -4,10 +4,10 @@
 
 Draft 0.5 is open as the independent cross-language proof release.
 
-This release currently records Milestone A only: baseline, governance,
-toolchain, bridge-boundary, and CI planning. It does not claim Python
-implementation, Python conformance, Java implementation, Java conformance,
-production readiness, certification, external review, or a package release.
+This release currently records Milestone A infrastructure, the Python
+implementation track, and the Java Money implementation track. It does not yet
+claim Draft 0.5 closure, production readiness, certification, external review,
+or a package release.
 
 ## Target Scope
 
@@ -89,15 +89,29 @@ Required current checks:
 - license checks; and
 - clean-diff checks after generated outputs.
 
-Python and Java jobs are pre-implementation toolchain checks until TASK-213 and
-TASK-226 create the package skeletons. The Draft 0.5 CI workflow provisions the
-selected versions through `npm run tools:bootstrap:draft0.5`; local development
-uses the same `.tools` fallback when system toolchains are missing. These jobs
-must not be reported as conformance evidence.
+Current implementation evidence:
+
+- Python passes the complete current manifest: 244 vectors pass with zero
+  failures, unsupported results, or infrastructure errors.
+- Python packaged coverage passes at 86% line coverage across `finkore` source,
+  including the complete current manifest in the measured run.
+- Java passes the complete current Money suite: 83 vectors pass with zero
+  failures, unsupported results, or infrastructure errors.
+- Java packaged coverage passes through Maven/JUnit/JaCoCo with 135 covered
+  lines out of 144 package lines and an enforced 85% line-coverage gate.
+- Java non-Money operations remain explicitly unsupported and are outside the
+  Java Draft 0.5 claim.
+
+Python and Java closure still require mutation or accepted equivalent
+defect-resistance evidence, critical-mutant review, and final release
+verification before TASK-225 or TASK-231 can close.
+
+Local development provisions the selected versions through
+`npm run tools:bootstrap:draft0.5` when system toolchains are missing. The
+downloaded `.tools` artifacts are local build inputs, not committed source.
 
 ## Unsupported and Deferred Scope
 
-Java full-domain conformance is outside this release. Python and Java packages
-are not yet implemented at Milestone A completion. Draft 0.4 deferred topics
+Java full-domain conformance is outside this release. Draft 0.4 deferred topics
 remain deferred unless an accepted Draft 0.5 finding records a scoped
 resolution.
