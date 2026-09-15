@@ -243,6 +243,23 @@ Do not skip required tests merely because the machine environment does not alrea
 
 ---
 
+# Python and Java Toolchains
+
+Before running Python- or Java-based commands or tests, verify whether the required runtime is available on the machine environment.
+
+If the required Python or Java toolchain is not found in the machine environment:
+
+1. Look for repository-local toolchains under `/.tools`.
+2. If `/.tools` exists and contains the required toolchain, run all related commands and tests using the binaries under `/.tools/bin`.
+3. If `/.tools` does not exist, or the required toolchain cannot be found there, run `npm run tools:bootstrap:draft0.5` to download the Draft 0.5 Python and Java toolchains into `/.tools`.
+4. Run `npm run tools:check:draft0.5` before relying on the downloaded toolchain.
+
+Draft 0.5 currently requires CPython 3.12 as the Python CI floor, CPython 3.13 as the Python compatibility check, JDK 21 for Java work, and Maven 3.9.x for Java package tasks.
+
+Do not skip required Python or Java tests merely because the machine environment does not already provide those tools.
+
+---
+
 ## `adapters/conformance`
 
 Translates between:

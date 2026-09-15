@@ -14,6 +14,7 @@ and `/agentic` describes canonical operation semantics.
 | [Draft 0.2](draft-0.2.md) | Closed | Added selected Money, Entity Evolution, Audit Relationship, and Approval Validity behavior. |
 | [Draft 0.3](draft-0.3.md) | Closed | Added bounded Approval Composition, Workflow version/import/conflict behavior, and Entity revision/import behavior. |
 | [Draft 0.4](draft-0.4.md) | Closed | Stabilized specifications and documentation for Python and Java implementation work in Draft 0.5. |
+| [Draft 0.5](draft-0.5.md) | Open | Cross-language proof release; Milestone A records the baseline, governance, selected toolchains, bridge boundary, and CI matrix without claiming Python or Java conformance. |
 
 Draft 0.4 closure details are recorded in
 [FinKore Core Draft 0.4 Closure Record](draft-0.4-closure.md).

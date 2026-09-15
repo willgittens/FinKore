@@ -296,7 +296,7 @@ recorded as they are discovered rather than deferred until TASK-232.
 
 ### Milestone A — Baseline, Governance, and Shared Infrastructure
 
-### - [ ] TASK-207 — Open Draft 0.5 and Lock the Implementation Baseline
+### - [x] TASK-207 — Open Draft 0.5 and Lock the Implementation Baseline
 
 **Depends on:** FinKore Core Draft 0.4 closure.
 
@@ -314,7 +314,7 @@ tests, conformance suite, documentation checks, license checks, and diff checks.
 **Acceptance:** The baseline is reproducible, all existing checks are green, and
 the release note distinguishes a target from completed work.
 
-### - [ ] TASK-208 — Establish the Draft 0.5 Finding Register
+### - [x] TASK-208 — Establish the Draft 0.5 Finding Register
 
 **Depends on:** TASK-207.
 
@@ -328,7 +328,7 @@ resolution, evidence, and maintainer-acceptance fields.
 **Acceptance:** Every blocking class has an explicit release effect, and the
 register cannot treat TypeScript behavior as dispositive evidence.
 
-### - [ ] TASK-209 — Record the Spec-First Independence Procedure
+### - [x] TASK-209 — Record the Spec-First Independence Procedure
 
 **Depends on:** TASK-207.
 
@@ -343,7 +343,7 @@ test order, ambiguity escalation, and when TypeScript comparison is allowed.
 domain semantics, and the procedure does not make an unverifiable legal
 clean-room claim.
 
-### - [ ] TASK-210 — Select Python and Java Toolchains and Package Layouts
+### - [x] TASK-210 — Select Python and Java Toolchains and Package Layouts
 
 **Depends on:** TASK-208 and TASK-209.
 
@@ -359,7 +359,7 @@ final directory layout.
 required quality gates, avoid binary floating-point financial arithmetic, and do
 not impose framework or persistence dependencies on either core.
 
-### - [ ] TASK-211 — Design the Cross-Process Conformance Adapter Boundary
+### - [x] TASK-211 — Design the Cross-Process Conformance Adapter Boundary
 
 **Depends on:** TASK-210.
 
@@ -375,7 +375,7 @@ but no financial rules; crashes and malformed responses become infrastructure
 errors; unsupported remains distinct; and the bridge is documented as
 conformance infrastructure only.
 
-### - [ ] TASK-212 — Add the Draft 0.5 CI and Quality Matrix
+### - [x] TASK-212 — Add the Draft 0.5 CI and Quality Matrix
 
 **Depends on:** TASK-210 and TASK-211.
 
@@ -835,9 +835,9 @@ blocker is hidden by TypeScript behavior, adapter normalization, or deferral.
 ## 13. First Execution Task
 
 ```text
-NEXT CODEX TASK: TASK-207 — Open Draft 0.5 and lock the implementation baseline
+NEXT CODEX TASK: TASK-213 — Create the Python Core skeleton and portable error model
 ```
 
-Implementation must begin with TASK-207. Creating language package skeletons
-before the baseline, finding process, and independence rules are recorded would
-weaken the portability evidence Draft 0.5 is intended to produce.
+Milestone A is complete. Python full-track implementation can now begin with
+TASK-213. Java Money-track implementation can proceed in parallel from TASK-226
+when maintainers choose to start that lane.
