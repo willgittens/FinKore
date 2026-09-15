@@ -181,6 +181,36 @@ Results:
   changes were recorded.
 - No external review is claimed.
 
+## Cross-language portability contract
+
+Milestone D, Cross-language portability contract, is complete. The durable review
+record is [Draft 0.4 Cross-Language Portability Contract](../../spec/draft-0.4-portability-contract.md).
+
+Results:
+
+- Abstract values, normative serialization, conformance-only fixture shapes,
+  normalized results, and idiomatic production API choices are explicitly
+  separated for Money, rates, rounding, currencies, identifiers, states,
+  timestamps, collections, histories, errors, absence, redaction, operation
+  inputs, and observations.
+- Decimal and numeric portability was reviewed against Python `decimal` and Java
+  `BigDecimal`/integer implementation models. Every current Money vector has one
+  intended outcome in both languages when exact base-10 parsing, numeric
+  equality, explicit rounding, signed-zero normalization, and declared-order
+  allocation are preserved.
+- Structural portability was reviewed for omitted versus null, unknown members,
+  duplicate JSON members, map versus array order, stable declared order, Unicode
+  and ASCII constraints, case sensitivity, RFC 3339 offsets, instant comparison,
+  immutable observations, opaque identifiers, and deterministic diagnostics.
+- All 35 manifest-listed operation labels are inventoried: 20 canonical
+  `finkore.*` Agentic operations and 15 conformance-local fixture labels.
+- Python and Java desk reviews found zero unresolved portability blockers.
+- No conformance vectors, TypeScript behavior, portable error codes, Agentic
+  descriptors, or runner behavior changed.
+- No Python implementation, Java implementation, or Python/Java conformance is
+  claimed.
+- No external review is claimed.
+
 ## Verification
 
 Baseline verification for Milestone A:
@@ -217,6 +247,16 @@ Additional verification for Milestone C:
 | Check | Command | Result |
 | --- | --- | --- |
 | Domain specification links | `npm run docs:check` | PASS |
+| Strict TypeScript | `npm run typecheck` | PASS |
+| Unit tests | `npm test` | PASS |
+| License metadata | `npm run license:check` | PASS |
+| Whitespace | `git diff --check` | PASS |
+
+Additional verification for Milestone D:
+
+| Check | Command | Result |
+| --- | --- | --- |
+| Portability contract links | `npm run docs:check` | PASS |
 | Strict TypeScript | `npm run typecheck` | PASS |
 | Unit tests | `npm test` | PASS |
 | License metadata | `npm run license:check` | PASS |

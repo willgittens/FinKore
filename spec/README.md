@@ -55,6 +55,7 @@ The repository is organized around `spec/` and `conformance/` today. As implemen
 - [Conventions](conventions.md) defines the language and representation rules used throughout the specification.
 - [Glossary](glossary.md) defines shared domain terms.
 - [Draft 0.4 Domain Specification Stabilization Record](draft-0.4-stabilization.md) records the accepted Draft 0.4 review of shared conventions and domain specifications.
+- [Draft 0.4 Cross-Language Portability Contract](draft-0.4-portability-contract.md) records the accepted Draft 0.4 Python and Java portability review for the stabilized baseline.
 - [Money](money/README.md) defines monetary representation and behavior.
 - [Workflow](workflow/README.md) defines lifecycle states, transitions, and definition versions.
 - [Audit](audit/README.md) defines durable domain history.

@@ -154,8 +154,8 @@ not choose the behavior that happens to match TypeScript.
 Recommended status block:
 
 ```text
-NEXT TASK: TASK-186
-LAST COMPLETED: TASK-185 (Milestone C — Domain Specification Stabilization)
+NEXT TASK: TASK-194
+LAST COMPLETED: TASK-193 (Milestone D — Cross-Language Portability Contract)
 BLOCKED ON: NONE
 ```
 
@@ -175,7 +175,7 @@ Completion:
 - [x] Foundation and authority: TASK-167–TASK-171
 - [x] CoreDoc alignment: TASK-172–TASK-176
 - [x] Domain specification stabilization: TASK-177–TASK-185
-- [ ] Cross-language portability contract: TASK-186–TASK-193
+- [x] Cross-language portability contract: TASK-186–TASK-193
 - [ ] Conformance and implementer documentation: TASK-194–TASK-198
 - [ ] Alignment and Draft 0.5 handoff: TASK-199–TASK-202
 - [ ] Draft 0.4 closure: TASK-203–TASK-206
@@ -589,7 +589,7 @@ TASK-186.
 
 ### Milestone D — Cross-Language Portability Contract
 
-### - [ ] TASK-186 — Define the Abstract Value and Representation Boundary
+### - [x] TASK-186 — Define the Abstract Value and Representation Boundary
 
 **Depends on:** TASK-185.
 
@@ -605,7 +605,12 @@ errors, absence/redaction sentinels, operation inputs, and observations.
 normative serialization is identified where it truly exists; unspecified
 serialization remains unspecified rather than inferred.
 
-### - [ ] TASK-187 — Close Decimal and Numeric Portability Ambiguities
+**Completion:** COMPLETE. Recorded in the
+[Draft 0.4 Cross-Language Portability Contract](../../spec/draft-0.4-portability-contract.md).
+Finding `D04-PORT-186-001` is ACCEPTED. No normative behavior changed. Next task:
+TASK-187.
+
+### - [x] TASK-187 — Close Decimal and Numeric Portability Ambiguities
 
 **Depends on:** TASK-186.
 
@@ -621,7 +626,13 @@ unsupported capability handling.
 languages. If no portable outcome exists, record a blocker; do not silently add
 precision floors or overflow behavior deferred by Draft 0.3.
 
-### - [ ] TASK-188 — Close Structural, Time, Ordering, and Identity Portability Ambiguities
+**Completion:** COMPLETE. Recorded in the
+[Draft 0.4 Cross-Language Portability Contract](../../spec/draft-0.4-portability-contract.md).
+Finding `D04-PORT-187-001` is ACCEPTED. Every current Money vector has a
+deterministic Python and Java outcome under exact base-10 semantics; no
+precision floor or overflow rule was added. Next task: TASK-188.
+
+### - [x] TASK-188 — Close Structural, Time, Ordering, and Identity Portability Ambiguities
 
 **Depends on:** TASK-186.
 
@@ -637,7 +648,13 @@ and deterministic diagnostic details.
 **Acceptance:** Observable order and equality are specified; host locale,
 timezone, hash/map order, object identity, and wall clock cannot alter results.
 
-### - [ ] TASK-189 — Inventory Operations, Effects, Preconditions, and Atomicity
+**Completion:** COMPLETE. Recorded in the
+[Draft 0.4 Cross-Language Portability Contract](../../spec/draft-0.4-portability-contract.md).
+Finding `D04-PORT-188-001` is ACCEPTED. Host locale, timezone, hash/map order,
+object identity, and wall clock are not FinKore domain inputs. Next task:
+TASK-189.
+
+### - [x] TASK-189 — Inventory Operations, Effects, Preconditions, and Atomicity
 
 **Depends on:** TASK-187 and TASK-188.
 
@@ -652,7 +669,13 @@ whether the error list is exhaustive.
 **Acceptance:** Canonical IDs and fixture labels remain distinct; all rejected
 state-changing operations have an observable atomicity statement where required.
 
-### - [ ] TASK-190 — Conduct a Python Implementation-Readiness Desk Review
+**Completion:** COMPLETE. Recorded in the
+[Draft 0.4 Cross-Language Portability Contract](../../spec/draft-0.4-portability-contract.md).
+Finding `D04-PORT-189-001` is ACCEPTED. The manifest currently records 244
+vectors across 35 operation labels: 20 canonical `finkore.*` operations and 15
+conformance-local labels. Next task: TASK-190.
+
+### - [x] TASK-190 — Conduct a Python Implementation-Readiness Desk Review
 
 **Depends on:** TASK-189.
 
@@ -670,7 +693,13 @@ behavior but must not become a Python implementation.
 classified as a finding; the review does not depend on reading TypeScript source
 for semantics.
 
-### - [ ] TASK-191 — Conduct a Java Implementation-Readiness Desk Review
+**Completion:** COMPLETE. Recorded in the
+[Draft 0.4 Cross-Language Portability Contract](../../spec/draft-0.4-portability-contract.md).
+Finding `D04-PORT-190-001` is ACCEPTED. A Python implementation can preserve
+Draft 0.4 behavior without reading TypeScript source for financial semantics.
+Next task: TASK-191.
+
+### - [x] TASK-191 — Conduct a Java Implementation-Readiness Desk Review
 
 **Depends on:** TASK-189.
 
@@ -687,7 +716,13 @@ implementation.
 **Acceptance:** Every question is answered or classified; Java-specific defaults
 are not promoted into FinKore semantics.
 
-### - [ ] TASK-192 — Resolve Python and Java Portability Blockers
+**Completion:** COMPLETE. Recorded in the
+[Draft 0.4 Cross-Language Portability Contract](../../spec/draft-0.4-portability-contract.md).
+Finding `D04-PORT-191-001` is ACCEPTED. Java defaults, including
+scale-sensitive `BigDecimal.equals`, are not promoted into FinKore semantics.
+Next task: TASK-192.
+
+### - [x] TASK-192 — Resolve Python and Java Portability Blockers
 
 **Depends on:** TASK-190 and TASK-191.
 
@@ -702,7 +737,13 @@ for non-blocking enhancements.
 **Acceptance:** Both desk-review reports have zero unresolved blockers; no new
 feature is disguised as portability remediation.
 
-### - [ ] TASK-193 — Close the Cross-Language Portability Gate
+**Completion:** COMPLETE. Recorded in the
+[Draft 0.4 Cross-Language Portability Contract](../../spec/draft-0.4-portability-contract.md).
+Finding `D04-PORT-192-001` is ACCEPTED. No unresolved Python or Java portability
+blocker was found, so no spec, vector, TypeScript, mutation, JSDoc, README, or
+Agentic behavior change was required. Next task: TASK-193.
+
+### - [x] TASK-193 — Close the Cross-Language Portability Gate
 
 **Depends on:** TASK-192.
 
@@ -712,6 +753,16 @@ without language-specific semantic invention.
 **Acceptance:** Numeric and structural matrices are complete; all operations are
 walked through; zero unresolved portability blockers; deferred capability limits
 are explicit; no implementation/conformance claim is made for either language.
+
+**Completion:** COMPLETE. Milestone D is recorded in the
+[Draft 0.4 Cross-Language Portability Contract](../../spec/draft-0.4-portability-contract.md)
+and summarized in the [Draft 0.4 release note](../releases/draft-0.4.md).
+Findings were ACCEPTED only; zero unresolved portability blockers were found.
+No normative financial behavior, conformance vectors, TypeScript behavior,
+Agentic descriptors, portable error codes, runner behavior, or Python/Java
+implementation/conformance claims changed. Verification: `npm run docs:check`,
+`npm run typecheck`, `npm test`, `npm run license:check`, and `git diff --check`
+passed. Next task: TASK-194.
 
 ### Milestone E — Conformance and Implementer Documentation
 
@@ -958,10 +1009,11 @@ is hidden by a deferral or by the TypeScript reference behavior.
 ## 12. Next Task
 
 ```text
-NEXT CODEX TASK: TASK-186 — Define the Abstract Value and Representation Boundary
+NEXT CODEX TASK: TASK-194 — Audit Conformance Schema and Manifest Portability
 ```
 
-TASK-186 begins Milestone D. It must use the completed Milestone A authority
-records, Milestone B CoreDoc alignment record, and Milestone C domain
-specification stabilization record before defining cross-language portability
-boundaries.
+TASK-194 begins Milestone E. It must use the completed Milestone A authority
+records, Milestone B CoreDoc alignment record, Milestone C domain specification
+stabilization record, and Milestone D portability contract before auditing the
+conformance schema, manifest, vectors, runner, adapter boundary, and implementer
+documentation.
