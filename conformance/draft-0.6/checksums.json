@@ -273,7 +273,7 @@
     },
     {
       "path": "docs/plans/draft-0.6-portability-compatibility-task-list.md",
-      "sha256": "e45ca4115e63cbbc67bcd34deecaa7d03a7cb9464fd6c9f5dcaa8ebfd8a78567"
+      "sha256": "5d92c6ce8e8fe54e1b5cf99cd3d0e45dbc7cfbff1638e8a82bba18289198c65b"
     },
     {
       "path": "docs/plans/good-to-have.md",
@@ -309,11 +309,11 @@
     },
     {
       "path": "docs/releases/draft-0.6.md",
-      "sha256": "ea07172f3156d1a2b17e39fe59014f39f13629c9b5477b04197f051e07e500d8"
+      "sha256": "aa963e92c388e393ef3078538a091573d29b2fd0f9044604d255ee4bcd61ea76"
     },
     {
       "path": "docs/releases/README.md",
-      "sha256": "69acad0dc1e4d5201280bb816dcff01fc28402244a06ebb6a1ccedaee3bfa43e"
+      "sha256": "bf167596cfa34116a5dbf043a90587503879020528ee3f4e5acbda1f782c1a53"
     },
     {
       "path": "docs/research/draft-0.6-boundary-corpus.json",
@@ -785,7 +785,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "48fc6445d3ea13d5821c87fa074d26c4197dccd6fd185889156029aa68286b30"
+      "sha256": "00ff82dae6066c53ff5e162cad4a444c2a56e53f04c6e1e6267f23a72ec90fe0"
     },
     {
       "path": "runner/coverage/coverage-summary.json",

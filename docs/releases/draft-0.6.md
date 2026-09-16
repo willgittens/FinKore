@@ -2,11 +2,23 @@
 
 ## Status
 
-Draft 0.6 is in progress. Milestones A through D are complete, and Milestone E
-release hardening evidence is prepared. The immutable release tag has
-maintainer approval for creation from the verified release evidence, but this
-document does not make the final Draft 0.6 closure claim until the tag is
-created and verified.
+Draft 0.6 is closed. Milestones A through E are complete. The immutable release
+tag `core-draft-0.6` resolves to verified commit
+`f7c5a1857fad4f71e8cc7801cbbefde80c640bfb`. The tag annotation records the
+checksum manifest SHA-256.
+
+```text
+FINKORE CORE DRAFT 0.6 COMPLETE
+
+FinKore now publishes and mechanically validates the portability floor,
+compatibility and deprecation rules, conformance profiles, implementation
+capability declarations, and reproducible evidence for the existing Core scope.
+TypeScript and Python pass their declared full profile, and Java passes its
+declared Money profile, with matching outcomes inside the applicable portable
+floor. This statement does not claim full Java conformance, public package
+availability, production readiness, external certification, cross-domain
+composition proof, or behavior outside the named Draft 0.6 profiles.
+```
 
 ## Target Scope
 
@@ -273,7 +285,7 @@ verification remains pending.
 | Documentation references | PASS; 269 CoreDoc/spec references checked |
 | License validation | PASS |
 | Whitespace/diff sanity | PASS |
-| Immutable tag status | PENDING; `core-draft-0.6` not created because maintainer approval is required |
+| Immutable tag status | PASS; `core-draft-0.6` resolves to `f7c5a1857fad4f71e8cc7801cbbefde80c640bfb` |
 
 ## Unsupported and Deferred Scope
 
@@ -281,11 +293,10 @@ Java non-Money domains remain unsupported. Numeric and allocation capability
 floors are accepted, encoded in capability/profile metadata, and exercised by
 manifest-listed Money profile vectors. Compatibility taxonomy, deprecation,
 profiles, claims, capability declarations, and provenance are encoded as
-Milestone D metadata and evidence. Final clean-checkout release hardening and
-artifact checksums are prepared; immutable-tag closure awaits creation and
-verification of the approved tag.
+Milestone D metadata and evidence. Final clean-checkout release hardening,
+artifact checksums, and immutable-tag closure are complete.
 
-No Draft 0.6 immutable tag is claimed until `core-draft-0.6` is created and
-verified from the final committed revision. The checksum metadata file exists
-with `generated-for-immutable-tag` status and verifies release-relevant
-artifacts using tag-resolved source identity.
+The Draft 0.6 immutable tag `core-draft-0.6` has been created and verified from
+the final committed revision. The checksum metadata file exists with
+`generated-for-immutable-tag` status and verifies release-relevant artifacts
+using tag-resolved source identity.

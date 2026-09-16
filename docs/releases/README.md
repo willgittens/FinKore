@@ -15,7 +15,7 @@ and `/agentic` describes canonical operation semantics.
 | [Draft 0.3](draft-0.3.md) | Closed | Added bounded Approval Composition, Workflow version/import/conflict behavior, and Entity revision/import behavior. |
 | [Draft 0.4](draft-0.4.md) | Closed | Stabilized specifications and documentation for Python and Java implementation work in Draft 0.5. |
 | [Draft 0.5](draft-0.5.md) | Closed | Cross-language proof release; Python passes the complete manifest scope and Java passes the complete Money scope, with Java non-Money domains explicitly unsupported. |
-| [Draft 0.6](draft-0.6.md) | In progress | Portability and compatibility hardening; release evidence is prepared, and final closure is pending immutable tag approval. |
+| [Draft 0.6](draft-0.6.md) | Closed | Portability and compatibility hardening; release evidence is reproducible, and immutable tag `core-draft-0.6` resolves to verified commit `f7c5a1857fad4f71e8cc7801cbbefde80c640bfb`. |
 
 Draft 0.4 closure details are recorded in
 [FinKore Core Draft 0.4 Closure Record](draft-0.4-closure.md).

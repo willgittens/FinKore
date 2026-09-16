@@ -819,9 +819,9 @@ compatibility matrix, migration guidance, claim examples, unsupported/deferred
 scope, profile claim records, and checksum metadata are synchronized. `npm run
 checksums:generate:draft0.6` produces the deterministic checksum manifest and
 `npm run checksums:check:draft0.6` verifies it. The immutable tag command and
-annotation are prepared in the release notes but were not executed.
+annotation were prepared in the release notes and executed during TASK-255.
 
-### - [ ] TASK-255 — Close FinKore Core Draft 0.6
+### - [x] TASK-255 — Close FinKore Core Draft 0.6
 
 **Depends on:** TASK-254.
 
@@ -859,6 +859,10 @@ created and verified. If tag approval is unavailable, TASK-255 remains pending
 and the release record identifies that blocker without using the closure
 statement.
 
+**Current status:** Complete. The immutable `core-draft-0.6` tag resolves to
+`f7c5a1857fad4f71e8cc7801cbbefde80c640bfb`. The tag annotation records the
+checksum manifest SHA-256.
+
 ## 14. Draft 0.6 Closure Checklist
 
 - [x] Opening revision, versions, inventories, and toolchains are locked.
@@ -889,8 +893,8 @@ statement.
   documentation, READMEs, and release notes are synchronized.
 - [x] Release-relevant artifacts and checksums are reproducible from the current
   verified working tree.
-- [ ] Immutable release-tag status is factual and maintainer-approved.
-- [ ] No external review, certification, public-package, production-readiness,
+- [x] Immutable release-tag status is factual and maintainer-approved.
+- [x] No external review, certification, public-package, production-readiness,
   Draft 0.7 composition, or Draft 0.8 Agentic-manifest claim is invented.
 
 ## 15. Completion Review Questions
@@ -919,10 +923,9 @@ Any `yes` answer requiring synchronized work must be resolved before closure.
 ## 16. Current Execution Status
 
 ```text
-  NEXT CODEX TASK: TASK-255 — Close FinKore Core Draft 0.6 after immutable tag approval.
+  NEXT CODEX TASK: Draft 0.6 is closed. Choose the next planned draft or maintenance task.
 ```
 
-TASK-238 through TASK-254 are complete. TASK-255 remains pending because the
-immutable `core-draft-0.6` tag requires maintainer approval and has not been
-created. Draft 0.5 remains the current closed cross-language proof release
-until the Draft 0.6 closure gate is satisfied.
+TASK-238 through TASK-255 are complete. The immutable `core-draft-0.6` tag has
+been created and verified, so Draft 0.6 is the current closed portability and
+compatibility hardening release.
