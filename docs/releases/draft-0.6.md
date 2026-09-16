@@ -2,10 +2,9 @@
 
 ## Status
 
-Draft 0.6 is in progress. Milestone A is complete; Milestones B through E are
-pending. This document is an opening record and does not make a Draft 0.6
-conformance, compatibility, capability-floor, immutable-tag, or release-closure
-claim.
+Draft 0.6 is in progress. Milestones A and B are complete; Milestones C through
+E are pending. This document does not make a Draft 0.6 conformance,
+compatibility, immutable-tag, or release-closure claim.
 
 ## Target Scope
 
@@ -53,7 +52,7 @@ TypeScript adapter, Python core, and Java core remain independently versioned at
 | Finding | Classification | Status | Owner | Affected artifacts | Release or claim effect | Evidence | Resolution | Maintainer acceptance |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `D06-EDITORIAL-240-001` | `EDITORIAL` | RESOLVED | Documentation maintainers | Live CoreDoc/spec/conformance/onboarding/implementation navigation and status wording | None; no semantic or claim change | TASK-240 freshness inventory | Current documentation updated to distinguish closed Draft 0.5 implementation results from historical Draft 0.4 statements | Accepted with Milestone A |
-| `D06-PORT-241-001` | `PORTABILITY BLOCKER` | OPEN | Money maintainers | Python Money arithmetic/rounding, capability-floor decision, boundary corpus | Blocks any Python claim covering observed values, TASK-242 acceptance, and Draft 0.6 closure; does not alter the closed 244-vector claim | Five documented corpus differences in `docs/research/draft-0.6-boundary-evidence.md` | Pending TASK-242 decision and later spec-first remediation | Pending |
+| `D06-PORT-241-001` | `PORTABILITY BLOCKER` | RESOLVED | Money maintainers | Python Money arithmetic/rounding, capability-floor decision, boundary corpus | No longer blocks TASK-242 or the Draft 0.6 numeric floor; later profile/evidence tasks still must prove accepted claims | Five Milestone A corpus differences, now matching controls in `docs/research/draft-0.6-boundary-evidence.md` | Resolved by the accepted Milestone B portability capability contract and Python exact coefficient-and-scale Money arithmetic | Accepted with Milestone B |
 
 ### D06-PORT-241-001 analysis
 
@@ -62,10 +61,11 @@ TypeScript adapter, Python core, and Java core remain independently versioned at
 - **Observed revision:** opening source revision
   `67298ec6582574c05175ef335d220eb861bd0f8f` plus the Milestone A research
   corpus and runner recorded by this change.
-- **Observed behavior:** Python uses the ambient 28-digit decimal context for
-  large addition, subtraction, multiplication, and Rate results, producing
-  silently reduced values; scale-50 quantization escapes as
-  `decimal.InvalidOperation`. TypeScript and Java return matching exact results.
+- **Observed behavior before remediation:** Python used the ambient 28-digit
+  decimal context for large addition, subtraction, multiplication, and Rate
+  results, producing silently reduced values; scale-50 quantization escaped as
+  `decimal.InvalidOperation`. TypeScript and Java returned matching exact
+  results.
 - **Affected stable identifiers:** `SPEC-DECIMAL-001`,
   `MONEY-REPRESENTATION-002`, `MONEY-REPRESENTATION-006`,
   `MONEY-ARITHMETIC-004`, `MONEY-ARITHMETIC-007`,
@@ -75,13 +75,15 @@ TypeScript adapter, Python core, and Java core remain independently versioned at
   `finkore.money.add`, `finkore.money.subtract`, `finkore.money.multiply`,
   `finkore.money.applyrate`, and `finkore.money.round`. No portable error,
   conformance vector, profile, or format identifier is assigned by Milestone A.
-- **Alternatives reserved for TASK-242:** define and implement a portable floor;
-  use context-independent exact arithmetic inside Python; define capability
-  discovery above the floor; decide whether a specified out-of-capability
-  operation outcome needs new normative semantics.
-- **Compatibility impact:** current manifest evidence is unchanged. Any chosen
-  floor or error behavior may affect future claims and must be analyzed before
-  acceptance.
+- **Accepted resolution:** TASK-242 defines a bounded numeric and allocation
+  floor in
+  [`spec/draft-0.6-portability-capability-contract.md`](../../spec/draft-0.6-portability-capability-contract.md).
+  Python now uses context-independent coefficient-and-scale arithmetic for the
+  affected Money operations. No new portable capability-exceeded error is
+  introduced.
+- **Compatibility impact:** current manifest evidence is unchanged. The Python
+  fix expands correct behavior already required by exact Money requirements; it
+  does not retroactively expand the closed Draft 0.5 claim.
 - **Domain/accounting impact:** silent loss of significant digits is
   unacceptable for exact Money behavior. No accounting policy or new financial
   domain is introduced.
@@ -97,12 +99,25 @@ TypeScript adapter, Python core, and Java core remain independently versioned at
 - The compatibility-surface inventory assigns authority, risk, ownership, and
   disposition to current artifacts and deferred boundaries.
 - The non-normative boundary corpus covers 19 cases and 49 executions.
-- The boundary evidence records 14 matching cases and five differences assigned
-  to `D06-PORT-241-001`.
+- The Milestone A boundary evidence originally recorded 14 matching cases and
+  five differences assigned to `D06-PORT-241-001`.
+
+## Milestone B Deliverables
+
+- The accepted portable numeric and allocation floor is recorded in
+  [Draft 0.6 Portability Capability Contract](../../spec/draft-0.6-portability-capability-contract.md).
+- Structural dispositions for Unicode identity, timestamp offsets, nullability,
+  declared order, object-member order, opaque identity, Money serialization,
+  and portable error precedence are accepted.
+- `D06-PORT-241-001` is resolved as a Python implementation defect under
+  existing exact Money requirements.
+- The boundary corpus now treats all 19 cases as expected cross-language
+  matches; it remains non-normative and outside `conformance/manifest.json`.
 
 ## Verification Status
 
-The Milestone A opening quality matrix is complete. Draft 0.6 closure
+The Milestone A opening quality matrix is complete, and the Milestone B
+blocker-remediation checks listed below are current. Draft 0.6 closure
 verification remains pending.
 
 | Check | Milestone A result |
@@ -122,7 +137,8 @@ verification remains pending.
 | Java packaged coverage | PASS; 135/144 lines covered, 85% gate satisfied |
 | Python/Java critical-mutant probes | PASS; 14/14 killed |
 | Draft 0.5 portability regression | PASS; TypeScript 244/244, Python 244/244, Java Money 83/83, zero actual-result differences in declared scopes |
-| Boundary research harness | PASS; 19 cases, 49 executions, 14 matches, five differences assigned to one open blocker |
+| Python Money regression tests | PASS; Draft 0.6 large-decimal and high-scale rounding/Rate controls included |
+| Boundary research harness | PASS; 19 cases, 49 executions, 19 matches, zero documented differences |
 | Architecture boundaries | PASS |
 | Documentation references | PASS; 269 CoreDoc/spec references checked |
 | License validation | PASS |
@@ -131,8 +147,9 @@ verification remains pending.
 ## Unsupported and Deferred Scope
 
 Java non-Money domains remain unsupported. Numeric and allocation capability
-floors remain undecided until TASK-242. Compatibility taxonomy, deprecation,
-profiles, claims, capability declarations, provenance, drift automation, and
-profile-aware runner evidence remain pending later Draft 0.6 milestones.
+floors are accepted for Milestone B but are not yet encoded as profile or
+capability metadata. Compatibility taxonomy, deprecation, profiles, claims,
+capability declarations, provenance, drift automation, and profile-aware runner
+evidence remain pending later Draft 0.6 milestones.
 
 No Draft 0.6 immutable tag or checksum manifest exists yet.

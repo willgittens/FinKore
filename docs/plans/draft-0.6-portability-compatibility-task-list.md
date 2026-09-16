@@ -473,7 +473,7 @@ executions completed within the 5-second adapter timeout.
 
 ### Milestone B — Portable Capability Contract
 
-### - [ ] TASK-242 — Decide the Portable Numeric and Allocation Capability Floor
+### - [x] TASK-242 — Decide the Portable Numeric and Allocation Capability Floor
 
 **Depends on:** TASK-241.
 
@@ -493,7 +493,15 @@ implementation can determine whether it satisfies the floor; inputs inside the
 floor have one portable outcome; any remaining deferred item is shown not to
 block the declared Draft 0.6 profiles.
 
-### - [ ] TASK-243 — Decide Structural and Representation Boundary Obligations
+**Current status:** Complete. The accepted floor is recorded in
+[`spec/draft-0.6-portability-capability-contract.md`](../../spec/draft-0.6-portability-capability-contract.md).
+It covers decimal significant digits, scale, exact-result growth, rounding
+target scale, division, Rates, allocation target scale, ratio values, part
+counts, and allocation units. `D06-PORT-241-001` is resolved as a Python
+implementation defect by exact coefficient-and-scale Money arithmetic; no
+portable capability-exceeded error is introduced.
+
+### - [x] TASK-243 — Decide Structural and Representation Boundary Obligations
 
 **Depends on:** TASK-241.
 
@@ -512,6 +520,14 @@ change.
 specified scope; invalid values remain distinct from unsupported capability and
 infrastructure failure; no global identifier format, presentation format,
 distributed ordering rule, or host-runtime default is invented.
+
+**Current status:** Complete. The accepted dispositions are recorded in
+[`spec/draft-0.6-portability-capability-contract.md`](../../spec/draft-0.6-portability-capability-contract.md).
+Unicode identifiers are exact and not normalized, timestamp offset controls use
+specified instant semantics, absent/null/redacted distinctions remain scoped,
+declared array/history order is preserved, object-member order is non-semantic,
+opaque identities remain opaque, Money serialization stays plain and
+locale-independent, and no global portable-error precedence is invented.
 
 ### Milestone C — Compatibility, Claims, and Provenance Governance
 
@@ -778,8 +794,8 @@ statement.
 - [x] Opening revision, versions, inventories, and toolchains are locked.
 - [x] Draft 0.6 finding and decision governance is active.
 - [x] Every compatibility surface has an authority and evolution rule.
-- [ ] Numeric and allocation capability floors are decided and testable.
-- [ ] Structural, timestamp, nullability, ordering, identity, and error
+- [x] Numeric and allocation capability floors are decided and testable.
+- [x] Structural, timestamp, nullability, ordering, identity, and error
   boundaries have explicit dispositions.
 - [ ] Core, conformance, Agentic, package, adapter, profile, evidence, and release
   versions are not conflated.
@@ -831,9 +847,9 @@ Any `yes` answer requiring synchronized work must be resolved before closure.
 ## 16. Current Execution Status
 
 ```text
-NEXT CODEX TASK: TASK-242 — Decide the Portable Numeric and Allocation Capability Floor.
+NEXT CODEX TASK: TASK-244 — Define the Version Compatibility Taxonomy.
 ```
 
-Milestone A (TASK-238 through TASK-241) is complete. Milestones B through E are
-pending. Draft 0.5 remains the current closed cross-language proof release until
-the Draft 0.6 closure gate is satisfied.
+Milestones A and B (TASK-238 through TASK-243) are complete. Milestones C
+through E are pending. Draft 0.5 remains the current closed cross-language proof
+release until the Draft 0.6 closure gate is satisfied.

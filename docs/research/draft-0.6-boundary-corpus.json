@@ -7,8 +7,7 @@
       "id": "money-large-add-significant-digits",
       "category": "decimal-significant-digits",
       "implementations": ["typescript", "python", "java"],
-      "expectedRelation": "DOCUMENTED_DIFFERENCE",
-      "finding": "D06-PORT-241-001",
+      "expectedRelation": "MATCH",
       "operation": "finkore.money.add",
       "input": {
         "left": { "amount": "123456789012345678901234567890123456789012345678901234567890.12", "currency": "EUR" },
@@ -19,8 +18,7 @@
       "id": "money-large-negative-subtraction",
       "category": "decimal-significant-digits",
       "implementations": ["typescript", "python", "java"],
-      "expectedRelation": "DOCUMENTED_DIFFERENCE",
-      "finding": "D06-PORT-241-001",
+      "expectedRelation": "MATCH",
       "operation": "finkore.money.subtract",
       "input": {
         "left": { "amount": "-98765432109876543210987654321098765432109876543210.75", "currency": "USD" },
@@ -31,8 +29,7 @@
       "id": "money-large-product-growth",
       "category": "decimal-result-growth",
       "implementations": ["typescript", "python", "java"],
-      "expectedRelation": "DOCUMENTED_DIFFERENCE",
-      "finding": "D06-PORT-241-001",
+      "expectedRelation": "MATCH",
       "operation": "finkore.money.multiply",
       "input": {
         "value": { "amount": "123456789012345678901234567890.12", "currency": "JPY" },
@@ -87,8 +84,7 @@
       "id": "money-round-at-scale-50",
       "category": "rounding-scale",
       "implementations": ["typescript", "python", "java"],
-      "expectedRelation": "DOCUMENTED_DIFFERENCE",
-      "finding": "D06-PORT-241-001",
+      "expectedRelation": "MATCH",
       "operation": "finkore.money.round",
       "input": {
         "value": { "amount": "1.234567890123456789012345678901234567890123456789015", "currency": "EUR" },
@@ -100,8 +96,7 @@
       "id": "money-large-percentage-rate",
       "category": "rate-result-growth",
       "implementations": ["typescript", "python", "java"],
-      "expectedRelation": "DOCUMENTED_DIFFERENCE",
-      "finding": "D06-PORT-241-001",
+      "expectedRelation": "MATCH",
       "operation": "finkore.money.applyrate",
       "input": {
         "value": { "amount": "123456789012345678901234567890.12", "currency": "EUR" },

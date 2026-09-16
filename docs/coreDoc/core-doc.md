@@ -700,11 +700,12 @@ evidence and regression oracles, not sources of financial semantics.
 FinKore Core Draft 0.4 is the current shared behavioral stabilization baseline.
 Draft 0.5 closed the independent Python full-manifest and Java Money
 implementation milestone without changing this CoreDoc baseline. Draft 0.6
-portability and compatibility hardening is in progress and must not be inferred
-from this CoreDoc. The conformance format value `0.1` continues to identify
-manifest and vector syntax compatibility unless that syntax changes.
-TypeScript, Python, Java, adapter, and runner package versions remain
-independently governed implementation-package versions.
+portability and compatibility hardening is in progress; its Milestone B
+portable capability contract is accepted in the specification, but Draft 0.6 is
+not closed and must not be inferred from this CoreDoc. The conformance format
+value `0.1` continues to identify manifest and vector syntax compatibility
+unless that syntax changes. TypeScript, Python, Java, adapter, and runner
+package versions remain independently governed implementation-package versions.
 
 Draft 0.4 CoreDoc inventory, bidirectional CoreDoc/specification traceability,
 counterexample review, accepted corrections, and the alignment gate result are
@@ -792,13 +793,14 @@ shows that one blocks an unambiguous implementation of already accepted
 behavior.
 
 Current deferred topics include private/non-fiat currency namespace design,
-minor-unit metadata policy, decimal precision floors, overflow and capability
-reporting, standardized Audit provenance fields, portable condition expression
-syntax, Workflow migration and distributed version coordination, approval
-delegation and escalation, dynamic approver resolution, broader identity
-registries, concrete ledger/correction posting effects, post-finalization
-metadata policy, distributed audit total ordering, and future ledger,
-reconciliation, payment, tax, and settlement domains.
+minor-unit metadata policy, numeric behavior outside the Draft 0.6 portable
+capability floor, overflow and capability reporting above declared profiles,
+standardized Audit provenance fields, portable condition expression syntax,
+Workflow migration and distributed version coordination, approval delegation
+and escalation, dynamic approver resolution, broader identity registries,
+concrete ledger/correction posting effects, post-finalization metadata policy,
+distributed audit total ordering, and future ledger, reconciliation, payment,
+tax, and settlement domains.
 
 ### Draft 0.3 implementation touchpoints retained in Draft 0.4
 

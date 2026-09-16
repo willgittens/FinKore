@@ -195,3 +195,13 @@ research corpus found one open portability blocker,
 current manifest values. TASK-242 is the next task and must resolve the portable
 numeric and allocation capability-floor decision without assuming that the
 current TypeScript or Java range is automatically normative.
+
+## Milestone B Update
+
+TASK-242 and TASK-243 are complete. The accepted portable numeric floor,
+allocation floor, and structural boundary dispositions are recorded in
+[`spec/draft-0.6-portability-capability-contract.md`](../spec/draft-0.6-portability-capability-contract.md).
+`D06-PORT-241-001` is resolved as a Python implementation defect under existing
+exact Money requirements. The boundary corpus now contains 19 expected matching
+cases and remains non-normative until later tasks promote any accepted boundary
+case into manifest-listed conformance.

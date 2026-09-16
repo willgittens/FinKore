@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from decimal import Decimal, InvalidOperation, ROUND_CEILING, ROUND_DOWN, ROUND_FLOOR, ROUND_HALF_EVEN, ROUND_HALF_UP, ROUND_UP
+from decimal import Decimal, InvalidOperation
 from fractions import Fraction
 import re
 from typing import Any
@@ -21,14 +21,7 @@ INVALID_ALLOCATION = "FINKORE_MONEY_INVALID_ALLOCATION"
 
 _AMOUNT_RE = re.compile(r"^-?(?:0|[0-9]+)(?:\.[0-9]+)?$")
 _CURRENCY_RE = re.compile(r"^[A-Z]{3}$")
-_ROUNDING = {
-    "HALF_UP": ROUND_HALF_UP,
-    "HALF_EVEN": ROUND_HALF_EVEN,
-    "DOWN": ROUND_DOWN,
-    "UP": ROUND_UP,
-    "FLOOR": ROUND_FLOOR,
-    "CEILING": ROUND_CEILING,
-}
+_ROUNDING = {"HALF_UP", "HALF_EVEN", "DOWN", "UP", "FLOOR", "CEILING"}
 
 
 def _plain_decimal(value: str) -> Decimal:
@@ -65,21 +58,80 @@ def _format_decimal(value: Decimal, scale: int | None = None) -> str:
     return text
 
 
+def _decimal_units(value: Decimal) -> tuple[int, int]:
+    digits = int("".join(str(digit) for digit in value.as_tuple().digits))
+    if value.as_tuple().sign == 1:
+        digits = -digits
+    exponent = value.as_tuple().exponent
+    if exponent >= 0:
+        return digits * (10**exponent), 0
+    return digits, -exponent
+
+
+def _decimal_from_units(units: int, scale: int) -> Decimal:
+    sign = 1 if units < 0 else 0
+    digits = tuple(int(digit) for digit in str(abs(units))) or (0,)
+    return Decimal((sign, digits, -scale))
+
+
+def _add_decimal(left: Decimal, right: Decimal) -> Decimal:
+    left_units, left_scale = _decimal_units(left)
+    right_units, right_scale = _decimal_units(right)
+    scale = max(left_scale, right_scale)
+    units = left_units * (10 ** (scale - left_scale)) + right_units * (10 ** (scale - right_scale))
+    return _decimal_from_units(units, scale)
+
+
+def _multiply_decimal(left: Decimal, right: Decimal) -> Decimal:
+    left_units, left_scale = _decimal_units(left)
+    right_units, right_scale = _decimal_units(right)
+    return _decimal_from_units(left_units * right_units, left_scale + right_scale)
+
+
+def _shift_decimal_scale(value: Decimal, places: int) -> Decimal:
+    units, scale = _decimal_units(value)
+    return _decimal_from_units(units, scale + places)
+
+
 def _valid_scale(value: Any, error_code: str = INVALID_ROUNDING) -> int:
     if not isinstance(value, int) or isinstance(value, bool) or value < 0:
         raise FinKoreError(error_code)
     return value
 
 
-def _quantum(scale: int) -> Decimal:
-    return Decimal(1).scaleb(-scale)
-
-
 def _whole_units(amount: Decimal, scale: int) -> int | None:
-    scaled = amount.scaleb(scale)
-    if scaled != scaled.to_integral_value():
+    units, amount_scale = _decimal_units(amount)
+    if amount_scale <= scale:
+        return units * (10 ** (scale - amount_scale))
+    factor = 10 ** (amount_scale - scale)
+    if units % factor != 0:
         return None
-    return int(scaled)
+    return units // factor
+
+
+def _round_decimal(amount: Decimal, target_scale: int, mode: str) -> Decimal:
+    units, scale = _decimal_units(amount)
+    if scale <= target_scale:
+        return _decimal_from_units(units * (10 ** (target_scale - scale)), target_scale)
+
+    divisor = 10 ** (scale - target_scale)
+    sign = -1 if units < 0 else 1
+    absolute_units = abs(units)
+    quotient, remainder = divmod(absolute_units, divisor)
+    increment = False
+    if remainder != 0:
+        if mode == "UP":
+            increment = True
+        elif mode == "FLOOR":
+            increment = sign < 0
+        elif mode == "CEILING":
+            increment = sign > 0
+        elif mode == "HALF_UP":
+            increment = remainder * 2 >= divisor
+        elif mode == "HALF_EVEN":
+            doubled = remainder * 2
+            increment = doubled > divisor or (doubled == divisor and quotient % 2 == 1)
+    return _decimal_from_units(sign * (quotient + (1 if increment else 0)), target_scale)
 
 
 def _finite_decimal_quotient(dividend: Decimal, divisor: Decimal) -> tuple[Decimal, int] | None:
@@ -97,7 +149,7 @@ def _finite_decimal_quotient(dividend: Decimal, divisor: Decimal) -> tuple[Decim
         return None
     scale = max(twos, fives)
     integer = ratio.numerator * (2 ** (scale - twos)) * (5 ** (scale - fives))
-    return Decimal(integer).scaleb(-scale), scale
+    return _decimal_from_units(integer, scale), scale
 
 
 @dataclass(frozen=True)
@@ -154,13 +206,13 @@ class Money:
         """Add compatible Money values exactly without mutating either operand."""
 
         self._compatible(other)
-        return Money(self.amount + other.amount, self.currency)
+        return Money(_add_decimal(self.amount, other.amount), self.currency)
 
     def subtract(self, other: "Money") -> "Money":
         """Subtract compatible Money values exactly without mutating either operand."""
 
         self._compatible(other)
-        return Money(self.amount - other.amount, self.currency)
+        return Money(_add_decimal(self.amount, -other.amount), self.currency)
 
     def negate(self) -> "Money":
         """Return the exact additive inverse while preserving currency."""
@@ -170,7 +222,7 @@ class Money:
     def multiply(self, scalar: Any) -> "Money":
         """Multiply by an exact decimal scalar while preserving currency."""
 
-        return Money(self.amount * _plain_decimal(scalar), self.currency)
+        return Money(_multiply_decimal(self.amount, _plain_decimal(scalar)), self.currency)
 
     def divide(self, scalar: Any) -> "Money":
         """Divide by a non-zero exact decimal scalar or fail when rounding is required."""
@@ -200,7 +252,7 @@ class Money:
         target_scale = _valid_scale(scale)
         if not isinstance(mode, str) or mode not in _ROUNDING:
             raise FinKoreError(INVALID_ROUNDING)
-        rounded = self.amount.quantize(_quantum(target_scale), rounding=_ROUNDING[mode])
+        rounded = _round_decimal(self.amount, target_scale, mode)
         return Money(rounded, self.currency, target_scale)
 
     def apply_rate(self, rate: Any, rounding: Any | None = None) -> "Money":
@@ -212,8 +264,8 @@ class Money:
         if kind not in {"DECIMAL", "PERCENTAGE"}:
             raise FinKoreError(INVALID_AMOUNT)
         value = _plain_decimal(rate.get("value"))
-        scalar = value if kind == "DECIMAL" else value / Decimal("100")
-        result = Money(self.amount * scalar, self.currency)
+        scalar = value if kind == "DECIMAL" else _shift_decimal_scale(value, 2)
+        result = Money(_multiply_decimal(self.amount, scalar), self.currency)
         if rounding is None:
             return result
         if not isinstance(rounding, dict):

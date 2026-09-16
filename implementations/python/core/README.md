@@ -18,6 +18,10 @@ Current status:
   evolution behavior are implemented.
 - Public errors expose portable FinKore error codes; Python exception class
   names are not portable semantics.
+- Money arithmetic, Rate application, allocation-unit detection, and rounding
+  use exact coefficient-and-scale arithmetic where Python `decimal` context
+  precision could otherwise alter FinKore results. This includes the resolved
+  Draft 0.6 `D06-PORT-241-001` boundary controls.
 
 Run the current local checks from the repository root:
 

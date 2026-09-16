@@ -42,6 +42,40 @@ class MoneyTests(unittest.TestCase):
             ],
         )
 
+    def test_draft_06_large_decimal_operations_ignore_decimal_context_precision(self) -> None:
+        left = Money.from_portable({"amount": "123456789012345678901234567890123456789012345678901234567890.12", "currency": "EUR"})
+        right = Money.from_portable({"amount": "0.88", "currency": "EUR"})
+        self.assertEqual(
+            left.add(right).to_portable(),
+            {"amount": "123456789012345678901234567890123456789012345678901234567891.00", "currency": "EUR"},
+        )
+
+        left = Money.from_portable({"amount": "-98765432109876543210987654321098765432109876543210.75", "currency": "USD"})
+        right = Money.from_portable({"amount": "12345678901234567890.25", "currency": "USD"})
+        self.assertEqual(
+            left.subtract(right).to_portable(),
+            {"amount": "-98765432109876543210987654321111111111011111111101.00", "currency": "USD"},
+        )
+
+        value = Money.from_portable({"amount": "123456789012345678901234567890.12", "currency": "JPY"})
+        self.assertEqual(
+            value.multiply("987654321098765432109876543210.98").to_portable(),
+            {"amount": "121932631137021795226185032733862429504001414418287658588617.5176", "currency": "JPY"},
+        )
+
+    def test_draft_06_high_scale_rounding_and_rate_are_exact(self) -> None:
+        value = Money.from_portable({"amount": "1.234567890123456789012345678901234567890123456789015", "currency": "EUR"})
+        self.assertEqual(
+            value.round(50, "HALF_EVEN").to_portable(),
+            {"amount": "1.23456789012345678901234567890123456789012345678902", "currency": "EUR"},
+        )
+
+        value = Money.from_portable({"amount": "123456789012345678901234567890.12", "currency": "EUR"})
+        self.assertEqual(
+            value.apply_rate({"kind": "PERCENTAGE", "value": "1234567890.123456789"}).to_portable(),
+            {"amount": "1524157875323883675034293577503386681.3431672002468", "currency": "EUR"},
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

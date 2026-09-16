@@ -11,8 +11,9 @@ Approval Validity; and selected Draft 0.3 Approval Composition, Workflow
 version/import/conflict, and Entity Revision/Import behavior. Draft 0.5 later
 proved this baseline through full-manifest Python and Money-scope Java
 implementations without adding new financial-domain behavior. Draft 0.6
-portability and compatibility hardening is in progress. The specification
-remains pre-1.0 and experimental.
+portability and compatibility hardening is in progress; its Milestone B
+portable capability contract is accepted, but Draft 0.6 is not closed. The
+specification remains pre-1.0 and experimental.
 
 ## Purpose
 
@@ -57,6 +58,7 @@ The repository is organized around `spec/` and `conformance/` today. As implemen
 - [Glossary](glossary.md) defines shared domain terms.
 - [Draft 0.4 Domain Specification Stabilization Record](draft-0.4-stabilization.md) records the accepted Draft 0.4 review of shared conventions and domain specifications.
 - [Draft 0.4 Cross-Language Portability Contract](draft-0.4-portability-contract.md) records the accepted Draft 0.4 Python and Java portability review for the stabilized baseline.
+- [Draft 0.6 Portability Capability Contract](draft-0.6-portability-capability-contract.md) records the accepted portable numeric floor and structural boundary dispositions for Draft 0.6 Milestone B.
 - [Money](money/README.md) defines monetary representation and behavior.
 - [Workflow](workflow/README.md) defines lifecycle states, transitions, and definition versions.
 - [Audit](audit/README.md) defines durable domain history.

@@ -28,6 +28,13 @@ keeps format `0.1` because no manifest or vector-file syntax change is made.
 Draft scope is determined by the manifest contents, referenced requirement IDs,
 and traceability status.
 
+Draft 0.6 Milestone B accepts a portable numeric/allocation floor and structural
+boundary dispositions in
+[Draft 0.6 Portability Capability Contract](../spec/draft-0.6-portability-capability-contract.md).
+Those decisions do not add manifest-listed vectors by themselves; later Draft
+0.6 profile and boundary tasks must promote any accepted case into this
+directory explicitly.
+
 The initial suites are grouped by specification behavior:
 
 - Money: representation, serialization, arithmetic, comparison, currency, rounding, Rates, and Allocation.

@@ -29,6 +29,10 @@ applicable vectors and requirements before a client relies on a conformance
 claim. The same principle applies to promoted operations such as
 `finkore.money.applyrate`, `finkore.money.allocate`,
 `finkore.workflow.transition`, and `finkore.entity.evolution.supersede`.
+Draft 0.6 Milestone B accepts a portable Money capability floor in the
+[Draft 0.6 Portability Capability Contract](../spec/draft-0.6-portability-capability-contract.md),
+but capability advertisements still do not prove profile conformance and do not
+describe behavior above an implementation's declared limits.
 Draft 0.4 retains the version/conflict refinements to
 `finkore.workflow.transition` as part of that canonical operation's current
 descriptor; `workflow.import` and
