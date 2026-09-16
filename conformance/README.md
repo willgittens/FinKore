@@ -35,6 +35,12 @@ Those decisions do not add manifest-listed vectors by themselves; later Draft
 0.6 profile and boundary tasks must promote any accepted case into this
 directory explicitly.
 
+Draft 0.6 Milestone C accepts profile and evidence-based claim policy in
+[Draft 0.6 Compatibility, Claims, and Provenance Policy](../docs/draft-0.6-compatibility-claims-provenance-policy.md).
+Those rules reserve profile identifiers and claim requirements, but
+machine-readable profile metadata and profile-aware runner evidence remain
+Milestone D work.
+
 The initial suites are grouped by specification behavior:
 
 - Money: representation, serialization, arithmetic, comparison, currency, rounding, Rates, and Allocation.

@@ -13,6 +13,18 @@ A format version MUST be bumped only when manifest syntax, vector-file syntax, o
 the meaning of a defined format member changes in a way that an older runner
 cannot faithfully validate. A runner MUST reject versions it does not support.
 
+## Profiles and claims
+
+Draft 0.6 profile identifiers and evidence-based claim rules are governed by
+the [Draft 0.6 Compatibility, Claims, and Provenance Policy](../docs/draft-0.6-compatibility-claims-provenance-policy.md).
+Profiles are closed scopes; local filters or partial manifest runs cannot create
+a successful broader claim. Capability declarations describe discoverable
+support and limits, but they are not conformance evidence.
+
+Profile metadata and claim schemas are not part of conformance format `0.1`.
+Adding them in later Draft 0.6 tasks requires explicit compatibility handling
+and validation.
+
 ## File and vector shape
 
 Each manifest-listed JSON file is an object containing `finkoreVectorFile` and a non-empty `vectors` array. Each vector has:

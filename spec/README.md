@@ -67,6 +67,10 @@ The repository is organized around `spec/` and `conformance/` today. As implemen
 
 Later domain specifications can compose these areas. The rules for explicit refinements are defined by **SPEC-TERMINOLOGY-001** in [Conventions](conventions.md).
 
+Draft 0.6 compatibility, profile, claim, capability-declaration, and release
+provenance policy is recorded outside the domain specifications in
+[Draft 0.6 Compatibility, Claims, and Provenance Policy](../docs/draft-0.6-compatibility-claims-provenance-policy.md).
+
 ## Scope Discipline (Non-Normative)
 
 FinKore Core deliberately begins with reusable primitives rather than concrete invoice, expense, purchase-order, payment, reimbursement, or journal-entry models. Applications may compose the primitives for those domains, but Core Draft 0.1 does not claim to standardize them.

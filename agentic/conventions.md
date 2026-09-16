@@ -29,9 +29,10 @@ An operation ID:
 - SHOULD be reusable by conformance vectors, runner adapters, discovery data,
   future tool adapters, and reference implementations.
 
-Versions are not encoded in Draft 0.4 operation IDs. Operation identifiers are
-intended to remain stable; a mechanism for incompatible contract changes remains
-an open question.
+Versions are not encoded in operation IDs. Operation identifiers are intended
+to remain stable; incompatible operation-contract changes require the
+classification, supersession, and profile/version handling defined by the
+[Draft 0.6 Compatibility, Claims, and Provenance Policy](../docs/draft-0.6-compatibility-claims-provenance-policy.md).
 
 ## Operation IDs and requirement IDs
 

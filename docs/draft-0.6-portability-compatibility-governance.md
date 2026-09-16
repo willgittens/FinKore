@@ -188,13 +188,13 @@ compile Java, and execute the corpus.
 
 ## Milestone A Outcome
 
-TASK-238 through TASK-241 are complete. The opening Draft 0.5 claims remain
-green. The compatibility surfaces and deferred boundaries are inventoried. The
-research corpus found one open portability blocker,
+At Milestone A, TASK-238 through TASK-241 were complete. The opening Draft 0.5
+claims remained green. The compatibility surfaces and deferred boundaries were
+inventoried. The research corpus found one open portability blocker,
 `D06-PORT-241-001`, concerning Python decimal-context behavior beyond the
-current manifest values. TASK-242 is the next task and must resolve the portable
-numeric and allocation capability-floor decision without assuming that the
-current TypeScript or Java range is automatically normative.
+current manifest values. TASK-242 was the next task and had to resolve the
+portable numeric and allocation capability-floor decision without assuming that
+the current TypeScript or Java range was automatically normative.
 
 ## Milestone B Update
 
@@ -205,3 +205,14 @@ allocation floor, and structural boundary dispositions are recorded in
 exact Money requirements. The boundary corpus now contains 19 expected matching
 cases and remains non-normative until later tasks promote any accepted boundary
 case into manifest-listed conformance.
+
+## Milestone C Update
+
+TASK-244 through TASK-248 are complete. The accepted version compatibility,
+change classification, deprecation, profile, claim, capability-declaration, and
+release provenance rules are recorded in
+[`docs/draft-0.6-compatibility-claims-provenance-policy.md`](draft-0.6-compatibility-claims-provenance-policy.md).
+The policy reserves stable Draft 0.6 profile ID forms and a closure-gated
+`core-draft-0.6` tag name, but does not create machine-readable metadata,
+checksums, release claims, or the immutable tag. Those remain Milestone D and E
+work.

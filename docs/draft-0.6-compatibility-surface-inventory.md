@@ -114,6 +114,9 @@ time.
 Every known compatibility surface now has an authority, current identity or
 explicit absence, evolution owner, risk, and Draft 0.6 disposition. Milestone B
 has accepted the portable capability floor and structural boundary dispositions;
-later Draft 0.6 metadata, profile, proof, and release tasks remain pending. No
-new portable error, canonical operation, conformance vector, or package version
-is created by this inventory.
+Milestone C has accepted compatibility, profile, claim, capability-declaration,
+and provenance policy in
+[Draft 0.6 Compatibility, Claims, and Provenance Policy](draft-0.6-compatibility-claims-provenance-policy.md).
+Later Draft 0.6 metadata, validation, proof, and release tasks remain pending.
+No new portable error, canonical operation, conformance vector, or package
+version is created by this inventory.

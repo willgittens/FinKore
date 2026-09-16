@@ -33,6 +33,10 @@ Draft 0.6 Milestone B accepts a portable Money capability floor in the
 [Draft 0.6 Portability Capability Contract](../spec/draft-0.6-portability-capability-contract.md),
 but capability advertisements still do not prove profile conformance and do not
 describe behavior above an implementation's declared limits.
+Draft 0.6 Milestone C defines capability declarations as discovery metadata in
+the [Draft 0.6 Compatibility, Claims, and Provenance Policy](../docs/draft-0.6-compatibility-claims-provenance-policy.md).
+Those declarations may link to evidence, but a successful claim requires the
+profile and evidence rules in that policy.
 Draft 0.4 retains the version/conflict refinements to
 `finkore.workflow.transition` as part of that canonical operation's current
 descriptor; `workflow.import` and

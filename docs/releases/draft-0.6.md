@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft 0.6 is in progress. Milestones A and B are complete; Milestones C through
+Draft 0.6 is in progress. Milestones A through C are complete; Milestones D and
 E are pending. This document does not make a Draft 0.6 conformance,
 compatibility, immutable-tag, or release-closure claim.
 
@@ -114,6 +114,23 @@ TypeScript adapter, Python core, and Java core remain independently versioned at
 - The boundary corpus now treats all 19 cases as expected cross-language
   matches; it remains non-normative and outside `conformance/manifest.json`.
 
+## Milestone C Deliverables
+
+- The accepted compatibility, claims, and provenance policy is recorded in
+  [Draft 0.6 Compatibility, Claims, and Provenance Policy](../draft-0.6-compatibility-claims-provenance-policy.md).
+- Core, conformance format, Agentic contract, package, adapter, profile,
+  evidence, and release artifact versions are governed as independent
+  dimensions.
+- Change classes, deprecation, migration, supersession, rollback, and
+  historical-traceability rules are accepted.
+- Stable profile ID forms are reserved, including
+  `finkore.core.draft0_6.full`, `finkore.core.draft0_6.domain.<domain>`, and
+  `finkore.core.draft0_6.operation.<operation-id>`.
+- Capability declarations are defined as discovery metadata only, distinct from
+  successful conformance claims.
+- Release identity, closure-gated tag `core-draft-0.6`, SHA-256 checksum
+  manifest, correction/revocation, and no-implied-signing rules are accepted.
+
 ## Verification Status
 
 The Milestone A opening quality matrix is complete, and the Milestone B
@@ -139,6 +156,7 @@ verification remains pending.
 | Draft 0.5 portability regression | PASS; TypeScript 244/244, Python 244/244, Java Money 83/83, zero actual-result differences in declared scopes |
 | Python Money regression tests | PASS; Draft 0.6 large-decimal and high-scale rounding/Rate controls included |
 | Boundary research harness | PASS; 19 cases, 49 executions, 19 matches, zero documented differences |
+| Milestone C policy references | PASS; compatibility, profile, claim, capability, and provenance policy linked from live navigation |
 | Architecture boundaries | PASS |
 | Documentation references | PASS; 269 CoreDoc/spec references checked |
 | License validation | PASS |
@@ -149,7 +167,8 @@ verification remains pending.
 Java non-Money domains remain unsupported. Numeric and allocation capability
 floors are accepted for Milestone B but are not yet encoded as profile or
 capability metadata. Compatibility taxonomy, deprecation, profiles, claims,
-capability declarations, provenance, drift automation, and profile-aware runner
-evidence remain pending later Draft 0.6 milestones.
+capability declarations, and provenance are accepted as Milestone C policy but
+not yet encoded as machine-readable metadata. Drift automation and profile-aware
+runner evidence remain pending later Draft 0.6 milestones.
 
 No Draft 0.6 immutable tag or checksum manifest exists yet.

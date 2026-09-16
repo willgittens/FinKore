@@ -408,8 +408,8 @@ Java behavior alone cannot settle unspecified semantics.
 **Current status:** Complete. The governance record defines all `D06-*`
 classifications, authority order, required fields, blocking effects, and
 synchronized-change rules. The durable release-note register contains resolved
-editorial finding `D06-EDITORIAL-240-001` and open portability blocker
-`D06-PORT-241-001`.
+editorial finding `D06-EDITORIAL-240-001` and portability blocker
+`D06-PORT-241-001`, which was later resolved in Milestone B.
 
 ### - [x] TASK-240 — Inventory Compatibility Surfaces and Deferred Boundaries
 
@@ -466,10 +466,11 @@ normative conformance without an accepted specification decision.
 
 **Current status:** Complete. The non-normative 19-case corpus executes 49
 adapter observations across the declared scopes, including 14 controls sourced
-from normative vectors. Fourteen cases match. Five Python decimal-context
-differences are assigned to `D06-PORT-241-001`; one is an infrastructure error
-from scale-50 quantization. The corpus remains outside the manifest, and all
-executions completed within the 5-second adapter timeout.
+from normative vectors. Milestone A originally recorded fourteen matching cases
+and five Python decimal-context differences assigned to `D06-PORT-241-001`;
+Milestone B resolved the blocker and the corpus now records 19 expected
+matches. The corpus remains outside the manifest, and all executions completed
+within the 5-second adapter timeout.
 
 ### Milestone B — Portable Capability Contract
 
@@ -531,7 +532,7 @@ locale-independent, and no global portable-error precedence is invented.
 
 ### Milestone C — Compatibility, Claims, and Provenance Governance
 
-### - [ ] TASK-244 — Define the Version Compatibility Taxonomy
+### - [x] TASK-244 — Define the Version Compatibility Taxonomy
 
 **Depends on:** TASK-240.
 
@@ -548,7 +549,13 @@ file, profile, adapter, implementation, and Core target can be used together;
 unsupported versions fail explicitly; a Core release does not force an
 unnecessary format bump; no package version implies conformance by itself.
 
-### - [ ] TASK-245 — Define Change Classification, Deprecation, and Migration Policy
+**Current status:** Complete. The accepted taxonomy is recorded in
+[`docs/draft-0.6-compatibility-claims-provenance-policy.md`](../draft-0.6-compatibility-claims-provenance-policy.md).
+It keeps Core, conformance formats, Agentic contract descriptors, package
+versions, adapter revisions, profiles, evidence revisions, and release artifact
+identity separate, with explicit unknown-version rejection rules.
+
+### - [x] TASK-245 — Define Change Classification, Deprecation, and Migration Policy
 
 **Depends on:** TASK-244.
 
@@ -566,7 +573,12 @@ are treated as semantic changes; deprecation is not deletion; editorial changes
 cannot conceal behavior changes; pre-1.0 policy is explicit without implying a
 1.0 freeze.
 
-### - [ ] TASK-246 — Define Conformance Profiles and Evidence-Based Claims
+**Current status:** Complete. The accepted policy defines `EDITORIAL`,
+`ADDITIVE_COMPATIBLE`, `BEHAVIORAL_COMPATIBLE`, `DEPRECATING`, and `BREAKING`
+changes, artifact-specific version effects, deprecation records, supersession,
+historical traceability, and release-note requirements.
+
+### - [x] TASK-246 — Define Conformance Profiles and Evidence-Based Claims
 
 **Depends on:** TASK-242, TASK-243, and TASK-245.
 
@@ -585,7 +597,13 @@ results are permitted inside a successful claim; operation profiles include
 cross-cutting validation and error dependencies; Java Money-only and Python
 full-scope claims can be expressed without ambiguity.
 
-### - [ ] TASK-247 — Define Implementation Capability Declarations
+**Current status:** Complete. Draft 0.6 reserves stable profile IDs including
+`finkore.core.draft0_6.full`, `finkore.core.draft0_6.domain.money`, and
+`finkore.core.draft0_6.operation.<operation-id>`, and defines evidence-based
+claim fields, pass/fail rules, historical-claim handling, official/reference
+quality evidence, and human-readable claim wording.
+
+### - [x] TASK-247 — Define Implementation Capability Declarations
 
 **Depends on:** TASK-242 and TASK-246.
 
@@ -603,7 +621,13 @@ limits cannot undercut a claimed profile's floor; conformance-local operations
 are not advertised as canonical capabilities; absent metadata does not imply
 support; inconsistent claims fail validation.
 
-### - [ ] TASK-248 — Define Release Identity, Provenance, and Checksum Policy
+**Current status:** Complete. The accepted declaration contract distinguishes
+operation discovery from evidence, requires Core target, canonical operations,
+known unsupported scope, numeric/allocation limits, adapter identity, and
+optional claim links or digests, and defines conservative handling for missing,
+unknown, stale, or inconsistent declarations.
+
+### - [x] TASK-248 — Define Release Identity, Provenance, and Checksum Policy
 
 **Depends on:** TASK-244 and TASK-245.
 
@@ -621,6 +645,12 @@ runner, adapter, implementation, and evidence inputs; checksums are deterministi
 from a clean checkout; mutable branch names are insufficient; tag creation and
 publication occur only after explicit approval; provenance language does not
 imply signing or external attestation unless actually present.
+
+**Current status:** Complete. The accepted policy defines exact source identity,
+clean-tree requirements, closure-gated tag `core-draft-0.6`, annotated tag
+content, SHA-256 checksum manifest rules, generated-artifact reproduction,
+toolchain identity, correction/revocation records, and factual no-signing /
+no-external-attestation language.
 
 ### Milestone D — Automated Enforcement and Cross-Language Proof
 
@@ -797,13 +827,13 @@ statement.
 - [x] Numeric and allocation capability floors are decided and testable.
 - [x] Structural, timestamp, nullability, ordering, identity, and error
   boundaries have explicit dispositions.
-- [ ] Core, conformance, Agentic, package, adapter, profile, evidence, and release
+- [x] Core, conformance, Agentic, package, adapter, profile, evidence, and release
   versions are not conflated.
-- [ ] Additive, compatible, deprecating, and breaking changes are defined.
-- [ ] Stable identifiers cannot be silently reused or semantically replaced.
-- [ ] Full, domain, operation, and version-specific profile rules are published.
-- [ ] Capability declarations are distinct from conformance evidence.
-- [ ] Claim records identify exact scope, versions, revision, limits, and result
+- [x] Additive, compatible, deprecating, and breaking changes are defined.
+- [x] Stable identifiers cannot be silently reused or semantically replaced.
+- [x] Full, domain, operation, and version-specific profile rules are published.
+- [x] Capability declarations are distinct from conformance evidence.
+- [x] Claim records identify exact scope, versions, revision, limits, and result
   counts.
 - [ ] Duplicate/orphan/drift and invalid-metadata checks run in CI.
 - [ ] Profile-aware runner output cannot launder partial, unsupported, or
@@ -847,9 +877,9 @@ Any `yes` answer requiring synchronized work must be resolved before closure.
 ## 16. Current Execution Status
 
 ```text
-NEXT CODEX TASK: TASK-244 — Define the Version Compatibility Taxonomy.
+NEXT CODEX TASK: TASK-249 — Add Machine-Readable Compatibility, Capability, and Claim Metadata.
 ```
 
-Milestones A and B (TASK-238 through TASK-243) are complete. Milestones C
-through E are pending. Draft 0.5 remains the current closed cross-language proof
+Milestones A through C (TASK-238 through TASK-248) are complete. Milestones D
+and E are pending. Draft 0.5 remains the current closed cross-language proof
 release until the Draft 0.6 closure gate is satisfied.

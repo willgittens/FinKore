@@ -85,6 +85,7 @@ import conformance-local until stable public operation contracts exist.
 - [Portable errors](errors.md)
 - [Examples](examples.md)
 - [Draft 0.4 Agentic Alignment Record](draft-0.4-alignment.md)
+- [Draft 0.6 Compatibility, Claims, and Provenance Policy](../docs/draft-0.6-compatibility-claims-provenance-policy.md)
 
 ## Readiness checklist
 
@@ -105,8 +106,8 @@ An operation may be considered Agentic Contract-ready when:
 
 ## Open questions
 
-- How should incompatible operation-contract changes be versioned?
-- Should FinKore define a machine-readable capability manifest?
+- How should Milestone D encode accepted Draft 0.6 capability declarations
+  without creating the Draft 0.8 machine-readable operation manifest early?
 - Should all effects use booleans, or richer states such as `none`, `may`, and
   `required`?
 - Should operations declare idempotency semantics?
