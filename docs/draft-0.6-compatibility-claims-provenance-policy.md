@@ -12,8 +12,8 @@ change conformance format `0.1`, create a release tag, publish packages, or
 close Draft 0.6.
 
 Machine-readable compatibility, profile, claim, capability, and checksum records
-are Milestone D work. Until then, this document is the accepted human-readable
-contract that those records must encode.
+are implemented under `conformance/draft-0.6`. This document remains the
+accepted human-readable contract that those records encode.
 
 ## Version Compatibility Taxonomy
 
@@ -37,7 +37,7 @@ The current compatibility matrix is:
 | Artifact | Draft 0.6 accepted relationship |
 | --- | --- |
 | Core `draft-0.6` to manifest/vector format `0.1` | Compatible. Draft 0.6 does not require a format bump unless Milestone D introduces a syntax or member-semantics change. |
-| Runner `@finkore/conformance-runner` `0.1.0` to manifest/vector format `0.1` | Supported for current unprofiled execution. Profile-aware claim emission remains pending TASK-251. |
+| Runner `@finkore/conformance-runner` `0.1.0` to manifest/vector format `0.1` | Supported for current unprofiled execution and Draft 0.6 profile-aware evidence runs. |
 | TypeScript and Python package `0.1.0` to Draft 0.6 work | Package versions remain independent; no package version implies Draft 0.6 conformance. |
 | Java package `0.1.0` to Draft 0.6 work | Money scope can support the Money profile; Java non-Money remains unsupported until implemented and proven. |
 | Agentic documentation to Draft 0.6 | Canonical operation IDs remain stable. No Draft 0.8 machine-readable operation manifest is created in Draft 0.6. |

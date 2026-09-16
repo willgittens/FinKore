@@ -2,9 +2,10 @@
 
 ## Status
 
-Draft 0.6 is in progress. Milestones A through D are complete; Milestone E is
-pending. This document does not make a final Draft 0.6 conformance,
-compatibility, immutable-tag, or release-closure claim.
+Draft 0.6 is in progress. Milestones A through D are complete, and Milestone E
+release hardening evidence is being prepared. The immutable release tag remains
+pending maintainer approval, so this document does not make the final Draft 0.6
+closure claim.
 
 ## Target Scope
 
@@ -148,6 +149,93 @@ TypeScript adapter, Python core, and Java core remain independently versioned at
 - TypeScript and Python pass the full Draft 0.6 profile, and Java passes the
   Draft 0.6 Money profile with non-Money domains remaining unsupported.
 
+## Milestone E Release Evidence
+
+The release-hardening evidence is recorded without creating the immutable tag.
+The prepared tag name is `core-draft-0.6`; it must be created only after
+maintainer approval from the final verified revision.
+
+Prepared command, not yet executed:
+
+```bash
+git tag -a core-draft-0.6 -m "FinKore Core Draft 0.6"
+git show core-draft-0.6
+```
+
+Suggested tag annotation:
+
+```text
+FinKore Core Draft 0.6
+
+Portability and compatibility hardening release.
+
+TypeScript and Python pass finkore.core.draft0_6.full.
+Java passes finkore.core.draft0_6.domain.money and does not claim non-Money domains.
+
+This tag does not claim package publication, production readiness, external
+certification, full Java conformance, Draft 0.7 cross-domain composition, or
+Draft 0.8 machine-readable Agentic manifest completion.
+```
+
+### Compatibility Matrix
+
+| Surface | Draft 0.6 status |
+| --- | --- |
+| Core/spec behavior | Existing Core scope retained; Draft 0.6 adds portable capability-floor and compatibility policy. |
+| Manifest/vector format | Still `0.1`; no syntax bump required. |
+| TypeScript implementation | Claims `finkore.core.draft0_6.full`; 254/254 profile vectors pass. |
+| Python implementation | Claims `finkore.core.draft0_6.full`; 254/254 profile vectors pass. |
+| Java implementation | Claims `finkore.core.draft0_6.domain.money`; 93/93 profile vectors pass; non-Money domains unsupported. |
+| Agentic Contract | Existing canonical operation IDs retained; no Draft 0.8 machine-readable operation manifest. |
+| Packages | Package versions remain `0.1.0`; no publication claim. |
+| External review/signing | Not claimed. |
+
+### Migration Guidance
+
+- Existing Draft 0.5 consumers should treat Draft 0.6 as a compatibility and
+  evidence hardening release, not as a new financial domain release.
+- Consumers relying on Money portability should use the Draft 0.6 capability
+  floor and the `finkore.core.draft0_6.domain.money` profile when comparing
+  implementations.
+- Consumers requiring full Core behavior should require the
+  `finkore.core.draft0_6.full` profile; Java must not be treated as a full
+  Core implementation.
+- Capability declarations are discovery metadata. A consumer should rely on the
+  corresponding claim record only when the selected profile has zero failures,
+  unsupported results, and infrastructure errors.
+- Historical Draft 0.5 claims remain exact for their original 244-vector full
+  scope and 83-vector Java Money scope; Draft 0.6 does not retroactively expand
+  those claims.
+
+### Claim Examples
+
+Valid current claim wording:
+
+```text
+TypeScript conforms to finkore.core.draft0_6.full for FinKore Core draft-0.6
+with 254 passed, 0 failed, 0 unsupported, and 0 infrastructure errors.
+```
+
+```text
+Java conforms to finkore.core.draft0_6.domain.money for FinKore Core draft-0.6
+with 93 passed, 0 failed, 0 unsupported, and 0 infrastructure errors. Java does
+not claim workflow, audit, approvals, or entities profiles.
+```
+
+Invalid claim wording:
+
+```text
+Java fully conforms to FinKore Core Draft 0.6.
+```
+
+### Checksums
+
+`conformance/draft-0.6/checksums.json` records SHA-256 checksums for the
+release-relevant source, specification, conformance, metadata, documentation,
+runner, adapter, and implementation inputs. The checksum manifest intentionally
+excludes itself to avoid a circular digest. Its status remains
+`generated-pending-immutable-tag` until the approved immutable tag exists.
+
 ## Verification Status
 
 The Milestone A opening quality matrix is complete, and the Milestone D
@@ -168,13 +256,14 @@ verification remains pending.
 | TypeScript full profile claim | PASS; `finkore.core.draft0_6.full`, 254/254 |
 | Python full profile claim | PASS; `finkore.core.draft0_6.full`, 254/254 |
 | Java Money profile claim | PASS; `finkore.core.draft0_6.domain.money`, 93/93 |
-| Draft 0.6 metadata validation | PASS; 26 profiles, 3 capability declarations, 3 claim records, 254 vectors |
+| Draft 0.6 metadata validation | PASS; 26 profiles, 3 capability declarations, 3 claim records, 282 checksum artifacts, 254 vectors |
+| Draft 0.6 checksum reproduction | PASS; 282 release-relevant artifacts verified; checksum manifest excludes itself |
 | Runner coverage | PASS; 96.33% statements, 94.20% branches, 97.29% functions, 98.33% lines |
 | TypeScript core coverage | PASS; 99.09% statements, 98.69% branches, 100% functions, 99.49% lines |
 | Python packaged coverage | PASS; 86% lines across `finkore` source with full manifest execution |
 | Java packaged coverage | PASS; 135/144 lines covered, 85% gate satisfied |
 | Python/Java critical-mutant probes | PASS; 14/14 killed |
-| Draft 0.5 portability regression | PASS; TypeScript 244/244, Python 244/244, Java Money 83/83, zero actual-result differences in declared historical scopes |
+| Cross-language portability comparison | PASS; TypeScript 254/254, Python 254/254, Java Money 93/93, Java full-manifest boundary 161 unsupported non-Money vectors, zero actual-result differences in declared scopes |
 | Python Money regression tests | PASS; Draft 0.6 large-decimal and high-scale rounding/Rate controls included |
 | Boundary research harness | PASS; 19 cases, 49 executions, 19 matches, zero documented differences |
 | Milestone C policy references | PASS; compatibility, profile, claim, capability, and provenance policy linked from live navigation |
@@ -182,6 +271,7 @@ verification remains pending.
 | Documentation references | PASS; 269 CoreDoc/spec references checked |
 | License validation | PASS |
 | Whitespace/diff sanity | PASS |
+| Immutable tag status | PENDING; `core-draft-0.6` not created because maintainer approval is required |
 
 ## Unsupported and Deferred Scope
 
@@ -193,4 +283,6 @@ Milestone D metadata and evidence. Final clean-checkout release hardening,
 artifact checksums, and immutable-tag status remain pending Milestone E work.
 
 No Draft 0.6 immutable tag exists yet. The checksum metadata file exists with
-`pending-release-closure` status; final artifact checksums remain pending.
+`generated-pending-immutable-tag` status and verifies current release-relevant
+artifacts, but final release closure remains pending until the approved tag is
+created and verified from the final committed revision.

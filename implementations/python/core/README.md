@@ -1,8 +1,9 @@
 # FinKore Python Core
 
-This package is the Draft 0.5 Python implementation track for FinKore. It is
-derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
-TypeScript financial implementation code.
+This package is the Python implementation track for FinKore. It is derived from
+CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from TypeScript financial
+implementation code. For Draft 0.6 evidence, Python claims
+`finkore.core.draft0_6.full` and passes the current 254-vector profile.
 
 Current status:
 
@@ -32,6 +33,7 @@ npm run python:coverage:setup
 npm run python:coverage
 npm run python:mutation:critical
 npm run conformance:python
+npm run conformance:python:profile:full
 ```
 
 The packaged Python coverage gate runs unit tests and the complete conformance

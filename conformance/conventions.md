@@ -22,8 +22,9 @@ a successful broader claim. Capability declarations describe discoverable
 support and limits, but they are not conformance evidence.
 
 Profile metadata and claim schemas are not part of conformance format `0.1`.
-Adding them in later Draft 0.6 tasks requires explicit compatibility handling
-and validation.
+Draft 0.6 stores them under `conformance/draft-0.6` and validates them with
+`npm run metadata:check:draft0.6`; this metadata does not change manifest or
+vector-file syntax.
 
 ## File and vector shape
 

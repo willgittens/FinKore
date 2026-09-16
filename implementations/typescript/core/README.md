@@ -6,7 +6,10 @@ Audit, Approvals, and Entities milestones.
 Draft 0.4 is a foundation-stabilization baseline for the existing Draft 0.1
 through Draft 0.3 behavior and did not add TypeScript financial behavior. Draft
 0.5 subsequently recorded full-manifest Python conformance and Money-scope Java
-conformance; those independent results do not make this TypeScript package the
+conformance. Draft 0.6 adds a portable Money capability floor, closed profile
+metadata, capability declarations, and profile-specific evidence. TypeScript
+currently claims `finkore.core.draft0_6.full` and passes the 254-vector full
+profile. These independent results do not make this TypeScript package the
 source of financial semantics.
 
 FinKore Money Draft 0.1 is fully implemented by this TypeScript reference implementation. The Draft 0.2 Money Rates and Money Allocation slices are also implemented. These statements apply only to the named Money specification slices; they do not imply that other FinKore domains are complete.
@@ -40,6 +43,10 @@ registries, Workflow migration, persistence, authorization, and concrete
 financial entity types remain outside this milestone.
 
 This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact decimal and percentage Rate application, Money allocation by equal parts or positive integer ratios, exact compatible-currency numeric comparison, and explicit Money rounding.
+The Draft 0.6 portable Money floor is covered by manifest-listed vectors for
+large significant digits, deep scale, exact product growth, high-scale
+rounding, percentage Rate scaling, safe-integer allocation ratios, and
+100-part equal allocation.
 
 It implements Workflow Draft 0.1: validated workflow
 definitions, exact state identifiers, one initial state, current state,

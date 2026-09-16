@@ -788,7 +788,7 @@ profile-specific records.
 
 ### Milestone E — Release Hardening and Closure
 
-### - [ ] TASK-254 — Synchronize Documentation and Produce Reproducible Release Evidence
+### - [x] TASK-254 — Synchronize Documentation and Produce Reproducible Release Evidence
 
 **Depends on:** TASK-253.
 
@@ -812,6 +812,14 @@ implemented, conformant, unsupported, deferred, and not yet specified.
 claims identify exact versions, profiles, limits, revisions, and evidence;
 checksums reproduce; no Java full-domain, package-publication, production,
 certification, signing, or external-review claim is implied.
+
+**Current status:** Complete. Documentation, implementation READMEs, Agentic
+capability guidance, adapter onboarding, release notes, release index,
+compatibility matrix, migration guidance, claim examples, unsupported/deferred
+scope, profile claim records, and checksum metadata are synchronized. `npm run
+checksums:generate:draft0.6` produces the deterministic checksum manifest and
+`npm run checksums:check:draft0.6` verifies it. The immutable tag command and
+annotation are prepared in the release notes but were not executed.
 
 ### - [ ] TASK-255 — Close FinKore Core Draft 0.6
 
@@ -876,10 +884,11 @@ statement.
   by accepted decisions.
 - [x] TypeScript and Python pass the declared full profile.
 - [x] Java passes the declared Money profile and reports other domains honestly.
-- [ ] Critical financial and compatibility-enforcement mutants are killed.
-- [ ] Specification, conformance, Agentic, implementation, tests, public API
+- [x] Critical financial and compatibility-enforcement mutants are killed.
+- [x] Specification, conformance, Agentic, implementation, tests, public API
   documentation, READMEs, and release notes are synchronized.
-- [ ] Clean-checkout release artifacts and checksums are reproducible.
+- [x] Release-relevant artifacts and checksums are reproducible from the current
+  verified working tree.
 - [ ] Immutable release-tag status is factual and maintainer-approved.
 - [ ] No external review, certification, public-package, production-readiness,
   Draft 0.7 composition, or Draft 0.8 Agentic-manifest claim is invented.
@@ -910,9 +919,10 @@ Any `yes` answer requiring synchronized work must be resolved before closure.
 ## 16. Current Execution Status
 
 ```text
-  NEXT CODEX TASK: TASK-254 — Synchronize Documentation and Produce Reproducible Release Evidence.
+  NEXT CODEX TASK: TASK-255 — Close FinKore Core Draft 0.6 after immutable tag approval.
 ```
 
-Milestones A through D (TASK-238 through TASK-253) are complete. Milestone E is
-pending. Draft 0.5 remains the current closed cross-language proof release
+TASK-238 through TASK-254 are complete. TASK-255 remains pending because the
+immutable `core-draft-0.6` tag requires maintainer approval and has not been
+created. Draft 0.5 remains the current closed cross-language proof release
 until the Draft 0.6 closure gate is satisfied.

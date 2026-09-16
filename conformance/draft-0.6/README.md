@@ -14,6 +14,7 @@ Run from the repository root:
 
 ```bash
 npm run metadata:check:draft0.6
+npm run checksums:check:draft0.6
 ```
 
 Profile-aware runner evidence can be produced with:
@@ -26,3 +27,21 @@ node runner/dist/cli/cli.js \
   --adapter implementations/typescript/adapters/conformance/dist/adapter.js \
   --json
 ```
+
+Current claim evidence commands:
+
+```bash
+npm run conformance:typescript:profile:full
+npm run conformance:python:profile:full
+npm run conformance:java:profile:money
+```
+
+Checksum metadata is generated deterministically with:
+
+```bash
+npm run checksums:generate:draft0.6
+```
+
+The checksum manifest excludes `checksums.json` itself to avoid a circular
+digest. Its current status is release-pending until a maintainer approves and
+creates the immutable `core-draft-0.6` tag.

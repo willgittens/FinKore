@@ -18,8 +18,10 @@
   "command": "npm run conformance:java:profile:money",
   "evidence": {
     "recordedDate": "2026-09-16",
-    "sourceRevision": "78f9f755a2ddd755821a7ae600e3bd0636db3cda",
-    "worktreeStatus": "milestone-d-working-tree",
+    "sourceRevision": "pending-commit",
+    "baseRevision": "bc72bab1e8fb867d3dba326897a65a7751dc4347",
+    "worktreeStatus": "milestone-e-working-tree; immutable tag pending maintainer approval",
+    "checksumManifest": "conformance/draft-0.6/checksums.json",
     "profileVectorIdsSha256": "3c3dcfb2f2f0a2ac1ebea9c71c6e5099e71ed12b47c3b115b0b2838e2ebb6c06",
     "sourceFileCount": 6
   },

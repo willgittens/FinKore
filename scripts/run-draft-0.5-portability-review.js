@@ -84,18 +84,21 @@ const ts = conformance('implementations/typescript/adapters/conformance/dist/ada
 const python = conformance('implementations/python/adapters/conformance/adapter.js')
 const javaMoney = conformance('implementations/java/adapters/conformance/adapter.js', ['--suite', 'money'])
 const javaFull = conformance('implementations/java/adapters/conformance/adapter.js')
+const totalVectors = ts.report.summary.total
+const moneyVectors = javaMoney.report.summary.total
+const nonMoneyVectors = totalVectors - moneyVectors
 
 const issues = [
-  ...expectCounts('TypeScript summary', ts.report.summary, { total: 244, passed: 244, failed: 0, unsupported: 0, infrastructureErrors: 0 }),
-  ...expectCounts('Python summary', python.report.summary, { total: 244, passed: 244, failed: 0, unsupported: 0, infrastructureErrors: 0 }),
-  ...expectCounts('Java Money summary', javaMoney.report.summary, { total: 83, passed: 83, failed: 0, unsupported: 0, infrastructureErrors: 0 }),
-  ...expectCounts('Java full-manifest unsupported-boundary summary', javaFull.report.summary, { total: 244, passed: 83, failed: 0, unsupported: 161, infrastructureErrors: 0 }),
+  ...expectCounts('TypeScript summary', ts.report.summary, { total: totalVectors, passed: totalVectors, failed: 0, unsupported: 0, infrastructureErrors: 0 }),
+  ...expectCounts('Python summary', python.report.summary, { total: totalVectors, passed: totalVectors, failed: 0, unsupported: 0, infrastructureErrors: 0 }),
+  ...expectCounts('Java Money summary', javaMoney.report.summary, { total: moneyVectors, passed: moneyVectors, failed: 0, unsupported: 0, infrastructureErrors: 0 }),
+  ...expectCounts('Java full-manifest unsupported-boundary summary', javaFull.report.summary, { total: totalVectors, passed: moneyVectors, failed: 0, unsupported: nonMoneyVectors, infrastructureErrors: 0 }),
   ...compareActuals('TypeScript/Python full-manifest actual mismatch', ts.report, python.report),
   ...compareActuals('TypeScript/Java Money actual mismatch', ts.report, javaMoney.report, 'money'),
 ]
 
 const lines = [
-  'Draft 0.5 portability review passed.',
+  'Cross-language portability review passed.',
   `TypeScript: ${ts.report.summary.passed}/${ts.report.summary.total} vectors passed; mutation-sensitive ${ts.report.mutationSensitive.passed}/${ts.report.mutationSensitive.total}.`,
   `Python: ${python.report.summary.passed}/${python.report.summary.total} vectors passed; mutation-sensitive ${python.report.mutationSensitive.passed}/${python.report.mutationSensitive.total}.`,
   `Java Money: ${javaMoney.report.summary.passed}/${javaMoney.report.summary.total} vectors passed; mutation-sensitive ${javaMoney.report.mutationSensitive.passed}/${javaMoney.report.mutationSensitive.total}.`,

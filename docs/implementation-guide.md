@@ -30,6 +30,11 @@ evidence that the same behavior can be realized idiomatically.
    canonical `finkore.*` operation.
 7. For Python or Java bootstrap work, use the
    [Draft 0.5 Python and Java Handoff Checklist](draft-0.5-python-java-handoff.md).
+8. For current compatibility, capability, and claim boundaries, read the
+   [Draft 0.6 Portability Capability Contract](../spec/draft-0.6-portability-capability-contract.md),
+   [Draft 0.6 Compatibility, Claims, and Provenance Policy](draft-0.6-compatibility-claims-provenance-policy.md),
+   and the machine-readable metadata under
+   [conformance/draft-0.6](../conformance/draft-0.6/README.md).
 
 ## Architecture Boundaries
 

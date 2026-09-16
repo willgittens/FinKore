@@ -704,11 +704,12 @@ portability and compatibility hardening is in progress; its Milestone B
 portable capability contract is accepted in the specification, its Milestone C
 compatibility, claims, and provenance policy is accepted in the Draft 0.6
 governance record, and its Milestone D metadata/profile proof exists in
-`/conformance/draft-0.6`. Draft 0.6 is not closed and must not be inferred from
-this CoreDoc. The conformance format value `0.1` continues to identify manifest
-and vector syntax compatibility unless that syntax changes. TypeScript, Python,
-Java, adapter, and runner package versions remain independently governed
-implementation-package versions.
+`/conformance/draft-0.6`. Milestone E release evidence and checksums are
+prepared, but Draft 0.6 is not closed until the maintainer-approved immutable
+tag exists and must not be inferred from this CoreDoc. The conformance format
+value `0.1` continues to identify manifest and vector syntax compatibility
+unless that syntax changes. TypeScript, Python, Java, adapter, and runner
+package versions remain independently governed implementation-package versions.
 
 Draft 0.4 CoreDoc inventory, bidirectional CoreDoc/specification traceability,
 counterexample review, accepted corrections, and the alignment gate result are

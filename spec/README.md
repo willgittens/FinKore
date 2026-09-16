@@ -11,9 +11,11 @@ Approval Validity; and selected Draft 0.3 Approval Composition, Workflow
 version/import/conflict, and Entity Revision/Import behavior. Draft 0.5 later
 proved this baseline through full-manifest Python and Money-scope Java
 implementations without adding new financial-domain behavior. Draft 0.6
-portability and compatibility hardening is in progress; its Milestone B
-portable capability contract is accepted, but Draft 0.6 is not closed. The
-specification remains pre-1.0 and experimental.
+portability and compatibility hardening is in progress; its portable capability
+contract, compatibility policy, profile metadata, capability declarations, and
+profile-specific evidence records are implemented, but the immutable release tag
+and final closure remain pending. The specification remains pre-1.0 and
+experimental.
 
 ## Purpose
 
@@ -44,11 +46,14 @@ Specifications are intended to remain small and composable. New concepts should 
 TypeScript is the reference implementation and remains runtime-independent where
 practical. Python passes the complete current manifest, and Java passes the
 complete current Money suite while reporting non-Money operations unsupported.
-These are implementation and conformance results, not specification authority
-or requirements that language APIs match one another. Future implementations
-may target C#, Go, Rust, PHP, or additional ecosystems. An implementation does
-not need to copy another implementation's API or internal architecture; it needs
-to preserve the behavior required here and verified by the conformance suite.
+Draft 0.6 expresses those scopes as closed profiles:
+`finkore.core.draft0_6.full` for TypeScript and Python, and
+`finkore.core.draft0_6.domain.money` for Java. These are implementation and
+conformance results, not specification authority or requirements that language
+APIs match one another. Future implementations may target C#, Go, Rust, PHP, or
+additional ecosystems. An implementation does not need to copy another
+implementation's API or internal architecture; it needs to preserve the behavior
+required here and verified by the conformance suite.
 
 The repository is organized around `spec/` and `conformance/` today. As implementations and portable interchange schemas are introduced, they may live in dedicated top-level areas alongside examples. This layout is project direction rather than a normative requirement.
 

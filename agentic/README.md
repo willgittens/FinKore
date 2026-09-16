@@ -2,7 +2,7 @@
 
 ## Status
 
-**Draft 0.4 foundation alignment**
+**Draft 0.6 profile and capability metadata available**
 
 > Agent-ready by contract, not by convention.
 
@@ -66,13 +66,17 @@ FinKore separates four dimensions:
 The Core Agentic Contract defines Discoverable, Understandable, and Governable
 semantics. Executable agent or transport adapters remain outside Draft 0.4.
 
-For FinKore Core Draft 0.4, an operation is **Agentic Ready** when it is
+For current FinKore Core work, an operation is **Agentic Ready** when it is
 Discoverable, Understandable, Governable, and Conformance-traceable. Direct
-execution through an agent framework is not required. Draft 0.4 preserves the
-Draft 0.3 alignment of the canonical `finkore.workflow.transition` descriptor
-with version binding and expected-state/revision conflict preconditions while
-keeping Approval composition/lifecycle fixtures, Workflow import, and Entity
-import conformance-local until stable public operation contracts exist.
+execution through an agent framework is not required. Draft 0.6 adds
+machine-readable capability declarations and profile evidence under
+`conformance/draft-0.6`, but it does not create the Draft 0.8
+machine-readable Agentic operation manifest or an executable agent adapter.
+Draft 0.4 preserved the Draft 0.3 alignment of the canonical
+`finkore.workflow.transition` descriptor with version binding and
+expected-state/revision conflict preconditions while keeping Approval
+composition/lifecycle fixtures, Workflow import, and Entity import
+conformance-local until stable public operation contracts exist.
 
 ## Documents
 
@@ -106,8 +110,6 @@ An operation may be considered Agentic Contract-ready when:
 
 ## Open questions
 
-- How should Milestone D encode accepted Draft 0.6 capability declarations
-  without creating the Draft 0.8 machine-readable operation manifest early?
 - Should all effects use booleans, or richer states such as `none`, `may`, and
   `required`?
 - Should operations declare idempotency semantics?

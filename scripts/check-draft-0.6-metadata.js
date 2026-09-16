@@ -201,7 +201,30 @@ function validateCapabilities(value, context, profileIds, errors) {
 function validateChecksums(value, errors) {
   if (value.finkoreChecksums !== expectedFormats.finkoreChecksums) errors.push('checksums: unsupported finkoreChecksums')
   if (value.algorithm !== 'SHA-256') errors.push('checksums: algorithm must be SHA-256')
-  if (!Array.isArray(value.artifacts)) errors.push('checksums: artifacts must be an array')
+  if (!Array.isArray(value.artifacts) || value.artifacts.length === 0) {
+    errors.push('checksums: artifacts must be a non-empty array')
+    return
+  }
+  const paths = value.artifacts.map((artifact) => artifact.path)
+  for (const duplicate of duplicateValues(paths)) errors.push(`checksums: duplicate artifact ${duplicate}`)
+  for (const artifact of value.artifacts) {
+    if (typeof artifact.path !== 'string' || artifact.path.length === 0) {
+      errors.push('checksums: artifact path must be a non-empty string')
+      continue
+    }
+    if (artifact.path === `${root}/checksums.json`) errors.push('checksums: manifest must not checksum itself')
+    if (artifact.path.includes('..') || artifact.path.startsWith('/')) errors.push(`checksums: unsafe artifact path ${artifact.path}`)
+    if (typeof artifact.sha256 !== 'string' || !/^[a-f0-9]{64}$/.test(artifact.sha256)) {
+      errors.push(`checksums: ${artifact.path} must have a SHA-256 digest`)
+      continue
+    }
+    if (!existsSync(artifact.path)) {
+      errors.push(`checksums: artifact does not exist ${artifact.path}`)
+      continue
+    }
+    const digest = createHash('sha256').update(readFileSync(artifact.path)).digest('hex')
+    if (digest !== artifact.sha256) errors.push(`checksums: digest mismatch for ${artifact.path}`)
+  }
 }
 
 function validateDrift(context, errors) {
@@ -287,6 +310,7 @@ console.log(JSON.stringify({
   profiles: profiles.profiles.length,
   capabilities: capabilities.declarations.length,
   claims: capabilities.declarations.filter((declaration) => typeof declaration.conformanceClaim === 'string').length,
+  checksumArtifacts: checksums.artifacts.length,
   vectors: vectors.length,
   vectorFiles: vectorFiles.length,
   portableErrors: context.specErrorCodes.size,
