@@ -216,3 +216,20 @@ The policy reserves stable Draft 0.6 profile ID forms and a closure-gated
 `core-draft-0.6` tag name, but does not create machine-readable metadata,
 checksums, release claims, or the immutable tag. Those remain Milestone D and E
 work.
+
+## Milestone D Update
+
+TASK-249 through TASK-253 are complete. Draft 0.6 metadata now lives under
+`conformance/draft-0.6`, including compatibility relationships, closed profile
+definitions, implementation capability declarations, claim records, checksum
+metadata shape, schemas, and positive/negative fixtures. `npm run
+metadata:check:draft0.6` validates duplicate identifiers, profile closure,
+capability-floor contradictions, canonical-operation drift, portable-error
+drift, claim/profile consistency, and checksum metadata.
+
+The runner remains domain-neutral and can resolve closed profiles from metadata.
+Current Milestone D evidence records TypeScript and Python passing the full
+254-vector Draft 0.6 profile, and Java passing the 93-vector Draft 0.6 Money
+profile while non-Money domains remain unsupported for Java. The immutable
+release tag and final reproducible checksum manifest remain Milestone E closure
+work.

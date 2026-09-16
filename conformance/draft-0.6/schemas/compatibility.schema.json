@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://finkore.org/schemas/draft-0.6/compatibility.schema.json",
+  "title": "FinKore Draft 0.6 Compatibility Metadata",
+  "type": "object",
+  "required": ["finkoreCompatibility", "authority", "coreVersions", "formats", "packages", "relationships", "unknownVersionPolicy"],
+  "properties": {
+    "finkoreCompatibility": { "const": "0.1" }
+  },
+  "additionalProperties": true
+}

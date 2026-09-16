@@ -1,0 +1,16 @@
+{
+  "finkoreCapabilities": "0.1",
+  "declarations": [
+    {
+      "implementation": "bad",
+      "language": "typescript",
+      "packageVersion": "0.1.0",
+      "coreTargets": ["draft-0.6"],
+      "canonicalOperations": ["workflow.import"],
+      "supportedProfiles": [],
+      "unsupportedDomains": [],
+      "limits": { "meetsDraft06PortableFloor": true },
+      "adapter": { "path": "implementations/typescript/adapters/conformance/dist/adapter.js", "version": "0.1.0" }
+    }
+  ]
+}

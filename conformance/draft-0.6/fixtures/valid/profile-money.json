@@ -1,0 +1,12 @@
+{
+  "finkoreProfiles": "0.1",
+  "profiles": [
+    {
+      "id": "finkore.core.draft0_6.domain.money",
+      "kind": "domain",
+      "coreVersion": "draft-0.6",
+      "selection": { "suites": ["money"] },
+      "capabilityFloor": "spec/draft-0.6-portability-capability-contract.md"
+    }
+  ]
+}

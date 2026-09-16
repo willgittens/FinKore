@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://finkore.org/schemas/draft-0.6/capabilities.schema.json",
+  "title": "FinKore Draft 0.6 Capability Metadata",
+  "type": "object",
+  "required": ["finkoreCapabilities", "declarations"],
+  "properties": {
+    "finkoreCapabilities": { "const": "0.1" }
+  },
+  "additionalProperties": true
+}

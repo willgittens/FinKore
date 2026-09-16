@@ -4,6 +4,7 @@ import { compareResults } from './comparator.js'
 import { filterVectors, type RunFilters } from './filters.js'
 import { loadConformance } from './loader.js'
 import type { RunnerMetadata } from './metadata.js'
+import { resolveProfile, type ProfileCatalog } from './profile.js'
 import { buildReport } from './reporter.js'
 import type { ExecutionResult } from './types/execution-result.js'
 import type { ConformanceReport } from './types/report.js'
@@ -14,10 +15,15 @@ export interface ConformanceRunnerOptions {
   readonly manifestPath: string
   readonly adapter: FinKoreConformanceAdapter
   readonly metadata?: RunnerMetadata
+  readonly profiles?: ProfileCatalog
+}
+
+export interface RunOptions extends RunFilters {
+  readonly profileId?: string
 }
 
 export interface ConformanceRunner {
-  run(filters?: RunFilters): Promise<ConformanceReport>
+  run(filters?: RunOptions): Promise<ConformanceReport>
 }
 
 function errorMessage(error: unknown): string {
@@ -70,14 +76,43 @@ async function executeVector(
 
 export function createConformanceRunner(options: ConformanceRunnerOptions): ConformanceRunner {
   return {
-    async run(filters: RunFilters = {}): Promise<ConformanceReport> {
+    async run(filters: RunOptions = {}): Promise<ConformanceReport> {
       const loaded = await loadConformance(options.manifestPath, options.metadata)
-      const vectors = filterVectors(loaded.vectors, filters)
+      if (filters.profileId !== undefined && ((filters.suites?.length ?? 0) > 0 || (filters.tags?.length ?? 0) > 0 || (filters.vectorIds?.length ?? 0) > 0)) {
+        throw new Error('Profile runs cannot be combined with suite, tag, or vector filters')
+      }
+      if (filters.profileId !== undefined && options.profiles === undefined) {
+        throw new Error('Profile run requested without profile metadata')
+      }
+      const profile = filters.profileId === undefined
+        ? undefined
+        : (() => {
+          const profiles = options.profiles
+          if (profiles === undefined) throw new Error('Profile run requested without profile metadata')
+          return resolveProfile(profiles, filters.profileId, loaded.manifest, loaded.vectors)
+        })()
+      const profileFiltered = profile === undefined
+        ? loaded.vectors
+        : loaded.vectors.filter((vector) => profile.vectorIds.includes(vector.id))
+      const vectors = filterVectors(profileFiltered, filters)
       const results: ExecutionResult[] = []
       for (const vector of vectors) {
         results.push(await executeVector(vector, options.adapter, loaded.metadata.criticalRequirementIds))
       }
-      return buildReport(results, loaded.metadata.criticalRequirementIds)
+      const profileEvidence = profile === undefined
+        ? undefined
+        : {
+          profileId: profile.profile.id,
+          coreVersion: profile.profile.coreVersion,
+          profileKind: profile.profile.kind,
+          manifestFormat: loaded.manifest.finkoreConformance,
+          vectorFileFormat: '0.1',
+          vectorCount: profile.vectorIds.length,
+          vectorIds: profile.vectorIds,
+          sourceFiles: [...new Set(vectors.map((vector) => vector.sourceFile))].sort((left, right) => left.localeCompare(right, 'en')),
+          ...(profile.profile.capabilityFloor === undefined ? {} : { capabilityFloor: profile.profile.capabilityFloor }),
+        }
+      return buildReport(results, loaded.metadata.criticalRequirementIds, profileEvidence)
     },
   }
 }

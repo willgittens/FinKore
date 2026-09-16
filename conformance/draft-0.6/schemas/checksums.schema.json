@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://finkore.org/schemas/draft-0.6/checksums.schema.json",
+  "title": "FinKore Draft 0.6 Checksum Manifest",
+  "type": "object",
+  "required": ["finkoreChecksums", "algorithm", "artifacts"],
+  "properties": {
+    "finkoreChecksums": { "const": "0.1" },
+    "algorithm": { "const": "SHA-256" }
+  },
+  "additionalProperties": true
+}

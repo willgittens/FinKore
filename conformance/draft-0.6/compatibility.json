@@ -1,0 +1,32 @@
+{
+  "finkoreCompatibility": "0.1",
+  "authority": "docs/draft-0.6-compatibility-claims-provenance-policy.md",
+  "coreVersions": ["draft-0.6"],
+  "formats": {
+    "manifest": ["0.1"],
+    "vectorFile": ["0.1"],
+    "profiles": ["0.1"],
+    "capabilities": ["0.1"],
+    "claims": ["0.1"],
+    "checksums": ["0.1"]
+  },
+  "packages": {
+    "runner": "0.1.0",
+    "typescriptCore": "0.1.0",
+    "typescriptAdapter": "0.1.0",
+    "pythonCore": "0.1.0",
+    "javaCore": "0.1.0"
+  },
+  "relationships": [
+    {
+      "coreVersion": "draft-0.6",
+      "manifestFormat": "0.1",
+      "vectorFileFormat": "0.1",
+      "profilesFormat": "0.1",
+      "capabilitiesFormat": "0.1",
+      "claimsFormat": "0.1",
+      "status": "supported"
+    }
+  ],
+  "unknownVersionPolicy": "reject"
+}

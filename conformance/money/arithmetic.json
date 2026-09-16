@@ -721,6 +721,286 @@
       "guardsAgainst": [
         "implicit-rounding-policy"
       ]
+    },
+    {
+      "id": "money.add.large-significant-digits-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "SPEC-DECIMAL-001",
+        "MONEY-ARITHMETIC-001",
+        "MONEY-ARITHMETIC-002",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009",
+        "MONEY-REPRESENTATION-002"
+      ],
+      "description": "Preserves an exact 62-digit addition result inside the Draft 0.6 portable floor.",
+      "operation": "finkore.money.add",
+      "input": {
+        "left": {
+          "amount": "123456789012345678901234567890123456789012345678901234567890.12",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "0.88",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "123456789012345678901234567890123456789012345678901234567891.00",
+          "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "123456789012345678901234567890123456789012345678901234567890.12",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "0.88",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "decimal-context-precision-loss",
+        "implicit-rounding-policy"
+      ]
+    },
+    {
+      "id": "money.add.deep-positive-scale-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "SPEC-DECIMAL-001",
+        "MONEY-ARITHMETIC-001",
+        "MONEY-ARITHMETIC-002",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009",
+        "MONEY-REPRESENTATION-002"
+      ],
+      "description": "Preserves exact addition at 60 fractional decimal places inside the Draft 0.6 portable floor.",
+      "operation": "finkore.money.add",
+      "input": {
+        "left": {
+          "amount": "0.000000000000000000000000000000000000000000000000000000000001",
+          "currency": "CHF"
+        },
+        "right": {
+          "amount": "0.000000000000000000000000000000000000000000000000000000000009",
+          "currency": "CHF"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "0.000000000000000000000000000000000000000000000000000000000010",
+          "currency": "CHF"
+        },
+        "observations": {
+          "left": {
+            "amount": "0.000000000000000000000000000000000000000000000000000000000001",
+            "currency": "CHF"
+          },
+          "right": {
+            "amount": "0.000000000000000000000000000000000000000000000000000000000009",
+            "currency": "CHF"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "deep-scale-truncated",
+        "implicit-rounding-policy"
+      ]
+    },
+    {
+      "id": "money.subtract.large-negative-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "SPEC-DECIMAL-001",
+        "MONEY-ARITHMETIC-001",
+        "MONEY-ARITHMETIC-002",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009",
+        "MONEY-REPRESENTATION-002",
+        "MONEY-REPRESENTATION-004"
+      ],
+      "description": "Preserves exact large negative subtraction inside the Draft 0.6 portable floor.",
+      "operation": "finkore.money.subtract",
+      "input": {
+        "left": {
+          "amount": "-98765432109876543210987654321098765432109876543210.75",
+          "currency": "USD"
+        },
+        "right": {
+          "amount": "12345678901234567890.25",
+          "currency": "USD"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-98765432109876543210987654321111111111011111111101.00",
+          "currency": "USD"
+        },
+        "observations": {
+          "left": {
+            "amount": "-98765432109876543210987654321098765432109876543210.75",
+            "currency": "USD"
+          },
+          "right": {
+            "amount": "12345678901234567890.25",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "decimal-context-precision-loss",
+        "operand-mutated-on-success"
+      ]
+    },
+    {
+      "id": "money.multiply.large-product-growth-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "SPEC-DECIMAL-001",
+        "MONEY-ARITHMETIC-004",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009",
+        "MONEY-REPRESENTATION-002"
+      ],
+      "description": "Preserves exact multiplication result growth inside the Draft 0.6 portable floor.",
+      "operation": "finkore.money.multiply",
+      "input": {
+        "value": {
+          "amount": "123456789012345678901234567890.12",
+          "currency": "JPY"
+        },
+        "scalar": "987654321098765432109876543210.98"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "121932631137021795226185032733862429504001414418287658588617.5176",
+          "currency": "JPY"
+        },
+        "observations": {
+          "operand": {
+            "amount": "123456789012345678901234567890.12",
+            "currency": "JPY"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "decimal-context-precision-loss",
+        "implicit-rounding-policy"
+      ]
+    },
+    {
+      "id": "money.divide.terminating-scale-40-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "SPEC-DECIMAL-001",
+        "MONEY-ARITHMETIC-005",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009",
+        "MONEY-REPRESENTATION-002"
+      ],
+      "description": "Preserves an exact terminating quotient at scale 40.",
+      "operation": "finkore.money.divide",
+      "input": {
+        "value": {
+          "amount": "1",
+          "currency": "GBP"
+        },
+        "scalar": "1099511627776"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "0.0000000000009094947017729282379150390625",
+          "currency": "GBP"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1",
+            "currency": "GBP"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "terminating-division-rejected",
+        "implicit-rounding-policy"
+      ]
+    },
+    {
+      "id": "money.divide.quotient-plain-expansion-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "SPEC-DECIMAL-001",
+        "MONEY-ARITHMETIC-005",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009",
+        "MONEY-SERIALIZATION-008"
+      ],
+      "description": "Serializes an exact quotient that some native decimal models represent with negative scale as plain notation.",
+      "operation": "finkore.money.divide",
+      "input": {
+        "value": {
+          "amount": "1000",
+          "currency": "GBP"
+        },
+        "scalar": "0.01"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "100000",
+          "currency": "GBP"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1000",
+            "currency": "GBP"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "exponent-output",
+        "negative-native-scale-leaked"
+      ]
     }
   ]
 }

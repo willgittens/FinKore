@@ -761,6 +761,52 @@
         "negative",
         "boundary"
       ]
+    },
+    {
+      "id": "money.round.scale-50-half-even-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "SPEC-DECIMAL-001",
+        "MONEY-ROUNDING-001",
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-004",
+        "MONEY-ROUNDING-008",
+        "MONEY-REPRESENTATION-002"
+      ],
+      "description": "Rounds at explicit target scale 50 using HALF_EVEN without ambient decimal context failure.",
+      "operation": "finkore.money.round",
+      "input": {
+        "value": {
+          "amount": "1.234567890123456789012345678901234567890123456789015",
+          "currency": "EUR"
+        },
+        "scale": 50,
+        "mode": "HALF_EVEN"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1.23456789012345678901234567890123456789012345678902",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1.234567890123456789012345678901234567890123456789015",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "decimal-context-invalid-operation",
+        "half-even-tie-wrong"
+      ]
     }
   ]
 }

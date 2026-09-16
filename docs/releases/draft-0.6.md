@@ -2,8 +2,8 @@
 
 ## Status
 
-Draft 0.6 is in progress. Milestones A through C are complete; Milestones D and
-E are pending. This document does not make a Draft 0.6 conformance,
+Draft 0.6 is in progress. Milestones A through D are complete; Milestone E is
+pending. This document does not make a final Draft 0.6 conformance,
 compatibility, immutable-tag, or release-closure claim.
 
 ## Target Scope
@@ -131,29 +131,50 @@ TypeScript adapter, Python core, and Java core remain independently versioned at
 - Release identity, closure-gated tag `core-draft-0.6`, SHA-256 checksum
   manifest, correction/revocation, and no-implied-signing rules are accepted.
 
+## Milestone D Deliverables
+
+- Machine-readable Draft 0.6 compatibility, profile, capability, claim, and
+  checksum metadata is recorded under
+  [`conformance/draft-0.6`](../../conformance/draft-0.6/README.md).
+- The metadata validator checks version relationships, duplicate identifiers,
+  profile closure, canonical operation drift, portable error drift,
+  capability-floor contradictions, claim/profile consistency, and invalid
+  fixture cases.
+- The conformance runner supports closed profile execution through
+  `--profile`/`--profiles` and records exact profile evidence in JSON reports.
+- Ten accepted Money portability boundary cases are promoted into manifest-listed
+  conformance vectors, increasing the current manifest to 254 vectors and the
+  Money profile to 93 vectors.
+- TypeScript and Python pass the full Draft 0.6 profile, and Java passes the
+  Draft 0.6 Money profile with non-Money domains remaining unsupported.
+
 ## Verification Status
 
-The Milestone A opening quality matrix is complete, and the Milestone B
-blocker-remediation checks listed below are current. Draft 0.6 closure
+The Milestone A opening quality matrix is complete, and the Milestone D
+metadata/profile evidence listed below is current. Draft 0.6 closure
 verification remains pending.
 
-| Check | Milestone A result |
+| Check | Current Draft 0.6 result |
 | --- | --- |
 | Toolchain check | PASS; CPython 3.12/3.13, JDK 21, and Maven 3.9.x repository-local tools valid |
-| Draft 0.6 baseline inventory | PASS; 381 requirements, 244 vectors, 217 mutation-sensitive vectors, 31 errors |
+| Draft 0.6 baseline inventory | PASS; 381 requirements, 254 vectors, 227 mutation-sensitive vectors, 31 errors |
 | TypeScript build and strict typecheck | PASS |
-| TypeScript unit tests | PASS; runner 110, core 371, adapter 15 |
+| TypeScript unit tests | PASS; runner 115, core 371, adapter 15 |
 | Python compile and adapter tests | PASS; adapter 4/4 |
 | Java tests and adapter tests | PASS; adapter 4/4 |
-| TypeScript full conformance | PASS; 244/244, zero failure/unsupported/infrastructure |
-| Python full conformance | PASS; 244/244, zero failure/unsupported/infrastructure |
-| Java Money conformance | PASS; 83/83, zero failure/unsupported/infrastructure |
-| Runner coverage | PASS; 98.31% statements, 95.29% branches, 100% functions, 98.75% lines |
+| TypeScript full conformance | PASS; 254/254, zero failure/unsupported/infrastructure |
+| Python full conformance | PASS; 254/254, zero failure/unsupported/infrastructure |
+| Java Money conformance | PASS; 93/93, zero failure/unsupported/infrastructure |
+| TypeScript full profile claim | PASS; `finkore.core.draft0_6.full`, 254/254 |
+| Python full profile claim | PASS; `finkore.core.draft0_6.full`, 254/254 |
+| Java Money profile claim | PASS; `finkore.core.draft0_6.domain.money`, 93/93 |
+| Draft 0.6 metadata validation | PASS; 26 profiles, 3 capability declarations, 3 claim records, 254 vectors |
+| Runner coverage | PASS; 96.33% statements, 94.20% branches, 97.29% functions, 98.33% lines |
 | TypeScript core coverage | PASS; 99.09% statements, 98.69% branches, 100% functions, 99.49% lines |
 | Python packaged coverage | PASS; 86% lines across `finkore` source with full manifest execution |
 | Java packaged coverage | PASS; 135/144 lines covered, 85% gate satisfied |
 | Python/Java critical-mutant probes | PASS; 14/14 killed |
-| Draft 0.5 portability regression | PASS; TypeScript 244/244, Python 244/244, Java Money 83/83, zero actual-result differences in declared scopes |
+| Draft 0.5 portability regression | PASS; TypeScript 244/244, Python 244/244, Java Money 83/83, zero actual-result differences in declared historical scopes |
 | Python Money regression tests | PASS; Draft 0.6 large-decimal and high-scale rounding/Rate controls included |
 | Boundary research harness | PASS; 19 cases, 49 executions, 19 matches, zero documented differences |
 | Milestone C policy references | PASS; compatibility, profile, claim, capability, and provenance policy linked from live navigation |
@@ -165,10 +186,11 @@ verification remains pending.
 ## Unsupported and Deferred Scope
 
 Java non-Money domains remain unsupported. Numeric and allocation capability
-floors are accepted for Milestone B but are not yet encoded as profile or
-capability metadata. Compatibility taxonomy, deprecation, profiles, claims,
-capability declarations, and provenance are accepted as Milestone C policy but
-not yet encoded as machine-readable metadata. Drift automation and profile-aware
-runner evidence remain pending later Draft 0.6 milestones.
+floors are accepted, encoded in capability/profile metadata, and exercised by
+manifest-listed Money profile vectors. Compatibility taxonomy, deprecation,
+profiles, claims, capability declarations, and provenance are encoded as
+Milestone D metadata and evidence. Final clean-checkout release hardening,
+artifact checksums, and immutable-tag status remain pending Milestone E work.
 
-No Draft 0.6 immutable tag or checksum manifest exists yet.
+No Draft 0.6 immutable tag exists yet. The checksum metadata file exists with
+`pending-release-closure` status; final artifact checksums remain pending.

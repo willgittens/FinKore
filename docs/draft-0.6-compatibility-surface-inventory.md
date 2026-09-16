@@ -16,7 +16,7 @@ TASK-240 point-in-time ownership record.
 | Surface | Current authority and identity | Compatibility risk | Evolution owner | Draft 0.6 disposition |
 | --- | --- | --- | --- | --- |
 | Foundation financial rules | `docs/coreDoc/core-doc.md`, stable `CORE-*` IDs | Silent replacement can sever durable rationale and review history | CoreDoc governance | Preserve identifiers and attributed evolution; compatibility policy in TASK-245 |
-| Precise domain behavior | `/spec`, 381 indexed requirement IDs plus the accepted Draft 0.6 portability capability contract | Changed MUST/MUST NOT meaning changes conforming outcomes | Domain specification | Milestone B capability and structural boundary decisions accepted; later metadata/proof work remains pending |
+| Precise domain behavior | `/spec`, 381 indexed requirement IDs plus the accepted Draft 0.6 portability capability contract | Changed MUST/MUST NOT meaning changes conforming outcomes | Domain specification | Milestone B capability and structural boundary decisions accepted; Milestone D metadata and proof records now reference this authority |
 | Normative Money serialization | `spec/money/serialization.md` | Parser or output changes can break portable interchange | Money specification | Exercise large/deep decimals; classify any accepted change before implementation |
 | Portable timestamp representation | `SPEC-TIMESTAMP-001..002` and domain refinements | Offset, instant, or host-time defaults can diverge | Specification conventions and affected domain | Existing equivalent-offset behavior retained; TASK-243 accepted instant-comparison disposition |
 | Nullability and presence | `SPEC-NULLABILITY-001` plus domain rules | Missing, null, and redacted values can collapse | Specification conventions and affected domain | Existing distinctions retained; TASK-243 accepted no global null default |
@@ -26,7 +26,7 @@ TASK-240 point-in-time ownership record.
 | Conformance manifest syntax | `conformance/manifest.json`, `finkoreConformance: 0.1` | Old runners may misdiscover scope | Conformance conventions | Version taxonomy in TASK-244; no automatic bump for Draft 0.6 |
 | Vector-file syntax | 16 files, `finkoreVectorFile: 0.1` | Old runners may misparse inputs or observations | Conformance conventions | Version taxonomy in TASK-244 |
 | Vector schema | `conformance/vector.schema.json` | Schema and loader disagreement can admit incompatible fixtures | Conformance | Compatibility tests in TASK-251 |
-| Vector identity and membership | 244 globally unique vector IDs discovered only from the manifest | Renames, orphan files, or filtering can misstate evidence | Conformance | Profile closure and drift checks in TASK-246/TASK-250 |
+| Vector identity and membership | 254 globally unique vector IDs discovered only from the manifest | Renames, orphan files, or filtering can misstate evidence | Conformance | Profile closure and drift checks implemented in TASK-250 |
 | Requirement traceability | `conformance/traceability.md`; 381 requirements | Orphan requirements/vectors can create false coverage claims | Specification and conformance | Automated bidirectional checks in TASK-250 |
 | Normalized runner result | Runner types, validator, comparator, and report | Shape or comparison changes can change pass/fail meaning | Runner/conformance contract | Version and compatibility rules in TASK-244/TASK-251 |
 | Runner package | `@finkore/conformance-runner` `0.1.0` | Package version alone does not identify Core behavior | Runner | Keep independent; profile evidence in TASK-251 |
@@ -40,14 +40,14 @@ TASK-240 point-in-time ownership record.
 | TypeScript adapter | `@finkore/typescript-conformance-adapter` `0.1.0` | Normalization can hide implementation divergence | Adapter/runner boundary | Adapter revision required in claims; no financial logic permitted |
 | Python adapter | Source revision; subprocess bridge | Crashes may be confused with domain errors | Adapter/runner boundary | Former high-scale crash resolved; infrastructure/domain separation remains governed by runner and adapter contracts |
 | Java adapter | Source revision; subprocess bridge | Money-only support may be broadened accidentally | Adapter/runner boundary | Non-Money support stays false; exact adapter revision required in claims |
-| TypeScript full claim | Draft 0.5 release: 244/244 | Moving manifest or implementation can invalidate historical evidence | Release/conformance evidence | Express as versioned full profile in TASK-246 |
-| Python full claim | Draft 0.5 release: 244/244 | Values outside the manifest can be mistaken as proven | Release/conformance evidence | Existing claim remains exact; resolved boundary controls do not retroactively expand the closed claim |
-| Java Money claim | Draft 0.5 release: 83/83; 161 non-Money unsupported | Domain claim can be presented as full claim | Release/conformance evidence | Express as versioned Money profile in TASK-246 |
+| TypeScript full claim | Draft 0.6 Milestone D profile claim: 254/254 | Moving manifest or implementation can invalidate historical evidence | Release/conformance evidence | Recorded as `finkore.core.draft0_6.full`; Draft 0.5 historical claim remains exact at 244/244 |
+| Python full claim | Draft 0.6 Milestone D profile claim: 254/254 | Values outside the manifest can be mistaken as proven | Release/conformance evidence | Recorded as `finkore.core.draft0_6.full`; resolved boundary controls do not retroactively expand the closed Draft 0.5 claim |
+| Java Money claim | Draft 0.6 Milestone D profile claim: 93/93; non-Money domains unsupported | Domain claim can be presented as full claim | Release/conformance evidence | Recorded as `finkore.core.draft0_6.domain.money`; Java full profile remains unsupported |
 | Coverage and mutation evidence | Release commands and reports | Quality evidence can be conflated with portable conformance | Implementation quality policy | Claims distinguish conformance from official/reference quality evidence |
 | Toolchain inputs | Node/npm, CPython 3.12/3.13, JDK 21, Maven 3.9.x | Host/runtime differences can prevent reproduction | Repository tooling | Record exact observed versions and supported floors in claim/release evidence |
 | Release notes | `docs/releases/*.md` | Planned work can be reported as shipped | Release governance | Draft 0.6 note remains in progress until TASK-255 |
 | Git revision and tag | Opening revision recorded; no immutable Draft 0.6 tag | Mutable branches cannot identify reviewed artifacts | Release governance | Provenance policy TASK-248; creation requires closure approval |
-| Checksums | No canonical release checksum manifest | Generated artifacts may not be reproducible | Release governance | Define policy in TASK-248 and schema in TASK-249 |
+| Checksums | Draft 0.6 checksum metadata format exists with release-closure status pending | Generated artifacts may not be reproducible | Release governance | Schema and validator exist; final artifact checksums remain TASK-254 closure work |
 | Research corpus | `docs/research/draft-0.6-boundary-corpus.json`, research format `0.1` | Exploratory values could become accidental specification | Draft 0.6 governance | Remains outside conformance manifest; differences require findings |
 
 ## Stable Semantic Inventory
@@ -55,7 +55,7 @@ TASK-240 point-in-time ownership record.
 | Kind | Opening count | Discovery authority | Draft 0.6 rule |
 | --- | ---: | --- | --- |
 | Core/spec requirement IDs | 381 | Markdown requirement definitions under `/spec` | Never reuse; orphan and duplicate checks added in TASK-250 |
-| Vector IDs | 244 | Manifest-listed vector files | Never reuse; profile membership cannot silently filter required vectors |
+| Vector IDs | 254 | Manifest-listed vector files | Never reuse; profile membership cannot silently filter required vectors |
 | Portable errors | 31 | Specification error catalogs | Conditions and precedence are semantic, not just string stability |
 | Canonical operations | 20 | `agentic/operations.md` | `/spec` remains authoritative; registry drift checked in TASK-250 |
 | Conformance-local labels | 15 | Manifest-listed vectors and conventions catalog | Test vocabulary only until separately promoted |
@@ -68,9 +68,9 @@ validation.
 
 | Implementation | Supported opening scope | Explicit non-capability | Evidence authority |
 | --- | --- | --- | --- |
-| TypeScript | Complete 244-vector manifest | No behavior beyond current Core/spec scope | Draft 0.5 release plus reproducible current run |
-| Python | Complete 244-vector manifest | No behavior beyond current Core/spec scope | Draft 0.5 release plus reproducible current run |
-| Java | 83-vector Money suite | 161 non-Money vectors unsupported | Draft 0.5 release plus reproducible current run |
+| TypeScript | Complete 254-vector full Draft 0.6 profile | No behavior beyond current Core/spec scope | Draft 0.6 Milestone D claim record plus final closure checks |
+| Python | Complete 254-vector full Draft 0.6 profile | No behavior beyond current Core/spec scope | Draft 0.6 Milestone D claim record plus final closure checks |
+| Java | 93-vector Money Draft 0.6 profile | Non-Money domains unsupported | Draft 0.6 Milestone D claim record plus final closure checks |
 
 The support boundary is operation- and profile-specific. Package presence,
 method availability, or an Agentic capability statement does not prove a
@@ -81,9 +81,9 @@ the Draft 0.5 claim.
 
 | Deferred topic | Current authority/status | Draft 0.6 disposition |
 | --- | --- | --- |
-| Decimal precision, scale, exact-result growth, overflow | Draft 0.6 portable floor accepted; behavior above declared capability remains governed by later metadata | TASK-242 complete; no unlimited arithmetic claim |
-| Allocation ratio/unit and part-count floor | Draft 0.6 portable floor accepted for safe-integer ratios, 100 parts, target scale through 50, and bounded allocation units | TASK-242 complete; later metadata/proof work remains pending |
-| Implementation capability discovery | Capability subsets allowed, no versioned declaration contract | In scope for TASK-247 |
+| Decimal precision, scale, exact-result growth, overflow | Draft 0.6 portable floor accepted and exercised by manifest-listed profile vectors | TASK-242 and TASK-252 complete; no unlimited arithmetic claim |
+| Allocation ratio/unit and part-count floor | Draft 0.6 portable floor accepted for safe-integer ratios, 100 parts, target scale through 50, and bounded allocation units | TASK-242 and TASK-252 complete; proof recorded in TASK-253 claims |
+| Implementation capability discovery | Capability declarations encoded in `conformance/draft-0.6/capabilities.json` | TASK-247 and TASK-249 complete; declarations are distinct from claim evidence |
 | Currency minor-unit metadata and defaults | Deferred; calculation scale is not currency minor units | Out of Draft 0.6 except to prohibit accidental coupling |
 | Private/non-fiat currency namespace | Deferred | Out of Draft 0.6 unless an accepted blocker proves necessary |
 | Duplicate JSON member handling | No domain semantic; parser-specific | Out of Draft 0.6 unless normative serialization review identifies a blocker |
@@ -114,9 +114,11 @@ time.
 Every known compatibility surface now has an authority, current identity or
 explicit absence, evolution owner, risk, and Draft 0.6 disposition. Milestone B
 has accepted the portable capability floor and structural boundary dispositions;
-Milestone C has accepted compatibility, profile, claim, capability-declaration,
-and provenance policy in
+Milestone C accepted compatibility, profile, claim, capability-declaration, and
+provenance policy in
 [Draft 0.6 Compatibility, Claims, and Provenance Policy](draft-0.6-compatibility-claims-provenance-policy.md).
-Later Draft 0.6 metadata, validation, proof, and release tasks remain pending.
-No new portable error, canonical operation, conformance vector, or package
-version is created by this inventory.
+Milestone D now provides machine-readable metadata, drift validation,
+profile-aware runner evidence, promoted Money portability vectors, and current
+claim records. Release hardening, final checksums, and immutable-tag status
+remain pending. No new portable error, canonical operation, or package version
+is created by this inventory.

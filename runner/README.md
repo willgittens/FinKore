@@ -89,6 +89,29 @@ const report = await runner.run({
 
 Values within one filter dimension are ORed; different dimensions are ANDed. Empty filter arrays mean no restriction. Filtering preserves loader order and never changes vector semantics.
 
+## Profile Evidence
+
+Draft 0.6 profile metadata lives outside the runner in
+`conformance/draft-0.6/profiles.json`. A profile run resolves one closed
+profile, rejects unknown profiles, and cannot be combined with `suite`, `tag`,
+or `vector` filters. Reports include profile evidence: profile id, Core version,
+profile kind, manifest/vector format versions, required vector count, required
+vector ids, source files, and any capability floor reference.
+
+Programmatic profile use:
+
+```ts
+import { createConformanceRunner, loadProfileCatalog } from '@finkore/conformance-runner'
+import { adapter } from './my-adapter.js'
+
+const profiles = await loadProfileCatalog('conformance/draft-0.6/profiles.json')
+const report = await createConformanceRunner({
+  manifestPath: 'conformance/manifest.json',
+  adapter,
+  profiles,
+}).run({ profileId: 'finkore.core.draft0_6.domain.money' })
+```
+
 ## CLI
 
 Build the package, then provide an ESM module whose default export or named `adapter` export implements the adapter interface:
@@ -103,6 +126,17 @@ node dist/cli/cli.js \
 ```
 
 Repeat `--suite`, `--tag`, or `--vector` to select multiple values. Add `--json` for the stable machine-readable report.
+
+Profile mode:
+
+```bash
+node dist/cli/cli.js \
+  --manifest ../conformance/manifest.json \
+  --profiles ../conformance/draft-0.6/profiles.json \
+  --profile finkore.core.draft0_6.domain.money \
+  --adapter ./my-adapter.js \
+  --json
+```
 
 Exit codes have this precedence:
 

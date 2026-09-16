@@ -798,6 +798,117 @@
         "unsupported-method-accepted",
         "wrong-error-code"
       ]
+    },
+    {
+      "id": "money.allocate.ratio.safe-integer-boundary-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "SPEC-DECIMAL-001",
+        "MONEY-ALLOCATION-002",
+        "MONEY-ALLOCATION-004",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009",
+        "MONEY-ALLOCATION-010",
+        "MONEY-ALLOCATION-012",
+        "MONEY-ALLOCATION-013"
+      ],
+      "description": "Allocates using ratio values at the Draft 0.6 safe-integer boundary with exact integer unit arithmetic.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "999999999999999999999999.99",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            9007199254740991,
+            9007199254740990,
+            1
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "500000000000000000000000.00",
+            "currency": "USD"
+          },
+          {
+            "amount": "499999999999999944488848.76",
+            "currency": "USD"
+          },
+          {
+            "amount": "55511151.23",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "999999999999999999999999.99",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "ratio-sum-overflow",
+        "unsafe-number-rounding",
+        "declared-order-ignored"
+      ]
+    },
+    {
+      "id": "money.allocate.equal.hundred-parts-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-002",
+        "MONEY-ALLOCATION-003",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009",
+        "MONEY-ALLOCATION-010",
+        "MONEY-ALLOCATION-012",
+        "MONEY-ALLOCATION-013"
+      ],
+      "description": "Allocates into 100 equal parts inside the Draft 0.6 portable part-count floor.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "1.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "EQUAL",
+          "parts": 100
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"}],
+        "observations": {
+          "operand": {
+            "amount": "1.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "part-count-limit-too-low",
+        "allocation-total-not-preserved"
+      ]
     }
   ]
 }

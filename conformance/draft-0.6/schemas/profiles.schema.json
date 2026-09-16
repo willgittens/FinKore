@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://finkore.org/schemas/draft-0.6/profiles.schema.json",
+  "title": "FinKore Draft 0.6 Profile Metadata",
+  "type": "object",
+  "required": ["finkoreProfiles", "profiles"],
+  "properties": {
+    "finkoreProfiles": { "const": "0.1" }
+  },
+  "additionalProperties": true
+}

@@ -2,7 +2,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createConformanceRunner } from '../src/runner.js'
 import type { FinKoreConformanceAdapter } from '../src/adapter/types.js'
-import { createFixtureConformance, metadata, validVector } from './helpers.js'
+import { createFixtureConformance, metadata, profileCatalog, validVector } from './helpers.js'
 
 async function runWith(adapter: FinKoreConformanceAdapter, vectors: readonly unknown[] = [validVector]) {
   const fixture = await createFixtureConformance(vectors)
@@ -94,5 +94,34 @@ describe('runner execution classification', () => {
     const report = await createConformanceRunner({ manifestPath: fixture.manifestPath, adapter, metadata }).run({ tags: ['positive'] })
     expect(calls).toEqual(['first'])
     expect(report.results.map((result) => result.vectorId)).toEqual(['money.add.first-001'])
+  })
+
+  it('records profile evidence for a closed profile run', async () => {
+    const fixture = await createFixtureConformance()
+    const report = await createConformanceRunner({
+      manifestPath: fixture.manifestPath,
+      adapter: { supports: () => true, execute: () => ({ status: 'success', value: { answer: 'ok' } }) },
+      metadata,
+      profiles: profileCatalog,
+    }).run({ profileId: 'finkore.core.draft0_6.domain.money' })
+    expect(report.profile).toMatchObject({
+      profileId: 'finkore.core.draft0_6.domain.money',
+      coreVersion: 'draft-0.6',
+      vectorCount: 1,
+      capabilityFloor: 'spec/draft-0.6-portability-capability-contract.md',
+    })
+    expect(report.profile?.vectorIds).toEqual(['money.add.basic-001'])
+  })
+
+  it('rejects unknown profiles and profile runs mixed with filters', async () => {
+    const fixture = await createFixtureConformance()
+    const runner = createConformanceRunner({
+      manifestPath: fixture.manifestPath,
+      adapter: { supports: () => true, execute: () => ({ status: 'success', value: { answer: 'ok' } }) },
+      metadata,
+      profiles: profileCatalog,
+    })
+    await expect(runner.run({ profileId: 'finkore.core.draft0_6.full' })).rejects.toThrow('Unknown profile')
+    await expect(runner.run({ profileId: 'finkore.core.draft0_6.domain.money', suites: ['money'] })).rejects.toThrow('cannot be combined')
   })
 })

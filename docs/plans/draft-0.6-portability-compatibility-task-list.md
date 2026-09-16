@@ -654,7 +654,7 @@ no-external-attestation language.
 
 ### Milestone D — Automated Enforcement and Cross-Language Proof
 
-### - [ ] TASK-249 — Add Machine-Readable Compatibility, Capability, and Claim Metadata
+### - [x] TASK-249 — Add Machine-Readable Compatibility, Capability, and Claim Metadata
 
 **Depends on:** TASK-246, TASK-247, and TASK-248.
 
@@ -672,7 +672,13 @@ restating domain rules; unknown required versions are rejected; optional
 extension behavior is explicit; invalid or contradictory records fail; the work
 does not create a machine-readable Agentic operation registry or production API.
 
-### - [ ] TASK-250 — Add Identifier, Traceability, Registry, and Metadata Drift Checks
+**Current status:** Complete. Draft 0.6 metadata now lives under
+`conformance/draft-0.6`, including compatibility, profile, capability, claim,
+checksum, schema, and fixture records. The metadata references existing
+specification, conformance, Agentic, adapter, and policy authorities without
+creating financial semantics or a Draft 0.8 operation manifest.
+
+### - [x] TASK-250 — Add Identifier, Traceability, Registry, and Metadata Drift Checks
 
 **Depends on:** TASK-249.
 
@@ -694,7 +700,13 @@ not broad exclusions.
 are deterministic and runnable in CI; no check derives normative behavior from
 an implementation; existing intentional gaps are named and justified.
 
-### - [ ] TASK-251 — Add Profile-Aware Runner Evidence and Compatibility Tests
+**Current status:** Complete. `npm run metadata:check:draft0.6` validates
+format versions, duplicate profile/vector identifiers, missing specs and
+requirements, canonical operation drift, portable error drift, profile closure,
+capability-floor contradictions, unsupported scope, claim/profile consistency,
+checksum metadata, and invalid fixtures.
+
+### - [x] TASK-251 — Add Profile-Aware Runner Evidence and Compatibility Tests
 
 **Depends on:** TASK-246 and TASK-249.
 
@@ -713,7 +725,12 @@ from validated metadata; a partial run cannot be emitted as a successful full
 claim; old supported formats retain their defined meaning; incompatible formats
 fail explicitly; current unfiltered execution remains available.
 
-### - [ ] TASK-252 — Specify and Implement the Accepted Portability Boundaries
+**Current status:** Complete. The runner resolves profiles from metadata,
+rejects unknown profiles, rejects profile runs combined with ad hoc filters,
+emits profile evidence in JSON and console reports, and keeps ordinary
+unfiltered/filter execution available.
+
+### - [x] TASK-252 — Specify and Implement the Accepted Portability Boundaries
 
 **Depends on:** TASK-242, TASK-243, TASK-249, and TASK-251.
 
@@ -734,7 +751,15 @@ every in-scope implementation passes inside its claimed profile; failures are
 non-mutating where required; critical new mutants are killed; no adapter
 implements financial policy.
 
-### - [ ] TASK-253 — Prove Cross-Language Portability Inside the Declared Floor
+**Current status:** Complete. Ten accepted Money boundary cases were promoted
+into manifest-listed conformance vectors covering large significant digits,
+deep positive scale, large negative subtraction, large product growth,
+terminating scale-40 division, plain quotient expansion, scale-50 HALF_EVEN
+rounding, large percentage Rate application, safe-integer allocation ratios,
+and 100-part equal allocation. TypeScript, Python, and Java Money pass their
+declared profile scopes with these vectors included.
+
+### - [x] TASK-253 — Prove Cross-Language Portability Inside the Declared Floor
 
 **Depends on:** TASK-250 through TASK-252.
 
@@ -753,6 +778,13 @@ specified results inside its floor; zero failures, unsupported results, or
 infrastructure errors occur in successful claims; differing implementation
 maxima are declared and do not affect claimed results; no critical portability
 or metadata-validation mutant survives; all blockers are closed.
+
+**Current status:** Complete. TypeScript and Python pass
+`finkore.core.draft0_6.full` at 254/254 vectors. Java passes
+`finkore.core.draft0_6.domain.money` at 93/93 vectors and does not claim
+non-Money domains. Claim records are stored in
+`conformance/draft-0.6/claims`, and capability declarations point to those
+profile-specific records.
 
 ### Milestone E — Release Hardening and Closure
 
@@ -835,14 +867,15 @@ statement.
 - [x] Capability declarations are distinct from conformance evidence.
 - [x] Claim records identify exact scope, versions, revision, limits, and result
   counts.
-- [ ] Duplicate/orphan/drift and invalid-metadata checks run in CI.
-- [ ] Profile-aware runner output cannot launder partial, unsupported, or
+- [x] Duplicate/orphan/drift and invalid-metadata checks have a CI-runnable
+  command.
+- [x] Profile-aware runner output cannot launder partial, unsupported, or
   infrastructure results into a pass.
-- [ ] Large decimals, extreme scales, allocation units, Unicode identifiers,
+- [x] Large decimals, extreme scales, allocation units, Unicode identifiers,
   timestamp offsets, absent/null, and declared order are exercised as required
   by accepted decisions.
-- [ ] TypeScript and Python pass the declared full profile.
-- [ ] Java passes the declared Money profile and reports other domains honestly.
+- [x] TypeScript and Python pass the declared full profile.
+- [x] Java passes the declared Money profile and reports other domains honestly.
 - [ ] Critical financial and compatibility-enforcement mutants are killed.
 - [ ] Specification, conformance, Agentic, implementation, tests, public API
   documentation, READMEs, and release notes are synchronized.
@@ -877,9 +910,9 @@ Any `yes` answer requiring synchronized work must be resolved before closure.
 ## 16. Current Execution Status
 
 ```text
-NEXT CODEX TASK: TASK-249 — Add Machine-Readable Compatibility, Capability, and Claim Metadata.
+  NEXT CODEX TASK: TASK-254 — Synchronize Documentation and Produce Reproducible Release Evidence.
 ```
 
-Milestones A through C (TASK-238 through TASK-248) are complete. Milestones D
-and E are pending. Draft 0.5 remains the current closed cross-language proof
-release until the Draft 0.6 closure gate is satisfied.
+Milestones A through D (TASK-238 through TASK-253) are complete. Milestone E is
+pending. Draft 0.5 remains the current closed cross-language proof release
+until the Draft 0.6 closure gate is satisfied.

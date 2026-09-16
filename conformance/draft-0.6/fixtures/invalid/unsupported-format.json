@@ -1,0 +1,9 @@
+{
+  "finkoreCompatibility": "0.2",
+  "authority": "docs/draft-0.6-compatibility-claims-provenance-policy.md",
+  "coreVersions": ["draft-0.6"],
+  "formats": {},
+  "packages": {},
+  "relationships": [],
+  "unknownVersionPolicy": "reject"
+}

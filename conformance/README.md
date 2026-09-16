@@ -37,9 +37,10 @@ directory explicitly.
 
 Draft 0.6 Milestone C accepts profile and evidence-based claim policy in
 [Draft 0.6 Compatibility, Claims, and Provenance Policy](../docs/draft-0.6-compatibility-claims-provenance-policy.md).
-Those rules reserve profile identifiers and claim requirements, but
-machine-readable profile metadata and profile-aware runner evidence remain
-Milestone D work.
+Draft 0.6 Milestone D encodes the current compatibility, profile, capability,
+claim, and checksum metadata under [draft-0.6](draft-0.6/README.md). The
+profile-aware runner can now emit closed-profile evidence for TypeScript full
+scope, Python full scope, and Java Money scope.
 
 The initial suites are grouped by specification behavior:
 

@@ -6,12 +6,12 @@ const expected = {
   requirements: 381,
   vectorFiles: 16,
   suites: 5,
-  manifestVectors: 244,
-  moneyVectors: 83,
+  manifestVectors: 254,
+  moneyVectors: 93,
   operationLabels: 35,
   canonicalAgenticOperations: 20,
   conformanceLocalOperationLabels: 15,
-  mutationSensitiveVectors: 217,
+  mutationSensitiveVectors: 227,
   portableErrorCodes: 31,
 }
 
@@ -129,10 +129,10 @@ const failures = [
 ]
 
 if (failures.length > 0) {
-  console.error('Draft 0.6 opening baseline validation failed:')
+  console.error('Draft 0.6 baseline validation failed:')
   for (const failure of failures) console.error(`- ${failure}`)
   process.exit(1)
 }
 
-console.log('Draft 0.6 opening baseline validation passed.')
+console.log('Draft 0.6 baseline validation passed.')
 console.log(JSON.stringify({ inventory: actual, versions: actualVersions }, null, 2))

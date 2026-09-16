@@ -23,6 +23,19 @@ export const validVector: ConformanceVector = {
   tags: ['positive'],
 }
 
+export const profileCatalog = {
+  finkoreProfiles: '0.1' as const,
+  profiles: [
+    {
+      id: 'finkore.core.draft0_6.domain.money',
+      kind: 'domain' as const,
+      coreVersion: 'draft-0.6',
+      selection: { suites: ['money'] },
+      capabilityFloor: 'spec/draft-0.6-portability-capability-contract.md',
+    },
+  ],
+}
+
 export async function createFixtureConformance(
   vectors: readonly unknown[] = [validVector],
   manifestOverride?: unknown,

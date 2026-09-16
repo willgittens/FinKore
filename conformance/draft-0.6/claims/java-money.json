@@ -1,0 +1,33 @@
+{
+  "finkoreClaim": "0.1",
+  "authority": "docs/draft-0.6-compatibility-claims-provenance-policy.md",
+  "claimId": "draft0.6-java-money",
+  "implementation": "java",
+  "language": "java",
+  "packageVersion": "0.1.0",
+  "profileId": "finkore.core.draft0_6.domain.money",
+  "profileKind": "domain",
+  "coreVersion": "draft-0.6",
+  "manifestFormat": "0.1",
+  "vectorFileFormat": "0.1",
+  "capabilityFloor": "spec/draft-0.6-portability-capability-contract.md",
+  "adapter": {
+    "path": "implementations/java/adapters/conformance/adapter.js",
+    "version": "source"
+  },
+  "command": "npm run conformance:java:profile:money",
+  "evidence": {
+    "recordedDate": "2026-09-16",
+    "sourceRevision": "78f9f755a2ddd755821a7ae600e3bd0636db3cda",
+    "worktreeStatus": "milestone-d-working-tree",
+    "profileVectorIdsSha256": "3c3dcfb2f2f0a2ac1ebea9c71c6e5099e71ed12b47c3b115b0b2838e2ebb6c06",
+    "sourceFileCount": 6
+  },
+  "summary": {
+    "total": 93,
+    "passed": 93,
+    "failed": 0,
+    "unsupported": 0,
+    "infrastructureErrors": 0
+  }
+}

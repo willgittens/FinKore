@@ -540,6 +540,55 @@
         "unsupported-rounding-mode-accepted",
         "operand-mutated-on-error"
       ]
+    },
+    {
+      "id": "money.rate.large-percentage-growth-001",
+      "spec": "money/rates",
+      "requirements": [
+        "SPEC-DECIMAL-001",
+        "MONEY-RATE-001",
+        "MONEY-RATE-002",
+        "MONEY-RATE-003",
+        "MONEY-RATE-005",
+        "MONEY-RATE-009",
+        "MONEY-REPRESENTATION-002"
+      ],
+      "description": "Applies a large percentage Rate exactly without decimal context precision loss.",
+      "operation": "finkore.money.applyrate",
+      "input": {
+        "value": {
+          "amount": "123456789012345678901234567890.12",
+          "currency": "EUR"
+        },
+        "rate": {
+          "kind": "PERCENTAGE",
+          "value": "1234567890.123456789"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1524157875323883675034293577503386681.3431672002468",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "123456789012345678901234567890.12",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "percentage-not-scaled",
+        "decimal-context-precision-loss",
+        "implicit-rounding-policy"
+      ]
     }
   ]
 }

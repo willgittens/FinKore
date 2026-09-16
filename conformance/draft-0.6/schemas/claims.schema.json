@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://finkore.org/schemas/draft-0.6/claims.schema.json",
+  "title": "FinKore Draft 0.6 Claim Evidence",
+  "type": "object",
+  "required": ["finkoreClaim", "profileId", "implementation", "summary"],
+  "properties": {
+    "finkoreClaim": { "const": "0.1" }
+  },
+  "additionalProperties": true
+}
