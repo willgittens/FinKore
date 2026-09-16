@@ -5,8 +5,8 @@
   "status": "generated-pending-immutable-tag",
   "generatedFor": {
     "coreVersion": "draft-0.6",
-    "baseRevision": "bc72bab1e8fb867d3dba326897a65a7751dc4347",
-    "worktreeStatus": "milestone-e-working-tree",
+    "baseRevision": "aec87f4e54442c808e5e038530fa98ea54ee4eac",
+    "worktreeStatus": "post-commit release-evidence refresh; immutable tag pending maintainer approval",
     "immutableTag": "core-draft-0.6",
     "immutableTagStatus": "pending-maintainer-approval"
   },
@@ -85,11 +85,11 @@
     },
     {
       "path": "conformance/draft-0.6/claims/java-money.json",
-      "sha256": "3ea63978075a3454b43f54b12fee3f4a0cccfa1a64f6b942f1450fb398124564"
+      "sha256": "aafe493efa5b1c36d9d12bf0a07e3bc74a9c14bd4e130f50996b5964749b78aa"
     },
     {
       "path": "conformance/draft-0.6/claims/python-full.json",
-      "sha256": "91360d6630952f6589b14f83298e80f8cd747a038596731d9ff9be9c795f5db2"
+      "sha256": "7c375aef62c699c9f2df277b6e60ece8f5d9f287c6f74c211810989dc3b0517a"
     },
     {
       "path": "conformance/draft-0.6/claims/README.md",
@@ -97,7 +97,7 @@
     },
     {
       "path": "conformance/draft-0.6/claims/typescript-full.json",
-      "sha256": "5e1564ae01e59b9f0f55082385248341f1545bdfdaf16d6fa001ea1bba25e2ac"
+      "sha256": "ba8542d647108f1acbdb81b439369fab0624258d5bb96554dc97053dc2bb089e"
     },
     {
       "path": "conformance/draft-0.6/compatibility.json",

@@ -73,7 +73,7 @@ const manifest = {
   generatedFor: {
     coreVersion: 'draft-0.6',
     baseRevision: gitHead(),
-    worktreeStatus: 'milestone-e-working-tree',
+    worktreeStatus: 'post-commit release-evidence refresh; immutable tag pending maintainer approval',
     immutableTag: 'core-draft-0.6',
     immutableTagStatus: 'pending-maintainer-approval',
   },
