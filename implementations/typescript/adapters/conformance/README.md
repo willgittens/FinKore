@@ -4,8 +4,9 @@ Adapter from FinKore conformance operation IDs to the TypeScript reference imple
 
 Draft 0.4 stabilizes this adapter contract for the existing Draft 0.1 through
 Draft 0.3 behavior. It keeps conformance-local fixtures separate from production
-API requirements and does not add Python or Java conformance claims.
-Future adapters should follow the language-neutral
+API requirements. Draft 0.5 later recorded independent Python full-manifest and
+Java Money adapter results; those adapters remain separate evidence and do not
+copy this adapter as financial authority. New adapters should follow the language-neutral
 [Conformance Adapter Onboarding Guide](../../../../docs/conformance-adapter-onboarding.md)
 rather than copying TypeScript adapter internals as architecture.
 

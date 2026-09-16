@@ -39,8 +39,8 @@ The initial suites are grouped by specification behavior:
 See [conventions.md](conventions.md) for the vector format and runner contract.
 See [traceability.md](traceability.md) for the current requirement coverage, known specification gaps, mutation design, and readiness assessment.
 See the [Draft 0.4 conformance and implementer documentation audit](draft-0.4-audit.md)
-for the schema, manifest, vector, traceability, runner, and adapter boundary
-review that supports future Python and Java adapter work.
+for the historical schema, manifest, vector, traceability, runner, and adapter
+boundary review that prepared the completed Draft 0.5 Python and Java work.
 See the [Conformance Adapter Onboarding Guide](../docs/conformance-adapter-onboarding.md)
 for integration steps.
 

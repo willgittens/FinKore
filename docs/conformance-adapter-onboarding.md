@@ -188,5 +188,8 @@ A conformance claim needs all of the following:
   implementations;
 - a clear statement of unsupported, not yet specified, and deferred behavior.
 
-Draft 0.4 does not claim Python or Java implementation or conformance. It only
-publishes the baseline and onboarding path for Draft 0.5 work.
+Draft 0.4 itself did not claim Python or Java implementation or conformance; it
+published the baseline and onboarding path. Draft 0.5 subsequently recorded
+full-manifest Python conformance and Money-scope Java conformance. Those results
+do not remove any of the evidence requirements above for a new or updated
+claim.

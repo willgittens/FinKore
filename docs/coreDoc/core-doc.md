@@ -698,11 +698,13 @@ machine-understandable operation semantics and must reference, not replace,
 evidence and regression oracles, not sources of financial semantics.
 
 FinKore Core Draft 0.4 is the current shared behavioral stabilization baseline.
-Draft 0.5 is reserved for the later Python and Java implementation milestone and
-must not be inferred from this CoreDoc. The conformance format value `0.1`
-continues to identify manifest and vector syntax compatibility unless that
-syntax changes. TypeScript, runner, and future Python or Java package versions
-remain independently governed implementation-package versions.
+Draft 0.5 closed the independent Python full-manifest and Java Money
+implementation milestone without changing this CoreDoc baseline. Draft 0.6
+portability and compatibility hardening is in progress and must not be inferred
+from this CoreDoc. The conformance format value `0.1` continues to identify
+manifest and vector syntax compatibility unless that syntax changes.
+TypeScript, Python, Java, adapter, and runner package versions remain
+independently governed implementation-package versions.
 
 Draft 0.4 CoreDoc inventory, bidirectional CoreDoc/specification traceability,
 counterexample review, accepted corrections, and the alignment gate result are
@@ -742,8 +744,10 @@ CoreDoc or `/spec`.
 Draft 0.4 foundation stabilization accepted the authority and version taxonomy
 recorded in the [Draft 0.4 Foundation Plan](../plans/draft-0.4-foundation-task-list.md):
 FinKore Core Draft 0.4 names the shared specification/CoreDoc baseline; Draft
-0.5 is the future Python and Java implementation milestone; conformance format
-and language package versions are separate compatibility dimensions.
+0.5 was assigned the later Python and Java implementation milestone;
+conformance format and language package versions are separate compatibility
+dimensions. Draft 0.5 is now closed; this paragraph records the accepted Draft
+0.4 decision rather than current implementation status.
 
 Material findings during Draft 0.4 review must record:
 

@@ -101,6 +101,9 @@ The execution sequence is defined by the
 Define the limits and evolution rules needed for independent implementations to
 remain compatible over time.
 
+The execution sequence is defined by the
+[Draft 0.6 Portability and Compatibility Hardening Task List](draft-0.6-portability-compatibility-task-list.md).
+
 ### Recommended Work
 
 - Decide how portable decimal precision, scale, allocation-unit, and overflow

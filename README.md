@@ -103,8 +103,9 @@ FinKore is not an ERP, ORM, payment processor, UI framework, accounting applicat
 - [Agentic Contract](./agentic/README.md) — portable operational semantics for machine clients.
 - [Language-Neutral Implementation Guide](./docs/implementation-guide.md) — implementation reading order, boundaries, value semantics, errors, effects, and gap handling.
 - [Conformance Adapter Onboarding](./docs/conformance-adapter-onboarding.md) — adapter integration, normalization, reporting, and conformance-claim evidence.
-- [Draft 0.5 Python and Java Handoff](./docs/draft-0.5-python-java-handoff.md) — bounded starting checklist for future language implementations.
-- [Draft 0.5 Cross-Language Implementation Plan](./docs/plans/draft-0.5-cross-language-task-list.md) — execution tasks and release gates for full Python and Money-scope Java conformance.
+- [Draft 0.5 Python and Java Handoff](./docs/draft-0.5-python-java-handoff.md) — historical bounded starting checklist for the completed implementation milestone.
+- [Draft 0.5 Cross-Language Implementation Plan](./docs/plans/draft-0.5-cross-language-task-list.md) — completed execution record for full Python and Money-scope Java conformance.
+- [Draft 0.6 Portability and Compatibility Plan](./docs/plans/draft-0.6-portability-compatibility-task-list.md) — current task list for capability floors, compatibility governance, claims, and reproducible release evidence.
 - [Draft 0.5 to 1.0 Roadmap](./docs/plans/good-to-have.md) — proposed non-normative sequence from independent portability proof to a stable 1.0 foundation.
 - [Conformance Traceability](./conformance/traceability.md) — current vector coverage, known gaps, and readiness.
 - [Release Notes](./docs/releases/README.md) — shipped scope, exclusions, review status, and verification by Core draft.
