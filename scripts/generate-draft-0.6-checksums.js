@@ -19,6 +19,8 @@ const includeRoots = [
 ]
 const allowedExtensions = new Set(['.md', '.json', '.ts', '.js', '.py', '.java', '.xml'])
 const allowedBasenames = new Set(['pom.xml'])
+const immutableTag = 'core-draft-0.6'
+const releaseIdentity = `resolved-by-immutable-tag:${immutableTag}`
 const excluded = [
   '/dist/',
   '/target/',
@@ -27,16 +29,6 @@ const excluded = [
   '/node_modules/',
   '/.stryker-tmp/',
 ]
-
-function gitHead() {
-  try {
-    const head = readFileSync('.git/HEAD', 'utf8').trim()
-    if (!head.startsWith('ref: ')) return head
-    return readFileSync(join('.git', head.slice(5)), 'utf8').trim()
-  } catch {
-    return 'unavailable'
-  }
-}
 
 function extension(path) {
   const last = path.lastIndexOf('.')
@@ -69,13 +61,13 @@ const manifest = {
   finkoreChecksums: '0.1',
   authority: 'docs/draft-0.6-compatibility-claims-provenance-policy.md',
   algorithm: 'SHA-256',
-  status: 'generated-pending-immutable-tag',
+  status: 'generated-for-immutable-tag',
   generatedFor: {
     coreVersion: 'draft-0.6',
-    baseRevision: gitHead(),
-    worktreeStatus: 'post-commit release-evidence refresh; immutable tag pending maintainer approval',
-    immutableTag: 'core-draft-0.6',
-    immutableTagStatus: 'pending-maintainer-approval',
+    baseRevision: releaseIdentity,
+    worktreeStatus: 'committed release evidence; exact source revision resolved by immutable tag',
+    immutableTag,
+    immutableTagStatus: 'approved-for-creation-from-this-evidence',
   },
   artifacts,
 }

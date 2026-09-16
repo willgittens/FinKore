@@ -2,13 +2,13 @@
   "finkoreChecksums": "0.1",
   "authority": "docs/draft-0.6-compatibility-claims-provenance-policy.md",
   "algorithm": "SHA-256",
-  "status": "generated-pending-immutable-tag",
+  "status": "generated-for-immutable-tag",
   "generatedFor": {
     "coreVersion": "draft-0.6",
-    "baseRevision": "aec87f4e54442c808e5e038530fa98ea54ee4eac",
-    "worktreeStatus": "post-commit release-evidence refresh; immutable tag pending maintainer approval",
+    "baseRevision": "resolved-by-immutable-tag:core-draft-0.6",
+    "worktreeStatus": "committed release evidence; exact source revision resolved by immutable tag",
     "immutableTag": "core-draft-0.6",
-    "immutableTagStatus": "pending-maintainer-approval"
+    "immutableTagStatus": "approved-for-creation-from-this-evidence"
   },
   "artifacts": [
     {
@@ -85,11 +85,11 @@
     },
     {
       "path": "conformance/draft-0.6/claims/java-money.json",
-      "sha256": "aafe493efa5b1c36d9d12bf0a07e3bc74a9c14bd4e130f50996b5964749b78aa"
+      "sha256": "361a2e3a0ae416ad9c96106bf2a4f347ca48c8689373f7b2091ef7bb23fd569d"
     },
     {
       "path": "conformance/draft-0.6/claims/python-full.json",
-      "sha256": "7c375aef62c699c9f2df277b6e60ece8f5d9f287c6f74c211810989dc3b0517a"
+      "sha256": "08b91be637f3cb296ea2f10746bad6e3c4cdb338db544b3b3772663615b4b3eb"
     },
     {
       "path": "conformance/draft-0.6/claims/README.md",
@@ -97,7 +97,7 @@
     },
     {
       "path": "conformance/draft-0.6/claims/typescript-full.json",
-      "sha256": "ba8542d647108f1acbdb81b439369fab0624258d5bb96554dc97053dc2bb089e"
+      "sha256": "6c9fad7e8fb3515a025e57344795bb9f97238459da19fc955572bea4ed416503"
     },
     {
       "path": "conformance/draft-0.6/compatibility.json",
@@ -129,7 +129,7 @@
     },
     {
       "path": "conformance/draft-0.6/README.md",
-      "sha256": "3f24506b4b4f83a5ff936c4f4cd9b0a236dfd40432465a100b682182f718ecb7"
+      "sha256": "90dc2286e85df0cc4822164ca5c98056617f66c0d70ab0b413a5f10cbb75dbd3"
     },
     {
       "path": "conformance/draft-0.6/schemas/capabilities.schema.json",
@@ -237,7 +237,7 @@
     },
     {
       "path": "docs/draft-0.6-compatibility-claims-provenance-policy.md",
-      "sha256": "2ee73117b1578f1db3a7a6d7724c489045221e2dee417f027b068175d29b4889"
+      "sha256": "8c0b44f11e9113925d6bee8657e5c4a13a409359d3b16402bb458456db770512"
     },
     {
       "path": "docs/draft-0.6-compatibility-surface-inventory.md",
@@ -309,7 +309,7 @@
     },
     {
       "path": "docs/releases/draft-0.6.md",
-      "sha256": "446794a2ded594a267b12add3fd110670ea389b6f34ba862dba01a5f246075f2"
+      "sha256": "ea07172f3156d1a2b17e39fe59014f39f13629c9b5477b04197f051e07e500d8"
     },
     {
       "path": "docs/releases/README.md",
@@ -785,7 +785,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "d2325ccf8d9acb02a1e80c93b4938078989f887fdf339e4df1fd044fcbd1195e"
+      "sha256": "48fc6445d3ea13d5821c87fa074d26c4197dccd6fd185889156029aa68286b30"
     },
     {
       "path": "runner/coverage/coverage-summary.json",

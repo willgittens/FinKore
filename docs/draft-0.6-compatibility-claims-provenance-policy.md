@@ -217,6 +217,11 @@ Immutable tag policy:
 - A tag MUST NOT be created from an unverified or uncommitted state.
 - If approval is unavailable, Draft 0.6 remains open or records tag status as
   pending. The closure statement MUST NOT be used.
+- Committed claim and checksum records MAY refer to the approved immutable tag
+  identity instead of embedding `git HEAD` when embedding the commit hash would
+  make the committed checksum manifest non-reproducible. In that case, the
+  annotated tag records the exact resolved source commit and checksum manifest
+  digest.
 
 Checksum policy:
 

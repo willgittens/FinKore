@@ -43,5 +43,6 @@ npm run checksums:generate:draft0.6
 ```
 
 The checksum manifest excludes `checksums.json` itself to avoid a circular
-digest. Its current status is release-pending until a maintainer approves and
-creates the immutable `core-draft-0.6` tag.
+digest. Its current status is resolved by the approved immutable
+`core-draft-0.6` tag identity; the tag object records the exact source commit
+and checksum manifest digest.

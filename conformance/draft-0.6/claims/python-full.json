@@ -18,9 +18,9 @@
   "command": "npm run conformance:python:profile:full",
   "evidence": {
     "recordedDate": "2026-09-16",
-    "sourceRevision": "aec87f4e54442c808e5e038530fa98ea54ee4eac",
-    "baseRevision": "aec87f4e54442c808e5e038530fa98ea54ee4eac",
-    "worktreeStatus": "post-commit release-evidence refresh; immutable tag pending maintainer approval",
+    "sourceRevision": "resolved-by-immutable-tag:core-draft-0.6",
+    "baseRevision": "resolved-by-immutable-tag:core-draft-0.6",
+    "worktreeStatus": "committed release evidence; exact source revision resolved by immutable tag",
     "checksumManifest": "conformance/draft-0.6/checksums.json",
     "profileVectorIdsSha256": "312801070398ae83a1d73a05b714c7873d7c78ab79c1eb2f680cbcc9ee4c205a",
     "sourceFileCount": 16

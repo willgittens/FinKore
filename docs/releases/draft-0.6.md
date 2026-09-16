@@ -3,9 +3,10 @@
 ## Status
 
 Draft 0.6 is in progress. Milestones A through D are complete, and Milestone E
-release hardening evidence is being prepared. The immutable release tag remains
-pending maintainer approval, so this document does not make the final Draft 0.6
-closure claim.
+release hardening evidence is prepared. The immutable release tag has
+maintainer approval for creation from the verified release evidence, but this
+document does not make the final Draft 0.6 closure claim until the tag is
+created and verified.
 
 ## Target Scope
 
@@ -233,8 +234,9 @@ Java fully conforms to FinKore Core Draft 0.6.
 `conformance/draft-0.6/checksums.json` records SHA-256 checksums for the
 release-relevant source, specification, conformance, metadata, documentation,
 runner, adapter, and implementation inputs. The checksum manifest intentionally
-excludes itself to avoid a circular digest. Its status remains
-`generated-pending-immutable-tag` until the approved immutable tag exists.
+excludes itself to avoid a circular digest. Its status is
+`generated-for-immutable-tag`, with exact source revision resolved by the
+approved `core-draft-0.6` tag.
 
 ## Verification Status
 
@@ -279,10 +281,11 @@ Java non-Money domains remain unsupported. Numeric and allocation capability
 floors are accepted, encoded in capability/profile metadata, and exercised by
 manifest-listed Money profile vectors. Compatibility taxonomy, deprecation,
 profiles, claims, capability declarations, and provenance are encoded as
-Milestone D metadata and evidence. Final clean-checkout release hardening,
-artifact checksums, and immutable-tag status remain pending Milestone E work.
+Milestone D metadata and evidence. Final clean-checkout release hardening and
+artifact checksums are prepared; immutable-tag closure awaits creation and
+verification of the approved tag.
 
-No Draft 0.6 immutable tag exists yet. The checksum metadata file exists with
-`generated-pending-immutable-tag` status and verifies current release-relevant
-artifacts, but final release closure remains pending until the approved tag is
-created and verified from the final committed revision.
+No Draft 0.6 immutable tag is claimed until `core-draft-0.6` is created and
+verified from the final committed revision. The checksum metadata file exists
+with `generated-for-immutable-tag` status and verifies release-relevant
+artifacts using tag-resolved source identity.
