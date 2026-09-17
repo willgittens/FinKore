@@ -386,7 +386,7 @@
     {
       "path": "docs/plans/pre-draft-0.7-readiness-task-list.md",
       "kind": "documentation",
-      "sha256": "a057fcb817e07616b9e10a250b706f760045e664d2b67904a143ba465abbf3cd"
+      "sha256": "74a811e11c3f7479cb0899f8041602433eef29d5e5acffb56a2b8da2fc8b21e5"
     },
     {
       "path": "docs/releases/draft-0.1.md",
@@ -426,7 +426,7 @@
     {
       "path": "docs/releases/draft-0.6.md",
       "kind": "documentation",
-      "sha256": "d8347b1887f037047da5060d4e8c4ebbab6a6066491b640716b1a5c3d068a64f"
+      "sha256": "d47dc49a2b698e0a760898bfc746fb6edd16bd8440a6bce9155ff8bf695ec70c"
     },
     {
       "path": "docs/releases/README.md",

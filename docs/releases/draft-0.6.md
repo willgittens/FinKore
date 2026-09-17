@@ -74,7 +74,7 @@ TypeScript adapter, Python core, and Java core remain independently versioned at
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `D06-EDITORIAL-240-001` | `EDITORIAL` | RESOLVED | Documentation maintainers | Live CoreDoc/spec/conformance/onboarding/implementation navigation and status wording | None; no semantic or claim change | TASK-240 freshness inventory | Current documentation updated to distinguish closed Draft 0.5 implementation results from historical Draft 0.4 statements | Accepted with Milestone A |
 | `D06-PORT-241-001` | `PORTABILITY BLOCKER` | RESOLVED | Money maintainers | Python Money arithmetic/rounding, capability-floor decision, boundary corpus | No longer blocks TASK-242 or the Draft 0.6 numeric floor; later profile/evidence tasks still must prove accepted claims | Five Milestone A corpus differences, now matching controls in `docs/research/draft-0.6-boundary-evidence.md` | Resolved by the accepted Milestone B portability capability contract and Python exact coefficient-and-scale Money arithmetic | Accepted with Milestone B |
-| `D06-EVIDENCE-256-001` | `RELEASE-EVIDENCE DEFECT` | IN PROGRESS | Release/conformance maintainers | Draft 0.6 checksum manifest, checksum schema, metadata validator, closure verification command, CI workflow, release-note tag/checksum statements | No financial behavior, requirement ID, portable error, canonical operation, profile membership, or conformance outcome changes; historical `core-draft-0.6` evidence remains recoverable and is superseded only for corrected release evidence | TASK-256 investigation; corrected `conformance/draft-0.6/checksums.json`; negative checksum fixtures | Checksum generation now derives from `git ls-files --cached --others --exclude-standard`, artifacts carry explicit kind metadata, generated artifacts require reproduction metadata, closure verification runs checksums after coverage/mutation, and CI executes the closure path | Pending final clean-checkout verification and immutable correction identity |
+| `D06-EVIDENCE-256-001` | `RELEASE-EVIDENCE DEFECT` | RESOLVED | Release/conformance maintainers | Draft 0.6 checksum manifest, checksum schema, metadata validator, closure verification command, CI workflow, release-note tag/checksum statements | No financial behavior, requirement ID, portable error, canonical operation, profile membership, or conformance outcome changes; historical `core-draft-0.6` evidence remains recoverable and is superseded only for corrected release evidence | TASK-256 investigation; corrected `conformance/draft-0.6/checksums.json`; negative checksum fixtures; `npm run verify:closure:draft0.6` on commit `d001916` | Checksum generation now derives from `git ls-files --cached --others --exclude-standard`, artifacts carry explicit kind metadata, generated artifacts require reproduction metadata, closure verification runs checksums after coverage/mutation, and CI executes the closure path | Accepted after closure verification from a clean committed worktree |
 
 ### D06-PORT-241-001 analysis
 
@@ -262,7 +262,8 @@ command, inputs, and reproduced digest that recreate them.
 
 The Milestone A opening quality matrix is complete, and the Milestone D
 metadata/profile evidence listed below is current. Draft 0.6 closure
-verification remains pending.
+verification passed from a clean committed worktree at commit
+`d001916e`.
 
 | Check | Current Draft 0.6 result |
 | --- | --- |
@@ -285,6 +286,7 @@ verification remains pending.
 | Java full profile claim | PASS under TASK-257; `finkore.core.draft0_6.full`, 254/254 |
 | Draft 0.6 metadata validation | PASS after TASK-256/TASK-257 updates; 26 profiles, 3 capability declarations, 3 active claim records, 316 checksum artifacts, 254 vectors |
 | Draft 0.6 checksum reproduction | PASS after TASK-257 update; 316 release-relevant artifacts verified; checksum manifest excludes itself and ignored/generated outputs |
+| Draft 0.6 closure verification | PASS; `npm run verify:closure:draft0.6` completed through final clean-tree checks |
 | Runner coverage | PASS; 96.33% statements, 94.20% branches, 97.29% functions, 98.33% lines |
 | TypeScript core coverage | PASS; 99.09% statements, 98.69% branches, 100% functions, 99.49% lines |
 | Python packaged coverage | PASS; 86% lines across `finkore` source with full manifest execution |
@@ -311,5 +313,5 @@ corrects release-evidence provenance without changing those financial outcomes.
 
 The Draft 0.6 immutable tag `core-draft-0.6` remains the original historical
 release-evidence identity. Corrected checksum evidence uses
-`release-evidence-correction` status and must be bound to an immutable
-correction identity after final clean-checkout verification.
+`release-evidence-correction` status and was verified by the closure-grade
+command from a clean committed worktree.

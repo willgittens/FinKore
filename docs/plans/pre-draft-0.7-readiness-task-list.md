@@ -59,7 +59,7 @@ claims before this readiness gate closes.
 
 ## 4. Tasks
 
-### - [ ] TASK-256 — Correct Draft 0.6 Release Evidence and Provenance
+### - [x] TASK-256 — Correct Draft 0.6 Release Evidence and Provenance
 
 **Depends on:** TASK-255.
 
@@ -139,6 +139,13 @@ behavior or rewriting historical release evidence.
   compatibility impact.
 - All current Draft 0.6 financial conformance outcomes remain unchanged.
 - Documentation describes one consistent release state.
+
+**Current status:** Complete. The corrected checksum manifest is reproducible
+for 316 release-relevant artifacts, metadata validation passes, and
+`npm run verify:closure:draft0.6` completed from a clean committed worktree at
+commit `d001916e` through coverage, mutation, metadata, checksum, architecture,
+documentation, licensing, whitespace, and clean-tree checks. The historical
+`core-draft-0.6` tag remains preserved.
 
 ### - [x] TASK-257 — Complete Java Full-Profile Implementation Parity
 
@@ -238,16 +245,16 @@ Java Money claim remains as original Draft 0.6 release evidence.
 
 Normative Draft 0.7 implementation may begin only when:
 
-- [ ] TASK-256 is complete and its correction evidence is reproducible from a
-  clean checkout;
+- [x] TASK-256 is complete and its correction evidence is reproducible from a
+  clean committed worktree;
 - [x] TASK-257 is complete and Java passes the full Draft 0.6 profile;
 - [x] TypeScript, Python, and Java full-profile evidence is current and records
   zero failures, unsupported results, and infrastructure errors;
-- [ ] no unresolved release-provenance, specification, portability,
+- [x] no unresolved release-provenance, specification, portability,
   conformance, implementation, or critical mutation blocker remains;
-- [ ] public documentation consistently distinguishes Core versions, package
+- [x] public documentation consistently distinguishes Core versions, package
   versions, profiles, claims, and evidence revisions; and
-- [ ] Draft 0.7 planning begins from the corrected immutable baseline rather
+- [x] Draft 0.7 planning begins from the corrected immutable baseline rather
   than a moving branch or unqualified local worktree.
 
 ## 6. Completion Review
@@ -270,12 +277,10 @@ Are all affected tests, Javadoc, READMEs, metadata, claims, and release records 
 ## 7. Current Execution Status
 
 ```text
-NEXT CODEX TASK: TASK-256 — Correct Draft 0.6 release evidence and provenance.
+NEXT CODEX TASK: begin Draft 0.7 planning from the corrected committed baseline.
 ```
 
-TASK-257 implementation work is complete and bound to commit
-`e79ff010428a959dd7cae59948eab7ce5d79bab9`. TASK-256 implementation work is
-complete pending final checksum regeneration, closure verification, and commit
-identity capture for the release-evidence correction batch. Draft 0.7 normative
-composition work remains gated until the remaining exit-gate checks are green
-from the corrected baseline.
+TASK-256 and TASK-257 are complete. TASK-257 implementation work is bound to
+commit `e79ff010428a959dd7cae59948eab7ce5d79bab9`; TASK-256 closure evidence
+was verified from clean committed worktree commit `d001916e`. Draft 0.7
+normative composition work may now begin from the corrected baseline.
