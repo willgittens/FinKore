@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.finkore.Approvals;
+import org.finkore.Audit;
 import org.finkore.FinKoreException;
 import org.finkore.Money;
 import org.finkore.Workflow;
@@ -27,7 +29,20 @@ public final class Bridge {
       "finkore.money.allocate",
       "workflow.create",
       "workflow.import",
-      "finkore.workflow.transition");
+      "finkore.workflow.transition",
+      "finkore.audit.append",
+      "finkore.audit.replace",
+      "finkore.audit.remove",
+      "audit.redact",
+      "approval.requirement.evaluate",
+      "approval.decision.record",
+      "approval.decision.evaluate",
+      "approval.condition.evaluate",
+      "approval.chain.evaluate",
+      "approval.decision.withdraw",
+      "approval.decision.supersede",
+      "approval.requirement.supersede",
+      "approval.composition.evaluate");
 
   private Bridge() {}
 
@@ -119,6 +134,64 @@ public final class Bridge {
               inputValue.get("expectedRevision"));
           yield success(result.toPortable(), null);
         }
+        case "finkore.audit.append" -> {
+          Audit.Log log = auditLog(inputValue);
+          yield success(log.append(inputValue.get("event")).toPortable(), null);
+        }
+        case "finkore.audit.replace" -> {
+          Audit.Log log = auditLog(inputValue);
+          log.replace();
+          yield success(log.toPortable(), null);
+        }
+        case "finkore.audit.remove" -> {
+          Audit.Log log = auditLog(inputValue);
+          log.remove();
+          yield success(log.toPortable(), null);
+        }
+        case "audit.redact" -> {
+          Audit.Log log = auditLog(inputValue);
+          Audit.RedactionResult result = log.redact(inputValue.get("policy"), inputValue.get("redactionEvent"));
+          yield success(result.toPortable(), Map.of("history", log.events()));
+        }
+        case "approval.requirement.evaluate" -> success(Approvals.evaluateRequirement(
+            inputValue.get("requirement"),
+            inputValue.get("decisions"),
+            inputValue.get("currentSubjectFacts"),
+            inputValue.get("relevantFactPaths"),
+            inputValue.get("evaluatedAt")), null);
+        case "approval.decision.record" -> success(Approvals.recordDecision(
+            inputValue.get("requirement"),
+            inputValue.get("decision"),
+            inputValue.get("history")), null);
+        case "approval.decision.evaluate" -> success(Approvals.evaluateDecision(
+            inputValue.get("decision"),
+            inputValue.get("currentSubjectFacts"),
+            inputValue.get("relevantFactPaths"),
+            inputValue.get("evaluatedAt")), null);
+        case "approval.condition.evaluate" -> success(Approvals.evaluateCondition(
+            inputValue.get("condition"),
+            inputValue.get("facts"),
+            inputValue.get("result")), null);
+        case "approval.chain.evaluate" -> success(Approvals.evaluateChain(
+            inputValue.get("chain"),
+            inputValue.get("states")), null);
+        case "approval.decision.withdraw" -> success(Approvals.withdrawDecision(
+            inputValue.get("requirement"),
+            inputValue.get("history"),
+            inputValue.get("withdrawal")), null);
+        case "approval.decision.supersede" -> success(Approvals.supersedeDecision(
+            inputValue.get("history"),
+            inputValue.get("supersession")), null);
+        case "approval.requirement.supersede" -> success(Approvals.supersedeRequirement(
+            inputValue.get("history"),
+            inputValue.get("supersession")), null);
+        case "approval.composition.evaluate" -> success(
+            Approvals.evaluateComposition(
+                inputValue.get("composition"),
+                inputValue.get("requirements"),
+                inputValue.get("decisions"),
+                inputValue.get("context")),
+            compositionSuccessObservations(inputValue));
         default -> Map.of("status", "unsupported");
       };
     } catch (FinKoreException error) {
@@ -152,6 +225,10 @@ public final class Bridge {
     return Workflow.Instance.fromPortable(input.get("instance"));
   }
 
+  private static Audit.Log auditLog(Map<String, Object> input) {
+    return Audit.Log.create(input.get("history"));
+  }
+
   private static Map<String, Object> observationsFor(String operation, Map<String, Object> input) {
     try {
       if (List.of("finkore.money.add", "finkore.money.subtract", "finkore.money.compare").contains(operation)) {
@@ -163,8 +240,30 @@ public final class Bridge {
       if ("finkore.workflow.transition".equals(operation)) {
         return workflowErrorObservations(input);
       }
+      if (List.of("finkore.audit.append", "finkore.audit.replace", "finkore.audit.remove", "audit.redact").contains(operation)) {
+        return Map.of("history", auditLog(input).events());
+      }
+      if (List.of(
+              "approval.decision.record",
+              "approval.decision.withdraw",
+              "approval.decision.supersede",
+              "approval.requirement.supersede")
+          .contains(operation)) {
+        return Approvals.historyObservation(input.get("history"));
+      }
+      if ("approval.composition.evaluate".equals(operation) && input.get("decisions") instanceof List<?>) {
+        return Map.of("decisions", input.get("decisions"));
+      }
     } catch (FinKoreException ignored) {
       return null;
+    }
+    return null;
+  }
+
+  private static Map<String, Object> compositionSuccessObservations(Map<String, Object> input) {
+    Object decisions = input.get("decisions");
+    if (decisions instanceof List<?> list && list.isEmpty()) {
+      return Map.of("decisions", decisions);
     }
     return null;
   }

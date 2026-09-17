@@ -35,6 +35,8 @@ npm run conformance:typescript:profile:full
 npm run conformance:python:profile:full
 npm run conformance:java:profile:money
 npm run conformance:java:profile:workflow
+npm run conformance:java:profile:audit
+npm run conformance:java:profile:approvals
 ```
 
 Checksum metadata is generated deterministically from tracked repository source

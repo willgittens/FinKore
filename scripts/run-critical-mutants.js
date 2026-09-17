@@ -129,6 +129,48 @@ const javaMutants = [
     from: 'if (definition.terminalStates().contains(instance.currentState())) {\n      throw new FinKoreException(TERMINAL_STATE);\n    }',
     to: 'if (false && definition.terminalStates().contains(instance.currentState())) {\n      throw new FinKoreException(TERMINAL_STATE);\n    }',
   },
+  {
+    id: 'java-audit-duplicate-event-bypass',
+    suite: 'audit',
+    path: 'core/src/main/java/org/finkore/Audit.java',
+    from: 'if (eventIds.contains(event.eventId())) {\n        throw new FinKoreException(DUPLICATE_EVENT);\n      }',
+    to: 'if (false && eventIds.contains(event.eventId())) {\n        throw new FinKoreException(DUPLICATE_EVENT);\n      }',
+  },
+  {
+    id: 'java-audit-replace-append-only-bypass',
+    suite: 'audit',
+    path: 'core/src/main/java/org/finkore/Audit.java',
+    from: 'public void replace() {\n      throw new FinKoreException(APPEND_ONLY_VIOLATION);\n    }',
+    to: 'public void replace() {\n    }',
+  },
+  {
+    id: 'java-audit-relationship-target-bypass',
+    suite: 'audit',
+    path: 'core/src/main/java/org/finkore/Audit.java',
+    from: 'if (target == null || !relationship.target().entity().equals(target.entity())) {\n        throw new FinKoreException(INVALID_EVENT);\n      }',
+    to: 'if (false && (target == null || !relationship.target().entity().equals(target.entity()))) {\n        throw new FinKoreException(INVALID_EVENT);\n      }',
+  },
+  {
+    id: 'java-approval-expiration-bypass',
+    suite: 'approvals',
+    path: 'core/src/main/java/org/finkore/Approvals.java',
+    from: 'return !instant(evaluatedAt, INVALID_CONTEXT).isBefore(instant(decision.get("expiresAt"), INVALID_CONTEXT));',
+    to: 'return false;',
+  },
+  {
+    id: 'java-approval-ineligible-actor-bypass',
+    suite: 'approvals',
+    path: 'core/src/main/java/org/finkore/Approvals.java',
+    from: 'if (requirement.containsKey("eligibleActors") && !stringList(requirement.get("eligibleActors"), INVALID_DECISION).contains(actorId)) {\n      throw new FinKoreException(INELIGIBLE_ACTOR);\n    }',
+    to: 'if (false && requirement.containsKey("eligibleActors") && !stringList(requirement.get("eligibleActors"), INVALID_DECISION).contains(actorId)) {\n      throw new FinKoreException(INELIGIBLE_ACTOR);\n    }',
+  },
+  {
+    id: 'java-approval-opposing-quorum-bypass',
+    suite: 'approvals',
+    path: 'core/src/main/java/org/finkore/Approvals.java',
+    from: 'if (approved && rejected) {\n      throw new FinKoreException(INVALID_CHAIN);\n    }',
+    to: 'if (false && approved && rejected) {\n      throw new FinKoreException(INVALID_CHAIN);\n    }',
+  },
 ]
 
 function files(directory) {

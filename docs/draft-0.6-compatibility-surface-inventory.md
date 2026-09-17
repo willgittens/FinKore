@@ -36,13 +36,13 @@ TASK-240 point-in-time ownership record.
 | Agentic descriptor version | No separate machine-readable descriptor version exists | Future metadata may be conflated with Core or package versions | Agentic Contract | Relationship policy in TASK-244; machine-readable operation manifest deferred to Draft 0.8 |
 | TypeScript core API | `@finkore/typescript` `0.1.0` | Idiomatic API change can affect consumers without changing Core | TypeScript package | Package compatibility remains separate from conformance |
 | Python core API | `finkore-python` `0.1.0` | Runtime decimal context can alter exact behavior | Python package, governed by `/spec` | `D06-PORT-241-001` resolved by exact coefficient-and-scale Money arithmetic |
-| Java core API | `org.finkore:finkore-java-core` `0.1.0` | Partial Java scope can be overstated as full Core | Java package, governed by `/spec` | Retain profile-specific scope; Money and Workflow are implemented, while Audit, Approvals, and Entities remain unsupported |
+| Java core API | `org.finkore:finkore-java-core` `0.1.0` | Partial Java scope can be overstated as full Core | Java package, governed by `/spec` | Retain profile-specific scope; Money, Workflow, Audit, and Approvals are implemented, while the Entities domain remains unsupported |
 | TypeScript adapter | `@finkore/typescript-conformance-adapter` `0.1.0` | Normalization can hide implementation divergence | Adapter/runner boundary | Adapter revision required in claims; no financial logic permitted |
 | Python adapter | Source revision; subprocess bridge | Crashes may be confused with domain errors | Adapter/runner boundary | Former high-scale crash resolved; infrastructure/domain separation remains governed by runner and adapter contracts |
-| Java adapter | Source revision; subprocess bridge | Adapter support may be broadened accidentally | Adapter/runner boundary | Money and Workflow support are explicit; unsupported domains stay false until implemented; exact adapter revision required in claims |
+| Java adapter | Source revision; subprocess bridge | Adapter support may be broadened accidentally | Adapter/runner boundary | Money, Workflow, Audit, and Approvals support are explicit; unsupported domains stay false until implemented; exact adapter revision required in claims |
 | TypeScript full claim | Draft 0.6 Milestone D profile claim: 254/254 | Moving manifest or implementation can invalidate historical evidence | Release/conformance evidence | Recorded as `finkore.core.draft0_6.full`; Draft 0.5 historical claim remains exact at 244/244 |
 | Python full claim | Draft 0.6 Milestone D profile claim: 254/254 | Values outside the manifest can be mistaken as proven | Release/conformance evidence | Recorded as `finkore.core.draft0_6.full`; resolved boundary controls do not retroactively expand the closed Draft 0.5 claim |
-| Java Money claim | Draft 0.6 Milestone D profile claim: 93/93; Workflow parity added later under TASK-257 | Domain claim can be presented as full claim | Release/conformance evidence | Recorded as `finkore.core.draft0_6.domain.money`; Java full profile remains unsupported until Audit, Approvals, and Entities are implemented |
+| Java Money claim | Draft 0.6 Milestone D profile claim: 93/93; Workflow, Audit, and Approvals parity added later under TASK-257 | Domain claim can be presented as full claim | Release/conformance evidence | Recorded as `finkore.core.draft0_6.domain.money`; Java full profile remains unsupported until the Entities domain is implemented |
 | Coverage and mutation evidence | Release commands and reports | Quality evidence can be conflated with portable conformance | Implementation quality policy | Claims distinguish conformance from official/reference quality evidence |
 | Toolchain inputs | Node/npm, CPython 3.12/3.13, JDK 21, Maven 3.9.x | Host/runtime differences can prevent reproduction | Repository tooling | Record exact observed versions and supported floors in claim/release evidence |
 | Release notes | `docs/releases/*.md` | Planned work can be reported as shipped | Release governance | Draft 0.6 note remains in progress until TASK-255 |
@@ -70,7 +70,7 @@ validation.
 | --- | --- | --- | --- |
 | TypeScript | Complete 254-vector full Draft 0.6 profile | No behavior beyond current Core/spec scope | Draft 0.6 Milestone D claim record plus final closure checks |
 | Python | Complete 254-vector full Draft 0.6 profile | No behavior beyond current Core/spec scope | Draft 0.6 Milestone D claim record plus final closure checks |
-| Java | 93-vector Money Draft 0.6 profile plus 41-vector Workflow profile under TASK-257 | Audit, Approvals, and Entities unsupported | Draft 0.6 Milestone D Money claim plus TASK-257 Workflow evidence |
+| Java | 93-vector Money Draft 0.6 profile, 41-vector Workflow profile, 29-vector Audit profile, and 66-vector Approvals profile under TASK-257 | Entities unsupported | Draft 0.6 Milestone D Money claim plus TASK-257 Workflow, Audit, and Approvals evidence |
 
 The support boundary is operation- and profile-specific. Package presence,
 method availability, or an Agentic capability statement does not prove a

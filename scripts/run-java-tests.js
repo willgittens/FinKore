@@ -10,7 +10,7 @@ const classpath = [
   resolve(repositoryRoot, 'implementations/java/target/test-classes'),
 ].join(delimiter)
 
-for (const testClass of ['org.finkore.MoneyTest', 'org.finkore.WorkflowTest']) {
+for (const testClass of ['org.finkore.MoneyTest', 'org.finkore.WorkflowTest', 'org.finkore.AuditTest', 'org.finkore.ApprovalsTest']) {
   const child = spawnSync(java, ['-cp', classpath, testClass], {
     encoding: 'utf8',
     cwd: repositoryRoot,
@@ -22,4 +22,4 @@ for (const testClass of ['org.finkore.MoneyTest', 'org.finkore.WorkflowTest']) {
     process.exit(child.status ?? 1)
   }
 }
-console.log('Java Money and Workflow tests passed.')
+console.log('Java Money, Workflow, Audit, and Approvals tests passed.')

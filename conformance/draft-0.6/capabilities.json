@@ -107,13 +107,18 @@
         "finkore.money.round",
         "finkore.money.applyrate",
         "finkore.money.allocate",
-        "finkore.workflow.transition"
+        "finkore.workflow.transition",
+        "finkore.audit.append",
+        "finkore.audit.replace",
+        "finkore.audit.remove"
       ],
       "supportedProfiles": [
         "finkore.core.draft0_6.domain.money",
-        "finkore.core.draft0_6.domain.workflow"
+        "finkore.core.draft0_6.domain.workflow",
+        "finkore.core.draft0_6.domain.audit",
+        "finkore.core.draft0_6.domain.approvals"
       ],
-      "unsupportedDomains": ["audit", "approvals", "entities"],
+      "unsupportedDomains": ["entities"],
       "limits": {
         "meetsDraft06PortableFloor": true
       },

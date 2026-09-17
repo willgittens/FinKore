@@ -9,7 +9,7 @@
   <version>0.1.0</version>
   <packaging>jar</packaging>
   <name>FinKore Java Core</name>
-  <description>Java implementation of FinKore Core Draft Money and Workflow behavior.</description>
+  <description>Java implementation of FinKore Core Draft Money, Workflow, Audit, and Approvals behavior.</description>
   <properties>
     <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

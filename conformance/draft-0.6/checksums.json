@@ -101,7 +101,7 @@
     {
       "path": "conformance/draft-0.6/capabilities.json",
       "kind": "conformance",
-      "sha256": "ed7963866655a228672d5e118797e03439dc5a522664baaea4f78f9ea64a16d2"
+      "sha256": "fbd8c008696c1c40984a177f89845581c7bc0559cd5e9303a4e048d8a756a2f0"
     },
     {
       "path": "conformance/draft-0.6/claims/java-money.json",
@@ -191,7 +191,7 @@
     {
       "path": "conformance/draft-0.6/README.md",
       "kind": "conformance",
-      "sha256": "398f394c7fa8fd38007124c70c16367bd0135ae085ca7780ef82beb2a6b788d4"
+      "sha256": "349f48946402cfbc9ef7235e9c0ca26803feeafe59b41e3dd4ec61c9f46ca024"
     },
     {
       "path": "conformance/draft-0.6/schemas/capabilities.schema.json",
@@ -331,7 +331,7 @@
     {
       "path": "docs/draft-0.6-compatibility-surface-inventory.md",
       "kind": "documentation",
-      "sha256": "d21f4256f4824e9e4c19cb3a3cafcf10c088d961d36ea57b52026462dc3d5e22"
+      "sha256": "d42950aa938fa456087da0df5fe8000344004b1cccba3b7a74d6f4ecf09f2922"
     },
     {
       "path": "docs/draft-0.6-portability-compatibility-governance.md",
@@ -421,7 +421,7 @@
     {
       "path": "docs/releases/draft-0.6.md",
       "kind": "documentation",
-      "sha256": "64a5dfcd2a0d6543ded74ad9af433e4eb6c7f99905cf7306c876e63b948df94e"
+      "sha256": "31a2379ac0f27f15741be4367e3e5025658a35e886d6831795125b1621d4b281"
     },
     {
       "path": "docs/releases/README.md",
@@ -446,7 +446,7 @@
     {
       "path": "implementations/java/adapters/conformance/src/main/java/org/finkore/conformance/Bridge.java",
       "kind": "adapter",
-      "sha256": "7d486973d2218203501aaee570236d619a02db7feb66f358f09ba3d6ee040317"
+      "sha256": "34925f2ffb13ea35298944901072d80a83f00cf242d133e0aa367e6153b21f10"
     },
     {
       "path": "implementations/java/adapters/conformance/src/main/java/org/finkore/conformance/Json.java",
@@ -466,17 +466,27 @@
     {
       "path": "implementations/java/adapters/conformance/test/adapter.test.js",
       "kind": "adapter",
-      "sha256": "a67c14ffd51883ca15021a9544751b11076a974fcc80d7a03f7a4a4c427b566c"
+      "sha256": "d4452c423654d62faf726bef7cdd9d5d6ca084a510d00fdcc0847f19b98ec192"
     },
     {
       "path": "implementations/java/core/pom.xml",
       "kind": "package",
-      "sha256": "6282cd5ff7655248d92a2443dba8cdd9b5986b2b0e6e66e2dd96a1a19d53bf6b"
+      "sha256": "bff1ec3bfcd2ae772fe8d86f1c526faaa6a725fd82d78857d6ac177bfe45d553"
     },
     {
       "path": "implementations/java/core/README.md",
       "kind": "implementation",
-      "sha256": "b8c73a3b404c7afd5a0fb694239c37961dd4f37d6fce3f5e5f461ce459602bd4"
+      "sha256": "5760c70dd202d7412e3df8895bc8ddf552eab7fd0e42248af8bc7cb369d9d680"
+    },
+    {
+      "path": "implementations/java/core/src/main/java/org/finkore/Approvals.java",
+      "kind": "implementation",
+      "sha256": "788a7c13ab8b08b87d1e4640c63207fccfc445f7550ddf58329e27defb645fd2"
+    },
+    {
+      "path": "implementations/java/core/src/main/java/org/finkore/Audit.java",
+      "kind": "implementation",
+      "sha256": "c35cbfc006c85f471855db71f73e7cb24b4c093206cca300f6951637894d7fad"
     },
     {
       "path": "implementations/java/core/src/main/java/org/finkore/FinKoreException.java",
@@ -492,6 +502,31 @@
       "path": "implementations/java/core/src/main/java/org/finkore/Workflow.java",
       "kind": "implementation",
       "sha256": "e156879af9c5fb8170084692728aa8a8f8adb879ea72eb3d12bcbc288d714a0a"
+    },
+    {
+      "path": "implementations/java/core/src/test/java/org/finkore/ApprovalsTest.java",
+      "kind": "implementation",
+      "sha256": "a850bcd82b3888f0238c057d4671e233f2b52c1ab1552d10694d1590b6584922"
+    },
+    {
+      "path": "implementations/java/core/src/test/java/org/finkore/ApprovalsVectorCoverageTest.java",
+      "kind": "implementation",
+      "sha256": "4292bdddbdd035f2e88f170e039f1135aaf41bf088758251fd8ac6f158ded5fe"
+    },
+    {
+      "path": "implementations/java/core/src/test/java/org/finkore/AuditCoverageTest.java",
+      "kind": "implementation",
+      "sha256": "8ccc1fb92d57ac1e7918506936cc4973352f76ed3539c86cc3a153b1c8122ea2"
+    },
+    {
+      "path": "implementations/java/core/src/test/java/org/finkore/AuditTest.java",
+      "kind": "implementation",
+      "sha256": "6b04f29908f7347115d906a714713a0ce789a3b483e2b3010a23802e111354f6"
+    },
+    {
+      "path": "implementations/java/core/src/test/java/org/finkore/Json.java",
+      "kind": "implementation",
+      "sha256": "2148ef8c14606f8cdc0373b1a037d436dce2deb724dd9f1e75c12348b5b73c28"
     },
     {
       "path": "implementations/java/core/src/test/java/org/finkore/MoneyCoverageTest.java",
@@ -1011,12 +1046,12 @@
     {
       "path": "package.json",
       "kind": "package",
-      "sha256": "d3935ce5ef7a99c7c3de2618748bfc6ef38fab8991da90cb33e4285dad644458"
+      "sha256": "1460967d0cf97ac3310e6ccbfb716f7a4aa0f64ddad342f1f352baf940c92a70"
     },
     {
       "path": "README.md",
       "kind": "source",
-      "sha256": "946cf265c12b9748c3f6b24232de1846ae7d00e51702a94a48e2091be10fe090"
+      "sha256": "a3ebba9a626e7e3279bce1a285bf7c776747388b872fbf6fed935a0bf50505b4"
     },
     {
       "path": "runner/package-lock.json",
@@ -1251,7 +1286,7 @@
     {
       "path": "scripts/run-critical-mutants.js",
       "kind": "tooling",
-      "sha256": "b769be5f3616153bc921f79eede92ccdb031feb01bb2ad75789d0fa194ee3acf"
+      "sha256": "07fbeeae24062ad9d19cc0d04ebb3a2de2ebd7aa17c276ba8d7e64b4366fbe31"
     },
     {
       "path": "scripts/run-draft-0.5-portability-review.js",
@@ -1266,7 +1301,7 @@
     {
       "path": "scripts/run-java-tests.js",
       "kind": "tooling",
-      "sha256": "07af38bf20a48639669bb16f04b819c643ece1a067b212bc0dc322c1e2623ddc"
+      "sha256": "bc5b31d4deed815ecfe85f2606e3c0cb2d28ee143380edb84617637fae4038b8"
     },
     {
       "path": "scripts/run-python-coverage.js",
@@ -1276,7 +1311,7 @@
     {
       "path": "scripts/verify-draft-0.6-closure.js",
       "kind": "tooling",
-      "sha256": "f4b9e6c0e5245613c6005146ac101df85b4ab9597e33c460324b9e3cc5396c5b"
+      "sha256": "598284f3ab2152d928097297c1d7c0bb5fbd8efd665712308eb9fbc4467b9b7c"
     },
     {
       "path": "spec/approvals/chains.md",
