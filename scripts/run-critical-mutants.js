@@ -171,6 +171,20 @@ const javaMutants = [
     from: 'if (approved && rejected) {\n      throw new FinKoreException(INVALID_CHAIN);\n    }',
     to: 'if (false && approved && rejected) {\n      throw new FinKoreException(INVALID_CHAIN);\n    }',
   },
+  {
+    id: 'java-entity-immutability-bypass',
+    suite: 'entities',
+    path: 'core/src/main/java/org/finkore/Entities.java',
+    from: 'if (!mutable.contains(path)) {\n        throw new FinKoreException(IMMUTABLE);\n      }',
+    to: 'if (false && !mutable.contains(path)) {\n        throw new FinKoreException(IMMUTABLE);\n      }',
+  },
+  {
+    id: 'java-entity-positive-money-validation-bypass',
+    suite: 'entities',
+    path: 'core/src/main/java/org/finkore/Entities.java',
+    from: 'invalid = new BigDecimal(amount).compareTo(BigDecimal.ZERO) <= 0;',
+    to: 'invalid = false;',
+  },
 ]
 
 function files(directory) {

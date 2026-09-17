@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import org.finkore.Approvals;
 import org.finkore.Audit;
+import org.finkore.Entities;
 import org.finkore.FinKoreException;
 import org.finkore.Money;
 import org.finkore.Workflow;
@@ -42,7 +43,15 @@ public final class Bridge {
       "approval.decision.withdraw",
       "approval.decision.supersede",
       "approval.requirement.supersede",
-      "approval.composition.evaluate");
+      "approval.composition.evaluate",
+      "finkore.entity.create",
+      "finkore.entity.mutate",
+      "finkore.entity.transition",
+      "finkore.entity.evolution.correct",
+      "finkore.entity.evolution.reverse",
+      "finkore.entity.evolution.supersede",
+      "finkore.entity.evolution.void",
+      "entity.import");
 
   private Bridge() {}
 
@@ -192,6 +201,43 @@ public final class Bridge {
                 inputValue.get("decisions"),
                 inputValue.get("context")),
             compositionSuccessObservations(inputValue));
+        case "finkore.entity.create" -> success(Entities.create(
+            inputValue.get("definition"),
+            inputValue.get("id"),
+            inputValue.get("data")), null);
+        case "finkore.entity.mutate" -> {
+          Map<String, Object> result = Entities.mutate(
+              inputValue.get("definition"),
+              inputValue.get("entity"),
+              inputValue.get("changes"));
+          yield success(result, Map.of("identity", result.get("id"), "state", result.get("state")));
+        }
+        case "finkore.entity.transition" -> {
+          Map<String, Object> result = Entities.transition(
+              inputValue.get("definition"),
+              inputValue.get("entity"),
+              inputValue.get("target"));
+          yield success(result, Map.of("identity", result.get("id")));
+        }
+        case "entity.import" -> success(Entities.importEntity(
+            inputValue.get("definition"),
+            inputValue.get("import")), null);
+        case "finkore.entity.evolution.correct" -> success(Entities.evolve(
+            "CORRECTION",
+            inputValue.get("definition"),
+            inputValue), Entities.evolutionObservation(inputValue, false));
+        case "finkore.entity.evolution.reverse" -> success(Entities.evolve(
+            "REVERSAL",
+            inputValue.get("definition"),
+            inputValue), Entities.evolutionObservation(inputValue, true));
+        case "finkore.entity.evolution.supersede" -> success(Entities.evolve(
+            "SUPERSESSION",
+            inputValue.get("definition"),
+            inputValue), Entities.evolutionObservation(inputValue, true));
+        case "finkore.entity.evolution.void" -> success(Entities.evolve(
+            "VOID",
+            inputValue.get("definition"),
+            inputValue), Entities.evolutionObservation(inputValue, true));
         default -> Map.of("status", "unsupported");
       };
     } catch (FinKoreException error) {
@@ -254,8 +300,42 @@ public final class Bridge {
       if ("approval.composition.evaluate".equals(operation) && input.get("decisions") instanceof List<?>) {
         return Map.of("decisions", input.get("decisions"));
       }
+      if ("finkore.entity.mutate".equals(operation)) {
+        Map<String, Object> observations = entityObservation(input.get("entity"));
+        if (observations != null) {
+          List<Map<String, Object>> findings = Entities.validationFindingsForMutation(
+              input.get("definition"),
+              input.get("entity"),
+              input.get("changes"));
+          if (!findings.isEmpty()) {
+            observations.put("findings", findings);
+          }
+        }
+        return observations;
+      }
+      if ("finkore.entity.transition".equals(operation)) {
+        return entityObservation(input.get("entity"));
+      }
+      if ("entity.import".equals(operation)) {
+        Object imported = input.get("import");
+        if (imported instanceof Map<?, ?> map) {
+          return entityObservation(map.get("entity"));
+        }
+      }
+      if (operation.startsWith("finkore.entity.evolution.")) {
+        return Entities.evolutionObservation(input, true);
+      }
     } catch (FinKoreException ignored) {
       return null;
+    }
+    return null;
+  }
+
+  private static Map<String, Object> entityObservation(Object entity) {
+    if (entity instanceof Map<?, ?>) {
+      Map<String, Object> observations = new LinkedHashMap<>();
+      observations.put("entity", entity);
+      return observations;
     }
     return null;
   }

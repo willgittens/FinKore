@@ -1,0 +1,607 @@
+// SPDX-License-Identifier: MPL-2.0
+package org.finkore;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * FinKore Financial Entity behavior for identity, lifecycle, mutability,
+ * validation, import, and bounded evolution relations.
+ *
+ * <p>Entity operations accept and return portable JSON-shaped observations.
+ * They preserve caller-supplied opaque identity and delegate referenced
+ * Workflow, Money, and Audit behavior to their domain implementations.
+ *
+ * @see <a href="../../../../../../spec/entities/identity.md">ENTITY-IDENTITY-001</a>
+ * @see <a href="../../../../../../spec/entities/lifecycle.md">ENTITY-LIFECYCLE-001</a>
+ * @see <a href="../../../../../../spec/entities/evolution.md">ENTITY-EVOLUTION-001</a>
+ */
+public final class Entities {
+  /** Portable error for malformed or conflicting Entity identity. */
+  public static final String INVALID_IDENTITY = "FINKORE_ENTITY_INVALID_IDENTITY";
+  /** Portable error for mutation of immutable Entity fields. */
+  public static final String IMMUTABLE = "FINKORE_ENTITY_IMMUTABLE";
+  /** Portable error for malformed or impermissible Entity mutation/evolution. */
+  public static final String INVALID_MUTATION = "FINKORE_ENTITY_INVALID_MUTATION";
+  /** Portable error for expected Entity state, revision, or conflict-version mismatch. */
+  public static final String STATE_CONFLICT = "FINKORE_ENTITY_STATE_CONFLICT";
+  /** Portable error for failed declared Entity validation rules. */
+  public static final String VALIDATION_FAILED = "FINKORE_ENTITY_VALIDATION_FAILED";
+
+  private Entities() {}
+
+  /**
+   * Creates a Financial Entity in its referenced Workflow initial state.
+   *
+   * @param definition portable Entity definition
+   * @param entityId caller-supplied stable Entity identity
+   * @param data initial Entity data
+   * @return portable Entity observation
+   */
+  public static Map<String, Object> create(Object definition, Object entityId, Object data) {
+    Map<String, Object> entityDefinition = validateDefinition(definition);
+    if (!opaque(entityId) || !(data instanceof Map<?, ?> dataMap)) {
+      throw new FinKoreException(INVALID_IDENTITY);
+    }
+    Workflow.Definition workflow = Workflow.Definition.fromPortable(entityDefinition.get("workflow"));
+    Map<String, Object> entity = new LinkedHashMap<>();
+    entity.put("type", entityDefinition.get("type"));
+    entity.put("id", entityId);
+    entity.put("state", Workflow.create(workflow).currentState());
+    entity.put("data", stringObjectMap(dataMap, VALIDATION_FAILED));
+    validateEntityData(entityDefinition, entity);
+    return copyMap(entity, INVALID_IDENTITY);
+  }
+
+  /**
+   * Applies declared mutable data changes without mutating the supplied Entity.
+   *
+   * @param definition portable Entity definition
+   * @param entity current Entity observation
+   * @param changes shallow data changes keyed by declared field path
+   * @return mutated Entity observation
+   */
+  public static Map<String, Object> mutate(Object definition, Object entity, Object changes) {
+    Map<String, Object> entityDefinition = validateDefinition(definition);
+    Map<String, Object> current = validateEntity(entityDefinition, entity);
+    if (!(changes instanceof Map<?, ?> rawChanges)) {
+      throw new FinKoreException(INVALID_MUTATION);
+    }
+    Map<String, Object> changeMap = stringObjectMap(rawChanges, INVALID_MUTATION);
+    for (String path : changeMap.keySet()) {
+      if (Set.of("type", "id", "state").contains(path)) {
+        throw new FinKoreException(IMMUTABLE);
+      }
+    }
+    Set<String> mutable = mutableFields(entityDefinition, (String) current.get("state"));
+    for (String path : changeMap.keySet()) {
+      if (!mutable.contains(path)) {
+        throw new FinKoreException(IMMUTABLE);
+      }
+    }
+    Map<String, Object> result = copyMap(current, INVALID_IDENTITY);
+    @SuppressWarnings("unchecked")
+    Map<String, Object> resultData = (Map<String, Object>) result.get("data");
+    resultData.putAll(copyMap(changeMap, INVALID_MUTATION));
+    validateEntityData(entityDefinition, result);
+    return result;
+  }
+
+  /**
+   * Transitions an Entity through the referenced Workflow without changing its
+   * identity or data.
+   *
+   * @param definition portable Entity definition
+   * @param entity current Entity observation
+   * @param target requested target state
+   * @return transitioned Entity observation
+   */
+  public static Map<String, Object> transition(Object definition, Object entity, Object target) {
+    Map<String, Object> entityDefinition = validateDefinition(definition);
+    Map<String, Object> current = validateEntity(entityDefinition, entity);
+    Workflow.Definition workflow = Workflow.Definition.fromPortable(entityDefinition.get("workflow"));
+    if (!(target instanceof String targetState) || !workflow.states().contains(targetState)) {
+      throw new FinKoreException(Workflow.INVALID_TRANSITION);
+    }
+    Workflow.Instance transitioned = Workflow.transition(
+        workflow,
+        new Workflow.Instance((String) current.get("state"), null, null),
+        target,
+        null,
+        null,
+        null);
+    Map<String, Object> result = copyMap(current, INVALID_IDENTITY);
+    result.put("state", transitioned.currentState());
+    validateEntityData(entityDefinition, result);
+    return result;
+  }
+
+  /**
+   * Validates and preserves an imported Entity observation, source mapping,
+   * revisions, and conflict-version context.
+   *
+   * @param definition portable Entity definition
+   * @param importValue import request observation
+   * @return portable import result
+   */
+  public static Map<String, Object> importEntity(Object definition, Object importValue) {
+    Map<String, Object> entityDefinition = validateDefinition(definition);
+    if (!(importValue instanceof Map<?, ?> rawImport)) {
+      throw new FinKoreException(INVALID_IDENTITY);
+    }
+    Map<String, Object> input = stringObjectMap(rawImport, INVALID_IDENTITY);
+    Map<String, Object> entity = validateEntity(entityDefinition, input.get("entity"));
+    Map<String, Object> mapping = null;
+    if (input.containsKey("sourceIdentity")) {
+      mapping = identityMapping(input.get("identityMapping"), entity, input.get("sourceIdentity"));
+    } else if (input.containsKey("identityMapping")) {
+      mapping = identityMapping(input.get("identityMapping"), entity, null);
+    }
+    Map<String, Object> currentRevision = input.containsKey("currentRevision") ? revision(input.get("currentRevision"), entity, true) : null;
+    List<Map<String, Object>> historical = new ArrayList<>();
+    if (input.containsKey("historicalRevisions")) {
+      for (Object item : listValue(input.get("historicalRevisions"), INVALID_IDENTITY)) {
+        historical.add(revision(item, entity, false));
+      }
+      ensureUniqueRevisions(historical);
+    }
+    Object conflictVersion = input.get("conflictVersion");
+    if (conflictVersion != null && !opaque(conflictVersion)) {
+      throw new FinKoreException(INVALID_IDENTITY);
+    }
+    if (!input.getOrDefault("expectedState", entity.get("state")).equals(entity.get("state"))) {
+      throw new FinKoreException(STATE_CONFLICT);
+    }
+    if (input.containsKey("expectedRevision")
+        && (currentRevision == null || !input.get("expectedRevision").equals(currentRevision.get("revision")))) {
+      throw new FinKoreException(STATE_CONFLICT);
+    }
+    if (input.containsKey("expectedConflictVersion") && !input.get("expectedConflictVersion").equals(conflictVersion)) {
+      throw new FinKoreException(STATE_CONFLICT);
+    }
+    Map<String, Object> result = new LinkedHashMap<>();
+    result.put("entity", copyJson(entity, INVALID_IDENTITY));
+    if (currentRevision != null) {
+      result.put("currentRevision", currentRevision);
+    }
+    if (!historical.isEmpty()) {
+      result.put("historicalRevisions", copyJson(historical, INVALID_IDENTITY));
+    }
+    if (mapping != null) {
+      result.put("identityMapping", mapping);
+    }
+    if (conflictVersion != null) {
+      result.put("conflictVersion", conflictVersion);
+    }
+    return result;
+  }
+
+  /**
+   * Records one Entity evolution relation and its required Audit evidence.
+   *
+   * @param kind evolution kind: CORRECTION, REVERSAL, VOID, or SUPERSESSION
+   * @param definition portable Entity definition
+   * @param input evolution request
+   * @return portable evolution result
+   */
+  public static Map<String, Object> evolve(String kind, Object definition, Map<String, Object> input) {
+    Map<String, Object> entityDefinition = validateDefinition(definition);
+    Map<String, Object> source = validateEntity(entityDefinition, input.get("source"));
+    String relatedKey = "SUPERSESSION".equals(kind) ? "successor" : "related";
+    String revisionKey = "SUPERSESSION".equals(kind) ? "successorRevision" : "relatedRevision";
+    Map<String, Object> related = "VOID".equals(kind) ? null : validateEntity(entityDefinition, input.get(relatedKey));
+    String sourceRevision = opaqueRevision(input.get("sourceRevision"), source);
+    String relatedRevision = related == null ? null : opaqueRevision(input.get(revisionKey), related);
+    String relationId = requiredString(input.get("relationId"), INVALID_MUTATION);
+    List<Map<String, Object>> currentRelations = relations(input.get("evolutionHistory"));
+    for (Map<String, Object> relation : currentRelations) {
+      if (relationId.equals(relation.get("relationId"))) {
+        throw new FinKoreException(INVALID_MUTATION);
+      }
+    }
+    if (!input.getOrDefault("expectedSourceState", source.get("state")).equals(source.get("state"))) {
+      throw new FinKoreException(STATE_CONFLICT);
+    }
+    if (!input.getOrDefault("expectedSourceRevision", sourceRevision).equals(sourceRevision)) {
+      throw new FinKoreException(STATE_CONFLICT);
+    }
+    if (!Boolean.TRUE.equals(input.getOrDefault("expectedSourceCurrent", Boolean.TRUE))) {
+      throw new FinKoreException(STATE_CONFLICT);
+    }
+    if (!Boolean.TRUE.equals(input.get("eligible"))) {
+      throw new FinKoreException(INVALID_MUTATION);
+    }
+    Map<String, Object> relation = relation(kind, relationId, source, sourceRevision, related, relatedRevision, input.get("supersessionScope"), auditEventId(input.get("auditEvent")));
+    Audit.Log auditLog = Audit.Log.create(input.get("auditHistory"));
+    Map<String, Object> auditHistory = auditLog.append(input.get("auditEvent")).toPortable();
+
+    Map<String, Object> result = new LinkedHashMap<>();
+    result.put("source", copyJson(source, INVALID_IDENTITY));
+    if (related != null) {
+      result.put("related", copyJson(related, INVALID_IDENTITY));
+    }
+    result.put("relation", relation);
+    result.put("evolutionHistory", historyEnvelope(append(currentRelations, relation)));
+    result.put("auditHistory", auditHistory);
+    result.put("auditEvent", copyJson(input.get("auditEvent"), INVALID_MUTATION));
+    return result;
+  }
+
+  /**
+   * Computes validation findings for a candidate mutation. Used by adapters to
+   * report safe diagnostics for failed validation without committing changes.
+   *
+   * @param definition portable Entity definition
+   * @param entity current Entity observation
+   * @param changes proposed changes
+   * @return validation findings
+   */
+  public static List<Map<String, Object>> validationFindingsForMutation(Object definition, Object entity, Object changes) {
+    Map<String, Object> entityDefinition = validateDefinition(definition);
+    Map<String, Object> current = validateEntity(entityDefinition, entity);
+    if (!(changes instanceof Map<?, ?> rawChanges)) {
+      return List.of();
+    }
+    @SuppressWarnings("unchecked")
+    Map<String, Object> data = (Map<String, Object>) current.get("data");
+    data.putAll(stringObjectMap(rawChanges, INVALID_MUTATION));
+    return validationFindings(entityDefinition, current);
+  }
+
+  /**
+   * Builds portable evolution observations from an input request.
+   *
+   * @param input evolution request
+   * @param includeSameIdentityRelated whether corrections should include a same-id related entity
+   * @return observations for conformance failure-atomicity checks
+   */
+  public static Map<String, Object> evolutionObservation(Map<String, Object> input, boolean includeSameIdentityRelated) {
+    Map<String, Object> observations = new LinkedHashMap<>();
+    observations.put("source", copyJson(input.get("source"), INVALID_IDENTITY));
+    if (input.containsKey("related")
+        && input.get("related") instanceof Map<?, ?> related
+        && input.get("source") instanceof Map<?, ?> source
+        && (includeSameIdentityRelated || !related.get("id").equals(source.get("id")))) {
+      observations.put("related", copyJson(input.get("related"), INVALID_IDENTITY));
+    }
+    if (input.containsKey("successor")) {
+      observations.put("related", copyJson(input.get("successor"), INVALID_IDENTITY));
+    }
+    observations.put("evolutionHistory", historyEnvelope(normalizedObservationRelations(input.get("evolutionHistory"))));
+    observations.put("auditHistory", auditObservation(input.get("auditHistory")));
+    return observations;
+  }
+
+  private static Map<String, Object> validateDefinition(Object definition) {
+    if (!(definition instanceof Map<?, ?> raw)) {
+      throw new FinKoreException(INVALID_IDENTITY);
+    }
+    Map<String, Object> entityDefinition = stringObjectMap(raw, INVALID_IDENTITY);
+    requiredString(entityDefinition.get("type"), INVALID_IDENTITY);
+    requiredString(entityDefinition.get("identityScope"), INVALID_IDENTITY);
+    Workflow.Definition.fromPortable(entityDefinition.get("workflow"));
+    Object mutability = entityDefinition.getOrDefault("mutability", Map.of());
+    if (!(mutability instanceof Map<?, ?>)) {
+      throw new FinKoreException(INVALID_MUTATION);
+    }
+    Object validation = entityDefinition.getOrDefault("validation", List.of());
+    if (!(validation instanceof List<?>)) {
+      throw new FinKoreException(VALIDATION_FAILED);
+    }
+    return copyMap(entityDefinition, INVALID_IDENTITY);
+  }
+
+  private static Map<String, Object> validateEntity(Map<String, Object> definition, Object entity) {
+    if (!(entity instanceof Map<?, ?> raw)) {
+      throw new FinKoreException(INVALID_IDENTITY);
+    }
+    Map<String, Object> value = stringObjectMap(raw, INVALID_IDENTITY);
+    if (!definition.get("type").equals(value.get("type")) || !opaque(value.get("id"))) {
+      throw new FinKoreException(INVALID_IDENTITY);
+    }
+    Workflow.Definition workflow = Workflow.Definition.fromPortable(definition.get("workflow"));
+    if (!(value.get("state") instanceof String state) || !workflow.states().contains(state)) {
+      throw new FinKoreException(Workflow.INVALID_STATE);
+    }
+    if (!(value.get("data") instanceof Map<?, ?>)) {
+      throw new FinKoreException(VALIDATION_FAILED);
+    }
+    Map<String, Object> result = copyMap(value, INVALID_IDENTITY);
+    validateEntityData(definition, result);
+    return result;
+  }
+
+  private static void validateEntityData(Map<String, Object> definition, Map<String, Object> entity) {
+    List<Map<String, Object>> findings = validationFindings(definition, entity);
+    if (!findings.isEmpty()) {
+      throw new FinKoreException(VALIDATION_FAILED);
+    }
+  }
+
+  private static List<Map<String, Object>> validationFindings(Map<String, Object> definition, Map<String, Object> entity) {
+    List<Map<String, Object>> findings = new ArrayList<>();
+    @SuppressWarnings("unchecked")
+    Map<String, Object> data = (Map<String, Object>) entity.get("data");
+    for (Object ruleObject : listValue(definition.getOrDefault("validation", List.of()), VALIDATION_FAILED)) {
+      if (!(ruleObject instanceof Map<?, ?> rawRule)) {
+        continue;
+      }
+      Map<String, Object> rule = stringObjectMap(rawRule, VALIDATION_FAILED);
+      if (!"positive-money".equals(rule.get("rule"))) {
+        continue;
+      }
+      Object path = rule.get("path");
+      boolean invalid = true;
+      if (path instanceof String key) {
+        Object candidate = data.get(key);
+        try {
+          Money.fromPortable(candidate);
+          if (candidate instanceof Map<?, ?> moneyMap && moneyMap.get("amount") instanceof String amount) {
+            invalid = new BigDecimal(amount).compareTo(BigDecimal.ZERO) <= 0;
+          }
+        } catch (RuntimeException error) {
+          invalid = true;
+        }
+      }
+      if (invalid) {
+        Map<String, Object> finding = new LinkedHashMap<>();
+        finding.put("rule", rule.get("id"));
+        finding.put("path", rule.get("path"));
+        findings.add(finding);
+      }
+    }
+    return findings;
+  }
+
+  private static Set<String> mutableFields(Map<String, Object> definition, String state) {
+    Object rawMutability = definition.getOrDefault("mutability", Map.of());
+    if (!(rawMutability instanceof Map<?, ?> map)) {
+      throw new FinKoreException(INVALID_MUTATION);
+    }
+    Object rawFields = map.containsKey(state) ? map.get(state) : List.of();
+    List<String> fields = stringList(rawFields, INVALID_MUTATION);
+    return new HashSet<>(fields);
+  }
+
+  private static Map<String, Object> identityMapping(Object mapping, Map<String, Object> entity, Object sourceIdentity) {
+    if (!(mapping instanceof Map<?, ?> raw)) {
+      throw new FinKoreException(INVALID_IDENTITY);
+    }
+    Map<String, Object> value = stringObjectMap(raw, INVALID_IDENTITY);
+    requiredString(value.get("mappingId"), INVALID_IDENTITY);
+    requiredString(value.get("sourceSystem"), INVALID_IDENTITY);
+    requiredString(value.get("sourceId"), INVALID_IDENTITY);
+    if (sourceIdentity != null) {
+      if (!(sourceIdentity instanceof Map<?, ?> source)
+          || !value.get("sourceSystem").equals(source.get("sourceSystem"))
+          || !value.get("sourceId").equals(source.get("sourceId"))) {
+        throw new FinKoreException(INVALID_IDENTITY);
+      }
+    }
+    Map<String, Object> expectedEntity = new LinkedHashMap<>();
+    expectedEntity.put("type", entity.get("type"));
+    expectedEntity.put("id", entity.get("id"));
+    if (!expectedEntity.equals(value.get("entity"))) {
+      throw new FinKoreException(INVALID_IDENTITY);
+    }
+    return copyMap(value, INVALID_IDENTITY);
+  }
+
+  private static Map<String, Object> revision(Object value, Map<String, Object> entity, boolean current) {
+    if (value instanceof String text) {
+      if (text.isEmpty() || text.equals(entity.get("id"))) {
+        throw new FinKoreException(INVALID_IDENTITY);
+      }
+      Map<String, Object> result = new LinkedHashMap<>();
+      result.put("type", entity.get("type"));
+      result.put("id", entity.get("id"));
+      result.put("revision", text);
+      result.put("current", current);
+      return result;
+    }
+    if (!(value instanceof Map<?, ?> raw)) {
+      throw new FinKoreException(INVALID_IDENTITY);
+    }
+    Map<String, Object> map = stringObjectMap(raw, INVALID_IDENTITY);
+    if (!entity.get("type").equals(map.get("type"))
+        || !entity.get("id").equals(map.get("id"))
+        || !opaque(map.get("revision"))
+        || map.get("revision").equals(entity.get("id"))
+        || (map.containsKey("current") && !Boolean.valueOf(current).equals(map.get("current")))) {
+      throw new FinKoreException(INVALID_IDENTITY);
+    }
+    Map<String, Object> result = new LinkedHashMap<>();
+    result.put("type", map.get("type"));
+    result.put("id", map.get("id"));
+    result.put("revision", map.get("revision"));
+    result.put("current", current);
+    return result;
+  }
+
+  private static void ensureUniqueRevisions(List<Map<String, Object>> revisions) {
+    Set<Object> seen = new HashSet<>();
+    for (Map<String, Object> revision : revisions) {
+      if (!seen.add(revision.get("revision"))) {
+        throw new FinKoreException(INVALID_IDENTITY);
+      }
+    }
+  }
+
+  private static String opaqueRevision(Object value, Map<String, Object> entity) {
+    if (!opaque(value) || value.equals(entity.get("id"))) {
+      throw new FinKoreException(INVALID_IDENTITY);
+    }
+    return (String) value;
+  }
+
+  private static Map<String, Object> relation(
+      String kind,
+      String relationId,
+      Map<String, Object> source,
+      String sourceRevision,
+      Map<String, Object> related,
+      String relatedRevision,
+      Object scope,
+      String auditEventId) {
+    Map<String, Object> relation = new LinkedHashMap<>();
+    relation.put("relationId", relationId);
+    relation.put("kind", kind);
+    relation.put("source", revisionReference(source, sourceRevision));
+    if (related != null) {
+      relation.put("related", revisionReference(related, relatedRevision));
+    }
+    if ("SUPERSESSION".equals(kind)) {
+      relation.put("supersessionScope", requiredString(scope, INVALID_MUTATION));
+    }
+    relation.put("sourceCurrent", !"VOID".equals(kind) && !"SUPERSESSION".equals(kind));
+    if (related != null) {
+      relation.put("relatedCurrent", Boolean.TRUE);
+    }
+    relation.put("auditEventId", auditEventId);
+    return relation;
+  }
+
+  private static Map<String, Object> revisionReference(Map<String, Object> entity, String revision) {
+    Map<String, Object> result = new LinkedHashMap<>();
+    result.put("type", entity.get("type"));
+    result.put("id", entity.get("id"));
+    result.put("revision", revision);
+    return result;
+  }
+
+  private static String auditEventId(Object auditEvent) {
+    if (!(auditEvent instanceof Map<?, ?> raw)) {
+      throw new FinKoreException(INVALID_MUTATION);
+    }
+    return requiredString(raw.get("eventId"), INVALID_MUTATION);
+  }
+
+  private static List<Map<String, Object>> relations(Object history) {
+    if (history == null || List.of().equals(history)) {
+      return List.of();
+    }
+    if (history instanceof Map<?, ?> raw && raw.get("relations") instanceof List<?> list) {
+      return copyMapList(list, INVALID_MUTATION);
+    }
+    throw new FinKoreException(INVALID_MUTATION);
+  }
+
+  private static List<Map<String, Object>> normalizedObservationRelations(Object history) {
+    if (history == null) {
+      return List.of();
+    }
+    if (history instanceof List<?> list) {
+      return copyMapList(list, INVALID_MUTATION);
+    }
+    if (history instanceof Map<?, ?> raw && raw.get("relations") instanceof List<?> list) {
+      return copyMapList(list, INVALID_MUTATION);
+    }
+    return List.of();
+  }
+
+  private static Map<String, Object> historyEnvelope(List<Map<String, Object>> relations) {
+    Map<String, Object> result = new LinkedHashMap<>();
+    result.put("relations", copyJson(relations, INVALID_MUTATION));
+    return result;
+  }
+
+  private static Map<String, Object> auditObservation(Object history) {
+    Map<String, Object> result = new LinkedHashMap<>();
+    if (history instanceof List<?>) {
+      result.put("history", copyJson(history, INVALID_MUTATION));
+    } else if (history instanceof Map<?, ?> raw && raw.get("history") instanceof List<?>) {
+      result.put("history", copyJson(raw.get("history"), INVALID_MUTATION));
+    } else {
+      result.put("history", List.of());
+    }
+    return result;
+  }
+
+  private static List<Map<String, Object>> append(List<Map<String, Object>> list, Map<String, Object> value) {
+    List<Map<String, Object>> result = new ArrayList<>();
+    for (Map<String, Object> item : list) {
+      result.add(copyMap(item, INVALID_MUTATION));
+    }
+    result.add(copyMap(value, INVALID_MUTATION));
+    return result;
+  }
+
+  private static boolean opaque(Object value) {
+    return value instanceof String text && !text.isEmpty();
+  }
+
+  private static String requiredString(Object value, String code) {
+    if (!opaque(value)) {
+      throw new FinKoreException(code);
+    }
+    return (String) value;
+  }
+
+  private static List<String> stringList(Object value, String code) {
+    if (!(value instanceof List<?> list)) {
+      throw new FinKoreException(code);
+    }
+    List<String> result = new ArrayList<>();
+    for (Object item : list) {
+      result.add(requiredString(item, code));
+    }
+    return result;
+  }
+
+  private static List<Object> listValue(Object value, String code) {
+    if (!(value instanceof List<?> list)) {
+      throw new FinKoreException(code);
+    }
+    return new ArrayList<>(list);
+  }
+
+  @SuppressWarnings("unchecked")
+  private static Map<String, Object> stringObjectMap(Map<?, ?> map, String code) {
+    return (Map<String, Object>) copyJson(map, code);
+  }
+
+  @SuppressWarnings("unchecked")
+  private static Map<String, Object> copyMap(Map<String, Object> map, String code) {
+    return (Map<String, Object>) copyJson(map, code);
+  }
+
+  private static List<Map<String, Object>> copyMapList(List<?> list, String code) {
+    List<Map<String, Object>> result = new ArrayList<>();
+    for (Object item : list) {
+      if (!(item instanceof Map<?, ?> map)) {
+        throw new FinKoreException(code);
+      }
+      result.add(stringObjectMap(map, code));
+    }
+    return result;
+  }
+
+  private static Object copyJson(Object value, String code) {
+    if (value == null || value instanceof String || value instanceof Number || value instanceof Boolean) {
+      return value;
+    }
+    if (value instanceof List<?> list) {
+      List<Object> result = new ArrayList<>();
+      for (Object item : list) {
+        result.add(copyJson(item, code));
+      }
+      return result;
+    }
+    if (value instanceof Map<?, ?> map) {
+      Map<String, Object> result = new LinkedHashMap<>();
+      for (Map.Entry<?, ?> entry : map.entrySet()) {
+        if (!(entry.getKey() instanceof String key)) {
+          throw new FinKoreException(code);
+        }
+        result.put(key, copyJson(entry.getValue(), code));
+      }
+      return result;
+    }
+    throw new FinKoreException(code);
+  }
+}

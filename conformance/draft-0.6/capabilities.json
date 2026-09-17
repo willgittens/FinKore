@@ -110,15 +110,24 @@
         "finkore.workflow.transition",
         "finkore.audit.append",
         "finkore.audit.replace",
-        "finkore.audit.remove"
+        "finkore.audit.remove",
+        "finkore.entity.create",
+        "finkore.entity.mutate",
+        "finkore.entity.transition",
+        "finkore.entity.evolution.correct",
+        "finkore.entity.evolution.reverse",
+        "finkore.entity.evolution.supersede",
+        "finkore.entity.evolution.void"
       ],
       "supportedProfiles": [
+        "finkore.core.draft0_6.full",
         "finkore.core.draft0_6.domain.money",
         "finkore.core.draft0_6.domain.workflow",
         "finkore.core.draft0_6.domain.audit",
-        "finkore.core.draft0_6.domain.approvals"
+        "finkore.core.draft0_6.domain.approvals",
+        "finkore.core.draft0_6.domain.entities"
       ],
-      "unsupportedDomains": ["entities"],
+      "unsupportedDomains": [],
       "limits": {
         "meetsDraft06PortableFloor": true
       },
@@ -126,7 +135,7 @@
         "path": "implementations/java/adapters/conformance/adapter.js",
         "version": "source"
       },
-      "conformanceClaim": "conformance/draft-0.6/claims/java-money.json"
+      "conformanceClaim": "conformance/draft-0.6/claims/java-full.json"
     }
   ]
 }

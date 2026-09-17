@@ -11,7 +11,7 @@ const classpath = [
   'implementations/java/target/test-classes',
 ].join(delimiter)
 
-test('discovers Java Money, Workflow, Audit, and Approvals operations without claiming later-domain labels', () => {
+test('discovers Java Money, Workflow, Audit, Approvals, and Entities operations', () => {
   const adapter = createJavaConformanceAdapter({ javaPath, classpath })
   assert.equal(adapter.supports('money.deserialize'), true)
   assert.equal(adapter.supports('finkore.money.add'), true)
@@ -20,7 +20,8 @@ test('discovers Java Money, Workflow, Audit, and Approvals operations without cl
   assert.equal(adapter.supports('audit.redact'), true)
   assert.equal(adapter.supports('approval.requirement.evaluate'), true)
   assert.equal(adapter.supports('approval.composition.evaluate'), true)
-  assert.equal(adapter.supports('finkore.entity.create'), false)
+  assert.equal(adapter.supports('finkore.entity.create'), true)
+  assert.equal(adapter.supports('entity.import'), true)
 })
 
 test('executes a Money operation through the Java subprocess bridge', () => {
@@ -100,6 +101,36 @@ test('executes an Approval decision record through the Java subprocess bridge', 
         actor: { type: 'user', id: 'user-7' },
         decidedAt: '2026-09-01T12:00:00Z',
       }],
+    },
+  })
+})
+
+test('executes an Entity create through the Java subprocess bridge', () => {
+  const adapter = createJavaConformanceAdapter({ javaPath, classpath })
+  assert.deepEqual(adapter.execute({
+    operationId: 'finkore.entity.create',
+    input: {
+      definition: {
+        type: 'invoice',
+        identityScope: 'tenant-a',
+        workflow: {
+          states: ['DRAFT', 'FINAL'],
+          initialState: 'DRAFT',
+          terminalStates: ['FINAL'],
+          transitions: [{ source: 'DRAFT', target: 'FINAL' }],
+        },
+        mutability: { DRAFT: ['memo'], FINAL: ['deliveryStatus'] },
+      },
+      id: 'inv-42',
+      data: { memo: 'initial' },
+    },
+  }), {
+    status: 'success',
+    value: {
+      type: 'invoice',
+      id: 'inv-42',
+      state: 'DRAFT',
+      data: { memo: 'initial' },
     },
   })
 })

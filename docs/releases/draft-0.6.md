@@ -19,10 +19,10 @@ FINKORE CORE DRAFT 0.6 COMPLETE
 FinKore now publishes and mechanically validates the portability floor,
 compatibility and deprecation rules, conformance profiles, implementation
 capability declarations, and reproducible evidence for the existing Core scope.
-TypeScript and Python pass their declared full profile, and Java passes its
-declared Money profile. TASK-257 adds post-Draft-0.6 Java Workflow, Audit, and
-Approvals parity without changing the original Draft 0.6 Money claim. This
-statement does not claim full Java conformance, public package
+TypeScript and Python pass their declared full profile, and Java passed its
+declared Money profile at the original Draft 0.6 closure. TASK-257 adds
+post-Draft-0.6 Java full-profile parity without moving or rewriting the
+original Draft 0.6 tag. This statement does not claim public package
 availability, production readiness, external certification, cross-domain
 composition proof, or behavior outside the named Draft 0.6 profiles.
 ```
@@ -168,8 +168,9 @@ TypeScript adapter, Python core, and Java core remain independently versioned at
   conformance vectors, increasing the current manifest to 254 vectors and the
   Money profile to 93 vectors.
 - TypeScript and Python pass the full Draft 0.6 profile, and Java passes the
-  Draft 0.6 Money profile. TASK-257 subsequently adds Java Workflow, Audit, and
-  Approvals profile parity while the Entities domain remains unsupported.
+  Draft 0.6 Money profile at the original closure. TASK-257 subsequently adds
+  Java Workflow, Audit, Approvals, and Entities parity and records a Java
+  full-profile claim.
 
 ## Milestone E Release Evidence and TASK-256 Correction
 
@@ -202,7 +203,7 @@ Draft 0.8 machine-readable Agentic manifest completion.
 | Manifest/vector format | Still `0.1`; no syntax bump required. |
 | TypeScript implementation | Claims `finkore.core.draft0_6.full`; 254/254 profile vectors pass. |
 | Python implementation | Claims `finkore.core.draft0_6.full`; 254/254 profile vectors pass. |
-| Java implementation | Claims `finkore.core.draft0_6.domain.money`; 93/93 profile vectors pass. TASK-257 additionally implements the Workflow, Audit, and Approvals domain profiles, while the Entities domain remains unsupported. |
+| Java implementation | Historical Draft 0.6 claim: `finkore.core.draft0_6.domain.money`, 93/93 profile vectors pass. Current TASK-257 parity claim: `finkore.core.draft0_6.full`, 254/254 profile vectors pass. |
 | Agentic Contract | Existing canonical operation IDs retained; no Draft 0.8 machine-readable operation manifest. |
 | Packages | Package versions remain `0.1.0`; no publication claim. |
 | External review/signing | Not claimed. |
@@ -234,17 +235,15 @@ with 254 passed, 0 failed, 0 unsupported, and 0 infrastructure errors.
 ```
 
 ```text
-Java conforms to finkore.core.draft0_6.domain.money for FinKore Core draft-0.6
-with 93 passed, 0 failed, 0 unsupported, and 0 infrastructure errors. Java also
-passes the Workflow, Audit, and Approvals domain profiles under TASK-257
-evidence, but does not claim the full profile while the Entities domain remains
-unsupported.
+Java conforms to finkore.core.draft0_6.full for FinKore Core draft-0.6 under
+post-Draft-0.6 TASK-257 parity evidence with 254 passed, 0 failed, 0
+unsupported, and 0 infrastructure errors.
 ```
 
 Invalid claim wording:
 
 ```text
-Java fully conforms to FinKore Core Draft 0.6.
+The original immutable core-draft-0.6 tag included Java full-profile evidence.
 ```
 
 ### Checksums
@@ -272,24 +271,26 @@ verification remains pending.
 | TypeScript build and strict typecheck | PASS |
 | TypeScript unit tests | PASS; runner 115, core 371, adapter 15 |
 | Python compile and adapter tests | PASS; adapter 4/4 |
-| Java tests and adapter tests | PASS; Money, Workflow, Audit, and Approvals native tests; adapter 6/6 |
+| Java tests and adapter tests | PASS; Money, Workflow, Audit, Approvals, and Entities native tests; adapter 7/7 |
 | TypeScript full conformance | PASS; 254/254, zero failure/unsupported/infrastructure |
 | Python full conformance | PASS; 254/254, zero failure/unsupported/infrastructure |
 | Java Money conformance | PASS; 93/93, zero failure/unsupported/infrastructure |
 | Java Workflow conformance | PASS under TASK-257; 41/41, zero failure/unsupported/infrastructure |
 | Java Audit conformance | PASS under TASK-257; 29/29, zero failure/unsupported/infrastructure |
 | Java Approvals conformance | PASS under TASK-257; 66/66, zero failure/unsupported/infrastructure |
+| Java Entities conformance | PASS under TASK-257; 25/25, zero failure/unsupported/infrastructure |
+| Java full conformance | PASS under TASK-257; 254/254, zero failure/unsupported/infrastructure |
 | TypeScript full profile claim | PASS; `finkore.core.draft0_6.full`, 254/254 |
 | Python full profile claim | PASS; `finkore.core.draft0_6.full`, 254/254 |
-| Java Money profile claim | PASS; `finkore.core.draft0_6.domain.money`, 93/93 |
-| Draft 0.6 metadata validation | PASS after TASK-256 correction; 26 profiles, 3 capability declarations, 3 claim records, 312 checksum artifacts, 254 vectors |
-| Draft 0.6 checksum reproduction | PASS after TASK-256 correction; 312 release-relevant artifacts verified; checksum manifest excludes itself and ignored/generated outputs |
+| Java full profile claim | PASS under TASK-257; `finkore.core.draft0_6.full`, 254/254 |
+| Draft 0.6 metadata validation | PASS after TASK-256/TASK-257 updates; 26 profiles, 3 capability declarations, 3 active claim records, 316 checksum artifacts, 254 vectors |
+| Draft 0.6 checksum reproduction | PASS after TASK-257 update; 316 release-relevant artifacts verified; checksum manifest excludes itself and ignored/generated outputs |
 | Runner coverage | PASS; 96.33% statements, 94.20% branches, 97.29% functions, 98.33% lines |
 | TypeScript core coverage | PASS; 99.09% statements, 98.69% branches, 100% functions, 99.49% lines |
 | Python packaged coverage | PASS; 86% lines across `finkore` source with full manifest execution |
-| Java packaged coverage | PASS; 1014/1110 lines covered, 85% gate satisfied |
-| Python/Java critical-mutant probes | PASS; 22/22 killed |
-| Cross-language portability comparison | PASS; TypeScript 254/254, Python 254/254, Java Money 93/93, Java Workflow 41/41, Java Audit 29/29, Java Approvals 66/66, Java full-manifest boundary still unsupported for Entities, zero actual-result differences in declared scopes |
+| Java packaged coverage | PASS; 1301/1440 lines covered, 85% gate satisfied |
+| Python/Java critical-mutant probes | PASS; 24/24 killed |
+| Cross-language portability comparison | PASS under TASK-257; TypeScript 254/254, Python 254/254, Java 254/254, zero actual-result differences in declared scopes |
 | Python Money regression tests | PASS; Draft 0.6 large-decimal and high-scale rounding/Rate controls included |
 | Boundary research harness | PASS; 19 cases, 49 executions, 19 matches, zero documented differences |
 | Milestone C policy references | PASS; compatibility, profile, claim, capability, and provenance policy linked from live navigation |
@@ -301,7 +302,6 @@ verification remains pending.
 
 ## Unsupported and Deferred Scope
 
-The Java Entities domain remains unsupported until its TASK-257 slice completes.
 Numeric and allocation capability floors are accepted, encoded in
 capability/profile metadata, and exercised by manifest-listed Money profile
 vectors.

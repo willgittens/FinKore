@@ -2,10 +2,8 @@
 
 This package is the Java implementation track for FinKore. It is derived
 from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from TypeScript or
-Python financial implementation code. For Draft 0.6 evidence, Java claims
-`finkore.core.draft0_6.domain.money` and now implements the Workflow, Audit,
-and Approvals domain slices as part of TASK-257. It does not yet claim the full
-profile.
+Python financial implementation code. For Draft 0.6 evidence, Java now claims
+`finkore.core.draft0_6.full` as post-Draft-0.6 TASK-257 parity evidence.
 
 Current status:
 
@@ -20,8 +18,11 @@ Current status:
 - Approval Requirements, Decisions, validity lifecycle, Conditions, Chains, and
   bounded Composition are implemented and pass the 66-vector Approvals domain
   profile.
-- Entities remain unsupported for Java until their TASK-257 slice is
-  implemented and proven.
+- Entity identity, lifecycle, mutability, validation, revisions, import, and
+  bounded evolution with required Audit evidence are implemented and pass the
+  25-vector Entities domain profile.
+- The complete Draft 0.6 full profile passes at 254/254 vectors with zero
+  failures, unsupported results, or infrastructure errors.
 - Public errors expose portable FinKore error codes; Java exception class names
   are not portable semantics.
 
@@ -40,10 +41,13 @@ npm run conformance:java:audit
 npm run conformance:java:profile:audit
 npm run conformance:java:approvals
 npm run conformance:java:profile:approvals
+npm run conformance:java:entities
+npm run conformance:java:profile:entities
+npm run conformance:java:profile:full
 ```
 
 The packaged Java coverage gate uses Maven, JUnit Jupiter, and JaCoCo. It
 currently enforces at least 85% line coverage for the Java core package.
-The critical-mutant probe mutates temporary Java Money, Workflow, Audit, and
-Approvals implementations and requires the relevant conformance suites to kill
-every probe.
+The critical-mutant probe mutates temporary Java Money, Workflow, Audit,
+Approvals, and Entities implementations and requires the relevant conformance
+suites to kill every probe.

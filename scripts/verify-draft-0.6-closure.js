@@ -18,6 +18,8 @@ const steps = [
   ['npm', ['run', 'conformance:java:profile:workflow']],
   ['npm', ['run', 'conformance:java:profile:audit']],
   ['npm', ['run', 'conformance:java:profile:approvals']],
+  ['npm', ['run', 'conformance:java:profile:entities']],
+  ['npm', ['run', 'conformance:java:profile:full']],
   ['npm', ['run', 'test:coverage', '-w', '@finkore/conformance-runner']],
   ['npm', ['run', 'test:coverage', '-w', '@finkore/typescript']],
   ['npm', ['run', 'python:coverage']],

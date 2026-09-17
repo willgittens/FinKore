@@ -101,7 +101,12 @@
     {
       "path": "conformance/draft-0.6/capabilities.json",
       "kind": "conformance",
-      "sha256": "fbd8c008696c1c40984a177f89845581c7bc0559cd5e9303a4e048d8a756a2f0"
+      "sha256": "4f0b548bb5e08a313042debb5804738cd943bdf8ee2a93a219229b3eda7c8e57"
+    },
+    {
+      "path": "conformance/draft-0.6/claims/java-full.json",
+      "kind": "claim",
+      "sha256": "dc27884b6c629470585504eb40fd772b5d340fc03ed1ed37ac5cdf56baf67160"
     },
     {
       "path": "conformance/draft-0.6/claims/java-money.json",
@@ -191,7 +196,7 @@
     {
       "path": "conformance/draft-0.6/README.md",
       "kind": "conformance",
-      "sha256": "349f48946402cfbc9ef7235e9c0ca26803feeafe59b41e3dd4ec61c9f46ca024"
+      "sha256": "3b4e3980808d37d8b77448963cb749b1c6d46585ff44a341a92f235c7ca6e369"
     },
     {
       "path": "conformance/draft-0.6/schemas/capabilities.schema.json",
@@ -331,7 +336,7 @@
     {
       "path": "docs/draft-0.6-compatibility-surface-inventory.md",
       "kind": "documentation",
-      "sha256": "d42950aa938fa456087da0df5fe8000344004b1cccba3b7a74d6f4ecf09f2922"
+      "sha256": "f3f48ced7588b59cc41338220d4f145d496e4f412957a508cc3fe1b1af2dd5b7"
     },
     {
       "path": "docs/draft-0.6-portability-compatibility-governance.md",
@@ -381,7 +386,7 @@
     {
       "path": "docs/plans/pre-draft-0.7-readiness-task-list.md",
       "kind": "documentation",
-      "sha256": "e3f5eefc14856f7331288f6fe7cfb673b876b64a96888b8a55111e11480e3dfa"
+      "sha256": "e1f736ecca65ce8634b649c3d420ffb10b2ec53701f2bc5ee2ecc5b642b31d94"
     },
     {
       "path": "docs/releases/draft-0.1.md",
@@ -421,7 +426,7 @@
     {
       "path": "docs/releases/draft-0.6.md",
       "kind": "documentation",
-      "sha256": "31a2379ac0f27f15741be4367e3e5025658a35e886d6831795125b1621d4b281"
+      "sha256": "d8347b1887f037047da5060d4e8c4ebbab6a6066491b640716b1a5c3d068a64f"
     },
     {
       "path": "docs/releases/README.md",
@@ -446,7 +451,7 @@
     {
       "path": "implementations/java/adapters/conformance/src/main/java/org/finkore/conformance/Bridge.java",
       "kind": "adapter",
-      "sha256": "34925f2ffb13ea35298944901072d80a83f00cf242d133e0aa367e6153b21f10"
+      "sha256": "afb8d23c996e7705100007243b75386bd93ada11587d01118de036f0bd356f0f"
     },
     {
       "path": "implementations/java/adapters/conformance/src/main/java/org/finkore/conformance/Json.java",
@@ -466,17 +471,17 @@
     {
       "path": "implementations/java/adapters/conformance/test/adapter.test.js",
       "kind": "adapter",
-      "sha256": "d4452c423654d62faf726bef7cdd9d5d6ca084a510d00fdcc0847f19b98ec192"
+      "sha256": "33fad55dbf955f44e0ab7f49d2f4fac53a2ec1976f163a513a79028860b2a012"
     },
     {
       "path": "implementations/java/core/pom.xml",
       "kind": "package",
-      "sha256": "bff1ec3bfcd2ae772fe8d86f1c526faaa6a725fd82d78857d6ac177bfe45d553"
+      "sha256": "426b6a8e0b54991c46d4b193c89a4dcebf838b361f6631b557c3ab677a2a289e"
     },
     {
       "path": "implementations/java/core/README.md",
       "kind": "implementation",
-      "sha256": "5760c70dd202d7412e3df8895bc8ddf552eab7fd0e42248af8bc7cb369d9d680"
+      "sha256": "8f996a45ff8fefd8b0bf8f6af4b78e092d05db6504065acd38f71588d2e9a135"
     },
     {
       "path": "implementations/java/core/src/main/java/org/finkore/Approvals.java",
@@ -487,6 +492,11 @@
       "path": "implementations/java/core/src/main/java/org/finkore/Audit.java",
       "kind": "implementation",
       "sha256": "c35cbfc006c85f471855db71f73e7cb24b4c093206cca300f6951637894d7fad"
+    },
+    {
+      "path": "implementations/java/core/src/main/java/org/finkore/Entities.java",
+      "kind": "implementation",
+      "sha256": "cdd25b9be179979bcdab1ea3016f33402170c68996c5ab688d1093f9aae28105"
     },
     {
       "path": "implementations/java/core/src/main/java/org/finkore/FinKoreException.java",
@@ -522,6 +532,16 @@
       "path": "implementations/java/core/src/test/java/org/finkore/AuditTest.java",
       "kind": "implementation",
       "sha256": "6b04f29908f7347115d906a714713a0ce789a3b483e2b3010a23802e111354f6"
+    },
+    {
+      "path": "implementations/java/core/src/test/java/org/finkore/EntitiesTest.java",
+      "kind": "implementation",
+      "sha256": "770f588a20cb4af1ae952508c71d9a887b39d486415b71da2c2757a5ff4a94d9"
+    },
+    {
+      "path": "implementations/java/core/src/test/java/org/finkore/EntitiesVectorCoverageTest.java",
+      "kind": "implementation",
+      "sha256": "b2663a42e453ca4d82cb2d75d0359b30b8a4f90a48e4baf322309ad1c349198a"
     },
     {
       "path": "implementations/java/core/src/test/java/org/finkore/Json.java",
@@ -1046,12 +1066,12 @@
     {
       "path": "package.json",
       "kind": "package",
-      "sha256": "1460967d0cf97ac3310e6ccbfb716f7a4aa0f64ddad342f1f352baf940c92a70"
+      "sha256": "6a353c7c490e23abad14242d23653e06d4f9f3f2fba1d50c551787e8e8f510cf"
     },
     {
       "path": "README.md",
       "kind": "source",
-      "sha256": "a3ebba9a626e7e3279bce1a285bf7c776747388b872fbf6fed935a0bf50505b4"
+      "sha256": "48fc11e4e3a5465ee34b26e9a39238cf324fc1edb2e6e97cf7d51b6e2ecc0b3b"
     },
     {
       "path": "runner/package-lock.json",
@@ -1286,7 +1306,7 @@
     {
       "path": "scripts/run-critical-mutants.js",
       "kind": "tooling",
-      "sha256": "07fbeeae24062ad9d19cc0d04ebb3a2de2ebd7aa17c276ba8d7e64b4366fbe31"
+      "sha256": "f7b675783c069cfc00dd34ec4326db8dbf4a1fc3399d7853b5ef3a5e44eaf7a6"
     },
     {
       "path": "scripts/run-draft-0.5-portability-review.js",
@@ -1301,7 +1321,7 @@
     {
       "path": "scripts/run-java-tests.js",
       "kind": "tooling",
-      "sha256": "bc5b31d4deed815ecfe85f2606e3c0cb2d28ee143380edb84617637fae4038b8"
+      "sha256": "97992fe59ff4f067797d73e7231f6ad3c2c8270a76b5a30d317d489c45f1ea41"
     },
     {
       "path": "scripts/run-python-coverage.js",
@@ -1311,7 +1331,7 @@
     {
       "path": "scripts/verify-draft-0.6-closure.js",
       "kind": "tooling",
-      "sha256": "598284f3ab2152d928097297c1d7c0bb5fbd8efd665712308eb9fbc4467b9b7c"
+      "sha256": "a08854229bb17a0801dedc50e0cdfab5874c3f9f4cb843fd682644a1ee90d277"
     },
     {
       "path": "spec/approvals/chains.md",
