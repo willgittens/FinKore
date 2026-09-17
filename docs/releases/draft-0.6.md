@@ -2,10 +2,16 @@
 
 ## Status
 
-Draft 0.6 is closed. Milestones A through E are complete. The immutable release
-tag `core-draft-0.6` resolves to verified commit
-`f7c5a1857fad4f71e8cc7801cbbefde80c640bfb`. The tag annotation records the
-checksum manifest SHA-256.
+Draft 0.6 is closed for financial behavior, profile scope, and the recorded
+TypeScript, Python, and Java Money conformance outcomes. The original immutable
+release tag `core-draft-0.6` remains historical evidence and MUST NOT be moved
+or rewritten.
+
+TASK-256 records a release-evidence correction for checksum/provenance defects
+identified after closure. The corrected checksum manifest has status
+`release-evidence-correction`, uses `git ls-files` as the deterministic source
+inventory command with ignored outputs excluded, and preserves the historical
+tag identity as superseded evidence.
 
 ```text
 FINKORE CORE DRAFT 0.6 COMPLETE
@@ -14,8 +20,9 @@ FinKore now publishes and mechanically validates the portability floor,
 compatibility and deprecation rules, conformance profiles, implementation
 capability declarations, and reproducible evidence for the existing Core scope.
 TypeScript and Python pass their declared full profile, and Java passes its
-declared Money profile, with matching outcomes inside the applicable portable
-floor. This statement does not claim full Java conformance, public package
+declared Money profile. TASK-257 adds post-Draft-0.6 Java Workflow parity
+without changing the original Draft 0.6 Money claim. This statement does not
+claim full Java conformance, public package
 availability, production readiness, external certification, cross-domain
 composition proof, or behavior outside the named Draft 0.6 profiles.
 ```
@@ -33,9 +40,9 @@ Workflow, Audit, Approvals, and Entities scope. It targets:
   detection; and
 - reproducible release identity, checksums, and an approved immutable tag.
 
-It does not add a financial domain, complete Java non-Money domains, create the
-Draft 0.8 Agentic operation manifest, publish packages, or claim production or
-external-review status.
+It does not add a financial domain, complete all Java non-Money domains, create
+the Draft 0.8 Agentic operation manifest, publish packages, or claim production
+or external-review status.
 
 ## Opening Baseline
 
@@ -67,6 +74,7 @@ TypeScript adapter, Python core, and Java core remain independently versioned at
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `D06-EDITORIAL-240-001` | `EDITORIAL` | RESOLVED | Documentation maintainers | Live CoreDoc/spec/conformance/onboarding/implementation navigation and status wording | None; no semantic or claim change | TASK-240 freshness inventory | Current documentation updated to distinguish closed Draft 0.5 implementation results from historical Draft 0.4 statements | Accepted with Milestone A |
 | `D06-PORT-241-001` | `PORTABILITY BLOCKER` | RESOLVED | Money maintainers | Python Money arithmetic/rounding, capability-floor decision, boundary corpus | No longer blocks TASK-242 or the Draft 0.6 numeric floor; later profile/evidence tasks still must prove accepted claims | Five Milestone A corpus differences, now matching controls in `docs/research/draft-0.6-boundary-evidence.md` | Resolved by the accepted Milestone B portability capability contract and Python exact coefficient-and-scale Money arithmetic | Accepted with Milestone B |
+| `D06-EVIDENCE-256-001` | `RELEASE-EVIDENCE DEFECT` | IN PROGRESS | Release/conformance maintainers | Draft 0.6 checksum manifest, checksum schema, metadata validator, closure verification command, CI workflow, release-note tag/checksum statements | No financial behavior, requirement ID, portable error, canonical operation, profile membership, or conformance outcome changes; historical `core-draft-0.6` evidence remains recoverable and is superseded only for corrected release evidence | TASK-256 investigation; corrected `conformance/draft-0.6/checksums.json`; negative checksum fixtures | Checksum generation now derives from `git ls-files --cached --others --exclude-standard`, artifacts carry explicit kind metadata, generated artifacts require reproduction metadata, closure verification runs checksums after coverage/mutation, and CI executes the closure path | Pending final clean-checkout verification and immutable correction identity |
 
 ### D06-PORT-241-001 analysis
 
@@ -160,22 +168,18 @@ TypeScript adapter, Python core, and Java core remain independently versioned at
   conformance vectors, increasing the current manifest to 254 vectors and the
   Money profile to 93 vectors.
 - TypeScript and Python pass the full Draft 0.6 profile, and Java passes the
-  Draft 0.6 Money profile with non-Money domains remaining unsupported.
+  Draft 0.6 Money profile. TASK-257 subsequently adds Java Workflow profile
+  parity while Audit, Approvals, and Entities remain unsupported.
 
-## Milestone E Release Evidence
+## Milestone E Release Evidence and TASK-256 Correction
 
-The release-hardening evidence is recorded without creating the immutable tag.
-The prepared tag name is `core-draft-0.6`; it must be created only after
-maintainer approval from the final verified revision.
+The original Draft 0.6 release evidence is historical. Its immutable tag name is
+`core-draft-0.6`; that tag remains recoverable and is not rewritten by TASK-256.
+The corrected release-evidence manifest supersedes the original checksum
+evidence for future verification while preserving the original tag as affected
+evidence.
 
-Prepared command, not yet executed:
-
-```bash
-git tag -a core-draft-0.6 -m "FinKore Core Draft 0.6"
-git show core-draft-0.6
-```
-
-Suggested tag annotation:
+The historical tag annotation is:
 
 ```text
 FinKore Core Draft 0.6
@@ -198,7 +202,7 @@ Draft 0.8 machine-readable Agentic manifest completion.
 | Manifest/vector format | Still `0.1`; no syntax bump required. |
 | TypeScript implementation | Claims `finkore.core.draft0_6.full`; 254/254 profile vectors pass. |
 | Python implementation | Claims `finkore.core.draft0_6.full`; 254/254 profile vectors pass. |
-| Java implementation | Claims `finkore.core.draft0_6.domain.money`; 93/93 profile vectors pass; non-Money domains unsupported. |
+| Java implementation | Claims `finkore.core.draft0_6.domain.money`; 93/93 profile vectors pass. TASK-257 additionally implements the Workflow domain profile, while Audit, Approvals, and Entities remain unsupported. |
 | Agentic Contract | Existing canonical operation IDs retained; no Draft 0.8 machine-readable operation manifest. |
 | Packages | Package versions remain `0.1.0`; no publication claim. |
 | External review/signing | Not claimed. |
@@ -231,8 +235,9 @@ with 254 passed, 0 failed, 0 unsupported, and 0 infrastructure errors.
 
 ```text
 Java conforms to finkore.core.draft0_6.domain.money for FinKore Core draft-0.6
-with 93 passed, 0 failed, 0 unsupported, and 0 infrastructure errors. Java does
-not claim workflow, audit, approvals, or entities profiles.
+with 93 passed, 0 failed, 0 unsupported, and 0 infrastructure errors. Java also
+passes the Workflow domain profile under TASK-257 evidence, but does not claim
+the full profile while audit, approvals, and entities remain unsupported.
 ```
 
 Invalid claim wording:
@@ -243,12 +248,15 @@ Java fully conforms to FinKore Core Draft 0.6.
 
 ### Checksums
 
-`conformance/draft-0.6/checksums.json` records SHA-256 checksums for the
+`conformance/draft-0.6/checksums.json` records SHA-256 checksums for tracked
 release-relevant source, specification, conformance, metadata, documentation,
-runner, adapter, and implementation inputs. The checksum manifest intentionally
-excludes itself to avoid a circular digest. Its status is
-`generated-for-immutable-tag`, with exact source revision resolved by the
-approved `core-draft-0.6` tag.
+runner, adapter, implementation, tooling, package, and licensing inputs. The
+checksum manifest intentionally excludes itself to avoid a circular digest.
+
+TASK-256 corrected the manifest policy so ignored build, coverage, mutation,
+toolchain, and dependency outputs are not checksum inputs. Each artifact carries
+an explicit `kind`; generated artifacts, if later included, must declare the
+command, inputs, and reproduced digest that recreate them.
 
 ## Verification Status
 
@@ -263,21 +271,22 @@ verification remains pending.
 | TypeScript build and strict typecheck | PASS |
 | TypeScript unit tests | PASS; runner 115, core 371, adapter 15 |
 | Python compile and adapter tests | PASS; adapter 4/4 |
-| Java tests and adapter tests | PASS; adapter 4/4 |
+| Java tests and adapter tests | PASS; Money and Workflow native tests; adapter 4/4 |
 | TypeScript full conformance | PASS; 254/254, zero failure/unsupported/infrastructure |
 | Python full conformance | PASS; 254/254, zero failure/unsupported/infrastructure |
 | Java Money conformance | PASS; 93/93, zero failure/unsupported/infrastructure |
+| Java Workflow conformance | PASS under TASK-257; 41/41, zero failure/unsupported/infrastructure |
 | TypeScript full profile claim | PASS; `finkore.core.draft0_6.full`, 254/254 |
 | Python full profile claim | PASS; `finkore.core.draft0_6.full`, 254/254 |
 | Java Money profile claim | PASS; `finkore.core.draft0_6.domain.money`, 93/93 |
-| Draft 0.6 metadata validation | PASS; 26 profiles, 3 capability declarations, 3 claim records, 282 checksum artifacts, 254 vectors |
-| Draft 0.6 checksum reproduction | PASS; 282 release-relevant artifacts verified; checksum manifest excludes itself |
+| Draft 0.6 metadata validation | PASS after TASK-256 correction; 26 profiles, 3 capability declarations, 3 claim records, 305 checksum artifacts, 254 vectors |
+| Draft 0.6 checksum reproduction | PASS after TASK-256 correction; 305 release-relevant artifacts verified; checksum manifest excludes itself and ignored/generated outputs |
 | Runner coverage | PASS; 96.33% statements, 94.20% branches, 97.29% functions, 98.33% lines |
 | TypeScript core coverage | PASS; 99.09% statements, 98.69% branches, 100% functions, 99.49% lines |
 | Python packaged coverage | PASS; 86% lines across `finkore` source with full manifest execution |
 | Java packaged coverage | PASS; 135/144 lines covered, 85% gate satisfied |
 | Python/Java critical-mutant probes | PASS; 14/14 killed |
-| Cross-language portability comparison | PASS; TypeScript 254/254, Python 254/254, Java Money 93/93, Java full-manifest boundary 161 unsupported non-Money vectors, zero actual-result differences in declared scopes |
+| Cross-language portability comparison | PASS; TypeScript 254/254, Python 254/254, Java Money 93/93, Java Workflow 41/41, Java full-manifest boundary still unsupported for Audit/Approvals/Entities, zero actual-result differences in declared scopes |
 | Python Money regression tests | PASS; Draft 0.6 large-decimal and high-scale rounding/Rate controls included |
 | Boundary research harness | PASS; 19 cases, 49 executions, 19 matches, zero documented differences |
 | Milestone C policy references | PASS; compatibility, profile, claim, capability, and provenance policy linked from live navigation |
@@ -285,18 +294,19 @@ verification remains pending.
 | Documentation references | PASS; 269 CoreDoc/spec references checked |
 | License validation | PASS |
 | Whitespace/diff sanity | PASS |
-| Immutable tag status | PASS; `core-draft-0.6` resolves to `f7c5a1857fad4f71e8cc7801cbbefde80c640bfb` |
+| Immutable tag status | HISTORICAL; `core-draft-0.6` is preserved as original release evidence and superseded by TASK-256 corrected checksum evidence |
 
 ## Unsupported and Deferred Scope
 
-Java non-Money domains remain unsupported. Numeric and allocation capability
-floors are accepted, encoded in capability/profile metadata, and exercised by
-manifest-listed Money profile vectors. Compatibility taxonomy, deprecation,
-profiles, claims, capability declarations, and provenance are encoded as
-Milestone D metadata and evidence. Final clean-checkout release hardening,
-artifact checksums, and immutable-tag closure are complete.
+Java Audit, Approvals, and Entities remain unsupported until their TASK-257
+slices complete. Numeric and allocation capability floors are accepted, encoded
+in capability/profile metadata, and exercised by manifest-listed Money profile
+vectors.
+Compatibility taxonomy, deprecation, profiles, claims, capability declarations,
+and provenance are encoded as Milestone D metadata and evidence. TASK-256
+corrects release-evidence provenance without changing those financial outcomes.
 
-The Draft 0.6 immutable tag `core-draft-0.6` has been created and verified from
-the final committed revision. The checksum metadata file exists with
-`generated-for-immutable-tag` status and verifies release-relevant artifacts
-using tag-resolved source identity.
+The Draft 0.6 immutable tag `core-draft-0.6` remains the original historical
+release-evidence identity. Corrected checksum evidence uses
+`release-evidence-correction` status and must be bound to an immutable
+correction identity after final clean-checkout verification.

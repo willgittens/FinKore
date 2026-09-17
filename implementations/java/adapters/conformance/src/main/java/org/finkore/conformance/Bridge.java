@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import org.finkore.FinKoreException;
 import org.finkore.Money;
+import org.finkore.Workflow;
 
 /** Subprocess bridge from conformance requests to the Java Money implementation. */
 public final class Bridge {
@@ -23,7 +24,10 @@ public final class Bridge {
       "finkore.money.compare",
       "finkore.money.round",
       "finkore.money.applyrate",
-      "finkore.money.allocate");
+      "finkore.money.allocate",
+      "workflow.create",
+      "workflow.import",
+      "finkore.workflow.transition");
 
   private Bridge() {}
 
@@ -97,6 +101,24 @@ public final class Bridge {
           }
           yield success(values, operand.observations);
         }
+        case "workflow.create" -> success(Workflow.create(workflowDefinition(inputValue)).toPortable(), null);
+        case "workflow.import" -> {
+          Workflow.Definition definition = workflowDefinition(inputValue);
+          Workflow.Instance instance = workflowInstance(inputValue);
+          yield success(Workflow.importInstance(definition, instance).toPortable(), null);
+        }
+        case "finkore.workflow.transition" -> {
+          Workflow.Definition definition = workflowDefinition(inputValue);
+          Workflow.Instance instance = workflowInstance(inputValue);
+          Workflow.Instance result = Workflow.transition(
+              definition,
+              instance,
+              inputValue.get("target"),
+              inputValue.get("facts"),
+              inputValue.get("expectedCurrentState"),
+              inputValue.get("expectedRevision"));
+          yield success(result.toPortable(), null);
+        }
         default -> Map.of("status", "unsupported");
       };
     } catch (FinKoreException error) {
@@ -122,6 +144,14 @@ public final class Bridge {
     return new MoneyOperand(value, Map.of("operand", value.toPortable()));
   }
 
+  private static Workflow.Definition workflowDefinition(Map<String, Object> input) {
+    return Workflow.Definition.fromPortable(input.get("definition"));
+  }
+
+  private static Workflow.Instance workflowInstance(Map<String, Object> input) {
+    return Workflow.Instance.fromPortable(input.get("instance"));
+  }
+
   private static Map<String, Object> observationsFor(String operation, Map<String, Object> input) {
     try {
       if (List.of("finkore.money.add", "finkore.money.subtract", "finkore.money.compare").contains(operation)) {
@@ -130,10 +160,27 @@ public final class Bridge {
       if (operation.startsWith("finkore.money.")) {
         return operand(input).observations;
       }
+      if ("finkore.workflow.transition".equals(operation)) {
+        return workflowErrorObservations(input);
+      }
     } catch (FinKoreException ignored) {
       return null;
     }
     return null;
+  }
+
+  private static Map<String, Object> workflowErrorObservations(Map<String, Object> input) {
+    Workflow.Instance instance = workflowInstance(input);
+    Workflow.Definition definition = workflowDefinition(input);
+    if (!definition.states().contains(instance.currentState())) {
+      return null;
+    }
+    Map<String, Object> observations = instance.toPortable();
+    Object facts = input.get("facts");
+    if (facts instanceof Map<?, ?> factsMap && !factsMap.isEmpty()) {
+      observations.put("facts", facts);
+    }
+    return observations;
   }
 
   private static Map<String, Object> success(Object value, Map<String, Object> observations) {

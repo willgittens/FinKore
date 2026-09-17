@@ -10,14 +10,16 @@ const classpath = [
   resolve(repositoryRoot, 'implementations/java/target/test-classes'),
 ].join(delimiter)
 
-const child = spawnSync(java, ['-cp', classpath, 'org.finkore.MoneyTest'], {
-  encoding: 'utf8',
-  cwd: repositoryRoot,
-})
-if (child.error !== undefined) throw child.error
-process.stdout.write(child.stdout)
-process.stderr.write(child.stderr)
-if (child.status !== 0) {
-  process.exit(child.status ?? 1)
+for (const testClass of ['org.finkore.MoneyTest', 'org.finkore.WorkflowTest']) {
+  const child = spawnSync(java, ['-cp', classpath, testClass], {
+    encoding: 'utf8',
+    cwd: repositoryRoot,
+  })
+  if (child.error !== undefined) throw child.error
+  process.stdout.write(child.stdout)
+  process.stderr.write(child.stderr)
+  if (child.status !== 0) {
+    process.exit(child.status ?? 1)
+  }
 }
-console.log('Java Money tests passed.')
+console.log('Java Money and Workflow tests passed.')

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { createHash } from 'node:crypto'
+import { execFileSync } from 'node:child_process'
 import { join } from 'node:path'
 
 const root = 'conformance/draft-0.6'
@@ -10,6 +11,24 @@ const expectedFormats = {
   finkoreCapabilities: '0.1',
   finkoreChecksums: '0.1',
 }
+const checksumArtifactKinds = new Set([
+  'adapter',
+  'agentic',
+  'claim',
+  'conformance',
+  'documentation',
+  'generated',
+  'implementation',
+  'license',
+  'package',
+  'runner',
+  'schema',
+  'source',
+  'specification',
+  'test-fixture',
+  'tooling',
+])
+const generatedOutputRoots = ['coverage/', 'reports/', 'dist/', 'target/', '.stryker-tmp/', 'node_modules/', '.tools/']
 
 function readJson(path) {
   return JSON.parse(readFileSync(path, 'utf8'))
@@ -201,12 +220,30 @@ function validateCapabilities(value, context, profileIds, errors) {
 function validateChecksums(value, errors) {
   if (value.finkoreChecksums !== expectedFormats.finkoreChecksums) errors.push('checksums: unsupported finkoreChecksums')
   if (value.algorithm !== 'SHA-256') errors.push('checksums: algorithm must be SHA-256')
+  if (value.status !== 'release-evidence-correction') errors.push('checksums: status must be release-evidence-correction')
+  if (value.generatedFor?.coreVersion !== 'draft-0.6') errors.push('checksums: generatedFor.coreVersion must be draft-0.6')
+  if (value.generatedFor?.sourceInventory !== 'git ls-files --cached --others --exclude-standard') {
+    errors.push('checksums: generatedFor.sourceInventory must be git ls-files --cached --others --exclude-standard')
+  }
+  if (value.generatedFor?.immutableTag !== 'core-draft-0.6') errors.push('checksums: generatedFor.immutableTag must preserve core-draft-0.6')
+  if (value.generatedFor?.evidenceRevision === `resolved-by-immutable-tag:${value.generatedFor?.immutableTag}`) {
+    errors.push('checksums: corrected evidence revision must not reuse the historical immutable tag identity')
+  }
+  if (typeof value.generatedFor?.supersedesEvidenceRevision !== 'string' || !value.generatedFor.supersedesEvidenceRevision.includes('core-draft-0.6')) {
+    errors.push('checksums: corrected evidence must identify superseded core-draft-0.6 evidence')
+  }
   if (!Array.isArray(value.artifacts) || value.artifacts.length === 0) {
     errors.push('checksums: artifacts must be a non-empty array')
     return
   }
   const paths = value.artifacts.map((artifact) => artifact.path)
   for (const duplicate of duplicateValues(paths)) errors.push(`checksums: duplicate artifact ${duplicate}`)
+  let trackedPaths
+  try {
+    trackedPaths = new Set(execFileSync('git', ['ls-files', '-z', '--cached', '--others', '--exclude-standard'], { encoding: 'utf8' }).split('\0').filter((path) => path.length > 0))
+  } catch {
+    trackedPaths = undefined
+  }
   for (const artifact of value.artifacts) {
     if (typeof artifact.path !== 'string' || artifact.path.length === 0) {
       errors.push('checksums: artifact path must be a non-empty string')
@@ -214,6 +251,29 @@ function validateChecksums(value, errors) {
     }
     if (artifact.path === `${root}/checksums.json`) errors.push('checksums: manifest must not checksum itself')
     if (artifact.path.includes('..') || artifact.path.startsWith('/')) errors.push(`checksums: unsafe artifact path ${artifact.path}`)
+    if (generatedOutputRoots.some((prefix) => artifact.path === prefix.slice(0, -1) || artifact.path.startsWith(prefix))) {
+      errors.push(`checksums: ignored generated output must not be release-source evidence ${artifact.path}`)
+    }
+    if (typeof artifact.kind !== 'string' || !checksumArtifactKinds.has(artifact.kind)) {
+      errors.push(`checksums: ${artifact.path} must declare a valid artifact kind`)
+    }
+    if (artifact.kind === 'generated') {
+      const reproduction = artifact.generatedBy
+      if (typeof reproduction?.command !== 'string' || reproduction.command.length === 0) {
+        errors.push(`checksums: generated artifact ${artifact.path} must declare reproduction command`)
+      }
+      if (!Array.isArray(reproduction?.inputs) || reproduction.inputs.length === 0 || reproduction.inputs.some((input) => typeof input !== 'string' || input.length === 0)) {
+        errors.push(`checksums: generated artifact ${artifact.path} must declare reproduction inputs`)
+      }
+      if (typeof reproduction?.reproducedSha256 !== 'string' || reproduction.reproducedSha256 !== artifact.sha256) {
+        errors.push(`checksums: generated artifact ${artifact.path} must record matching reproduced digest`)
+      }
+    } else if (artifact.generatedBy !== undefined) {
+      errors.push(`checksums: non-generated artifact ${artifact.path} must not declare generatedBy`)
+    }
+    if (trackedPaths !== undefined && artifact.kind !== 'generated' && !trackedPaths.has(artifact.path)) {
+      errors.push(`checksums: non-generated artifact is not tracked by source inventory ${artifact.path}`)
+    }
     if (typeof artifact.sha256 !== 'string' || !/^[a-f0-9]{64}$/.test(artifact.sha256)) {
       errors.push(`checksums: ${artifact.path} must have a SHA-256 digest`)
       continue
@@ -290,6 +350,12 @@ const fixtureExpectations = [
   ['conformance-local capability fixture', `${root}/fixtures/invalid/conformance-local-capability.json`, (value, fixtureErrors) => validateCapabilities(value, context, profileIds, fixtureErrors)],
   ['unsupported format fixture', `${root}/fixtures/invalid/unsupported-format.json`, validateCompatibility],
   ['checksum algorithm fixture', `${root}/fixtures/invalid/checksum-algorithm.json`, validateChecksums],
+  ['checksum ignored coverage fixture', `${root}/fixtures/invalid/checksum-ignored-coverage.json`, validateChecksums],
+  ['checksum missing generated fixture', `${root}/fixtures/invalid/checksum-missing-generated.json`, validateChecksums],
+  ['checksum stale generated fixture', `${root}/fixtures/invalid/checksum-stale-generated.json`, validateChecksums],
+  ['checksum artifact-kind omission fixture', `${root}/fixtures/invalid/checksum-artifact-kind-omission.json`, validateChecksums],
+  ['checksum drift fixture', `${root}/fixtures/invalid/checksum-drift.json`, validateChecksums],
+  ['checksum tag/source disagreement fixture', `${root}/fixtures/invalid/checksum-tag-source-disagreement.json`, validateChecksums],
 ]
 for (const [label, path, validator] of fixtureExpectations) {
   if (!expectInvalidFixture(path, validator)) errors.push(`fixtures: ${label} unexpectedly passed`)

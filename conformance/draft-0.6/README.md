@@ -34,15 +34,20 @@ Current claim evidence commands:
 npm run conformance:typescript:profile:full
 npm run conformance:python:profile:full
 npm run conformance:java:profile:money
+npm run conformance:java:profile:workflow
 ```
 
-Checksum metadata is generated deterministically with:
+Checksum metadata is generated deterministically from tracked repository source
+inventory with:
 
 ```bash
 npm run checksums:generate:draft0.6
 ```
 
 The checksum manifest excludes `checksums.json` itself to avoid a circular
-digest. Its current status is resolved by the approved immutable
-`core-draft-0.6` tag identity; the tag object records the exact source commit
-and checksum manifest digest.
+digest. Its current status is `release-evidence-correction`: the historical
+`core-draft-0.6` tag remains preserved as superseded evidence, while corrected
+checksums are derived from
+`git ls-files --cached --others --exclude-standard` so ignored build, coverage,
+mutation, toolchain, and dependency outputs do not affect release-source
+evidence.

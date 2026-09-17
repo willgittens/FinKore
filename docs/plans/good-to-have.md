@@ -38,6 +38,8 @@ Independent implementations
         ↓
 Portability and compatibility hardening
         ↓
+Release correction and Java full-profile parity
+        ↓
 Cross-domain composition proof
         ↓
 Agentic, security, and external review
@@ -141,6 +143,36 @@ The execution sequence is defined by the
   error-precedence portability blocker remains.
 - Conformance claims identify the exact Core version, conformance format,
   implementation version, supported profile, and evidence revision.
+
+## Pre-Draft 0.7 — Release Correction and Java Parity
+
+### Objective
+
+Begin Draft 0.7 from reproducible Draft 0.6 release evidence and three
+independent full-profile implementations rather than carrying release
+provenance defects or Java's Money-only scope into composition work.
+
+The execution sequence is defined by the
+[Pre-Draft 0.7 Readiness Task List](pre-draft-0.7-readiness-task-list.md).
+
+### Required Work
+
+- Correct Draft 0.6 checksum, metadata, verification, tag/provenance, and
+  documentation-evidence defects without rewriting the historical release or
+  changing financial behavior.
+- Extend Java from its complete Money profile to the complete existing Draft
+  0.6 profile for Money, Workflow, Audit, Approvals, and Entities.
+
+### Exit Gate
+
+- Corrected Draft 0.6 claims and checksums reproduce from a clean checkout.
+- A closure-grade verification path detects stale metadata, profile evidence,
+  generated artifacts, checksums, and provenance.
+- Java passes the complete Draft 0.6 full profile with zero failures,
+  unsupported results, or infrastructure errors.
+- TypeScript and Python full-profile regression evidence remains green.
+- No Draft 0.7 composition semantics or future financial domain is introduced
+  by the maintenance and parity work.
 
 ## Draft 0.7 — Cross-Domain Composition Proof
 

@@ -1,0 +1,20 @@
+{
+  "finkoreChecksums": "0.1",
+  "authority": "docs/draft-0.6-compatibility-claims-provenance-policy.md",
+  "algorithm": "SHA-256",
+  "status": "release-evidence-correction",
+  "generatedFor": {
+    "coreVersion": "draft-0.6",
+    "evidenceRevision": "resolved-by-immutable-tag:core-draft-0.6",
+    "supersedesEvidenceRevision": "resolved-by-immutable-tag:core-draft-0.6",
+    "sourceInventory": "git ls-files",
+    "immutableTag": "core-draft-0.6"
+  },
+  "artifacts": [
+    {
+      "path": "README.md",
+      "kind": "documentation",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ]
+}

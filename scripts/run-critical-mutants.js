@@ -82,33 +82,52 @@ const pythonMutants = [
 const javaMutants = [
   {
     id: 'java-money-currency-mismatch-bypass',
+    suite: 'money',
     path: 'core/src/main/java/org/finkore/Money.java',
     from: 'if (!currency.equals(other.currency)) {\n      throw new FinKoreException(CURRENCY_MISMATCH);\n    }',
     to: 'if (false && !currency.equals(other.currency)) {\n      throw new FinKoreException(CURRENCY_MISMATCH);\n    }',
   },
   {
     id: 'java-money-addition-subtracts',
+    suite: 'money',
     path: 'core/src/main/java/org/finkore/Money.java',
     from: 'return new Money(amount.add(other.amount), currency, null);',
     to: 'return new Money(amount.subtract(other.amount), currency, null);',
   },
   {
     id: 'java-money-floor-becomes-down',
+    suite: 'money',
     path: 'core/src/main/java/org/finkore/Money.java',
     from: 'case "FLOOR" -> RoundingMode.FLOOR;',
     to: 'case "FLOOR" -> RoundingMode.DOWN;',
   },
   {
     id: 'java-money-percentage-not-scaled',
+    suite: 'money',
     path: 'core/src/main/java/org/finkore/Money.java',
     from: 'scalar = scalar.divide(new BigDecimal("100"));',
     to: 'scalar = scalar.multiply(BigDecimal.ONE);',
   },
   {
     id: 'java-money-allocation-remainder-reversed',
+    suite: 'money',
     path: 'core/src/main/java/org/finkore/Money.java',
     from: 'base.set(index, base.get(index).add(BigInteger.ONE));',
     to: 'base.set(base.size() - 1 - index, base.get(base.size() - 1 - index).add(BigInteger.ONE));',
+  },
+  {
+    id: 'java-workflow-guard-bypass',
+    suite: 'workflow',
+    path: 'core/src/main/java/org/finkore/Workflow.java',
+    from: 'if (!transition.guardsPass(factMap)) {\n      throw new FinKoreException(GUARD_REJECTED);\n    }',
+    to: 'if (false && !transition.guardsPass(factMap)) {\n      throw new FinKoreException(GUARD_REJECTED);\n    }',
+  },
+  {
+    id: 'java-workflow-terminal-bypass',
+    suite: 'workflow',
+    path: 'core/src/main/java/org/finkore/Workflow.java',
+    from: 'if (definition.terminalStates().contains(instance.currentState())) {\n      throw new FinKoreException(TERMINAL_STATE);\n    }',
+    to: 'if (false && definition.terminalStates().contains(instance.currentState())) {\n      throw new FinKoreException(TERMINAL_STATE);\n    }',
   },
 ]
 
@@ -202,7 +221,7 @@ function runJavaMutant(mutant) {
       FINKORE_MUTANT_ADAPTER: 'implementations/java/adapters/conformance/adapter.js',
       FINKORE_JAVA_PATH: resolve(repositoryRoot, '.tools/bin/java'),
       FINKORE_JAVA_CLASSPATH: compile.output,
-    }, 'money')
+    }, mutant.suite)
     return { ...result, id: mutant.id }
   } finally {
     rmSync(directory, { recursive: true, force: true })

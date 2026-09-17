@@ -588,4 +588,6 @@ Draft 0.4 adds stabilization, portability, conformance-documentation, Agentic
 alignment, and implementation-handoff evidence for this baseline. It does not
 claim Python or Java implementation or conformance. Draft 0.5 subsequently
 recorded full-manifest Python conformance and Money-scope Java conformance for
-this stabilized behavior; Java non-Money domains remain unsupported.
+this stabilized behavior. Pre-Draft 0.7 TASK-257 adds Java Workflow parity;
+Java Audit, Approvals, and Entities remain unsupported until their slices are
+implemented and proven.

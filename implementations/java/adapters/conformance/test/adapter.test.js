@@ -11,11 +11,12 @@ const classpath = [
   'implementations/java/target/test-classes',
 ].join(delimiter)
 
-test('discovers Java Money operations without claiming non-Money labels', () => {
+test('discovers Java Money and Workflow operations without claiming later-domain labels', () => {
   const adapter = createJavaConformanceAdapter({ javaPath, classpath })
   assert.equal(adapter.supports('money.deserialize'), true)
   assert.equal(adapter.supports('finkore.money.add'), true)
-  assert.equal(adapter.supports('finkore.workflow.transition'), false)
+  assert.equal(adapter.supports('finkore.workflow.transition'), true)
+  assert.equal(adapter.supports('finkore.audit.append'), false)
 })
 
 test('executes a Money operation through the Java subprocess bridge', () => {
