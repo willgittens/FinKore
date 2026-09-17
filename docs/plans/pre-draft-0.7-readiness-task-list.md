@@ -227,12 +227,12 @@ after the expected behavior is derived; they are not normative sources.
 - No deferred Draft 0.7 composition behavior or future financial domain has
   been implemented accidentally.
 
-**Current status:** Complete pending final post-edit verification and commit
-identity. Java now implements Money, Workflow, Audit, Approvals, and Entities,
-and `npm run conformance:java:profile:full` passes 254/254 vectors with zero
-failures, unsupported results, or infrastructure errors. Capability metadata
-points to the Java full-profile claim, and the historical Java Money claim
-remains as original Draft 0.6 release evidence.
+**Current status:** Complete. Java now implements Money, Workflow, Audit,
+Approvals, and Entities, and `npm run conformance:java:profile:full` passes
+254/254 vectors with zero failures, unsupported results, or infrastructure
+errors. Capability metadata points to the Java full-profile claim recorded
+against commit `e79ff010428a959dd7cae59948eab7ce5d79bab9`, and the historical
+Java Money claim remains as original Draft 0.6 release evidence.
 
 ## 5. Pre-Draft 0.7 Exit Gate
 
@@ -273,7 +273,9 @@ Are all affected tests, Javadoc, READMEs, metadata, claims, and release records 
 NEXT CODEX TASK: TASK-256 — Correct Draft 0.6 release evidence and provenance.
 ```
 
-TASK-256 and TASK-257 implementation work is complete pending final checksum
-regeneration, closure verification, and commit identity capture. Draft 0.7
-normative composition work remains gated until the remaining exit-gate checks
-are green from the corrected baseline.
+TASK-257 implementation work is complete and bound to commit
+`e79ff010428a959dd7cae59948eab7ce5d79bab9`. TASK-256 implementation work is
+complete pending final checksum regeneration, closure verification, and commit
+identity capture for the release-evidence correction batch. Draft 0.7 normative
+composition work remains gated until the remaining exit-gate checks are green
+from the corrected baseline.

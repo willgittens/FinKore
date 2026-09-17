@@ -106,7 +106,7 @@
     {
       "path": "conformance/draft-0.6/claims/java-full.json",
       "kind": "claim",
-      "sha256": "dc27884b6c629470585504eb40fd772b5d340fc03ed1ed37ac5cdf56baf67160"
+      "sha256": "808bc084416961ab35015859338f0670aa31a9d2e02c40ae4550691eb119c7a5"
     },
     {
       "path": "conformance/draft-0.6/claims/java-money.json",
@@ -386,7 +386,7 @@
     {
       "path": "docs/plans/pre-draft-0.7-readiness-task-list.md",
       "kind": "documentation",
-      "sha256": "e1f736ecca65ce8634b649c3d420ffb10b2ec53701f2bc5ee2ecc5b642b31d94"
+      "sha256": "a057fcb817e07616b9e10a250b706f760045e664d2b67904a143ba465abbf3cd"
     },
     {
       "path": "docs/releases/draft-0.1.md",

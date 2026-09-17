@@ -18,9 +18,9 @@
   "command": "npm run conformance:java:profile:full",
   "evidence": {
     "recordedDate": "2026-09-17",
-    "sourceRevision": "pending-commit:task-257-java-full-profile-parity",
+    "sourceRevision": "e79ff010428a959dd7cae59948eab7ce5d79bab9",
     "baseRevision": "437103d0b3e4a63d5b63b6502181fc4f8ce17495",
-    "worktreeStatus": "pending commit; post-Draft-0.6 TASK-257 Java full-profile parity evidence",
+    "worktreeStatus": "committed post-Draft-0.6 TASK-257 Java full-profile parity evidence",
     "checksumManifest": "conformance/draft-0.6/checksums.json",
     "profileVectorIdsSha256": "312801070398ae83a1d73a05b714c7873d7c78ab79c1eb2f680cbcc9ee4c205a",
     "sourceFileCount": 16
