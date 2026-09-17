@@ -121,7 +121,7 @@
     {
       "path": "conformance/draft-0.6/claims/README.md",
       "kind": "claim",
-      "sha256": "7c3f80e5f45d69c0b8a84c1b0d7135b2cd0a46ae7faaf75a36f6c83fc8231a1a"
+      "sha256": "80517dde2e620c5fda5b62000028e7cd6cefc16a6db40987fe4f5f44fb2f61e7"
     },
     {
       "path": "conformance/draft-0.6/claims/typescript-full.json",
@@ -276,12 +276,12 @@
     {
       "path": "conformance/README.md",
       "kind": "conformance",
-      "sha256": "56664fd75003f910db56001d9ef4b302dc7d68ecf5e06620261900364f9ba732"
+      "sha256": "af97d46cf5e4f766879bcf5d5536465379fba65450e171a86c9f355ca2602022"
     },
     {
       "path": "conformance/traceability.md",
       "kind": "conformance",
-      "sha256": "0b4429d2976165dba6e85ae8762c2bd70b9ee7dde0198799a367a5fa7728afc9"
+      "sha256": "7aa1ce7bcf7652ee0ab3199b91324f90974137399b295d8d0686fc359534d5ae"
     },
     {
       "path": "conformance/vector.schema.json",
@@ -301,7 +301,7 @@
     {
       "path": "docs/conformance-adapter-onboarding.md",
       "kind": "documentation",
-      "sha256": "2f4c8eb580de82e96c10c3f3802cec0b8ae43a6ce570eb32646fa08d26bd481c"
+      "sha256": "e629fe46f3f638e7757bbf699e3dd624b1d2785db1b16d4349bad6260589957c"
     },
     {
       "path": "docs/coreDoc/core-doc.md",
@@ -331,7 +331,7 @@
     {
       "path": "docs/draft-0.6-compatibility-claims-provenance-policy.md",
       "kind": "documentation",
-      "sha256": "8c0b44f11e9113925d6bee8657e5c4a13a409359d3b16402bb458456db770512"
+      "sha256": "d0be9d7d20b18504dc448f7d20ff04dca5fe0b2e196b33371b08cc9c50f574f5"
     },
     {
       "path": "docs/draft-0.6-compatibility-surface-inventory.md",
@@ -431,7 +431,7 @@
     {
       "path": "docs/releases/README.md",
       "kind": "documentation",
-      "sha256": "0f3ac7f353ea0abe85dca786d9d02165425c175e689806df5362b87f6a645713"
+      "sha256": "67cd3712995d4e72a1c8f00f3f6f8f73bca8dd8d90cfaaa3100b63a6ff44baeb"
     },
     {
       "path": "docs/research/draft-0.6-boundary-corpus.json",
@@ -1311,7 +1311,7 @@
     {
       "path": "scripts/run-draft-0.5-portability-review.js",
       "kind": "tooling",
-      "sha256": "4e7146eb3b009344faca63ee6e8007e929970aa035c30a4bd64f56d0868d892f"
+      "sha256": "cdf3303e19a7719d5e20789e67ec1ca6694fc823360f71034cf2d4ba2119b418"
     },
     {
       "path": "scripts/run-draft-0.6-boundary-research.js",

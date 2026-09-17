@@ -207,5 +207,6 @@ Draft 0.4 itself did not claim Python or Java implementation or conformance; it
 published the baseline and onboarding path. Draft 0.5 subsequently recorded
 full-manifest Python conformance and Money-scope Java conformance. Draft 0.6
 records current profile-specific claims for TypeScript full scope, Python full
-scope, and Java Money scope in `conformance/draft-0.6/claims`. Those results do
-not remove any of the evidence requirements above for a new or updated claim.
+scope, historical Java Money scope, and current Java full scope in
+`conformance/draft-0.6/claims`. Those results do not remove any of the evidence
+requirements above for a new or updated claim.

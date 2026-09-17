@@ -86,15 +86,14 @@ const javaMoney = conformance('implementations/java/adapters/conformance/adapter
 const javaFull = conformance('implementations/java/adapters/conformance/adapter.js')
 const totalVectors = ts.report.summary.total
 const moneyVectors = javaMoney.report.summary.total
-const nonMoneyVectors = totalVectors - moneyVectors
 
 const issues = [
   ...expectCounts('TypeScript summary', ts.report.summary, { total: totalVectors, passed: totalVectors, failed: 0, unsupported: 0, infrastructureErrors: 0 }),
   ...expectCounts('Python summary', python.report.summary, { total: totalVectors, passed: totalVectors, failed: 0, unsupported: 0, infrastructureErrors: 0 }),
   ...expectCounts('Java Money summary', javaMoney.report.summary, { total: moneyVectors, passed: moneyVectors, failed: 0, unsupported: 0, infrastructureErrors: 0 }),
-  ...expectCounts('Java full-manifest unsupported-boundary summary', javaFull.report.summary, { total: totalVectors, passed: moneyVectors, failed: 0, unsupported: nonMoneyVectors, infrastructureErrors: 0 }),
+  ...expectCounts('Java full-manifest summary', javaFull.report.summary, { total: totalVectors, passed: totalVectors, failed: 0, unsupported: 0, infrastructureErrors: 0 }),
   ...compareActuals('TypeScript/Python full-manifest actual mismatch', ts.report, python.report),
-  ...compareActuals('TypeScript/Java Money actual mismatch', ts.report, javaMoney.report, 'money'),
+  ...compareActuals('TypeScript/Java full-manifest actual mismatch', ts.report, javaFull.report),
 ]
 
 const lines = [
@@ -102,7 +101,7 @@ const lines = [
   `TypeScript: ${ts.report.summary.passed}/${ts.report.summary.total} vectors passed; mutation-sensitive ${ts.report.mutationSensitive.passed}/${ts.report.mutationSensitive.total}.`,
   `Python: ${python.report.summary.passed}/${python.report.summary.total} vectors passed; mutation-sensitive ${python.report.mutationSensitive.passed}/${python.report.mutationSensitive.total}.`,
   `Java Money: ${javaMoney.report.summary.passed}/${javaMoney.report.summary.total} vectors passed; mutation-sensitive ${javaMoney.report.mutationSensitive.passed}/${javaMoney.report.mutationSensitive.total}.`,
-  `Java full-manifest boundary: ${javaFull.report.summary.passed} Money vectors passed and ${javaFull.report.summary.unsupported} non-Money vectors reported unsupported.`,
+  `Java full manifest: ${javaFull.report.summary.passed}/${javaFull.report.summary.total} vectors passed; mutation-sensitive ${javaFull.report.mutationSensitive.passed}/${javaFull.report.mutationSensitive.total}.`,
   'Observed actual-result differences requiring D05 findings: 0.',
 ]
 

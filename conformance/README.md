@@ -40,7 +40,8 @@ Draft 0.6 Milestone C accepts profile and evidence-based claim policy in
 Draft 0.6 Milestone D encodes the current compatibility, profile, capability,
 claim, and checksum metadata under [draft-0.6](draft-0.6/README.md). The
 profile-aware runner can now emit closed-profile evidence for TypeScript full
-scope, Python full scope, and Java Money scope.
+scope, Python full scope, historical Java Money scope, and current Java full
+scope.
 
 The initial suites are grouped by specification behavior:
 

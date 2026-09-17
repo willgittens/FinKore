@@ -39,7 +39,7 @@ The current compatibility matrix is:
 | Core `draft-0.6` to manifest/vector format `0.1` | Compatible. Draft 0.6 does not require a format bump unless Milestone D introduces a syntax or member-semantics change. |
 | Runner `@finkore/conformance-runner` `0.1.0` to manifest/vector format `0.1` | Supported for current unprofiled execution and Draft 0.6 profile-aware evidence runs. |
 | TypeScript and Python package `0.1.0` to Draft 0.6 work | Package versions remain independent; no package version implies Draft 0.6 conformance. |
-| Java package `0.1.0` to Draft 0.6 work | Money scope can support the Money profile; Java non-Money remains unsupported until implemented and proven. |
+| Java package `0.1.0` to Draft 0.6 work | Historical Draft 0.6 evidence supports the Money profile; TASK-257 post-closure evidence supports the full profile after Java non-Money domains were implemented and proven. |
 | Agentic documentation to Draft 0.6 | Canonical operation IDs remain stable. No Draft 0.8 machine-readable operation manifest is created in Draft 0.6. |
 
 ## Change Classes and Deprecation Policy
