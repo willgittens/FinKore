@@ -7,10 +7,17 @@ current specification and conformance vectors. Other conformance
 operation labels remain runner-adapter vocabulary until their stable agent-facing
 contract, effects, and inputs are reviewed.
 
+Milestone 4 reviewed every promoted operation in this registry for stable
+purpose, input semantics, success output, preconditions, postconditions,
+portable errors, effects, and requirement references. Each promoted operation is
+also used by manifest-listed conformance vectors. No Approval operation label,
+Workflow import/create label, Entity import label, Money serialization label, or
+Audit redaction label is promoted as a canonical Agentic operation in Core 0.8.
+
 Approval conformance labels, including `approval.chain.evaluate`,
 `approval.composition.evaluate`, `approval.decision.withdraw`,
 `approval.decision.supersede`, and `approval.requirement.supersede`, remain
-conformance-local after the Draft 0.3 Agentic review. They observe Approval
+conformance-local after the Core 0.8 Agentic review. They observe Approval
 evaluation and lifecycle behavior through test fixtures; they are not promoted
 to canonical Agentic operations because public Approval operation contracts still
 need a stable agent-facing input model, diagnostics policy, and security review
@@ -30,30 +37,36 @@ preconditions through fixture-shaped inputs, but Core 0.8 does not define a
 public migration/import operation contract, identity registry, persistence
 schema, or source-system authority model.
 
+The registry intentionally does not include idempotency metadata for Core 0.8.
+Transport retry policy, idempotency keys, and autonomous-execution policy belong
+to the consuming application unless a concrete FinKore rule says otherwise.
+Accounting finality remains unspecified while ledger posting and financial
+commitment are outside Core.
+
 ## Registry
 
-| Operation | Domain | State-changing | Financial state | Deterministic | Audit | Approval relation | Requirements |
+| Operation | Domain | State mutation | Financial-state mutation | Determinism | Audit production | Approval relation | Requirements |
 | --- | --- | ---: | ---: | ---: | ---: | --- | --- |
-| `finkore.money.add` | Money | No | No | Yes | None | None | `MONEY-ARITHMETIC-001`, `-002`, `-007`, `-009` |
-| `finkore.money.subtract` | Money | No | No | Yes | None | None | `MONEY-ARITHMETIC-001`, `-002`, `-007`, `-009` |
-| `finkore.money.negate` | Money | No | No | Yes | None | None | `MONEY-ARITHMETIC-003`, `-009` |
-| `finkore.money.multiply` | Money | No | No | Yes | None | None | `MONEY-ARITHMETIC-004`, `-007`, `-009` |
-| `finkore.money.divide` | Money | No | No | Yes | None | None | `MONEY-ARITHMETIC-005`–`-009`, `MONEY-ROUNDING-006` |
-| `finkore.money.compare` | Money | No | No | Yes | None | None | `MONEY-COMPARISON-001`–`-004`, `-006` |
-| `finkore.money.round` | Money | No | No | Yes | None | None | `MONEY-ROUNDING-001`–`-004`, `-008`, `-009` |
-| `finkore.money.applyrate` | Money | No | No | Yes | None | None | `MONEY-RATE-001`–`-009` |
-| `finkore.money.allocate` | Money | No | No | Yes | None | None | `MONEY-ALLOCATION-001`–`-013`, `MONEY-ERROR-008` |
-| `finkore.workflow.transition` | Workflow | Yes | Unspecified | Yes when supplied guards are deterministic for declared facts | May | May be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007`, `WORKFLOW-VERSION-005`–`-012`, `WORKFLOW-CONFLICT-001`–`-008` |
-| `finkore.audit.append` | Audit | Yes | No | Yes | Records | None | `AUDIT-EVENT-001`–`-005`, `-007`, `-008`, `AUDIT-ACTOR-001`–`-004`, `-007`, `-008`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001` |
-| `finkore.audit.replace` | Audit | No | No | Yes | None | None | `AUDIT-APPEND-001` |
-| `finkore.audit.remove` | Audit | No | No | Yes | None | None | `AUDIT-APPEND-001` |
-| `finkore.entity.create` | Entities | Yes | Unspecified | Yes | May | None | `ENTITY-IDENTITY-001`, `-003`, `ENTITY-LIFECYCLE-001`, `-002`, `-006`, `ENTITY-VALIDATION-001` |
-| `finkore.entity.mutate` | Entities | Yes | Unspecified | Yes | May | May invalidate approval-relevant facts | `ENTITY-MUTABILITY-001`, `-002`, `-004`, `-006`, `-007`, `ENTITY-VALIDATION-002`–`-006`, `ENTITY-ERROR-001` |
-| `finkore.entity.transition` | Entities | Yes | Unspecified | Yes | May | May be governed by composing-domain approval policy | `ENTITY-LIFECYCLE-003`, `ENTITY-IDENTITY-002`, `ENTITY-ERROR-001`, `-004` |
-| `finkore.entity.evolution.correct` | Entities | Yes | Unspecified | Yes | Required | May invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`–`-010`, `-015`, `-022`–`-024`, `-029`–`-032` |
-| `finkore.entity.evolution.reverse` | Entities | Yes | Unspecified | Yes | Required | May invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`, `-011`–`-015`, `-022`–`-024`, `-029`, `-032` |
-| `finkore.entity.evolution.void` | Entities | Yes | Unspecified | Yes | Required | May invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-016`–`-018`, `-022`–`-024`, `-029`, `-032` |
-| `finkore.entity.evolution.supersede` | Entities | Yes | Unspecified | Yes | Required | May invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-019`–`-024`, `-029`, `-031`, `-032` |
+| `finkore.money.add` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ARITHMETIC-001`, `-002`, `-007`, `-009` |
+| `finkore.money.subtract` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ARITHMETIC-001`, `-002`, `-007`, `-009` |
+| `finkore.money.negate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ARITHMETIC-003`, `-009` |
+| `finkore.money.multiply` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ARITHMETIC-004`, `-007`, `-009` |
+| `finkore.money.divide` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ARITHMETIC-005`–`-009`, `MONEY-ROUNDING-006` |
+| `finkore.money.compare` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-COMPARISON-001`–`-004`, `-006` |
+| `finkore.money.round` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ROUNDING-001`–`-004`, `-008`, `-009` |
+| `finkore.money.applyrate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-RATE-001`–`-009` |
+| `finkore.money.allocate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ALLOCATION-001`–`-013`, `MONEY-ERROR-008` |
+| `finkore.workflow.transition` | Workflow | `yes` | `unspecified` | `yes` | `may` | may be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007`, `WORKFLOW-VERSION-005`–`-012`, `WORKFLOW-CONFLICT-001`–`-008` |
+| `finkore.audit.append` | Audit | `yes` | `no` | `yes` | `required` | `none` | `AUDIT-EVENT-001`–`-005`, `-007`, `-008`, `AUDIT-ACTOR-001`–`-004`, `-007`, `-008`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001` |
+| `finkore.audit.replace` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
+| `finkore.audit.remove` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
+| `finkore.entity.create` | Entities | `yes` | `unspecified` | `yes` | `may` | `none` | `ENTITY-IDENTITY-001`, `-003`, `ENTITY-LIFECYCLE-001`, `-002`, `-006`, `ENTITY-VALIDATION-001` |
+| `finkore.entity.mutate` | Entities | `yes` | `unspecified` | `yes` | `may` | may invalidate approval-relevant facts | `ENTITY-MUTABILITY-001`, `-002`, `-004`, `-006`, `-007`, `ENTITY-VALIDATION-002`–`-006`, `ENTITY-ERROR-001` |
+| `finkore.entity.transition` | Entities | `yes` | `unspecified` | `yes` | `may` | may be governed by composing-domain approval policy | `ENTITY-LIFECYCLE-003`, `ENTITY-IDENTITY-002`, `ENTITY-ERROR-001`, `-004` |
+| `finkore.entity.evolution.correct` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`–`-010`, `-015`, `-022`–`-024`, `-029`–`-032` |
+| `finkore.entity.evolution.reverse` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`, `-011`–`-015`, `-022`–`-024`, `-029`, `-032` |
+| `finkore.entity.evolution.void` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-016`–`-018`, `-022`–`-024`, `-029`, `-032` |
+| `finkore.entity.evolution.supersede` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-019`–`-024`, `-029`, `-031`, `-032` |
 
 `Unspecified` is deliberate. A generic Workflow may not be attached to a
 Financial Entity, an Entity may carry non-financial or composing-domain facts,

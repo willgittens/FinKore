@@ -14,9 +14,10 @@ do not prescribe implementation style.
 | Approval relation | explicit relation or `none` | Whether the operation makes a decision, may be blocked by approval, or may invalidate a decision. |
 | Irreversibility | `unspecified` | Core defines Entity correction, reversal, void, and supersession observations but not accounting finality, ledger posting, or legal irreversibility. |
 
-The mixed value sets are intentional. Booleans are adequate for direct
-state-change and determinism facts, while audit and approval semantics would be
-misleading if compressed into booleans.
+These value sets are fixed for the Core 0.8 Agentic Contract. Direct
+state-change and determinism use `yes` / `no` / `unspecified`; audit production
+uses `none` / `may` / `required` / `unspecified` because audit evidence has
+domain meaning that would be misleading if compressed into a boolean.
 
 ## Pure operations
 
@@ -78,6 +79,7 @@ define accounting finality, cancellation, adjustment, ledger posting, or legal
 irreversibility. The registry therefore does not claim that any operation is
 irreversible.
 
-Idempotency is not currently a metadata dimension. Pure Money operations can
-be recomputed without mutating their operands, but this does not define transport
-retries or idempotency keys. State-changing idempotency remains open.
+Idempotency is not part of the Core 0.8 metadata contract. Pure Money
+operations can be recomputed without mutating their operands, but this does not
+define transport retries or idempotency keys. State-changing idempotency is
+explicitly unspecified for Core 0.8.

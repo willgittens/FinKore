@@ -45,3 +45,5 @@ Some operations may be suitable for autonomous execution. Others may require
 human confirmation, an Approval, authorization, or application policy. The
 contract does not impose human confirmation on every mutation, create an
 AI-specific bypass, or make a universal execution decision for clients.
+Autonomous-execution policy belongs to the consuming application unless a
+concrete FinKore rule says otherwise.

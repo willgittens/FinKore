@@ -31,6 +31,11 @@ Applications decide when confirmation, authorization, Approval, or additional
 policy evaluation is required, using the exposed operation metadata and their
 own policies.
 
+FinKore Core does not define a universal autonomous-execution policy. A
+consuming application may require human confirmation, authorization, Approval,
+or other governance before invoking an operation, but those policies do not
+weaken the operation's FinKore preconditions or portable errors.
+
 An adapter may add stricter access controls, but it MUST NOT reinterpret a
 rejected domain operation as successful or replace its primary portable domain
 error merely because the requester is autonomous.

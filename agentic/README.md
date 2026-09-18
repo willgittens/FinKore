@@ -75,6 +75,13 @@ expected-state/revision conflict preconditions. Approval composition and
 lifecycle fixtures, Workflow import, and Entity import remain conformance-local
 until stable public operation contracts exist.
 
+For Core 0.8, effect values use the dimensions defined in
+[Effects](effects.md). Idempotency is explicitly unspecified and is not a
+metadata dimension. Autonomous-execution policy belongs to the consuming
+application unless a concrete FinKore rule says otherwise. Accounting finality
+also remains unspecified while ledger posting and financial commitment are
+outside Core.
+
 ## Documents
 
 - [Conventions](conventions.md)
@@ -103,10 +110,8 @@ An operation may be considered Agentic Contract-ready when:
 - [ ] No agent-specific bypass exists
 - [ ] Relevant conformance vectors use the same operation ID
 
-## Open questions
+## Deferred questions
 
-- Should all effects use booleans, or richer states such as `none`, `may`, and
-  `required`?
-- Should operations declare idempotency semantics?
-- Should FinKore define policy hints for autonomous execution?
-- How should future financial commitment and finality semantics be represented?
+- Transport idempotency and idempotency-key semantics.
+- Autonomous-execution policy hints beyond the existing operation metadata.
+- Financial commitment, ledger posting, and accounting finality.

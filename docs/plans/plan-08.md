@@ -134,26 +134,26 @@ Stabilize what “agent-ready by contract” means for the 1.0 candidate scope.
 
 ### Tasks
 
-- [ ] Review every operation currently listed in the canonical operation
+- [x] Review every operation currently listed in the canonical operation
       registry.
-- [ ] Verify stable purpose, inputs, outputs, preconditions, postconditions,
+- [x] Verify stable purpose, inputs, outputs, preconditions, postconditions,
       portable errors, effects, and requirement references for each promoted
       operation.
-- [ ] Decide whether effect values remain boolean-like or use the existing
+- [x] Decide whether effect values remain boolean-like or use the existing
       `none` / `may` / `required` distinctions consistently.
-- [ ] Decide whether idempotency is part of the 1.0 metadata contract or is
+- [x] Decide whether idempotency is part of the 1.0 metadata contract or is
       explicitly unspecified.
-- [ ] State that autonomous-execution policy belongs to the consuming
+- [x] State that autonomous-execution policy belongs to the consuming
       application unless a concrete FinKore rule says otherwise.
-- [ ] Keep accounting finality unspecified while ledger posting and financial
+- [x] Keep accounting finality unspecified while ledger posting and financial
       commitment remain outside Core.
-- [ ] Review Approval operation labels and either define stable public contracts
+- [x] Review Approval operation labels and either define stable public contracts
       or keep them explicitly conformance-local.
-- [ ] Review Workflow and Entity import labels and either define stable public
+- [x] Review Workflow and Entity import labels and either define stable public
       contracts or keep them explicitly conformance-local.
-- [ ] Confirm that every promoted operation is traceable to both specification
+- [x] Confirm that every promoted operation is traceable to both specification
       requirements and conformance vectors.
-- [ ] Confirm that no agent-specific bypass exists for financial rules,
+- [x] Confirm that no agent-specific bypass exists for financial rules,
       approvals, audit evidence, or failure atomicity.
 
 ### Completion criteria
