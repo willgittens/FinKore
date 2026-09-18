@@ -54,7 +54,7 @@ financial behavior.
 
 ## Organization
 
-- [Conventions](conventions.md) defines the language and representation rules used throughout the specification.
+- [Conventions](conventions.md) defines normative language, compatibility policy, stable identifiers, portable values, and error-code conventions.
 - [Glossary](glossary.md) defines shared domain terms.
 - [Money](money/README.md) defines monetary representation and behavior.
 - [Workflow](workflow/README.md) defines lifecycle states, transitions, and definition versions.

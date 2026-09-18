@@ -11,6 +11,11 @@ specification's error catalogs are themselves not complete. Additional safe
 context may be attached under `SPEC-ERROR-003` through `SPEC-ERROR-005` without
 changing code meaning.
 
+Portable error-code compatibility is governed by the
+[Specification compatibility policy](../spec/conventions.md#compatibility-policy).
+Codes are stable domain-failure categories, not exception class names or
+localized messages.
+
 The following shape is illustrative and non-normative:
 
 ```json
@@ -29,4 +34,3 @@ specified operation; repetition does not authorize implicit currency conversion.
 
 Transient network, rate-limit, process, and service errors belong to adapters or
 transports and are not FinKore portable domain errors.
-

@@ -10,6 +10,9 @@ requirement IDs, and traceability, not from bumping a format field.
 A format version MUST be bumped only when manifest syntax, vector-file syntax, or
 the meaning of a defined format member changes in a way that an older runner
 cannot faithfully validate. A runner MUST reject versions it does not support.
+Core compatibility rules for normative behavior, portable serializations, and
+regression vectors are defined in the
+[Specification compatibility policy](../spec/conventions.md#compatibility-policy).
 
 ## File and vector shape
 

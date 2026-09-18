@@ -63,9 +63,18 @@ Implementation code does not define FinKore behavior. A new normative rule begin
 
 ## Requirement and vector stability
 
-Requirement IDs are permanent semantic anchors. Once published, an ID MUST NOT be reused for a different rule or renumbered merely to close a gap. If a rule is replaced, preserve its historical ID and assign a new ID to the replacement.
+Requirement IDs are permanent semantic anchors governed by the
+[Specification compatibility policy](../spec/conventions.md#compatibility-policy).
+Once published, an ID MUST NOT be reused for a different rule or renumbered
+merely to close a gap. If a rule is replaced, preserve its historical ID and
+assign a new ID to the replacement.
 
 Vector IDs are likewise unique, stable, human-readable, and domain-prefixed. Moving a document or vector file does not change either kind of ID. Every vector references one or more normative requirements. A vector may exercise more than one rule, but its description should make the primary behavior clear.
+
+A regression vector may be added without changing the Core version only when it
+exercises existing normative behavior. A vector that requires new observable
+semantics, a changed portable result, or a changed portable error mapping is a
+specification change, not a version-neutral regression.
 
 ## Test design
 

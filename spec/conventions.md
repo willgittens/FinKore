@@ -27,6 +27,44 @@ Normative clauses selected for conformance traceability use a domain-prefixed id
 - **SPEC-REQUIREMENT-004** — A retired requirement identifier MUST NOT be reused.
 - **SPEC-REQUIREMENT-005** — Conformance vectors SHOULD reference every normative requirement they exercise.
 
+## Compatibility Policy
+
+This policy defines the portable compatibility surface for FinKore Core. Before
+1.0, FinKore remains experimental, but published identifiers and observable
+portable semantics are still managed deliberately. After 1.0, an incompatible
+observable change to this compatibility surface requires a new major Core
+version.
+
+The compatibility surface is limited to:
+
+- normative requirements and their stable identifiers;
+- portable error codes and their domain-failure meanings;
+- canonical `finkore.*` operation identifiers and their language-neutral
+  contracts;
+- normative portable input and output serializations;
+- conformance manifest and vector-file syntax as separately versioned by
+  `finkoreConformance` and `finkoreVectorFile`.
+
+It does not include implementation-specific APIs, exception class names,
+package-private helpers, storage schemas, persistence models, framework
+bindings, transport protocols, HTTP routes, generated documentation shape,
+stack traces, localized messages, or test-runner normalization envelopes.
+
+- **SPEC-COMPATIBILITY-001** — A published requirement identifier MUST NOT be reused for a different normative meaning.
+- **SPEC-COMPATIBILITY-002** — A requirement MAY be deprecated, replaced, or superseded only by preserving its identifier and assigning a distinct identifier to any materially different replacement requirement.
+- **SPEC-COMPATIBILITY-003** — Deprecation, replacement, or supersession metadata MUST NOT erase the historical identity or traceability of the original requirement.
+- **SPEC-COMPATIBILITY-004** — A portable error code MUST NOT be reused for a different domain-failure category.
+- **SPEC-COMPATIBILITY-005** — Changing the primary portable error code required for an existing observable failure condition is a behaviorally incompatible change unless the previous mapping was internally inconsistent and the release explicitly records the correction.
+- **SPEC-COMPATIBILITY-006** — A canonical `finkore.*` operation identifier MUST NOT be reused for a different operation contract.
+- **SPEC-COMPATIBILITY-007** — A behaviorally incompatible change to a canonical operation's required inputs, success output, portable errors, preconditions, postconditions, or state-mutation effect MUST use a new operation identifier or a documented supersession path.
+- **SPEC-COMPATIBILITY-008** — A normative portable serialization MUST preserve the meaning of published member names, requiredness, nullability, value encodings, and result categories.
+- **SPEC-COMPATIBILITY-009** — Changing a portable serialization in a way that an older conforming consumer or producer cannot faithfully interpret is behaviorally incompatible.
+- **SPEC-COMPATIBILITY-010** — Adding an optional portable serialization member is compatible only when omission preserves the prior semantics and consumers may ignore the member without changing the defined result.
+- **SPEC-COMPATIBILITY-011** — Editorial changes include wording clarifications, typo fixes, document moves, heading changes, additional non-normative examples, and requirement cross-reference repairs that do not change observable required behavior.
+- **SPEC-COMPATIBILITY-012** — Behaviorally incompatible changes include changes that alter whether an existing valid input succeeds, whether an existing invalid input fails, the normalized portable result, the primary portable error code, required input shape, required output shape, mutation semantics, or failure atomicity.
+- **SPEC-COMPATIBILITY-013** — A regression vector MAY be added without changing the Core version when it exercises existing normative behavior and does not require changing the specification's observable semantics.
+- **SPEC-COMPATIBILITY-014** — A regression vector that requires new normative behavior, a changed portable result, or a changed portable error mapping MUST be treated as a specification change rather than a version-neutral regression.
+
 ## Naming and Terminology
 
 - **SPEC-TERMINOLOGY-001** — A specification that refines a [glossary](glossary.md) term or an underlying rule MUST identify the refinement explicitly and MUST NOT silently contradict the shared definition.
@@ -106,7 +144,6 @@ All other JSON is illustrative and non-normative; omission in an example does no
 
 ## Open Questions
 
-- Which formal specification revision and compatibility policy will govern future changes?
 - Should identifiers receive a common serialized envelope in a later interchange specification?
 
 ## Non-Goals

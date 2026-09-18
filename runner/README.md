@@ -27,6 +27,11 @@ The runner loads only files declared by `conformance/manifest.json`. It validate
 Manifest and vector-file versions are syntax compatibility versions. They do not
 need to match FinKore release numbers. The runner rejects unsupported format
 versions instead of guessing compatibility.
+Core compatibility rules for financial behavior and portable serializations are
+defined by the
+[Specification compatibility policy](../spec/conventions.md#compatibility-policy);
+the runner package version does not create a separate financial compatibility
+promise.
 
 ## Canonical operations and requirements
 

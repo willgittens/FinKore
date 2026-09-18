@@ -101,6 +101,7 @@ FinKore is not an ERP, ORM, payment processor, UI framework, accounting applicat
 ## Documentation
 
 - [FinKore Specification](./spec/README.md) — normative financial behavior, conventions, and domain definitions.
+- [Specification Conventions](./spec/conventions.md) — normative language, compatibility policy, stable identifiers, portable values, and error-code catalog.
 - [Conformance Suite](./conformance/README.md) — language-independent test vectors and reliability methodology.
 - [Agentic Contract](./agentic/README.md) — portable operational semantics for machine clients.
 - [Language-Neutral Implementation Guide](./docs/implementation-guide.md) — implementation reading order, boundaries, value semantics, errors, effects, and gap handling.

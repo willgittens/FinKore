@@ -71,21 +71,21 @@ Define what users may rely on before the release candidate is frozen.
 
 ### Tasks
 
-- [ ] Define compatibility rules for normative requirements.
-- [ ] Confirm that published requirement IDs are never reused for a different
+- [x] Define compatibility rules for normative requirements.
+- [x] Confirm that published requirement IDs are never reused for a different
       meaning.
-- [ ] Define compatibility rules for portable error codes.
-- [ ] Define compatibility rules for canonical operation IDs.
-- [ ] Define compatibility rules for portable input and output serializations.
-- [ ] Define how a requirement is deprecated, replaced, or superseded without
+- [x] Define compatibility rules for portable error codes.
+- [x] Define compatibility rules for canonical operation IDs.
+- [x] Define compatibility rules for portable input and output serializations.
+- [x] Define how a requirement is deprecated, replaced, or superseded without
       erasing its identity.
-- [ ] Define which changes are editorial and which changes are behaviorally
+- [x] Define which changes are editorial and which changes are behaviorally
       incompatible.
-- [ ] Define the post-1.0 rule that incompatible observable changes require a
+- [x] Define the post-1.0 rule that incompatible observable changes require a
       new major version.
-- [ ] Define when a regression vector may be added without changing the Core
+- [x] Define when a regression vector may be added without changing the Core
       version.
-- [ ] Verify that the policy does not promise compatibility for implementation
+- [x] Verify that the policy does not promise compatibility for implementation
       details, exception class names, storage models, or framework APIs.
 
 ### Completion criteria

@@ -18,6 +18,7 @@ Examples are `finkore.money.add` and `finkore.workflow.transition`.
 An operation ID:
 
 - MUST be globally unique within FinKore;
+- MUST NOT be reused for a different operation contract;
 - MUST remain independent of TypeScript methods, Java classes, package names,
   framework routes, HTTP URLs, and tool-provider naming;
 - MUST map to one clear semantic operation;
@@ -26,8 +27,11 @@ An operation ID:
   future tool adapters, and reference implementations.
 
 Versions are not encoded in operation IDs. Operation identifiers are intended
-to remain stable; incompatible operation-contract changes require an explicit
-replacement or supersession decision.
+to remain stable. Compatibility rules for canonical operation identifiers are
+defined in the
+[Specification compatibility policy](../spec/conventions.md#compatibility-policy);
+incompatible operation-contract changes require a new identifier or documented
+supersession path.
 
 ## Operation IDs and requirement IDs
 
