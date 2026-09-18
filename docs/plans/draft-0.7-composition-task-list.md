@@ -598,7 +598,7 @@ topics are recorded in
 [Draft 0.7 Composition Closure Review](../draft-0.7-composition-closure-review.md).
 No material blocker remains for the non-normative reference profile scope.
 
-### - [ ] TASK-272 — Finalize Compatibility, Profile Scope, and Claim Evidence
+### - [x] TASK-272 — Finalize Compatibility, Profile Scope, and Claim Evidence
 
 **Depends on:** TASK-271.
 
@@ -614,7 +614,15 @@ error, operation, and requirement/vector drift. Publish exact counts and revisio
 **Acceptance:** Claimed profiles have zero failures, unsupported results, or
 infrastructure errors. Reference application results do not expand Core claims.
 
-### - [ ] TASK-273 — Synchronize Documentation and Runnable Examples
+**Execution note (2026-09-18):** The claim boundary is finalized in
+[Draft 0.7 Composition Claim Evidence](../draft-0.7-composition-claim-evidence.md).
+No Draft 0.7 Core conformance profile, capability declaration, claim metadata,
+manifest format, vector-file format, portable error, or canonical operation is
+added. Existing Draft 0.6 full-profile claims remain the closed Core claim
+boundary, while Draft 0.7 reference profile results remain non-normative
+application evidence.
+
+### - [x] TASK-273 — Synchronize Documentation and Runnable Examples
 
 **Depends on:** TASK-272.
 
@@ -628,6 +636,13 @@ architecture, licensing, and whitespace. Review every completion question below.
 
 **Acceptance:** Documentation reflects implemented and verified scope, with no
 planned capability described as shipped and no stale unsupported-domain claim.
+
+**Execution note (2026-09-18):** Root README, release index, conformance
+navigation, roadmap status, implementation READMEs, release notes, fixture
+README, observation contract, and scenario matrix now distinguish Draft 0.6
+closed Core claims from Draft 0.7 non-normative reference profile evidence.
+Runnable commands are documented for fixture, scenario, comparison, critical,
+and critical-mutant checks.
 
 ### - [ ] TASK-274 — Reproduce Draft 0.7 Closure Evidence in CI and a Clean Checkout
 
@@ -645,6 +660,18 @@ new evidence to exact revisions without circular or moving-branch claims.
 
 **Acceptance:** Required evidence reproduces, generated output does not corrupt
 source checksums, and stale claims or provenance prevent closure.
+
+**Execution note (2026-09-18):** Added `npm run verify:closure:draft0.7` and
+`.github/workflows/draft-0.7-closure.yml`. The command sequences toolchain
+checks, Draft 0.6 baseline inventory/version validation, builds, static
+checks, native and adapter tests, full three-language conformance, Draft 0.7
+reference scenarios, cross-language comparison, critical composition checks,
+composition critical mutants, coverage, Core critical mutants, portability and
+boundary reviews, architecture, documentation, license, whitespace, and
+clean-tree checks. Draft 0.6 checksum metadata remains historical release
+evidence and is not regenerated for Draft 0.7 documentation/source changes.
+TASK-274 remains open until this command is reproduced from the final committed
+clean checkout and Draft 0.7 provenance/checksum evidence is finalized.
 
 ### - [ ] TASK-275 — Close Draft 0.7 and Record the Draft 0.8 Handoff
 
@@ -675,9 +702,9 @@ releases. Draft 0.7 is closed only after the complete exit gate passes.
 - [ ] Failure atomicity and history preservation verified through actual operations.
 - [x] No critical financial mutant survives; mutation/equivalent evidence recorded.
 - [x] Domain/accounting/technical/security/privacy findings have explicit dispositions.
-- [ ] Closed claims distinguish normative conformance from reference scenario results.
-- [ ] Existing full-profile regressions remain green; scope counts are current.
-- [ ] Public APIs, examples, READMEs, and operation metadata are synchronized.
+- [x] Closed claims distinguish normative conformance from reference scenario results.
+- [x] Existing full-profile regressions remain green; scope counts are current.
+- [x] Public APIs, examples, READMEs, and operation metadata are synchronized.
 - [ ] CI and clean-checkout closure evidence, checksums, and provenance reproduce.
 - [ ] Historical tags and evidence are preserved; approved release identity is recorded.
 - [ ] External-review status and deferred Draft 0.8 topics are factual and explicit.
@@ -697,11 +724,12 @@ undeclared Core rule, and no passing aggregate score concealed a critical defect
 ## 12. Current Execution Status
 
 ```text
-NEXT CODEX TASK: Begin TASK-272 by finalizing Draft 0.7 compatibility, profile
-scope, and claim evidence from the current Milestone D/E verification record.
+NEXT CODEX TASK: Continue TASK-274 by committing the Draft 0.7 closure command
+and reproducing `npm run verify:closure:draft0.7` from a clean checkout.
 ```
 
 Milestones A through D are implemented for the non-normative Draft 0.7
-reference composition scope. Milestone E has started: TASK-271 findings review
-is recorded, and TASK-272 through TASK-275 remain open. This document does not
+reference composition scope. Milestone E has started: TASK-271 findings review,
+TASK-272 claim evidence, and TASK-273 documentation synchronization are
+recorded, and TASK-274 through TASK-275 remain open. This document does not
 claim Draft 0.7 release closure.

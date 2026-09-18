@@ -12,6 +12,11 @@ currently claims `finkore.core.draft0_6.full` and passes the 254-vector full
 profile. These independent results do not make this TypeScript package the
 source of financial semantics.
 
+Draft 0.7 composition examples live outside the TypeScript Core package under
+`implementations/typescript/examples/composition/draft-0.7/`. They exercise
+expense approval and invoice correction as non-normative reference application
+profiles and do not expand the TypeScript Core conformance claim.
+
 FinKore Money Draft 0.1 is fully implemented by this TypeScript reference implementation. The Draft 0.2 Money Rates and Money Allocation slices are also implemented. These statements apply only to the named Money specification slices; they do not imply that other FinKore domains are complete.
 
 FinKore Workflow Draft 0.1 is fully implemented by the TypeScript reference implementation. Draft 0.3 Workflow definition/version identity, immutable instance binding/mismatch, import, and expected-state/revision conflict semantics are specified, vector-covered, implemented in core, and supported by the TypeScript conformance adapter. This statement applies only to the implemented Workflow slice; it does not imply that the full Workflow specification, Entities, or other FinKore domains are complete.

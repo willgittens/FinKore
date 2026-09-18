@@ -31,6 +31,7 @@ Supporting Milestone A artifacts:
 - [Draft 0.7 Composition Scenario Matrix](../draft-0.7-composition-scenario-matrix.md)
 - [Draft 0.7 Composition Observation Contract](../draft-0.7-composition-observation-contract.md)
 - [Draft 0.7 Composition Closure Review](../draft-0.7-composition-closure-review.md)
+- [Draft 0.7 Composition Claim Evidence](../draft-0.7-composition-claim-evidence.md)
 
 ## Opening Baseline
 
@@ -187,3 +188,39 @@ No material blocker remains for the non-normative reference profile scope.
 
 Claim evidence finalization, documentation synchronization, clean-checkout
 closure reproduction, and final release identity remain open.
+
+## Claim Evidence Status
+
+TASK-272 finalizes the current claim boundary in
+[Draft 0.7 Composition Claim Evidence](../draft-0.7-composition-claim-evidence.md).
+No Draft 0.7 Core conformance profile, capability metadata, claim record,
+manifest format, vector-file format, portable error, or canonical operation is
+added. The existing Draft 0.6 full-profile claims remain the closed Core claim
+boundary, and Draft 0.7 reference profile results are recorded separately as
+non-normative application evidence.
+
+The claim-evidence source revision at the start of TASK-272 is
+`b06417a761479314373c3d58831bbcb398562db0`. Draft 0.7 remains open pending
+documentation synchronization, clean-checkout closure reproduction, provenance
+review, and final release identity approval.
+
+## Closure Verification Status
+
+TASK-274 has a closure-grade command and CI path prepared:
+
+```bash
+npm run verify:closure:draft0.7
+```
+
+The command covers toolchain checks, Draft 0.6 baseline inventory/version
+validation, build/typecheck/unit tests, adapters, full
+TypeScript/Python/Java conformance, Draft 0.7 reference scenario execution,
+cross-language comparison, critical composition checks, composition critical
+mutants, coverage, Core critical mutants, portability and boundary reviews,
+architecture, documentation, license, whitespace, and clean-tree checks. Draft
+0.6 checksum metadata remains historical release evidence and is not
+regenerated for Draft 0.7 documentation/source changes.
+
+Clean committed-checkout reproduction is still pending. Draft 0.7 remains open
+until that command passes from the final accepted committed revision and Draft
+0.7 provenance/checksum evidence is finalized.

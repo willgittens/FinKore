@@ -23,6 +23,10 @@ Current status:
   use exact coefficient-and-scale arithmetic where Python `decimal` context
   precision could otherwise alter FinKore results. This includes the resolved
   Draft 0.6 `D06-PORT-241-001` boundary controls.
+- Draft 0.7 composition examples live outside the Python Core package under
+  `implementations/python/examples/composition/draft-0.7/`. They exercise
+  expense approval and invoice correction as non-normative reference
+  application profiles and do not expand the Python Core conformance claim.
 
 Run the current local checks from the repository root:
 

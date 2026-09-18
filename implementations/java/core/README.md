@@ -23,6 +23,10 @@ Current status:
   25-vector Entities domain profile.
 - The complete Draft 0.6 full profile passes at 254/254 vectors with zero
   failures, unsupported results, or infrastructure errors.
+- Draft 0.7 composition examples live outside the Java Core package under
+  `implementations/java/examples/composition/draft-0.7/`. They exercise
+  expense approval and invoice correction as non-normative reference
+  application profiles and do not expand the Java Core conformance claim.
 - Public errors expose portable FinKore error codes; Java exception class names
   are not portable semantics.
 

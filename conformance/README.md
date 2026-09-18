@@ -43,6 +43,13 @@ profile-aware runner can now emit closed-profile evidence for TypeScript full
 scope, Python full scope, historical Java Money scope, and current Java full
 scope.
 
+Draft 0.7 cross-domain composition uses non-normative reference application
+fixtures under
+[examples/composition/draft-0.7](../examples/composition/draft-0.7/). Those
+fixtures are intentionally outside [manifest.json](manifest.json), are not
+closed Core conformance profiles, and do not add Draft 0.7 profile metadata,
+portable errors, or canonical operation IDs.
+
 The initial suites are grouped by specification behavior:
 
 - Money: representation, serialization, arithmetic, comparison, currency, rounding, Rates, and Allocation.

@@ -184,6 +184,13 @@ workflows without silently inventing cross-domain semantics.
 The execution sequence is defined by the
 [Draft 0.7 Cross-Domain Composition Task List](draft-0.7-composition-task-list.md).
 
+Current status: the reference expense approval and invoice correction profiles
+are implemented in TypeScript, Python, and Java as non-normative examples.
+Their actual results are cross-language compared, critical failure-boundary
+observations are checked, and seeded critical composition mutants are killed.
+Draft 0.7 still does not add a new Core conformance profile or production
+application policy.
+
 ### Recommended Work
 
 - Begin with non-normative reference profiles for at least two bounded use cases,
