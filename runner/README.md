@@ -132,6 +132,13 @@ Thus infrastructure errors take precedence over failures, and failures over unsu
 
 Malformed manifests or vectors fail the run before execution and lead to CLI exit code 2. Reports aggregate by suite and requirement, separately summarize mutation-sensitive vectors, and surface every non-passing result tied to a critical requirement.
 
+Reports also include reproducibility metadata: Core release, manifest path,
+`finkoreConformance` version, vector schema path, manifest-declared suites and
+vector files, and any selected suites, tags, or vector IDs. A filtered report is
+evidence only for that selected run; complete Core or domain-scoped conformance
+claims are governed by the claim model in
+[conformance/README.md](../conformance/README.md#conformance-claim-model).
+
 ## Validation
 
 The runner rejects unsupported versions, malformed or duplicate suite declarations, unsafe manifest paths, unreadable JSON, missing files, malformed vector files, missing/invalid/duplicate vector IDs, invalid specification references, empty descriptions, non-object input/context/observations, invalid or duplicate requirement references, invalid/unknown operation IDs, unregistered `finkore.*` IDs, invalid/duplicate tags and guards, malformed portable error codes, contradictory success/error expectations, and globally duplicate vector IDs.

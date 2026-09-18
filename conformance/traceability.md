@@ -583,3 +583,22 @@ errors, deterministic context, and valid requirement references are sufficient
 for the current runner. Current directly testable requirements are covered by
 manifest-listed vectors, and the TypeScript, Python, and Java implementations
 execute the complete manifest scope.
+
+## Not Directly Testable Review
+
+Milestone 3 reviewed the requirements classified as `NOT DIRECTLY TESTABLE`.
+Each current classification is justified by at least one of these reasons:
+
+- **Architecture boundary:** the obligation belongs to a composing domain,
+  storage boundary, registry, authorization layer, or cross-domain integration
+  that Core 0.8 intentionally does not define as a portable operation.
+- **Authoring rule:** the obligation constrains specification authors or domain
+  definitions rather than one executable runtime behavior.
+- **Non-observable or optional obligation:** the rule concerns optional
+  diagnostics, safe disclosure, or evidence that cannot be made mandatory
+  without changing a `MAY` or out-of-scope obligation into a required portable
+  behavior.
+
+No requirement IDs, vector IDs, vector mappings, or coverage classifications
+were changed during this review, so the human-readable traceability table did
+not need regeneration.

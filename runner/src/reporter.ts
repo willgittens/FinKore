@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-import type { ConformanceReport, StatusCounts } from './types/report.js'
+import type { ConformanceReport, ReportReproducibility, StatusCounts } from './types/report.js'
 import type { ExecutionResult, ExecutionStatus } from './types/execution-result.js'
 
 function emptyCounts(): { total: number; passed: number; failed: number; unsupported: number; infrastructureErrors: number } {
@@ -17,6 +17,7 @@ function addStatus(counts: ReturnType<typeof emptyCounts>, status: ExecutionStat
 export function buildReport(
   results: readonly ExecutionResult[],
   criticalRequirements: ReadonlySet<string>,
+  reproducibility: ReportReproducibility,
 ): ConformanceReport {
   const summary = emptyCounts()
   const mutationSensitive = emptyCounts()
@@ -53,7 +54,9 @@ export function buildReport(
   })
 
   return {
+    finkoreCore: '0.8',
     finkoreConformanceRunner: '0.1',
+    reproducibility,
     summary,
     mutationSensitive,
     suites,
@@ -72,7 +75,15 @@ function formatJson(value: unknown): string {
 }
 
 export function formatConsoleReport(report: ConformanceReport): string {
-  const lines = ['FinKore Conformance', '']
+  const lines = [
+    'FinKore Conformance',
+    '',
+    `Core: ${report.finkoreCore}`,
+    `Manifest: ${report.reproducibility.manifest.path}`,
+    `Conformance format: ${report.reproducibility.manifest.finkoreConformance}`,
+    `Suites: ${report.reproducibility.manifest.suites.map((suite) => suite.id).join(', ')}`,
+    '',
+  ]
   for (const suite of report.suites) {
     lines.push(suite.suiteId, `  ${countsLine(suite.counts)}`, '')
   }

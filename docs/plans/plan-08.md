@@ -102,23 +102,23 @@ profile machinery.
 
 ### Tasks
 
-- [ ] Define full FinKore Core conformance as passing every applicable suite in
+- [x] Define full FinKore Core conformance as passing every applicable suite in
       the release manifest.
-- [ ] Define domain-scoped conformance for implementations that intentionally
+- [x] Define domain-scoped conformance for implementations that intentionally
       implement only named domains.
-- [ ] Require every claim to identify the exact Core release and conformance
+- [x] Require every claim to identify the exact Core release and conformance
       manifest version used.
-- [ ] State that advertising an Agentic capability is not evidence of
+- [x] State that advertising an Agentic capability is not evidence of
       conformance.
-- [ ] State that passing only selected vectors cannot be described as complete
+- [x] State that passing only selected vectors cannot be described as complete
       Core conformance.
-- [ ] Confirm how `UNSUPPORTED` affects full and domain-scoped claims.
-- [ ] Ensure the runner reports enough manifest and suite information for a
+- [x] Confirm how `UNSUPPORTED` affects full and domain-scoped claims.
+- [x] Ensure the runner reports enough manifest and suite information for a
       developer to reproduce a claim locally.
-- [ ] Review the requirements classified as not directly testable and confirm
+- [x] Review the requirements classified as not directly testable and confirm
       that each classification is justified by architecture, authoring rules,
       or an intentionally non-observable obligation.
-- [ ] Regenerate or update the human-readable traceability index if any
+- [x] Regenerate or update the human-readable traceability index if any
       requirement or vector mapping changes.
 
 ### Completion criteria

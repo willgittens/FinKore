@@ -33,6 +33,52 @@ See [traceability.md](traceability.md) for the current requirement coverage, kno
 See the [Conformance Adapter Onboarding Guide](../docs/conformance-adapter-onboarding.md)
 for integration steps.
 
+## Conformance Claim Model
+
+A FinKore conformance claim is a statement about observable behavior against a
+specific Core release and conformance manifest. It is not a statement about API
+shape, storage design, framework integration, package maturity, mutation score,
+or Agentic advertising.
+
+A complete FinKore Core 0.8 conformance claim means the implementation passed
+every applicable vector in every suite listed by the Core 0.8 release manifest,
+using the stated `finkoreConformance` manifest format. The claim MUST identify
+at least:
+
+- Core release: `FinKore Core 0.8`;
+- manifest path or release manifest identity;
+- `finkoreConformance` version;
+- all suites included in the run;
+- the implementation and adapter under test.
+
+A domain-scoped claim is allowed when an implementation intentionally implements
+only named domains. The claim MUST name the domain suites it covers, use the
+same Core release and manifest version, and pass every applicable vector in
+those suites. It MUST NOT be described as complete FinKore Core conformance.
+
+Passing only selected vectors, selected tags, or selected vector IDs is useful
+for development and regression checks, but it is not a complete Core claim or a
+complete domain-scoped claim. A filtered run MAY be reported as a selected-vector
+or selected-tag result only when the filters are disclosed.
+
+`UNSUPPORTED` is not passing. A complete Core claim cannot contain any
+`UNSUPPORTED` vector in the release manifest. A domain-scoped claim cannot
+contain any `UNSUPPORTED` vector in its claimed domain suites. Unsupported
+vectors outside the claimed domain scope do not invalidate the domain-scoped
+claim, but they MUST NOT be hidden when publishing the complete run report.
+
+Advertising an Agentic operation or capability is not evidence of conformance.
+Agentic metadata may describe a contract, but conformance is demonstrated only
+by passing the relevant manifest-listed vectors through a faithful runner and
+adapter.
+
+The reference runner report includes the Core release, manifest path,
+`finkoreConformance` version, declared suites and vector files, applied filters,
+suite counts, requirement counts, critical failures, and individual vector
+results. That information is intended to make a claim reproducible locally from
+the repository without checksums, attestations, hosted CI, provenance reports, or
+profile machinery.
+
 ## Specification-first TDD
 
 The preferred workflow for official/reference implementations is:

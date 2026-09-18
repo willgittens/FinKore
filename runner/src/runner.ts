@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { resolve } from 'node:path'
 import type { FinKoreConformanceAdapter } from './adapter/types.js'
 import { compareResults } from './comparator.js'
 import { filterVectors, type RunFilters } from './filters.js'
@@ -6,6 +7,7 @@ import { loadConformance } from './loader.js'
 import type { RunnerMetadata } from './metadata.js'
 import { buildReport } from './reporter.js'
 import type { ExecutionResult } from './types/execution-result.js'
+import type { ReportFilters, ReportReproducibility } from './types/report.js'
 import type { ConformanceReport } from './types/report.js'
 import type { LoadedVector } from './types/vector.js'
 import { isNormalizedResult } from './validator.js'
@@ -24,6 +26,18 @@ export interface ConformanceRunner {
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
+}
+
+function normalizeFilterValues(values: readonly string[] | undefined): readonly string[] {
+  return values === undefined ? [] : [...values]
+}
+
+function reportFilters(filters: RunOptions): ReportFilters {
+  return {
+    suites: normalizeFilterValues(filters.suites),
+    tags: normalizeFilterValues(filters.tags),
+    vectorIds: normalizeFilterValues(filters.vectorIds),
+  }
 }
 
 function baseResult(vector: LoadedVector, criticalRequirements: ReadonlySet<string>) {
@@ -79,7 +93,16 @@ export function createConformanceRunner(options: ConformanceRunnerOptions): Conf
       for (const vector of vectors) {
         results.push(await executeVector(vector, options.adapter, loaded.metadata.criticalRequirementIds))
       }
-      return buildReport(results, loaded.metadata.criticalRequirementIds)
+      const reproducibility: ReportReproducibility = {
+        manifest: {
+          path: resolve(options.manifestPath),
+          finkoreConformance: loaded.manifest.finkoreConformance,
+          vectorSchema: loaded.manifest.vectorSchema,
+          suites: loaded.manifest.suites,
+        },
+        filters: reportFilters(filters),
+      }
+      return buildReport(results, loaded.metadata.criticalRequirementIds, reproducibility)
     },
   }
 }

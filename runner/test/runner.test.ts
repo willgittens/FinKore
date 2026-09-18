@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 import { describe, expect, it, vi } from 'vitest'
+import { resolve } from 'node:path'
 import { createConformanceRunner } from '../src/runner.js'
 import type { FinKoreConformanceAdapter } from '../src/adapter/types.js'
 import { createFixtureConformance, metadata, validVector } from './helpers.js'
@@ -94,6 +95,19 @@ describe('runner execution classification', () => {
     const report = await createConformanceRunner({ manifestPath: fixture.manifestPath, adapter, metadata }).run({ tags: ['positive'] })
     expect(calls).toEqual(['first'])
     expect(report.results.map((result) => result.vectorId)).toEqual(['money.add.first-001'])
+    expect(report.reproducibility).toStrictEqual({
+      manifest: {
+        path: resolve(fixture.manifestPath),
+        finkoreConformance: '0.1',
+        vectorSchema: './schema.json',
+        suites: [{ id: 'money', vectorFiles: ['./suite/vectors.json'] }],
+      },
+      filters: {
+        suites: [],
+        tags: ['positive'],
+        vectorIds: [],
+      },
+    })
   })
 
 })
