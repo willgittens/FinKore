@@ -235,6 +235,12 @@ inputs while excluding ignored generated outputs and itself. It is provenance
 evidence for the non-normative composition reference scope only; it does not
 create a Draft 0.7 Core conformance profile or an immutable tag.
 
-Clean committed-checkout reproduction is still pending. Draft 0.7 remains open
-until the closure command passes from the final accepted committed revision and
-the release identity is explicitly accepted.
+Clean committed-checkout reproduction passed on September 18, 2026 from
+revision `4e810f424728a743bcc4bb661becce8ab3f9c2b5` after the Draft 0.7
+checksum/provenance gate was committed. The run completed through final
+clean-tree checks, verified `343` Draft 0.7 checksum artifacts, killed all
+Draft 0.7 composition critical mutants (`9/9`), and killed all Core critical
+mutant probes (`24/24`).
+
+Draft 0.7 remains open until TASK-275 records the final release identity,
+handoff scope, and maintainer acceptance decision.

@@ -429,7 +429,7 @@
     {
       "path": "docs/plans/draft-0.7-composition-task-list.md",
       "kind": "documentation",
-      "sha256": "ab884c2bd19005ed8e0b37c1dac136f420d942b4fa18791913fe1bb8d3abd9a2"
+      "sha256": "baa118d600c1aec1278b70428457f661f324fd7fadce2d58092b1e30fec10be5"
     },
     {
       "path": "docs/plans/good-to-have.md",
@@ -484,7 +484,7 @@
     {
       "path": "docs/releases/draft-0.7.md",
       "kind": "documentation",
-      "sha256": "1636590bec2e2604ee236b7965d47e19672a1746a8eb4da0d3dc9fa7e065f5cb"
+      "sha256": "a7d8a2be294de5edd45dffc76f13921817d15db872ef728dc5ccca445e6fc5f7"
     },
     {
       "path": "docs/releases/README.md",

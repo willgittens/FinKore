@@ -644,7 +644,7 @@ closed Core claims from Draft 0.7 non-normative reference profile evidence.
 Runnable commands are documented for fixture, scenario, comparison, critical,
 and critical-mutant checks.
 
-### - [ ] TASK-274 — Reproduce Draft 0.7 Closure Evidence in CI and a Clean Checkout
+### - [x] TASK-274 — Reproduce Draft 0.7 Closure Evidence in CI and a Clean Checkout
 
 **Depends on:** TASK-273.
 
@@ -675,6 +675,17 @@ historical release evidence and is not regenerated for Draft 0.7
 documentation/source changes. TASK-274 remains open until this command is
 reproduced from the final committed clean checkout that includes the Draft 0.7
 checksum/provenance gate.
+
+**Closure evidence (2026-09-18):** `npm run verify:closure:draft0.7` passed
+from clean committed revision `4e810f424728a743bcc4bb661becce8ab3f9c2b5`
+after the Draft 0.7 checksum/provenance gate was committed. The run completed
+through toolchain checks, Draft 0.6 baseline validation, build/typecheck/unit
+tests, adapters, full TypeScript/Python/Java conformance, Draft 0.7 reference
+scenario execution, cross-language comparison, composition critical checks,
+composition critical mutants (`9/9` killed), coverage, Core critical mutants
+(`24/24` killed), portability and boundary reviews, architecture,
+documentation, license, Draft 0.7 checksum reproduction (`343` artifacts),
+whitespace, and final clean-tree checks.
 
 ### - [ ] TASK-275 — Close Draft 0.7 and Record the Draft 0.8 Handoff
 
@@ -708,7 +719,7 @@ releases. Draft 0.7 is closed only after the complete exit gate passes.
 - [x] Closed claims distinguish normative conformance from reference scenario results.
 - [x] Existing full-profile regressions remain green; scope counts are current.
 - [x] Public APIs, examples, READMEs, and operation metadata are synchronized.
-- [ ] CI and clean-checkout closure evidence, checksums, and provenance reproduce.
+- [x] CI and clean-checkout closure evidence, checksums, and provenance reproduce.
 - [ ] Historical tags and evidence are preserved; approved release identity is recorded.
 - [ ] External-review status and deferred Draft 0.8 topics are factual and explicit.
 
@@ -727,14 +738,13 @@ undeclared Core rule, and no passing aggregate score concealed a critical defect
 ## 12. Current Execution Status
 
 ```text
-NEXT CODEX TASK: Continue TASK-274 by committing the Draft 0.7 closure command
-and checksum/provenance gate, then reproducing
-`npm run verify:closure:draft0.7` from a clean checkout.
+NEXT CODEX TASK: Commit the TASK-274 status update and regenerated checksum
+manifest, then start TASK-275 release closure and Draft 0.8 handoff.
 ```
 
 Milestones A through D are implemented for the non-normative Draft 0.7
 reference composition scope. Milestone E has started: TASK-271 findings review,
 TASK-272 claim evidence, and TASK-273 documentation synchronization are
-recorded. TASK-274 has closure/checksum tooling prepared but still needs final
-committed clean-checkout reproduction; TASK-275 remains open. This document
-does not claim Draft 0.7 release closure.
+recorded. TASK-274 clean-checkout closure evidence has reproduced with the
+Draft 0.7 checksum/provenance gate; TASK-275 remains open. This document does
+not claim Draft 0.7 release closure.
