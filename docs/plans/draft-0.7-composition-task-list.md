@@ -261,7 +261,7 @@ gates. Completion requires the evidence for the final accepted revision.
 
 ### Milestone A — Baseline and Scenario Design
 
-### - [ ] TASK-258 — Open Draft 0.7 and Reproduce the Corrected Baseline
+### - [x] TASK-258 — Open Draft 0.7 and Reproduce the Corrected Baseline
 
 **Depends on:** TASK-256 and TASK-257.
 
@@ -290,7 +290,15 @@ The workspace was already dirty when execution began, so clean committed
 checkout acceptance remains open and is tracked as `D07-TOOLING-258-001` in
 [Draft 0.7 Release Notes](../releases/draft-0.7.md).
 
-### - [ ] TASK-259 — Declare the Two Reference Application Profiles
+**Closure note (2026-09-18):** Clean committed-checkout opening verification
+was reproduced from revision `9f2409556eca6fd98f29e044c955bbdd22fe497f`.
+`npm run tools:check:draft0.5`, `npm run baseline:draft0.6`,
+`npm run build`, and all three full profiles passed. Python and Java again
+required escalated local-toolchain reruns after sandboxed `EPERM` failures.
+`D07-TOOLING-258-001` is resolved in
+[Draft 0.7 Release Notes](../releases/draft-0.7.md).
+
+### - [x] TASK-259 — Declare the Two Reference Application Profiles
 
 **Depends on:** TASK-258.
 
@@ -309,7 +317,7 @@ and contain no implicit tax, posting, authorization, settlement, or finality rul
 recorded in
 [Draft 0.7 Composition Profiles](../draft-0.7-composition-profiles.md).
 
-### - [ ] TASK-260 — Build the Composition Scenario and Traceability Matrix
+### - [x] TASK-260 — Build the Composition Scenario and Traceability Matrix
 
 **Depends on:** TASK-259.
 
@@ -331,7 +339,7 @@ recorded in
 
 ### Milestone B — Semantic and Observation Contract
 
-### - [ ] TASK-261 — Resolve Action Boundaries, Failure Effects, and Error Precedence
+### - [x] TASK-261 — Resolve Action Boundaries, Failure Effects, and Error Precedence
 
 **Depends on:** TASK-260.
 
@@ -356,7 +364,7 @@ Approval gates use profile-local rejection codes, late Audit failures preserve
 previously committed observations, and invoice correction uses Entity evolution
 plus required Audit evidence as the portable observation.
 
-### - [ ] TASK-262 — Apply Accepted Specification and CoreDoc Resolutions
+### - [x] TASK-262 — Apply Accepted Specification and CoreDoc Resolutions
 
 **Depends on:** TASK-261.
 
@@ -378,7 +386,7 @@ portable error change is required for Milestone B. Existing Money, Workflow,
 Audit, Approval, and Entity requirements cover the bounded reference scenarios
 when profile policy remains outside Core.
 
-### - [ ] TASK-263 — Define Scenario Execution and Portable Observations
+### - [x] TASK-263 — Define Scenario Execution and Portable Observations
 
 **Depends on:** TASK-262.
 
@@ -403,7 +411,7 @@ Shared fixtures live under `examples/composition/draft-0.7/`; future language
 implementations should live under language-specific
 `implementations/<language>/examples/composition/draft-0.7/` directories.
 
-### - [ ] TASK-264 — Add Traceable Vectors and Establish Failing Regressions
+### - [x] TASK-264 — Add Traceable Vectors and Establish Failing Regressions
 
 **Depends on:** TASK-263.
 
@@ -420,9 +428,10 @@ turn missing support or infrastructure errors into successful domain evidence.
 
 **Execution note (2026-09-18):** No normative vectors were added because no new
 Core behavior was accepted. Non-normative reference fixtures were added under
-`examples/composition/draft-0.7/` with `implementationStatus: "pending"` and a
-fixture contract check exposed as `npm run composition:check:draft0.7`. Native
-failing scenario tests remain a Milestone C prerequisite before implementation.
+`examples/composition/draft-0.7/` and a fixture contract check exposed as
+`npm run composition:check:draft0.7`. Milestone C later changed
+`implementationStatus` to `"implemented"` after all three language runners and
+native scenario tests were added.
 
 ### Milestone C — Independent Implementation
 
@@ -444,6 +453,12 @@ normative conformance, reference scenarios, and affected mutation checks.
 **Acceptance:** Both profiles pass; state and historical observations remain
 immutable as specified; no application policy enters the runner or adapter.
 
+**Execution note (2026-09-18):** TypeScript reference orchestration was added
+under `implementations/typescript/examples/composition/draft-0.7/`, with a
+strict example `tsconfig` and fixture-driven Vitest coverage for all 20 shared
+scenarios. `npm run composition:typescript:draft0.7` passed: strict compile and
+20/20 scenario checks.
+
 ### - [ ] TASK-266 — Implement and Verify Python Composition Profiles
 
 **Depends on:** TASK-264.
@@ -459,6 +474,11 @@ conformance, scenarios, and mutation or accepted equivalent; exercise CPython
 **Acceptance:** Both profiles pass without relying on TypeScript code, ambient
 decimal context, mutable fixture aliases, or inferred financial policy.
 
+**Execution note (2026-09-18):** Python reference orchestration was added under
+`implementations/python/examples/composition/draft-0.7/`, with a native
+unittest loading the shared fixture set. `npm run composition:python:draft0.7`
+passed and checked all 20 shared scenarios through Python Core APIs.
+
 ### - [ ] TASK-267 — Implement and Verify Java Composition Profiles
 
 **Depends on:** TASK-264.
@@ -473,6 +493,14 @@ coverage, conformance, scenarios, and mutation or accepted equivalent.
 
 **Acceptance:** Both profiles pass with exact decimal behavior, preserved source
 observations, and full existing domain support retained.
+
+**Execution note (2026-09-18):** Java reference orchestration was added under
+`implementations/java/examples/composition/draft-0.7/`, with a native main-class
+test registered in the Java test runner. `npm run composition:java:draft0.7`
+passed after local-toolchain escalation for `javac`, compiling 9 Java source
+files and 9 test files. The combined
+`npm run composition:test:draft0.7` command passed after the same Java sandbox
+escalation.
 
 ### Milestone D — Composition Proof
 

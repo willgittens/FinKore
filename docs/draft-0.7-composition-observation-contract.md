@@ -178,7 +178,11 @@ Each language implementation must:
 
 ## Fixture Status
 
-Milestone B adds the reference fixture contract and fixture inputs, but it does
-not implement the language scenario runners. The fixtures therefore carry
-`implementationStatus: "pending"` until Milestone C adds failing native scenario
-tests and then the profile implementations.
+Milestone B added the reference fixture contract and fixture inputs. Milestone C
+adds language scenario runners in TypeScript, Python, and Java, so the fixtures
+now carry `implementationStatus: "implemented"` for the reference application
+scenario set.
+
+This status means only that the non-normative examples execute the shared
+scenarios through real Core APIs. It is not a Core conformance profile or a
+Draft 0.7 release-closure claim.

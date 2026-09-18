@@ -49,8 +49,12 @@ The worktree was not clean when the run began: `README.md`,
 `docs/plans/pre-draft-0.7-readiness-task-list.md` were already modified, and
 `docs/plans/draft-0.7-composition-task-list.md` was untracked. These were
 treated as planning/documentation qualifications, not as Draft 0.7 release
-evidence. A clean committed-checkout reproduction remains required before
-closure.
+evidence.
+
+A clean committed-checkout reproduction was later run from committed revision
+`9f2409556eca6fd98f29e044c955bbdd22fe497f` on September 18, 2026. The same
+opening baseline checks passed from that committed tree, closing
+`D07-TOOLING-258-001`.
 
 | Inventory item | Opening value |
 | --- | ---: |
@@ -107,7 +111,7 @@ Suite counts for each successful full-profile run were identical:
 
 | Finding | Classification | Status | Owner | Affected artifacts | Release or claim effect | Evidence | Resolution | Maintainer acceptance |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `D07-TOOLING-258-001` | `TOOLING/CLAIM DEFECT` | OPEN | Release/conformance maintainers | Draft 0.7 opening evidence and future release claims | Blocks claiming TASK-258 clean-checkout acceptance and blocks Draft 0.7 closure evidence; does not change financial behavior, requirements, vectors, errors, operations, or Draft 0.6 historical evidence | Milestone A profile runs passed from revision `ad2942179271f65234527d73fca020efa1df443c`, but the workspace already contained modified documentation and the Draft 0.7 plan was untracked | Rerun the required opening verification from a clean committed checkout after Milestone A documentation is committed | Pending |
+| `D07-TOOLING-258-001` | `TOOLING/CLAIM DEFECT` | RESOLVED | Release/conformance maintainers | Draft 0.7 opening evidence and future release claims | Clean-checkout acceptance for TASK-258 is no longer blocked; does not change financial behavior, requirements, vectors, errors, operations, or Draft 0.6 historical evidence | Initial Milestone A profile runs passed from revision `ad2942179271f65234527d73fca020efa1df443c` with dirty-worktree qualifications. Clean committed revision `9f2409556eca6fd98f29e044c955bbdd22fe497f` later reproduced `tools:check:draft0.5`, `baseline:draft0.6`, `build`, and all three full profiles with 254/254 passing and 227/227 mutation-sensitive results. Python and Java required escalated reruns after local-toolchain sandbox `EPERM` failures. | Clean committed-checkout opening verification reproduced on September 18, 2026 | Accepted for Draft 0.7 opening-evidence scope |
 
 ## Current Claim Boundary
 
@@ -116,8 +120,8 @@ profile. The opening evidence only confirms that the existing
 `finkore.core.draft0_6.full` profile still passes in TypeScript, Python, and
 Java from the qualified workspace state described above.
 
-Reference application scenario results, when later implemented, will be
-reported separately from normative Core conformance.
+Reference application scenario results are reported separately from normative
+Core conformance.
 
 ## Milestone B Status
 
@@ -126,5 +130,27 @@ fixture location, and no-new-normative-change decision in
 [Draft 0.7 Composition Observation Contract](../draft-0.7-composition-observation-contract.md).
 The shared reference fixtures are recorded under
 [`examples/composition/draft-0.7`](../../examples/composition/draft-0.7/).
-They remain pending reference application fixtures and are not part of the
-Core conformance manifest.
+They are reference application fixtures and are not part of the Core
+conformance manifest.
+
+## Milestone C Status
+
+Milestone C adds independent reference profile implementations in TypeScript,
+Python, and Java under the language-specific `examples/composition/draft-0.7/`
+paths. The implementations execute the 20 shared scenarios through real Core
+APIs and keep profile-local policy outside Core packages, adapters, and the
+runner.
+
+Reference scenario verification on September 18, 2026:
+
+| Command | Result |
+| --- | --- |
+| `npm run composition:test:draft0.7` | Initial sandboxed combined run passed fixture, TypeScript, and Python stages, then failed Java compilation with `spawnSync .tools/bin/javac EPERM`; escalated rerun PASS |
+| `npm run composition:check:draft0.7` | PASS: 20 scenarios |
+| `npm run composition:typescript:draft0.7` | PASS: strict TypeScript example compile and 20/20 Vitest scenario checks |
+| `npm run composition:python:draft0.7` | PASS: Python unittest scenario check over 20 shared scenarios |
+| `npm run composition:java:draft0.7` | PASS after Java local-toolchain escalation: compiled 9 Java source files and 9 test files, including the composition profile/test |
+
+This evidence does not create a new Core conformance profile or a Draft 0.7
+release claim. Coverage, mutation hardening, cross-language result comparison,
+and final claim closure remain later Draft 0.7 gates.

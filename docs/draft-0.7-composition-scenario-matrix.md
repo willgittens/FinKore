@@ -9,6 +9,11 @@ success, rejection, boundary, and history-preservation scenarios. It does not
 add conformance vectors or new Core behavior. Normative vectors may be added
 only after a later task accepts any necessary specification change.
 
+Milestone C implements the matrix as non-normative reference scenarios in
+TypeScript, Python, and Java. Run `npm run composition:test:draft0.7` from the
+repository root to execute the shared fixture contract and all three language
+reference runners.
+
 ## Assertion Authority
 
 | Authority | Meaning |

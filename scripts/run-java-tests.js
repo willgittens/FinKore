@@ -16,6 +16,7 @@ for (const testClass of [
   'org.finkore.AuditTest',
   'org.finkore.ApprovalsTest',
   'org.finkore.EntitiesTest',
+  'org.finkore.CompositionDraft07Test',
 ]) {
   const child = spawnSync(java, ['-cp', classpath, testClass], {
     encoding: 'utf8',

@@ -16,5 +16,12 @@ Run the fixture contract check from the repository root:
 npm run composition:check:draft0.7
 ```
 
-Milestone C language examples will execute these scenarios through real Core
-APIs. Until then, `implementationStatus` remains `pending`.
+Run the implemented reference scenarios in all three languages:
+
+```bash
+npm run composition:test:draft0.7
+```
+
+The TypeScript, Python, and Java Milestone C examples execute these scenarios
+through real Core APIs. `implementationStatus` is `implemented` for the
+reference application fixture set; this is not a Core conformance claim.

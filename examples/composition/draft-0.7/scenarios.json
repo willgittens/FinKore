@@ -7,7 +7,7 @@
     "docs/draft-0.7-composition-scenario-matrix.md",
     "docs/draft-0.7-composition-observation-contract.md"
   ],
-  "implementationStatus": "pending",
+  "implementationStatus": "implemented",
   "scenarioCount": 20,
   "scenarios": [
     {
@@ -28,7 +28,7 @@
         "preservePriorApprovalHistory": true,
         "appendAuditEvent": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-EXP-002",
@@ -47,7 +47,7 @@
         "noSyntheticDecisionForInapplicableRequirement": true,
         "appendAuditEvent": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-EXP-003",
@@ -64,7 +64,7 @@
         "preservePriorApprovalHistory": true,
         "preservePriorAuditHistory": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-EXP-004",
@@ -80,7 +80,7 @@
         "preserveEntity": true,
         "preservePriorApprovalHistory": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-EXP-005",
@@ -95,7 +95,7 @@
         "code": "D07_PROFILE_APPROVAL_NOT_CURRENT",
         "preservePriorApprovalHistory": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-EXP-006",
@@ -110,7 +110,7 @@
         "code": "D07_PROFILE_APPROVAL_NOT_CURRENT",
         "evaluationInstant": "2026-09-18T12:00:00Z"
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-EXP-007",
@@ -125,7 +125,7 @@
         "preserveEntity": true,
         "preservePriorAuditHistory": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-EXP-008",
@@ -140,7 +140,7 @@
         "preserveEntity": true,
         "preserveSourceMoney": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-EXP-009",
@@ -156,7 +156,7 @@
         "preservePriorApprovalHistory": true,
         "preservePriorAuditHistory": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-EXP-010",
@@ -175,7 +175,7 @@
         "preservePriorApprovalHistory": true,
         "preservePriorAuditHistory": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-INV-001",
@@ -193,7 +193,7 @@
         "appendCorrectionRelation": true,
         "appendAuditEvent": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-INV-002",
@@ -207,7 +207,7 @@
         "preserveSourceFacts": true,
         "preservePriorAuditHistory": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-INV-003",
@@ -222,7 +222,7 @@
         "preserveSourceFacts": true,
         "preservePriorAuditHistory": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-INV-004",
@@ -237,7 +237,7 @@
         "preserveSourceFacts": true,
         "preserveExistingRelations": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-INV-005",
@@ -252,7 +252,7 @@
         "preserveSourceFacts": true,
         "preserveExistingRelations": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-INV-006",
@@ -268,7 +268,7 @@
         "preserveSourceFacts": true,
         "preservePriorApprovalHistory": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-INV-007",
@@ -283,7 +283,7 @@
         "code": "D07_PROFILE_APPROVAL_NOT_CURRENT",
         "preservePriorApprovalHistory": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-INV-008",
@@ -299,7 +299,7 @@
         "preserveExistingRelations": true,
         "preservePriorAuditHistory": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-INV-009",
@@ -314,7 +314,7 @@
         "noSyntheticDecisionForInapplicableRequirement": true,
         "appendCorrectionRelation": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     },
     {
       "id": "D07-INV-010",
@@ -329,7 +329,7 @@
         "noSyntheticPosting": true,
         "noSyntheticPaymentEffect": true
       },
-      "implementationStatus": "pending"
+      "implementationStatus": "implemented"
     }
   ]
 }

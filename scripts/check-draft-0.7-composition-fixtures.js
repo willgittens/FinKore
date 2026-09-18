@@ -5,6 +5,7 @@ const path = 'examples/composition/draft-0.7/scenarios.json'
 const allowedProfiles = new Set(['expense-approval', 'invoice-correction'])
 const allowedAuthority = new Set(['CORE', 'PROFILE', 'OBSERVATION'])
 const allowedStatuses = new Set(['success', 'error', 'profile-error'])
+const allowedImplementationStatuses = new Set(['pending', 'implemented'])
 const canonicalOperations = new Set([
   'finkore.money.add',
   'finkore.money.subtract',
@@ -43,7 +44,7 @@ assertObject(fixture, 'fixture')
 
 if (fixture.finkoreCompositionScenarios !== '0.1') fail('unsupported finkoreCompositionScenarios')
 if (fixture.normative !== false) fail('fixture must be explicitly non-normative')
-if (fixture.implementationStatus !== 'pending') fail('Milestone B fixtures must remain pending until scenario runners exist')
+if (!allowedImplementationStatuses.has(fixture.implementationStatus)) fail('unsupported fixture implementationStatus')
 if (!Array.isArray(fixture.scenarios) || fixture.scenarios.length === 0) fail('scenarios must be non-empty')
 if (fixture.scenarioCount !== fixture.scenarios.length) fail('scenarioCount must match scenarios length')
 if (!Array.isArray(fixture.authority) || fixture.authority.some((entry) => typeof entry !== 'string')) {
@@ -87,7 +88,9 @@ for (const [index, scenario] of fixture.scenarios.entries()) {
     fail(`${scenario.id} success observation must not include an error code`)
   }
 
-  if (scenario.implementationStatus !== 'pending') fail(`${scenario.id} must remain pending until Milestone C`)
+  if (scenario.implementationStatus !== fixture.implementationStatus) {
+    fail(`${scenario.id} implementationStatus must match fixture implementationStatus`)
+  }
 }
 
 process.stdout.write(`Draft 0.7 composition fixture check passed: ${fixture.scenarios.length} scenarios.\n`)

@@ -37,6 +37,7 @@ mkdirSync(testOutput, { recursive: true })
 
 const mainSources = [
   ...files('implementations/java/core/src/main/java'),
+  ...files('implementations/java/examples'),
   ...files('implementations/java/adapters/conformance/src/main/java'),
 ]
 run(['-Xlint:all', '-Werror', '-d', mainOutput, ...mainSources])
