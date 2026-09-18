@@ -181,6 +181,9 @@ The execution sequence is defined by the
 Demonstrate that the existing primitives compose into realistic financial
 workflows without silently inventing cross-domain semantics.
 
+The execution sequence is defined by the
+[Draft 0.7 Cross-Domain Composition Task List](draft-0.7-composition-task-list.md).
+
 ### Recommended Work
 
 - Begin with non-normative reference profiles for at least two bounded use cases,

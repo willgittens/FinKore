@@ -16,6 +16,7 @@ and `/agentic` describes canonical operation semantics.
 | [Draft 0.4](draft-0.4.md) | Closed | Stabilized specifications and documentation for Python and Java implementation work in Draft 0.5. |
 | [Draft 0.5](draft-0.5.md) | Closed | Cross-language proof release; Python passes the complete manifest scope and Java passes the complete Money scope, with Java non-Money domains explicitly unsupported. |
 | [Draft 0.6](draft-0.6.md) | Closed with release-evidence correction | Portability and compatibility hardening; TypeScript/Python full-profile and historical Java Money-profile outcomes are closed; TASK-257 records current Java full-profile parity, while TASK-256 preserves the historical `core-draft-0.6` tag and records corrected checksum/provenance evidence. |
+| [Draft 0.7](draft-0.7.md) | Open | Cross-domain composition proof in progress; no new Core conformance claim is closed. |
 
 Draft 0.4 closure details are recorded in
 [FinKore Core Draft 0.4 Closure Record](draft-0.4-closure.md).

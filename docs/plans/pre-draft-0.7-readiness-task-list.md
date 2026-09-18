@@ -277,10 +277,14 @@ Are all affected tests, Javadoc, READMEs, metadata, claims, and release records 
 ## 7. Current Execution Status
 
 ```text
-NEXT CODEX TASK: begin Draft 0.7 planning from the corrected committed baseline.
+NEXT CODEX TASK: TASK-258 — Open Draft 0.7 and Reproduce the Corrected Baseline.
 ```
 
 TASK-256 and TASK-257 are complete. TASK-257 implementation work is bound to
 commit `e79ff010428a959dd7cae59948eab7ce5d79bab9`; TASK-256 closure evidence
 was verified from clean committed worktree commit `d001916e`. Draft 0.7
 normative composition work may now begin from the corrected baseline.
+
+The next execution sequence is defined by the
+[Draft 0.7 Cross-Domain Composition Task List](draft-0.7-composition-task-list.md).
+The plan is prepared; its execution tasks remain pending.
