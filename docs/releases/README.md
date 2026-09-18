@@ -1,29 +1,38 @@
 # FinKore Release Notes
 
-This directory records the user-facing scope and verification status of each
-FinKore Core draft.
+This is the complete release history kept in the working tree. Precise financial
+behavior belongs to `/spec`; detailed change history remains available in Git.
 
-Release notes summarize what a draft contains. They are not a second
-specification: `/spec` defines precise domain behavior, CoreDoc records durable
-foundation rules and their evolution, `/conformance` records observable coverage,
-and `/agentic` describes canonical operation semantics.
+## Draft 0.7
 
-| Release | Status | Summary |
-| --- | --- | --- |
-| [Draft 0.1](draft-0.1.md) | Historical closed baseline | Established Money, Workflow, Audit, Approvals, and Entities. |
-| [Draft 0.2](draft-0.2.md) | Closed | Added selected Money, Entity Evolution, Audit Relationship, and Approval Validity behavior. |
-| [Draft 0.3](draft-0.3.md) | Closed | Added bounded Approval Composition, Workflow version/import/conflict behavior, and Entity revision/import behavior. |
-| [Draft 0.4](draft-0.4.md) | Closed | Stabilized specifications and documentation for Python and Java implementation work in Draft 0.5. |
-| [Draft 0.5](draft-0.5.md) | Closed | Cross-language proof release; Python passes the complete manifest scope and Java passes the complete Money scope, with Java non-Money domains explicitly unsupported. |
-| [Draft 0.6](draft-0.6.md) | Closed with release-evidence correction | Portability and compatibility hardening; TypeScript/Python full-profile and historical Java Money-profile outcomes are closed; TASK-257 records current Java full-profile parity, while TASK-256 preserves the historical `core-draft-0.6` tag and records corrected checksum/provenance evidence. |
-| [Draft 0.7](draft-0.7.md) | Open pending release-identity approval | Cross-domain composition reference proof, closure command, and release-candidate checksums are recorded; no new Core conformance claim is closed. |
+Removed the non-normative composition proof and simplified repository governance,
+documentation, developer tooling, and local verification. No financial domain
+was removed.
 
-Draft 0.4 closure details are recorded in
-[FinKore Core Draft 0.4 Closure Record](draft-0.4-closure.md).
+## Draft 0.6
 
-Draft 0.5 portability details are recorded in
-[FinKore Core Draft 0.5 Portability Review](draft-0.5-portability-review.md).
+Hardened exact Money behavior at large precision and scale boundaries and brought
+the TypeScript, Python, and Java implementations to the same manifest scope.
 
-Developer plans are intentionally not retained as release history. Durable
-normative accountability belongs with stable CoreDoc/specification identifiers;
-release-level capability and verification facts belong in these notes.
+## Draft 0.5
+
+Added independent Python and Java implementations and their conformance adapters.
+
+## Draft 0.4
+
+Introduced CoreDoc and stabilized the existing specification baseline for
+cross-language implementation.
+
+## Draft 0.3
+
+Added bounded Approval composition, Workflow version and conflict behavior, and
+Entity revision and import behavior.
+
+## Draft 0.2
+
+Added Money Rates and Allocation, Audit Relationships, Entity Evolution, and
+Approval Validity.
+
+## Draft 0.1
+
+Established the Money, Workflow, Audit, Approvals, and Entities domains.

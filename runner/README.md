@@ -21,16 +21,15 @@ Implementation under test
 The runner loads only files declared by `conformance/manifest.json`. It validates every loaded vector and all cross-layer references before executing any vector. Execution is sequential and deterministic: manifest suite order, then vector ID within each suite.
 
 Manifest and vector-file versions are syntax compatibility versions. They do not
-need to match the FinKore Draft release number, so Draft 0.2 artifacts can
-remain on format `0.1` until the manifest or vector-file syntax changes. The
-runner rejects unsupported format versions instead of guessing compatibility.
+need to match FinKore release numbers. The runner rejects unsupported format
+versions instead of guessing compatibility.
 
 ## Canonical operations and requirements
 
 Canonical operation IDs are reused verbatim from the Agentic Contract, including
 `finkore.money.add`, `finkore.money.divide`, and
 `finkore.workflow.transition`. `src/metadata.ts` contains the small explicit
-Draft 0.4 canonical Agentic ID set aligned with `agentic/operations.md`; it
+canonical Agentic ID set aligned with `agentic/operations.md`; it
 duplicates identifiers, not semantics. Operations without the `finkore.` prefix
 remain conformance-local adapter vocabulary as documented by
 `conformance/conventions.md`.
@@ -67,7 +66,7 @@ An optional `reset` hook supports the vector-isolation requirement. It runs imme
 
 See the [Conformance Adapter Onboarding Guide](../docs/conformance-adapter-onboarding.md)
 for the language-neutral integration workflow, reporting expectations, and
-conformance-claim evidence.
+local verification.
 
 ## Programmatic usage
 
@@ -89,29 +88,6 @@ const report = await runner.run({
 
 Values within one filter dimension are ORed; different dimensions are ANDed. Empty filter arrays mean no restriction. Filtering preserves loader order and never changes vector semantics.
 
-## Profile Evidence
-
-Draft 0.6 profile metadata lives outside the runner in
-`conformance/draft-0.6/profiles.json`. A profile run resolves one closed
-profile, rejects unknown profiles, and cannot be combined with `suite`, `tag`,
-or `vector` filters. Reports include profile evidence: profile id, Core version,
-profile kind, manifest/vector format versions, required vector count, required
-vector ids, source files, and any capability floor reference.
-
-Programmatic profile use:
-
-```ts
-import { createConformanceRunner, loadProfileCatalog } from '@finkore/conformance-runner'
-import { adapter } from './my-adapter.js'
-
-const profiles = await loadProfileCatalog('conformance/draft-0.6/profiles.json')
-const report = await createConformanceRunner({
-  manifestPath: 'conformance/manifest.json',
-  adapter,
-  profiles,
-}).run({ profileId: 'finkore.core.draft0_6.domain.money' })
-```
-
 ## CLI
 
 Build the package, then provide an ESM module whose default export or named `adapter` export implements the adapter interface:
@@ -126,17 +102,6 @@ node dist/cli/cli.js \
 ```
 
 Repeat `--suite`, `--tag`, or `--vector` to select multiple values. Add `--json` for the stable machine-readable report.
-
-Profile mode:
-
-```bash
-node dist/cli/cli.js \
-  --manifest ../conformance/manifest.json \
-  --profiles ../conformance/draft-0.6/profiles.json \
-  --profile finkore.core.draft0_6.domain.money \
-  --adapter ./my-adapter.js \
-  --json
-```
 
 Exit codes have this precedence:
 

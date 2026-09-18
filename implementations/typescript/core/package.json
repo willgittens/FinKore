@@ -15,8 +15,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:mutation": "stryker run",
-    "composition:test:draft0.7": "tsc -p ../examples/composition/draft-0.7/tsconfig.json && vitest run test/composition/draft-0.7-composition.test.ts"
+    "test:mutation": "stryker run"
   },
   "engines": {
     "node": "^22.18.0 || >=24.11.0"

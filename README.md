@@ -102,24 +102,29 @@ FinKore is not an ERP, ORM, payment processor, UI framework, accounting applicat
 - [Conformance Suite](./conformance/README.md) — language-independent test vectors and reliability methodology.
 - [Agentic Contract](./agentic/README.md) — portable operational semantics for machine clients.
 - [Language-Neutral Implementation Guide](./docs/implementation-guide.md) — implementation reading order, boundaries, value semantics, errors, effects, and gap handling.
-- [Conformance Adapter Onboarding](./docs/conformance-adapter-onboarding.md) — adapter integration, normalization, reporting, and conformance-claim evidence.
-- [Draft 0.5 Python and Java Handoff](./docs/draft-0.5-python-java-handoff.md) — historical bounded starting checklist for the completed implementation milestone.
-- [Draft 0.5 Cross-Language Implementation Plan](./docs/plans/draft-0.5-cross-language-task-list.md) — completed execution record for full Python and Money-scope Java conformance.
-- [Draft 0.6 Portability and Compatibility Plan](./docs/plans/draft-0.6-portability-compatibility-task-list.md) — completed execution record for capability floors, compatibility governance, claims, and reproducible release evidence.
-- [Pre-Draft 0.7 Readiness Plan](./docs/plans/pre-draft-0.7-readiness-task-list.md) — completed Draft 0.6 release-evidence correction and Java full-profile parity gate.
-- [Draft 0.7 Cross-Domain Composition Plan](./docs/plans/draft-0.7-composition-task-list.md) — execution record for non-normative expense approval and invoice correction reference profiles across TypeScript, Python, and Java.
-- [Draft 0.7 Composition Claim Evidence](./docs/draft-0.7-composition-claim-evidence.md) — claim boundary separating existing Core conformance from Draft 0.7 reference application evidence.
-- [Draft 0.5 to 1.0 Roadmap](./docs/plans/good-to-have.md) — proposed non-normative sequence from independent portability proof to a stable 1.0 foundation.
+- [Conformance Adapter Onboarding](./docs/conformance-adapter-onboarding.md) — adapter integration, normalization, reporting, and local verification.
 - [Conformance Traceability](./conformance/traceability.md) — current vector coverage, known gaps, and readiness.
-- [Release Notes](./docs/releases/README.md) — shipped scope, exclusions, review status, and verification by Core draft.
-- [Draft 0.4 Foundation Plan](./docs/plans/draft-0.4-foundation-task-list.md) — completed stabilization work for the closed Draft 0.4 baseline.
+- [Release Notes](./docs/releases/README.md) — concise release history.
+- [Developer Tools](./docs/tools/README.md) — local build, test, coverage, mutation, and verification utilities.
 - [Licensing](./LICENSING.md) — community license policy, third-party notice policy, and commercial-use guidance.
 
 ## Project Status
 
-FinKore is experimental. FinKore Core Draft 0.6 is closed with release-evidence correction; Draft 0.7 has completed its non-normative composition reference proof for expense approval and invoice correction and is pending explicit release-identity approval. Draft 0.6 publishes a portable Money capability floor, compatibility/deprecation rules, closed conformance profiles, implementation capability declarations, metadata validation, and profile-specific claim records. TypeScript, Python, and Java currently pass the Draft 0.6 full profile at 254/254 vectors; Java full-profile parity was completed after the original Draft 0.6 closure as TASK-257 pre-Draft 0.7 readiness evidence. Draft 0.7 does not add a Core conformance profile or expand closed Core claims. The immutable Draft 0.6 tag `core-draft-0.6` remains preserved as historical evidence while TASK-256 records corrected checksum/provenance evidence.
+FinKore is experimental. TypeScript, Python, and Java implement the current
+manifest scope for Money, Workflow, Audit, Approvals, and Entities.
 
-Money, Workflow, Audit, Approvals, and Entities are complete for Draft 0.1 in the TypeScript reference implementation, Python implementation, and Java implementation. Money covers representation, canonical serialization, portable errors, exact arithmetic, exact compatible-currency comparison, explicit rounding, the Draft 0.2 Money Rates and Money Allocation slices, and the Draft 0.6 portable numeric/allocation floor. Workflow covers definitions, exact state identity, initial and current state, directed transitions, guards, explicit terminal states, portable errors, and state preservation after rejection; Draft 0.3 specifies, vector-covers, implements, and adapts Workflow definition/version identity, immutable instance binding/mismatch behavior, import of existing state/version observations, and expected-state/revision conflict preconditions. The canonical `finkore.workflow.transition` Agentic descriptor is aligned with the version/conflict preconditions, while Workflow import remains conformance-local. Audit covers events, actors, append-only logical history, changes, redaction, Audit Relationships, and portable Audit errors. Approvals covers requirement and decision representation, decision recording, requirement evaluation, subject-fact effectiveness, withdrawal, expiration, Decision and Requirement supersession, append-only Decision and lifecycle history preservation, condition representation, condition required-fact completeness, explicit condition evaluation boundaries, all-required sequential and unordered Approval Chains, duplicate Requirement rejection in chains, Draft 0.3 Approval Composition for bounded any-of/all-of groups, N-of-M quorum groups, ordered stages, nested groups, and portable Approval errors. Approval lifecycle and composition operation labels remain conformance-local rather than canonical Agentic operations. Entities covers identity, lifecycle, mutability, validation, Draft 0.2 Entity Evolution correction/reversal/void/supersession history, required Audit evidence for evolution, Draft 0.3 Entity Revision and Import identity mapping/conflict preconditions, portable Entity errors, and canonical `finkore.entity.*` Agentic operation IDs for the current Entity operation surface. Entity import remains conformance-local. Rich condition expressions, delegation, escalation, parallel approval graphs beyond bounded composition, dynamic approver resolution, authorization/RBAC, generic entity validation rule engines, concrete Entity/Audit integration policy, global identity registries, and other FinKore domains remain deferred for future drafts.
+Money covers exact representation, serialization, arithmetic, comparison,
+rounding, Rates, and Allocation. Workflow covers definitions, version binding,
+transitions, guards, terminal states, import observations, and conflict
+preconditions. Audit covers actors, events, changes, append-only history,
+redaction, relationships, and portable errors. Approvals covers requirements,
+conditions, decisions, validity, chains, and bounded composition. Entities covers
+identity, lifecycle, mutability, validation, revisions, imports, and evolution
+with required Audit evidence.
+
+Rich condition expressions, delegation, escalation, unrestricted approval
+graphs, dynamic approver resolution, authorization, global identity registries,
+and concrete accounting domains remain outside the current scope.
 
 The specification is expected to evolve significantly before version 1.0. Production use is not recommended yet, and no implementation should claim that its API defines FinKore independently of the specification.
 

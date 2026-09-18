@@ -1,9 +1,9 @@
 # FinKore Java Core
 
-This package is the Java implementation track for FinKore. It is derived
-from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from TypeScript or
-Python financial implementation code. For Draft 0.6 evidence, Java now claims
-`finkore.core.draft0_6.full` as post-Draft-0.6 TASK-257 parity evidence.
+This package is the Java implementation track for FinKore. It is derived from
+CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from TypeScript or Python
+financial implementation code. It passes the complete current conformance
+manifest.
 
 Current status:
 
@@ -11,22 +11,13 @@ Current status:
   rounding, and allocation are implemented.
 - Workflow definitions, instances, guards, transitions, terminal behavior,
   version binding, import observations, and conflict preconditions are
-  implemented and pass the 41-vector Workflow domain profile.
+  implemented.
 - Audit Events, Actors, Changes, append-only history, redaction
-  representations, and Audit Relationships are implemented and pass the
-  29-vector Audit domain profile.
+  representations, and Audit Relationships are implemented.
 - Approval Requirements, Decisions, validity lifecycle, Conditions, Chains, and
-  bounded Composition are implemented and pass the 66-vector Approvals domain
-  profile.
+  bounded Composition are implemented.
 - Entity identity, lifecycle, mutability, validation, revisions, import, and
-  bounded evolution with required Audit evidence are implemented and pass the
-  25-vector Entities domain profile.
-- The complete Draft 0.6 full profile passes at 254/254 vectors with zero
-  failures, unsupported results, or infrastructure errors.
-- Draft 0.7 composition examples live outside the Java Core package under
-  `implementations/java/examples/composition/draft-0.7/`. They exercise
-  expense approval and invoice correction as non-normative reference
-  application profiles and do not expand the Java Core conformance claim.
+  bounded evolution with required Audit evidence are implemented.
 - Public errors expose portable FinKore error codes; Java exception class names
   are not portable semantics.
 
@@ -37,17 +28,7 @@ npm run java:compile
 npm run java:test
 npm run java:coverage
 npm run java:mutation:critical
-npm run conformance:java:money
-npm run conformance:java:profile:money
-npm run conformance:java:workflow
-npm run conformance:java:profile:workflow
-npm run conformance:java:audit
-npm run conformance:java:profile:audit
-npm run conformance:java:approvals
-npm run conformance:java:profile:approvals
-npm run conformance:java:entities
-npm run conformance:java:profile:entities
-npm run conformance:java:profile:full
+npm run conformance:java
 ```
 
 The packaged Java coverage gate uses Maven, JUnit Jupiter, and JaCoCo. It

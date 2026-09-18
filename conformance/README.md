@@ -6,54 +6,19 @@
 
 > In financial software, a passing test suite is useful only if it reliably rejects broken behavior.
 
-This directory is the language-independent executable evidence for FinKore Draft
-0.1 plus the implemented Draft 0.2 Money Rates, Money Allocation, Audit
-Relationships, Entity Evolution, and Approval Validity slices, the implemented
-Draft 0.3 Approval Composition slice, the implemented Draft 0.3 Workflow
-definition/version identity, import, instance binding/mismatch, and conflict
-slice, and the implemented Draft 0.3 Entity Revision and Import slice. Draft
-0.4 stabilizes this behavioral baseline and authority model; it does not add new
-vector syntax or new financial behavior. The specification remains the source of
-truth. Vectors describe observable domain behavior; they do not prescribe APIs,
-classes, exceptions, storage, or frameworks.
+This directory is the language-independent executable evidence for the current
+FinKore Money, Workflow, Audit, Approvals, and Entities specifications. The
+specification remains the source of truth. Vectors describe observable domain
+behavior; they do not prescribe APIs, classes, exceptions, storage, or
+frameworks.
 
 ## Scope and discovery
 
 [manifest.json](manifest.json) is the only normative discovery entry point. A runner MUST load only the listed vector files, resolve paths relative to the manifest, reject duplicate vector IDs, and reject unsupported format versions. Filesystem traversal order carries no meaning.
 
 The manifest and vector-file version fields describe syntax compatibility, not
-the FinKore Draft release number. Draft 0.2 and later vectors may remain on
-format `0.1` while they use the same manifest and vector-file shape; Draft 0.4
-keeps format `0.1` because no manifest or vector-file syntax change is made.
-Draft scope is determined by the manifest contents, referenced requirement IDs,
-and traceability status.
-
-Draft 0.6 Milestone B accepts a portable numeric/allocation floor and structural
-boundary dispositions in
-[Draft 0.6 Portability Capability Contract](../spec/draft-0.6-portability-capability-contract.md).
-Those decisions do not add manifest-listed vectors by themselves; later Draft
-0.6 profile and boundary tasks must promote any accepted case into this
-directory explicitly.
-
-Draft 0.6 Milestone C accepts profile and evidence-based claim policy in
-[Draft 0.6 Compatibility, Claims, and Provenance Policy](../docs/draft-0.6-compatibility-claims-provenance-policy.md).
-Draft 0.6 Milestone D encodes the current compatibility, profile, capability,
-claim, and checksum metadata under [draft-0.6](draft-0.6/README.md). The
-profile-aware runner can now emit closed-profile evidence for TypeScript full
-scope, Python full scope, historical Java Money scope, and current Java full
-scope.
-
-Draft 0.7 cross-domain composition uses non-normative reference application
-fixtures under
-[examples/composition/draft-0.7](../examples/composition/draft-0.7/). Those
-fixtures are intentionally outside [manifest.json](manifest.json), are not
-closed Core conformance profiles, and do not add Draft 0.7 profile metadata,
-portable errors, or canonical operation IDs.
-
-Draft 0.7 release-candidate checksum evidence is recorded under
-[draft-0.7](draft-0.7/README.md). That evidence is a closure/provenance gate
-only; it does not promote the reference application profiles into normative
-conformance vectors.
+FinKore release numbers. Release scope is determined by the manifest contents,
+referenced requirement IDs, and traceability status.
 
 The initial suites are grouped by specification behavior:
 
@@ -65,9 +30,6 @@ The initial suites are grouped by specification behavior:
 
 See [conventions.md](conventions.md) for the vector format and runner contract.
 See [traceability.md](traceability.md) for the current requirement coverage, known specification gaps, mutation design, and readiness assessment.
-See the [Draft 0.4 conformance and implementer documentation audit](draft-0.4-audit.md)
-for the historical schema, manifest, vector, traceability, runner, and adapter
-boundary review that prepared the completed Draft 0.5 Python and Java work.
 See the [Conformance Adapter Onboarding Guide](../docs/conformance-adapter-onboarding.md)
 for integration steps.
 

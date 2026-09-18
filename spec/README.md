@@ -2,20 +2,8 @@
 
 ## Status
 
-**Draft.** FinKore Core Draft 0.4 is the closed
-foundation-stabilization baseline. It aligns authority, version terminology, and
-implementation-readiness evidence for the closed Draft 0.3 behavioral scope:
-Draft 0.1 Money, Workflow, Audit, Approvals, and Entities; selected Draft 0.2
-Money Rates, Money Allocation, Audit Relationships, Entity Evolution, and
-Approval Validity; and selected Draft 0.3 Approval Composition, Workflow
-version/import/conflict, and Entity Revision/Import behavior. Draft 0.5 later
-proved this baseline through full-manifest Python and Money-scope Java
-implementations without adding new financial-domain behavior. Draft 0.6
-portability and compatibility hardening is in progress; its portable capability
-contract, compatibility policy, profile metadata, capability declarations, and
-profile-specific evidence records are implemented, but the immutable release tag
-and final closure remain pending. The specification remains pre-1.0 and
-experimental.
+**Experimental.** The specification remains pre-1.0 and may change. Money,
+Workflow, Audit, Approvals, and Entities are the current domain scope.
 
 ## Purpose
 
@@ -44,16 +32,11 @@ Specifications are intended to remain small and composable. New concepts should 
 ## Implementation Direction (Non-Normative)
 
 TypeScript is the reference implementation and remains runtime-independent where
-practical. Python passes the complete current manifest, and Java passes the
-complete current Money suite while reporting non-Money operations unsupported.
-Draft 0.6 expresses those scopes as closed profiles:
-`finkore.core.draft0_6.full` for TypeScript and Python, and
-`finkore.core.draft0_6.domain.money` for Java. These are implementation and
-conformance results, not specification authority or requirements that language
-APIs match one another. Future implementations may target C#, Go, Rust, PHP, or
-additional ecosystems. An implementation does not need to copy another
-implementation's API or internal architecture; it needs to preserve the behavior
-required here and verified by the conformance suite.
+practical. Python and Java provide independent implementations of the current
+manifest scope. These implementations are evidence, not specification authority,
+and their public APIs do not need to match one another. Future implementations
+may use any idiomatic design that preserves the behavior required here and
+verified by the conformance suite.
 
 The repository is organized around `spec/` and `conformance/` today. As implementations and portable interchange schemas are introduced, they may live in dedicated top-level areas alongside examples. This layout is project direction rather than a normative requirement.
 
@@ -61,9 +44,6 @@ The repository is organized around `spec/` and `conformance/` today. As implemen
 
 - [Conventions](conventions.md) defines the language and representation rules used throughout the specification.
 - [Glossary](glossary.md) defines shared domain terms.
-- [Draft 0.4 Domain Specification Stabilization Record](draft-0.4-stabilization.md) records the accepted Draft 0.4 review of shared conventions and domain specifications.
-- [Draft 0.4 Cross-Language Portability Contract](draft-0.4-portability-contract.md) records the accepted Draft 0.4 Python and Java portability review for the stabilized baseline.
-- [Draft 0.6 Portability Capability Contract](draft-0.6-portability-capability-contract.md) records the accepted portable numeric floor and structural boundary dispositions for Draft 0.6 Milestone B.
 - [Money](money/README.md) defines monetary representation and behavior.
 - [Workflow](workflow/README.md) defines lifecycle states, transitions, and definition versions.
 - [Audit](audit/README.md) defines durable domain history.
@@ -71,10 +51,6 @@ The repository is organized around `spec/` and `conformance/` today. As implemen
 - [Entities](entities/README.md) defines the common behavior of financial entities.
 
 Later domain specifications can compose these areas. The rules for explicit refinements are defined by **SPEC-TERMINOLOGY-001** in [Conventions](conventions.md).
-
-Draft 0.6 compatibility, profile, claim, capability-declaration, and release
-provenance policy is recorded outside the domain specifications in
-[Draft 0.6 Compatibility, Claims, and Provenance Policy](../docs/draft-0.6-compatibility-claims-provenance-policy.md).
 
 ## Scope Discipline (Non-Normative)
 

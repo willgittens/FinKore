@@ -3,7 +3,6 @@
 import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import type { FinKoreConformanceAdapter } from '../adapter/types.js'
-import { loadProfileCatalog } from '../profile.js'
 import { createConformanceRunner } from '../runner.js'
 import { exitCodeForReport, formatConsoleReport, formatJsonReport } from '../reporter.js'
 
@@ -13,8 +12,6 @@ interface CliOptions {
   suites: string[]
   tags: string[]
   vectorIds: string[]
-  profileId: string
-  profilesPath: string
   json: boolean
 }
 
@@ -27,8 +24,6 @@ Options:
   --suite <id>       Include suite (repeatable)
   --tag <tag>        Include tag (repeatable; tags are ORed)
   --vector <id>      Include vector id (repeatable)
-  --profile <id>     Run a closed conformance profile
-  --profiles <path>  Profile metadata path (default: conformance/draft-0.6/profiles.json)
   --json             Emit machine-readable JSON
   --help             Show this help`
 }
@@ -46,8 +41,6 @@ export function parseArgs(args: readonly string[]): CliOptions {
     suites: [],
     tags: [],
     vectorIds: [],
-    profileId: '',
-    profilesPath: 'conformance/draft-0.6/profiles.json',
     json: false,
   }
   for (let index = 0; index < args.length; index += 1) {
@@ -59,14 +52,9 @@ export function parseArgs(args: readonly string[]): CliOptions {
     else if (argument === '--suite') options.suites.push(takeValue(args, index++, argument))
     else if (argument === '--tag') options.tags.push(takeValue(args, index++, argument))
     else if (argument === '--vector') options.vectorIds.push(takeValue(args, index++, argument))
-    else if (argument === '--profile') options.profileId = takeValue(args, index++, argument)
-    else if (argument === '--profiles') options.profilesPath = takeValue(args, index++, argument)
     else throw new Error(`Unknown option: ${argument}`)
   }
   if (options.adapterPath.length === 0) throw new Error('--adapter is required')
-  if (options.profileId.length > 0 && (options.suites.length > 0 || options.tags.length > 0 || options.vectorIds.length > 0)) {
-    throw new Error('--profile cannot be combined with --suite, --tag, or --vector')
-  }
   return options
 }
 
@@ -86,15 +74,10 @@ async function main(): Promise<void> {
     const module = await import(pathToFileURL(resolve(options.adapterPath)).href) as { default?: unknown; adapter?: unknown }
     const adapter = module.adapter ?? module.default
     if (!isAdapter(adapter)) throw new Error('Adapter module must export adapter or a default adapter')
-    const profiles = options.profileId.length === 0 ? undefined : await loadProfileCatalog(options.profilesPath)
-    const runnerOptions = profiles === undefined
-      ? { manifestPath: options.manifestPath, adapter }
-      : { manifestPath: options.manifestPath, adapter, profiles }
-    const report = await createConformanceRunner(runnerOptions).run({
+    const report = await createConformanceRunner({ manifestPath: options.manifestPath, adapter }).run({
       suites: options.suites,
       tags: options.tags,
       vectorIds: options.vectorIds,
-      ...(options.profileId.length === 0 ? {} : { profileId: options.profileId }),
     })
     process.stdout.write(options.json ? formatJsonReport(report) : `${formatConsoleReport(report)}\n`)
     process.exitCode = exitCodeForReport(report)

@@ -697,24 +697,6 @@ machine-understandable operation semantics and must reference, not replace,
 `/spec`. Language implementations, including TypeScript, are implementation
 evidence and regression oracles, not sources of financial semantics.
 
-FinKore Core Draft 0.4 is the current shared behavioral stabilization baseline.
-Draft 0.5 closed the independent Python full-manifest and Java Money
-implementation milestone without changing this CoreDoc baseline. Draft 0.6
-portability and compatibility hardening is in progress; its Milestone B
-portable capability contract is accepted in the specification, its Milestone C
-compatibility, claims, and provenance policy is accepted in the Draft 0.6
-governance record, and its Milestone D metadata/profile proof exists in
-`/conformance/draft-0.6`. Milestone E release evidence and checksums are
-prepared, but Draft 0.6 is not closed until the maintainer-approved immutable
-tag exists and must not be inferred from this CoreDoc. The conformance format
-value `0.1` continues to identify manifest and vector syntax compatibility
-unless that syntax changes. TypeScript, Python, Java, adapter, and runner
-package versions remain independently governed implementation-package versions.
-
-Draft 0.4 CoreDoc inventory, bidirectional CoreDoc/specification traceability,
-counterexample review, accepted corrections, and the alignment gate result are
-recorded in the [Draft 0.4 CoreDoc Alignment Record](draft-0.4-alignment.md).
-
 ## Evolution of CoreDoc
 
 Core Principle and Financial Rule identifiers are stable references. A CORE-XXX
@@ -726,110 +708,19 @@ Introduced records entry into CoreDoc. Last updated and Last updated on record
 the most recent normative change. Editorial-only changes SHALL NOT update those
 fields.
 
-## Normative evolution and release accountability
+Release summaries are maintained in [FinKore Release Notes](../releases/README.md).
+They do not override CoreDoc or `/spec`.
 
-CoreDoc is the durable record for foundation-level financial rules and their
-normative evolution. A material change SHALL remain attributable to its stable
-`CORE-*` identifier, the reviewed artifact revision, the accepted rationale, and
-the release in which the change takes effect. Superseded meaning SHALL remain
-recoverable rather than being replaced by an unattributed edit.
+## Scope and deferred topics
 
-The domain specification containing a changed requirement carries the precise
-behavioral rule and stable requirement identity. CoreDoc records the associated
-foundation-level effect. Release notes record shipped scope, compatibility, and
-verification facts. Developer plans may organize work, but they are not the
-normative history or release evidence.
-
-Historical and current release summaries are indexed in
-[FinKore Release Notes](../releases/README.md). A release note does not override
-CoreDoc or `/spec`.
-
-## Draft 0.4 decision and review record
-
-Draft 0.4 foundation stabilization accepted the authority and version taxonomy
-recorded in the [Draft 0.4 Foundation Plan](../plans/draft-0.4-foundation-task-list.md):
-FinKore Core Draft 0.4 names the shared specification/CoreDoc baseline; Draft
-0.5 was assigned the later Python and Java implementation milestone;
-conformance format and language package versions are separate compatibility
-dimensions. Draft 0.5 is now closed; this paragraph records the accepted Draft
-0.4 decision rather than current implementation status.
-
-Material findings during Draft 0.4 review must record:
-
-- finding classification and owner;
-- affected `CORE-*`, specification requirement, conformance vector, Agentic
-  operation, or documentation identifiers;
-- exact artifact revision reviewed;
-- domain, accounting, technical, security, and privacy analysis required by the
-  finding scope;
-- alternatives considered, recommendation, compatibility impact, and
-  maintainer acceptance;
-- whether a decision supersedes earlier normative meaning and where the
-  superseded meaning remains recoverable; and
-- factual external-review status.
-
-Release-level implementation results, coverage, mutation reports, and
-conformance pass/fail evidence belong in the release note. No review credential,
-community signoff, independent review, or external acceptance may be inferred
-unless it is explicitly recorded. A material semantic finding cannot close as an
-editorial correction.
-
-## External review
-
-Reviewers may challenge a Financial Rule by its stable identifier. A challenge
-may identify an accounting counterexample, control weakness, jurisdictional
-limitation, ambiguity, missing exception, or proposed replacement. Agreement with
-one rule does not imply approval of the CoreDoc as a whole.
-
-## Relationship to FinKore Core Draft 0.4
-
-This draft is limited to the current Money, Workflow, Audit, Approvals, and
+This CoreDoc is limited to the current Money, Workflow, Audit, Approvals, and
 Financial Entities specifications. It makes no claim that unspecified future
 domains or policy choices have already been standardised.
 
-### Draft 0.4 foundation scope and deferred topics
-
-Draft 0.4 stabilizes the existing Draft 0.1 through Draft 0.3 Money, Workflow,
-Audit, Approvals, and Entities behavior. It does not add new financial domains,
-Python or Java production code, or previously deferred financial capabilities.
-Open or deferred topics remain outside Draft 0.4 unless a later accepted finding
-shows that one blocks an unambiguous implementation of already accepted
-behavior.
-
-Current deferred topics include private/non-fiat currency namespace design,
-minor-unit metadata policy, numeric behavior outside the Draft 0.6 portable
-capability floor, overflow and capability reporting above declared profiles,
-standardized Audit provenance fields, portable condition expression syntax,
-Workflow migration and distributed version coordination, approval delegation
-and escalation, dynamic approver resolution, broader identity registries,
-concrete ledger/correction posting effects, post-finalization metadata policy,
-distributed audit total ordering, and future ledger, reconciliation, payment,
-tax, and settlement domains.
-
-### Draft 0.3 implementation touchpoints retained in Draft 0.4
-
-Draft 0.3 domain specifications refine this CoreDoc without introducing new
-CoreDoc rule identifiers:
-
-- Approval composition adds bounded any-of/all-of groups, N-of-M quorum,
-  ordered stages, and bounded nesting while preserving `CORE-004.1` through
-  `CORE-004.4`; delegation, escalation, dynamic approver lookup, unrestricted
-  graphs, and rich condition expressions remain outside the current Core.
-- Workflow version binding and expected-state/revision conflicts refine
-  `CORE-002.1` through `CORE-002.3` by making version mismatch and stale
-  expected preconditions rejected non-mutating outcomes, not persistence locks
-  or distributed concurrency rules.
-- Entity revision and import identity mapping refine `CORE-005.1` by preserving
-  stable FinKore identity and explicit source identity mapping without creating
-  a global registry, concrete migration format, or source-system authority
-  model.
-- Money portability research preserves `CORE-001.1` through `CORE-001.4` and
-  explicitly defers private/non-fiat namespaces, minor-unit metadata policy,
-  precision floors, and overflow/capability reporting.
-- Audit provenance research preserves `CORE-003.1` through `CORE-003.4` and
-  explicitly defers standardized reason, source, correlation, causation, and
-  trace-context metadata.
-- Agentic operation metadata exposes preconditions, effects, portable errors,
-  and conformance-local boundaries for machine clients; it does not create an
-  AI-specific bypass, authorization model, or financial behavior outside the
-  domain specifications.
+Current deferred topics include private or non-fiat currency namespaces,
+minor-unit metadata policy, implementation resource limits, standardized Audit
+provenance fields, portable condition expressions, Workflow migration and
+distributed coordination, approval delegation and escalation, dynamic approver
+resolution, broader identity registries, concrete ledger or correction posting
+effects, post-finalization metadata policy, distributed Audit total ordering,
+and future ledger, reconciliation, payment, tax, and settlement domains.

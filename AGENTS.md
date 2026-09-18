@@ -251,10 +251,10 @@ If the required Python or Java toolchain is not found in the machine environment
 
 1. Look for repository-local toolchains under `/.tools`.
 2. If `/.tools` exists and contains the required toolchain, run all related commands and tests using the binaries under `/.tools/bin`.
-3. If `/.tools` does not exist, or the required toolchain cannot be found there, run `npm run tools:bootstrap:draft0.5` to download the Draft 0.5 Python and Java toolchains into `/.tools`.
-4. Run `npm run tools:check:draft0.5` before relying on the downloaded toolchain.
+3. If `/.tools` does not exist, or the required toolchain cannot be found there, run `npm run tools:bootstrap` to download the Python and Java toolchains into `/.tools`.
+4. Run `npm run tools:check` before relying on the downloaded toolchain.
 
-Draft 0.5 currently requires CPython 3.12 as the Python CI floor, CPython 3.13 as the Python compatibility check, JDK 21 for Java work, and Maven 3.9.x for Java package tasks.
+The repository toolchain requires CPython 3.12 as the Python floor, CPython 3.13 as the Python compatibility check, JDK 21 for Java work, and Maven 3.9.x for Java package tasks.
 
 Do not skip required Python or Java tests merely because the machine environment does not already provide those tools.
 
@@ -1027,26 +1027,27 @@ Not every trivial rule needs every test category, but critical financial behavio
 
 ---
 
-# CoreDoc and Release Review Governance
+# CoreDoc and Release Governance
 
 Read [CoreDoc](docs/coreDoc/core-doc.md) for foundation-level financial obligations;
 `/spec` refines the precise domain behavior and must not silently contradict it.
 
-CoreDoc is the durable record for foundation-level normative evolution. Record
-attributed material findings, resolutions, exact artifact revision, stable rule
-or requirement identifiers, and explicit scoped maintainer acceptance there or
-in the affected specification. [Release notes](docs/releases/README.md) record
-shipped scope, compatibility, verification, and actual external-review status.
-Developer plans organize active work but are not normative or release evidence.
+CoreDoc records each rule's introduction and latest normative update through its
+`Introduced`, `Last updated`, and `Last updated on` fields. Do not create separate
+alignment records, closure reports, checksums, provenance reports, or review
+evidence for CoreDoc changes.
 
-Required domain, accounting, technical, security, and privacy analysis remains
-mandatory where specified. External community or independent review is not a
-prerequisite unless a current scope explicitly makes it one; record its actual
-status and future review topics without inventing signoff or reviewer
-credentials.
+[Release notes](docs/releases/README.md) are a concise maintainer-owned history.
+Keep all release summaries in that single file and do not turn them into test,
+coverage, mutation, compatibility, or external-review reports. Git and merge
+requests retain detailed development history.
 
-This policy does not resolve financial ambiguity, accept later domain decisions,
-or waive conformance, mutation, traceability, or other verification gates.
+Developer tools live under `docs/tools`. Each executable tool MUST begin with a
+comment explaining its purpose, effects, and that it does not define financial
+behavior. Verification runs locally; do not add GitHub Actions.
+
+This simplified governance does not resolve financial ambiguity or waive
+conformance, mutation, traceability, or other implementation quality gates.
 
 ---
 
@@ -1064,7 +1065,7 @@ When encountering ambiguity:
 
 Prefer:
 
-> This behavior is not currently defined by FinKore Core Draft 0.4.
+> This behavior is not currently defined by FinKore Core.
 
 Prefer that kind of explicit gap statement over inventing behavior.
 

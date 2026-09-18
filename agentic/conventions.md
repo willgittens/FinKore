@@ -1,9 +1,5 @@
 # Agentic Contract Conventions
 
-## Status
-
-**Draft 0.4 foundation alignment**
-
 The normative-language and portable-value conventions in the
 [FinKore Specification](../spec/conventions.md) apply here. The Agentic Contract
 adds operational metadata; it does not add or alter financial rules.
@@ -30,9 +26,8 @@ An operation ID:
   future tool adapters, and reference implementations.
 
 Versions are not encoded in operation IDs. Operation identifiers are intended
-to remain stable; incompatible operation-contract changes require the
-classification, supersession, and profile/version handling defined by the
-[Draft 0.6 Compatibility, Claims, and Provenance Policy](../docs/draft-0.6-compatibility-claims-provenance-policy.md).
+to remain stable; incompatible operation-contract changes require an explicit
+replacement or supersession decision.
 
 ## Operation IDs and requirement IDs
 
@@ -69,8 +64,8 @@ This illustrative JSON is non-normative:
 }
 ```
 
-The semantic fields are the contract in Draft 0.4; this object shape is not a
-normative serialization.
+The semantic fields are the contract; this object shape is not a normative
+serialization.
 
 ## Representation layers
 

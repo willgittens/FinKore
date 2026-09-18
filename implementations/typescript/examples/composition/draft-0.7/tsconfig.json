@@ -1,9 +1,0 @@
-{
-  "extends": "../../../core/tsconfig.json",
-  "compilerOptions": {
-    "rootDir": "../../../",
-    "noEmit": true,
-    "declaration": false
-  },
-  "include": ["./profiles.ts", "./emit-results.ts", "../../../core/src/**/*.ts"]
-}

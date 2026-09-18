@@ -75,19 +75,6 @@ node runner/dist/cli/cli.js \
 Repeated values within one dimension are ORed. Different dimensions are ANDed.
 Filtering does not change vector semantics.
 
-Draft 0.6 also supports closed profile runs. A profile run resolves all required
-vectors from metadata and cannot be combined with ad hoc suite, tag, or vector
-filters:
-
-```bash
-node runner/dist/cli/cli.js \
-  --manifest conformance/manifest.json \
-  --profiles conformance/draft-0.6/profiles.json \
-  --profile finkore.core.draft0_6.domain.money \
-  --adapter path/to/adapter.js \
-  --json
-```
-
 ## Normalization
 
 The adapter normalizes only observable behavior:
@@ -140,9 +127,7 @@ node runner/dist/cli/cli.js --adapter path/to/adapter.js --json
 
 Use the JSON report for automated evidence. It includes suite counts,
 requirement counts, mutation-sensitive counts, per-vector results, and critical
-requirement failures. In profile mode it also records profile id, Core version,
-profile kind, manifest/vector format versions, required vector count, required
-vector ids, source files, and any capability floor.
+requirement failures.
 
 When a vector fails, check these in order:
 
@@ -194,19 +179,11 @@ A conformance claim needs all of the following:
 - a complete unfiltered runner report with zero failures and zero infrastructure
   errors;
 - zero unsupported vectors for the claimed scope;
-- confirmation that the implementation targets the same FinKore Core Draft and
-  conformance format versions;
+- confirmation that the implementation targets the same specification and
+  conformance format version;
 - documentation of any language-specific limits that do not change current
   vector outcomes;
 - public API documentation for supported behavior and portable errors;
 - mutation or equivalent defect-resistance evidence for official/reference
   implementations;
 - a clear statement of unsupported, not yet specified, and deferred behavior.
-
-Draft 0.4 itself did not claim Python or Java implementation or conformance; it
-published the baseline and onboarding path. Draft 0.5 subsequently recorded
-full-manifest Python conformance and Money-scope Java conformance. Draft 0.6
-records current profile-specific claims for TypeScript full scope, Python full
-scope, historical Java Money scope, and current Java full scope in
-`conformance/draft-0.6/claims`. Those results do not remove any of the evidence
-requirements above for a new or updated claim.

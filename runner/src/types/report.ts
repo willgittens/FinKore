@@ -26,21 +26,8 @@ export interface CriticalFailure {
   readonly status: Exclude<ExecutionStatus, 'PASS'>
 }
 
-export interface ProfileEvidence {
-  readonly profileId: string
-  readonly coreVersion: string
-  readonly profileKind: string
-  readonly manifestFormat: string
-  readonly vectorFileFormat: string
-  readonly vectorCount: number
-  readonly vectorIds: readonly string[]
-  readonly sourceFiles: readonly string[]
-  readonly capabilityFloor?: string
-}
-
 export interface ConformanceReport {
   readonly finkoreConformanceRunner: '0.1'
-  readonly profile?: ProfileEvidence
   readonly summary: StatusCounts
   readonly mutationSensitive: StatusCounts
   readonly suites: readonly SuiteResult[]

@@ -1,12 +1,11 @@
 # Capability Discovery
 
 A machine client should be able to obtain a collection of available operation
-descriptors. Discovery is conceptual and transport-neutral in Draft 0.4. A
-future adapter could expose it through MCP, OpenAPI, HTTP, a local API, a CLI, or
-a tool runtime without changing operation semantics.
-Draft 0.4 keeps discovery documentation-first: the reviewed registry aligns
-canonical operation descriptors, but no executable discovery endpoint or
-machine-readable operations manifest is introduced.
+descriptors. Discovery is conceptual and transport-neutral. A future adapter
+could expose it through MCP, OpenAPI, HTTP, a local API, a CLI, or a tool runtime
+without changing operation semantics. Discovery is documentation-first: the
+registry aligns canonical operation descriptors, but no executable discovery
+endpoint or machine-readable operations manifest is currently defined.
 
 Illustrative, non-normative discovery data:
 
@@ -50,7 +49,7 @@ The returned collection MUST reflect the implementation's actual supported
 subset. Collection order carries no meaning, and absence means the operation was
 not advertised; it does not prove that an equivalent non-FinKore API is absent.
 
-Draft 0.4 creates no `operations.json`. A machine-readable manifest should be
+A machine-readable manifest should be
 added only after the descriptor model and its versioning policy are stable, with
 Markdown retaining its explanatory role and one data artifact becoming the
 portable registry rather than creating conflicting sources of truth.

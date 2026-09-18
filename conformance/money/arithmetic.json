@@ -733,7 +733,7 @@
         "MONEY-ARITHMETIC-009",
         "MONEY-REPRESENTATION-002"
       ],
-      "description": "Preserves an exact 62-digit addition result inside the Draft 0.6 portable floor.",
+      "description": "Preserves an exact 62-digit addition result.",
       "operation": "finkore.money.add",
       "input": {
         "left": {
@@ -784,7 +784,7 @@
         "MONEY-ARITHMETIC-009",
         "MONEY-REPRESENTATION-002"
       ],
-      "description": "Preserves exact addition at 60 fractional decimal places inside the Draft 0.6 portable floor.",
+      "description": "Preserves exact addition at 60 fractional decimal places.",
       "operation": "finkore.money.add",
       "input": {
         "left": {
@@ -835,7 +835,7 @@
         "MONEY-REPRESENTATION-002",
         "MONEY-REPRESENTATION-004"
       ],
-      "description": "Preserves exact large negative subtraction inside the Draft 0.6 portable floor.",
+      "description": "Preserves exact large negative subtraction.",
       "operation": "finkore.money.subtract",
       "input": {
         "left": {
@@ -885,7 +885,7 @@
         "MONEY-ARITHMETIC-009",
         "MONEY-REPRESENTATION-002"
       ],
-      "description": "Preserves exact multiplication result growth inside the Draft 0.6 portable floor.",
+      "description": "Preserves exact multiplication result growth.",
       "operation": "finkore.money.multiply",
       "input": {
         "value": {

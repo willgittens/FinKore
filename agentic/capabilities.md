@@ -4,7 +4,7 @@
 
 A capability states that an implementation exposes a named FinKore Operation.
 Its descriptor makes the operation Discoverable, Understandable, and Governable.
-Invocation bindings are implementation-specific and outside Draft 0.4.
+Invocation bindings are implementation-specific and outside the current scope.
 
 An adapter MAY expose only a subset of the registry. A Money-only implementation,
 for example, may expose Money operations such as `finkore.money.add`,
@@ -29,22 +29,9 @@ applicable vectors and requirements before a client relies on a conformance
 claim. The same principle applies to promoted operations such as
 `finkore.money.applyrate`, `finkore.money.allocate`,
 `finkore.workflow.transition`, and `finkore.entity.evolution.supersede`.
-Draft 0.6 Milestone B accepts a portable Money capability floor in the
-[Draft 0.6 Portability Capability Contract](../spec/draft-0.6-portability-capability-contract.md),
-but capability advertisements still do not prove profile conformance and do not
-describe behavior above an implementation's declared limits.
-Draft 0.6 defines capability declarations as discovery metadata in
-the [Draft 0.6 Compatibility, Claims, and Provenance Policy](../docs/draft-0.6-compatibility-claims-provenance-policy.md).
-The current machine-readable declarations live in
-[`conformance/draft-0.6/capabilities.json`](../conformance/draft-0.6/capabilities.json).
-Those declarations link to evidence records, but a successful claim still
-requires the closed profile and evidence rules in that policy. The declarations
-do not create the Draft 0.8 machine-readable Agentic operation manifest and do
-not advertise conformance-local operations as public capabilities.
-Draft 0.4 retains the version/conflict refinements to
-`finkore.workflow.transition` as part of that canonical operation's current
-descriptor; `workflow.import` and
-`entity.import` remain conformance-local.
+Capability advertisements do not prove conformance or describe behavior above
+an implementation's declared limits. `workflow.import` and `entity.import`
+remain conformance-local.
 
 ## Suitability for autonomy
 
@@ -55,8 +42,6 @@ conformance status. FinKore Core does not assign subjective `LOW`, `MEDIUM`,
 `HIGH`, or `CRITICAL` safety classes.
 
 Some operations may be suitable for autonomous execution. Others may require
-human confirmation, an Approval, authorization, or application policy. Draft
-0.4 preserves the available facts and does not impose human confirmation on
-every mutation. It keeps Approval composition/lifecycle fixtures
-conformance-local and adds no AI-specific bypass or universal execution
-decision for clients.
+human confirmation, an Approval, authorization, or application policy. The
+contract does not impose human confirmation on every mutation, create an
+AI-specific bypass, or make a universal execution decision for clients.

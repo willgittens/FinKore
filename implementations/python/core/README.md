@@ -2,8 +2,7 @@
 
 This package is the Python implementation track for FinKore. It is derived from
 CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from TypeScript financial
-implementation code. For Draft 0.6 evidence, Python claims
-`finkore.core.draft0_6.full` and passes the current 254-vector profile.
+implementation code. It passes the complete current conformance manifest.
 
 Current status:
 
@@ -21,12 +20,7 @@ Current status:
   names are not portable semantics.
 - Money arithmetic, Rate application, allocation-unit detection, and rounding
   use exact coefficient-and-scale arithmetic where Python `decimal` context
-  precision could otherwise alter FinKore results. This includes the resolved
-  Draft 0.6 `D06-PORT-241-001` boundary controls.
-- Draft 0.7 composition examples live outside the Python Core package under
-  `implementations/python/examples/composition/draft-0.7/`. They exercise
-  expense approval and invoice correction as non-normative reference
-  application profiles and do not expand the Python Core conformance claim.
+  precision could otherwise alter FinKore results.
 
 Run the current local checks from the repository root:
 
@@ -37,7 +31,6 @@ npm run python:coverage:setup
 npm run python:coverage
 npm run python:mutation:critical
 npm run conformance:python
-npm run conformance:python:profile:full
 ```
 
 The packaged Python coverage gate runs unit tests and the complete conformance

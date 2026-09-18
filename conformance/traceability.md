@@ -1,11 +1,9 @@
-# FinKore Core Draft 0.4 Requirement Traceability
+# FinKore Requirement Traceability
 
-This is the canonical human-readable requirement-to-vector index. Manifest-listed vectors remain the primary machine-readable mapping through each vector requirements field.
-
-Draft 0.4 stabilizes the closed Draft 0.1 through Draft 0.3 behavior without
-adding financial behavior or vector syntax. The counts and mappings below
-therefore remain the current Draft 0.4 traceability baseline for the existing
-Money, Workflow, Audit, Approvals, and Entities scope.
+This is the canonical human-readable requirement-to-vector index. Manifest-listed
+vectors remain the primary machine-readable mapping through each vector's
+`requirements` field. The counts and mappings cover the current Money, Workflow,
+Audit, Approvals, and Entities scope.
 
 ## Inventory and coverage
 
@@ -554,9 +552,8 @@ gaps in this inventory. This does not close future-draft questions outside it.
 All 37 directly testable Draft 0.3 composition/quorum/error requirements have
 manifest-listed vectors and pass against the TypeScript reference implementation
 through the conformance adapter. Focused mutation hardening recorded zero
-critical survivors for the Advanced Approvals composition surface. External
-review status is recorded in the [Draft 0.3 release note](../docs/releases/draft-0.3.md).
-Closed Draft 0.1/0.2 coverage classifications and vector references are unchanged.
+critical survivors for the Advanced Approvals composition surface. Closed Draft
+0.1/0.2 coverage classifications and vector references are unchanged.
 
 ### Draft 0.3 Workflow versioning review gaps
 
@@ -574,19 +571,15 @@ expected-state/revision conflict surface. Canonical Agentic metadata for these
 Draft 0.3 Workflow refinements is aligned; the canonical
 `finkore.workflow.transition` descriptor includes version binding and
 expected-state/revision preconditions, while `workflow.import` remains
-conformance-local. External review status is recorded in the
-[Draft 0.3 release note](../docs/releases/draft-0.3.md).
-Closed Draft 0.1/0.2 coverage classifications and vector references are
-unchanged.
+conformance-local. Closed Draft 0.1/0.2 coverage classifications and vector
+references are unchanged.
 
 ## Readiness
 
-**READY FOR CONFORMANCE RUNNER — DRAFT 0.4 STABILIZED BASELINE**
+**READY FOR CONFORMANCE RUNNER**
 
-The manifest, schema, operation catalog, exact comparison rules, normalized errors, deterministic context, and valid requirement references are sufficient for the current runner. Money, Workflow, Audit, Approvals, and Entities Draft 0.1 have complete vector coverage for their current directly testable mandatory requirements, and the TypeScript reference implementation passes those suites. Draft 0.2 Money Rates, Money Allocation, Audit Relationships, Entity Evolution, and Approval Validity requirements are vector-covered, implemented by the TypeScript reference implementation, and pass their conformance suites. Draft 0.3 Approval Composition requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Approval conformance suite. Draft 0.3 Workflow definition/version identity, import, instance binding/mismatch, and expected-state/revision conflict requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Workflow conformance suite. Draft 0.3 Entity Revision and Import requirements are vector-covered, implemented by the TypeScript reference implementation, and pass the Entities conformance suite. FinKore Core Draft 0.4 stabilizes this selected closed scope for directly testable mandatory requirements.
-Draft 0.4 adds stabilization, portability, conformance-documentation, Agentic
-alignment, and implementation-handoff evidence for this baseline. It does not
-claim Python or Java implementation or conformance. Draft 0.5 subsequently
-recorded full-manifest Python conformance and Money-scope Java conformance for
-this stabilized behavior. Pre-Draft 0.7 TASK-257 adds Java full-profile parity
-for Money, Workflow, Audit, Approvals, and Entities.
+The manifest, schema, operation catalog, exact comparison rules, normalized
+errors, deterministic context, and valid requirement references are sufficient
+for the current runner. Current directly testable requirements are covered by
+manifest-listed vectors, and the TypeScript, Python, and Java implementations
+execute the complete manifest scope.

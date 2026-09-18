@@ -2,7 +2,7 @@
 
 ## Status
 
-**Draft 0.6 profile and capability metadata available**
+**Experimental documentation contract**
 
 > Agent-ready by contract, not by convention.
 
@@ -64,19 +64,16 @@ FinKore separates four dimensions:
    tool or transport.
 
 The Core Agentic Contract defines Discoverable, Understandable, and Governable
-semantics. Executable agent or transport adapters remain outside Draft 0.4.
+semantics. Executable agent or transport adapters remain outside the current
+scope.
 
 For current FinKore Core work, an operation is **Agentic Ready** when it is
 Discoverable, Understandable, Governable, and Conformance-traceable. Direct
-execution through an agent framework is not required. Draft 0.6 adds
-machine-readable capability declarations and profile evidence under
-`conformance/draft-0.6`, but it does not create the Draft 0.8
-machine-readable Agentic operation manifest or an executable agent adapter.
-Draft 0.4 preserved the Draft 0.3 alignment of the canonical
-`finkore.workflow.transition` descriptor with version binding and
-expected-state/revision conflict preconditions while keeping Approval
-composition/lifecycle fixtures, Workflow import, and Entity import
-conformance-local until stable public operation contracts exist.
+execution through an agent framework is not required. The canonical
+`finkore.workflow.transition` descriptor includes version binding and
+expected-state/revision conflict preconditions. Approval composition and
+lifecycle fixtures, Workflow import, and Entity import remain conformance-local
+until stable public operation contracts exist.
 
 ## Documents
 
@@ -88,8 +85,6 @@ conformance-local until stable public operation contracts exist.
 - [Discovery](discovery.md)
 - [Portable errors](errors.md)
 - [Examples](examples.md)
-- [Draft 0.4 Agentic Alignment Record](draft-0.4-alignment.md)
-- [Draft 0.6 Compatibility, Claims, and Provenance Policy](../docs/draft-0.6-compatibility-claims-provenance-policy.md)
 
 ## Readiness checklist
 

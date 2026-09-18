@@ -19,22 +19,12 @@ evidence that the same behavior can be realized idiomatically.
    [Glossary](../spec/glossary.md).
 3. Read the relevant domain specification under `spec/money/`,
    `spec/workflow/`, `spec/audit/`, `spec/approvals/`, or `spec/entities/`.
-4. Read the Draft 0.4 records:
-   [Domain Specification Stabilization](../spec/draft-0.4-stabilization.md),
-   [Cross-Language Portability Contract](../spec/draft-0.4-portability-contract.md),
-   and [Conformance and Implementer Documentation Audit](../conformance/draft-0.4-audit.md).
-5. Read [Conformance Conventions](../conformance/conventions.md),
+4. Read [Conformance Conventions](../conformance/conventions.md),
    [Traceability](../conformance/traceability.md), and the
    [Adapter Onboarding Guide](conformance-adapter-onboarding.md).
-6. Read [Agentic Operations](../agentic/operations.md) when implementing a
+5. Read [Agentic Operations](../agentic/operations.md) when implementing a
    canonical `finkore.*` operation.
-7. For Python or Java bootstrap work, use the
-   [Draft 0.5 Python and Java Handoff Checklist](draft-0.5-python-java-handoff.md).
-8. For current compatibility, capability, and claim boundaries, read the
-   [Draft 0.6 Portability Capability Contract](../spec/draft-0.6-portability-capability-contract.md),
-   [Draft 0.6 Compatibility, Claims, and Provenance Policy](draft-0.6-compatibility-claims-provenance-policy.md),
-   and the machine-readable metadata under
-   [conformance/draft-0.6](../conformance/draft-0.6/README.md).
+6. Use [Developer Tools](tools/README.md) for local toolchains and verification.
 
 ## Architecture Boundaries
 

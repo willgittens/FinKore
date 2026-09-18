@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-import type { ConformanceReport, ProfileEvidence, StatusCounts } from './types/report.js'
+import type { ConformanceReport, StatusCounts } from './types/report.js'
 import type { ExecutionResult, ExecutionStatus } from './types/execution-result.js'
 
 function emptyCounts(): { total: number; passed: number; failed: number; unsupported: number; infrastructureErrors: number } {
@@ -17,7 +17,6 @@ function addStatus(counts: ReturnType<typeof emptyCounts>, status: ExecutionStat
 export function buildReport(
   results: readonly ExecutionResult[],
   criticalRequirements: ReadonlySet<string>,
-  profile?: ProfileEvidence,
 ): ConformanceReport {
   const summary = emptyCounts()
   const mutationSensitive = emptyCounts()
@@ -55,7 +54,6 @@ export function buildReport(
 
   return {
     finkoreConformanceRunner: '0.1',
-    ...(profile === undefined ? {} : { profile }),
     summary,
     mutationSensitive,
     suites,
@@ -75,9 +73,6 @@ function formatJson(value: unknown): string {
 
 export function formatConsoleReport(report: ConformanceReport): string {
   const lines = ['FinKore Conformance', '']
-  if (report.profile !== undefined) {
-    lines.push('Profile', `  ${report.profile.profileId}`, `  ${report.profile.vectorCount} vectors`, '')
-  }
   for (const suite of report.suites) {
     lines.push(suite.suiteId, `  ${countsLine(suite.counts)}`, '')
   }
