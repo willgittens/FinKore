@@ -37,7 +37,7 @@ describe('Workflow definition versioning', () => {
     })
   })
 
-  it('leaves unversioned Draft 0.1 definitions valid', () => {
+  it('leaves unversioned definitions valid', () => {
     const definition = WorkflowDefinition.from(baseDefinition)
 
     expect(definition.definitionIdentity).toBeUndefined()

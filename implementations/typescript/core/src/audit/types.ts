@@ -41,7 +41,7 @@ export type AuditActorIdentifier = string
 /**
  * Optional actor type supplied by a composing domain or application.
  *
- * FinKore Draft 0.1 does not define a closed actor-type catalog.
+ * FinKore Core 0.8 does not define a closed actor-type catalog.
  *
  * @see AUDIT-ACTOR-007
  */
@@ -80,7 +80,7 @@ export interface SerializedAuditEntityReference {
 }
 
 /**
- * Portable Audit Relationship type supported by Draft 0.2.
+ * Portable Audit Relationship type supported by Core 0.8.
  *
  * Relationship types are explicit event-content semantics. They are not
  * inferred from event type, identifier format, or storage order.
@@ -144,7 +144,7 @@ export interface SerializedAuditRelationship {
  * Serialized known Actor attribution for an Audit Event.
  *
  * Actor type and display metadata may be retained as context, but the stable
- * identity remains the actor identifier. FinKore Draft 0.1 does not define
+ * identity remains the actor identifier. FinKore Core 0.8 does not define
  * authentication, authorization, RBAC, or an identity-provider binding.
  *
  * @see AUDIT-ACTOR-001
@@ -171,7 +171,7 @@ export interface SerializedAuditActor {
  *
  * A change identifies the affected field or domain path and may preserve prior
  * and resulting values. Omitted members and explicit `null` values are distinct.
- * Draft 0.1 does not define a full domain path syntax, change-kind catalog,
+ * Core 0.8 does not define a full domain path syntax, change-kind catalog,
  * redaction behavior, or Money-specific change validation.
  *
  * @see AUDIT-CHANGE-001
@@ -210,7 +210,7 @@ export interface SerializedAuditRedactedValue {
 /**
  * Policy fixture used to request redaction of protected Audit content.
  *
- * FinKore Draft 0.1 requires an audit policy to identify protected content and
+ * FinKore Core 0.8 requires an audit policy to identify protected content and
  * the authority for redaction. This TypeScript milestone supports redaction of
  * Audit Change values whose `path` appears in `protectedPaths`, plus the
  * reserved actor-context targets `actor.displayName` and `actor.metadata`.

@@ -2,7 +2,7 @@
 
 ## Status
 
-**Draft 0.2**
+**Included in FinKore Core 0.8; introduced in Draft 0.2.**
 
 ## Purpose
 

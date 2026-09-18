@@ -46,7 +46,7 @@ The adapter supports:
 
 `money.deserialize` and `money.serialize` are conformance-local Money
 operations. Serialization operations remain representation boundary checks for
-portable Money JSON. Draft 0.2 Rate application and Allocation are promoted as
+portable Money JSON. Rate application and Allocation are promoted as
 `finkore.money.applyrate` and `finkore.money.allocate`. This adapter still
 accepts the previous `money.rate.apply` and `money.allocate` labels as
 compatibility aliases, but current manifest-listed vectors use the canonical
@@ -63,8 +63,8 @@ Workflow API.
 
 `finkore.entity.create`, `finkore.entity.mutate`,
 `finkore.entity.transition`, and `finkore.entity.evolution.*` are canonical
-Draft 0.2 Entity operation IDs for the current Identity, Lifecycle,
-Mutability, Validation, and Entity Evolution milestones. The adapter still
+Entity operation IDs for the current Identity, Lifecycle, Mutability,
+Validation, and Entity Evolution behavior. The adapter still
 accepts the previous local `entity.*` labels as compatibility aliases.
 `finkore.entity.mutate` support covers declared top-level field mutability and
 complete validation of the proposed result through the core TypeScript Entity
@@ -75,19 +75,22 @@ history, call `EntityEvolutionHistory`, and normalize
 source/result/evolution/Audit observations. The adapter does not implement
 evolution rules, evaluate validation rules, construct Audit evidence, or infer
 identifiers itself. Generic validation rule engines remain outside this
-milestone.
-`entity.import` is a Draft 0.3 conformance-local import boundary. It delegates
+Core 0.8.
+`entity.import` is a conformance-local import boundary. It delegates
 stable identity preservation, source identity mapping, Entity Revision history,
 Entity Conflict Version separation, and expected precondition checks to core;
-the Draft 0.3 Agentic review keeps it conformance-local because Core does not
+the Agentic review keeps it conformance-local because Core 0.8 does not
 yet define a public migration/import operation contract, identity registry,
 persistence schema, or source-system authority model.
 
-Audit operation support covers FinKore Audit Draft 0.1 plus the Draft 0.2 Audit Relationships slice: Events, Actors, append-only history, Change representation, Redaction, relationship metadata, and portable Audit errors. Draft 0.1 does not define `audit.order` as an executable adapter operation. Audit Relationships are observed through existing append/redaction fixtures; the adapter does not interpret relationships itself.
+Audit operation support covers Core 0.8 Audit behavior: Events, Actors,
+append-only history, Change representation, Redaction, relationship metadata,
+and portable Audit errors. Core 0.8 does not define `audit.order` as an
+executable adapter operation. Audit Relationships are observed through existing
+append/redaction fixtures; the adapter does not interpret relationships itself.
 
-Approval operation support covers FinKore Approvals Draft 0.1, the Draft
-0.2 Approval Validity slice, and the Draft 0.3 Approval Composition adapter
-slice: Requirement evaluation, Decision recording, Decision effectiveness,
+Approval operation support covers Core 0.8 Approvals behavior: Requirement
+evaluation, Decision recording, Decision effectiveness,
 eligible actor validation, subject-fact binding, append-only Decision history
 preservation, withdrawal lifecycle evidence, expiration with explicit
 evaluation instants, Decision supersession, Requirement supersession,
@@ -104,7 +107,7 @@ listed in `agentic/operations.md`.
 `approval.chain.evaluate`, `approval.composition.evaluate`,
 `approval.decision.withdraw`, `approval.decision.supersede`, and
 `approval.requirement.supersede` remain conformance-local operations. They
-observe chain/composition and Draft 0.2 Approval Validity lifecycle behavior.
+observe chain/composition and Approval Validity lifecycle behavior.
 They do not replace Approval Decision history as evidence for Requirement
 binding, actor eligibility, relevant subject facts, or quorum voter evidence.
 Composition fixtures are delegated to the core API; caller-declared approved

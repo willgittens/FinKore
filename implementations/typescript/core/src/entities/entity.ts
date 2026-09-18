@@ -260,7 +260,7 @@ function assertValidEntityData(definition: EntityDefinition, data: unknown): voi
  * Mutability means only whether a top-level Entity data field may change in the
  * current lifecycle state. Validation separately evaluates declared Entity
  * constraints against complete Entity data before a successful create, import,
- * or mutation becomes observable. Draft 0.1 has not standardized a generic
+ * or mutation becomes observable. Core 0.8 has not standardized a generic
  * validation language; this implementation supports only the small
  * `positive-money` conformance fixture predicate.
  *

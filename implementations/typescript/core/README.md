@@ -1,26 +1,41 @@
 # FinKore TypeScript
 
-TypeScript reference implementation for the current FinKore Money, Workflow,
-Audit, Approvals, and Entities specifications. It passes the complete current
-conformance manifest, but the specification remains the source of financial
+TypeScript reference implementation for FinKore Core 0.8: Money, Workflow,
+Audit, Approvals, and Entities. It passes the complete current conformance
+manifest, but the specification remains the source of financial semantics.
+
+Money support covers exact representation, serialization, arithmetic,
+comparison, currency compatibility, explicit rounding, Rates, and Allocation.
+
+Workflow support covers validated definitions, current-state transitions,
+guards, terminal behavior, definition/version identity, immutable instance
+binding/mismatch, import observations, and expected-state/revision conflict
 semantics.
 
-FinKore Money Draft 0.1 is fully implemented by this TypeScript reference implementation. The Draft 0.2 Money Rates and Money Allocation slices are also implemented. These statements apply only to the named Money specification slices; they do not imply that other FinKore domains are complete.
+Audit support covers Events, Actors, append-only logical history, Change
+representation semantics, Redaction semantics, relationship metadata, and
+portable Audit errors. Distributed ordering, persistence, and cross-domain
+integrations remain outside Core 0.8.
 
-FinKore Workflow Draft 0.1 is fully implemented by the TypeScript reference implementation. Draft 0.3 Workflow definition/version identity, immutable instance binding/mismatch, import, and expected-state/revision conflict semantics are specified, vector-covered, implemented in core, and supported by the TypeScript conformance adapter. This statement applies only to the implemented Workflow slice; it does not imply that the full Workflow specification, Entities, or other FinKore domains are complete.
+Approvals support covers Approval Requirement representation, Approval Decision
+representation, Decision-to-Requirement binding, allowed Decision outcomes,
+Decision validation, relevant subject-fact effectiveness checks, withdrawal,
+expiration, Decision supersession, Requirement supersession, append-only
+Decision and lifecycle history preservation, Approval Condition representation
+and evaluation-boundary validation, Approval Chain all-required ordered or
+unordered composition, declared rejection outcomes, current sequential
+actionable Requirement reporting, exclusion of explicitly not-applicable
+Requirements, duplicate Requirement rejection in chains, Approval Composition
+group/stage/quorum definition validation, any/all group evaluation from
+explicit Requirement observations, N-of-M quorum evaluation from explicit
+current-effective Decision observations, staged progression, and portable
+Approval errors.
 
-FinKore Audit Draft 0.1 is fully implemented by the TypeScript reference implementation. The Draft 0.2 Audit Relationships slice is also implemented. Audit covers Events, Actors, append-only logical history, Change representation semantics, Redaction semantics, and relationship metadata. Distributed ordering, persistence, and cross-domain integrations remain outside this milestone.
-
-FinKore Approvals Draft 0.1 is fully implemented by the TypeScript reference implementation. The Draft 0.2 Approval Validity slice is also implemented. The Draft 0.3 Approval Composition slice is implemented for model/API validation, explicit any/all evaluation, explicit N-of-M quorum evaluation, ordered stages, bounded nested groups, conformance adapter support, and mutation-hardened behavior. Approvals covers Approval Requirement representation, Approval Decision representation, Decision-to-Requirement binding, allowed Decision outcomes, Decision validation, relevant subject-fact effectiveness checks, withdrawal, expiration, Decision supersession, Requirement supersession, append-only Decision and lifecycle history preservation, Approval Condition representation and evaluation-boundary validation, Approval Chain all-required ordered or unordered composition, declared rejection outcomes, current sequential actionable Requirement reporting, exclusion of explicitly not-applicable Requirements, duplicate Requirement rejection in chains, Approval Composition group/stage/quorum definition validation, any/all group evaluation from explicit Requirement observations, N-of-M quorum evaluation from explicit current-effective Decision observations, staged progression, and portable Approval errors.
-
-FinKore Entities Draft 0.1 is fully implemented by the TypeScript reference
-implementation for Entity Identity, Lifecycle, Mutability, and the current
-Validation milestone. The Draft 0.2 Entity Evolution slice is also implemented
-for correction, reversal, void, supersession, evolution history observations,
-and required Audit evidence. The Draft 0.3 Entity Revision and Import slice is
-also implemented for source identity mapping, current and historical business
-revision observations, and distinct Entity Conflict Version preconditions. This
-covers caller-supplied stable Entity identity,
+Entities support covers Entity Identity, Lifecycle, Mutability, Validation,
+Revision, Import, and Evolution behavior: correction, reversal, void,
+supersession, evolution history observations, source identity mapping, current
+and historical business revision observations, distinct Entity Conflict Version
+preconditions, and required Audit evidence. This covers caller-supplied stable Entity identity,
 declared identity scope, creation in the referenced Workflow initial state,
 exactly one current lifecycle state, valid directed lifecycle transitions,
 rejected transition failure atomicity, identity preservation through transitions
@@ -33,7 +48,7 @@ evolution relation/reversal rejection, scope-specific supersession currentness,
 void-without-delete, and evolution/Audit failure atomicity. Generic validation
 rule engines, concrete Entity/Audit policy selection, global identity
 registries, Workflow migration, persistence, authorization, and concrete
-financial entity types remain outside this milestone.
+financial entity types remain outside Core 0.8.
 
 This package implements Money construction, validation, portable Money errors, canonical serialization, exact compatible-currency addition, exact compatible-currency subtraction, exact negation, exact decimal scalar multiplication, exact decimal scalar division when the quotient terminates, exact decimal and percentage Rate application, Money allocation by equal parts or positive integer ratios, exact compatible-currency numeric comparison, and explicit Money rounding.
 Money boundary behavior is covered by manifest-listed vectors for
@@ -41,9 +56,9 @@ large significant digits, deep scale, exact product growth, high-scale
 rounding, percentage Rate scaling, safe-integer allocation ratios, and
 100-part equal allocation.
 
-It implements Workflow Draft 0.1: validated workflow
+It implements Core 0.8 Workflow behavior: validated workflow
 definitions, exact state identifiers, one initial state, current state,
-directed transitions, single or multiple simple Draft 0.1 fact-equality guards,
+directed transitions, single or multiple simple fact-equality guards,
 explicit terminal-state detection, rejection of outgoing transitions in
 terminal definitions, terminal-state transition rejection and portable error
 precedence, successful state changes, and state preservation after rejection.
@@ -115,7 +130,7 @@ before current state changes. Failed guard evaluation throws
 
 This Workflow milestone does not define a production interchange format,
 callback guard model, authorization system, or full guard language. The current
-fact-equality guard shape exists to satisfy Draft 0.1 conformance semantics
+fact-equality guard shape exists to satisfy Core 0.8 conformance semantics
 without introducing broader workflow behavior.
 
 ## Current Audit API
@@ -152,7 +167,7 @@ Audit failures expose portable codes: `FINKORE_AUDIT_INVALID_EVENT`,
 - `approvalDecisionHistory.supersedeRequirement(supersession)` appends lifecycle evidence that a Requirement has been superseded; Decisions for the superseded Requirement do not transfer to the successor Requirement.
 - `approvalDecisionHistory.evaluateRequirement(requirement, options)` returns `PENDING`, `APPROVED`, or `REJECTED` from currently effective associated Decisions. Options may include `currentSubjectFacts`, `relevantFactPaths`, and explicit `evaluatedAt` for expiring Decisions.
 - `approvalDecisionHistory.decisions()`, `approvalDecisionHistory.lifecycleEvents()`, and `approvalDecisionHistory.toJSON()` return defensive observations of committed history.
-- `ApprovalComposition.from(composition)` validates a Draft 0.3 Approval Composition definition with exactly one standalone `rootGroup` or ordered nonempty `stages`, unique group/stage/member identifiers, supported group kinds, nonempty members, bounded child-group references, and quorum threshold/voter declarations.
+- `ApprovalComposition.from(composition)` validates a bounded Approval Composition definition with exactly one standalone `rootGroup` or ordered nonempty `stages`, unique group/stage/member identifiers, supported group kinds, nonempty members, bounded child-group references, and quorum threshold/voter declarations.
 - `approvalComposition.evaluate({ requirements, decisions, context })` evaluates `ALL_OF` and `ANY_OF` groups from explicit current Requirement observations, and `N_OF_M` quorum groups from explicit current-effective Decision observations plus Requirement outcome mapping. Evaluation covers inapplicable members, ordered stages, complete validation, fixed quorum thresholds, distinct eligible voter counting, opposing effective vote rejection, and current actionable Requirement reporting.
 - `approvalComposition.rootGroup`, `approvalComposition.stages`, `approvalComposition.groups`, and `approvalComposition.toJSON()` return defensive observations of the validated definition. This API does not derive current-effectiveness from Decision history, authorize actors, or resolve dynamic approvers.
 - `ApprovalChain.from(chain)` validates a chain with `SEQUENTIAL` or `UNORDERED` mode, one or more Requirement identities in declared order, and a declared `REJECTED` rejection outcome.
@@ -160,7 +175,7 @@ Audit failures expose portable codes: `FINKORE_AUDIT_INVALID_EVENT`,
 - Explicit `NOT_APPLICABLE` Requirement states are excluded from chain completion. Missing or malformed states throw `FINKORE_APPROVAL_INVALID_CHAIN`; explicit unresolved applicability throws `FINKORE_APPROVAL_CONDITION_UNRESOLVED`.
 - Approval Chain evaluation consumes explicit Requirement state observations. It does not prove which historical Decision satisfied a Requirement or which subject facts were bound to that Decision; use `ApprovalDecisionHistory.evaluateRequirement(requirement, { currentSubjectFacts, relevantFactPaths, evaluatedAt })` for current satisfaction from historical evidence.
 - Historical Decisions whose relevant subject facts no longer match current facts, are withdrawn, expired, superseded, or address a superseded Requirement remain committed but do not satisfy or reject the Requirement for current evaluation. Without another effective Decision, the Requirement is `PENDING`.
-- Draft 0.1 does not define Approval Chain identity. Decisions bind to Requirements and relevant subject facts, not to Chain identifiers.
+- Core 0.8 does not define Approval Chain identity. Decisions bind to Requirements and relevant subject facts, not to Chain identifiers.
 
 Approval failures expose portable codes:
 `FINKORE_APPROVAL_REQUIRED`,
@@ -170,7 +185,7 @@ Approval failures expose portable codes:
 `FINKORE_APPROVAL_CONDITION_UNRESOLVED`, and
 `FINKORE_APPROVAL_INVALID_CONTEXT`.
 
-FinKore Draft 0.1 does not define a portable rich condition expression model.
+FinKore Core 0.8 does not define a portable rich condition expression model.
 This implementation therefore does not evaluate comparisons such as amount
 thresholds, logical `AND`/`OR` expressions, policy rules, JavaScript callbacks,
 or authorization predicates as FinKore semantics. Composing domains evaluate
@@ -209,16 +224,16 @@ adapter, callback system, persistence validator, authorization model, or
 cross-domain Workflow/Approval/Audit integration. Validation findings include
 stable rule identity and path only; they do not include sensitive field values.
 
-Entity Evolution in Draft 0.2 is audit-required. Callers provide Revision
+Entity Evolution in Core 0.8 is audit-required. Callers provide Revision
 identity, Evolution Relation identity, composing-domain eligibility, and Audit
 Event/Relationship evidence. The TypeScript core validates that evidence and
 returns new evolution and Audit history observations atomically; it does not
 generate identifiers, compute financial replacement policy, authorize the
 operation, or mutate source Entity observations in place.
 
-### Entity Draft 0.1 Requirement Inventory
+### Entity Requirement Inventory
 
-| Requirement | Draft 0.1 classification | Implementation and tests |
+| Requirement | Core 0.8 classification | Implementation and tests |
 | --- | --- | --- |
 | `ENTITY-AUDIT-001` | NOT DIRECTLY TESTABLE | Composing domains identify which Entity operations require Audit Events; the generic Entity API has no standalone audit policy declaration surface. |
 | `ENTITY-AUDIT-002` | NOT DIRECTLY TESTABLE | Audit Event production is conditional on `ENTITY-AUDIT-001` and requires the out-of-scope Entity/Audit integration surface. |
@@ -228,16 +243,16 @@ operation, or mutate source Entity observations in place.
 | `ENTITY-IDENTITY-003` | IN SCOPE | Entity IDs are opaque strings preserved exactly; unit tests verify no generation or inference; conformance `entity.create.opaque-identity-preserved-001`. |
 | `ENTITY-IDENTITY-004` | IN SCOPE | Revision/version/display-number data does not replace stable identity; conformance `entity.mutate.display-number-not-identity-001`. |
 | `ENTITY-IDENTITY-005` | NOT DIRECTLY TESTABLE | Cross-entity uniqueness requires a composing-domain registry or persistence scope not defined by this milestone. |
-| `ENTITY-IDENTITY-006` | NOT DIRECTLY TESTABLE | Import/migration identity mapping has no standalone Draft 0.1 operation; `from` only reconstructs a supplied observation. |
+| `ENTITY-IDENTITY-006` | NOT DIRECTLY TESTABLE | Import/migration identity mapping has no standalone Core 0.8 create/from operation; `from` only reconstructs a supplied observation. |
 | `ENTITY-LIFECYCLE-001` | IN SCOPE | Entity definitions require a valid referenced Workflow; unit tests and conformance `entity.create.initial-lifecycle-001`. |
 | `ENTITY-LIFECYCLE-002` | IN SCOPE | `FinancialEntity.create` uses `Workflow.create` initial state; unit tests and conformance `entity.create.initial-lifecycle-001`. |
 | `ENTITY-LIFECYCLE-003` | IN SCOPE | `FinancialEntity.transition` delegates to `Workflow.transition`; `mutate` never changes lifecycle state; unit tests and conformance transition/mutate vectors. |
-| `ENTITY-LIFECYCLE-004` | NOT DIRECTLY TESTABLE | Entity Audit declaration is a composing-domain/cross-domain obligation without a standalone Draft 0.1 Entity operation. |
+| `ENTITY-LIFECYCLE-004` | NOT DIRECTLY TESTABLE | Entity Audit declaration is a composing-domain/cross-domain obligation without a standalone Core 0.8 Entity operation. |
 | `ENTITY-LIFECYCLE-005` | NOT DIRECTLY TESTABLE | Concrete domain consequences of states belong to composing domains. |
 | `ENTITY-LIFECYCLE-006` | IN SCOPE | Serialized Entity has a single `state`; `from` validates it against Workflow; unit tests cover undeclared state rejection; conformance `entity.create.initial-lifecycle-001`. |
 | `ENTITY-MUTABILITY-001` | IN SCOPE | `FinancialEntity` requires per-state mutable field declarations; unit tests and conformance `entity.mutate.mutable-field-001`. |
 | `ENTITY-MUTABILITY-002` | IN SCOPE | `FinancialEntity.mutate` rejects any undeclared targeted field with `FINKORE_ENTITY_IMMUTABLE`; unit tests and conformance `entity.mutate.immutable-financial-field-001`. |
-| `ENTITY-MUTABILITY-003` | NOT DIRECTLY TESTABLE | Mutation Audit declaration is a composing-domain/cross-domain obligation without a standalone Draft 0.1 Entity operation. |
+| `ENTITY-MUTABILITY-003` | NOT DIRECTLY TESTABLE | Mutation Audit declaration is a composing-domain/cross-domain obligation without a standalone Core 0.8 Entity operation. |
 | `ENTITY-MUTABILITY-004` | IN SCOPE | `mutate` validates all targets before returning a new Entity; unit tests and conformance immutable vector cover failure atomicity. |
 | `ENTITY-MUTABILITY-005` | NOT DIRECTLY TESTABLE | Audit history attachment/preservation requires the out-of-scope Entity/Audit integration surface. |
 | `ENTITY-MUTABILITY-006` | IN SCOPE | Terminal states use their declared mutability list, not global immutability; unit tests and conformance `entity.mutate.terminal-metadata-001`. |
@@ -248,7 +263,7 @@ operation, or mutate source Entity observations in place.
 
 ### Entity Validation Requirement Inventory
 
-| Requirement | Draft 0.1 classification | Implementation and tests |
+| Requirement | Core 0.8 classification | Implementation and tests |
 | --- | --- | --- |
 | `ENTITY-VALIDATION-001` | IN SCOPE | `FinancialEntity.create` and `from` validate declared rules for current data; unit tests cover valid and invalid creation/import; conformance `entity.create.initial-lifecycle-001`. |
 | `ENTITY-VALIDATION-002` | IN SCOPE | `FinancialEntity.mutate` validates the complete proposed result before returning a new Entity; unit tests and conformance `entity.validation.complete-result-001`; mutation protection checks mutation-before-validation. |
@@ -256,17 +271,17 @@ operation, or mutate source Entity observations in place.
 | `ENTITY-VALIDATION-004` | IN SCOPE | Failed declared validation throws `EntityValidationFailedError` with portable `FINKORE_ENTITY_VALIDATION_FAILED`; unit tests and conformance `entity.validation.complete-result-001`. |
 | `ENTITY-VALIDATION-005` | IN SCOPE | Findings include the declared validation path; unit tests cover path preservation; conformance `entity.validation.complete-result-001`. |
 | `ENTITY-VALIDATION-006` | IN SCOPE | `validate` is observational and failed create/from/mutate do not alter observable Entity state; unit tests and conformance `entity.validation.complete-result-001`. |
-| `ENTITY-VALIDATION-007` | NOT DIRECTLY TESTABLE | Draft 0.1 recommends composing domains distinguish always-required and state/transition-specific rules, but the current generic Entity milestone has no state-dependent validation policy language. |
+| `ENTITY-VALIDATION-007` | NOT DIRECTLY TESTABLE | Core 0.8 recommends composing domains distinguish always-required and state/transition-specific rules, but the current generic Entity behavior has no state-dependent validation policy language. |
 | `ENTITY-VALIDATION-008` | IN SCOPE | Validation findings and normalized adapter observations omit field values and localized messages; unit tests inspect safe details; conformance `entity.validation.complete-result-001`. |
 | `ENTITY-ERROR-002` | IN SCOPE | Findings preserve stable declared violation identifiers as `rule`; unit tests cover identifier preservation; conformance `entity.validation.complete-result-001`. |
 | `ENTITY-ERROR-004` | IN SCOPE | Workflow transition failures continue to retain Workflow portable error codes; validation does not replace primary Workflow behavior. |
 
-FinKore Entities Draft 0.1 and the Draft 0.2 Entity Evolution slice are
-implemented by the TypeScript reference implementation. No blocking Entity spec
-gap remains for the implemented slices. Current Entity create, mutate,
-transition, and evolution operations are advertised through canonical
-`finkore.entity.*` Agentic operation identifiers; Draft 0.3 `entity.import`
-remains conformance-local after the Agentic review.
+FinKore Core 0.8 Entity behavior is implemented by the TypeScript reference
+implementation. No blocking Entity spec gap remains for the implemented
+behavior. Current Entity create, mutate, transition, and evolution operations
+are advertised through canonical `finkore.entity.*` Agentic operation
+identifiers; `entity.import` remains conformance-local after the Agentic
+review.
 
 ## API Documentation
 

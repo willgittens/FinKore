@@ -25,7 +25,7 @@ This document defines initial portable audit failure categories.
 - **AUDIT-ERROR-003** — Implementations MAY expose additional diagnostic context that preserves these constraints.
 
 Audit Relationship error mapping is defined by **AUDIT-RELATIONSHIP-013** in
-[Audit Relationships](relationships.md). Draft 0.2 does not introduce a
+[Audit Relationships](relationships.md). Core 0.8 does not introduce a
 dedicated Audit Relationship portable error code.
 
 ## Invariants
@@ -34,4 +34,4 @@ A failed append must leave committed logical history unchanged.
 
 ## Non-Goals
 
-This is not a complete error catalog and does not define transport behavior or errors for concurrency and ordering mechanisms outside FinKore Core Draft 0.1.
+This is not a complete error catalog and does not define transport behavior or errors for concurrency and ordering mechanisms outside FinKore Core 0.8.

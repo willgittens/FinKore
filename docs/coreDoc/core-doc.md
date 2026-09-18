@@ -1,8 +1,8 @@
 # FinKore CoreDoc
 
-**CoreDoc version:** Draft 0.4
-**Document date:** 2026-09-15
-**Status:** Draft 0.4 foundation baseline
+**CoreDoc version:** FinKore Core 0.8
+**Document date:** 2026-09-18
+**Status:** Current FinKore Core 0.8 baseline
 
 ## Purpose
 
@@ -11,9 +11,9 @@ foundation-level obligations for financial meaning and control that FinKore doma
 specifications must refine. It is intended for accounting, audit, control,
 compliance, and financial-systems review.
 
-FinKore Core Draft versions identify the shared language-neutral behavioral
-baseline. They are distinct from conformance manifest/vector-file format
-versions and from language package versions.
+The FinKore Core release version identifies the shared language-neutral
+behavioral baseline. It is distinct from conformance manifest/vector-file format
+versions, the conformance runner package version, and language package versions.
 
 ## Scope
 
@@ -21,7 +21,7 @@ The CoreDoc governs financial meaning, evidence, control behaviour, and history.
 It does not prescribe software design, storage, interfaces, programming
 languages, or conformance mechanics.
 
-FinKore Core Draft 0.4 does not define posting, double-entry ledgers, accounting dates or
+FinKore Core 0.8 does not define posting, double-entry ledgers, accounting dates or
 closed periods, tax, exchange-rate sourcing, reconciliation, settlement,
 accruals, depreciation, revenue recognition, statutory retention periods, or
 segregation-of-duties policy. This CoreDoc establishes none of them.
@@ -128,7 +128,7 @@ currency identifier. A mismatch is a rejected domain outcome, not zero or equal.
 
 **Boundaries**
 
-FinKore Core Draft 0.4 does not specify rate source, rate date, or foreign-exchange
+FinKore Core 0.8 does not specify rate source, rate date, or foreign-exchange
 accounting.
 
 **Relevant FinKore domains**

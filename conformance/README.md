@@ -6,8 +6,8 @@
 
 > In financial software, a passing test suite is useful only if it reliably rejects broken behavior.
 
-This directory is the language-independent executable evidence for the current
-FinKore Money, Workflow, Audit, Approvals, and Entities specifications. The
+This directory is the language-independent executable evidence for FinKore Core
+0.8: Money, Workflow, Audit, Approvals, and Entities. The
 specification remains the source of truth. Vectors describe observable domain
 behavior; they do not prescribe APIs, classes, exceptions, storage, or
 frameworks.
@@ -25,7 +25,7 @@ The initial suites are grouped by specification behavior:
 - Money: representation, serialization, arithmetic, comparison, currency, rounding, Rates, and Allocation.
 - Workflow: states, directed transitions, guards, terminal states, definition versioning, import, conflict preconditions, and failure atomicity.
 - Audit: events, actors, changes, append-only history, redaction, relationships, and ordering.
-- Approvals: requirements, decisions, validity lifecycle events, explicit expiration context, conditions, chains, subject facts, and Draft 0.3 composition groups/stages/quorums.
+- Approvals: requirements, decisions, validity lifecycle events, explicit expiration context, conditions, chains, subject facts, and bounded composition groups/stages/quorums.
 - Entities: identity, lifecycle, declared mutability, validation, evolution, import mapping, business revision observations, and conflict preconditions.
 
 See [conventions.md](conventions.md) for the vector format and runner contract.

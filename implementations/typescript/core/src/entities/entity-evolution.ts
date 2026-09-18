@@ -175,7 +175,7 @@ function validateAuditEvidence(
 }
 
 /**
- * Immutable Draft 0.2 Entity Evolution history.
+ * Immutable Core 0.8 Entity Evolution history.
  *
  * The history records correction, reversal, void, and supersession relations
  * without rewriting source Entity identity or financial facts. Every successful

@@ -4,6 +4,10 @@ This package is the reference TypeScript runner for FinKore's language-independe
 
 It is not a financial library, a FinKore domain implementation, an agent runtime, or a general-purpose application testing framework. Production code here contains no Money, Workflow, Audit, Approval, or Entity behavior.
 
+The runner package version is an implementation artifact version. It is
+separate from the FinKore Core release version and from the manifest/vector
+format versions that the runner accepts.
+
 ## Architecture
 
 ```text

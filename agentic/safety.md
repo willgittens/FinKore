@@ -17,7 +17,7 @@ services, batch jobs, integrations, agents, and autonomous systems. Tool or
 transport adapters MUST preserve the operation's preconditions, postconditions,
 portable errors, and failure atomicity.
 
-Draft 0.3 Workflow version binding and expected-state/revision preconditions are
+Workflow version binding and expected-state/revision preconditions are
 ordinary domain preconditions. An adapter for `finkore.workflow.transition` MUST
 not ignore a version mismatch or state conflict because the requester is an
 agent. Approval composition and lifecycle conformance fixtures do not create an

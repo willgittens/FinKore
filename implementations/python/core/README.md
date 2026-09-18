@@ -1,8 +1,9 @@
 # FinKore Python Core
 
-This package is the Python implementation track for FinKore. It is derived from
-CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from TypeScript financial
-implementation code. It passes the complete current conformance manifest.
+This package is the Python implementation track for FinKore Core 0.8. It is
+derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
+TypeScript financial implementation code. It passes the complete current
+conformance manifest.
 
 Current status:
 

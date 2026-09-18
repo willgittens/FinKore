@@ -21,7 +21,8 @@ FinKore exists to define that behavior once, independently of the stack that imp
 
 ## What FinKore Standardizes
 
-FinKore Core currently develops portable rules for:
+FinKore Core 0.8 is the current shared, language-neutral behavioral baseline.
+It covers portable rules for:
 
 - exact Money representation, arithmetic, comparison, rounding, and serialization;
 - Financial Entity identity, lifecycle, mutability, and validation;
@@ -46,7 +47,8 @@ The same operation with incompatible currencies must not silently succeed:
 → FINKORE_MONEY_CURRENCY_MISMATCH
 ```
 
-TypeScript and Java may expose different APIs. They should still produce the same financial behavior.
+TypeScript, Python, and Java may expose different APIs. They should still
+produce the same financial behavior.
 
 ## Specification First
 
@@ -110,8 +112,9 @@ FinKore is not an ERP, ORM, payment processor, UI framework, accounting applicat
 
 ## Project Status
 
-FinKore is experimental. TypeScript, Python, and Java implement the current
-manifest scope for Money, Workflow, Audit, Approvals, and Entities.
+FinKore Core 0.8 is experimental and pre-1.0. TypeScript, Python, and Java
+implement the current manifest scope for Money, Workflow, Audit, Approvals, and
+Entities.
 
 Money covers exact representation, serialization, arithmetic, comparison,
 rounding, Rates, and Allocation. Workflow covers definitions, version binding,
@@ -126,7 +129,20 @@ Rich condition expressions, delegation, escalation, unrestricted approval
 graphs, dynamic approver resolution, authorization, global identity registries,
 and concrete accounting domains remain outside the current scope.
 
-The specification is expected to evolve significantly before version 1.0. Production use is not recommended yet, and no implementation should claim that its API defines FinKore independently of the specification.
+The Core release version is separate from other version lines:
+
+- `FinKore Core 0.8` identifies the current language-neutral behavioral
+  baseline.
+- `finkoreConformance` and `finkoreVectorFile` identify manifest and vector
+  syntax compatibility, not the Core release.
+- The conformance runner package version identifies the runner implementation,
+  not financial behavior.
+- Language package versions identify package release artifacts, not independent
+  FinKore semantics.
+
+The specification is expected to evolve significantly before version 1.0.
+Production use is not recommended yet, and no implementation should claim that
+its API defines FinKore independently of the specification.
 
 ## Contributing
 

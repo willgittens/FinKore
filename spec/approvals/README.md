@@ -16,7 +16,7 @@ This domain defines approval requirements and decisions independently of any par
 - An [Approval Decision](decisions.md) must identify its Approval Requirement, outcome, Actor, time, and association with the relevant subject state or facts.
 - An [Approval Chain](chains.md) must define how its Approval Requirements combine and must declare sequencing only when sequencing applies.
 - [Approval Composition](composition.md) defines bounded any-of, all-of, quorum,
-  staged, and nested group evaluation for Draft 0.3. Quorum members reference
+  staged, and nested group evaluation for Core 0.8. Quorum members reference
   Requirements with explicit distinct voter identities; quorum groups may be
   nested beneath any-of/all-of groups but cannot contain child groups as votes.
   The declared quorum threshold stays fixed when applicability changes; a
@@ -33,7 +33,7 @@ This domain defines approval requirements and decisions independently of any par
   order. Coexisting validation failures follow structure, applicability, required
   context, then state/effectiveness priority. Opposing effective Decisions from
   one declared quorum voter are invalid evidence; each member's state uses only
-  its matching voter/Requirement evidence. The scoped Draft 0.3 review,
+  its matching voter/Requirement evidence. The scoped Agentic review,
   conformance vectors, TypeScript implementation, adapter wiring, and mutation
   hardening are complete for this composition surface.
 - [Conditional Approval Requirements](conditions.md) must use explicit domain facts.

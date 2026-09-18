@@ -6,8 +6,8 @@
 
 ## Purpose
 
-This document defines Draft 0.2 current-effectiveness semantics for Approval
-Decisions. It extends the Draft 0.1 fact-effectiveness model with explicit
+This document defines Core 0.8 current-effectiveness semantics for Approval
+Decisions. It extends the fact-effectiveness model with explicit
 withdrawal, expiration, and supersession evidence while preserving append-only
 Approval history.
 

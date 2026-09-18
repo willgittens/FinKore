@@ -16,17 +16,17 @@ to canonical Agentic operations because public Approval operation contracts stil
 need a stable agent-facing input model, diagnostics policy, and security review
 separate from conformance fixtures.
 
-Draft 0.3 Workflow definition/version identity, immutable instance binding,
-version mismatch, import, and expected-state/revision conflict semantics are
+Workflow definition/version identity, immutable instance binding, version
+mismatch, import, and expected-state/revision conflict semantics are
 specified in `/spec`, implemented by the TypeScript reference implementation,
 and vector-covered. The canonical `finkore.workflow.transition` operation now
 includes the version binding and conflict preconditions listed below.
 `workflow.create` and `workflow.import` remain conformance-local structural
 boundary checks rather than canonical Agentic operations.
 
-`entity.import` remains conformance-local after the Draft 0.3 Agentic review. It
+`entity.import` remains conformance-local after the Agentic review. It
 observes import identity mapping, business revision history, and conflict-version
-preconditions through fixture-shaped inputs, but Draft 0.3 does not define a
+preconditions through fixture-shaped inputs, but Core 0.8 does not define a
 public migration/import operation contract, identity registry, persistence
 schema, or source-system authority model.
 
@@ -57,7 +57,7 @@ schema, or source-system authority model.
 
 `Unspecified` is deliberate. A generic Workflow may not be attached to a
 Financial Entity, an Entity may carry non-financial or composing-domain facts,
-and a guard may declare dependence on external facts. Draft 0.3 includes
+and a guard may declare dependence on external facts. Core 0.8 includes
 correction, reversal, void, and supersession observations, but no operation is
 labeled irreversible because Core still does not define accounting finality,
 ledger posting, or transport idempotency.
@@ -277,7 +277,7 @@ replacement payload is intentionally not interpreted by the Agentic layer.
 **Preconditions:** None that permit replacement; committed logical Audit history
 is append-only.
 
-**Success postcondition:** None. Draft 0.1 defines no successful replacement of
+**Success postcondition:** None. Core 0.8 defines no successful replacement of
 committed Audit Events outside future redaction policy semantics.
 
 **Failure postcondition:** The supplied logical history remains unchanged.
@@ -296,7 +296,7 @@ identifier is not interpreted as permission to erase committed logical history.
 **Preconditions:** None that permit removal; committed logical Audit history is
 append-only.
 
-**Success postcondition:** None. Draft 0.1 defines no successful removal of
+**Success postcondition:** None. Core 0.8 defines no successful removal of
 committed Audit Events outside future redaction policy semantics.
 
 **Failure postcondition:** The supplied logical history remains unchanged.
@@ -311,7 +311,7 @@ committed Audit Events outside future redaction policy semantics.
 
 **Input semantics:** A valid Workflow definition, an instance with one declared
 current State, requested target State, facts required by applicable guards, and
-when versioned, the instance's bound Workflow Definition Version. Draft 0.3
+when versioned, the instance's bound Workflow Definition Version. Conformance
 fixtures may also supply optional expected-current-state and expected-revision
 preconditions. Current conformance fixtures express fact-equality guards as
 `guard` for one condition or `guards` for multiple conditions; this fixture shape

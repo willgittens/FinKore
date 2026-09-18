@@ -245,7 +245,7 @@ export class Workflow {
   /**
    * Returns the immutable bound Workflow definition version for this instance.
    *
-   * Calling this method does not mutate the Workflow. Unversioned Draft 0.1
+   * Calling this method does not mutate the Workflow. Unversioned
    * instances return `undefined`.
    *
    * @returns A defensive copy of the bound definition/version identity pair, or

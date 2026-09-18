@@ -2,7 +2,7 @@
 
 ## Status
 
-**Experimental documentation contract**
+**Experimental documentation contract for FinKore Core 0.8**
 
 > Agent-ready by contract, not by convention.
 

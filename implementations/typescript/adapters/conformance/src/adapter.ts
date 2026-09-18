@@ -12,7 +12,7 @@ import { operationHandlers } from './operations.js'
  * `@finkore/typescript`, with `/spec` remaining authoritative.
  *
  * @returns A conformance adapter supporting the operations implemented by the
- * current TypeScript Draft 0.1 domain milestones.
+ * current TypeScript FinKore Core 0.8 behavior.
  */
 export function createTypeScriptConformanceAdapter(): FinKoreConformanceAdapter {
   return {

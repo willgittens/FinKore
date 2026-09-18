@@ -12,12 +12,12 @@ This document defines the minimum meaning and content of an Audit Event. An Audi
 
 - **AUDIT-EVENT-001** — Every committed Audit Event MUST have a stable event identifier, event type, entity reference, and timestamp.
 - **AUDIT-EVENT-002** — It MUST identify an Actor when the responsible Actor is known; otherwise Actor attribution MAY be omitted or explicitly represented as unknown.
-- **AUDIT-EVENT-003** — The event type MUST be a stable, producer-supplied domain event identifier. In Draft 0.1 it MUST be a non-empty ASCII token matching `[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*`. FinKore does not define a closed global event-type catalog in Draft 0.1. Implementations MUST NOT derive event type automatically from TypeScript method names, class names, repository methods, HTTP endpoints, database operations, framework callbacks, or other implementation mechanism names.
+- **AUDIT-EVENT-003** — The event type MUST be a stable, producer-supplied domain event identifier. In Core 0.8 it MUST be a non-empty ASCII token matching `[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*`. FinKore does not define a closed global event-type catalog in Core 0.8. Implementations MUST NOT derive event type automatically from TypeScript method names, class names, repository methods, HTTP endpoints, database operations, framework callbacks, or other implementation mechanism names.
 - **AUDIT-EVENT-004** — The entity reference MUST identify the affected entity type and stable entity identifier.
 - **AUDIT-EVENT-005** — The timestamp MUST identify an unambiguous instant when the recorded occurrence took effect and, when serialized, MUST follow [Timestamp conventions](../conventions.md#portable-values).
 - **AUDIT-EVENT-006** — Event metadata MAY provide relevant context.
 - **AUDIT-EVENT-008** — Event metadata MUST NOT contradict required event fields.
-- **AUDIT-EVENT-007** — In Draft 0.1, an Audit Event is complete when every required Audit Event field is present and individually valid according to this document and referenced actor, timestamp, entity, change, and redaction requirements. No additional event-type-specific fields are required by Draft 0.1. Optional metadata or display text MUST NOT be required to recover the event identifier, event type, entity reference, timestamp, known actor identity, or recorded changes.
+- **AUDIT-EVENT-007** — In Core 0.8, an Audit Event is complete when every required Audit Event field is present and individually valid according to this document and referenced actor, timestamp, entity, change, and redaction requirements. No additional event-type-specific fields are required by Core 0.8. Optional metadata or display text MUST NOT be required to recover the event identifier, event type, entity reference, timestamp, known actor identity, or recorded changes.
 
 Audit Relationships, when present, follow [Audit Relationships](relationships.md).
 

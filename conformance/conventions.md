@@ -73,7 +73,7 @@ These identifiers name observable behavior, not implementation methods.
 | `approval.decision.supersede` | Append Decision supersession lifecycle evidence without altering Decision history. |
 | `approval.condition.evaluate` | Return `APPLICABLE` or `NOT_APPLICABLE` from explicit facts. |
 | `approval.chain.evaluate` | Derive chain state from its declared combination and explicit Requirement state observations. |
-| `approval.composition.evaluate` | Derive Draft 0.3 composition outcome and actionable Requirement identifiers from declared groups, stages, applicability, current-effective evidence, and explicit evaluation context. |
+| `approval.composition.evaluate` | Derive bounded composition outcome and actionable Requirement identifiers from declared groups, stages, applicability, current-effective evidence, and explicit evaluation context. |
 | `finkore.entity.create` | Create under the supplied composing-domain definition. |
 | `finkore.entity.mutate` | Apply a declared mutation under supplied mutability and validation rules. |
 | `finkore.entity.transition` | Apply a lifecycle transition under the referenced workflow. |
@@ -89,13 +89,13 @@ Identifiers beginning with `finkore.` are canonical operations in the
 [Agentic Contract](../agentic/operations.md). Remaining catalog entries are
 conformance-local adapter operations until their stable public contracts are
 reviewed; vector use alone does not make them advertised FinKore capabilities.
-Audit ordering requirements are verified through append-only history and review of explicitly recorded relationships; Draft 0.1 does not define `audit.order` as an executable conformance operation or as an Agentic operation. Draft 0.2 Audit Relationships are observed through ordinary `finkore.audit.append` and `audit.redact` fixtures, not a separate relationship operation.
-For Money Draft 0.1, `money.deserialize` and `money.serialize` remain
+Audit ordering requirements are verified through append-only history and review of explicitly recorded relationships; Core 0.8 does not define `audit.order` as an executable conformance operation or as an Agentic operation. Audit Relationships are observed through ordinary `finkore.audit.append` and `audit.redact` fixtures, not a separate relationship operation.
+For Money, `money.deserialize` and `money.serialize` remain
 conformance-local representation boundary checks. They exercise normative Money
-serialization but are not separate public Agentic operations. For Money Draft
-0.2, Rate application and Allocation are promoted to
+serialization but are not separate public Agentic operations. Rate application
+and Allocation are promoted to
 `finkore.money.applyrate` and `finkore.money.allocate` after Agentic review.
-For Workflow Draft 0.3, `workflow.import` remains conformance-local after the
+For Workflow, `workflow.import` remains conformance-local after the
 Agentic review. Versioned Workflow fixtures may include definition identity,
 definition version identity, instance binding, Workflow Instance Revision,
 Expected Current State, and Expected Workflow Instance Revision. These fixture
@@ -108,17 +108,17 @@ For Approval Composition, `approval.composition.evaluate` uses a conformance-loc
 
 For Approvals, `approval.chain.evaluate`, `approval.decision.withdraw`,
 `approval.decision.supersede`, and `approval.requirement.supersede` remain
-conformance-local. They observe deterministic chain composition and Draft 0.2
+conformance-local. They observe deterministic chain composition and
 current-effectiveness lifecycle behavior; they are not public Agentic operations
 and do not replace Decision history as evidence for which Decision satisfied a
 Requirement or which subject facts were bound to that Decision.
-For Entities Draft 0.2, Entity create, mutate, transition, and evolution
+For Entities, Entity create, mutate, transition, and evolution
 operations are promoted to canonical `finkore.entity.*` operation identifiers.
 They observe identity, lifecycle, mutability, validation, correction, reversal,
 void, supersession, revision, relation, currentness, and Audit evidence
 semantics defined by the Entity specifications.
-For Entities Draft 0.3, `entity.import` remains conformance-local after the
-Draft 0.3 Agentic review. It observes import identity mapping, current and
+For Entities, `entity.import` remains conformance-local after the
+Agentic review. It observes import identity mapping, current and
 historical Entity Revision identity, Entity Conflict Version separation, and
 expected-state/revision/conflict-version preconditions without defining a
 registry, storage lock, or concrete migration format.

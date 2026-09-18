@@ -35,12 +35,12 @@ logical history but MUST NOT satisfy the Requirement for current evaluation.
 The observable Requirement state is therefore `PENDING` unless another
 effective Decision satisfies or rejects the Requirement.
 
-Draft 0.2 current-effectiveness also considers lifecycle evidence defined by
+Core 0.8 current-effectiveness also considers lifecycle evidence defined by
 [Approval Validity](validity.md), including withdrawal, expiration, and
 supersession. Those lifecycle events change current effectiveness without
 rewriting the committed Decision.
 
-Draft 0.1 does not require a specific binding mechanism such as revision
+Core 0.8 does not require a specific binding mechanism such as revision
 numbers, database versions, hashes, immutable snapshots, or stable fact
 references. A composing domain MAY use any mechanism that preserves the
 observable guarantee that the Decision can be associated with the relevant

@@ -36,7 +36,7 @@ describe('Audit relationships', () => {
     })
   })
 
-  it('supports every Draft 0.2 relationship type without inferring order from relationship identity', () => {
+  it('supports every relationship type without inferring order from relationship identity', () => {
     const log = AuditLog.create([originalEvent])
     const event = {
       eventId: 'evt-evolution-bundle',

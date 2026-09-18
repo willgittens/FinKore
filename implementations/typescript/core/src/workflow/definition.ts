@@ -284,7 +284,7 @@ export class WorkflowDefinition {
   /**
    * Returns the portable definition-version binding for versioned definitions.
    *
-   * Calling this method does not mutate the definition. Unversioned Draft 0.1
+   * Calling this method does not mutate the definition. Unversioned
    * definitions return `undefined`.
    *
    * @returns The exact caller-supplied binding pair, or `undefined`.

@@ -35,7 +35,7 @@ function vote(actorId: string, effective: boolean) {
 }
 
 describe('Approval composition contrast and boundary evaluation', () => {
-  it('composes Draft 0.2 current-state contrasts through any-of and all-of groups', () => {
+  it('composes current-state contrasts through any-of and all-of groups', () => {
     const effectiveRequirement = requirement('effective-review')
     const withdrawnRequirement = requirement('withdrawn-review')
     const expiredRequirement = requirement('expired-review')

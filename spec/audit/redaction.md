@@ -14,7 +14,7 @@ This document defines how sensitive information may be withheld while preserving
 
 ## Requirements
 
-- **AUDIT-REDACTION-001** — An audit policy MUST identify which content requires redaction and under what authority. Draft 0.1 redaction targets are Audit Change paths supplied by the producer and the reserved actor-context targets `actor.displayName` and `actor.metadata`.
+- **AUDIT-REDACTION-001** — An audit policy MUST identify which content requires redaction and under what authority. Core 0.8 redaction targets are Audit Change paths supplied by the producer and the reserved actor-context targets `actor.displayName` and `actor.metadata`.
 - **AUDIT-REDACTION-002** — A redacted value MUST be distinguishable from a value that was absent originally.
 - **AUDIT-REDACTION-003** — A redacted representation MUST preserve event identity, event type, entity reference, occurrence timestamp, actor identity, any supplied actor type, and every ordering relationship explicitly recorded in logical history.
 - **AUDIT-REDACTION-004** — Redaction SHOULD preserve enough structural information to explain what category of content was removed.
@@ -48,4 +48,3 @@ Even though neither protected value is disclosed, the separate `before` and `aft
 ## Open Questions
 
 - How can cryptographic evidence of pre-redaction content be standardized without creating disclosure risk?
-

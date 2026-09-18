@@ -1287,7 +1287,7 @@ function executeApprovalCompositionEvaluate(request: AdapterRequest): Normalized
  * Public Money and Entity domain operations use canonical Agentic Contract
  * identifiers. `money.deserialize`, `money.serialize`, and `workflow.create`
  * plus `workflow.import` remain conformance-local boundary checks rather than
- * public FinKore operations. Legacy local labels for promoted Draft 0.2 operations remain
+ * public FinKore operations. Legacy local labels for promoted operations remain
  * accepted by this adapter only as compatibility aliases.
  *
  * @see MONEY-SERIALIZATION-001
