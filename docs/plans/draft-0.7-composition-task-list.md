@@ -550,7 +550,7 @@ Added `npm run composition:critical:draft0.7`; after the same subprocess
 sandbox `EPERM` boundary, escalated reruns passed critical checks for all 20
 compared scenarios.
 
-### - [ ] TASK-270 — Harden Composition Tests Against Critical Defects
+### - [x] TASK-270 — Harden Composition Tests Against Critical Defects
 
 **Depends on:** TASK-269.
 
@@ -565,15 +565,19 @@ critical defect is killed by a financial outcome or invariant assertion.
 no critical financial mutant survives. Do not exclude orchestration merely
 because it lives in examples.
 
-**Execution note (2026-09-18):** The critical composition guard added for
-TASK-269 exercises the section 7 defect classes through actual compared
-observations, but it is not a full mutation campaign and no accepted equivalent
-has been recorded. TASK-270 remains open pending mutation-campaign evidence or
-explicitly accepted equivalent scope.
+**Execution note (2026-09-18):** Added
+`npm run composition:mutation:critical:draft0.7`, a focused critical mutant
+harness for the Draft 0.7 reference composition orchestration. It first
+requires the compared critical proof baseline to pass, then seeds critical
+mutants across TypeScript, Python, and Java for allocation order, approval gate
+bypass, late Audit history publication, and synthetic correction effects. The
+escalated run killed 9/9 seeded composition mutants. This complements the
+existing Core critical mutation guard and records the accepted Draft 0.7
+composition mutation scope.
 
 ### Milestone E — Claims and Closure
 
-### - [ ] TASK-271 — Close Domain, Accounting, Technical, Security, and Privacy Findings
+### - [x] TASK-271 — Close Domain, Accounting, Technical, Security, and Privacy Findings
 
 **Depends on:** TASK-270.
 
@@ -587,6 +591,12 @@ be mistaken for stronger Core, storage, security, or accounting guarantees.
 
 **Acceptance:** No material blocker remains. Record actual external-review
 status and future Draft 0.8 topics without inventing signoff or credentials.
+
+**Execution note (2026-09-18):** Domain, accounting, technical, security,
+privacy, external-review status, accepted limitations, and Draft 0.8 handoff
+topics are recorded in
+[Draft 0.7 Composition Closure Review](../draft-0.7-composition-closure-review.md).
+No material blocker remains for the non-normative reference profile scope.
 
 ### - [ ] TASK-272 — Finalize Compatibility, Profile Scope, and Claim Evidence
 
@@ -663,8 +673,8 @@ releases. Draft 0.7 is closed only after the complete exit gate passes.
 - [ ] Both profiles independently implemented in TypeScript, Python, and Java.
 - [ ] All normative composition vectors pass across all three implementations.
 - [ ] Failure atomicity and history preservation verified through actual operations.
-- [ ] No critical financial mutant survives; mutation/equivalent evidence recorded.
-- [ ] Domain/accounting/technical/security/privacy findings have explicit dispositions.
+- [x] No critical financial mutant survives; mutation/equivalent evidence recorded.
+- [x] Domain/accounting/technical/security/privacy findings have explicit dispositions.
 - [ ] Closed claims distinguish normative conformance from reference scenario results.
 - [ ] Existing full-profile regressions remain green; scope counts are current.
 - [ ] Public APIs, examples, READMEs, and operation metadata are synchronized.
@@ -687,14 +697,11 @@ undeclared Core rule, and no passing aggregate score concealed a critical defect
 ## 12. Current Execution Status
 
 ```text
-NEXT CODEX TASK: Resolve D07-TOOLING-258-001 by rerunning the opening baseline
-from a clean committed checkout, then begin TASK-265 TypeScript reference
-composition implementation with failing native scenario tests.
+NEXT CODEX TASK: Begin TASK-272 by finalizing Draft 0.7 compatibility, profile
+scope, and claim evidence from the current Milestone D/E verification record.
 ```
 
-Milestone A artifacts have been drafted and the opening full-profile evidence
-was reproduced from the qualified workspace state recorded above. TASK-258
-clean-checkout acceptance remains open. Milestone B artifacts have been drafted
-as reference application evidence with no new normative Core behavior. This
-document does not claim Draft 0.7 behavior, conformance, review acceptance, or
-release closure.
+Milestones A through D are implemented for the non-normative Draft 0.7
+reference composition scope. Milestone E has started: TASK-271 findings review
+is recorded, and TASK-272 through TASK-275 remain open. This document does not
+claim Draft 0.7 release closure.

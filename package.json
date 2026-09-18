@@ -64,6 +64,7 @@
     "composition:test:draft0.7": "npm run composition:check:draft0.7 && npm run composition:typescript:draft0.7 && npm run composition:python:draft0.7 && npm run composition:java:draft0.7",
     "composition:compare:draft0.7": "node scripts/run-draft-0.7-composition-comparison.js",
     "composition:critical:draft0.7": "node scripts/run-draft-0.7-composition-critical-checks.js",
+    "composition:mutation:critical:draft0.7": "node scripts/run-draft-0.7-composition-mutants.js",
     "docs:check": "node scripts/check-doc-references.js",
     "license:check": "node scripts/check-license.js"
   }

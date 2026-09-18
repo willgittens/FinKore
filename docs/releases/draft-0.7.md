@@ -30,6 +30,7 @@ Supporting Milestone A artifacts:
 - [Draft 0.7 Composition Profiles](../draft-0.7-composition-profiles.md)
 - [Draft 0.7 Composition Scenario Matrix](../draft-0.7-composition-scenario-matrix.md)
 - [Draft 0.7 Composition Observation Contract](../draft-0.7-composition-observation-contract.md)
+- [Draft 0.7 Composition Closure Review](../draft-0.7-composition-closure-review.md)
 
 ## Opening Baseline
 
@@ -170,8 +171,19 @@ Reference proof verification on September 18, 2026:
 | --- | --- |
 | `npm run composition:compare:draft0.7` | Sandboxed runs hit subprocess `EPERM` boundaries while spawning local toolchain commands; escalated reruns PASS: 20 scenarios matched across TypeScript, Python, and Java |
 | `npm run composition:critical:draft0.7` | Sandboxed runs hit subprocess `EPERM` boundaries while spawning the nested comparator; escalated reruns PASS: critical checks passed for 20 compared scenarios |
+| `npm run composition:mutation:critical:draft0.7` | Initial sandboxed run failed with nested Node subprocess `EPERM`; escalated rerun PASS: killed 9/9 seeded critical composition mutants |
 
 This evidence closes the actual-result comparison and critical
-history-preservation proof work. It does not claim a full composition mutation
-campaign, an accepted equivalent for mutation coverage, a new Core conformance
-profile, or Draft 0.7 release closure.
+history-preservation proof work and records the accepted Draft 0.7 composition
+critical mutation scope. It does not create a new Core conformance profile or
+Draft 0.7 release closure.
+
+## Milestone E Status
+
+Milestone E has started. The domain, accounting, technical, security, privacy,
+external-review, limitation, and Draft 0.8 handoff review is recorded in
+[Draft 0.7 Composition Closure Review](../draft-0.7-composition-closure-review.md).
+No material blocker remains for the non-normative reference profile scope.
+
+Claim evidence finalization, documentation synchronization, clean-checkout
+closure reproduction, and final release identity remain open.

@@ -17,8 +17,9 @@ reference runners.
 Milestone D compares the actual portable observations emitted by all three
 language profiles with `npm run composition:compare:draft0.7` and checks
 selected critical boundary invariants with
-`npm run composition:critical:draft0.7`. These commands remain reference
-application evidence, not Core conformance vectors.
+`npm run composition:critical:draft0.7`. It hardens those checks with
+`npm run composition:mutation:critical:draft0.7`. These commands remain
+reference application evidence, not Core conformance vectors.
 
 ## Assertion Authority
 

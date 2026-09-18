@@ -192,5 +192,7 @@ Milestone D adds actual-result comparison and a critical composition guard via
 `npm run composition:compare:draft0.7` and
 `npm run composition:critical:draft0.7`. The guard checks selected
 failure-boundary, history-preservation, exact-money, and no-synthetic-effect
-observations, but it is not a full mutation campaign or a release-closure
-claim.
+observations. `npm run composition:mutation:critical:draft0.7` seeds critical
+composition mutants across TypeScript, Python, and Java and requires the proof
+layer to kill them. These commands are still reference application evidence,
+not a release-closure claim.
