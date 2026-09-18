@@ -101,13 +101,14 @@ finding promotes a behavior into `/spec` and `/conformance`.
 | Failure boundary | `D07-EXP-003`, `D07-EXP-007`, `D07-EXP-008`, `D07-EXP-009`, `D07-EXP-010` | `D07-INV-003` through `D07-INV-008` | Existing Core plus profile boundary |
 | Portability and safety | All scenarios | All scenarios | Existing Core plus profile fixture discipline |
 
-## Open Milestone B Questions
+## Milestone B Resolutions
 
-These items are intentionally blocked rather than encoded as expected behavior:
+The open Milestone A questions are resolved in
+[Draft 0.7 Composition Observation Contract](draft-0.7-composition-observation-contract.md):
 
-| Question | Affected scenarios | Required resolution |
+| Question | Affected scenarios | Resolution |
 | --- | --- | --- |
-| What portable or reference-profile error is reported when a profile approval gate rejects an otherwise valid Workflow transition? | `D07-EXP-004`, `D07-INV-006` | TASK-261 action-boundary and primary-error decision. |
-| Does a late Audit failure around a profile-level transition return the primary Audit error, a profile error, or an existing domain error? | `D07-EXP-010`, `D07-INV-008` | TASK-261 boundary and precedence review; no storage transaction semantics implied. |
-| Does invoice correction require a lifecycle transition to `CORRECTED`, or is the evolution relation alone the portable observation for Draft 0.7? | `D07-INV-001`, `D07-INV-002`, `D07-INV-008` | TASK-261/TASK-263 scenario execution contract. |
-| Which observations are normative conformance vectors versus reference scenario fixtures? | All scenarios | TASK-263 and TASK-264 fixture decision. |
+| What portable or reference-profile error is reported when a profile approval gate rejects an otherwise valid Workflow transition? | `D07-EXP-004`, `D07-INV-006` | Profile approval gates use the profile-local code `D07_PROFILE_APPROVAL_NOT_CURRENT`; no `FINKORE_*` error is invented. |
+| Does a late Audit failure around a profile-level transition return the primary Audit error, a profile error, or an existing domain error? | `D07-EXP-010`, `D07-INV-008` | Required Audit evidence is inside the profile action boundary; existing Audit or Entity evolution primary errors remain visible where they are the Core primary failure. |
+| Does invoice correction require a lifecycle transition to `CORRECTED`, or is the evolution relation alone the portable observation for Draft 0.7? | `D07-INV-001`, `D07-INV-002`, `D07-INV-008` | Entity evolution correction plus required Audit evidence is the Draft 0.7 portable observation; no lifecycle transition is required by Milestone B. |
+| Which observations are normative conformance vectors versus reference scenario fixtures? | All scenarios | No normative vectors are added in Milestone B; reference fixtures live under `examples/composition/draft-0.7/` and remain outside `conformance/manifest.json`. |

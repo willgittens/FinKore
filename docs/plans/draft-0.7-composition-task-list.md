@@ -349,6 +349,13 @@ committed evidence without exposing partial new results.
 **Acceptance:** Boundaries and precedence are explicit, accepted where required,
 and do not prescribe storage or invent universal cross-operation rollback.
 
+**Execution note (2026-09-18):** Reference action boundaries and primary-failure
+policy are recorded in
+[Draft 0.7 Composition Observation Contract](../draft-0.7-composition-observation-contract.md).
+Approval gates use profile-local rejection codes, late Audit failures preserve
+previously committed observations, and invoice correction uses Entity evolution
+plus required Audit evidence as the portable observation.
+
 ### - [ ] TASK-262 — Apply Accepted Specification and CoreDoc Resolutions
 
 **Depends on:** TASK-261.
@@ -365,6 +372,11 @@ scoped acceptance of material normative changes before implementation.
 **Acceptance:** No affected semantic blocker remains. If no normative change is
 needed, record the evidence and decision explicitly; do not invent requirements,
 portable errors, or canonical operations to fill a milestone.
+
+**Execution note (2026-09-18):** No normative `/spec`, CoreDoc, `/agentic`, or
+portable error change is required for Milestone B. Existing Money, Workflow,
+Audit, Approval, and Entity requirements cover the bounded reference scenarios
+when profile policy remains outside Core.
 
 ### - [ ] TASK-263 — Define Scenario Execution and Portable Observations
 
@@ -384,6 +396,13 @@ requires a fixture-format bump.
 **Acceptance:** All three languages can execute the same scenarios through
 idiomatic APIs, with portable observations and explicit evidence classifications.
 
+**Execution note (2026-09-18):** Scenario execution layout, observation shape,
+profile-local errors, and reference fixture boundaries are recorded in
+[Draft 0.7 Composition Observation Contract](../draft-0.7-composition-observation-contract.md).
+Shared fixtures live under `examples/composition/draft-0.7/`; future language
+implementations should live under language-specific
+`implementations/<language>/examples/composition/draft-0.7/` directories.
+
 ### - [ ] TASK-264 — Add Traceable Vectors and Establish Failing Regressions
 
 **Depends on:** TASK-263.
@@ -398,6 +417,12 @@ intended reason. Assert exact values, errors, unchanged inputs, and history.
 
 **Acceptance:** Fixtures are language independent, reproducible, and unable to
 turn missing support or infrastructure errors into successful domain evidence.
+
+**Execution note (2026-09-18):** No normative vectors were added because no new
+Core behavior was accepted. Non-normative reference fixtures were added under
+`examples/composition/draft-0.7/` with `implementationStatus: "pending"` and a
+fixture contract check exposed as `npm run composition:check:draft0.7`. Native
+failing scenario tests remain a Milestone C prerequisite before implementation.
 
 ### Milestone C — Independent Implementation
 
@@ -614,11 +639,13 @@ undeclared Core rule, and no passing aggregate score concealed a critical defect
 
 ```text
 NEXT CODEX TASK: Resolve D07-TOOLING-258-001 by rerunning the opening baseline
-from a clean committed checkout, then proceed to TASK-261 action-boundary and
-primary-error decisions.
+from a clean committed checkout, then begin TASK-265 TypeScript reference
+composition implementation with failing native scenario tests.
 ```
 
 Milestone A artifacts have been drafted and the opening full-profile evidence
 was reproduced from the qualified workspace state recorded above. TASK-258
-clean-checkout acceptance remains open. This document does not claim Draft 0.7
-behavior, conformance, review acceptance, or release closure.
+clean-checkout acceptance remains open. Milestone B artifacts have been drafted
+as reference application evidence with no new normative Core behavior. This
+document does not claim Draft 0.7 behavior, conformance, review acceptance, or
+release closure.

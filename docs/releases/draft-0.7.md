@@ -29,6 +29,7 @@ Supporting Milestone A artifacts:
 
 - [Draft 0.7 Composition Profiles](../draft-0.7-composition-profiles.md)
 - [Draft 0.7 Composition Scenario Matrix](../draft-0.7-composition-scenario-matrix.md)
+- [Draft 0.7 Composition Observation Contract](../draft-0.7-composition-observation-contract.md)
 
 ## Opening Baseline
 
@@ -117,3 +118,13 @@ Java from the qualified workspace state described above.
 
 Reference application scenario results, when later implemented, will be
 reported separately from normative Core conformance.
+
+## Milestone B Status
+
+Milestone B resolves the reference action boundaries, primary-failure policy,
+fixture location, and no-new-normative-change decision in
+[Draft 0.7 Composition Observation Contract](../draft-0.7-composition-observation-contract.md).
+The shared reference fixtures are recorded under
+[`examples/composition/draft-0.7`](../../examples/composition/draft-0.7/).
+They remain pending reference application fixtures and are not part of the
+Core conformance manifest.

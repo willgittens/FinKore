@@ -57,6 +57,7 @@
     "baseline:draft0.5": "node scripts/check-draft-0.5-baseline.js",
     "tools:bootstrap:draft0.5": "node scripts/bootstrap-draft-0.5-tools.js",
     "tools:check:draft0.5": "node scripts/bootstrap-draft-0.5-tools.js --check",
+    "composition:check:draft0.7": "node scripts/check-draft-0.7-composition-fixtures.js",
     "docs:check": "node scripts/check-doc-references.js",
     "license:check": "node scripts/check-license.js"
   }
