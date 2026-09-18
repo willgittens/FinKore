@@ -50,6 +50,11 @@ fixtures are intentionally outside [manifest.json](manifest.json), are not
 closed Core conformance profiles, and do not add Draft 0.7 profile metadata,
 portable errors, or canonical operation IDs.
 
+Draft 0.7 release-candidate checksum evidence is recorded under
+[draft-0.7](draft-0.7/README.md). That evidence is a closure/provenance gate
+only; it does not promote the reference application profiles into normative
+conformance vectors.
+
 The initial suites are grouped by specification behavior:
 
 - Money: representation, serialization, arithmetic, comparison, currency, rounding, Rates, and Allocation.

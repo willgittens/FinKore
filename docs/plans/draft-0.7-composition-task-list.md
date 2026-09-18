@@ -668,10 +668,13 @@ checks, native and adapter tests, full three-language conformance, Draft 0.7
 reference scenarios, cross-language comparison, critical composition checks,
 composition critical mutants, coverage, Core critical mutants, portability and
 boundary reviews, architecture, documentation, license, whitespace, and
-clean-tree checks. Draft 0.6 checksum metadata remains historical release
-evidence and is not regenerated for Draft 0.7 documentation/source changes.
-TASK-274 remains open until this command is reproduced from the final committed
-clean checkout and Draft 0.7 provenance/checksum evidence is finalized.
+clean-tree checks. Draft 0.7 release-candidate checksum evidence is recorded
+under `conformance/draft-0.7/checksums.json` and verified by
+`npm run checksums:check:draft0.7`; Draft 0.6 checksum metadata remains
+historical release evidence and is not regenerated for Draft 0.7
+documentation/source changes. TASK-274 remains open until this command is
+reproduced from the final committed clean checkout that includes the Draft 0.7
+checksum/provenance gate.
 
 ### - [ ] TASK-275 — Close Draft 0.7 and Record the Draft 0.8 Handoff
 
@@ -725,11 +728,13 @@ undeclared Core rule, and no passing aggregate score concealed a critical defect
 
 ```text
 NEXT CODEX TASK: Continue TASK-274 by committing the Draft 0.7 closure command
-and reproducing `npm run verify:closure:draft0.7` from a clean checkout.
+and checksum/provenance gate, then reproducing
+`npm run verify:closure:draft0.7` from a clean checkout.
 ```
 
 Milestones A through D are implemented for the non-normative Draft 0.7
 reference composition scope. Milestone E has started: TASK-271 findings review,
 TASK-272 claim evidence, and TASK-273 documentation synchronization are
-recorded, and TASK-274 through TASK-275 remain open. This document does not
-claim Draft 0.7 release closure.
+recorded. TASK-274 has closure/checksum tooling prepared but still needs final
+committed clean-checkout reproduction; TASK-275 remains open. This document
+does not claim Draft 0.7 release closure.

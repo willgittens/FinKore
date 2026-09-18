@@ -129,5 +129,5 @@ Draft 0.7 claim evidence is finalized for the current open-release milestone:
 closed claims remain Draft 0.6 full-profile claims, and Draft 0.7 composition
 evidence remains explicitly non-normative reference application evidence. This
 does not close Draft 0.7; closure still requires documentation synchronization,
-clean-checkout reproduction, provenance/checksum review, and final maintainer
-approval of the release identity.
+clean-checkout reproduction, release-candidate checksum verification, and final
+maintainer approval of the release identity.

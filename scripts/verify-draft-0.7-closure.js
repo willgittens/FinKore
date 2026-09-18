@@ -30,6 +30,7 @@ const steps = [
   ['npm', ['run', 'architecture:check']],
   ['npm', ['run', 'docs:check']],
   ['npm', ['run', 'license:check']],
+  ['npm', ['run', 'checksums:check:draft0.7']],
   ['git', ['diff', '--check']],
   ['git', ['diff', '--quiet']],
   ['git', ['diff', '--cached', '--quiet']],

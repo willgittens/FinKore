@@ -217,10 +217,24 @@ validation, build/typecheck/unit tests, adapters, full
 TypeScript/Python/Java conformance, Draft 0.7 reference scenario execution,
 cross-language comparison, critical composition checks, composition critical
 mutants, coverage, Core critical mutants, portability and boundary reviews,
-architecture, documentation, license, whitespace, and clean-tree checks. Draft
-0.6 checksum metadata remains historical release evidence and is not
-regenerated for Draft 0.7 documentation/source changes.
+architecture, documentation, license, Draft 0.7 release-candidate checksums,
+whitespace, and clean-tree checks. Draft 0.6 checksum metadata remains
+historical release evidence and is not regenerated for Draft 0.7
+documentation/source changes.
+
+Draft 0.7 release-candidate checksum evidence is recorded in
+`conformance/draft-0.7/checksums.json` and verified by:
+
+```bash
+npm run checksums:check:draft0.7
+```
+
+The checksum manifest covers tracked release-relevant source, specification,
+conformance, documentation, implementation, tooling, package, and license
+inputs while excluding ignored generated outputs and itself. It is provenance
+evidence for the non-normative composition reference scope only; it does not
+create a Draft 0.7 Core conformance profile or an immutable tag.
 
 Clean committed-checkout reproduction is still pending. Draft 0.7 remains open
-until that command passes from the final accepted committed revision and Draft
-0.7 provenance/checksum evidence is finalized.
+until the closure command passes from the final accepted committed revision and
+the release identity is explicitly accepted.

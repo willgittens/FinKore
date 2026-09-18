@@ -42,6 +42,8 @@
     "metadata:check:draft0.6": "node scripts/check-draft-0.6-metadata.js",
     "checksums:generate:draft0.6": "node scripts/generate-draft-0.6-checksums.js",
     "checksums:check:draft0.6": "node scripts/generate-draft-0.6-checksums.js --check",
+    "checksums:generate:draft0.7": "node scripts/generate-draft-0.7-checksums.js",
+    "checksums:check:draft0.7": "node scripts/generate-draft-0.7-checksums.js --check",
     "conformance:typescript:profile:full": "node runner/dist/cli/cli.js --manifest conformance/manifest.json --profiles conformance/draft-0.6/profiles.json --profile finkore.core.draft0_6.full --adapter implementations/typescript/adapters/conformance/dist/adapter.js --json",
     "conformance:python:profile:full": "node runner/dist/cli/cli.js --manifest conformance/manifest.json --profiles conformance/draft-0.6/profiles.json --profile finkore.core.draft0_6.full --adapter implementations/python/adapters/conformance/adapter.js --json",
     "conformance:java:profile:money": "npm run java:compile && node runner/dist/cli/cli.js --manifest conformance/manifest.json --profiles conformance/draft-0.6/profiles.json --profile finkore.core.draft0_6.domain.money --adapter implementations/java/adapters/conformance/adapter.js --json",
