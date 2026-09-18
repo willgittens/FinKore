@@ -2,10 +2,11 @@
 
 ## Status
 
-Draft 0.7 is open. This file is a release-note shell for cross-domain
-composition work. It records planning evidence and pending findings; it does
-not claim Draft 0.7 conformance, package availability, production readiness,
-external review, or release closure.
+Draft 0.7 is open pending explicit release-identity approval. The
+cross-domain composition reference proof, closure-grade verification command,
+release-candidate checksums, and Draft 0.8 handoff are recorded; this file does
+not claim package availability, production readiness, external review, or an
+immutable release tag.
 
 Draft 0.7 uses two non-normative reference application profiles:
 
@@ -16,13 +17,13 @@ Those profiles demonstrate composition of existing Money, Workflow, Audit,
 Approvals, and Entities behavior. They do not define new invoice, expense,
 ledger, tax, settlement, authorization, or posting standards.
 
-## Target Scope
+## Closed Scope Candidate
 
-Draft 0.7 aims to prove that existing Core domains can be composed into
+Draft 0.7 proves that existing Core domains can be composed into
 bounded financial workflows with traceable authority, portable observations,
 preserved history, and no partial observable financial effect on rejection.
 
-The release target remains subject to the task list in
+The closure target remains subject to explicit release-identity approval in
 [Draft 0.7 Composition Task List](../plans/draft-0.7-composition-task-list.md).
 
 Supporting Milestone A artifacts:
@@ -181,13 +182,15 @@ Draft 0.7 release closure.
 
 ## Milestone E Status
 
-Milestone E has started. The domain, accounting, technical, security, privacy,
-external-review, limitation, and Draft 0.8 handoff review is recorded in
+Milestone E closure preparation is complete through TASK-274. The domain,
+accounting, technical, security, privacy, external-review, limitation, and
+Draft 0.8 handoff review is recorded in
 [Draft 0.7 Composition Closure Review](../draft-0.7-composition-closure-review.md).
 No material blocker remains for the non-normative reference profile scope.
 
-Claim evidence finalization, documentation synchronization, clean-checkout
-closure reproduction, and final release identity remain open.
+Claim evidence finalization, documentation synchronization, release-candidate
+checksums, and clean-checkout closure reproduction are recorded. Final release
+identity approval remains open.
 
 ## Claim Evidence Status
 
@@ -201,8 +204,7 @@ non-normative application evidence.
 
 The claim-evidence source revision at the start of TASK-272 is
 `b06417a761479314373c3d58831bbcb398562db0`. Draft 0.7 remains open pending
-documentation synchronization, clean-checkout closure reproduction, provenance
-review, and final release identity approval.
+explicit release-identity approval.
 
 ## Closure Verification Status
 
@@ -242,5 +244,45 @@ clean-tree checks, verified `343` Draft 0.7 checksum artifacts, killed all
 Draft 0.7 composition critical mutants (`9/9`), and killed all Core critical
 mutant probes (`24/24`).
 
-Draft 0.7 remains open until TASK-275 records the final release identity,
-handoff scope, and maintainer acceptance decision.
+## Release Identity Approval Candidate
+
+TASK-275 prepares the following release identity for maintainer approval:
+
+| Item | Draft 0.7 candidate |
+| --- | --- |
+| Release label | FinKore Core Draft 0.7 |
+| Proposed immutable tag | `core-draft-0.7` |
+| Latest closure-evidence revision | `4e810f424728a743bcc4bb661becce8ab3f9c2b5` |
+| TASK-274 status revision | `f5cdbb0dcf8ecacc760d042f8818a2e11f814c79` |
+| Closure command | `npm run verify:closure:draft0.7` |
+| Checksum manifest | `conformance/draft-0.7/checksums.json` |
+| Checksum artifact count | `343` |
+| Core conformance claim added by Draft 0.7 | None |
+| Package publication claim | None |
+| Production-readiness claim | None |
+| External-review claim | None performed |
+| Draft 0.6 historical evidence | Preserved; `core-draft-0.6` is not rewritten |
+
+No immutable Draft 0.7 tag has been created by this record. Tag creation
+requires explicit maintainer approval and a final clean committed checkout. If
+approved, the annotated tag should identify the resolved source commit, the
+Draft 0.7 checksum manifest digest, the non-normative reference-profile scope,
+and the factual external-review status.
+
+## Draft 0.8 Handoff
+
+Draft 0.8 should carry forward the following topics:
+
+- executable Agentic manifests for composition workflows;
+- authorization, segregation of duties, delegation, escalation, and actor
+  authentication boundaries;
+- privacy/security review for real identifiers, diagnostics, data
+  minimization, and redaction policy;
+- accounting-specific correction, reversal, posting, payment, settlement,
+  revenue, and tax effects;
+- storage durability, tamper evidence, cryptographic sealing, retention, and
+  distributed Audit ordering; and
+- external community or independent review with factual scope and disposition.
+
+Draft 0.7 remains open until maintainers explicitly approve the release
+identity and any immutable tag action.

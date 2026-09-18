@@ -188,8 +188,9 @@ Current status: the reference expense approval and invoice correction profiles
 are implemented in TypeScript, Python, and Java as non-normative examples.
 Their actual results are cross-language compared, critical failure-boundary
 observations are checked, and seeded critical composition mutants are killed.
-Draft 0.7 still does not add a new Core conformance profile or production
-application policy.
+Closure-grade verification and release-candidate checksums reproduce; Draft
+0.7 is pending explicit release-identity approval. Draft 0.7 still does not add
+a new Core conformance profile or production application policy.
 
 ### Recommended Work
 

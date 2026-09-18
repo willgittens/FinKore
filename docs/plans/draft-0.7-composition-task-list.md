@@ -602,10 +602,11 @@ No material blocker remains for the non-normative reference profile scope.
 
 **Depends on:** TASK-271.
 
-**Deliverables:** Define closed Draft 0.7 conformance scope according to accepted
-changes; update capability and claim metadata as applicable. Record reference
-profile evidence separately. Keep Core, package, conformance format, Agentic,
-profile, and evidence versions distinct; preserve historical Draft 0.6 claims.
+**Deliverables:** Determine the Draft 0.7 conformance-scope boundary according
+to accepted changes; update capability and claim metadata as applicable. Record
+reference profile evidence separately. Keep Core, package, conformance format,
+Agentic, profile, and evidence versions distinct; preserve historical Draft 0.6
+claims.
 
 **Verification:** Run all required normative vectors against all three full
 implementations and both reference profiles in each. Check metadata, identifier,
@@ -704,6 +705,17 @@ Any final semantic or artifact change reruns affected verification gates.
 accepted tag/provenance requirements are fulfilled without rewriting historical
 releases. Draft 0.7 is closed only after the complete exit gate passes.
 
+**Execution note (2026-09-18):** Release notes now prepare the Draft 0.7
+release identity for explicit maintainer approval: proposed tag
+`core-draft-0.7`, latest closure-evidence revision
+`4e810f424728a743bcc4bb661becce8ab3f9c2b5`, TASK-274 status revision
+`f5cdbb0dcf8ecacc760d042f8818a2e11f814c79`, checksum manifest
+`conformance/draft-0.7/checksums.json`, and no new Core conformance,
+package-publication, production-readiness, or external-review claim. Draft 0.8
+Agentic, security, privacy, accounting-effects, storage, and external-review
+handoff topics are recorded. No immutable Draft 0.7 tag has been created; tag
+creation remains pending explicit maintainer approval.
+
 ## 10. Draft 0.7 Closure Checklist
 
 - [ ] Corrected opening baseline and three-language full parity reproduced.
@@ -721,7 +733,7 @@ releases. Draft 0.7 is closed only after the complete exit gate passes.
 - [x] Public APIs, examples, READMEs, and operation metadata are synchronized.
 - [x] CI and clean-checkout closure evidence, checksums, and provenance reproduce.
 - [ ] Historical tags and evidence are preserved; approved release identity is recorded.
-- [ ] External-review status and deferred Draft 0.8 topics are factual and explicit.
+- [x] External-review status and deferred Draft 0.8 topics are factual and explicit.
 
 ## 11. Completion Review
 
@@ -738,13 +750,16 @@ undeclared Core rule, and no passing aggregate score concealed a critical defect
 ## 12. Current Execution Status
 
 ```text
-NEXT CODEX TASK: Commit the TASK-274 status update and regenerated checksum
-manifest, then start TASK-275 release closure and Draft 0.8 handoff.
+NEXT CODEX TASK: Commit the TASK-275 release-identity preparation and
+regenerated checksum manifest. Then obtain explicit maintainer approval before
+creating any immutable `core-draft-0.7` tag or claiming Draft 0.7 closed.
 ```
 
 Milestones A through D are implemented for the non-normative Draft 0.7
 reference composition scope. Milestone E has started: TASK-271 findings review,
 TASK-272 claim evidence, and TASK-273 documentation synchronization are
 recorded. TASK-274 clean-checkout closure evidence has reproduced with the
-Draft 0.7 checksum/provenance gate; TASK-275 remains open. This document does
-not claim Draft 0.7 release closure.
+Draft 0.7 checksum/provenance gate. TASK-275 has release-identity preparation
+and Draft 0.8 handoff recorded, but remains open pending explicit maintainer
+approval of the Draft 0.7 release identity. This document does not claim Draft
+0.7 release closure.

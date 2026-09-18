@@ -429,12 +429,12 @@
     {
       "path": "docs/plans/draft-0.7-composition-task-list.md",
       "kind": "documentation",
-      "sha256": "baa118d600c1aec1278b70428457f661f324fd7fadce2d58092b1e30fec10be5"
+      "sha256": "fb49e99f21658e03476c08dddb0c227fbca05ce9f88e2fb97558538c3cb497c2"
     },
     {
       "path": "docs/plans/good-to-have.md",
       "kind": "documentation",
-      "sha256": "ee50ec18d2a79c1ef1098fbb7f2bd1849783635e506cbee8ee9023bca7cda34f"
+      "sha256": "0df42ebf6ef6f03009f3081c5cbd288569c5de49d808e9362df74e6d4d259639"
     },
     {
       "path": "docs/plans/pre-draft-0.7-readiness-task-list.md",
@@ -484,12 +484,12 @@
     {
       "path": "docs/releases/draft-0.7.md",
       "kind": "documentation",
-      "sha256": "a7d8a2be294de5edd45dffc76f13921817d15db872ef728dc5ccca445e6fc5f7"
+      "sha256": "a584ccbf0d058ebfe46a0bad1e23d3332abde7fcf26057ddb79661fe5728368a"
     },
     {
       "path": "docs/releases/README.md",
       "kind": "documentation",
-      "sha256": "bd36dd748842bb2059d2afa0e7230549ba8b8645053371da464cc16443c3c167"
+      "sha256": "9d9028ad8066a974b9177e8a1a47f358532a4e6ebae5edbf8b556f26c380b27e"
     },
     {
       "path": "docs/research/draft-0.6-boundary-corpus.json",
@@ -1179,7 +1179,7 @@
     {
       "path": "README.md",
       "kind": "source",
-      "sha256": "56c7f7a5147e71d702f8ce54c766a6130b8b5c9b035ace7d43afc0fba15bf13b"
+      "sha256": "a7919d0008e1eb98ca0802b283666feea6284cc94501f6a531f3b6148834b9ac"
     },
     {
       "path": "runner/package-lock.json",
