@@ -2,9 +2,9 @@
 
 ## Status
 
-Planned. This document is non-normative and organizes the work required for the
-0.8 release. Financial behavior remains defined by `/spec`, and completed scope
-is recorded concisely in `docs/releases/README.md` when the release ships.
+Complete. This document is non-normative and records the work completed for the
+0.8 release. Financial behavior remains defined by `/spec`, and shipped scope is
+recorded concisely in `docs/releases/README.md`.
 
 ## Objective
 
@@ -169,29 +169,29 @@ Prove that the unified wording did not change or fragment behavior.
 
 ### Tasks
 
-- [ ] Run documentation link and reference checks.
-- [ ] Run architecture and license checks.
-- [ ] Build and type-check the TypeScript workspaces.
-- [ ] Run TypeScript, Python, and Java unit and adapter tests.
-- [ ] Run the complete manifest against TypeScript, Python, and Java.
-- [ ] Run coverage checks for the runner and all three implementations.
-- [ ] Run the complete critical-mutant suite.
-- [ ] Confirm that all critical financial mutants are killed.
-- [ ] Confirm that all verification commands work locally without GitHub
+- [x] Run documentation link and reference checks.
+- [x] Run architecture and license checks.
+- [x] Build and type-check the TypeScript workspaces.
+- [x] Run TypeScript, Python, and Java unit and adapter tests.
+- [x] Run the complete manifest against TypeScript, Python, and Java.
+- [x] Run coverage checks for the runner and all three implementations.
+- [x] Run the complete critical-mutant suite.
+- [x] Confirm that all critical financial mutants are killed.
+- [x] Confirm that all verification commands work locally without GitHub
       Actions.
-- [ ] Add a short 0.8 entry to `docs/releases/README.md` only when the release is
+- [x] Add a short 0.8 entry to `docs/releases/README.md` only when the release is
       complete.
 
 ## Release gate
 
 0.8 is complete only when:
 
-- [ ] the current baseline has one coherent version identity;
-- [ ] compatibility rules are explicit;
-- [ ] full and domain-scoped conformance claims are explicit;
-- [ ] the Agentic Contract boundary is settled for the current scope;
-- [ ] no new financial domain has entered the release;
-- [ ] TypeScript, Python, and Java pass the same complete manifest;
-- [ ] local build, tests, conformance, coverage, mutation, architecture,
+- [x] the current baseline has one coherent version identity;
+- [x] compatibility rules are explicit;
+- [x] full and domain-scoped conformance claims are explicit;
+- [x] the Agentic Contract boundary is settled for the current scope;
+- [x] no new financial domain has entered the release;
+- [x] TypeScript, Python, and Java pass the same complete manifest;
+- [x] local build, tests, conformance, coverage, mutation, architecture,
       documentation, and license checks pass;
-- [ ] release notes contain only a concise shipped-scope summary.
+- [x] release notes contain only a concise shipped-scope summary.

@@ -3,6 +3,12 @@
 This is the complete release history kept in the working tree. Precise financial
 behavior belongs to `/spec`; detailed change history remains available in Git.
 
+## FinKore Core 0.8
+
+Unified the Money, Workflow, Audit, Approvals, and Financial Entities baseline
+as FinKore Core 0.8, with explicit compatibility, conformance-claim, and
+Agentic Contract boundaries.
+
 ## Draft 0.7
 
 Removed the non-normative composition proof and simplified repository governance,
