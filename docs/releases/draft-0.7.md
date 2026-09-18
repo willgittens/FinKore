@@ -154,3 +154,24 @@ Reference scenario verification on September 18, 2026:
 This evidence does not create a new Core conformance profile or a Draft 0.7
 release claim. Coverage, mutation hardening, cross-language result comparison,
 and final claim closure remain later Draft 0.7 gates.
+
+## Milestone D Status
+
+Milestone D adds executable proof tooling for the non-normative reference
+profiles. The comparison command emits actual observations from TypeScript,
+Python, and Java and compares the full sorted JSON result set for all 20 shared
+scenarios. The critical guard then checks selected exact-money,
+failure-boundary, history-preservation, primary-error, and no-synthetic-effect
+facts over those compared results.
+
+Reference proof verification on September 18, 2026:
+
+| Command | Result |
+| --- | --- |
+| `npm run composition:compare:draft0.7` | Sandboxed runs hit subprocess `EPERM` boundaries while spawning local toolchain commands; escalated reruns PASS: 20 scenarios matched across TypeScript, Python, and Java |
+| `npm run composition:critical:draft0.7` | Sandboxed runs hit subprocess `EPERM` boundaries while spawning the nested comparator; escalated reruns PASS: critical checks passed for 20 compared scenarios |
+
+This evidence closes the actual-result comparison and critical
+history-preservation proof work. It does not claim a full composition mutation
+campaign, an accepted equivalent for mutation coverage, a new Core conformance
+profile, or Draft 0.7 release closure.

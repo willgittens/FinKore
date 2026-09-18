@@ -439,7 +439,7 @@ For TASK-265 through TASK-267, derive behavior from accepted specifications and
 declared profile policy, preserve architecture boundaries, and retain a failing
 regression before fixing any defect. Each language implements both profiles.
 
-### - [ ] TASK-265 — Implement and Verify TypeScript Composition Profiles
+### - [x] TASK-265 — Implement and Verify TypeScript Composition Profiles
 
 **Depends on:** TASK-264.
 
@@ -459,7 +459,7 @@ strict example `tsconfig` and fixture-driven Vitest coverage for all 20 shared
 scenarios. `npm run composition:typescript:draft0.7` passed: strict compile and
 20/20 scenario checks.
 
-### - [ ] TASK-266 — Implement and Verify Python Composition Profiles
+### - [x] TASK-266 — Implement and Verify Python Composition Profiles
 
 **Depends on:** TASK-264.
 
@@ -479,7 +479,7 @@ decimal context, mutable fixture aliases, or inferred financial policy.
 unittest loading the shared fixture set. `npm run composition:python:draft0.7`
 passed and checked all 20 shared scenarios through Python Core APIs.
 
-### - [ ] TASK-267 — Implement and Verify Java Composition Profiles
+### - [x] TASK-267 — Implement and Verify Java Composition Profiles
 
 **Depends on:** TASK-264.
 
@@ -504,7 +504,7 @@ escalation.
 
 ### Milestone D — Composition Proof
 
-### - [ ] TASK-268 — Compare Actual Composition Results Across Languages
+### - [x] TASK-268 — Compare Actual Composition Results Across Languages
 
 **Depends on:** TASK-265, TASK-266, TASK-267.
 
@@ -519,7 +519,14 @@ TypeScript expectations. Do not normalize away meaningful nullability or order.
 **Acceptance:** No unexplained cross-language difference remains within the
 declared portable scope; claims identify exact inputs and implementation revisions.
 
-### - [ ] TASK-269 — Prove Failure Atomicity and History Preservation
+**Execution note (2026-09-18):** Added
+`npm run composition:compare:draft0.7`, which emits actual observations from
+TypeScript, Python, and Java and compares the complete sorted JSON result set
+for all 20 shared scenarios. Sandboxed runs hit subprocess `EPERM` boundaries
+while spawning local toolchain commands; escalated reruns passed with all 20
+scenarios matching across the three languages.
+
+### - [x] TASK-269 — Prove Failure Atomicity and History Preservation
 
 **Depends on:** TASK-268.
 
@@ -535,6 +542,14 @@ prior committed Decisions, Audit Events, and original correction facts.
 **Acceptance:** Every rejection has the specified error and effects; no claimed
 atomicity guarantee rests solely on inspecting the returned status.
 
+**Execution note (2026-09-18):** Added explicit `evidence` observations to the
+TypeScript, Python, and Java profile results for exact allocations, approval
+gates, stale Workflow preconditions, late Audit failures, correction source and
+related facts, relation counts, and absence of synthetic correction effects.
+Added `npm run composition:critical:draft0.7`; after the same subprocess
+sandbox `EPERM` boundary, escalated reruns passed critical checks for all 20
+compared scenarios.
+
 ### - [ ] TASK-270 — Harden Composition Tests Against Critical Defects
 
 **Depends on:** TASK-269.
@@ -549,6 +564,12 @@ critical defect is killed by a financial outcome or invariant assertion.
 **Acceptance:** Mutation target is met or an equivalent is explicitly accepted;
 no critical financial mutant survives. Do not exclude orchestration merely
 because it lives in examples.
+
+**Execution note (2026-09-18):** The critical composition guard added for
+TASK-269 exercises the section 7 defect classes through actual compared
+observations, but it is not a full mutation campaign and no accepted equivalent
+has been recorded. TASK-270 remains open pending mutation-campaign evidence or
+explicitly accepted equivalent scope.
 
 ### Milestone E — Claims and Closure
 

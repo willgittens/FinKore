@@ -26,7 +26,7 @@
     "conformance:java:approvals": "npm run java:compile && node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/java/adapters/conformance/adapter.js --suite approvals",
     "conformance:java:entities": "npm run java:compile && node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/java/adapters/conformance/adapter.js --suite entities",
     "python:unit": "PYTHONPATH=implementations/python/core/src .tools/bin/python3.12 -m unittest discover -s implementations/python/core/tests",
-    "python:compile": "PYTHONPATH=implementations/python/core/src .tools/bin/python3.12 -m compileall -q implementations/python/core/src implementations/python/adapters/conformance implementations/python/core/tests",
+    "python:compile": "PYTHONPATH=implementations/python/core/src .tools/bin/python3.12 -m compileall -q implementations/python/core/src implementations/python/adapters/conformance implementations/python/core/tests implementations/python/examples",
     "python:coverage:setup": ".tools/bin/python3.12 -m venv .tools/python-coverage && .tools/python-coverage/bin/python -m pip install -e 'implementations/python/core[coverage]'",
     "python:coverage": "node scripts/run-python-coverage.js",
     "python:mutation:critical": "node scripts/run-critical-mutants.js python",
@@ -62,6 +62,8 @@
     "composition:python:draft0.7": "PYTHONPATH=implementations/python/core/src .tools/bin/python3.12 -m unittest implementations/python/core/tests/test_composition_draft_0_7.py",
     "composition:java:draft0.7": "npm run java:compile && node scripts/run-java-tests.js",
     "composition:test:draft0.7": "npm run composition:check:draft0.7 && npm run composition:typescript:draft0.7 && npm run composition:python:draft0.7 && npm run composition:java:draft0.7",
+    "composition:compare:draft0.7": "node scripts/run-draft-0.7-composition-comparison.js",
+    "composition:critical:draft0.7": "node scripts/run-draft-0.7-composition-critical-checks.js",
     "docs:check": "node scripts/check-doc-references.js",
     "license:check": "node scripts/check-license.js"
   }

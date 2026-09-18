@@ -22,6 +22,19 @@ Run the implemented reference scenarios in all three languages:
 npm run composition:test:draft0.7
 ```
 
+Compare the actual portable observations emitted by all three language
+profiles:
+
+```bash
+npm run composition:compare:draft0.7
+```
+
+Run the Draft 0.7 critical composition guard over the compared results:
+
+```bash
+npm run composition:critical:draft0.7
+```
+
 The TypeScript, Python, and Java Milestone C examples execute these scenarios
 through real Core APIs. `implementationStatus` is `implemented` for the
 reference application fixture set; this is not a Core conformance claim.

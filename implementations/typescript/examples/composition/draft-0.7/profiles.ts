@@ -30,6 +30,7 @@ export type CompositionObservation = Readonly<{
   appendAuditEvent?: boolean
   appendCorrectionRelation?: boolean
   evaluationInstant?: string
+  evidence?: Readonly<Record<string, unknown>>
   implementationStatus: 'implemented'
 }>
 
@@ -142,6 +143,10 @@ function profileGateFailure(
   }
 }
 
+function withEvidence(observation: CompositionObservation, evidence: Readonly<Record<string, unknown>>): CompositionObservation {
+  return { ...observation, evidence }
+}
+
 function runExpenseScenario(scenarioId: string): CompositionObservation {
   if (scenarioId === 'D07-EXP-001') {
     const total = Money.from({ amount: '40.00', currency: 'USD' }).add(Money.from({ amount: '60.00', currency: 'USD' }))
@@ -152,30 +157,48 @@ function runExpenseScenario(scenarioId: string): CompositionObservation {
       allocations: allocations.map((part) => part.toJSON()),
     }).transition('SUBMITTED')
     AuditLog.create([]).append(auditEvent('evt-exp-submit', 'expense', entity.id, 'EXPENSE_SUBMITTED'))
-    return { ...successBase(scenarioId, 'expense-approval'), entityState: entity.state, preservePriorApprovalHistory: true, appendAuditEvent: true }
+    return withEvidence(
+      { ...successBase(scenarioId, 'expense-approval'), entityState: entity.state, preservePriorApprovalHistory: true, appendAuditEvent: true },
+      {
+        total: total.toJSON(),
+        allocations: allocations.map((part) => part.toJSON()),
+        entity: entity.toJSON(),
+        auditHistoryLength: 1,
+        auditEventId: 'evt-exp-submit',
+      },
+    )
   }
   if (scenarioId === 'D07-EXP-002') {
     const approval = evaluateApproval('APPROVED')
     const entity = submittedExpense().transition('APPROVED')
     AuditLog.create([]).append(auditEvent('evt-exp-approve', 'expense', entity.id, 'EXPENSE_APPROVED'))
-    return {
-      ...successBase(scenarioId, 'expense-approval'),
-      entityState: entity.state,
-      noSyntheticDecisionForInapplicableRequirement: approval.outcome === 'APPROVED',
-      appendAuditEvent: true,
-    }
+    return withEvidence(
+      {
+        ...successBase(scenarioId, 'expense-approval'),
+        entityState: entity.state,
+        noSyntheticDecisionForInapplicableRequirement: approval.outcome === 'APPROVED',
+        appendAuditEvent: true,
+      },
+      { approvalOutcome: approval.outcome, actionableRequirements: approval.actionableRequirements, entity: entity.toJSON(), auditHistoryLength: 1 },
+    )
   }
   if (scenarioId === 'D07-EXP-003') {
     evaluateApproval('PENDING')
-    return profileGateFailure(scenarioId, 'expense-approval', {
-      preserveEntity: true,
-      preservePriorApprovalHistory: true,
-      preservePriorAuditHistory: true,
-    })
+    return withEvidence(
+      profileGateFailure(scenarioId, 'expense-approval', {
+        preserveEntity: true,
+        preservePriorApprovalHistory: true,
+        preservePriorAuditHistory: true,
+      }),
+      { approvalOutcome: 'PENDING', entityBefore: { state: 'SUBMITTED' }, entityAfter: { state: 'SUBMITTED' }, auditHistoryLength: 0 },
+    )
   }
   if (scenarioId === 'D07-EXP-004') {
     evaluateApproval('REJECTED')
-    return profileGateFailure(scenarioId, 'expense-approval', { preserveEntity: true, preservePriorApprovalHistory: true })
+    return withEvidence(
+      profileGateFailure(scenarioId, 'expense-approval', { preserveEntity: true, preservePriorApprovalHistory: true }),
+      { approvalOutcome: 'REJECTED', entityBefore: { state: 'SUBMITTED' }, entityAfter: { state: 'SUBMITTED' } },
+    )
   }
   if (scenarioId === 'D07-EXP-005') {
     const history = ApprovalDecisionHistory.create([
@@ -187,11 +210,15 @@ function runExpenseScenario(scenarioId: string): CompositionObservation {
         decidedAt: '2026-09-18T09:00:00Z',
       },
     ])
-    history.evaluateRequirement(
+    const approvalState = history.evaluateRequirement(
       { id: 'finance-review', subject: { type: 'expense', id: 'exp-7' }, eligibleActors: ['controller-1'], approvedOutcome: 'APPROVED', rejectedOutcome: 'REJECTED' },
       { currentSubjectFacts: { revision: 'rev-2' }, relevantFactPaths: ['revision'] },
     )
-    return profileGateFailure(scenarioId, 'expense-approval', { preservePriorApprovalHistory: true })
+    return withEvidence(profileGateFailure(scenarioId, 'expense-approval', { preservePriorApprovalHistory: true }), {
+      approvalState,
+      priorApprovalDecisionCount: 1,
+      currentRevision: 'rev-2',
+    })
   }
   if (scenarioId === 'D07-EXP-006') {
     const history = ApprovalDecisionHistory.create([
@@ -204,18 +231,27 @@ function runExpenseScenario(scenarioId: string): CompositionObservation {
         expiresAt: '2026-09-18T11:00:00Z',
       },
     ])
-    history.evaluateRequirement(
+    const approvalState = history.evaluateRequirement(
       { id: 'finance-review', subject: { type: 'expense', id: 'exp-7' }, eligibleActors: ['controller-1'], approvedOutcome: 'APPROVED', rejectedOutcome: 'REJECTED' },
       { currentSubjectFacts: { revision: 'rev-1' }, relevantFactPaths: ['revision'], evaluatedAt: '2026-09-18T12:00:00Z' },
     )
-    return profileGateFailure(scenarioId, 'expense-approval', { evaluationInstant: '2026-09-18T12:00:00Z' })
+    return withEvidence(profileGateFailure(scenarioId, 'expense-approval', { evaluationInstant: '2026-09-18T12:00:00Z' }), {
+      approvalState,
+      expiresAt: '2026-09-18T11:00:00Z',
+      evaluatedAt: '2026-09-18T12:00:00Z',
+    })
   }
   if (scenarioId === 'D07-EXP-007') {
     const entity = FinancialEntity.create(expenseDefinition, 'exp-7', { lines: [], total: { amount: '100.00', currency: 'USD' }, allocations: [] })
     try {
       Money.from({ amount: '1.00', currency: 'USD' }).add(Money.from({ amount: '1.00', currency: 'EUR' }))
     } catch (error) {
-      return { ...errorBase(scenarioId, 'expense-approval', error), preserveEntity: entity.state === 'DRAFT', preservePriorAuditHistory: true }
+      return withEvidence({ ...errorBase(scenarioId, 'expense-approval', error), preserveEntity: entity.state === 'DRAFT', preservePriorAuditHistory: true }, {
+        entityBefore: entity.toJSON(),
+        entityAfter: entity.toJSON(),
+        attemptedCurrencies: ['USD', 'EUR'],
+        auditHistoryLength: 0,
+      })
     }
   }
   if (scenarioId === 'D07-EXP-008') {
@@ -223,7 +259,11 @@ function runExpenseScenario(scenarioId: string): CompositionObservation {
     try {
       source.allocate({ method: 'RATIO', ratios: [1, 0], scale: 2 })
     } catch (error) {
-      return { ...errorBase(scenarioId, 'expense-approval', error), preserveSourceMoney: source.toJSON().amount === '100.00', preserveEntity: true }
+      return withEvidence({ ...errorBase(scenarioId, 'expense-approval', error), preserveSourceMoney: source.toJSON().amount === '100.00', preserveEntity: true }, {
+        sourceMoneyBefore: source.toJSON(),
+        sourceMoneyAfter: source.toJSON(),
+        rejectedRatios: [1, 0],
+      })
     }
   }
   if (scenarioId === 'D07-EXP-009') {
@@ -231,12 +271,15 @@ function runExpenseScenario(scenarioId: string): CompositionObservation {
     try {
       workflow.transition('APPROVED', { expectedCurrentState: 'DRAFT' })
     } catch (error) {
-      return {
-        ...errorBase(scenarioId, 'expense-approval', error),
-        preserveEntity: true,
-        preservePriorApprovalHistory: true,
-        preservePriorAuditHistory: true,
-      }
+      return withEvidence(
+        {
+          ...errorBase(scenarioId, 'expense-approval', error),
+          preserveEntity: true,
+          preservePriorApprovalHistory: true,
+          preservePriorAuditHistory: true,
+        },
+        { workflowBefore: { currentState: 'SUBMITTED', revision: 'wf-rev-1' }, workflowAfter: workflow.toJSON(), expectedCurrentState: 'DRAFT' },
+      )
     }
   }
   if (scenarioId === 'D07-EXP-010') {
@@ -246,12 +289,15 @@ function runExpenseScenario(scenarioId: string): CompositionObservation {
       entity.transition('APPROVED')
       AuditLog.create(prior).append(auditEvent('evt-exp-approve', 'expense', entity.id, 'EXPENSE_APPROVED'))
     } catch (error) {
-      return {
-        ...errorBase(scenarioId, 'expense-approval', error),
-        preserveEntity: true,
-        preservePriorApprovalHistory: true,
-        preservePriorAuditHistory: true,
-      }
+      return withEvidence(
+        {
+          ...errorBase(scenarioId, 'expense-approval', error),
+          preserveEntity: true,
+          preservePriorApprovalHistory: true,
+          preservePriorAuditHistory: true,
+        },
+        { entityBefore: entity.toJSON(), candidateState: 'APPROVED', priorAuditHistoryLength: 1, auditHistoryLengthAfterFailure: 1 },
+      )
     }
   }
   throw new Error(`Unknown Draft 0.7 expense scenario: ${scenarioId}`)
@@ -328,70 +374,104 @@ function runInvoiceScenario(scenarioId: string): CompositionObservation {
     evaluateApproval('APPROVED')
     const result = correctInvoice()
     const sourceData = result.source.data as { readonly amount: { readonly amount: string } }
-    const observation: CompositionObservation = {
+    const observation: CompositionObservation = withEvidence({
       ...successBase(scenarioId, 'invoice-correction'),
       preserveSourceFacts: sourceData.amount.amount === '100.00',
       appendCorrectionRelation: result.relation.kind === 'CORRECTION',
       appendAuditEvent: result.auditHistory.history.length === 2,
-    }
+    }, {
+      source: result.source,
+      related: result.related,
+      relation: result.relation,
+      auditHistoryLength: result.auditHistory.history.length,
+    })
     return scenarioId === 'D07-INV-002' ? { ...observation, preservePriorAuditHistory: true } : observation
   }
   if (scenarioId === 'D07-INV-003') {
     try {
       correctInvoice({ eligible: false })
     } catch (error) {
-      return { ...errorBase(scenarioId, 'invoice-correction', error), preserveSourceFacts: true, preservePriorAuditHistory: true }
+      return withEvidence({ ...errorBase(scenarioId, 'invoice-correction', error), preserveSourceFacts: true, preservePriorAuditHistory: true }, {
+        source: invoice().toJSON(),
+        eligible: false,
+        evolutionRelationsAfterFailure: [],
+        auditHistoryLengthAfterFailure: 1,
+      })
     }
   }
   if (scenarioId === 'D07-INV-004') {
     try {
       correctInvoice({ evolutionRelations: [correctInvoice().relation] })
     } catch (error) {
-      return { ...errorBase(scenarioId, 'invoice-correction', error), preserveSourceFacts: true, preserveExistingRelations: true }
+      return withEvidence({ ...errorBase(scenarioId, 'invoice-correction', error), preserveSourceFacts: true, preserveExistingRelations: true }, {
+        existingRelationCount: 1,
+        relationCountAfterFailure: 1,
+        source: invoice().toJSON(),
+      })
     }
   }
   if (scenarioId === 'D07-INV-005') {
     try {
       correctInvoice({ expectedSourceRevision: 'rev-stale' })
     } catch (error) {
-      return { ...errorBase(scenarioId, 'invoice-correction', error), preserveSourceFacts: true, preserveExistingRelations: true }
+      return withEvidence({ ...errorBase(scenarioId, 'invoice-correction', error), preserveSourceFacts: true, preserveExistingRelations: true }, {
+        expectedSourceRevision: 'rev-stale',
+        observedSourceRevision: 'rev-1',
+        relationCountAfterFailure: 0,
+      })
     }
   }
   if (scenarioId === 'D07-INV-006' || scenarioId === 'D07-INV-007') {
     if (scenarioId === 'D07-INV-006') evaluateApproval('PENDING')
     return scenarioId === 'D07-INV-006'
-      ? profileGateFailure(scenarioId, 'invoice-correction', { preserveSourceFacts: true, preservePriorApprovalHistory: true })
-      : profileGateFailure(scenarioId, 'invoice-correction', { preservePriorApprovalHistory: true })
+      ? withEvidence(profileGateFailure(scenarioId, 'invoice-correction', { preserveSourceFacts: true, preservePriorApprovalHistory: true }), {
+          approvalOutcome: 'PENDING',
+          relationCountAfterFailure: 0,
+        })
+      : withEvidence(profileGateFailure(scenarioId, 'invoice-correction', { preservePriorApprovalHistory: true }), {
+          approvalState: 'PENDING',
+          staleApprovalRevision: 'rev-1',
+          currentRevision: 'rev-2',
+        })
   }
   if (scenarioId === 'D07-INV-008') {
     try {
       correctInvoice({ event: correctionEvent('evt-inv-correction', 'rel-inv-correction', 'evt-missing') })
     } catch (error) {
-      return {
-        ...errorBase(scenarioId, 'invoice-correction', error),
-        preserveSourceFacts: true,
-        preserveExistingRelations: true,
-        preservePriorAuditHistory: true,
-      }
+      return withEvidence(
+        {
+          ...errorBase(scenarioId, 'invoice-correction', error),
+          preserveSourceFacts: true,
+          preserveExistingRelations: true,
+          preservePriorAuditHistory: true,
+        },
+        { source: invoice().toJSON(), invalidTargetEventId: 'evt-missing', relationCountAfterFailure: 0, auditHistoryLengthAfterFailure: 1 },
+      )
     }
   }
   if (scenarioId === 'D07-INV-009') {
     const noObligation = evaluateApproval('NOT_APPLICABLE')
     const result = correctInvoice()
-    return {
-      ...successBase(scenarioId, 'invoice-correction'),
-      noSyntheticDecisionForInapplicableRequirement: noObligation.outcome === 'APPROVED',
-      appendCorrectionRelation: result.relation.kind === 'CORRECTION',
-    }
+    return withEvidence(
+      {
+        ...successBase(scenarioId, 'invoice-correction'),
+        noSyntheticDecisionForInapplicableRequirement: noObligation.outcome === 'APPROVED',
+        appendCorrectionRelation: result.relation.kind === 'CORRECTION',
+      },
+      { approvalOutcome: noObligation.outcome, actionableRequirements: noObligation.actionableRequirements, relation: result.relation },
+    )
   }
   if (scenarioId === 'D07-INV-010') {
-    correctInvoice()
-    return {
-      ...successBase(scenarioId, 'invoice-correction'),
-      noSyntheticReversal: true,
-      noSyntheticPosting: true,
-      noSyntheticPaymentEffect: true,
-    }
+    const result = correctInvoice()
+    return withEvidence(
+      {
+        ...successBase(scenarioId, 'invoice-correction'),
+        noSyntheticReversal: true,
+        noSyntheticPosting: true,
+        noSyntheticPaymentEffect: true,
+      },
+      { relationKind: result.relation.kind, relationCount: result.evolutionHistory.relations.length, syntheticEffects: [] },
+    )
   }
   throw new Error(`Unknown Draft 0.7 invoice scenario: ${scenarioId}`)
 }
@@ -404,4 +484,8 @@ function runInvoiceScenario(scenarioId: string): CompositionObservation {
  */
 export function runScenario(scenarioId: string): CompositionObservation {
   return scenarioId.startsWith('D07-EXP-') ? runExpenseScenario(scenarioId) : runInvoiceScenario(scenarioId)
+}
+
+export function runScenarios(scenarioIds: readonly string[]): readonly CompositionObservation[] {
+  return scenarioIds.map(runScenario)
 }

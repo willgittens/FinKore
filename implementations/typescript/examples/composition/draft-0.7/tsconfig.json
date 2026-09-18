@@ -5,5 +5,5 @@
     "noEmit": true,
     "declaration": false
   },
-  "include": ["./profiles.ts", "../../../core/src/**/*.ts"]
+  "include": ["./profiles.ts", "./emit-results.ts", "../../../core/src/**/*.ts"]
 }

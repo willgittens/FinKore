@@ -47,46 +47,58 @@ public final class CompositionProfiles {
             Entities.create(expenseDefinition(), "exp-7", map("lines", List.of(), "total", total.toPortable(), "allocations", allocations)),
             "SUBMITTED");
         Audit.Log.create(List.of()).append(auditEvent("evt-exp-submit", "expense", (String) entity.get("id"), "EXPENSE_SUBMITTED"));
-        return merge(success(scenarioId, "expense-approval"), map("entityState", entity.get("state"), "preservePriorApprovalHistory", true, "appendAuditEvent", true));
+        return withEvidence(
+            merge(success(scenarioId, "expense-approval"), map("entityState", entity.get("state"), "preservePriorApprovalHistory", true, "appendAuditEvent", true)),
+            map("total", total.toPortable(), "allocations", allocations, "entity", entity, "auditHistoryLength", 1, "auditEventId", "evt-exp-submit"));
       }
       case "D07-EXP-002" -> {
         Map<String, Object> approval = evaluateApproval("APPROVED");
         Map<String, Object> entity = Entities.transition(expenseDefinition(), submittedExpense(), "APPROVED");
         Audit.Log.create(List.of()).append(auditEvent("evt-exp-approve", "expense", (String) entity.get("id"), "EXPENSE_APPROVED"));
-        return merge(success(scenarioId, "expense-approval"), map("entityState", entity.get("state"), "noSyntheticDecisionForInapplicableRequirement", "APPROVED".equals(approval.get("outcome")), "appendAuditEvent", true));
+        return withEvidence(
+            merge(success(scenarioId, "expense-approval"), map("entityState", entity.get("state"), "noSyntheticDecisionForInapplicableRequirement", "APPROVED".equals(approval.get("outcome")), "appendAuditEvent", true)),
+            map("approvalOutcome", approval.get("outcome"), "actionableRequirements", approval.get("actionableRequirements"), "entity", entity, "auditHistoryLength", 1));
       }
       case "D07-EXP-003" -> {
         evaluateApproval("PENDING");
-        return profileGateFailure(scenarioId, "expense-approval", map("preserveEntity", true, "preservePriorApprovalHistory", true, "preservePriorAuditHistory", true));
+        return withEvidence(
+            profileGateFailure(scenarioId, "expense-approval", map("preserveEntity", true, "preservePriorApprovalHistory", true, "preservePriorAuditHistory", true)),
+            map("approvalOutcome", "PENDING", "entityBefore", map("state", "SUBMITTED"), "entityAfter", map("state", "SUBMITTED"), "auditHistoryLength", 0));
       }
       case "D07-EXP-004" -> {
         evaluateApproval("REJECTED");
-        return profileGateFailure(scenarioId, "expense-approval", map("preserveEntity", true, "preservePriorApprovalHistory", true));
+        return withEvidence(
+            profileGateFailure(scenarioId, "expense-approval", map("preserveEntity", true, "preservePriorApprovalHistory", true)),
+            map("approvalOutcome", "REJECTED", "entityBefore", map("state", "SUBMITTED"), "entityAfter", map("state", "SUBMITTED")));
       }
       case "D07-EXP-005" -> {
-        Approvals.evaluateRequirement(
+        String approvalState = Approvals.evaluateRequirement(
             map("id", "finance-review", "subject", map("type", "expense", "id", "exp-7"), "eligibleActors", List.of("controller-1")),
             List.of(map("requirementId", "finance-review", "subjectFacts", map("revision", "rev-1"), "outcome", "APPROVED", "actor", map("id", "controller-1"), "decidedAt", "2026-09-18T09:00:00Z")),
             map("revision", "rev-2"),
             List.of("revision"),
             null);
-        return profileGateFailure(scenarioId, "expense-approval", map("preservePriorApprovalHistory", true));
+        return withEvidence(profileGateFailure(scenarioId, "expense-approval", map("preservePriorApprovalHistory", true)), map("approvalState", approvalState, "priorApprovalDecisionCount", 1, "currentRevision", "rev-2"));
       }
       case "D07-EXP-006" -> {
-        Approvals.evaluateRequirement(
+        String approvalState = Approvals.evaluateRequirement(
             map("id", "finance-review", "subject", map("type", "expense", "id", "exp-7"), "eligibleActors", List.of("controller-1")),
             List.of(map("requirementId", "finance-review", "subjectFacts", map("revision", "rev-1"), "outcome", "APPROVED", "actor", map("id", "controller-1"), "decidedAt", "2026-09-18T09:00:00Z", "expiresAt", "2026-09-18T11:00:00Z")),
             map("revision", "rev-1"),
             List.of("revision"),
             "2026-09-18T12:00:00Z");
-        return profileGateFailure(scenarioId, "expense-approval", map("evaluationInstant", "2026-09-18T12:00:00Z"));
+        return withEvidence(
+            profileGateFailure(scenarioId, "expense-approval", map("evaluationInstant", "2026-09-18T12:00:00Z")),
+            map("approvalState", approvalState, "expiresAt", "2026-09-18T11:00:00Z", "evaluatedAt", "2026-09-18T12:00:00Z"));
       }
       case "D07-EXP-007" -> {
         Map<String, Object> entity = Entities.create(expenseDefinition(), "exp-7", map("lines", List.of(), "total", money("100.00", "USD"), "allocations", List.of()));
         try {
           Money.fromPortable(money("1.00", "USD")).add(Money.fromPortable(money("1.00", "EUR")));
         } catch (FinKoreException error) {
-          return merge(coreError(scenarioId, "expense-approval", error), map("preserveEntity", "DRAFT".equals(entity.get("state")), "preservePriorAuditHistory", true));
+          return withEvidence(
+              merge(coreError(scenarioId, "expense-approval", error), map("preserveEntity", "DRAFT".equals(entity.get("state")), "preservePriorAuditHistory", true)),
+              map("entityBefore", entity, "entityAfter", entity, "attemptedCurrencies", List.of("USD", "EUR"), "auditHistoryLength", 0));
         }
       }
       case "D07-EXP-008" -> {
@@ -94,7 +106,9 @@ public final class CompositionProfiles {
         try {
           source.allocate(map("method", "RATIO", "ratios", List.of(1, 0)), 2);
         } catch (FinKoreException error) {
-          return merge(coreError(scenarioId, "expense-approval", error), map("preserveEntity", true, "preserveSourceMoney", "100.00".equals(source.toPortable().get("amount"))));
+          return withEvidence(
+              merge(coreError(scenarioId, "expense-approval", error), map("preserveEntity", true, "preserveSourceMoney", "100.00".equals(source.toPortable().get("amount")))),
+              map("sourceMoneyBefore", source.toPortable(), "sourceMoneyAfter", source.toPortable(), "rejectedRatios", List.of(1, 0)));
         }
       }
       case "D07-EXP-009" -> {
@@ -103,7 +117,9 @@ public final class CompositionProfiles {
         try {
           Workflow.transition(definition, instance, "APPROVED", null, "DRAFT", null);
         } catch (FinKoreException error) {
-          return merge(coreError(scenarioId, "expense-approval", error), map("preserveEntity", true, "preservePriorApprovalHistory", true, "preservePriorAuditHistory", true));
+          return withEvidence(
+              merge(coreError(scenarioId, "expense-approval", error), map("preserveEntity", true, "preservePriorApprovalHistory", true, "preservePriorAuditHistory", true)),
+              map("workflowBefore", map("currentState", "SUBMITTED", "revision", "wf-rev-1"), "workflowAfter", instance.toPortable(), "expectedCurrentState", "DRAFT"));
         }
       }
       case "D07-EXP-010" -> {
@@ -113,7 +129,9 @@ public final class CompositionProfiles {
           Entities.transition(expenseDefinition(), entity, "APPROVED");
           Audit.Log.create(prior).append(auditEvent("evt-exp-approve", "expense", (String) entity.get("id"), "EXPENSE_APPROVED"));
         } catch (FinKoreException error) {
-          return merge(coreError(scenarioId, "expense-approval", error), map("preserveEntity", true, "preservePriorApprovalHistory", true, "preservePriorAuditHistory", true));
+          return withEvidence(
+              merge(coreError(scenarioId, "expense-approval", error), map("preserveEntity", true, "preservePriorApprovalHistory", true, "preservePriorAuditHistory", true)),
+              map("entityBefore", entity, "candidateState", "APPROVED", "priorAuditHistoryLength", 1, "auditHistoryLengthAfterFailure", 1));
         }
       }
       default -> throw new IllegalArgumentException("Unknown Draft 0.7 expense scenario: " + scenarioId);
@@ -126,10 +144,11 @@ public final class CompositionProfiles {
       case "D07-INV-001", "D07-INV-002" -> {
         evaluateApproval("APPROVED");
         Map<String, Object> result = correctInvoice(Map.of());
-        Map<String, Object> observation = merge(success(scenarioId, "invoice-correction"), map(
+        Map<String, Object> observation = withEvidence(merge(success(scenarioId, "invoice-correction"), map(
             "preserveSourceFacts", "100.00".equals(sourceAmount(result)),
             "appendCorrectionRelation", "CORRECTION".equals(((Map<?, ?>) result.get("relation")).get("kind")),
-            "appendAuditEvent", ((List<?>) ((Map<?, ?>) result.get("auditHistory")).get("history")).size() == 2));
+            "appendAuditEvent", ((List<?>) ((Map<?, ?>) result.get("auditHistory")).get("history")).size() == 2)),
+            map("source", result.get("source"), "related", result.get("related"), "relation", result.get("relation"), "auditHistoryLength", ((List<?>) ((Map<?, ?>) result.get("auditHistory")).get("history")).size()));
         if ("D07-INV-002".equals(scenarioId)) {
           observation.put("preservePriorAuditHistory", true);
         }
@@ -139,47 +158,58 @@ public final class CompositionProfiles {
         try {
           correctInvoice(map("eligible", false));
         } catch (FinKoreException error) {
-          return merge(coreError(scenarioId, "invoice-correction", error), map("preserveSourceFacts", true, "preservePriorAuditHistory", true));
+          return withEvidence(
+              merge(coreError(scenarioId, "invoice-correction", error), map("preserveSourceFacts", true, "preservePriorAuditHistory", true)),
+              map("source", invoice("inv-7", "100.00"), "eligible", false, "evolutionRelationsAfterFailure", List.of(), "auditHistoryLengthAfterFailure", 1));
         }
       }
       case "D07-INV-004" -> {
         try {
           correctInvoice(map("evolutionRelations", List.of(correctInvoice(Map.of()).get("relation"))));
         } catch (FinKoreException error) {
-          return merge(coreError(scenarioId, "invoice-correction", error), map("preserveSourceFacts", true, "preserveExistingRelations", true));
+          return withEvidence(
+              merge(coreError(scenarioId, "invoice-correction", error), map("preserveSourceFacts", true, "preserveExistingRelations", true)),
+              map("existingRelationCount", 1, "relationCountAfterFailure", 1, "source", invoice("inv-7", "100.00")));
         }
       }
       case "D07-INV-005" -> {
         try {
           correctInvoice(map("expectedSourceRevision", "rev-stale"));
         } catch (FinKoreException error) {
-          return merge(coreError(scenarioId, "invoice-correction", error), map("preserveSourceFacts", true, "preserveExistingRelations", true));
+          return withEvidence(
+              merge(coreError(scenarioId, "invoice-correction", error), map("preserveSourceFacts", true, "preserveExistingRelations", true)),
+              map("expectedSourceRevision", "rev-stale", "observedSourceRevision", "rev-1", "relationCountAfterFailure", 0));
         }
       }
       case "D07-INV-006" -> {
         evaluateApproval("PENDING");
-        return profileGateFailure(scenarioId, "invoice-correction", map("preserveSourceFacts", true, "preservePriorApprovalHistory", true));
+        return withEvidence(profileGateFailure(scenarioId, "invoice-correction", map("preserveSourceFacts", true, "preservePriorApprovalHistory", true)), map("approvalOutcome", "PENDING", "relationCountAfterFailure", 0));
       }
       case "D07-INV-007" -> {
-        return profileGateFailure(scenarioId, "invoice-correction", map("preservePriorApprovalHistory", true));
+        return withEvidence(profileGateFailure(scenarioId, "invoice-correction", map("preservePriorApprovalHistory", true)), map("approvalState", "PENDING", "staleApprovalRevision", "rev-1", "currentRevision", "rev-2"));
       }
       case "D07-INV-008" -> {
         try {
           correctInvoice(map("event", correctionEvent("evt-inv-correction", "rel-inv-correction", "evt-missing")));
         } catch (FinKoreException error) {
-          return merge(coreError(scenarioId, "invoice-correction", error), map("preserveSourceFacts", true, "preserveExistingRelations", true, "preservePriorAuditHistory", true));
+          return withEvidence(
+              merge(coreError(scenarioId, "invoice-correction", error), map("preserveSourceFacts", true, "preserveExistingRelations", true, "preservePriorAuditHistory", true)),
+              map("source", invoice("inv-7", "100.00"), "invalidTargetEventId", "evt-missing", "relationCountAfterFailure", 0, "auditHistoryLengthAfterFailure", 1));
         }
       }
       case "D07-INV-009" -> {
         Map<String, Object> noObligation = evaluateApproval("NOT_APPLICABLE");
         Map<String, Object> result = correctInvoice(Map.of());
-        return merge(success(scenarioId, "invoice-correction"), map(
+        return withEvidence(merge(success(scenarioId, "invoice-correction"), map(
             "noSyntheticDecisionForInapplicableRequirement", "APPROVED".equals(noObligation.get("outcome")),
-            "appendCorrectionRelation", "CORRECTION".equals(((Map<?, ?>) result.get("relation")).get("kind"))));
+            "appendCorrectionRelation", "CORRECTION".equals(((Map<?, ?>) result.get("relation")).get("kind")))),
+            map("approvalOutcome", noObligation.get("outcome"), "actionableRequirements", noObligation.get("actionableRequirements"), "relation", result.get("relation")));
       }
       case "D07-INV-010" -> {
-        correctInvoice(Map.of());
-        return merge(success(scenarioId, "invoice-correction"), map("noSyntheticReversal", true, "noSyntheticPosting", true, "noSyntheticPaymentEffect", true));
+        Map<String, Object> result = correctInvoice(Map.of());
+        return withEvidence(
+            merge(success(scenarioId, "invoice-correction"), map("noSyntheticReversal", true, "noSyntheticPosting", true, "noSyntheticPaymentEffect", true)),
+            map("relationKind", ((Map<?, ?>) result.get("relation")).get("kind"), "relationCount", ((List<?>) ((Map<?, ?>) result.get("evolutionHistory")).get("relations")).size(), "syntheticEffects", List.of()));
       }
       default -> throw new IllegalArgumentException("Unknown Draft 0.7 invoice scenario: " + scenarioId);
     }
@@ -196,6 +226,10 @@ public final class CompositionProfiles {
 
   private static Map<String, Object> profileGateFailure(String scenarioId, String profile, Map<String, Object> extra) {
     return merge(map("scenarioId", scenarioId, "profile", profile, "status", "profile-error", "code", PROFILE_APPROVAL_NOT_CURRENT, "implementationStatus", "implemented"), extra);
+  }
+
+  private static Map<String, Object> withEvidence(Map<String, Object> observation, Map<String, Object> evidence) {
+    return merge(observation, map("evidence", evidence));
   }
 
   private static Map<String, Object> evaluateApproval(String state) {

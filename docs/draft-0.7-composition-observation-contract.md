@@ -169,7 +169,8 @@ Each language implementation must:
 
 - read the same scenario fixture identifiers and deterministic policy inputs;
 - call real language Core APIs rather than runner or adapter shortcuts;
-- return the same portable observation shape for comparison;
+- return the same portable observation shape for comparison, including any
+  optional `evidence` object used by proof tooling;
 - keep profile policy outside Core packages and outside conformance adapters;
 - preserve previously committed Approval Decisions and Audit Events on failure;
 - distinguish profile-local rejection codes from portable `FINKORE_*` errors;
@@ -186,3 +187,10 @@ scenario set.
 This status means only that the non-normative examples execute the shared
 scenarios through real Core APIs. It is not a Core conformance profile or a
 Draft 0.7 release-closure claim.
+
+Milestone D adds actual-result comparison and a critical composition guard via
+`npm run composition:compare:draft0.7` and
+`npm run composition:critical:draft0.7`. The guard checks selected
+failure-boundary, history-preservation, exact-money, and no-synthetic-effect
+observations, but it is not a full mutation campaign or a release-closure
+claim.

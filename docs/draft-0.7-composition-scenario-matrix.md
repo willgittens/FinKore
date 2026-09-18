@@ -14,6 +14,12 @@ TypeScript, Python, and Java. Run `npm run composition:test:draft0.7` from the
 repository root to execute the shared fixture contract and all three language
 reference runners.
 
+Milestone D compares the actual portable observations emitted by all three
+language profiles with `npm run composition:compare:draft0.7` and checks
+selected critical boundary invariants with
+`npm run composition:critical:draft0.7`. These commands remain reference
+application evidence, not Core conformance vectors.
+
 ## Assertion Authority
 
 | Authority | Meaning |
