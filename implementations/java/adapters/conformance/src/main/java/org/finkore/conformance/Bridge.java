@@ -2,6 +2,7 @@
 package org.finkore.conformance;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -225,19 +226,19 @@ public final class Bridge {
         case "finkore.entity.evolution.correct" -> success(Entities.evolve(
             "CORRECTION",
             inputValue.get("definition"),
-            inputValue), Entities.evolutionObservation(inputValue, false));
+            inputValue), evolutionObservation(inputValue, false));
         case "finkore.entity.evolution.reverse" -> success(Entities.evolve(
             "REVERSAL",
             inputValue.get("definition"),
-            inputValue), Entities.evolutionObservation(inputValue, true));
+            inputValue), evolutionObservation(inputValue, true));
         case "finkore.entity.evolution.supersede" -> success(Entities.evolve(
             "SUPERSESSION",
             inputValue.get("definition"),
-            inputValue), Entities.evolutionObservation(inputValue, true));
+            inputValue), evolutionObservation(inputValue, true));
         case "finkore.entity.evolution.void" -> success(Entities.evolve(
             "VOID",
             inputValue.get("definition"),
-            inputValue), Entities.evolutionObservation(inputValue, true));
+            inputValue), evolutionObservation(inputValue, true));
         default -> Map.of("status", "unsupported");
       };
     } catch (FinKoreException error) {
@@ -295,7 +296,7 @@ public final class Bridge {
               "approval.decision.supersede",
               "approval.requirement.supersede")
           .contains(operation)) {
-        return Approvals.historyObservation(input.get("history"));
+        return approvalHistoryObservation(input.get("history"));
       }
       if ("approval.composition.evaluate".equals(operation) && input.get("decisions") instanceof List<?>) {
         return Map.of("decisions", input.get("decisions"));
@@ -303,7 +304,7 @@ public final class Bridge {
       if ("finkore.entity.mutate".equals(operation)) {
         Map<String, Object> observations = entityObservation(input.get("entity"));
         if (observations != null) {
-          List<Map<String, Object>> findings = Entities.validationFindingsForMutation(
+          List<Map<String, Object>> findings = validationFindingsForMutation(
               input.get("definition"),
               input.get("entity"),
               input.get("changes"));
@@ -323,7 +324,7 @@ public final class Bridge {
         }
       }
       if (operation.startsWith("finkore.entity.evolution.")) {
-        return Entities.evolutionObservation(input, true);
+        return evolutionObservation(input, true);
       }
     } catch (FinKoreException ignored) {
       return null;
@@ -338,6 +339,101 @@ public final class Bridge {
       return observations;
     }
     return null;
+  }
+
+  private static Map<String, Object> approvalHistoryObservation(Object history) {
+    Map<String, Object> result = new LinkedHashMap<>();
+    if (history instanceof Map<?, ?> envelope) {
+      result.put("history", envelope.get("history") instanceof List<?> list ? list : List.of());
+      if (envelope.get("lifecycle") instanceof List<?> lifecycle && !lifecycle.isEmpty()) {
+        result.put("lifecycle", lifecycle);
+      }
+      return result;
+    }
+    result.put("history", history instanceof List<?> list ? list : List.of());
+    return result;
+  }
+
+  private static List<Map<String, Object>> validationFindingsForMutation(Object definition, Object entity, Object changes) {
+    if (!(definition instanceof Map<?, ?> rawDefinition)
+        || !(entity instanceof Map<?, ?> rawEntity)
+        || !(rawEntity.get("data") instanceof Map<?, ?> rawData)
+        || !(changes instanceof Map<?, ?> rawChanges)
+        || !(rawDefinition.get("validation") instanceof List<?> validation)) {
+      return List.of();
+    }
+    Map<String, Object> data = new LinkedHashMap<>();
+    for (Map.Entry<?, ?> entry : rawData.entrySet()) {
+      if (entry.getKey() instanceof String key) data.put(key, entry.getValue());
+    }
+    for (Map.Entry<?, ?> entry : rawChanges.entrySet()) {
+      if (entry.getKey() instanceof String key) data.put(key, entry.getValue());
+    }
+    List<Map<String, Object>> findings = new ArrayList<>();
+    for (Object ruleObject : validation) {
+      if (!(ruleObject instanceof Map<?, ?> rule) || !"positive-money".equals(rule.get("rule"))) continue;
+      boolean invalid = true;
+      Object path = rule.get("path");
+      if (path instanceof String key) {
+        Object candidate = data.get(key);
+        try {
+          Money.fromPortable(candidate);
+          if (candidate instanceof Map<?, ?> moneyMap && moneyMap.get("amount") instanceof String amount) {
+            invalid = new BigDecimal(amount).compareTo(BigDecimal.ZERO) <= 0;
+          }
+        } catch (RuntimeException error) {
+          invalid = true;
+        }
+      }
+      if (invalid) {
+        Map<String, Object> finding = new LinkedHashMap<>();
+        finding.put("rule", rule.get("id"));
+        finding.put("path", rule.get("path"));
+        findings.add(finding);
+      }
+    }
+    return findings;
+  }
+
+  private static Map<String, Object> evolutionObservation(Map<String, Object> input, boolean includeSameIdentityRelated) {
+    Map<String, Object> observations = new LinkedHashMap<>();
+    observations.put("source", input.get("source"));
+    if (input.containsKey("related")
+        && input.get("related") instanceof Map<?, ?> related
+        && input.get("source") instanceof Map<?, ?> source
+        && (includeSameIdentityRelated || !related.get("id").equals(source.get("id")))) {
+      observations.put("related", input.get("related"));
+    }
+    if (input.containsKey("successor")) {
+      observations.put("related", input.get("successor"));
+    }
+    observations.put("evolutionHistory", evolutionHistoryObservation(input.get("evolutionHistory")));
+    observations.put("auditHistory", auditHistoryObservation(input.get("auditHistory")));
+    return observations;
+  }
+
+  private static Map<String, Object> evolutionHistoryObservation(Object history) {
+    Map<String, Object> result = new LinkedHashMap<>();
+    if (history instanceof Map<?, ?> map && map.get("relations") instanceof List<?> relations) {
+      result.put("relations", relations);
+    } else if (history instanceof List<?> relations) {
+      result.put("relations", relations);
+    } else {
+      result.put("relations", List.of());
+    }
+    return result;
+  }
+
+  private static Map<String, Object> auditHistoryObservation(Object history) {
+    Map<String, Object> result = new LinkedHashMap<>();
+    if (history instanceof Map<?, ?> map && map.get("history") instanceof List<?> events) {
+      result.put("history", events);
+    } else if (history instanceof List<?> events) {
+      result.put("history", events);
+    } else {
+      result.put("history", List.of());
+    }
+    return result;
   }
 
   private static Map<String, Object> compositionSuccessObservations(Map<String, Object> input) {

@@ -21,6 +21,37 @@ Current status:
 - Public errors expose portable FinKore error codes; Java exception class names
   are not portable semantics.
 
+## Public Package Surface
+
+The intentional Java package surface is `org.finkore`. The public classes are:
+
+- `FinKoreException`, carrying the portable `code()`.
+- `Money`, including portable Money parsing, serialization, arithmetic,
+  comparison, rounding, Rate application, and Allocation.
+- `Workflow`, including `Workflow.Definition`, `Workflow.Instance`, and
+  `Workflow.Transition`.
+- `Audit`, including `Audit.EntityReference`, `Audit.Actor`, `Audit.Change`,
+  `Audit.RelationshipTarget`, `Audit.Relationship`, `Audit.Event`,
+  `Audit.RedactionPolicy`, `Audit.RedactionResult`, and `Audit.Log`.
+- `Approvals`, exposing static Approval requirement, decision, validity,
+  condition, chain, and bounded-composition operations.
+- `Entities`, exposing static Entity create, mutate, transition, import, and
+  evolution operations.
+- Domain classes expose portable error-code constants for the errors they can
+  raise.
+
+Portable consumers should catch `FinKoreException` and inspect `code()` rather
+than depending on Java class names or exception messages. The implementation
+uses portable JSON-shaped `Map` and `List` observations for non-Money domains;
+those shapes follow the conformance vectors and specification, not Java object
+identity.
+
+Implementation-specific limits: this package requires JDK 21. Money amounts use
+`BigDecimal` from plain decimal strings. Rounding/allocation target scales must
+fit Java `int` because `BigDecimal` scale is an `int`; equal-allocation part
+counts also fit Java `int`. These are Java API limits, not portable FinKore
+requirements.
+
 Run the current local checks from the repository root:
 
 ```bash

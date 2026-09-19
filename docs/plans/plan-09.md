@@ -69,30 +69,41 @@ portable behavior.
 
 ### Tasks
 
-- [ ] Inventory the intentional public API of the TypeScript package.
-- [ ] Inventory the intentional public API of the Python package.
-- [ ] Inventory the intentional public API of the Java package.
-- [ ] Remove or make internal any accidentally exported implementation detail.
-- [ ] Review construction, serialization, mutation, and error surfaces in all
+- [x] Inventory the intentional public API of the TypeScript package.
+- [x] Inventory the intentional public API of the Python package.
+- [x] Inventory the intentional public API of the Java package.
+- [x] Remove or make internal any accidentally exported implementation detail.
+- [x] Review construction, serialization, mutation, and error surfaces in all
       three languages.
-- [ ] Confirm exact decimal behavior without unsafe binary floating-point
+- [x] Confirm exact decimal behavior without unsafe binary floating-point
       shortcuts.
-- [ ] Confirm that portable consumers rely on error codes rather than exception
+- [x] Confirm that portable consumers rely on error codes rather than exception
       or class names.
-- [ ] Confirm that immutable-value and failure-atomicity guarantees are visible
+- [x] Confirm that immutable-value and failure-atomicity guarantees are visible
       in each public API.
-- [ ] Review TypeScript JSDoc for every intentional public symbol.
-- [ ] Review the equivalent public documentation for Python and Java.
-- [ ] Confirm that each implementation README describes its current API and
+- [x] Review TypeScript JSDoc for every intentional public symbol.
+- [x] Review the equivalent public documentation for Python and Java.
+- [x] Confirm that each implementation README describes its current API and
       limitations without historical milestone narration.
-- [ ] Document any implementation-specific resource limit without turning it
+- [x] Document any implementation-specific resource limit without turning it
       into portable financial semantics.
 
 ### Completion criteria
 
-- Each implementation exposes a deliberate and documented public surface.
-- No implementation API silently broadens or weakens the specification.
-- API changes expected before 1.0 have been completed.
+- [x] Each implementation exposes a deliberate and documented public surface.
+- [x] No implementation API silently broadens or weakens the specification.
+- [x] API changes expected before 1.0 have been completed.
+
+### Result
+
+Milestone 2 inventories the intentional TypeScript, Python, and Java public
+surfaces in their implementation READMEs. TypeScript exposes only the package
+root and no longer re-exports Money serialization helper functions from the
+package entry point. Java conformance observation helpers for Approval and
+Entity vectors are no longer public core methods; the Java conformance adapter
+owns its observation shaping. Python's top-level `finkore.__all__` is documented
+as the intentional package surface. Implementation-specific runtime and numeric
+limits are documented as package facts, not portable FinKore semantics.
 
 ## Milestone 3 — Packaging and external-consumption proof
 

@@ -241,7 +241,7 @@ public final class Entities {
    * @param changes proposed changes
    * @return validation findings
    */
-  public static List<Map<String, Object>> validationFindingsForMutation(Object definition, Object entity, Object changes) {
+  static List<Map<String, Object>> validationFindingsForMutation(Object definition, Object entity, Object changes) {
     Map<String, Object> entityDefinition = validateDefinition(definition);
     Map<String, Object> current = validateEntity(entityDefinition, entity);
     if (!(changes instanceof Map<?, ?> rawChanges)) {
@@ -260,7 +260,7 @@ public final class Entities {
    * @param includeSameIdentityRelated whether corrections should include a same-id related entity
    * @return observations for conformance failure-atomicity checks
    */
-  public static Map<String, Object> evolutionObservation(Map<String, Object> input, boolean includeSameIdentityRelated) {
+  static Map<String, Object> evolutionObservation(Map<String, Object> input, boolean includeSameIdentityRelated) {
     Map<String, Object> observations = new LinkedHashMap<>();
     observations.put("source", copyJson(input.get("source"), INVALID_IDENTITY));
     if (input.containsKey("related")

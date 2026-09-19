@@ -67,6 +67,35 @@ It intentionally does not implement tax jurisdiction policy, interest convention
 
 The specification remains canonical. This package stores validated decimal amounts as strings and performs arithmetic and comparison with scaled integer arithmetic so observable behavior preserves exact base-10 semantics without using JavaScript `number`.
 
+## Public Package Surface
+
+The intentional TypeScript package entry point is `@finkore/typescript`. The
+package exports only `.`; source subpaths are internal implementation files and
+are not part of the supported public API.
+
+The public value exports are:
+
+- Money: `Money`, `Currency`, and `isValidCurrencyIdentifier`.
+- Workflow: `WorkflowDefinition` and `Workflow`.
+- Audit: `AuditActor`, `AuditChange`, `AuditEvent`, and `AuditLog`.
+- Approvals: `ApprovalCondition`, `ApprovalRequirement`, `ApprovalDecision`,
+  `ApprovalDecisionHistory`, `ApprovalChain`, and `ApprovalComposition`.
+- Entities: `FinancialEntity` and `EntityEvolutionHistory`.
+- Errors: portable-code-bearing FinKore error classes and `isFinKore*Error`
+  type guards for each domain.
+
+The public type exports are the serialized observations, input shapes, result
+shapes, domain identifiers, portable error-code unions, and enum-like string
+unions re-exported from `src/index.ts`. Portable consumers should depend on the
+`code` field of FinKore errors, not on TypeScript class names or messages.
+
+Implementation-specific limits: JavaScript runtime constraints mean Money
+rounding scales, allocation scales, equal-allocation part counts, and Approval
+composition quorum thresholds are accepted as finite safe integer `number`
+values. Ratio allocation entries may use `bigint` where a ratio exceeds the safe
+integer range. These limits describe this package API only; they are not
+portable FinKore semantics.
+
 ## Current Money API
 
 - `Money.from(input)` validates amount and currency and returns a Money value.

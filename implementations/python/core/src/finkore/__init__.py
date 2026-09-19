@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
-"""Python implementation surface for FinKore Core Draft behavior."""
+"""Intentional Python package surface for FinKore Core 0.9 release candidate."""
 
 from .errors import FinKoreError
 from .audit import append_event, redact_history, remove_event, replace_event

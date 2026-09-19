@@ -52,7 +52,6 @@ export {
   isFinKoreMoneyError,
 } from './money/errors.js'
 export { Money } from './money/money.js'
-export { serializeMoney, validateSerializedAmount } from './money/serialization.js'
 export { WorkflowDefinition } from './workflow/definition.js'
 export {
   FinKoreWorkflowError,

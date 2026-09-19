@@ -308,7 +308,7 @@ public final class Approvals {
    * @param decisions list or envelope
    * @return defensive history envelope
    */
-  public static Map<String, Object> historyObservation(Object decisions) {
+  static Map<String, Object> historyObservation(Object decisions) {
     DecisionSet set = normalizeDecisionSet(decisions);
     return historyEnvelope(set.history(), set.lifecycle());
   }

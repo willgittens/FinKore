@@ -23,6 +23,32 @@ Current status:
   use exact coefficient-and-scale arithmetic where Python `decimal` context
   precision could otherwise alter FinKore results.
 
+## Public Package Surface
+
+The intentional Python package surface is the top-level `finkore` package and
+its `__all__` list. Submodule helpers that are not re-exported from
+`finkore.__all__` are implementation details for the current package and
+conformance adapter, even when Python allows direct import by module path.
+
+The public exports are:
+
+- Error model: `FinKoreError`; portable consumers should inspect `error.code`.
+- Money: `Money`.
+- Workflow: `WorkflowDefinition`, `WorkflowInstance`, `create_workflow`,
+  `import_workflow`, and `transition_workflow`.
+- Audit: `append_event`, `replace_event`, `remove_event`, and
+  `redact_history`.
+- Approvals: `record_decision`, `evaluate_decision`, `evaluate_requirement`,
+  `evaluate_condition`, `evaluate_chain`, `evaluate_composition`,
+  `withdraw_decision`, `supersede_decision`, and `supersede_requirement`.
+- Entities: `create_entity`, `mutate_entity`, `transition_entity`,
+  `import_entity`, and `evolve_entity`.
+
+Implementation-specific limits: this package requires Python 3.12 or newer and
+uses Python `int` and exact `Decimal` construction from plain decimal strings.
+No fixed portable precision, scale, or collection-size limit is declared by
+FinKore Core; practical limits are the Python runtime and available memory.
+
 Run the current local checks from the repository root:
 
 ```bash
