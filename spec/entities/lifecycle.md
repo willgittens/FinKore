@@ -2,7 +2,7 @@
 
 ## Status
 
-**Draft**
+**FinKore Core 0.9 release candidate.**
 
 ## Purpose
 
@@ -43,7 +43,7 @@ Workflow failures use [Workflow Errors](../workflow/errors.md); entity-specific 
 ## Non-Goals
 
 Lifecycle State semantics do not by themselves define Correction, Reversal,
-Void, Supersession, Cancellation, or Adjustment behavior. Core 0.8 Entity
+Void, Supersession, Cancellation, or Adjustment behavior. Core 0.9 release candidate Entity
 Evolution defines portable correction, reversal, void, and supersession
 distinctions; composing domains still define concrete lifecycle eligibility and
 consequences.

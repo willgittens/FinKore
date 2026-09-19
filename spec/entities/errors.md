@@ -2,7 +2,7 @@
 
 ## Status
 
-**Draft**
+**FinKore Core 0.9 release candidate.**
 
 ## Purpose
 
@@ -26,7 +26,7 @@ This document defines initial portable entity failure categories.
 - **ENTITY-ERROR-004** — A Workflow, Money, Approval, or Audit failure MUST retain its domain-specific code when that condition is the primary failure; it MUST NOT be replaced by `FINKORE_ENTITY_VALIDATION_FAILED`.
 
 Entity evolution error mapping is defined by **ENTITY-EVOLUTION-024** through
-**ENTITY-EVOLUTION-028** in [Entity Evolution](evolution.md). Core 0.8 does not
+**ENTITY-EVOLUTION-028** in [Entity Evolution](evolution.md). Core 0.9 release candidate does not
 introduce a dedicated evolution error code.
 
 ## Invariants

@@ -21,8 +21,8 @@ FinKore exists to define that behavior once, independently of the stack that imp
 
 ## What FinKore Standardizes
 
-FinKore Core 0.8 is the current shared, language-neutral behavioral baseline.
-It covers portable rules for:
+FinKore Core 0.9 is the current shared, language-neutral release candidate
+intended to become Core 1.0. It covers portable rules for:
 
 - exact Money representation, arithmetic, comparison, rounding, and serialization;
 - Financial Entity identity, lifecycle, mutability, and validation;
@@ -113,9 +113,9 @@ FinKore is not an ERP, ORM, payment processor, UI framework, accounting applicat
 
 ## Project Status
 
-FinKore Core 0.8 is experimental and pre-1.0. TypeScript, Python, and Java
-implement the current manifest scope for Money, Workflow, Audit, Approvals, and
-Entities.
+FinKore Core 0.9 is the pre-1.0 release candidate. TypeScript, Python, and
+Java implement the current manifest scope for Money, Workflow, Audit,
+Approvals, and Entities.
 
 Money covers exact representation, serialization, arithmetic, comparison,
 rounding, Rates, and Allocation. Workflow covers definitions, version binding,
@@ -132,8 +132,8 @@ and concrete accounting domains remain outside the current scope.
 
 The Core release version is separate from other version lines:
 
-- `FinKore Core 0.8` identifies the current language-neutral behavioral
-  baseline.
+- `FinKore Core 0.9` identifies the current language-neutral release-candidate
+  behavioral baseline.
 - `finkoreConformance` and `finkoreVectorFile` identify manifest and vector
   syntax compatibility, not the Core release.
 - The conformance runner package version identifies the runner implementation,
@@ -141,9 +141,9 @@ The Core release version is separate from other version lines:
 - Language package versions identify package release artifacts, not independent
   FinKore semantics.
 
-The specification is expected to evolve significantly before version 1.0.
-Production use is not recommended yet, and no implementation should claim that
-its API defines FinKore independently of the specification.
+No planned behavioral changes remain before Core 1.0, but the project is still
+pre-1.0 and production use is not recommended yet. No implementation should
+claim that its API defines FinKore independently of the specification.
 
 ## Contributing
 

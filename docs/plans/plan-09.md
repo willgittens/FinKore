@@ -2,8 +2,8 @@
 
 ## Status
 
-Planned. This document is non-normative and depends on completion of the 0.8
-release gate. Version 0.9 is the release-candidate phase for FinKore Core 1.0.
+In progress. This document is non-normative. Version 0.9 is the
+release-candidate phase for FinKore Core 1.0.
 
 ## Objective
 
@@ -16,11 +16,11 @@ features do not enter 0.9.
 
 ## Entry criteria
 
-- [ ] FinKore Core 0.8 has been released.
-- [ ] The five-domain candidate scope is fixed.
-- [ ] Compatibility and conformance claim policies are documented.
-- [ ] Canonical and conformance-local operation boundaries are explicit.
-- [ ] All three implementations pass the 0.8 manifest.
+- [x] FinKore Core 0.8 has been released.
+- [x] The five-domain candidate scope is fixed.
+- [x] Compatibility and conformance claim policies are documented.
+- [x] Canonical and conformance-local operation boundaries are explicit.
+- [x] All three implementations pass the 0.8 manifest.
 
 ## Milestone 1 — Normative release-candidate freeze
 
@@ -28,29 +28,39 @@ Create the exact behavioral candidate intended to become 1.0.
 
 ### Tasks
 
-- [ ] Declare the 0.9 specification and CoreDoc to be the 1.0 release candidate.
-- [ ] Freeze existing requirement IDs, portable error codes, operation IDs, and
+- [x] Declare the 0.9 specification and CoreDoc to be the 1.0 release candidate.
+- [x] Freeze existing requirement IDs, portable error codes, operation IDs, and
       serialization shapes.
-- [ ] Review every normative MUST and MUST NOT for ambiguity, conflicting
+- [x] Review every normative MUST and MUST NOT for ambiguity, conflicting
       precedence, and undefined observable results.
-- [ ] Review SHOULD, SHOULD NOT, and MAY requirements to ensure they do not imply
+- [x] Review SHOULD, SHOULD NOT, and MAY requirements to ensure they do not imply
       mandatory behavior accidentally.
-- [ ] Review terminology shared across Money, Workflow, Audit, Approvals, and
+- [x] Review terminology shared across Money, Workflow, Audit, Approvals, and
       Entities.
-- [ ] Verify that cross-domain refinements do not silently contradict their base
+- [x] Verify that cross-domain refinements do not silently contradict their base
       domain rules.
-- [ ] Verify error precedence wherever more than one invalid condition can be
+- [x] Verify error precedence wherever more than one invalid condition can be
       observed.
-- [ ] Verify failure atomicity for every state-changing operation.
-- [ ] Allow normative changes after freeze only to fix a demonstrated
+- [x] Verify failure atomicity for every state-changing operation.
+- [x] Allow normative changes after freeze only to fix a demonstrated
       contradiction, ambiguity, or portability defect.
-- [ ] Require every accepted normative correction to update specification,
+- [x] Require every accepted normative correction to update specification,
       conformance, implementations, tests, and public documentation together.
 
 ### Completion criteria
 
-- No known normative question blocks portable implementation.
-- The candidate can become 1.0 without planned behavioral changes.
+- [x] No known normative question blocks portable implementation.
+- [x] The candidate can become 1.0 without planned behavioral changes.
+
+### Result
+
+Milestone 1 declares FinKore Core 0.9 and CoreDoc as the Core 1.0 release
+candidate. The compatibility surface is frozen in the specification conventions:
+requirement IDs, portable error codes, canonical operation IDs, and normative
+serialization shapes may change only through a documented correction for a
+demonstrated contradiction, ambiguity, or portability defect. Existing Open
+Questions remain non-normative future-scope notes unless conformance
+traceability classifies one as a blocking specification gap.
 
 ## Milestone 2 — Public API review
 
@@ -195,4 +205,3 @@ history.
 - [ ] all verification remains runnable locally without GitHub Actions;
 - [ ] only fixes, not planned features, remain before 1.0;
 - [ ] release notes contain a concise 0.9 summary.
-

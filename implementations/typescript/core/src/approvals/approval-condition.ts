@@ -38,7 +38,7 @@ function factPresent(facts: Readonly<Record<string, unknown>>, path: string): bo
 }
 
 /**
- * FinKore Approval Condition for Core 0.8 representation and evaluation boundary semantics.
+ * FinKore Approval Condition for Core 0.9 release candidate representation and evaluation boundary semantics.
  *
  * A Condition has a stable caller-supplied identity, declares the domain facts
  * required to evaluate it, and preserves the composing-domain evaluation model

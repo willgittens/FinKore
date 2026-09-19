@@ -54,7 +54,7 @@ export function buildReport(
   })
 
   return {
-    finkoreCore: '0.8',
+    finkoreCore: '0.9-rc',
     finkoreConformanceRunner: '0.1',
     reproducibility,
     summary,

@@ -49,7 +49,7 @@ function recordsEqual(left: Readonly<Record<string, unknown>>, right: Readonly<R
  *
  * A Change identifies the affected domain field or path and preserves supplied
  * prior and resulting values without interpreting Money, Workflow, or future
- * Entity semantics. Core 0.8 does not define a portable path syntax, change
+ * Entity semantics. Core 0.9 release candidate does not define a portable path syntax, change
  * kind catalog, duplicate-path rule, or diff engine.
  *
  * @see AUDIT-CHANGE-001

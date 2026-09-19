@@ -356,7 +356,7 @@ function validateEvaluationInput(
 }
 
 /**
- * FinKore Approval Composition definition for Core 0.8 bounded groups.
+ * FinKore Approval Composition definition for Core 0.9 release candidate bounded groups.
  *
  * A Composition declares exactly one standalone root Approval Group or a
  * nonempty ordered list of Approval Stages. Groups have stable identities,

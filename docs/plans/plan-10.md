@@ -86,8 +86,8 @@ Publish executable evidence for the exact 1.0 contract.
       three implementations.
 - [ ] Run runner unit tests and coverage.
 - [ ] Verify that the runner remains domain-neutral.
-- [ ] Verify full and domain-scoped conformance claim wording against the 0.8
-      policy.
+- [ ] Verify full and domain-scoped conformance claim wording against the 0.9
+      release-candidate policy.
 
 ### Completion criteria
 
@@ -192,4 +192,3 @@ FinKore Core 1.0 is complete only when:
 - [ ] no new financial domain was inserted after the 0.9 freeze;
 - [ ] the concise 1.0 release note and version tag are ready;
 - [ ] post-1.0 compatibility rules are active.
-

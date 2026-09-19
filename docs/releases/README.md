@@ -3,6 +3,14 @@
 This is the complete release history kept in the working tree. Precise financial
 behavior belongs to `/spec`; detailed change history remains available in Git.
 
+## FinKore Core 0.9 Release Candidate
+
+Froze the Money, Workflow, Audit, Approvals, and Financial Entities behavioral
+candidate intended to become FinKore Core 1.0. Existing requirement IDs,
+portable error codes, canonical operation IDs, and normative serialization
+shapes are frozen; future normative changes before 1.0 are limited to correcting
+demonstrated contradictions, ambiguities, or portability defects.
+
 ## FinKore Core 0.8
 
 Unified the Money, Workflow, Audit, Approvals, and Financial Entities baseline

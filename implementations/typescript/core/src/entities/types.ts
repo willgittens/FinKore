@@ -18,7 +18,7 @@ export type EntityIdentifier = string
 /**
  * Stable Financial Entity type identifier.
  *
- * Core 0.8 does not define concrete entity domains. The type identifies the
+ * Core 0.9 release candidate does not define concrete entity domains. The type identifies the
  * composing-domain definition used by a generic Financial Entity.
  *
  * @see ENTITY-DEFINITION-001
@@ -28,7 +28,7 @@ export type EntityTypeIdentifier = string
 /**
  * Declared scope in which an Entity identifier is unique.
  *
- * Core 0.8 requires an identity scope but leaves the cross-entity registry or
+ * Core 0.9 release candidate requires an identity scope but leaves the cross-entity registry or
  * tenancy model to composing domains and storage layers.
  *
  * @see ENTITY-IDENTITY-001
@@ -54,7 +54,7 @@ export type EntityErrorCode =
 /**
  * Validation rule fixture supported by the current Entity conformance milestone.
  *
- * Core 0.8 has not standardized a generic validation language. The current
+ * Core 0.9 release candidate has not standardized a generic validation language. The current
  * TypeScript reference implementation supports only the deterministic
  * `positive-money` fixture predicate used by Entity conformance vectors.
  *
@@ -66,7 +66,7 @@ export type EntityValidationRule = 'positive-money'
  * Declared Entity validation rule.
  *
  * The rule identifier is a stable composing-domain violation identity. The path
- * names the top-level Entity data member inspected by this Core 0.8 behavior.
+ * names the top-level Entity data member inspected by this Core 0.9 release candidate behavior.
  *
  * @see ENTITY-ERROR-002
  * @see ENTITY-VALIDATION-005
@@ -104,7 +104,7 @@ export interface EntityValidationFinding {
  * Complete result of evaluating declared Entity validation rules.
  *
  * Findings are reported in declaration order for this TypeScript
- * representation. Core 0.8 conformance does not make finding array order a
+ * representation. Core 0.9 release candidate conformance does not make finding array order a
  * cross-language contract.
  *
  * @see ENTITY-VALIDATION-003
@@ -317,10 +317,10 @@ export interface EntityImportResult {
 export type EntityEvolutionRelationIdentifier = string
 
 /**
- * Portable Entity evolution kinds supported by FinKore Core 0.8.
+ * Portable Entity evolution kinds supported by FinKore Core 0.9 release candidate.
  *
  * The four values are distinct; replacement and amendment are intentionally
- * not portable Core 0.8 operations.
+ * not portable Core 0.9 release candidate operations.
  *
  * @see ENTITY-EVOLUTION-004
  * @see ENTITY-EVOLUTION-005
@@ -413,7 +413,7 @@ export interface EntityEvolutionAuditEvidenceInput {
 }
 
 /**
- * Shared request context for Core 0.8 Entity evolution operations.
+ * Shared request context for Core 0.9 release candidate Entity evolution operations.
  *
  * @see ENTITY-EVOLUTION-006
  * @see ENTITY-EVOLUTION-007

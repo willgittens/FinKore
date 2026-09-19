@@ -2,11 +2,11 @@
 
 ## Status
 
-**Draft**
+**FinKore Core 0.9 release candidate.**
 
 ## Purpose
 
-This document defines currency identity and compatibility for Money values that use ISO 4217 identifiers in FinKore Core 0.8.
+This document defines currency identity and compatibility for Money values that use ISO 4217 identifiers in Core 0.9 release candidate.
 
 ## Requirements
 
@@ -40,4 +40,4 @@ The applicable failure conditions are defined in [Money Errors](errors.md).
 
 ## Non-Goals
 
-This document does not define exchange rates, redenomination, currency availability dates, or display symbols. Application-defined currencies, crypto assets, tokens, loyalty points, internal credits, and other non-ISO identifiers are outside the normative scope of FinKore Core 0.8; this exclusion does not prohibit a composing application from supporting them.
+This document does not define exchange rates, redenomination, currency availability dates, or display symbols. Application-defined currencies, crypto assets, tokens, loyalty points, internal credits, and other non-ISO identifiers are outside the normative scope of Core 0.9 release candidate; this exclusion does not prohibit a composing application from supporting them.

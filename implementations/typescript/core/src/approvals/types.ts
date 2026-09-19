@@ -39,7 +39,7 @@ export type ApprovalActorIdentifier = string
 /**
  * Optional Actor type supplied by a composing domain or application.
  *
- * FinKore Core 0.8 does not define a closed actor-type catalog.
+ * FinKore Core 0.9 release candidate does not define a closed actor-type catalog.
  *
  * @see APPROVAL-DECISION-001
  */
@@ -56,7 +56,7 @@ export type ApprovalActorType = string
 export type ApprovalDecisionOutcome = 'APPROVED' | 'REJECTED'
 
 /**
- * Portable state of an Approval Requirement under Core 0.8 evaluation.
+ * Portable state of an Approval Requirement under Core 0.9 release candidate evaluation.
  *
  * @see APPROVAL-REQUIREMENT-004
  * @see APPROVAL-REQUIREMENT-005
@@ -64,7 +64,7 @@ export type ApprovalDecisionOutcome = 'APPROVED' | 'REJECTED'
 export type ApprovalRequirementState = 'APPROVED' | 'REJECTED' | 'PENDING'
 
 /**
- * Portable Approval Chain outcome currently defined by Core 0.8.
+ * Portable Approval Chain outcome currently defined by Core 0.9 release candidate.
  *
  * `APPROVED` means every applicable Requirement is approved. `PENDING` means at
  * least one applicable Requirement remains pending and no effective rejection
@@ -128,7 +128,7 @@ export type ApprovalConditionFactPath = string
 /**
  * Explicit result supplied by the composing domain at the condition boundary.
  *
- * FinKore Core 0.8 does not define a portable expression language. The
+ * FinKore Core 0.9 release candidate does not define a portable expression language. The
  * TypeScript core validates condition/fact completeness and preserves the
  * boundary result without interpreting a condition expression.
  *
@@ -191,7 +191,7 @@ export interface SerializedApprovalCompositionRequirementObservation {
  * Current-effective Decision observation supplied to Approval Composition quorum
  * evaluation.
  *
- * The observation is already reduced by Core 0.8 effectiveness rules; this
+ * The observation is already reduced by Core 0.9 release candidate effectiveness rules; this
  * type does not define lifecycle derivation or mutate committed history.
  *
  * @see APPROVAL-COMPOSITION-008
@@ -217,7 +217,7 @@ export interface SerializedApprovalCompositionDecisionObservation {
 }
 
 /**
- * Evaluation input for the Core 0.8 Approval Composition model.
+ * Evaluation input for the Core 0.9 release candidate Approval Composition model.
  *
  * @see APPROVAL-COMPOSITION-008
  * @see APPROVAL-COMPOSITION-024
@@ -280,7 +280,7 @@ export interface SerializedApprovalSubject {
 /**
  * Serialized deciding Actor attribution for an Approval Decision.
  *
- * FinKore Core 0.8 does not define authentication, authorization, RBAC,
+ * FinKore Core 0.9 release candidate does not define authentication, authorization, RBAC,
  * delegation, or identity-provider binding.
  *
  * @see APPROVAL-DECISION-001
@@ -325,7 +325,7 @@ export interface SerializedApprovalRequirement {
 /**
  * Serialized Approval Decision accepted by the TypeScript Approval core.
  *
- * Decision timestamp and subject facts are supplied explicitly. Core 0.8 does
+ * Decision timestamp and subject facts are supplied explicitly. Core 0.9 release candidate does
  * not prescribe decision identity, reasons, comments, signatures, audit
  * metadata, or persistence identifiers.
  *
@@ -364,7 +364,7 @@ export interface SerializedApprovalDecision {
 /**
  * Stable structural reference to one committed Approval Decision.
  *
- * Core 0.8 lifecycle events use the Requirement, deciding Actor, and decision
+ * Core 0.9 release candidate lifecycle events use the Requirement, deciding Actor, and decision
  * timestamp to identify a historical Decision without adding generated identity
  * to the Decision model. A lifecycle operation must resolve the reference to
  * exactly one committed Decision.
@@ -480,7 +480,7 @@ export type ApprovalCompositionMemberIdentifier = string
 export type ApprovalCompositionStageIdentifier = string
 
 /**
- * Supported Core 0.8 Approval Group kind.
+ * Supported Core 0.9 release candidate Approval Group kind.
  *
  * @see APPROVAL-COMPOSITION-003
  */
@@ -588,7 +588,7 @@ export interface SerializedApprovalComposition {
 /**
  * Serialized Approval Chain accepted by the TypeScript Approval core.
  *
- * Chain identity is not part of the current Core 0.8 portable chain model.
+ * Chain identity is not part of the current Core 0.9 release candidate portable chain model.
  * Requirement references are caller-supplied stable Requirement identifiers,
  * their declared order is preserved exactly, and duplicates are invalid.
  *

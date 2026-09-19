@@ -41,7 +41,7 @@ export class AuditActor {
    * Creates and validates known Actor attribution.
    *
    * Unknown attribution may be represented by omitting the actor from an Audit
-   * Event. FinKore Core 0.8 leaves a serialized unknown-actor representation
+   * Event. FinKore Core 0.9 release candidate leaves a serialized unknown-actor representation
    * open, so this method accepts only known actors with stable identifiers.
    *
    * @param input - Candidate serialized known actor.

@@ -101,7 +101,7 @@ export type WorkflowErrorCode =
   | 'FINKORE_WORKFLOW_STATE_CONFLICT'
 
 /**
- * Guard condition supported by the Core 0.8 TypeScript Workflow behavior.
+ * Guard condition supported by the Core 0.9 release candidate TypeScript Workflow behavior.
  *
  * The condition deterministically compares one supplied fact to an expected
  * value. Authorization evidence may be supplied as an ordinary fact, but this
@@ -138,14 +138,14 @@ export interface WorkflowTransitionDefinition {
   readonly target: WorkflowStateIdentifier
 
   /**
-   * Optional Core 0.8 fact-equality guard for this transition.
+   * Optional Core 0.9 release candidate fact-equality guard for this transition.
    *
    * This single-guard form is accepted for existing conformance fixtures.
    */
   readonly guard?: WorkflowTransitionGuard
 
   /**
-   * Optional Core 0.8 fact-equality guards that all apply to this transition.
+   * Optional Core 0.9 release candidate fact-equality guards that all apply to this transition.
    *
    * Every guard must pass before the transition succeeds.
    *

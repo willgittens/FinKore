@@ -175,7 +175,7 @@ function validateAuditEvidence(
 }
 
 /**
- * Immutable Core 0.8 Entity Evolution history.
+ * Immutable Core 0.9 release candidate Entity Evolution history.
  *
  * The history records correction, reversal, void, and supersession relations
  * without rewriting source Entity identity or financial facts. Every successful

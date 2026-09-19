@@ -46,7 +46,7 @@ export interface ReportReproducibility {
 }
 
 export interface ConformanceReport {
-  readonly finkoreCore: '0.8'
+  readonly finkoreCore: '0.9-rc'
   readonly finkoreConformanceRunner: '0.1'
   readonly reproducibility: ReportReproducibility
   readonly summary: StatusCounts

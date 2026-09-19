@@ -75,21 +75,21 @@ history, call `EntityEvolutionHistory`, and normalize
 source/result/evolution/Audit observations. The adapter does not implement
 evolution rules, evaluate validation rules, construct Audit evidence, or infer
 identifiers itself. Generic validation rule engines remain outside this
-Core 0.8.
+Core 0.9 release candidate.
 `entity.import` is a conformance-local import boundary. It delegates
 stable identity preservation, source identity mapping, Entity Revision history,
 Entity Conflict Version separation, and expected precondition checks to core;
-the Agentic review keeps it conformance-local because Core 0.8 does not
+the Agentic review keeps it conformance-local because Core 0.9 release candidate does not
 yet define a public migration/import operation contract, identity registry,
 persistence schema, or source-system authority model.
 
-Audit operation support covers Core 0.8 Audit behavior: Events, Actors,
+Audit operation support covers Core 0.9 release candidate Audit behavior: Events, Actors,
 append-only history, Change representation, Redaction, relationship metadata,
-and portable Audit errors. Core 0.8 does not define `audit.order` as an
+and portable Audit errors. Core 0.9 release candidate does not define `audit.order` as an
 executable adapter operation. Audit Relationships are observed through existing
 append/redaction fixtures; the adapter does not interpret relationships itself.
 
-Approval operation support covers Core 0.8 Approvals behavior: Requirement
+Approval operation support covers Core 0.9 release candidate Approvals behavior: Requirement
 evaluation, Decision recording, Decision effectiveness,
 eligible actor validation, subject-fact binding, append-only Decision history
 preservation, withdrawal lifecycle evidence, expiration with explicit

@@ -141,7 +141,7 @@ export class AuditEvent {
   /**
    * Creates and validates an Audit Event from a portable candidate value.
    *
-   * The method validates Core 0.8 event and change representation semantics.
+   * The method validates Core 0.9 release candidate event and change representation semantics.
    * It does not define a full path language, event-type catalog, redaction
    * behavior, relationship target existence, diff engine, or production storage
    * format. Relationship target existence and uniqueness are validated by

@@ -81,7 +81,7 @@ function redactActor(
 }
 
 /**
- * Validates the Core 0.8 redaction policy fixture accepted by AuditLog.redact.
+ * Validates the Core 0.9 release candidate redaction policy fixture accepted by AuditLog.redact.
  *
  * @param input - Candidate redaction policy.
  * @returns A defensive policy value with protected change paths.

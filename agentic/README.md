@@ -2,7 +2,7 @@
 
 ## Status
 
-**Experimental documentation contract for FinKore Core 0.8**
+**Documentation contract for FinKore Core 0.9 release candidate**
 
 > Agent-ready by contract, not by convention.
 
@@ -75,7 +75,7 @@ expected-state/revision conflict preconditions. Approval composition and
 lifecycle fixtures, Workflow import, and Entity import remain conformance-local
 until stable public operation contracts exist.
 
-For Core 0.8, effect values use the dimensions defined in
+For Core 0.9 release candidate, effect values use the dimensions defined in
 [Effects](effects.md). Idempotency is explicitly unspecified and is not a
 metadata dimension. Autonomous-execution policy belongs to the consuming
 application unless a concrete FinKore rule says otherwise. Accounting finality

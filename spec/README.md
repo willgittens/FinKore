@@ -2,9 +2,10 @@
 
 ## Status
 
-**Experimental.** FinKore Core 0.8 is the current shared, language-neutral
-behavioral baseline. It remains pre-1.0 and may change. The 0.8 domain scope is
-Money, Workflow, Audit, Approvals, and Entities.
+**FinKore Core 0.9 release candidate.** This is the shared,
+language-neutral behavioral candidate intended to become FinKore Core 1.0.
+It remains pre-1.0, but no planned behavioral changes are expected before 1.0.
+The 0.9 domain scope is Money, Workflow, Audit, Approvals, and Entities.
 
 ## Purpose
 
@@ -45,8 +46,8 @@ direction rather than a normative requirement.
 
 ## Version Identity (Non-Normative)
 
-`FinKore Core 0.8` identifies the current language-neutral behavioral baseline.
-It is distinct from the `finkoreConformance` manifest format version, the
+`FinKore Core 0.9 release candidate` identifies the current language-neutral
+behavioral baseline. It is distinct from the `finkoreConformance` manifest format version, the
 `finkoreVectorFile` vector-file format version, the conformance runner package
 version, and language implementation package versions. Format and package
 versions describe tooling or artifact compatibility; they do not define
@@ -66,7 +67,7 @@ Later domain specifications can compose these areas. The rules for explicit refi
 
 ## Scope Discipline (Non-Normative)
 
-FinKore Core deliberately begins with reusable primitives rather than concrete invoice, expense, purchase-order, payment, reimbursement, or journal-entry models. Applications may compose the primitives for those domains, but Core 0.8 does not claim to standardize them.
+FinKore Core deliberately begins with reusable primitives rather than concrete invoice, expense, purchase-order, payment, reimbursement, or journal-entry models. Applications may compose the primitives for those domains, but Core 0.9 release candidate does not claim to standardize them.
 
 Possible later specifications may explore journal entries, debit and credit, general ledgers, reconciliation, fiscal periods, cost centers, purchase orders, invoice matching, payments, concrete correction posting rules, ledger reversals, and tax primitives. These are not current capabilities or commitments. A topic should enter scope only when its semantics can be defined clearly, tested across implementations, and justified by a real financial software problem.
 

@@ -2,7 +2,7 @@
 
 ## Status
 
-**Draft**
+**FinKore Core 0.9 release candidate.**
 
 ## Purpose
 
@@ -43,7 +43,7 @@ A prohibited mutation must report `FINKORE_ENTITY_IMMUTABLE`.
 ## Non-Goals
 
 Ordinary Mutation does not define Correction, Reversal, Void, Supersession,
-Cancellation, or Adjustment. Core 0.8 Entity Evolution defines portable
+Cancellation, or Adjustment. Core 0.9 release candidate Entity Evolution defines portable
 correction, reversal, void, and supersession distinctions; those operations are
 not ordinary in-place mutation and are not synonyms. This document also does not
 define a universal policy for post-finalization operational metadata.

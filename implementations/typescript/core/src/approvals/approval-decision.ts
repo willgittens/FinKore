@@ -119,7 +119,7 @@ const RFC3339_DATE_TIME_WITH_OFFSET = new RegExp([
 // Stryker restore all
 
 /**
- * FinKore Approval Decision for Core 0.8 decision representation.
+ * FinKore Approval Decision for Core 0.9 release candidate decision representation.
  *
  * A Decision identifies exactly one Approval Requirement, one deciding Actor,
  * one `APPROVED` or `REJECTED` outcome, one unambiguous timestamp, and the
@@ -251,7 +251,7 @@ export class ApprovalDecision {
    * Only caller-declared relevant fact paths are compared when supplied. Without
    * explicit relevant paths, the full supplied subject-fact value is compared.
    * This method does not define which mutations are material; that remains a
-   * composing-domain policy choice under Core 0.8.
+   * composing-domain policy choice under Core 0.9 release candidate.
    *
    * @param currentSubjectFacts - Current subject facts or state to compare.
    * @param relevantFactPaths - Optional domain-defined relevant fact paths.

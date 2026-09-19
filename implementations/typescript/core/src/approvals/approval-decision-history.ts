@@ -148,7 +148,7 @@ const RFC3339_DATE_TIME_WITH_OFFSET = new RegExp([
  *
  * The history validates and commits Decisions by appending them. Failed record
  * attempts leave previously committed Decisions unchanged. Existing committed
- * Decisions are never overwritten or removed. Core 0.8 lifecycle events make
+ * Decisions are never overwritten or removed. Core 0.9 release candidate lifecycle events make
  * Decisions ineffective for current evaluation without rewriting history.
  *
  * @see APPROVAL-DECISION-007

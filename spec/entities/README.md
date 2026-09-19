@@ -2,7 +2,7 @@
 
 ## Status
 
-**Draft**
+**FinKore Core 0.9 release candidate.**
 
 ## Purpose
 
@@ -16,9 +16,9 @@ A Financial Entity follows the canonical [identity](identity.md), [lifecycle](li
 - **ENTITY-AUDIT-002** — Each successful Mutation or Transition identified by **ENTITY-AUDIT-001** MUST produce a corresponding Audit Event.
 - **ENTITY-DEFINITION-001** — A composing domain MUST define its fields, lifecycle, and financially relevant invariants.
 
-Core 0.8 Entity Evolution defines portable correction, reversal, void, and supersession relations. Evolution preserves stable Entity identity and historical financial facts, uses explicit Entity Revision and Evolution Relation identities, requires caller-supplied Audit evidence, and rejects invalid or duplicate evolution without creating partial Entity, evolution, or Audit observations.
+Core 0.9 release candidate Entity Evolution defines portable correction, reversal, void, and supersession relations. Evolution preserves stable Entity identity and historical financial facts, uses explicit Entity Revision and Evolution Relation identities, requires caller-supplied Audit evidence, and rejects invalid or duplicate evolution without creating partial Entity, evolution, or Audit observations.
 
-Core 0.8 Entity Revision and Import refines business revision observations and
+Core 0.9 release candidate Entity Revision and Import refines business revision observations and
 defines a bounded import boundary. Import preserves stable FinKore Entity
 identity, records explicit source identity mapping when external identity is
 present, preserves current and historical Entity Revision identity, keeps Entity

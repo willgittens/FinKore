@@ -2,7 +2,7 @@
 
 ## Status
 
-**Draft**
+**FinKore Core 0.9 release candidate.**
 
 ## Purpose
 
@@ -34,4 +34,4 @@ A Workflow instance must have exactly one current State, and that State must bel
 
 ## Non-Goals
 
-This domain does not define screens, queues, persistence, process engines, or actor authorization. FinKore Core 0.8 defines Workflow definition identity, version identity, immutable instance binding, import of existing current State observations, and expected-state/revision conflict preconditions; it does not define optimistic locking, pessimistic locking, concurrent-transition winner selection, distributed coordination, database transaction isolation, Workflow migrations, state mapping across versions, or actor authorization.
+This domain does not define screens, queues, persistence, process engines, or actor authorization. Core 0.9 release candidate defines Workflow definition identity, version identity, immutable instance binding, import of existing current State observations, and expected-state/revision conflict preconditions; it does not define optimistic locking, pessimistic locking, concurrent-transition winner selection, distributed coordination, database transaction isolation, Workflow migrations, state mapping across versions, or actor authorization.

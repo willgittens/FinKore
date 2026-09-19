@@ -38,7 +38,7 @@ describe('report aggregation', () => {
       result('PASS', { vectorId: 'money.round.plain-001', tags: ['positive'] }),
     ], new Set(['MONEY-ROUNDING-003']), reproducibility)
     expect(report.summary).toEqual({ total: 5, passed: 2, failed: 1, unsupported: 1, infrastructureErrors: 1 })
-    expect(report.finkoreCore).toBe('0.8')
+    expect(report.finkoreCore).toBe('0.9-rc')
     expect(report.finkoreConformanceRunner).toBe('0.1')
     expect(report.reproducibility).toStrictEqual(reproducibility)
     expect(report.suites[0]?.counts).toEqual(report.summary)
@@ -62,7 +62,7 @@ describe('report aggregation', () => {
   it('surfaces critical failures in console and deterministic JSON', () => {
     const report = buildReport([result('FAIL', { diagnostic: 'different' })], new Set(['MONEY-ROUNDING-003']), reproducibility)
     const console = formatConsoleReport(report)
-    expect(console).toContain('Core: 0.8')
+    expect(console).toContain('Core: 0.9-rc')
     expect(console).toContain('Manifest: /repo/conformance/manifest.json')
     expect(console).toContain('CRITICAL CONFORMANCE FAILURE')
     expect(console).toContain('MONEY-ROUNDING-003')

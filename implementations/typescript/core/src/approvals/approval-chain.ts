@@ -45,13 +45,13 @@ function validateRequirementState(value: unknown): ChainRequirementEvaluationSta
 }
 
 /**
- * FinKore Approval Chain for Core 0.8 all-required composition semantics.
+ * FinKore Approval Chain for Core 0.9 release candidate all-required composition semantics.
  *
  * A Chain contains one or more declared Approval Requirement identities,
  * declares whether the Requirements are sequential or unordered, and declares
  * the rejection outcome used when an effective rejection determines the chain
  * result. Requirement identities must not repeat within a chain. Chain identity
- * is intentionally absent in Core 0.8; Decisions bind to Requirements and
+ * is intentionally absent in Core 0.9 release candidate; Decisions bind to Requirements and
  * relevant subject facts rather than to a Chain identifier. This class does not
  * implement quorum, parallel voting groups, delegation, withdrawal,
  * supersession, escalation, dynamic approver resolution, authorization,
@@ -78,7 +78,7 @@ export class ApprovalChain {
    * Creates and validates an Approval Chain from a portable candidate.
    *
  * The declared Requirement order is preserved exactly. Chain identity is not
- * generated because Core 0.8 does not define a chain identity field. Duplicate
+ * generated because Core 0.9 release candidate does not define a chain identity field. Duplicate
  * Requirement identities are rejected instead of deduplicated.
    *
    * @param input - Candidate serialized Approval Chain.

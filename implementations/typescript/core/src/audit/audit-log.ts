@@ -230,7 +230,7 @@ export class AuditLog {
   /**
    * Rejects replacement of a committed Audit Event.
    *
-   * FinKore Core 0.8 currently only permits appending. Replacing committed event content
+   * FinKore Core 0.9 release candidate currently only permits appending. Replacing committed event content
    * would rewrite logical history and therefore always fails without mutation.
    *
    * @throws {AuditAppendOnlyViolationError}
@@ -246,7 +246,7 @@ export class AuditLog {
   /**
    * Rejects removal of a committed Audit Event.
    *
-   * FinKore Core 0.8 currently only permits appending. Removing committed event content
+   * FinKore Core 0.9 release candidate currently only permits appending. Removing committed event content
    * would erase logical history and therefore always fails without mutation.
    *
    * @throws {AuditAppendOnlyViolationError}

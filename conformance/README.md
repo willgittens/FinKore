@@ -7,7 +7,7 @@
 > In financial software, a passing test suite is useful only if it reliably rejects broken behavior.
 
 This directory is the language-independent executable evidence for FinKore Core
-0.8: Money, Workflow, Audit, Approvals, and Entities. The
+0.9 release candidate: Money, Workflow, Audit, Approvals, and Entities. The
 specification remains the source of truth. Vectors describe observable domain
 behavior; they do not prescribe APIs, classes, exceptions, storage, or
 frameworks.
@@ -40,12 +40,12 @@ specific Core release and conformance manifest. It is not a statement about API
 shape, storage design, framework integration, package maturity, mutation score,
 or Agentic advertising.
 
-A complete FinKore Core 0.8 conformance claim means the implementation passed
-every applicable vector in every suite listed by the Core 0.8 release manifest,
-using the stated `finkoreConformance` manifest format. The claim MUST identify
-at least:
+A complete FinKore Core 0.9 release-candidate conformance claim means the
+implementation passed every applicable vector in every suite listed by the Core
+0.9 release-candidate manifest, using the stated `finkoreConformance` manifest
+format. The claim MUST identify at least:
 
-- Core release: `FinKore Core 0.8`;
+- Core release: `FinKore Core 0.9 release candidate`;
 - manifest path or release manifest identity;
 - `finkoreConformance` version;
 - all suites included in the run;

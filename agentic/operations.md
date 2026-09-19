@@ -12,12 +12,12 @@ purpose, input semantics, success output, preconditions, postconditions,
 portable errors, effects, and requirement references. Each promoted operation is
 also used by manifest-listed conformance vectors. No Approval operation label,
 Workflow import/create label, Entity import label, Money serialization label, or
-Audit redaction label is promoted as a canonical Agentic operation in Core 0.8.
+Audit redaction label is promoted as a canonical Agentic operation in Core 0.9 release candidate.
 
 Approval conformance labels, including `approval.chain.evaluate`,
 `approval.composition.evaluate`, `approval.decision.withdraw`,
 `approval.decision.supersede`, and `approval.requirement.supersede`, remain
-conformance-local after the Core 0.8 Agentic review. They observe Approval
+conformance-local after the Core 0.9 release candidate Agentic review. They observe Approval
 evaluation and lifecycle behavior through test fixtures; they are not promoted
 to canonical Agentic operations because public Approval operation contracts still
 need a stable agent-facing input model, diagnostics policy, and security review
@@ -33,11 +33,11 @@ boundary checks rather than canonical Agentic operations.
 
 `entity.import` remains conformance-local after the Agentic review. It
 observes import identity mapping, business revision history, and conflict-version
-preconditions through fixture-shaped inputs, but Core 0.8 does not define a
+preconditions through fixture-shaped inputs, but Core 0.9 release candidate does not define a
 public migration/import operation contract, identity registry, persistence
 schema, or source-system authority model.
 
-The registry intentionally does not include idempotency metadata for Core 0.8.
+The registry intentionally does not include idempotency metadata for Core 0.9 release candidate.
 Transport retry policy, idempotency keys, and autonomous-execution policy belong
 to the consuming application unless a concrete FinKore rule says otherwise.
 Accounting finality remains unspecified while ledger posting and financial
@@ -70,7 +70,7 @@ commitment are outside Core.
 
 `Unspecified` is deliberate. A generic Workflow may not be attached to a
 Financial Entity, an Entity may carry non-financial or composing-domain facts,
-and a guard may declare dependence on external facts. Core 0.8 includes
+and a guard may declare dependence on external facts. Core 0.9 release candidate includes
 correction, reversal, void, and supersession observations, but no operation is
 labeled irreversible because Core still does not define accounting finality,
 ledger posting, or transport idempotency.
@@ -290,7 +290,7 @@ replacement payload is intentionally not interpreted by the Agentic layer.
 **Preconditions:** None that permit replacement; committed logical Audit history
 is append-only.
 
-**Success postcondition:** None. Core 0.8 defines no successful replacement of
+**Success postcondition:** None. Core 0.9 release candidate defines no successful replacement of
 committed Audit Events outside future redaction policy semantics.
 
 **Failure postcondition:** The supplied logical history remains unchanged.
@@ -309,7 +309,7 @@ identifier is not interpreted as permission to erase committed logical history.
 **Preconditions:** None that permit removal; committed logical Audit history is
 append-only.
 
-**Success postcondition:** None. Core 0.8 defines no successful removal of
+**Success postcondition:** None. Core 0.9 release candidate defines no successful removal of
 committed Audit Events outside future redaction policy semantics.
 
 **Failure postcondition:** The supplied logical history remains unchanged.
