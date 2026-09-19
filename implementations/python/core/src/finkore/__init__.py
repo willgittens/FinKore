@@ -18,7 +18,10 @@ from .entities import create_entity, evolve_entity, import_entity, mutate_entity
 from .money import Money
 from .workflow import WorkflowDefinition, WorkflowInstance, create_workflow, import_workflow, transition_workflow
 
+CORE_VERSION = "0.9-rc"
+
 __all__ = [
+    "CORE_VERSION",
     "FinKoreError",
     "Money",
     "append_event",

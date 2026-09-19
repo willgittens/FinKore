@@ -1,4 +1,14 @@
 // SPDX-License-Identifier: MPL-2.0
+/**
+ * FinKore Core release-candidate version implemented by this TypeScript package.
+ *
+ * This value identifies the language-neutral FinKore Core behavioral baseline,
+ * not the npm package version.
+ *
+ * @see SPEC-COMPATIBILITY-001
+ */
+export const FINKORE_CORE_VERSION = '0.9-rc'
+
 export { AuditActor } from './audit/actor.js'
 export { AuditChange } from './audit/audit-change.js'
 export { AuditEvent } from './audit/audit-event.js'

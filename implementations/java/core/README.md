@@ -5,6 +5,11 @@ derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
 TypeScript or Python financial implementation code. It passes the complete
 current conformance manifest.
 
+This artifact is a repository reference implementation for the 0.9
+release-candidate phase. It is not published to a Maven repository. The Maven
+artifact version identifies this implementation artifact; `FinKore.CORE_VERSION`
+identifies the FinKore Core behavioral baseline it implements.
+
 Current status:
 
 - Money representation, serialization, arithmetic, comparison, rates,
@@ -26,6 +31,7 @@ Current status:
 The intentional Java package surface is `org.finkore`. The public classes are:
 
 - `FinKoreException`, carrying the portable `code()`.
+- `FinKore`, carrying package-level implementation metadata.
 - `Money`, including portable Money parsing, serialization, arithmetic,
   comparison, rounding, Rate application, and Allocation.
 - `Workflow`, including `Workflow.Definition`, `Workflow.Instance`, and
@@ -51,6 +57,12 @@ Implementation-specific limits: this package requires JDK 21. Money amounts use
 fit Java `int` because `BigDecimal` scale is an `int`; equal-allocation part
 counts also fit Java `int`. These are Java API limits, not portable FinKore
 requirements.
+
+The JAR intentionally includes compiled `org.finkore` classes plus
+`META-INF/LICENSE`, `META-INF/NOTICE.md`, `META-INF/THIRD_PARTY_LICENSES.md`,
+and `META-INF/finkore-core.properties`. Tests, coverage data, generated
+reports, repository-local toolchains, and build outputs are not packaged in the
+runtime JAR.
 
 Run the current local checks from the repository root:
 

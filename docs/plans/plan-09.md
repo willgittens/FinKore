@@ -112,28 +112,28 @@ inside the repository.
 
 ### Tasks
 
-- [ ] Decide whether TypeScript, Python, and Java artifacts will be officially
+- [x] Decide whether TypeScript, Python, and Java artifacts will be officially
       published with Core 1.0 or remain reference implementations.
-- [ ] Keep Core release versions distinct from implementation package versions.
-- [ ] Require each package to declare the FinKore Core version it implements.
-- [ ] Finalize package names, descriptions, licenses, exported files, and runtime
+- [x] Keep Core release versions distinct from implementation package versions.
+- [x] Require each package to declare the FinKore Core version it implements.
+- [x] Finalize package names, descriptions, licenses, exported files, and runtime
       version requirements.
-- [ ] Produce a TypeScript package archive locally.
-- [ ] Install the TypeScript archive into an empty consumer project and execute
+- [x] Produce a TypeScript package archive locally.
+- [x] Install the TypeScript archive into an empty consumer project and execute
       representative public API calls.
-- [ ] Build a Python wheel and source distribution locally.
-- [ ] Install the Python artifact into a clean virtual environment and execute
+- [x] Build a Python wheel and source distribution locally.
+- [x] Install the Python artifact into a clean virtual environment and execute
       representative public API calls.
-- [ ] Build the Java JAR locally.
-- [ ] Consume the Java artifact from a separate minimal Maven project and
+- [x] Build the Java JAR locally.
+- [x] Consume the Java artifact from a separate minimal Maven project and
       execute representative public API calls.
-- [ ] Verify that source packages exclude tests, generated reports, local
+- [x] Verify that source packages exclude tests, generated reports, local
       toolchains, and repository-only developer files unless intentionally
       shipped.
-- [ ] Verify MPL-2.0 license and notice inclusion in every distributable.
-- [ ] Document local release commands under `docs/tools` if additional release
+- [x] Verify MPL-2.0 license and notice inclusion in every distributable.
+- [x] Document local release commands under `docs/tools` if additional release
       tooling is required.
-- [ ] Ensure every new permanent script begins with a comment explaining its
+- [x] Ensure every new permanent script begins with a comment explaining its
       purpose and contains no financial-domain behavior.
 
 ### Completion criteria
@@ -143,6 +143,17 @@ inside the repository.
 - A clean consumer can use the documented public API.
 - Publication status is explicit; the repository does not imply that private or
   unpublished artifacts are available from a registry.
+
+### Result
+
+Milestone 3 keeps the TypeScript, Python, and Java packages as repository
+reference implementations for the 0.9 release candidate rather than claiming
+registry publication. Each package declares the implemented FinKore Core version
+separately from its artifact version. Local packaging proof produced and
+consumed an npm archive, Python wheel and source distribution, and Java JAR from
+clean consumer projects. Distributables include MPL-2.0 license and notice files
+and exclude tests, generated reports, local toolchains, and repository-only
+developer files.
 
 ## Milestone 4 — Conformance and quality release candidate
 

@@ -9,8 +9,9 @@
   <version>0.1.0</version>
   <packaging>jar</packaging>
   <name>FinKore Java Core</name>
-    <description>Java implementation of FinKore Money, Workflow, Audit, Approvals, and Entities behavior.</description>
+  <description>Repository reference Java implementation of FinKore Core 0.9 release-candidate behavior.</description>
   <properties>
+    <finkore.core.version>0.9-rc</finkore.core.version>
     <maven.compiler.release>21</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>

@@ -17,3 +17,28 @@ the FinKore public API and MUST NOT define financial-domain behavior.
 Run `npm run check` for the normal local validation suite. Run
 `npm run verify` for the complete local suite, including conformance, coverage,
 and critical mutation probes.
+
+## Local Packaging Proof
+
+Milestone packaging checks use local artifacts only. They do not publish to npm,
+PyPI, Maven Central, or any other registry.
+
+Representative commands:
+
+```bash
+npm run build
+npm pack --workspace @finkore/typescript --pack-destination /tmp/finkore-packaging
+
+.tools/bin/python3.12 -m pip wheel implementations/python/core --no-deps --wheel-dir /tmp/finkore-packaging
+.tools/bin/python3.12 -m pip install 'setuptools>=69' --target /tmp/finkore-packaging/build-backend
+(cd implementations/python/core && PYTHONPATH=/tmp/finkore-packaging/build-backend ../../../.tools/bin/python3.12 -c "import setuptools.build_meta as build_meta; build_meta.build_sdist('/tmp/finkore-packaging')")
+
+.tools/bin/mvn -f implementations/java/core/pom.xml package
+.tools/bin/mvn install:install-file \
+  -Dfile=implementations/java/core/target/finkore-java-core-0.1.0.jar \
+  -DpomFile=implementations/java/core/pom.xml \
+  -DlocalRepositoryPath=/tmp/finkore-packaging/m2
+```
+
+These commands only build and consume implementation artifacts. They do not
+define financial behavior.

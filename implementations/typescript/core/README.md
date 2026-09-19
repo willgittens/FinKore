@@ -4,6 +4,11 @@ TypeScript reference implementation for FinKore Core 0.9 release candidate: Mone
 Audit, Approvals, and Entities. It passes the complete current conformance
 manifest, but the specification remains the source of financial semantics.
 
+This artifact is a repository reference implementation for the 0.9
+release-candidate phase. It is not published to an npm registry. The npm package
+version identifies this implementation artifact; `FINKORE_CORE_VERSION`
+identifies the FinKore Core behavioral baseline it implements.
+
 Money support covers exact representation, serialization, arithmetic,
 comparison, currency compatibility, explicit rounding, Rates, and Allocation.
 
@@ -75,6 +80,7 @@ are not part of the supported public API.
 
 The public value exports are:
 
+- Metadata: `FINKORE_CORE_VERSION`.
 - Money: `Money`, `Currency`, and `isValidCurrencyIdentifier`.
 - Workflow: `WorkflowDefinition` and `Workflow`.
 - Audit: `AuditActor`, `AuditChange`, `AuditEvent`, and `AuditLog`.
@@ -95,6 +101,11 @@ composition quorum thresholds are accepted as finite safe integer `number`
 values. Ratio allocation entries may use `bigint` where a ratio exceeds the safe
 integer range. These limits describe this package API only; they are not
 portable FinKore semantics.
+
+The package archive intentionally includes `dist/`, this README, `LICENSE`,
+`NOTICE.md`, and `THIRD_PARTY_LICENSES.md`. Source tests, coverage reports,
+mutation reports, local toolchains, and repository-only developer files are not
+part of the packed artifact.
 
 ## Current Money API
 

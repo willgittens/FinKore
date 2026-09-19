@@ -5,6 +5,11 @@ derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
 TypeScript financial implementation code. It passes the complete current
 conformance manifest.
 
+This artifact is a repository reference implementation for the 0.9
+release-candidate phase. It is not published to a Python package registry. The
+Python package version identifies this implementation artifact; `CORE_VERSION`
+identifies the FinKore Core behavioral baseline it implements.
+
 Current status:
 
 - Money representation, serialization, arithmetic, comparison, rates,
@@ -32,6 +37,7 @@ conformance adapter, even when Python allows direct import by module path.
 
 The public exports are:
 
+- Metadata: `CORE_VERSION`.
 - Error model: `FinKoreError`; portable consumers should inspect `error.code`.
 - Money: `Money`.
 - Workflow: `WorkflowDefinition`, `WorkflowInstance`, `create_workflow`,
@@ -48,6 +54,12 @@ Implementation-specific limits: this package requires Python 3.12 or newer and
 uses Python `int` and exact `Decimal` construction from plain decimal strings.
 No fixed portable precision, scale, or collection-size limit is declared by
 FinKore Core; practical limits are the Python runtime and available memory.
+
+The wheel and source distribution intentionally include package source,
+`py.typed`, this README, `LICENSE`, `NOTICE.md`, and
+`THIRD_PARTY_LICENSES.md`. Tests, coverage data, generated reports,
+repository-local toolchains, and build outputs are excluded from the source
+distribution.
 
 Run the current local checks from the repository root:
 
