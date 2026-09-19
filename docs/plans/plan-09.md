@@ -161,22 +161,22 @@ Exercise the frozen candidate across languages and plausible defects.
 
 ### Tasks
 
-- [ ] Freeze the release-candidate conformance manifest and schema compatibility
+- [x] Freeze the release-candidate conformance manifest and schema compatibility
       version.
-- [ ] Run every manifest vector against TypeScript, Python, and Java.
-- [ ] Confirm that all implementations report identical normalized observations.
-- [ ] Review all not-directly-testable classifications and their justifications.
-- [ ] Add regression vectors for every defect found during API and packaging
+- [x] Run every manifest vector against TypeScript, Python, and Java.
+- [x] Confirm that all implementations report identical normalized observations.
+- [x] Review all not-directly-testable classifications and their justifications.
+- [x] Add regression vectors for every defect found during API and packaging
       review when the behavior is portable and normative.
-- [ ] Run runner and TypeScript mutation testing at the configured quality gate.
-- [ ] Run the complete cross-language critical-mutant probes.
-- [ ] Confirm that no known critical financial mutant survives.
-- [ ] Run all configured coverage gates.
-- [ ] Run architecture checks confirming that implementations do not depend on
+- [x] Run runner and TypeScript mutation testing at the configured quality gate.
+- [x] Run the complete cross-language critical-mutant probes.
+- [x] Confirm that no known critical financial mutant survives.
+- [x] Run all configured coverage gates.
+- [x] Run architecture checks confirming that implementations do not depend on
       conformance or Agentic metadata for financial behavior.
-- [ ] Perform clean-environment verification with only declared toolchain
+- [x] Perform clean-environment verification with only declared toolchain
       dependencies available.
-- [ ] Record defects in the normal development tracker or merge request rather
+- [x] Record defects in the normal development tracker or merge request rather
       than adding repository audit reports.
 
 ### Completion criteria
@@ -184,6 +184,24 @@ Exercise the frozen candidate across languages and plausible defects.
 - The frozen candidate passes the full local verification pipeline.
 - All three implementations agree on the complete portable manifest.
 - No known release-blocking portability, packaging, or financial defect remains.
+
+### Result
+
+Milestone 4 freezes `conformance/manifest.json` as the Core 0.9
+release-candidate manifest with `finkoreConformance` syntax compatibility
+version `0.1`. TypeScript, Python, and Java each passed all 254 manifest-listed
+vectors with 0 failures, 0 unsupported vectors, and 0 infrastructure errors, so
+their normalized observations agree with the same portable expected results.
+
+Traceability remains at 313 covered requirements, 68 not directly testable
+requirements, and 0 uncovered, deferred, or blocking specification gaps. No API
+or packaging-review defect required a new portable regression vector.
+
+The full local verification pipeline passed with the declared local toolchains.
+Runner and TypeScript Stryker mutation gates exceeded the configured 95% break
+thresholds at 98.88% and 98.28%. The cross-language critical-mutant probes
+killed 24 of 24 configured critical mutants. Coverage gates passed for runner,
+TypeScript, Python, and Java. No repository audit report was added.
 
 ## Milestone 5 — Documentation and migration review
 
