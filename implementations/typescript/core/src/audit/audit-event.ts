@@ -2,6 +2,7 @@
 import { AuditActor } from './actor.js'
 import { AuditChange } from './audit-change.js'
 import { InvalidAuditEventError } from './errors.js'
+import { parsePortableTimestamp } from '../portable-timestamp.js'
 import type {
   AuditRelationshipType,
   SerializedAuditChange,
@@ -12,19 +13,6 @@ import type {
 
 // Stryker disable all: regex construction mechanics are equivalent noise; event-type acceptance/rejection behavior is covered by validation tests.
 const EVENT_TYPE = /^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*$/u
-// Stryker restore all
-
-// Stryker disable all: regex construction mechanics are equivalent noise; timestamp acceptance/rejection behavior is covered by validation tests.
-const RFC3339_DATE_TIME_WITH_OFFSET = new RegExp([
-  '^\\d{4}-',
-  '\\d{2}-',
-  '\\d{2}T',
-  '\\d{2}:',
-  '\\d{2}:',
-  '\\d{2}',
-  '(?:\\.\\d+)?',
-  '(?:Z|[+-]\\d{2}:\\d{2})$',
-].join(''), 'u')
 // Stryker restore all
 
 function isPlainRecord(value: unknown): value is Readonly<Record<string, unknown>> {
@@ -52,7 +40,9 @@ function validateEventType(value: unknown): string {
 
 function validateTimestamp(value: unknown): string {
   const timestamp = requiredString(value)
-  if (!RFC3339_DATE_TIME_WITH_OFFSET.test(timestamp) || Number.isNaN(Date.parse(timestamp))) {
+  try {
+    parsePortableTimestamp(timestamp)
+  } catch {
     throw new InvalidAuditEventError()
   }
   return timestamp

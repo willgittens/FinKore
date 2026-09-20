@@ -346,17 +346,26 @@ export interface SerializedApprovalDecision {
   /** Actor attributable for the decision. */
   readonly actor: SerializedApprovalActor
 
-  /** RFC 3339 date-time with an explicit numeric UTC offset or Z. */
+  /**
+   * Portable FinKore RFC 3339 date-time with at most nine fractional digits
+   * and an explicit known numeric UTC offset or Z.
+   *
+   * @see SPEC-TIMESTAMP-001
+   * @see SPEC-TIMESTAMP-003
+   * @see SPEC-TIMESTAMP-004
+   */
   readonly decidedAt: string
 
   /**
-   * Optional RFC 3339 date-time at which this Decision expires.
+   * Optional portable FinKore RFC 3339 date-time at which this Decision
+   * expires.
    *
    * A Decision is no longer effective when the explicit evaluation instant is
    * equal to or later than this instant.
    *
    * @see APPROVAL-VALIDITY-007
    * @see APPROVAL-VALIDITY-009
+   * @see SPEC-TIMESTAMP-005
    */
   readonly expiresAt?: string
 }
@@ -413,7 +422,7 @@ export interface SerializedApprovalLifecycleEvent {
   /** Actor attributed to recording the lifecycle event. */
   readonly actor: SerializedApprovalActor
 
-  /** RFC 3339 date-time when the lifecycle event was recorded. */
+  /** Portable FinKore RFC 3339 date-time when the lifecycle event was recorded. */
   readonly recordedAt: string
 }
 

@@ -177,7 +177,7 @@ conformance semantics without introducing broader workflow behavior.
 
 - `AuditActor.from(actor)` validates known actor attribution with a stable opaque identity and optional type/display metadata.
 - `AuditChange.from(change)` validates a change with a required field/path identity and preserved optional `before`/`after` values.
-- `AuditEvent.from(event)` validates an Audit Event with caller-supplied `eventId`, stable domain `eventType`, `entity`, optional `actor`, explicit RFC 3339 `occurredAt` timestamp, optional validated changes, and optional Audit Relationships.
+- `AuditEvent.from(event)` validates an Audit Event with caller-supplied `eventId`, stable domain `eventType`, `entity`, optional `actor`, an `occurredAt` value using the portable FinKore RFC 3339 profile, optional validated changes, and optional Audit Relationships.
 - `AuditLog.create(history)` creates a logical audit history from existing committed events and rejects duplicate event or relationship identities, absent relationship targets, self-targets, and relationship target Entity mismatches.
 - `auditLog.append(event)` validates and appends one event, rejecting duplicate event identities and invalid Audit Relationships without changing prior history.
 - `auditLog.redact({ policy, redactionEvent })` returns a redacted representation of exactly one affected event with protected Change path values or reserved actor-context targets, preserves Audit Relationships, and appends an evidence event without mutating the committed source event.
@@ -197,7 +197,7 @@ Audit failures expose portable codes: `FINKORE_AUDIT_INVALID_EVENT`,
 - `ApprovalRequirement.from(requirement)` validates a requirement with caller-supplied stable `id`, subject reference, eligible actor identities, and explicit `APPROVED`/`REJECTED` outcome semantics.
 - `approvalRequirement.isEligibleActor(actorId)` reports whether an actor identity is declared eligible for the requirement.
 - `approvalRequirement.stateForOutcome(outcome)` maps an effective Decision outcome to `APPROVED` or `REJECTED`.
-- `ApprovalDecision.from(decision)` validates a decision with requirement identity, subject facts, `APPROVED` or `REJECTED` outcome, actor attribution, explicit RFC 3339 timestamp, and optional explicit expiration timestamp.
+- `ApprovalDecision.from(decision)` validates a decision with requirement identity, subject facts, `APPROVED` or `REJECTED` outcome, actor attribution, a timestamp using the portable FinKore RFC 3339 profile, and an optional expiration timestamp using the same profile.
 - `ApprovalDecision.forRequirement(requirement, decision)` validates Decision-to-Requirement association and actor eligibility.
 - `approvalDecision.evaluateEffectiveness(currentSubjectFacts, relevantFactPaths)` returns `EFFECTIVE` only when the decision remains associated with unchanged relevant subject facts.
 - `ApprovalDecisionHistory.create(history)` creates a logical append-only Approval Decision history from either the legacy Decision array shape or `{ history, lifecycle }` observations.
@@ -215,6 +215,7 @@ Audit failures expose portable codes: `FINKORE_AUDIT_INVALID_EVENT`,
 - Explicit `NOT_APPLICABLE` Requirement states are excluded from chain completion. Missing or malformed states throw `FINKORE_APPROVAL_INVALID_CHAIN`; explicit unresolved applicability throws `FINKORE_APPROVAL_CONDITION_UNRESOLVED`.
 - Approval Chain evaluation consumes explicit Requirement state observations. It does not prove which historical Decision satisfied a Requirement or which subject facts were bound to that Decision; use `ApprovalDecisionHistory.evaluateRequirement(requirement, { currentSubjectFacts, relevantFactPaths, evaluatedAt })` for current satisfaction from historical evidence.
 - Historical Decisions whose relevant subject facts no longer match current facts, are withdrawn, expired, superseded, or address a superseded Requirement remain committed but do not satisfy or reject the Requirement for current evaluation. Without another effective Decision, the Requirement is `PENDING`.
+- Portable timestamps accept valid years `0001` through `9999`, uppercase `T` and `Z`, explicit known numeric offsets, and zero through nine fractional digits. Expiration compares exact nanoseconds and equivalent offsets by instant; invalid calendars, unknown `-00:00` offsets, leap seconds, lowercase/basic forms, and excess precision are rejected.
 - Core 0.9 release candidate does not define Approval Chain identity. Decisions bind to Requirements and relevant subject facts, not to Chain identifiers.
 
 Approval failures expose portable codes:

@@ -37,6 +37,9 @@ it addressed was superseded.
 Expiration is deterministic. If any currently considered Decision has an
 expiration instant, the evaluation context must include an explicit evaluation
 instant. At the exact expiration instant the Decision is no longer effective.
+Comparison uses every accepted fractional digit in the portable timestamp
+profile; an implementation must not reduce the comparison to milliseconds or
+microseconds.
 
 Lifecycle events are relationships over existing Approval evidence. They do not
 delete historical Decisions, create new Decisions, or define authorization

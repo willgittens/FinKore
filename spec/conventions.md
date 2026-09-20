@@ -95,6 +95,10 @@ policy above.
 
 - **SPEC-TIMESTAMP-001** — Timestamps used as domain values MUST identify an unambiguous instant.
 - **SPEC-TIMESTAMP-002** — A serialized timestamp MUST use an RFC 3339 `date-time` representation with an explicit numeric UTC offset or `Z`.
+- **SPEC-TIMESTAMP-003** — The portable FinKore RFC 3339 profile MUST use a valid proleptic-Gregorian calendar date with a four-digit year from `0001` through `9999`, uppercase `T`, an hour from `00` through `23`, a minute and second from `00` through `59`, and uppercase `Z` or a numeric offset in `+HH:MM` or `-HH:MM` form. Numeric offset hours MUST be from `00` through `23` and offset minutes from `00` through `59`. The RFC 3339 unknown-local-offset form `-00:00`, leap-second values, lowercase `t` or `z`, basic forms without separators, and calendar-invalid dates MUST be rejected.
+- **SPEC-TIMESTAMP-004** — Fractional seconds MAY be omitted. When present, they MUST contain from one through nine decimal digits. A timestamp with more than nine fractional digits MUST be rejected rather than truncated or rounded.
+- **SPEC-TIMESTAMP-005** — Timestamp ordering and equality MUST compare the exact represented instant at nanosecond precision. Equivalent numeric offsets MUST compare as the same instant, and an implementation MUST NOT use a conversion that loses any accepted fractional digit.
+- **SPEC-TIMESTAMP-006** — FinKore Core does not define one canonical lexical spelling for equivalent timestamp instants. An operation that returns a caller-supplied valid timestamp MUST preserve that serialized value exactly unless its governing domain specification explicitly requires normalization.
 - **SPEC-DECIMAL-001** — Exact decimal domain values MUST use base-10 semantics.
 - **SPEC-DECIMAL-002** — A specification that defines a serialized decimal value MUST define an encoding that preserves its exact numeric value; JSON numbers are not portable for this purpose.
 - **SPEC-CURRENCY-001** — Currency identifiers SHOULD use ISO 4217 alphabetic codes when representing currencies covered by ISO 4217.

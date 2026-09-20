@@ -57,6 +57,13 @@ describe('Audit events', () => {
     })
 
     expect(withOffset.toJSON().occurredAt).toBe('2026-09-01T14:00:00+02:00')
+    expect(
+      AuditEvent.from({
+        ...completeEvent,
+        eventId: 'evt-nanoseconds',
+        occurredAt: '2026-02-28T12:00:00.123456789+23:59',
+      }).toJSON().occurredAt,
+    ).toBe('2026-02-28T12:00:00.123456789+23:59')
   })
 
   it('omits optional event fields that were not supplied', () => {
@@ -172,6 +179,18 @@ describe('Audit events', () => {
       '2026-09-01T12:00:00+2:00',
       'prefix-2026-09-01T12:00:00Z',
       '2026-09-01T12:00:00Z-suffix',
+      '2026-02-30T12:00:00Z',
+      '2026-09-01T12:00:00.1234567890Z',
+      '20260901T120000Z',
+      '2026-09-01t12:00:00Z',
+      '2026-09-01T12:00:00z',
+      '2026-09-01T12:00:00-00:00',
+      '2026-12-31T23:59:60Z',
+      '0000-01-01T00:00:00Z',
+      '2026-09-01T24:00:00Z',
+      '2026-09-01T12:60:00Z',
+      '2026-09-01T12:00:00+24:00',
+      '2026-09-01T12:00:00+00:60',
     ]) {
       expect(() => AuditEvent.from({ ...completeEvent, occurredAt })).toThrow(InvalidAuditEventError)
     }

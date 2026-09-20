@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 package org.finkore;
 
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.HashMap;
@@ -39,8 +37,6 @@ public final class Audit {
   public static final String ACTOR_INVALID = "FINKORE_AUDIT_ACTOR_INVALID";
 
   private static final Pattern EVENT_TYPE = Pattern.compile("[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*");
-  private static final Pattern TIMESTAMP = Pattern.compile(
-      "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})");
   private static final Set<String> RESERVED_METADATA = Set.of(
       "eventId", "eventType", "entity", "actor", "occurredAt", "changes", "relationships");
   private static final Set<String> RELATIONSHIP_TYPES = Set.of("CORRECTS", "REVERSES", "VOIDS", "SUPERSEDES");
@@ -633,12 +629,9 @@ public final class Audit {
   }
 
   private static void validateTimestamp(String timestamp) {
-    if (!TIMESTAMP.matcher(timestamp).matches()) {
-      throw new FinKoreException(INVALID_EVENT);
-    }
     try {
-      OffsetDateTime.parse(timestamp);
-    } catch (DateTimeParseException error) {
+      PortableTimestamp.parse(timestamp);
+    } catch (IllegalArgumentException error) {
       throw new FinKoreException(INVALID_EVENT);
     }
   }

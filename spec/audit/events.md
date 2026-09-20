@@ -44,6 +44,8 @@ The following JSON is illustrative and non-normative; it does not prescribe seri
 
 - An event with only free-form prose and no event type or entity reference.
 - Reusing an event identifier within the same history.
+- Supplying a calendar-invalid occurrence timestamp, an unknown `-00:00`
+  offset, or more than nine fractional digits.
 
 ## Open Questions
 

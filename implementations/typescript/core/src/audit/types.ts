@@ -292,7 +292,14 @@ export interface SerializedAuditEvent {
   /** Known responsible Actor; omitted when actor attribution is unknown. */
   readonly actor?: SerializedAuditActor
 
-  /** RFC 3339 date-time with an explicit numeric UTC offset or Z. */
+  /**
+   * Portable FinKore RFC 3339 date-time, preserving up to nine fractional
+   * digits and an explicit known numeric UTC offset or Z.
+   *
+   * @see SPEC-TIMESTAMP-001
+   * @see SPEC-TIMESTAMP-003
+   * @see SPEC-TIMESTAMP-004
+   */
   readonly occurredAt: string
 
   /** Optional domain-relevant changes preserved as event content. */

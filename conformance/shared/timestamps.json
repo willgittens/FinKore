@@ -1,0 +1,612 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "shared.timestamp.maximum-precision-001",
+      "spec": "shared/conventions",
+      "requirements": [
+        "SPEC-TIMESTAMP-001",
+        "SPEC-TIMESTAMP-002",
+        "SPEC-TIMESTAMP-003",
+        "SPEC-TIMESTAMP-004",
+        "SPEC-TIMESTAMP-006",
+        "AUDIT-EVENT-005"
+      ],
+      "description": "Accepts and exactly preserves a valid timestamp with nine fractional digits.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-timestamp-nanoseconds",
+          "eventType": "ENTITY_OBSERVED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "occurredAt": "2026-09-01T12:00:00.123456789Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "evt-timestamp-nanoseconds",
+              "eventType": "ENTITY_OBSERVED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "occurredAt": "2026-09-01T12:00:00.123456789Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "timestamp-fraction-truncated",
+        "timestamp-fraction-rejected"
+      ]
+    },
+    {
+      "id": "shared.timestamp.excess-precision-001",
+      "spec": "shared/conventions",
+      "requirements": [
+        "SPEC-TIMESTAMP-004",
+        "AUDIT-EVENT-005",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Rejects a timestamp with ten fractional digits without appending the event.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-timestamp-too-precise",
+          "eventType": "ENTITY_OBSERVED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "occurredAt": "2026-09-01T12:00:00.1234567890Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "timestamp-excess-precision-accepted",
+        "failed-timestamp-append-mutates-history"
+      ]
+    },
+    {
+      "id": "shared.timestamp.invalid-calendar-001",
+      "spec": "shared/conventions",
+      "requirements": [
+        "SPEC-TIMESTAMP-003",
+        "AUDIT-EVENT-005",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Rejects a calendar-invalid timestamp rather than normalizing it.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-timestamp-invalid-calendar",
+          "eventType": "ENTITY_OBSERVED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "occurredAt": "2026-02-30T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "timestamp-invalid-calendar-normalized",
+        "failed-timestamp-append-mutates-history"
+      ]
+    },
+    {
+      "id": "shared.timestamp.basic-form-invalid-001",
+      "spec": "shared/conventions",
+      "requirements": [
+        "SPEC-TIMESTAMP-002",
+        "SPEC-TIMESTAMP-003",
+        "AUDIT-EVENT-005"
+      ],
+      "description": "Rejects an RFC 3339 basic-form timestamp without required separators.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-timestamp-basic-form",
+          "eventType": "ENTITY_OBSERVED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "occurredAt": "20260901T120000Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "timestamp-basic-form-accepted"
+      ]
+    },
+    {
+      "id": "shared.timestamp.missing-offset-invalid-001",
+      "spec": "shared/conventions",
+      "requirements": [
+        "SPEC-TIMESTAMP-001",
+        "SPEC-TIMESTAMP-002",
+        "AUDIT-EVENT-005"
+      ],
+      "description": "Rejects a timestamp without an explicit offset.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-timestamp-no-offset",
+          "eventType": "ENTITY_OBSERVED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "occurredAt": "2026-09-01T12:00:00"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "timestamp-ambient-offset-used"
+      ]
+    },
+    {
+      "id": "shared.timestamp.unknown-offset-invalid-001",
+      "spec": "shared/conventions",
+      "requirements": [
+        "SPEC-TIMESTAMP-001",
+        "SPEC-TIMESTAMP-003",
+        "AUDIT-EVENT-005"
+      ],
+      "description": "Rejects the RFC 3339 unknown-local-offset form because it does not identify a known instant.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-timestamp-unknown-offset",
+          "eventType": "ENTITY_OBSERVED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "occurredAt": "2026-09-01T12:00:00-00:00"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "timestamp-unknown-offset-treated-as-utc"
+      ]
+    },
+    {
+      "id": "shared.timestamp.leap-second-invalid-001",
+      "spec": "shared/conventions",
+      "requirements": [
+        "SPEC-TIMESTAMP-003",
+        "AUDIT-EVENT-005"
+      ],
+      "description": "Rejects leap-second syntax outside the portable FinKore profile.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-timestamp-leap-second",
+          "eventType": "ENTITY_OBSERVED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "occurredAt": "2026-12-31T23:59:60Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "timestamp-leap-second-accepted"
+      ]
+    },
+    {
+      "id": "shared.timestamp.expiration-subnanosecond-before-001",
+      "spec": "shared/conventions",
+      "requirements": [
+        "SPEC-TIMESTAMP-004",
+        "SPEC-TIMESTAMP-005",
+        "APPROVAL-VALIDITY-008",
+        "APPROVAL-VALIDITY-009"
+      ],
+      "description": "Keeps a Decision effective when evaluation is one nanosecond before expiration.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00.000000001Z",
+            "expiresAt": "2026-09-02T12:00:00.000000005Z"
+          }
+        ],
+        "evaluatedAt": "2026-09-02T12:00:00.000000004Z"
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "timestamp-fraction-lost",
+        "expiration-boundary-inverted"
+      ]
+    },
+    {
+      "id": "shared.timestamp.expiration-equivalent-offset-nanoseconds-001",
+      "spec": "shared/conventions",
+      "requirements": [
+        "SPEC-TIMESTAMP-005",
+        "APPROVAL-VALIDITY-008",
+        "APPROVAL-VALIDITY-009"
+      ],
+      "description": "Treats nanosecond timestamps with equivalent offsets as the same expiration instant.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00.000000001Z",
+            "expiresAt": "2026-09-02T12:00:00.000000005Z"
+          }
+        ],
+        "evaluatedAt": "2026-09-02T14:00:00.000000005+02:00"
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "timestamp-offset-compared-lexically",
+        "timestamp-fraction-lost"
+      ]
+    },
+    {
+      "id": "shared.timestamp.expiration-subnanosecond-after-001",
+      "spec": "shared/conventions",
+      "requirements": [
+        "SPEC-TIMESTAMP-004",
+        "SPEC-TIMESTAMP-005",
+        "APPROVAL-VALIDITY-008",
+        "APPROVAL-VALIDITY-009"
+      ],
+      "description": "Treats a Decision as expired when evaluation is one nanosecond after expiration.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00.000000001Z",
+            "expiresAt": "2026-09-02T12:00:00.000000005Z"
+          }
+        ],
+        "evaluatedAt": "2026-09-02T12:00:00.000000006Z"
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "timestamp-fraction-lost",
+        "expiration-boundary-inverted"
+      ]
+    },
+    {
+      "id": "shared.timestamp.invalid-evaluation-precision-001",
+      "spec": "shared/conventions",
+      "requirements": [
+        "SPEC-TIMESTAMP-004",
+        "APPROVAL-VALIDITY-008",
+        "APPROVAL-ERROR-007"
+      ],
+      "description": "Rejects an evaluation instant beyond portable precision as invalid context.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "expiresAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "evaluatedAt": "2026-09-02T12:00:00.1234567890Z"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CONTEXT"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "timestamp-excess-precision-accepted",
+        "invalid-context-reclassified"
+      ]
+    },
+    {
+      "id": "shared.timestamp.invalid-decision-precision-001",
+      "spec": "shared/conventions",
+      "requirements": [
+        "SPEC-TIMESTAMP-004",
+        "APPROVAL-DECISION-006",
+        "APPROVAL-ERROR-001",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "Rejects a Decision timestamp beyond portable precision without changing history.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00.1234567890Z"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "timestamp-excess-precision-accepted",
+        "failed-decision-mutates-history"
+      ]
+    }
+  ]
+}

@@ -12,6 +12,7 @@ public final class AuditTest {
   public static void main(String[] args) {
     appendsCompleteEventAndPreservesActorIdentity();
     duplicateAppendDoesNotMutateHistory();
+    enforcesPortableTimestampProfile();
     redactionPreservesSourceAndAppendsEvidence();
     invalidRelationshipDoesNotCommitSourceEvent();
   }
@@ -31,6 +32,34 @@ public final class AuditTest {
         "entity", Map.of("type", "expense", "id", "exp-52"),
         "occurredAt", "2026-09-01T13:00:00Z")));
     assertEquals(List.of(submittedEvent()), log.events());
+  }
+
+  private static void enforcesPortableTimestampProfile() {
+    Map<String, Object> valid = Map.of(
+        "eventId", "evt-nanoseconds",
+        "eventType", "ENTITY_OBSERVED",
+        "entity", Map.of("type", "expense", "id", "exp-52"),
+        "occurredAt", "2026-02-28T12:00:00.123456789+23:59");
+    assertEquals(Map.of("history", List.of(valid)), Audit.Log.create(List.of()).append(valid).toPortable());
+
+    for (String occurredAt : List.of(
+        "2026-02-30T12:00:00Z",
+        "2026-09-01T12:00:00.1234567890Z",
+        "20260901T120000Z",
+        "2026-09-01t12:00:00Z",
+        "2026-09-01T12:00:00z",
+        "2026-09-01T12:00:00-00:00",
+        "2026-12-31T23:59:60Z",
+        "0000-01-01T00:00:00Z")) {
+      Audit.Log log = Audit.Log.create(List.of());
+      Map<String, Object> invalid = Map.of(
+          "eventId", "evt-invalid-timestamp",
+          "eventType", "ENTITY_OBSERVED",
+          "entity", Map.of("type", "expense", "id", "exp-52"),
+          "occurredAt", occurredAt);
+      assertError(Audit.INVALID_EVENT, () -> log.append(invalid));
+      assertEquals(List.of(), log.events());
+    }
   }
 
   private static void redactionPreservesSourceAndAppendsEvidence() {

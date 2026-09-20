@@ -13,6 +13,8 @@ public final class ApprovalsTest {
     recordsEligibleDecisionAndEvaluatesRequirement();
     rejectsIneligibleActorWithoutMutatingHistory();
     expirationRequiresExplicitContext();
+    expirationUsesExactNanosecondsAndEquivalentOffsets();
+    rejectsExcessTimestampPrecision();
     compositionRejectsOpposingEffectiveVotes();
   }
 
@@ -51,6 +53,36 @@ public final class ApprovalsTest {
         null,
         null,
         "2026-09-02T12:00:00Z"));
+  }
+
+  private static void expirationUsesExactNanosecondsAndEquivalentOffsets() {
+    Map<String, Object> expiringDecision = Map.of(
+        "requirementId", "finance-review",
+        "subjectFacts", Map.of("revision", "3"),
+        "outcome", "APPROVED",
+        "actor", Map.of("type", "user", "id", "user-7"),
+        "decidedAt", "2026-09-01T12:00:00.000000001Z",
+        "expiresAt", "2026-09-02T12:00:00.000000005Z");
+
+    assertEquals("APPROVED", Approvals.evaluateRequirement(
+        requirement(),
+        List.of(expiringDecision),
+        null,
+        null,
+        "2026-09-02T12:00:00.000000004Z"));
+    assertEquals("PENDING", Approvals.evaluateRequirement(
+        requirement(),
+        List.of(expiringDecision),
+        null,
+        null,
+        "2026-09-02T14:00:00.000000005+02:00"));
+  }
+
+  private static void rejectsExcessTimestampPrecision() {
+    assertError(Approvals.INVALID_DECISION, () -> Approvals.recordDecision(
+        requirement(),
+        approvedDecision("2026-09-01T12:00:00.1234567890Z"),
+        List.of()));
   }
 
   private static void compositionRejectsOpposingEffectiveVotes() {

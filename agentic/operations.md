@@ -23,6 +23,10 @@ to canonical Agentic operations because public Approval operation contracts stil
 need a stable agent-facing input model, diagnostics policy, and security review
 separate from conformance fixtures.
 
+Timestamp fields used by these Approval fixtures, including `decidedAt`,
+`expiresAt`, `recordedAt`, and `evaluatedAt`, follow the portable
+timestamp profile in [Agentic Contract Conventions](conventions.md#portable-timestamps).
+
 Workflow definition/version identity, immutable instance binding, version
 mismatch, import, and expected-state/revision conflict semantics are
 specified in `/spec`, implemented by the TypeScript reference implementation,
@@ -258,7 +262,8 @@ and [MONEY-ERROR-005, -007, -008](../spec/money/errors.md).
 
 **Input semantics:** Existing logical history and a candidate Audit Event with
 caller-supplied stable event identity, stable domain event type, entity reference, optional
-known Actor, and explicit occurrence timestamp. Current conformance fixtures use
+known Actor, and explicit occurrence timestamp following the portable timestamp
+profile. Current conformance fixtures use
 `history` and `event`; this fixture shape is not a production storage format.
 
 **Preconditions:** Event content is valid; known Actor attribution is valid when

@@ -24,6 +24,9 @@ Current status:
   evolution behavior are implemented.
 - Public errors expose portable FinKore error codes; Python exception class
   names are not portable semantics.
+- Audit and Approval timestamps use the strict portable FinKore RFC 3339
+  profile. Values retain up to nine fractional digits, and Approval expiration
+  compares exact nanoseconds rather than Python `datetime` microseconds.
 - Money arithmetic, Rate application, allocation-unit detection, and rounding
   use exact coefficient-and-scale arithmetic where Python `decimal` context
   precision could otherwise alter FinKore results.
@@ -52,8 +55,9 @@ The public exports are:
 
 Implementation-specific limits: this package requires Python 3.12 or newer and
 uses Python `int` and exact `Decimal` construction from plain decimal strings.
-No fixed portable precision, scale, or collection-size limit is declared by
-FinKore Core; practical limits are the Python runtime and available memory.
+No fixed portable Money precision, Money scale, or collection-size limit is
+declared by FinKore Core; practical limits are the Python runtime and available
+memory. Portable timestamps have the normative nine-digit fractional limit.
 
 The wheel and source distribution intentionally include package source,
 `py.typed`, this README, `LICENSE`, `NOTICE.md`, and

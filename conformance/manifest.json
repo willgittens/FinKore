@@ -3,6 +3,12 @@
   "vectorSchema": "./vector.schema.json",
   "suites": [
     {
+      "id": "shared",
+      "vectorFiles": [
+        "./shared/timestamps.json"
+      ]
+    },
+    {
       "id": "money",
       "vectorFiles": [
         "./money/representation.json",

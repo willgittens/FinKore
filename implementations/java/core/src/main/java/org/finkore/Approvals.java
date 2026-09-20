@@ -2,8 +2,6 @@
 package org.finkore;
 
 import java.math.BigInteger;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -420,7 +418,7 @@ public final class Approvals {
     if (evaluatedAt == null) {
       throw new FinKoreException(INVALID_CONTEXT);
     }
-    return !instant(evaluatedAt, INVALID_CONTEXT).isBefore(instant(decision.get("expiresAt"), INVALID_CONTEXT));
+    return instant(evaluatedAt, INVALID_CONTEXT).compareTo(instant(decision.get("expiresAt"), INVALID_CONTEXT)) >= 0;
   }
 
   private static boolean factsMatch(Object decisionFacts, Object currentFacts, Object paths) {
@@ -793,15 +791,10 @@ public final class Approvals {
     return result;
   }
 
-  private static OffsetDateTime instant(Object value, String code) {
-    if (!(value instanceof String text)
-        || !text.contains("T")
-        || !(text.endsWith("Z") || text.substring(Math.min(10, text.length())).contains("+") || text.substring(Math.min(10, text.length())).contains("-"))) {
-      throw new FinKoreException(code);
-    }
+  private static PortableTimestamp.InstantValue instant(Object value, String code) {
     try {
-      return OffsetDateTime.parse(text.replace("Z", "+00:00"));
-    } catch (DateTimeParseException error) {
+      return PortableTimestamp.parse(value);
+    } catch (IllegalArgumentException error) {
       throw new FinKoreException(code);
     }
   }

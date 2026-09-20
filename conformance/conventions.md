@@ -45,7 +45,13 @@ Conformance-only sentinels use `{"presence":"ABSENT"}` and `{"presence":"REDACTE
 Workflow guard expressions and entity validation rules in these vectors are small adapter fixtures, not additions to the FinKore business specification or a general expression DSL. The fixture `{"fact":"x","equals":value}` compares one explicitly supplied fact. The entity validator named `positive-money` accepts an exact Money amount greater than zero. These fixtures let every adapter exercise guard/validation ordering and atomicity under the same deterministic predicate.
 
 
-Timestamps are RFC 3339 instants with `Z` or an explicit numeric offset. Identifiers are opaque strings. States and outcomes use the exact domain names supplied by the vector.
+Timestamps use the portable FinKore RFC 3339 profile in
+[SPEC-TIMESTAMP-001 through -006](../spec/conventions.md#portable-values).
+They use uppercase `T` and `Z`, a valid year from `0001` through `9999`,
+seconds from `00` through `59`, `Z` or a known numeric offset, and at most
+nine fractional digits. Exact instant comparison includes all accepted
+fractional digits. Identifiers are opaque strings. States and outcomes use the
+exact domain names supplied by the vector.
 
 ## Semantic operation catalog
 

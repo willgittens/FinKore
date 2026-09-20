@@ -7,6 +7,7 @@ from copy import deepcopy
 import re
 from typing import Any
 
+from ._timestamp import parse_portable_timestamp
 from .errors import FinKoreError
 
 INVALID_EVENT = "FINKORE_AUDIT_INVALID_EVENT"
@@ -60,6 +61,10 @@ def validate_event(event: Any, committed_events: dict[str, dict[str, Any]], comm
     entity = _entity(event.get("entity"))
     if entity is None or not _opaque(event.get("occurredAt")):
         raise FinKoreError(INVALID_EVENT)
+    try:
+        parse_portable_timestamp(event["occurredAt"])
+    except ValueError as error:
+        raise FinKoreError(INVALID_EVENT) from error
     metadata = event.get("metadata")
     if isinstance(metadata, dict) and any(key in metadata for key in ("eventId", "eventType", "entity", "actor", "occurredAt", "changes", "relationships")):
         raise FinKoreError(INVALID_EVENT)

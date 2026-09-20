@@ -25,6 +25,8 @@ Current status:
   bounded evolution with required Audit evidence are implemented.
 - Public errors expose portable FinKore error codes; Java exception class names
   are not portable semantics.
+- Audit and Approval timestamps use the strict portable FinKore RFC 3339
+  profile and Approval expiration compares exact instants through nanoseconds.
 
 ## Public Package Surface
 

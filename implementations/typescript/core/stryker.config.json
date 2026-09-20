@@ -18,7 +18,8 @@
     "src/approvals/approval-condition.ts",
     "src/approvals/approval-decision.ts",
     "src/approvals/approval-decision-history.ts",
-    "src/approvals/approval-requirement.ts"
+    "src/approvals/approval-requirement.ts",
+    "src/portable-timestamp.ts"
   ],
   "testFiles": [
     "test/money/*.test.ts",

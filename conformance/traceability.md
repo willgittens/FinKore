@@ -9,15 +9,15 @@ Audit, Approvals, and Entities scope.
 
 | Domain | Requirements | MUST / MUST NOT | SHOULD / SHOULD NOT | MAY | Covered | Partial | Uncovered | Not directly testable | Deferred | Blocking spec gap |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Shared | 29 | 23 | 5 | 1 | 2 | 0 | 0 | 27 | 0 | 0 |
+| Shared | 33 | 27 | 5 | 1 | 8 | 0 | 0 | 25 | 0 | 0 |
 | Money | 73 | 68 | 1 | 4 | 68 | 0 | 0 | 5 | 0 | 0 |
 | Workflow | 57 | 55 | 1 | 1 | 48 | 0 | 0 | 9 | 0 | 0 |
 | Audit | 52 | 44 | 4 | 4 | 42 | 0 | 0 | 10 | 0 | 0 |
 | Approvals | 86 | 83 | 1 | 2 | 81 | 0 | 0 | 5 | 0 | 0 |
 | Entities | 84 | 79 | 3 | 2 | 72 | 0 | 0 | 12 | 0 | 0 |
-| **Total** | **381** | **352** | **15** | **14** | **313** | **0** | **0** | **68** | **0** | **0** |
+| **Total** | **385** | **356** | **15** | **14** | **319** | **0** | **0** | **66** | **0** | **0** |
 
-The suite contains 254 vectors. Overall: **313 covered (82.2%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **68 not directly testable (17.8%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
+The suite contains 266 vectors. Overall: **319 covered (82.9%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **66 not directly testable (17.1%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current release candidate. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -52,8 +52,12 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | SPEC-TERMINOLOGY-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
 | SPEC-TERMINOLOGY-002 | Shared | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
 | SPEC-TERMINOLOGY-003 | Shared | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-TIMESTAMP-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-TIMESTAMP-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| SPEC-TIMESTAMP-001 | Shared | MUST / MUST NOT | COVERED | shared.timestamp.missing-offset-invalid-001, shared.timestamp.unknown-offset-invalid-001 |
+| SPEC-TIMESTAMP-002 | Shared | MUST / MUST NOT | COVERED | shared.timestamp.basic-form-invalid-001, shared.timestamp.maximum-precision-001, shared.timestamp.missing-offset-invalid-001 |
+| SPEC-TIMESTAMP-003 | Shared | MUST / MUST NOT | COVERED | shared.timestamp.basic-form-invalid-001, shared.timestamp.invalid-calendar-001, shared.timestamp.leap-second-invalid-001, shared.timestamp.maximum-precision-001, shared.timestamp.unknown-offset-invalid-001 |
+| SPEC-TIMESTAMP-004 | Shared | MUST / MUST NOT | COVERED | shared.timestamp.excess-precision-001, shared.timestamp.expiration-subnanosecond-after-001, shared.timestamp.expiration-subnanosecond-before-001, shared.timestamp.invalid-decision-precision-001, shared.timestamp.invalid-evaluation-precision-001, shared.timestamp.maximum-precision-001 |
+| SPEC-TIMESTAMP-005 | Shared | MUST / MUST NOT | COVERED | shared.timestamp.expiration-equivalent-offset-nanoseconds-001, shared.timestamp.expiration-subnanosecond-after-001, shared.timestamp.expiration-subnanosecond-before-001 |
+| SPEC-TIMESTAMP-006 | Shared | MUST / MUST NOT | COVERED | shared.timestamp.maximum-precision-001 |
 | MONEY-ARITHMETIC-001 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.add.deep-positive-scale-001, money.add.large-significant-digits-001, money.add.negative-001, money.add.same-currency.basic-001, money.subtract.basic-001, money.subtract.currency-mismatch-001, money.subtract.large-negative-001 |
 | MONEY-ARITHMETIC-002 | Money | MUST / MUST NOT | COVERED | money.add.deep-positive-scale-001, money.add.large-significant-digits-001, money.add.same-currency.basic-001, money.subtract.basic-001, money.subtract.large-negative-001 |
 | MONEY-ARITHMETIC-003 | Money | MUST / MUST NOT | COVERED | money.negate.negative-001, money.negate.positive-001 |
@@ -474,6 +478,8 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 
 | Requirement | Critical behavior | Mutation that should be killed |
 | --- | --- | --- |
+| SPEC-TIMESTAMP-003, SPEC-TIMESTAMP-004 | Only the strict portable timestamp syntax and nanosecond precision bound are accepted. | Accept an invalid calendar date, missing or unknown offset, leap second, basic/lowercase form, or more than nine fractional digits. |
+| SPEC-TIMESTAMP-005 | Timestamp comparison preserves every accepted fractional digit and compares equivalent offsets by instant. | Compare lexically, truncate to milliseconds or microseconds, or invert equality/ordering at expiration. |
 | MONEY-ERROR-003 | Currency mismatch rejection and portable code. | Remove currency compatibility check. |
 | MONEY-ARITHMETIC-007 | Exact base-10 arithmetic. | Use binary floating point or implicit minor-unit rounding. |
 | MONEY-ROUNDING-003 | Six exact portable rounding modes. | Replace HALF_EVEN with HALF_UP or negative FLOOR with DOWN. |

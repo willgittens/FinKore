@@ -83,3 +83,16 @@ These layers MUST NOT be treated as interchangeable merely because examples look
 similar. In particular, Money operation metadata reuses the normative
 [Money serialization](../spec/money/serialization.md); production APIs are not
 required to return the conformance runner's normalized envelope.
+
+## Portable timestamps
+
+Machine clients MUST use the portable timestamp profile defined by
+[SPEC-TIMESTAMP-001 through -006](../spec/conventions.md#portable-values) for
+every timestamp field governed by FinKore Core. The profile accepts valid
+Gregorian dates with uppercase `T`, uppercase `Z` or a known numeric offset,
+and at most nine fractional digits. Clients MUST NOT send unknown `-00:00`
+offsets, leap seconds, basic or lowercase forms, or excess fractional precision.
+
+Operation descriptions may call such a value an explicit timestamp or instant
+without repeating the complete profile. Exact comparison includes all accepted
+fractional digits and equivalent offsets compare by instant.

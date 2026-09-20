@@ -53,6 +53,9 @@ describe('Approval decisions', () => {
     expect(() => ApprovalDecision.from({ ...decision, decidedAt: '2026-09-01T12:00:00' })).toThrow(
       InvalidApprovalDecisionError,
     )
+    expect(() => ApprovalDecision.from({ ...decision, decidedAt: '2026-09-01T12:00:00.1234567890Z' })).toThrow(
+      InvalidApprovalDecisionError,
+    )
     expect(() => ApprovalDecision.from({ ...decision, subjectFacts: undefined })).toThrow(InvalidApprovalDecisionError)
     expect(() => ApprovalDecision.from({ ...decision, subjectFacts: () => 'not portable' })).toThrow(
       InvalidApprovalDecisionError,
@@ -216,6 +219,25 @@ describe('Approval decisions', () => {
     expect(history.evaluateRequirement(requirement, { evaluatedAt: '2026-09-02T11:59:59Z' })).toBe('APPROVED')
     expect(history.evaluateRequirement(requirement, { evaluatedAt: '2026-09-02T12:00:00Z' })).toBe('PENDING')
     expect(history.evaluateRequirement(requirement, { evaluatedAt: '2026-09-02T14:00:00+02:00' })).toBe('PENDING')
+  })
+
+  it('compares expiration instants exactly through nanoseconds', () => {
+    const expiringDecision = {
+      ...decision,
+      decidedAt: '2026-09-01T12:00:00.000000001Z',
+      expiresAt: '2026-09-02T12:00:00.000000005Z',
+    }
+    const history = ApprovalDecisionHistory.create([expiringDecision])
+
+    expect(history.evaluateRequirement(requirement, { evaluatedAt: '2026-09-02T12:00:00.000000004Z' })).toBe(
+      'APPROVED',
+    )
+    expect(history.evaluateRequirement(requirement, { evaluatedAt: '2026-09-02T14:00:00.000000005+02:00' })).toBe(
+      'PENDING',
+    )
+    expect(() =>
+      history.evaluateRequirement(requirement, { evaluatedAt: '2026-09-02T12:00:00.0000000001Z' }),
+    ).toThrow(InvalidApprovalContextError)
   })
 
   it('supersedes a decision while preserving target and successor decisions', () => {

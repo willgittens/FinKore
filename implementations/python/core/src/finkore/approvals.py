@@ -5,9 +5,9 @@ from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import dataclass
-from datetime import datetime
 from typing import Any
 
+from ._timestamp import parse_portable_timestamp
 from .errors import FinKoreError
 
 REQUIRED = "FINKORE_APPROVAL_REQUIRED"
@@ -28,11 +28,9 @@ def _actor_id(actor: Any) -> str | None:
     return actor["id"]
 
 
-def _instant(value: Any, code: str = INVALID_DECISION) -> datetime:
-    if not isinstance(value, str) or "T" not in value or (not value.endswith("Z") and "+" not in value[10:] and "-" not in value[10:]):
-        raise FinKoreError(code)
+def _instant(value: Any, code: str = INVALID_DECISION) -> tuple[int, int]:
     try:
-        return datetime.fromisoformat(value.replace("Z", "+00:00"))
+        return parse_portable_timestamp(value)
     except ValueError as error:
         raise FinKoreError(code) from error
 

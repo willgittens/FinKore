@@ -2,6 +2,7 @@
 import { ApprovalDecision } from './approval-decision.js'
 import { ApprovalRequirement } from './approval-requirement.js'
 import { IneligibleApprovalActorError, InvalidApprovalContextError, InvalidApprovalDecisionError } from './errors.js'
+import { comparePortableTimestamps, parsePortableTimestamp } from '../portable-timestamp.js'
 import type {
   SerializedApprovalActor,
   ApprovalRequirementState,
@@ -52,7 +53,9 @@ function cloneJsonValue<T>(value: T): T {
 
 function validateTimestamp(value: unknown): string {
   const timestamp = requiredString(value)
-  if (!RFC3339_DATE_TIME_WITH_OFFSET.test(timestamp) || Number.isNaN(Date.parse(timestamp))) {
+  try {
+    parsePortableTimestamp(timestamp)
+  } catch {
     throw new InvalidApprovalDecisionError()
   }
   return timestamp
@@ -60,7 +63,9 @@ function validateTimestamp(value: unknown): string {
 
 function validateEvaluationTimestamp(value: unknown): string {
   const timestamp = typeof value === 'string' ? value : ''
-  if (timestamp.length === 0 || !RFC3339_DATE_TIME_WITH_OFFSET.test(timestamp) || Number.isNaN(Date.parse(timestamp))) {
+  try {
+    parsePortableTimestamp(timestamp)
+  } catch {
     throw new InvalidApprovalContextError()
   }
   return timestamp
@@ -128,19 +133,6 @@ function lifecycleCandidate(input: unknown, type: SerializedApprovalLifecycleEve
   if (!isPlainRecord(input)) throw new InvalidApprovalDecisionError()
   return { ...input, type }
 }
-
-// Stryker disable all: regex construction mechanics are equivalent noise; timestamp acceptance/rejection behavior is covered by validation tests.
-const RFC3339_DATE_TIME_WITH_OFFSET = new RegExp([
-  '^\\d{4}-',
-  '\\d{2}-',
-  '\\d{2}T',
-  '\\d{2}:',
-  '\\d{2}:',
-  '\\d{2}',
-  '(?:\\.\\d+)?',
-  '(?:Z|[+-]\\d{2}:\\d{2})$',
-].join(''), 'u')
-// Stryker restore all
 
 /**
  * FinKore Approval Decision history for append-only committed decisions and
@@ -442,7 +434,7 @@ export class ApprovalDecisionHistory {
   private isDecisionUnexpired(decision: ApprovalDecision, evaluatedAt: unknown): boolean {
     if (decision.expiresAt === undefined) return true
     const evaluatedAtTimestamp = validateEvaluationTimestamp(evaluatedAt)
-    return Date.parse(evaluatedAtTimestamp) < Date.parse(decision.expiresAt)
+    return comparePortableTimestamps(evaluatedAtTimestamp, decision.expiresAt) < 0
   }
 
   private commitLifecycleEvent(event: ApprovalLifecycleEvent): void {

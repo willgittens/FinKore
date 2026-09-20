@@ -19,6 +19,38 @@ class ApprovalTests(unittest.TestCase):
             record_decision(requirement, decision, [])
         self.assertEqual(context.exception.code, "FINKORE_APPROVAL_INELIGIBLE_ACTOR")
 
+    def test_expiration_uses_exact_nanoseconds_and_equivalent_offsets(self) -> None:
+        requirement = {"id": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}, "eligibleActors": ["user-7"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED"}
+        decision = {
+            "requirementId": "finance-review",
+            "subjectFacts": {"revision": "3"},
+            "outcome": "APPROVED",
+            "actor": {"type": "user", "id": "user-7"},
+            "decidedAt": "2026-09-01T12:00:00.000000001Z",
+            "expiresAt": "2026-09-02T12:00:00.000000005Z",
+        }
+        self.assertEqual(
+            evaluate_requirement(requirement, [decision], evaluated_at="2026-09-02T12:00:00.000000004Z"),
+            "APPROVED",
+        )
+        self.assertEqual(
+            evaluate_requirement(requirement, [decision], evaluated_at="2026-09-02T14:00:00.000000005+02:00"),
+            "PENDING",
+        )
+
+    def test_rejects_timestamp_precision_beyond_nine_digits(self) -> None:
+        requirement = {"id": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}, "eligibleActors": ["user-7"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED"}
+        decision = {
+            "requirementId": "finance-review",
+            "subjectFacts": {"revision": "3"},
+            "outcome": "APPROVED",
+            "actor": {"type": "user", "id": "user-7"},
+            "decidedAt": "2026-09-01T12:00:00.1234567890Z",
+        }
+        with self.assertRaises(FinKoreError) as context:
+            record_decision(requirement, decision, [])
+        self.assertEqual(context.exception.code, "FINKORE_APPROVAL_INVALID_DECISION")
+
     def test_composition_quorum_counts_distinct_declared_voters(self) -> None:
         result = evaluate_composition(
             {

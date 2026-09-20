@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 import { ApprovalRequirement } from './approval-requirement.js'
 import { IneligibleApprovalActorError, InvalidApprovalDecisionError } from './errors.js'
+import { parsePortableTimestamp } from '../portable-timestamp.js'
 import type {
   ApprovalDecisionEffectiveness,
   ApprovalDecisionOutcome,
@@ -32,7 +33,9 @@ function validateOutcome(value: unknown): ApprovalDecisionOutcome {
 
 function validateTimestamp(value: unknown): string {
   const timestamp = requiredString(value)
-  if (!RFC3339_DATE_TIME_WITH_OFFSET.test(timestamp) || Number.isNaN(Date.parse(timestamp))) {
+  try {
+    parsePortableTimestamp(timestamp)
+  } catch {
     throw new InvalidApprovalDecisionError()
   }
   return timestamp
@@ -105,19 +108,6 @@ function jsonEquivalent(left: unknown, right: unknown): boolean {
   return false
 }
 
-// Stryker disable all: regex construction mechanics are equivalent noise; timestamp acceptance/rejection behavior is covered by validation tests.
-const RFC3339_DATE_TIME_WITH_OFFSET = new RegExp([
-  '^\\d{4}-',
-  '\\d{2}-',
-  '\\d{2}T',
-  '\\d{2}:',
-  '\\d{2}:',
-  '\\d{2}',
-  '(?:\\.\\d+)?',
-  '(?:Z|[+-]\\d{2}:\\d{2})$',
-].join(''), 'u')
-// Stryker restore all
-
 /**
  * FinKore Approval Decision for Core 0.9 release candidate decision representation.
  *
@@ -143,8 +133,8 @@ export class ApprovalDecision {
    * Creates and validates an Approval Decision from a portable candidate.
    *
    * `PENDING` is rejected because it is a Requirement state, not a Decision
-   * outcome. The decision timestamp must serialize as an unambiguous RFC 3339
-   * date-time with an explicit offset.
+   * outcome. The decision timestamp must use the portable FinKore RFC 3339
+   * profile with an explicit known offset and at most nine fractional digits.
    *
    * @param input - Candidate serialized Approval Decision.
    * @returns A validated Approval Decision value.
@@ -155,6 +145,8 @@ export class ApprovalDecision {
    * @see APPROVAL-DECISION-001
    * @see APPROVAL-DECISION-005
    * @see APPROVAL-DECISION-006
+   * @see SPEC-TIMESTAMP-003
+   * @see SPEC-TIMESTAMP-004
    */
   static from(input: unknown): ApprovalDecision {
     if (!isPlainRecord(input) || !Object.hasOwn(input, 'subjectFacts')) throw new InvalidApprovalDecisionError()
@@ -240,6 +232,7 @@ export class ApprovalDecision {
    *
    * @see APPROVAL-VALIDITY-007
    * @see APPROVAL-VALIDITY-009
+   * @see SPEC-TIMESTAMP-005
    */
   get expiresAt(): string | undefined {
     return this.value.expiresAt
