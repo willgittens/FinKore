@@ -11,7 +11,7 @@ describe('TypeScript conformance adapter', () => {
     expect(cliAdapter.supports('finkore.entity.create')).toBe(true)
   })
 
-  it('supports current Money, Workflow, Audit, Approval, and Entity milestone operations', () => {
+  it('supports current Core 0.9 Money, Workflow, Audit, Approval, and Entity operations', () => {
     const adapter = createTypeScriptConformanceAdapter()
 
     expect(adapter.supports('money.deserialize')).toBe(true)

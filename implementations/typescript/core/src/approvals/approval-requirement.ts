@@ -39,8 +39,8 @@ function validateEligibleActors(value: unknown): readonly ApprovalActorIdentifie
  * FinKore Approval Requirement for Core 0.9 release candidate requirement representation.
  *
  * A Requirement has a stable caller-supplied identity, identifies the subject
- * whose approval is requested, declares eligible actor identities for this
- * milestone, and defines which Decision outcomes approve or reject it. This
+ * whose approval is requested, declares eligible actor identities for Core 0.9
+ * release candidate behavior, and defines which Decision outcomes approve or reject it. This
  * class does not implement chains, quorum, delegation, authorization, dynamic
  * actor resolution, persistence, or audit integration.
  *

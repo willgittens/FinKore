@@ -165,7 +165,7 @@ def evaluate_condition(condition: Any, facts: Any, result: Any = None) -> str:
 
 
 def evaluate_chain(chain: Any, states: Any) -> Any:
-    """Evaluate a Draft all-required Approval Chain."""
+    """Evaluate a Core 0.9 release candidate all-required Approval Chain."""
 
     if not isinstance(chain, dict) or not isinstance(states, dict):
         raise FinKoreError(INVALID_CHAIN)

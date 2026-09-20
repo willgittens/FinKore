@@ -52,7 +52,7 @@ export type EntityErrorCode =
   | 'FINKORE_ENTITY_VALIDATION_FAILED'
 
 /**
- * Validation rule fixture supported by the current Entity conformance milestone.
+ * Validation rule fixture supported by Core 0.9 release candidate Entity conformance.
  *
  * Core 0.9 release candidate has not standardized a generic validation language. The current
  * TypeScript reference implementation supports only the deterministic
@@ -119,13 +119,14 @@ export interface EntityValidationResult {
 }
 
 /**
- * Financial Entity definition input for the current identity, lifecycle, and
- * mutability milestones.
+ * Financial Entity definition input for Core 0.9 release candidate identity,
+ * lifecycle, and mutability behavior.
  *
- * This milestone validates the composing-domain type, declared identity scope,
- * referenced Workflow, and top-level field mutability declarations. Validation
- * rule engines, audit policy, persistence, versioning, and concrete financial
- * invariants remain outside this Entity milestone.
+ * Core 0.9 release candidate validates the composing-domain type, declared
+ * identity scope, referenced Workflow, and top-level field mutability
+ * declarations. Validation rule engines, audit policy, persistence, versioning,
+ * and concrete financial invariants remain outside Core 0.9 release candidate
+ * Entity behavior.
  *
  * @see ENTITY-IDENTITY-001
  * @see ENTITY-LIFECYCLE-001
@@ -145,7 +146,7 @@ export interface EntityDefinitionInput {
   /** Top-level data fields declared mutable by lifecycle state. */
   readonly mutability?: unknown
 
-  /** Declared Entity validation rules for this conformance milestone. */
+  /** Declared Entity validation rules for Core 0.9 release candidate conformance. */
   readonly validation?: unknown
 }
 

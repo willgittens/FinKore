@@ -472,7 +472,7 @@ export class FinancialEntity {
    * @throws {ImmutableEntityError}
    * When any targeted field is not declared mutable in the current state.
    * @throws {InvalidEntityMutationError}
-   * When the mutation request shape is not recognized by this milestone.
+   * When the mutation request shape is not recognized by Core 0.9 release candidate Entity behavior.
    * @throws {EntityValidationFailedError}
    * When one or more declared Entity validation rules fail for the complete
    * proposed result.

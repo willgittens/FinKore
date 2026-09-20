@@ -118,7 +118,7 @@ export type ApprovalConditionIdentifier = string
 /**
  * Domain fact path named by an Approval Condition.
  *
- * Fact paths are opaque composing-domain identifiers in this milestone; they
+ * Fact paths are opaque composing-domain identifiers in Core 0.9 release candidate; they
  * are not a portable expression or query language.
  *
  * @see APPROVAL-CONDITION-001
@@ -312,7 +312,7 @@ export interface SerializedApprovalRequirement {
   /** Subject whose approval is requested. */
   readonly subject: SerializedApprovalSubject
 
-  /** Actor identities eligible to decide this requirement in this milestone. */
+  /** Actor identities eligible to decide this requirement in Core 0.9 release candidate behavior. */
   readonly eligibleActors: readonly ApprovalActorIdentifier[]
 
   /** Decision outcome that satisfies this requirement. */

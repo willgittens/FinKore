@@ -145,6 +145,26 @@ No planned behavioral changes remain before Core 1.0, but the project is still
 pre-1.0 and production use is not recommended yet. No implementation should
 claim that its API defines FinKore independently of the specification.
 
+## Migration From Pre-0.9
+
+External package consumers should treat Core 0.9 as the release-candidate
+baseline rather than a continuation of earlier draft package surfaces. The
+observable financial behavior is the frozen candidate described by `/spec` and
+`conformance/manifest.json`.
+
+- TypeScript consumers should import from `@finkore/typescript` package root.
+  Money serialization helpers are no longer part of the root public API; use
+  `Money.deserialize(value)` and `money.toJSON()` for the supported boundary.
+- TypeScript, Python, and Java packages now expose their implemented Core
+  baseline through `FINKORE_CORE_VERSION`, `CORE_VERSION`, and
+  `FinKore.CORE_VERSION` respectively. These Core-version values are distinct
+  from package artifact versions.
+- Java conformance observation helpers are adapter internals rather than public
+  core API. Portable consumers should use the documented `org.finkore` public
+  classes and inspect `FinKoreException.code()`.
+- The reference packages are not published to public registries for Core 0.9;
+  local artifact consumption is documented in [Developer Tools](./docs/tools/README.md).
+
 ## Contributing
 
 FinKore is developed in the open. Contributions can begin with financial use cases, edge cases, specification proposals, conformance vectors, schemas, implementation work, documentation, or examples.

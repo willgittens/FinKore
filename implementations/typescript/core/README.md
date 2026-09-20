@@ -168,10 +168,10 @@ to the matched transition, every guard must pass against the supplied facts
 before current state changes. Failed guard evaluation throws
 `FINKORE_WORKFLOW_GUARD_REJECTED` and leaves state unchanged.
 
-This Workflow milestone does not define a production interchange format,
-callback guard model, authorization system, or full guard language. The current
-fact-equality guard shape exists to satisfy Core 0.9 release candidate conformance semantics
-without introducing broader workflow behavior.
+Core 0.9 release candidate Workflow does not define a production interchange
+format, callback guard model, authorization system, or full guard language. The
+current fact-equality guard shape exists to satisfy Core 0.9 release candidate
+conformance semantics without introducing broader workflow behavior.
 
 ## Current Audit API
 
@@ -249,7 +249,7 @@ their own condition rule and supply the explicit boundary result.
 - `entityEvolutionHistory.supersede(request)` records Supersession predecessor/successor Revision links and declared-scope currentness with required Audit evidence.
 - `entityEvolutionHistory.toJSON()` returns a defensive portable evolution history observation.
 
-Entity failures currently introduced by these milestones expose
+Entity failures exposed by the Core 0.9 release candidate API are
 `FINKORE_ENTITY_INVALID_IDENTITY`, `FINKORE_ENTITY_IMMUTABLE`,
 `FINKORE_ENTITY_INVALID_MUTATION`, `FINKORE_ENTITY_STATE_CONFLICT`, and
 `FINKORE_ENTITY_VALIDATION_FAILED`.
@@ -257,10 +257,10 @@ Lifecycle transition failures can expose Workflow portable errors such as
 `FINKORE_WORKFLOW_INVALID_TRANSITION`, preserving the primary Workflow error
 code required by Entity error semantics.
 
-Entity validation in this milestone intentionally supports only declared
-top-level validation entries with the deterministic `positive-money` fixture
-predicate used by conformance. It is not a generic rule DSL, JSON Schema
-adapter, callback system, persistence validator, authorization model, or
+Core 0.9 release candidate Entity validation intentionally supports only
+declared top-level validation entries with the deterministic `positive-money`
+fixture predicate used by conformance. It is not a generic rule DSL, JSON
+Schema adapter, callback system, persistence validator, authorization model, or
 cross-domain Workflow/Approval/Audit integration. Validation findings include
 stable rule identity and path only; they do not include sensitive field values.
 
@@ -282,7 +282,7 @@ operation, or mutate source Entity observations in place.
 | `ENTITY-IDENTITY-002` | IN SCOPE | `FinancialEntity.transition` and `mutate`; unit tests verify identity after success and failure; conformance `entity.transition.success-identity-stable-001` and mutate vectors; mutation protection checks identity changed during transition or mutation. |
 | `ENTITY-IDENTITY-003` | IN SCOPE | Entity IDs are opaque strings preserved exactly; unit tests verify no generation or inference; conformance `entity.create.opaque-identity-preserved-001`. |
 | `ENTITY-IDENTITY-004` | IN SCOPE | Revision/version/display-number data does not replace stable identity; conformance `entity.mutate.display-number-not-identity-001`. |
-| `ENTITY-IDENTITY-005` | NOT DIRECTLY TESTABLE | Cross-entity uniqueness requires a composing-domain registry or persistence scope not defined by this milestone. |
+| `ENTITY-IDENTITY-005` | NOT DIRECTLY TESTABLE | Cross-entity uniqueness requires a composing-domain registry or persistence scope not defined by Core 0.9 release candidate. |
 | `ENTITY-IDENTITY-006` | NOT DIRECTLY TESTABLE | Import/migration identity mapping has no standalone Core 0.9 release candidate create/from operation; `from` only reconstructs a supplied observation. |
 | `ENTITY-LIFECYCLE-001` | IN SCOPE | Entity definitions require a valid referenced Workflow; unit tests and conformance `entity.create.initial-lifecycle-001`. |
 | `ENTITY-LIFECYCLE-002` | IN SCOPE | `FinancialEntity.create` uses `Workflow.create` initial state; unit tests and conformance `entity.create.initial-lifecycle-001`. |

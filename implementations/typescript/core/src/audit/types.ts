@@ -211,7 +211,7 @@ export interface SerializedAuditRedactedValue {
  * Policy fixture used to request redaction of protected Audit content.
  *
  * FinKore Core 0.9 release candidate requires an audit policy to identify protected content and
- * the authority for redaction. This TypeScript milestone supports redaction of
+ * the authority for redaction. Core 0.9 release candidate supports redaction of
  * Audit Change values whose `path` appears in `protectedPaths`, plus the
  * reserved actor-context targets `actor.displayName` and `actor.metadata`.
  *

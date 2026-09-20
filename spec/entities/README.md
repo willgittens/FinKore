@@ -31,6 +31,6 @@ A Financial Entity's identity must remain stable throughout its lifecycle. Its c
 
 ## Non-Goals
 
-This draft does not define any concrete financial entity type, storage model,
-ownership model, global identity registry, deduplication service, authorization
-model, API, or user interface.
+Core 0.9 release candidate does not define any concrete financial entity type,
+storage model, ownership model, global identity registry, deduplication service,
+authorization model, API, or user interface.

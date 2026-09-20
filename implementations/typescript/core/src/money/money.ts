@@ -331,15 +331,15 @@ function allocateUnitAmounts(sourceUnits: bigint, weights: readonly bigint[]): r
 }
 
 /**
- * TypeScript Money value for the first FinKore reference implementation
- * milestone.
+ * TypeScript Money value for the FinKore Core 0.9 release candidate reference
+ * implementation.
  *
  * A Money value binds an exact decimal amount to a currency identifier. This
- * milestone supports construction, validation, canonical serialization,
- * compatible-currency addition, compatible-currency subtraction, negation,
- * exact decimal scalar multiplication and division, exact Rate application,
- * Money allocation by equal parts or positive integer ratios, exact
- * compatible-currency numeric comparison, and explicit Money rounding.
+ * Core 0.9 release candidate supports construction, validation, canonical
+ * serialization, compatible-currency addition, compatible-currency subtraction,
+ * negation, exact decimal scalar multiplication and division, exact Rate
+ * application, Money allocation by equal parts or positive integer ratios,
+ * exact compatible-currency numeric comparison, and explicit Money rounding.
  *
  * @remarks
  * This TypeScript implementation stores the validated decimal representation
@@ -356,7 +356,7 @@ export class Money {
    * Validated exact decimal amount as preserved by this implementation.
    *
    * @remarks
-   * The string storage choice preserves this milestone's observable
+   * The string storage choice preserves Core 0.9 release candidate observable
    * serialization behavior without using unsafe binary floating-point
    * arithmetic.
    */
@@ -439,8 +439,8 @@ export class Money {
   /**
    * Adds another Money value using exact decimal semantics.
    *
-   * Both operands must use the same currency identifier in this milestone's
-   * ISO 4217 scope. The returned Money value preserves that currency, and
+   * Both operands must use the same currency identifier in the Core 0.9
+   * release candidate ISO 4217 scope. The returned Money value preserves that currency, and
    * neither operand is mutated.
    *
    * @param other - Money value to add to this value.
@@ -466,8 +466,8 @@ export class Money {
   /**
    * Subtracts another Money value using exact decimal semantics.
    *
-   * Both operands must use the same currency identifier in this milestone's
-   * ISO 4217 scope. The returned Money value preserves this value's currency,
+   * Both operands must use the same currency identifier in the Core 0.9
+   * release candidate ISO 4217 scope. The returned Money value preserves this value's currency,
    * and neither operand is mutated.
    *
    * @param other - Money value to subtract from this value.

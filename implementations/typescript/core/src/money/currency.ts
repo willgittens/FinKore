@@ -16,8 +16,8 @@ const ISO_4217_ALPHABETIC_CODE = /^[A-Z]{3}$/u
  */
 export class Currency {
   /**
-   * Uppercase ISO 4217 alphabetic currency identifier for this milestone's
-   * normative FinKore scope.
+   * Uppercase ISO 4217 alphabetic currency identifier for the Core 0.9 release
+   * candidate normative FinKore scope.
    */
   readonly code: string
 
@@ -68,7 +68,8 @@ export class Currency {
 }
 
 /**
- * Checks whether a value is valid for this milestone's Currency abstraction.
+ * Checks whether a value is valid for the Core 0.9 release candidate Currency
+ * abstraction.
  *
  * This predicate performs validation only; it does not normalize lowercase or
  * otherwise ambiguous identifiers.

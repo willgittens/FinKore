@@ -106,7 +106,7 @@ export type WorkflowErrorCode =
  * The condition deterministically compares one supplied fact to an expected
  * value. Authorization evidence may be supplied as an ordinary fact, but this
  * type assumes no authorization model. Broader guard languages, callbacks, and
- * external fact capture remain outside this Workflow milestone.
+ * external fact capture remain outside Core 0.9 release candidate Workflow.
  *
  * @see WORKFLOW-GUARD-001
  * @see WORKFLOW-GUARD-002

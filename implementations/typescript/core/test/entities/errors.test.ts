@@ -11,7 +11,7 @@ import {
 } from '../../src/index.js'
 
 describe('Entity errors', () => {
-  it('exposes current portable Entity codes used by the Entity milestones', () => {
+  it('exposes current portable Entity codes used by Core 0.9 Entity behavior', () => {
     expect(new InvalidEntityIdentityError().code).toBe('FINKORE_ENTITY_INVALID_IDENTITY')
     expect(new ImmutableEntityError().code).toBe('FINKORE_ENTITY_IMMUTABLE')
     expect(new InvalidEntityMutationError().code).toBe('FINKORE_ENTITY_INVALID_MUTATION')

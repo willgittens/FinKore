@@ -2,7 +2,7 @@
 
 ## Status
 
-In progress. This document is non-normative. Version 0.9 is the
+Complete. This document is non-normative. Version 0.9 is the
 release-candidate phase for FinKore Core 1.0.
 
 ## Objective
@@ -210,19 +210,19 @@ history.
 
 ### Tasks
 
-- [ ] Review the root README, CoreDoc, specification indexes, conformance
+- [x] Review the root README, CoreDoc, specification indexes, conformance
       documentation, Agentic Contract, implementation guide, adapter onboarding,
       and implementation READMEs.
-- [ ] Ensure documentation distinguishes normative behavior from examples,
+- [x] Ensure documentation distinguishes normative behavior from examples,
       implementation choices, and conformance evidence.
-- [ ] Replace obsolete “experimental implementation” wording with accurate
+- [x] Replace obsolete “experimental implementation” wording with accurate
       release-candidate language while retaining the pre-1.0 warning.
-- [ ] State all intentionally unsupported areas clearly.
-- [ ] Verify that deferred topics are not described as planned 1.0 behavior.
-- [ ] Document the expected migration from the latest pre-0.9 public API if an
+- [x] State all intentionally unsupported areas clearly.
+- [x] Verify that deferred topics are not described as planned 1.0 behavior.
+- [x] Document the expected migration from the latest pre-0.9 public API if an
       external consumer could be affected.
-- [ ] Check all local documentation links and CoreDoc requirement references.
-- [ ] Confirm that no deleted research, examples, draft-report, script, or
+- [x] Check all local documentation links and CoreDoc requirement references.
+- [x] Confirm that no deleted research, examples, draft-report, script, or
       GitHub Actions path is referenced.
 
 ### Completion criteria
@@ -231,17 +231,32 @@ history.
   operation metadata, and implementation boundaries directly.
 - Documentation accurately describes the frozen candidate and its exclusions.
 
+### Result
+
+Milestone 5 refreshed current-facing documentation for the Core 0.9
+release-candidate posture without changing normative behavior. The root README
+now includes a concise migration note for pre-0.9 package consumers, including
+the TypeScript root export cleanup, Core-version constants, Java public API
+boundary, and local-only package artifact status.
+
+Current spec and implementation documentation now avoids describing active
+capabilities as draft or milestone-scoped behavior. Historical draft labels
+remain only where they record release history, CoreDoc introduction/update
+metadata, or traceability closure history. Deferred topics remain explicitly
+outside Core 0.9 release candidate scope and are not described as planned 1.0
+behavior.
+
 ## Release gate
 
 0.9 is complete only when:
 
-- [ ] the normative candidate is frozen;
-- [ ] there are no known release-blocking specification ambiguities;
-- [ ] public APIs have been reviewed in all three languages;
-- [ ] intended distribution artifacts install in clean consumer projects;
-- [ ] all three implementations pass the same frozen manifest;
-- [ ] coverage and mutation requirements pass;
-- [ ] documentation is release-candidate ready;
-- [ ] all verification remains runnable locally without GitHub Actions;
-- [ ] only fixes, not planned features, remain before 1.0;
-- [ ] release notes contain a concise 0.9 summary.
+- [x] the normative candidate is frozen;
+- [x] there are no known release-blocking specification ambiguities;
+- [x] public APIs have been reviewed in all three languages;
+- [x] intended distribution artifacts install in clean consumer projects;
+- [x] all three implementations pass the same frozen manifest;
+- [x] coverage and mutation requirements pass;
+- [x] documentation is release-candidate ready;
+- [x] all verification remains runnable locally without GitHub Actions;
+- [x] only fixes, not planned features, remain before 1.0;
+- [x] release notes contain a concise 0.9 summary.

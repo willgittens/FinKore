@@ -448,11 +448,11 @@ function workflowTransitionObservations(
 }
 
 /**
- * Executes the first-milestone Money serialization boundary.
+ * Executes the Core 0.9 release candidate Money serialization boundary.
  *
  * The conformance operations `money.deserialize` and `money.serialize` both
  * observe construction followed by canonical portable serialization in this
- * milestone. Financial validation remains in the core TypeScript Money API; the
+ * release candidate. Financial validation remains in the core TypeScript Money API; the
  * adapter only translates inputs, outputs, and portable errors.
  */
 function executeMoneySerialization(request: AdapterRequest): NormalizedResult {

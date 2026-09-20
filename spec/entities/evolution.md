@@ -77,8 +77,9 @@ created. If required Audit evidence is missing or rejected by Audit semantics,
 the Entity evolution request fails with the primary Audit error and no Entity
 evolution result becomes observable.
 
-This draft does not require one serialized envelope or API shape. Conformance
-vectors may use fixture vocabulary to observe the same portable semantics.
+Core 0.9 release candidate does not require one serialized envelope or API
+shape. Conformance vectors may use fixture vocabulary to observe the same
+portable semantics.
 
 ## Requirements
 
@@ -154,9 +155,9 @@ error code.
 
 ## Open Questions
 
-- Should a future draft define a common serialized envelope for Evolution
+- Should a future specification version define a common serialized envelope for Evolution
   Relations?
-- Should a future draft define branch-aware supersession graphs, or require
+- Should a future specification version define branch-aware supersession graphs, or require
   composing domains to maintain a single current successor per declared scope?
 
 ## Non-Goals

@@ -149,7 +149,7 @@ public final class Approvals {
   }
 
   /**
-   * Evaluates a Draft all-required Approval Chain.
+   * Evaluates a Core 0.9 release candidate all-required Approval Chain.
    *
    * @param chain portable chain definition
    * @param states current requirement states

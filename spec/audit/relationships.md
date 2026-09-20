@@ -115,8 +115,8 @@ code.
 
 ## Open Questions
 
-- Should a future draft define a generic `RELATED` relationship type?
-- Should a future draft define policy-authorized relationship redaction, and if
+- Should a future specification version define a generic `RELATED` relationship type?
+- Should a future specification version define policy-authorized relationship redaction, and if
   so which relationship members can be safely concealed without destroying event
   meaning?
 

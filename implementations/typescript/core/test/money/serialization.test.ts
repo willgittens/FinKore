@@ -10,7 +10,7 @@ describe('Money serialization', () => {
     })
   })
 
-  it('preserves presentation scale through this milestone serialization path', () => {
+  it('preserves presentation scale through the Core 0.9 serialization path', () => {
     expect(Money.deserialize({ amount: '15.50', currency: 'EUR' }).toJSON()).toEqual({
       amount: '15.50',
       currency: 'EUR',

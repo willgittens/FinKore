@@ -35,7 +35,7 @@ A failed Financial Entity operation must not produce a partially valid Financial
 
 ## Open Questions
 
-- Should a future draft define a dedicated portable error catalog for additional evolution concepts if existing Entity errors become too broad?
+- Should a future specification version define a dedicated portable error catalog for additional evolution concepts if existing Entity errors become too broad?
 
 ## Non-Goals
 
