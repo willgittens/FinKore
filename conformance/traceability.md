@@ -9,50 +9,68 @@ Audit, Approvals, and Entities scope.
 
 | Domain | Requirements | MUST / MUST NOT | SHOULD / SHOULD NOT | MAY | Covered | Partial | Uncovered | Not directly testable | Deferred | Blocking spec gap |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Shared | 33 | 27 | 5 | 1 | 8 | 0 | 0 | 25 | 0 | 0 |
+| Shared | 51 | 41 | 5 | 5 | 8 | 0 | 0 | 43 | 0 | 0 |
 | Money | 74 | 69 | 1 | 4 | 69 | 0 | 0 | 5 | 0 | 0 |
 | Workflow | 57 | 55 | 1 | 1 | 48 | 0 | 0 | 9 | 0 | 0 |
-| Audit | 52 | 44 | 4 | 4 | 42 | 0 | 0 | 10 | 0 | 0 |
+| Audit | 54 | 46 | 4 | 4 | 44 | 0 | 0 | 10 | 0 | 0 |
 | Approvals | 86 | 83 | 1 | 2 | 81 | 0 | 0 | 5 | 0 | 0 |
 | Entities | 84 | 79 | 3 | 2 | 72 | 0 | 0 | 12 | 0 | 0 |
-| **Total** | **386** | **357** | **15** | **14** | **320** | **0** | **0** | **66** | **0** | **0** |
+| **Total** | **406** | **373** | **15** | **18** | **322** | **0** | **0** | **84** | **0** | **0** |
 
-The suite contains 272 vectors. Overall: **320 covered (82.9%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **66 not directly testable (17.1%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
+The suite contains 281 vectors. Overall: **322 covered (79.3%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **84 not directly testable (20.7%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current release candidate. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
 ## Requirement mapping
 
-| Requirement | Domain | Modality | Coverage | Test vectors |
+| Requirement | Domain | Modality | Coverage | Vectors or classification rationale |
 | --- | --- | --- | --- | --- |
-| SPEC-CONFORMANCE-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-CONFORMANCE-002 | Shared | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-CURRENCY-001 | Shared | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
+| SPEC-COMPATIBILITY-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Identifier lifecycle is a specification-governance obligation, not one runtime operation result. |
+| SPEC-COMPATIBILITY-002 | Shared | MAY | NOT DIRECTLY TESTABLE | Deprecation and supersession are specification-governance choices, not runtime behavior. |
+| SPEC-COMPATIBILITY-003 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Historical traceability preservation is verified by repository review, not a domain vector. |
+| SPEC-COMPATIBILITY-004 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Error-code reuse across releases requires longitudinal governance review. |
+| SPEC-COMPATIBILITY-005 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Release compatibility classification cannot be isolated by one operation vector. |
+| SPEC-COMPATIBILITY-006 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Operation-ID reuse across releases requires registry history review. |
+| SPEC-COMPATIBILITY-007 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Operation supersession is a release-governance obligation, not one runtime result. |
+| SPEC-COMPATIBILITY-008 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Serialization compatibility across published versions requires schema and release review. |
+| SPEC-COMPATIBILITY-009 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Older producer/consumer interpretability requires cross-version compatibility testing. |
+| SPEC-COMPATIBILITY-010 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Optional-member compatibility requires cross-version consumers, outside one current vector. |
+| SPEC-COMPATIBILITY-011 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Editorial-change classification is a maintainer review decision. |
+| SPEC-COMPATIBILITY-012 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Behavioral-change classification compares releases rather than one runtime observation. |
+| SPEC-COMPATIBILITY-013 | Shared | MAY | NOT DIRECTLY TESTABLE | Whether to add a version-neutral regression vector is a conformance-governance choice. |
+| SPEC-COMPATIBILITY-014 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Classifying a vector as a specification change is a release-governance obligation. |
+| SPEC-CONFORMANCE-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Whole-implementation conformance is an aggregate judgment, not one vector outcome. |
+| SPEC-CONFORMANCE-002 | Shared | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | Documented exceptions require implementation-level review beyond operation vectors. |
+| SPEC-CURRENCY-001 | Shared | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | This recommendation permits justified non-ISO identifiers and has no mandatory single result. |
 | SPEC-CURRENCY-002 | Shared | MUST / MUST NOT | COVERED | money.deserialize.lowercase-currency-001 |
 | SPEC-DECIMAL-001 | Shared | MUST / MUST NOT | COVERED | money.add.deep-positive-scale-001, money.add.large-significant-digits-001, money.allocate.ratio.safe-integer-boundary-001, money.divide.quotient-plain-expansion-001, money.divide.terminating-scale-40-001, money.multiply.large-product-growth-001, money.rate.large-percentage-growth-001, money.round.scale-50-half-even-001, money.subtract.large-negative-001 |
-| SPEC-DECIMAL-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-ERROR-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-ERROR-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-ERROR-003 | Shared | MAY | NOT DIRECTLY TESTABLE | — |
-| SPEC-ERROR-004 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-ERROR-005 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-EXAMPLE-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-EXAMPLE-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-EXAMPLE-003 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-IDENTIFIER-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-IDENTIFIER-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-IDENTIFIER-003 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-JSON-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-NULLABILITY-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-REQUIREMENT-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-REQUIREMENT-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-REQUIREMENT-003 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-REQUIREMENT-004 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-REQUIREMENT-005 | Shared | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-TERMINOLOGY-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-TERMINOLOGY-002 | Shared | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-TERMINOLOGY-003 | Shared | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
-| SPEC-TIMESTAMP-001 | Shared | MUST / MUST NOT | COVERED | shared.timestamp.missing-offset-invalid-001, shared.timestamp.unknown-offset-invalid-001 |
+| SPEC-DECIMAL-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | This constrains composing specifications; runtime vectors test each chosen encoding instead. |
+| SPEC-ERROR-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Cross-release category stability requires catalog governance review. |
+| SPEC-ERROR-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Localized prose and implementation detail are outside normalized vector errors. |
+| SPEC-ERROR-003 | Shared | MAY | NOT DIRECTLY TESTABLE | Optional diagnostic attachments cannot be required by conformance. |
+| SPEC-ERROR-004 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Vectors normalize by primary code and do not compare optional details. |
+| SPEC-ERROR-005 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Sensitive diagnostic disclosure needs implementation and security review. |
+| SPEC-EXAMPLE-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Normative example syntax is a documentation lint concern, not runtime behavior. |
+| SPEC-EXAMPLE-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Surrounding specification completeness requires documentation review. |
+| SPEC-EXAMPLE-003 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Language-example labeling is a documentation convention. |
+| SPEC-FREEZE-001 | Shared | MAY | NOT DIRECTLY TESTABLE | Accepting a post-freeze correction is a maintainer governance decision. |
+| SPEC-FREEZE-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Same-change artifact synchronization is verified across the repository. |
+| SPEC-FREEZE-003 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Stable-ID preservation is a release-history review obligation. |
+| SPEC-FREEZE-004 | Shared | MAY | NOT DIRECTLY TESTABLE | Permitting a non-normative edit is a maintainer governance decision. |
+| SPEC-IDENTIFIER-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Domain vectors cover concrete identifiers; no generic identifier operation exists. |
+| SPEC-IDENTIFIER-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Absence of all inferred facts cannot be proven by one generic vector. |
+| SPEC-IDENTIFIER-003 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Stability over resource lifetime requires longitudinal observation. |
+| SPEC-JSON-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | JSON parsers do not expose member order through the normalized vector boundary. |
+| SPEC-NULLABILITY-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | This constrains specification authors; domain vectors test declared field rules. |
+| SPEC-REQUIREMENT-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Requirement-ID meaning across releases is a governance invariant. |
+| SPEC-REQUIREMENT-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Renumbering policy is enforced by specification history review. |
+| SPEC-REQUIREMENT-003 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Replacement-ID assignment is a specification-governance obligation. |
+| SPEC-REQUIREMENT-004 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Retired-ID reuse requires longitudinal repository review. |
+| SPEC-REQUIREMENT-005 | Shared | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | Vector references are checked as metadata, not as a domain operation result. |
+| SPEC-TERMINOLOGY-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Cross-document semantic alignment requires specification review. |
+| SPEC-TERMINOLOGY-002 | Shared | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | Naming consistency is a documentation quality judgment. |
+| SPEC-TERMINOLOGY-003 | Shared | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | Domain-oriented naming is a documentation quality judgment. |
+| SPEC-TIMESTAMP-001 | Shared | MUST / MUST NOT | COVERED | shared.timestamp.maximum-precision-001, shared.timestamp.missing-offset-invalid-001, shared.timestamp.unknown-offset-invalid-001 |
 | SPEC-TIMESTAMP-002 | Shared | MUST / MUST NOT | COVERED | shared.timestamp.basic-form-invalid-001, shared.timestamp.maximum-precision-001, shared.timestamp.missing-offset-invalid-001 |
 | SPEC-TIMESTAMP-003 | Shared | MUST / MUST NOT | COVERED | shared.timestamp.basic-form-invalid-001, shared.timestamp.invalid-calendar-001, shared.timestamp.leap-second-invalid-001, shared.timestamp.maximum-precision-001, shared.timestamp.unknown-offset-invalid-001 |
 | SPEC-TIMESTAMP-004 | Shared | MUST / MUST NOT | COVERED | shared.timestamp.excess-precision-001, shared.timestamp.expiration-subnanosecond-after-001, shared.timestamp.expiration-subnanosecond-before-001, shared.timestamp.invalid-decision-precision-001, shared.timestamp.invalid-evaluation-precision-001, shared.timestamp.maximum-precision-001 |
@@ -94,34 +112,34 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | MONEY-COMPARISON-002 | Money | MUST / MUST NOT | COVERED | money.compare.equal-trailing-zeros-001, money.compare.equal-zero-scale-001 |
 | MONEY-COMPARISON-003 | Money | MUST / MUST NOT | COVERED | money.compare.greater-negative-001, money.compare.less-001 |
 | MONEY-COMPARISON-004 | Money | MUST / MUST NOT | COVERED | money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001 |
-| MONEY-COMPARISON-005 | Money | MAY | NOT DIRECTLY TESTABLE | — |
-| MONEY-COMPARISON-006 | Money | MUST / MUST NOT | COVERED | money.compare.equal-zero-scale-001, money.compare.equal-trailing-zeros-001 |
+| MONEY-COMPARISON-005 | Money | MAY | NOT DIRECTLY TESTABLE | Representation equality is an optional API and cannot be required by portable vectors. |
+| MONEY-COMPARISON-006 | Money | MUST / MUST NOT | COVERED | money.compare.equal-zero-scale-001 |
 | MONEY-CURRENCY-001 | Money | MUST / MUST NOT | COVERED | money.deserialize.positive-001 |
-| MONEY-CURRENCY-002 | Money | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
+| MONEY-CURRENCY-002 | Money | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | This recommendation permits justified non-ISO identifiers and has no mandatory single result. |
 | MONEY-CURRENCY-003 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001 |
 | MONEY-CURRENCY-004 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.subtract.currency-mismatch-001 |
 | MONEY-CURRENCY-005 | Money | MUST / MUST NOT | COVERED | money.deserialize.unknown-members-001 |
-| MONEY-ERROR-001 | Money | MUST / MUST NOT | COVERED | money.deserialize.exponent-001, money.deserialize.leading-plus-001, money.deserialize.missing-amount-001, money.deserialize.non-finite-001, money.deserialize.numeric-amount-001 |
+| MONEY-ERROR-001 | Money | MUST / MUST NOT | COVERED | money.deserialize.exponent-001, money.deserialize.leading-plus-001, money.deserialize.missing-amount-001, money.deserialize.non-finite-001, money.deserialize.numeric-amount-001, money.rate.invalid-exponent-value-001, money.rate.invalid-kind-001, money.rate.invalid-numeric-value-001 |
 | MONEY-ERROR-002 | Money | MUST / MUST NOT | COVERED | money.deserialize.lowercase-currency-001, money.deserialize.missing-currency-001 |
 | MONEY-ERROR-003 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.subtract.currency-mismatch-001 |
 | MONEY-ERROR-004 | Money | MUST / MUST NOT | COVERED | money.divide.zero-001 |
-| MONEY-ERROR-005 | Money | MUST / MUST NOT | COVERED | money.divide.rounding-required-001 |
-| MONEY-ERROR-006 | Money | MUST / MUST NOT | COVERED | money.round.invalid-mode-001, money.round.invalid-scale-001 |
-| MONEY-ERROR-007 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.divide.rounding-required-001, money.divide.zero-001, money.round.invalid-mode-001, money.round.invalid-scale-001, money.subtract.currency-mismatch-001 |
+| MONEY-ERROR-005 | Money | MUST / MUST NOT | COVERED | money.allocate.unrepresentable-source-scale-001, money.divide.rounding-required-001 |
+| MONEY-ERROR-006 | Money | MUST / MUST NOT | COVERED | money.rate.invalid-rounding-001, money.round.invalid-mode-001, money.round.invalid-scale-001 |
+| MONEY-ERROR-007 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.allocate.equal.invalid-zero-parts-001, money.allocate.unrepresentable-source-scale-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.divide.rounding-required-001, money.divide.zero-001, money.subtract.currency-mismatch-001 |
 | MONEY-ERROR-008 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.invalid-negative-parts-001, money.allocate.equal.invalid-zero-parts-001, money.allocate.equal.part-count-out-of-range-001, money.allocate.invalid-method-001, money.allocate.invalid-scale-001, money.allocate.ratio.invalid-empty-ratios-001, money.allocate.ratio.invalid-fractional-ratio-001, money.allocate.ratio.invalid-malformed-ratio-001, money.allocate.ratio.invalid-negative-ratio-001, money.allocate.ratio.invalid-zero-ratio-001, money.allocate.ratio.out-of-range-001, money.allocate.scale.out-of-range-001 |
 | MONEY-REPRESENTATION-001 | Money | MUST / MUST NOT | COVERED | money.deserialize.missing-amount-001, money.deserialize.missing-currency-001, money.deserialize.positive-001 |
 | MONEY-REPRESENTATION-002 | Money | MUST / MUST NOT | COVERED | money.add.deep-positive-scale-001, money.add.large-significant-digits-001, money.deserialize.positive-001, money.divide.terminating-scale-40-001, money.multiply.large-product-growth-001, money.rate.large-percentage-growth-001, money.round.scale-50-half-even-001, money.subtract.large-negative-001 |
 | MONEY-REPRESENTATION-003 | Money | MUST / MUST NOT | COVERED | money.deserialize.missing-currency-001, money.deserialize.positive-001 |
 | MONEY-REPRESENTATION-004 | Money | MUST / MUST NOT | COVERED | money.add.negative-001, money.deserialize.negative-001, money.deserialize.zero-001, money.subtract.large-negative-001 |
 | MONEY-REPRESENTATION-005 | Money | MUST / MUST NOT | COVERED | money.compare.equal-trailing-zeros-001 |
-| MONEY-REPRESENTATION-006 | Money | MAY | NOT DIRECTLY TESTABLE | — |
-| MONEY-ROUNDING-001 | Money | MUST / MUST NOT | COVERED | money.round.explicit-scale-001, money.round.invalid-mode-001, money.round.invalid-scale-001, money.round.scale-50-half-even-001 |
+| MONEY-REPRESENTATION-006 | Money | MAY | NOT DIRECTLY TESTABLE | Internal numeric representation is intentionally unobservable. |
+| MONEY-ROUNDING-001 | Money | MUST / MUST NOT | COVERED | money.rate.round.half-even-001, money.rate.round.half-up-001, money.round.explicit-scale-001, money.round.invalid-mode-001, money.round.invalid-scale-001, money.round.scale-50-half-even-001 |
 | MONEY-ROUNDING-002 | Money | MUST / MUST NOT | COVERED | money.round.above-half-positive-001, money.round.below-half-positive-001, money.round.ceiling.negative-001, money.round.ceiling.positive-001, money.round.down.negative-001, money.round.down.positive-001, money.round.floor.negative-001, money.round.floor.positive-001, money.round.half-even.tie-even-down-001, money.round.half-even.tie-negative-even-001, money.round.half-even.tie-odd-up-001, money.round.half-up.tie-negative-001, money.round.half-up.tie-positive-001, money.round.scale-50-half-even-001, money.round.up.negative-001, money.round.up.positive-001 |
-| MONEY-ROUNDING-003 | Money | MUST / MUST NOT | COVERED | money.round.above-half-positive-001, money.round.below-half-positive-001, money.round.ceiling.negative-001, money.round.ceiling.positive-001, money.round.down.negative-001, money.round.down.positive-001, money.round.floor.negative-001, money.round.floor.positive-001, money.round.half-even.tie-even-down-001, money.round.half-even.tie-negative-even-001, money.round.half-even.tie-odd-up-001, money.round.half-up.tie-negative-001, money.round.half-up.tie-positive-001, money.round.no-discard-001, money.round.scale-50-half-even-001, money.round.up.negative-001, money.round.up.positive-001 |
+| MONEY-ROUNDING-003 | Money | MUST / MUST NOT | COVERED | money.rate.round.half-even-001, money.rate.round.half-up-001, money.round.above-half-positive-001, money.round.below-half-positive-001, money.round.ceiling.negative-001, money.round.ceiling.positive-001, money.round.down.negative-001, money.round.down.positive-001, money.round.floor.negative-001, money.round.floor.positive-001, money.round.half-even.tie-even-down-001, money.round.half-even.tie-negative-even-001, money.round.half-even.tie-odd-up-001, money.round.half-up.tie-negative-001, money.round.half-up.tie-positive-001, money.round.no-discard-001, money.round.scale-50-half-even-001, money.round.up.negative-001, money.round.up.positive-001 |
 | MONEY-ROUNDING-004 | Money | MUST / MUST NOT | COVERED | money.round.explicit-scale-001, money.round.scale-50-half-even-001 |
-| MONEY-ROUNDING-005 | Money | MAY | NOT DIRECTLY TESTABLE | — |
+| MONEY-ROUNDING-005 | Money | MAY | NOT DIRECTLY TESTABLE | Declaring a domain rounding policy is optional and outside generic Money operations. |
 | MONEY-ROUNDING-006 | Money | MUST / MUST NOT | COVERED | money.divide.rounding-required-001 |
-| MONEY-ROUNDING-007 | Money | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| MONEY-ROUNDING-007 | Money | MUST / MUST NOT | NOT DIRECTLY TESTABLE | This constrains composing specifications that declare policies; no policy-definition operation exists. |
 | MONEY-ROUNDING-008 | Money | MUST / MUST NOT | COVERED | money.round.above-half-positive-001, money.round.below-half-positive-001, money.round.ceiling.negative-001, money.round.ceiling.positive-001, money.round.down.negative-001, money.round.down.positive-001, money.round.explicit-scale-001, money.round.floor.negative-001, money.round.floor.positive-001, money.round.half-even.tie-even-down-001, money.round.half-even.tie-negative-even-001, money.round.half-even.tie-odd-up-001, money.round.half-up.tie-negative-001, money.round.half-up.tie-positive-001, money.round.no-discard-001, money.round.scale-50-half-even-001, money.round.up.negative-001, money.round.up.positive-001 |
 | MONEY-ROUNDING-009 | Money | MUST / MUST NOT | COVERED | money.round.no-discard-001 |
 | MONEY-SERIALIZATION-001 | Money | MUST / MUST NOT | COVERED | money.deserialize.missing-amount-001, money.deserialize.missing-currency-001, money.deserialize.positive-001, money.serialize.roundtrip-001 |
@@ -133,7 +151,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | MONEY-SERIALIZATION-007 | Money | MUST / MUST NOT | COVERED | money.deserialize.unknown-members-001 |
 | MONEY-SERIALIZATION-008 | Money | MUST / MUST NOT | COVERED | money.deserialize.positive-001, money.deserialize.unknown-members-001, money.divide.quotient-plain-expansion-001, money.serialize.roundtrip-001 |
 | WORKFLOW-ERROR-001 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.transition-rejected-001 |
-| WORKFLOW-ERROR-002 | Workflow | MAY | NOT DIRECTLY TESTABLE | — |
+| WORKFLOW-ERROR-002 | Workflow | MAY | NOT DIRECTLY TESTABLE | Optional safe diagnostics are omitted from normalized vector errors. |
 | WORKFLOW-ERROR-003 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001, workflow.transition.reverse-not-implied-001, workflow.transition.state-identity-exact-001, workflow.transition.undeclared-001 |
 | WORKFLOW-ERROR-004 | Workflow | MUST / MUST NOT | COVERED | workflow.import.version-mismatch-001, workflow.transition.version-mismatch-preserves-state-001 |
 | WORKFLOW-ERROR-005 | Workflow | MUST / MUST NOT | COVERED | workflow.import.malformed-revision-invalid-instance-001, workflow.import.missing-current-state-invalid-instance-001, workflow.import.undeclared-current-state-001, workflow.transition.error-precedence-invalid-instance-before-version-001, workflow.transition.multiple-current-states-001 |
@@ -146,12 +164,12 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | WORKFLOW-CONFLICT-005 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.expected-revision-matches-001, workflow.transition.expected-revision-mismatch-001 |
 | WORKFLOW-CONFLICT-006 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.bound-older-version-001, workflow.transition.expected-revision-matches-001, workflow.transition.expected-state-matches-001 |
 | WORKFLOW-CONFLICT-007 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.expected-revision-mismatch-001, workflow.transition.expected-state-mismatch-001 |
-| WORKFLOW-CONFLICT-008 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| WORKFLOW-GUARD-001 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.pass-001 |
+| WORKFLOW-CONFLICT-008 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Absence of storage-lock or distributed-coordination semantics is architectural, not a portable result. |
+| WORKFLOW-GUARD-001 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-pass-001, workflow.guard.pass-001 |
 | WORKFLOW-GUARD-002 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001, workflow.guard.multiple-pass-001, workflow.guard.pass-001, workflow.guard.reject-001 |
 | WORKFLOW-GUARD-003 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001, workflow.guard.reject-001 |
-| WORKFLOW-GUARD-004 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| WORKFLOW-GUARD-005 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| WORKFLOW-GUARD-004 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | External-fact dependency declaration needs a guard-definition schema not present in this release. |
+| WORKFLOW-GUARD-005 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Authorization-model independence is an architectural guarantee outside the fact-equality fixture. |
 | WORKFLOW-GUARD-006 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001 |
 | WORKFLOW-IMPORT-001 | Workflow | MUST / MUST NOT | COVERED | workflow.import.current-state-preserved-001, workflow.import.missing-current-state-invalid-instance-001 |
 | WORKFLOW-IMPORT-002 | Workflow | MUST / MUST NOT | COVERED | workflow.import.undeclared-current-state-001 |
@@ -164,7 +182,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | WORKFLOW-STATES-003 | Workflow | MUST / MUST NOT | COVERED | workflow.create.initial-state-001 |
 | WORKFLOW-STATES-004 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.undeclared-current-state-001 |
 | WORKFLOW-STATES-005 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.state-identity-exact-001 |
-| WORKFLOW-STATES-006 | Workflow | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
+| WORKFLOW-STATES-006 | Workflow | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | State-meaning documentation is a composing-domain recommendation. |
 | WORKFLOW-STATES-007 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.multiple-current-states-001 |
 | WORKFLOW-TERMINAL-001 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.entry-allowed-001, workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001 |
 | WORKFLOW-TERMINAL-002 | Workflow | MUST / MUST NOT | COVERED | workflow.create.terminal-outgoing-001 |
@@ -173,14 +191,14 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | WORKFLOW-TRANSITION-001 | Workflow | MUST / MUST NOT | COVERED | workflow.create.undeclared-transition-source-001, workflow.create.undeclared-transition-target-001 |
 | WORKFLOW-TRANSITION-002 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.reverse-not-implied-001 |
 | WORKFLOW-TRANSITION-003 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.entry-allowed-001, workflow.terminal.not-inferred-no-outgoing-001, workflow.transition.undeclared-001, workflow.transition.unguarded-ignores-facts-001, workflow.transition.valid-001 |
-| WORKFLOW-TRANSITION-004 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.pass-001, workflow.transition.unguarded-ignores-facts-001 |
+| WORKFLOW-TRANSITION-004 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-pass-001, workflow.guard.pass-001, workflow.transition.unguarded-ignores-facts-001 |
 | WORKFLOW-TRANSITION-005 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.entry-allowed-001, workflow.transition.unguarded-ignores-facts-001, workflow.transition.valid-001 |
-| WORKFLOW-TRANSITION-006 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001, workflow.transition.reverse-not-implied-001, workflow.transition.undeclared-001 |
-| WORKFLOW-TRANSITION-007 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| WORKFLOW-TRANSITION-006 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001, workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001, workflow.transition.reverse-not-implied-001, workflow.transition.undeclared-001 |
+| WORKFLOW-TRANSITION-007 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | No intermediate state is exposed by the atomic operation boundary for a vector to observe. |
 | WORKFLOW-VERSION-001 | Workflow | MUST / MUST NOT | COVERED | workflow.create.version-missing-invalid-001, workflow.create.versioned-binding-001 |
 | WORKFLOW-VERSION-002 | Workflow | MUST / MUST NOT | COVERED | workflow.create.versioned-binding-001 |
-| WORKFLOW-VERSION-003 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| WORKFLOW-VERSION-004 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| WORKFLOW-VERSION-003 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Immutable reuse across separately published definitions requires a definition registry or history. |
+| WORKFLOW-VERSION-004 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Cross-concept identity distinction is a composing-domain modeling constraint. |
 | WORKFLOW-VERSION-005 | Workflow | MUST / MUST NOT | COVERED | workflow.create.versioned-binding-001 |
 | WORKFLOW-VERSION-006 | Workflow | MUST / MUST NOT | COVERED | workflow.create.default-version-sequence-zero-invalid-001 |
 | WORKFLOW-VERSION-007 | Workflow | MUST / MUST NOT | COVERED | workflow.create.versioned-binding-001, workflow.import.version-binding-preserved-001 |
@@ -188,45 +206,47 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | WORKFLOW-VERSION-009 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.bound-older-version-001 |
 | WORKFLOW-VERSION-010 | Workflow | MUST / MUST NOT | COVERED | workflow.import.version-mismatch-001, workflow.transition.version-mismatch-preserves-state-001 |
 | WORKFLOW-VERSION-011 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.bound-older-version-001 |
-| WORKFLOW-VERSION-012 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| AUDIT-ACTOR-001 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001 |
+| WORKFLOW-VERSION-012 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Optional diagnostic content is outside normalized vector errors and needs disclosure review. |
+| AUDIT-ACTOR-001 | Audit | MUST / MUST NOT | COVERED | audit.actor.empty-id-001, audit.actor.missing-id-001, audit.event.append-complete-001 |
 | AUDIT-ACTOR-002 | Audit | MUST / MUST NOT | COVERED | audit.actor.opaque-identity-001 |
 | AUDIT-ACTOR-003 | Audit | MUST / MUST NOT | COVERED | audit.actor.display-name-not-identity-001 |
 | AUDIT-ACTOR-004 | Audit | MUST / MUST NOT | COVERED | audit.event.unknown-actor-omitted-001 |
-| AUDIT-ACTOR-005 | Audit | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
+| AUDIT-ACTOR-005 | Audit | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | Acting-on-behalf-of representation is not defined in the current portable Actor shape. |
 | AUDIT-ACTOR-006 | Audit | MUST / MUST NOT | COVERED | audit.redaction.actor-context-001 |
-| AUDIT-ACTOR-007 | Audit | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
+| AUDIT-ACTOR-007 | Audit | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | Actor type remains recommended and omission is valid, so no mandatory result distinguishes compliance. |
 | AUDIT-ACTOR-008 | Audit | MUST / MUST NOT | COVERED | audit.actor.identity-preserved-in-history-001 |
+| AUDIT-ACTOR-009 | Audit | MUST / MUST NOT | COVERED | audit.actor.empty-id-001, audit.actor.invalid-type-001, audit.actor.malformed-representation-001, audit.actor.missing-id-001, audit.actor.precedence-duplicate-001, audit.actor.precedence-invalid-event-001 |
 | AUDIT-APPEND-001 | Audit | MUST / MUST NOT | COVERED | audit.append-only.remove-forbidden-001, audit.append-only.replace-forbidden-001 |
-| AUDIT-APPEND-002 | Audit | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| AUDIT-APPEND-003 | Audit | MUST / MUST NOT | COVERED | audit.event.duplicate-identity-001 |
+| AUDIT-APPEND-002 | Audit | MUST / MUST NOT | NOT DIRECTLY TESTABLE | No current portable field represents a mutable explicit ordering relationship. |
+| AUDIT-APPEND-003 | Audit | MUST / MUST NOT | COVERED | audit.actor.precedence-relationship-001, audit.event.duplicate-identity-001 |
 | AUDIT-APPEND-004 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
-| AUDIT-APPEND-006 | Audit | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| AUDIT-APPEND-006 | Audit | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Absence of inferred domain meaning from retrieval order is an architectural guarantee. |
 | AUDIT-CHANGE-001 | Audit | MUST / MUST NOT | COVERED | audit.change.before-after-001 |
 | AUDIT-CHANGE-002 | Audit | SHOULD / SHOULD NOT | COVERED | audit.change.before-after-001 |
 | AUDIT-CHANGE-003 | Audit | MUST / MUST NOT | COVERED | audit.change.absent-vs-null-001 |
 | AUDIT-CHANGE-004 | Audit | MUST / MUST NOT | COVERED | audit.change.money-value-preserved-001 |
 | AUDIT-CHANGE-005 | Audit | MUST / MUST NOT | COVERED | audit.change.unchanged-rejected-001 |
 | AUDIT-CHANGE-006 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
-| AUDIT-CHANGE-007 | Audit | MAY | NOT DIRECTLY TESTABLE | — |
-| AUDIT-ERROR-001 | Audit | MUST / MUST NOT | COVERED | audit.event.missing-entity-id-001, audit.event.missing-timestamp-001, audit.redaction.unknown-path-001 |
-| AUDIT-ERROR-002 | Audit | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| AUDIT-ERROR-003 | Audit | MAY | NOT DIRECTLY TESTABLE | — |
+| AUDIT-CHANGE-007 | Audit | MAY | NOT DIRECTLY TESTABLE | Change omission is optional and depends on event type or disclosure policy. |
+| AUDIT-ERROR-001 | Audit | MUST / MUST NOT | COVERED | audit.actor.empty-id-001, audit.actor.invalid-type-001, audit.actor.malformed-representation-001, audit.actor.missing-id-001, audit.actor.precedence-duplicate-001, audit.actor.precedence-invalid-event-001, audit.actor.precedence-relationship-001, audit.change.unchanged-rejected-001, audit.event.implementation-type-rejected-001, audit.event.metadata-conflict-001, audit.event.missing-entity-id-001, audit.event.missing-timestamp-001, audit.redaction.unknown-path-001, shared.timestamp.excess-precision-001, shared.timestamp.invalid-calendar-001 |
+| AUDIT-ERROR-002 | Audit | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Normalized errors omit messages/details, so protected-detail absence needs security review. |
+| AUDIT-ERROR-003 | Audit | MAY | NOT DIRECTLY TESTABLE | Additional safe diagnostic context is optional. |
+| AUDIT-ERROR-004 | Audit | MUST / MUST NOT | COVERED | audit.actor.precedence-duplicate-001, audit.actor.precedence-invalid-event-001, audit.actor.precedence-invalid-history-001, audit.actor.precedence-relationship-001 |
 | AUDIT-EVENT-001 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001, audit.event.missing-timestamp-001 |
 | AUDIT-EVENT-002 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001, audit.event.unknown-actor-omitted-001 |
 | AUDIT-EVENT-003 | Audit | MUST / MUST NOT | COVERED | audit.event.implementation-type-rejected-001 |
 | AUDIT-EVENT-004 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001, audit.event.missing-entity-id-001 |
-| AUDIT-EVENT-005 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001, audit.event.missing-timestamp-001 |
-| AUDIT-EVENT-006 | Audit | MAY | NOT DIRECTLY TESTABLE | — |
+| AUDIT-EVENT-005 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001, audit.event.missing-timestamp-001, shared.timestamp.basic-form-invalid-001, shared.timestamp.excess-precision-001, shared.timestamp.invalid-calendar-001, shared.timestamp.leap-second-invalid-001, shared.timestamp.maximum-precision-001, shared.timestamp.missing-offset-invalid-001, shared.timestamp.unknown-offset-invalid-001 |
+| AUDIT-EVENT-006 | Audit | MAY | NOT DIRECTLY TESTABLE | Event metadata is optional and has no required contents. |
 | AUDIT-EVENT-007 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001, audit.event.missing-entity-id-001, audit.event.missing-timestamp-001 |
 | AUDIT-EVENT-008 | Audit | MUST / MUST NOT | COVERED | audit.event.metadata-conflict-001 |
 | AUDIT-REDACTION-001 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001, audit.redaction.unknown-path-001 |
-| AUDIT-REDACTION-002 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
-| AUDIT-REDACTION-003 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
-| AUDIT-REDACTION-004 | Audit | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
-| AUDIT-REDACTION-005 | Audit | MAY | NOT DIRECTLY TESTABLE | — |
+| AUDIT-REDACTION-002 | Audit | MUST / MUST NOT | COVERED | audit.redaction.actor-context-001, audit.redaction.preserve-evidence-001 |
+| AUDIT-REDACTION-003 | Audit | MUST / MUST NOT | COVERED | audit.redaction.actor-context-001, audit.redaction.preserve-evidence-001 |
+| AUDIT-REDACTION-004 | Audit | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | The required redaction marker is covered, but sufficient explanatory category detail remains a recommendation. |
+| AUDIT-REDACTION-005 | Audit | MAY | NOT DIRECTLY TESTABLE | Access-time masking is an optional integration behavior. |
 | AUDIT-REDACTION-006 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
-| AUDIT-REDACTION-007 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
+| AUDIT-REDACTION-007 | Audit | MUST / MUST NOT | COVERED | audit.redaction.actor-context-001, audit.redaction.preserve-evidence-001 |
 | AUDIT-RELATIONSHIP-001 | Audit | MUST / MUST NOT | COVERED | audit.relationship.corrects.append-001 |
 | AUDIT-RELATIONSHIP-002 | Audit | MUST / MUST NOT | COVERED | audit.relationship.corrects.append-001 |
 | AUDIT-RELATIONSHIP-003 | Audit | MUST / MUST NOT | COVERED | audit.relationship.all-types-order-001, audit.relationship.corrects.append-001, audit.relationship.invalid-type-001 |
@@ -274,9 +294,9 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-COMPOSITION-022 | Approvals | MUST / MUST NOT | COVERED | approval.composition.none-applicable-approved-001, approval.composition.stage-inapplicable-allows-later-001 |
 | APPROVAL-COMPOSITION-023 | Approvals | MUST / MUST NOT | COVERED | approval.composition.stage-inapplicable-allows-later-001, approval.composition.stage-parallel-rejected-001 |
 | APPROVAL-COMPOSITION-024 | Approvals | MUST / MUST NOT | COVERED | approval.composition.stage-first-pending-actionable-001, approval.composition.unresolved-applicability-complete-validation-001 |
-| APPROVAL-CONDITION-001 | Approvals | MUST / MUST NOT | COVERED | approval.condition.missing-fact-001 |
+| APPROVAL-CONDITION-001 | Approvals | MUST / MUST NOT | COVERED | approval.condition.applicable-explicit-001, approval.condition.falsey-facts-present-001, approval.condition.missing-fact-001, approval.condition.not-applicable-explicit-001 |
 | APPROVAL-CONDITION-002 | Approvals | MUST / MUST NOT | COVERED | approval.condition.applicable-explicit-001, approval.condition.missing-result-unresolved-001, approval.condition.not-applicable-explicit-001 |
-| APPROVAL-CONDITION-003 | Approvals | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
+| APPROVAL-CONDITION-003 | Approvals | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | Audit-evidence retention is a composing-domain recommendation outside Approval results. |
 | APPROVAL-CONDITION-004 | Approvals | MUST / MUST NOT | COVERED | approval.condition.applicable-explicit-001, approval.condition.not-applicable-explicit-001 |
 | APPROVAL-CONDITION-005 | Approvals | MUST / MUST NOT | COVERED | approval.condition.applicable-explicit-001, approval.condition.not-applicable-explicit-001 |
 | APPROVAL-CONDITION-006 | Approvals | MUST / MUST NOT | COVERED | approval.condition.falsey-facts-present-001, approval.condition.missing-fact-001, approval.condition.missing-result-unresolved-001 |
@@ -285,16 +305,16 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-DECISION-003 | Approvals | MUST / MUST NOT | COVERED | approval.decision.relevant-path-unchanged-unrelated-fact-changed-001, approval.decision.subject-facts-array-order-changed-001, approval.decision.subject-facts-array-to-object-001, approval.decision.subject-facts-changed-001, approval.decision.subject-facts-nested-shape-changed-001, approval.decision.subject-facts-object-key-changed-001, approval.decision.subject-facts-object-key-order-001, approval.decision.subject-facts-object-to-array-001, approval.decision.subject-facts-unchanged-001 |
 | APPROVAL-DECISION-004 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001 |
 | APPROVAL-DECISION-005 | Approvals | MUST / MUST NOT | COVERED | approval.decision.pending-invalid-001 |
-| APPROVAL-DECISION-006 | Approvals | MUST / MUST NOT | COVERED | approval.decision.timestamp-ambiguous-001 |
+| APPROVAL-DECISION-006 | Approvals | MUST / MUST NOT | COVERED | approval.decision.timestamp-ambiguous-001, shared.timestamp.invalid-decision-precision-001 |
 | APPROVAL-DECISION-007 | Approvals | MUST / MUST NOT | COVERED | approval.decision.append-history-001 |
-| APPROVAL-DECISION-008 | Approvals | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| APPROVAL-ERROR-001 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001, approval.decision.pending-invalid-001, approval.decision.timestamp-ambiguous-001 |
-| APPROVAL-ERROR-002 | Approvals | MAY | NOT DIRECTLY TESTABLE | — |
+| APPROVAL-DECISION-008 | Approvals | MUST / MUST NOT | NOT DIRECTLY TESTABLE | This is conditional on an out-of-scope composing-domain Approval/Audit integration. |
+| APPROVAL-ERROR-001 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001, approval.decision.timestamp-ambiguous-001, shared.timestamp.invalid-decision-precision-001 |
+| APPROVAL-ERROR-002 | Approvals | MAY | NOT DIRECTLY TESTABLE | Identifying the affected requirement in diagnostic details is optional. |
 | APPROVAL-ERROR-003 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.pending-001, approval.requirement.rejected-001 |
-| APPROVAL-ERROR-004 | Approvals | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| APPROVAL-ERROR-005 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001, approval.decision.pending-invalid-001, approval.decision.timestamp-ambiguous-001 |
+| APPROVAL-ERROR-004 | Approvals | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Normalized errors omit details, so restricted-data absence needs security review. |
+| APPROVAL-ERROR-005 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001, approval.decision.timestamp-ambiguous-001, shared.timestamp.invalid-decision-precision-001 |
 | APPROVAL-ERROR-006 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-duplicate-invalid-001 |
-| APPROVAL-ERROR-007 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-missing-context-001 |
+| APPROVAL-ERROR-007 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-missing-context-001, shared.timestamp.invalid-evaluation-precision-001 |
 | APPROVAL-ERROR-008 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-invalid-member-voter-001, approval.composition.quorum-opposing-effective-votes-invalid-001, approval.composition.structure-cycle-depth-invalid-001, approval.composition.structure-empty-stage-kind-invalid-001, approval.composition.structure-invalid-duplicates-001 |
 | APPROVAL-ERROR-009 | Approvals | MUST / MUST NOT | COVERED | approval.composition.error-priority-context-before-state-001, approval.composition.error-priority-structure-over-context-001, approval.composition.unresolved-applicability-complete-validation-001 |
 | APPROVAL-ERROR-010 | Approvals | MUST / MUST NOT | COVERED | approval.composition.error-priority-context-before-state-001, approval.composition.error-priority-structure-over-context-001, approval.composition.quorum-opposing-effective-votes-invalid-001 |
@@ -314,7 +334,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-REQUIREMENT-004 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.approved-001, approval.requirement.rejected-001 |
 | APPROVAL-REQUIREMENT-005 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.pending-001 |
 | APPROVAL-REQUIREMENT-006 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001 |
-| APPROVAL-REQUIREMENT-007 | Approvals | MAY | NOT DIRECTLY TESTABLE | — |
+| APPROVAL-REQUIREMENT-007 | Approvals | MAY | NOT DIRECTLY TESTABLE | Conditional requirements are optional; executable condition behavior is covered by its own requirements. |
 | APPROVAL-VALIDITY-001 | Approvals | MUST / MUST NOT | COVERED | approval.validity.decision-superseded-not-counted-001, approval.validity.withdrawn-not-counted-001 |
 | APPROVAL-VALIDITY-002 | Approvals | MUST / MUST NOT | COVERED | approval.validity.decision-supersession-preserves-history-001, approval.validity.requirement-supersession-preserves-history-001, approval.validity.withdraw-preserves-history-001 |
 | APPROVAL-VALIDITY-003 | Approvals | MUST / MUST NOT | COVERED | approval.validity.stale-revision-not-effective-001, approval.validity.unchanged-relevant-facts-effective-001 |
@@ -322,23 +342,23 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | APPROVAL-VALIDITY-005 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-duplicate-invalid-001 |
 | APPROVAL-VALIDITY-006 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-preserves-history-001 |
 | APPROVAL-VALIDITY-007 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-before-boundary-001, approval.validity.expiration-missing-context-001 |
-| APPROVAL-VALIDITY-008 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-before-boundary-001, approval.validity.expiration-equivalent-offset-001 |
-| APPROVAL-VALIDITY-009 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-at-boundary-001, approval.validity.expiration-before-boundary-001, approval.validity.expiration-equivalent-offset-001 |
+| APPROVAL-VALIDITY-008 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-before-boundary-001, approval.validity.expiration-equivalent-offset-001, shared.timestamp.expiration-equivalent-offset-nanoseconds-001, shared.timestamp.expiration-subnanosecond-after-001, shared.timestamp.expiration-subnanosecond-before-001, shared.timestamp.invalid-evaluation-precision-001 |
+| APPROVAL-VALIDITY-009 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-at-boundary-001, approval.validity.expiration-before-boundary-001, approval.validity.expiration-equivalent-offset-001, shared.timestamp.expiration-equivalent-offset-nanoseconds-001, shared.timestamp.expiration-subnanosecond-after-001, shared.timestamp.expiration-subnanosecond-before-001 |
 | APPROVAL-VALIDITY-010 | Approvals | MUST / MUST NOT | COVERED | approval.validity.decision-superseded-not-counted-001, approval.validity.decision-supersession-preserves-history-001 |
 | APPROVAL-VALIDITY-011 | Approvals | MUST / MUST NOT | COVERED | approval.validity.requirement-superseded-not-transferred-001, approval.validity.requirement-supersession-preserves-history-001 |
 | APPROVAL-VALIDITY-012 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-duplicate-invalid-001 |
-| ENTITY-AUDIT-001 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| ENTITY-AUDIT-002 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| ENTITY-DEFINITION-001 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-AUDIT-001 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Audit policy declaration belongs to a composing domain; no generic declaration operation exists. |
+| ENTITY-AUDIT-002 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Event production is conditional on composing-domain policy and needs an Entity/Audit integration operation. |
+| ENTITY-DEFINITION-001 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Field, lifecycle, and invariant definition is a composing-domain responsibility. |
 | ENTITY-ERROR-001 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.mutate.immutable-financial-field-001, entity.transition.rejected-preserves-entity-001, entity.validation.complete-result-001 |
 | ENTITY-ERROR-002 | Entities | SHOULD / SHOULD NOT | COVERED | entity.validation.complete-result-001 |
-| ENTITY-ERROR-003 | Entities | MAY | NOT DIRECTLY TESTABLE | — |
+| ENTITY-ERROR-003 | Entities | MAY | NOT DIRECTLY TESTABLE | Safe diagnostic context is optional. |
 | ENTITY-ERROR-004 | Entities | MUST / MUST NOT | COVERED | entity.transition.rejected-preserves-entity-001 |
 | ENTITY-EVOLUTION-001 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001 |
 | ENTITY-EVOLUTION-002 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001 |
 | ENTITY-EVOLUTION-003 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001 |
 | ENTITY-EVOLUTION-004 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001 |
-| ENTITY-EVOLUTION-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-EVOLUTION-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Absence of unstandardized Replacement/Amendment operations is enforced by API and registry review. |
 | ENTITY-EVOLUTION-006 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.ineligible-001, entity.evolution.void.ineligible-001 |
 | ENTITY-EVOLUTION-007 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001 |
 | ENTITY-EVOLUTION-008 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001 |
@@ -361,7 +381,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-EVOLUTION-025 | Entities | MUST / MUST NOT | COVERED | entity.evolution.stale-revision-001 |
 | ENTITY-EVOLUTION-026 | Entities | MUST / MUST NOT | COVERED | entity.evolution.invalid-related-identity-001 |
 | ENTITY-EVOLUTION-027 | Entities | MUST / MUST NOT | COVERED | entity.evolution.audit-failure-001 |
-| ENTITY-EVOLUTION-028 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-EVOLUTION-028 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Optional diagnostic disclosure is outside normalized vector errors and needs security review. |
 | ENTITY-EVOLUTION-029 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001, entity.evolution.void.audit-001, entity.evolution.supersession.currentness-001 |
 | ENTITY-EVOLUTION-030 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001 |
 | ENTITY-EVOLUTION-031 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.supersession.currentness-001 |
@@ -371,7 +391,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-IDENTITY-002 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.transition.success-identity-stable-001 |
 | ENTITY-IDENTITY-003 | Entities | MUST / MUST NOT | COVERED | entity.create.opaque-identity-preserved-001 |
 | ENTITY-IDENTITY-004 | Entities | MUST / MUST NOT | COVERED | entity.mutate.display-number-not-identity-001 |
-| ENTITY-IDENTITY-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-IDENTITY-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Cross-entity uniqueness requires a registry or persistence scope absent from current operations. |
 | ENTITY-IDENTITY-006 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
 | ENTITY-IMPORT-001 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
 | ENTITY-IMPORT-002 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
@@ -380,20 +400,20 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-IMPORT-005 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
 | ENTITY-IMPORT-006 | Entities | MUST / MUST NOT | COVERED | entity.import.expected-conflict-version-conflict-001, entity.import.expected-revision-conflict-001, entity.import.identity-mapping-preserved-001 |
 | ENTITY-IMPORT-007 | Entities | MUST / MUST NOT | COVERED | entity.import.expected-conflict-version-conflict-001, entity.import.expected-revision-conflict-001, entity.import.expected-state-conflict-001 |
-| ENTITY-IMPORT-008 | Entities | MUST / MUST NOT | COVERED | entity.import.expected-conflict-version-conflict-001, entity.import.expected-revision-conflict-001, entity.import.expected-state-conflict-001, entity.import.missing-mapping-invalid-identity-001 |
+| ENTITY-IMPORT-008 | Entities | MUST / MUST NOT | COVERED | entity.import.duplicate-revision-invalid-identity-001, entity.import.expected-conflict-version-conflict-001, entity.import.expected-revision-conflict-001, entity.import.expected-state-conflict-001, entity.import.missing-mapping-invalid-identity-001 |
 | ENTITY-IMPORT-009 | Entities | MUST / MUST NOT | COVERED | entity.import.missing-mapping-invalid-identity-001 |
 | ENTITY-IMPORT-010 | Entities | MUST / MUST NOT | COVERED | entity.import.missing-mapping-invalid-identity-001 |
 | ENTITY-LIFECYCLE-001 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
 | ENTITY-LIFECYCLE-002 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
 | ENTITY-LIFECYCLE-003 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.transition.rejected-preserves-entity-001, entity.transition.success-identity-stable-001 |
-| ENTITY-LIFECYCLE-004 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
-| ENTITY-LIFECYCLE-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-LIFECYCLE-004 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Lifecycle Audit declaration requires the out-of-scope Entity/Audit integration. |
+| ENTITY-LIFECYCLE-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | State consequences are defined by concrete composing domains, not generic Entity Core. |
 | ENTITY-LIFECYCLE-006 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
 | ENTITY-MUTABILITY-001 | Entities | MUST / MUST NOT | COVERED | entity.mutate.mutable-field-001 |
 | ENTITY-MUTABILITY-002 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.mutate.immutable-financial-field-001 |
-| ENTITY-MUTABILITY-003 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-MUTABILITY-003 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Mutation Audit declaration requires the out-of-scope Entity/Audit integration. |
 | ENTITY-MUTABILITY-004 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.mutate.immutable-financial-field-001 |
-| ENTITY-MUTABILITY-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-MUTABILITY-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Prior-audit attachment requires an Entity/Audit integration surface absent from current vectors. |
 | ENTITY-MUTABILITY-006 | Entities | MUST / MUST NOT | COVERED | entity.mutate.terminal-metadata-001 |
 | ENTITY-MUTABILITY-007 | Entities | MAY | COVERED | entity.mutate.terminal-metadata-001 |
 | ENTITY-REVISION-001 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
@@ -401,15 +421,15 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-REVISION-003 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
 | ENTITY-REVISION-004 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
 | ENTITY-REVISION-005 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
-| ENTITY-REVISION-006 | Entities | MUST / MUST NOT | COVERED | entity.import.expected-conflict-version-conflict-001, entity.import.expected-revision-conflict-001, entity.import.identity-mapping-preserved-001 |
-| ENTITY-REVISION-007 | Entities | MUST / MUST NOT | COVERED | entity.import.missing-mapping-invalid-identity-001 |
+| ENTITY-REVISION-006 | Entities | MUST / MUST NOT | COVERED | entity.import.expected-conflict-version-conflict-001, entity.import.expected-revision-conflict-001 |
+| ENTITY-REVISION-007 | Entities | MUST / MUST NOT | COVERED | entity.import.duplicate-revision-invalid-identity-001 |
 | ENTITY-VALIDATION-001 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
 | ENTITY-VALIDATION-002 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
 | ENTITY-VALIDATION-003 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
 | ENTITY-VALIDATION-004 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
 | ENTITY-VALIDATION-005 | Entities | SHOULD / SHOULD NOT | COVERED | entity.validation.complete-result-001 |
 | ENTITY-VALIDATION-006 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
-| ENTITY-VALIDATION-007 | Entities | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | — |
+| ENTITY-VALIDATION-007 | Entities | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | Distinguishing always-required and state-dependent rules is a composing-domain recommendation. |
 | ENTITY-VALIDATION-008 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
 
 ## Audit Draft 0.1 traceability closure notes
@@ -421,8 +441,10 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | AUDIT-ACTOR-004 | COVERED | `audit.event.unknown-actor-omitted-001` observes the Draft 0.1 permitted unknown-actor path: actor attribution is omitted and no identity is invented. The explicit unknown-actor interchange representation remains an open question. |
 | AUDIT-ACTOR-006 | COVERED | `audit.redaction.actor-context-001` observes the Draft 0.1 reserved actor-context redaction targets: optional actor display name and metadata are redacted, while actor identity and type remain observable. |
 | AUDIT-ACTOR-008 | COVERED | `audit.actor.identity-preserved-in-history-001` observes that later appends preserve actor identity already recorded on committed history. |
+| AUDIT-ACTOR-009 | COVERED | Actor-shape vectors reject missing and empty identity, scalar attribution, and invalid optional type with the dedicated portable actor error and unchanged history. |
 | AUDIT-APPEND-002 | NOT DIRECTLY TESTABLE | Draft 0.1 requires preservation of explicitly recorded ordering relationships, but no portable representation of such relationships exists in current Audit Event or history vectors. Append order remains observable under `AUDIT-APPEND-001`; distributed or causal ordering is outside Draft 0.1. |
 | AUDIT-ERROR-002 | NOT DIRECTLY TESTABLE | Current normalized conformance errors compare portable error codes and post-state only; messages are never compared and safe diagnostic details are optional. The TypeScript adapter omits implementation messages/details, but the current vector shape cannot independently prove absence of protected details. |
+| AUDIT-ERROR-004 | COVERED | The four `audit.actor.precedence-*` vectors distinguish supplied-history, non-actor representation, actor, duplicate identity, and history-dependent relationship failures while observing unchanged valid history where one exists. |
 | AUDIT-EVENT-003 | COVERED | `audit.event.implementation-type-rejected-001` observes the clarified stable domain event identifier rule and rejects implementation-mechanism event type syntax. |
 | AUDIT-EVENT-007 | COVERED | Draft 0.1 now defines structural completeness through required valid fields. Existing complete and missing-required-field vectors exercise that boundary. |
 | AUDIT-REDACTION-007 | COVERED | `audit.redaction.preserve-evidence-001` now observes that redaction returns a redacted representation and evidence event while preserving the committed source event in history. |
@@ -473,7 +495,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-VALIDATION-007 | NOT DIRECTLY TESTABLE | This is a composing-domain recommendation about distinguishing always-required rules from transition or target-state rules. Draft 0.1 has no generic state-dependent validation policy language to execute portably. |
 | ENTITY-VALIDATION-008 | COVERED | `entity.validation.complete-result-001` observes that validation failure details expose only `rule` and `path`, not the rejected Money value, TypeScript class name, message, or other sensitive value-bearing details. |
 | ENTITY-REVISION-001 to ENTITY-REVISION-006 | COVERED | `entity.import.identity-mapping-preserved-001` and the expected-revision/conflict-version contrast vectors observe opaque caller-supplied business revisions, stable Entity identity qualification, historical revision preservation, and separation from conflict-version tokens. |
-| ENTITY-REVISION-007 | COVERED | `entity.import.missing-mapping-invalid-identity-001` covers invalid identity handling for malformed import evidence; implementation unit tests additionally cover duplicate and identity-conflicting revision observations. |
+| ENTITY-REVISION-007 | COVERED | `entity.import.duplicate-revision-invalid-identity-001` directly exercises the duplicate-revision rejection and portable identity error mapping. |
 
 ## Critical financial requirements
 
@@ -507,6 +529,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | WORKFLOW-CONFLICT-003, WORKFLOW-CONFLICT-005, WORKFLOW-CONFLICT-007, WORKFLOW-ERROR-006 | Expected-state or expected-revision conflicts fail with the portable conflict code and preserve state, binding, and revision. | Ignore stale expected values, accept missing observed revision as matched, return invalid-transition/terminal/guard codes first, or mutate state/binding/revision on conflict. |
 | WORKFLOW-ERROR-007 | Error precedence is deterministic across versioning, import, conflict, terminal, transition, and guard failures. | Let branch order choose error code, report terminal/transition/guard before structural or conflict failures, or invert terminal precedence over invalid transition. |
 | AUDIT-APPEND-001 | Append-only committed history. | Replace or remove a committed event. |
+| AUDIT-ACTOR-009, AUDIT-ERROR-004 | Supplied actor shape and append error precedence are portable and failure-atomic. | Accept a missing actor identity, collapse it into invalid event, or select duplicate/relationship failure before an earlier validation stage. |
 | AUDIT-REDACTION-002, AUDIT-REDACTION-003, AUDIT-REDACTION-006 | Redacted representation remains distinguishable, preserves event meaning, and records evidence. | Expose protected values, collapse redaction to null or absence, change event identity, or omit evidence. |
 | AUDIT-RELATIONSHIP-005, AUDIT-RELATIONSHIP-012 | Relationship identity is unique and rejected relationship requests do not create partial state. | Accept duplicate relationship identities or append relationship-bearing invalid events. |
 | AUDIT-RELATIONSHIP-006, AUDIT-RELATIONSHIP-007, AUDIT-RELATIONSHIP-008 | Relationship targets must exist and match the recorded target Entity. | Accept absent target events or ignore target Entity mismatches. |
@@ -539,6 +562,7 @@ NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommen
 | ENTITY-IMPORT-001, ENTITY-IMPORT-003, ENTITY-IMPORT-005 | Import preserves FinKore identity and explicit mapping evidence. | Replace stable Entity identity with Source Identity, accept incomplete mapping evidence, or map evidence to a different Entity. |
 | ENTITY-REVISION-004, ENTITY-IMPORT-006 | Import preserves current and historical business revision observations. | Drop historical revisions, overwrite the current revision, or derive revision identity from state/order/storage values. |
 | ENTITY-REVISION-006, ENTITY-IMPORT-007 | Business revision and conflict version remain distinct precondition values. | Use conflict version as business revision, use business revision as conflict version, or bypass stale expected values. |
+| ENTITY-REVISION-007 | Duplicate or identity-conflicting revision observations fail with portable invalid identity. | Accept one identity as both current and historical revision or return partial import state. |
 | ENTITY-IMPORT-008, ENTITY-IMPORT-010 | Failed import returns no partial import and exposes safe diagnostics. | Return partial import output after failure or leak source identity/financial values in normalized error details. |
 
 

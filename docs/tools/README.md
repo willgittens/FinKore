@@ -7,6 +7,7 @@ the FinKore public API and MUST NOT define financial-domain behavior.
 | --- | --- | --- |
 | `bootstrap-toolchains.js` | Install or validate repository-local Python, Java, and Maven toolchains. | `npm run tools:bootstrap`, `npm run tools:check` |
 | `check-doc-links.js` | Validate Markdown links and CoreDoc requirement references. | `npm run docs:check` |
+| `check-traceability.js` | Cross-check specification requirements, traceability rows, vector metadata, and Agentic references. | `npm run traceability:check`, `npm run docs:check` |
 | `check-architecture.js` | Enforce implementation dependency boundaries. | `npm run architecture:check` |
 | `check-license.js` | Validate license metadata, headers, and repository license text. | `npm run license:check` |
 | `compile-java.js` | Compile the Java core, adapter, and executable tests. | `npm run java:compile` |

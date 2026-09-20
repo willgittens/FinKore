@@ -12,6 +12,7 @@ public final class AuditTest {
   public static void main(String[] args) {
     appendsCompleteEventAndPreservesActorIdentity();
     duplicateAppendDoesNotMutateHistory();
+    appendErrorPrecedenceDoesNotMutateHistory();
     enforcesPortableTimestampProfile();
     redactionPreservesSourceAndAppendsEvidence();
     invalidRelationshipDoesNotCommitSourceEvent();
@@ -31,6 +32,36 @@ public final class AuditTest {
         "eventType", "ENTITY_RESUBMITTED",
         "entity", Map.of("type", "expense", "id", "exp-52"),
         "occurredAt", "2026-09-01T13:00:00Z")));
+    assertEquals(List.of(submittedEvent()), log.events());
+  }
+
+  private static void appendErrorPrecedenceDoesNotMutateHistory() {
+    Audit.Log log = Audit.Log.create(List.of(submittedEvent()));
+
+    assertError(Audit.INVALID_EVENT, () -> log.append(Map.of(
+        "eventId", "evt-invalid",
+        "eventType", "ENTITY_APPROVED",
+        "entity", Map.of("type", "expense"),
+        "actor", Map.of("type", "user"),
+        "occurredAt", "2026-09-01T13:00:00Z")));
+    assertError(Audit.ACTOR_INVALID, () -> log.append(Map.of(
+        "eventId", "evt-1042",
+        "eventType", "ENTITY_APPROVED",
+        "entity", Map.of("type", "expense", "id", "exp-52"),
+        "actor", Map.of("type", "user"),
+        "occurredAt", "2026-09-01T13:00:00Z")));
+    assertError(Audit.DUPLICATE_EVENT, () -> log.append(Map.of(
+        "eventId", "evt-1042",
+        "eventType", "ENTITY_APPROVED",
+        "entity", Map.of("type", "expense", "id", "exp-52"),
+        "occurredAt", "2026-09-01T13:00:00Z",
+        "relationships", List.of(Map.of(
+            "relationshipId", "rel-missing-target",
+            "type", "CORRECTS",
+            "target", Map.of(
+                "eventId", "evt-missing",
+                "entity", Map.of("type", "expense", "id", "exp-52")))))));
+
     assertEquals(List.of(submittedEvent()), log.events());
   }
 

@@ -179,7 +179,7 @@ conformance semantics without introducing broader workflow behavior.
 - `AuditChange.from(change)` validates a change with a required field/path identity and preserved optional `before`/`after` values.
 - `AuditEvent.from(event)` validates an Audit Event with caller-supplied `eventId`, stable domain `eventType`, `entity`, optional `actor`, an `occurredAt` value using the portable FinKore RFC 3339 profile, optional validated changes, and optional Audit Relationships.
 - `AuditLog.create(history)` creates a logical audit history from existing committed events and rejects duplicate event or relationship identities, absent relationship targets, self-targets, and relationship target Entity mismatches.
-- `auditLog.append(event)` validates and appends one event, rejecting duplicate event identities and invalid Audit Relationships without changing prior history.
+- `auditLog.append(event)` validates and appends one event, rejecting malformed supplied actors with `FINKORE_AUDIT_ACTOR_INVALID`, duplicate event identities, and invalid Audit Relationships without changing prior history. Validation precedence is history, non-actor event shape, actor shape, duplicate identity, then history-dependent relationships.
 - `auditLog.redact({ policy, redactionEvent })` returns a redacted representation of exactly one affected event with protected Change path values or reserved actor-context targets, preserves Audit Relationships, and appends an evidence event without mutating the committed source event.
 - `auditLog.replace()` and `auditLog.remove()` reject attempts to rewrite committed history with `FINKORE_AUDIT_APPEND_ONLY_VIOLATION`.
 - `auditLog.events()` and `auditLog.toJSON()` return defensive observations of committed history.

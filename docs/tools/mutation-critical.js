@@ -98,6 +98,13 @@ const pythonMutants = [
     to: 'if False and actor_id not in requirement.get("eligibleActors", [actor_id]):\n        raise FinKoreError(INELIGIBLE_ACTOR)',
   },
   {
+    id: 'python-audit-actor-identity-bypass',
+    suite: 'audit',
+    path: 'core/src/finkore/audit.py',
+    from: 'if not isinstance(actor, dict) or not _opaque(actor.get("id")):\n        raise FinKoreError(ACTOR_INVALID)',
+    to: 'if not isinstance(actor, dict):\n        raise FinKoreError(ACTOR_INVALID)',
+  },
+  {
     id: 'python-entity-immutability-bypass',
     suite: 'entities',
     path: 'core/src/finkore/entities.py',
@@ -110,6 +117,13 @@ const pythonMutants = [
     path: 'core/src/finkore/entities.py',
     from: 'if money.amount <= Decimal("0"):\n                findings.append({"rule": rule.get("id"), "path": rule.get("path")})',
     to: 'if False and money.amount <= Decimal("0"):\n                findings.append({"rule": rule.get("id"), "path": rule.get("path")})',
+  },
+  {
+    id: 'python-entity-duplicate-revision-bypass',
+    suite: 'entities',
+    path: 'core/src/finkore/entities.py',
+    from: 'if len({revision["revision"] for revision in revisions}) != len(revisions):\n        raise FinKoreError(INVALID_IDENTITY)',
+    to: 'if False and len({revision["revision"] for revision in revisions}) != len(revisions):\n        raise FinKoreError(INVALID_IDENTITY)',
   },
 ]
 
@@ -234,6 +248,13 @@ const javaMutants = [
     to: 'if (false && approved && rejected) {\n      throw new FinKoreException(INVALID_CHAIN);\n    }',
   },
   {
+    id: 'java-audit-actor-identity-bypass',
+    suite: 'audit',
+    path: 'core/src/main/java/org/finkore/Audit.java',
+    from: 'String id = requiredString(map.get("id"), ACTOR_INVALID);',
+    to: 'String id = optionalString(map.get("id"), ACTOR_INVALID);',
+  },
+  {
     id: 'java-entity-immutability-bypass',
     suite: 'entities',
     path: 'core/src/main/java/org/finkore/Entities.java',
@@ -246,6 +267,13 @@ const javaMutants = [
     path: 'core/src/main/java/org/finkore/Entities.java',
     from: 'invalid = new BigDecimal(amount).compareTo(BigDecimal.ZERO) <= 0;',
     to: 'invalid = false;',
+  },
+  {
+    id: 'java-entity-duplicate-revision-bypass',
+    suite: 'entities',
+    path: 'core/src/main/java/org/finkore/Entities.java',
+    from: 'if (!seen.add(revision.get("revision"))) {',
+    to: 'if (false && !seen.add(revision.get("revision"))) {',
   },
 ]
 

@@ -202,37 +202,46 @@ while correcting the demonstrated ambiguity.
 
 ## 6. Milestone 3 — Traceability and Audit contract repair
 
+Completed: 2026-09-20
+
+Decision: a supplied Audit actor has a closed portable minimum shape and uses
+`FINKORE_AUDIT_ACTOR_INVALID`. Append validation now selects errors in the
+portable order: supplied history, non-actor candidate representation, actor,
+duplicate event identity, then history-dependent relationship validity. The
+rebuilt inventory contains 406 requirements and 281 vectors; 322 requirements
+are COVERED and 84 are NOT DIRECTLY TESTABLE with an explicit rationale.
+
 ### 6.1 Audit actor error
 
-- [ ] Add or clarify the normative requirement governing invalid Audit actors.
-- [ ] Specify rejection precedence where more than one Audit input is invalid.
-- [ ] Add negative conformance vectors for missing, empty, malformed, and otherwise invalid actors as applicable.
-- [ ] Verify that failed append operations do not mutate Audit history.
-- [ ] Align Agentic error declarations, implementation errors, JSDoc, and README examples.
+- [x] Add or clarify the normative requirement governing invalid Audit actors.
+- [x] Specify rejection precedence where more than one Audit input is invalid.
+- [x] Add negative conformance vectors for missing, empty, malformed, and otherwise invalid actors as applicable.
+- [x] Verify that failed append operations do not mutate Audit history.
+- [x] Align Agentic error declarations, implementation errors, JSDoc, and README examples.
 
 ### 6.2 Requirement inventory
 
-- [ ] Rebuild the requirement inventory from the current specification and confirm the expected total.
-- [ ] Add the fourteen SPEC-COMPATIBILITY and four SPEC-FREEZE requirements to traceability.
-- [ ] Repair or reclassify the six requirements marked COVERED without vector references.
-- [ ] Reclassify SPEC-TIMESTAMP-001 and SPEC-TIMESTAMP-002 based on their executable assertions.
-- [ ] Review every remaining non-directly-testable classification for a written, defensible reason.
-- [ ] Recalculate all traceability totals and status summaries.
+- [x] Rebuild the requirement inventory from the current specification and confirm the expected total.
+- [x] Add the fourteen SPEC-COMPATIBILITY and four SPEC-FREEZE requirements to traceability.
+- [x] Repair or reclassify the six requirements marked COVERED without vector references.
+- [x] Reclassify SPEC-TIMESTAMP-001 and SPEC-TIMESTAMP-002 based on their executable assertions.
+- [x] Review every remaining non-directly-testable classification for a written, defensible reason.
+- [x] Recalculate all traceability totals and status summaries.
 
 ### 6.3 Automated consistency checks
 
-- [ ] Add a local documentation check that detects specification requirement IDs missing from traceability.
-- [ ] Add a check that rejects COVERED rows without at least one machine-readable vector reference.
-- [ ] Add a check for unknown requirement IDs referenced by vectors or Agentic metadata.
-- [ ] Ensure checks validate metadata only and do not define financial behavior.
-- [ ] Add the required purpose/effects/non-normative header to every new executable under docs/tools.
+- [x] Add a local documentation check that detects specification requirement IDs missing from traceability.
+- [x] Add a check that rejects COVERED rows without at least one machine-readable vector reference.
+- [x] Add a check for unknown requirement IDs referenced by vectors or Agentic metadata.
+- [x] Ensure checks validate metadata only and do not define financial behavior.
+- [x] Add the required purpose/effects/non-normative header to every new executable under docs/tools.
 
 ### 6.4 Completion criteria
 
-- [ ] Every specification requirement appears exactly once in the traceability inventory.
-- [ ] Every COVERED claim is supported by a real vector reference.
-- [ ] Every intentional non-directly-testable classification has a clear reason.
-- [ ] Portable Audit actor errors are normatively specified and tested.
+- [x] Every specification requirement appears exactly once in the traceability inventory.
+- [x] Every COVERED claim is supported by a real vector reference.
+- [x] Every intentional non-directly-testable classification has a clear reason.
+- [x] Portable Audit actor errors are normatively specified and tested.
 
 ## 7. Milestone 4 — Reproducible verification and mutation gates
 

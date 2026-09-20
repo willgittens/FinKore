@@ -61,7 +61,7 @@ commitment are outside Core.
 | `finkore.money.applyrate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-RATE-001`–`-009` |
 | `finkore.money.allocate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ALLOCATION-001`–`-014`, `MONEY-ERROR-008` |
 | `finkore.workflow.transition` | Workflow | `yes` | `unspecified` | `yes` | `may` | may be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007`, `WORKFLOW-VERSION-005`–`-012`, `WORKFLOW-CONFLICT-001`–`-008` |
-| `finkore.audit.append` | Audit | `yes` | `no` | `yes` | `required` | `none` | `AUDIT-EVENT-001`–`-005`, `-007`, `-008`, `AUDIT-ACTOR-001`–`-004`, `-007`, `-008`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001` |
+| `finkore.audit.append` | Audit | `yes` | `no` | `yes` | `required` | `none` | `AUDIT-EVENT-001`–`-005`, `-007`, `-008`, `AUDIT-ACTOR-001`–`-004`, `-007`–`-009`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001`, `-004` |
 | `finkore.audit.replace` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
 | `finkore.audit.remove` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
 | `finkore.entity.create` | Entities | `yes` | `unspecified` | `yes` | `may` | `none` | `ENTITY-IDENTITY-001`, `-003`, `ENTITY-LIFECYCLE-001`, `-002`, `-006`, `ENTITY-VALIDATION-001` |
@@ -282,11 +282,16 @@ all existing committed event identities and meanings are preserved.
 `FINKORE_AUDIT_ACTOR_INVALID`, and `FINKORE_AUDIT_DUPLICATE_EVENT`. This
 Stage 1 operation does not perform redaction.
 
+**Error precedence:** Validate supplied history first, then the candidate's
+non-actor representation, supplied actor, duplicate event identity, and finally
+relationships against committed history. The first failing stage determines
+the primary portable error, and failure leaves history unchanged.
+
 **Normative traceability:**
 [AUDIT-EVENT-001 through -005, -007, and -008](../spec/audit/events.md),
-[AUDIT-ACTOR-001 through -004 and -007 through -008](../spec/audit/actors.md),
+[AUDIT-ACTOR-001 through -004 and -007 through -009](../spec/audit/actors.md),
 [AUDIT-APPEND-001 and -003](../spec/audit/append-only.md), and
-[AUDIT-ERROR-001](../spec/audit/errors.md).
+[AUDIT-ERROR-001 and -004](../spec/audit/errors.md).
 
 ## `finkore.audit.replace`
 

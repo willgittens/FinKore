@@ -155,17 +155,23 @@ export class AuditEvent {
    */
   static from(input: unknown): AuditEvent {
     if (!isPlainRecord(input)) throw new InvalidAuditEventError()
+    const eventId = requiredString(input.eventId)
+    const eventType = validateEventType(input.eventType)
+    const entity = validateEntity(input.entity)
+    const occurredAt = validateTimestamp(input.occurredAt)
     const changes = validateChanges(input.changes)
     const relationships = validateRelationships(input.relationships)
+    const metadata = input.metadata === undefined ? undefined : validateMetadata(input.metadata)
+    const actor = input.actor === undefined ? undefined : AuditActor.from(input.actor).toJSON()
     return new AuditEvent({
-      eventId: requiredString(input.eventId),
-      eventType: validateEventType(input.eventType),
-      entity: validateEntity(input.entity),
-      occurredAt: validateTimestamp(input.occurredAt),
-      ...(input.actor === undefined ? {} : { actor: AuditActor.from(input.actor).toJSON() }),
+      eventId,
+      eventType,
+      entity,
+      occurredAt,
+      ...(actor === undefined ? {} : { actor }),
       ...(changes === undefined ? {} : { changes }),
       ...(relationships === undefined ? {} : { relationships }),
-      ...(input.metadata === undefined ? {} : { metadata: validateMetadata(input.metadata) }),
+      ...(metadata === undefined ? {} : { metadata }),
     })
   }
 

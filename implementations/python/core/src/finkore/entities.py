@@ -101,7 +101,10 @@ def transition_entity(definition: Any, entity: Any, target: Any) -> dict[str, An
 
 
 def import_entity(definition: Any, import_value: Any) -> dict[str, Any]:
-    """Validate and preserve an imported Entity observation."""
+    """Validate and preserve an imported Entity observation.
+
+    @see ENTITY-REVISION-007
+    """
 
     entity_definition = validate_definition(definition)
     if not isinstance(import_value, dict):
@@ -114,7 +117,13 @@ def import_entity(definition: Any, import_value: Any) -> dict[str, Any]:
     else:
         mapping = None
     current_revision = _revision(import_value.get("currentRevision"), entity, True) if "currentRevision" in import_value else None
-    historical = [_revision(item, entity, False) for item in import_value.get("historicalRevisions", [])]
+    historical_input = import_value.get("historicalRevisions", [])
+    if not isinstance(historical_input, list):
+        raise FinKoreError(INVALID_IDENTITY)
+    historical = [_revision(item, entity, False) for item in historical_input]
+    revisions = ([current_revision] if current_revision is not None else []) + historical
+    if len({revision["revision"] for revision in revisions}) != len(revisions):
+        raise FinKoreError(INVALID_IDENTITY)
     conflict_version = import_value.get("conflictVersion")
     if conflict_version is not None and not _opaque(conflict_version):
         raise FinKoreError(INVALID_IDENTITY)

@@ -9,6 +9,7 @@
         "AUDIT-EVENT-002",
         "AUDIT-EVENT-004",
         "AUDIT-EVENT-005",
+        "AUDIT-EVENT-007",
         "AUDIT-ACTOR-001"
       ],
       "description": "Appends a complete event with stable identity, entity, actor, and explicit timestamp.",
@@ -132,6 +133,258 @@
       "guardsAgainst": [
         "unknown-actor-identity-invented"
       ]
+    },
+    {
+      "id": "audit.actor.missing-id-001",
+      "spec": "audit/actors",
+      "requirements": [
+        "AUDIT-ACTOR-001",
+        "AUDIT-ACTOR-009",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Rejects a supplied actor without its stable identifier and preserves committed history.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-existing",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": { "type": "expense", "id": "exp-52" },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "event": {
+          "eventId": "evt-missing-actor-id",
+          "eventType": "ENTITY_APPROVED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "type": "user" },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_AUDIT_ACTOR_INVALID" },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-existing",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": { "type": "expense", "id": "exp-52" },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": ["negative", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["missing-actor-id-accepted", "invalid-actor-partially-appended"]
+    },
+    {
+      "id": "audit.actor.empty-id-001",
+      "spec": "audit/actors",
+      "requirements": ["AUDIT-ACTOR-001", "AUDIT-ACTOR-009", "AUDIT-ERROR-001"],
+      "description": "Rejects an empty supplied actor identifier and preserves committed history.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-empty-actor-id",
+          "eventType": "ENTITY_APPROVED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "id": "" },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_AUDIT_ACTOR_INVALID" },
+        "observations": { "history": [] }
+      },
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["empty-actor-id-accepted", "invalid-actor-partially-appended"]
+    },
+    {
+      "id": "audit.actor.malformed-representation-001",
+      "spec": "audit/actors",
+      "requirements": ["AUDIT-ACTOR-009", "AUDIT-ERROR-001"],
+      "description": "Rejects a supplied actor that is not a JSON object and preserves committed history.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-malformed-actor",
+          "eventType": "ENTITY_APPROVED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": "user-7",
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_AUDIT_ACTOR_INVALID" },
+        "observations": { "history": [] }
+      },
+      "tags": ["negative", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["scalar-actor-accepted", "invalid-actor-partially-appended"]
+    },
+    {
+      "id": "audit.actor.invalid-type-001",
+      "spec": "audit/actors",
+      "requirements": ["AUDIT-ACTOR-009", "AUDIT-ERROR-001"],
+      "description": "Rejects a supplied actor whose optional type is not a non-empty string.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-invalid-actor-type",
+          "eventType": "ENTITY_APPROVED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "id": "user-7", "type": 7 },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_AUDIT_ACTOR_INVALID" },
+        "observations": { "history": [] }
+      },
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["invalid-actor-type-accepted", "invalid-actor-partially-appended"]
+    },
+    {
+      "id": "audit.actor.precedence-invalid-event-001",
+      "spec": "audit/errors",
+      "requirements": ["AUDIT-ACTOR-009", "AUDIT-ERROR-001", "AUDIT-ERROR-004"],
+      "description": "Selects invalid event before invalid actor when both candidate representations are malformed.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-invalid-event-and-actor",
+          "eventType": "ENTITY_APPROVED",
+          "entity": { "type": "expense" },
+          "actor": { "type": "user" },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_AUDIT_INVALID_EVENT" },
+        "observations": { "history": [] }
+      },
+      "tags": ["negative", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["actor-error-selected-before-event-error", "invalid-event-partially-appended"]
+    },
+    {
+      "id": "audit.actor.precedence-duplicate-001",
+      "spec": "audit/errors",
+      "requirements": ["AUDIT-ACTOR-009", "AUDIT-ERROR-001", "AUDIT-ERROR-004"],
+      "description": "Selects invalid actor before duplicate identity for a structurally valid candidate.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-duplicate-actor",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": { "type": "expense", "id": "exp-52" },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "event": {
+          "eventId": "evt-duplicate-actor",
+          "eventType": "ENTITY_APPROVED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "type": "user" },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_AUDIT_ACTOR_INVALID" },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-duplicate-actor",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": { "type": "expense", "id": "exp-52" },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": ["negative", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["duplicate-selected-before-actor-error", "invalid-actor-partially-appended"]
+    },
+    {
+      "id": "audit.actor.precedence-relationship-001",
+      "spec": "audit/errors",
+      "requirements": ["AUDIT-APPEND-003", "AUDIT-ERROR-001", "AUDIT-ERROR-004"],
+      "description": "Selects duplicate identity before a history-dependent relationship inconsistency.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-duplicate-relationship",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": { "type": "expense", "id": "exp-52" },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "event": {
+          "eventId": "evt-duplicate-relationship",
+          "eventType": "ENTITY_APPROVED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "occurredAt": "2026-09-01T13:00:00Z",
+          "relationships": [
+            {
+              "relationshipId": "rel-missing-target",
+              "type": "CORRECTS",
+              "target": {
+                "eventId": "evt-missing",
+                "entity": { "type": "expense", "id": "exp-52" }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_AUDIT_DUPLICATE_EVENT" },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-duplicate-relationship",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": { "type": "expense", "id": "exp-52" },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": ["negative", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["relationship-error-selected-before-duplicate", "duplicate-event-partially-appended"]
+    },
+    {
+      "id": "audit.actor.precedence-invalid-history-001",
+      "spec": "audit/errors",
+      "requirements": ["AUDIT-ERROR-004"],
+      "description": "Selects invalid event for malformed supplied history before validating a malformed candidate actor.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": "not-a-history",
+        "event": {
+          "eventId": "evt-invalid-history-precedence",
+          "eventType": "ENTITY_APPROVED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "type": "user" },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_AUDIT_INVALID_EVENT" }
+      },
+      "tags": ["negative", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["candidate-validated-before-history", "malformed-history-reported-as-append-only-violation"]
     },
     {
       "id": "audit.actor.opaque-identity-001",
@@ -425,6 +678,7 @@
       "requirements": [
         "AUDIT-EVENT-001",
         "AUDIT-EVENT-005",
+        "AUDIT-EVENT-007",
         "AUDIT-ERROR-001"
       ],
       "description": "Rejects a missing occurrence timestamp without partially appending.",
@@ -468,6 +722,7 @@
       "spec": "audit/events",
       "requirements": [
         "AUDIT-EVENT-004",
+        "AUDIT-EVENT-007",
         "AUDIT-ERROR-001"
       ],
       "description": "Rejects an entity reference without stable identity.",
@@ -1214,6 +1469,8 @@
       "id": "audit.redaction.preserve-evidence-001",
       "spec": "audit/redaction",
       "requirements": [
+        "AUDIT-APPEND-004",
+        "AUDIT-CHANGE-006",
         "AUDIT-REDACTION-002",
         "AUDIT-REDACTION-003",
         "AUDIT-REDACTION-006",

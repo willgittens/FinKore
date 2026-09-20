@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import unittest
 
-from finkore import FinKoreError, create_entity, mutate_entity, transition_entity
+from finkore import FinKoreError, create_entity, import_entity, mutate_entity, transition_entity
 
 
 DEFINITION = {
@@ -31,6 +31,27 @@ class EntityTests(unittest.TestCase):
     def test_transition_preserves_identity(self) -> None:
         entity = {"type": "invoice", "id": "inv-42", "state": "DRAFT", "data": {"amount": {"amount": "100.00", "currency": "EUR"}}}
         self.assertEqual(transition_entity(DEFINITION, entity, "FINAL")["id"], "inv-42")
+
+    def test_import_rejects_duplicate_revision_observations(self) -> None:
+        entity = {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "FINAL",
+            "data": {"amount": {"amount": "100.00", "currency": "EUR"}},
+        }
+
+        with self.assertRaises(FinKoreError) as context:
+            import_entity(
+                DEFINITION,
+                {
+                    "entity": entity,
+                    "currentRevision": "business-rev-2",
+                    "historicalRevisions": ["business-rev-2"],
+                },
+            )
+
+        self.assertEqual(context.exception.code, "FINKORE_ENTITY_INVALID_IDENTITY")
+        self.assertEqual(entity["data"]["amount"], {"amount": "100.00", "currency": "EUR"})
 
 
 if __name__ == "__main__":

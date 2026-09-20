@@ -89,6 +89,7 @@ public final class Audit {
    * @param metadata optional actor context
    * @see <a href="../../../../../../spec/audit/actors.md">AUDIT-ACTOR-001</a>
    * @see <a href="../../../../../../spec/audit/actors.md">AUDIT-ACTOR-006</a>
+   * @see <a href="../../../../../../spec/audit/actors.md">AUDIT-ACTOR-009</a>
    */
   public record Actor(String id, String type, String displayName, Object metadata) {
     /**
@@ -316,7 +317,6 @@ public final class Audit {
       }
       String occurredAt = requiredString(map.get("occurredAt"), INVALID_EVENT);
       validateTimestamp(occurredAt);
-      Actor actor = map.containsKey("actor") ? Actor.fromPortable(map.get("actor")) : null;
       List<Change> changes = map.containsKey("changes") ? changesFromPortable(map.get("changes")) : null;
       List<Relationship> relationships = map.containsKey("relationships") ? relationshipsFromPortable(map.get("relationships")) : null;
       Object metadata = null;
@@ -330,7 +330,9 @@ public final class Audit {
           }
         }
       }
-      return new Event(eventId, eventType, EntityReference.fromPortable(map.get("entity")), occurredAt, actor, changes, relationships, metadata);
+      EntityReference entity = EntityReference.fromPortable(map.get("entity"));
+      Actor actor = map.containsKey("actor") ? Actor.fromPortable(map.get("actor")) : null;
+      return new Event(eventId, eventType, entity, occurredAt, actor, changes, relationships, metadata);
     }
 
     /**
@@ -454,6 +456,7 @@ public final class Audit {
      * @param history committed event observations
      * @return validated log
      * @throws FinKoreException with audit portable error code
+     * @see <a href="../../../../../../spec/audit/errors.md">AUDIT-ERROR-004</a>
      */
     public static Log create(Object history) {
       if (!(history instanceof List<?> list)) {
@@ -483,6 +486,7 @@ public final class Audit {
      * @param eventValue candidate event
      * @return this log after append
      * @throws FinKoreException with audit portable error code
+     * @see <a href="../../../../../../spec/audit/errors.md">AUDIT-ERROR-004</a>
      */
     public Log append(Object eventValue) {
       Event event = Event.fromPortable(eventValue);

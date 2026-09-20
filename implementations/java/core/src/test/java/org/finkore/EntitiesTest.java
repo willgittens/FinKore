@@ -14,6 +14,7 @@ public final class EntitiesTest {
     mutateRejectsImmutableIdentityWithoutChangingEntity();
     transitionRejectsUnknownTargetAsInvalidTransition();
     validationFailureReportsFindings();
+    importRejectsDuplicateRevisionObservations();
   }
 
   private static void createPreservesOpaqueIdentityAndInitialState() {
@@ -55,6 +56,18 @@ public final class EntitiesTest {
             definition,
             entity,
             Map.of("amount", Map.of("amount", "-1.00", "currency", "EUR"))));
+  }
+
+  private static void importRejectsDuplicateRevisionObservations() {
+    Map<String, Object> entity = entity();
+
+    assertError(Entities.INVALID_IDENTITY, () -> Entities.importEntity(
+        definition(),
+        Map.of(
+            "entity", entity,
+            "currentRevision", "business-rev-2",
+            "historicalRevisions", List.of("business-rev-2"))));
+    assertEquals("initial", ((Map<?, ?>) entity.get("data")).get("memo"));
   }
 
   private static Map<String, Object> definition() {

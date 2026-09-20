@@ -128,6 +128,7 @@ public final class Entities {
    * @param definition portable Entity definition
    * @param importValue import request observation
    * @return portable import result
+   * @see <a href="../../../../../../spec/entities/revisions.md">ENTITY-REVISION-007</a>
    */
   public static Map<String, Object> importEntity(Object definition, Object importValue) {
     Map<String, Object> entityDefinition = validateDefinition(definition);
@@ -148,8 +149,13 @@ public final class Entities {
       for (Object item : listValue(input.get("historicalRevisions"), INVALID_IDENTITY)) {
         historical.add(revision(item, entity, false));
       }
-      ensureUniqueRevisions(historical);
     }
+    List<Map<String, Object>> revisions = new ArrayList<>();
+    if (currentRevision != null) {
+      revisions.add(currentRevision);
+    }
+    revisions.addAll(historical);
+    ensureUniqueRevisions(revisions);
     Object conflictVersion = input.get("conflictVersion");
     if (conflictVersion != null && !opaque(conflictVersion)) {
       throw new FinKoreException(INVALID_IDENTITY);

@@ -30,6 +30,48 @@ class AuditTests(unittest.TestCase):
             append_event([event], event)
         self.assertEqual(context.exception.code, "FINKORE_AUDIT_DUPLICATE_EVENT")
 
+    def test_applies_portable_append_error_precedence_without_mutation(self) -> None:
+        committed = {
+            "eventId": "evt-1042",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {"type": "expense", "id": "exp-52"},
+            "occurredAt": "2026-09-01T12:00:00Z",
+        }
+        base = {
+            "eventId": "evt-1043",
+            "eventType": "ENTITY_APPROVED",
+            "entity": {"type": "expense", "id": "exp-52"},
+            "occurredAt": "2026-09-01T13:00:00Z",
+        }
+        cases = (
+            ({**base, "entity": {"type": "expense"}, "actor": {"type": "user"}}, "FINKORE_AUDIT_INVALID_EVENT"),
+            ({**base, "eventId": "evt-1042", "actor": {"type": "user"}}, "FINKORE_AUDIT_ACTOR_INVALID"),
+            (
+                {
+                    **base,
+                    "eventId": "evt-1042",
+                    "relationships": [
+                        {
+                            "relationshipId": "rel-missing-target",
+                            "type": "CORRECTS",
+                            "target": {
+                                "eventId": "evt-missing",
+                                "entity": {"type": "expense", "id": "exp-52"},
+                            },
+                        }
+                    ],
+                },
+                "FINKORE_AUDIT_DUPLICATE_EVENT",
+            ),
+        )
+        for candidate, expected_code in cases:
+            with self.subTest(expected_code=expected_code):
+                history = [committed]
+                with self.assertRaises(FinKoreError) as context:
+                    append_event(history, candidate)
+                self.assertEqual(context.exception.code, expected_code)
+                self.assertEqual(history, [committed])
+
     def test_enforces_portable_timestamp_profile_without_mutating_history(self) -> None:
         valid = {
             "eventId": "evt-nanoseconds",

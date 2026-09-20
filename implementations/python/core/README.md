@@ -16,7 +16,8 @@ Current status:
   rounding, and allocation are implemented.
 - Workflow definitions, imports, transitions, guards, terminal behavior,
   version binding, and conflict preconditions are implemented.
-- Audit event append, append-only rejection, actor/change validation,
+- Audit event append, append-only rejection, actor/change validation with
+  portable history/event/actor/duplicate/relationship error precedence,
   redaction representations, and relationships are implemented.
 - Approval requirement, decision, condition, chain, lifecycle, and bounded
   composition behavior are implemented.

@@ -18,7 +18,8 @@ Current status:
   version binding, import observations, and conflict preconditions are
   implemented.
 - Audit Events, Actors, Changes, append-only history, redaction
-  representations, and Audit Relationships are implemented.
+  representations, and Audit Relationships are implemented, including
+  portable history/event/actor/duplicate/relationship error precedence.
 - Approval Requirements, Decisions, validity lifecycle, Conditions, Chains, and
   bounded Composition are implemented.
 - Entity identity, lifecycle, mutability, validation, revisions, import, and

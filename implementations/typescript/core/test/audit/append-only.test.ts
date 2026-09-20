@@ -4,6 +4,7 @@ import {
   AuditAppendOnlyViolationError,
   AuditLog,
   DuplicateAuditEventError,
+  InvalidAuditActorError,
   InvalidAuditEventError,
 } from '../../src/index.js'
 
@@ -94,8 +95,35 @@ describe('Audit append-only history', () => {
     expect(log.toJSON()).toEqual({ history: [submitted] })
   })
 
+  it('applies portable append error precedence without mutating history', () => {
+    const log = AuditLog.create([submitted])
+
+    expect(() =>
+      log.append({ ...approved, entity: { type: 'expense' }, actor: { type: 'user' } }),
+    ).toThrow(InvalidAuditEventError)
+    expect(() =>
+      log.append({ ...approved, eventId: submitted.eventId, actor: { type: 'user' } }),
+    ).toThrow(InvalidAuditActorError)
+    expect(() =>
+      log.append({
+        ...approved,
+        eventId: submitted.eventId,
+        relationships: [
+          {
+            relationshipId: 'rel-missing-target',
+            type: 'CORRECTS',
+            target: { eventId: 'evt-missing', entity: approved.entity },
+          },
+        ],
+      }),
+    ).toThrow(DuplicateAuditEventError)
+
+    expect(log.toJSON()).toEqual({ history: [submitted] })
+  })
+
   it('rejects malformed or duplicate imported history', () => {
-    expect(() => AuditLog.create('not-history' as unknown as readonly unknown[])).toThrow(AuditAppendOnlyViolationError)
+    expect(() => AuditLog.create('not-history' as unknown as readonly unknown[])).toThrow(InvalidAuditEventError)
+    expect(() => AuditLog.create({} as unknown as readonly unknown[])).toThrow(InvalidAuditEventError)
     expect(() => AuditLog.create([submitted, { ...approved, eventId: 'evt-1042' }])).toThrow(DuplicateAuditEventError)
     expect(() => AuditLog.create([{ ...submitted, eventId: '' }])).toThrow(InvalidAuditEventError)
   })

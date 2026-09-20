@@ -5,7 +5,8 @@
       "id": "approval.requirement.pending-001",
       "spec": "approvals/requirements",
       "requirements": [
-        "APPROVAL-REQUIREMENT-005"
+        "APPROVAL-REQUIREMENT-005",
+        "APPROVAL-ERROR-003"
       ],
       "description": "An applicable requirement without an effective decision is pending.",
       "operation": "approval.requirement.evaluate",
@@ -206,7 +207,8 @@
       "id": "approval.requirement.rejected-001",
       "spec": "approvals/requirements",
       "requirements": [
-        "APPROVAL-REQUIREMENT-004"
+        "APPROVAL-REQUIREMENT-004",
+        "APPROVAL-ERROR-003"
       ],
       "description": "An eligible rejecting decision rejects its associated requirement.",
       "operation": "approval.requirement.evaluate",

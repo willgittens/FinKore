@@ -29,6 +29,7 @@ function cloneJsonValue<T>(value: T): T {
  * @see AUDIT-ACTOR-003
  * @see AUDIT-ACTOR-007
  * @see AUDIT-ACTOR-008
+ * @see AUDIT-ACTOR-009
  */
 export class AuditActor {
   private readonly value: SerializedAuditActor
@@ -52,6 +53,7 @@ export class AuditActor {
    * @see FINKORE_AUDIT_ACTOR_INVALID
    * @see AUDIT-ACTOR-001
    * @see AUDIT-ACTOR-004
+   * @see AUDIT-ACTOR-009
    */
   static from(input: unknown): AuditActor {
     if (!isPlainRecord(input) || typeof input.id !== 'string' || input.id.length === 0) {

@@ -75,23 +75,19 @@ export class AuditLog {
    * @see AUDIT-RELATIONSHIP-007
    */
   static create(history: readonly unknown[] = []): AuditLog {
-    if (!Array.isArray(history)) throw new AuditAppendOnlyViolationError()
-    const events = history.map((event) => AuditEvent.from(event))
+    if (!Array.isArray(history)) throw new InvalidAuditEventError()
+    const events: AuditEvent[] = []
     const ids = new Set<string>()
-    for (const event of events) {
+    const relationshipIds = new Set<string>()
+    for (const eventInput of history) {
+      const event = AuditEvent.from(eventInput)
       if (ids.has(event.eventId)) throw new DuplicateAuditEventError()
+      const eventsById = new Map(events.map((committed) => [committed.eventId, committed.toJSON()] as const))
+      AuditLog.validateEventRelationships(event, eventsById, relationshipIds)
+      events.push(event)
       ids.add(event.eventId)
     }
-    AuditLog.validateRelationshipsForImportedHistory(events)
     return new AuditLog(events)
-  }
-
-  private static validateRelationshipsForImportedHistory(events: readonly AuditEvent[]): void {
-    const eventsById = new Map(events.map((event) => [event.eventId, event.toJSON()] as const))
-    const relationshipIds = new Set<string>()
-    for (const event of events) {
-      AuditLog.validateEventRelationships(event, eventsById, relationshipIds)
-    }
   }
 
   private static validateEventRelationships(
@@ -112,6 +108,7 @@ export class AuditLog {
   ): void {
     if (relationshipIds.has(relationship.relationshipId)) throw new InvalidAuditEventError()
     relationshipIds.add(relationship.relationshipId)
+    // Stryker disable next-line all: a self-target is also necessarily absent from the previously committed target map and produces the same portable error; retain the explicit check for the named Audit rule.
     if (relationship.target.eventId === sourceEvent.eventId) throw new InvalidAuditEventError()
 
     const targetEvent = targetEvents.get(relationship.target.eventId)
@@ -148,6 +145,8 @@ export class AuditLog {
    * @see AUDIT-APPEND-001
    * @see AUDIT-APPEND-003
    * @see AUDIT-ERROR-001
+   * @see AUDIT-ERROR-004
+   * @see AUDIT-ACTOR-009
    * @see AUDIT-RELATIONSHIP-006
    * @see AUDIT-RELATIONSHIP-012
    */

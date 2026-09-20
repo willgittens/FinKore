@@ -52,9 +52,17 @@ def validate_event(event: Any, committed_events: dict[str, dict[str, Any]], comm
     @see AUDIT-RELATIONSHIP-001
     """
 
+    validated = _validate_event_representation(event)
+    _validate_relationship_context(validated, committed_events, committed_relationships)
+    return validated
+
+
+def _validate_event_representation(event: Any) -> dict[str, Any]:
+    """Validate candidate representation before history-dependent conditions."""
+
     if not isinstance(event, dict):
         raise FinKoreError(INVALID_EVENT)
-    event_id = _event_identity(event)
+    _event_identity(event)
     event_type = event.get("eventType")
     if not isinstance(event_type, str) or _EVENT_TYPE_RE.fullmatch(event_type) is None:
         raise FinKoreError(INVALID_EVENT)
@@ -68,12 +76,12 @@ def validate_event(event: Any, committed_events: dict[str, dict[str, Any]], comm
     metadata = event.get("metadata")
     if isinstance(metadata, dict) and any(key in metadata for key in ("eventId", "eventType", "entity", "actor", "occurredAt", "changes", "relationships")):
         raise FinKoreError(INVALID_EVENT)
-    if "actor" in event:
-        _validate_actor(event["actor"])
     if "changes" in event:
         _validate_changes(event["changes"])
     if "relationships" in event:
-        _validate_relationships(event, entity, committed_events, committed_relationships)
+        _validate_relationship_representation(event, entity)
+    if "actor" in event:
+        _validate_actor(event["actor"])
     return deepcopy(event)
 
 
@@ -86,10 +94,11 @@ def validate_history(history: Any) -> list[dict[str, Any]]:
     relationships: set[str] = set()
     validated: list[dict[str, Any]] = []
     for event in history:
-        event_id = _event_identity(event) if isinstance(event, dict) else None
+        validated_event = _validate_event_representation(event)
+        event_id = validated_event["eventId"]
         if event_id in events:
             raise FinKoreError(DUPLICATE_EVENT)
-        validated_event = validate_event(event, events, relationships)
+        _validate_relationship_context(validated_event, events, relationships)
         events[validated_event["eventId"]] = validated_event
         if isinstance(validated_event.get("relationships"), list):
             relationships.update(_relationship_identity(relationship) for relationship in validated_event["relationships"])
@@ -102,14 +111,17 @@ def append_event(history: Any, event: Any) -> dict[str, list[dict[str, Any]]]:
 
     @see AUDIT-APPEND-001
     @see AUDIT-APPEND-003
+    @see AUDIT-ACTOR-009
+    @see AUDIT-ERROR-004
     """
 
     current = validate_history(history)
-    if _event_identity(event) in {item["eventId"] for item in current}:
+    appended = _validate_event_representation(event)
+    if appended["eventId"] in {item["eventId"] for item in current}:
         raise FinKoreError(DUPLICATE_EVENT)
     events = {item["eventId"]: item for item in current}
     relationships = _relationship_ids(current)
-    appended = validate_event(event, events, relationships)
+    _validate_relationship_context(appended, events, relationships)
     return {"history": [*current, appended]}
 
 
@@ -151,9 +163,10 @@ def redact_history(history: Any, policy: Any, redaction_event: Any) -> dict[str,
     current = validate_history(history)
     protected_paths = _protected_paths(policy)
     events = {item["eventId"]: item for item in current}
-    evidence = validate_event(redaction_event, events, _relationship_ids(current))
+    evidence = _validate_event_representation(redaction_event)
     if evidence["eventId"] in events:
         raise FinKoreError(DUPLICATE_EVENT)
+    _validate_relationship_context(evidence, events, _relationship_ids(current))
     target = _redaction_target(current, protected_paths)
     if target is None:
         raise FinKoreError(REDACTION_INVALID)
@@ -178,7 +191,7 @@ def _validate_changes(changes: Any) -> None:
             raise FinKoreError(INVALID_EVENT)
 
 
-def _validate_relationships(event: dict[str, Any], entity: dict[str, str], events: dict[str, dict[str, Any]], relationships: set[str]) -> None:
+def _validate_relationship_representation(event: dict[str, Any], entity: dict[str, str]) -> None:
     raw_relationships = event.get("relationships")
     if not isinstance(raw_relationships, list) or len(raw_relationships) == 0:
         raise FinKoreError(INVALID_EVENT)
@@ -187,7 +200,7 @@ def _validate_relationships(event: dict[str, Any], entity: dict[str, str], event
         if not isinstance(relationship, dict):
             raise FinKoreError(INVALID_EVENT)
         relationship_id = _relationship_identity(relationship)
-        if relationship_id in seen or relationship_id in relationships:
+        if relationship_id in seen:
             raise FinKoreError(INVALID_EVENT)
         seen.add(relationship_id)
         if relationship.get("type") not in _RELATIONSHIP_TYPES:
@@ -198,14 +211,25 @@ def _validate_relationships(event: dict[str, Any], entity: dict[str, str], event
         if target["eventId"] == event["eventId"]:
             raise FinKoreError(INVALID_EVENT)
         target_entity = _entity(target.get("entity"))
-        target_event = events.get(target["eventId"])
-        if target_entity is None or target_event is None or target_entity != _entity(target_event.get("entity")):
-            raise FinKoreError(INVALID_EVENT)
-        if target_entity != _entity(target.get("entity")):
-            raise FinKoreError(INVALID_EVENT)
-        if target_entity is None or "entity" not in target:
+        if target_entity is None:
             raise FinKoreError(INVALID_EVENT)
         if entity is None:
+            raise FinKoreError(INVALID_EVENT)
+
+
+def _validate_relationship_context(
+    event: dict[str, Any],
+    events: dict[str, dict[str, Any]],
+    relationships: set[str],
+) -> None:
+    for relationship in event.get("relationships", []):
+        relationship_id = _relationship_identity(relationship)
+        if relationship_id in relationships:
+            raise FinKoreError(INVALID_EVENT)
+        target = relationship["target"]
+        target_entity = _entity(target["entity"])
+        target_event = events.get(target["eventId"])
+        if target_entity is None or target_event is None or target_entity != _entity(target_event.get("entity")):
             raise FinKoreError(INVALID_EVENT)
 
 

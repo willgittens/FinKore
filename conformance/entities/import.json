@@ -180,7 +180,7 @@
     {
       "id": "entity.import.expected-revision-conflict-001",
       "spec": "entities/import",
-      "requirements": ["ENTITY-REVISION-006", "ENTITY-IMPORT-006", "ENTITY-IMPORT-007", "ENTITY-IMPORT-008"],
+      "requirements": ["ENTITY-REVISION-002", "ENTITY-REVISION-006", "ENTITY-IMPORT-006", "ENTITY-IMPORT-007", "ENTITY-IMPORT-008"],
       "description": "Rejects an import whose expected business revision does not match the supplied current revision.",
       "operation": "entity.import",
       "input": {
@@ -225,7 +225,7 @@
     {
       "id": "entity.import.expected-conflict-version-conflict-001",
       "spec": "entities/import",
-      "requirements": ["ENTITY-REVISION-006", "ENTITY-IMPORT-006", "ENTITY-IMPORT-007", "ENTITY-IMPORT-008"],
+      "requirements": ["ENTITY-REVISION-002", "ENTITY-REVISION-006", "ENTITY-IMPORT-006", "ENTITY-IMPORT-007", "ENTITY-IMPORT-008"],
       "description": "Rejects an import whose expected conflict version does not match while the business revision does match.",
       "operation": "entity.import",
       "input": {
@@ -267,6 +267,50 @@
       },
       "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
       "guardsAgainst": ["business-revision-used-as-conflict-version"]
+    },
+    {
+      "id": "entity.import.duplicate-revision-invalid-identity-001",
+      "spec": "entities/revisions",
+      "requirements": ["ENTITY-REVISION-007", "ENTITY-IMPORT-008"],
+      "description": "Rejects duplicate current and historical Entity Revision observations without returning a partial import.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": ["DRAFT", "SUBMITTED"],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [{ "source": "DRAFT", "target": "SUBMITTED" }]
+          },
+          "mutability": { "DRAFT": ["amount"], "SUBMITTED": ["memo"] }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": { "amount": { "amount": "100.00", "currency": "EUR" } }
+          },
+          "currentRevision": "business-rev-2",
+          "historicalRevisions": ["business-rev-2"]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_ENTITY_INVALID_IDENTITY" },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": { "amount": { "amount": "100.00", "currency": "EUR" } }
+          }
+        }
+      },
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["duplicate-business-revision-accepted", "partial-import-returned"]
     }
   ]
 }
