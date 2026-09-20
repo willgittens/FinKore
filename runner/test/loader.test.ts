@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-import { mkdir, writeFile } from 'node:fs/promises'
+import { mkdir, unlink, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { loadConformance } from '../src/loader.js'
@@ -30,7 +30,7 @@ describe('manifest-driven loading', () => {
     await expect(loadConformance(fixture.manifestPath, metadata)).rejects.toThrow('Cannot read valid JSON')
   })
 
-  it.each(['../escape.json', '/tmp/escape.json', '.'])('rejects unsafe vector path %s', async (path) => {
+  it.each(['..', '../escape.json', '/tmp/escape.json', '.'])('rejects unsafe vector path %s', async (path) => {
     const fixture = await createFixtureConformance([], {
       finkoreConformance: '0.1',
       vectorSchema: './schema.json',
@@ -75,5 +75,35 @@ describe('manifest-driven loading', () => {
     const loaded = await loadConformance(fixture.manifestPath)
     expect(loaded.metadata.requirementIds.has('MONEY-ARITHMETIC-001')).toBe(true)
     expect(loaded.metadata.criticalRequirementIds.has('MONEY-ARITHMETIC-001')).toBe(true)
+  })
+
+  it('classifies missing and invalid default metadata as metadata infrastructure failures', async () => {
+    const invalid = await createFixtureConformance()
+    await writeFile(join(invalid.root, 'traceability.md'), '# no requirements')
+    await expect(loadConformance(invalid.manifestPath)).rejects.toMatchObject({ kind: 'METADATA' })
+
+    const missing = await createFixtureConformance()
+    await unlink(join(missing.root, 'traceability.md'))
+    await expect(loadConformance(missing.manifestPath)).rejects.toMatchObject({
+      kind: 'METADATA',
+      path: join(missing.root, 'traceability.md'),
+    })
+  })
+
+  it('retains manifest and vector failure categories and paths', async () => {
+    const malformedManifest = await createFixtureConformance()
+    await writeFile(malformedManifest.manifestPath, '{')
+    await expect(loadConformance(malformedManifest.manifestPath, metadata)).rejects.toMatchObject({
+      kind: 'MANIFEST',
+      path: malformedManifest.manifestPath,
+    })
+
+    const malformedVector = await createFixtureConformance()
+    const vectorPath = join(malformedVector.root, 'suite', 'vectors.json')
+    await writeFile(vectorPath, '{')
+    await expect(loadConformance(malformedVector.manifestPath, metadata)).rejects.toMatchObject({
+      kind: 'VECTOR',
+      path: vectorPath,
+    })
   })
 })

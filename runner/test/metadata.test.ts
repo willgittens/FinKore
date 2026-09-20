@@ -4,6 +4,46 @@ import { AGENTIC_OPERATION_IDS, CONFORMANCE_OPERATION_IDS, parseTraceabilityMeta
 
 describe('metadata', () => {
   it('keeps canonical Agentic ids distinct from local conformance operations', () => {
+    expect([...AGENTIC_OPERATION_IDS]).toStrictEqual([
+      'finkore.money.add',
+      'finkore.money.subtract',
+      'finkore.money.negate',
+      'finkore.money.multiply',
+      'finkore.money.divide',
+      'finkore.money.compare',
+      'finkore.money.round',
+      'finkore.money.applyrate',
+      'finkore.money.allocate',
+      'finkore.workflow.transition',
+      'finkore.audit.append',
+      'finkore.audit.replace',
+      'finkore.audit.remove',
+      'finkore.entity.create',
+      'finkore.entity.mutate',
+      'finkore.entity.transition',
+      'finkore.entity.evolution.correct',
+      'finkore.entity.evolution.reverse',
+      'finkore.entity.evolution.supersede',
+      'finkore.entity.evolution.void',
+    ])
+    expect([...CONFORMANCE_OPERATION_IDS]).toStrictEqual([
+      ...AGENTIC_OPERATION_IDS,
+      'money.deserialize',
+      'money.serialize',
+      'workflow.create',
+      'workflow.import',
+      'entity.import',
+      'audit.redact',
+      'approval.requirement.evaluate',
+      'approval.requirement.supersede',
+      'approval.decision.record',
+      'approval.decision.evaluate',
+      'approval.decision.supersede',
+      'approval.decision.withdraw',
+      'approval.condition.evaluate',
+      'approval.chain.evaluate',
+      'approval.composition.evaluate',
+    ])
     expect(AGENTIC_OPERATION_IDS.has('finkore.money.add')).toBe(true)
     expect(AGENTIC_OPERATION_IDS.has('finkore.money.negate')).toBe(true)
     expect(AGENTIC_OPERATION_IDS.has('finkore.money.multiply')).toBe(true)
@@ -72,6 +112,20 @@ describe('metadata', () => {
     ].join('\n'))
     expect([...parsed.requirementIds]).toEqual(['MONEY-A-001', 'MONEY-B-001'])
     expect([...parsed.criticalRequirementIds]).toEqual(['MONEY-A-001'])
+  })
+
+  it('accepts compact valid rows and ignores malformed requirement-shaped rows', () => {
+    const parsed = parseTraceabilityMetadata([
+      '|MONEY-ARITHMETIC-001| compact |',
+      'x| MONEY-LEADING-001 | prefixed |',
+      '| money-LOWER-001 | lowercase |',
+      '| X-A-01 | short digits |',
+      '| X-A-001x | trailing identifier text |',
+      '| 1-A-001 | invalid prefix |',
+      '| MONEY-ARITHMETIC-0001 | long digits |',
+    ].join('\n'))
+    expect([...parsed.requirementIds]).toStrictEqual(['MONEY-ARITHMETIC-001'])
+    expect([...parsed.criticalRequirementIds]).toStrictEqual([])
   })
 
   it('rejects metadata without requirement rows', () => {

@@ -189,10 +189,13 @@ describe('Audit redaction', () => {
       null,
       'not-a-request',
       { policy: { id: '', protectedPaths: ['bankAccount'], authority: 'retention-policy' }, redactionEvent },
+      { policy: { id: 4, protectedPaths: ['bankAccount'], authority: 'retention-policy' }, redactionEvent },
       { policy: { id: 'p', protectedPaths: [], authority: 'retention-policy' }, redactionEvent },
+      { policy: { id: 'p', protectedPaths: [4], authority: 'retention-policy' }, redactionEvent },
       { policy: { id: 'p', protectedPaths: ['unknown'], authority: 'retention-policy' }, redactionEvent },
       { policy: { id: 'p', protectedPaths: ['bankAccount', 'unknown'], authority: 'retention-policy' }, redactionEvent },
       { policy: { id: 'p', protectedPaths: ['bankAccount'], authority: '' }, redactionEvent },
+      { policy: { id: 'p', protectedPaths: ['bankAccount'], authority: 4 }, redactionEvent },
     ]) {
       const log = AuditLog.create([protectedEvent])
       expect(() => log.redact(badRequest as never)).toThrow(InvalidAuditRedactionError)
@@ -207,6 +210,49 @@ describe('Audit redaction', () => {
     expect(() => alreadyRedacted.redact({ policy, redactionEvent })).toThrow(InvalidAuditRedactionError)
     expect(alreadyRedacted.toJSON()).toEqual({
       history: [{ ...protectedEvent, changes: [{ path: 'bankAccount', before: { presence: 'REDACTED' }, after: 'DE222' }] }],
+    })
+  })
+
+  it('rejects protected targets without retained content or optional actor context', () => {
+    const { actor: _actor, ...eventWithoutActor } = protectedEvent
+    const pathOnlyEvent = {
+      ...protectedEvent,
+      eventId: 'evt-path-only',
+      changes: [{ path: 'bankAccount' }],
+    }
+    const pathOnly = AuditLog.create([pathOnlyEvent])
+    expect(() => pathOnly.redact({ policy, redactionEvent })).toThrow(InvalidAuditRedactionError)
+    expect(pathOnly.toJSON()).toEqual({ history: [pathOnlyEvent] })
+
+    for (const event of [
+      { ...eventWithoutActor, eventId: 'evt-no-actor' },
+      { ...protectedEvent, eventId: 'evt-no-actor-metadata', actor: { type: 'user', id: 'user-7' } },
+    ]) {
+      const log = AuditLog.create([event])
+      expect(() => log.redact({
+        policy: { id: 'actor-metadata', protectedPaths: ['actor.metadata'], authority: 'retention-policy' },
+        redactionEvent,
+      })).toThrow(InvalidAuditRedactionError)
+      expect(log.toJSON()).toEqual({ history: [event] })
+    }
+  })
+
+  it('redacts only the actor context named by the policy', () => {
+    const event = {
+      ...protectedEvent,
+      eventId: 'evt-one-actor-field',
+      actor: { type: 'user', id: 'user-7', displayName: 'Ada', metadata: { team: 'finance' } },
+    }
+    const log = AuditLog.create([event])
+
+    expect(log.redact({
+      policy: { id: 'display-name-only', protectedPaths: ['actor.displayName'], authority: 'retention-policy' },
+      redactionEvent,
+    }).event.actor).toStrictEqual({
+      type: 'user',
+      id: 'user-7',
+      displayName: { presence: 'REDACTED' },
+      metadata: { team: 'finance' },
     })
   })
 })

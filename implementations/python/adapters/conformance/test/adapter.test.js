@@ -7,7 +7,7 @@ import test from 'node:test'
 
 import { createPythonConformanceAdapter } from '../adapter.js'
 
-const pythonPath = '.tools/bin/python3.12'
+const pythonPath = process.env.FINKORE_PYTHON_PATH ?? '.tools/bin/python3.12'
 const bridgePath = 'implementations/python/adapters/conformance/bridge.py'
 
 test('discovers supported Python operations without claiming unsupported labels', () => {

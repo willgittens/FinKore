@@ -12,7 +12,7 @@ describe('Currency', () => {
   })
 
   it('rejects missing, empty, lowercase, and ambiguous identifiers', () => {
-    for (const value of [undefined, '', 'eur', 'EURO', 'EU', 978]) {
+    for (const value of [undefined, '', 'eur', 'EURO', 'EU', 978, { toString: () => 'EUR' }]) {
       expect(() => Currency.of(value)).toThrow(InvalidCurrencyError)
     }
   })
@@ -22,5 +22,6 @@ describe('Currency', () => {
     expect(isValidCurrencyIdentifier('eur')).toBe(false)
     expect(isValidCurrencyIdentifier('EURO')).toBe(false)
     expect(isValidCurrencyIdentifier(undefined)).toBe(false)
+    expect(isValidCurrencyIdentifier({ toString: () => 'EUR' })).toBe(false)
   })
 })

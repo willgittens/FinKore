@@ -245,9 +245,25 @@ are COVERED and 84 are NOT DIRECTLY TESTABLE with an explicit rationale.
 
 ## 7. Milestone 4 — Reproducible verification and mutation gates
 
+Completed: 2026-09-20
+
+Decision: `npm run verify` is the single complete local release workflow. It
+bootstraps missing repository-local toolchains, checks the Node release line,
+runs CPython 3.12 and 3.13, executes every vector against all implementations,
+builds and inspects local package artifacts, runs coverage, runs both full
+Stryker suites, and finishes with the targeted Python and Java critical mutant
+probes. The supported Node claim is narrowed to `>=24.11.0 <25`, the line
+actually exercised by the release workflow. A fresh clone rehearsal completed
+with Node 24.15.0, CPython 3.12.14 and 3.13.15, JDK 21.0.12.1, and Maven 3.9.9.
+Runner mutation passed at 96.90 percent and TypeScript mutation passed at 96.17
+percent; all 36 targeted Python and Java critical mutants were killed. Surviving
+Stryker mutants were classified as non-normative diagnostic changes or
+equivalent/unreachable transformations behind already validated invariants; no
+survivor changes portable financial behavior.
+
 ### 7.1 Aggregate verification
 
-- [ ] Make the documented release workflow execute, directly or through a clearly documented second command:
+- [x] Make the documented release workflow execute, directly or through a clearly documented second command:
   - strict builds;
   - unit tests;
   - coverage;
@@ -256,30 +272,30 @@ are COVERED and 84 are NOT DIRECTLY TESTABLE with an explicit rationale.
   - TypeScript implementation mutation testing;
   - targeted Python and Java critical mutation checks;
   - documentation, architecture, package, and license checks.
-- [ ] Keep fast developer checks separate if necessary, but make the release command complete and unambiguous.
+- [x] Keep fast developer checks separate if necessary, but make the release command complete and unambiguous.
 
 ### 7.2 Mutation scope
 
-- [ ] Review every mutation include and exclude rule.
-- [ ] Bring audit redaction and other meaningful financial behavior into mutation scope, or add a narrow equivalent-mutant justification.
-- [ ] Classify surviving mutants by financial criticality rather than aggregate score alone.
-- [ ] Add tests that kill all critical survivors.
-- [ ] Extend targeted Python and Java mutants for timestamp precision, allocation range, and Audit actor validation.
+- [x] Review every mutation include and exclude rule.
+- [x] Bring audit redaction and other meaningful financial behavior into mutation scope, or add a narrow equivalent-mutant justification.
+- [x] Classify surviving mutants by financial criticality rather than aggregate score alone.
+- [x] Add tests that kill all critical survivors.
+- [x] Extend targeted Python and Java mutants for timestamp precision, allocation range, and Audit actor validation.
 
 ### 7.3 Toolchain matrix
 
-- [ ] Run the Python suite on CPython 3.12.
-- [ ] Run the compatibility suite on CPython 3.13.
-- [ ] Run Java work with JDK 21 and Maven 3.9.x.
-- [ ] Verify every Node version claimed by package engine metadata, or narrow the claim before release.
-- [ ] Make tool bootstrap and tool checks reproducible from a clean checkout.
+- [x] Run the Python suite on CPython 3.12.
+- [x] Run the compatibility suite on CPython 3.13.
+- [x] Run Java work with JDK 21 and Maven 3.9.x.
+- [x] Verify every Node version claimed by package engine metadata, or narrow the claim before release.
+- [x] Make tool bootstrap and tool checks reproducible from a clean checkout.
 
 ### 7.4 Completion criteria
 
-- [ ] The complete release workflow passes from a clean checkout.
-- [ ] Runner and TypeScript mutation scores remain at least 95 percent.
-- [ ] No critical financial mutant survives in any implementation.
-- [ ] Required Python, Java, Maven, and Node compatibility claims are demonstrated by the release workflow.
+- [x] The complete release workflow passes from a clean checkout.
+- [x] Runner and TypeScript mutation scores remain at least 95 percent.
+- [x] No critical financial mutant survives in any implementation.
+- [x] Required Python, Java, Maven, and Node compatibility claims are demonstrated by the release workflow.
 
 ## 8. Milestone 5 — Documentation and release hygiene
 

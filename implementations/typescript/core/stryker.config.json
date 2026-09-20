@@ -2,14 +2,19 @@
   "$schema": "../../../../node_modules/@stryker-mutator/core/schema/stryker-schema.json",
   "testRunner": "vitest",
   "mutate": [
+    "src/money/currency.ts",
+    "src/money/errors.ts",
     "src/money/money.ts",
-    "src/money/types.ts:34-74",
+    "src/money/serialization.ts",
     "src/workflow/definition.ts",
+    "src/workflow/errors.ts",
     "src/workflow/workflow.ts",
     "src/audit/actor.ts",
     "src/audit/audit-change.ts",
     "src/audit/audit-event.ts",
     "src/audit/audit-log.ts",
+    "src/audit/audit-redaction.ts",
+    "src/audit/errors.ts",
     "src/entities/entity-evolution.ts",
     "src/entities/entity.ts",
     "src/entities/errors.ts",
@@ -19,6 +24,7 @@
     "src/approvals/approval-decision.ts",
     "src/approvals/approval-decision-history.ts",
     "src/approvals/approval-requirement.ts",
+    "src/approvals/errors.ts",
     "src/portable-timestamp.ts"
   ],
   "testFiles": [

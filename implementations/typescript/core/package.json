@@ -27,7 +27,7 @@
     "test:mutation": "stryker run"
   },
   "engines": {
-    "node": "^22.18.0 || >=24.11.0"
+    "node": ">=24.11.0 <25"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

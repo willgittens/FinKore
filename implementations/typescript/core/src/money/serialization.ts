@@ -2,7 +2,9 @@
 import { InvalidMoneyAmountError } from './errors.js'
 import type { SerializedMoney } from './types.js'
 
+// Stryker disable all: Vitest imports this static regex before mutant activation; exact decimal syntax boundaries are covered by Money representation tests.
 const PLAIN_DECIMAL = /^-?\d+(?:\.\d+)?$/u
+// Stryker restore all
 
 /**
  * Validates a FinKore serialized Money amount without converting through

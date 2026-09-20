@@ -5,9 +5,31 @@ import { metadata, validVector } from './helpers.js'
 
 describe('vector validation', () => {
   it('accepts valid success and error vectors', () => {
-    expect(validateVector(validVector, metadata)).toEqual(validVector)
+    expect(validateVector(validVector, metadata)).toStrictEqual(validVector)
     const error = { ...validVector, expected: { status: 'error', error: { code: 'FINKORE_MONEY_BAD_INPUT' } }, tags: ['negative'] }
-    expect(validateVector(error, metadata).expected).toEqual(error.expected)
+    expect(validateVector(error, metadata).expected).toStrictEqual(error.expected)
+  })
+
+  it('accepts every declared tag and compact valid identifier boundary', () => {
+    const vector = {
+      ...validVector,
+      id: 'm.a',
+      tags: ['positive', 'negative', 'boundary', 'invariant', 'regression', 'mutation-sensitive'],
+    }
+    expect(validateVector(vector, metadata)).toStrictEqual(vector)
+  })
+
+  it('preserves observations on portable error expectations', () => {
+    const vector = {
+      ...validVector,
+      expected: {
+        status: 'error',
+        error: { code: 'FINKORE_MONEY_BAD_INPUT' },
+        observations: { state: 'unchanged' },
+      },
+      tags: ['negative'],
+    }
+    expect(validateVector(vector, metadata).expected).toStrictEqual(vector.expected)
   })
 
   it('preserves optional validated fields exactly when present', () => {
@@ -20,6 +42,8 @@ describe('vector validation', () => {
     [{ ...validVector, id: undefined }, 'invalid id'],
     [{ ...validVector, id: 4 }, 'invalid id'],
     [{ ...validVector, id: ['money.add.basic-001'] }, 'invalid id'],
+    [{ ...validVector, id: '!money.add.basic-001' }, 'invalid id'],
+    [{ ...validVector, id: 'money.add.basic-001!' }, 'invalid id'],
     [{ ...validVector, spec: '../money' }, 'spec reference'],
     [{ ...validVector, spec: 4 }, 'spec reference'],
     [{ ...validVector, spec: ['money/arithmetic'] }, 'spec reference'],
@@ -75,7 +99,10 @@ describe('vector validation', () => {
   })
 
   it('validates vector file version and contents', () => {
-    expect(validateVectorFile({ finkoreVectorFile: '0.1', vectors: [validVector] }, metadata, 'x').vectors).toHaveLength(1)
+    expect(validateVectorFile({ finkoreVectorFile: '0.1', vectors: [validVector] }, metadata, 'x')).toStrictEqual({
+      finkoreVectorFile: '0.1',
+      vectors: [validVector],
+    })
     expect(() => validateVectorFile(null, metadata, 'x')).toThrow('Vector file must be an object')
     expect(() => validateVectorFile({ finkoreVectorFile: '0.1', vectors: null }, metadata, 'x')).toThrow('vectors array')
     expect(() => validateVectorFile({ finkoreVectorFile: '0.2', vectors: [validVector] }, metadata, 'x')).toThrow('version')

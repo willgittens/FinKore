@@ -4,6 +4,9 @@
   "private": true,
   "license": "MPL-2.0",
   "type": "module",
+  "engines": {
+    "node": ">=24.11.0 <25"
+  },
   "workspaces": [
     "runner",
     "implementations/typescript/core",
@@ -15,14 +18,19 @@
     "test": "npm run test --workspaces",
     "conformance:typescript": "node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/typescript/adapters/conformance/dist/adapter.js",
     "conformance:python": "node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/python/adapters/conformance/adapter.js",
+    "conformance:python:3.13": "FINKORE_PYTHON_PATH=.tools/bin/python3.13 node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/python/adapters/conformance/adapter.js",
     "conformance:java": "npm run java:compile && node runner/dist/cli/cli.js --manifest conformance/manifest.json --adapter implementations/java/adapters/conformance/adapter.js",
     "conformance": "npm run conformance:typescript && npm run conformance:python && npm run conformance:java",
     "python:unit": "PYTHONPATH=implementations/python/core/src .tools/bin/python3.12 -m unittest discover -s implementations/python/core/tests",
+    "python:unit:3.13": "PYTHONPATH=implementations/python/core/src .tools/bin/python3.13 -m unittest discover -s implementations/python/core/tests",
     "python:compile": "PYTHONPATH=implementations/python/core/src .tools/bin/python3.12 -m compileall -q implementations/python/core/src implementations/python/adapters/conformance implementations/python/core/tests",
-    "python:coverage:setup": ".tools/bin/python3.12 -m venv .tools/python-coverage && .tools/python-coverage/bin/python -m pip install -e 'implementations/python/core[coverage]'",
-    "python:coverage": "node docs/tools/coverage-python.js",
+    "python:compile:3.13": "PYTHONPATH=implementations/python/core/src .tools/bin/python3.13 -m compileall -q implementations/python/core/src implementations/python/adapters/conformance implementations/python/core/tests",
+    "python:coverage:setup": ".tools/bin/python3.12 -m venv .tools/python-coverage && .tools/python-coverage/bin/python -m pip install 'setuptools>=69' && .tools/python-coverage/bin/python -m pip install --no-build-isolation -e 'implementations/python/core[coverage]'",
+    "python:coverage": "npm run python:coverage:setup && node docs/tools/coverage-python.js",
     "python:mutation:critical": "node docs/tools/mutation-critical.js python",
     "python:adapter:test": "node --test implementations/python/adapters/conformance/test/*.test.js",
+    "python:adapter:test:3.13": "FINKORE_PYTHON_PATH=.tools/bin/python3.13 node --test implementations/python/adapters/conformance/test/*.test.js",
+    "python:compat": "npm run python:compile:3.13 && npm run python:unit:3.13 && npm run python:adapter:test:3.13 && npm run conformance:python:3.13",
     "java:compile": "node docs/tools/compile-java.js",
     "java:test": "npm run java:compile && node docs/tools/test-java.js",
     "java:coverage": ".tools/bin/mvn -f implementations/java/core/pom.xml clean verify",
@@ -32,10 +40,12 @@
     "architecture:check": "node docs/tools/check-architecture.js",
     "tools:bootstrap": "node docs/tools/bootstrap-toolchains.js",
     "tools:check": "node docs/tools/bootstrap-toolchains.js --check",
+    "node:check": "node docs/tools/check-node-version.js",
+    "package:check": "npm run build && npm run python:coverage:setup && node docs/tools/check-packages.js",
     "traceability:check": "node docs/tools/check-traceability.js",
     "docs:check": "node docs/tools/check-doc-links.js && node docs/tools/check-traceability.js",
     "license:check": "node docs/tools/check-license.js",
     "check": "npm run build && npm run typecheck && npm test && npm run python:compile && npm run python:unit && npm run python:adapter:test && npm run java:test && npm run java:adapter:test && npm run architecture:check && npm run docs:check && npm run license:check && git diff --check",
-    "verify": "npm run tools:check && npm run check && npm run conformance && npm run test:coverage -w @finkore/conformance-runner && npm run test:coverage -w @finkore/typescript && npm run python:coverage && npm run java:coverage && npm run mutation:critical"
+    "verify": "npm run tools:bootstrap && npm run tools:check && npm run node:check && npm run check && npm run python:compat && npm run conformance && npm run test:coverage -w @finkore/conformance-runner && npm run test:coverage -w @finkore/typescript && npm run python:coverage && npm run java:coverage && npm run package:check && npm run test:mutation -w @finkore/conformance-runner && npm run test:mutation -w @finkore/typescript && npm run mutation:critical"
   }
 }
