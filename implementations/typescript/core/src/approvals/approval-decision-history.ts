@@ -316,20 +316,25 @@ export class ApprovalDecisionHistory {
   /**
    * Evaluates one Requirement against committed or supplied Decisions.
    *
- * Decisions associated with other Requirements are ignored. Matching Decisions
- * must be valid for the Requirement and must remain effective for the supplied
- * current facts when current facts are available. Historical Decisions whose
- * relevant subject facts no longer match are preserved but do not satisfy or
- * reject the Requirement for current evaluation. An applicable Requirement with
- * no effective Decision remains `PENDING`.
+   * Decisions associated with other Requirements are ignored. Matching Decisions
+   * must be valid for the Requirement and must remain effective for the supplied
+   * current facts when current facts are available. A Decision with an expiration
+   * timestamp requires an explicit portable evaluation timestamp and is
+   * ineffective when that instant is equal to or later than its expiration.
+   * Comparison is exact through nine fractional digits and never reads ambient
+   * time. Historical Decisions that are stale or expired remain preserved. An
+   * applicable Requirement with no effective Decision remains `PENDING`.
    *
    * @param requirementInput - Requirement to evaluate.
-   * @param options - Optional current subject facts and relevant fact paths.
+   * @param options - Optional current facts and paths, plus explicit evaluation
+   * time when expiration applies.
    * @returns Requirement state derived from effective associated Decisions.
    * @throws {InvalidApprovalDecisionError}
    * When a matching Decision is malformed or identifies inconsistent state.
    * @throws {IneligibleApprovalActorError}
    * When a matching Decision's Actor is not eligible for the Requirement.
+   * @throws {InvalidApprovalContextError}
+   * When an expiring Decision has no valid explicit evaluation timestamp.
    *
    * @see APPROVAL-REQUIREMENT-004
    * @see APPROVAL-REQUIREMENT-005
@@ -338,7 +343,13 @@ export class ApprovalDecisionHistory {
    * @see APPROVAL-DECISION-003
    * @see APPROVAL-DECISION-004
    * @see APPROVAL-DECISION-007
+   * @see APPROVAL-VALIDITY-001
+   * @see APPROVAL-VALIDITY-007
+   * @see APPROVAL-VALIDITY-008
+   * @see APPROVAL-VALIDITY-009
+   * @see APPROVAL-VALIDITY-012
    * @see APPROVAL-ERROR-005
+   * @see SPEC-TIMESTAMP-005
    */
   evaluateRequirement(
     requirementInput: unknown,

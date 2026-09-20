@@ -72,7 +72,6 @@ if (!licenseText.startsWith('Mozilla Public License Version 2.0\n')) {
 for (const path of [
   'package.json',
   'runner/package.json',
-  'runner/package.json.orig',
   'implementations/typescript/core/package.json',
   'implementations/typescript/adapters/conformance/package.json',
 ]) {

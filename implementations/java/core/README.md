@@ -55,16 +55,18 @@ uses portable JSON-shaped `Map` and `List` observations for non-Money domains;
 those shapes follow the conformance vectors and specification, not Java object
 identity.
 
-This package requires JDK 21. Money amounts use `BigDecimal` from plain decimal
-strings. Portable allocation scales are bounded by `50`, equal-part counts by
-`100`, and ratios by `9007199254740991`. Money rounding scales
-must fit Java `int` as an implementation-specific `BigDecimal` constraint.
+This package requires JDK 21 and its release workflow uses Maven 3.9.x. Money
+amounts use `BigDecimal` from plain decimal strings. Portable allocation scales
+are bounded by `50`, equal-part counts by `100`, and ratios by
+`9007199254740991`. Money rounding scales must fit Java `int` as an
+implementation-specific `BigDecimal` constraint.
 
 The JAR intentionally includes compiled `org.finkore` classes plus
 `META-INF/LICENSE`, `META-INF/NOTICE.md`, `META-INF/THIRD_PARTY_LICENSES.md`,
 and `META-INF/finkore-core.properties`. Tests, coverage data, generated
 reports, repository-local toolchains, and build outputs are not packaged in the
-runtime JAR.
+runtime JAR. The release package gate installs the JAR into an isolated Maven
+repository, compiles an external consumer against it, and runs that consumer.
 
 Run the current local checks from the repository root:
 

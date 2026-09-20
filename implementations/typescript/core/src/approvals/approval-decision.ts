@@ -113,9 +113,10 @@ function jsonEquivalent(left: unknown, right: unknown): boolean {
  *
  * A Decision identifies exactly one Approval Requirement, one deciding Actor,
  * one `APPROVED` or `REJECTED` outcome, one unambiguous timestamp, and the
- * subject facts or state against which it was made. This class does not define
- * withdrawal, supersession, delegation, expiration, escalation, audit
- * integration, or persistence.
+ * subject facts or state against which it was made. It validates an optional
+ * expiration timestamp; Approval Decision history evaluates that timestamp
+ * against explicit context. This class does not define withdrawal,
+ * supersession, delegation, escalation, audit integration, or persistence.
  *
  * @see APPROVAL-DECISION-001
  * @see APPROVAL-DECISION-002
@@ -145,8 +146,11 @@ export class ApprovalDecision {
    * @see APPROVAL-DECISION-001
    * @see APPROVAL-DECISION-005
    * @see APPROVAL-DECISION-006
+   * @see SPEC-TIMESTAMP-001
+   * @see SPEC-TIMESTAMP-002
    * @see SPEC-TIMESTAMP-003
    * @see SPEC-TIMESTAMP-004
+   * @see SPEC-TIMESTAMP-006
    */
   static from(input: unknown): ApprovalDecision {
     if (!isPlainRecord(input) || !Object.hasOwn(input, 'subjectFacts')) throw new InvalidApprovalDecisionError()

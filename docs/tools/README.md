@@ -15,7 +15,7 @@ the FinKore public API and MUST NOT define financial-domain behavior.
 | `test-java.js` | Run the compiled Java core tests. | `npm run java:test` |
 | `coverage-python.js` | Measure Python unit and conformance coverage. | `npm run python:coverage` |
 | `mutation-critical.js` | Run targeted critical mutation probes for Python and Java. | `npm run mutation:critical` |
-| `check-packages.js` | Build and inspect local TypeScript, Python, and Java package artifacts without publishing them. | `npm run package:check` |
+| `check-packages.js` | Build, inspect, install, and import local TypeScript, Python, and Java package artifacts without publishing them. | `npm run package:check` |
 
 Run `npm run check` for the normal local validation suite. Run
 `npm run verify` for the complete release suite. From a clean checkout, install
@@ -77,22 +77,19 @@ The executable gate is:
 npm run package:check
 ```
 
-Representative component commands:
+The gate creates all artifacts in or from an isolated temporary directory and
+checks their allowlisted runtime, metadata, license, and notice content. It
+rejects source tests, coverage or mutation reports, backup files, local
+toolchains, and other repository-only material. It then performs three
+consumer checks:
 
-```bash
-npm run build
-npm pack --workspace @finkore/typescript --pack-destination /tmp/finkore-packaging
+- installs the npm tarball into an empty Node project and imports the public
+  package root;
+- installs the Python wheel into a new virtual environment without consulting
+  a package index and imports the documented `finkore` surface;
+- installs the Java JAR into an isolated Maven repository, compiles an external
+  consumer against it, and runs that consumer.
 
-.tools/bin/python3.12 -m pip wheel implementations/python/core --no-deps --wheel-dir /tmp/finkore-packaging
-.tools/bin/python3.12 -m pip install 'setuptools>=69' --target /tmp/finkore-packaging/build-backend
-(cd implementations/python/core && PYTHONPATH=/tmp/finkore-packaging/build-backend ../../../.tools/bin/python3.12 -c "import setuptools.build_meta as build_meta; build_meta.build_sdist('/tmp/finkore-packaging')")
-
-.tools/bin/mvn -f implementations/java/core/pom.xml package
-.tools/bin/mvn install:install-file \
-  -Dfile=implementations/java/core/target/finkore-java-core-0.1.0.jar \
-  -DpomFile=implementations/java/core/pom.xml \
-  -DlocalRepositoryPath=/tmp/finkore-packaging/m2
-```
-
-These commands only build and consume implementation artifacts. They do not
-define financial behavior.
+Temporary consumer environments and artifacts are removed when the check
+finishes. These checks only build and consume implementation artifacts. They do
+not define financial behavior.

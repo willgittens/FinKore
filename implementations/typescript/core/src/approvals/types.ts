@@ -351,8 +351,10 @@ export interface SerializedApprovalDecision {
    * and an explicit known numeric UTC offset or Z.
    *
    * @see SPEC-TIMESTAMP-001
+   * @see SPEC-TIMESTAMP-002
    * @see SPEC-TIMESTAMP-003
    * @see SPEC-TIMESTAMP-004
+   * @see SPEC-TIMESTAMP-006
    */
   readonly decidedAt: string
 
@@ -364,8 +366,14 @@ export interface SerializedApprovalDecision {
    * equal to or later than this instant.
    *
    * @see APPROVAL-VALIDITY-007
+   * @see APPROVAL-VALIDITY-008
    * @see APPROVAL-VALIDITY-009
+   * @see SPEC-TIMESTAMP-001
+   * @see SPEC-TIMESTAMP-002
+   * @see SPEC-TIMESTAMP-003
+   * @see SPEC-TIMESTAMP-004
    * @see SPEC-TIMESTAMP-005
+   * @see SPEC-TIMESTAMP-006
    */
   readonly expiresAt?: string
 }

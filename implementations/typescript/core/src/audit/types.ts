@@ -297,8 +297,10 @@ export interface SerializedAuditEvent {
    * digits and an explicit known numeric UTC offset or Z.
    *
    * @see SPEC-TIMESTAMP-001
+   * @see SPEC-TIMESTAMP-002
    * @see SPEC-TIMESTAMP-003
    * @see SPEC-TIMESTAMP-004
+   * @see SPEC-TIMESTAMP-006
    */
   readonly occurredAt: string
 

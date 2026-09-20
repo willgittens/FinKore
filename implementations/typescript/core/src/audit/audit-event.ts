@@ -132,6 +132,8 @@ export class AuditEvent {
    * Creates and validates an Audit Event from a portable candidate value.
    *
    * The method validates Core 0.9 release candidate event and change representation semantics.
+   * The occurrence timestamp must use the portable FinKore RFC 3339 profile
+   * with an explicit known offset and at most nine fractional digits.
    * It does not define a full path language, event-type catalog, redaction
    * behavior, relationship target existence, diff engine, or production storage
    * format. Relationship target existence and uniqueness are validated by
@@ -152,6 +154,11 @@ export class AuditEvent {
    * @see AUDIT-CHANGE-001
    * @see AUDIT-CHANGE-005
    * @see AUDIT-RELATIONSHIP-001
+   * @see SPEC-TIMESTAMP-001
+   * @see SPEC-TIMESTAMP-002
+   * @see SPEC-TIMESTAMP-003
+   * @see SPEC-TIMESTAMP-004
+   * @see SPEC-TIMESTAMP-006
    */
   static from(input: unknown): AuditEvent {
     if (!isPlainRecord(input)) throw new InvalidAuditEventError()

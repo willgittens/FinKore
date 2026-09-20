@@ -6,6 +6,9 @@ requirements. New adapters should follow the language-neutral
 [Conformance Adapter Onboarding Guide](../../../../docs/conformance-adapter-onboarding.md)
 rather than copying TypeScript adapter internals as architecture.
 
+This repository adapter supports Node `>=24.11.0 <25` and is not a standalone
+financial-domain package.
+
 The adapter supports:
 
 - `finkore.money.add`

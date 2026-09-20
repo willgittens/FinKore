@@ -1,6 +1,7 @@
 # FinKore Core 0.9.1 Plan
 
-Status: Planned
+Status: Milestones 1–4 complete; Milestone 5 locally complete, with publication
+blocked on authenticated remote tag verification.
 
 Release type: Corrective release candidate
 
@@ -299,13 +300,25 @@ survivor changes portable financial behavior.
 
 ## 8. Milestone 5 — Documentation and release hygiene
 
-- [ ] Resolve the Core 0.9 versus Core 1.0 release-candidate wording in CoreDoc without changing normative behavior accidentally.
-- [ ] Review root and package READMEs for current capability, conformance, toolchain, and release claims.
-- [ ] Review Agentic metadata and public JSDoc for every corrected behavior.
-- [ ] Remove runner/package.json.orig after confirming it has no legitimate package role.
-- [ ] Verify published package contents exclude temporary, backup, fixture-only, and repository-only files.
-- [ ] Perform consumer-style installation and import checks for publishable packages.
-- [ ] Add a concise Core 0.9.1 entry to docs/releases/README.md after the corrective work is complete.
+Local completion: 2026-09-20
+
+Decision: CoreDoc consistently identifies the current Core 0.9 release
+candidate; Core 0.9.1 is its corrective release and does not claim Core 1.0
+status. Public READMEs, Agentic metadata, and corrected timestamp/allocation/Audit
+JSDoc were reviewed together. The stale runner backup was removed, and the
+package gate now rejects repository-only content and proves isolated npm, wheel,
+and JAR consumption. The complete local `npm run verify` workflow passes.
+Authenticated access to the configured private GitHub origin is unavailable in
+this environment, so remote tag verification did not complete, no 0.9.1 tag was
+created, and Core 1.0 planning remains gated.
+
+- [x] Resolve the Core 0.9 versus Core 1.0 release-candidate wording in CoreDoc without changing normative behavior accidentally.
+- [x] Review root and package READMEs for current capability, conformance, toolchain, and release claims.
+- [x] Review Agentic metadata and public JSDoc for every corrected behavior.
+- [x] Remove runner/package.json.orig after confirming it has no legitimate package role.
+- [x] Verify published package contents exclude temporary, backup, fixture-only, and repository-only files.
+- [x] Perform consumer-style installation and import checks for publishable packages.
+- [x] Add a concise Core 0.9.1 entry to docs/releases/README.md after the corrective work is complete.
 - [ ] Verify local and remote tag state with authenticated repository access before publishing.
 - [ ] Create the Core 0.9.1 release tag only after every release gate passes.
 - [ ] Reopen Core 1.0 planning only when no unresolved 0.9.1 blocker remains.
@@ -331,21 +344,21 @@ Implementation changes MUST NOT precede the normative decision for timestamp pre
 
 Core 0.9.1 is ready only when all of the following are true:
 
-- [ ] Timestamp syntax, precision, comparison, serialization, and expiry boundaries are portable.
-- [ ] Money allocation has a portable integer representation and range.
-- [ ] All confirmed cross-language probes agree.
-- [ ] The requirement inventory and traceability totals are accurate.
-- [ ] No COVERED requirement lacks real conformance evidence.
-- [ ] Audit actor invalidity has a complete normative and conformance mapping.
-- [ ] All 254 existing vectors plus every new 0.9.1 vector pass against TypeScript, Python, and Java.
-- [ ] Runner and TypeScript mutation suites meet the 95 percent target.
-- [ ] No critical mutant survives, including targeted Python and Java mutants.
-- [ ] CPython 3.12 and 3.13 compatibility checks pass.
-- [ ] JDK 21, Maven 3.9.x, and supported Node checks pass.
-- [ ] Documentation, architecture, package, and license checks pass.
-- [ ] CoreDoc, READMEs, Agentic metadata, JSDoc, and release notes describe the same current behavior.
-- [ ] No stale backup or unintended package artifact remains.
+- [x] Timestamp syntax, precision, comparison, serialization, and expiry boundaries are portable.
+- [x] Money allocation has a portable integer representation and range.
+- [x] All confirmed cross-language probes agree.
+- [x] The requirement inventory and traceability totals are accurate.
+- [x] No COVERED requirement lacks real conformance evidence.
+- [x] Audit actor invalidity has a complete normative and conformance mapping.
+- [x] All 254 existing vectors plus every new 0.9.1 vector pass against TypeScript, Python, and Java.
+- [x] Runner and TypeScript mutation suites meet the 95 percent target.
+- [x] No critical mutant survives, including targeted Python and Java mutants.
+- [x] CPython 3.12 and 3.13 compatibility checks pass.
+- [x] JDK 21, Maven 3.9.x, and supported Node checks pass.
+- [x] Documentation, architecture, package, and license checks pass.
+- [x] CoreDoc, READMEs, Agentic metadata, JSDoc, and release notes describe the same current behavior.
+- [x] No stale backup or unintended package artifact remains.
 - [ ] Remote release/tag state has been verified.
-- [ ] The working tree contains only intentional release changes.
+- [x] The working tree contains only intentional release changes.
 
 Any unresolved item above blocks the 0.9.1 release candidate unless the specification explicitly records it as deferred and the deferral does not undermine a current portability or conformance claim.

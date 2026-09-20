@@ -113,9 +113,12 @@ FinKore is not an ERP, ORM, payment processor, UI framework, accounting applicat
 
 ## Project Status
 
-FinKore Core 0.9 is the pre-1.0 release candidate. TypeScript, Python, and
-Java implement the current manifest scope for Money, Workflow, Audit,
-Approvals, and Entities.
+FinKore Core 0.9.1 is the current corrective release candidate for the frozen
+Core 0.9 baseline. TypeScript, Python, and Java implement the current manifest
+scope for Money, Workflow, Audit, Approvals, and Entities. The 0.9.1
+corrections make timestamp precision and syntax, allocation integer bounds,
+Audit actor errors, and requirement traceability consistent across that
+baseline without adding a domain.
 
 Money covers exact representation, serialization, arithmetic, comparison,
 rounding, Rates, and Allocation. Workflow covers definitions, version binding,
@@ -145,12 +148,18 @@ No planned behavioral changes remain before Core 1.0, but the project is still
 pre-1.0 and production use is not recommended yet. No implementation should
 claim that its API defines FinKore independently of the specification.
 
+The complete local release gate is `npm run verify`. It validates Node
+`>=24.11.0 <25`, CPython 3.12 and 3.13, JDK 21, and Maven 3.9.x; executes the
+complete manifest against all three implementations; and checks distributable
+artifacts through isolated consumer installs. See [Developer
+Tools](./docs/tools/README.md) for clean-checkout instructions.
+
 ## Migration From Pre-0.9
 
-External package consumers should treat Core 0.9 as the release-candidate
-baseline rather than a continuation of earlier draft package surfaces. The
-observable financial behavior is the frozen candidate described by `/spec` and
-`conformance/manifest.json`.
+External package consumers should treat Core 0.9.1 as the corrected Core 0.9
+release-candidate baseline rather than a continuation of earlier draft package
+surfaces. The observable financial behavior is the frozen candidate described
+by `/spec` and `conformance/manifest.json`.
 
 - TypeScript consumers should import from `@finkore/typescript` package root.
   Money serialization helpers are no longer part of the root public API; use

@@ -7,10 +7,11 @@ current specification and conformance vectors. Other conformance
 operation labels remain runner-adapter vocabulary until their stable agent-facing
 contract, effects, and inputs are reviewed.
 
-Milestone 4 reviewed every promoted operation in this registry for stable
-purpose, input semantics, success output, preconditions, postconditions,
-portable errors, effects, and requirement references. Each promoted operation is
-also used by manifest-listed conformance vectors. No Approval operation label,
+The Core 0.9 release-candidate review checked every promoted operation in this
+registry for stable purpose, input semantics, success output, preconditions,
+postconditions, portable errors, effects, and requirement references. Each
+promoted operation is also used by manifest-listed conformance vectors. No
+Approval operation label,
 Workflow import/create label, Entity import label, Money serialization label, or
 Audit redaction label is promoted as a canonical Agentic operation in Core 0.9 release candidate.
 

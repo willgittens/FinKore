@@ -107,6 +107,10 @@ The package archive intentionally includes `dist/`, this README, `LICENSE`,
 mutation reports, local toolchains, and repository-only developer files are not
 part of the packed artifact.
 
+This package supports Node `>=24.11.0 <25`. The release package gate installs
+the generated tarball into an isolated empty project and imports only the
+documented package-root surface.
+
 ## Current Money API
 
 - `Money.from(input)` validates amount and currency and returns a Money value.

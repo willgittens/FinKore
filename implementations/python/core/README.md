@@ -54,7 +54,7 @@ The public exports are:
 - Entities: `create_entity`, `mutate_entity`, `transition_entity`,
   `import_entity`, and `evolve_entity`.
 
-This package requires Python 3.12 or newer and uses Python `int` and exact
+This package supports CPython 3.12 and 3.13 and uses Python `int` and exact
 `Decimal` construction from plain decimal strings. Portable allocation scales
 are bounded by `50`, equal-part counts by `100`, and ratios by
 `9007199254740991`. Money amount precision and other practical limits depend on
@@ -65,13 +65,15 @@ The wheel and source distribution intentionally include package source,
 `py.typed`, this README, `LICENSE`, `NOTICE.md`, and
 `THIRD_PARTY_LICENSES.md`. Tests, coverage data, generated reports,
 repository-local toolchains, and build outputs are excluded from the source
-distribution.
+distribution. The release package gate installs the wheel into a new isolated
+virtual environment and imports the documented top-level package surface.
 
 Run the current local checks from the repository root:
 
 ```bash
 npm run python:compile
 npm run python:unit
+npm run python:compat
 npm run python:coverage:setup
 npm run python:coverage
 npm run python:mutation:critical

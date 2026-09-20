@@ -1,8 +1,8 @@
 # FinKore CoreDoc
 
 **CoreDoc version:** FinKore Core 0.9 release candidate
-**Document date:** 2026-09-19
-**Status:** Current FinKore Core 1.0 release candidate
+**Document date:** 2026-09-20
+**Status:** Current FinKore Core 0.9 release candidate
 
 ## Purpose
 

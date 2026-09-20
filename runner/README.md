@@ -2,6 +2,9 @@
 
 This package is the reference TypeScript runner for FinKore's language-independent conformance vectors. It verifies an implementation's normalized observable behavior against the specification vectors.
 
+The runner supports Node `>=24.11.0 <25`. Its package version is independent of
+the FinKore Core release and conformance format versions.
+
 It is not a financial library, a FinKore domain implementation, an agent runtime, or a general-purpose application testing framework. Production code here contains no Money, Workflow, Audit, Approval, or Entity behavior.
 
 The runner package version is an implementation artifact version. It is
