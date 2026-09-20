@@ -160,11 +160,13 @@ export interface MoneyRateApplicationOptions {
 /**
  * Allocation method for splitting Money into ordered results.
  *
- * `EQUAL` allocation uses a positive part count. `RATIO` allocation uses a
- * non-empty ordered list of positive integer ratios.
+ * `EQUAL` allocation uses a positive part count no greater than `100`.
+ * `RATIO` allocation uses a non-empty ordered list of positive integer JSON
+ * numbers no greater than `9007199254740991`.
  *
  * @see MONEY-ALLOCATION-003
  * @see MONEY-ALLOCATION-004
+ * @see MONEY-ALLOCATION-014
  */
 export type MoneyAllocationMethod = 'EQUAL' | 'RATIO'
 
@@ -186,23 +188,27 @@ export interface MoneyAllocationRequest {
   readonly method: unknown
 
   /**
-   * Target decimal scale for every allocated result.
+   * Target decimal scale from `0` through `50` for every allocated result.
    *
    * @see MONEY-ALLOCATION-002
+   * @see MONEY-ALLOCATION-014
    */
   readonly scale: unknown
 
   /**
-   * Candidate positive integer part count for equal allocation.
+   * Candidate positive integer part count no greater than `100`.
    *
    * @see MONEY-ALLOCATION-003
+   * @see MONEY-ALLOCATION-014
    */
   readonly parts?: unknown
 
   /**
-   * Candidate ordered positive integer ratios for ratio allocation.
+   * Candidate ordered positive integer JSON numbers no greater than
+   * `9007199254740991` for ratio allocation.
    *
    * @see MONEY-ALLOCATION-004
+   * @see MONEY-ALLOCATION-014
    */
   readonly ratios?: unknown
 }

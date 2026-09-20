@@ -42,6 +42,20 @@ const pythonMutants = [
     to: 'elif mode == "FLOOR":\n            increment = False',
   },
   {
+    id: 'python-money-allocation-upper-bound-bypass',
+    suite: 'money',
+    path: 'core/src/finkore/money.py',
+    from: 'if integer < minimum or integer > maximum:\n        raise FinKoreError(INVALID_ALLOCATION)',
+    to: 'if integer < minimum:\n        raise FinKoreError(INVALID_ALLOCATION)',
+  },
+  {
+    id: 'python-money-allocation-maximum-rejected',
+    suite: 'money',
+    path: 'core/src/finkore/money.py',
+    from: 'if integer < minimum or integer > maximum:\n        raise FinKoreError(INVALID_ALLOCATION)',
+    to: 'if integer < minimum or integer >= maximum:\n        raise FinKoreError(INVALID_ALLOCATION)',
+  },
+  {
     id: 'python-workflow-guard-bypass',
     suite: 'workflow',
     path: 'core/src/finkore/workflow.py',
@@ -134,6 +148,20 @@ const javaMutants = [
     path: 'core/src/main/java/org/finkore/Money.java',
     from: 'base.set(index, base.get(index).add(BigInteger.ONE));',
     to: 'base.set(base.size() - 1 - index, base.get(base.size() - 1 - index).add(BigInteger.ONE));',
+  },
+  {
+    id: 'java-money-allocation-upper-bound-bypass',
+    suite: 'money',
+    path: 'core/src/main/java/org/finkore/Money.java',
+    from: 'if (integer.compareTo(BigInteger.valueOf(minimum)) < 0\n        || integer.compareTo(BigInteger.valueOf(maximum)) > 0) {\n      throw new FinKoreException(INVALID_ALLOCATION);\n    }',
+    to: 'if (integer.compareTo(BigInteger.valueOf(minimum)) < 0) {\n      throw new FinKoreException(INVALID_ALLOCATION);\n    }',
+  },
+  {
+    id: 'java-money-allocation-maximum-rejected',
+    suite: 'money',
+    path: 'core/src/main/java/org/finkore/Money.java',
+    from: 'if (integer.compareTo(BigInteger.valueOf(minimum)) < 0\n        || integer.compareTo(BigInteger.valueOf(maximum)) > 0) {\n      throw new FinKoreException(INVALID_ALLOCATION);\n    }',
+    to: 'if (integer.compareTo(BigInteger.valueOf(minimum)) < 0\n        || integer.compareTo(BigInteger.valueOf(maximum)) >= 0) {\n      throw new FinKoreException(INVALID_ALLOCATION);\n    }',
   },
   {
     id: 'java-workflow-guard-bypass',

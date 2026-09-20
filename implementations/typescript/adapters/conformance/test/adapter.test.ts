@@ -158,9 +158,17 @@ describe('TypeScript conformance adapter', () => {
       'money.allocate.ratio.invalid-empty-ratios-001',
       'money.allocate.invalid-scale-001',
       'money.allocate.invalid-method-001',
+      'money.allocate.equal.hundred-parts-001',
+      'money.allocate.equal.integral-json-number-001',
+      'money.allocate.equal.part-count-out-of-range-001',
+      'money.allocate.ratio.integral-json-number-001',
+      'money.allocate.ratio.out-of-range-001',
+      'money.allocate.ratio.safe-integer-boundary-001',
+      'money.allocate.scale.maximum-001',
+      'money.allocate.scale.out-of-range-001',
     ] })
 
-    expect(report.summary).toEqual({ total: 16, passed: 16, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 24, passed: 24, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current canonical Money comparison vectors', async () => {

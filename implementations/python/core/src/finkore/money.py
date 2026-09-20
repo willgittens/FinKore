@@ -6,6 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
 from fractions import Fraction
+import math
 import re
 from typing import Any
 
@@ -97,6 +98,19 @@ def _valid_scale(value: Any, error_code: str = INVALID_ROUNDING) -> int:
     if not isinstance(value, int) or isinstance(value, bool) or value < 0:
         raise FinKoreError(error_code)
     return value
+
+
+def _allocation_integer(value: Any, minimum: int, maximum: int) -> int:
+    if isinstance(value, bool) or not isinstance(value, (int, float, Decimal)):
+        raise FinKoreError(INVALID_ALLOCATION)
+    if isinstance(value, float) and (not math.isfinite(value) or not value.is_integer()):
+        raise FinKoreError(INVALID_ALLOCATION)
+    if isinstance(value, Decimal) and (not value.is_finite() or value != value.to_integral_value()):
+        raise FinKoreError(INVALID_ALLOCATION)
+    integer = int(value)
+    if integer < minimum or integer > maximum:
+        raise FinKoreError(INVALID_ALLOCATION)
+    return integer
 
 
 def _whole_units(amount: Decimal, scale: int) -> int | None:
@@ -278,24 +292,26 @@ class Money:
             raise FinKoreError(INVALID_ROUNDING) from error
 
     def allocate(self, allocation: Any, scale: Any) -> list["Money"]:
-        """Allocate this Money value in declared order at an explicit target scale."""
+        """Allocate in declared order using the portable scale, part, and ratio integer ranges.
 
-        target_scale = _valid_scale(scale, INVALID_ALLOCATION)
+        Raises ``FinKoreError`` with ``FINKORE_MONEY_INVALID_ALLOCATION`` for
+        malformed or out-of-range requests and preserves this Money value on
+        every failure.
+        """
+
+        target_scale = _allocation_integer(scale, 0, 50)
         if not isinstance(allocation, dict):
             raise FinKoreError(INVALID_ALLOCATION)
         method = allocation.get("method")
         if method == "EQUAL":
             parts = allocation.get("parts")
-            if not isinstance(parts, int) or isinstance(parts, bool) or parts <= 0:
-                raise FinKoreError(INVALID_ALLOCATION)
+            parts = _allocation_integer(parts, 1, 100)
             weights = [1] * parts
         elif method == "RATIO":
             ratios = allocation.get("ratios")
             if not isinstance(ratios, list) or len(ratios) == 0:
                 raise FinKoreError(INVALID_ALLOCATION)
-            if any(not isinstance(ratio, int) or isinstance(ratio, bool) or ratio <= 0 for ratio in ratios):
-                raise FinKoreError(INVALID_ALLOCATION)
-            weights = ratios
+            weights = [_allocation_integer(ratio, 1, 9007199254740991) for ratio in ratios]
         else:
             raise FinKoreError(INVALID_ALLOCATION)
 

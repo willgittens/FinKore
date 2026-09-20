@@ -95,12 +95,12 @@ shapes, domain identifiers, portable error-code unions, and enum-like string
 unions re-exported from `src/index.ts`. Portable consumers should depend on the
 `code` field of FinKore errors, not on TypeScript class names or messages.
 
-Implementation-specific limits: JavaScript runtime constraints mean Money
-rounding scales, allocation scales, equal-allocation part counts, and Approval
-composition quorum thresholds are accepted as finite safe integer `number`
-values. Ratio allocation entries may use `bigint` where a ratio exceeds the safe
-integer range. These limits describe this package API only; they are not
-portable FinKore semantics.
+Portable allocation integers use JSON numbers. Allocation scales are bounded by
+`50`, equal-part counts by `100`, and ratio entries by
+`9007199254740991`. Integral values such as `2.0` are accepted, while strings,
+fractions, booleans, non-finite values, and out-of-range integers fail with
+`FINKORE_MONEY_INVALID_ALLOCATION`. Other JavaScript runtime limits remain
+implementation-specific.
 
 The package archive intentionally includes `dist/`, this README, `LICENSE`,
 `NOTICE.md`, and `THIRD_PARTY_LICENSES.md`. Source tests, coverage reports,
@@ -118,7 +118,7 @@ part of the packed artifact.
 - `money.multiply(scalar)` returns a new Money value multiplied by an exact decimal scalar.
 - `money.divide(scalar)` returns a new Money value divided by a non-zero exact decimal scalar when the quotient terminates; zero divisors throw `FINKORE_MONEY_DIVISION_BY_ZERO`, and non-terminating quotients without a rounding policy throw `FINKORE_MONEY_ROUNDING_REQUIRED`.
 - `money.applyRate(rate, options)` applies an explicit `DECIMAL` or `PERCENTAGE` Rate, preserves currency, accepts zero and negative rates, returns the exact product unless `options.rounding` is supplied, and throws `FINKORE_MONEY_INVALID_AMOUNT` or `FINKORE_MONEY_INVALID_ROUNDING` for invalid rate or rounding inputs.
-- `money.allocate({ method, parts, ratios, scale })` allocates Money by `EQUAL` positive part count or `RATIO` positive integer ratios at an explicit target scale. Results preserve source currency, sum exactly to the source amount, distribute remainders by declared order, and throw `FINKORE_MONEY_INVALID_ALLOCATION` or `FINKORE_MONEY_ROUNDING_REQUIRED` for invalid allocation requests or unrepresentable source totals.
+- `money.allocate({ method, parts, ratios, scale })` allocates Money by `EQUAL` positive part count or `RATIO` positive integer ratios at an explicit target scale. Scale is bounded by `50`, parts by `100`, ratios by `9007199254740991`, and all are JSON-number integer values. Results preserve source currency, sum exactly to the source amount, distribute remainders by declared order, and throw `FINKORE_MONEY_INVALID_ALLOCATION` or `FINKORE_MONEY_ROUNDING_REQUIRED` for invalid allocation requests or unrepresentable source totals.
 - `money.compare(other)` returns `LESS`, `EQUAL`, or `GREATER` for exact same-currency numeric comparison and throws `FINKORE_MONEY_CURRENCY_MISMATCH` for incompatible currencies.
 - `money.round({ scale, mode })` returns a new Money value rounded to the explicit target scale using `HALF_UP`, `HALF_EVEN`, `DOWN`, `UP`, `FLOOR`, or `CEILING`; invalid scale or mode values throw `FINKORE_MONEY_INVALID_ROUNDING`.
 

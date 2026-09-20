@@ -17,7 +17,7 @@ This document defines portable failure categories for Money behavior.
 - **MONEY-ERROR-005** — Required precision reduction without an applicable explicit rounding policy MUST fail with `FINKORE_MONEY_ROUNDING_REQUIRED` and MUST NOT return a Money result.
 - **MONEY-ERROR-006** — An invalid or unsupported rounding scale or mode MUST fail with `FINKORE_MONEY_INVALID_ROUNDING` and MUST NOT return a Money result.
 - **MONEY-ERROR-007** — A failed Money operation MUST leave the observable value of every Money operand unchanged.
-- **MONEY-ERROR-008** — An allocation request with a missing, malformed, unsupported, or invalid allocation method, part count, ratio list, ratio value, or target scale MUST fail with `FINKORE_MONEY_INVALID_ALLOCATION` and MUST NOT return an allocation result.
+- **MONEY-ERROR-008** — An allocation request with a missing, malformed, unsupported, invalid, or out-of-range allocation method, part count, ratio list, ratio value, or target scale MUST fail with `FINKORE_MONEY_INVALID_ALLOCATION` and MUST NOT return an allocation result.
 
 Implementations can provide additional structured details in accordance with [conventions](../conventions.md).
 

@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MPL-2.0
 from __future__ import annotations
 
+from decimal import Decimal
 import unittest
 
 from finkore import FinKoreError, Money
@@ -41,6 +42,55 @@ class MoneyTests(unittest.TestCase):
                 {"amount": "1.66", "currency": "USD"},
             ],
         )
+
+    def test_allocation_integer_domain_is_portable(self) -> None:
+        value = Money.from_portable({"amount": "10.00", "currency": "USD"})
+        self.assertEqual(
+            [part.to_portable() for part in value.allocate({"method": "RATIO", "ratios": [1.0, 2.0]}, 2.0)],
+            [
+                {"amount": "3.34", "currency": "USD"},
+                {"amount": "6.66", "currency": "USD"},
+            ],
+        )
+        self.assertEqual(
+            [part.to_portable() for part in value.allocate({"method": "RATIO", "ratios": [Decimal("1.0"), Decimal("2.0")]}, Decimal("2.0"))],
+            [
+                {"amount": "3.34", "currency": "USD"},
+                {"amount": "6.66", "currency": "USD"},
+            ],
+        )
+        self.assertEqual(
+            [part.to_portable() for part in value.allocate({"method": "RATIO", "ratios": [9007199254740991, 1]}, 2)],
+            [
+                {"amount": "10.00", "currency": "USD"},
+                {"amount": "0.00", "currency": "USD"},
+            ],
+        )
+        hundred = Money.from_portable({"amount": "1.00", "currency": "USD"}).allocate({"method": "EQUAL", "parts": 100}, 2)
+        self.assertEqual(len(hundred), 100)
+        self.assertTrue(all(part.to_portable() == {"amount": "0.01", "currency": "USD"} for part in hundred))
+        self.assertEqual(
+            [part.to_portable() for part in Money.from_portable({"amount": "1", "currency": "USD"}).allocate({"method": "EQUAL", "parts": 2}, 50)],
+            [
+                {"amount": "0.50000000000000000000000000000000000000000000000000", "currency": "USD"},
+                {"amount": "0.50000000000000000000000000000000000000000000000000", "currency": "USD"},
+            ],
+        )
+
+        invalid_requests = [
+            ({"method": "RATIO", "ratios": [9007199254740992, 1]}, 2),
+            ({"method": "EQUAL", "parts": 101}, 2),
+            ({"method": "EQUAL", "parts": 2}, 51),
+            ({"method": "RATIO", "ratios": ["2", 1]}, 2),
+            ({"method": "RATIO", "ratios": [1.5, 1]}, 2),
+            ("invalid", 2),
+        ]
+        for allocation, scale in invalid_requests:
+            with self.subTest(allocation=allocation, scale=scale):
+                with self.assertRaises(FinKoreError) as context:
+                    value.allocate(allocation, scale)
+                self.assertEqual(context.exception.code, "FINKORE_MONEY_INVALID_ALLOCATION")
+                self.assertEqual(value.to_portable(), {"amount": "10.00", "currency": "USD"})
 
     def test_draft_06_large_decimal_operations_ignore_decimal_context_precision(self) -> None:
         left = Money.from_portable({"amount": "123456789012345678901234567890123456789012345678901234567890.12", "currency": "EUR"})

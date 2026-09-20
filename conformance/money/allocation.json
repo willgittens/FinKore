@@ -800,6 +800,312 @@
       ]
     },
     {
+      "id": "money.allocate.equal.integral-json-number-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-002",
+        "MONEY-ALLOCATION-003",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-012",
+        "MONEY-ALLOCATION-013",
+        "MONEY-ALLOCATION-014"
+      ],
+      "description": "Treats integral JSON numbers with decimal lexical notation as integer scale and part-count values.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "1.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "EQUAL",
+          "parts": 2.0
+        },
+        "scale": 2.0
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "0.50",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.50",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "1.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression"
+      ],
+      "guardsAgainst": [
+        "integral-json-number-rejected",
+        "integer-encoding-parsed-lexically"
+      ]
+    },
+    {
+      "id": "money.allocate.equal.part-count-out-of-range-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-003",
+        "MONEY-ALLOCATION-013",
+        "MONEY-ALLOCATION-014",
+        "MONEY-ERROR-008"
+      ],
+      "description": "Rejects the first equal-part count above the portable allocation part-count range.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "EQUAL",
+          "parts": 101
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_ALLOCATION"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "out-of-range-part-count-accepted",
+        "wrong-error-code"
+      ]
+    },
+    {
+      "id": "money.allocate.scale.maximum-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-002",
+        "MONEY-ALLOCATION-003",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-012",
+        "MONEY-ALLOCATION-013",
+        "MONEY-ALLOCATION-014"
+      ],
+      "description": "Allocates successfully at the maximum portable allocation target scale.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "1",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "EQUAL",
+          "parts": 2
+        },
+        "scale": 50
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "0.50000000000000000000000000000000000000000000000000",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.50000000000000000000000000000000000000000000000000",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "1",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "allocation-scale-limit-too-low",
+        "allocation-scale-maximum-rejected",
+        "allocation-total-not-preserved"
+      ]
+    },
+    {
+      "id": "money.allocate.scale.out-of-range-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-002",
+        "MONEY-ALLOCATION-013",
+        "MONEY-ALLOCATION-014",
+        "MONEY-ERROR-008"
+      ],
+      "description": "Rejects the first target scale above the portable allocation scale range.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "EQUAL",
+          "parts": 2
+        },
+        "scale": 51
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_ALLOCATION"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "out-of-range-scale-accepted",
+        "wrong-error-code"
+      ]
+    },
+    {
+      "id": "money.allocate.ratio.integral-json-number-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-004",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009",
+        "MONEY-ALLOCATION-010",
+        "MONEY-ALLOCATION-012",
+        "MONEY-ALLOCATION-013",
+        "MONEY-ALLOCATION-014"
+      ],
+      "description": "Treats integral JSON numbers with decimal lexical notation as integer ratio values.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            1.0,
+            2.0
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "3.34",
+            "currency": "USD"
+          },
+          {
+            "amount": "6.66",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression"
+      ],
+      "guardsAgainst": [
+        "integral-json-number-rejected",
+        "integer-encoding-parsed-lexically"
+      ]
+    },
+    {
+      "id": "money.allocate.ratio.out-of-range-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-004",
+        "MONEY-ALLOCATION-013",
+        "MONEY-ALLOCATION-014",
+        "MONEY-ERROR-008"
+      ],
+      "description": "Rejects the first positive integer ratio above the portable exact JSON integer range.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            9007199254740992,
+            1
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_ALLOCATION"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "out-of-range-ratio-accepted",
+        "unsafe-number-rounding",
+        "wrong-error-code"
+      ]
+    },
+    {
       "id": "money.allocate.ratio.safe-integer-boundary-001",
       "spec": "money/allocation",
       "requirements": [
@@ -811,7 +1117,8 @@
         "MONEY-ALLOCATION-009",
         "MONEY-ALLOCATION-010",
         "MONEY-ALLOCATION-012",
-        "MONEY-ALLOCATION-013"
+        "MONEY-ALLOCATION-013",
+        "MONEY-ALLOCATION-014"
       ],
       "description": "Allocates using large safe-integer ratio values with exact integer unit arithmetic.",
       "operation": "finkore.money.allocate",
@@ -875,7 +1182,8 @@
         "MONEY-ALLOCATION-009",
         "MONEY-ALLOCATION-010",
         "MONEY-ALLOCATION-012",
-        "MONEY-ALLOCATION-013"
+        "MONEY-ALLOCATION-013",
+        "MONEY-ALLOCATION-014"
       ],
       "description": "Allocates into 100 equal parts with exact total preservation.",
       "operation": "finkore.money.allocate",

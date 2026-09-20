@@ -206,12 +206,18 @@ public final class Money {
   /**
    * Allocates this value in declared order at an explicit target scale.
    *
-   * @param allocation equal or ratio allocation request
-   * @param scale target decimal places
+   * <p>The target scale is bounded by 50, the equal-part count by 100, and ratio
+   * entries by 9007199254740991. The source value is never mutated.
+   *
+   * @param allocation equal or ratio allocation request using portable integer ranges
+   * @param scale target decimal places in the inclusive range 0 through 50
    * @return allocated parts preserving total amount
+   * @throws FinKoreException with {@link #INVALID_ALLOCATION} for malformed or
+   *     out-of-range allocation requests, or {@link #ROUNDING_REQUIRED} when
+   *     the source is not representable at the requested scale
    */
   public List<Money> allocate(Object allocation, Object scale) {
-    int targetScale = validScale(scale, INVALID_ALLOCATION);
+    int targetScale = validAllocationInteger(scale, 0, 50).intValueExact();
     if (!(allocation instanceof Map<?, ?> allocationMap)) {
       throw new FinKoreException(INVALID_ALLOCATION);
     }
@@ -292,10 +298,28 @@ public final class Money {
     throw new FinKoreException(code);
   }
 
-  private static BigInteger validPositiveInteger(Object value, String code) {
-    BigInteger integer = validPositiveOrZeroInteger(value, code);
-    if (integer.signum() <= 0) {
-      throw new FinKoreException(code);
+  private static BigInteger validAllocationInteger(Object value, long minimum, long maximum) {
+    BigInteger integer;
+    if (value instanceof BigDecimal decimal) {
+      try {
+        integer = decimal.toBigIntegerExact();
+      } catch (ArithmeticException error) {
+        throw new FinKoreException(INVALID_ALLOCATION);
+      }
+    } else if (value instanceof Double || value instanceof Float) {
+      double number = ((Number) value).doubleValue();
+      if (!Double.isFinite(number) || number != Math.rint(number)) {
+        throw new FinKoreException(INVALID_ALLOCATION);
+      }
+      integer = BigDecimal.valueOf(number).toBigIntegerExact();
+    } else if (value instanceof Short || value instanceof Byte) {
+      integer = BigInteger.valueOf(((Number) value).longValue());
+    } else {
+      integer = validPositiveOrZeroInteger(value, INVALID_ALLOCATION);
+    }
+    if (integer.compareTo(BigInteger.valueOf(minimum)) < 0
+        || integer.compareTo(BigInteger.valueOf(maximum)) > 0) {
+      throw new FinKoreException(INVALID_ALLOCATION);
     }
     return integer;
   }
@@ -318,7 +342,7 @@ public final class Money {
   private static List<BigInteger> allocationWeights(Map<?, ?> allocation) {
     Object method = allocation.get("method");
     if ("EQUAL".equals(method)) {
-      int parts = validPositiveInteger(allocation.get("parts"), INVALID_ALLOCATION).intValueExact();
+      int parts = validAllocationInteger(allocation.get("parts"), 1, 100).intValueExact();
       List<BigInteger> weights = new ArrayList<>();
       for (int index = 0; index < parts; index += 1) {
         weights.add(BigInteger.ONE);
@@ -328,7 +352,7 @@ public final class Money {
     if ("RATIO".equals(method) && allocation.get("ratios") instanceof List<?> ratios && !ratios.isEmpty()) {
       List<BigInteger> weights = new ArrayList<>();
       for (Object ratio : ratios) {
-        weights.add(validPositiveInteger(ratio, INVALID_ALLOCATION));
+        weights.add(validAllocationInteger(ratio, 1, 9007199254740991L));
       }
       return weights;
     }

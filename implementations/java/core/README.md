@@ -54,11 +54,10 @@ uses portable JSON-shaped `Map` and `List` observations for non-Money domains;
 those shapes follow the conformance vectors and specification, not Java object
 identity.
 
-Implementation-specific limits: this package requires JDK 21. Money amounts use
-`BigDecimal` from plain decimal strings. Rounding/allocation target scales must
-fit Java `int` because `BigDecimal` scale is an `int`; equal-allocation part
-counts also fit Java `int`. These are Java API limits, not portable FinKore
-requirements.
+This package requires JDK 21. Money amounts use `BigDecimal` from plain decimal
+strings. Portable allocation scales are bounded by `50`, equal-part counts by
+`100`, and ratios by `9007199254740991`. Money rounding scales
+must fit Java `int` as an implementation-specific `BigDecimal` constraint.
 
 The JAR intentionally includes compiled `org.finkore` classes plus
 `META-INF/LICENSE`, `META-INF/NOTICE.md`, `META-INF/THIRD_PARTY_LICENSES.md`,

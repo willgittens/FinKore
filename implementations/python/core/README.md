@@ -53,11 +53,12 @@ The public exports are:
 - Entities: `create_entity`, `mutate_entity`, `transition_entity`,
   `import_entity`, and `evolve_entity`.
 
-Implementation-specific limits: this package requires Python 3.12 or newer and
-uses Python `int` and exact `Decimal` construction from plain decimal strings.
-No fixed portable Money precision, Money scale, or collection-size limit is
-declared by FinKore Core; practical limits are the Python runtime and available
-memory. Portable timestamps have the normative nine-digit fractional limit.
+This package requires Python 3.12 or newer and uses Python `int` and exact
+`Decimal` construction from plain decimal strings. Portable allocation scales
+are bounded by `50`, equal-part counts by `100`, and ratios by
+`9007199254740991`. Money amount precision and other practical limits depend on
+the Python runtime and available memory. Portable timestamps have the normative
+nine-digit fractional limit.
 
 The wheel and source distribution intentionally include package source,
 `py.typed`, this README, `LICENSE`, `NOTICE.md`, and

@@ -11,6 +11,10 @@ portable error codes, canonical operation IDs, and normative serialization
 shapes are frozen; future normative changes before 1.0 are limited to correcting
 demonstrated contradictions, ambiguities, or portability defects.
 
+The 0.9.1 release-candidate corrections define one cross-language allocation
+integer domain while retaining the existing JSON-number request shape and
+portable allocation error category.
+
 ## FinKore Core 0.8
 
 Unified the Money, Workflow, Audit, Approvals, and Financial Entities baseline

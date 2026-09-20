@@ -153,41 +153,52 @@ valid lexical representations.
 
 ## 5. Milestone 2 — Portable allocation integer domain
 
+Completed: 2026-09-20
+
+Decision: portable allocation integers retain the existing JSON-number shape.
+Allocation scale is bounded to `0..50`, equal-part count to `1..100`, and each
+ratio to `1..9007199254740991`, all inclusive. Integer meaning is mathematical,
+so integral JSON numbers such as `2.0` are accepted; strings, booleans, nulls,
+fractions, non-finite implementation values, and out-of-range integers fail
+with `FINKORE_MONEY_INVALID_ALLOCATION`. These executable bounds preserve the
+existing cross-language scale-50, 100-part, and safe-integer ratio baselines
+while correcting the demonstrated ambiguity.
+
 ### 5.1 Specify the integer representation
 
-- [ ] Preserve a failing regression case for allocation ratios above JavaScript's safe integer range.
-- [ ] Decide and normatively define one portable representation:
+- [x] Preserve a failing regression case for allocation ratios above JavaScript's safe integer range.
+- [x] Decide and normatively define one portable representation:
   - bounded JSON integers with an explicit inclusive maximum; or
   - canonical decimal-string integers with exact parsing rules.
-- [ ] Define validation and portable errors for zero, negative, fractional, malformed, and out-of-range ratios.
-- [ ] Review whether the same representation issue affects allocation part counts, scale values, versions, revisions, or other integer-shaped inputs.
-- [ ] Assess compatibility consequences for existing conformance syntax and Agentic schemas.
+- [x] Define validation and portable errors for zero, negative, fractional, malformed, and out-of-range ratios.
+- [x] Review whether the same representation issue affects allocation part counts, scale values, versions, revisions, or other integer-shaped inputs.
+- [x] Assess compatibility consequences for existing conformance syntax and Agentic schemas.
 
 ### 5.2 Align specification and metadata
 
-- [ ] Update Money allocation requirements and examples.
-- [ ] Update the canonical conformance input schema and vectors.
-- [ ] Update finkore.money.allocate Agentic metadata.
-- [ ] Add boundary vectors at:
+- [x] Update Money allocation requirements and examples.
+- [x] Update the canonical conformance input schema and vectors.
+- [x] Update finkore.money.allocate Agentic metadata.
+- [x] Add boundary vectors at:
   - the largest supported value;
   - the first unsupported value;
   - combinations of large and small ratios;
   - totals that challenge intermediate arithmetic;
   - invalid encodings and non-integers.
-- [ ] Retain exact conservation, determinism, ordering, and non-mutation assertions.
+- [x] Retain exact conservation, determinism, ordering, and non-mutation assertions.
 
 ### 5.3 Implement and verify
 
-- [ ] Update TypeScript, Python, and Java implementations only after the portable representation is specified.
-- [ ] Ensure adapters translate data without implementing allocation rules.
-- [ ] Add unit, conformance, regression, and mutation-sensitive coverage.
-- [ ] Review public API documentation and package examples.
+- [x] Update TypeScript, Python, and Java implementations only after the portable representation is specified.
+- [x] Ensure adapters translate data without implementing allocation rules.
+- [x] Add unit, conformance, regression, and mutation-sensitive coverage.
+- [x] Review public API documentation and package examples.
 
 ### 5.4 Completion criteria
 
-- [ ] Every value accepted by the portable contract behaves identically in all three implementations.
-- [ ] Every value outside the portable contract returns the same portable error outcome.
-- [ ] No critical range, integer-validation, conservation, ordering, or mutation mutant survives.
+- [x] Every value accepted by the portable contract behaves identically in all three implementations.
+- [x] Every value outside the portable contract returns the same portable error outcome.
+- [x] No critical range, integer-validation, conservation, ordering, or mutation mutant survives.
 
 ## 6. Milestone 3 — Traceability and Audit contract repair
 

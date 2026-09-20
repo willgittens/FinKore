@@ -38,6 +38,13 @@ The normalized observation belongs only to conformance infrastructure. Productio
 ## Canonical values
 
 Money is represented as `{"amount":"plain base-10 decimal","currency":"ISO code"}`. A normalized Money result uses a canonical plain decimal string: no plus sign, no exponent, no insignificant leading zeros, and zero is not negative. Trailing fractional zeros MAY be present in vector input, but runners compare Money numerically and exactly with currency. Where an operation defines target scale, the expected result uses that scale to expose the boundary.
+The `finkore.money.allocate` fixture supplies `value`, `allocation`, and
+`scale`. `allocation.method` is `EQUAL` with `parts` or `RATIO` with `ratios`.
+Scale, parts, and ratio entries are JSON numbers with integer mathematical
+values. Scale and parts use the inclusive ranges defined by
+MONEY-ALLOCATION-014, and ratio entries use its inclusive exact JSON integer
+range. Adapters pass these values to their core implementation without applying
+range or allocation rules.
 Conformance-only sentinels use `{"presence":"ABSENT"}` and `{"presence":"REDACTED"}` when absence and policy-authorized concealment must be observed distinctly from JSON `null`. Adapters translate their own representations to these sentinels; production APIs are not required to expose them.
 
 ## Declarative fixtures

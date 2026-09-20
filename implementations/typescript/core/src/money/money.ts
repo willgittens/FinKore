@@ -213,12 +213,11 @@ function shouldIncrement(
       if (tieComparison < divisor) return false
       return retainedMagnitude % 2n !== 0n
     }
-    // Stryker disable all: validateRoundingOptions narrows all public inputs to supported modes before this internal helper is called.
+    // Stryker disable next-line all: validateRoundingOptions narrows all public inputs to supported modes before this internal helper is called.
     default: {
       const unsupported: never = mode
       throw new InvalidMoneyRoundingError('Invalid Money rounding mode', { mode: unsupported })
     }
-    // Stryker restore all
   }
 }
 
@@ -245,24 +244,20 @@ function roundDecimal(amount: string, targetScale: number, mode: RoundingMode): 
 }
 
 function validateAllocationScale(scale: unknown): number {
-  if (!Number.isSafeInteger(scale) || (scale as number) < 0) {
+  if (!Number.isInteger(scale) || (scale as number) < 0 || (scale as number) > 50) {
     throw new InvalidMoneyAllocationError()
   }
   return scale as number
 }
 
 function validateAllocationPartCount(parts: unknown): number {
-  if (!Number.isSafeInteger(parts) || (parts as number) <= 0) {
+  if (!Number.isInteger(parts) || (parts as number) <= 0 || (parts as number) > 100) {
     throw new InvalidMoneyAllocationError()
   }
   return parts as number
 }
 
 function validateAllocationRatio(ratio: unknown): bigint {
-  if (typeof ratio === 'bigint') {
-    if (ratio <= 0n) throw new InvalidMoneyAllocationError()
-    return ratio
-  }
   if (!Number.isSafeInteger(ratio) || (ratio as number) <= 0) {
     throw new InvalidMoneyAllocationError()
   }
@@ -270,7 +265,7 @@ function validateAllocationRatio(ratio: unknown): bigint {
 }
 
 function validateAllocationRequest(input: MoneyAllocationRequest): { readonly scale: number; readonly weights: readonly bigint[] } {
-  if (typeof input !== 'object' || input === null || Array.isArray(input)) {
+  if (input === null || input === undefined || Array.isArray(input)) {
     throw new InvalidMoneyAllocationError()
   }
   const candidate = input as {
@@ -302,7 +297,8 @@ function validateAllocationRequest(input: MoneyAllocationRequest): { readonly sc
 
 function allocationUnitsAtScale(amount: string, targetScale: number): bigint {
   const parts = decimalParts(amount)
-  if (targetScale >= parts.scale) {
+  // Stryker disable next-line EqualityOperator: at equal scale the reduction path divides by one and returns the same integer units.
+  if (targetScale > parts.scale) {
     return scaleDecimal(parts, targetScale)
   }
 
@@ -314,6 +310,7 @@ function allocationUnitsAtScale(amount: string, targetScale: number): bigint {
 }
 
 function allocateUnitAmounts(sourceUnits: bigint, weights: readonly bigint[]): readonly bigint[] {
+  // Stryker disable next-line EqualityOperator: bigint has no distinct negative zero.
   const negative = sourceUnits < 0n
   const absoluteUnits = negative ? -sourceUnits : sourceUnits
   const totalWeight = weights.reduce((sum, weight) => sum + weight, 0n)
@@ -606,11 +603,13 @@ export class Money {
    * Allocates this Money value into ordered Money results.
    *
    * Equal allocation uses a positive integer part count. Ratio allocation uses
-   * a non-empty ordered list of positive integer ratios. Every result is
-   * represented at the explicit target scale, preserves this value's currency,
-   * and the exact numeric sum of all results equals this value. Remainders are
-   * assigned to earliest declared positions, including negative sources where
-   * the affected result magnitudes increase.
+   * a non-empty ordered list of positive integer ratios. Scale and part count
+   * are bounded by `50` and `100`, respectively; each ratio is bounded by
+   * `9007199254740991`. Every result is represented at the explicit target
+   * scale, preserves this value's currency, and the exact numeric sum of all
+   * results equals this value. Remainders are assigned to earliest declared
+   * positions, including negative sources where the affected result magnitudes
+   * increase.
    *
    * @param request - Allocation method, method-specific inputs, and explicit target scale.
    * @returns Ordered allocated Money values preserving the source total and currency.
@@ -636,6 +635,7 @@ export class Money {
    * @see MONEY-ALLOCATION-011
    * @see MONEY-ALLOCATION-012
    * @see MONEY-ALLOCATION-013
+   * @see MONEY-ALLOCATION-014
    * @see MONEY-ERROR-005
    * @see MONEY-ERROR-007
    * @see MONEY-ERROR-008

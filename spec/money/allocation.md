@@ -46,6 +46,11 @@ declared-order meaning used for remainder placement.
 The concrete conformance fixture shape is defined by conformance vectors. This
 specification defines the required semantics, not a production API signature.
 
+Allocation integer members use JSON numbers. Their mathematical value, rather
+than whether the JSON text contains a decimal point, determines whether they
+are integers. For example, `2` and `2.0` represent the same integer value;
+`2.5` is fractional. Decimal strings are not allocation integer values.
+
 ## Requirements
 
 - **MONEY-ALLOCATION-001** - An allocation request MUST provide a valid source Money value, exactly one supported allocation method, and an explicit target scale. Required allocation request members MUST NOT be omitted or null.
@@ -61,6 +66,7 @@ specification defines the required semantics, not a production API signature.
 - **MONEY-ALLOCATION-011** - For a negative source amount, remainder assignment MUST use the same declared order and increase the magnitude of the affected negative allocated results.
 - **MONEY-ALLOCATION-012** - Allocation MUST be deterministic for the same source Money, allocation method, declared order, and target scale.
 - **MONEY-ALLOCATION-013** - Allocation MUST NOT alter the observable value of the source Money operand, whether allocation succeeds or fails.
+- **MONEY-ALLOCATION-014** - Every allocation target scale, equal-part count, and ratio MUST be a finite JSON number whose mathematical value is an integer. A target scale MUST be from `0` through `50` inclusive, an equal-part count MUST be from `1` through `100` inclusive, and each ratio MUST be from `1` through `9007199254740991` inclusive. JSON strings, booleans, nulls, non-integer numbers, non-finite implementation values, and integers outside the applicable range MUST be rejected with `FINKORE_MONEY_INVALID_ALLOCATION`.
 
 ## Invariants
 
@@ -84,6 +90,9 @@ allocate -10.00 USD equally into 3 parts at scale 2
 
 allocate 0.00 USD by ratios [1, 2] at scale 2
 = [0.00 USD, 0.00 USD]
+
+allocate 10.00 USD by ratios [9007199254740991, 1] at scale 2
+= [10.00 USD, 0.00 USD]
 ```
 
 ## Invalid Examples
@@ -93,6 +102,8 @@ allocate 0.00 USD by ratios [1, 2] at scale 2
 - Inferring target scale 2 because the source currency is `USD`.
 - Reordering ratio entries before distributing the remainder.
 - Accepting zero, negative, fractional, decimal-string, or malformed ratios.
+- Accepting ratio `9007199254740992`, target scale `51`, or equal-part count
+  `101`.
 
 ## Errors
 
@@ -104,6 +115,22 @@ cannot be represented as whole allocation units at the target scale, the
 operation fails with `FINKORE_MONEY_ROUNDING_REQUIRED` under
 **MONEY-ERROR-005**. Failed allocation leaves the source Money operand
 unchanged under **MONEY-ERROR-007**.
+
+## Compatibility Correction
+
+Core 0.9.1 retains the published JSON-number request shape and existing member
+names. It defines the previously missing inclusive ranges so a JSON number is
+not accepted by an arbitrary-precision implementation when the same value
+cannot be represented or processed by another supported implementation. Values
+inside the ranges keep their existing meaning; values outside them use the
+existing `FINKORE_MONEY_INVALID_ALLOCATION` category. This is the demonstrated
+portability correction permitted by **SPEC-FREEZE-001** and does not introduce
+a new serialization encoding or operation identifier.
+
+Workflow definition versions use positive base-10 integer strings only for the
+optional Default Workflow Version Sequence; other versions and revisions are
+opaque strings. Approval quorum thresholds are bounded by the finite declared
+voter set. Those values therefore do not reuse the allocation ratio domain.
 
 ## Non-Goals
 

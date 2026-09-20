@@ -59,7 +59,7 @@ commitment are outside Core.
 | `finkore.money.compare` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-COMPARISON-001`–`-004`, `-006` |
 | `finkore.money.round` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ROUNDING-001`–`-004`, `-008`, `-009` |
 | `finkore.money.applyrate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-RATE-001`–`-009` |
-| `finkore.money.allocate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ALLOCATION-001`–`-013`, `MONEY-ERROR-008` |
+| `finkore.money.allocate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ALLOCATION-001`–`-014`, `MONEY-ERROR-008` |
 | `finkore.workflow.transition` | Workflow | `yes` | `unspecified` | `yes` | `may` | may be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007`, `WORKFLOW-VERSION-005`–`-012`, `WORKFLOW-CONFLICT-001`–`-008` |
 | `finkore.audit.append` | Audit | `yes` | `no` | `yes` | `required` | `none` | `AUDIT-EVENT-001`–`-005`, `-007`, `-008`, `AUDIT-ACTOR-001`–`-004`, `-007`, `-008`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001` |
 | `finkore.audit.replace` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
@@ -240,11 +240,14 @@ ratios.
 
 **Input:** `value` using normative Money serialization and an allocation request
 with `method`, explicit target `scale`, and either positive integer `parts` or a
-non-empty ordered positive integer `ratios` list.
+non-empty ordered positive integer `ratios` list. These integer members are JSON
+numbers: scale is in `0..50`, parts is in `1..100`, and every
+ratio is in `1..9007199254740991`, all inclusive. Integral JSON numbers such as
+`2.0` have the integer value `2`; strings and fractional values are invalid.
 
-**Preconditions:** The source Money is valid, the allocation request shape is
-valid, and the source amount is exactly representable as whole units at the
-target scale.
+**Preconditions:** The source Money is valid, the allocation request shape and
+integer ranges are valid, and the source amount is exactly representable as
+whole units at the target scale.
 
 **Success:** Returns an ordered list of Money values preserving source currency.
 The list sums exactly to the source amount, and any indivisible remainder is
@@ -253,8 +256,8 @@ distributed by declared order. The input Money does not change.
 **Known operation-specific errors:** `FINKORE_MONEY_INVALID_ALLOCATION` and
 `FINKORE_MONEY_ROUNDING_REQUIRED`. Money validation errors may also apply.
 
-**Normative traceability:** [MONEY-ALLOCATION-001 through -013](../spec/money/allocation.md)
-and [MONEY-ERROR-005, -007, -008](../spec/money/errors.md).
+**Normative traceability:** [MONEY-ALLOCATION-001 through -014](../spec/money/allocation.md)
+and [MONEY-ERROR-005, -007, and -008](../spec/money/errors.md).
 
 ## `finkore.audit.append`
 

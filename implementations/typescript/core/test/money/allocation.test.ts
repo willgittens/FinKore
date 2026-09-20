@@ -68,6 +68,61 @@ describe('Money allocation', () => {
       { amount: '40.00', currency: 'EUR' },
       { amount: '60.00', currency: 'EUR' },
     ])
+
+    expect(
+      json(
+        Money.from({ amount: '1.00', currency: 'USD' }).allocate({
+          method: 'RATIO',
+          ratios: [9007199254740991, 1],
+          scale: 2,
+        }),
+      ),
+    ).toEqual([
+      { amount: '1.00', currency: 'USD' },
+      { amount: '0.00', currency: 'USD' },
+    ])
+  })
+
+  it('accepts integral JSON numbers independently of decimal lexical notation', () => {
+    expect(json(Money.from({ amount: '1.00', currency: 'USD' }).allocate({ method: 'EQUAL', parts: 2.0, scale: 2.0 }))).toEqual([
+      { amount: '0.50', currency: 'USD' },
+      { amount: '0.50', currency: 'USD' },
+    ])
+    expect(json(Money.from({ amount: '10.00', currency: 'USD' }).allocate({ method: 'RATIO', ratios: [1.0, 2.0], scale: 2 }))).toEqual([
+      { amount: '3.34', currency: 'USD' },
+      { amount: '6.66', currency: 'USD' },
+    ])
+  })
+
+  it('accepts every inclusive allocation integer maximum', () => {
+    const hundred = Money.from({ amount: '1.00', currency: 'USD' }).allocate({ method: 'EQUAL', parts: 100, scale: 2 })
+    expect(hundred).toHaveLength(100)
+    expect(json(hundred).every((part) => part.amount === '0.01' && part.currency === 'USD')).toBe(true)
+
+    expect(json(Money.from({ amount: '1', currency: 'USD' }).allocate({ method: 'EQUAL', parts: 2, scale: 50 }))).toEqual([
+      { amount: '0.50000000000000000000000000000000000000000000000000', currency: 'USD' },
+      { amount: '0.50000000000000000000000000000000000000000000000000', currency: 'USD' },
+    ])
+    expect(json(Money.from({ amount: '10', currency: 'USD' }).allocate({ method: 'EQUAL', parts: 2, scale: 0 }))).toEqual([
+      { amount: '5', currency: 'USD' },
+      { amount: '5', currency: 'USD' },
+    ])
+  })
+
+  it('handles scale expansion and exact scale reduction without changing the source', () => {
+    const expanded = Money.from({ amount: '1', currency: 'USD' })
+    expect(json(expanded.allocate({ method: 'EQUAL', parts: 2, scale: 2 }))).toEqual([
+      { amount: '0.50', currency: 'USD' },
+      { amount: '0.50', currency: 'USD' },
+    ])
+    expect(expanded.toJSON()).toEqual({ amount: '1', currency: 'USD' })
+
+    const reduced = Money.from({ amount: '10.000', currency: 'USD' })
+    expect(json(reduced.allocate({ method: 'EQUAL', parts: 2, scale: 2 }))).toEqual([
+      { amount: '5.00', currency: 'USD' },
+      { amount: '5.00', currency: 'USD' },
+    ])
+    expect(reduced.toJSON()).toEqual({ amount: '10.000', currency: 'USD' })
   })
 
   it('rejects source amounts that are unrepresentable at the requested scale without mutating the operand', () => {
@@ -90,6 +145,7 @@ describe('Money allocation', () => {
       { method: 'EQUAL', parts: 0, scale: 2 },
       { method: 'EQUAL', parts: -1, scale: 2 },
       { method: 'EQUAL', parts: 1.5, scale: 2 },
+      { method: 'EQUAL', parts: 101, scale: 2 },
       { method: 'EQUAL', scale: 2 },
       { method: 'EQUAL', parts: 2, ratios: [1, 1], scale: 2 },
       { method: 'RATIO', ratios: [], scale: 2 },
@@ -97,12 +153,17 @@ describe('Money allocation', () => {
       { method: 'RATIO', ratios: [1, -2], scale: 2 },
       { method: 'RATIO', ratios: [1, '2'], scale: 2 },
       { method: 'RATIO', ratios: [1, 1.5], scale: 2 },
+      { method: 'RATIO', ratios: [1, 9007199254740992], scale: 2 },
+      { method: 'RATIO', ratios: [1, 2n], scale: 2 },
       { method: 'RATIO', ratios: [1, 2], parts: 2, scale: 2 },
       { method: 'RATIO', scale: 2 },
       { method: 'WEIGHTED', ratios: [1, 2], scale: 2 },
       { method: 'EQUAL', parts: 2, scale: 2.5 },
       { method: 'EQUAL', parts: 2, scale: -1 },
+      { method: 'EQUAL', parts: 2, scale: 51 },
       { method: 'EQUAL', parts: 2 },
+      'invalid',
+      undefined,
       null,
       [],
     ]) {

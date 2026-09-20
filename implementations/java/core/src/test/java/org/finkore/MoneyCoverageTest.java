@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -123,7 +125,46 @@ final class MoneyCoverageTest {
     assertEquals(Money.INVALID_ALLOCATION, assertThrows(FinKoreException.class, () -> value.allocate(Map.of("method", "EQUAL", "parts", 2), -1)).code());
     assertEquals(Money.INVALID_ALLOCATION, assertThrows(FinKoreException.class, () -> value.allocate(Map.of("method", "RATIO", "ratios", List.of()), 2)).code());
     assertEquals(Money.INVALID_ALLOCATION, assertThrows(FinKoreException.class, () -> value.allocate(Map.of("method", "RATIO", "ratios", List.of(1, 0)), 2)).code());
+    assertEquals(Money.INVALID_ALLOCATION, assertThrows(FinKoreException.class, () -> value.allocate(Map.of("method", "RATIO", "ratios", List.of(new BigInteger("9007199254740992"), 1)), 2)).code());
+    assertEquals(Money.INVALID_ALLOCATION, assertThrows(FinKoreException.class, () -> value.allocate(Map.of("method", "EQUAL", "parts", 101), 2)).code());
+    assertEquals(Money.INVALID_ALLOCATION, assertThrows(FinKoreException.class, () -> value.allocate(Map.of("method", "EQUAL", "parts", 2), 51)).code());
     assertEquals(Money.ROUNDING_REQUIRED, assertThrows(FinKoreException.class, () -> Money.fromPortable(Map.of("amount", "10.001", "currency", "USD")).allocate(Map.of("method", "EQUAL", "parts", 2), 2)).code());
+  }
+
+  @Test
+  void allocationAcceptsThePortableIntegerBoundariesAndIntegralJsonNumbers() {
+    Money value = Money.fromPortable(Map.of("amount", "10.00", "currency", "USD"));
+
+    assertEquals(
+        List.of(
+            Map.of("amount", "3.34", "currency", "USD"),
+            Map.of("amount", "6.66", "currency", "USD")),
+        value.allocate(
+            Map.of("method", "RATIO", "ratios", List.of(new BigDecimal("1.0"), new BigDecimal("2.0"))),
+            new BigDecimal("2.0")).stream().map(Money::toPortable).toList());
+    assertEquals(
+        List.of(
+            Map.of("amount", "3.34", "currency", "USD"),
+            Map.of("amount", "6.66", "currency", "USD")),
+        value.allocate(Map.of("method", "RATIO", "ratios", List.of(1.0d, 2.0d)), 2.0d)
+            .stream().map(Money::toPortable).toList());
+    assertEquals(
+        List.of(
+            Map.of("amount", "10.00", "currency", "USD"),
+            Map.of("amount", "0.00", "currency", "USD")),
+        value.allocate(
+            Map.of("method", "RATIO", "ratios", List.of(new BigInteger("9007199254740991"), BigInteger.ONE)),
+            2).stream().map(Money::toPortable).toList());
+    List<Money> hundred = Money.fromPortable(Map.of("amount", "1.00", "currency", "USD"))
+        .allocate(Map.of("method", "EQUAL", "parts", 100), 2);
+    assertEquals(100, hundred.size());
+    assertTrue(hundred.stream().allMatch(part -> Map.of("amount", "0.01", "currency", "USD").equals(part.toPortable())));
+    assertEquals(
+        List.of(
+            Map.of("amount", "0.50000000000000000000000000000000000000000000000000", "currency", "USD"),
+            Map.of("amount", "0.50000000000000000000000000000000000000000000000000", "currency", "USD")),
+        Money.fromPortable(Map.of("amount", "1", "currency", "USD"))
+            .allocate(Map.of("method", "EQUAL", "parts", 2), 50).stream().map(Money::toPortable).toList());
   }
 
   @Test
