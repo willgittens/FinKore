@@ -2,9 +2,9 @@
 
 ## Status
 
-Planned. This document is non-normative and depends on successful completion of
-the 0.9 release-candidate gate. In this filename, `10` means version 1.0, not
-version 0.10.
+Ready to begin. The Core 0.9.1 corrective release gate is complete, so Core 1.0
+planning is reopened. This document remains non-normative. In this filename,
+`10` means version 1.0, not version 0.10.
 
 ## Objective
 

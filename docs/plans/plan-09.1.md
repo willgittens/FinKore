@@ -1,7 +1,7 @@
 # FinKore Core 0.9.1 Plan
 
-Status: Milestones 1–4 complete; Milestone 5 locally complete, with publication
-blocked on authenticated remote tag verification.
+Status: Complete. Milestones 1–5 and the Core 0.9.1 release gate passed. The
+release is represented by the annotated `core-0.9.1` tag.
 
 Release type: Corrective release candidate
 
@@ -300,17 +300,18 @@ survivor changes portable financial behavior.
 
 ## 8. Milestone 5 — Documentation and release hygiene
 
-Local completion: 2026-09-20
+Completion: 2026-09-21
 
 Decision: CoreDoc consistently identifies the current Core 0.9 release
 candidate; Core 0.9.1 is its corrective release and does not claim Core 1.0
 status. Public READMEs, Agentic metadata, and corrected timestamp/allocation/Audit
 JSDoc were reviewed together. The stale runner backup was removed, and the
 package gate now rejects repository-only content and proves isolated npm, wheel,
-and JAR consumption. The complete local `npm run verify` workflow passes.
-Authenticated access to the configured private GitHub origin is unavailable in
-this environment, so remote tag verification did not complete, no 0.9.1 tag was
-created, and Core 1.0 planning remains gated.
+and JAR consumption. The complete `npm run verify` workflow passes from a clean
+clone. Authenticated remote inspection confirmed that `main` contains the
+verified release state and that no conflicting `core-0.9.1` tag existed before
+publication. The annotated tag identifies the corrective release, and Core 1.0
+planning is reopened.
 
 - [x] Resolve the Core 0.9 versus Core 1.0 release-candidate wording in CoreDoc without changing normative behavior accidentally.
 - [x] Review root and package READMEs for current capability, conformance, toolchain, and release claims.
@@ -319,9 +320,9 @@ created, and Core 1.0 planning remains gated.
 - [x] Verify published package contents exclude temporary, backup, fixture-only, and repository-only files.
 - [x] Perform consumer-style installation and import checks for publishable packages.
 - [x] Add a concise Core 0.9.1 entry to docs/releases/README.md after the corrective work is complete.
-- [ ] Verify local and remote tag state with authenticated repository access before publishing.
-- [ ] Create the Core 0.9.1 release tag only after every release gate passes.
-- [ ] Reopen Core 1.0 planning only when no unresolved 0.9.1 blocker remains.
+- [x] Verify local and remote tag state with authenticated repository access before publishing.
+- [x] Create the Core 0.9.1 release tag only after every release gate passes.
+- [x] Reopen Core 1.0 planning only when no unresolved 0.9.1 blocker remains.
 
 ## 9. Required execution order
 
@@ -358,7 +359,7 @@ Core 0.9.1 is ready only when all of the following are true:
 - [x] Documentation, architecture, package, and license checks pass.
 - [x] CoreDoc, READMEs, Agentic metadata, JSDoc, and release notes describe the same current behavior.
 - [x] No stale backup or unintended package artifact remains.
-- [ ] Remote release/tag state has been verified.
+- [x] Remote release/tag state has been verified.
 - [x] The working tree contains only intentional release changes.
 
 Any unresolved item above blocks the 0.9.1 release candidate unless the specification explicitly records it as deferred and the deferral does not undermine a current portability or conformance claim.
