@@ -22,9 +22,10 @@ The suite contains 285 vectors. Overall: **322 covered (79.3%)**, **0 partially 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current release candidate. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
 Requirement coverage records that a vector exercises a requirement; it does not
-prove exhaustive boundary coverage or a passing implementation. The four Core
-0.9.2 regressions currently fail in Python and pass in TypeScript and Java.
-Money exactness and Approval validity fixes remain pending under the
+prove exhaustive boundary coverage or a passing implementation. The three Core
+0.9.2 Money regressions now pass in all implementations. The Approval validity
+regression still fails in Python and passes in TypeScript and Java; its fix
+remains pending under the
 [Core 0.9.2 plan](../docs/plans/plan-09.2.md).
 
 ## Requirement mapping

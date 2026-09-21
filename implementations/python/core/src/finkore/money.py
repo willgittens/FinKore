@@ -223,15 +223,33 @@ class Money:
         return Money(_add_decimal(self.amount, other.amount), self.currency)
 
     def subtract(self, other: "Money") -> "Money":
-        """Subtract compatible Money values exactly without mutating either operand."""
+        """Subtract compatible Money values exactly without mutating either operand.
+
+        Sign reversal and arithmetic preserve every digit independently of the
+        caller's Decimal precision and rounding mode; the context is unchanged.
+        Raises ``FinKoreError`` with ``FINKORE_MONEY_CURRENCY_MISMATCH`` when
+        currencies differ.
+
+        @see MONEY-ARITHMETIC-001
+        @see MONEY-ARITHMETIC-002
+        @see MONEY-ARITHMETIC-007
+        @see MONEY-ARITHMETIC-009
+        """
 
         self._compatible(other)
-        return Money(_add_decimal(self.amount, -other.amount), self.currency)
+        return Money(_add_decimal(self.amount, other.amount.copy_negate()), self.currency)
 
     def negate(self) -> "Money":
-        """Return the exact additive inverse while preserving currency."""
+        """Return the exact additive inverse while preserving currency and this operand.
 
-        return Money(-self.amount, self.currency, self.presentation_scale)
+        Negation neither applies nor changes the caller's Decimal context.
+
+        @see MONEY-ARITHMETIC-003
+        @see MONEY-ARITHMETIC-007
+        @see MONEY-ARITHMETIC-009
+        """
+
+        return Money(self.amount.copy_negate(), self.currency, self.presentation_scale)
 
     def multiply(self, scalar: Any) -> "Money":
         """Multiply by an exact decimal scalar while preserving currency."""
@@ -295,8 +313,17 @@ class Money:
         """Allocate in declared order using the portable scale, part, and ratio integer ranges.
 
         Raises ``FinKoreError`` with ``FINKORE_MONEY_INVALID_ALLOCATION`` for
-        malformed or out-of-range requests and preserves this Money value on
-        every failure.
+        malformed or out-of-range requests, or ``FINKORE_MONEY_ROUNDING_REQUIRED``
+        when the source cannot be represented in whole units at the target scale.
+        Preserves this Money value on success and failure. Result construction
+        conserves the exact source total independently of the caller's Decimal
+        precision and rounding mode, without changing that context.
+
+        @see MONEY-ALLOCATION-007
+        @see MONEY-ALLOCATION-008
+        @see MONEY-ALLOCATION-010
+        @see MONEY-ALLOCATION-011
+        @see MONEY-ALLOCATION-013
         """
 
         target_scale = _allocation_integer(scale, 0, 50)
@@ -325,4 +352,4 @@ class Money:
         remainder = absolute_units - sum(base_units)
         for index in range(remainder):
             base_units[index] += 1
-        return [Money(Decimal(sign * units_for_part).scaleb(-target_scale), self.currency, target_scale) for units_for_part in base_units]
+        return [Money(_decimal_from_units(sign * units_for_part, target_scale), self.currency, target_scale) for units_for_part in base_units]

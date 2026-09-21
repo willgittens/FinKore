@@ -2,10 +2,10 @@
 
 This package is the Python implementation track for FinKore Core 0.9 release candidate. It is
 derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
-TypeScript financial implementation code. It currently passes 281 of the 285
-manifest vectors. Four permanent regressions expose unresolved Money exactness
-and Approval validity defects; this is not complete current conformance.
-The [Core 0.9.2 plan](../../../docs/plans/plan-09.2.md) tracks their correction.
+TypeScript financial implementation code. It currently passes 284 of the 285
+manifest vectors, including all 102 Money vectors. One Approval validity
+regression remains unresolved; this is not complete current conformance.
+The [Core 0.9.2 plan](../../../docs/plans/plan-09.2.md) tracks its correction.
 
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to a Python package registry. The
@@ -30,12 +30,14 @@ Current status:
 - Audit and Approval timestamps use the strict portable FinKore RFC 3339
   profile. Values retain up to nine fractional digits, and Approval expiration
   compares exact nanoseconds rather than Python `datetime` microseconds.
-- Money arithmetic, Rate application, allocation-unit detection, and rounding
-  use exact coefficient-and-scale arithmetic where Python `decimal` context
-  precision could otherwise alter FinKore results. Known exceptions remain in
-  subtraction, negation, and allocation result construction, which can silently
-  round high-precision amounts. Approval relevant-fact comparison also currently
-  conflates JSON Boolean and numeric values such as `true` and `1`.
+- Money arithmetic, Rate application, allocation, and rounding preserve exact
+  values independently of the caller's Decimal precision and rounding mode.
+  Subtraction and negation use exact sign reversal; allocation constructs
+  results directly from integer units and scale. These operations preserve
+  operands and the caller's Decimal context. Precision reduction uses the
+  explicit FinKore rounding arguments.
+- Approval relevant-fact comparison currently conflates JSON Boolean and
+  numeric values such as `true` and `1`.
 
 ## Public Package Surface
 

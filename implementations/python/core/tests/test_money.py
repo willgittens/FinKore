@@ -1,13 +1,141 @@
 # SPDX-License-Identifier: MPL-2.0
 from __future__ import annotations
 
-from decimal import Context, Decimal, ROUND_HALF_EVEN, localcontext
+from copy import deepcopy
+from decimal import Context, Decimal, Inexact, Rounded, ROUND_DOWN, ROUND_HALF_EVEN, ROUND_UP, getcontext, localcontext
+from fractions import Fraction
 import unittest
 
 from finkore import FinKoreError, Money
 
 
 class MoneyTests(unittest.TestCase):
+    def assert_money_value(self, result: Money, expected: str) -> None:
+        """Check exact numeric serialization and round-trip without prescribing trailing zeros."""
+        serialized = result.to_portable()
+        self.assertEqual(serialized["currency"], "EUR")
+        self.assertEqual(Decimal(serialized["amount"]), Decimal(expected))
+        restored = Money.from_portable(serialized)
+        self.assertEqual(restored.amount, Decimal(expected))
+        self.assertEqual(restored.currency, "EUR")
+
+    def test_sign_reversal_and_cancellation_at_precision_boundaries(self) -> None:
+        """MONEY-ARITHMETIC-003/007/009: preserve digits on both sides of precision 28."""
+        amounts = [
+            "1234567890123456789012345.67",  # 27 significant digits
+            "12345678901234567890123456.78",  # 28 significant digits
+            "123456789012345678901234567.89",  # 29 significant digits
+            "1234567890123456789012345678.91",
+            "0.00000000000000000000000000000000000000000000000001",
+            "0.00",
+        ]
+        for amount in amounts:
+            for sign in ("", "-"):
+                with self.subTest(amount=amount, sign=sign), localcontext(Context(prec=28)):
+                    source = {"amount": sign + amount, "currency": "EUR"}
+                    value = Money.from_portable(source)
+                    before = value.to_portable()
+                    zero = Money.from_portable({"amount": "0", "currency": "EUR"})
+                    opposite = amount if sign else "-" + amount
+                    self.assert_money_value(zero.subtract(value), opposite)
+                    self.assert_money_value(value.negate(), opposite)
+                    self.assert_money_value(value.subtract(value), "0")
+                    self.assert_money_value(value.add(value.negate()), "0")
+                    self.assertEqual(value.to_portable(), before)
+                    self.assert_money_value(zero, "0")
+
+    def test_money_operations_preserve_caller_decimal_context(self) -> None:
+        """MONEY-ARITHMETIC-007/008 and MONEY-ALLOCATION-008: context is not a rounding policy."""
+        caller = getcontext()
+        caller_state = repr(caller)
+        for precision in (3, 28, 60):
+            for mode in (ROUND_DOWN, ROUND_HALF_EVEN, ROUND_UP):
+                for trap_rounding in (False, True):
+                    with self.subTest(precision=precision, mode=mode, traps=trap_rounding):
+                        with localcontext(Context(prec=precision, rounding=mode)) as context:
+                            context.traps[Inexact] = trap_rounding
+                            context.traps[Rounded] = trap_rounding
+                            # Include an existing flag so clearing caller flags also fails.
+                            context.flags[Inexact] = True
+                            before = repr(context)
+                            value = Money.from_portable({"amount": "123.45", "currency": "EUR"})
+                            other = Money.from_portable({"amount": "23.45", "currency": "EUR"})
+                            operations = [
+                                (lambda: value.subtract(other), "100"),
+                                (lambda: other.subtract(value), "-100"),
+                                (lambda: value.negate(), "-123.45"),
+                                (lambda: value.add(other), "146.90"),
+                                (lambda: value.multiply("2"), "246.90"),
+                                (lambda: value.divide("2"), "61.725"),
+                                (lambda: value.apply_rate({"kind": "PERCENTAGE", "value": "10"}), "12.345"),
+                                (lambda: value.round(1, "HALF_UP"), "123.5"),
+                            ]
+                            for operation, expected in operations:
+                                self.assert_money_value(operation(), expected)
+                                self.assertIs(getcontext(), context)
+                                self.assertEqual(repr(context), before)
+                            for allocation in ({"method": "EQUAL", "parts": 2}, {"method": "RATIO", "ratios": [1, 1]}):
+                                parts = value.allocate(allocation, 2)
+                                self.assertEqual(len(parts), 2)
+                                self.assert_money_value(parts[0], "61.73")
+                                self.assert_money_value(parts[1], "61.72")
+                                self.assertEqual(sum(Fraction(part.amount) for part in parts), Fraction("123.45"))
+                                self.assertEqual(repr(context), before)
+                            self.assertEqual(value.compare(other), "GREATER")
+                            self.assert_money_value(value, "123.45")
+                            self.assert_money_value(other, "23.45")
+                            self.assertEqual(repr(context), before)
+                        self.assertIs(getcontext(), caller)
+                        self.assertEqual(repr(caller), caller_state)
+
+    def test_allocation_conserves_exact_signed_values_and_declared_order(self) -> None:
+        """MONEY-ALLOCATION-005/007/008/010/011/012/013: conserve signed units in order."""
+        tiny = "0." + "0" * 49 + "1"
+        cases = [
+            ("10.00", 2, {"method": "EQUAL", "parts": 3}, ["3.34", "3.33", "3.33"]),
+            ("10.00", 2, {"method": "RATIO", "ratios": [1, 2, 3]}, ["1.67", "3.33", "5.00"]),
+            ("1234567890123456789012345678.91", 2, {"method": "RATIO", "ratios": [1, 1]},
+             ["617283945061728394506172839.46", "617283945061728394506172839.45"]),
+            (tiny, 50, {"method": "EQUAL", "parts": 3}, [tiny, "0", "0"]),
+            ("0.00", 2, {"method": "RATIO", "ratios": [3, 1]}, ["0", "0"]),
+        ]
+        for amount, scale, allocation, expected in cases:
+            for sign in ("", "-"):
+                with self.subTest(amount=amount, sign=sign, allocation=allocation), localcontext(Context(prec=3)):
+                    value = Money.from_portable({"amount": sign + amount, "currency": "EUR"})
+                    before = value.to_portable()
+                    allocation_before = deepcopy(allocation)
+                    parts = value.allocate(allocation, scale)
+                    self.assertEqual(len(parts), len(expected))
+                    for part, expected_amount in zip(parts, expected, strict=True):
+                        self.assert_money_value(part, sign + expected_amount)
+                    self.assertEqual(sum(Fraction(part.amount) for part in parts), Fraction(sign + amount))
+                    self.assertEqual([part.to_portable() for part in value.allocate(allocation, scale)],
+                                     [part.to_portable() for part in parts])
+                    self.assertEqual(value.to_portable(), before)
+                    self.assertEqual(allocation, allocation_before)
+
+    def test_failed_money_operations_preserve_values_requests_and_context(self) -> None:
+        """MONEY-ERROR-007 and MONEY-ALLOCATION-013: failures cannot alter operands or context."""
+        with localcontext(Context(prec=3, rounding=ROUND_UP)) as context:
+            value = Money.from_portable({"amount": "123.451", "currency": "EUR"})
+            other = Money.from_portable({"amount": "1", "currency": "USD"})
+            source_before, other_before, context_before = value.to_portable(), other.to_portable(), repr(context)
+            allocation = {"method": "RATIO", "ratios": [1, 2]}
+            allocation_before = deepcopy(allocation)
+            for operation, code in [
+                (lambda: value.subtract(other), "FINKORE_MONEY_CURRENCY_MISMATCH"),
+                (lambda: value.allocate(allocation, 2), "FINKORE_MONEY_ROUNDING_REQUIRED"),
+                (lambda: value.allocate(allocation, 51), "FINKORE_MONEY_INVALID_ALLOCATION"),
+            ]:
+                with self.subTest(code=code), self.assertRaises(FinKoreError) as raised:
+                    operation()
+                self.assertEqual(raised.exception.code, code)
+                self.assertEqual(value.to_portable(), source_before)
+                self.assertEqual(other.to_portable(), other_before)
+                self.assertEqual(allocation, allocation_before)
+                self.assertEqual(repr(context), context_before)
+
     def test_subtracts_high_precision_right_operand_exactly(self) -> None:
         """MONEY-ARITHMETIC-007/009: sign reversal must not round the right operand."""
         with localcontext(Context(prec=28, rounding=ROUND_HALF_EVEN)):

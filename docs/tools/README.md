@@ -66,6 +66,11 @@ the same rule to timestamp precision and syntax, Money allocation range and
 ordering, Audit actor validation, and the other critical requirements listed
 in `conformance/traceability.md`.
 
+The Python Money probes also reintroduce Decimal-context rounding during
+subtraction, negation, and allocation result construction. Each has a permanent
+high-precision regression vector in the Money suite. The complete cross-domain
+release gate remains pending while the known Approval regression is unresolved.
+
 ## Local Packaging Proof
 
 Milestone packaging checks use local artifacts only. They do not publish to npm,

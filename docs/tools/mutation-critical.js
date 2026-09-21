@@ -21,6 +21,27 @@ if (!validTargets.has(requestedTarget)) {
 
 const pythonMutants = [
   {
+    id: 'python-money-subtraction-context-rounding',
+    suite: 'money',
+    path: 'core/src/finkore/money.py',
+    from: 'return Money(_add_decimal(self.amount, other.amount.copy_negate()), self.currency)',
+    to: 'return Money(_add_decimal(self.amount, -other.amount), self.currency)',
+  },
+  {
+    id: 'python-money-negation-context-rounding',
+    suite: 'money',
+    path: 'core/src/finkore/money.py',
+    from: 'return Money(self.amount.copy_negate(), self.currency, self.presentation_scale)',
+    to: 'return Money(-self.amount, self.currency, self.presentation_scale)',
+  },
+  {
+    id: 'python-money-allocation-context-rounding',
+    suite: 'money',
+    path: 'core/src/finkore/money.py',
+    from: 'Money(_decimal_from_units(sign * units_for_part, target_scale), self.currency, target_scale)',
+    to: 'Money(Decimal(sign * units_for_part).scaleb(-target_scale), self.currency, target_scale)',
+  },
+  {
     id: 'python-money-currency-mismatch-bypass',
     suite: 'money',
     path: 'core/src/finkore/money.py',
