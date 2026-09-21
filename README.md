@@ -56,49 +56,94 @@ Your application may be unique.
 
 The foundational financial problems beneath it usually are not.
 
-Teams repeatedly solve questions such as:
+FinKore separates the rules that make your product distinctive from the
+foundational behavior that should not be reinvented each time.
 
-- Can two monetary values with different currencies be added?
-- Does an approval remain valid after the amount changes?
-- Can a terminal financial record transition again?
-- Can committed audit history be rewritten?
-- Does a failed financial operation leave partial state behind?
-- Should multiple implementations produce the same observable outcome?
+| Your application decides | FinKore makes explicit |
+| --- | --- |
+| Which business policies, thresholds, and permissions apply | How declared financial rules behave and fail |
+| Which workflows and approval requirements the product needs | How state, decisions, and history remain valid and traceable |
+| How data is stored, presented, and integrated | Which outcomes must remain consistent across implementations |
 
-FinKore defines those behaviors before they become implementation details.
+You keep control of the product. FinKore gives its financially significant
+behavior a shared, testable foundation.
 
 ---
 
 ## One rule, one meaning
 
-Consider an operation that appears trivial:
+The value becomes clearer at the boundaries where ordinary application logic
+often becomes ambiguous.
+
+### Allocation without a missing cent
+
+Splitting `10.00 USD` equally into three parts cannot produce three identical
+amounts at a scale of two. FinKore makes the remainder rule deterministic:
 
 ```text
-10.20 EUR + 5.30 EUR
-
-→ 15.50 EUR
+10.00 USD ÷ 3
+→ [3.34 USD, 3.33 USD, 3.33 USD]
 ```
 
-Changing the second currency changes the meaning of the operation, not merely its formatting:
+The result order is declared, every part keeps the source currency, and the
+exact sum remains `10.00 USD`.
+
+### An approval belongs to the facts that were approved
+
+A manager approves an invoice for `9,000 EUR`. The invoice is later changed to
+`90,000 EUR`, and amount is relevant to that approval requirement.
 
 ```text
-10.20 EUR + 5.30 USD
-
-→ FINKORE_MONEY_CURRENCY_MISMATCH
+Approval for 9,000 EUR + current amount of 90,000 EUR
+→ previous decision remains in history
+→ previous decision does not satisfy the current requirement
 ```
 
-FinKore specifies the expected outcome, provides portable tests for it, and verifies that each implementation preserves it.
+The history is preserved, but the old decision is not silently reused for
+materially different facts.
 
-The same approach applies to questions such as:
+### A terminal state is actually terminal
 
-- Does an approval remain valid after a relevant amount changes?
-- Can a terminal financial record be edited or transitioned again?
-- Does a failed operation leave any partial state behind?
-- Can committed history be rewritten, or must a correction preserve evidence?
+If a workflow explicitly declares `APPROVED` as terminal, a later request to
+transition that instance back to `DRAFT` must fail.
+
+```text
+APPROVED → DRAFT
+→ FINKORE_WORKFLOW_TERMINAL_STATE
+→ current state remains APPROVED
+```
+
+The failure is explicit, portable, and non-mutating. A state name alone is not
+enough: terminal behavior must be declared by the workflow definition.
+
+### History keeps the uncomfortable parts
+
+Suppose a committed audit event records a rejected decision and a later event
+records an approval. The later outcome does not permit the earlier event to be
+edited or deleted.
+
+```text
+[rejected event] + [later approved event]
+→ both remain in committed history
+```
+
+FinKore treats that history as evidence, not as a mutable summary of the latest
+result.
 
 These are financial domain decisions.
 
 They should not be accidental side effects of a framework or whichever service implemented them first.
+
+FinKore specifies each outcome, provides portable tests for it, and verifies
+that every implementation preserves the same meaning.
+
+These scenarios are only a small illustration of FinKore Core 0.9.1:
+
+Across Money, Workflow, Audit, Approvals, Financial Entities, and shared
+conventions, 322 directly testable requirements are covered by the conformance
+suite. And this is just the beginning.
+
+TypeScript, Python, and Java all pass the complete current conformance manifest.
 
 ---
 
