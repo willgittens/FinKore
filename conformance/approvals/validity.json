@@ -958,6 +958,85 @@
         "unrelated-facts-invalidate-decision",
         "object-key-order-affects-facts"
       ]
+    },
+    {
+      "id": "approval.validity.boolean-number-fact-change-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-DECISION-003",
+        "APPROVAL-DECISION-007",
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-003"
+      ],
+      "description": "A relevant fact changing from JSON true to number 1 makes the prior approval ineffective while retaining the committed decision unchanged.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "approvedFlag": true
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "approvedFlag": 1
+        },
+        "relevantFactPaths": [
+          "approvedFlag"
+        ],
+        "observeHistory": true
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING",
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "approvedFlag": true
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-boolean-number-facts-treated-equal",
+        "stale-approval-satisfies-requirement",
+        "ineffective-decision-removed-or-rewritten"
+      ]
     }
   ]
 }

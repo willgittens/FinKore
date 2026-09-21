@@ -1,13 +1,43 @@
 # SPDX-License-Identifier: MPL-2.0
 from __future__ import annotations
 
-from decimal import Decimal
+from decimal import Context, Decimal, ROUND_HALF_EVEN, localcontext
 import unittest
 
 from finkore import FinKoreError, Money
 
 
 class MoneyTests(unittest.TestCase):
+    def test_subtracts_high_precision_right_operand_exactly(self) -> None:
+        """MONEY-ARITHMETIC-007/009: sign reversal must not round the right operand."""
+        with localcontext(Context(prec=28, rounding=ROUND_HALF_EVEN)):
+            left_input = {"amount": "0", "currency": "EUR"}
+            right_input = {"amount": "1234567890123456789012345678.91", "currency": "EUR"}
+            left = Money.from_portable(left_input)
+            right = Money.from_portable(right_input)
+            result = left.subtract(right)
+            self.assertEqual(left.to_portable(), left_input)
+            self.assertEqual(right.to_portable(), right_input)
+            self.assertEqual(result.to_portable(), {"amount": "-1234567890123456789012345678.91", "currency": "EUR"})
+
+    def test_negates_high_precision_amount_exactly(self) -> None:
+        """MONEY-ARITHMETIC-003/007/009: negation changes only the numeric sign."""
+        with localcontext(Context(prec=28, rounding=ROUND_HALF_EVEN)):
+            source = {"amount": "1234567890123456789012345678.91", "currency": "EUR"}
+            value = Money.from_portable(source)
+            result = value.negate()
+            self.assertEqual(value.to_portable(), source)
+            self.assertEqual(result.to_portable(), {"amount": "-1234567890123456789012345678.91", "currency": "EUR"})
+
+    def test_single_part_allocation_preserves_high_precision_source(self) -> None:
+        """MONEY-ALLOCATION-003/007/008/013: one part must conserve the exact source."""
+        with localcontext(Context(prec=28, rounding=ROUND_HALF_EVEN)):
+            source = {"amount": "1234567890123456789012345678.91", "currency": "EUR"}
+            value = Money.from_portable(source)
+            parts = value.allocate({"method": "EQUAL", "parts": 1}, 2)
+            self.assertEqual(value.to_portable(), source)
+            self.assertEqual([part.to_portable() for part in parts], [source])
+
     def test_portable_errors_carry_codes(self) -> None:
         with self.assertRaises(FinKoreError) as context:
             Money.from_portable({"amount": "1e3", "currency": "EUR"})

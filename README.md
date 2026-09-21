@@ -143,7 +143,9 @@ Across Money, Workflow, Audit, Approvals, Financial Entities, and shared
 conventions, 322 directly testable requirements are covered by the conformance
 suite. And this is just the beginning.
 
-TypeScript, Python, and Java all pass the complete current conformance manifest.
+TypeScript and Java pass the complete current conformance manifest. Python has
+four failing regressions for Money exactness and Approval validity tracked in
+the [Core 0.9.2 corrective plan](./docs/plans/plan-09.2.md).
 
 ---
 
@@ -334,7 +336,9 @@ See [Developer Tools](./docs/tools/README.md) for details.
 
 FinKore Core 0.9.1 is the corrective release candidate for the frozen Core 0.9 baseline intended to become Core 1.0.
 
-TypeScript, Python, and Java implement and pass the complete current conformance manifest for:
+TypeScript, Python, and Java implement the following domains. TypeScript and
+Java pass the complete current manifest; Python's four known regression failures
+block Core 1.0 promotion pending the Core 0.9.2 corrections.
 
 - Money
 - Workflow

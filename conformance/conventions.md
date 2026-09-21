@@ -128,6 +128,15 @@ conformance-local. They observe deterministic chain composition and
 current-effectiveness lifecycle behavior; they are not public Agentic operations
 and do not replace Decision history as evidence for which Decision satisfied a
 Requirement or which subject facts were bound to that Decision.
+
+An `approval.requirement.evaluate` fixture with an array of `decisions` may
+set `input.observeHistory` to `true`. On successful evaluation the adapter
+returns `observations.history` containing the committed decisions after the
+operation, alongside the normal requirement-state value. This optional
+conformance observation verifies history preservation; it does not change
+Approval semantics or introduce a public Agentic operation. Fixtures omitting
+the flag retain their existing result shape.
+
 For Entities, Entity create, mutate, transition, and evolution
 operations are promoted to canonical `finkore.entity.*` operation identifiers.
 They observe identity, lifecycle, mutability, validation, correction, reversal,

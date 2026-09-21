@@ -2,8 +2,10 @@
 
 This package is the Python implementation track for FinKore Core 0.9 release candidate. It is
 derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
-TypeScript financial implementation code. It passes the complete current
-conformance manifest.
+TypeScript financial implementation code. It currently passes 281 of the 285
+manifest vectors. Four permanent regressions expose unresolved Money exactness
+and Approval validity defects; this is not complete current conformance.
+The [Core 0.9.2 plan](../../../docs/plans/plan-09.2.md) tracks their correction.
 
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to a Python package registry. The
@@ -30,7 +32,10 @@ Current status:
   compares exact nanoseconds rather than Python `datetime` microseconds.
 - Money arithmetic, Rate application, allocation-unit detection, and rounding
   use exact coefficient-and-scale arithmetic where Python `decimal` context
-  precision could otherwise alter FinKore results.
+  precision could otherwise alter FinKore results. Known exceptions remain in
+  subtraction, negation, and allocation result construction, which can silently
+  round high-precision amounts. Approval relevant-fact comparison also currently
+  conflates JSON Boolean and numeric values such as `true` and `1`.
 
 ## Public Package Surface
 

@@ -1217,6 +1217,56 @@
         "part-count-limit-too-low",
         "allocation-total-not-preserved"
       ]
+    },
+    {
+      "id": "money.allocate.equal.high-precision-single-part-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-003",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-013"
+      ],
+      "description": "Allocates a 30-significant-digit source into one part at scale 2 without creating or losing units during result construction.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "1234567890123456789012345678.91",
+          "currency": "EUR"
+        },
+        "allocation": {
+          "method": "EQUAL",
+          "parts": 1
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "1234567890123456789012345678.91",
+            "currency": "EUR"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "1234567890123456789012345678.91",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "allocation-context-rounded-result",
+        "allocation-does-not-conserve-total",
+        "allocation-mutates-source"
+      ]
     }
   ]
 }

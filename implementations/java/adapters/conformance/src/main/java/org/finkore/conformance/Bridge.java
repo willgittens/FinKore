@@ -168,7 +168,9 @@ public final class Bridge {
             inputValue.get("decisions"),
             inputValue.get("currentSubjectFacts"),
             inputValue.get("relevantFactPaths"),
-            inputValue.get("evaluatedAt")), null);
+            inputValue.get("evaluatedAt")),
+            Boolean.TRUE.equals(inputValue.get("observeHistory"))
+                ? Map.of("history", inputValue.get("decisions")) : null);
         case "approval.decision.record" -> success(Approvals.recordDecision(
             inputValue.get("requirement"),
             inputValue.get("decision"),

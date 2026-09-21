@@ -1,12 +1,35 @@
 # SPDX-License-Identifier: MPL-2.0
 from __future__ import annotations
 
+import json
 import unittest
 
 from finkore import FinKoreError, evaluate_composition, evaluate_requirement, record_decision
 
 
 class ApprovalTests(unittest.TestCase):
+    def test_boolean_to_number_fact_change_invalidates_approval_and_preserves_history(self) -> None:
+        """APPROVAL-DECISION-003/007 and APPROVAL-VALIDITY-002/003: retain stale evidence."""
+        requirement = {
+            "id": "finance-review", "subject": {"type": "invoice", "id": "inv-42"},
+            "eligibleActors": ["user-7"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED",
+        }
+        decision = {
+            "requirementId": "finance-review", "subjectFacts": {"approvedFlag": True},
+            "outcome": "APPROVED", "actor": {"type": "user", "id": "user-7"},
+            "decidedAt": "2026-09-01T12:00:00Z",
+        }
+        history = record_decision(requirement, decision, [])["history"]
+        before = json.dumps(history, sort_keys=True)
+        self.assertEqual(
+            evaluate_requirement(requirement, history, {"approvedFlag": True}, ["approvedFlag"]),
+            "APPROVED",
+        )
+        result = evaluate_requirement(requirement, history, {"approvedFlag": 1}, ["approvedFlag"])
+        # JSON comparison keeps Boolean/number distinctions that Python equality loses.
+        self.assertEqual(json.dumps(history, sort_keys=True), before)
+        self.assertEqual(result, "PENDING")
+
     def test_requirement_approved_by_effective_eligible_decision(self) -> None:
         requirement = {"id": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}, "eligibleActors": ["user-7"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED"}
         decision = {"requirementId": "finance-review", "subjectFacts": {"revision": "3"}, "outcome": "APPROVED", "actor": {"type": "user", "id": "user-7"}, "decidedAt": "2026-09-01T12:00:00Z"}

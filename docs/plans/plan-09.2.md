@@ -2,8 +2,9 @@
 
 ## Status
 
-Planned. Core 1.0 promotion is blocked by the Money exactness and Approval
-validity defects reproduced during the readiness review.
+In progress. Milestone 1 is complete; implementation fixes in Milestones 2
+and 3 remain pending. Core 1.0 promotion is blocked by the Money exactness and
+Approval validity defects reproduced during the readiness review.
 
 Release type: Corrective release candidate.
 
@@ -70,23 +71,28 @@ tests and vectors; this release must not depend on files under `/tmp`.
 
 Preserve each demonstrated failure before implementation changes.
 
-- [ ] Read Money arithmetic, representation, serialization, and allocation
+- [x] Read Money arithmetic, representation, serialization, and allocation
       specifications and Approval decisions and validity specifications.
       Confirm the existing governing requirements and related Agentic metadata.
-- [ ] Add manifest-discovered Money vectors for high-precision subtraction,
+- [x] Add manifest-discovered Money vectors for high-precision subtraction,
       negation, and one-part allocation using the reproduced inputs above.
-- [ ] Add a vector for an approved requirement whose explicitly relevant fact
+- [x] Add a vector for an approved requirement whose explicitly relevant fact
       changes from `true` to `1`, requiring `PENDING` and preserved history.
-- [ ] Give new vectors stable IDs, valid requirement references, `regression`
+- [x] Give new vectors stable IDs, valid requirement references, `regression`
       and mutation-sensitive metadata, and exact expected observations.
-- [ ] Add Python unit regressions for each defect through the public API.
-- [ ] Confirm the new regressions fail against the defective Python code and
+- [x] Add Python unit regressions for each defect through the public API.
+- [x] Confirm the new regressions fail against the defective Python code and
       that TypeScript and Java agree with the normative portable expectations.
-- [ ] Update traceability references and vector counts without claiming that
+- [x] Update traceability references and vector counts without claiming that
       requirement inventory coverage proves exhaustive boundary coverage.
 
-Completion: all four demonstrated incorrect observations have permanent,
-requirement-backed failing tests.
+Completed: 2026-09-21. All four demonstrated incorrect observations now have
+permanent, requirement-backed unit tests and manifest-discovered vectors.
+TypeScript and Java pass all 285 vectors; CPython 3.12 and 3.13 each pass the
+original 281 and fail exactly the four new regressions. Python unit tests fail
+on the same four defects. Approval adapters expose optional post-evaluation
+history observations, and current conformance claims and traceability are
+updated. No financial core behavior or normative contract was changed.
 
 ## Milestone 2 — Exact Python Money operations
 

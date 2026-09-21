@@ -274,6 +274,7 @@ function inputAuditRedact(input: unknown): { readonly history: unknown; readonly
 function inputApprovalRequirementEvaluate(input: unknown): {
   readonly requirement: unknown
   readonly decisions: unknown
+  readonly observeHistory?: boolean
   readonly currentSubjectFacts?: unknown
   readonly relevantFactPaths?: readonly string[]
   readonly evaluatedAt?: unknown
@@ -284,6 +285,7 @@ function inputApprovalRequirementEvaluate(input: unknown): {
   const candidate = input as {
     readonly requirement: unknown
     readonly decisions: unknown
+    readonly observeHistory?: boolean
     readonly currentSubjectFacts?: unknown
     readonly relevantFactPaths?: readonly string[]
     readonly evaluatedAt?: unknown
@@ -291,6 +293,7 @@ function inputApprovalRequirementEvaluate(input: unknown): {
   return {
     requirement: candidate.requirement,
     decisions: candidate.decisions,
+    ...(candidate.observeHistory === true ? { observeHistory: true } : {}),
     ...(Object.hasOwn(candidate, 'currentSubjectFacts') ? { currentSubjectFacts: candidate.currentSubjectFacts } : {}),
     ...(candidate.relevantFactPaths === undefined ? {} : { relevantFactPaths: candidate.relevantFactPaths }),
     ...(Object.hasOwn(candidate, 'evaluatedAt') ? { evaluatedAt: candidate.evaluatedAt } : {}),
@@ -1093,6 +1096,8 @@ function executeAuditRemove(request: AdapterRequest): NormalizedResult {
  * The adapter reconstructs the supplied logical decision history and delegates
  * requirement identity, eligibility, outcome, and relevant-facts effectiveness
  * checks to the core Approval API.
+ * Array-history fixtures may request the committed decisions after evaluation
+ * with `observeHistory`, allowing vectors to verify history preservation.
  */
 function executeApprovalRequirementEvaluate(request: AdapterRequest): NormalizedResult {
   const input = inputApprovalRequirementEvaluate(request.input)
@@ -1105,6 +1110,7 @@ function executeApprovalRequirementEvaluate(request: AdapterRequest): Normalized
         ...(input.relevantFactPaths === undefined ? {} : { relevantFactPaths: input.relevantFactPaths }),
         ...(Object.hasOwn(input, 'evaluatedAt') ? { evaluatedAt: input.evaluatedAt } : {}),
       }),
+      ...(input.observeHistory === true ? { observations: { history: history.decisions() } } : {}),
     }
   } catch (error) {
     return normalizeThrown(error)

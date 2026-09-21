@@ -1001,6 +1001,97 @@
         "exponent-output",
         "negative-native-scale-leaked"
       ]
+    },
+    {
+      "id": "money.subtract.high-precision-right-operand-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-001",
+        "MONEY-ARITHMETIC-002",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "Subtracts a 30-significant-digit right operand from zero without rounding during sign reversal or changing either operand.",
+      "operation": "finkore.money.subtract",
+      "input": {
+        "left": {
+          "amount": "0",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "1234567890123456789012345678.91",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-1234567890123456789012345678.91",
+          "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "0",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "1234567890123456789012345678.91",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "subtraction-context-rounded-right-operand",
+        "arithmetic-mutates-operand"
+      ]
+    },
+    {
+      "id": "money.negate.high-precision-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-003",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "Reverses the sign of a 30-significant-digit amount exactly while preserving the operand.",
+      "operation": "finkore.money.negate",
+      "input": {
+        "value": {
+          "amount": "1234567890123456789012345678.91",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-1234567890123456789012345678.91",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1234567890123456789012345678.91",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "negation-context-rounded-amount",
+        "arithmetic-mutates-operand"
+      ]
     }
   ]
 }

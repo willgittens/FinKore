@@ -195,7 +195,8 @@ def execute_approval_requirement_evaluate(input_value: dict[str, Any]) -> dict[s
             input_value.get("currentSubjectFacts"),
             input_value.get("relevantFactPaths"),
             input_value.get("evaluatedAt"),
-        )
+        ),
+        {"history": input_value.get("decisions")} if input_value.get("observeHistory") is True else None,
     )
 
 
