@@ -33,9 +33,6 @@ function redactValue(value: unknown): SerializedAuditRedactedValue {
   return { presence: 'REDACTED' }
 }
 
-const ACTOR_DISPLAY_NAME_TARGET = 'actor.displayName'
-const ACTOR_METADATA_TARGET = 'actor.metadata'
-
 function redactChange(change: SerializedAuditChange, protectedPaths: ReadonlySet<string>): SerializedAuditChange {
   if (!protectedPaths.has(change.path)) return cloneAuditValue(change)
 
@@ -53,11 +50,11 @@ function redactChange(change: SerializedAuditChange, protectedPaths: ReadonlySet
 function foundProtectedPaths(event: SerializedAuditEvent, policy: AuditRedactionPolicy): ReadonlySet<string> {
   const protectedPaths = new Set(policy.protectedPaths)
   const foundPaths = new Set<string>()
-  if (protectedPaths.has(ACTOR_DISPLAY_NAME_TARGET) && event.actor !== undefined && Object.hasOwn(event.actor, 'displayName')) {
-    foundPaths.add(ACTOR_DISPLAY_NAME_TARGET)
+  if (protectedPaths.has('actor.displayName') && event.actor !== undefined && Object.hasOwn(event.actor, 'displayName')) {
+    foundPaths.add('actor.displayName')
   }
-  if (protectedPaths.has(ACTOR_METADATA_TARGET) && event.actor !== undefined && Object.hasOwn(event.actor, 'metadata')) {
-    foundPaths.add(ACTOR_METADATA_TARGET)
+  if (protectedPaths.has('actor.metadata') && event.actor !== undefined && Object.hasOwn(event.actor, 'metadata')) {
+    foundPaths.add('actor.metadata')
   }
   for (const change of event.changes ?? []) {
     if (protectedPaths.has(change.path)) foundPaths.add(change.path)
@@ -71,10 +68,10 @@ function redactActor(
 ): NonNullable<SerializedAuditEvent['actor']> {
   return {
     ...cloneAuditValue(actor),
-    ...(protectedPaths.has(ACTOR_DISPLAY_NAME_TARGET) && Object.hasOwn(actor, 'displayName')
+    ...(protectedPaths.has('actor.displayName') && Object.hasOwn(actor, 'displayName')
       ? { displayName: redactValue(actor.displayName) }
       : {}),
-    ...(protectedPaths.has(ACTOR_METADATA_TARGET) && Object.hasOwn(actor, 'metadata')
+    ...(protectedPaths.has('actor.metadata') && Object.hasOwn(actor, 'metadata')
       ? { metadata: redactValue(actor.metadata) }
       : {}),
   }

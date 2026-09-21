@@ -7,6 +7,7 @@ import {
   IneligibleApprovalActorError,
   InvalidApprovalChainError,
   InvalidApprovalDecisionError,
+  InvalidApprovalContextError,
   isFinKoreApprovalError,
 } from '../../src/index.js'
 
@@ -17,6 +18,7 @@ describe('Approval errors', () => {
     expect(new IneligibleApprovalActorError().code).toBe('FINKORE_APPROVAL_INELIGIBLE_ACTOR')
     expect(new InvalidApprovalChainError().code).toBe('FINKORE_APPROVAL_INVALID_CHAIN')
     expect(new ApprovalConditionUnresolvedError().code).toBe('FINKORE_APPROVAL_CONDITION_UNRESOLVED')
+    expect(new InvalidApprovalContextError().code).toBe('FINKORE_APPROVAL_INVALID_CONTEXT')
   })
 
   it('preserves TypeScript names, messages, and safe diagnostic details separately from portable codes', () => {

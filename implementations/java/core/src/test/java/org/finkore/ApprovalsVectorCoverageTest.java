@@ -32,7 +32,7 @@ final class ApprovalsVectorCoverageTest {
         executed += 1;
       }
     }
-    assertEquals(66, executed);
+    assertEquals(72, executed);
   }
 
   private static Map<String, Object> execute(Map<String, Object> vector) {
@@ -46,7 +46,9 @@ final class ApprovalsVectorCoverageTest {
             input.get("decisions"),
             input.get("currentSubjectFacts"),
             input.get("relevantFactPaths"),
-            input.get("evaluatedAt")), null);
+            input.get("evaluatedAt")),
+            Boolean.TRUE.equals(input.get("observeHistory"))
+                ? Map.of("history", input.get("decisions")) : null);
         case "approval.decision.record" -> success(Approvals.recordDecision(
             input.get("requirement"),
             input.get("decision"),

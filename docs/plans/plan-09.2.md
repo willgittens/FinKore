@@ -2,9 +2,10 @@
 
 ## Status
 
-In progress. Milestones 1 through 3 are complete. The Money exactness and
-Approval validity defects are fixed. Release verification and the corrective
-release remain pending in Milestones 4 and 5 before Core 1.0 promotion resumes.
+In progress. Milestones 1 through 4 are complete. The Money exactness and
+Approval validity defects are fixed, and clean-checkout release verification
+passes. Milestone 5's documentation, release identity, and corrective release
+work remain before Core 1.0 promotion resumes.
 
 Release type: Corrective release candidate.
 
@@ -169,27 +170,48 @@ public API change was needed. Complete release verification remains pending.
 
 ## Milestone 4 — Mutation protection and release verification
 
-- [ ] Extend targeted Python critical-mutant probes to reintroduce
+- [x] Extend targeted Python critical-mutant probes to reintroduce
       context-sensitive subtraction, negation, and allocation construction,
       and native Boolean/numeric fact equality.
-- [ ] Confirm each probe is killed by the corresponding regression rather than
+- [x] Confirm each probe is killed by the corresponding regression rather than
       an unrelated infrastructure failure.
-- [ ] Run both full Stryker suites at the existing minimum 95 percent gate and
+- [x] Run both full Stryker suites at the existing minimum 95 percent gate and
       all configured Python and Java critical probes. Review survivors; no
       critical financial mutant may survive.
-- [ ] Run all configured builds, strict checks, unit and adapter tests,
+- [x] Run all configured builds, strict checks, unit and adapter tests,
       coverage gates, and the complete expanded conformance manifest.
-- [ ] Verify all implementations pass every manifest vector with no failures,
+- [x] Verify all implementations pass every manifest vector with no failures,
       unsupported results, or infrastructure errors; include Python 3.13.
-- [ ] Build and consume the TypeScript, Python, and Java artifacts in isolated
+- [x] Build and consume the TypeScript, Python, and Java artifacts in isolated
       consumer environments using the existing package gate.
-- [ ] Run documentation, traceability, architecture, license, and whitespace
+- [x] Run documentation, traceability, architecture, license, and whitespace
       checks, preserving a domain-neutral runner and translation-only adapters.
-- [ ] From a clean checkout, run `npm ci` and the complete `npm run verify`.
+- [x] From a clean checkout, run `npm ci` and the complete `npm run verify`.
       Ensure the new critical probes participate in this aggregate command.
 
-Completion: the expanded local release workflow passes and demonstrably rejects
-reintroductions of both blockers.
+Completed: 2026-09-21. `npm ci` and the complete `npm run verify` pass in an
+isolated clean checkout containing the milestone changes. All 290 vectors pass
+in TypeScript, Java, and CPython 3.12/3.13 without failures, unsupported results,
+or infrastructure errors. Builds, strict checks, unit and adapter tests,
+coverage gates, isolated package consumers, and repository checks pass.
+
+Full Stryker scores are 97.06 percent for the runner and 96.67 percent for the
+TypeScript core. All 22 Python and 21 Java critical probes are killed. Probe
+classification now rejects compilation/process failures, malformed or empty
+reports, infrastructure outcomes, and unsupported results. The seven new Money
+and Approval probes must fail their named regression or positive control;
+classification tests participate in the aggregate release command.
+
+Verification exposed a stale Java coverage helper, now aligned with all 72
+Approval vectors and their history observations. Survivor review added tests
+for manifest types, portable errors, malformed history/import inputs, opaque
+scope/quorum identifiers, and Audit redaction boundaries. Audit target strings
+now execute within the checks so Stryker can mutate them after module loading.
+No financial behavior or public API changed. Remaining survivors and uncovered
+mutants are non-normative diagnostics or equivalent under the portable contract;
+the rationale is documented in [Developer Tools](../tools/README.md). No critical
+mutant remains, and no exclusions or thresholds were relaxed. Corrective release
+preparation remains in Milestone 5.
 
 ## Milestone 5 — Documentation and corrective release
 
@@ -226,11 +248,11 @@ Core 0.9.2 is complete only when:
       languages while preserving history.
 - [x] Existing and new vectors pass on all official implementations and required
       runtime versions.
-- [ ] Coverage and mutation gates pass, including probes for each corrected
+- [x] Coverage and mutation gates pass, including probes for each corrected
       failure mechanism, with no critical surviving mutant.
-- [ ] Clean-checkout verification and isolated consumer installation pass.
-- [ ] Traceability and affected public documentation describe the actual state.
-- [ ] No new domain, invented financial semantics, or architectural bypass was
+- [x] Clean-checkout verification and isolated consumer installation pass.
+- [x] Traceability and affected public documentation describe the actual state.
+- [x] No new domain, invented financial semantics, or architectural bypass was
       introduced.
 - [ ] The concise release note and corrective release tag identify the verified
       state, and no known blocker remains before resuming Core 1.0 promotion.

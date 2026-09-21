@@ -39,6 +39,57 @@ const redactionEvent = {
 }
 
 describe('Audit redaction', () => {
+  it.each(['displayName', 'metadata'] as const)(
+    'redacts actor %s and a matching change path under the same policy target', (field) => {
+      const path = `actor.${field}`
+      const event = {
+        ...protectedEvent,
+        actor: { ...protectedEvent.actor, metadata: { source: 'private' } },
+        changes: [{ path, after: 'private context' }],
+      }
+      const log = AuditLog.create([event])
+      const result = log.redact({ policy: { ...policy, protectedPaths: [path] }, redactionEvent })
+      expect(result.event.actor?.[field]).toEqual({ presence: 'REDACTED' })
+      expect(result.event.changes).toEqual([{ path, after: { presence: 'REDACTED' } }])
+      expect(log.toJSON()).toEqual({ history: [event, redactionEvent] })
+    },
+  )
+
+  it('preserves an absent actor when redacting change content', () => {
+    const { actor: _actor, ...event } = protectedEvent
+    const log = AuditLog.create([event])
+    expect(() => log.redact({
+      policy: { ...policy, protectedPaths: ['actor.displayName'] }, redactionEvent,
+    })).toThrowError(expect.objectContaining({ code: 'FINKORE_AUDIT_REDACTION_INVALID' }))
+    expect(log.toJSON()).toEqual({ history: [event] })
+    const result = log.redact({ policy, redactionEvent })
+    expect(Object.hasOwn(result.event, 'actor')).toBe(false)
+    expect(result.event.changes?.[0]).toEqual({
+      path: 'bankAccount', before: { presence: 'REDACTED' }, after: { presence: 'REDACTED' },
+    })
+    expect(log.toJSON()).toEqual({ history: [event, redactionEvent] })
+  })
+
+  it('redacts actor context without inventing absent changes', () => {
+    const { changes: _changes, ...event } = protectedEvent
+    const log = AuditLog.create([event])
+    const result = log.redact({
+      policy: { ...policy, protectedPaths: ['actor.displayName'] }, redactionEvent,
+    })
+    expect(result.event.actor).toEqual({ type: 'user', id: 'user-7', displayName: { presence: 'REDACTED' } })
+    expect(Object.hasOwn(result.event, 'changes')).toBe(false)
+    expect(log.toJSON()).toEqual({ history: [event, redactionEvent] })
+  })
+
+  it('does not mistake an ordinary record containing a presence field for the exact redaction marker', () => {
+    const event = { ...protectedEvent, changes: [{ path: 'bankAccount', after: { presence: 'REDACTED', source: 'external' } }] }
+    const log = AuditLog.create([event])
+    expect(log.redact({ policy, redactionEvent }).event.changes).toEqual([
+      { path: 'bankAccount', after: { presence: 'REDACTED' } },
+    ])
+    expect(log.toJSON()).toEqual({ history: [event, redactionEvent] })
+  })
+
   it('redacts protected change values while preserving required event meaning and evidence', () => {
     const log = AuditLog.create([protectedEvent])
 

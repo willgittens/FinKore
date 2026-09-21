@@ -55,6 +55,26 @@ const validatedInvoiceData = {
 }
 
 describe('Financial Entity identity and lifecycle', () => {
+  it('rejects null import identities and revisions with the portable identity error', () => {
+    const entity = { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData }
+    const sourceIdentity = { sourceSystem: 'legacy-ar', sourceId: 'LEGACY-42' }
+    const identityMapping = { mappingId: 'mapping-42', ...sourceIdentity, entity: { type: 'invoice', id: 'inv-42' } }
+    const inputs = [
+      { entity, sourceIdentity: null, identityMapping },
+      { entity, sourceIdentity, identityMapping: null },
+      { entity, sourceIdentity, identityMapping: { ...identityMapping, entity: null } },
+      { entity, currentRevision: null },
+      { entity, historicalRevisions: [null] },
+    ]
+    for (const input of inputs) {
+      const before = structuredClone(input)
+      expect(() => FinancialEntity.import(invoiceDefinition, input)).toThrowError(
+        expect.objectContaining({ code: 'FINKORE_ENTITY_INVALID_IDENTITY' }),
+      )
+      expect(input).toEqual(before)
+    }
+  })
+
   it('creates an entity with caller-supplied identity in the workflow initial state', () => {
     const entity = FinancialEntity.create(invoiceDefinition, 'inv-42', invoiceData)
 

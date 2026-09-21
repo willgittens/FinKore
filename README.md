@@ -144,8 +144,8 @@ conventions, 322 directly testable requirements are covered by the conformance
 suite. And this is just the beginning.
 
 TypeScript, Python, and Java pass the complete current conformance manifest.
-The Money and Approval corrections are implemented; release verification
-remains pending in the [Core 0.9.2 corrective plan](./docs/plans/plan-09.2.md).
+The Money and Approval corrections pass clean-checkout release verification;
+corrective release preparation remains in the [Core 0.9.2 plan](./docs/plans/plan-09.2.md).
 
 ---
 
@@ -337,8 +337,8 @@ See [Developer Tools](./docs/tools/README.md) for details.
 FinKore Core 0.9.1 is the corrective release candidate for the frozen Core 0.9 baseline intended to become Core 1.0.
 
 TypeScript, Python, and Java implement the following domains and pass the
-complete current manifest. Core 1.0 promotion remains pending the remaining
-Core 0.9.2 verification and corrective release gates.
+complete current manifest. Core 0.9.2 verification passes; Core 1.0 promotion
+remains pending the corrective release gate.
 
 - Money
 - Workflow

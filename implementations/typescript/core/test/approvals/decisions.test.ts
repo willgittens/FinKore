@@ -28,6 +28,35 @@ const decision = {
 }
 
 describe('Approval decisions', () => {
+  it('rejects malformed history envelopes with the portable decision error', () => {
+    for (const candidate of [null, false, { history: null }, { history: {} }, { history: 'invalid' }]) {
+      expect(() => ApprovalDecisionHistory.create(candidate)).toThrowError(
+        expect.objectContaining({ code: 'FINKORE_APPROVAL_INVALID_DECISION' }),
+      )
+    }
+  })
+
+  it('rejects non-string lifecycle identities without appending evidence', () => {
+    const history = ApprovalDecisionHistory.create([decision])
+    const before = history.toJSON()
+    const event = {
+      targetRequirementId: requirement.id,
+      successorRequirementId: 'next-review',
+      actor: { id: 'user-7' },
+      recordedAt: '2026-09-02T12:00:00Z',
+    }
+    for (const candidate of [
+      { ...event, actor: { id: 7 } },
+      { ...event, targetRequirementId: true },
+      { ...event, successorRequirementId: ['next-review'] },
+    ]) {
+      expect(() => history.supersedeRequirement(candidate)).toThrowError(
+        expect.objectContaining({ code: 'FINKORE_APPROVAL_INVALID_DECISION' }),
+      )
+      expect(history.toJSON()).toEqual(before)
+    }
+  })
+
   it('records a valid decision without generating additional fields', () => {
     const history = ApprovalDecisionHistory.create()
 

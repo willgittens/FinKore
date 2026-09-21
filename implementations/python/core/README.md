@@ -4,8 +4,9 @@ This package is the Python implementation track for FinKore Core 0.9 release can
 derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
 TypeScript financial implementation code. It passes all 290 manifest vectors
 on CPython 3.12 and 3.13, including 102 Money and 72 Approval vectors.
-The [Core 0.9.2 plan](../../../docs/plans/plan-09.2.md) tracks the remaining
-release verification for the implemented Money and Approval corrections.
+The implemented Money and Approval corrections pass clean-checkout release
+verification. The [Core 0.9.2 plan](../../../docs/plans/plan-09.2.md) tracks the
+remaining corrective release preparation.
 
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to a Python package registry. The

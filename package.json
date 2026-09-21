@@ -45,7 +45,8 @@
     "traceability:check": "node docs/tools/check-traceability.js",
     "docs:check": "node docs/tools/check-doc-links.js && node docs/tools/check-traceability.js",
     "license:check": "node docs/tools/check-license.js",
-    "check": "npm run build && npm run typecheck && npm test && npm run python:compile && npm run python:unit && npm run python:adapter:test && npm run java:test && npm run java:adapter:test && npm run architecture:check && npm run docs:check && npm run license:check && git diff --check",
-    "verify": "npm run tools:bootstrap && npm run tools:check && npm run node:check && npm run check && npm run python:compat && npm run conformance && npm run test:coverage -w @finkore/conformance-runner && npm run test:coverage -w @finkore/typescript && npm run python:coverage && npm run java:coverage && npm run package:check && npm run test:mutation -w @finkore/conformance-runner && npm run test:mutation -w @finkore/typescript && npm run mutation:critical"
+    "check": "npm run build && npm run typecheck && npm test && npm run python:compile && npm run python:unit && npm run python:adapter:test && npm run java:test && npm run java:adapter:test && npm run tools:test && npm run architecture:check && npm run docs:check && npm run license:check && git diff --check",
+    "verify": "npm run tools:bootstrap && npm run tools:check && npm run node:check && npm run check && npm run python:compat && npm run conformance && npm run test:coverage -w @finkore/conformance-runner && npm run test:coverage -w @finkore/typescript && npm run python:coverage && npm run java:coverage && npm run package:check && npm run test:mutation -w @finkore/conformance-runner && npm run test:mutation -w @finkore/typescript && npm run mutation:critical",
+    "tools:test": "node --test docs/tools/test/*.test.js"
   }
 }

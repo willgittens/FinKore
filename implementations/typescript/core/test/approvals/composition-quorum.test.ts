@@ -5,6 +5,24 @@ import { ApprovalComposition, InvalidApprovalChainError } from '../../src/index.
 const evaluatedAt = '2026-09-12T10:00:00Z'
 
 describe('Approval composition quorum evaluation', () => {
+  // A synthetic ID inserted by an array mutant must not impose a state
+  // requirement on an otherwise valid quorum-only observation.
+  it.each(['board-review', 'Stryker was here'])(
+    'derives quorum outcomes from votes without requiring aggregate state (%s)', (requirementId) => {
+      const composition = ApprovalComposition.from({
+        rootGroup: 'quorum', groups: [{
+          id: 'quorum', kind: 'N_OF_M', threshold: 1,
+          members: [{ type: 'requirement', id: 'seat', requirementId, voter: { id: 'alice' } }],
+        }],
+      })
+      expect(composition.evaluate({
+        requirements: [{ id: requirementId, applicability: 'APPLICABLE', eligibleActors: ['alice'], approvedOutcome: 'APPROVED', rejectedOutcome: 'REJECTED' }],
+        decisions: [{ requirementId, actor: { id: 'alice' }, outcome: 'APPROVED', effective: true }],
+        context: { evaluatedAt },
+      })).toEqual({ outcome: 'APPROVED', actionableRequirements: [] })
+    },
+  )
+
   it('approves a two-of-three quorum from two distinct effective eligible approvals', () => {
     const composition = ApprovalComposition.from({
       rootGroup: 'board-quorum',

@@ -1,0 +1,57 @@
+// SPDX-License-Identifier: MPL-2.0
+/**
+ * Tests mutation gate classification using synthetic process reports.
+ * Does not spawn processes or change files and defines no financial behavior.
+ */
+import assert from 'node:assert/strict'
+import test from 'node:test'
+import { assessMutationResult } from '../mutation-result.js'
+
+function result(statuses = ['PASS', 'FAIL']) {
+  const failed = statuses.filter((status) => status === 'FAIL').length
+  return {
+    status: failed ? 1 : 0,
+    stdout: JSON.stringify({
+      summary: { total: statuses.length, passed: statuses.length - failed, failed, unsupported: 0, infrastructureErrors: 0 },
+      results: statuses.map((status, index) => ({ vectorId: `vector-${index}`, status })),
+    }),
+  }
+}
+
+test('accepts behavioral failures and requires the intended regression when declared', () => {
+  assert.equal(assessMutationResult(result()).killed, true)
+  assert.equal(assessMutationResult(result(), 'vector-1').killed, true)
+  assert.equal(assessMutationResult(result(), 'vector-0').killed, false)
+  assert.equal(assessMutationResult(result(), 'missing-vector').killed, false)
+})
+
+test('passing or empty suites cannot kill a mutant', () => {
+  assert.equal(assessMutationResult(result(['PASS'])).killed, false)
+  assert.equal(assessMutationResult(result([])).killed, false)
+})
+
+test('process failures, signals and malformed output cannot kill a mutant', () => {
+  for (const override of [
+    { status: 2 }, { status: 3 }, { status: null }, { signal: 'SIGTERM' },
+    { error: new Error('spawn failed') }, { stdout: 'SyntaxError' },
+    { stdout: '{}' }, { stdout: 'null' },
+  ]) assert.equal(assessMutationResult({ ...result(), ...override }).killed, false)
+})
+
+test('infrastructure and unsupported outcomes cannot be hidden by a behavioral failure', () => {
+  for (const status of ['INFRASTRUCTURE_ERROR', 'UNSUPPORTED', 'UNKNOWN']) {
+    assert.equal(assessMutationResult(result(['FAIL', status])).killed, false)
+  }
+})
+
+test('inconsistent counts or exit codes cannot kill a mutant', () => {
+  for (const field of ['total', 'passed', 'failed', 'unsupported', 'infrastructureErrors']) {
+    const captured = result()
+    const report = JSON.parse(captured.stdout)
+    report.summary[field] += 1
+    captured.stdout = JSON.stringify(report)
+    assert.equal(assessMutationResult(captured).killed, false)
+  }
+  assert.equal(assessMutationResult({ ...result(), status: 0 }).killed, false)
+  assert.equal(assessMutationResult({ ...result(['PASS']), status: 1 }).killed, false)
+})

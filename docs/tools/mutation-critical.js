@@ -4,11 +4,13 @@
  *
  * This developer tool mutates temporary copies only, reports whether the
  * conformance suite kills each probe, and never changes repository sources.
+ * It does not define financial behavior. Infrastructure failures are not kills.
  */
 import { cpSync, existsSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { delimiter, join, resolve } from 'node:path'
 import { spawnSync } from 'node:child_process'
+import { assessMutationResult } from './mutation-result.js'
 
 const repositoryRoot = process.cwd()
 const requestedTarget = process.argv[2] ?? 'all'
@@ -22,6 +24,7 @@ if (!validTargets.has(requestedTarget)) {
 const pythonMutants = [
   {
     id: 'python-approval-native-fact-equality',
+    expectedVector: 'approval.validity.boolean-number-fact-change-001',
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
     from: 'if left is _MISSING or right is _MISSING or not _json_fact_equal(left, right):',
@@ -29,6 +32,7 @@ const pythonMutants = [
   },
   {
     id: 'python-approval-shallow-object-fact-equality',
+    expectedVector: 'approval.validity.nested-number-boolean-fact-change-001',
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
     from: 'return all(_json_fact_equal(left[key], right[key]) for key in left)',
@@ -36,6 +40,7 @@ const pythonMutants = [
   },
   {
     id: 'python-approval-shallow-array-fact-equality',
+    expectedVector: 'approval.validity.array-number-boolean-fact-change-001',
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
     from: 'return all(_json_fact_equal(a, b) for a, b in zip(left, right))',
@@ -43,6 +48,7 @@ const pythonMutants = [
   },
   {
     id: 'python-approval-unchanged-boolean-facts-rejected',
+    expectedVector: 'approval.validity.structured-facts-unchanged-001',
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
     from: 'return left is right',
@@ -50,6 +56,7 @@ const pythonMutants = [
   },
   {
     id: 'python-money-subtraction-context-rounding',
+    expectedVector: 'money.subtract.high-precision-right-operand-001',
     suite: 'money',
     path: 'core/src/finkore/money.py',
     from: 'return Money(_add_decimal(self.amount, other.amount.copy_negate()), self.currency)',
@@ -57,6 +64,7 @@ const pythonMutants = [
   },
   {
     id: 'python-money-negation-context-rounding',
+    expectedVector: 'money.negate.high-precision-001',
     suite: 'money',
     path: 'core/src/finkore/money.py',
     from: 'return Money(self.amount.copy_negate(), self.currency, self.presentation_scale)',
@@ -64,6 +72,7 @@ const pythonMutants = [
   },
   {
     id: 'python-money-allocation-context-rounding',
+    expectedVector: 'money.allocate.equal.high-precision-single-part-001',
     suite: 'money',
     path: 'core/src/finkore/money.py',
     from: 'Money(_decimal_from_units(sign * units_for_part, target_scale), self.currency, target_scale)',
@@ -359,7 +368,7 @@ function run(command, args, options = {}) {
   return result
 }
 
-function conformanceKilled(env, suite) {
+function conformanceKilled(env, mutant) {
   const result = run('node', [
     'runner/dist/cli/cli.js',
     '--manifest',
@@ -367,10 +376,10 @@ function conformanceKilled(env, suite) {
     '--adapter',
     env.FINKORE_MUTANT_ADAPTER,
     '--suite',
-    suite,
+    mutant.suite,
     '--json',
   ], { env: { ...process.env, ...env } })
-  return { killed: result.status !== 0, status: result.status, output: result.stdout, error: result.stderr }
+  return { ...assessMutationResult(result, mutant.expectedVector), output: result.stdout, error: result.stderr }
 }
 
 function runPythonMutant(mutant) {
@@ -383,7 +392,7 @@ function runPythonMutant(mutant) {
       FINKORE_MUTANT_ADAPTER: 'implementations/python/adapters/conformance/adapter.js',
       FINKORE_PYTHON_PATH: resolve(repositoryRoot, '.tools/bin/python3.12'),
       FINKORE_PYTHON_BRIDGE_PATH: join(implementationRoot, 'adapters/conformance/bridge.py'),
-    }, mutant.suite)
+    }, mutant)
     return { ...result, id: mutant.id }
   } finally {
     rmSync(directory, { recursive: true, force: true })
@@ -410,13 +419,13 @@ function runJavaMutant(mutant) {
     applyMutation(join(implementationRoot, mutant.path), mutant.from, mutant.to)
     const compile = compileJava(implementationRoot)
     if (compile.result.status !== 0) {
-      return { id: mutant.id, killed: true, status: compile.result.status, output: compile.result.stdout, error: compile.result.stderr }
+      return { id: mutant.id, killed: false, reason: 'Mutant compilation failed', output: compile.result.stdout, error: compile.result.stderr }
     }
     const result = conformanceKilled({
       FINKORE_MUTANT_ADAPTER: 'implementations/java/adapters/conformance/adapter.js',
       FINKORE_JAVA_PATH: resolve(repositoryRoot, '.tools/bin/java'),
       FINKORE_JAVA_CLASSPATH: compile.output,
-    }, mutant.suite)
+    }, mutant)
     return { ...result, id: mutant.id }
   } finally {
     rmSync(directory, { recursive: true, force: true })
@@ -427,10 +436,10 @@ function report(results) {
   let failures = 0
   for (const result of results) {
     if (result.killed) {
-      console.log(`KILLED ${result.id}`)
+      console.log(`KILLED ${result.id}: ${result.reason}`)
     } else {
       failures += 1
-      console.error(`SURVIVED ${result.id}`)
+      console.error(`NOT KILLED ${result.id}: ${result.reason}`)
       process.stderr.write(result.output)
       process.stderr.write(result.error)
     }

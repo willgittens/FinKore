@@ -15,6 +15,7 @@ the FinKore public API and MUST NOT define financial-domain behavior.
 | `test-java.js` | Run the compiled Java core tests. | `npm run java:test` |
 | `coverage-python.js` | Measure Python unit and conformance coverage. | `npm run python:coverage` |
 | `mutation-critical.js` | Run targeted critical mutation probes for Python and Java. | `npm run mutation:critical` |
+| `mutation-result.js` | Classify mutation results, rejecting infrastructure failures and missing regression failures. | `npm run tools:test` |
 | `check-packages.js` | Build, inspect, install, and import local TypeScript, Python, and Java package artifacts without publishing them. | `npm run package:check` |
 
 Run `npm run check` for the normal local validation suite. Run
@@ -72,7 +73,37 @@ high-precision regression vector in the Money suite. Python Approval probes
 restore native scalar equality or shallow object/array comparison and reject
 unchanged Boolean facts. Permanent changed-fact regressions and an unchanged
 structured-fact control detect these defects. The complete release verification
-gate remains pending under the [Core 0.9.2 plan](../plans/plan-09.2.md).
+gate passes; corrective release preparation remains under the
+[Core 0.9.2 plan](../plans/plan-09.2.md).
+
+A critical probe is killed only by a valid conformance report with behavioral
+failures and no unsupported or infrastructure outcomes. Compilation failures,
+process failures, malformed reports, and empty suites fail the gate. The Core
+0.9.2 Money and Approval probes additionally require their named regression or
+positive-control vector to fail. Classification tests run through `npm run
+tools:test`, included in `npm run check` and `npm run verify`.
+
+The Core 0.9.2 survivor review distinguishes these non-critical cases:
+
+- Runner diagnostic text, source labels, and error wrapping do not change
+  infrastructure classification. The remaining record-type guard mutant still
+  rejects JSON primitives through the required-field checks.
+- Core diagnostic messages, class names, and optional diagnostic details do not
+  change portable codes. Redundant validation guards and optional `undefined`
+  fields retain the same portable results; Workflow identifiers and Entity Money
+  values still undergo their downstream validators.
+- Internal Approval flags or synthetic entries are equivalent where they are
+  discarded before outcomes and actionable requirements are produced. Entity
+  synthetic currentness keys cannot match validated composite keys. Clone-error
+  and post-append defensive branches are unreachable through already-validated
+  public inputs; Money rounding modes are validated before dispatch.
+
+Critical survivors require permanent public-behavior tests. The 0.9.2 review
+added cases for portable errors, malformed histories and imports, opaque scope
+and quorum identifiers, and Audit optional fields and overlapping redaction
+targets. Actor-redaction target strings are evaluated inside the matching and
+redaction functions so Stryker can mutate them after module initialization.
+No mutation exclusions or thresholds were relaxed.
 
 ## Local Packaging Proof
 

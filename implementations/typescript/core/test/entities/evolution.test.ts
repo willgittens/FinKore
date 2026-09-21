@@ -29,6 +29,24 @@ const sourceData = {
   memo: 'original',
 }
 
+// Include the mutation tool's replacement literal: even that caller-supplied
+// opaque scope must remain distinct from currentness without a scope.
+it.each(['tenant-a:invoice-current', 'Stryker was here!'])(
+  'keeps scoped supersession separate from unscoped currentness (%s)', (supersessionScope) => {
+    const relation = {
+      relationId: 'rel-scoped', kind: 'SUPERSESSION',
+      source: { type: 'invoice', id: 'inv-10', revision: 'rev-1' },
+      related: { type: 'invoice', id: 'inv-10-v2', revision: 'rev-1' },
+      supersessionScope, sourceCurrent: false, relatedCurrent: true, auditEventId: 'evt-scoped',
+    }
+    const history = EntityEvolutionHistory.create([relation])
+    const before = history.toJSON()
+    const result = history.correct(correctionRequest({ expectedSourceCurrent: true }))
+    expect(result.relation.sourceCurrent).toBe(true)
+    expect(history.toJSON()).toEqual(before)
+  },
+)
+
 const correctedData = {
   amount: { amount: '99.00', currency: 'EUR' },
   memo: 'corrected',
