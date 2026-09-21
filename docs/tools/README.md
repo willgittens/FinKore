@@ -73,7 +73,7 @@ high-precision regression vector in the Money suite. Python Approval probes
 restore native scalar equality or shallow object/array comparison and reject
 unchanged Boolean facts. Permanent changed-fact regressions and an unchanged
 structured-fact control detect these defects. The complete release verification
-gate passes; corrective release preparation remains under the
+gate passes. The corrections and release steps are tracked in the
 [Core 0.9.2 plan](../plans/plan-09.2.md).
 
 A critical probe is killed only by a valid conformance report with behavioral

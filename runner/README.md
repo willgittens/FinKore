@@ -11,6 +11,10 @@ The runner package version is an implementation artifact version. It is
 separate from the FinKore Core release version and from the manifest/vector
 format versions that the runner accepts.
 
+For the `core-0.9.2` corrective snapshot, reports retain the frozen Core label
+`0.9-rc` and conformance syntax version `0.1`. The repository tag identifies the
+exact regression manifest and implementation snapshot used for a run.
+
 ## Architecture
 
 ```text

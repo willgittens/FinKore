@@ -25,7 +25,7 @@ Requirement coverage records that a vector exercises a requirement; it does not
 prove exhaustive boundary coverage or a passing implementation. The Core 0.9.2
 Money and Approval regressions, including nested Boolean/numeric fact changes
 and unchanged-fact controls, pass in TypeScript, Python, and Java. Clean-checkout
-release verification passes; corrective release preparation remains under the
+release verification passes. The corrections and release steps are tracked in the
 [Core 0.9.2 plan](../docs/plans/plan-09.2.md).
 
 ## Requirement mapping

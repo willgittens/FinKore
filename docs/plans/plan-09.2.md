@@ -2,10 +2,11 @@
 
 ## Status
 
-In progress. Milestones 1 through 4 are complete. The Money exactness and
-Approval validity defects are fixed, and clean-checkout release verification
-passes. Milestone 5's documentation, release identity, and corrective release
-work remain before Core 1.0 promotion resumes.
+Complete locally. All five milestones are complete. The Money exactness and
+Approval validity defects are fixed, clean-checkout release verification passes,
+and the annotated local `core-0.9.2` tag identifies the corrective snapshot.
+Core 1.0 planning is reopened. Remote tag inspection and publication remain
+pending GitHub authentication.
 
 Release type: Corrective release candidate.
 
@@ -215,27 +216,43 @@ preparation remains in Milestone 5.
 
 ## Milestone 5 — Documentation and corrective release
 
-- [ ] Review Python public API docstrings and README claims about exactness,
+- [x] Review Python public API docstrings and README claims about exactness,
       Decimal context independence, Approval effectiveness, and immutability.
       Update affected examples and documentation with the corrections.
-- [ ] Review TypeScript JSDoc, Java documentation, `/spec`, `/conformance`,
+- [x] Review TypeScript JSDoc, Java documentation, `/spec`, `/conformance`,
       `/agentic`, CoreDoc, the root README, and `AGENTS.md` for affected claims.
       Update only affected artifacts; do not change normative text merely to
       record an implementation fix.
-- [ ] Keep Core release identity, implementation package versions, and
+- [x] Keep Core release identity, implementation package versions, and
       conformance syntax versions distinct. Check consistency of public Core
       constants, package metadata, runner report labels, and consumer assertions
       with the declared corrective baseline; do not promote them to 1.0 here.
-- [ ] Retain the repository-reference package publication status unless the
+- [x] Retain the repository-reference package publication status unless the
       maintainer explicitly changes the distribution decision.
-- [ ] After verification, add a concise 0.9.2 summary to
+- [x] After verification, add a concise 0.9.2 summary to
       [the release notes](../releases/README.md) describing the Money and
       Approval corrections. Do not add separate audit or closure reports.
-- [ ] Verify intended commit and existing tag state, then create the annotated
+- [x] Verify intended commit and existing tag state, then create the annotated
       `core-0.9.2` tag through the maintainer's release process after all gates
       pass. Do not move an existing release tag.
-- [ ] Mark this plan complete and reopen [Core 1.0 planning](plan-10.md) only
+- [x] Mark this plan complete and reopen [Core 1.0 planning](plan-10.md) only
       after the corrective release gate is satisfied.
+
+Completed locally: 2026-09-21. Python docstrings and all affected public claims
+were reviewed against the implemented corrections. TypeScript JSDoc, Java
+documentation, CoreDoc, `/spec`, `/conformance`, `/agentic`, and `AGENTS.md`
+require no financial-contract changes. The release notes summarize the two
+corrections, and READMEs distinguish the `core-0.9.2` snapshot from the unchanged
+`0.9-rc` behavioral baseline, `0.1.0` reference packages, and `0.1` conformance
+syntax. Packages remain unpublished repository reference implementations.
+
+The release documentation snapshot passed `npm ci` and the complete `npm run
+verify` in a clean checkout. Local tag inspection found no existing
+`core-0.9.2`; the annotated tag identifies the final release commit, preserving
+all existing tags. Remote inspection failed because GitHub credentials were
+unavailable, so this completion records a local release only. Core 1.0 planning
+may resume from this verified snapshot; stable 1.0 promotion remains a separate
+plan.
 
 ## Release gate
 
@@ -254,5 +271,5 @@ Core 0.9.2 is complete only when:
 - [x] Traceability and affected public documentation describe the actual state.
 - [x] No new domain, invented financial semantics, or architectural bypass was
       introduced.
-- [ ] The concise release note and corrective release tag identify the verified
+- [x] The concise release note and corrective release tag identify the verified
       state, and no known blocker remains before resuming Core 1.0 promotion.

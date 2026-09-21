@@ -2,11 +2,13 @@
 
 ## Status
 
-Promotion blocked pending the [Core 0.9.2 corrective release](plan-09.2.md).
-The Core 1.0 readiness review reproduced Money exactness and Approval validity
-defects after the Core 0.9.1 release gate passed. Resume promotion only after
-the 0.9.2 release gate is complete. This document remains non-normative. In
-this filename, `10` means version 1.0, not version 0.10.
+Planning reopened after the verified, locally tagged
+[Core 0.9.2 corrective release](plan-09.2.md). The reproduced Money exactness
+and Approval validity defects are fixed and protected by permanent regressions.
+Remote publication of that snapshot remains pending GitHub authentication.
+The stable 1.0 milestones below remain uncompleted; reopening this plan does
+not declare Core 1.0 stable. This document remains non-normative. In this
+filename, `10` means version 1.0, not version 0.10.
 
 ## Objective
 

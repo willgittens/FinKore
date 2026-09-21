@@ -9,6 +9,10 @@ release-candidate phase. It is not published to an npm registry. The npm package
 version identifies this implementation artifact; `FINKORE_CORE_VERSION`
 identifies the FinKore Core behavioral baseline it implements.
 
+The `core-0.9.2` repository tag identifies the corrective snapshot.
+`FINKORE_CORE_VERSION` and package compatibility metadata remain `0.9-rc`;
+the unpublished npm package version remains `0.1.0`.
+
 Money support covers exact representation, serialization, arithmetic,
 comparison, currency compatibility, explicit rounding, Rates, and Allocation.
 

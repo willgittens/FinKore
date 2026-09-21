@@ -137,15 +137,15 @@ They should not be accidental side effects of a framework or whichever service i
 FinKore specifies each outcome, provides portable tests for it, and verifies
 that every implementation preserves the same meaning.
 
-These scenarios are only a small illustration of FinKore Core 0.9.1:
+These scenarios are only a small illustration of FinKore Core 0.9.2:
 
 Across Money, Workflow, Audit, Approvals, Financial Entities, and shared
 conventions, 322 directly testable requirements are covered by the conformance
 suite. And this is just the beginning.
 
 TypeScript, Python, and Java pass the complete current conformance manifest.
-The Money and Approval corrections pass clean-checkout release verification;
-corrective release preparation remains in the [Core 0.9.2 plan](./docs/plans/plan-09.2.md).
+Core 0.9.2 corrects Python Money exactness and Approval fact comparison while
+preserving the frozen behavioral contract. See the [corrective plan](./docs/plans/plan-09.2.md).
 
 ---
 
@@ -203,7 +203,7 @@ This makes financial behavior portable across languages and more resilient to ch
 
 ## What FinKore Core covers
 
-The current Core 0.9.1 release-candidate baseline defines:
+The current Core 0.9.2 release-candidate snapshot defines:
 
 | Domain | What becomes explicit |
 | --- | --- |
@@ -334,11 +334,11 @@ See [Developer Tools](./docs/tools/README.md) for details.
 
 ## Project status
 
-FinKore Core 0.9.1 is the corrective release candidate for the frozen Core 0.9 baseline intended to become Core 1.0.
+FinKore Core 0.9.2 is the corrective release candidate for the frozen Core 0.9 baseline intended to become Core 1.0.
 
 TypeScript, Python, and Java implement the following domains and pass the
-complete current manifest. Core 0.9.2 verification passes; Core 1.0 promotion
-remains pending the corrective release gate.
+complete current manifest. Core 0.9.2 verification passes; the remaining stable
+release work is described in the [Core 1.0 plan](./docs/plans/plan-10.md).
 
 - Money
 - Workflow
@@ -359,9 +359,17 @@ Current limitations include areas such as:
 - distributed audit ordering;
 - concrete accounting domains such as ledgers, tax, reconciliation, and FX policy.
 
-Package versions identify implementation artifacts.
+The release identifiers serve different purposes:
 
-The FinKore Core version identifies the shared language-neutral behavioral baseline.
+| Identifier | Current value | Meaning |
+| --- | --- | --- |
+| Corrective snapshot tag | `core-0.9.2` | Exact repository state containing the corrections. |
+| Core constants, package compatibility metadata, and runner Core label | `0.9-rc` | Frozen language-neutral behavioral baseline. |
+| Implementation package versions | `0.1.0` | Unpublished repository reference artifacts. |
+| Conformance syntax version | `0.1` | Manifest and vector format compatibility. |
+
+The corrective release implements existing requirements; it does not change the
+behavioral baseline or declare Core 1.0 stable.
 
 See the [release notes](./docs/releases/README.md) for the concise history and the implementation READMEs for current public APIs and local package use.
 

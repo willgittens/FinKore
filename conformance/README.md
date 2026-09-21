@@ -20,6 +20,10 @@ The manifest and vector-file version fields describe syntax compatibility, not
 FinKore release numbers. Release scope is determined by the manifest contents,
 referenced requirement IDs, and traceability status.
 
+The `core-0.9.2` tag identifies the corrective snapshot of this manifest.
+Its regression vectors exercise the existing `0.9-rc` behavioral baseline;
+the conformance syntax version remains `0.1`.
+
 For FinKore Core 0.9 release candidate, [manifest.json](manifest.json) is the
 frozen release-candidate manifest and `finkoreConformance` remains `0.1`. This
 freeze does not permit manifest-listed behavior to change except through the

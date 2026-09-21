@@ -10,6 +10,10 @@ release-candidate phase. It is not published to a Maven repository. The Maven
 artifact version identifies this implementation artifact; `FinKore.CORE_VERSION`
 identifies the FinKore Core behavioral baseline it implements.
 
+The `core-0.9.2` repository tag identifies the corrective snapshot.
+`FinKore.CORE_VERSION` and packaged Core compatibility metadata remain `0.9-rc`;
+the unpublished Maven artifact version remains `0.1.0`.
+
 Current status:
 
 - Money representation, serialization, arithmetic, comparison, rates,
