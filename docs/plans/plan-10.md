@@ -2,9 +2,11 @@
 
 ## Status
 
-Ready to begin. The Core 0.9.1 corrective release gate is complete, so Core 1.0
-planning is reopened. This document remains non-normative. In this filename,
-`10` means version 1.0, not version 0.10.
+Promotion blocked pending the [Core 0.9.2 corrective release](plan-09.2.md).
+The Core 1.0 readiness review reproduced Money exactness and Approval validity
+defects after the Core 0.9.1 release gate passed. Resume promotion only after
+the 0.9.2 release gate is complete. This document remains non-normative. In
+this filename, `10` means version 1.0, not version 0.10.
 
 ## Objective
 
