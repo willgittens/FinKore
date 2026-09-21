@@ -21,6 +21,34 @@ if (!validTargets.has(requestedTarget)) {
 
 const pythonMutants = [
   {
+    id: 'python-approval-native-fact-equality',
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: 'if left is _MISSING or right is _MISSING or not _json_fact_equal(left, right):',
+    to: 'if left is _MISSING or right is _MISSING or left != right:',
+  },
+  {
+    id: 'python-approval-shallow-object-fact-equality',
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: 'return all(_json_fact_equal(left[key], right[key]) for key in left)',
+    to: 'return left == right',
+  },
+  {
+    id: 'python-approval-shallow-array-fact-equality',
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: 'return all(_json_fact_equal(a, b) for a, b in zip(left, right))',
+    to: 'return left == right',
+  },
+  {
+    id: 'python-approval-unchanged-boolean-facts-rejected',
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: 'return left is right',
+    to: 'return False',
+  },
+  {
     id: 'python-money-subtraction-context-rounding',
     suite: 'money',
     path: 'core/src/finkore/money.py',

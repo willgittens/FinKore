@@ -2,9 +2,9 @@
 
 ## Status
 
-In progress. Milestones 1 and 2 are complete. The Money exactness defects are
-fixed; the Approval validity defect remains pending in Milestone 3 and continues
-to block Core 1.0 promotion.
+In progress. Milestones 1 through 3 are complete. The Money exactness and
+Approval validity defects are fixed. Release verification and the corrective
+release remain pending in Milestones 4 and 5 before Core 1.0 promotion resumes.
 
 Release type: Corrective release candidate.
 
@@ -55,9 +55,11 @@ Governing requirements include `MONEY-ARITHMETIC-003`,
 
 ### Approval validity after a relevant fact changes
 
-Python `_facts_match` uses native equality, under which `True == 1`. When a
-caller-declared relevant fact changes from JSON `true` to JSON `1`, Python
-continues to report `APPROVED`. TypeScript and Java report `PENDING`.
+Before the Milestone 3 correction, Python `_facts_match` used native equality,
+under which `True == 1`. When a caller-declared relevant fact changed from JSON
+`true` to JSON `1`, Python continued to report `APPROVED`. All three
+implementations now report `PENDING`, including for nested Boolean/numeric
+changes, while preserving decision history.
 
 Governing requirements include `APPROVAL-DECISION-003`,
 `APPROVAL-VALIDITY-003`, and the history-preservation rule
@@ -133,24 +135,37 @@ complete release verification remains pending.
 
 ## Milestone 3 — Portable Approval fact comparison
 
-- [ ] Correct Python relevant-fact comparison so native Boolean/numeric
+- [x] Correct Python relevant-fact comparison so native Boolean/numeric
       equality cannot treat changed JSON facts as unchanged.
-- [ ] Apply the correction consistently to decision effectiveness and
+- [x] Apply the correction consistently to decision effectiveness and
       requirement evaluation; review other Approval callers of the comparison.
-- [ ] Add paired unchanged/changed cases for `true` versus `1` and `false`
+- [x] Add paired unchanged/changed cases for `true` versus `1` and `false`
       versus `0`, including reversed operands and nested objects and arrays.
-- [ ] Preserve existing portable comparison semantics for numeric values,
+- [x] Preserve existing portable comparison semantics for numeric values,
       strings, nulls, missing paths, object member order, and array order.
       Resolve any demonstrated undefined semantics through `/spec` first.
-- [ ] Verify stale decisions cannot satisfy or reject a requirement and that
+- [x] Verify stale decisions cannot satisfy or reject a requirement and that
       committed decisions and caller-supplied facts remain unchanged.
-- [ ] Retain positive controls proving an unchanged effective approval still
+- [x] Retain positive controls proving an unchanged effective approval still
       satisfies its requirement.
-- [ ] Run affected unit tests and real Approval vectors on CPython 3.12 and
+- [x] Run affected unit tests and real Approval vectors on CPython 3.12 and
       3.13, TypeScript, and Java, comparing normalized observations.
 
-Completion: changing a declared relevant fact invalidates the prior decision
-consistently across languages without rewriting historical evidence.
+Completed: 2026-09-21. Recursive fact comparison distinguishes Booleans from
+numbers in both decision and requirement evaluation. Other Approval callers
+were reviewed; composition consumes effective evidence without another fact
+comparison. Paired tests cover both change directions, nested containers,
+unchanged controls, stale approvals and rejections, and preservation of inputs
+and history. The new tests failed before the fix and pass afterward.
+
+All 40 Python unit tests pass on CPython 3.12 and 3.13. All 290 manifest vectors,
+including 72 Approval vectors, pass in both Python versions, TypeScript, and
+Java. All 22 Python critical probes are killed with vector failures and no
+infrastructure errors; each new Approval probe fails its intended regression
+or positive control. Python coverage passes at 87 percent, and `npm run check`
+passes. Docstrings, README claims, and traceability are current. Existing
+requirements and operation contracts define the correction; no normative or
+public API change was needed. Complete release verification remains pending.
 
 ## Milestone 4 — Mutation protection and release verification
 
@@ -204,12 +219,12 @@ reintroductions of both blockers.
 
 Core 0.9.2 is complete only when:
 
-- [ ] All four reproduced failures have permanent regressions and are fixed.
+- [x] All four reproduced failures have permanent regressions and are fixed.
 - [x] Money preserves exact results and allocation conservation across tested
       Decimal contexts, with no operand mutation or implicit rounding.
-- [ ] Changed relevant facts invalidate Approval decisions consistently across
+- [x] Changed relevant facts invalidate Approval decisions consistently across
       languages while preserving history.
-- [ ] Existing and new vectors pass on all official implementations and required
+- [x] Existing and new vectors pass on all official implementations and required
       runtime versions.
 - [ ] Coverage and mutation gates pass, including probes for each corrected
       failure mechanism, with no critical surviving mutant.

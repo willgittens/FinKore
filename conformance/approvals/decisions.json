@@ -1690,6 +1690,61 @@
         "duplicate-requirement-deduplicated",
         "duplicate-requirement-accepted"
       ]
+    },
+    {
+      "id": "approval.decision.boolean-number-fact-change-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-003"
+      ],
+      "description": "Direct decision evaluation distinguishes Boolean true from numeric 1 on a declared relevant path.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "approvedFlag": true
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "approvedFlag": 1
+        },
+        "relevantFactPaths": [
+          "approvedFlag"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "INEFFECTIVE"
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-boolean-number-facts-treated-equal",
+        "decision-effectiveness-bypasses-relevant-facts"
+      ]
     }
   ]
 }

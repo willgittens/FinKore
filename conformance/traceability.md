@@ -17,15 +17,15 @@ Audit, Approvals, and Entities scope.
 | Entities | 84 | 79 | 3 | 2 | 72 | 0 | 0 | 12 | 0 | 0 |
 | **Total** | **406** | **373** | **15** | **18** | **322** | **0** | **0** | **84** | **0** | **0** |
 
-The suite contains 285 vectors. Overall: **322 covered (79.3%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **84 not directly testable (20.7%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
+The suite contains 290 vectors. Overall: **322 covered (79.3%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **84 not directly testable (20.7%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current release candidate. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
 Requirement coverage records that a vector exercises a requirement; it does not
-prove exhaustive boundary coverage or a passing implementation. The three Core
-0.9.2 Money regressions now pass in all implementations. The Approval validity
-regression still fails in Python and passes in TypeScript and Java; its fix
-remains pending under the
+prove exhaustive boundary coverage or a passing implementation. The Core 0.9.2
+Money and Approval regressions, including nested Boolean/numeric fact changes
+and unchanged-fact controls, pass in TypeScript, Python, and Java. Complete
+release verification remains pending under the
 [Core 0.9.2 plan](../docs/plans/plan-09.2.md).
 
 ## Requirement mapping
@@ -309,11 +309,11 @@ remains pending under the
 | APPROVAL-CONDITION-006 | Approvals | MUST / MUST NOT | COVERED | approval.condition.falsey-facts-present-001, approval.condition.missing-fact-001, approval.condition.missing-result-unresolved-001 |
 | APPROVAL-DECISION-001 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.wrong-association-001 |
 | APPROVAL-DECISION-002 | Approvals | MUST / MUST NOT | COVERED | approval.decision.relevant-path-unchanged-unrelated-fact-changed-001, approval.decision.subject-facts-array-order-changed-001, approval.decision.subject-facts-array-to-object-001, approval.decision.subject-facts-changed-001, approval.decision.subject-facts-nested-shape-changed-001, approval.decision.subject-facts-object-key-changed-001, approval.decision.subject-facts-object-key-order-001, approval.decision.subject-facts-object-to-array-001, approval.decision.subject-facts-unchanged-001 |
-| APPROVAL-DECISION-003 | Approvals | MUST / MUST NOT | COVERED | approval.decision.relevant-path-unchanged-unrelated-fact-changed-001, approval.decision.subject-facts-array-order-changed-001, approval.decision.subject-facts-array-to-object-001, approval.decision.subject-facts-changed-001, approval.decision.subject-facts-nested-shape-changed-001, approval.decision.subject-facts-object-key-changed-001, approval.decision.subject-facts-object-key-order-001, approval.decision.subject-facts-object-to-array-001, approval.decision.subject-facts-unchanged-001, approval.validity.boolean-number-fact-change-001 |
+| APPROVAL-DECISION-003 | Approvals | MUST / MUST NOT | COVERED | approval.decision.boolean-number-fact-change-001, approval.decision.relevant-path-unchanged-unrelated-fact-changed-001, approval.decision.subject-facts-array-order-changed-001, approval.decision.subject-facts-array-to-object-001, approval.decision.subject-facts-changed-001, approval.decision.subject-facts-nested-shape-changed-001, approval.decision.subject-facts-object-key-changed-001, approval.decision.subject-facts-object-key-order-001, approval.decision.subject-facts-object-to-array-001, approval.decision.subject-facts-unchanged-001, approval.validity.array-number-boolean-fact-change-001, approval.validity.boolean-number-fact-change-001, approval.validity.false-zero-fact-change-001, approval.validity.nested-number-boolean-fact-change-001, approval.validity.structured-facts-unchanged-001 |
 | APPROVAL-DECISION-004 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001 |
 | APPROVAL-DECISION-005 | Approvals | MUST / MUST NOT | COVERED | approval.decision.pending-invalid-001 |
 | APPROVAL-DECISION-006 | Approvals | MUST / MUST NOT | COVERED | approval.decision.timestamp-ambiguous-001, shared.timestamp.invalid-decision-precision-001 |
-| APPROVAL-DECISION-007 | Approvals | MUST / MUST NOT | COVERED | approval.decision.append-history-001, approval.validity.boolean-number-fact-change-001 |
+| APPROVAL-DECISION-007 | Approvals | MUST / MUST NOT | COVERED | approval.decision.append-history-001, approval.validity.array-number-boolean-fact-change-001, approval.validity.boolean-number-fact-change-001, approval.validity.false-zero-fact-change-001, approval.validity.nested-number-boolean-fact-change-001, approval.validity.structured-facts-unchanged-001 |
 | APPROVAL-DECISION-008 | Approvals | MUST / MUST NOT | NOT DIRECTLY TESTABLE | This is conditional on an out-of-scope composing-domain Approval/Audit integration. |
 | APPROVAL-ERROR-001 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001, approval.decision.timestamp-ambiguous-001, shared.timestamp.invalid-decision-precision-001 |
 | APPROVAL-ERROR-002 | Approvals | MAY | NOT DIRECTLY TESTABLE | Identifying the affected requirement in diagnostic details is optional. |
@@ -343,8 +343,8 @@ remains pending under the
 | APPROVAL-REQUIREMENT-006 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001 |
 | APPROVAL-REQUIREMENT-007 | Approvals | MAY | NOT DIRECTLY TESTABLE | Conditional requirements are optional; executable condition behavior is covered by its own requirements. |
 | APPROVAL-VALIDITY-001 | Approvals | MUST / MUST NOT | COVERED | approval.validity.decision-superseded-not-counted-001, approval.validity.withdrawn-not-counted-001 |
-| APPROVAL-VALIDITY-002 | Approvals | MUST / MUST NOT | COVERED | approval.validity.boolean-number-fact-change-001, approval.validity.decision-supersession-preserves-history-001, approval.validity.requirement-supersession-preserves-history-001, approval.validity.withdraw-preserves-history-001 |
-| APPROVAL-VALIDITY-003 | Approvals | MUST / MUST NOT | COVERED | approval.validity.boolean-number-fact-change-001, approval.validity.stale-revision-not-effective-001, approval.validity.unchanged-relevant-facts-effective-001 |
+| APPROVAL-VALIDITY-002 | Approvals | MUST / MUST NOT | COVERED | approval.validity.array-number-boolean-fact-change-001, approval.validity.boolean-number-fact-change-001, approval.validity.decision-supersession-preserves-history-001, approval.validity.false-zero-fact-change-001, approval.validity.nested-number-boolean-fact-change-001, approval.validity.requirement-supersession-preserves-history-001, approval.validity.structured-facts-unchanged-001, approval.validity.withdraw-preserves-history-001 |
+| APPROVAL-VALIDITY-003 | Approvals | MUST / MUST NOT | COVERED | approval.validity.array-number-boolean-fact-change-001, approval.validity.boolean-number-fact-change-001, approval.validity.false-zero-fact-change-001, approval.validity.nested-number-boolean-fact-change-001, approval.validity.stale-revision-not-effective-001, approval.validity.structured-facts-unchanged-001, approval.validity.unchanged-relevant-facts-effective-001 |
 | APPROVAL-VALIDITY-004 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-preserves-history-001, approval.validity.withdrawn-not-counted-001 |
 | APPROVAL-VALIDITY-005 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-duplicate-invalid-001 |
 | APPROVAL-VALIDITY-006 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-preserves-history-001 |

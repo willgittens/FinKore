@@ -118,7 +118,18 @@ def record_decision(requirement: Any, decision: Any, history: Any) -> dict[str, 
 
 
 def evaluate_decision(requirement: Any, decision: Any, current_subject_facts: Any = None, relevant_fact_paths: Any = None, evaluated_at: Any = None) -> str:
-    """Evaluate whether one Decision is currently effective for supplied facts."""
+    """Evaluate whether one Decision is currently effective for supplied facts.
+
+    When relevant fact paths are supplied, each must exist in both fact sets.
+    Comparison distinguishes JSON Booleans from numbers, including within
+    objects and arrays. Object member order is immaterial; array order matters.
+    The Decision and caller-supplied facts are not mutated.
+
+    @see APPROVAL-DECISION-003
+    @see APPROVAL-DECISION-007
+    @see APPROVAL-VALIDITY-003
+    @see APPROVAL-VALIDITY-012
+    """
 
     req = validate_requirement(requirement)
     item = validate_decision(req, decision)
@@ -132,7 +143,19 @@ def evaluate_decision(requirement: Any, decision: Any, current_subject_facts: An
 
 
 def evaluate_requirement(requirement: Any, decisions: Any = None, current_subject_facts: Any = None, relevant_fact_paths: Any = None, evaluated_at: Any = None) -> str:
-    """Evaluate an Approval Requirement from currently effective Decisions."""
+    """Evaluate an Approval Requirement from currently effective Decisions.
+
+    A Decision whose declared relevant facts changed can neither satisfy nor
+    reject the Requirement. JSON Booleans remain distinct from numbers at
+    every nesting level; object member order is ignored and array order retained.
+    Committed decisions, lifecycle evidence, and supplied facts remain unchanged.
+
+    @see APPROVAL-DECISION-003
+    @see APPROVAL-DECISION-007
+    @see APPROVAL-VALIDITY-002
+    @see APPROVAL-VALIDITY-003
+    @see APPROVAL-VALIDITY-012
+    """
 
     req = validate_requirement(requirement)
     history, lifecycle = normalize_decision_set(decisions)
@@ -280,13 +303,36 @@ def _expired(decision: dict[str, Any], evaluated_at: Any) -> bool:
     return _instant(evaluated_at, INVALID_CONTEXT) >= _instant(decision["expiresAt"], INVALID_CONTEXT)
 
 
+def _json_fact_equal(left: Any, right: Any) -> bool:
+    """Compare JSON facts without Python's Boolean/numeric equality coercion.
+
+    Containers must be traversed before using native scalar equality so that
+    nested Booleans cannot compare equal to numbers. Numeric scalar equality
+    retains its existing meaning.
+
+    @see APPROVAL-DECISION-003
+    @see APPROVAL-VALIDITY-003
+    """
+    if isinstance(left, bool) or isinstance(right, bool):
+        return left is right
+    if isinstance(left, dict) or isinstance(right, dict):
+        if not isinstance(left, dict) or not isinstance(right, dict) or left.keys() != right.keys():
+            return False
+        return all(_json_fact_equal(left[key], right[key]) for key in left)
+    if isinstance(left, list) or isinstance(right, list):
+        if not isinstance(left, list) or not isinstance(right, list) or len(left) != len(right):
+            return False
+        return all(_json_fact_equal(a, b) for a, b in zip(left, right))
+    return left == right
+
+
 def _facts_match(decision_facts: Any, current_facts: Any, paths: Any) -> bool:
     if not isinstance(paths, list) or any(not _opaque(path) for path in paths):
         raise FinKoreError(INVALID_DECISION)
     for fact_path in paths:
         left = _path(decision_facts, fact_path)
         right = _path(current_facts, fact_path)
-        if left is _MISSING or right is _MISSING or left != right:
+        if left is _MISSING or right is _MISSING or not _json_fact_equal(left, right):
             return False
     return True
 

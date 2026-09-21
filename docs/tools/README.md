@@ -68,8 +68,11 @@ in `conformance/traceability.md`.
 
 The Python Money probes also reintroduce Decimal-context rounding during
 subtraction, negation, and allocation result construction. Each has a permanent
-high-precision regression vector in the Money suite. The complete cross-domain
-release gate remains pending while the known Approval regression is unresolved.
+high-precision regression vector in the Money suite. Python Approval probes
+restore native scalar equality or shallow object/array comparison and reject
+unchanged Boolean facts. Permanent changed-fact regressions and an unchanged
+structured-fact control detect these defects. The complete release verification
+gate remains pending under the [Core 0.9.2 plan](../plans/plan-09.2.md).
 
 ## Local Packaging Proof
 

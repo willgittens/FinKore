@@ -2,10 +2,10 @@
 
 This package is the Python implementation track for FinKore Core 0.9 release candidate. It is
 derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
-TypeScript financial implementation code. It currently passes 284 of the 285
-manifest vectors, including all 102 Money vectors. One Approval validity
-regression remains unresolved; this is not complete current conformance.
-The [Core 0.9.2 plan](../../../docs/plans/plan-09.2.md) tracks its correction.
+TypeScript financial implementation code. It passes all 290 manifest vectors
+on CPython 3.12 and 3.13, including 102 Money and 72 Approval vectors.
+The [Core 0.9.2 plan](../../../docs/plans/plan-09.2.md) tracks the remaining
+release verification for the implemented Money and Approval corrections.
 
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to a Python package registry. The
@@ -36,8 +36,10 @@ Current status:
   results directly from integer units and scale. These operations preserve
   operands and the caller's Decimal context. Precision reduction uses the
   explicit FinKore rounding arguments.
-- Approval relevant-fact comparison currently conflates JSON Boolean and
-  numeric values such as `true` and `1`.
+- Approval decision and requirement evaluation distinguish JSON Boolean and
+  numeric facts such as `true` and `1`, including inside objects and arrays.
+  Object member order is ignored; array order matters. Changed relevant facts
+  invalidate prior decisions without modifying history or caller-supplied facts.
 
 ## Public Package Surface
 

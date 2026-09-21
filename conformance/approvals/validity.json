@@ -1037,6 +1037,384 @@
         "stale-approval-satisfies-requirement",
         "ineffective-decision-removed-or-rewritten"
       ]
+    },
+    {
+      "id": "approval.validity.false-zero-fact-change-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-DECISION-003",
+        "APPROVAL-DECISION-007",
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-003"
+      ],
+      "description": "A relevant fact changing from false to zero makes a recorded rejection ineffective without rewriting history.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "approvedFlag": false
+            },
+            "outcome": "REJECTED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "approvedFlag": 0
+        },
+        "relevantFactPaths": [
+          "approvedFlag"
+        ],
+        "observeHistory": true
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING",
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "approvedFlag": false
+              },
+              "outcome": "REJECTED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-boolean-number-facts-treated-equal",
+        "stale-rejection-rejects-requirement",
+        "ineffective-decision-removed-or-rewritten"
+      ]
+    },
+    {
+      "id": "approval.validity.nested-number-boolean-fact-change-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-DECISION-003",
+        "APPROVAL-DECISION-007",
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-003"
+      ],
+      "description": "A nested numeric fact changing to Boolean invalidates the prior approval without rewriting history.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "approvedFlag": {
+                "inner": {
+                  "flag": 1
+                }
+              }
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "approvedFlag": {
+            "inner": {
+              "flag": true
+            }
+          }
+        },
+        "relevantFactPaths": [
+          "approvedFlag"
+        ],
+        "observeHistory": true
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING",
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "approvedFlag": {
+                  "inner": {
+                    "flag": 1
+                  }
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-boolean-number-facts-treated-equal",
+        "stale-approval-satisfies-requirement",
+        "ineffective-decision-removed-or-rewritten"
+      ]
+    },
+    {
+      "id": "approval.validity.array-number-boolean-fact-change-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-DECISION-003",
+        "APPROVAL-DECISION-007",
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-003"
+      ],
+      "description": "A numeric fact inside an array changing to Boolean invalidates the prior approval without rewriting history.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "approvedFlag": [
+                {
+                  "flag": 0
+                }
+              ]
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "approvedFlag": [
+            {
+              "flag": false
+            }
+          ]
+        },
+        "relevantFactPaths": [
+          "approvedFlag"
+        ],
+        "observeHistory": true
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING",
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "approvedFlag": [
+                  {
+                    "flag": 0
+                  }
+                ]
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-boolean-number-facts-treated-equal",
+        "stale-approval-satisfies-requirement",
+        "ineffective-decision-removed-or-rewritten"
+      ]
+    },
+    {
+      "id": "approval.validity.structured-facts-unchanged-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-DECISION-003",
+        "APPROVAL-DECISION-007",
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-003"
+      ],
+      "description": "Unchanged structured relevant facts retain approval regardless of object member order while preserving Boolean, numeric, string, null, and array values.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "approvedFlag": {
+                "flag": true,
+                "values": [
+                  false,
+                  0,
+                  1.5,
+                  "1",
+                  null
+                ],
+                "meta": {
+                  "a": 1,
+                  "b": 2
+                }
+              }
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "approvedFlag": {
+            "meta": {
+              "b": 2,
+              "a": 1
+            },
+            "values": [
+              false,
+              0,
+              1.5,
+              "1",
+              null
+            ],
+            "flag": true
+          }
+        },
+        "relevantFactPaths": [
+          "approvedFlag"
+        ],
+        "observeHistory": true
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED",
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "approvedFlag": {
+                  "flag": true,
+                  "values": [
+                    false,
+                    0,
+                    1.5,
+                    "1",
+                    null
+                  ],
+                  "meta": {
+                    "a": 1,
+                    "b": 2
+                  }
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unchanged-approval-facts-invalidated",
+        "object-key-order-affects-facts",
+        "boolean-facts-always-unequal"
+      ]
     }
   ]
 }
