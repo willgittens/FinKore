@@ -17,7 +17,7 @@ Audit, Approvals, and Entities scope.
 | Entities | 84 | 79 | 3 | 2 | 72 | 0 | 0 | 12 | 0 | 0 |
 | **Total** | **406** | **373** | **15** | **18** | **322** | **0** | **0** | **84** | **0** | **0** |
 
-The suite contains 290 vectors. Overall: **322 covered (79.3%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **84 not directly testable (20.7%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
+The suite contains 296 vectors. Overall: **322 covered (79.3%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **84 not directly testable (20.7%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current release candidate. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
 
@@ -27,6 +27,14 @@ Money and Approval regressions, including nested Boolean/numeric fact changes
 and unchanged-fact controls, pass in TypeScript, Python, and Java. Clean-checkout
 release verification passes. The corrections and release steps are tracked in the
 [Core 0.9.2 plan](../docs/plans/plan-09.2.md).
+
+The `entity.validation.cross-field-*` regressions strengthen
+`ENTITY-VALIDATION-003`: paired increases and decreases must use the complete
+proposed result, and invalid combined or single-field updates must preserve
+the original Entity. Their declared amount/limit predicate is a conformance
+fixture, not a new universal financial rule. Audit redaction observations use
+conformance-only markers; `/spec/audit/redaction.md` leaves production redacted
+representations implementation-defined.
 
 ## Requirement mapping
 
@@ -419,7 +427,7 @@ release verification passes. The corrections and release steps are tracked in th
 | ENTITY-MUTABILITY-001 | Entities | MUST / MUST NOT | COVERED | entity.mutate.mutable-field-001 |
 | ENTITY-MUTABILITY-002 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.mutate.immutable-financial-field-001 |
 | ENTITY-MUTABILITY-003 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Mutation Audit declaration requires the out-of-scope Entity/Audit integration. |
-| ENTITY-MUTABILITY-004 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.mutate.immutable-financial-field-001 |
+| ENTITY-MUTABILITY-004 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.mutate.immutable-financial-field-001, entity.validation.cross-field-combined-invalid-001, entity.validation.cross-field-retained-amount-001, entity.validation.cross-field-retained-limit-001 |
 | ENTITY-MUTABILITY-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Prior-audit attachment requires an Entity/Audit integration surface absent from current vectors. |
 | ENTITY-MUTABILITY-006 | Entities | MUST / MUST NOT | COVERED | entity.mutate.terminal-metadata-001 |
 | ENTITY-MUTABILITY-007 | Entities | MAY | COVERED | entity.mutate.terminal-metadata-001 |
@@ -431,11 +439,11 @@ release verification passes. The corrections and release steps are tracked in th
 | ENTITY-REVISION-006 | Entities | MUST / MUST NOT | COVERED | entity.import.expected-conflict-version-conflict-001, entity.import.expected-revision-conflict-001 |
 | ENTITY-REVISION-007 | Entities | MUST / MUST NOT | COVERED | entity.import.duplicate-revision-invalid-identity-001 |
 | ENTITY-VALIDATION-001 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
-| ENTITY-VALIDATION-002 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
-| ENTITY-VALIDATION-003 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
-| ENTITY-VALIDATION-004 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
+| ENTITY-VALIDATION-002 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001, entity.validation.cross-field-combined-invalid-001, entity.validation.cross-field-paired-decrease-001, entity.validation.cross-field-paired-increase-001, entity.validation.cross-field-retained-amount-001, entity.validation.cross-field-retained-limit-001, entity.validation.cross-field-retained-limit-valid-001 |
+| ENTITY-VALIDATION-003 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001, entity.validation.cross-field-combined-invalid-001, entity.validation.cross-field-paired-decrease-001, entity.validation.cross-field-paired-increase-001, entity.validation.cross-field-retained-amount-001, entity.validation.cross-field-retained-limit-001, entity.validation.cross-field-retained-limit-valid-001 |
+| ENTITY-VALIDATION-004 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001, entity.validation.cross-field-combined-invalid-001, entity.validation.cross-field-retained-amount-001, entity.validation.cross-field-retained-limit-001 |
 | ENTITY-VALIDATION-005 | Entities | SHOULD / SHOULD NOT | COVERED | entity.validation.complete-result-001 |
-| ENTITY-VALIDATION-006 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
+| ENTITY-VALIDATION-006 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001, entity.validation.cross-field-combined-invalid-001, entity.validation.cross-field-paired-decrease-001, entity.validation.cross-field-paired-increase-001, entity.validation.cross-field-retained-amount-001, entity.validation.cross-field-retained-limit-001, entity.validation.cross-field-retained-limit-valid-001 |
 | ENTITY-VALIDATION-007 | Entities | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | Distinguishing always-required and state-dependent rules is a composing-domain recommendation. |
 | ENTITY-VALIDATION-008 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
 

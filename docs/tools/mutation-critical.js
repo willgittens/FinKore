@@ -23,6 +23,46 @@ if (!validTargets.has(requestedTarget)) {
 
 const pythonMutants = [
   {
+    id: 'python-entity-validates-patch-only',
+    expectedVector: 'entity.validation.cross-field-retained-limit-valid-001',
+    suite: 'entities',
+    path: 'core/src/finkore/entities.py',
+    from: '_validate_entity_data(entity_definition, result)',
+    to: '_validate_entity_data(entity_definition, {**result, "data": changes})',
+  },
+  {
+    id: 'python-entity-cross-field-validation-bypass',
+    expectedVector: 'entity.validation.cross-field-combined-invalid-001',
+    suite: 'entities',
+    path: 'core/src/finkore/entities.py',
+    from: 'valid = value.compare(other) != "GREATER"',
+    to: 'valid = True',
+  },
+  {
+    id: 'python-entity-cross-field-equality-rejected',
+    expectedVector: 'entity.validation.cross-field-paired-increase-001',
+    suite: 'entities',
+    path: 'core/src/finkore/entities.py',
+    from: 'valid = value.compare(other) != "GREATER"',
+    to: 'valid = value.compare(other) == "LESS"',
+  },
+  {
+    id: 'python-entity-validates-old-result',
+    expectedVector: 'entity.validation.cross-field-combined-invalid-001',
+    suite: 'entities',
+    path: 'core/src/finkore/entities.py',
+    from: '_validate_entity_data(entity_definition, result)',
+    to: '_validate_entity_data(entity_definition, current)',
+  },
+  {
+    id: 'python-entity-validates-intermediate-result',
+    expectedVector: 'entity.validation.cross-field-paired-increase-001',
+    suite: 'entities',
+    path: 'core/src/finkore/entities.py',
+    from: 'result["data"] = {**result["data"], **deepcopy(changes)}',
+    to: 'for path, value in changes.items():\n        result["data"][path] = deepcopy(value)\n        _validate_entity_data(entity_definition, result)',
+  },
+  {
     id: 'python-approval-native-fact-equality',
     expectedVector: 'approval.validity.boolean-number-fact-change-001',
     suite: 'approvals',
@@ -186,6 +226,46 @@ const pythonMutants = [
 ]
 
 const javaMutants = [
+  {
+    id: 'java-entity-validates-patch-only',
+    expectedVector: 'entity.validation.cross-field-retained-limit-valid-001',
+    suite: 'entities',
+    path: 'core/src/main/java/org/finkore/Entities.java',
+    from: 'resultData.putAll(copyMap(changeMap, INVALID_MUTATION));\n    validateEntityData(entityDefinition, result);',
+    to: 'resultData.putAll(copyMap(changeMap, INVALID_MUTATION));\n    validateEntityData(entityDefinition, Map.of("data", changeMap));',
+  },
+  {
+    id: 'java-entity-cross-field-validation-bypass',
+    expectedVector: 'entity.validation.cross-field-combined-invalid-001',
+    suite: 'entities',
+    path: 'core/src/main/java/org/finkore/Entities.java',
+    from: 'invalid = "GREATER".equals(value.compare(other));',
+    to: 'invalid = false;',
+  },
+  {
+    id: 'java-entity-cross-field-equality-rejected',
+    expectedVector: 'entity.validation.cross-field-paired-increase-001',
+    suite: 'entities',
+    path: 'core/src/main/java/org/finkore/Entities.java',
+    from: 'invalid = "GREATER".equals(value.compare(other));',
+    to: 'invalid = !"LESS".equals(value.compare(other));',
+  },
+  {
+    id: 'java-entity-validates-old-result',
+    expectedVector: 'entity.validation.cross-field-combined-invalid-001',
+    suite: 'entities',
+    path: 'core/src/main/java/org/finkore/Entities.java',
+    from: 'resultData.putAll(copyMap(changeMap, INVALID_MUTATION));\n    validateEntityData(entityDefinition, result);',
+    to: 'resultData.putAll(copyMap(changeMap, INVALID_MUTATION));\n    validateEntityData(entityDefinition, current);',
+  },
+  {
+    id: 'java-entity-validates-intermediate-result',
+    expectedVector: 'entity.validation.cross-field-paired-increase-001',
+    suite: 'entities',
+    path: 'core/src/main/java/org/finkore/Entities.java',
+    from: 'resultData.putAll(copyMap(changeMap, INVALID_MUTATION));',
+    to: 'for (Map.Entry<String, Object> entry : changeMap.entrySet()) {\n      resultData.put(entry.getKey(), entry.getValue());\n      validateEntityData(entityDefinition, result);\n    }',
+  },
   {
     id: 'java-money-currency-mismatch-bypass',
     suite: 'money',

@@ -194,6 +194,15 @@ def _validate_entity_data(definition: dict[str, Any], entity: dict[str, Any]) ->
                 continue
             if money.amount <= Decimal("0"):
                 findings.append({"rule": rule.get("id"), "path": rule.get("path")})
+        elif isinstance(rule, dict) and rule.get("rule") == "money-not-greater-than":
+            try:
+                value = Money.from_portable(entity["data"].get(rule.get("path")))
+                other = Money.from_portable(entity["data"].get(rule.get("otherPath")))
+                valid = value.compare(other) != "GREATER"
+            except FinKoreError:
+                valid = False
+            if not valid:
+                findings.append({"rule": rule.get("id"), "path": rule.get("path")})
     if findings:
         error = FinKoreError(VALIDATION_FAILED)
         error.findings = findings

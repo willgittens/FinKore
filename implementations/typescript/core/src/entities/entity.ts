@@ -59,12 +59,14 @@ function validateValidationRules(value: unknown): readonly EntityValidationRuleD
   if (!Array.isArray(value)) throw new InvalidEntityMutationError()
   return value.map((candidate) => {
     if (!isPlainRecord(candidate)) throw new InvalidEntityMutationError()
-    if (candidate.rule !== 'positive-money') throw new InvalidEntityMutationError()
-    return {
+    if (candidate.rule !== 'positive-money' && candidate.rule !== 'money-not-greater-than') throw new InvalidEntityMutationError()
+    const identity = {
       id: requiredValidationString(candidate.id),
       path: requiredValidationString(candidate.path),
-      rule: candidate.rule,
     }
+    return candidate.rule === 'money-not-greater-than'
+      ? { ...identity, rule: candidate.rule, otherPath: requiredValidationString(candidate.otherPath) }
+      : { ...identity, rule: candidate.rule }
   })
 }
 
@@ -234,11 +236,23 @@ function isPositiveMoney(value: unknown): boolean {
 function validateEntityData(definition: EntityDefinition, data: unknown): EntityValidationResult {
   const findings: EntityValidationFinding[] = []
   for (const rule of definition.validation) {
-    if (rule.rule === 'positive-money' && !isPositiveMoney(valueAtTopLevelPath(data, rule.path))) {
+    const value = valueAtTopLevelPath(data, rule.path)
+    const valid = rule.rule === 'positive-money'
+      ? isPositiveMoney(value)
+      : isMoneyNotGreaterThan(value, valueAtTopLevelPath(data, rule.otherPath))
+    if (!valid) {
       findings.push({ rule: rule.id, path: rule.path })
     }
   }
   return { valid: findings.length === 0, findings }
+}
+
+function isMoneyNotGreaterThan(value: unknown, other: unknown): boolean {
+  try {
+    return Money.deserialize(value).compare(Money.deserialize(other)) !== 'GREATER'
+  } catch {
+    return false
+  }
 }
 
 function assertValidEntityData(definition: EntityDefinition, data: unknown): void {
@@ -262,7 +276,9 @@ function assertValidEntityData(definition: EntityDefinition, data: unknown): voi
  * constraints against complete Entity data before a successful create, import,
  * or mutation becomes observable. Core 0.9 release candidate has not standardized a generic
  * validation language; this implementation supports only the small
- * `positive-money` conformance fixture predicate.
+ * `positive-money` and cross-field `money-not-greater-than` conformance fixture
+ * predicates. The latter compares two declared top-level Money fields in the
+ * complete proposed data using exact, compatible-currency ordering.
  *
  * @see ENTITY-IDENTITY-001
  * @see ENTITY-IDENTITY-002

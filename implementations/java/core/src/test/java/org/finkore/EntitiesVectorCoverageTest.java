@@ -32,7 +32,7 @@ final class EntitiesVectorCoverageTest {
         executed += 1;
       }
     }
-    assertEquals(26, executed);
+    assertEquals(32, executed);
   }
 
   private static Map<String, Object> execute(Map<String, Object> vector) {

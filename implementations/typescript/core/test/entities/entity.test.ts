@@ -54,6 +54,68 @@ const validatedInvoiceData = {
   tax: { amount: '20.00', currency: 'EUR' },
 }
 
+describe('Financial Entity cross-field validation', () => {
+  const definition = {
+    ...invoiceDefinition,
+    mutability: { DRAFT: ['amount', 'limit', 'memo'] },
+    validation: [{ id: 'WITHIN_LIMIT', path: 'amount', otherPath: 'limit', rule: 'money-not-greater-than' }],
+  }
+  const money = (amount: string, currency = 'EUR') => ({ amount, currency })
+
+  it.each([
+    ['10', { amount: money('20'), limit: money('20') }],
+    ['20', { limit: money('10'), amount: money('10') }],
+  ])('validates a paired update from %s against the complete proposed result', (initial, changes) => {
+    const entity = FinancialEntity.create(definition, 'inv-42', { amount: money(initial), limit: money(initial) })
+    const before = entity.toJSON()
+    expect(entity.mutate(changes).toJSON().data).toEqual(changes)
+    expect(entity.toJSON()).toEqual(before)
+  })
+
+  it.each([
+    { amount: money('30'), limit: money('20'), memo: 'must-not-stick' },
+    { amount: money('21') },
+    { limit: money('9') },
+    { amount: money('20.000000000000000000001') },
+    { amount: money('1', 'USD') },
+    { amount: null },
+    { limit: { amount: 'invalid', currency: 'EUR' } },
+  ])('rejects invalid proposals without modifying the original entity: %j', (changes) => {
+    const entity = FinancialEntity.create(definition, 'inv-42', { amount: money('10'), limit: money('20'), memo: 'original' })
+    const before = entity.toJSON()
+    expect(() => entity.mutate(changes)).toThrowError(expect.objectContaining({
+      code: 'FINKORE_ENTITY_VALIDATION_FAILED',
+      details: { findings: [{ rule: 'WITHIN_LIMIT', path: 'amount' }] },
+    }))
+    expect(entity.toJSON()).toEqual(before)
+  })
+
+  it.each([
+    ['10', '20'], ['20.00', '20.0'], ['0', '0'], ['-2', '-1'],
+  ])('uses exact ordering without imposing positivity: %s <= %s', (amount, limit) => {
+    const data = { amount: money(amount), limit: money(limit) }
+    expect(FinancialEntity.create(definition, 'inv-42', data).toJSON().data).toEqual(data)
+  })
+
+  it('validates a partial update with its retained peer field', () => {
+    const entity = FinancialEntity.create(definition, 'inv-42', { amount: money('10'), limit: money('20') })
+    expect(entity.mutate({ amount: money('15') }).toJSON().data).toEqual({ amount: money('15'), limit: money('20') })
+    expect(entity.toJSON().data).toEqual({ amount: money('10'), limit: money('20') })
+  })
+
+  it('rejects a missing peer value with a safe finding', () => {
+    expect(() => FinancialEntity.create(definition, 'inv-42', { amount: money('10') }))
+      .toThrowError(expect.objectContaining({ code: 'FINKORE_ENTITY_VALIDATION_FAILED' }))
+  })
+
+  it.each([undefined, null, '', 7])('requires a declared peer path: %j', (otherPath) => {
+    expect(() => FinancialEntity.create({
+      ...definition,
+      validation: [{ id: 'WITHIN_LIMIT', path: 'amount', otherPath, rule: 'money-not-greater-than' }],
+    }, 'inv-42', { amount: money('10'), limit: money('20') })).toThrow(InvalidEntityMutationError)
+  })
+})
+
 describe('Financial Entity identity and lifecycle', () => {
   it('rejects null import identities and revisions with the portable identity error', () => {
     const entity = { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData }

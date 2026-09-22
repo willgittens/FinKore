@@ -2,7 +2,7 @@
 
 This package is the Python implementation track for FinKore Core 0.9 release candidate. It is
 derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
-TypeScript financial implementation code. It passes all 290 manifest vectors
+TypeScript financial implementation code. It passes all 296 manifest vectors
 on CPython 3.12 and 3.13, including 102 Money and 72 Approval vectors.
 The Core 0.9.2 corrective snapshot includes the Money and Approval fixes and
 passes clean-checkout release verification. See the
@@ -44,6 +44,14 @@ Current status:
   numeric facts such as `true` and `1`, including inside objects and arrays.
   Object member order is ignored; array order matters. Changed relevant facts
   invalidate prior decisions without modifying history or caller-supplied facts.
+
+Entity validation supports the `positive-money` and cross-field
+`money-not-greater-than` conformance fixture predicates. The latter reads
+`path` and `otherPath` from the complete proposed data and accepts exact
+compatible-currency Money values when the first is less than or equal to the
+second. Invalid or incompatible values fail the declared Entity rule. These
+predicates exercise declared validation; they do not standardize a general
+validation language or impose a universal amount/limit policy.
 
 ## Public Package Surface
 

@@ -33,6 +33,14 @@ Current status:
 - Audit and Approval timestamps use the strict portable FinKore RFC 3339
   profile and Approval expiration compares exact instants through nanoseconds.
 
+Entity validation supports the `positive-money` and cross-field
+`money-not-greater-than` conformance fixture predicates. The latter reads
+`path` and `otherPath` from the complete proposed data and accepts exact
+compatible-currency Money values when the first is less than or equal to the
+second. Invalid or incompatible values fail the declared Entity rule. These
+predicates exercise declared validation; they do not standardize a general
+validation language or impose a universal amount/limit policy.
+
 ## Public Package Surface
 
 The intentional Java package surface is `org.finkore`. The public classes are:
@@ -49,7 +57,9 @@ The intentional Java package surface is `org.finkore`. The public classes are:
 - `Approvals`, exposing static Approval requirement, decision, validity,
   condition, chain, and bounded-composition operations.
 - `Entities`, exposing static Entity create, mutate, transition, import, and
-  evolution operations.
+  evolution operations. `Entities.validationFindingsForMutation` reports safe
+  rule/path findings for the complete proposed data without mutating the source;
+  the conformance adapter obtains these findings from the core.
 - Domain classes expose portable error-code constants for the errors they can
   raise.
 

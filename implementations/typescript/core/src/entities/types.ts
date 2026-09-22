@@ -55,12 +55,15 @@ export type EntityErrorCode =
  * Validation rule fixture supported by Core 0.9 release candidate Entity conformance.
  *
  * Core 0.9 release candidate has not standardized a generic validation language. The current
- * TypeScript reference implementation supports only the deterministic
- * `positive-money` fixture predicate used by Entity conformance vectors.
+ * TypeScript reference implementation supports the deterministic `positive-money`
+ * and `money-not-greater-than` fixture predicates used by Entity conformance
+ * vectors. The latter compares two compatible Money fields exactly and accepts
+ * equality; invalid or incompatible values fail the declared Entity rule.
  *
  * @see ENTITY-VALIDATION-001
+ * @see ENTITY-VALIDATION-003
  */
-export type EntityValidationRule = 'positive-money'
+export type EntityValidationRule = 'positive-money' | 'money-not-greater-than'
 
 /**
  * Declared Entity validation rule.
@@ -71,16 +74,24 @@ export type EntityValidationRule = 'positive-money'
  * @see ENTITY-ERROR-002
  * @see ENTITY-VALIDATION-005
  */
-export interface EntityValidationRuleDefinition {
+export type EntityValidationRuleDefinition = {
   /** Stable violation identifier supplied by the composing domain. */
   readonly id: string
 
   /** Top-level Entity data path inspected by the rule. */
   readonly path: string
-
-  /** Small conformance fixture predicate, not a general rule expression. */
-  readonly rule: EntityValidationRule
-}
+} & (
+  | {
+      /** Single-field positive Money predicate. */
+      readonly rule: 'positive-money'
+    }
+  | {
+      /** Exact comparison against another declared Money field. */
+      readonly rule: 'money-not-greater-than'
+      /** Top-level Money upper bound read from the same complete proposed data. */
+      readonly otherPath: string
+    }
+)
 
 /**
  * Portable validation finding emitted when a declared Entity rule fails.

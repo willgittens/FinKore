@@ -3,6 +3,7 @@ package org.finkore;
 
 import java.util.List;
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 /** Minimal stdlib tests for the Java Entities implementation. */
 public final class EntitiesTest {
@@ -14,6 +15,7 @@ public final class EntitiesTest {
     mutateRejectsImmutableIdentityWithoutChangingEntity();
     transitionRejectsUnknownTargetAsInvalidTransition();
     validationFailureReportsFindings();
+    crossFieldValidationUsesExactMoneyOrdering();
     importRejectsDuplicateRevisionObservations();
   }
 
@@ -68,6 +70,35 @@ public final class EntitiesTest {
             "currentRevision", "business-rev-2",
             "historicalRevisions", List.of("business-rev-2"))));
     assertEquals("initial", ((Map<?, ?>) entity.get("data")).get("memo"));
+  }
+
+  private static void crossFieldValidationUsesExactMoneyOrdering() {
+    Map<String, Object> definition = new LinkedHashMap<>(definitionWithValidation());
+    definition.put("mutability", Map.of("DRAFT", List.of("amount", "limit", "memo")));
+    definition.put("validation", List.of(Map.of(
+        "id", "WITHIN_LIMIT", "path", "amount", "otherPath", "limit", "rule", "money-not-greater-than")));
+    for (List<String> pair : List.of(List.of("10", "20"), List.of("20.00", "20.0"), List.of("0", "0"), List.of("-2", "-1"))) {
+      Map<String, Object> data = Map.of(
+          "amount", Map.of("amount", pair.get(0), "currency", "EUR"),
+          "limit", Map.of("amount", pair.get(1), "currency", "EUR"));
+      assertEquals(data, Entities.create(definition, "inv-42", data).get("data"));
+    }
+    Map<String, Object> data = Map.of(
+        "amount", Map.of("amount", "10", "currency", "EUR"),
+        "limit", Map.of("amount", "20", "currency", "EUR"));
+    Map<String, Object> entity = Entities.create(definition, "inv-42", data);
+    for (Map<String, Object> changes : List.<Map<String, Object>>of(
+        Map.of("amount", Map.of("amount", "20.000000000000000000001", "currency", "EUR")),
+        Map.of("amount", Map.of("amount", "1", "currency", "USD")),
+        Map.of("amount", "invalid"),
+        Map.of("limit", Map.of("amount", "invalid", "currency", "EUR")))) {
+      assertError(Entities.VALIDATION_FAILED, () -> Entities.mutate(definition, entity, changes));
+      assertEquals(List.of(Map.of("rule", "WITHIN_LIMIT", "path", "amount")),
+          Entities.validationFindingsForMutation(definition, entity, changes));
+      assertEquals(data, entity.get("data"));
+    }
+    assertError(Entities.VALIDATION_FAILED,
+        () -> Entities.create(definition, "inv-42", Map.of("amount", Map.of("amount", "10", "currency", "EUR"))));
   }
 
   private static Map<String, Object> definition() {

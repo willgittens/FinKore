@@ -241,13 +241,18 @@ public final class Entities {
   /**
    * Computes validation findings for a candidate mutation. Used by adapters to
    * report safe diagnostics for failed validation without committing changes.
+   * The complete proposed data includes both changed and retained fields.
+   * Findings contain declared rule identities and paths, never field values.
+   * Neither the source Entity nor the supplied changes are mutated.
    *
    * @param definition portable Entity definition
    * @param entity current Entity observation
    * @param changes proposed changes
-   * @return validation findings
+   * @return findings in declaration order, or an empty list for a non-map change request
+   * @throws FinKoreException when the definition or current Entity is invalid
+   * @see "ENTITY-VALIDATION-003"
    */
-  static List<Map<String, Object>> validationFindingsForMutation(Object definition, Object entity, Object changes) {
+  public static List<Map<String, Object>> validationFindingsForMutation(Object definition, Object entity, Object changes) {
     Map<String, Object> entityDefinition = validateDefinition(definition);
     Map<String, Object> current = validateEntity(entityDefinition, entity);
     if (!(changes instanceof Map<?, ?> rawChanges)) {
@@ -338,7 +343,8 @@ public final class Entities {
         continue;
       }
       Map<String, Object> rule = stringObjectMap(rawRule, VALIDATION_FAILED);
-      if (!"positive-money".equals(rule.get("rule"))) {
+      boolean crossField = "money-not-greater-than".equals(rule.get("rule"));
+      if (!"positive-money".equals(rule.get("rule")) && !crossField) {
         continue;
       }
       Object path = rule.get("path");
@@ -346,8 +352,11 @@ public final class Entities {
       if (path instanceof String key) {
         Object candidate = data.get(key);
         try {
-          Money.fromPortable(candidate);
-          if (candidate instanceof Map<?, ?> moneyMap && moneyMap.get("amount") instanceof String amount) {
+          Money value = Money.fromPortable(candidate);
+          if (crossField) {
+            Money other = Money.fromPortable(data.get(rule.get("otherPath")));
+            invalid = "GREATER".equals(value.compare(other));
+          } else if (candidate instanceof Map<?, ?> moneyMap && moneyMap.get("amount") instanceof String amount) {
             invalid = new BigDecimal(amount).compareTo(BigDecimal.ZERO) <= 0;
           }
         } catch (RuntimeException error) {

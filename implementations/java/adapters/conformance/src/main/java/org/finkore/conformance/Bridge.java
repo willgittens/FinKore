@@ -2,7 +2,6 @@
 package org.finkore.conformance;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -306,7 +305,7 @@ public final class Bridge {
       if ("finkore.entity.mutate".equals(operation)) {
         Map<String, Object> observations = entityObservation(input.get("entity"));
         if (observations != null) {
-          List<Map<String, Object>> findings = validationFindingsForMutation(
+          List<Map<String, Object>> findings = Entities.validationFindingsForMutation(
               input.get("definition"),
               input.get("entity"),
               input.get("changes"));
@@ -354,47 +353,6 @@ public final class Bridge {
     }
     result.put("history", history instanceof List<?> list ? list : List.of());
     return result;
-  }
-
-  private static List<Map<String, Object>> validationFindingsForMutation(Object definition, Object entity, Object changes) {
-    if (!(definition instanceof Map<?, ?> rawDefinition)
-        || !(entity instanceof Map<?, ?> rawEntity)
-        || !(rawEntity.get("data") instanceof Map<?, ?> rawData)
-        || !(changes instanceof Map<?, ?> rawChanges)
-        || !(rawDefinition.get("validation") instanceof List<?> validation)) {
-      return List.of();
-    }
-    Map<String, Object> data = new LinkedHashMap<>();
-    for (Map.Entry<?, ?> entry : rawData.entrySet()) {
-      if (entry.getKey() instanceof String key) data.put(key, entry.getValue());
-    }
-    for (Map.Entry<?, ?> entry : rawChanges.entrySet()) {
-      if (entry.getKey() instanceof String key) data.put(key, entry.getValue());
-    }
-    List<Map<String, Object>> findings = new ArrayList<>();
-    for (Object ruleObject : validation) {
-      if (!(ruleObject instanceof Map<?, ?> rule) || !"positive-money".equals(rule.get("rule"))) continue;
-      boolean invalid = true;
-      Object path = rule.get("path");
-      if (path instanceof String key) {
-        Object candidate = data.get(key);
-        try {
-          Money.fromPortable(candidate);
-          if (candidate instanceof Map<?, ?> moneyMap && moneyMap.get("amount") instanceof String amount) {
-            invalid = new BigDecimal(amount).compareTo(BigDecimal.ZERO) <= 0;
-          }
-        } catch (RuntimeException error) {
-          invalid = true;
-        }
-      }
-      if (invalid) {
-        Map<String, Object> finding = new LinkedHashMap<>();
-        finding.put("rule", rule.get("id"));
-        finding.put("path", rule.get("path"));
-        findings.add(finding);
-      }
-    }
-    return findings;
   }
 
   private static Map<String, Object> evolutionObservation(Map<String, Object> input, boolean includeSameIdentityRelated) {

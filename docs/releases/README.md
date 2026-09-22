@@ -3,6 +3,14 @@
 This is the complete release history kept in the working tree. Precise financial
 behavior belongs to `/spec`; detailed change history remains available in Git.
 
+## Unreleased
+
+Clarified that Audit redaction representations are implementation-defined and
+conformance markers do not prescribe production encoding. Added cross-field
+Entity validation regressions and the corresponding amount/limit fixture in
+TypeScript, Python, and Java, exercising the existing complete-result validation
+requirement without adding a universal Entity constraint.
+
 ## FinKore Core 0.9.2 Release Candidate
 
 Corrected Python Money subtraction, negation, and allocation to preserve exact

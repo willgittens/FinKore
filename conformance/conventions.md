@@ -51,6 +51,19 @@ Conformance-only sentinels use `{"presence":"ABSENT"}` and `{"presence":"REDACTE
 
 Workflow guard expressions and entity validation rules in these vectors are small adapter fixtures, not additions to the FinKore business specification or a general expression DSL. The fixture `{"fact":"x","equals":value}` compares one explicitly supplied fact. The entity validator named `positive-money` accepts an exact Money amount greater than zero. These fixtures let every adapter exercise guard/validation ordering and atomicity under the same deterministic predicate.
 
+The Entity fixture `{"id":"WITHIN_LIMIT","rule":"money-not-greater-than",
+"path":"amount","otherPath":"limit"}` accepts two valid, compatible Money
+values when the value at `path` is numerically less than or equal to the value
+at `otherPath`. Both paths name top-level fields in the complete proposed Entity
+data, including retained fields omitted from the mutation. Missing or invalid
+Money values and incompatible currencies make this predicate false. A failed
+predicate produces `FINKORE_ENTITY_VALIDATION_FAILED`, with any observed finding
+identifying its declared `id` and `path`. The predicate uses exact Money
+comparison and does not impose positivity or currency conversion. It is a
+declared test constraint for **ENTITY-VALIDATION-003**, not a required rule for
+all financial entities. Core implementations evaluate the predicate; adapters
+only translate fixtures and observations.
+
 
 Timestamps use the portable FinKore RFC 3339 profile in
 [SPEC-TIMESTAMP-001 through -006](../spec/conventions.md#portable-values).

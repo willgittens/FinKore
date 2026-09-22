@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import unittest
+from copy import deepcopy
 
 from finkore import FinKoreError, create_entity, import_entity, mutate_entity, transition_entity
 
@@ -16,6 +17,34 @@ DEFINITION = {
 
 
 class EntityTests(unittest.TestCase):
+    def test_cross_field_validation_uses_exact_money_ordering(self) -> None:
+        definition = deepcopy(DEFINITION)
+        definition["mutability"]["DRAFT"] = ["amount", "limit", "memo"]
+        definition["validation"] = [{"id": "WITHIN_LIMIT", "path": "amount", "otherPath": "limit", "rule": "money-not-greater-than"}]
+        for amount, limit in [("10", "20"), ("20.00", "20.0"), ("0", "0"), ("-2", "-1")]:
+            with self.subTest(amount=amount, limit=limit):
+                data = {"amount": {"amount": amount, "currency": "EUR"}, "limit": {"amount": limit, "currency": "EUR"}}
+                self.assertEqual(create_entity(definition, "inv-42", data)["data"], data)
+
+        entity = create_entity(definition, "inv-42", {"amount": {"amount": "10", "currency": "EUR"}, "limit": {"amount": "20", "currency": "EUR"}})
+        before = deepcopy(entity)
+        for changes in [
+            {"amount": {"amount": "20.000000000000000000001", "currency": "EUR"}},
+            {"amount": {"amount": "1", "currency": "USD"}},
+            {"amount": None},
+            {"limit": {"amount": "invalid", "currency": "EUR"}},
+        ]:
+            with self.subTest(changes=changes):
+                with self.assertRaises(FinKoreError) as context:
+                    mutate_entity(definition, entity, changes)
+                self.assertEqual(context.exception.code, "FINKORE_ENTITY_VALIDATION_FAILED")
+                self.assertEqual(context.exception.findings, [{"rule": "WITHIN_LIMIT", "path": "amount"}])
+                self.assertEqual(entity, before)
+
+        with self.assertRaises(FinKoreError) as context:
+            create_entity(definition, "inv-42", {"amount": {"amount": "10", "currency": "EUR"}})
+        self.assertEqual(context.exception.code, "FINKORE_ENTITY_VALIDATION_FAILED")
+
     def test_create_preserves_identity_and_initial_state(self) -> None:
         entity = create_entity(DEFINITION, "inv-42", {"amount": {"amount": "100.00", "currency": "EUR"}})
         self.assertEqual(entity["id"], "inv-42")

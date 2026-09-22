@@ -268,7 +268,10 @@ code required by Entity error semantics.
 
 Core 0.9 release candidate Entity validation intentionally supports only
 declared top-level validation entries with the deterministic `positive-money`
-fixture predicate used by conformance. It is not a generic rule DSL, JSON
+and cross-field `money-not-greater-than` fixture predicates used by conformance.
+The latter declares `path` and `otherPath`, compares their Money values exactly
+with an inclusive upper bound, and validates the complete proposed data. Invalid
+or incompatible values fail the declared Entity rule. It is not a generic rule DSL, JSON
 Schema adapter, callback system, persistence validator, authorization model, or
 cross-domain Workflow/Approval/Audit integration. Validation findings include
 stable rule identity and path only; they do not include sensitive field values.

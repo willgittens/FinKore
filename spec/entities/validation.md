@@ -40,6 +40,16 @@ The following JSON is illustrative and non-normative.
 }
 ```
 
+## Cross-field example (non-normative)
+
+For example, a composing domain may declare that an amount must not exceed a
+limit in the same currency. Updating both from `10 EUR` to `20 EUR` must be
+validated against the proposed `20 EUR` amount and `20 EUR` limit, not against
+an intermediate `20 EUR` amount and old `10 EUR` limit. A proposed `30 EUR`
+amount and `20 EUR` limit must fail without changing either original field.
+This is an illustration of **ENTITY-VALIDATION-003**, not a universal Entity
+constraint or a standardized validation language.
+
 ## Invalid Examples
 
 - Applying half of a multi-field mutation before reporting another field invalid.
@@ -48,4 +58,3 @@ The following JSON is illustrative and non-normative.
 ## Open Questions
 
 - Should violation severity and warning semantics be standardized?
-

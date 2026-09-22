@@ -26,6 +26,15 @@ This document defines how sensitive information may be withheld while preserving
 
 A redacted representation must preserve the fact that an Audit Event occurred and that protected content occupied a defined place in it.
 
+## Representation boundary
+
+Core 0.9 release candidate defines the meaning of redaction, including optional
+Actor context under **AUDIT-ACTOR-006**, without standardizing a production
+redacted-value encoding. The representation is implementation-defined and must
+preserve the distinctions and evidence required above. Conformance adapters
+normalize that representation to the conformance-only `{"presence":"REDACTED"}`
+sentinel; the sentinel is not a required production representation.
+
 ## Example
 
 The following JSON is illustrative and non-normative. The masking representation is application-defined.

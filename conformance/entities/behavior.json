@@ -885,6 +885,621 @@
         "domain-error-replaced",
         "failed-transition-mutates-entity"
       ]
+    },
+    {
+      "id": "entity.validation.cross-field-paired-increase-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-002",
+        "ENTITY-VALIDATION-003",
+        "ENTITY-VALIDATION-006"
+      ],
+      "description": "Accepts the complete valid increase even though the proposed amount exceeds the old limit.",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": []
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "limit",
+              "memo"
+            ]
+          },
+          "validation": [
+            {
+              "id": "WITHIN_LIMIT",
+              "path": "amount",
+              "otherPath": "limit",
+              "rule": "money-not-greater-than"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-cross-field",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "10",
+              "currency": "EUR"
+            },
+            "limit": {
+              "amount": "10",
+              "currency": "EUR"
+            },
+            "memo": "original"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "20",
+            "currency": "EUR"
+          },
+          "limit": {
+            "amount": "20",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "inv-cross-field",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "20",
+              "currency": "EUR"
+            },
+            "limit": {
+              "amount": "20",
+              "currency": "EUR"
+            },
+            "memo": "original"
+          }
+        },
+        "observations": {
+          "identity": "inv-cross-field",
+          "state": "DRAFT"
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "validation-against-intermediate-result",
+        "validation-against-old-peer-field"
+      ]
+    },
+    {
+      "id": "entity.validation.cross-field-paired-decrease-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-002",
+        "ENTITY-VALIDATION-003",
+        "ENTITY-VALIDATION-006"
+      ],
+      "description": "Accepts the complete valid decrease even though the old amount exceeds the proposed limit.",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": []
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "limit",
+              "memo"
+            ]
+          },
+          "validation": [
+            {
+              "id": "WITHIN_LIMIT",
+              "path": "amount",
+              "otherPath": "limit",
+              "rule": "money-not-greater-than"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-cross-field",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "20",
+              "currency": "EUR"
+            },
+            "limit": {
+              "amount": "20",
+              "currency": "EUR"
+            },
+            "memo": "original"
+          }
+        },
+        "changes": {
+          "limit": {
+            "amount": "10",
+            "currency": "EUR"
+          },
+          "amount": {
+            "amount": "10",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "inv-cross-field",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "10",
+              "currency": "EUR"
+            },
+            "limit": {
+              "amount": "10",
+              "currency": "EUR"
+            },
+            "memo": "original"
+          }
+        },
+        "observations": {
+          "identity": "inv-cross-field",
+          "state": "DRAFT"
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "validation-against-intermediate-result",
+        "validation-against-old-peer-field"
+      ]
+    },
+    {
+      "id": "entity.validation.cross-field-combined-invalid-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-002",
+        "ENTITY-VALIDATION-003",
+        "ENTITY-VALIDATION-006",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-MUTABILITY-004"
+      ],
+      "description": "Rejects positive amounts whose combined proposed result violates the declared cross-field rule without partial mutation.",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": []
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "limit",
+              "memo"
+            ]
+          },
+          "validation": [
+            {
+              "id": "WITHIN_LIMIT",
+              "path": "amount",
+              "otherPath": "limit",
+              "rule": "money-not-greater-than"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-cross-field",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "10",
+              "currency": "EUR"
+            },
+            "limit": {
+              "amount": "10",
+              "currency": "EUR"
+            },
+            "memo": "original"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "30",
+            "currency": "EUR"
+          },
+          "limit": {
+            "amount": "20",
+            "currency": "EUR"
+          },
+          "memo": "must-not-stick"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-cross-field",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "10",
+                "currency": "EUR"
+              },
+              "limit": {
+                "amount": "10",
+                "currency": "EUR"
+              },
+              "memo": "original"
+            }
+          },
+          "findings": [
+            {
+              "rule": "WITHIN_LIMIT",
+              "path": "amount"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "cross-field-validation-bypassed",
+        "validation-against-old-result",
+        "validation-of-changed-fields-only",
+        "failed-mutation-partially-applied"
+      ]
+    },
+    {
+      "id": "entity.validation.cross-field-retained-limit-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-002",
+        "ENTITY-VALIDATION-003",
+        "ENTITY-VALIDATION-006",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-MUTABILITY-004"
+      ],
+      "description": "Validates the proposed amount against the retained limit when the mutation omits that field.",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": []
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "limit",
+              "memo"
+            ]
+          },
+          "validation": [
+            {
+              "id": "WITHIN_LIMIT",
+              "path": "amount",
+              "otherPath": "limit",
+              "rule": "money-not-greater-than"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-cross-field",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "10",
+              "currency": "EUR"
+            },
+            "limit": {
+              "amount": "20",
+              "currency": "EUR"
+            },
+            "memo": "original"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "21",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-cross-field",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "10",
+                "currency": "EUR"
+              },
+              "limit": {
+                "amount": "20",
+                "currency": "EUR"
+              },
+              "memo": "original"
+            }
+          },
+          "findings": [
+            {
+              "rule": "WITHIN_LIMIT",
+              "path": "amount"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "cross-field-validation-bypassed",
+        "validation-against-old-result",
+        "validation-of-changed-fields-only",
+        "failed-mutation-partially-applied"
+      ]
+    },
+    {
+      "id": "entity.validation.cross-field-retained-amount-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-002",
+        "ENTITY-VALIDATION-003",
+        "ENTITY-VALIDATION-006",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-MUTABILITY-004"
+      ],
+      "description": "Revalidates the retained amount when only its related limit changes.",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": []
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "limit",
+              "memo"
+            ]
+          },
+          "validation": [
+            {
+              "id": "WITHIN_LIMIT",
+              "path": "amount",
+              "otherPath": "limit",
+              "rule": "money-not-greater-than"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-cross-field",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "10",
+              "currency": "EUR"
+            },
+            "limit": {
+              "amount": "20",
+              "currency": "EUR"
+            },
+            "memo": "original"
+          }
+        },
+        "changes": {
+          "limit": {
+            "amount": "9",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-cross-field",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "10",
+                "currency": "EUR"
+              },
+              "limit": {
+                "amount": "20",
+                "currency": "EUR"
+              },
+              "memo": "original"
+            }
+          },
+          "findings": [
+            {
+              "rule": "WITHIN_LIMIT",
+              "path": "amount"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "cross-field-validation-bypassed",
+        "validation-against-old-result",
+        "validation-of-changed-fields-only",
+        "failed-mutation-partially-applied"
+      ]
+    },
+    {
+      "id": "entity.validation.cross-field-retained-limit-valid-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-002",
+        "ENTITY-VALIDATION-003",
+        "ENTITY-VALIDATION-006"
+      ],
+      "description": "Accepts a valid amount update using the retained limit rather than validating only the mutation payload.",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": []
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "limit",
+              "memo"
+            ]
+          },
+          "validation": [
+            {
+              "id": "WITHIN_LIMIT",
+              "path": "amount",
+              "otherPath": "limit",
+              "rule": "money-not-greater-than"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-cross-field",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "10",
+              "currency": "EUR"
+            },
+            "limit": {
+              "amount": "20",
+              "currency": "EUR"
+            },
+            "memo": "original"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "15",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "inv-cross-field",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "15",
+              "currency": "EUR"
+            },
+            "limit": {
+              "amount": "20",
+              "currency": "EUR"
+            },
+            "memo": "original"
+          }
+        },
+        "observations": {
+          "identity": "inv-cross-field",
+          "state": "DRAFT"
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "validation-of-patch-without-retained-fields"
+      ]
     }
   ]
 }
