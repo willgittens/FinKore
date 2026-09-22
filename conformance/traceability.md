@@ -11,15 +11,15 @@ Audit, Approvals, and Entities scope.
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Shared | 51 | 41 | 5 | 5 | 8 | 0 | 0 | 43 | 0 | 0 |
 | Money | 74 | 69 | 1 | 4 | 69 | 0 | 0 | 5 | 0 | 0 |
-| Workflow | 57 | 55 | 1 | 1 | 48 | 0 | 0 | 9 | 0 | 0 |
-| Audit | 54 | 46 | 4 | 4 | 44 | 0 | 0 | 10 | 0 | 0 |
+| Workflow | 57 | 55 | 1 | 1 | 46 | 2 | 0 | 9 | 0 | 0 |
+| Audit | 57 | 49 | 4 | 4 | 39 | 5 | 3 | 10 | 0 | 0 |
 | Approvals | 86 | 83 | 1 | 2 | 81 | 0 | 0 | 5 | 0 | 0 |
-| Entities | 84 | 79 | 3 | 2 | 72 | 0 | 0 | 12 | 0 | 0 |
-| **Total** | **406** | **373** | **15** | **18** | **322** | **0** | **0** | **84** | **0** | **0** |
+| Entities | 84 | 79 | 3 | 2 | 71 | 1 | 0 | 12 | 0 | 0 |
+| **Total** | **409** | **376** | **15** | **18** | **314** | **8** | **3** | **84** | **0** | **0** |
 
-The suite contains 296 vectors. Overall: **322 covered (79.3%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **84 not directly testable (20.7%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
+The suite contains 296 vectors. Overall: **314 covered (76.8%)**, **8 partially covered (2.0%)**, **3 uncovered (0.7%)**, **84 not directly testable (20.5%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
 
-NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. DEFERRED means the requirement is explicitly outside the current release candidate. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published. No requirement is partially covered in this snapshot.
+NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. PARTIAL means current vectors exercise part of a requirement but do not yet cover a mandatory observable boundary. DEFERRED means the requirement is explicitly outside the current release candidate. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published.
 
 Requirement coverage records that a vector exercises a requirement; it does not
 prove exhaustive boundary coverage or a passing implementation. The Core 0.9.2
@@ -35,6 +35,14 @@ the original Entity. Their declared amount/limit predicate is a conformance
 fixture, not a new universal financial rule. Audit redaction observations use
 conformance-only markers; `/spec/audit/redaction.md` leaves production redacted
 representations implementation-defined.
+
+The Core 0.9.3 contract review resolves the Entity import, Workflow guard, and
+Audit comparison/nullability ambiguities without treating existing mappings as
+exhaustive evidence. Current vectors do not yet cover imported validator
+failure, the complete Workflow equality matrix, optional actor-string and null
+metadata boundaries, or the newly explicit Audit JSON/Money comparison rules;
+those rows are therefore PARTIAL or UNCOVERED until Milestone 2 adds permanent
+manifest-discovered regressions.
 
 ## Requirement mapping
 
@@ -180,8 +188,8 @@ representations implementation-defined.
 | WORKFLOW-CONFLICT-006 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.bound-older-version-001, workflow.transition.expected-revision-matches-001, workflow.transition.expected-state-matches-001 |
 | WORKFLOW-CONFLICT-007 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.expected-revision-mismatch-001, workflow.transition.expected-state-mismatch-001 |
 | WORKFLOW-CONFLICT-008 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Absence of storage-lock or distributed-coordination semantics is architectural, not a portable result. |
-| WORKFLOW-GUARD-001 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-pass-001, workflow.guard.pass-001 |
-| WORKFLOW-GUARD-002 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001, workflow.guard.multiple-pass-001, workflow.guard.pass-001, workflow.guard.reject-001 |
+| WORKFLOW-GUARD-001 | Workflow | MUST / MUST NOT | PARTIAL | Current pass vectors use primitive Boolean facts; missing/null, type-sensitive, nested, and ordering boundaries await Core 0.9.3 regressions. |
+| WORKFLOW-GUARD-002 | Workflow | MUST / MUST NOT | PARTIAL | Current pass/reject vectors cover multiple guards but not the complete resolved equality fixture boundary. |
 | WORKFLOW-GUARD-003 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001, workflow.guard.reject-001 |
 | WORKFLOW-GUARD-004 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | External-fact dependency declaration needs a guard-definition schema not present in this release. |
 | WORKFLOW-GUARD-005 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Authorization-model independence is an architectural guarantee outside the fact-equality fixture. |
@@ -227,10 +235,11 @@ representations implementation-defined.
 | AUDIT-ACTOR-003 | Audit | MUST / MUST NOT | COVERED | audit.actor.display-name-not-identity-001 |
 | AUDIT-ACTOR-004 | Audit | MUST / MUST NOT | COVERED | audit.event.unknown-actor-omitted-001 |
 | AUDIT-ACTOR-005 | Audit | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | Acting-on-behalf-of representation is not defined in the current portable Actor shape. |
-| AUDIT-ACTOR-006 | Audit | MUST / MUST NOT | COVERED | audit.redaction.actor-context-001 |
+| AUDIT-ACTOR-006 | Audit | MUST / MUST NOT | PARTIAL | audit.redaction.actor-context-001 covers supplied non-null context; omitted and explicit-null metadata redaction boundaries await Core 0.9.3 regressions. |
 | AUDIT-ACTOR-007 | Audit | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | Actor type remains recommended and omission is valid, so no mandatory result distinguishes compliance. |
 | AUDIT-ACTOR-008 | Audit | MUST / MUST NOT | COVERED | audit.actor.identity-preserved-in-history-001 |
-| AUDIT-ACTOR-009 | Audit | MUST / MUST NOT | COVERED | audit.actor.empty-id-001, audit.actor.invalid-type-001, audit.actor.malformed-representation-001, audit.actor.missing-id-001, audit.actor.precedence-duplicate-001, audit.actor.precedence-invalid-event-001 |
+| AUDIT-ACTOR-009 | Audit | MUST / MUST NOT | PARTIAL | Current vectors cover identity, malformed actor, invalid type, and precedence; empty, numeric, and null displayName plus null optional type await Core 0.9.3 regressions. |
+| AUDIT-ACTOR-010 | Audit | MUST / MUST NOT | UNCOVERED | Deterministic omitted, explicit-null, preserved-presence, and redaction vectors are required by Core 0.9.3 Milestone 2. |
 | AUDIT-APPEND-001 | Audit | MUST / MUST NOT | COVERED | audit.append-only.remove-forbidden-001, audit.append-only.replace-forbidden-001 |
 | AUDIT-APPEND-002 | Audit | MUST / MUST NOT | NOT DIRECTLY TESTABLE | No current portable field represents a mutable explicit ordering relationship. |
 | AUDIT-APPEND-003 | Audit | MUST / MUST NOT | COVERED | audit.actor.precedence-relationship-001, audit.event.duplicate-identity-001 |
@@ -239,10 +248,12 @@ representations implementation-defined.
 | AUDIT-CHANGE-001 | Audit | MUST / MUST NOT | COVERED | audit.change.before-after-001 |
 | AUDIT-CHANGE-002 | Audit | SHOULD / SHOULD NOT | COVERED | audit.change.before-after-001 |
 | AUDIT-CHANGE-003 | Audit | MUST / MUST NOT | COVERED | audit.change.absent-vs-null-001 |
-| AUDIT-CHANGE-004 | Audit | MUST / MUST NOT | COVERED | audit.change.money-value-preserved-001 |
-| AUDIT-CHANGE-005 | Audit | MUST / MUST NOT | COVERED | audit.change.unchanged-rejected-001 |
+| AUDIT-CHANGE-004 | Audit | MUST / MUST NOT | PARTIAL | audit.change.money-value-preserved-001 preserves differing Money-shaped values but does not exercise declared Money equality. |
+| AUDIT-CHANGE-005 | Audit | MUST / MUST NOT | PARTIAL | audit.change.unchanged-rejected-001 covers one scalar unchanged value; recursive type-sensitive and declared Money equality boundaries await Core 0.9.3 regressions. |
 | AUDIT-CHANGE-006 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
 | AUDIT-CHANGE-007 | Audit | MAY | NOT DIRECTLY TESTABLE | Change omission is optional and depends on event type or disclosure policy. |
+| AUDIT-CHANGE-008 | Audit | MUST / MUST NOT | UNCOVERED | Ordinary JSON type-sensitive recursive comparison vectors are required by Core 0.9.3 Milestone 2. |
+| AUDIT-CHANGE-009 | Audit | MUST / MUST NOT | UNCOVERED | Explicit Money declaration, trailing-zero equality, changed amount/currency, and malformed declared Money vectors are required by Core 0.9.3 Milestone 2. |
 | AUDIT-ERROR-001 | Audit | MUST / MUST NOT | COVERED | audit.actor.empty-id-001, audit.actor.invalid-type-001, audit.actor.malformed-representation-001, audit.actor.missing-id-001, audit.actor.precedence-duplicate-001, audit.actor.precedence-invalid-event-001, audit.actor.precedence-relationship-001, audit.change.unchanged-rejected-001, audit.event.implementation-type-rejected-001, audit.event.metadata-conflict-001, audit.event.missing-entity-id-001, audit.event.missing-timestamp-001, audit.redaction.unknown-path-001, shared.timestamp.excess-precision-001, shared.timestamp.invalid-calendar-001 |
 | AUDIT-ERROR-002 | Audit | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Normalized errors omit messages/details, so protected-detail absence needs security review. |
 | AUDIT-ERROR-003 | Audit | MAY | NOT DIRECTLY TESTABLE | Additional safe diagnostic context is optional. |
@@ -256,7 +267,7 @@ representations implementation-defined.
 | AUDIT-EVENT-007 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001, audit.event.missing-entity-id-001, audit.event.missing-timestamp-001 |
 | AUDIT-EVENT-008 | Audit | MUST / MUST NOT | COVERED | audit.event.metadata-conflict-001 |
 | AUDIT-REDACTION-001 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001, audit.redaction.unknown-path-001 |
-| AUDIT-REDACTION-002 | Audit | MUST / MUST NOT | COVERED | audit.redaction.actor-context-001, audit.redaction.preserve-evidence-001 |
+| AUDIT-REDACTION-002 | Audit | MUST / MUST NOT | PARTIAL | Existing vectors distinguish redaction markers from supplied values; explicit-null actor metadata and omitted-target boundaries await Core 0.9.3 regressions. |
 | AUDIT-REDACTION-003 | Audit | MUST / MUST NOT | COVERED | audit.redaction.actor-context-001, audit.redaction.preserve-evidence-001 |
 | AUDIT-REDACTION-004 | Audit | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | The required redaction marker is covered, but sufficient explanatory category detail remains a recommendation. |
 | AUDIT-REDACTION-005 | Audit | MAY | NOT DIRECTLY TESTABLE | Access-time masking is an optional integration behavior. |
@@ -409,7 +420,7 @@ representations implementation-defined.
 | ENTITY-IDENTITY-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Cross-entity uniqueness requires a registry or persistence scope absent from current operations. |
 | ENTITY-IDENTITY-006 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
 | ENTITY-IMPORT-001 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
-| ENTITY-IMPORT-002 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
+| ENTITY-IMPORT-002 | Entities | MUST / MUST NOT | PARTIAL | entity.import.identity-mapping-preserved-001 covers valid import; rejection of an observation that violates a declared validator awaits the Core 0.9.3 regression. |
 | ENTITY-IMPORT-003 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001, entity.import.missing-mapping-invalid-identity-001 |
 | ENTITY-IMPORT-004 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
 | ENTITY-IMPORT-005 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
@@ -454,9 +465,9 @@ representations implementation-defined.
 | AUDIT-ACTOR-002 | COVERED | `audit.actor.opaque-identity-001` observes that actor identifiers are preserved exactly and actor types are not interpreted as an authorization or identity namespace. |
 | AUDIT-ACTOR-003 | COVERED | `audit.actor.display-name-not-identity-001` observes display metadata retained separately from stable actor identity. |
 | AUDIT-ACTOR-004 | COVERED | `audit.event.unknown-actor-omitted-001` observes the Draft 0.1 permitted unknown-actor path: actor attribution is omitted and no identity is invented. The explicit unknown-actor interchange representation remains an open question. |
-| AUDIT-ACTOR-006 | COVERED | `audit.redaction.actor-context-001` observes the Draft 0.1 reserved actor-context redaction targets: optional actor display name and metadata are redacted, while actor identity and type remain observable. |
+| AUDIT-ACTOR-006 | PARTIAL | `audit.redaction.actor-context-001` observes the Draft 0.1 reserved actor-context redaction targets for supplied non-null values. Core 0.9.3 requires additional omitted and explicit-null metadata cases before this boundary is completely covered. |
 | AUDIT-ACTOR-008 | COVERED | `audit.actor.identity-preserved-in-history-001` observes that later appends preserve actor identity already recorded on committed history. |
-| AUDIT-ACTOR-009 | COVERED | Actor-shape vectors reject missing and empty identity, scalar attribution, and invalid optional type with the dedicated portable actor error and unchanged history. |
+| AUDIT-ACTOR-009 | PARTIAL | Actor-shape vectors reject missing and empty identity, scalar attribution, and one invalid optional type with the dedicated portable actor error and unchanged history. Empty, numeric, and null display names and explicit-null type remain to be added in Core 0.9.3. |
 | AUDIT-APPEND-002 | NOT DIRECTLY TESTABLE | Draft 0.1 requires preservation of explicitly recorded ordering relationships, but no portable representation of such relationships exists in current Audit Event or history vectors. Append order remains observable under `AUDIT-APPEND-001`; distributed or causal ordering is outside Draft 0.1. |
 | AUDIT-ERROR-002 | NOT DIRECTLY TESTABLE | Current normalized conformance errors compare portable error codes and post-state only; messages are never compared and safe diagnostic details are optional. The TypeScript adapter omits implementation messages/details, but the current vector shape cannot independently prove absence of protected details. |
 | AUDIT-ERROR-004 | COVERED | The four `audit.actor.precedence-*` vectors distinguish supplied-history, non-actor representation, actor, duplicate identity, and history-dependent relationship failures while observing unchanged valid history where one exists. |

@@ -76,7 +76,7 @@ export type NormalizedResult =
     }
 ```
 
-The normalized envelope is conformance infrastructure, not a required FinKore implementation API. An adapter translates native values and errors into it. It must canonicalize domain representations before returning; the domain-neutral comparator applies exact recursive equality, with unordered object keys and ordered arrays. It never uses floating-point tolerance or invents domain equivalence.
+The normalized envelope is conformance infrastructure, not a required FinKore implementation API. An adapter translates native values and errors into it and exposes the representation agreed for the operation. Domain operations decide financial equality and normalization before that boundary. The domain-neutral comparator then applies exact recursive equality, with unordered object keys and ordered arrays. It never recognizes Money-shaped objects, removes decimal trailing zeros, uses floating-point tolerance, or invents domain equivalence. Consequently, Money trailing-zero equality is observed through the `finkore.money.compare` result, while an explicit rounding or allocation target scale is already present in the adapter's normalized Money serialization before comparison.
 
 An optional `reset` hook supports the vector-isolation requirement. It runs immediately before each supported execution.
 

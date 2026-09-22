@@ -30,7 +30,7 @@ the imported observation.
 ## Requirements
 
 - **ENTITY-IMPORT-001** - Entity Import MUST preserve the supplied stable FinKore Entity identity. It MUST NOT generate a replacement identity or substitute a Source Identity for stable Entity identity.
-- **ENTITY-IMPORT-002** - Entity Import MUST validate the supplied Entity observation using the Entity identity, lifecycle, mutability, validation, and referenced Workflow requirements.
+- **ENTITY-IMPORT-002** - Entity Import MUST validate the complete supplied Entity observation using the Entity identity, lifecycle, mutability, validation, and referenced Workflow requirements before returning an import observation. Every Structural Validation and Business Validation rule declared for the Entity's supplied current State applies to import in the same way that it applies to an already-observed Entity; import MUST NOT bypass a declared validator merely because no Mutation is being proposed.
 - **ENTITY-IMPORT-003** - When Entity Import supplies Source Identity, it MUST also supply explicit Entity Identity Mapping evidence that identifies the source system, source identity, mapped Entity type, mapped Entity identity, and mapping identity.
 - **ENTITY-IMPORT-004** - Entity Identity Mapping evidence MUST be preserved as opaque caller-supplied values. An implementation MUST NOT parse source-system formats, infer tenancy, deduplicate entities, or look up a global registry from mapping content.
 - **ENTITY-IMPORT-005** - Entity Identity Mapping MUST map to the same stable Entity type and Entity identity as the imported Entity observation.
@@ -45,6 +45,21 @@ the imported observation.
 Import observes existing Entity continuity. It preserves the stable FinKore
 Entity identity or records explicit continuity mapping; it does not create a
 global identity registry or select an Entity by searching external systems.
+
+An imported Entity is an observed existing Entity, not a validation bypass. A
+validation failure uses `FINKORE_ENTITY_VALIDATION_FAILED` under
+**ENTITY-VALIDATION-004** and returns no partial import observation under
+**ENTITY-IMPORT-008**.
+
+## Core 0.9.3 correction note (non-normative)
+
+The clarification to **ENTITY-IMPORT-002** closes a demonstrated portability
+defect: one implementation skipped declared Entity validators during import.
+It does not add a new validator, change valid import input, or alter error
+precedence. Imports that satisfied their declared validation rules remain
+valid; imports that violated those already-applicable rules were never
+conforming. The correction is therefore compatible under
+**SPEC-COMPATIBILITY-011** and **SPEC-COMPATIBILITY-013**.
 
 ## Non-Goals
 

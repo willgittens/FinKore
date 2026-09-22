@@ -37,7 +37,21 @@ The normalized observation belongs only to conformance infrastructure. Productio
 
 ## Canonical values
 
-Money is represented as `{"amount":"plain base-10 decimal","currency":"ISO code"}`. A normalized Money result uses a canonical plain decimal string: no plus sign, no exponent, no insignificant leading zeros, and zero is not negative. Trailing fractional zeros MAY be present in vector input, but runners compare Money numerically and exactly with currency. Where an operation defines target scale, the expected result uses that scale to expose the boundary.
+Money is represented as `{"amount":"plain base-10 decimal","currency":"ISO code"}`.
+Implementations perform Money operations and comparisons under `/spec`; the
+adapter exposes the resulting normative Money serialization or other agreed
+observation. The runner then compares that normalized observation exactly. It
+does not recognize Money-shaped objects, remove trailing zeros, compare decimal
+strings numerically, or apply currency rules.
+
+Trailing fractional zeros MAY be present in vector input. Numeric equality is
+observed through a domain operation such as `finkore.money.compare`, whose
+normalized result is `EQUAL`; it is not created by special runner comparison.
+For an operation that returns Money, the expected decimal string records the
+operation's agreed observable representation. When the operation defines a
+target scale, the expected amount has exactly that scale, and each adapter must
+expose that result before the runner's exact comparison. This keeps decimal and
+scale semantics in the implementation core rather than in the runner.
 The `finkore.money.allocate` fixture supplies `value`, `allocation`, and
 `scale`. `allocation.method` is `EQUAL` with `parts` or `RATIO` with `ratios`.
 Scale, parts, and ratio entries are JSON numbers with integer mathematical
@@ -49,7 +63,40 @@ Conformance-only sentinels use `{"presence":"ABSENT"}` and `{"presence":"REDACTE
 
 ## Declarative fixtures
 
-Workflow guard expressions and entity validation rules in these vectors are small adapter fixtures, not additions to the FinKore business specification or a general expression DSL. The fixture `{"fact":"x","equals":value}` compares one explicitly supplied fact. The entity validator named `positive-money` accepts an exact Money amount greater than zero. These fixtures let every adapter exercise guard/validation ordering and atomicity under the same deterministic predicate.
+Workflow guard expressions and entity validation rules in these vectors are
+small adapter fixtures, not additions to the FinKore business specification or
+a general expression DSL. The Workflow fixture
+`{"fact":"x","equals":value}` selects one own, top-level member of the
+explicitly supplied `facts` object. `fact` must be a non-empty string and
+`equals` must be present. A definition that omits either member, supplies an
+unsupported non-JSON comparison value, supplies both `guard` and non-empty
+`guards`, or otherwise malforms this fixture fails with
+`FINKORE_WORKFLOW_INVALID_DEFINITION` under the existing Workflow definition
+and error-precedence rules.
+
+The fixture supports ordinary JSON null, Boolean, number, string, array, and
+object values. It uses recursive, type-sensitive JSON equality: Boolean and
+number values are distinct; JSON numbers compare by numeric value; strings
+compare exactly; object member order is irrelevant and the complete member set
+must match; array order and length are significant. A missing fact never equals
+any value, including null. An explicitly supplied null fact equals an explicit
+null `equals` value. A well-formed guard whose selected fact is missing or not
+equal rejects the transition with `FINKORE_WORKFLOW_GUARD_REJECTED`. Values are
+not coerced, and an object that resembles Money or another domain type remains
+an ordinary JSON object in this fixture.
+
+The entity validator named `positive-money` accepts an exact Money amount
+greater than zero. These fixtures let every adapter exercise guard/validation
+ordering and atomicity under the same deterministic predicate.
+
+Audit Change fixtures reflect the production declaration in
+**AUDIT-CHANGE-009** by using `"valueType":"MONEY"` when `before` and `after`
+carry Money semantics. Without that declaration, even an object containing
+`amount` and `currency` is compared as ordinary JSON under
+**AUDIT-CHANGE-008**. The conformance-only `{"presence":"ABSENT"}` sentinel
+continues to observe domain absence and is not a production type declaration.
+Malformed declared Money values produce `FINKORE_AUDIT_INVALID_EVENT`; adapters
+must not repair them or infer Money semantics.
 
 The Entity fixture `{"id":"WITHIN_LIMIT","rule":"money-not-greater-than",
 "path":"amount","otherPath":"limit"}` accepts two valid, compatible Money

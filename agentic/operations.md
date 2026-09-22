@@ -61,8 +61,8 @@ commitment are outside Core.
 | `finkore.money.round` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ROUNDING-001`–`-004`, `-008`, `-009` |
 | `finkore.money.applyrate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-RATE-001`–`-009` |
 | `finkore.money.allocate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ALLOCATION-001`–`-014`, `MONEY-ERROR-008` |
-| `finkore.workflow.transition` | Workflow | `yes` | `unspecified` | `yes` | `may` | may be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007`, `WORKFLOW-VERSION-005`–`-012`, `WORKFLOW-CONFLICT-001`–`-008` |
-| `finkore.audit.append` | Audit | `yes` | `no` | `yes` | `required` | `none` | `AUDIT-EVENT-001`–`-005`, `-007`, `-008`, `AUDIT-ACTOR-001`–`-004`, `-007`–`-009`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001`, `-004` |
+| `finkore.workflow.transition` | Workflow | `yes` | `unspecified` | `yes` | `may` | may be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007`, `WORKFLOW-GUARD-001`–`-006`, `WORKFLOW-VERSION-005`–`-012`, `WORKFLOW-CONFLICT-001`–`-008` |
+| `finkore.audit.append` | Audit | `yes` | `no` | `yes` | `required` | `none` | `AUDIT-EVENT-001`–`-005`, `-007`, `-008`, `AUDIT-ACTOR-001`–`-004`, `-007`–`-010`, `AUDIT-CHANGE-001`–`-005`, `-008`, `-009`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001`, `-004` |
 | `finkore.audit.replace` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
 | `finkore.audit.remove` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
 | `finkore.entity.create` | Entities | `yes` | `unspecified` | `yes` | `may` | `none` | `ENTITY-IDENTITY-001`, `-003`, `ENTITY-LIFECYCLE-001`, `-002`, `-006`, `ENTITY-VALIDATION-001` |
@@ -265,9 +265,14 @@ and [MONEY-ERROR-005, -007, and -008](../spec/money/errors.md).
 **Purpose:** Commit one valid Audit Event to a logical Audit history.
 
 **Input semantics:** Existing logical history and a candidate Audit Event with
-caller-supplied stable event identity, stable domain event type, entity reference, optional
-known Actor, and explicit occurrence timestamp following the portable timestamp
-profile. Current conformance fixtures use
+caller-supplied stable event identity, stable domain event type, entity
+reference, optional known Actor, and explicit occurrence timestamp following
+the portable timestamp profile. Supplied actor `type` and `displayName` values
+are non-empty strings; optional actor metadata may be any JSON value, including
+null, and its presence is preserved. Ordinary Audit Change values use
+type-sensitive recursive JSON comparison. A Change carrying Money semantics
+explicitly declares `valueType: "MONEY"`; Money is never inferred from object
+shape. Current conformance fixtures use
 `history` and `event`; this fixture shape is not a production storage format.
 
 **Preconditions:** Event content is valid; known Actor attribution is valid when
@@ -290,7 +295,8 @@ the primary portable error, and failure leaves history unchanged.
 
 **Normative traceability:**
 [AUDIT-EVENT-001 through -005, -007, and -008](../spec/audit/events.md),
-[AUDIT-ACTOR-001 through -004 and -007 through -009](../spec/audit/actors.md),
+[AUDIT-ACTOR-001 through -004 and -007 through -010](../spec/audit/actors.md),
+[AUDIT-CHANGE-001 through -005, -008, and -009](../spec/audit/changes.md),
 [AUDIT-APPEND-001 and -003](../spec/audit/append-only.md), and
 [AUDIT-ERROR-001 and -004](../spec/audit/errors.md).
 
@@ -342,7 +348,12 @@ when versioned, the instance's bound Workflow Definition Version. Conformance
 fixtures may also supply optional expected-current-state and expected-revision
 preconditions. Current conformance fixtures express fact-equality guards as
 `guard` for one condition or `guards` for multiple conditions; this fixture shape
-is not a production interchange format.
+is not a production interchange format. Within that fixture, a missing fact is
+different from explicit null, Boolean and numeric values are different, object
+member order is irrelevant, array order is significant, and nested JSON values
+are compared recursively without coercion. Unsupported comparison values make
+the fixture definition invalid rather than extending the production guard
+contract.
 
 **Preconditions:** States and directed Transition are declared; current State is
 the source and is not terminal; every applicable guard passes. For versioned
