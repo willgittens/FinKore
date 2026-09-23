@@ -25,6 +25,12 @@ test('accepts behavioral failures and requires the intended regression when decl
   assert.equal(assessMutationResult(result(), 'missing-vector').killed, false)
 })
 
+test('requires declared positive controls to execute and keep passing', () => {
+  assert.equal(assessMutationResult(result(), 'vector-1', ['vector-0']).killed, true)
+  assert.equal(assessMutationResult(result(), 'vector-1', ['vector-1']).killed, false)
+  assert.equal(assessMutationResult(result(), 'vector-1', ['missing-vector']).killed, false)
+})
+
 test('passing or empty suites cannot kill a mutant', () => {
   assert.equal(assessMutationResult(result(['PASS'])).killed, false)
   assert.equal(assessMutationResult(result([])).killed, false)

@@ -23,6 +23,60 @@ if (!validTargets.has(requestedTarget)) {
 
 const pythonMutants = [
   {
+    id: 'python-entity-import-validation-bypass',
+    expectedVector: 'entity.import.validation-positive-money-invalid-001',
+    expectedPassVectors: ['entity.import.validation-positive-money-valid-001'],
+    suite: 'entities',
+    path: 'core/src/finkore/entities.py',
+    from: 'entity = validate_entity(entity_definition, import_value.get("entity"))\n    _validate_entity_data(entity_definition, entity)',
+    to: 'entity = validate_entity(entity_definition, import_value.get("entity"))',
+  },
+  {
+    id: 'python-workflow-boolean-number-coercion',
+    expectedVector: 'workflow.guard.boolean-expected-number-actual-rejected-001',
+    expectedPassVectors: ['workflow.guard.pass-001'],
+    suite: 'workflow',
+    path: 'core/src/finkore/workflow.py',
+    from: 'return isinstance(left, bool) and isinstance(right, bool) and left == right',
+    to: 'return left == right',
+  },
+  {
+    id: 'python-workflow-missing-null-coercion',
+    expectedVector: 'workflow.guard.missing-fact-not-null-001',
+    expectedPassVectors: ['workflow.guard.explicit-null-pass-001'],
+    suite: 'workflow',
+    path: 'core/src/finkore/workflow.py',
+    from: 'guard["fact"] in facts and _json_equal(facts[guard["fact"]], guard["equals"])',
+    to: '_json_equal(facts.get(guard["fact"]), guard["equals"])',
+  },
+  {
+    id: 'python-audit-display-name-validation-bypass',
+    expectedVector: 'audit.actor.empty-display-name-001',
+    expectedPassVectors: ['audit.actor.display-name-not-identity-001'],
+    suite: 'audit',
+    path: 'core/src/finkore/audit.py',
+    from: 'if "displayName" in actor and not _opaque(actor["displayName"]):\n        raise FinKoreError(ACTOR_INVALID)',
+    to: 'if False and "displayName" in actor and not _opaque(actor["displayName"]):\n        raise FinKoreError(ACTOR_INVALID)',
+  },
+  {
+    id: 'python-audit-boolean-number-coercion',
+    expectedVector: 'audit.change.boolean-to-number-distinct-001',
+    expectedPassVectors: ['audit.change.unchanged-boolean-rejected-001'],
+    suite: 'audit',
+    path: 'core/src/finkore/audit.py',
+    from: 'return isinstance(left, bool) and isinstance(right, bool) and left == right',
+    to: 'return left == right',
+  },
+  {
+    id: 'python-audit-money-domain-equality-bypass',
+    expectedVector: 'audit.change.money-trailing-zero-unchanged-001',
+    expectedPassVectors: ['audit.change.money-amount-changed-001'],
+    suite: 'audit',
+    path: 'core/src/finkore/audit.py',
+    from: 'return left.currency == right.currency and left.compare(right) == "EQUAL"',
+    to: 'return left.to_portable() == right.to_portable()',
+  },
+  {
     id: 'python-entity-validates-patch-only',
     expectedVector: 'entity.validation.cross-field-retained-limit-valid-001',
     suite: 'entities',
@@ -227,6 +281,78 @@ const pythonMutants = [
 
 const javaMutants = [
   {
+    id: 'java-entity-import-validation-bypass',
+    expectedVector: 'entity.import.validation-positive-money-invalid-001',
+    expectedPassVectors: ['entity.import.validation-positive-money-valid-001'],
+    suite: 'entities',
+    path: 'core/src/main/java/org/finkore/Entities.java',
+    from: 'Map<String, Object> result = copyMap(value, INVALID_IDENTITY);\n    validateEntityData(definition, result);\n    return result;',
+    to: 'Map<String, Object> result = copyMap(value, INVALID_IDENTITY);\n    return result;',
+  },
+  {
+    id: 'java-workflow-missing-null-coercion',
+    expectedVector: 'workflow.guard.missing-fact-not-null-001',
+    expectedPassVectors: ['workflow.guard.explicit-null-pass-001'],
+    suite: 'workflow',
+    path: 'core/src/main/java/org/finkore/Workflow.java',
+    from: 'if (!facts.containsKey(guard.get("fact")) || !jsonEquals(facts.get(guard.get("fact")), guard.get("equals"))) {',
+    to: 'if (!jsonEquals(facts.get(guard.get("fact")), guard.get("equals"))) {',
+  },
+  {
+    id: 'java-workflow-null-equality-rejected',
+    expectedVector: 'workflow.guard.explicit-null-pass-001',
+    expectedPassVectors: ['workflow.guard.missing-fact-not-null-001'],
+    suite: 'workflow',
+    path: 'core/src/main/java/org/finkore/Workflow.java',
+    from: 'if (left == null || right == null) {\n      return left == null && right == null;\n    }',
+    to: 'if (left == null || right == null) {\n      return false;\n    }',
+  },
+  {
+    id: 'java-workflow-structural-equality-bypass',
+    expectedVector: 'workflow.guard.object-member-order-pass-001',
+    expectedPassVectors: ['workflow.guard.nested-boolean-number-rejected-001'],
+    suite: 'workflow',
+    path: 'core/src/main/java/org/finkore/Workflow.java',
+    from: 'if (left instanceof Map<?, ?> || right instanceof Map<?, ?>) {\n      if (!(left instanceof Map<?, ?> leftValues) || !(right instanceof Map<?, ?> rightValues)\n          || leftValues.size() != rightValues.size()) {\n        return false;\n      }\n      for (Map.Entry<?, ?> entry : leftValues.entrySet()) {\n        if (!rightValues.containsKey(entry.getKey())\n            || !jsonEquals(entry.getValue(), rightValues.get(entry.getKey()))) {\n          return false;\n        }\n      }\n      return true;\n    }',
+    to: 'if (left instanceof Map<?, ?> || right instanceof Map<?, ?>) {\n      return left == right;\n    }',
+  },
+  {
+    id: 'java-audit-display-name-validation-bypass',
+    expectedVector: 'audit.actor.null-display-name-001',
+    expectedPassVectors: ['audit.actor.display-name-not-identity-001'],
+    suite: 'audit',
+    path: 'core/src/main/java/org/finkore/Audit.java',
+    from: 'String displayName = map.containsKey("displayName") ? requiredString(map.get("displayName"), ACTOR_INVALID) : null;',
+    to: 'String displayName = map.get("displayName") instanceof String text ? text : null;',
+  },
+  {
+    id: 'java-audit-metadata-null-presence-loss',
+    expectedVector: 'audit.actor.metadata-null-preserved-001',
+    expectedPassVectors: ['audit.redaction.actor-metadata-omitted-001'],
+    suite: 'audit',
+    path: 'core/src/main/java/org/finkore/Audit.java',
+    from: 'boolean hasMetadata = map.containsKey("metadata");',
+    to: 'boolean hasMetadata = map.get("metadata") != null;',
+  },
+  {
+    id: 'java-audit-boolean-number-coercion',
+    expectedVector: 'audit.change.boolean-to-number-distinct-001',
+    expectedPassVectors: ['audit.change.unchanged-boolean-rejected-001'],
+    suite: 'audit',
+    path: 'core/src/main/java/org/finkore/Audit.java',
+    from: 'return left.getClass().equals(right.getClass()) && left.equals(right);',
+    to: 'return (left instanceof Boolean && right instanceof Number)\n          || (left instanceof Number && right instanceof Boolean)\n          || (left.getClass().equals(right.getClass()) && left.equals(right));',
+  },
+  {
+    id: 'java-audit-money-domain-equality-bypass',
+    expectedVector: 'audit.change.money-trailing-zero-unchanged-001',
+    expectedPassVectors: ['audit.change.money-amount-changed-001'],
+    suite: 'audit',
+    path: 'core/src/main/java/org/finkore/Audit.java',
+    from: 'return leftCurrency.equals(rightCurrency) && "EQUAL".equals(left.compare(right));',
+    to: 'return left.toPortable().equals(right.toPortable());',
+  },
+  {
     id: 'java-entity-validates-patch-only',
     expectedVector: 'entity.validation.cross-field-retained-limit-valid-001',
     suite: 'entities',
@@ -387,10 +513,12 @@ const javaMutants = [
   },
   {
     id: 'java-audit-actor-identity-bypass',
+    expectedVector: 'audit.actor.missing-id-001',
+    expectedPassVectors: ['audit.actor.opaque-identity-001'],
     suite: 'audit',
     path: 'core/src/main/java/org/finkore/Audit.java',
     from: 'String id = requiredString(map.get("id"), ACTOR_INVALID);',
-    to: 'String id = optionalString(map.get("id"), ACTOR_INVALID);',
+    to: 'String id = map.get("id") instanceof String text ? text : null;',
   },
   {
     id: 'java-entity-immutability-bypass',
@@ -459,7 +587,11 @@ function conformanceKilled(env, mutant) {
     mutant.suite,
     '--json',
   ], { env: { ...process.env, ...env } })
-  return { ...assessMutationResult(result, mutant.expectedVector), output: result.stdout, error: result.stderr }
+  return {
+    ...assessMutationResult(result, mutant.expectedVector, mutant.expectedPassVectors),
+    output: result.stdout,
+    error: result.stderr,
+  }
 }
 
 function runPythonMutant(mutant) {

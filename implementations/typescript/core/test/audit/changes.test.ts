@@ -89,6 +89,39 @@ describe('Audit changes', () => {
     expect(() => AuditChange.from({ ...changed, before: { amount: 10, currency: 'EUR' } })).toThrow(InvalidAuditEventError)
   })
 
+  it('preserves Money null and absence distinctions while validating supplied values', () => {
+    const beforeNull = { path: 'amount', valueType: 'MONEY' as const, before: null }
+    const afterNull = { path: 'amount', valueType: 'MONEY' as const, after: null }
+
+    expect(AuditChange.from(beforeNull).toJSON()).toEqual(beforeNull)
+    expect(AuditChange.from(afterNull).toJSON()).toEqual(afterNull)
+    expect(AuditChange.from({
+      path: 'amount',
+      valueType: 'MONEY',
+      before: null,
+      after: { amount: '0.00', currency: 'EUR' },
+    }).toJSON()).toEqual({
+      path: 'amount',
+      valueType: 'MONEY',
+      before: null,
+      after: { amount: '0.00', currency: 'EUR' },
+    })
+    expect(() => AuditChange.from({ path: 'amount', valueType: 'MONEY', before: null, after: null })).toThrow(
+      InvalidAuditEventError,
+    )
+    expect(() => AuditChange.from({ path: 'amount', valueType: 'MONEY', before: { amount: 10, currency: 'EUR' } })).toThrow(
+      InvalidAuditEventError,
+    )
+    expect(() => AuditChange.from({ path: 'amount', valueType: 'DECIMAL', before: '10', after: '11' })).toThrow(
+      InvalidAuditEventError,
+    )
+  })
+
+  it('uses JSON numeric equality including signed zero', () => {
+    expect(() => AuditChange.from({ path: 'count', before: -0, after: 0 })).toThrow(InvalidAuditEventError)
+    expect(() => AuditChange.from({ path: 'count', before: 12.5, after: 12.5 })).toThrow(InvalidAuditEventError)
+  })
+
   it('accepts unequal arrays and records without treating shape differences as equality', () => {
     expect(AuditChange.from({ path: 'tags', before: [], after: ['travel'] }).toJSON()).toEqual({
       path: 'tags',
@@ -158,6 +191,31 @@ describe('Audit changes', () => {
     expect(() => AuditChange.from({ path: 'date', before: new Date('2026-09-01T12:00:00Z') })).toThrow(
       InvalidAuditEventError,
     )
+    expect(() => AuditChange.from({ path: 'nan', before: Number.NaN })).toThrow(InvalidAuditEventError)
+    expect(() => AuditChange.from({ path: 'infinity', after: Number.NEGATIVE_INFINITY })).toThrow(InvalidAuditEventError)
+
+    const symbolValue = { value: 'visible', [Symbol('private')]: true }
+    expect(() => AuditChange.from({ path: 'symbol', before: symbolValue })).toThrow(InvalidAuditEventError)
+
+    const cyclicArray: unknown[] = []
+    cyclicArray.push(cyclicArray)
+    expect(() => AuditChange.from({ path: 'cycle', before: cyclicArray })).toThrow(InvalidAuditEventError)
+
+    const cyclicObject: Record<string, unknown> = {}
+    cyclicObject.self = cyclicObject
+    expect(() => AuditChange.from({ path: 'cycle', after: cyclicObject })).toThrow(InvalidAuditEventError)
+  })
+
+  it('accepts portable null-prototype and shared JSON values without retaining references', () => {
+    const shared = { value: true }
+    const before = Object.create(null) as Record<string, unknown>
+    before.values = [null, 'text', false, 1.5, shared, shared]
+    const change = AuditChange.from({ path: 'details', before, after: { values: [] } })
+    const serialized = change.toJSON() as { before: { values: unknown[] } }
+
+    expect(serialized.before).toEqual({ values: [null, 'text', false, 1.5, { value: true }, { value: true }] })
+    expect(Object.getPrototypeOf(serialized.before)).toBe(Object.prototype)
+    expect(serialized.before.values[4]).not.toBe(shared)
   })
 
   it('rejects changes that claim equal before and after domain values changed', () => {

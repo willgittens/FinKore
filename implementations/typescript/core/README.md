@@ -4,9 +4,10 @@ TypeScript reference implementation for FinKore Core 0.9 release candidate: Mone
 Audit, Approvals, and Entities. The current 331-vector manifest includes
 permanent Core 0.9.3 regressions. Entity import failure observations and
 Workflow guard comparison, actor metadata presence, and Audit value comparison
-now pass all 145 affected Entity, Workflow, and Audit vectors. Complete
-manifest, coverage, and mutation verification remain pending. The specification
-remains the source of financial semantics; see the active
+now pass the complete 331-vector manifest. The TypeScript coverage and mutation
+gates, critical cross-language probes, isolated package consumers, and clean
+snapshot verification pass. The specification remains the source of financial
+semantics; see the active
 [Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
 
 This artifact is a repository reference implementation for the 0.9

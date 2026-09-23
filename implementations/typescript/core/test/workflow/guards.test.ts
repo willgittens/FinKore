@@ -163,6 +163,40 @@ describe('Workflow guards', () => {
     }
   })
 
+  it('distinguishes every recursive JSON container boundary used by guards', () => {
+    const definitionFor = (equals: unknown) => ({
+      states: ['SUBMITTED', 'APPROVED'],
+      initialState: 'SUBMITTED',
+      terminalStates: ['APPROVED'],
+      transitions: [{ source: 'SUBMITTED', target: 'APPROVED', guard: { fact: 'value', equals } }],
+    })
+    const rejectedPairs = [
+      [null, false],
+      [false, null],
+      [[], {}],
+      [{}, []],
+      [[], [0]],
+      [[0], []],
+      [[1, 2], [1, 3]],
+      [[1, 2], [1]],
+      [{ left: 1 }, { right: 1 }],
+      [{ left: 1 }, { left: 1, right: 2 }],
+      [{ values: [1, { approved: true }] }, { values: [1, { approved: false }] }],
+    ] as const
+
+    for (const [equals, value] of rejectedPairs) {
+      const workflow = Workflow.create(definitionFor(equals))
+      expect(() => workflow.transition('APPROVED', { facts: { value } })).toThrow(WorkflowGuardRejectedError)
+      expect(workflow.currentState).toBe('SUBMITTED')
+    }
+
+    for (const value of [[], {}, [1, 2], { left: 1, nested: { approved: true } }] as const) {
+      const workflow = Workflow.create(definitionFor(value))
+      workflow.transition('APPROVED', { facts: { value: structuredClone(value) } })
+      expect(workflow.currentState).toBe('APPROVED')
+    }
+  })
+
   it('treats authorization evidence as supplied facts without assuming an authorization model', () => {
     const workflow = Workflow.create({
       states: ['PENDING', 'READY'],

@@ -5,8 +5,8 @@ derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
 TypeScript or Python financial implementation code. The current 331-vector
 manifest includes permanent Core 0.9.3 regressions. Workflow null handling and
 recursive guard comparison, actor metadata presence, and Audit value comparison
-now pass all 145 affected Entity, Workflow, and Audit vectors. Complete
-manifest, coverage, and mutation verification remain pending. See the active
+now pass the complete 331-vector manifest. Coverage, critical mutation probes,
+isolated package consumers, and clean-snapshot verification pass. See the active
 [Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
 
 This artifact is a repository reference implementation for the 0.9

@@ -6,8 +6,9 @@ TypeScript financial implementation code. The current 331-vector manifest
 includes permanent Core 0.9.3 regressions. Entity import validation and Workflow
 guard comparison now pass the expanded Entity and Workflow suites on CPython
 3.12 and 3.13. Actor validation/metadata presence and ordinary JSON/declared
-Money Audit comparison now pass all 145 affected vectors on both runtimes;
-complete manifest, coverage, and mutation verification remain pending. See the
+Money Audit comparison now pass the complete 331-vector manifest on both
+runtimes. Coverage, critical mutation probes, isolated package consumers, and
+clean-snapshot verification pass. See the
 active [Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
 The Core 0.9.2 corrective snapshot includes the Money and Approval fixes and
 passes clean-checkout release verification. See the

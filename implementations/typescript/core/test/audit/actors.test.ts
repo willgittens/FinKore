@@ -33,6 +33,33 @@ describe('Audit actors', () => {
     expect('metadata' in serialized).toBe(true)
   })
 
+  it('preserves every portable JSON metadata shape and shared values defensively', () => {
+    const shared = { flag: true }
+    const metadata = {
+      nullValue: null,
+      stringValue: 'finance',
+      booleanValue: false,
+      numberValue: 12.5,
+      arrayValue: [0, 'x', true, { nested: null }],
+      sharedValues: [shared, shared],
+    }
+    const serialized = AuditActor.from({ id: 'user-7', metadata }).toJSON()
+
+    expect(serialized.metadata).toEqual(metadata)
+    expect(serialized.metadata).not.toBe(metadata)
+    expect((serialized.metadata as typeof metadata).sharedValues[0]).not.toBe(shared)
+  })
+
+  it('accepts null-prototype JSON objects without retaining their prototype', () => {
+    const metadata = Object.create(null) as Record<string, unknown>
+    metadata.department = 'finance'
+
+    const serialized = AuditActor.from({ id: 'user-7', metadata }).toJSON()
+
+    expect(serialized.metadata).toEqual({ department: 'finance' })
+    expect(Object.getPrototypeOf(serialized.metadata)).toBe(Object.prototype)
+  })
+
   it('does not normalize actor identifiers or reject unknown actor types', () => {
     expect(AuditActor.from({ id: 'USER-7', type: 'agent' }).toJSON()).toEqual({ id: 'USER-7', type: 'agent' })
     expect(AuditActor.from({ id: 'user-7', type: 'new-system-kind' }).toJSON()).toEqual({
@@ -56,6 +83,22 @@ describe('Audit actors', () => {
     expect(() => AuditActor.from({ id: 'user-7', displayName: null })).toThrow(InvalidAuditActorError)
     expect(() => AuditActor.from({ id: 'user-7', metadata: undefined })).toThrow(InvalidAuditActorError)
     expect(() => AuditActor.from({ id: 'user-7', metadata: 1n })).toThrow(InvalidAuditActorError)
+    expect(() => AuditActor.from({ id: 'user-7', metadata: Number.NaN })).toThrow(InvalidAuditActorError)
+    expect(() => AuditActor.from({ id: 'user-7', metadata: Number.POSITIVE_INFINITY })).toThrow(InvalidAuditActorError)
+    expect(() => AuditActor.from({ id: 'user-7', metadata: new Date('2026-09-01T12:00:00Z') })).toThrow(
+      InvalidAuditActorError,
+    )
+
+    const symbolMetadata = { department: 'finance', [Symbol('private')]: true }
+    expect(() => AuditActor.from({ id: 'user-7', metadata: symbolMetadata })).toThrow(InvalidAuditActorError)
+
+    const cyclicArray: unknown[] = []
+    cyclicArray.push(cyclicArray)
+    expect(() => AuditActor.from({ id: 'user-7', metadata: cyclicArray })).toThrow(InvalidAuditActorError)
+
+    const cyclicObject: Record<string, unknown> = {}
+    cyclicObject.self = cyclicObject
+    expect(() => AuditActor.from({ id: 'user-7', metadata: cyclicObject })).toThrow(InvalidAuditActorError)
   })
 
   it('returns defensive actor copies', () => {

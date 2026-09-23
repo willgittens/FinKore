@@ -4,7 +4,7 @@
  * Reads only the supplied result, has no side effects, and defines no financial behavior.
  */
 
-export function assessMutationResult(result, expectedVector) {
+export function assessMutationResult(result, expectedVector, expectedPassVectors = []) {
   if (result.error || result.signal || ![0, 1].includes(result.status)) {
     return { killed: false, reason: 'Conformance process failed or reported infrastructure/unsupported results' }
   }
@@ -30,6 +30,16 @@ export function assessMutationResult(result, expectedVector) {
   if (failed.length === 0) return { killed: false, reason: 'All vectors passed' }
   if (expectedVector !== undefined && !failed.some((row) => row.vectorId === expectedVector)) {
     return { killed: false, reason: `Expected regression did not fail: ${expectedVector}` }
+  }
+  const failedIds = new Set(failed.map((row) => row.vectorId))
+  const failedControl = expectedPassVectors.find((vectorId) => failedIds.has(vectorId))
+  if (failedControl !== undefined) {
+    return { killed: false, reason: `Positive control failed: ${failedControl}` }
+  }
+  const reportedIds = new Set(rows.map((row) => row.vectorId))
+  const missingControl = expectedPassVectors.find((vectorId) => !reportedIds.has(vectorId))
+  if (missingControl !== undefined) {
+    return { killed: false, reason: `Positive control was not executed: ${missingControl}` }
   }
   return { killed: true, reason: expectedVector ?? `${failed.length} conformance vector(s) failed` }
 }

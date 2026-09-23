@@ -2,11 +2,12 @@
 
 ## Status
 
-In progress. Milestones 1 through 4 are complete. The release-candidate review identified
+In progress. Milestones 1 through 5 are complete. The release-candidate review identified
 Entity import, Workflow guard, and Audit portability findings; their contract
 boundaries are resolved and permanent regressions protect them. Entity import,
-Workflow, and Audit corrections now pass across all implementations; complete
-verification remains pending in Milestone 5. Stable Core 1.0 promotion
+Workflow, and Audit corrections and complete verification now pass across all
+implementations. Release documentation and tagging remain pending in Milestone
+6. Stable Core 1.0 promotion
 remains blocked until the corrective release gate below is satisfied;
 [Core 1.0 planning](plan-10.md) may continue.
 
@@ -281,28 +282,58 @@ contract and Milestone 2 added permanent vectors and traceability.
 
 ## Milestone 5 — Mutation protection and complete verification
 
-- [ ] Add targeted Python/Java probes for the corrected failure mechanisms:
+- [x] Add targeted Python/Java probes for the corrected failure mechanisms:
       import validator bypass, guard coercion/presence errors, actor validation
       bypass, metadata presence loss, and Audit comparison defects. Add positive
       controls so rejecting every input cannot satisfy the regressions.
-- [ ] Exercise meaningful changed TypeScript behavior through Stryker and
+- [x] Exercise meaningful changed TypeScript behavior through Stryker and
       permanent public-behavior tests. Review survivors, including comparison,
       error, state-preservation, and redaction branches.
-- [ ] Require new critical probes to fail their named regression or positive
+- [x] Require new critical probes to fail their named regression or positive
       control with valid conformance failures. Compilation failures, crashes,
       malformed reports, unsupported results, and infrastructure errors are not
       evidence that a financial mutant was killed.
-- [ ] Run builds, strict TypeScript, unit/adapter tests, coverage gates, and the
+- [x] Run builds, strict TypeScript, unit/adapter tests, coverage gates, and the
       complete expanded manifest on TypeScript, Python 3.12/3.13, and Java.
       Require zero failures, unsupported cases, and infrastructure errors.
-- [ ] Run both full Stryker suites at the existing minimum 95 percent gate and
+- [x] Run both full Stryker suites at the existing minimum 95 percent gate and
       all configured critical probes. No critical financial mutant may survive;
       justify equivalent mutants without weakening meaningful tests or scope.
-- [ ] Run documentation, traceability, architecture, license, and whitespace
+- [x] Run documentation, traceability, architecture, license, and whitespace
       checks, plus isolated package/consumer checks for all three languages.
-- [ ] Run `npm ci` and the complete `npm run verify` from a clean checkout of
+- [x] Run `npm ci` and the complete `npm run verify` from a clean checkout of
       the intended release snapshot with the prescribed toolchains. Ensure new
       protections participate in the aggregate workflow; keep verification local.
+
+Completed: 2026-09-23. The critical mutation harness now requires both the
+named regression failure and every declared positive control to execute and
+remain passing. Compilation failures, crashes, malformed reports, unsupported
+results, and infrastructure errors remain invalid mutation evidence. New probes
+cover Entity import validation, Workflow Boolean/number and missing/null
+boundaries, Actor optional-string validation, Java metadata presence, and Audit
+ordinary JSON and declared Money comparison. Python kills all 33 critical
+mutants and Java kills all 34.
+
+TypeScript public-behavior tests now exercise portable Audit JSON scalar and
+container boundaries, non-finite and cyclic values, shared-value defensive
+copies, declared Money null/absence semantics, and recursive Workflow guard
+contrasts. The full TypeScript core Stryker suite passes at 96.31 percent and
+the Conformance Runner suite at 97.06 percent, both above the unchanged 95
+percent gate. No critical financial mutant survives.
+
+Builds, strict TypeScript, 130 Runner tests, 424 TypeScript core tests, 15
+TypeScript adapter tests, 47 Python core tests and 4 adapter tests on each
+required Python runtime, Java core entry-point tests, 31 Java coverage tests,
+and 7 Java adapter tests pass. The complete manifest passes 331/331 on
+TypeScript, Python 3.12, Python 3.13, and Java with zero failures, unsupported
+cases, or infrastructure errors. TypeScript coverage exceeds 99 percent for
+statements and lines, Python and Java meet their configured 85 percent floors,
+and npm, Python wheel/sdist, and Java JAR consumer checks pass.
+
+Documentation, traceability, architecture, license, and whitespace checks pass.
+A temporary clean Git snapshot of the intended Milestone 5 tree passes `npm ci`
+and the complete local `npm run verify`; no workflow publishes artifacts or
+changes remote state. Milestone 6 owns the concise release note and release tag.
 
 ## Milestone 6 — Documentation and corrective release
 
