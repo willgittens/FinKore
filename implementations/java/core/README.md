@@ -4,10 +4,10 @@ This package is the Java implementation track for FinKore Core 0.9 release candi
 derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
 TypeScript or Python financial implementation code. The current 331-vector
 manifest includes permanent Core 0.9.3 regressions. Workflow null handling and
-recursive guard comparison now pass the expanded Workflow suite; Audit
-actor/null-presence and declared-Money corrections remain pending, so this
-implementation is not yet fully conformant with the expanded manifest. See
-the active [Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
+recursive guard comparison, actor metadata presence, and Audit value comparison
+now pass all 145 affected Entity, Workflow, and Audit vectors. Complete
+manifest, coverage, and mutation verification remain pending. See the active
+[Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
 
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to a Maven repository. The Maven
@@ -25,9 +25,10 @@ Current status:
 - Workflow definitions, instances, recursive type-sensitive JSON guards,
   transitions, terminal behavior, version binding, import observations, and
   conflict preconditions are implemented.
-- Audit Events, Actors, Changes, append-only history, redaction
-  representations, and Audit Relationships are implemented, including
-  portable history/event/actor/duplicate/relationship error precedence.
+- Audit Events, presence-preserving Actors, recursively type-sensitive ordinary
+  JSON and explicitly declared Money Changes, append-only history, redaction
+  representations, and Audit Relationships are implemented, including portable
+  history/event/actor/duplicate/relationship error precedence.
 - Approval Requirements, Decisions, validity lifecycle, Conditions, Chains, and
   bounded Composition are implemented.
 - Entity identity, lifecycle, mutability, validation, revisions, import, and
@@ -58,6 +59,9 @@ The intentional Java package surface is `org.finkore`. The public classes are:
 - `Audit`, including `Audit.EntityReference`, `Audit.Actor`, `Audit.Change`,
   `Audit.RelationshipTarget`, `Audit.Relationship`, `Audit.Event`,
   `Audit.RedactionPolicy`, `Audit.RedactionResult`, and `Audit.Log`.
+  `Audit.Actor.hasMetadata()` distinguishes omitted metadata from supplied
+  metadata, including explicit `null`; `Audit.Change.valueType()` exposes the
+  supported explicit `MONEY` declaration when present.
 - `Approvals`, exposing static Approval requirement, decision, validity,
   condition, chain, and bounded-composition operations.
 - `Entities`, exposing static Entity create, mutate, transition, import, and

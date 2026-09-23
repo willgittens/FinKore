@@ -3,7 +3,9 @@ import { InvalidAuditActorError } from './errors.js'
 import type { SerializedAuditActor } from './types.js'
 
 function isPlainRecord(value: unknown): value is Readonly<Record<string, unknown>> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value)
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return false
+  const prototype = Object.getPrototypeOf(value)
+  return prototype === Object.prototype || prototype === null
 }
 
 function optionalString(value: unknown): string | undefined {
@@ -12,8 +14,31 @@ function optionalString(value: unknown): string | undefined {
   return value
 }
 
-function cloneJsonValue<T>(value: T): T {
-  return structuredClone(value)
+function cloneJsonValue<T>(value: T, ancestors = new Set<object>()): T {
+  if (value === null || typeof value === 'string' || typeof value === 'boolean') return value
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value)) throw new InvalidAuditActorError()
+    return value
+  }
+  if (Array.isArray(value)) {
+    if (ancestors.has(value)) throw new InvalidAuditActorError()
+    ancestors.add(value)
+    const result = value.map((item) => cloneJsonValue(item, ancestors))
+    ancestors.delete(value)
+    return result as T
+  }
+  if (isPlainRecord(value)) {
+    if (ancestors.has(value)) throw new InvalidAuditActorError()
+    if (Reflect.ownKeys(value).some((key) => typeof key !== 'string')) throw new InvalidAuditActorError()
+    ancestors.add(value)
+    const result: Record<string, unknown> = {}
+    for (const [key, item] of Object.entries(value)) {
+      result[key] = cloneJsonValue(item, ancestors)
+    }
+    ancestors.delete(value)
+    return result as T
+  }
+  throw new InvalidAuditActorError()
 }
 
 /**
@@ -30,6 +55,7 @@ function cloneJsonValue<T>(value: T): T {
  * @see AUDIT-ACTOR-007
  * @see AUDIT-ACTOR-008
  * @see AUDIT-ACTOR-009
+ * @see AUDIT-ACTOR-010
  */
 export class AuditActor {
   private readonly value: SerializedAuditActor
@@ -54,6 +80,7 @@ export class AuditActor {
    * @see AUDIT-ACTOR-001
    * @see AUDIT-ACTOR-004
    * @see AUDIT-ACTOR-009
+   * @see AUDIT-ACTOR-010
    */
   static from(input: unknown): AuditActor {
     if (!isPlainRecord(input) || typeof input.id !== 'string' || input.id.length === 0) {
@@ -65,7 +92,7 @@ export class AuditActor {
       id: input.id,
       ...(type === undefined ? {} : { type }),
       ...(displayName === undefined ? {} : { displayName }),
-      ...(input.metadata === undefined ? {} : { metadata: cloneJsonValue(input.metadata) }),
+      ...(Object.hasOwn(input, 'metadata') ? { metadata: cloneJsonValue(input.metadata) } : {}),
     })
   }
 

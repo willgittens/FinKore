@@ -86,12 +86,35 @@ public final class Audit {
    * @param id stable opaque actor identifier
    * @param type optional opaque actor type
    * @param displayName optional historical display context
+   * @param hasMetadata whether metadata was supplied, including explicit null
    * @param metadata optional actor context
    * @see <a href="../../../../../../spec/audit/actors.md">AUDIT-ACTOR-001</a>
    * @see <a href="../../../../../../spec/audit/actors.md">AUDIT-ACTOR-006</a>
    * @see <a href="../../../../../../spec/audit/actors.md">AUDIT-ACTOR-009</a>
+   * @see <a href="../../../../../../spec/audit/actors.md">AUDIT-ACTOR-010</a>
    */
-  public record Actor(String id, String type, String displayName, Object metadata) {
+  public record Actor(String id, String type, String displayName, boolean hasMetadata, Object metadata) {
+    /** Creates an Actor while preserving and defensively copying metadata presence. */
+    public Actor {
+      if (!hasMetadata && metadata != null) {
+        throw new FinKoreException(ACTOR_INVALID);
+      }
+      metadata = hasMetadata ? copyJson(metadata, ACTOR_INVALID) : null;
+    }
+
+    /**
+     * Creates Actor attribution while deriving metadata presence from a
+     * non-null metadata value.
+     *
+     * @param id stable opaque actor identifier
+     * @param type optional opaque actor type
+     * @param displayName optional historical display context
+     * @param metadata optional actor context
+     */
+    public Actor(String id, String type, String displayName, Object metadata) {
+      this(id, type, displayName, metadata != null, metadata);
+    }
+
     /**
      * Parses known Actor attribution.
      *
@@ -104,10 +127,11 @@ public final class Audit {
         throw new FinKoreException(ACTOR_INVALID);
       }
       String id = requiredString(map.get("id"), ACTOR_INVALID);
-      String type = optionalString(map.get("type"), ACTOR_INVALID);
-      String displayName = optionalString(map.get("displayName"), ACTOR_INVALID);
-      Object metadata = map.containsKey("metadata") ? copyJson(map.get("metadata"), ACTOR_INVALID) : null;
-      return new Actor(id, type, displayName, metadata);
+      String type = map.containsKey("type") ? requiredString(map.get("type"), ACTOR_INVALID) : null;
+      String displayName = map.containsKey("displayName") ? requiredString(map.get("displayName"), ACTOR_INVALID) : null;
+      boolean hasMetadata = map.containsKey("metadata");
+      Object metadata = hasMetadata ? copyJson(map.get("metadata"), ACTOR_INVALID) : null;
+      return new Actor(id, type, displayName, hasMetadata, metadata);
     }
 
     /**
@@ -124,7 +148,7 @@ public final class Audit {
       if (displayName != null) {
         result.put("displayName", displayName);
       }
-      if (metadata != null) {
+      if (hasMetadata) {
         result.put("metadata", copyJson(metadata, ACTOR_INVALID));
       }
       return result;
@@ -139,10 +163,18 @@ public final class Audit {
    * @param before prior value, when present
    * @param hasAfter whether {@code after} was present
    * @param after resulting value, when present
+   * @param valueType explicit supported domain interpretation, or null
    * @see <a href="../../../../../../spec/audit/changes.md">AUDIT-CHANGE-001</a>
    * @see <a href="../../../../../../spec/audit/changes.md">AUDIT-CHANGE-005</a>
+   * @see <a href="../../../../../../spec/audit/changes.md">AUDIT-CHANGE-008</a>
+   * @see <a href="../../../../../../spec/audit/changes.md">AUDIT-CHANGE-009</a>
    */
-  public record Change(String path, boolean hasBefore, Object before, boolean hasAfter, Object after) {
+  public record Change(String path, boolean hasBefore, Object before, boolean hasAfter, Object after, String valueType) {
+    /** Preserves the pre-declaration constructor for ordinary JSON Changes. */
+    public Change(String path, boolean hasBefore, Object before, boolean hasAfter, Object after) {
+      this(path, hasBefore, before, hasAfter, after, null);
+    }
+
     /**
      * Parses and validates one Audit Change.
      *
@@ -159,10 +191,22 @@ public final class Audit {
       boolean hasAfter = map.containsKey("after");
       Object before = hasBefore ? copyJson(map.get("before"), INVALID_EVENT) : null;
       Object after = hasAfter ? copyJson(map.get("after"), INVALID_EVENT) : null;
-      if (hasBefore && hasAfter && Objects.equals(before, after)) {
+      String valueType = null;
+      if (map.containsKey("valueType")) {
+        valueType = requiredString(map.get("valueType"), INVALID_EVENT);
+        if (!"MONEY".equals(valueType)) {
+          throw new FinKoreException(INVALID_EVENT);
+        }
+      }
+      Money beforeMoney = "MONEY".equals(valueType) && hasBefore ? moneyValue(before) : null;
+      Money afterMoney = "MONEY".equals(valueType) && hasAfter ? moneyValue(after) : null;
+      boolean unchanged = hasBefore && hasAfter && ("MONEY".equals(valueType)
+          ? moneyValuesEqual(beforeMoney, afterMoney)
+          : jsonValuesEqual(before, after));
+      if (unchanged) {
         throw new FinKoreException(INVALID_EVENT);
       }
-      return new Change(path, hasBefore, before, hasAfter, after);
+      return new Change(path, hasBefore, before, hasAfter, after, valueType);
     }
 
     /**
@@ -173,6 +217,9 @@ public final class Audit {
     public Map<String, Object> toPortable() {
       Map<String, Object> result = new LinkedHashMap<>();
       result.put("path", path);
+      if (valueType != null) {
+        result.put("valueType", valueType);
+      }
       if (hasBefore) {
         result.put("before", copyJson(before, INVALID_EVENT));
       }
@@ -645,7 +692,7 @@ public final class Audit {
     for (String path : policy.protectedPaths()) {
       if (ACTOR_DISPLAY_NAME.equals(path) && event.actor() != null && event.actor().displayName() != null) {
         found.add(path);
-      } else if (ACTOR_METADATA.equals(path) && event.actor() != null && event.actor().metadata() != null) {
+      } else if (ACTOR_METADATA.equals(path) && event.actor() != null && event.actor().hasMetadata()) {
         found.add(path);
       } else if (!path.startsWith("actor.")) {
         for (Change change : event.changes() == null ? List.<Change>of() : event.changes()) {
@@ -705,11 +752,65 @@ public final class Audit {
     return text;
   }
 
-  private static String optionalString(Object value, String code) {
+  private static Money moneyValue(Object value) {
     if (value == null) {
       return null;
     }
-    return requiredString(value, code);
+    try {
+      return Money.fromPortable(value);
+    } catch (FinKoreException error) {
+      throw new FinKoreException(INVALID_EVENT);
+    }
+  }
+
+  private static boolean moneyValuesEqual(Money left, Money right) {
+    if (left == null || right == null) {
+      return left == right;
+    }
+    String leftCurrency = (String) left.toPortable().get("currency");
+    String rightCurrency = (String) right.toPortable().get("currency");
+    return leftCurrency.equals(rightCurrency) && "EQUAL".equals(left.compare(right));
+  }
+
+  private static boolean jsonValuesEqual(Object left, Object right) {
+    if (left == null || right == null) {
+      return left == right;
+    }
+    if (left instanceof Number leftNumber && right instanceof Number rightNumber) {
+      try {
+        return new java.math.BigDecimal(leftNumber.toString()).compareTo(new java.math.BigDecimal(rightNumber.toString())) == 0;
+      } catch (NumberFormatException error) {
+        return false;
+      }
+    }
+    if (left instanceof Boolean || right instanceof Boolean || left instanceof String || right instanceof String) {
+      return left.getClass().equals(right.getClass()) && left.equals(right);
+    }
+    if (left instanceof List<?> || right instanceof List<?>) {
+      if (!(left instanceof List<?> actualLeft) || !(right instanceof List<?> actualRight)
+          || actualLeft.size() != actualRight.size()) {
+        return false;
+      }
+      for (int index = 0; index < actualLeft.size(); index += 1) {
+        if (!jsonValuesEqual(actualLeft.get(index), actualRight.get(index))) {
+          return false;
+        }
+      }
+      return true;
+    }
+    if (left instanceof Map<?, ?> || right instanceof Map<?, ?>) {
+      if (!(left instanceof Map<?, ?> actualLeft) || !(right instanceof Map<?, ?> actualRight)
+          || !actualLeft.keySet().equals(actualRight.keySet())) {
+        return false;
+      }
+      for (Object key : actualLeft.keySet()) {
+        if (!jsonValuesEqual(actualLeft.get(key), actualRight.get(key))) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return Objects.equals(left, right);
   }
 
   private static List<String> stringList(Object value, String code) {
@@ -724,6 +825,10 @@ public final class Audit {
   }
 
   private static Object copyJson(Object value, String code) {
+    if ((value instanceof Double doubleValue && !Double.isFinite(doubleValue))
+        || (value instanceof Float floatValue && !Float.isFinite(floatValue))) {
+      throw new FinKoreException(code);
+    }
     if (value == null || value instanceof String || value instanceof Number || value instanceof Boolean) {
       return value;
     }

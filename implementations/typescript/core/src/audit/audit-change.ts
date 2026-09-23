@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: MPL-2.0
 import { InvalidAuditEventError } from './errors.js'
 import type { SerializedAuditChange } from './types.js'
+import { Money } from '../money/money.js'
 
 function isPlainRecord(value: unknown): value is Readonly<Record<string, unknown>> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value)
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return false
+  const prototype = Object.getPrototypeOf(value)
+  return prototype === Object.prototype || prototype === null
 }
 
 function requiredString(value: unknown): string {
@@ -11,15 +14,52 @@ function requiredString(value: unknown): string {
   return value
 }
 
-function cloneAuditValue<T>(value: T): T {
+function cloneAuditValue<T>(value: T, ancestors = new Set<object>()): T {
+  if (value === null || typeof value === 'string' || typeof value === 'boolean') return value
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value)) throw new InvalidAuditEventError()
+    return value
+  }
+  if (Array.isArray(value)) {
+    if (ancestors.has(value)) throw new InvalidAuditEventError()
+    ancestors.add(value)
+    const result = value.map((item) => cloneAuditValue(item, ancestors))
+    ancestors.delete(value)
+    return result as T
+  }
+  if (isPlainRecord(value)) {
+    if (ancestors.has(value)) throw new InvalidAuditEventError()
+    if (Reflect.ownKeys(value).some((key) => typeof key !== 'string')) throw new InvalidAuditEventError()
+    ancestors.add(value)
+    const result: Record<string, unknown> = {}
+    for (const [key, item] of Object.entries(value)) {
+      result[key] = cloneAuditValue(item, ancestors)
+    }
+    ancestors.delete(value)
+    return result as T
+  }
+  throw new InvalidAuditEventError()
+}
+
+function declaredMoney(value: unknown): Money | null {
+  if (value === null) return null
   try {
-    return structuredClone(value)
+    return Money.deserialize(value)
   } catch {
     throw new InvalidAuditEventError()
   }
 }
 
+function moneyValuesEqual(left: Money | null, right: Money | null): boolean {
+  if (left === null || right === null) return left === right
+  if (left.currency.code !== right.currency.code) return false
+  return left.compare(right) === 'EQUAL'
+}
+
 function auditValuesEqual(left: unknown, right: unknown): boolean {
+  if (typeof left === 'number' && typeof right === 'number') {
+    return Number.isFinite(left) && Number.isFinite(right) && left === right
+  }
   if (Object.is(left, right)) return true
 
   if (Array.isArray(left)) {
@@ -48,14 +88,17 @@ function recordsEqual(left: Readonly<Record<string, unknown>>, right: Readonly<R
  * FinKore Audit Change value retained inside an Audit Event.
  *
  * A Change identifies the affected domain field or path and preserves supplied
- * prior and resulting values without interpreting Money, Workflow, or future
- * Entity semantics. Core 0.9 release candidate does not define a portable path syntax, change
- * kind catalog, duplicate-path rule, or diff engine.
+ * prior and resulting values. Money semantics are applied only when the Change
+ * explicitly declares `valueType: 'MONEY'`; ordinary JSON objects are never
+ * inferred to be Money. Core 0.9 release candidate does not define a portable
+ * path syntax, change kind catalog, duplicate-path rule, or diff engine.
  *
  * @see AUDIT-CHANGE-001
  * @see AUDIT-CHANGE-002
  * @see AUDIT-CHANGE-003
  * @see AUDIT-CHANGE-005
+ * @see AUDIT-CHANGE-008
+ * @see AUDIT-CHANGE-009
  */
 export class AuditChange {
   private readonly value: SerializedAuditChange
@@ -80,6 +123,8 @@ export class AuditChange {
    * @see AUDIT-CHANGE-001
    * @see AUDIT-CHANGE-003
    * @see AUDIT-CHANGE-005
+   * @see AUDIT-CHANGE-008
+   * @see AUDIT-CHANGE-009
    */
   static from(input: unknown): AuditChange {
     if (!isPlainRecord(input)) throw new InvalidAuditEventError()
@@ -89,12 +134,25 @@ export class AuditChange {
     const before = hasBefore ? cloneAuditValue(input.before) : undefined
     const after = hasAfter ? cloneAuditValue(input.after) : undefined
 
-    if (hasBefore && hasAfter && auditValuesEqual(before, after)) {
+    const hasValueType = Object.hasOwn(input, 'valueType')
+    if (hasValueType && input.valueType !== 'MONEY') {
+      throw new InvalidAuditEventError()
+    }
+
+    const beforeMoney = hasValueType && hasBefore ? declaredMoney(before) : null
+    const afterMoney = hasValueType && hasAfter ? declaredMoney(after) : null
+    const unchanged = hasBefore && hasAfter && (
+      hasValueType
+        ? moneyValuesEqual(beforeMoney, afterMoney)
+        : auditValuesEqual(before, after)
+    )
+    if (unchanged) {
       throw new InvalidAuditEventError()
     }
 
     return new AuditChange({
       path: requiredString(input.path),
+      ...(hasValueType ? { valueType: 'MONEY' as const } : {}),
       ...(hasBefore ? { before } : {}),
       ...(hasAfter ? { after } : {}),
     })
@@ -111,6 +169,7 @@ export class AuditChange {
    * @see AUDIT-APPEND-001
    * @see AUDIT-CHANGE-002
    * @see AUDIT-CHANGE-003
+   * @see AUDIT-CHANGE-009
    */
   toJSON(): SerializedAuditChange {
     return cloneAuditValue(this.value)

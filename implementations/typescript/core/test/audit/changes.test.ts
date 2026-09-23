@@ -26,15 +26,11 @@ describe('Audit changes', () => {
   it('preserves omitted before and after members without manufacturing nulls or rejecting one-sided values', () => {
     const beforeOnly = AuditChange.from({ path: 'externalRef', before: { presence: 'ABSENT' } }).toJSON()
     const afterOnly = AuditChange.from({ path: 'externalRef', after: null }).toJSON()
-    const undefinedBeforeOnly = AuditChange.from({ path: 'externalRef', before: undefined }).toJSON()
 
     expect(beforeOnly).toEqual({ path: 'externalRef', before: { presence: 'ABSENT' } })
     expect('after' in beforeOnly).toBe(false)
     expect(afterOnly).toEqual({ path: 'externalRef', after: null })
     expect('before' in afterOnly).toBe(false)
-    expect(undefinedBeforeOnly).toEqual({ path: 'externalRef', before: undefined })
-    expect('before' in undefinedBeforeOnly).toBe(true)
-    expect('after' in undefinedBeforeOnly).toBe(false)
   })
 
   it('preserves multiple changes, including duplicate paths, without collapsing them', () => {
@@ -150,11 +146,16 @@ describe('Audit changes', () => {
     })
   })
 
-  it('rejects a missing change path, non-change value, or uncloneable change value as an invalid event', () => {
+  it('rejects malformed changes and values outside the portable JSON data model', () => {
     expect(() => AuditChange.from(null)).toThrow(InvalidAuditEventError)
     expect(() => AuditChange.from({ before: 'DRAFT', after: 'SUBMITTED' })).toThrow(InvalidAuditEventError)
     expect(() => AuditChange.from({ path: '', before: 'DRAFT', after: 'SUBMITTED' })).toThrow(InvalidAuditEventError)
     expect(() => AuditChange.from({ path: 'callback', before: 'missing', after: () => undefined })).toThrow(
+      InvalidAuditEventError,
+    )
+    expect(() => AuditChange.from({ path: 'undefined', before: undefined })).toThrow(InvalidAuditEventError)
+    expect(() => AuditChange.from({ path: 'bigint', before: 1n })).toThrow(InvalidAuditEventError)
+    expect(() => AuditChange.from({ path: 'date', before: new Date('2026-09-01T12:00:00Z') })).toThrow(
       InvalidAuditEventError,
     )
   })

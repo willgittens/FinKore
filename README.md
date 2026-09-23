@@ -144,9 +144,10 @@ conventions, 327 directly testable requirements are covered by the conformance
 suite. And this is just the beginning.
 
 The expanded 331-vector manifest includes permanent Core 0.9.3 regressions.
-Entity import and Workflow guard corrections now pass all 87 affected vectors
-across TypeScript, Python, and Java; the remaining failures are isolated to the
-pending Audit correction milestone. Core 0.9.2 remains the last clean passing
+Entity import, Workflow guard, and Audit portability corrections now pass all
+145 affected vectors across TypeScript, Python 3.12/3.13, and Java, with no
+unsupported cases or infrastructure errors. Complete manifest, coverage, and
+mutation verification remain in progress. Core 0.9.2 remains the last released
 corrective snapshot; see the active
 [Core 0.9.3 plan](./docs/plans/plan-09.3.md).
 

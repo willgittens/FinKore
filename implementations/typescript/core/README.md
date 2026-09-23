@@ -3,10 +3,10 @@
 TypeScript reference implementation for FinKore Core 0.9 release candidate: Money, Workflow,
 Audit, Approvals, and Entities. The current 331-vector manifest includes
 permanent Core 0.9.3 regressions. Entity import failure observations and
-Workflow guard comparison now pass the expanded Entity and Workflow suites;
-declared-Money Audit corrections remain pending, so this implementation is not
-yet fully conformant with the expanded manifest. The specification remains the
-source of financial semantics; see the active
+Workflow guard comparison, actor metadata presence, and Audit value comparison
+now pass all 145 affected Entity, Workflow, and Audit vectors. Complete
+manifest, coverage, and mutation verification remain pending. The specification
+remains the source of financial semantics; see the active
 [Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
 
 This artifact is a repository reference implementation for the 0.9
@@ -26,10 +26,11 @@ guards, terminal behavior, definition/version identity, immutable instance
 binding/mismatch, import observations, and expected-state/revision conflict
 semantics.
 
-Audit support covers Events, Actors, append-only logical history, Change
-representation semantics, Redaction semantics, relationship metadata, and
-portable Audit errors. Distributed ordering, persistence, and cross-domain
-integrations remain outside Core 0.9 release candidate.
+Audit support covers Events, Actors, append-only logical history, recursively
+type-sensitive ordinary JSON Change equality, explicitly declared Money Change
+equality, Redaction semantics, relationship metadata, and portable Audit
+errors. Distributed ordering, persistence, and cross-domain integrations remain
+outside Core 0.9 release candidate.
 
 Approvals support covers Approval Requirement representation, Approval Decision
 representation, Decision-to-Requirement binding, allowed Decision outcomes,
@@ -189,8 +190,8 @@ conformance semantics without introducing broader workflow behavior.
 
 ## Current Audit API
 
-- `AuditActor.from(actor)` validates known actor attribution with a stable opaque identity and optional type/display metadata.
-- `AuditChange.from(change)` validates a change with a required field/path identity and preserved optional `before`/`after` values.
+- `AuditActor.from(actor)` validates known actor attribution with a stable opaque identity, non-empty supplied type/display strings, and presence-preserving optional metadata, including explicit `null`.
+- `AuditChange.from(change)` validates a change with a required field/path identity and preserved optional `before`/`after` values. Ordinary JSON values use recursive type-sensitive equality; `valueType: 'MONEY'` opts into exact Money parsing and comparison without inferring Money from object shape.
 - `AuditEvent.from(event)` validates an Audit Event with caller-supplied `eventId`, stable domain `eventType`, `entity`, optional `actor`, an `occurredAt` value using the portable FinKore RFC 3339 profile, optional validated changes, and optional Audit Relationships.
 - `AuditLog.create(history)` creates a logical audit history from existing committed events and rejects duplicate event or relationship identities, absent relationship targets, self-targets, and relationship target Entity mismatches.
 - `auditLog.append(event)` validates and appends one event, rejecting malformed supplied actors with `FINKORE_AUDIT_ACTOR_INVALID`, duplicate event identities, and invalid Audit Relationships without changing prior history. Validation precedence is history, non-actor event shape, actor shape, duplicate identity, then history-dependent relationships.

@@ -5,8 +5,9 @@ derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
 TypeScript financial implementation code. The current 331-vector manifest
 includes permanent Core 0.9.3 regressions. Entity import validation and Workflow
 guard comparison now pass the expanded Entity and Workflow suites on CPython
-3.12 and 3.13; Audit corrections remain pending, so this implementation is not
-yet fully conformant with the expanded manifest. See the
+3.12 and 3.13. Actor validation/metadata presence and ordinary JSON/declared
+Money Audit comparison now pass all 145 affected vectors on both runtimes;
+complete manifest, coverage, and mutation verification remain pending. See the
 active [Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
 The Core 0.9.2 corrective snapshot includes the Money and Approval fixes and
 passes clean-checkout release verification. See the
@@ -27,9 +28,10 @@ Current status:
 - Workflow definitions, imports, transitions, recursive type-sensitive JSON
   fact guards, terminal behavior, version binding, and conflict preconditions
   are implemented.
-- Audit event append, append-only rejection, actor/change validation with
-  portable history/event/actor/duplicate/relationship error precedence,
-  redaction representations, and relationships are implemented.
+- Audit event append, append-only rejection, presence-preserving actor
+  validation, recursive type-sensitive ordinary JSON and explicitly declared
+  Money Change comparison, portable error precedence, redaction
+  representations, and relationships are implemented.
 - Approval requirement, decision, condition, chain, lifecycle, and bounded
   composition behavior are implemented.
 - Entity create, mutate, transition, validated import, revision observation,

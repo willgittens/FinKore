@@ -2,11 +2,11 @@
 
 ## Status
 
-In progress. Milestones 1 through 3 are complete. The release-candidate review identified
+In progress. Milestones 1 through 4 are complete. The release-candidate review identified
 Entity import, Workflow guard, and Audit portability findings; their contract
-boundaries are resolved and permanent regressions reproduce them. Entity import
-and Workflow corrections now pass across all implementations; Audit corrections
-and complete verification remain pending in Milestones 4 and 5. Stable Core 1.0 promotion
+boundaries are resolved and permanent regressions protect them. Entity import,
+Workflow, and Audit corrections now pass across all implementations; complete
+verification remains pending in Milestone 5. Stable Core 1.0 promotion
 remains blocked until the corrective release gate below is satisfied;
 [Core 1.0 planning](plan-10.md) may continue.
 
@@ -239,21 +239,45 @@ the corrected behavior and Milestone 2 already supplies its permanent vectors.
 
 ## Milestone 4 — Audit corrections
 
-- [ ] Enforce actor optional-string validation in Python and Java using
+- [x] Enforce actor optional-string validation in Python and Java using
       `FINKORE_AUDIT_ACTOR_INVALID` and existing append error precedence.
-- [ ] Preserve actor metadata presence in Java through parsing, serialization,
+- [x] Preserve actor metadata presence in Java through parsing, serialization,
       and redaction under the clarified nullability contract. Failed redaction
       must not append evidence or modify committed source history.
-- [ ] Correct Python Audit comparison so Boolean/numeric distinctions survive
+- [x] Correct Python Audit comparison so Boolean/numeric distinctions survive
       recursively; retain unchanged-value rejection and valid-change controls.
-- [ ] Implement the resolved Audit domain-value comparison boundary across
+- [x] Implement the resolved Audit domain-value comparison boundary across
       TypeScript, Python, and Java. Do not hide Money interpretation in adapters
       or guess a value's type from an incidental object shape.
-- [ ] Verify immutable history, defensive observations, unchanged-value
+- [x] Verify immutable history, defensive observations, unchanged-value
       rejection, source preservation during redaction, and portable errors.
-- [ ] Synchronize public API documentation and affected `/spec`, `/conformance`,
+- [x] Synchronize public API documentation and affected `/spec`, `/conformance`,
       `/agentic`, and README claims with the final behavior. Re-run affected
       unit, adapter, and Audit conformance suites across required runtimes.
+
+Completed: 2026-09-23. Python and Java now reject supplied null, empty, or
+non-string optional Actor strings with `FINKORE_AUDIT_ACTOR_INVALID` at the
+existing precedence point. Java Actor observations retain a dedicated metadata
+presence bit, so supplied `metadata: null` survives append and remains an
+eligible redaction target without changing committed source history.
+
+Ordinary Audit Change equality is recursive and preserves the JSON
+Boolean/number distinction. TypeScript, Python, and Java apply Money semantics
+only for explicit `valueType: MONEY`, validate each supplied non-null Money
+value through the language's Money core, compare same-currency amounts exactly,
+and treat different valid currencies as a recordable difference rather than a
+currency-mismatch error. The declaration is retained in portable observations;
+Money-shaped ordinary JSON remains ordinary JSON.
+
+All 58 Audit vectors and the complete 145-vector Entity, Workflow, and Audit
+corrective set pass on TypeScript, Python 3.12, Python 3.13, and Java with zero
+failures, unsupported cases, or infrastructure errors. TypeScript passes 418
+core tests and 15 adapter tests; Python passes 47 core tests and 4 adapter tests
+on each required runtime; Java core entry-point tests and all 7 adapter tests
+pass. Build and strict TypeScript checks pass. Public API and implementation
+README documentation is synchronized. `/spec`, `/conformance`, and `/agentic`
+were reviewed and need no Milestone 4 edit because Milestone 1 established the
+contract and Milestone 2 added permanent vectors and traceability.
 
 ## Milestone 5 — Mutation protection and complete verification
 

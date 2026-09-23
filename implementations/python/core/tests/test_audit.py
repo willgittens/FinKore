@@ -185,6 +185,23 @@ class AuditTests(unittest.TestCase):
         self.assertEqual(result["event"]["actor"], {"type": "user", "id": "user-7", "metadata": {"presence": "REDACTED"}})
         self.assertEqual(result["history"], [event, evidence])
 
+    def test_rejects_actor_metadata_and_changes_outside_json(self) -> None:
+        base = {
+            "eventId": "evt-non-json",
+            "eventType": "ENTITY_FACT_CHANGED",
+            "entity": {"type": "expense", "id": "exp-52"},
+            "occurredAt": "2026-09-01T12:00:00Z",
+        }
+        cases = (
+            ({**base, "actor": {"id": "user-7", "metadata": {"finance"}}}, "FINKORE_AUDIT_ACTOR_INVALID"),
+            ({**base, "changes": [{"path": "tags", "before": {"old"}}]}, "FINKORE_AUDIT_INVALID_EVENT"),
+        )
+        for event, expected_code in cases:
+            with self.subTest(expected_code=expected_code):
+                with self.assertRaises(FinKoreError) as context:
+                    append_event([], event)
+                self.assertEqual(context.exception.code, expected_code)
+
     def test_change_comparison_distinguishes_json_types_and_declared_money(self) -> None:
         base = {
             "eventId": "evt-change-comparison",

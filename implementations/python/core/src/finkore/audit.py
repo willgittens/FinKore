@@ -4,11 +4,13 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import math
 import re
 from typing import Any
 
 from ._timestamp import parse_portable_timestamp
 from .errors import FinKoreError
+from .money import Money
 
 INVALID_EVENT = "FINKORE_AUDIT_INVALID_EVENT"
 DUPLICATE_EVENT = "FINKORE_AUDIT_DUPLICATE_EVENT"
@@ -112,6 +114,9 @@ def append_event(history: Any, event: Any) -> dict[str, list[dict[str, Any]]]:
     @see AUDIT-APPEND-001
     @see AUDIT-APPEND-003
     @see AUDIT-ACTOR-009
+    @see AUDIT-ACTOR-010
+    @see AUDIT-CHANGE-008
+    @see AUDIT-CHANGE-009
     @see AUDIT-ERROR-004
     """
 
@@ -179,6 +184,71 @@ def _validate_actor(actor: Any) -> None:
         raise FinKoreError(ACTOR_INVALID)
     if "type" in actor and not _opaque(actor["type"]):
         raise FinKoreError(ACTOR_INVALID)
+    if "displayName" in actor and not _opaque(actor["displayName"]):
+        raise FinKoreError(ACTOR_INVALID)
+    if "metadata" in actor:
+        _validate_json_value(actor["metadata"], ACTOR_INVALID)
+
+
+def _validate_json_value(value: Any, error_code: str) -> None:
+    """Reject values outside the portable JSON data model."""
+
+    if value is None or isinstance(value, (str, bool, int)):
+        return
+    if isinstance(value, float):
+        if not math.isfinite(value):
+            raise FinKoreError(error_code)
+        return
+    if isinstance(value, list):
+        for item in value:
+            _validate_json_value(item, error_code)
+        return
+    if isinstance(value, dict) and all(isinstance(key, str) for key in value):
+        for item in value.values():
+            _validate_json_value(item, error_code)
+        return
+    raise FinKoreError(error_code)
+
+
+def _json_values_equal(left: Any, right: Any) -> bool:
+    """Compare ordinary JSON recursively without Python Boolean/number coercion."""
+
+    if isinstance(left, bool) or isinstance(right, bool):
+        return isinstance(left, bool) and isinstance(right, bool) and left == right
+    if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+        return left == right
+    if left is None or right is None or isinstance(left, str) or isinstance(right, str):
+        return type(left) is type(right) and left == right
+    if isinstance(left, list) or isinstance(right, list):
+        return (
+            isinstance(left, list)
+            and isinstance(right, list)
+            and len(left) == len(right)
+            and all(_json_values_equal(left_item, right_item) for left_item, right_item in zip(left, right, strict=True))
+        )
+    if isinstance(left, dict) or isinstance(right, dict):
+        return (
+            isinstance(left, dict)
+            and isinstance(right, dict)
+            and left.keys() == right.keys()
+            and all(_json_values_equal(left[key], right[key]) for key in left)
+        )
+    return False
+
+
+def _money_value(value: Any) -> Money | None:
+    if value is None:
+        return None
+    try:
+        return Money.from_portable(value)
+    except FinKoreError as error:
+        raise FinKoreError(INVALID_EVENT) from error
+
+
+def _money_values_equal(left: Money | None, right: Money | None) -> bool:
+    if left is None or right is None:
+        return left is right
+    return left.currency == right.currency and left.compare(right) == "EQUAL"
 
 
 def _validate_changes(changes: Any) -> None:
@@ -187,7 +257,23 @@ def _validate_changes(changes: Any) -> None:
     for change in changes:
         if not isinstance(change, dict) or not _opaque(change.get("path")):
             raise FinKoreError(INVALID_EVENT)
-        if "before" in change and "after" in change and change["before"] == change["after"]:
+        has_before = "before" in change
+        has_after = "after" in change
+        if has_before:
+            _validate_json_value(change["before"], INVALID_EVENT)
+        if has_after:
+            _validate_json_value(change["after"], INVALID_EVENT)
+        has_value_type = "valueType" in change
+        if has_value_type and change["valueType"] != "MONEY":
+            raise FinKoreError(INVALID_EVENT)
+        before_money = _money_value(change["before"]) if has_value_type and has_before else None
+        after_money = _money_value(change["after"]) if has_value_type and has_after else None
+        unchanged = has_before and has_after and (
+            _money_values_equal(before_money, after_money)
+            if has_value_type
+            else _json_values_equal(change["before"], change["after"])
+        )
+        if unchanged:
             raise FinKoreError(INVALID_EVENT)
 
 

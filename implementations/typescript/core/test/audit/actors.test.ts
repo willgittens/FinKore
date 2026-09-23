@@ -54,6 +54,8 @@ describe('Audit actors', () => {
     expect(() => AuditActor.from({ id: 'user-7', displayName: 7 })).toThrow(InvalidAuditActorError)
     expect(() => AuditActor.from({ id: 'user-7', type: null })).toThrow(InvalidAuditActorError)
     expect(() => AuditActor.from({ id: 'user-7', displayName: null })).toThrow(InvalidAuditActorError)
+    expect(() => AuditActor.from({ id: 'user-7', metadata: undefined })).toThrow(InvalidAuditActorError)
+    expect(() => AuditActor.from({ id: 'user-7', metadata: 1n })).toThrow(InvalidAuditActorError)
   })
 
   it('returns defensive actor copies', () => {

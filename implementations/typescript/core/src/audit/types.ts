@@ -171,18 +171,25 @@ export interface SerializedAuditActor {
  *
  * A change identifies the affected field or domain path and may preserve prior
  * and resulting values. Omitted members and explicit `null` values are distinct.
- * Core 0.9 release candidate does not define a full domain path syntax, change-kind catalog,
- * redaction behavior, or Money-specific change validation.
+ * Money semantics apply only when `valueType` explicitly declares `MONEY`;
+ * otherwise values use recursive, type-sensitive ordinary JSON equality. Core
+ * 0.9 release candidate does not define a full domain path syntax,
+ * change-kind catalog, or diff engine.
  *
  * @see AUDIT-CHANGE-001
  * @see AUDIT-CHANGE-002
  * @see AUDIT-CHANGE-003
  * @see AUDIT-CHANGE-005
  * @see AUDIT-CHANGE-007
+ * @see AUDIT-CHANGE-008
+ * @see AUDIT-CHANGE-009
  */
 export interface SerializedAuditChange {
   /** Domain path or field name supplied by the composing domain. */
   readonly path: string
+
+  /** Explicit supported domain interpretation for the supplied values. */
+  readonly valueType?: 'MONEY'
 
   /** Prior value when safely retained by the composing domain. */
   readonly before?: unknown
