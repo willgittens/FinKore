@@ -42,6 +42,36 @@ def _binding(value: Any) -> dict[str, str] | None:
     return {"definitionIdentity": definition_identity, "definitionVersionIdentity": version_identity}
 
 
+def _json_equal(left: Any, right: Any) -> bool:
+    """Compare supported guard fixture values using recursive JSON equality."""
+
+    if left is None or right is None:
+        return left is None and right is None
+    if isinstance(left, bool) or isinstance(right, bool):
+        return isinstance(left, bool) and isinstance(right, bool) and left == right
+    left_is_number = isinstance(left, (int, float)) and not isinstance(left, bool)
+    right_is_number = isinstance(right, (int, float)) and not isinstance(right, bool)
+    if left_is_number or right_is_number:
+        return left_is_number and right_is_number and left == right
+    if isinstance(left, str) or isinstance(right, str):
+        return isinstance(left, str) and isinstance(right, str) and left == right
+    if isinstance(left, list) or isinstance(right, list):
+        return (
+            isinstance(left, list)
+            and isinstance(right, list)
+            and len(left) == len(right)
+            and all(_json_equal(left_item, right_item) for left_item, right_item in zip(left, right, strict=True))
+        )
+    if isinstance(left, dict) or isinstance(right, dict):
+        return (
+            isinstance(left, dict)
+            and isinstance(right, dict)
+            and left.keys() == right.keys()
+            and all(_json_equal(left[key], right[key]) for key in left)
+        )
+    return False
+
+
 @dataclass(frozen=True)
 class WorkflowTransition:
     """Directed Workflow transition with optional deterministic fact guards.
@@ -79,9 +109,17 @@ class WorkflowTransition:
         return WorkflowTransition(source=source, target=target, guards=tuple(dict(guard) for guard in guards))
 
     def guards_pass(self, facts: dict[str, Any]) -> bool:
-        """Evaluate all transition guards against explicitly supplied facts."""
+        """Evaluate guards with presence-aware, type-sensitive JSON equality.
 
-        return all(facts.get(guard["fact"]) == guard["equals"] for guard in self.guards)
+        @see WORKFLOW-GUARD-001
+        @see WORKFLOW-GUARD-002
+        @see WORKFLOW-GUARD-003
+        """
+
+        return all(
+            guard["fact"] in facts and _json_equal(facts[guard["fact"]], guard["equals"])
+            for guard in self.guards
+        )
 
 
 @dataclass(frozen=True)

@@ -181,6 +181,12 @@ function inputEntityImport(input: unknown): {
   return { definition: candidate.definition, imported: candidate.import }
 }
 
+function entityImportObservation(imported: unknown): { readonly entity: unknown } | undefined {
+  if (typeof imported !== 'object' || imported === null || !('entity' in imported)) return undefined
+  const entity = (imported as { readonly entity?: unknown }).entity
+  return typeof entity === 'object' && entity !== null && !Array.isArray(entity) ? { entity } : undefined
+}
+
 function inputEntityEvolution(input: unknown): {
   readonly definition: unknown
   readonly evolutionHistory: unknown
@@ -852,17 +858,12 @@ function executeEntityMutate(request: AdapterRequest): NormalizedResult {
  */
 function executeEntityImport(request: AdapterRequest): NormalizedResult {
   const input = inputEntityImport(request.input)
-  let entity: FinancialEntity | undefined
   try {
-    const imported = input.imported as { readonly entity?: unknown }
-    entity = FinancialEntity.from(input.definition, imported.entity)
     return { status: 'success', value: FinancialEntity.import(input.definition, input.imported) }
   } catch (error) {
     const result = normalizeThrown(error)
-    if (result.status === 'error' && entity !== undefined) {
-      return { ...result, observations: { entity: entity.toJSON() } }
-    }
-    return result
+    const observations = entityImportObservation(input.imported)
+    return result.status === 'error' && observations !== undefined ? { ...result, observations } : result
   }
 }
 

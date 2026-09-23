@@ -101,8 +101,11 @@ def transition_entity(definition: Any, entity: Any, target: Any) -> dict[str, An
 
 
 def import_entity(definition: Any, import_value: Any) -> dict[str, Any]:
-    """Validate and preserve an imported Entity observation.
+    """Validate and preserve a complete imported Entity observation.
 
+    @see ENTITY-IMPORT-002
+    @see ENTITY-IMPORT-008
+    @see ENTITY-VALIDATION-004
     @see ENTITY-REVISION-007
     """
 
@@ -110,6 +113,7 @@ def import_entity(definition: Any, import_value: Any) -> dict[str, Any]:
     if not isinstance(import_value, dict):
         raise FinKoreError(INVALID_IDENTITY)
     entity = validate_entity(entity_definition, import_value.get("entity"))
+    _validate_entity_data(entity_definition, entity)
     if "sourceIdentity" in import_value:
         mapping = _identity_mapping(import_value.get("identityMapping"), entity, import_value["sourceIdentity"])
     elif "identityMapping" in import_value:

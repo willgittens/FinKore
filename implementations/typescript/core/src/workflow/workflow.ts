@@ -26,8 +26,26 @@ function factsFrom(options: WorkflowTransitionOptions | undefined): Readonly<Rec
   return options?.facts ?? {}
 }
 
+function jsonValuesEqual(left: unknown, right: unknown): boolean {
+  if (left === null || right === null) return left === right
+  if (typeof left !== typeof right) return false
+  if (typeof left === 'boolean' || typeof left === 'number' || typeof left === 'string') return left === right
+  if (Array.isArray(left) || Array.isArray(right)) {
+    return Array.isArray(left) && Array.isArray(right)
+      && left.length === right.length
+      && left.every((value, index) => jsonValuesEqual(value, right[index]))
+  }
+  if (isPlainRecord(left) && isPlainRecord(right)) {
+    const leftKeys = Object.keys(left)
+    const rightKeys = Object.keys(right)
+    return leftKeys.length === rightKeys.length
+      && leftKeys.every((key) => Object.hasOwn(right, key) && jsonValuesEqual(left[key], right[key]))
+  }
+  return false
+}
+
 function guardsPass(guards: readonly WorkflowTransitionGuard[], facts: Readonly<Record<string, unknown>>): boolean {
-  return guards.every((guard) => Object.is(facts[guard.fact], guard.equals))
+  return guards.every((guard) => Object.hasOwn(facts, guard.fact) && jsonValuesEqual(facts[guard.fact], guard.equals))
 }
 
 function parseObservedBinding(value: unknown): WorkflowDefinitionVersionBinding {

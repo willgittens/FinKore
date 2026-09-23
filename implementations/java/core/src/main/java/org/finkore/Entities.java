@@ -122,12 +122,16 @@ public final class Entities {
   }
 
   /**
-   * Validates and preserves an imported Entity observation, source mapping,
-   * revisions, and conflict-version context.
+   * Validates the complete imported Entity observation and preserves its source
+   * mapping, revisions, and conflict-version context.
    *
    * @param definition portable Entity definition
    * @param importValue import request observation
    * @return portable import result
+   * @throws FinKoreException with {@link #VALIDATION_FAILED} when a declared
+   *     validator rejects the complete imported Entity
+   * @see <a href="../../../../../../spec/entities/import.md">ENTITY-IMPORT-002</a>
+   * @see <a href="../../../../../../spec/entities/import.md">ENTITY-IMPORT-008</a>
    * @see <a href="../../../../../../spec/entities/revisions.md">ENTITY-REVISION-007</a>
    */
   public static Map<String, Object> importEntity(Object definition, Object importValue) {

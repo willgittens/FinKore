@@ -3,9 +3,10 @@
 This package is the Java implementation track for FinKore Core 0.9 release candidate. It is
 derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
 TypeScript or Python financial implementation code. The current 331-vector
-manifest includes permanent Core 0.9.3 regressions that expose pending Workflow
-null handling and Audit actor/null-presence and declared-Money corrections, so
-this implementation is not yet fully conformant with the expanded suite. See
+manifest includes permanent Core 0.9.3 regressions. Workflow null handling and
+recursive guard comparison now pass the expanded Workflow suite; Audit
+actor/null-presence and declared-Money corrections remain pending, so this
+implementation is not yet fully conformant with the expanded manifest. See
 the active [Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
 
 This artifact is a repository reference implementation for the 0.9
@@ -21,9 +22,9 @@ Current status:
 
 - Money representation, serialization, arithmetic, comparison, rates,
   rounding, and allocation are implemented.
-- Workflow definitions, instances, guards, transitions, terminal behavior,
-  version binding, import observations, and conflict preconditions are
-  implemented.
+- Workflow definitions, instances, recursive type-sensitive JSON guards,
+  transitions, terminal behavior, version binding, import observations, and
+  conflict preconditions are implemented.
 - Audit Events, Actors, Changes, append-only history, redaction
   representations, and Audit Relationships are implemented, including
   portable history/event/actor/duplicate/relationship error precedence.

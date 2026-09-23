@@ -2,9 +2,10 @@
 
 TypeScript reference implementation for FinKore Core 0.9 release candidate: Money, Workflow,
 Audit, Approvals, and Entities. The current 331-vector manifest includes
-permanent Core 0.9.3 regressions that expose pending Entity import observation,
-Workflow guard, and Audit declared-Money corrections, so this implementation is
-not yet fully conformant with the expanded suite. The specification remains the
+permanent Core 0.9.3 regressions. Entity import failure observations and
+Workflow guard comparison now pass the expanded Entity and Workflow suites;
+declared-Money Audit corrections remain pending, so this implementation is not
+yet fully conformant with the expanded manifest. The specification remains the
 source of financial semantics; see the active
 [Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
 
@@ -71,7 +72,8 @@ rounding, percentage Rate scaling, safe-integer allocation ratios, and
 
 It implements Core 0.9 release candidate Workflow behavior: validated workflow
 definitions, exact state identifiers, one initial state, current state,
-directed transitions, single or multiple simple fact-equality guards,
+directed transitions, single or multiple recursive JSON fact-equality guards
+that distinguish missing/null and Boolean/numeric values,
 explicit terminal-state detection, rejection of outgoing transitions in
 terminal definitions, terminal-state transition rejection and portable error
 precedence, successful state changes, and state preservation after rejection.

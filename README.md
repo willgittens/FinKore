@@ -143,10 +143,11 @@ Across Money, Workflow, Audit, Approvals, Financial Entities, and shared
 conventions, 327 directly testable requirements are covered by the conformance
 suite. And this is just the beginning.
 
-The expanded 331-vector manifest now includes permanent Core 0.9.3 regressions
-that intentionally expose pending Entity import, Workflow guard, and Audit
-corrections across TypeScript, Python, and Java. Core 0.9.2 remains the last
-clean passing corrective snapshot; see the active
+The expanded 331-vector manifest includes permanent Core 0.9.3 regressions.
+Entity import and Workflow guard corrections now pass all 87 affected vectors
+across TypeScript, Python, and Java; the remaining failures are isolated to the
+pending Audit correction milestone. Core 0.9.2 remains the last clean passing
+corrective snapshot; see the active
 [Core 0.9.3 plan](./docs/plans/plan-09.3.md).
 
 ---

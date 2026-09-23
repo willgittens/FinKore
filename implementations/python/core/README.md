@@ -3,9 +3,10 @@
 This package is the Python implementation track for FinKore Core 0.9 release candidate. It is
 derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
 TypeScript financial implementation code. The current 331-vector manifest
-includes permanent Core 0.9.3 regressions that expose pending Entity import,
-Workflow guard, and Audit corrections on CPython 3.12 and 3.13, so this
-implementation is not yet fully conformant with the expanded suite. See the
+includes permanent Core 0.9.3 regressions. Entity import validation and Workflow
+guard comparison now pass the expanded Entity and Workflow suites on CPython
+3.12 and 3.13; Audit corrections remain pending, so this implementation is not
+yet fully conformant with the expanded manifest. See the
 active [Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
 The Core 0.9.2 corrective snapshot includes the Money and Approval fixes and
 passes clean-checkout release verification. See the
@@ -23,15 +24,16 @@ Current status:
 
 - Money representation, serialization, arithmetic, comparison, rates,
   rounding, and allocation are implemented.
-- Workflow definitions, imports, transitions, guards, terminal behavior,
-  version binding, and conflict preconditions are implemented.
+- Workflow definitions, imports, transitions, recursive type-sensitive JSON
+  fact guards, terminal behavior, version binding, and conflict preconditions
+  are implemented.
 - Audit event append, append-only rejection, actor/change validation with
   portable history/event/actor/duplicate/relationship error precedence,
   redaction representations, and relationships are implemented.
 - Approval requirement, decision, condition, chain, lifecycle, and bounded
   composition behavior are implemented.
-- Entity create, mutate, transition, import, revision observation, and
-  evolution behavior are implemented.
+- Entity create, mutate, transition, validated import, revision observation,
+  and evolution behavior are implemented.
 - Public errors expose portable FinKore error codes; Python exception class
   names are not portable semantics.
 - Audit and Approval timestamps use the strict portable FinKore RFC 3339

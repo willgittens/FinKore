@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MPL-2.0
 package org.finkore;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,14 +62,15 @@ public final class Workflow {
     }
 
     /**
-     * Evaluates every guard against supplied facts.
+     * Evaluates every guard against supplied facts using presence-aware,
+     * type-sensitive recursive JSON equality.
      *
      * @param facts explicit fact map for this transition request
      * @return {@code true} when every guard is satisfied
      */
     public boolean guardsPass(Map<String, Object> facts) {
       for (Map<String, Object> guard : guards) {
-        if (!facts.containsKey(guard.get("fact")) || !facts.get(guard.get("fact")).equals(guard.get("equals"))) {
+        if (!facts.containsKey(guard.get("fact")) || !jsonEquals(facts.get(guard.get("fact")), guard.get("equals"))) {
           return false;
         }
       }
@@ -408,6 +410,54 @@ public final class Workflow {
 
   private static boolean opaque(Object value) {
     return value instanceof String text && !text.isEmpty();
+  }
+
+  private static boolean jsonEquals(Object left, Object right) {
+    if (left == null || right == null) {
+      return left == null && right == null;
+    }
+    if (left instanceof Boolean || right instanceof Boolean) {
+      return left instanceof Boolean && right instanceof Boolean && left.equals(right);
+    }
+    if (left instanceof Number || right instanceof Number) {
+      if (!(left instanceof Number) || !(right instanceof Number)) {
+        return false;
+      }
+      try {
+        return new BigDecimal(left.toString()).compareTo(new BigDecimal(right.toString())) == 0;
+      } catch (NumberFormatException ignored) {
+        return false;
+      }
+    }
+    if (left instanceof String || right instanceof String) {
+      return left instanceof String && right instanceof String && left.equals(right);
+    }
+    if (left instanceof List<?> || right instanceof List<?>) {
+      if (!(left instanceof List<?> leftValues) || !(right instanceof List<?> rightValues)
+          || leftValues.size() != rightValues.size()) {
+        return false;
+      }
+      for (int index = 0; index < leftValues.size(); index += 1) {
+        if (!jsonEquals(leftValues.get(index), rightValues.get(index))) {
+          return false;
+        }
+      }
+      return true;
+    }
+    if (left instanceof Map<?, ?> || right instanceof Map<?, ?>) {
+      if (!(left instanceof Map<?, ?> leftValues) || !(right instanceof Map<?, ?> rightValues)
+          || leftValues.size() != rightValues.size()) {
+        return false;
+      }
+      for (Map.Entry<?, ?> entry : leftValues.entrySet()) {
+        if (!rightValues.containsKey(entry.getKey())
+            || !jsonEquals(entry.getValue(), rightValues.get(entry.getKey()))) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
   }
 
   private static boolean versionSequenceValid(Object value) {

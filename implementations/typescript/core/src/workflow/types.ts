@@ -104,9 +104,12 @@ export type WorkflowErrorCode =
  * Guard condition supported by the Core 0.9 release candidate TypeScript Workflow behavior.
  *
  * The condition deterministically compares one supplied fact to an expected
- * value. Authorization evidence may be supplied as an ordinary fact, but this
- * type assumes no authorization model. Broader guard languages, callbacks, and
- * external fact capture remain outside Core 0.9 release candidate Workflow.
+ * JSON value using recursive, type-sensitive equality. Missing facts differ
+ * from explicit null, object member order is irrelevant, and array order is
+ * significant. Authorization evidence may be supplied as an ordinary fact,
+ * but this type assumes no authorization model. Broader guard languages,
+ * callbacks, and external fact capture remain outside Core 0.9 release
+ * candidate Workflow.
  *
  * @see WORKFLOW-GUARD-001
  * @see WORKFLOW-GUARD-002
@@ -117,7 +120,7 @@ export interface WorkflowTransitionGuard {
   /** Fact key to read from a transition request's supplied facts. */
   readonly fact: string
 
-  /** Expected value for the named fact. */
+  /** Expected JSON value for the named fact. */
   readonly equals: unknown
 }
 

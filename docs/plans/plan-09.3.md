@@ -2,10 +2,11 @@
 
 ## Status
 
-In progress. Milestones 1 and 2 are complete. The release-candidate review identified
+In progress. Milestones 1 through 3 are complete. The release-candidate review identified
 Entity import, Workflow guard, and Audit portability findings; their contract
-boundaries are resolved and permanent regressions now reproduce them, while
-implementation corrections remain pending in Milestones 3 through 5. Stable Core 1.0 promotion
+boundaries are resolved and permanent regressions reproduce them. Entity import
+and Workflow corrections now pass across all implementations; Audit corrections
+and complete verification remain pending in Milestones 4 and 5. Stable Core 1.0 promotion
 remains blocked until the corrective release gate below is satisfied;
 [Core 1.0 planning](plan-10.md) may continue.
 
@@ -187,21 +188,54 @@ and mutation gates remain work for Milestones 3 through 5.
 
 ## Milestone 3 — Entity import and Workflow corrections
 
-- [ ] Make Python Entity import enforce all applicable declared validators
+- [x] Make Python Entity import enforce all applicable declared validators
       before returning an imported observation. Preserve identity, lifecycle,
       revision, mapping, conflict preconditions, and domain error precedence.
-- [ ] Correct Workflow guard evaluation in each affected core according to the
+- [x] Correct Workflow guard evaluation in each affected core according to the
       resolved comparison contract, including Java null handling and Python
       presence/type distinctions. Do not replace a runtime crash with an
       arbitrary successful or rejected outcome.
-- [ ] Review adjacent callers of the corrected validation/comparison paths.
+- [x] Review adjacent callers of the corrected validation/comparison paths.
       Add a failing regression before fixing any additional confirmed defect;
       preserve existing Approval fact-comparison protections.
-- [ ] Keep adapters free of validation and guard rules. Update affected public
+- [x] Keep adapters free of validation and guard rules. Update affected public
       API documentation, JSDoc/docstrings, examples, and implementation claims
       alongside each correction.
-- [ ] Run affected unit, adapter, and real conformance suites on all official
+- [x] Run affected unit, adapter, and real conformance suites on all official
       implementations and both required Python versions.
+
+Completed: 2026-09-23. Python Entity import now applies the complete declared
+validation set immediately after structural Entity validation and before
+revision, mapping, and conflict-precondition processing, matching the existing
+TypeScript and Java primary-error ordering. Rejected imports retain
+`FINKORE_ENTITY_VALIDATION_FAILED`, do not mutate their supplied observation,
+and return no partial import result. The TypeScript conformance adapter now
+reports that caller-supplied source observation after failure without
+duplicating any validator or financial rule.
+
+TypeScript, Python, and Java Workflow guards now distinguish missing facts from
+explicit null and compare supported JSON recursively with Boolean/number type
+distinctions, order-independent object members, and order-sensitive arrays.
+Java null values no longer crash the adapter process. The implementation keeps
+comparison inside each core; adapters remain limited to request/result
+translation. Adjacent Approval fact-comparison suites pass unchanged.
+
+All 51 Workflow vectors and all 36 Entity vectors pass on TypeScript, Python
+3.12, Python 3.13, and Java: 87/87 for each runtime, with zero unsupported or
+infrastructure results. Targeted public-API verification passes 64 TypeScript
+Entity/Workflow tests, 12 Python Entity/Workflow tests on each required runtime,
+and the Java Workflow and Entity entry points. Approval protections pass 138
+TypeScript tests, 10 Python tests per runtime, and the Java Approval entry
+point. Python and Java adapter tests pass; the TypeScript adapter suite now has
+only its intentionally pending Audit group failure.
+
+The reduced 145-vector corrective baseline contains only Milestone 4 Audit
+failures: TypeScript passes 141 with 4 failures, both Python versions pass 135
+with the same 10 failures, and Java passes 137 with 8 failures. Every runtime
+reports zero infrastructure errors. Build, strict TypeScript, Python 3.12/3.13
+compilation, and Java compilation pass. No specification, conformance-vector,
+Agentic, or traceability change is required because Milestone 1 already defines
+the corrected behavior and Milestone 2 already supplies its permanent vectors.
 
 ## Milestone 4 — Audit corrections
 

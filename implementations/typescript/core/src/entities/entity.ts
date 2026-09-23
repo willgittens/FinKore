@@ -396,6 +396,9 @@ export class FinancialEntity {
    * @throws {EntityStateConflictError}
    * When an expected state, revision, or conflict version does not match the
    * supplied observation.
+   * @throws {EntityValidationFailedError}
+   * When the complete supplied Entity observation violates a declared
+   * validation rule for its current state.
    *
    * @see FINKORE_ENTITY_INVALID_IDENTITY
    * @see FINKORE_ENTITY_STATE_CONFLICT
@@ -403,8 +406,11 @@ export class FinancialEntity {
    * @see ENTITY-REVISION-001
    * @see ENTITY-REVISION-006
    * @see ENTITY-IMPORT-001
+   * @see ENTITY-IMPORT-002
    * @see ENTITY-IMPORT-006
    * @see ENTITY-IMPORT-007
+   * @see ENTITY-IMPORT-008
+   * @see ENTITY-VALIDATION-004
    */
   static import(definitionInput: unknown, importInput: unknown): EntityImportResult {
     const definition = validateDefinition(definitionInput)
