@@ -6,7 +6,8 @@ TypeScript or Python financial implementation code. The current 331-vector
 manifest includes permanent Core 0.9.3 regressions. Workflow null handling and
 recursive guard comparison, actor metadata presence, and Audit value comparison
 now pass the complete 331-vector manifest. Coverage, critical mutation probes,
-isolated package consumers, and clean-snapshot verification pass. See the active
+isolated package consumers, and clean-snapshot verification pass. See the
+completed
 [Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
 
 This artifact is a repository reference implementation for the 0.9
@@ -14,7 +15,7 @@ release-candidate phase. It is not published to a Maven repository. The Maven
 artifact version identifies this implementation artifact; `FinKore.CORE_VERSION`
 identifies the FinKore Core behavioral baseline it implements.
 
-The `core-0.9.2` repository tag identifies the corrective snapshot.
+The `core-0.9.3` repository tag identifies the corrective snapshot.
 `FinKore.CORE_VERSION` and packaged Core compatibility metadata remain `0.9-rc`;
 the unpublished Maven artifact version remains `0.1.0`.
 

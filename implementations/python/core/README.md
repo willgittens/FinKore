@@ -8,18 +8,15 @@ guard comparison now pass the expanded Entity and Workflow suites on CPython
 3.12 and 3.13. Actor validation/metadata presence and ordinary JSON/declared
 Money Audit comparison now pass the complete 331-vector manifest on both
 runtimes. Coverage, critical mutation probes, isolated package consumers, and
-clean-snapshot verification pass. See the
-active [Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
-The Core 0.9.2 corrective snapshot includes the Money and Approval fixes and
-passes clean-checkout release verification. See the
-[corrective plan](../../../docs/plans/plan-09.2.md).
+clean-snapshot verification pass. See the completed
+[Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
 
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to a Python package registry. The
 Python package version identifies this implementation artifact; `CORE_VERSION`
 identifies the FinKore Core behavioral baseline it implements.
 
-The `core-0.9.2` repository tag identifies the corrective snapshot. `CORE_VERSION`
+The `core-0.9.3` repository tag identifies the corrective snapshot. `CORE_VERSION`
 remains `0.9-rc`, and the unpublished package version remains `0.1.0`.
 
 Current status:

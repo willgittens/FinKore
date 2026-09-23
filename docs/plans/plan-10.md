@@ -2,10 +2,12 @@
 
 ## Status
 
-Planning reopened after the verified, locally tagged
-[Core 0.9.2 corrective release](plan-09.2.md). The reproduced Money exactness
-and Approval validity defects are fixed and protected by permanent regressions.
-Remote publication of that snapshot remains pending GitHub authentication.
+Planning continues after the verified, locally tagged
+[Core 0.9.3 corrective release](plan-09.3.md). The reproduced Entity import,
+Workflow guard, and Audit portability defects, together with the earlier Money
+exactness and Approval validity defects, are fixed and protected by permanent
+regressions. Remote publication of the corrective snapshot remains pending
+GitHub authentication.
 The stable 1.0 milestones below remain uncompleted; reopening this plan does
 not declare Core 1.0 stable. This document remains non-normative. In this
 filename, `10` means version 1.0, not version 0.10.

@@ -2,14 +2,13 @@
 
 ## Status
 
-In progress. Milestones 1 through 5 are complete. The release-candidate review identified
-Entity import, Workflow guard, and Audit portability findings; their contract
-boundaries are resolved and permanent regressions protect them. Entity import,
-Workflow, and Audit corrections and complete verification now pass across all
-implementations. Release documentation and tagging remain pending in Milestone
-6. Stable Core 1.0 promotion
-remains blocked until the corrective release gate below is satisfied;
-[Core 1.0 planning](plan-10.md) may continue.
+Complete locally. All six milestones and the corrective release gate pass. The
+Entity import, Workflow guard, and Audit portability findings are resolved and
+protected by permanent regressions. Clean-checkout verification passes across
+all implementations, and the annotated local `core-0.9.3` tag identifies the
+corrective snapshot. Remote publication remains pending GitHub authentication.
+[Core 1.0 planning](plan-10.md) may continue; this release does not declare Core
+1.0 stable.
 
 Release type: Corrective release candidate.
 
@@ -337,42 +336,58 @@ changes remote state. Milestone 6 owns the concise release note and release tag.
 
 ## Milestone 6 — Documentation and corrective release
 
-- [ ] Review CoreDoc, specifications, conformance claims, Agentic metadata,
+- [x] Review CoreDoc, specifications, conformance claims, Agentic metadata,
       public API documentation, implementation READMEs, root README, and
       `AGENTS.md`. Update affected claims only, distinguishing implemented,
       passing conformance, unsupported, and not-yet-specified behavior.
-- [ ] Keep Core release identity, implementation package versions, and
+- [x] Keep Core release identity, implementation package versions, and
       conformance syntax versions distinct. Review constants, report labels,
       and consumer assertions for consistency with the corrective baseline.
-- [ ] After verification, add a concise 0.9.3 summary to the single
+- [x] After verification, add a concise 0.9.3 summary to the single
       [release notes](../releases/README.md), including the existing Unreleased
       cross-field validation and redaction clarification changes. Keep detailed
       test and development history out of release summaries.
-- [ ] Preserve repository-reference package publication status unless the
+- [x] Preserve repository-reference package publication status unless the
       maintainer changes the distribution decision. Creating this plan does
       not publish packages, create tags, or authorize remote release actions.
-- [ ] Through the maintainer's release process, verify the intended commit and
+- [x] Through the maintainer's release process, verify the intended commit and
       existing tag state, then create the annotated `core-0.9.3` tag only after
       all gates pass. Do not move an existing release tag; distinguish local
       tagging from remote publication in the completion status.
-- [ ] Mark this plan complete and update Core 1.0 promotion prerequisites only
+- [x] Mark this plan complete and update Core 1.0 promotion prerequisites only
       when no known blocker remains. Do not describe corrective RC completion
       as stable Core 1.0 completion.
+
+Completed locally: 2026-09-23. CoreDoc, `/spec`, `/conformance`, `/agentic`,
+public API documentation, implementation READMEs, the root README, and
+`AGENTS.md` were reviewed against the verified corrections. No further
+financial-contract or development-rule change is required. The release
+documentation distinguishes the `core-0.9.3` snapshot from the unchanged
+`0.9-rc` behavioral baseline, unpublished `0.1.0` reference packages, and `0.1`
+conformance syntax. Package publication remains unchanged.
+
+The release documentation snapshot passed `npm ci` and the complete local `npm
+run verify` from a clean checkout. Local tag inspection found no existing
+`core-0.9.3`; the annotated tag identifies the final release commit while
+preserving existing tags. Remote tag inspection could not authenticate to
+GitHub, so this completion records a local release only. No known corrective
+blocker remains, and Core 1.0 planning may continue as a separate stable-release
+plan.
 
 ## Release gate
 
 Core 0.9.3 is complete only when:
 
-- [ ] Every finding above has a resolved contract and permanent regression
+- [x] Every finding above has a resolved contract and permanent regression
       coverage; no mandatory equality or nullability question remains open.
-- [ ] Entity imports enforce declared validation and Workflow guards produce
+- [x] Entity imports enforce declared validation and Workflow guards produce
       consistent portable outcomes without crashes or hidden state changes.
-- [ ] Audit actor validation, metadata presence, redaction, and value comparison
+- [x] Audit actor validation, metadata presence, redaction, and value comparison
       agree across languages while preserving history and domain meaning.
-- [ ] Existing and new vectors, coverage gates, mutation gates, clean-checkout
+- [x] Existing and new vectors, coverage gates, mutation gates, clean-checkout
       verification, and isolated package consumers pass on required runtimes.
-- [ ] Traceability and public documentation describe the actual verified state,
+- [x] Traceability and public documentation describe the actual verified state,
       without unsupported full-conformance or stability claims.
-- [ ] The concise release note and corrective release tag identify the verified
+- [x] The concise release note and corrective release tag identify the verified
       snapshot, with no scope expansion, invented semantics, or architectural
       bypass introduced by the corrections.

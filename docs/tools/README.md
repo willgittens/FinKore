@@ -78,10 +78,13 @@ gate passes. The corrections and release steps are tracked in the
 
 A critical probe is killed only by a valid conformance report with behavioral
 failures and no unsupported or infrastructure outcomes. Compilation failures,
-process failures, malformed reports, and empty suites fail the gate. The Core
-0.9.2 Money and Approval probes additionally require their named regression or
-positive-control vector to fail. Classification tests run through `npm run
-tools:test`, included in `npm run check` and `npm run verify`.
+process failures, malformed reports, and empty suites fail the gate. Probes with
+a named regression require that regression to fail; every declared positive
+control must execute and pass. Core 0.9.3 adds this paired protection for Entity
+import validation, Workflow comparison, Audit Actor validation and metadata
+presence, and Audit ordinary JSON and declared Money comparison. Classification
+tests run through `npm run tools:test`, included in `npm run check` and `npm run
+verify`.
 
 The Core 0.9.2 survivor review distinguishes these non-critical cases:
 

@@ -137,18 +137,17 @@ They should not be accidental side effects of a framework or whichever service i
 FinKore specifies each outcome, provides portable tests for it, and verifies
 that every implementation preserves the same meaning.
 
-These scenarios are only a small illustration of FinKore Core 0.9.2:
+These scenarios are only a small illustration of FinKore Core 0.9.3:
 
 Across Money, Workflow, Audit, Approvals, Financial Entities, and shared
 conventions, 327 directly testable requirements are covered by the conformance
 suite. And this is just the beginning.
 
-The expanded 331-vector manifest includes permanent Core 0.9.3 regressions.
-Entity import, Workflow guard, and Audit portability corrections now pass all
-331 manifest vectors across TypeScript, Python 3.12/3.13, and Java, with no
-unsupported cases or infrastructure errors. Coverage, mutation, package, and
-clean-snapshot verification pass; Core 0.9.2 remains the last released
-corrective snapshot while 0.9.3 release preparation continues. See the active
+The 331-vector manifest includes permanent Core 0.9.3 regressions. Entity
+import, Workflow guard, and Audit portability corrections pass the complete
+manifest across TypeScript, Python 3.12/3.13, and Java, with no unsupported
+cases or infrastructure errors. Coverage, mutation, package, and clean-snapshot
+verification pass for the `core-0.9.3` corrective snapshot. See the completed
 [Core 0.9.3 plan](./docs/plans/plan-09.3.md).
 
 ---
@@ -207,7 +206,7 @@ This makes financial behavior portable across languages and more resilient to ch
 
 ## What FinKore Core covers
 
-The current Core 0.9.2 release-candidate snapshot defines:
+The current Core 0.9.3 release-candidate snapshot defines:
 
 | Domain | What becomes explicit |
 | --- | --- |
@@ -338,10 +337,10 @@ See [Developer Tools](./docs/tools/README.md) for details.
 
 ## Project status
 
-FinKore Core 0.9.2 is the corrective release candidate for the frozen Core 0.9 baseline intended to become Core 1.0.
+FinKore Core 0.9.3 is the corrective release candidate for the frozen Core 0.9 baseline intended to become Core 1.0.
 
 TypeScript, Python, and Java implement the following domains and pass the
-complete current manifest. Core 0.9.2 verification passes; the remaining stable
+complete current manifest. Core 0.9.3 verification passes; the remaining stable
 release work is described in the [Core 1.0 plan](./docs/plans/plan-10.md).
 
 - Money
@@ -367,7 +366,7 @@ The release identifiers serve different purposes:
 
 | Identifier | Current value | Meaning |
 | --- | --- | --- |
-| Corrective snapshot tag | `core-0.9.2` | Exact repository state containing the corrections. |
+| Corrective snapshot tag | `core-0.9.3` | Exact repository state containing the corrections. |
 | Core constants, package compatibility metadata, and runner Core label | `0.9-rc` | Frozen language-neutral behavioral baseline. |
 | Implementation package versions | `0.1.0` | Unpublished repository reference artifacts. |
 | Conformance syntax version | `0.1` | Manifest and vector format compatibility. |

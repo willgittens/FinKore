@@ -7,7 +7,7 @@ Workflow guard comparison, actor metadata presence, and Audit value comparison
 now pass the complete 331-vector manifest. The TypeScript coverage and mutation
 gates, critical cross-language probes, isolated package consumers, and clean
 snapshot verification pass. The specification remains the source of financial
-semantics; see the active
+semantics; see the completed
 [Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
 
 This artifact is a repository reference implementation for the 0.9
@@ -15,7 +15,7 @@ release-candidate phase. It is not published to an npm registry. The npm package
 version identifies this implementation artifact; `FINKORE_CORE_VERSION`
 identifies the FinKore Core behavioral baseline it implements.
 
-The `core-0.9.2` repository tag identifies the corrective snapshot.
+The `core-0.9.3` repository tag identifies the corrective snapshot.
 `FINKORE_CORE_VERSION` and package compatibility metadata remain `0.9-rc`;
 the unpublished npm package version remains `0.1.0`.
 
