@@ -82,6 +82,41 @@ class EntityTests(unittest.TestCase):
         self.assertEqual(context.exception.code, "FINKORE_ENTITY_INVALID_IDENTITY")
         self.assertEqual(entity["data"]["amount"], {"amount": "100.00", "currency": "EUR"})
 
+    def test_import_enforces_declared_positive_and_cross_field_validators(self) -> None:
+        valid = {
+            "type": "invoice",
+            "id": "inv-import",
+            "state": "DRAFT",
+            "data": {"amount": {"amount": "1.00", "currency": "EUR"}},
+        }
+        self.assertEqual(import_entity(DEFINITION, {"entity": valid}), {"entity": valid})
+
+        invalid = deepcopy(valid)
+        invalid["data"]["amount"] = {"amount": "-1", "currency": "EUR"}
+        original = deepcopy(invalid)
+        with self.assertRaises(FinKoreError) as context:
+            import_entity(DEFINITION, {"entity": invalid})
+        self.assertEqual(context.exception.code, "FINKORE_ENTITY_VALIDATION_FAILED")
+        self.assertEqual(invalid, original)
+
+        cross_field = deepcopy(DEFINITION)
+        cross_field["mutability"]["DRAFT"] = ["amount", "limit"]
+        cross_field["validation"] = [{"id": "WITHIN_LIMIT", "path": "amount", "otherPath": "limit", "rule": "money-not-greater-than"}]
+        invalid_cross_field = {
+            "type": "invoice",
+            "id": "inv-import-limit",
+            "state": "DRAFT",
+            "data": {
+                "amount": {"amount": "30", "currency": "EUR"},
+                "limit": {"amount": "20", "currency": "EUR"},
+            },
+        }
+        cross_field_original = deepcopy(invalid_cross_field)
+        with self.assertRaises(FinKoreError) as context:
+            import_entity(cross_field, {"entity": invalid_cross_field})
+        self.assertEqual(context.exception.code, "FINKORE_ENTITY_VALIDATION_FAILED")
+        self.assertEqual(invalid_cross_field, cross_field_original)
+
 
 if __name__ == "__main__":
     unittest.main()

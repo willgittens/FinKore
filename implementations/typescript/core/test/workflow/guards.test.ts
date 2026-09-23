@@ -127,6 +127,42 @@ describe('Workflow guards', () => {
     expect(second.transition('APPROVED', { facts }).currentState).toBe('APPROVED')
   })
 
+  it('compares guard facts recursively with JSON type and presence distinctions', () => {
+    const definitionFor = (equals: unknown) => ({
+      states: ['SUBMITTED', 'APPROVED'],
+      initialState: 'SUBMITTED',
+      terminalStates: ['APPROVED'],
+      transitions: [{ source: 'SUBMITTED', target: 'APPROVED', guard: { fact: 'value', equals } }],
+    })
+
+    for (const [equals, value] of [
+      [true, 1],
+      [1, true],
+      [{ nested: [true] }, { nested: [1] }],
+      [['KYC', 'LIMIT'], ['LIMIT', 'KYC']],
+    ] as const) {
+      const workflow = Workflow.create(definitionFor(equals))
+      const facts = { value }
+      expect(() => workflow.transition('APPROVED', { facts })).toThrow(WorkflowGuardRejectedError)
+      expect(workflow.currentState).toBe('SUBMITTED')
+      expect(facts).toEqual({ value })
+    }
+
+    const missing = Workflow.create(definitionFor(null))
+    expect(() => missing.transition('APPROVED', { facts: {} })).toThrow(WorkflowGuardRejectedError)
+    expect(missing.currentState).toBe('SUBMITTED')
+
+    for (const [equals, value] of [
+      [null, null],
+      [{ status: 'CLEAR', detail: { score: 7 } }, { detail: { score: 7 }, status: 'CLEAR' }],
+      [['KYC', { status: 'CLEAR' }], ['KYC', { status: 'CLEAR' }]],
+    ] as const) {
+      const workflow = Workflow.create(definitionFor(equals))
+      workflow.transition('APPROVED', { facts: { value } })
+      expect(workflow.currentState).toBe('APPROVED')
+    }
+  })
+
   it('treats authorization evidence as supplied facts without assuming an authorization model', () => {
     const workflow = Workflow.create({
       states: ['PENDING', 'READY'],

@@ -222,7 +222,7 @@ describe('TypeScript conformance adapter', () => {
       adapter: createTypeScriptConformanceAdapter(),
     }).run({ suites: ['audit'] })
 
-    expect(report.summary).toEqual({ total: 37, passed: 37, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 58, passed: 58, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current Audit relationship vectors', async () => {
@@ -305,12 +305,22 @@ describe('TypeScript conformance adapter', () => {
       'workflow.guard.reject-001',
       'workflow.guard.multiple-pass-001',
       'workflow.guard.multiple-order-invariant-001',
+      'workflow.guard.boolean-expected-number-actual-rejected-001',
+      'workflow.guard.number-expected-boolean-actual-rejected-001',
+      'workflow.guard.missing-fact-not-null-001',
+      'workflow.guard.explicit-null-pass-001',
+      'workflow.guard.object-member-order-pass-001',
+      'workflow.guard.nested-boolean-number-rejected-001',
+      'workflow.guard.array-equal-pass-001',
+      'workflow.guard.array-order-rejected-001',
+      'workflow.guard.multiple-structured-pass-001',
+      'workflow.guard.multiple-rejection-preserves-context-001',
       'workflow.terminal.entry-allowed-001',
       'workflow.terminal.not-inferred-no-outgoing-001',
       'workflow.terminal.transition-rejected-001',
     ] })
 
-    expect(report.summary).toEqual({ total: 20, passed: 20, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 30, passed: 30, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes Workflow versioning, import, and conflict vectors through core Workflow behavior', async () => {
@@ -374,8 +384,12 @@ describe('TypeScript conformance adapter', () => {
       'entity.import.expected-state-conflict-001',
       'entity.import.expected-revision-conflict-001',
       'entity.import.expected-conflict-version-conflict-001',
+      'entity.import.validation-positive-money-valid-001',
+      'entity.import.validation-positive-money-invalid-001',
+      'entity.import.validation-cross-field-valid-001',
+      'entity.import.validation-cross-field-invalid-001',
     ] })
 
-    expect(report.summary).toEqual({ total: 25, passed: 25, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 29, passed: 29, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 })

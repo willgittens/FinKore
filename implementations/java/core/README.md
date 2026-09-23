@@ -2,8 +2,11 @@
 
 This package is the Java implementation track for FinKore Core 0.9 release candidate. It is
 derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
-TypeScript or Python financial implementation code. It passes the complete
-current conformance manifest.
+TypeScript or Python financial implementation code. The current 331-vector
+manifest includes permanent Core 0.9.3 regressions that expose pending Workflow
+null handling and Audit actor/null-presence and declared-Money corrections, so
+this implementation is not yet fully conformant with the expanded suite. See
+the active [Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
 
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to a Maven repository. The Maven

@@ -93,6 +93,52 @@ class WorkflowTests(unittest.TestCase):
             transition_workflow(definition, instance, "SUBMITTED", expected_current_state="SUBMITTED")
         self.assertEqual(context.exception.code, "FINKORE_WORKFLOW_STATE_CONFLICT")
 
+    def test_guard_equality_is_presence_aware_type_sensitive_and_recursive(self) -> None:
+        def guarded(expected: object) -> WorkflowDefinition:
+            return WorkflowDefinition.from_portable(
+                {
+                    "states": ["SUBMITTED", "APPROVED"],
+                    "initialState": "SUBMITTED",
+                    "terminalStates": ["APPROVED"],
+                    "transitions": [
+                        {"source": "SUBMITTED", "target": "APPROVED", "guard": {"fact": "value", "equals": expected}}
+                    ],
+                }
+            )
+
+        for expected, actual in ((True, 1), (1, True), ({"nested": [True]}, {"nested": [1]})):
+            with self.subTest(expected=expected, actual=actual):
+                instance = WorkflowInstance.from_portable({"currentState": "SUBMITTED"})
+                with self.assertRaises(FinKoreError) as context:
+                    transition_workflow(guarded(expected), instance, "APPROVED", {"value": actual})
+                self.assertEqual(context.exception.code, "FINKORE_WORKFLOW_GUARD_REJECTED")
+                self.assertEqual(instance.to_portable(), {"currentState": "SUBMITTED"})
+
+        missing = WorkflowInstance.from_portable({"currentState": "SUBMITTED"})
+        with self.assertRaises(FinKoreError) as context:
+            transition_workflow(guarded(None), missing, "APPROVED", {})
+        self.assertEqual(context.exception.code, "FINKORE_WORKFLOW_GUARD_REJECTED")
+        self.assertEqual(missing.to_portable(), {"currentState": "SUBMITTED"})
+
+        self.assertEqual(
+            transition_workflow(
+                guarded({"status": "CLEAR", "steps": ["KYC", "LIMIT"]}),
+                WorkflowInstance.from_portable({"currentState": "SUBMITTED"}),
+                "APPROVED",
+                {"value": {"steps": ["KYC", "LIMIT"], "status": "CLEAR"}},
+            ).to_portable(),
+            {"currentState": "APPROVED"},
+        )
+        self.assertEqual(
+            transition_workflow(
+                guarded(None),
+                WorkflowInstance.from_portable({"currentState": "SUBMITTED"}),
+                "APPROVED",
+                {"value": None},
+            ).to_portable(),
+            {"currentState": "APPROVED"},
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

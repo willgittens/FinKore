@@ -26,6 +26,13 @@ describe('Audit actors', () => {
     expect('metadata' in serialized).toBe(false)
   })
 
+  it('preserves explicit null actor metadata as distinct from omission', () => {
+    const serialized = AuditActor.from({ id: 'user-7', type: 'user', metadata: null }).toJSON()
+
+    expect(serialized).toEqual({ id: 'user-7', type: 'user', metadata: null })
+    expect('metadata' in serialized).toBe(true)
+  })
+
   it('does not normalize actor identifiers or reject unknown actor types', () => {
     expect(AuditActor.from({ id: 'USER-7', type: 'agent' }).toJSON()).toEqual({ id: 'USER-7', type: 'agent' })
     expect(AuditActor.from({ id: 'user-7', type: 'new-system-kind' }).toJSON()).toEqual({
@@ -45,6 +52,8 @@ describe('Audit actors', () => {
     expect(() => AuditActor.from({ id: 'user-7', type: '' })).toThrow(InvalidAuditActorError)
     expect(() => AuditActor.from({ id: 'user-7', type: 7 })).toThrow(InvalidAuditActorError)
     expect(() => AuditActor.from({ id: 'user-7', displayName: 7 })).toThrow(InvalidAuditActorError)
+    expect(() => AuditActor.from({ id: 'user-7', type: null })).toThrow(InvalidAuditActorError)
+    expect(() => AuditActor.from({ id: 'user-7', displayName: null })).toThrow(InvalidAuditActorError)
   })
 
   it('returns defensive actor copies', () => {

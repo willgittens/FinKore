@@ -65,6 +65,34 @@ describe('Audit changes', () => {
     })
   })
 
+  it('keeps Boolean and numeric ordinary JSON values distinct recursively', () => {
+    for (const change of [
+      { path: 'approved', before: true, after: 1 },
+      { path: 'approved', before: 0, after: false },
+      { path: 'review', before: { checks: [true, { manual: false }] }, after: { checks: [1, { manual: 0 }] } },
+    ]) {
+      expect(AuditChange.from(change).toJSON()).toEqual(change)
+    }
+  })
+
+  it('uses explicit Money declarations for exact domain equality and preserves the declaration', () => {
+    expect(() => AuditChange.from({
+      path: 'amount',
+      valueType: 'MONEY',
+      before: { amount: '10.0', currency: 'EUR' },
+      after: { amount: '10.00', currency: 'EUR' },
+    })).toThrow(InvalidAuditEventError)
+
+    const changed = {
+      path: 'amount',
+      valueType: 'MONEY',
+      before: { amount: '10.00', currency: 'EUR' },
+      after: { amount: '11.00', currency: 'EUR' },
+    }
+    expect(AuditChange.from(changed).toJSON()).toEqual(changed)
+    expect(() => AuditChange.from({ ...changed, before: { amount: 10, currency: 'EUR' } })).toThrow(InvalidAuditEventError)
+  })
+
   it('accepts unequal arrays and records without treating shape differences as equality', () => {
     expect(AuditChange.from({ path: 'tags', before: [], after: ['travel'] }).toJSON()).toEqual({
       path: 'tags',

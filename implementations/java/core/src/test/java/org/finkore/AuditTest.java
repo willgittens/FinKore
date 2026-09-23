@@ -2,6 +2,7 @@
 package org.finkore;
 
 import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /** Minimal stdlib tests for the Java Audit implementation. */
@@ -16,6 +17,9 @@ public final class AuditTest {
     enforcesPortableTimestampProfile();
     redactionPreservesSourceAndAppendsEvidence();
     invalidRelationshipDoesNotCommitSourceEvent();
+    actorOptionalStringsRejectExplicitNull();
+    actorMetadataNullPresenceSurvivesAppendAndRedaction();
+    changeComparisonDistinguishesJsonTypesAndDeclaredMoney();
   }
 
   private static void appendsCompleteEventAndPreservesActorIdentity() {
@@ -140,6 +144,74 @@ public final class AuditTest {
             "type", "CORRECTS",
             "target", Map.of("eventId", "evt-missing", "entity", Map.of("type", "invoice", "id", "inv-10")))))));
     assertEquals(List.of(original), log.events());
+  }
+
+  private static void actorOptionalStringsRejectExplicitNull() {
+    for (String field : List.of("type", "displayName")) {
+      Map<String, Object> actor = new LinkedHashMap<>();
+      actor.put("id", "user-7");
+      actor.put(field, null);
+      Map<String, Object> event = new LinkedHashMap<>();
+      event.put("eventId", "evt-null-" + field);
+      event.put("eventType", "ENTITY_SUBMITTED");
+      event.put("entity", Map.of("type", "expense", "id", "exp-52"));
+      event.put("actor", actor);
+      event.put("occurredAt", "2026-09-01T12:00:00Z");
+      Audit.Log log = Audit.Log.create(List.of());
+      assertError(Audit.ACTOR_INVALID, () -> log.append(event));
+      assertEquals(List.of(), log.events());
+    }
+  }
+
+  private static void actorMetadataNullPresenceSurvivesAppendAndRedaction() {
+    Map<String, Object> actor = new LinkedHashMap<>();
+    actor.put("type", "user");
+    actor.put("id", "user-7");
+    actor.put("metadata", null);
+    Map<String, Object> event = new LinkedHashMap<>();
+    event.put("eventId", "evt-null-metadata");
+    event.put("eventType", "ENTITY_SUBMITTED");
+    event.put("entity", Map.of("type", "expense", "id", "exp-52"));
+    event.put("actor", actor);
+    event.put("occurredAt", "2026-09-01T12:00:00Z");
+
+    Audit.Log appended = Audit.Log.create(List.of());
+    assertEquals(Map.of("history", List.of(event)), appended.append(event).toPortable());
+
+    Audit.Log redacted = Audit.Log.create(List.of(event));
+    Audit.RedactionResult result = redacted.redact(
+        Map.of("id", "null-metadata", "protectedPaths", List.of("actor.metadata"), "authority", "retention-policy"),
+        Map.of(
+            "eventId", "evt-null-metadata-evidence",
+            "eventType", "AUDIT_CONTENT_REDACTED",
+            "entity", Map.of("type", "expense", "id", "exp-52"),
+            "occurredAt", "2026-09-01T13:00:00Z"));
+    assertEquals(Map.of("type", "user", "id", "user-7", "metadata", Map.of("presence", "REDACTED")),
+        ((Map<?, ?>) result.toPortable().get("event")).get("actor"));
+    assertEquals(event, redacted.events().get(0));
+  }
+
+  private static void changeComparisonDistinguishesJsonTypesAndDeclaredMoney() {
+    Map<String, Object> base = Map.of(
+        "eventId", "evt-json-types",
+        "eventType", "ENTITY_FACT_CHANGED",
+        "entity", Map.of("type", "expense", "id", "exp-52"),
+        "occurredAt", "2026-09-01T12:00:00Z",
+        "changes", List.of(Map.of("path", "approved", "before", true, "after", 1L)));
+    assertEquals(Map.of("history", List.of(base)), Audit.Log.create(List.of()).append(base).toPortable());
+
+    Map<String, Object> declaredMoney = Map.of(
+        "path", "amount",
+        "valueType", "MONEY",
+        "before", Map.of("amount", "10.0", "currency", "EUR"),
+        "after", Map.of("amount", "10.00", "currency", "EUR"));
+    Map<String, Object> moneyEvent = Map.of(
+        "eventId", "evt-money-unchanged",
+        "eventType", "ENTITY_AMOUNT_CHANGED",
+        "entity", Map.of("type", "expense", "id", "exp-52"),
+        "occurredAt", "2026-09-01T12:00:00Z",
+        "changes", List.of(declaredMoney));
+    assertError(Audit.INVALID_EVENT, () -> Audit.Log.create(List.of()).append(moneyEvent));
   }
 
   private static Map<String, Object> submittedEvent() {

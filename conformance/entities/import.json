@@ -311,6 +311,172 @@
       },
       "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
       "guardsAgainst": ["duplicate-business-revision-accepted", "partial-import-returned"]
+    },
+    {
+      "id": "entity.import.validation-positive-money-valid-001",
+      "spec": "entities/import",
+      "requirements": ["ENTITY-REVISION-003", "ENTITY-REVISION-004", "ENTITY-IMPORT-002", "ENTITY-VALIDATION-001"],
+      "description": "Imports an Entity whose Money value satisfies its declared positive-money validator.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": { "states": ["DRAFT"], "initialState": "DRAFT", "terminalStates": [], "transitions": [] },
+          "mutability": { "DRAFT": ["amount"] },
+          "validation": [{ "id": "AMOUNT_POSITIVE", "path": "amount", "rule": "positive-money" }]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-valid-positive",
+            "state": "DRAFT",
+            "data": { "amount": { "amount": "1.00", "currency": "EUR" } }
+          },
+          "historicalRevisions": [{ "type": "invoice", "id": "inv-valid-positive", "revision": "legacy-r1" }]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-valid-positive",
+            "state": "DRAFT",
+            "data": { "amount": { "amount": "1.00", "currency": "EUR" } }
+          },
+          "historicalRevisions": [{ "type": "invoice", "id": "inv-valid-positive", "revision": "legacy-r1", "current": false }]
+        }
+      },
+      "tags": ["positive", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["import-validator-rejects-every-value"]
+    },
+    {
+      "id": "entity.import.validation-positive-money-invalid-001",
+      "spec": "entities/import",
+      "requirements": ["ENTITY-IMPORT-002", "ENTITY-IMPORT-008", "ENTITY-VALIDATION-001", "ENTITY-VALIDATION-004", "ENTITY-VALIDATION-006"],
+      "description": "Rejects an imported negative Money value under its declared positive-money validator without returning a partial import.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": { "states": ["DRAFT"], "initialState": "DRAFT", "terminalStates": [], "transitions": [] },
+          "mutability": { "DRAFT": ["amount"] },
+          "validation": [{ "id": "AMOUNT_POSITIVE", "path": "amount", "rule": "positive-money" }]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-invalid-negative",
+            "state": "DRAFT",
+            "data": { "amount": { "amount": "-1", "currency": "EUR" } }
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_ENTITY_VALIDATION_FAILED" },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-invalid-negative",
+            "state": "DRAFT",
+            "data": { "amount": { "amount": "-1", "currency": "EUR" } }
+          }
+        }
+      },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["import-validator-bypassed", "invalid-import-returns-partial-result", "import-source-mutated"]
+    },
+    {
+      "id": "entity.import.validation-cross-field-valid-001",
+      "spec": "entities/import",
+      "requirements": ["ENTITY-REVISION-003", "ENTITY-REVISION-004", "ENTITY-IMPORT-002", "ENTITY-VALIDATION-001", "ENTITY-VALIDATION-003"],
+      "description": "Imports an Entity whose complete amount and limit observation satisfies its declared cross-field Money validator.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": { "states": ["DRAFT"], "initialState": "DRAFT", "terminalStates": [], "transitions": [] },
+          "mutability": { "DRAFT": ["amount", "limit"] },
+          "validation": [{ "id": "WITHIN_LIMIT", "path": "amount", "otherPath": "limit", "rule": "money-not-greater-than" }]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-valid-limit",
+            "state": "DRAFT",
+            "data": {
+              "amount": { "amount": "20.00", "currency": "EUR" },
+              "limit": { "amount": "20.0", "currency": "EUR" }
+            }
+          },
+          "historicalRevisions": [{ "type": "invoice", "id": "inv-valid-limit", "revision": "legacy-r1" }]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-valid-limit",
+            "state": "DRAFT",
+            "data": {
+              "amount": { "amount": "20.00", "currency": "EUR" },
+              "limit": { "amount": "20.0", "currency": "EUR" }
+            }
+          },
+          "historicalRevisions": [{ "type": "invoice", "id": "inv-valid-limit", "revision": "legacy-r1", "current": false }]
+        }
+      },
+      "tags": ["positive", "boundary", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["import-cross-field-validator-rejects-equal-money"]
+    },
+    {
+      "id": "entity.import.validation-cross-field-invalid-001",
+      "spec": "entities/import",
+      "requirements": ["ENTITY-IMPORT-002", "ENTITY-IMPORT-008", "ENTITY-VALIDATION-001", "ENTITY-VALIDATION-003", "ENTITY-VALIDATION-004", "ENTITY-VALIDATION-006"],
+      "description": "Rejects an imported complete observation whose amount exceeds its declared limit without returning a partial import.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": { "states": ["DRAFT"], "initialState": "DRAFT", "terminalStates": [], "transitions": [] },
+          "mutability": { "DRAFT": ["amount", "limit"] },
+          "validation": [{ "id": "WITHIN_LIMIT", "path": "amount", "otherPath": "limit", "rule": "money-not-greater-than" }]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-invalid-limit",
+            "state": "DRAFT",
+            "data": {
+              "amount": { "amount": "30", "currency": "EUR" },
+              "limit": { "amount": "20", "currency": "EUR" }
+            }
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_ENTITY_VALIDATION_FAILED" },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-invalid-limit",
+            "state": "DRAFT",
+            "data": {
+              "amount": { "amount": "30", "currency": "EUR" },
+              "limit": { "amount": "20", "currency": "EUR" }
+            }
+          }
+        }
+      },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["import-cross-field-validator-bypassed", "invalid-import-returns-partial-result", "import-source-mutated"]
     }
   ]
 }

@@ -1107,6 +1107,269 @@
         "state-identifier-normalized",
         "invalid-state-mutates-current-state"
       ]
+    },
+    {
+      "id": "workflow.guard.boolean-expected-number-actual-rejected-001",
+      "spec": "workflow/guards",
+      "requirements": ["WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-GUARD-003"],
+      "description": "Rejects numeric one when the declared guard expects Boolean true without coercion or state mutation.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["SUBMITTED", "APPROVED"],
+          "initialState": "SUBMITTED",
+          "terminalStates": ["APPROVED"],
+          "transitions": [{ "source": "SUBMITTED", "target": "APPROVED", "guard": { "fact": "ready", "equals": true } }]
+        },
+        "instance": { "currentState": "SUBMITTED" },
+        "target": "APPROVED",
+        "facts": { "ready": 1 }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_GUARD_REJECTED" },
+        "observations": { "currentState": "SUBMITTED", "facts": { "ready": 1 } }
+      },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["guard-boolean-number-coercion", "failed-guard-mutates-state"]
+    },
+    {
+      "id": "workflow.guard.number-expected-boolean-actual-rejected-001",
+      "spec": "workflow/guards",
+      "requirements": ["WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-GUARD-003"],
+      "description": "Rejects Boolean true when the declared guard expects numeric one without coercion or state mutation.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["SUBMITTED", "APPROVED"],
+          "initialState": "SUBMITTED",
+          "terminalStates": ["APPROVED"],
+          "transitions": [{ "source": "SUBMITTED", "target": "APPROVED", "guard": { "fact": "ready", "equals": 1 } }]
+        },
+        "instance": { "currentState": "SUBMITTED" },
+        "target": "APPROVED",
+        "facts": { "ready": true }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_GUARD_REJECTED" },
+        "observations": { "currentState": "SUBMITTED", "facts": { "ready": true } }
+      },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["guard-number-boolean-coercion", "failed-guard-mutates-state"]
+    },
+    {
+      "id": "workflow.guard.missing-fact-not-null-001",
+      "spec": "workflow/guards",
+      "requirements": ["WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-GUARD-003"],
+      "description": "Keeps a missing fact distinct from explicit null and rejects the guarded transition without mutation.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["SUBMITTED", "APPROVED"],
+          "initialState": "SUBMITTED",
+          "terminalStates": ["APPROVED"],
+          "transitions": [{ "source": "SUBMITTED", "target": "APPROVED", "guard": { "fact": "reviewNote", "equals": null } }]
+        },
+        "instance": { "currentState": "SUBMITTED" },
+        "target": "APPROVED",
+        "facts": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_GUARD_REJECTED" },
+        "observations": { "currentState": "SUBMITTED" }
+      },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["missing-fact-collapsed-to-null", "failed-guard-mutates-state"]
+    },
+    {
+      "id": "workflow.guard.explicit-null-pass-001",
+      "spec": "workflow/guards",
+      "requirements": ["WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-TRANSITION-004"],
+      "description": "Allows a guarded transition when the selected fact and declared expected value are both explicit null.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["SUBMITTED", "APPROVED"],
+          "initialState": "SUBMITTED",
+          "terminalStates": ["APPROVED"],
+          "transitions": [{ "source": "SUBMITTED", "target": "APPROVED", "guard": { "fact": "reviewNote", "equals": null } }]
+        },
+        "instance": { "currentState": "SUBMITTED" },
+        "target": "APPROVED",
+        "facts": { "reviewNote": null }
+      },
+      "expected": { "status": "success", "value": { "currentState": "APPROVED" } },
+      "tags": ["positive", "boundary", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["explicit-null-fact-crashes", "explicit-null-treated-as-missing"]
+    },
+    {
+      "id": "workflow.guard.object-member-order-pass-001",
+      "spec": "workflow/guards",
+      "requirements": ["WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-TRANSITION-004", "SPEC-JSON-001"],
+      "description": "Allows structurally equal nested object facts independently supplied with different member order.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["SUBMITTED", "APPROVED"],
+          "initialState": "SUBMITTED",
+          "terminalStates": ["APPROVED"],
+          "transitions": [{
+            "source": "SUBMITTED",
+            "target": "APPROVED",
+            "guard": { "fact": "review", "equals": { "status": "CLEAR", "detail": { "score": 7, "manual": false } } }
+          }]
+        },
+        "instance": { "currentState": "SUBMITTED" },
+        "target": "APPROVED",
+        "facts": { "review": { "detail": { "manual": false, "score": 7 }, "status": "CLEAR" } }
+      },
+      "expected": { "status": "success", "value": { "currentState": "APPROVED" } },
+      "tags": ["positive", "boundary", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["guard-object-identity-comparison", "guard-object-member-order-significant"]
+    },
+    {
+      "id": "workflow.guard.nested-boolean-number-rejected-001",
+      "spec": "workflow/guards",
+      "requirements": ["WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-GUARD-003"],
+      "description": "Rejects a nested numeric value when the corresponding declared nested value is Boolean.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["SUBMITTED", "APPROVED"],
+          "initialState": "SUBMITTED",
+          "terminalStates": ["APPROVED"],
+          "transitions": [{ "source": "SUBMITTED", "target": "APPROVED", "guard": { "fact": "review", "equals": { "checks": [true, { "manual": false }] } } }]
+        },
+        "instance": { "currentState": "SUBMITTED" },
+        "target": "APPROVED",
+        "facts": { "review": { "checks": [1, { "manual": 0 }] } }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_GUARD_REJECTED" },
+        "observations": { "currentState": "SUBMITTED", "facts": { "review": { "checks": [1, { "manual": 0 }] } } }
+      },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["nested-guard-boolean-number-coercion", "failed-guard-mutates-state"]
+    },
+    {
+      "id": "workflow.guard.array-equal-pass-001",
+      "spec": "workflow/guards",
+      "requirements": ["WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-TRANSITION-004"],
+      "description": "Allows independently supplied arrays when their recursively compared elements and order are equal.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["SUBMITTED", "APPROVED"],
+          "initialState": "SUBMITTED",
+          "terminalStates": ["APPROVED"],
+          "transitions": [{ "source": "SUBMITTED", "target": "APPROVED", "guard": { "fact": "steps", "equals": ["KYC", { "status": "CLEAR" }] } }]
+        },
+        "instance": { "currentState": "SUBMITTED" },
+        "target": "APPROVED",
+        "facts": { "steps": ["KYC", { "status": "CLEAR" }] }
+      },
+      "expected": { "status": "success", "value": { "currentState": "APPROVED" } },
+      "tags": ["positive", "boundary", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["guard-array-identity-comparison"]
+    },
+    {
+      "id": "workflow.guard.array-order-rejected-001",
+      "spec": "workflow/guards",
+      "requirements": ["WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-GUARD-003"],
+      "description": "Rejects a structurally similar array fact when its element order differs.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["SUBMITTED", "APPROVED"],
+          "initialState": "SUBMITTED",
+          "terminalStates": ["APPROVED"],
+          "transitions": [{ "source": "SUBMITTED", "target": "APPROVED", "guard": { "fact": "steps", "equals": ["KYC", "LIMIT"] } }]
+        },
+        "instance": { "currentState": "SUBMITTED" },
+        "target": "APPROVED",
+        "facts": { "steps": ["LIMIT", "KYC"] }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_GUARD_REJECTED" },
+        "observations": { "currentState": "SUBMITTED", "facts": { "steps": ["LIMIT", "KYC"] } }
+      },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["guard-array-order-ignored", "failed-guard-mutates-state"]
+    },
+    {
+      "id": "workflow.guard.multiple-structured-pass-001",
+      "spec": "workflow/guards",
+      "requirements": ["WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-GUARD-006", "WORKFLOW-TRANSITION-004"],
+      "description": "Allows a transition when multiple null and structured equality guards all pass.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": ["SUBMITTED", "APPROVED"],
+          "initialState": "SUBMITTED",
+          "terminalStates": ["APPROVED"],
+          "transitions": [{
+            "source": "SUBMITTED",
+            "target": "APPROVED",
+            "guards": [
+              { "fact": "reviewNote", "equals": null },
+              { "fact": "review", "equals": { "status": "CLEAR", "levels": [1, 2] } }
+            ]
+          }]
+        },
+        "instance": { "currentState": "SUBMITTED" },
+        "target": "APPROVED",
+        "facts": { "review": { "levels": [1, 2], "status": "CLEAR" }, "reviewNote": null }
+      },
+      "expected": { "status": "success", "value": { "currentState": "APPROVED" } },
+      "tags": ["positive", "boundary", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["only-first-structured-guard-evaluated", "guard-null-crashes", "guard-object-identity-comparison"]
+    },
+    {
+      "id": "workflow.guard.multiple-rejection-preserves-context-001",
+      "spec": "workflow/guards",
+      "requirements": ["WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-GUARD-003", "WORKFLOW-GUARD-006", "WORKFLOW-TRANSITION-006"],
+      "description": "Rejects one unequal guard among multiple guards while preserving version binding, revision, current state, and supplied facts.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "3",
+          "states": ["SUBMITTED", "APPROVED"],
+          "initialState": "SUBMITTED",
+          "terminalStates": ["APPROVED"],
+          "transitions": [{
+            "source": "SUBMITTED",
+            "target": "APPROVED",
+            "guards": [
+              { "fact": "review", "equals": { "status": "CLEAR" } },
+              { "fact": "steps", "equals": ["KYC", "LIMIT"] }
+            ]
+          }]
+        },
+        "instance": {
+          "currentState": "SUBMITTED",
+          "binding": { "definitionIdentity": "invoice-approval", "definitionVersionIdentity": "3" },
+          "revision": "wf-rev:0042"
+        },
+        "target": "APPROVED",
+        "facts": { "review": { "status": "CLEAR" }, "steps": ["LIMIT", "KYC"] }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_WORKFLOW_GUARD_REJECTED" },
+        "observations": {
+          "currentState": "SUBMITTED",
+          "binding": { "definitionIdentity": "invoice-approval", "definitionVersionIdentity": "3" },
+          "revision": "wf-rev:0042",
+          "facts": { "review": { "status": "CLEAR" }, "steps": ["LIMIT", "KYC"] }
+        }
+      },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["only-first-guard-evaluated", "failed-guard-mutates-context", "guard-array-order-ignored"]
     }
   ]
 }

@@ -17,6 +17,7 @@ public final class EntitiesTest {
     validationFailureReportsFindings();
     crossFieldValidationUsesExactMoneyOrdering();
     importRejectsDuplicateRevisionObservations();
+    importEnforcesDeclaredValidators();
   }
 
   private static void createPreservesOpaqueIdentityAndInitialState() {
@@ -70,6 +71,24 @@ public final class EntitiesTest {
             "currentRevision", "business-rev-2",
             "historicalRevisions", List.of("business-rev-2"))));
     assertEquals("initial", ((Map<?, ?>) entity.get("data")).get("memo"));
+  }
+
+  private static void importEnforcesDeclaredValidators() {
+    Map<String, Object> valid = Map.of(
+        "type", "invoice",
+        "id", "inv-import",
+        "state", "DRAFT",
+        "data", Map.of("amount", Map.of("amount", "1.00", "currency", "EUR")));
+    assertEquals(Map.of("entity", valid), Entities.importEntity(definitionWithValidation(), Map.of("entity", valid)));
+
+    Map<String, Object> invalid = Map.of(
+        "type", "invoice",
+        "id", "inv-import-invalid",
+        "state", "DRAFT",
+        "data", Map.of("amount", Map.of("amount", "-1", "currency", "EUR")));
+    assertError(Entities.VALIDATION_FAILED,
+        () -> Entities.importEntity(definitionWithValidation(), Map.of("entity", invalid)));
+    assertEquals(Map.of("amount", Map.of("amount", "-1", "currency", "EUR")), invalid.get("data"));
   }
 
   private static void crossFieldValidationUsesExactMoneyOrdering() {

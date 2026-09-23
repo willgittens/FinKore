@@ -1707,6 +1707,565 @@
         "failed-redaction-partially-mutates-history",
         "redaction-error-code-changed"
       ]
+    },
+    {
+      "id": "audit.actor.empty-display-name-001",
+      "spec": "audit/actors",
+      "requirements": ["AUDIT-ACTOR-009", "AUDIT-ERROR-001"],
+      "description": "Rejects an explicitly supplied empty actor display name and preserves empty history.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-empty-display",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "id": "user-7", "displayName": "" },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }
+      },
+      "expected": { "status": "error", "error": { "code": "FINKORE_AUDIT_ACTOR_INVALID" }, "observations": { "history": [] } },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["empty-actor-display-name-accepted", "invalid-actor-partially-appended"]
+    },
+    {
+      "id": "audit.actor.numeric-display-name-001",
+      "spec": "audit/actors",
+      "requirements": ["AUDIT-ACTOR-009", "AUDIT-ERROR-001"],
+      "description": "Rejects an explicitly supplied numeric actor display name and preserves empty history.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-numeric-display",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "id": "user-7", "displayName": 7 },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }
+      },
+      "expected": { "status": "error", "error": { "code": "FINKORE_AUDIT_ACTOR_INVALID" }, "observations": { "history": [] } },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["numeric-actor-display-name-accepted", "invalid-actor-partially-appended"]
+    },
+    {
+      "id": "audit.actor.null-display-name-001",
+      "spec": "audit/actors",
+      "requirements": ["AUDIT-ACTOR-009", "AUDIT-ERROR-001"],
+      "description": "Rejects an explicitly supplied null actor display name and preserves empty history.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-null-display",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "id": "user-7", "displayName": null },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }
+      },
+      "expected": { "status": "error", "error": { "code": "FINKORE_AUDIT_ACTOR_INVALID" }, "observations": { "history": [] } },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["null-actor-display-name-treated-as-omitted", "invalid-actor-partially-appended"]
+    },
+    {
+      "id": "audit.actor.null-type-001",
+      "spec": "audit/actors",
+      "requirements": ["AUDIT-ACTOR-009", "AUDIT-ERROR-001"],
+      "description": "Rejects an explicitly supplied null actor type and preserves empty history.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-null-type",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "id": "user-7", "type": null },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }
+      },
+      "expected": { "status": "error", "error": { "code": "FINKORE_AUDIT_ACTOR_INVALID" }, "observations": { "history": [] } },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["null-actor-type-treated-as-omitted", "invalid-actor-partially-appended"]
+    },
+    {
+      "id": "audit.actor.invalid-history-display-name-precedence-001",
+      "spec": "audit/errors",
+      "requirements": ["AUDIT-ACTOR-009", "AUDIT-ERROR-001", "AUDIT-ERROR-004"],
+      "description": "Rejects malformed actor attribution in supplied history before considering the valid candidate.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [{
+          "eventId": "evt-invalid-history-actor",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "id": "user-7", "displayName": "" },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }],
+        "event": {
+          "eventId": "evt-candidate-after-history",
+          "eventType": "ENTITY_APPROVED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "id": "user-8", "type": "user", "displayName": "Valid" },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": { "status": "error", "error": { "code": "FINKORE_AUDIT_ACTOR_INVALID" } },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["invalid-history-actor-skipped", "candidate-validated-before-history"]
+    },
+    {
+      "id": "audit.actor.invalid-display-name-precedes-duplicate-001",
+      "spec": "audit/errors",
+      "requirements": ["AUDIT-ACTOR-009", "AUDIT-ERROR-001", "AUDIT-ERROR-004"],
+      "description": "Selects invalid actor attribution before duplicate event identity and preserves committed history.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [{
+          "eventId": "evt-actor-duplicate",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }],
+        "event": {
+          "eventId": "evt-actor-duplicate",
+          "eventType": "ENTITY_APPROVED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "id": "user-7", "displayName": "" },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_AUDIT_ACTOR_INVALID" },
+        "observations": { "history": [{
+          "eventId": "evt-actor-duplicate",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }] }
+      },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["duplicate-selected-before-invalid-actor", "invalid-actor-partially-appended"]
+    },
+    {
+      "id": "audit.actor.metadata-null-preserved-001",
+      "spec": "audit/actors",
+      "requirements": ["AUDIT-ACTOR-010", "SPEC-NULLABILITY-001"],
+      "description": "Preserves an explicitly supplied null actor metadata member as distinct from omission.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-null-metadata",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "type": "user", "id": "user-7", "metadata": null },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }
+      },
+      "expected": { "status": "success", "value": { "history": [{
+        "eventId": "evt-null-metadata",
+        "eventType": "ENTITY_SUBMITTED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "actor": { "type": "user", "id": "user-7", "metadata": null },
+        "occurredAt": "2026-09-01T12:00:00Z"
+      }] } },
+      "tags": ["positive", "boundary", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["null-actor-metadata-collapsed-to-omission"]
+    },
+    {
+      "id": "audit.redaction.actor-metadata-null-001",
+      "spec": "audit/actors",
+      "requirements": ["AUDIT-ACTOR-006", "AUDIT-ACTOR-010", "AUDIT-REDACTION-002", "AUDIT-REDACTION-003", "AUDIT-REDACTION-006", "AUDIT-REDACTION-007"],
+      "description": "Redacts explicitly supplied null actor metadata while preserving attribution, source history, and redaction evidence.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [{
+          "eventId": "evt-null-metadata-redact",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "type": "user", "id": "user-7", "metadata": null },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }],
+        "policy": { "id": "null-metadata-policy", "protectedPaths": ["actor.metadata"], "authority": "retention-policy" },
+        "redactionEvent": {
+          "eventId": "evt-null-metadata-evidence",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "type": "system", "id": "retention-service" },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "event": {
+            "eventId": "evt-null-metadata-redact",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": { "type": "expense", "id": "exp-52" },
+            "actor": { "type": "user", "id": "user-7", "metadata": { "presence": "REDACTED" } },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          },
+          "evidenceEvent": {
+            "eventId": "evt-null-metadata-evidence",
+            "eventType": "AUDIT_CONTENT_REDACTED",
+            "entity": { "type": "expense", "id": "exp-52" },
+            "actor": { "type": "system", "id": "retention-service" },
+            "occurredAt": "2026-09-01T13:00:00Z"
+          }
+        },
+        "observations": { "history": [
+          {
+            "eventId": "evt-null-metadata-redact",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": { "type": "expense", "id": "exp-52" },
+            "actor": { "type": "user", "id": "user-7", "metadata": null },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "eventId": "evt-null-metadata-evidence",
+            "eventType": "AUDIT_CONTENT_REDACTED",
+            "entity": { "type": "expense", "id": "exp-52" },
+            "actor": { "type": "system", "id": "retention-service" },
+            "occurredAt": "2026-09-01T13:00:00Z"
+          }
+        ] }
+      },
+      "tags": ["positive", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["null-actor-metadata-lost", "null-actor-metadata-not-redactable", "source-history-mutated-by-redaction"]
+    },
+    {
+      "id": "audit.redaction.actor-metadata-omitted-001",
+      "spec": "audit/actors",
+      "requirements": ["AUDIT-ACTOR-006", "AUDIT-ACTOR-010", "AUDIT-REDACTION-002", "AUDIT-ERROR-001"],
+      "description": "Rejects actor metadata redaction when metadata was omitted and preserves source history without evidence append.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [{
+          "eventId": "evt-omitted-metadata",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "type": "user", "id": "user-7" },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }],
+        "policy": { "id": "omitted-metadata-policy", "protectedPaths": ["actor.metadata"], "authority": "retention-policy" },
+        "redactionEvent": {
+          "eventId": "evt-omitted-metadata-evidence",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": { "code": "FINKORE_AUDIT_REDACTION_INVALID" },
+        "observations": { "history": [{
+          "eventId": "evt-omitted-metadata",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": { "type": "expense", "id": "exp-52" },
+          "actor": { "type": "user", "id": "user-7" },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }] }
+      },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["omitted-actor-metadata-redacted", "failed-redaction-appends-evidence"]
+    },
+    {
+      "id": "audit.change.boolean-to-number-distinct-001",
+      "spec": "audit/changes",
+      "requirements": ["AUDIT-CHANGE-005", "AUDIT-CHANGE-008"],
+      "description": "Records Boolean true to numeric one as an actual ordinary JSON value change.",
+      "operation": "finkore.audit.append",
+      "input": { "history": [], "event": {
+        "eventId": "evt-boolean-to-number",
+        "eventType": "ENTITY_FACT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{ "path": "approved", "before": true, "after": 1 }]
+      } },
+      "expected": { "status": "success", "value": { "history": [{
+        "eventId": "evt-boolean-to-number",
+        "eventType": "ENTITY_FACT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{ "path": "approved", "before": true, "after": 1 }]
+      }] } },
+      "tags": ["positive", "boundary", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["audit-boolean-number-coercion"]
+    },
+    {
+      "id": "audit.change.number-to-boolean-distinct-001",
+      "spec": "audit/changes",
+      "requirements": ["AUDIT-CHANGE-005", "AUDIT-CHANGE-008"],
+      "description": "Records numeric zero to Boolean false as an actual ordinary JSON value change.",
+      "operation": "finkore.audit.append",
+      "input": { "history": [], "event": {
+        "eventId": "evt-number-to-boolean",
+        "eventType": "ENTITY_FACT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{ "path": "approved", "before": 0, "after": false }]
+      } },
+      "expected": { "status": "success", "value": { "history": [{
+        "eventId": "evt-number-to-boolean",
+        "eventType": "ENTITY_FACT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{ "path": "approved", "before": 0, "after": false }]
+      }] } },
+      "tags": ["positive", "boundary", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["audit-number-boolean-coercion"]
+    },
+    {
+      "id": "audit.change.nested-boolean-number-distinct-001",
+      "spec": "audit/changes",
+      "requirements": ["AUDIT-CHANGE-005", "AUDIT-CHANGE-008"],
+      "description": "Records recursively nested Boolean and numeric differences as an actual ordinary JSON change.",
+      "operation": "finkore.audit.append",
+      "input": { "history": [], "event": {
+        "eventId": "evt-nested-boolean-number",
+        "eventType": "ENTITY_FACT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{
+          "path": "review",
+          "before": { "checks": [true, { "manual": false }] },
+          "after": { "checks": [1, { "manual": 0 }] }
+        }]
+      } },
+      "expected": { "status": "success", "value": { "history": [{
+        "eventId": "evt-nested-boolean-number",
+        "eventType": "ENTITY_FACT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{
+          "path": "review",
+          "before": { "checks": [true, { "manual": false }] },
+          "after": { "checks": [1, { "manual": 0 }] }
+        }]
+      }] } },
+      "tags": ["positive", "boundary", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["nested-audit-boolean-number-coercion"]
+    },
+    {
+      "id": "audit.change.unchanged-boolean-rejected-001",
+      "spec": "audit/changes",
+      "requirements": ["AUDIT-CHANGE-005", "AUDIT-CHANGE-008", "AUDIT-ERROR-001"],
+      "description": "Rejects an ordinary JSON Change that claims equal Boolean values changed.",
+      "operation": "finkore.audit.append",
+      "input": { "history": [], "event": {
+        "eventId": "evt-unchanged-boolean",
+        "eventType": "ENTITY_FACT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{ "path": "approved", "before": false, "after": false }]
+      } },
+      "expected": { "status": "error", "error": { "code": "FINKORE_AUDIT_INVALID_EVENT" }, "observations": { "history": [] } },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["unchanged-boolean-accepted", "invalid-change-partially-appended"]
+    },
+    {
+      "id": "audit.change.object-member-order-unchanged-001",
+      "spec": "audit/changes",
+      "requirements": ["AUDIT-CHANGE-005", "AUDIT-CHANGE-008", "AUDIT-ERROR-001", "SPEC-JSON-001"],
+      "description": "Rejects structurally equal ordinary JSON objects as unchanged despite different member order.",
+      "operation": "finkore.audit.append",
+      "input": { "history": [], "event": {
+        "eventId": "evt-object-order-unchanged",
+        "eventType": "ENTITY_FACT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{
+          "path": "review",
+          "before": { "status": "CLEAR", "detail": { "score": 7, "manual": false } },
+          "after": { "detail": { "manual": false, "score": 7 }, "status": "CLEAR" }
+        }]
+      } },
+      "expected": { "status": "error", "error": { "code": "FINKORE_AUDIT_INVALID_EVENT" }, "observations": { "history": [] } },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["audit-object-member-order-significant", "invalid-change-partially-appended"]
+    },
+    {
+      "id": "audit.change.array-order-unchanged-001",
+      "spec": "audit/changes",
+      "requirements": ["AUDIT-CHANGE-005", "AUDIT-CHANGE-008", "AUDIT-ERROR-001"],
+      "description": "Rejects recursively equal ordered arrays as an unchanged ordinary JSON value.",
+      "operation": "finkore.audit.append",
+      "input": { "history": [], "event": {
+        "eventId": "evt-array-order-unchanged",
+        "eventType": "ENTITY_FACT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{ "path": "steps", "before": ["KYC", { "status": "CLEAR" }], "after": ["KYC", { "status": "CLEAR" }] }]
+      } },
+      "expected": { "status": "error", "error": { "code": "FINKORE_AUDIT_INVALID_EVENT" }, "observations": { "history": [] } },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["unchanged-array-accepted", "invalid-change-partially-appended"]
+    },
+    {
+      "id": "audit.change.array-reordering-changed-001",
+      "spec": "audit/changes",
+      "requirements": ["AUDIT-CHANGE-005", "AUDIT-CHANGE-008"],
+      "description": "Records arrays with the same members in a different order as an actual ordinary JSON change.",
+      "operation": "finkore.audit.append",
+      "input": { "history": [], "event": {
+        "eventId": "evt-array-reordered",
+        "eventType": "ENTITY_FACT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{ "path": "steps", "before": ["KYC", "LIMIT"], "after": ["LIMIT", "KYC"] }]
+      } },
+      "expected": { "status": "success", "value": { "history": [{
+        "eventId": "evt-array-reordered",
+        "eventType": "ENTITY_FACT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{ "path": "steps", "before": ["KYC", "LIMIT"], "after": ["LIMIT", "KYC"] }]
+      }] } },
+      "tags": ["positive", "boundary", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["audit-array-order-ignored"]
+    },
+    {
+      "id": "audit.change.money-shaped-ordinary-json-001",
+      "spec": "audit/changes",
+      "requirements": ["AUDIT-CHANGE-005", "AUDIT-CHANGE-008"],
+      "description": "Keeps undeclared Money-shaped objects under ordinary JSON equality instead of inferring Money semantics.",
+      "operation": "finkore.audit.append",
+      "input": { "history": [], "event": {
+        "eventId": "evt-money-shaped-json",
+        "eventType": "ENTITY_AMOUNT_TEXT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{
+          "path": "amountDisplay",
+          "before": { "amount": "10.0", "currency": "EUR" },
+          "after": { "amount": "10.00", "currency": "EUR" }
+        }]
+      } },
+      "expected": { "status": "success", "value": { "history": [{
+        "eventId": "evt-money-shaped-json",
+        "eventType": "ENTITY_AMOUNT_TEXT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{
+          "path": "amountDisplay",
+          "before": { "amount": "10.0", "currency": "EUR" },
+          "after": { "amount": "10.00", "currency": "EUR" }
+        }]
+      }] } },
+      "tags": ["positive", "boundary", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["money-semantics-inferred-from-object-shape"]
+    },
+    {
+      "id": "audit.change.money-trailing-zero-unchanged-001",
+      "spec": "audit/changes",
+      "requirements": ["AUDIT-CHANGE-004", "AUDIT-CHANGE-005", "AUDIT-CHANGE-009", "AUDIT-ERROR-001", "MONEY-REPRESENTATION-005", "MONEY-COMPARISON-002"],
+      "description": "Rejects an explicitly declared Money Change whose exact amount differs only by insignificant trailing zeros.",
+      "operation": "finkore.audit.append",
+      "input": { "history": [], "event": {
+        "eventId": "evt-money-trailing-zero",
+        "eventType": "ENTITY_AMOUNT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{
+          "path": "amount",
+          "valueType": "MONEY",
+          "before": { "amount": "10.0", "currency": "EUR" },
+          "after": { "amount": "10.00", "currency": "EUR" }
+        }]
+      } },
+      "expected": { "status": "error", "error": { "code": "FINKORE_AUDIT_INVALID_EVENT" }, "observations": { "history": [] } },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["declared-money-representation-equality", "invalid-change-partially-appended"]
+    },
+    {
+      "id": "audit.change.money-amount-changed-001",
+      "spec": "audit/changes",
+      "requirements": ["AUDIT-CHANGE-004", "AUDIT-CHANGE-005", "AUDIT-CHANGE-009"],
+      "description": "Records an explicitly declared Money amount change and preserves its domain type declaration.",
+      "operation": "finkore.audit.append",
+      "input": { "history": [], "event": {
+        "eventId": "evt-money-amount-changed",
+        "eventType": "ENTITY_AMOUNT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{
+          "path": "amount",
+          "valueType": "MONEY",
+          "before": { "amount": "10.00", "currency": "EUR" },
+          "after": { "amount": "11.00", "currency": "EUR" }
+        }]
+      } },
+      "expected": { "status": "success", "value": { "history": [{
+        "eventId": "evt-money-amount-changed",
+        "eventType": "ENTITY_AMOUNT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{
+          "path": "amount",
+          "valueType": "MONEY",
+          "before": { "amount": "10.00", "currency": "EUR" },
+          "after": { "amount": "11.00", "currency": "EUR" }
+        }]
+      }] } },
+      "tags": ["positive", "boundary", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["declared-money-amount-change-rejected", "money-type-declaration-dropped"]
+    },
+    {
+      "id": "audit.change.money-currency-changed-001",
+      "spec": "audit/changes",
+      "requirements": ["AUDIT-CHANGE-004", "AUDIT-CHANGE-005", "AUDIT-CHANGE-009"],
+      "description": "Records an explicitly declared Money currency change without mapping it to a comparison-operation currency mismatch.",
+      "operation": "finkore.audit.append",
+      "input": { "history": [], "event": {
+        "eventId": "evt-money-currency-changed",
+        "eventType": "ENTITY_AMOUNT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{
+          "path": "amount",
+          "valueType": "MONEY",
+          "before": { "amount": "10.00", "currency": "EUR" },
+          "after": { "amount": "10.00", "currency": "USD" }
+        }]
+      } },
+      "expected": { "status": "success", "value": { "history": [{
+        "eventId": "evt-money-currency-changed",
+        "eventType": "ENTITY_AMOUNT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{
+          "path": "amount",
+          "valueType": "MONEY",
+          "before": { "amount": "10.00", "currency": "EUR" },
+          "after": { "amount": "10.00", "currency": "USD" }
+        }]
+      }] } },
+      "tags": ["positive", "boundary", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["audit-money-currency-change-reported-as-mismatch", "money-type-declaration-dropped"]
+    },
+    {
+      "id": "audit.change.money-malformed-declared-value-001",
+      "spec": "audit/changes",
+      "requirements": ["AUDIT-CHANGE-009", "AUDIT-ERROR-001"],
+      "description": "Rejects a malformed explicitly declared Money value using the Audit invalid-event mapping without partial append.",
+      "operation": "finkore.audit.append",
+      "input": { "history": [], "event": {
+        "eventId": "evt-money-malformed",
+        "eventType": "ENTITY_AMOUNT_CHANGED",
+        "entity": { "type": "expense", "id": "exp-52" },
+        "occurredAt": "2026-09-01T12:00:00Z",
+        "changes": [{
+          "path": "amount",
+          "valueType": "MONEY",
+          "before": { "amount": 10, "currency": "EUR" },
+          "after": { "amount": "11.00", "currency": "EUR" }
+        }]
+      } },
+      "expected": { "status": "error", "error": { "code": "FINKORE_AUDIT_INVALID_EVENT" }, "observations": { "history": [] } },
+      "tags": ["negative", "boundary", "invariant", "regression", "mutation-sensitive"],
+      "guardsAgainst": ["malformed-declared-money-accepted", "money-error-leaks-through-audit", "invalid-change-partially-appended"]
     }
   ]
 }

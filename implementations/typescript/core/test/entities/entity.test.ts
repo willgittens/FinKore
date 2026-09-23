@@ -586,6 +586,39 @@ describe('Financial Entity validation', () => {
 })
 
 describe('Financial Entity import', () => {
+  it('applies declared positive-money and cross-field validators without mutating source input', () => {
+    const definition = {
+      ...invoiceDefinition,
+      mutability: { DRAFT: ['amount', 'limit'] },
+      validation: [
+        { id: 'AMOUNT_POSITIVE', path: 'amount', rule: 'positive-money' },
+        { id: 'WITHIN_LIMIT', path: 'amount', otherPath: 'limit', rule: 'money-not-greater-than' },
+      ],
+    }
+    const money = (amount: string) => ({ amount, currency: 'EUR' })
+    const envelope = (amount: string, limit: string) => ({
+      entity: {
+        type: 'invoice',
+        id: 'inv-42',
+        state: 'DRAFT',
+        data: { amount: money(amount), limit: money(limit) },
+      },
+    })
+
+    expect(FinancialEntity.import(definition, envelope('10', '20')).entity.data).toEqual({
+      amount: money('10'),
+      limit: money('20'),
+    })
+
+    for (const input of [envelope('0', '20'), envelope('21', '20')]) {
+      const before = structuredClone(input)
+      expect(() => FinancialEntity.import(definition, input)).toThrowError(
+        expect.objectContaining({ code: 'FINKORE_ENTITY_VALIDATION_FAILED' }),
+      )
+      expect(input).toEqual(before)
+    }
+  })
+
   it('imports a minimal observation without optional revision, mapping, or conflict fields', () => {
     const result = FinancialEntity.import(invoiceDefinition, {
       entity: {

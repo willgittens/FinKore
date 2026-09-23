@@ -140,12 +140,14 @@ that every implementation preserves the same meaning.
 These scenarios are only a small illustration of FinKore Core 0.9.2:
 
 Across Money, Workflow, Audit, Approvals, Financial Entities, and shared
-conventions, 322 directly testable requirements are covered by the conformance
+conventions, 327 directly testable requirements are covered by the conformance
 suite. And this is just the beginning.
 
-TypeScript, Python, and Java pass the complete current conformance manifest.
-Core 0.9.2 corrects Python Money exactness and Approval fact comparison while
-preserving the frozen behavioral contract. See the [corrective plan](./docs/plans/plan-09.2.md).
+The expanded 331-vector manifest now includes permanent Core 0.9.3 regressions
+that intentionally expose pending Entity import, Workflow guard, and Audit
+corrections across TypeScript, Python, and Java. Core 0.9.2 remains the last
+clean passing corrective snapshot; see the active
+[Core 0.9.3 plan](./docs/plans/plan-09.3.md).
 
 ---
 

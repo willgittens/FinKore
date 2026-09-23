@@ -2,6 +2,7 @@
 package org.finkore;
 
 import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /** Minimal stdlib tests for the Java Workflow implementation. */
@@ -15,6 +16,7 @@ public final class WorkflowTest {
     rejectedGuardDoesNotMutateInstanceObservation();
     importRejectsVersionMismatch();
     expectedRevisionConflictPrecedesTransition();
+    guardEqualityIsPresenceAwareTypeSensitiveAndRecursive();
   }
 
   private static void createVersionedInstancePreservesOpaqueBinding() {
@@ -90,6 +92,47 @@ public final class WorkflowTest {
         null,
         "wf-rev:old"));
     assertEquals(Map.of("currentState", "SUBMITTED", "revision", "wf-rev:0007"), instance.toPortable());
+  }
+
+  private static void guardEqualityIsPresenceAwareTypeSensitiveAndRecursive() {
+    Workflow.Instance typeMismatch = Workflow.Instance.fromPortable(Map.of("currentState", "SUBMITTED"));
+    assertError(Workflow.GUARD_REJECTED, () -> Workflow.transition(
+        workflowExpecting(true), typeMismatch, "APPROVED", Map.of("value", 1L), null, null));
+    assertEquals(Map.of("currentState", "SUBMITTED"), typeMismatch.toPortable());
+
+    Workflow.Instance missing = Workflow.Instance.fromPortable(Map.of("currentState", "SUBMITTED"));
+    assertError(Workflow.GUARD_REJECTED, () -> Workflow.transition(
+        workflowExpecting(null), missing, "APPROVED", Map.of(), null, null));
+    assertEquals(Map.of("currentState", "SUBMITTED"), missing.toPortable());
+
+    Map<String, Object> explicitNull = new LinkedHashMap<>();
+    explicitNull.put("value", null);
+    assertEquals(Map.of("currentState", "APPROVED"), Workflow.transition(
+        workflowExpecting(null),
+        Workflow.Instance.fromPortable(Map.of("currentState", "SUBMITTED")),
+        "APPROVED",
+        explicitNull,
+        null,
+        null).toPortable());
+
+    assertEquals(Map.of("currentState", "APPROVED"), Workflow.transition(
+        workflowExpecting(Map.of("status", "CLEAR", "steps", List.of("KYC", "LIMIT"))),
+        Workflow.Instance.fromPortable(Map.of("currentState", "SUBMITTED")),
+        "APPROVED",
+        Map.of("value", Map.of("steps", List.of("KYC", "LIMIT"), "status", "CLEAR")),
+        null,
+        null).toPortable());
+  }
+
+  private static Workflow.Definition workflowExpecting(Object expected) {
+    Map<String, Object> guard = new LinkedHashMap<>();
+    guard.put("fact", "value");
+    guard.put("equals", expected);
+    return Workflow.Definition.fromPortable(Map.of(
+        "states", List.of("SUBMITTED", "APPROVED"),
+        "initialState", "SUBMITTED",
+        "terminalStates", List.of("APPROVED"),
+        "transitions", List.of(Map.of("source", "SUBMITTED", "target", "APPROVED", "guard", guard))));
   }
 
   private static Workflow.Definition approvalWorkflow() {

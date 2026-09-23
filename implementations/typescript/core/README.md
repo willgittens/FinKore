@@ -1,8 +1,12 @@
 # FinKore TypeScript
 
 TypeScript reference implementation for FinKore Core 0.9 release candidate: Money, Workflow,
-Audit, Approvals, and Entities. It passes the complete current conformance
-manifest, but the specification remains the source of financial semantics.
+Audit, Approvals, and Entities. The current 331-vector manifest includes
+permanent Core 0.9.3 regressions that expose pending Entity import observation,
+Workflow guard, and Audit declared-Money corrections, so this implementation is
+not yet fully conformant with the expanded suite. The specification remains the
+source of financial semantics; see the active
+[Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
 
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to an npm registry. The npm package

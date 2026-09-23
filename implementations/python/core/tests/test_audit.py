@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MPL-2.0
 from __future__ import annotations
 
+from copy import deepcopy
 import unittest
 
 from finkore import FinKoreError, append_event, redact_history, remove_event
@@ -144,6 +145,78 @@ class AuditTests(unittest.TestCase):
                 "history": [event, evidence],
             },
         )
+
+    def test_actor_optional_strings_are_non_empty_when_supplied(self) -> None:
+        base = {
+            "eventId": "evt-invalid-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {"type": "expense", "id": "exp-52"},
+            "occurredAt": "2026-09-01T12:00:00Z",
+        }
+        for actor in (
+            {"id": "user-7", "displayName": ""},
+            {"id": "user-7", "displayName": 7},
+            {"id": "user-7", "displayName": None},
+            {"id": "user-7", "type": None},
+        ):
+            with self.subTest(actor=actor):
+                history: list[dict[str, object]] = []
+                with self.assertRaises(FinKoreError) as context:
+                    append_event(history, {**base, "actor": actor})
+                self.assertEqual(context.exception.code, "FINKORE_AUDIT_ACTOR_INVALID")
+                self.assertEqual(history, [])
+
+    def test_actor_metadata_null_presence_survives_append_and_redaction(self) -> None:
+        event = {
+            "eventId": "evt-null-metadata",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {"type": "expense", "id": "exp-52"},
+            "actor": {"type": "user", "id": "user-7", "metadata": None},
+            "occurredAt": "2026-09-01T12:00:00Z",
+        }
+        evidence = {
+            "eventId": "evt-null-metadata-evidence",
+            "eventType": "AUDIT_CONTENT_REDACTED",
+            "entity": {"type": "expense", "id": "exp-52"},
+            "occurredAt": "2026-09-01T13:00:00Z",
+        }
+        self.assertEqual(append_event([], event), {"history": [event]})
+        result = redact_history([event], {"protectedPaths": ["actor.metadata"]}, evidence)
+        self.assertEqual(result["event"]["actor"], {"type": "user", "id": "user-7", "metadata": {"presence": "REDACTED"}})
+        self.assertEqual(result["history"], [event, evidence])
+
+    def test_change_comparison_distinguishes_json_types_and_declared_money(self) -> None:
+        base = {
+            "eventId": "evt-change-comparison",
+            "eventType": "ENTITY_FACT_CHANGED",
+            "entity": {"type": "expense", "id": "exp-52"},
+            "occurredAt": "2026-09-01T12:00:00Z",
+        }
+        for change in (
+            {"path": "approved", "before": True, "after": 1},
+            {"path": "approved", "before": 0, "after": False},
+            {"path": "review", "before": {"checks": [True]}, "after": {"checks": [1]}},
+            {"path": "steps", "before": ["KYC", "LIMIT"], "after": ["LIMIT", "KYC"]},
+        ):
+            with self.subTest(change=change):
+                event = {**base, "changes": [change]}
+                self.assertEqual(append_event([], event), {"history": [event]})
+
+        money_unchanged = {
+            **base,
+            "eventId": "evt-money-unchanged",
+            "changes": [{
+                "path": "amount",
+                "valueType": "MONEY",
+                "before": {"amount": "10.0", "currency": "EUR"},
+                "after": {"amount": "10.00", "currency": "EUR"},
+            }],
+        }
+        original = deepcopy(money_unchanged)
+        with self.assertRaises(FinKoreError) as context:
+            append_event([], money_unchanged)
+        self.assertEqual(context.exception.code, "FINKORE_AUDIT_INVALID_EVENT")
+        self.assertEqual(money_unchanged, original)
 
 
 if __name__ == "__main__":

@@ -2,10 +2,10 @@
 
 ## Status
 
-In progress. Milestone 1 is complete. The release-candidate review identified
+In progress. Milestones 1 and 2 are complete. The release-candidate review identified
 Entity import, Workflow guard, and Audit portability findings; their contract
-boundaries are now resolved, while regression coverage and implementation
-corrections remain pending in Milestones 2 through 5. Stable Core 1.0 promotion
+boundaries are resolved and permanent regressions now reproduce them, while
+implementation corrections remain pending in Milestones 3 through 5. Stable Core 1.0 promotion
 remains blocked until the corrective release gate below is satisfied;
 [Core 1.0 planning](plan-10.md) may continue.
 
@@ -123,34 +123,67 @@ governing requirements are confirmed.
 
 ## Milestone 2 — Permanent failing regressions
 
-- [ ] Convert every reproduced failure into permanent public-API tests and
+- [x] Convert every reproduced failure into permanent public-API tests and
       manifest-discovered vectors where the portable contract permits them.
       Resolve Milestone 1 decisions before assigning expectations to ambiguous
       cases. Do not depend on temporary review scripts.
-- [ ] Give vectors stable IDs, requirement references, regression and
+- [x] Give vectors stable IDs, requirement references, regression and
       mutation-sensitive metadata, exact results, and post-state observations.
-- [ ] Cover Entity import with invalid positive-Money data, valid controls,
+- [x] Cover Entity import with invalid positive-Money data, valid controls,
       and valid/invalid cross-field amount/limit observations. Check unchanged
       source observations and absence of partial imports after rejection.
-- [ ] Cover Workflow Boolean/numeric distinctions in both directions, missing
+- [x] Cover Workflow Boolean/numeric distinctions in both directions, missing
       versus explicit null facts, nested structures, object order, array order,
       and multiple guards under the resolved contract. Preserve state, binding,
       revision, and supplied facts on rejection.
-- [ ] Cover omitted, valid, empty, numeric, and null actor optional strings,
+- [x] Cover omitted, valid, empty, numeric, and null actor optional strings,
       including invalid supplied history and competing append errors. Require
       the existing actor error and precedence rules without partial history.
-- [ ] Pair actor metadata omission and explicit null with ordinary metadata
+- [x] Pair actor metadata omission and explicit null with ordinary metadata
       redaction cases under the resolved contract. Verify source history,
       actor identity/type, redaction evidence, and distinguishable presence.
-- [ ] Cover Audit Boolean/numeric changes, nested containers, unchanged
+- [x] Cover Audit Boolean/numeric changes, nested containers, unchanged
       controls, omission/null distinctions, and object/array ordering. Add
       Money equality and actual amount/currency change cases through the
       domain-value boundary resolved in Milestone 1.
-- [ ] Demonstrate failures against defective implementations before fixes,
+- [x] Demonstrate failures against defective implementations before fixes,
       distinguishing incorrect results from Java process/infrastructure errors.
       Compare TypeScript, Python 3.12/3.13, and Java observations.
-- [ ] Synchronize traceability, manifest-discovered counts, integration tests,
+- [x] Synchronize traceability, manifest-discovered counts, integration tests,
       and coverage helpers as vectors are added. Preserve previous regressions.
+
+Completed: 2026-09-22. Milestone 2 adds 35 manifest-discovered regression
+vectors: four Entity import cases, ten Workflow equality cases, and twenty-one
+Audit actor, metadata/redaction, ordinary JSON, and declared Money cases. The
+vectors include stable IDs, requirement references, regression and
+mutation-sensitive tags, exact results, and failure observations. Public API
+tests cover the same boundaries in TypeScript, Python, and Java without changing
+implementation source behavior.
+
+The 145-vector Entity, Workflow, and Audit comparison run reproduces the
+pre-correction state as follows:
+
+| Implementation | Pass | Fail | Infrastructure error | Reproduced boundary |
+| --- | ---: | ---: | ---: | --- |
+| TypeScript | 136 | 9 | 0 | Structural Workflow equality, declared Money semantics, and Entity import failure observations. |
+| Python 3.12 | 129 | 16 | 0 | Entity import validator bypass, Workflow type/presence coercion, actor optional strings/precedence, JSON Boolean/number equality, and declared Money semantics. |
+| Python 3.13 | 129 | 16 | 0 | Identical result and failing vector set to Python 3.12. |
+| Java | 135 | 8 | 2 | Actor null-presence and declared Money semantics fail; `workflow.guard.explicit-null-pass-001` and `workflow.guard.multiple-structured-pass-001` crash the adapter process and are classified as infrastructure errors. |
+
+The positive Entity controls pass on all three implementations; Java passes all
+four new Entity import vectors. The public API suites independently reproduce
+the defects: TypeScript has two targeted failures, Python 3.12 and 3.13 each
+report nine assertion failures and three unexpected errors, Java Workflow
+throws the expected pre-fix null dereference, Java Audit fails its actor
+validation assertion, and Java Entity import passes.
+
+Build, strict TypeScript, Python 3.12/3.13 compilation, Java compilation, the
+130 runner tests, documentation/traceability checks, and whitespace checks
+pass. The intentionally red TypeScript adapter coverage test discovers all
+expanded suites and fails in the expected Audit, Workflow, and Entity groups.
+Traceability now records 409 requirements, 331 vectors, and 327 covered
+requirements, with no partial or uncovered rows. Passing corrections, coverage,
+and mutation gates remain work for Milestones 3 through 5.
 
 ## Milestone 3 — Entity import and Workflow corrections
 
