@@ -11,6 +11,10 @@ unfixed defects. The expanded suite is intentionally failing during this TDD
 stage; current full conformance and mutation-gate completion are not claimed.
 Corrections are tracked in the [0.9.4 plan](../../../docs/plans/plan-09.4.md).
 
+Milestone 3 restores all 112 Approval conformance vectors, including lifecycle
+recording sequences and invalid quorum evidence. Entity, Workflow, and Audit
+corrections remain assigned to later milestones.
+
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to a Maven repository. The Maven
 artifact version identifies this implementation artifact; `FinKore.CORE_VERSION`
@@ -78,6 +82,17 @@ than depending on Java class names or exception messages. The implementation
 uses portable JSON-shaped `Map` and `List` observations for non-Money domains;
 those shapes follow the conformance vectors and specification, not Java object
 identity.
+
+Approval operations return a history envelope. Pass the complete envelope to
+subsequent recording and evaluation so withdrawal and supersession evidence
+remains available. Recording preserves both histories without mutating inputs.
+Withdrawal requires exactly one committed target that has not already been
+withdrawn or superseded; invalid targets raise
+`FINKORE_APPROVAL_INVALID_DECISION` without changing prior evidence. Lifecycle
+operations determine the event kind even when the request supplies `type`.
+Composition Decision observations require explicit Boolean `effective`:
+`false` is valid ineffective evidence; missing or malformed evidence raises
+`FINKORE_APPROVAL_INVALID_CHAIN` under the specified error priority.
 
 This package requires JDK 21 and its release workflow uses Maven 3.9.x. Money
 amounts use `BigDecimal` from plain decimal strings. Portable allocation scales

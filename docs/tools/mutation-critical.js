@@ -14,14 +14,123 @@ import { assessMutationResult } from './mutation-result.js'
 
 const repositoryRoot = process.cwd()
 const requestedTarget = process.argv[2] ?? 'all'
+const requestedSuite = process.argv[3]
 const validTargets = new Set(['all', 'python', 'java'])
 
 if (!validTargets.has(requestedTarget)) {
-  console.error('Usage: node docs/tools/mutation-critical.js [all|python|java]')
+  console.error('Usage: node docs/tools/mutation-critical.js [all|python|java] [suite]')
   process.exit(2)
 }
 
 const pythonMutants = [
+  {
+    id: 'python-approval-record-drops-lifecycle',
+    expectedVector: 'approval.record.preserves-withdrawn-001',
+    expectedPassVectors: ['approval.withdraw.target-unique-001'],
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: 'result["lifecycle"] = lifecycle',
+    to: 'result["lifecycle"] = []',
+  },
+  {
+    id: 'python-approval-withdraw-request-type-override',
+    expectedVector: 'approval.lifecycle.withdraw.request-type-conflicting-001',
+    expectedPassVectors: ['approval.lifecycle.withdraw.request-type-omitted-001'],
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: 'event = {**deepcopy(value), "type": lifecycle_type}',
+    to: 'event = {"type": lifecycle_type, **deepcopy(value)} if lifecycle_type == "WITHDRAWN" else {**deepcopy(value), "type": lifecycle_type}',
+  },
+  {
+    id: 'python-approval-supersede-request-type-override',
+    expectedVector: 'approval.lifecycle.supersede.request-type-conflicting-001',
+    expectedPassVectors: ['approval.lifecycle.supersede.request-type-omitted-001'],
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: 'event = {**deepcopy(value), "type": lifecycle_type}',
+    to: 'event = {"type": lifecycle_type, **deepcopy(value)} if lifecycle_type == "DECISION_SUPERSEDED" else {**deepcopy(value), "type": lifecycle_type}',
+  },
+  {
+    id: 'python-approval-requirement-request-type-override',
+    expectedVector: 'approval.lifecycle.requirement.request-type-conflicting-001',
+    expectedPassVectors: ['approval.lifecycle.requirement.request-type-omitted-001'],
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: '{**deepcopy(supersession), "type": "REQUIREMENT_SUPERSEDED"}',
+    to: '{"type": "REQUIREMENT_SUPERSEDED", **deepcopy(supersession)}',
+  },
+  {
+    id: 'python-approval-withdraw-first-match',
+    expectedVector: 'approval.withdraw.target-ambiguous-001',
+    expectedPassVectors: ['approval.withdraw.target-unique-001'],
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: 'sum(_decision_key(decision) == target for decision in current) != 1',
+    to: '_find_decision(current, target) is None',
+  },
+  {
+    id: 'python-approval-withdraw-superseded-accepted',
+    expectedVector: 'approval.withdraw.target-superseded-001',
+    expectedPassVectors: ['approval.withdraw.target-unique-001'],
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: 'item.get("type") in ("WITHDRAWN", "DECISION_SUPERSEDED")',
+    to: 'item.get("type") == "WITHDRAWN"',
+  },
+  {
+    id: 'python-approval-withdraw-withdrawn-accepted',
+    expectedVector: 'approval.validity.withdraw-duplicate-invalid-001',
+    expectedPassVectors: ['approval.withdraw.target-unique-001'],
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: 'item.get("type") in ("WITHDRAWN", "DECISION_SUPERSEDED")',
+    to: 'item.get("type") == "DECISION_SUPERSEDED"',
+  },
+  {
+    id: 'python-approval-effectiveness-validation-bypass',
+    expectedVector: 'approval.quorum.effectiveness-string-001',
+    expectedPassVectors: ['approval.quorum.effectiveness-true-001', 'approval.quorum.effectiveness-false-001'],
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: 'if not isinstance(decision.get("effective"), bool):',
+    to: 'if False:',
+  },
+  {
+    id: 'python-approval-missing-effectiveness-default',
+    expectedVector: 'approval.quorum.effectiveness-missing-001',
+    expectedPassVectors: ['approval.quorum.effectiveness-true-001', 'approval.quorum.effectiveness-false-001'],
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: 'if not isinstance(decision.get("effective"), bool):',
+    to: 'if not isinstance(decision.get("effective", True), bool):',
+  },
+  {
+    id: 'python-approval-numeric-effectiveness-accepted',
+    expectedVector: 'approval.quorum.effectiveness-number-001',
+    expectedPassVectors: ['approval.quorum.effectiveness-true-001', 'approval.quorum.effectiveness-false-001'],
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: 'if not isinstance(decision.get("effective"), bool):',
+    to: 'if not isinstance(decision.get("effective"), (bool, int)):',
+  },
+  {
+    id: 'python-approval-false-effectiveness-rejected',
+    expectedVector: 'approval.quorum.effectiveness-false-001',
+    expectedPassVectors: ['approval.quorum.effectiveness-true-001'],
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: 'if not isinstance(decision.get("effective"), bool):',
+    to: 'if decision.get("effective") is not True:',
+  },
+  {
+    id: 'python-approval-ineffective-vote-counted',
+    expectedVector: 'approval.quorum.effectiveness-false-001',
+    expectedPassVectors: ['approval.quorum.effectiveness-true-001'],
+    suite: 'approvals',
+    path: 'core/src/finkore/approvals.py',
+    from: 'or decision.get("effective") is False:\n            continue',
+    to: 'or False:\n            continue',
+  },
   {
     id: 'python-entity-import-validation-bypass',
     expectedVector: 'entity.import.validation-positive-money-invalid-001',
@@ -280,6 +389,114 @@ const pythonMutants = [
 ]
 
 const javaMutants = [
+  {
+    id: 'java-approval-record-drops-lifecycle',
+    expectedVector: 'approval.record.preserves-withdrawn-001',
+    expectedPassVectors: ['approval.withdraw.target-unique-001'],
+    suite: 'approvals',
+    path: 'core/src/main/java/org/finkore/Approvals.java',
+    from: 'return historyEnvelope(append(current.history(), recorded), current.lifecycle());',
+    to: 'return historyEnvelope(append(current.history(), recorded), List.of());',
+  },
+  {
+    id: 'java-approval-withdraw-request-type-override',
+    expectedVector: 'approval.lifecycle.withdraw.request-type-conflicting-001',
+    expectedPassVectors: ['approval.lifecycle.withdraw.request-type-omitted-001'],
+    suite: 'approvals',
+    path: 'core/src/main/java/org/finkore/Approvals.java',
+    from: 'event.put("type", type);\n    return event;',
+    to: 'event.put("type", type);\n    if ("WITHDRAWN".equals(type)) event.putAll(copyMap(source, INVALID_DECISION));\n    return event;',
+  },
+  {
+    id: 'java-approval-supersede-request-type-override',
+    expectedVector: 'approval.lifecycle.supersede.request-type-conflicting-001',
+    expectedPassVectors: ['approval.lifecycle.supersede.request-type-omitted-001'],
+    suite: 'approvals',
+    path: 'core/src/main/java/org/finkore/Approvals.java',
+    from: 'event.put("type", type);\n    return event;',
+    to: 'event.put("type", type);\n    if ("DECISION_SUPERSEDED".equals(type)) event.putAll(copyMap(source, INVALID_DECISION));\n    return event;',
+  },
+  {
+    id: 'java-approval-requirement-request-type-override',
+    expectedVector: 'approval.lifecycle.requirement.request-type-conflicting-001',
+    expectedPassVectors: ['approval.lifecycle.requirement.request-type-omitted-001'],
+    suite: 'approvals',
+    path: 'core/src/main/java/org/finkore/Approvals.java',
+    from: 'lifecycle.putAll(copyMap(event, INVALID_DECISION));\n    lifecycle.put("type", "REQUIREMENT_SUPERSEDED");',
+    to: 'lifecycle.put("type", "REQUIREMENT_SUPERSEDED");\n    lifecycle.putAll(copyMap(event, INVALID_DECISION));',
+  },
+  {
+    id: 'java-approval-withdraw-first-match',
+    expectedVector: 'approval.withdraw.target-ambiguous-001',
+    expectedPassVectors: ['approval.withdraw.target-unique-001'],
+    suite: 'approvals',
+    path: 'core/src/main/java/org/finkore/Approvals.java',
+    from: 'if (matches != 1 ||',
+    to: 'if (matches == 0 ||',
+  },
+  {
+    id: 'java-approval-withdraw-superseded-accepted',
+    expectedVector: 'approval.withdraw.target-superseded-001',
+    expectedPassVectors: ['approval.withdraw.target-unique-001'],
+    suite: 'approvals',
+    path: 'core/src/main/java/org/finkore/Approvals.java',
+    from: 'lifecycleContains(current.lifecycle(), "DECISION_SUPERSEDED", target)',
+    to: '(false && lifecycleContains(current.lifecycle(), "DECISION_SUPERSEDED", target))',
+  },
+  {
+    id: 'java-approval-withdraw-withdrawn-accepted',
+    expectedVector: 'approval.validity.withdraw-duplicate-invalid-001',
+    expectedPassVectors: ['approval.withdraw.target-unique-001'],
+    suite: 'approvals',
+    path: 'core/src/main/java/org/finkore/Approvals.java',
+    from: 'lifecycleContains(current.lifecycle(), "WITHDRAWN", target)',
+    to: '(false && lifecycleContains(current.lifecycle(), "WITHDRAWN", target))',
+  },
+  {
+    id: 'java-approval-effectiveness-validation-bypass',
+    expectedVector: 'approval.quorum.effectiveness-string-001',
+    expectedPassVectors: ['approval.quorum.effectiveness-true-001', 'approval.quorum.effectiveness-false-001'],
+    suite: 'approvals',
+    path: 'core/src/main/java/org/finkore/Approvals.java',
+    from: 'if (!(decision.get("effective") instanceof Boolean)) {',
+    to: 'if (false) {',
+  },
+  {
+    id: 'java-approval-missing-effectiveness-default',
+    expectedVector: 'approval.quorum.effectiveness-missing-001',
+    expectedPassVectors: ['approval.quorum.effectiveness-true-001', 'approval.quorum.effectiveness-false-001'],
+    suite: 'approvals',
+    path: 'core/src/main/java/org/finkore/Approvals.java',
+    from: 'if (!(decision.get("effective") instanceof Boolean)) {',
+    to: 'if (decision.containsKey("effective") && !(decision.get("effective") instanceof Boolean)) {',
+  },
+  {
+    id: 'java-approval-numeric-effectiveness-accepted',
+    expectedVector: 'approval.quorum.effectiveness-number-001',
+    expectedPassVectors: ['approval.quorum.effectiveness-true-001', 'approval.quorum.effectiveness-false-001'],
+    suite: 'approvals',
+    path: 'core/src/main/java/org/finkore/Approvals.java',
+    from: 'if (!(decision.get("effective") instanceof Boolean)) {',
+    to: 'if (!(decision.get("effective") instanceof Boolean) && !(decision.get("effective") instanceof Number)) {',
+  },
+  {
+    id: 'java-approval-false-effectiveness-rejected',
+    expectedVector: 'approval.quorum.effectiveness-false-001',
+    expectedPassVectors: ['approval.quorum.effectiveness-true-001'],
+    suite: 'approvals',
+    path: 'core/src/main/java/org/finkore/Approvals.java',
+    from: 'if (!(decision.get("effective") instanceof Boolean)) {',
+    to: 'if (!Boolean.TRUE.equals(decision.get("effective"))) {',
+  },
+  {
+    id: 'java-approval-ineffective-vote-counted',
+    expectedVector: 'approval.quorum.effectiveness-false-001',
+    expectedPassVectors: ['approval.quorum.effectiveness-true-001'],
+    suite: 'approvals',
+    path: 'core/src/main/java/org/finkore/Approvals.java',
+    from: '|| Boolean.FALSE.equals(decision.get("effective"))) {\n        continue;',
+    to: '|| false) {\n        continue;',
+  },
   {
     id: 'java-entity-import-validation-bypass',
     expectedVector: 'entity.import.validation-positive-money-invalid-001',
@@ -661,10 +878,15 @@ function report(results) {
 }
 
 const results = []
+if (process.argv.length > 4 || (requestedSuite !== undefined && ![...pythonMutants, ...javaMutants].some((mutant) => mutant.suite === requestedSuite))) {
+  console.error('Unknown mutation suite or extra arguments')
+  process.exit(2)
+}
+const selected = (mutants) => mutants.filter((mutant) => requestedSuite === undefined || mutant.suite === requestedSuite)
 if (requestedTarget === 'all' || requestedTarget === 'python') {
-  for (const mutant of pythonMutants) results.push(runPythonMutant(mutant))
+  for (const mutant of selected(pythonMutants)) results.push(runPythonMutant(mutant))
 }
 if (requestedTarget === 'all' || requestedTarget === 'java') {
-  for (const mutant of javaMutants) results.push(runJavaMutant(mutant))
+  for (const mutant of selected(javaMutants)) results.push(runJavaMutant(mutant))
 }
 report(results)

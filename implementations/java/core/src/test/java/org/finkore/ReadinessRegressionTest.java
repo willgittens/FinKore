@@ -14,13 +14,27 @@ import java.util.Objects;
 public final class ReadinessRegressionTest {
   private ReadinessRegressionTest() {}
 
-  /** Runs every case, retaining individual assertion and unexpected-exception diagnostics. */
+  /** Runs all cases, or the Approval cases with {@code approvals}, retaining diagnostics. */
   public static void main(String[] args) throws IOException {
     List<String> failures = new ArrayList<>();
+    if (args.length > 1 || (args.length == 1 && !"approvals".equals(args[0]))) {
+      throw new IllegalArgumentException("Expected no arguments or approvals");
+    }
     for (String kind : List.of("withdraw", "decision", "requirement")) {
-      run(failures, "lifecycle-" + kind, () -> lifecycle(kind));
+      Map<String, Object> nullType = new LinkedHashMap<>(); nullType.put("type", null);
+      for (Map<String, Object> extra : List.of(Map.<String, Object>of(), Map.<String, Object>of("type", "WITHDRAWN"), Map.<String, Object>of("type", "DECISION_SUPERSEDED"), Map.<String, Object>of("type", "REQUIREMENT_SUPERSEDED"), Map.<String, Object>of("type", "UNKNOWN"), nullType, Map.<String, Object>of("type", Map.of()))) {
+        run(failures, "lifecycle-" + kind + extra, () -> lifecycle(kind, extra));
+      }
     }
     run(failures, "new-effective-decision", ReadinessRegressionTest::newEffectiveDecision);
+    for (String state : List.of("missing", "ambiguous", "withdrawn", "superseded", "unique")) {
+      run(failures, "withdrawal-" + state, () -> invalidWithdrawal(state));
+    }
+    if (args.length == 1) {
+      if (!failures.isEmpty()) throw new AssertionError(String.join("\n", failures));
+      System.out.println("Java Approval readiness regressions passed.");
+      return;
+    }
     for (boolean imported : List.of(false, true)) for (boolean array : List.of(false, true)) {
       for (boolean observation : List.of(false, true)) for (boolean approved : List.of(false, true)) {
         run(failures, "ownership-import=" + imported + ",array=" + array + ",observation=" + observation + ",approved=" + approved,
@@ -62,15 +76,19 @@ public final class ReadinessRegressionTest {
   }
 
   // APPROVAL-VALIDITY-001/002/004/010/011/012.
-  private static void lifecycle(String kind) {
+  private static void lifecycle(String kind, Map<String, Object> extra) {
     Map<String, Object> first = decision("3", "2026-09-01T12:00:00Z");
     Map<String, Object> later = decision("4", "2026-09-03T12:00:00Z");
     Map<String, Object> committed;
-    if (kind.equals("withdraw")) committed = Approvals.withdrawDecision(requirement(), List.of(first), event());
+    Map<String, Object> request = event(); request.putAll(extra);
+    if (kind.equals("withdraw")) committed = Approvals.withdrawDecision(requirement(), List.of(first), request);
     else if (kind.equals("decision")) {
-      Map<String, Object> request = event(); request.put("successor", target("2026-09-03T12:00:00Z"));
+      request.put("successor", target("2026-09-03T12:00:00Z"));
       committed = Approvals.supersedeDecision(List.of(first, later), request);
-    } else committed = Approvals.supersedeRequirement(List.of(first), Map.of("targetRequirementId", "review", "successorRequirementId", "next-review", "actor", Map.of("id", "alice"), "recordedAt", "2026-09-02T12:00:00Z"));
+    } else {
+      request.remove("target"); request.put("targetRequirementId", "review"); request.put("successorRequirementId", "next-review");
+      committed = Approvals.supersedeRequirement(List.of(first), request);
+    }
     Object before = copy(committed);
     Map<String, Object> next = decision("4", "2026-09-04T12:00:00Z");
     Map<String, Object> recorded = Approvals.recordDecision(requirement(), next, committed);
@@ -81,6 +99,32 @@ public final class ReadinessRegressionTest {
     Object stable = copy(recorded); next.put("outcome", "PENDING");
     error("FINKORE_APPROVAL_INVALID_DECISION", () -> Approvals.recordDecision(requirement(), next, recorded));
     equal(stable, recorded);
+    map(list(recorded.get("lifecycle")).get(0)).put("type", "UNKNOWN");
+    equal(before, committed);
+  }
+
+  private static void invalidWithdrawal(String state) {
+    Map<String, Object> first = decision("3", "2026-09-01T12:00:00Z");
+    Map<String, Object> later = decision("4", "2026-09-03T12:00:00Z");
+    Map<String, Object> history = new LinkedHashMap<>();
+    history.put("history", List.of(first)); history.put("lifecycle", List.of());
+    if (state.equals("missing")) history.put("history", List.of(later));
+    if (state.equals("ambiguous")) history.put("history", List.of(first, copy(first)));
+    if (state.equals("withdrawn")) history = Approvals.withdrawDecision(requirement(), history, event());
+    if (state.equals("superseded")) {
+      history.put("history", List.of(first, later));
+      Map<String, Object> request = event(); request.put("successor", target("2026-09-03T12:00:00Z"));
+      history = Approvals.supersedeDecision(history, request);
+    }
+    Map<String, Object> original = history;
+    Object before = copy(original);
+    String outcome = Approvals.evaluateRequirement(requirement(), original, Map.of("revision", "3"), List.of("revision"), null);
+    if (state.equals("unique")) {
+      Map<String, Object> result = Approvals.withdrawDecision(requirement(), original, event());
+      equal("PENDING", Approvals.evaluateRequirement(requirement(), result, Map.of("revision", "3"), List.of("revision"), null));
+    } else error(Approvals.INVALID_DECISION, () -> Approvals.withdrawDecision(requirement(), original, event()));
+    equal(before, original);
+    equal(outcome, Approvals.evaluateRequirement(requirement(), original, Map.of("revision", "3"), List.of("revision"), null));
   }
 
   private static void newEffectiveDecision() {

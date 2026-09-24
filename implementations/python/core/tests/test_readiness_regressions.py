@@ -3,6 +3,7 @@
 import json
 import unittest
 from copy import deepcopy
+from itertools import product
 from pathlib import Path
 
 from finkore import (FinKoreError, WorkflowDefinition, WorkflowInstance, create_workflow,
@@ -22,15 +23,15 @@ BINDING = {"definitionIdentity": "review-flow", "definitionVersionIdentity": "v1
 class ReadinessRegressionTests(unittest.TestCase):
     def test_lifecycle_record_evaluate_sequences(self):
         """APPROVAL-VALIDITY-001/002/004/010/011/012: retain actual prior results."""
-        for kind in ("withdraw", "decision", "requirement"):
-            with self.subTest(kind=kind):
+        for kind, extra in product(("withdraw", "decision", "requirement"), ({}, {"type": "WITHDRAWN"}, {"type": "DECISION_SUPERSEDED"}, {"type": "REQUIREMENT_SUPERSEDED"}, {"type": "UNKNOWN"}, {"type": None}, {"type": {}})):
+            with self.subTest(kind=kind, extra=extra):
                 initial = [deepcopy(DECISION), deepcopy(LATER)] if kind == "decision" else [deepcopy(DECISION)]
                 if kind == "withdraw":
-                    committed = withdraw_decision(REQUIREMENT, initial, deepcopy(EVENT))
+                    committed = withdraw_decision(REQUIREMENT, initial, {**deepcopy(EVENT), **extra})
                 elif kind == "decision":
-                    committed = supersede_decision(initial, {**deepcopy(EVENT), "successor": {**TARGET, "decidedAt": LATER["decidedAt"]}})
+                    committed = supersede_decision(initial, {**deepcopy(EVENT), "successor": {**TARGET, "decidedAt": LATER["decidedAt"]}, **extra})
                 else:
-                    committed = supersede_requirement(initial, {"targetRequirementId": "review", "successorRequirementId": "next-review", "actor": EVENT["actor"], "recordedAt": EVENT["recordedAt"]})
+                    committed = supersede_requirement(initial, {"targetRequirementId": "review", "successorRequirementId": "next-review", "actor": EVENT["actor"], "recordedAt": EVENT["recordedAt"], **extra})
                 before = deepcopy(committed)
                 later = {**deepcopy(LATER), "decidedAt": "2026-09-04T12:00:00Z"}
                 recorded = record_decision(REQUIREMENT, later, committed)
@@ -42,6 +43,34 @@ class ReadinessRegressionTests(unittest.TestCase):
                     record_decision(REQUIREMENT, {**later, "outcome": "PENDING"}, recorded)
                 self.assertEqual(error.exception.code, "FINKORE_APPROVAL_INVALID_DECISION")
                 self.assertEqual(recorded, stable)
+                recorded["lifecycle"][0]["type"] = "UNKNOWN"
+                self.assertEqual(committed, before)
+
+    def test_invalid_withdrawal_preserves_history_and_effectiveness(self):
+        """APPROVAL-VALIDITY-005/012: reject every invalid target atomically."""
+        for state in ("missing", "ambiguous", "withdrawn", "superseded", "unique"):
+            with self.subTest(state=state):
+                history = {"history": [deepcopy(DECISION)], "lifecycle": []}
+                if state == "missing":
+                    history["history"] = [deepcopy(LATER)]
+                if state == "ambiguous":
+                    history["history"].append(deepcopy(DECISION))
+                if state == "withdrawn":
+                    history = withdraw_decision(REQUIREMENT, history, EVENT)
+                if state == "superseded":
+                    history["history"].append(deepcopy(LATER))
+                    history = supersede_decision(history, {**EVENT, "successor": {**TARGET, "decidedAt": LATER["decidedAt"]}})
+                before = deepcopy(history)
+                outcome = evaluate_requirement(REQUIREMENT, history, {"revision": "3"}, ["revision"])
+                if state == "unique":
+                    result = withdraw_decision(REQUIREMENT, history, EVENT)
+                    self.assertEqual(evaluate_requirement(REQUIREMENT, result, {"revision": "3"}, ["revision"]), "PENDING")
+                else:
+                    with self.assertRaises(FinKoreError) as error:
+                        withdraw_decision(REQUIREMENT, history, EVENT)
+                    self.assertEqual(error.exception.code, "FINKORE_APPROVAL_INVALID_DECISION")
+                self.assertEqual(history, before)
+                self.assertEqual(evaluate_requirement(REQUIREMENT, history, {"revision": "3"}, ["revision"]), outcome)
 
     def test_new_effective_decision_after_withdrawal(self):
         committed = withdraw_decision(REQUIREMENT, [deepcopy(DECISION)], deepcopy(EVENT))

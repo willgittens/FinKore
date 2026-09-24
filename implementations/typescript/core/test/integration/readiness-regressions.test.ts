@@ -11,22 +11,24 @@ const event = { target, actor: { id: 'alice' }, recordedAt: '2026-09-02T12:00:00
 // APPROVAL-VALIDITY-001/002/004/010/011: consume real results across operations.
 describe('Approval lifecycle recording sequences', () => {
   for (const kind of ['withdraw', 'decision', 'requirement'] as const) {
-    it(`preserves ${kind} evidence after recording and reimporting`, () => {
-      const history = ApprovalDecisionHistory.create(kind === 'decision' ? [decision, later] : [decision])
-      if (kind === 'withdraw') history.withdraw(requirement, event)
-      if (kind === 'decision') history.supersedeDecision({ ...event, successor: { ...target, decidedAt: later.decidedAt } })
-      if (kind === 'requirement') history.supersedeRequirement({ actor: event.actor, recordedAt: event.recordedAt, targetRequirementId: 'review', successorRequirementId: 'next-review' })
-      const committed = history.toJSON()
-      const next = { ...later, decidedAt: '2026-09-04T12:00:00Z' }
-      history.record(requirement, next)
-      const imported = ApprovalDecisionHistory.create(history.toJSON())
-      expect(imported.evaluateRequirement(requirement, { currentSubjectFacts: { revision: '3' }, relevantFactPaths: ['revision'] })).toBe('PENDING')
-      expect(history.toJSON()).toEqual({ history: [...committed.history, next], lifecycle: committed.lifecycle })
-      expect(imported.toJSON()).toEqual(history.toJSON())
-      const before = imported.toJSON()
-      expect(() => imported.record(requirement, { ...next, outcome: 'PENDING' })).toThrowError(expect.objectContaining({ code: 'FINKORE_APPROVAL_INVALID_DECISION' }))
-      expect(imported.toJSON()).toEqual(before)
-    })
+    for (const extra of [{}, { type: 'WITHDRAWN' }, { type: 'DECISION_SUPERSEDED' }, { type: 'REQUIREMENT_SUPERSEDED' }, { type: 'UNKNOWN' }, { type: null }, { type: {} }]) {
+      it(`preserves ${kind} evidence after recording and reimporting with ${JSON.stringify(extra)}`, () => {
+        const history = ApprovalDecisionHistory.create(kind === 'decision' ? [decision, later] : [decision])
+        if (kind === 'withdraw') history.withdraw(requirement, { ...event, ...extra })
+        if (kind === 'decision') history.supersedeDecision({ ...event, successor: { ...target, decidedAt: later.decidedAt }, ...extra })
+        if (kind === 'requirement') history.supersedeRequirement({ actor: event.actor, recordedAt: event.recordedAt, targetRequirementId: 'review', successorRequirementId: 'next-review', ...extra })
+        const committed = history.toJSON()
+        const next = { ...later, decidedAt: '2026-09-04T12:00:00Z' }
+        history.record(requirement, next)
+        const imported = ApprovalDecisionHistory.create(history.toJSON())
+        expect(imported.evaluateRequirement(requirement, { currentSubjectFacts: { revision: '3' }, relevantFactPaths: ['revision'] })).toBe('PENDING')
+        expect(history.toJSON()).toEqual({ history: [...committed.history, next], lifecycle: committed.lifecycle })
+        expect(imported.toJSON()).toEqual(history.toJSON())
+        const before = imported.toJSON()
+        expect(() => imported.record(requirement, { ...next, outcome: 'PENDING' })).toThrowError(expect.objectContaining({ code: 'FINKORE_APPROVAL_INVALID_DECISION' }))
+        expect(imported.toJSON()).toEqual(before)
+      })
+    }
   }
   it('permits a new independently effective decision after withdrawal', () => {
     const history = ApprovalDecisionHistory.create([decision]).withdraw(requirement, event)

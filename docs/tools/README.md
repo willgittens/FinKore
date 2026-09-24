@@ -86,6 +86,14 @@ presence, and Audit ordinary JSON and declared Money comparison. Classification
 tests run through `npm run tools:test`, included in `npm run check` and `npm run
 verify`.
 
+Core 0.9.4 adds paired Approval probes for lifecycle preservation, operation
+kind overrides, ambiguous or previously invalidated withdrawal targets, and
+missing, malformed, or ineffective quorum observations. Run the focused gate
+with `node docs/tools/mutation-critical.js all approvals` after the unmodified
+Approval suite passes. The optional final argument selects a suite; omitting it
+retains all probes. A focused run does not establish the full release mutation
+gate or an aggregate mutation score.
+
 The Core 0.9.2 survivor review distinguishes these non-critical cases:
 
 - Runner diagnostic text, source labels, and error wrapping do not change

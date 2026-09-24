@@ -109,12 +109,19 @@ def normalize_decision_set(decisions: Any) -> tuple[list[dict[str, Any]], list[d
 
 
 def record_decision(requirement: Any, decision: Any, history: Any) -> dict[str, Any]:
-    """Append an Approval Decision without rewriting prior decisions."""
+    """Append a Decision, preserving committed Decisions and lifecycle evidence.
+
+    Inputs are not mutated, including on validation failure. Returned history
+    owns its data. See APPROVAL-DECISION-007 and APPROVAL-VALIDITY-001/002/012.
+    """
 
     req = validate_requirement(requirement)
-    current, _ = normalize_decision_set(history)
+    current, lifecycle = normalize_decision_set(history)
     recorded = validate_decision(req, decision)
-    return {"history": [*current, recorded]}
+    result = {"history": [*current, recorded]}
+    if lifecycle:
+        result["lifecycle"] = lifecycle
+    return result
 
 
 def evaluate_decision(requirement: Any, decision: Any, current_subject_facts: Any = None, relevant_fact_paths: Any = None, evaluated_at: Any = None) -> str:
@@ -208,19 +215,28 @@ def evaluate_chain(chain: Any, states: Any) -> Any:
 
 
 def withdraw_decision(requirement: Any, history: Any, withdrawal: Any) -> dict[str, Any]:
-    """Record lifecycle evidence withdrawing one committed Decision."""
+    """Withdraw exactly one committed, not withdrawn or superseded Decision.
+
+    An invalid target raises FINKORE_APPROVAL_INVALID_DECISION without changing
+    either history. Ancillary request ``type`` cannot override withdrawal.
+    See APPROVAL-VALIDITY-004/005/012.
+    """
 
     validate_requirement(requirement)
     current, lifecycle = normalize_decision_set(history)
     event = _lifecycle(withdrawal, "WITHDRAWN")
     target = event["target"]
-    if _find_decision(current, target) is None or any(item.get("type") == "WITHDRAWN" and item.get("target") == target for item in lifecycle):
+    if sum(_decision_key(decision) == target for decision in current) != 1 or any(item.get("type") in ("WITHDRAWN", "DECISION_SUPERSEDED") and item.get("target") == target for item in lifecycle):
         raise FinKoreError(INVALID_DECISION)
     return {"history": current, "lifecycle": [*lifecycle, event]}
 
 
 def supersede_decision(history: Any, supersession: Any) -> dict[str, Any]:
-    """Record lifecycle evidence superseding one committed Decision with another."""
+    """Supersede a committed Decision, preserving both histories and inputs.
+
+    Ancillary request ``type`` cannot override Decision supersession.
+    See APPROVAL-VALIDITY-010/012.
+    """
 
     current, lifecycle = normalize_decision_set(history)
     event = _lifecycle(supersession, "DECISION_SUPERSEDED", successor=True)
@@ -230,13 +246,17 @@ def supersede_decision(history: Any, supersession: Any) -> dict[str, Any]:
 
 
 def supersede_requirement(history: Any, supersession: Any) -> dict[str, Any]:
-    """Record lifecycle evidence superseding a requirement identity."""
+    """Supersede a Requirement identity, preserving both histories and inputs.
+
+    Ancillary request ``type`` cannot override Requirement supersession.
+    See APPROVAL-VALIDITY-011/012.
+    """
 
     current, lifecycle = normalize_decision_set(history)
     if not isinstance(supersession, dict) or not _opaque(supersession.get("targetRequirementId")) or not _opaque(supersession.get("successorRequirementId")):
         raise FinKoreError(INVALID_DECISION)
     _instant(supersession.get("recordedAt"))
-    return {"history": current, "lifecycle": [*lifecycle, {"type": "REQUIREMENT_SUPERSEDED", **deepcopy(supersession)}]}
+    return {"history": current, "lifecycle": [*lifecycle, {**deepcopy(supersession), "type": "REQUIREMENT_SUPERSEDED"}]}
 
 
 @dataclass
@@ -247,7 +267,14 @@ class GroupResult:
 
 
 def evaluate_composition(composition: Any, requirements: Any, decisions: Any = None, context: Any = None) -> dict[str, Any]:
-    """Evaluate bounded Approval Composition groups, quorum, and stages."""
+    """Evaluate bounded Approval Composition groups, quorum, and stages.
+
+    Every supplied quorum Decision must have explicit Boolean ``effective``
+    evidence; false is valid but cannot count as a vote. Invalid evidence raises
+    FINKORE_APPROVAL_INVALID_CHAIN before any outcome, following the structure,
+    applicability, context, then state/effectiveness priority. Inputs are not
+    mutated. See APPROVAL-COMPOSITION-024 and APPROVAL-ERROR-010.
+    """
 
     groups = _validate_composition_structure(composition)
     reqs = _validate_composition_requirements(requirements, context)
@@ -352,7 +379,7 @@ def _lifecycle(value: Any, lifecycle_type: str, successor: bool = False) -> dict
     if not isinstance(value, dict) or not isinstance(value.get("target"), dict):
         raise FinKoreError(INVALID_DECISION)
     _instant(value.get("recordedAt"))
-    event = {"type": lifecycle_type, **deepcopy(value)}
+    event = {**deepcopy(value), "type": lifecycle_type}
     if successor and not isinstance(value.get("successor"), dict):
         raise FinKoreError(INVALID_DECISION)
     return event
@@ -445,6 +472,8 @@ def _validate_composition_requirements(requirements: Any, context: Any) -> dict[
 def _validate_composition_evidence(reqs: dict[str, dict[str, Any]], decisions: list[dict[str, Any]]) -> None:
     for decision in decisions:
         if not isinstance(decision, dict) or not _opaque(decision.get("requirementId")) or decision["requirementId"] not in reqs:
+            raise FinKoreError(INVALID_CHAIN)
+        if not isinstance(decision.get("effective"), bool):
             raise FinKoreError(INVALID_CHAIN)
         actor_id = _actor_id(decision.get("actor"))
         if actor_id is None or decision.get("outcome") not in {"APPROVED", "REJECTED"}:

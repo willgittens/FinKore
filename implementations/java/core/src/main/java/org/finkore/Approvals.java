@@ -43,7 +43,8 @@ public final class Approvals {
   private Approvals() {}
 
   /**
-   * Appends one Approval Decision to append-only logical history.
+   * Appends one Approval Decision, preserving all committed lifecycle evidence.
+   * Inputs are unchanged on success or failure; the result owns its history data.
    *
    * @param requirement portable Approval Requirement
    * @param decision portable Approval Decision
@@ -51,14 +52,13 @@ public final class Approvals {
    * @return history envelope containing the appended Decision
    * @throws FinKoreException with Approval portable error code
    * @see <a href="../../../../../../spec/approvals/decisions.md">APPROVAL-DECISION-007</a>
+   * @see <a href="../../../../../../spec/approvals/validity.md">APPROVAL-VALIDITY-001/002/012</a>
    */
   public static Map<String, Object> recordDecision(Object requirement, Object decision, Object history) {
     Map<String, Object> req = validateRequirement(requirement);
     DecisionSet current = normalizeDecisionSet(history);
     Map<String, Object> recorded = validateDecision(req, decision);
-    Map<String, Object> result = new LinkedHashMap<>();
-    result.put("history", append(current.history(), recorded));
-    return result;
+    return historyEnvelope(append(current.history(), recorded), current.lifecycle());
   }
 
   /**
@@ -197,11 +197,16 @@ public final class Approvals {
 
   /**
    * Records lifecycle evidence withdrawing a committed Decision.
+   * The target must resolve exactly once and must not already be withdrawn or
+   * superseded. Ancillary request {@code type} cannot change the operation.
+   * Neither history is changed on failure.
    *
    * @param requirement portable Approval Requirement
    * @param history existing decision history
    * @param withdrawal withdrawal lifecycle evidence
    * @return history envelope preserving committed Decisions and appending lifecycle evidence
+   * @throws FinKoreException with {@code FINKORE_APPROVAL_INVALID_DECISION} for an invalid target
+   * @see <a href="../../../../../../spec/approvals/validity.md">APPROVAL-VALIDITY-004/005/012</a>
    */
   public static Map<String, Object> withdrawDecision(Object requirement, Object history, Object withdrawal) {
     validateRequirement(requirement);
@@ -209,7 +214,9 @@ public final class Approvals {
     Map<String, Object> event = lifecycle(withdrawal, "WITHDRAWN", false);
     @SuppressWarnings("unchecked")
     Map<String, Object> target = (Map<String, Object>) event.get("target");
-    if (findDecision(current.history(), target) == null || lifecycleContains(current.lifecycle(), "WITHDRAWN", target)) {
+    long matches = current.history().stream().filter(decision -> decisionKey(decision).equals(target)).count();
+    if (matches != 1 || lifecycleContains(current.lifecycle(), "WITHDRAWN", target)
+        || lifecycleContains(current.lifecycle(), "DECISION_SUPERSEDED", target)) {
       throw new FinKoreException(INVALID_DECISION);
     }
     return historyEnvelope(current.history(), append(current.lifecycle(), event));
@@ -217,10 +224,13 @@ public final class Approvals {
 
   /**
    * Records lifecycle evidence superseding a committed Decision.
+   * Preserves both histories and inputs; ancillary request {@code type} cannot
+   * override Decision supersession.
    *
    * @param history existing decision history
    * @param supersession supersession lifecycle evidence
    * @return history envelope with appended lifecycle evidence
+   * @see <a href="../../../../../../spec/approvals/validity.md">APPROVAL-VALIDITY-010/012</a>
    */
   public static Map<String, Object> supersedeDecision(Object history, Object supersession) {
     DecisionSet current = normalizeDecisionSet(history);
@@ -237,10 +247,13 @@ public final class Approvals {
 
   /**
    * Records lifecycle evidence superseding an Approval Requirement identity.
+   * Preserves both histories and inputs; ancillary request {@code type} cannot
+   * override Requirement supersession.
    *
    * @param history existing decision history
    * @param supersession requirement supersession evidence
    * @return history envelope with appended lifecycle evidence
+   * @see <a href="../../../../../../spec/approvals/validity.md">APPROVAL-VALIDITY-011/012</a>
    */
   public static Map<String, Object> supersedeRequirement(Object history, Object supersession) {
     DecisionSet current = normalizeDecisionSet(history);
@@ -252,19 +265,26 @@ public final class Approvals {
     requiredString(event.get("successorRequirementId"), INVALID_DECISION);
     instant(event.get("recordedAt"), INVALID_DECISION);
     Map<String, Object> lifecycle = new LinkedHashMap<>();
-    lifecycle.put("type", "REQUIREMENT_SUPERSEDED");
     lifecycle.putAll(copyMap(event, INVALID_DECISION));
+    lifecycle.put("type", "REQUIREMENT_SUPERSEDED");
     return historyEnvelope(current.history(), append(current.lifecycle(), lifecycle));
   }
 
   /**
    * Evaluates bounded Approval Composition groups, quorum, and stages.
+   * Every supplied quorum Decision requires explicit Boolean {@code effective}
+   * evidence. False is valid but cannot count as a vote. All evidence is validated
+   * before any outcome, after structure, applicability, and required context.
+   * Inputs are not mutated.
    *
    * @param composition portable composition definition
    * @param requirements current requirement observations
    * @param decisions current-effective decision observations for quorum groups
    * @param context explicit evaluation context
    * @return composition evaluation
+   * @throws FinKoreException with {@code FINKORE_APPROVAL_INVALID_CHAIN} for invalid evidence
+   * @see <a href="../../../../../../spec/approvals/composition.md">APPROVAL-COMPOSITION-024</a>
+   * @see <a href="../../../../../../spec/approvals/errors.md">APPROVAL-ERROR-010</a>
    */
   public static Map<String, Object> evaluateComposition(
       Object composition,
@@ -484,8 +504,8 @@ public final class Approvals {
       throw new FinKoreException(INVALID_DECISION);
     }
     Map<String, Object> event = new LinkedHashMap<>();
-    event.put("type", type);
     event.putAll(copyMap(source, INVALID_DECISION));
+    event.put("type", type);
     return event;
   }
 
@@ -639,6 +659,9 @@ public final class Approvals {
   private static void validateCompositionEvidence(Map<String, Map<String, Object>> requirements, List<Map<String, Object>> decisions) {
     for (Map<String, Object> decision : decisions) {
       if (!opaque(decision.get("requirementId")) || !requirements.containsKey(decision.get("requirementId"))) {
+        throw new FinKoreException(INVALID_CHAIN);
+      }
+      if (!(decision.get("effective") instanceof Boolean)) {
         throw new FinKoreException(INVALID_CHAIN);
       }
       if (actorId(decision.get("actor")) == null || !Set.of("APPROVED", "REJECTED").contains(decision.get("outcome"))) {

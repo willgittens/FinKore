@@ -2,9 +2,10 @@
 
 ## Status
 
-Milestones 1 and 2 are complete, including the accepted Entity decisions and
-permanent failing regressions with valid controls. Implementation fixes have
-not started; the expanded tests intentionally expose the defective baseline.
+Milestones 1–3 are complete, including the accepted Entity decisions, permanent
+regressions with valid controls, and Approval corrections. All 112 Approval
+vectors pass across TypeScript, Python 3.12/3.13, and Java. Entity, Workflow, and
+Audit regressions remain failing pending Milestones 4–6.
 The review of `f39bbe1`
 (`core-0.9.3`) reproduced the failures below after the complete existing
 verification command passed. The earlier corrective releases remain historical
@@ -330,41 +331,81 @@ now describe the failing expanded suite.
 
 ## Milestone 3 — Approval lifecycle and quorum corrections
 
-- [ ] Preserve both Decision history and all committed lifecycle evidence when
+- [x] Preserve both Decision history and all committed lifecycle evidence when
       recording another Decision in Python and Java. Verify withdrawal,
       Decision supersession, and Requirement supersession remain effective
       across subsequent recording and observation round trips.
-- [ ] Retain the revision-3 withdrawal/revision-4 recording regression: revision
+- [x] Retain the revision-3 withdrawal/revision-4 recording regression: revision
       3 remains pending when the new Decision does not apply. Add valid controls
       proving a new effective eligible Decision can still satisfy a Requirement
       under the existing rules. Do not make withdrawal a permanent blanket ban.
-- [ ] Prevent caller fields from silently changing the lifecycle operation's
+- [x] Prevent caller fields from silently changing the lifecycle operation's
       effect under Milestone 1's resolved boundary. Cover omitted, matching,
       unknown, and conflicting `type` members for withdrawal and adjacent
       supersession paths. Verify the subsequent effectiveness result, not only
       the returned lifecycle event label.
-- [ ] Require withdrawal targets to resolve to exactly one committed Decision.
+- [x] Require withdrawal targets to resolve to exactly one committed Decision.
       Reject missing, ambiguous, already-withdrawn, and already-superseded
       targets using existing errors, preserving all prior evidence. Retain
       valid single-target controls and the existing Actor eligibility boundary.
-- [ ] Validate quorum effectiveness observations before outcome calculation.
+- [x] Validate quorum effectiveness observations before outcome calculation.
       Missing, null, string, numeric, or other malformed evidence must not count
       as an effective vote. Preserve valid `true` and `false` behavior, distinct
       voters, ineligible-decision exclusion, and opposing-evidence rules.
-- [ ] Apply required evidence validation across all declared branches and later
+- [x] Apply required evidence validation across all declared branches and later
       stages, including when another branch already determines an outcome.
       Preserve `APPROVAL-ERROR-010` priority and actionable-requirement ordering.
-- [ ] Review adjacent Approval callers for dropped lifecycle evidence and
+- [x] Review adjacent Approval callers for dropped lifecycle evidence and
       missing-evidence defaults. Fix additional confirmed defects only after
       retaining a failing regression; preserve the prior exact fact-comparison
       and timestamp protections.
-- [ ] Update affected public API documentation, JSDoc/docstrings, examples, and
+- [x] Update affected public API documentation, JSDoc/docstrings, examples, and
       implementation README claims. Run Approval unit, adapter, sequence, and
       real conformance tests on every required runtime.
 
 Completion: successful lifecycle operations have their declared effect,
 recording preserves committed evidence, invalid targets fail atomically, and
 quorum approval requires valid explicit effectiveness evidence.
+
+### Milestone 3 outcome
+
+Python and Java now preserve committed lifecycle evidence when recording a
+Decision, enforce the requested lifecycle operation despite ancillary `type`,
+reject non-unique or already invalidated withdrawal targets, and require
+explicit Boolean quorum effectiveness. Python's adapter also omits empty
+lifecycle observations consistently with the fixture convention. TypeScript
+Approval financial code required no change.
+
+Verification:
+
+- All **112 Approval vectors pass** on TypeScript, Python 3.12, Python 3.13,
+  and Java, including all 40 Milestone 2 Approval regressions and controls.
+- Native tests cover all three lifecycle operations with seven request-type
+  variants, subsequent recording/evaluation, failed recording, independent
+  returned histories, and a fresh eligible approval after withdrawal. Python
+  and Java additionally observe history and effectiveness across each invalid
+  withdrawal target and its valid control. Approval unit and adapter tests pass
+  on all required runtimes.
+- **33/33 targeted critical Approval probes are killed**, including 24 new
+  probes with named regressions and positive controls. This is a focused probe
+  result, not a full-release aggregate mutation score.
+- Python Approval coverage is **88%** including branch measurement; Java
+  Approval line coverage is **90.1%**, with **80.7%** branch coverage. Build,
+  strict TypeScript, Python compilation, Java compilation, tool tests,
+  architecture, documentation, traceability, license, and whitespace checks
+  pass.
+- The full 532-vector comparison changes only Approval failures to passes:
+  TypeScript **495 PASS / 37 FAIL**; Python 3.12 and 3.13 each
+  **456 PASS / 76 FAIL**; Java **460 PASS / 69 FAIL / 3 INFRASTRUCTURE_ERROR**.
+  Unsupported remains zero. The remaining failures and Java infrastructure
+  errors are unchanged from Milestone 2 and belong to later milestones; the
+  full release gate is still open.
+
+Public docstrings/Javadoc, implementation READMEs, root status, tool usage, and
+traceability status are synchronized. Existing normative requirements and
+conformance vectors already define these corrections; no specification,
+CoreDoc, Agentic operation metadata, or AGENTS.md change is required. Approval
+fixture labels remain conformance-local.
 
 ## Milestone 4 — Entity evolution validation and history corrections
 

@@ -50,8 +50,11 @@ public-API sequence and ownership tests. The inventory records coverage of the
 identified boundaries, not passing implementations: the new tests expose
 defects in all three implementation tracks. Existing vector mappings remain
 retained, and `ENTITY-EVOLUTION-034` and `ENTITY-EVOLUTION-035` have explicit
-combined-error and history-consistency coverage. Corrections remain assigned to
-Milestones 3–6 in the [0.9.4 plan](../docs/plans/plan-09.4.md).
+combined-error and history-consistency coverage. Milestone 3 restores all 112
+Approval vectors across TypeScript, Python 3.12/3.13, and Java, with native
+sequence coverage for each lifecycle operation and ancillary request type.
+Entity, Workflow, and Audit corrections remain assigned to Milestones 4–6 in
+the [0.9.4 plan](../docs/plans/plan-09.4.md).
 
 Native readiness tests in TypeScript, Python, and Java cover lifecycle → record
 → evaluate sequences, evolution output reuse, failure atomicity, and original

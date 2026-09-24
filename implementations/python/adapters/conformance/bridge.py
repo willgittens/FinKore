@@ -352,7 +352,9 @@ def execute(request: dict[str, Any]) -> dict[str, Any]:
             elif operation_id in {"approval.decision.record", "approval.decision.withdraw", "approval.decision.supersede", "approval.requirement.supersede"}:
                 history_value = input_value.get("history")
                 if isinstance(history_value, dict):
-                    observations = {"history": history_value.get("history", []), "lifecycle": history_value.get("lifecycle", [])}
+                    observations = {"history": history_value.get("history", [])}
+                    if history_value.get("lifecycle"):
+                        observations["lifecycle"] = history_value["lifecycle"]
                 else:
                     observations = {"history": history_value if isinstance(history_value, list) else []}
             elif operation_id == "approval.composition.evaluate" and "decisions" in input_value:

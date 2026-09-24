@@ -10,6 +10,10 @@ unfixed defects. The expanded suite is intentionally failing during this TDD
 stage; current full conformance and mutation-gate completion are not claimed.
 Corrections are tracked in the [0.9.4 plan](../../../docs/plans/plan-09.4.md).
 
+Milestone 3 confirms all 112 Approval conformance vectors and extends native
+lifecycle sequence coverage. The TypeScript Approval implementation already
+meets these requirements; remaining corrections belong to later milestones.
+
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to an npm registry. The npm package
 version identifies this implementation artifact; `FINKORE_CORE_VERSION`

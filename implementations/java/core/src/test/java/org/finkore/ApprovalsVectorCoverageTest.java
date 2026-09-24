@@ -20,6 +20,12 @@ final class ApprovalsVectorCoverageTest {
       Path.of("conformance/approvals/readiness-regressions.json"));
 
   @Test
+  void approvalNativeRegressionsExecuteAgainstCoreImplementation() throws IOException {
+    ApprovalsTest.main(new String[0]);
+    ReadinessRegressionTest.main(new String[]{"approvals"});
+  }
+
+  @Test
   void approvalVectorsExecuteAgainstCoreImplementation() throws IOException {
     Path repositoryRoot = Path.of("../../..").toAbsolutePath().normalize();
     int executed = 0;

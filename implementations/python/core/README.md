@@ -11,6 +11,10 @@ unfixed defects. The expanded suite is intentionally failing during this TDD
 stage; current full conformance and mutation-gate completion are not claimed.
 Corrections are tracked in the [0.9.4 plan](../../../docs/plans/plan-09.4.md).
 
+Milestone 3 restores all 112 Approval conformance vectors on Python 3.12 and
+3.13, including lifecycle recording sequences and invalid quorum evidence.
+Entity, Workflow, and Audit corrections remain assigned to later milestones.
+
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to a Python package registry. The
 Python package version identifies this implementation artifact; `CORE_VERSION`
@@ -79,6 +83,17 @@ The public exports are:
   `withdraw_decision`, `supersede_decision`, and `supersede_requirement`.
 - Entities: `create_entity`, `mutate_entity`, `transition_entity`,
   `import_entity`, and `evolve_entity`.
+
+Approval operations return a history envelope. Pass the complete envelope to
+subsequent recording and evaluation so withdrawal and supersession evidence
+remains available. Recording preserves both histories without mutating inputs.
+Withdrawal requires exactly one committed target that has not already been
+withdrawn or superseded; invalid targets raise
+`FINKORE_APPROVAL_INVALID_DECISION` without changing prior evidence. Lifecycle
+operations determine the event kind even when the request supplies `type`.
+Composition Decision observations require explicit Boolean `effective`:
+`False` is valid ineffective evidence; missing or malformed evidence raises
+`FINKORE_APPROVAL_INVALID_CHAIN` under the specified error priority.
 
 This package supports CPython 3.12 and 3.13 and uses Python `int` and exact
 `Decimal` construction from plain decimal strings. Portable allocation scales
