@@ -48,6 +48,22 @@ A versioned Workflow instance is governed by its Bound Workflow Definition
 Version. Publishing or supplying a newer Workflow Definition Version must not
 silently rebind existing instances.
 
+The immutability in **WORKFLOW-VERSION-003** includes the retained definition's
+nested guard values, states, transitions, and terminal declarations. Changing a
+caller's original input or a returned observation must not change the semantics
+used by an existing instance under **WORKFLOW-VERSION-009**. This is an
+observable ownership guarantee, not a requirement to use a particular copying,
+freezing, or storage architecture. Native public-API tests can verify this
+boundary without a registry of separately published definitions.
+
+Under **WORKFLOW-VERSION-006**, a default-sequence position is the version
+identity selected under that convention. A fixture selector such as `DEFAULT`
+is not itself a position. Without that convention, **WORKFLOW-VERSION-005**
+continues to require opaque treatment of valid version identities. Validation
+of one supplied position does not establish whether a successor was published
+consecutively or authorize migration. Fixture encoding is documented in the
+[conformance conventions](../../conformance/conventions.md).
+
 ## Examples
 
 Given Workflow Definition Identity `invoice-approval` with versions `1` and `2`,
@@ -67,4 +83,3 @@ This document does not define migration between Workflow Definition Versions,
 mapping of states across versions, historical replay, optimistic locking,
 pessimistic locking, database isolation, storage schemas, deployment rollout
 policy, BPMN, or actor authorization.
-

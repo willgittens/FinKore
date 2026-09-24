@@ -48,6 +48,11 @@ to the consuming application unless a concrete FinKore rule says otherwise.
 Accounting finality remains unspecified while ledger posting and financial
 commitment are outside Core.
 
+The [0.9.4 contract review](../docs/plans/plan-09.4.md#milestone-1--contract-review-and-traceability-correction)
+reopens boundary coverage and implementation defects in the existing operation
+surface. Registry inclusion is not a claim that those defects are corrected;
+current gaps are recorded in [traceability](../conformance/traceability.md).
+
 ## Registry
 
 | Operation | Domain | State mutation | Financial-state mutation | Determinism | Audit production | Approval relation | Requirements |
@@ -61,17 +66,17 @@ commitment are outside Core.
 | `finkore.money.round` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ROUNDING-001`–`-004`, `-008`, `-009` |
 | `finkore.money.applyrate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-RATE-001`–`-009` |
 | `finkore.money.allocate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ALLOCATION-001`–`-014`, `MONEY-ERROR-008` |
-| `finkore.workflow.transition` | Workflow | `yes` | `unspecified` | `yes` | `may` | may be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007`, `WORKFLOW-GUARD-001`–`-006`, `WORKFLOW-VERSION-005`–`-012`, `WORKFLOW-CONFLICT-001`–`-008` |
+| `finkore.workflow.transition` | Workflow | `yes` | `unspecified` | `yes` | `may` | may be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007`, `WORKFLOW-GUARD-001`–`-006`, `WORKFLOW-VERSION-003`, `-005`–`-012`, `WORKFLOW-CONFLICT-001`–`-008` |
 | `finkore.audit.append` | Audit | `yes` | `no` | `yes` | `required` | `none` | `AUDIT-EVENT-001`–`-005`, `-007`, `-008`, `AUDIT-ACTOR-001`–`-004`, `-007`–`-010`, `AUDIT-CHANGE-001`–`-005`, `-008`, `-009`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001`, `-004` |
 | `finkore.audit.replace` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
 | `finkore.audit.remove` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
 | `finkore.entity.create` | Entities | `yes` | `unspecified` | `yes` | `may` | `none` | `ENTITY-IDENTITY-001`, `-003`, `ENTITY-LIFECYCLE-001`, `-002`, `-006`, `ENTITY-VALIDATION-001` |
 | `finkore.entity.mutate` | Entities | `yes` | `unspecified` | `yes` | `may` | may invalidate approval-relevant facts | `ENTITY-MUTABILITY-001`, `-002`, `-004`, `-006`, `-007`, `ENTITY-VALIDATION-002`–`-006`, `ENTITY-ERROR-001` |
 | `finkore.entity.transition` | Entities | `yes` | `unspecified` | `yes` | `may` | may be governed by composing-domain approval policy | `ENTITY-LIFECYCLE-003`, `ENTITY-IDENTITY-002`, `ENTITY-ERROR-001`, `-004` |
-| `finkore.entity.evolution.correct` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`–`-010`, `-015`, `-022`–`-024`, `-029`–`-032` |
-| `finkore.entity.evolution.reverse` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`, `-011`–`-015`, `-022`–`-024`, `-029`, `-032` |
-| `finkore.entity.evolution.void` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-016`–`-018`, `-022`–`-024`, `-029`, `-032` |
-| `finkore.entity.evolution.supersede` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-019`–`-024`, `-029`, `-031`, `-032` |
+| `finkore.entity.evolution.correct` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`–`-010`, `-015`, `-022`–`-027`, `-029`–`-033`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
+| `finkore.entity.evolution.reverse` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`, `-011`–`-015`, `-022`–`-027`, `-029`–`-033`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
+| `finkore.entity.evolution.void` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-016`–`-018`, `-022`–`-027`, `-029`–`-033`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
+| `finkore.entity.evolution.supersede` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-019`–`-027`, `-029`–`-033`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
 
 `Unspecified` is deliberate. A generic Workflow may not be attached to a
 Financial Entity, an Entity may carry non-financial or composing-domain facts,
@@ -275,6 +280,10 @@ explicitly declares `valueType: "MONEY"`; Money is never inferred from object
 shape. Current conformance fixtures use
 `history` and `event`; this fixture shape is not a production storage format.
 
+JSON metadata preservation and recursive Change comparison include every own
+member, including `__proto__` and `constructor`, at every nesting depth. Native
+object prototype conventions do not reserve or remove JSON member names.
+
 **Preconditions:** Event content is valid; known Actor attribution is valid when
 supplied; the event identity has not already been committed in the supplied
 logical history.
@@ -355,6 +364,14 @@ are compared recursively without coercion. Unsupported comparison values make
 the fixture definition invalid rather than extending the production guard
 contract.
 
+Retained versioned definition semantics include nested guards, transitions, and
+state declarations. Mutating caller-owned inputs or returned observations must
+not change the retained version's behavior (`WORKFLOW-VERSION-003` and `-009`).
+This local ownership guarantee does not require a definition registry.
+The [conformance conventions](../conformance/conventions.md) define the guard
+shape and `versionSequence: "DEFAULT"` fixture selector; they do not prescribe
+production serialization or expand the guard language.
+
 **Preconditions:** States and directed Transition are declared; current State is
 the source and is not terminal; every applicable guard passes. For versioned
 instances, the supplied definition identity/version must match the instance's
@@ -382,7 +399,7 @@ binding, and expected-precondition checks have passed.
 [WORKFLOW-TERMINAL-001 through -004](../spec/workflow/terminal-states.md),
 [WORKFLOW-STATES-004 and -007](../spec/workflow/states.md), and
 [WORKFLOW-ERROR-001 through -007](../spec/workflow/errors.md),
-[WORKFLOW-VERSION-005 through -012](../spec/workflow/versioning.md), and
+[WORKFLOW-VERSION-003 and -005 through -012](../spec/workflow/versioning.md), and
 [WORKFLOW-CONFLICT-001 through -008](../spec/workflow/conflicts.md).
 
 ## `finkore.entity.create`
@@ -462,6 +479,28 @@ definition is malformed.
 [ENTITY-IDENTITY-002](../spec/entities/identity.md), and
 [ENTITY-ERROR-001, -004](../spec/entities/errors.md).
 
+## Shared Entity evolution obligations
+
+All four evolution operations validate complete source and related/successor
+Entity observations under [ENTITY-VALIDATION-001, -004, and -006](../spec/entities/validation.md).
+Business Validation failures return `FINKORE_ENTITY_VALIDATION_FAILED` unless
+another domain failure is primary under `ENTITY-ERROR-004`.
+
+Expected currentness is compared with the observed source Entity and Revision
+in the applicable scope, independently of eligibility and declared duplicate
+policy (`ENTITY-EVOLUTION-025`). Required Audit evidence must satisfy both
+Audit validation and evolution correspondence (`ENTITY-EVOLUTION-027`, `-029`,
+`-031`, and `-032`). Failure preserves Entity observations, evolution history,
+currentness, and Audit history together (`ENTITY-EVOLUTION-023` and `-033`).
+The [Entity evolution open questions](../spec/entities/evolution.md#open-questions)
+record unresolved combined-failure precedence and conflicting-history
+currentness policy. This metadata does not choose either policy.
+
+Conformance evolution history arrays are translated according to the
+[fixture conventions](../conformance/conventions.md). Native production
+history containers may differ; adapters do not define currentness or duplicate
+policy.
+
 ## `finkore.entity.evolution.correct`
 
 **Purpose:** Record a Correction relation between a source Entity Revision and
@@ -484,7 +523,8 @@ source Entity facts remain preserved.
 Audit history observations remain unchanged.
 
 **Known operation-specific errors:** `FINKORE_ENTITY_INVALID_MUTATION`,
-`FINKORE_ENTITY_INVALID_IDENTITY`, `FINKORE_ENTITY_STATE_CONFLICT`, and Audit
+`FINKORE_ENTITY_INVALID_IDENTITY`, `FINKORE_ENTITY_STATE_CONFLICT`,
+`FINKORE_ENTITY_VALIDATION_FAILED`, and Audit
 portable errors from invalid evidence.
 
 **Normative traceability:** [ENTITY-EVOLUTION-001 through -010, -015, -022 through -024, and -029 through -032](../spec/entities/evolution.md).
@@ -498,8 +538,9 @@ related reversing Revision with required Audit evidence.
 `finkore.entity.evolution.correct`, with Reversal-specific relation semantics.
 
 **Preconditions:** The request is valid and eligible, Audit evidence matches the
-requested Reversal, and the same source Revision has not already been reversed
-under the current duplicate-reversal policy.
+requested Reversal, the Relation identity is new, and the request satisfies the
+composing domain's declared duplicate policy. Core does not impose a universal
+one-reversal policy on every composing domain.
 
 **Success postcondition:** Returns a new evolution history containing the
 Reversal relation and a new Audit history containing the evidence event. The
@@ -509,7 +550,8 @@ source Entity facts are not negated or rewritten in place.
 Audit history observations remain unchanged.
 
 **Known operation-specific errors:** `FINKORE_ENTITY_INVALID_MUTATION`,
-`FINKORE_ENTITY_INVALID_IDENTITY`, `FINKORE_ENTITY_STATE_CONFLICT`, and Audit
+`FINKORE_ENTITY_INVALID_IDENTITY`, `FINKORE_ENTITY_STATE_CONFLICT`,
+`FINKORE_ENTITY_VALIDATION_FAILED`, and Audit
 portable errors from invalid evidence.
 
 **Normative traceability:** [ENTITY-EVOLUTION-001, -011 through -015, -022 through -024, -029, and -032](../spec/entities/evolution.md).
@@ -535,7 +577,8 @@ the evidence event.
 observations remain unchanged.
 
 **Known operation-specific errors:** `FINKORE_ENTITY_INVALID_MUTATION`,
-`FINKORE_ENTITY_INVALID_IDENTITY`, `FINKORE_ENTITY_STATE_CONFLICT`, and Audit
+`FINKORE_ENTITY_INVALID_IDENTITY`, `FINKORE_ENTITY_STATE_CONFLICT`,
+`FINKORE_ENTITY_VALIDATION_FAILED`, and Audit
 portable errors from invalid evidence.
 
 **Normative traceability:** [ENTITY-EVOLUTION-016 through -018, -022 through -024, -029, and -032](../spec/entities/evolution.md).
@@ -562,7 +605,8 @@ supersession scope, plus a new Audit history containing the evidence event.
 and Audit history observations remain unchanged.
 
 **Known operation-specific errors:** `FINKORE_ENTITY_INVALID_MUTATION`,
-`FINKORE_ENTITY_INVALID_IDENTITY`, `FINKORE_ENTITY_STATE_CONFLICT`, and Audit
+`FINKORE_ENTITY_INVALID_IDENTITY`, `FINKORE_ENTITY_STATE_CONFLICT`,
+`FINKORE_ENTITY_VALIDATION_FAILED`, and Audit
 portable errors from invalid evidence.
 
 **Normative traceability:** [ENTITY-EVOLUTION-019 through -024, -029, -031, and -032](../spec/entities/evolution.md).

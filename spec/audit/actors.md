@@ -30,6 +30,14 @@ it does not mean that the member was omitted. A policy targeting
 `actor.metadata` redacts either a null or non-null supplied value, while an
 omitted member remains omitted under **AUDIT-ACTOR-006**.
 
+Preserving a JSON value under **AUDIT-ACTOR-010** includes preserving every
+supplied object member name and its value recursively. Names such as
+`__proto__` and `constructor` are ordinary JSON names, not implementation
+instructions or exceptions to preservation. Their presence alone does not make
+metadata invalid, and copying or observing metadata cannot remove or reinterpret
+them. This clarifies the existing JSON boundary without permitting non-JSON
+runtime values or changing redaction semantics.
+
 ## Core 0.9.3 correction note (non-normative)
 
 **AUDIT-ACTOR-010** makes the previously missing metadata nullability boundary

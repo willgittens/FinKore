@@ -155,6 +155,25 @@ error code.
 
 ## Open Questions
 
+- **0.9.4 blocking error-priority gap:** A generically valid Audit Event can
+  fail evolution correspondence (for example, valid metadata identifies a
+  different evolution kind). That invalid request falls under
+  `ENTITY-EVOLUTION-024`; missing or intrinsically invalid Audit evidence retains
+  the primary Audit error under the Portable Model and
+  `ENTITY-EVOLUTION-027`. The contract does not yet order intrinsic Audit
+  validation against correspondence validation when both fail. Do not infer
+  that order from the TypeScript implementation or assign a combined-failure
+  vector's expected primary code until this gap is resolved.
+- **0.9.4 blocking currentness gap:** `ENTITY-EVOLUTION-025` compares an
+  expectation with observed currentness, not with a constant or the expectation
+  itself. An unambiguous prior non-current observation for the same Entity,
+  Revision, and applicable scope cannot satisfy an expectation of currentness.
+  A different Entity, Revision, or unrelated supersession scope does not supply
+  that observation. The contract does not yet define how conflicting
+  currentness observations in supplied history are resolved. Do not introduce
+  a permanent non-current-wins rule, last-record-wins rule, or new rejection
+  policy implicitly. Unambiguous-history tests can proceed; tests requiring
+  conflict resolution remain blocked pending a specification decision.
 - Should a future specification version define a common serialized envelope for Evolution
   Relations?
 - Should a future specification version define branch-aware supersession graphs, or require

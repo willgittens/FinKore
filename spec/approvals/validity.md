@@ -45,6 +45,33 @@ Lifecycle events are relationships over existing Approval evidence. They do not
 delete historical Decisions, create new Decisions, or define authorization
 policy.
 
+Recording another Decision preserves the committed lifecycle evidence used by
+**APPROVAL-VALIDITY-001**, including withdrawals and Decision or Requirement
+supersessions. Returning the Decision list while dropping that evidence can
+make an ineffective historical Decision effective again and violates the
+existing current-effectiveness rules. A later Decision is evaluated against
+its own Requirement and facts; withdrawal of an earlier Decision does not
+prohibit a later, independently effective Decision.
+
+An operation explicitly requesting withdrawal has withdrawal meaning under
+**APPROVAL-VALIDITY-004**. Caller-supplied ancillary members cannot turn a
+successful withdrawal into an unknown lifecycle kind or a supersession. The
+same principle applies to the explicitly requested supersession operations in
+**APPROVAL-VALIDITY-010** and **APPROVAL-VALIDITY-011**. This does not prescribe
+a production request envelope. The handling of redundant fixture members is
+documented in the [conformance conventions](../../conformance/conventions.md).
+
+The target checks in **APPROVAL-VALIDITY-005** apply to the complete committed
+Decision and lifecycle observations. Finding the first matching Decision is
+insufficient when the supplied target identifies more than one. Prior
+supersession is an independent reason a withdrawal target is invalid, even
+when there is no prior withdrawal. These failures use
+`FINKORE_APPROVAL_INVALID_DECISION` and preserve both histories under
+**APPROVAL-VALIDITY-012** and **APPROVAL-ERROR-006**.
+
+These 0.9.4 clarifications apply existing validity and history obligations;
+they introduce no new lifecycle kind, eligibility policy, or portable error.
+
 ## Example
 
 The following JSON is illustrative and non-normative:

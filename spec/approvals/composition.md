@@ -209,6 +209,17 @@ validation must not fabricate a Decision merely to supply evidence. Explicit
 inapplicability removes the approval obligation, not structural validity or the
 need to establish applicability. It does not require an approving Decision.
 
+Likewise, an explicitly ineffective Decision differs from a supplied Decision
+whose required effectiveness evidence is absent or malformed. Under
+**APPROVAL-COMPOSITION-010** and **APPROVAL-COMPOSITION-024**, the latter is
+invalid evidence, not an effective vote or an instruction to silently discard
+the Decision. It uses `FINKORE_APPROVAL_INVALID_CHAIN` in category 4 of
+**APPROVAL-ERROR-010**, even if another branch already supplies enough votes.
+An empty, valid set of effective Decisions can still leave a member pending.
+The [conformance fixture](../../conformance/conventions.md) represents each
+supplied Decision's effectiveness with an explicit Boolean; this encoding is
+not a new production serialization requirement.
+
 Validation observes current input; it does not activate future stages, request
 votes, mutate history, or resolve missing facts through ambient lookup. The
 current stage's actionability is determined separately by the stage rules.

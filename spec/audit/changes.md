@@ -31,6 +31,14 @@ The Audit equality check is not the `finkore.money.compare` operation: two
 valid Money values with different currencies are different Change values, so
 their difference is recordable without reporting a currency-mismatch error.
 
+The complete member-set comparison in **AUDIT-CHANGE-008** includes names such
+as `__proto__` and `constructor`, at every nesting level. They are ordinary JSON
+members. Copying, retaining, or observing a Change must not drop those members
+or reinterpret them as runtime instructions. Objects differing only in one such
+member can be different values; equal objects remain subject to unchanged-value
+rejection under **AUDIT-CHANGE-005**. This clarifies existing preservation and
+equality obligations rather than adding a reserved-name policy.
+
 ## Example
 
 The following JSON is illustrative and non-normative; it does not prescribe serialized member names or a domain-path syntax.

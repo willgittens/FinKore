@@ -140,8 +140,9 @@ that every implementation preserves the same meaning.
 These scenarios are only a small illustration of FinKore Core 0.9.3:
 
 Across Money, Workflow, Audit, Approvals, Financial Entities, and shared
-conventions, 327 directly testable requirements are covered by the conformance
-suite. And this is just the beginning.
+conventions, the conformance suite maps vectors to 327 requirements. The 0.9.4
+review reclassifies 35 as partially covered and two as blocking specification
+gaps, leaving 290 covered. See [current traceability](./conformance/traceability.md).
 
 The 331-vector manifest includes permanent Core 0.9.3 regressions. Entity
 import, Workflow guard, and Audit portability corrections pass the complete

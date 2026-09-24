@@ -74,6 +74,16 @@ unsupported non-JSON comparison value, supplies both `guard` and non-empty
 `FINKORE_WORKFLOW_INVALID_DEFINITION` under the existing Workflow definition
 and error-precedence rules.
 
+Omission of both guard members declares no guards. When supplied, `guard` must
+be a well-formed guard object and `guards` must be an array of well-formed guard
+objects; explicit null is invalid for either container. A valid `guard` together
+with `guards: []` means that single guard. A valid `guard` together with a
+nonempty `guards` array is invalid. An empty, null, or non-string `fact` is
+invalid; `equals: null` is a valid explicitly supplied comparison value.
+Definition validation precedes instance, binding, State, conflict, terminal,
+Transition, and guard-result failures under **WORKFLOW-ERROR-007**. A runtime
+exception is not a substitute for `FINKORE_WORKFLOW_INVALID_DEFINITION`.
+
 The fixture supports ordinary JSON null, Boolean, number, string, array, and
 object values. It uses recursive, type-sensitive JSON equality: Boolean and
 number values are distinct; JSON numbers compare by numeric value; strings
@@ -84,6 +94,19 @@ null `equals` value. A well-formed guard whose selected fact is missing or not
 equal rejects the transition with `FINKORE_WORKFLOW_GUARD_REJECTED`. Values are
 not coerced, and an object that resembles Money or another domain type remains
 an ordinary JSON object in this fixture.
+
+Versioned Workflow fixtures identify the definition family with
+`definitionIdentity` and its version with `definitionVersionIdentity`. When
+`versionSequence` is supplied, its only supported selector is `"DEFAULT"`,
+and both identity members are required. Under that selector the version identity
+must match `[1-9][0-9]*`: `"1"` and `"12"` are valid positions; `"0"`, `"01"`,
+signed, fractional, empty, and non-ASCII-digit positions are invalid. The selector
+itself is not parsed as an integer. Invalid selectors, including null or `"1"`,
+produce `FINKORE_WORKFLOW_INVALID_DEFINITION`. Without a selector, valid
+nonempty version identities remain opaque, including identities that would not
+be valid default-sequence positions. This encoding observes
+**WORKFLOW-VERSION-005** and **WORKFLOW-VERSION-006**; it adds no global version
+registry or production request format.
 
 The entity validator named `positive-money` accepts an exact Money amount
 greater than zero. These fixtures let every adapter exercise guard/validation
@@ -182,12 +205,47 @@ expected-state/revision conflict preconditions.
 
 For Approval Composition, `approval.composition.evaluate` uses a conformance-local logical fixture. `composition` declares exactly one `rootGroup` or ordered `stages`, plus declared `groups` with `ALL_OF`, `ANY_OF`, or `N_OF_M` kind. `requirements` supplies explicit applicability and, for non-quorum members, current state observations. Quorum vectors use explicit voter members and `decisions` entries to observe current-effective voter evidence; an `effective: false` decision is retained history that does not count toward current approval. The normalized success value is `{ "outcome": "APPROVED" | "PENDING" | "REJECTED", "actionableRequirements": [...] }`.
 
+Every supplied composition Decision observation requires `effective` as a JSON
+Boolean. Missing, null, numeric, string, array, or object values are malformed
+evidence, not truthy/falsy substitutes or defaults. `true` permits consideration
+under the existing voter/Requirement/eligibility rules; `false` contributes no
+effective vote. Invalid evidence produces `FINKORE_APPROVAL_INVALID_CHAIN` in
+category 4 of **APPROVAL-ERROR-010**, after higher-priority structure,
+applicability, and required-context failures. Validation includes supplied
+evidence in otherwise decisive branches and later stages. The fixture consumes
+current-effectiveness observations; adapters do not derive them or repair them.
+
 For Approvals, `approval.chain.evaluate`, `approval.decision.withdraw`,
 `approval.decision.supersede`, and `approval.requirement.supersede` remain
 conformance-local. They observe deterministic chain composition and
 current-effectiveness lifecycle behavior; they are not public Agentic operations
 and do not replace Decision history as evidence for which Decision satisfied a
 Requirement or which subject facts were bound to that Decision.
+
+Approval history inputs may use the existing Decision array or the
+`{ "history": [...], "lifecycle": [...] }` envelope. The array represents
+Decision history with no lifecycle events. Recording another Decision preserves
+all supplied committed Decisions and lifecycle events; an output omits the
+lifecycle member only when there are no lifecycle events. Adapters translate
+containers without discarding evidence. Tests that withdraw or supersede, record,
+and then evaluate must pass real operation outputs between public APIs as well
+as exercise reconstructed-history conformance vectors.
+
+For the operation-specific withdrawal and supersession fixtures, the operation
+identifier determines the requested lifecycle kind. A redundant `type` member
+inside `withdrawal` or `supersession` has no effect, whether omitted, matching,
+conflicting, null, or otherwise malformed. Successful operations append
+`WITHDRAWN`, `DECISION_SUPERSEDED`, or `REQUIREMENT_SUPERSEDED`, respectively;
+the core operation owns this guarantee. This rule does not apply to committed
+lifecycle history, where `type` is the meaningful event discriminator and is
+validated as such. It does not prescribe the handling of redundant members in
+other production request representations.
+
+A withdrawal target matching zero or multiple committed Decisions, or one
+already withdrawn or superseded, produces `FINKORE_APPROVAL_INVALID_DECISION`
+under **APPROVAL-VALIDITY-005**. Failure preserves both Decision and lifecycle
+history. An accepted withdrawal must also be observed through subsequent
+effectiveness evaluation; a success envelope alone is insufficient evidence.
 
 An `approval.requirement.evaluate` fixture with an array of `decisions` may
 set `input.observeHistory` to `true`. On successful evaluation the adapter
@@ -202,6 +260,19 @@ operations are promoted to canonical `finkore.entity.*` operation identifiers.
 They observe identity, lifecycle, mutability, validation, correction, reversal,
 void, supersession, revision, relation, currentness, and Audit evidence
 semantics defined by the Entity specifications.
+
+The existing evolution fixture supplies `evolutionHistory` as an array of
+declared relation observations, including an empty array for no prior relations.
+The normalized result represents history as `{ "relations": [...] }`. An
+adapter may translate that container into its core's accepted history API and
+normalize it back; it must not reject every nonempty input, invent relations,
+derive currentness, or implement duplicate policies itself. A follow-on fixture
+uses the returned relation array. Native API sequence tests use each documented
+history import boundary. Valid unrelated prior relations must survive a later
+successful operation, and duplicate-rule tests need paired valid histories
+that prove parsing reaches the domain rule. This is a fixture translation
+boundary, not a required production envelope.
+
 For Entities, `entity.import` remains conformance-local after the
 Agentic review. It observes import identity mapping, current and
 historical Entity Revision identity, Entity Conflict Version separation, and
@@ -241,7 +312,7 @@ for file in manifest.vectorFiles:
         assertExact(normalize(actual), vector.expected)
 ```
 
-The adapter bridges syntax. The vector defines behavior.
+The adapter bridges syntax. The vector observes behavior defined by `/spec`.
 
 ## Classification and regression metadata
 

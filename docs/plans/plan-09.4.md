@@ -2,7 +2,9 @@
 
 ## Status
 
-Planned. Implementation has not started. The review of `f39bbe1`
+Milestone 1 contract review and traceability correction are recorded below;
+two Entity specification decisions remain open. Implementation and permanent
+regression work have not started. The review of `f39bbe1`
 (`core-0.9.3`) reproduced the failures below after the complete existing
 verification command passed. The earlier corrective releases remain historical
 snapshots; their passing gates do not close these newly demonstrated defects.
@@ -84,7 +86,7 @@ without checking the governing contract.
 
 ## Milestone 1 — Contract review and traceability correction
 
-- [ ] Review the affected [Approval validity](../../spec/approvals/validity.md),
+- [x] Review the affected [Approval validity](../../spec/approvals/validity.md),
       [composition](../../spec/approvals/composition.md),
       [Entity evolution](../../spec/entities/evolution.md),
       [validation](../../spec/entities/validation.md),
@@ -93,15 +95,15 @@ without checking the governing contract.
       [Audit Actors](../../spec/audit/actors.md), and
       [Changes](../../spec/audit/changes.md) contracts against CoreDoc and the
       applicable domain error catalogs and Agentic metadata.
-- [ ] Classify each finding as an implementation violation, fixture translation
+- [x] Classify each finding as an implementation violation, fixture translation
       defect, documentation inconsistency, or demonstrated normative gap.
       Record any required clarification in its owning document before choosing
       new expectations. Preserve existing identifiers and assess compatibility.
-- [ ] Resolve handling of conflicting lifecycle `type` members at the request
+- [x] Resolve handling of conflicting lifecycle `type` members at the request
       boundary. Successful withdrawal must have withdrawal semantics; rejection
       must preserve history. Review the corresponding Decision and Requirement
       supersession boundaries without inventing new lifecycle policies.
-- [ ] Confirm the composition fixture's required Boolean effectiveness evidence
+- [x] Confirm the composition fixture's required Boolean effectiveness evidence
       and existing error precedence. Keep effectiveness derivation in its owning
       Approval operation; do not infer effectiveness from missing evidence or
       require a new history interpreter in the composition adapter.
@@ -114,17 +116,17 @@ without checking the governing contract.
       currentness conflicts from eligibility and declared duplicate policy.
       Specify fixture-to-API history translation in conformance documentation
       without standardizing a new production envelope.
-- [ ] Confirm Workflow fixture rules for empty fact names, explicit null guards,
+- [x] Confirm Workflow fixture rules for empty fact names, explicit null guards,
       `guard` with empty/nonempty `guards`, and unsupported comparison values.
       Document the default-sequence selector and version-position boundary;
       keep arbitrary opaque version identities valid when that convention is
       not selected.
-- [ ] Reassess affected [traceability](../../conformance/traceability.md) rows.
+- [x] Reassess affected [traceability](../../conformance/traceability.md) rows.
       Use PARTIAL, UNCOVERED, or BLOCKING SPEC GAP where appropriate; one mapped
       rejection does not establish coverage of every mandatory boundary.
       Distinguish local Workflow definition ownership tests from the separate
       cross-definition registry guarantee.
-- [ ] Update `/spec`, `/conformance`, and `/agentic` only where the review shows
+- [x] Update `/spec`, `/conformance`, and `/agentic` only where the review shows
       a change is necessary. CoreDoc changes require a changed foundation
       obligation and its existing version fields; do not create separate
       alignment, provenance, or closure documents.
@@ -132,6 +134,76 @@ without checking the governing contract.
 Completion: every finding has a governing requirement, an explicit portable
 outcome or a documented blocking gap, and an identified test boundary. Unresolved
 financial semantics block dependent implementation work.
+
+### Review outcomes
+
+The review covers the affected normative files, their domain error catalogs,
+CoreDoc, conformance conventions and vectors, and canonical Agentic descriptors.
+The requirements listed in the findings table remain the governing identifiers.
+The table below records portable expectations and test boundaries; it does not
+claim the implementations already satisfy them.
+
+| Finding | Classification and outcome | Permanent test boundary |
+| --- | --- | --- |
+| 1 | Implementation violation. Recording a Decision preserves both Decision and committed lifecycle history. An unrelated revision's Decision does not reactivate withdrawn or superseded evidence. | Native withdraw/supersede → record → evaluate sequences, plus reconstructed-history vectors and a new eligible Decision control. |
+| 2 | Implementation violation; fixture documentation clarified. Every supplied quorum Decision has explicit Boolean `effective`. Missing or malformed evidence returns `FINKORE_APPROVAL_INVALID_CHAIN` in the existing state/effectiveness priority category; `false` is valid ineffective evidence. | Missing/null/string/number/container evidence, `true`/`false` controls, decisive sibling/later-stage cases, and competing error categories. |
+| 3a | Implementation violation; fixture translation clarified. The invoked lifecycle operation determines the event kind. The conformance request ignores redundant `type`, including conflicting values. Committed lifecycle event types remain meaningful and validated. Production APIs are not required to adopt this fixture envelope. | Withdraw, Decision supersede, and Requirement supersede with omitted/matching/conflicting/malformed request `type`; evaluate the actual resulting effect. |
+| 3b | Implementation violation. Missing, ambiguous, withdrawn, or superseded withdrawal targets return `FINKORE_APPROVAL_INVALID_DECISION` without changing either history. | Each invalid target paired with exactly one valid target; observe both history and subsequent effectiveness. |
+| 4 | Implementation violation for accepted mismatched evidence; demonstrated normative gap for simultaneous intrinsic Audit and correspondence failures. Valid generic Audit evidence with invalid evolution correspondence yields `FINKORE_ENTITY_INVALID_MUTATION`; intrinsically invalid evidence preserves its primary Audit error when no competing failure requires undefined precedence. | Each evolution kind with valid evidence, then one mismatched correspondence field, missing relationship, and standalone Audit failure. Combined-failure primary-code assertions are blocked by the gap below. |
+| 5a | Implementation violation for ignored unambiguous currentness; demonstrated normative gap for conflicting observations. A mismatch against observed source currentness returns `FINKORE_ENTITY_STATE_CONFLICT`, independently of eligibility. | Exact Entity/Revision/scope matches and unrelated controls with unambiguous history. Conflicting-history expected outcomes remain blocked. |
+| 5b | Fixture translation defect and misleading negative-test coverage. Nonempty history arrays are accepted and preserved when valid; only the declared duplicate policy or other actual invalidity justifies rejection. | An unrelated prior relation succeeds; an actual duplicate fails for its governing rule; native sequences reuse actual returned history. |
+| 6 | Implementation violation. Full source and related/successor Business Validation applies to evolution; business-rule failure returns `FINKORE_ENTITY_VALIDATION_FAILED` unless a different domain failure is primary. | Invalid positive-money input paired with valid data; complete validation findings and atomic failure for all affected observations. |
+| 7 | Implementation violation and traceability rationale correction. Nested caller or observation mutations cannot change retained definition-version semantics. Local ownership needs no registry. | Native tests mutate original and returned nested objects/arrays, then observe unchanged guard behavior, binding, state, and revision. |
+| 8 | Implementation violation. Every own JSON member survives metadata preservation and participates in recursive Change comparison, including `__proto__` and `constructor`. A real change succeeds; unchanged content returns `FINKORE_AUDIT_INVALID_EVENT`. | Parsed JSON/native maps with scalar/object/array nesting, unequal/equal controls, and retained-history ownership observations. |
+| 9 | Implementation and fixture translation defects. Empty fact names or null/malformed guards return `FINKORE_WORKFLOW_INVALID_DEFINITION` with existing definition-error priority. A valid `guard` plus `guards: []` is accepted; a nonempty competing list is rejected. Explicit null comparison values remain valid JSON. | Paired create/transition fixture cases, combined-invalidity priority, and no host exception substituted for a portable error. |
+| 10 | Fixture translation defect. `DEFAULT` selects the convention; the version identity supplies a positive base-10 position. Valid positions are accepted, invalid selectors/positions return `FINKORE_WORKFLOW_INVALID_DEFINITION`, and omitted selectors retain opaque version identities. | Valid `1` and multi-digit positions paired with zero/leading-zero/sign/fraction/malformed cases and opaque non-default controls. |
+
+### Pending Entity decisions
+
+Two questions remain in the owning [Entity evolution specification](../../spec/entities/evolution.md#open-questions).
+The corresponding checklist items stay open until a decision is recorded:
+
+1. **Audit error priority:** Does intrinsic Audit validation precede evolution
+   correspondence when both fail? The proposed clarification is Audit validation
+   first, then correspondence. It is not adopted by this milestone. A chosen
+   precedence requires explicit normative wording, compatibility assessment, and
+   combined-failure regressions; existing implementation order is insufficient
+   evidence.
+2. **Conflicting currentness:** Does 0.9.4 explicitly leave conflicting-history
+   resolution outside its guaranteed behavior, or define a universal rule?
+   The proposed scope is unambiguous exact Entity/Revision/scope observations
+   while leaving the conflict policy unresolved. It is not a blanket rule that
+   any prior non-current observation permanently wins.
+
+These documented gaps satisfy the review's requirement to identify undefined
+semantics, but do not authorize implementation guesses. Milestone 2 can proceed
+on the unambiguous boundaries; dependent Entity cases await decisions. Core 1.0
+remains blocked, and the final review must resolve or explicitly bound these
+gaps before any readiness claim.
+
+### Compatibility and synchronization
+
+The committed review changes explain existing financial obligations and the
+conformance-only input vocabulary. They preserve requirement IDs, portable error
+codes, operation IDs, vector IDs, and serialization version `0.1`. They add no
+domain, expression language, production envelope, registry, or lifecycle policy.
+Correcting accepted invalid inputs or rejected valid fixtures changes defective
+implementation behavior; it does not establish that current consumers observe
+identical behavior. Release documentation must describe those corrections when
+implemented. A future error-precedence or currentness-policy decision must be
+assessed separately under `SPEC-COMPATIBILITY-005`, `-012`, and `-014`.
+
+Traceability now records 290 COVERED, 35 PARTIAL, 2 BLOCKING SPEC GAP, and 82
+NOT DIRECTLY TESTABLE requirements out of 409; all 331 vectors and their existing
+requirement mappings are retained. Local Workflow ownership remains a native
+test obligation even where isolated JSON vectors cannot express aliasing.
+
+CoreDoc's foundation obligations are unchanged, so its rules and version fields
+need no edit. Specification clarifications, conformance conventions, Agentic
+metadata, and README coverage claims are synchronized. No code, public API,
+JSDoc, vector, or mutation-test implementation changes belong to this milestone;
+those updates remain required by Milestones 2–7. AGENTS.md and release history
+need no change for this contract review.
 
 ## Milestone 2 — Permanent failing regressions and positive controls
 

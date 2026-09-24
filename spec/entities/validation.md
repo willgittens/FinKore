@@ -27,6 +27,17 @@ This document defines validation of financial entity state and proposed domain o
 
 A successful operation must leave the Financial Entity valid for its resulting State. A failed operation must leave the Financial Entity unchanged.
 
+The applicable rules in **ENTITY-VALIDATION-001** also govern Entity
+observations supplied as the source, related Entity, or successor of an
+[evolution operation](evolution.md). Preserving source facts does not waive
+their declared validation, and an operation cannot successfully identify an
+invalid related Entity as its domain result. Validate each complete observation
+against the rules applicable to its State. A declared business-validator failure
+uses **ENTITY-VALIDATION-004**; preservation of a more specific primary domain
+failure still follows **ENTITY-ERROR-004**. Failed evolution returns no partial
+relation, currentness change, or Audit commit under **ENTITY-EVOLUTION-023**
+and **ENTITY-EVOLUTION-033**.
+
 ## Example
 
 The following JSON is illustrative and non-normative.

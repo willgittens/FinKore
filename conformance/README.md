@@ -24,6 +24,12 @@ The `core-0.9.3` tag identifies the corrective snapshot of this manifest.
 Its regression vectors exercise the existing `0.9-rc` behavioral baseline;
 the conformance syntax version remains `0.1`.
 
+The [Core 0.9.4 plan](../docs/plans/plan-09.4.md) reopens demonstrated boundary
+gaps after that snapshot. Milestone 1 clarifies contracts and fixtures and
+corrects [traceability](traceability.md); it adds no vectors or implementation
+fixes. Passing the existing manifest does not close the reopened requirements
+or establish Core 1.0 readiness.
+
 For FinKore Core 0.9 release candidate, [manifest.json](manifest.json) is the
 frozen release-candidate manifest and `finkoreConformance` remains `0.1`. This
 freeze does not permit manifest-listed behavior to change except through the

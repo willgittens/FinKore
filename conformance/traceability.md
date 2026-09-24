@@ -11,13 +11,13 @@ Audit, Approvals, and Entities scope.
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Shared | 51 | 41 | 5 | 5 | 10 | 0 | 0 | 41 | 0 | 0 |
 | Money | 74 | 69 | 1 | 4 | 69 | 0 | 0 | 5 | 0 | 0 |
-| Workflow | 57 | 55 | 1 | 1 | 48 | 0 | 0 | 9 | 0 | 0 |
-| Audit | 57 | 49 | 4 | 4 | 47 | 0 | 0 | 10 | 0 | 0 |
-| Approvals | 86 | 83 | 1 | 2 | 81 | 0 | 0 | 5 | 0 | 0 |
-| Entities | 84 | 79 | 3 | 2 | 72 | 0 | 0 | 12 | 0 | 0 |
-| **Total** | **409** | **376** | **15** | **18** | **327** | **0** | **0** | **82** | **0** | **0** |
+| Workflow | 57 | 55 | 1 | 1 | 42 | 6 | 0 | 9 | 0 | 0 |
+| Audit | 57 | 49 | 4 | 4 | 43 | 4 | 0 | 10 | 0 | 0 |
+| Approvals | 86 | 83 | 1 | 2 | 68 | 13 | 0 | 5 | 0 | 0 |
+| Entities | 84 | 79 | 3 | 2 | 58 | 12 | 0 | 12 | 0 | 2 |
+| **Total** | **409** | **376** | **15** | **18** | **290** | **35** | **0** | **82** | **0** | **2** |
 
-The suite contains 331 vectors. Overall: **327 covered (80.0%)**, **0 partially covered (0.0%)**, **0 uncovered (0.0%)**, **82 not directly testable (20.0%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
+The suite contains 331 vectors. Overall: **290 covered (70.9%)**, **35 partially covered (8.6%)**, **0 uncovered (0.0%)**, **82 not directly testable (20.0%)**, **0 deferred (0.0%)**, **2 blocking spec gaps (0.5%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. PARTIAL means current vectors exercise part of a requirement but do not yet cover a mandatory observable boundary. DEFERRED means the requirement is explicitly outside the current release candidate. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published.
 
@@ -43,6 +43,16 @@ for imported validation, the Workflow equality matrix, optional actor-string
 and null-metadata boundaries, and the explicit Audit JSON/Money comparison
 rules. Passing implementation work remains tracked separately by later
 milestones.
+
+The Core 0.9.4 Milestone 1 review supersedes earlier blanket coverage claims:
+35 requirements are PARTIAL and two have BLOCKING SPEC GAP classifications.
+Existing vector references are retained as partial evidence. No regressions or
+implementation fixes have landed in this milestone. The [0.9.4 plan](../docs/plans/plan-09.4.md)
+maps each missing boundary to its corrective milestone. The two blocking gaps
+are documented in [Entity evolution](../spec/entities/evolution.md#open-questions).
+They block only dependent expectations and fixes; unambiguous regressions can
+proceed. A passing 331-vector run does not close these gaps or establish 1.0
+readiness.
 
 ## Requirement mapping
 
@@ -173,13 +183,13 @@ milestones.
 | MONEY-SERIALIZATION-006 | Money | MAY | COVERED | money.deserialize.unknown-members-001 |
 | MONEY-SERIALIZATION-007 | Money | MUST / MUST NOT | COVERED | money.deserialize.unknown-members-001 |
 | MONEY-SERIALIZATION-008 | Money | MUST / MUST NOT | COVERED | money.deserialize.positive-001, money.deserialize.unknown-members-001, money.divide.quotient-plain-expansion-001, money.serialize.roundtrip-001 |
-| WORKFLOW-ERROR-001 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.transition-rejected-001 |
+| WORKFLOW-ERROR-001 | Workflow | MUST / MUST NOT | PARTIAL | workflow.terminal.transition-rejected-001; Missing empty/null/malformed guard and empty competing-list controls, including definition-error priority (finding 9). |
 | WORKFLOW-ERROR-002 | Workflow | MAY | NOT DIRECTLY TESTABLE | Optional safe diagnostics are omitted from normalized vector errors. |
 | WORKFLOW-ERROR-003 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001, workflow.transition.reverse-not-implied-001, workflow.transition.state-identity-exact-001, workflow.transition.undeclared-001 |
 | WORKFLOW-ERROR-004 | Workflow | MUST / MUST NOT | COVERED | workflow.import.version-mismatch-001, workflow.transition.version-mismatch-preserves-state-001 |
 | WORKFLOW-ERROR-005 | Workflow | MUST / MUST NOT | COVERED | workflow.import.malformed-revision-invalid-instance-001, workflow.import.missing-current-state-invalid-instance-001, workflow.import.undeclared-current-state-001, workflow.transition.error-precedence-invalid-instance-before-version-001, workflow.transition.multiple-current-states-001 |
 | WORKFLOW-ERROR-006 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.expected-revision-mismatch-001, workflow.transition.expected-state-mismatch-001 |
-| WORKFLOW-ERROR-007 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.error-precedence-conflict-before-terminal-001, workflow.transition.error-precedence-invalid-instance-before-version-001, workflow.transition.error-precedence-invalid-state-before-conflict-001, workflow.transition.error-precedence-terminal-before-invalid-transition-001 |
+| WORKFLOW-ERROR-007 | Workflow | MUST / MUST NOT | PARTIAL | workflow.transition.error-precedence-conflict-before-terminal-001, workflow.transition.error-precedence-invalid-instance-before-version-001, workflow.transition.error-precedence-invalid-state-before-conflict-001, workflow.transition.error-precedence-terminal-before-invalid-transition-001; Missing empty/null/malformed guard and empty competing-list controls, including definition-error priority (finding 9). |
 | WORKFLOW-CONFLICT-001 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.expected-state-omitted-no-default-001 |
 | WORKFLOW-CONFLICT-002 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.error-precedence-invalid-state-before-conflict-001, workflow.transition.expected-state-matches-001 |
 | WORKFLOW-CONFLICT-003 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.expected-state-mismatch-001 |
@@ -188,8 +198,8 @@ milestones.
 | WORKFLOW-CONFLICT-006 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.bound-older-version-001, workflow.transition.expected-revision-matches-001, workflow.transition.expected-state-matches-001 |
 | WORKFLOW-CONFLICT-007 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.expected-revision-mismatch-001, workflow.transition.expected-state-mismatch-001 |
 | WORKFLOW-CONFLICT-008 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Absence of storage-lock or distributed-coordination semantics is architectural, not a portable result. |
-| WORKFLOW-GUARD-001 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.array-equal-pass-001, workflow.guard.array-order-rejected-001, workflow.guard.boolean-expected-number-actual-rejected-001, workflow.guard.explicit-null-pass-001, workflow.guard.missing-fact-not-null-001, workflow.guard.multiple-pass-001, workflow.guard.multiple-rejection-preserves-context-001, workflow.guard.multiple-structured-pass-001, workflow.guard.nested-boolean-number-rejected-001, workflow.guard.number-expected-boolean-actual-rejected-001, workflow.guard.object-member-order-pass-001, workflow.guard.pass-001 |
-| WORKFLOW-GUARD-002 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.array-equal-pass-001, workflow.guard.array-order-rejected-001, workflow.guard.boolean-expected-number-actual-rejected-001, workflow.guard.explicit-null-pass-001, workflow.guard.missing-fact-not-null-001, workflow.guard.multiple-order-invariant-001, workflow.guard.multiple-pass-001, workflow.guard.multiple-rejection-preserves-context-001, workflow.guard.multiple-structured-pass-001, workflow.guard.nested-boolean-number-rejected-001, workflow.guard.number-expected-boolean-actual-rejected-001, workflow.guard.object-member-order-pass-001, workflow.guard.pass-001, workflow.guard.reject-001 |
+| WORKFLOW-GUARD-001 | Workflow | MUST / MUST NOT | PARTIAL | workflow.guard.array-equal-pass-001, workflow.guard.array-order-rejected-001, workflow.guard.boolean-expected-number-actual-rejected-001, workflow.guard.explicit-null-pass-001, workflow.guard.missing-fact-not-null-001, workflow.guard.multiple-pass-001, workflow.guard.multiple-rejection-preserves-context-001, workflow.guard.multiple-structured-pass-001, workflow.guard.nested-boolean-number-rejected-001, workflow.guard.number-expected-boolean-actual-rejected-001, workflow.guard.object-member-order-pass-001, workflow.guard.pass-001; Missing empty/null/malformed guard and empty competing-list controls, including definition-error priority (finding 9). |
+| WORKFLOW-GUARD-002 | Workflow | MUST / MUST NOT | PARTIAL | workflow.guard.array-equal-pass-001, workflow.guard.array-order-rejected-001, workflow.guard.boolean-expected-number-actual-rejected-001, workflow.guard.explicit-null-pass-001, workflow.guard.missing-fact-not-null-001, workflow.guard.multiple-order-invariant-001, workflow.guard.multiple-pass-001, workflow.guard.multiple-rejection-preserves-context-001, workflow.guard.multiple-structured-pass-001, workflow.guard.nested-boolean-number-rejected-001, workflow.guard.number-expected-boolean-actual-rejected-001, workflow.guard.object-member-order-pass-001, workflow.guard.pass-001, workflow.guard.reject-001; Missing empty/null/malformed guard and empty competing-list controls, including definition-error priority (finding 9). |
 | WORKFLOW-GUARD-003 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.array-order-rejected-001, workflow.guard.boolean-expected-number-actual-rejected-001, workflow.guard.missing-fact-not-null-001, workflow.guard.multiple-order-invariant-001, workflow.guard.multiple-rejection-preserves-context-001, workflow.guard.nested-boolean-number-rejected-001, workflow.guard.number-expected-boolean-actual-rejected-001, workflow.guard.reject-001 |
 | WORKFLOW-GUARD-004 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | External-fact dependency declaration needs a guard-definition schema not present in this release. |
 | WORKFLOW-GUARD-005 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Authorization-model independence is an architectural guarantee outside the fact-equality fixture. |
@@ -220,13 +230,13 @@ milestones.
 | WORKFLOW-TRANSITION-007 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | No intermediate state is exposed by the atomic operation boundary for a vector to observe. |
 | WORKFLOW-VERSION-001 | Workflow | MUST / MUST NOT | COVERED | workflow.create.version-missing-invalid-001, workflow.create.versioned-binding-001 |
 | WORKFLOW-VERSION-002 | Workflow | MUST / MUST NOT | COVERED | workflow.create.versioned-binding-001 |
-| WORKFLOW-VERSION-003 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Immutable reuse across separately published definitions requires a definition registry or history. |
+| WORKFLOW-VERSION-003 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Isolated JSON vectors cannot retain caller aliases. Native public-API tests must verify local nested-definition ownership (finding 7); those regressions are still missing. Cross-publication identity reuse separately requires a registry or history. |
 | WORKFLOW-VERSION-004 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Cross-concept identity distinction is a composing-domain modeling constraint. |
 | WORKFLOW-VERSION-005 | Workflow | MUST / MUST NOT | COVERED | workflow.create.versioned-binding-001 |
-| WORKFLOW-VERSION-006 | Workflow | MUST / MUST NOT | COVERED | workflow.create.default-version-sequence-zero-invalid-001 |
+| WORKFLOW-VERSION-006 | Workflow | MUST / MUST NOT | PARTIAL | workflow.create.default-version-sequence-zero-invalid-001; Missing valid DEFAULT selector/version-position counterparts to invalid position cases (finding 10). |
 | WORKFLOW-VERSION-007 | Workflow | MUST / MUST NOT | COVERED | workflow.create.versioned-binding-001, workflow.import.version-binding-preserved-001 |
 | WORKFLOW-VERSION-008 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.bound-older-version-001 |
-| WORKFLOW-VERSION-009 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.bound-older-version-001 |
+| WORKFLOW-VERSION-009 | Workflow | MUST / MUST NOT | PARTIAL | workflow.transition.bound-older-version-001; Missing native public-API nested-alias mutation regressions; isolated JSON vectors cannot prove retained ownership (finding 7). |
 | WORKFLOW-VERSION-010 | Workflow | MUST / MUST NOT | COVERED | workflow.import.version-mismatch-001, workflow.transition.version-mismatch-preserves-state-001 |
 | WORKFLOW-VERSION-011 | Workflow | MUST / MUST NOT | COVERED | workflow.transition.bound-older-version-001 |
 | WORKFLOW-VERSION-012 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Optional diagnostic content is outside normalized vector errors and needs disclosure review. |
@@ -239,8 +249,8 @@ milestones.
 | AUDIT-ACTOR-007 | Audit | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | Actor type remains recommended and omission is valid, so no mandatory result distinguishes compliance. |
 | AUDIT-ACTOR-008 | Audit | MUST / MUST NOT | COVERED | audit.actor.identity-preserved-in-history-001 |
 | AUDIT-ACTOR-009 | Audit | MUST / MUST NOT | COVERED | audit.actor.empty-display-name-001, audit.actor.empty-id-001, audit.actor.invalid-display-name-precedes-duplicate-001, audit.actor.invalid-history-display-name-precedence-001, audit.actor.invalid-type-001, audit.actor.malformed-representation-001, audit.actor.missing-id-001, audit.actor.null-display-name-001, audit.actor.null-type-001, audit.actor.numeric-display-name-001, audit.actor.precedence-duplicate-001, audit.actor.precedence-invalid-event-001 |
-| AUDIT-ACTOR-010 | Audit | MUST / MUST NOT | COVERED | audit.actor.metadata-null-preserved-001, audit.redaction.actor-metadata-null-001, audit.redaction.actor-metadata-omitted-001 |
-| AUDIT-APPEND-001 | Audit | MUST / MUST NOT | COVERED | audit.append-only.remove-forbidden-001, audit.append-only.replace-forbidden-001 |
+| AUDIT-ACTOR-010 | Audit | MUST / MUST NOT | PARTIAL | audit.actor.metadata-null-preserved-001, audit.redaction.actor-metadata-null-001, audit.redaction.actor-metadata-omitted-001; Missing recursive own JSON member preservation/comparison for __proto__ and constructor, including unchanged controls (finding 8). |
+| AUDIT-APPEND-001 | Audit | MUST / MUST NOT | PARTIAL | audit.append-only.remove-forbidden-001, audit.append-only.replace-forbidden-001; Missing recursive own JSON member preservation/comparison for __proto__ and constructor, including unchanged controls (finding 8). |
 | AUDIT-APPEND-002 | Audit | MUST / MUST NOT | NOT DIRECTLY TESTABLE | No current portable field represents a mutable explicit ordering relationship. |
 | AUDIT-APPEND-003 | Audit | MUST / MUST NOT | COVERED | audit.actor.precedence-relationship-001, audit.event.duplicate-identity-001 |
 | AUDIT-APPEND-004 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
@@ -249,10 +259,10 @@ milestones.
 | AUDIT-CHANGE-002 | Audit | SHOULD / SHOULD NOT | COVERED | audit.change.before-after-001 |
 | AUDIT-CHANGE-003 | Audit | MUST / MUST NOT | COVERED | audit.change.absent-vs-null-001 |
 | AUDIT-CHANGE-004 | Audit | MUST / MUST NOT | COVERED | audit.change.money-amount-changed-001, audit.change.money-currency-changed-001, audit.change.money-trailing-zero-unchanged-001, audit.change.money-value-preserved-001 |
-| AUDIT-CHANGE-005 | Audit | MUST / MUST NOT | COVERED | audit.change.array-order-unchanged-001, audit.change.array-reordering-changed-001, audit.change.boolean-to-number-distinct-001, audit.change.money-amount-changed-001, audit.change.money-currency-changed-001, audit.change.money-shaped-ordinary-json-001, audit.change.money-trailing-zero-unchanged-001, audit.change.nested-boolean-number-distinct-001, audit.change.number-to-boolean-distinct-001, audit.change.object-member-order-unchanged-001, audit.change.unchanged-boolean-rejected-001, audit.change.unchanged-rejected-001 |
+| AUDIT-CHANGE-005 | Audit | MUST / MUST NOT | PARTIAL | audit.change.array-order-unchanged-001, audit.change.array-reordering-changed-001, audit.change.boolean-to-number-distinct-001, audit.change.money-amount-changed-001, audit.change.money-currency-changed-001, audit.change.money-shaped-ordinary-json-001, audit.change.money-trailing-zero-unchanged-001, audit.change.nested-boolean-number-distinct-001, audit.change.number-to-boolean-distinct-001, audit.change.object-member-order-unchanged-001, audit.change.unchanged-boolean-rejected-001, audit.change.unchanged-rejected-001; Missing recursive own JSON member preservation/comparison for __proto__ and constructor, including unchanged controls (finding 8). |
 | AUDIT-CHANGE-006 | Audit | MUST / MUST NOT | COVERED | audit.redaction.preserve-evidence-001 |
 | AUDIT-CHANGE-007 | Audit | MAY | NOT DIRECTLY TESTABLE | Change omission is optional and depends on event type or disclosure policy. |
-| AUDIT-CHANGE-008 | Audit | MUST / MUST NOT | COVERED | audit.change.array-order-unchanged-001, audit.change.array-reordering-changed-001, audit.change.boolean-to-number-distinct-001, audit.change.money-shaped-ordinary-json-001, audit.change.nested-boolean-number-distinct-001, audit.change.number-to-boolean-distinct-001, audit.change.object-member-order-unchanged-001, audit.change.unchanged-boolean-rejected-001 |
+| AUDIT-CHANGE-008 | Audit | MUST / MUST NOT | PARTIAL | audit.change.array-order-unchanged-001, audit.change.array-reordering-changed-001, audit.change.boolean-to-number-distinct-001, audit.change.money-shaped-ordinary-json-001, audit.change.nested-boolean-number-distinct-001, audit.change.number-to-boolean-distinct-001, audit.change.object-member-order-unchanged-001, audit.change.unchanged-boolean-rejected-001; Missing recursive own JSON member preservation/comparison for __proto__ and constructor, including unchanged controls (finding 8). |
 | AUDIT-CHANGE-009 | Audit | MUST / MUST NOT | COVERED | audit.change.money-amount-changed-001, audit.change.money-currency-changed-001, audit.change.money-malformed-declared-value-001, audit.change.money-trailing-zero-unchanged-001 |
 | AUDIT-ERROR-001 | Audit | MUST / MUST NOT | COVERED | audit.actor.empty-display-name-001, audit.actor.empty-id-001, audit.actor.invalid-display-name-precedes-duplicate-001, audit.actor.invalid-history-display-name-precedence-001, audit.actor.invalid-type-001, audit.actor.malformed-representation-001, audit.actor.missing-id-001, audit.actor.null-display-name-001, audit.actor.null-type-001, audit.actor.numeric-display-name-001, audit.actor.precedence-duplicate-001, audit.actor.precedence-invalid-event-001, audit.actor.precedence-relationship-001, audit.change.array-order-unchanged-001, audit.change.money-malformed-declared-value-001, audit.change.money-trailing-zero-unchanged-001, audit.change.object-member-order-unchanged-001, audit.change.unchanged-boolean-rejected-001, audit.change.unchanged-rejected-001, audit.event.implementation-type-rejected-001, audit.event.metadata-conflict-001, audit.event.missing-entity-id-001, audit.event.missing-timestamp-001, audit.redaction.actor-metadata-omitted-001, audit.redaction.unknown-path-001, shared.timestamp.excess-precision-001, shared.timestamp.invalid-calendar-001 |
 | AUDIT-ERROR-002 | Audit | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Normalized errors omit messages/details, so protected-detail absence needs security review. |
@@ -305,7 +315,7 @@ milestones.
 | APPROVAL-COMPOSITION-007 | Approvals | MUST / MUST NOT | COVERED | approval.composition.structure-cycle-depth-invalid-001 |
 | APPROVAL-COMPOSITION-008 | Approvals | MUST / MUST NOT | COVERED | approval.composition.all-of-pending-001 |
 | APPROVAL-COMPOSITION-009 | Approvals | MUST / MUST NOT | COVERED | approval.composition.unresolved-applicability-complete-validation-001 |
-| APPROVAL-COMPOSITION-010 | Approvals | MUST / MUST NOT | COVERED | approval.composition.error-priority-context-before-state-001, approval.composition.error-priority-structure-over-context-001 |
+| APPROVAL-COMPOSITION-010 | Approvals | MUST / MUST NOT | PARTIAL | approval.composition.error-priority-context-before-state-001, approval.composition.error-priority-structure-over-context-001; Missing malformed explicit effectiveness evidence and validation-priority controls across branches and stages (finding 2). |
 | APPROVAL-COMPOSITION-011 | Approvals | MUST / MUST NOT | COVERED | approval.composition.any-of-inapplicable-child-pending-001, approval.composition.none-applicable-approved-001, approval.composition.quorum-fixed-threshold-unreachable-001 |
 | APPROVAL-COMPOSITION-012 | Approvals | MUST / MUST NOT | COVERED | approval.composition.any-of-inapplicable-child-pending-001, approval.composition.none-applicable-approved-001 |
 | APPROVAL-COMPOSITION-013 | Approvals | MUST / MUST NOT | COVERED | approval.composition.all-of-pending-001 |
@@ -319,7 +329,7 @@ milestones.
 | APPROVAL-COMPOSITION-021 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-ineffective-decision-not-counted-001 |
 | APPROVAL-COMPOSITION-022 | Approvals | MUST / MUST NOT | COVERED | approval.composition.none-applicable-approved-001, approval.composition.stage-inapplicable-allows-later-001 |
 | APPROVAL-COMPOSITION-023 | Approvals | MUST / MUST NOT | COVERED | approval.composition.stage-inapplicable-allows-later-001, approval.composition.stage-parallel-rejected-001 |
-| APPROVAL-COMPOSITION-024 | Approvals | MUST / MUST NOT | COVERED | approval.composition.stage-first-pending-actionable-001, approval.composition.unresolved-applicability-complete-validation-001 |
+| APPROVAL-COMPOSITION-024 | Approvals | MUST / MUST NOT | PARTIAL | approval.composition.stage-first-pending-actionable-001, approval.composition.unresolved-applicability-complete-validation-001; Missing malformed explicit effectiveness evidence and validation-priority controls across branches and stages (finding 2). |
 | APPROVAL-CONDITION-001 | Approvals | MUST / MUST NOT | COVERED | approval.condition.applicable-explicit-001, approval.condition.falsey-facts-present-001, approval.condition.missing-fact-001, approval.condition.not-applicable-explicit-001 |
 | APPROVAL-CONDITION-002 | Approvals | MUST / MUST NOT | COVERED | approval.condition.applicable-explicit-001, approval.condition.missing-result-unresolved-001, approval.condition.not-applicable-explicit-001 |
 | APPROVAL-CONDITION-003 | Approvals | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | Audit-evidence retention is a composing-domain recommendation outside Approval results. |
@@ -339,15 +349,15 @@ milestones.
 | APPROVAL-ERROR-003 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.pending-001, approval.requirement.rejected-001 |
 | APPROVAL-ERROR-004 | Approvals | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Normalized errors omit details, so restricted-data absence needs security review. |
 | APPROVAL-ERROR-005 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001, approval.decision.timestamp-ambiguous-001, shared.timestamp.invalid-decision-precision-001 |
-| APPROVAL-ERROR-006 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-duplicate-invalid-001 |
+| APPROVAL-ERROR-006 | Approvals | MUST / MUST NOT | PARTIAL | approval.validity.withdraw-duplicate-invalid-001; Missing ambiguous and superseded withdrawal targets, subsequent effectiveness, and failure-atomicity controls (finding 3b). |
 | APPROVAL-ERROR-007 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-missing-context-001, shared.timestamp.invalid-evaluation-precision-001 |
 | APPROVAL-ERROR-008 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-invalid-member-voter-001, approval.composition.quorum-opposing-effective-votes-invalid-001, approval.composition.structure-cycle-depth-invalid-001, approval.composition.structure-empty-stage-kind-invalid-001, approval.composition.structure-invalid-duplicates-001 |
 | APPROVAL-ERROR-009 | Approvals | MUST / MUST NOT | COVERED | approval.composition.error-priority-context-before-state-001, approval.composition.error-priority-structure-over-context-001, approval.composition.unresolved-applicability-complete-validation-001 |
-| APPROVAL-ERROR-010 | Approvals | MUST / MUST NOT | COVERED | approval.composition.error-priority-context-before-state-001, approval.composition.error-priority-structure-over-context-001, approval.composition.quorum-opposing-effective-votes-invalid-001 |
+| APPROVAL-ERROR-010 | Approvals | MUST / MUST NOT | PARTIAL | approval.composition.error-priority-context-before-state-001, approval.composition.error-priority-structure-over-context-001, approval.composition.quorum-opposing-effective-votes-invalid-001; Missing malformed explicit effectiveness evidence and validation-priority controls across branches and stages (finding 2). |
 | APPROVAL-QUORUM-001 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-fixed-threshold-unreachable-001, approval.composition.quorum-two-of-three-approved-boundary-001 |
-| APPROVAL-QUORUM-002 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-member-specific-evidence-001, approval.composition.quorum-two-of-three-approved-boundary-001 |
+| APPROVAL-QUORUM-002 | Approvals | MUST / MUST NOT | PARTIAL | approval.composition.quorum-member-specific-evidence-001, approval.composition.quorum-two-of-three-approved-boundary-001; Missing malformed explicit effectiveness evidence and validation-priority controls across branches and stages (finding 2). |
 | APPROVAL-QUORUM-003 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-two-of-three-approved-boundary-001 |
-| APPROVAL-QUORUM-004 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-ineffective-decision-not-counted-001 |
+| APPROVAL-QUORUM-004 | Approvals | MUST / MUST NOT | PARTIAL | approval.composition.quorum-ineffective-decision-not-counted-001; Missing malformed explicit effectiveness evidence and validation-priority controls across branches and stages (finding 2). |
 | APPROVAL-QUORUM-005 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-two-of-three-approved-boundary-001 |
 | APPROVAL-QUORUM-006 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-fixed-threshold-unreachable-001, approval.composition.quorum-reachable-pending-001 |
 | APPROVAL-QUORUM-007 | Approvals | MUST / MUST NOT | COVERED | approval.composition.quorum-invalid-member-voter-001 |
@@ -361,18 +371,18 @@ milestones.
 | APPROVAL-REQUIREMENT-005 | Approvals | MUST / MUST NOT | COVERED | approval.requirement.pending-001 |
 | APPROVAL-REQUIREMENT-006 | Approvals | MUST / MUST NOT | COVERED | approval.decision.ineligible-actor-001 |
 | APPROVAL-REQUIREMENT-007 | Approvals | MAY | NOT DIRECTLY TESTABLE | Conditional requirements are optional; executable condition behavior is covered by its own requirements. |
-| APPROVAL-VALIDITY-001 | Approvals | MUST / MUST NOT | COVERED | approval.validity.decision-superseded-not-counted-001, approval.validity.withdrawn-not-counted-001 |
-| APPROVAL-VALIDITY-002 | Approvals | MUST / MUST NOT | COVERED | approval.validity.array-number-boolean-fact-change-001, approval.validity.boolean-number-fact-change-001, approval.validity.decision-supersession-preserves-history-001, approval.validity.false-zero-fact-change-001, approval.validity.nested-number-boolean-fact-change-001, approval.validity.requirement-supersession-preserves-history-001, approval.validity.structured-facts-unchanged-001, approval.validity.withdraw-preserves-history-001 |
+| APPROVAL-VALIDITY-001 | Approvals | MUST / MUST NOT | PARTIAL | approval.validity.decision-superseded-not-counted-001, approval.validity.withdrawn-not-counted-001; Missing lifecycle preservation across subsequent Decision recording and operation-type conflict controls (findings 1 and 3a). |
+| APPROVAL-VALIDITY-002 | Approvals | MUST / MUST NOT | PARTIAL | approval.validity.array-number-boolean-fact-change-001, approval.validity.boolean-number-fact-change-001, approval.validity.decision-supersession-preserves-history-001, approval.validity.false-zero-fact-change-001, approval.validity.nested-number-boolean-fact-change-001, approval.validity.requirement-supersession-preserves-history-001, approval.validity.structured-facts-unchanged-001, approval.validity.withdraw-preserves-history-001; Missing lifecycle preservation across subsequent Decision recording and operation-type conflict controls (findings 1 and 3a). |
 | APPROVAL-VALIDITY-003 | Approvals | MUST / MUST NOT | COVERED | approval.validity.array-number-boolean-fact-change-001, approval.validity.boolean-number-fact-change-001, approval.validity.false-zero-fact-change-001, approval.validity.nested-number-boolean-fact-change-001, approval.validity.stale-revision-not-effective-001, approval.validity.structured-facts-unchanged-001, approval.validity.unchanged-relevant-facts-effective-001 |
-| APPROVAL-VALIDITY-004 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-preserves-history-001, approval.validity.withdrawn-not-counted-001 |
-| APPROVAL-VALIDITY-005 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-duplicate-invalid-001 |
+| APPROVAL-VALIDITY-004 | Approvals | MUST / MUST NOT | PARTIAL | approval.validity.withdraw-preserves-history-001, approval.validity.withdrawn-not-counted-001; Missing lifecycle preservation across subsequent Decision recording and operation-type conflict controls (findings 1 and 3a). |
+| APPROVAL-VALIDITY-005 | Approvals | MUST / MUST NOT | PARTIAL | approval.validity.withdraw-duplicate-invalid-001; Missing ambiguous and superseded withdrawal targets, subsequent effectiveness, and failure-atomicity controls (finding 3b). |
 | APPROVAL-VALIDITY-006 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-preserves-history-001 |
 | APPROVAL-VALIDITY-007 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-before-boundary-001, approval.validity.expiration-missing-context-001 |
 | APPROVAL-VALIDITY-008 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-before-boundary-001, approval.validity.expiration-equivalent-offset-001, shared.timestamp.expiration-equivalent-offset-nanoseconds-001, shared.timestamp.expiration-subnanosecond-after-001, shared.timestamp.expiration-subnanosecond-before-001, shared.timestamp.invalid-evaluation-precision-001 |
 | APPROVAL-VALIDITY-009 | Approvals | MUST / MUST NOT | COVERED | approval.validity.expiration-at-boundary-001, approval.validity.expiration-before-boundary-001, approval.validity.expiration-equivalent-offset-001, shared.timestamp.expiration-equivalent-offset-nanoseconds-001, shared.timestamp.expiration-subnanosecond-after-001, shared.timestamp.expiration-subnanosecond-before-001 |
-| APPROVAL-VALIDITY-010 | Approvals | MUST / MUST NOT | COVERED | approval.validity.decision-superseded-not-counted-001, approval.validity.decision-supersession-preserves-history-001 |
-| APPROVAL-VALIDITY-011 | Approvals | MUST / MUST NOT | COVERED | approval.validity.requirement-superseded-not-transferred-001, approval.validity.requirement-supersession-preserves-history-001 |
-| APPROVAL-VALIDITY-012 | Approvals | MUST / MUST NOT | COVERED | approval.validity.withdraw-duplicate-invalid-001 |
+| APPROVAL-VALIDITY-010 | Approvals | MUST / MUST NOT | PARTIAL | approval.validity.decision-superseded-not-counted-001, approval.validity.decision-supersession-preserves-history-001; Missing lifecycle preservation across subsequent Decision recording and operation-type conflict controls (findings 1 and 3a). |
+| APPROVAL-VALIDITY-011 | Approvals | MUST / MUST NOT | PARTIAL | approval.validity.requirement-superseded-not-transferred-001, approval.validity.requirement-supersession-preserves-history-001; Missing lifecycle preservation across subsequent Decision recording and operation-type conflict controls (findings 1 and 3a). |
+| APPROVAL-VALIDITY-012 | Approvals | MUST / MUST NOT | PARTIAL | approval.validity.withdraw-duplicate-invalid-001; Missing ambiguous and superseded withdrawal targets, subsequent effectiveness, and failure-atomicity controls (finding 3b). |
 | ENTITY-AUDIT-001 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Audit policy declaration belongs to a composing domain; no generic declaration operation exists. |
 | ENTITY-AUDIT-002 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Event production is conditional on composing-domain policy and needs an Entity/Audit integration operation. |
 | ENTITY-DEFINITION-001 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Field, lifecycle, and invariant definition is a composing-domain responsibility. |
@@ -393,26 +403,26 @@ milestones.
 | ENTITY-EVOLUTION-011 | Entities | MUST / MUST NOT | COVERED | entity.evolution.reversal.audit-001, entity.evolution.reversal.duplicate-001 |
 | ENTITY-EVOLUTION-012 | Entities | MUST / MUST NOT | COVERED | entity.evolution.reversal.audit-001, entity.evolution.reversal.duplicate-001 |
 | ENTITY-EVOLUTION-013 | Entities | MUST / MUST NOT | COVERED | entity.evolution.invalid-related-identity-001, entity.evolution.reversal.audit-001 |
-| ENTITY-EVOLUTION-014 | Entities | MUST / MUST NOT | COVERED | entity.evolution.reversal.duplicate-001 |
+| ENTITY-EVOLUTION-014 | Entities | MUST / MUST NOT | PARTIAL | entity.evolution.reversal.duplicate-001; Missing accepted nonempty history controls and reuse of actual operation outputs; existing rejection can pass for an unrelated reason (finding 5b). |
 | ENTITY-EVOLUTION-015 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001 |
 | ENTITY-EVOLUTION-016 | Entities | MUST / MUST NOT | COVERED | entity.evolution.void.audit-001 |
 | ENTITY-EVOLUTION-017 | Entities | MUST / MUST NOT | COVERED | entity.evolution.void.audit-001 |
 | ENTITY-EVOLUTION-018 | Entities | MUST / MUST NOT | COVERED | entity.evolution.void.ineligible-001 |
 | ENTITY-EVOLUTION-019 | Entities | MUST / MUST NOT | COVERED | entity.evolution.supersession.currentness-001 |
-| ENTITY-EVOLUTION-020 | Entities | MUST / MUST NOT | COVERED | entity.evolution.supersession.currentness-001 |
+| ENTITY-EVOLUTION-020 | Entities | MUST / MUST NOT | PARTIAL | entity.evolution.supersession.currentness-001; Missing exact Entity/Revision/scope currentness controls on unambiguous history (finding 5a). |
 | ENTITY-EVOLUTION-021 | Entities | MUST / MUST NOT | COVERED | entity.evolution.supersession.currentness-001 |
-| ENTITY-EVOLUTION-022 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001, entity.evolution.void.audit-001, entity.evolution.supersession.currentness-001 |
-| ENTITY-EVOLUTION-023 | Entities | MUST / MUST NOT | COVERED | entity.evolution.audit-failure-001, entity.evolution.correction.ineligible-001, entity.evolution.invalid-related-identity-001, entity.evolution.reversal.duplicate-001, entity.evolution.stale-revision-001, entity.evolution.void.ineligible-001 |
-| ENTITY-EVOLUTION-024 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.ineligible-001, entity.evolution.reversal.duplicate-001, entity.evolution.void.ineligible-001 |
-| ENTITY-EVOLUTION-025 | Entities | MUST / MUST NOT | COVERED | entity.evolution.stale-revision-001 |
+| ENTITY-EVOLUTION-022 | Entities | MUST / MUST NOT | PARTIAL | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001, entity.evolution.void.audit-001, entity.evolution.supersession.currentness-001; Missing accepted nonempty history controls and reuse of actual operation outputs; existing rejection can pass for an unrelated reason (finding 5b). |
+| ENTITY-EVOLUTION-023 | Entities | MUST / MUST NOT | PARTIAL | entity.evolution.audit-failure-001, entity.evolution.correction.ineligible-001, entity.evolution.invalid-related-identity-001, entity.evolution.reversal.duplicate-001, entity.evolution.stale-revision-001, entity.evolution.void.ineligible-001; Missing valid-but-mismatched Audit evidence, corresponding valid controls, and atomicity checks; combined-error priority remains a separate gap (finding 4). |
+| ENTITY-EVOLUTION-024 | Entities | MUST / MUST NOT | PARTIAL | entity.evolution.correction.ineligible-001, entity.evolution.reversal.duplicate-001, entity.evolution.void.ineligible-001; Missing valid-but-mismatched Audit evidence, corresponding valid controls, and atomicity checks; combined-error priority remains a separate gap (finding 4). |
+| ENTITY-EVOLUTION-025 | Entities | MUST / MUST NOT | BLOCKING SPEC GAP | entity.evolution.stale-revision-001; Blocking: conflicting currentness observations have no defined resolution policy. Unambiguous-history mismatch is specified but lacks regression coverage (finding 5a). See spec/entities/evolution.md Open Questions. |
 | ENTITY-EVOLUTION-026 | Entities | MUST / MUST NOT | COVERED | entity.evolution.invalid-related-identity-001 |
-| ENTITY-EVOLUTION-027 | Entities | MUST / MUST NOT | COVERED | entity.evolution.audit-failure-001 |
+| ENTITY-EVOLUTION-027 | Entities | MUST / MUST NOT | BLOCKING SPEC GAP | entity.evolution.audit-failure-001; Blocking: intrinsic Audit failure versus evolution-correspondence failure has no defined combined-error priority (finding 4). See spec/entities/evolution.md Open Questions. |
 | ENTITY-EVOLUTION-028 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Optional diagnostic disclosure is outside normalized vector errors and needs security review. |
-| ENTITY-EVOLUTION-029 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001, entity.evolution.void.audit-001, entity.evolution.supersession.currentness-001 |
+| ENTITY-EVOLUTION-029 | Entities | MUST / MUST NOT | PARTIAL | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001, entity.evolution.void.audit-001, entity.evolution.supersession.currentness-001; Missing valid-but-mismatched Audit evidence, corresponding valid controls, and atomicity checks; combined-error priority remains a separate gap (finding 4). |
 | ENTITY-EVOLUTION-030 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001 |
-| ENTITY-EVOLUTION-031 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.supersession.currentness-001 |
-| ENTITY-EVOLUTION-032 | Entities | MUST / MUST NOT | COVERED | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001, entity.evolution.void.audit-001, entity.evolution.supersession.currentness-001 |
-| ENTITY-EVOLUTION-033 | Entities | MUST / MUST NOT | COVERED | entity.evolution.audit-failure-001 |
+| ENTITY-EVOLUTION-031 | Entities | MUST / MUST NOT | PARTIAL | entity.evolution.correction.audit-001, entity.evolution.supersession.currentness-001; Missing valid-but-mismatched Audit evidence, corresponding valid controls, and atomicity checks; combined-error priority remains a separate gap (finding 4). |
+| ENTITY-EVOLUTION-032 | Entities | MUST / MUST NOT | PARTIAL | entity.evolution.correction.audit-001, entity.evolution.reversal.audit-001, entity.evolution.void.audit-001, entity.evolution.supersession.currentness-001; Missing valid-but-mismatched Audit evidence, corresponding valid controls, and atomicity checks; combined-error priority remains a separate gap (finding 4). |
+| ENTITY-EVOLUTION-033 | Entities | MUST / MUST NOT | PARTIAL | entity.evolution.audit-failure-001; Missing valid-but-mismatched Audit evidence, corresponding valid controls, and atomicity checks; combined-error priority remains a separate gap (finding 4). |
 | ENTITY-IDENTITY-001 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
 | ENTITY-IDENTITY-002 | Entities | MUST / MUST NOT | COVERED | entity.mutate.identity-and-state-protected-001, entity.transition.success-identity-stable-001 |
 | ENTITY-IDENTITY-003 | Entities | MUST / MUST NOT | COVERED | entity.create.opaque-identity-preserved-001 |
@@ -449,12 +459,12 @@ milestones.
 | ENTITY-REVISION-005 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
 | ENTITY-REVISION-006 | Entities | MUST / MUST NOT | COVERED | entity.import.expected-conflict-version-conflict-001, entity.import.expected-revision-conflict-001 |
 | ENTITY-REVISION-007 | Entities | MUST / MUST NOT | COVERED | entity.import.duplicate-revision-invalid-identity-001 |
-| ENTITY-VALIDATION-001 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001, entity.import.validation-cross-field-invalid-001, entity.import.validation-cross-field-valid-001, entity.import.validation-positive-money-invalid-001, entity.import.validation-positive-money-valid-001 |
+| ENTITY-VALIDATION-001 | Entities | MUST / MUST NOT | PARTIAL | entity.create.initial-lifecycle-001, entity.import.validation-cross-field-invalid-001, entity.import.validation-cross-field-valid-001, entity.import.validation-positive-money-invalid-001, entity.import.validation-positive-money-valid-001; Missing complete business validation of evolution source and related/successor observations (finding 6). |
 | ENTITY-VALIDATION-002 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001, entity.validation.cross-field-combined-invalid-001, entity.validation.cross-field-paired-decrease-001, entity.validation.cross-field-paired-increase-001, entity.validation.cross-field-retained-amount-001, entity.validation.cross-field-retained-limit-001, entity.validation.cross-field-retained-limit-valid-001 |
 | ENTITY-VALIDATION-003 | Entities | MUST / MUST NOT | COVERED | entity.import.validation-cross-field-invalid-001, entity.import.validation-cross-field-valid-001, entity.validation.complete-result-001, entity.validation.cross-field-combined-invalid-001, entity.validation.cross-field-paired-decrease-001, entity.validation.cross-field-paired-increase-001, entity.validation.cross-field-retained-amount-001, entity.validation.cross-field-retained-limit-001, entity.validation.cross-field-retained-limit-valid-001 |
-| ENTITY-VALIDATION-004 | Entities | MUST / MUST NOT | COVERED | entity.import.validation-cross-field-invalid-001, entity.import.validation-positive-money-invalid-001, entity.validation.complete-result-001, entity.validation.cross-field-combined-invalid-001, entity.validation.cross-field-retained-amount-001, entity.validation.cross-field-retained-limit-001 |
+| ENTITY-VALIDATION-004 | Entities | MUST / MUST NOT | PARTIAL | entity.import.validation-cross-field-invalid-001, entity.import.validation-positive-money-invalid-001, entity.validation.complete-result-001, entity.validation.cross-field-combined-invalid-001, entity.validation.cross-field-retained-amount-001, entity.validation.cross-field-retained-limit-001; Missing complete business validation of evolution source and related/successor observations (finding 6). |
 | ENTITY-VALIDATION-005 | Entities | SHOULD / SHOULD NOT | COVERED | entity.validation.complete-result-001 |
-| ENTITY-VALIDATION-006 | Entities | MUST / MUST NOT | COVERED | entity.import.validation-cross-field-invalid-001, entity.import.validation-positive-money-invalid-001, entity.validation.complete-result-001, entity.validation.cross-field-combined-invalid-001, entity.validation.cross-field-paired-decrease-001, entity.validation.cross-field-paired-increase-001, entity.validation.cross-field-retained-amount-001, entity.validation.cross-field-retained-limit-001, entity.validation.cross-field-retained-limit-valid-001 |
+| ENTITY-VALIDATION-006 | Entities | MUST / MUST NOT | PARTIAL | entity.import.validation-cross-field-invalid-001, entity.import.validation-positive-money-invalid-001, entity.validation.complete-result-001, entity.validation.cross-field-combined-invalid-001, entity.validation.cross-field-paired-decrease-001, entity.validation.cross-field-paired-increase-001, entity.validation.cross-field-retained-amount-001, entity.validation.cross-field-retained-limit-001, entity.validation.cross-field-retained-limit-valid-001; Missing complete business validation of evolution source and related/successor observations (finding 6). |
 | ENTITY-VALIDATION-007 | Entities | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | Distinguishing always-required and state-dependent rules is a composing-domain recommendation. |
 | ENTITY-VALIDATION-008 | Entities | MUST / MUST NOT | COVERED | entity.validation.complete-result-001 |
 
@@ -594,6 +604,12 @@ milestones.
 
 ## Conformance gaps
 
+The domain summaries below describe the earlier release-candidate coverage.
+The current requirement table and 0.9.4 review above qualify their coverage and
+implementation claims, including Workflow ownership, Approval sequences, Audit
+JSON keys, and Entity evolution. Existing tests remain valid evidence for the
+boundaries they actually exercise.
+
 - Money: allocation normative semantics and portable invalid-allocation error semantics are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance in Core 0.9 release candidate. Precision/overflow limits, capability reporting, private or non-fiat currency namespaces, and currency-recommended/minor-unit scale guidance remain outside the current Money scope.
 - Workflow: Workflow definition identity, version identity, immutable instance binding, older-version observation, version-mismatch semantics, import of existing state/version observations, and expected-state/revision conflict preconditions are specified, vector-covered, implemented by the TypeScript reference implementation, and passing through the conformance adapter. Version identity reuse, Entity/storage separation, safe diagnostic disclosure, and non-locking/non-concurrency guarantees are not directly testable through one portable vector and remain subject to implementation, architecture, and review checks. External fact capture, definition migration, state mapping across versions, transition identifiers, storage locking, and distributed concurrency remain open.
 - Audit: Audit Relationships are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Standardized reason, source, correlation, causation, and trace-context metadata remain outside Core 0.9 release candidate; generic Audit Event metadata remains available only as non-standardized context under `AUDIT-EVENT-006`. Unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, generic related links, relationship redaction policy, and causal sequencing remain open.
@@ -604,8 +620,9 @@ milestones.
 
 `APPROVAL-QUORUM-009` and `APPROVAL-QUORUM-010` close the identified
 opposing-vote ambiguity and preserve member-specific counting, pending capacity,
-and actionability. There are zero currently identified blocking specification
-gaps in this inventory. This does not close future-scope questions outside it.
+and actionability. That Draft 0.3 review identified no blocking specification
+gaps in its Approval slice. The 0.9.4 review reopens effectiveness-evidence
+coverage and separately identifies two Entity evolution specification gaps.
 
 All 37 directly testable Draft 0.3 composition/quorum/error requirements have
 manifest-listed vectors and pass against the TypeScript reference implementation
@@ -634,17 +651,19 @@ references are unchanged.
 
 ## Readiness
 
-**READY FOR CONFORMANCE RUNNER**
+**READY FOR CONFORMANCE RUNNER; NOT READY FOR CORE 1.0**
 
 The manifest, schema, operation catalog, exact comparison rules, normalized
 errors, deterministic context, and valid requirement references are sufficient
-for the current runner. Current directly testable requirements are covered by
-manifest-listed vectors, and the TypeScript, Python, and Java implementations
-execute the complete manifest scope.
+for the current runner. TypeScript, Python, and Java execute the existing
+manifest scope. The newly identified boundaries need permanent regression
+coverage, corrections, and resolution of the two Entity specification gaps
+before a 1.0 readiness claim.
 
 ## Not Directly Testable Review
 
-Milestone 3 reviewed the requirements classified as `NOT DIRECTLY TESTABLE`.
+The earlier Milestone 3 review examined `NOT DIRECTLY TESTABLE` requirements;
+the 0.9.4 review corrects the local Workflow ownership rationale.
 Each current classification is justified by at least one of these reasons:
 
 - **Architecture boundary:** the obligation belongs to a composing domain,
@@ -652,11 +671,15 @@ Each current classification is justified by at least one of these reasons:
   that Core 0.9 release candidate intentionally does not define as a portable operation.
 - **Authoring rule:** the obligation constrains specification authors or domain
   definitions rather than one executable runtime behavior.
+- **Native ownership boundary:** isolated JSON input/result vectors cannot
+  mutate retained caller aliases. Native public-API regressions are required
+  for local definition ownership, independently of any cross-definition
+  registry. NOT DIRECTLY TESTABLE is not an exemption from those tests.
 - **Non-observable or optional obligation:** the rule concerns optional
   diagnostics, safe disclosure, or evidence that cannot be made mandatory
   without changing a `MAY` or out-of-scope obligation into a required portable
   behavior.
 
-No requirement IDs, vector IDs, vector mappings, or coverage classifications
-were changed during this review, so the human-readable traceability table did
-not need regeneration.
+The 0.9.4 review preserves requirement IDs, vector IDs, and existing mappings.
+Coverage classifications and inventory counts now reflect the demonstrated
+missing boundaries and specification gaps.
