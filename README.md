@@ -340,8 +340,11 @@ See [Developer Tools](./docs/tools/README.md) for details.
 FinKore Core 0.9.3 is the corrective release candidate for the frozen Core 0.9 baseline intended to become Core 1.0.
 
 TypeScript, Python, and Java implement the following domains and pass the
-complete current manifest. Core 0.9.3 verification passes; the remaining stable
-release work is described in the [Core 1.0 plan](./docs/plans/plan-10.md).
+complete current manifest. Core 0.9.3 verification passes, but subsequent
+review found additional financial and portability defects. The
+[Core 0.9.4 corrective plan](./docs/plans/plan-09.4.md) tracks the required fixes
+and expanded regression coverage. [Core 1.0 promotion](./docs/plans/plan-10.md)
+is blocked until that corrective release gate is satisfied.
 
 - Money
 - Workflow

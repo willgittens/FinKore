@@ -2,15 +2,17 @@
 
 ## Status
 
-Planning continues after the verified, locally tagged
-[Core 0.9.3 corrective release](plan-09.3.md). The reproduced Entity import,
-Workflow guard, and Audit portability defects, together with the earlier Money
-exactness and Approval validity defects, are fixed and protected by permanent
-regressions. Remote publication of the corrective snapshot remains pending
-GitHub authentication.
-The stable 1.0 milestones below remain uncompleted; reopening this plan does
-not declare Core 1.0 stable. This document remains non-normative. In this
-filename, `10` means version 1.0, not version 0.10.
+Stable promotion is blocked by the additional Approval, Entity evolution,
+Workflow, and Audit defects tracked in the [Core 0.9.4 corrective plan](plan-09.4.md).
+The locally tagged [Core 0.9.3 release](plan-09.3.md) passes its existing
+verification gate and retains the earlier corrections, but the subsequent
+review demonstrates missing behavioral coverage. Core 0.9.4 must close those
+findings and pass its expanded release gate before 1.0 promotion resumes.
+Remote publication of the 0.9.3 snapshot remains pending GitHub authentication.
+
+The stable 1.0 milestones below remain uncompleted. This document remains
+non-normative and does not declare Core 1.0 stable. In this filename, `10`
+means version 1.0, not version 0.10.
 
 ## Objective
 
@@ -55,7 +57,8 @@ Promote the reviewed 0.9 candidate without adding new behavior.
 
 ### Tasks
 
-- [ ] Confirm that every 0.9 release blocker is resolved.
+- [ ] Confirm that every 0.9 release blocker is resolved, including every
+      finding and release gate in the [0.9.4 corrective plan](plan-09.4.md).
 - [ ] Change CoreDoc status and version to FinKore Core 1.0.
 - [ ] Change specification status from experimental or release candidate to
       stable 1.0.
