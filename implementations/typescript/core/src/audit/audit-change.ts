@@ -31,10 +31,10 @@ function cloneAuditValue<T>(value: T, ancestors = new Set<object>()): T {
     if (ancestors.has(value)) throw new InvalidAuditEventError()
     if (Reflect.ownKeys(value).some((key) => typeof key !== 'string')) throw new InvalidAuditEventError()
     ancestors.add(value)
-    const result: Record<string, unknown> = {}
-    for (const [key, item] of Object.entries(value)) {
-      result[key] = cloneAuditValue(item, ancestors)
-    }
+    // Define own data members; assignment would invoke the __proto__ setter.
+    const result = Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, cloneAuditValue(item, ancestors)]),
+    )
     ancestors.delete(value)
     return result as T
   }
@@ -113,6 +113,9 @@ export class AuditChange {
    * The field/path identity is required. When both `before` and `after` are
    * supplied, they must represent different domain values; explicit `null` and
    * omitted members remain distinct.
+   * Every own JSON member, including `__proto__` and `constructor`, participates
+   * in preservation and equality. Copying does not interpret member names as
+   * runtime instructions or mutate caller values.
    *
    * @param input - Candidate serialized Audit Change.
    * @returns A validated Audit Change value.
@@ -162,7 +165,8 @@ export class AuditChange {
    * Returns portable Audit Change serialization.
    *
    * The returned value is a defensive copy, so callers cannot mutate retained
-   * historical before/after values through a previous observation.
+   * historical before/after values through a previous observation. Nested own
+   * JSON members remain ordinary data properties in every returned copy.
    *
    * @returns Serialized Audit Change content.
    *

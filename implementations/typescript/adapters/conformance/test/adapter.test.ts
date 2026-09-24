@@ -222,7 +222,7 @@ describe('TypeScript conformance adapter', () => {
       adapter: createTypeScriptConformanceAdapter(),
     }).run({ suites: ['audit'] })
 
-    expect(report.summary).toEqual({ total: 70, passed: 70, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 76, passed: 76, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current Audit relationship vectors', async () => {

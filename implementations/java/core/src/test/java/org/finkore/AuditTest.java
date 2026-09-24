@@ -11,6 +11,7 @@ public final class AuditTest {
 
   /** Runs Java Audit tests without an external test framework. */
   public static void main(String[] args) {
+    jsonMembersSurviveOwnershipAndRedaction();
     appendsCompleteEventAndPreservesActorIdentity();
     duplicateAppendDoesNotMutateHistory();
     appendErrorPrecedenceDoesNotMutateHistory();
@@ -20,6 +21,65 @@ public final class AuditTest {
     actorOptionalStringsRejectExplicitNull();
     actorMetadataNullPresenceSurvivesAppendAndRedaction();
     changeComparisonDistinguishesJsonTypesAndDeclaredMoney();
+  }
+
+  private static Object copyJson(Object value) {
+    if (value instanceof Map<?, ?> map) {
+      Map<Object, Object> copy = new LinkedHashMap<>();
+      for (Map.Entry<?, ?> entry : map.entrySet()) copy.put(entry.getKey(), copyJson(entry.getValue()));
+      return copy;
+    }
+    if (value instanceof List<?> list) {
+      List<Object> copy = new java.util.ArrayList<>();
+      for (Object item : list) copy.add(copyJson(item));
+      return copy;
+    }
+    return value;
+  }
+
+  @SuppressWarnings("unchecked")
+  private static void jsonMembersSurviveOwnershipAndRedaction() {
+    for (String key : List.of("__proto__", "constructor", "prototype", "hasOwnProperty")) {
+      for (Object value : java.util.Arrays.asList(7, null, Map.of("approved", true), java.util.Arrays.asList(null, Map.of("approved", false)))) {
+        Map<String, Object> payload = new LinkedHashMap<>(); payload.put(key, value);
+        Map<String, Object> shared = Map.of("payload", payload);
+        Map<String, Object> event = new LinkedHashMap<>(Map.of(
+            "eventId", "event", "eventType", "ENTITY_CHANGED", "entity", Map.of("type", "invoice", "id", "1"),
+            "occurredAt", "2026-09-01T12:00:00Z", "actor", Map.of("id", "opaque :: actor", "type", "service", "metadata", Map.of("left", shared, "right", List.of(shared))),
+            "changes", List.of(Map.of("path", "payload", "before", Map.of(), "after", payload))));
+        Object expected = copyJson(event);
+        Audit.Actor actor = Audit.Actor.fromPortable(event.get("actor"));
+        Audit.Event retained = Audit.Event.fromPortable(event);
+        Audit.Log log = Audit.Log.create(List.of()).append(event);
+        Audit.Log imported = Audit.Log.create(List.of(event));
+        payload.put(key, "caller mutation");
+        assertEquals(((Map<String, Object>) expected).get("actor"), actor.toPortable());
+        assertEquals(expected, retained.toPortable());
+        assertEquals(List.of(expected), log.events());
+        assertEquals(List.of(expected), imported.events());
+        Map<String, Object> observed = log.events().get(0);
+        List<Map<String, Object>> changes = (List<Map<String, Object>>) observed.get("changes");
+        ((Map<String, Object>) changes.get(0).get("after")).put(key, "observation mutation");
+        assertEquals(List.of(expected), log.events());
+        Map<String, Object> same = new LinkedHashMap<>(); same.put(key, value);
+        Map<String, Object> unchanged = new LinkedHashMap<>(event);
+        unchanged.put("eventId", "equal");
+        unchanged.put("changes", List.of(Map.of("path", "payload", "before", same, "after", new LinkedHashMap<>(same))));
+        assertError(Audit.INVALID_EVENT, () -> log.append(unchanged));
+        Map<String, Object> evidence = Map.of("eventId", "redacted", "eventType", "AUDIT_CONTENT_REDACTED", "entity", event.get("entity"), "occurredAt", "2026-09-02T12:00:00Z");
+        Audit.RedactionResult result = log.redact(Map.of("id", "policy", "authority", "retention", "protectedPaths", List.of("actor.metadata")), evidence);
+        Map<String, Object> expectedView = (Map<String, Object>) copyJson(expected);
+        ((Map<String, Object>) expectedView.get("actor")).put("metadata", Map.of("presence", "REDACTED"));
+        assertEquals(expectedView, result.event());
+        assertEquals(List.of(expected, evidence), log.events());
+        Audit.RedactionResult changeRedaction = imported.redact(Map.of("id", "policy", "authority", "retention", "protectedPaths", List.of("payload")), evidence);
+        Map<String, Object> expectedChangeView = (Map<String, Object>) copyJson(expected);
+        expectedChangeView.put("changes", List.of(Map.of("path", "payload", "before", Map.of("presence", "REDACTED"), "after", Map.of("presence", "REDACTED"))));
+        assertEquals(expectedChangeView, changeRedaction.event());
+        ((Map<String, Object>) ((List<Map<String, Object>>) result.event().get("changes")).get(0).get("after")).put(key, "view mutation");
+        assertEquals(List.of(expected, evidence), log.events());
+      }
+    }
   }
 
   private static void appendsCompleteEventAndPreservesActorIdentity() {

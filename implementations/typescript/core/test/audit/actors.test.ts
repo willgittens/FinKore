@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 import { describe, expect, it } from 'vitest'
+import { deepStrictEqual as assertJson } from 'node:assert/strict'
 import { AuditActor, InvalidAuditActorError } from '../../src/index.js'
 
 describe('Audit actors', () => {
@@ -94,11 +95,19 @@ describe('Audit actors', () => {
 
     const cyclicArray: unknown[] = []
     cyclicArray.push(cyclicArray)
-    expect(() => AuditActor.from({ id: 'user-7', metadata: cyclicArray })).toThrow(InvalidAuditActorError)
+    // Keep mutant failures compact instead of formatting a recursive error trace.
+    let cycleFailure0: unknown
+    try { AuditActor.from({ id: 'user-7', metadata: cyclicArray }) } catch (error) { cycleFailure0 = error }
+    expect(cycleFailure0 instanceof InvalidAuditActorError).toBe(true)
+    expect((cycleFailure0 as InvalidAuditActorError).code).toBe('FINKORE_AUDIT_ACTOR_INVALID')
 
     const cyclicObject: Record<string, unknown> = {}
     cyclicObject.self = cyclicObject
-    expect(() => AuditActor.from({ id: 'user-7', metadata: cyclicObject })).toThrow(InvalidAuditActorError)
+    // Keep mutant failures compact instead of formatting a recursive error trace.
+    let cycleFailure1: unknown
+    try { AuditActor.from({ id: 'user-7', metadata: cyclicObject }) } catch (error) { cycleFailure1 = error }
+    expect(cycleFailure1 instanceof InvalidAuditActorError).toBe(true)
+    expect((cycleFailure1 as InvalidAuditActorError).code).toBe('FINKORE_AUDIT_ACTOR_INVALID')
   })
 
   it('returns defensive actor copies', () => {
@@ -108,5 +117,28 @@ describe('Audit actors', () => {
     snapshot.metadata.department = 'changed'
 
     expect(actor.toJSON()).toEqual({ id: 'user-7', metadata: { department: 'finance' } })
+  })
+})
+
+// Node compares own constructor members as data; Vitest strict equality treats them as type markers.
+describe('Audit Actor own JSON member observations', () => {
+  it('retains own members, null prototypes and shared inputs in every observation', () => {
+    const payload = Object.assign(Object.create(null) as Record<string, unknown>, { constructor: { prototype: 'data' } })
+    Object.defineProperty(payload, '__proto__', { value: [null, { value: true }], enumerable: true, writable: true })
+    const input = { id: 'opaque :: actor', metadata: { first: payload, second: payload } }
+    const expected = JSON.parse(JSON.stringify(input))
+    const actor = AuditActor.from(input)
+    payload['__proto__'] = false
+    expect(actor.id).toBe(input.id)
+    assertJson(actor.toJSON(), expected)
+    const observation = actor.toJSON().metadata as typeof input.metadata
+    observation.first['__proto__'] = 'changed'
+    assertJson(actor.toJSON(), expected)
+  })
+
+  it('rejects unsupported values even beneath ordinary special-name members', () => {
+    for (const value of [undefined, NaN, Infinity, 1n, () => true, new Date(), Symbol('x')]) {
+      expect(() => AuditActor.from({ id: 'actor', metadata: { ['__proto__']: value } })).toThrow(InvalidAuditActorError)
+    }
   })
 })

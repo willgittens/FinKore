@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 import { describe, expect, it } from 'vitest'
+import { deepStrictEqual as assertJson } from 'node:assert/strict'
 import { AuditChange, AuditEvent, AuditLog, InvalidAuditEventError } from '../../src/index.js'
 
 const eventBase = {
@@ -199,11 +200,19 @@ describe('Audit changes', () => {
 
     const cyclicArray: unknown[] = []
     cyclicArray.push(cyclicArray)
-    expect(() => AuditChange.from({ path: 'cycle', before: cyclicArray })).toThrow(InvalidAuditEventError)
+    // Keep mutant failures compact instead of formatting a recursive error trace.
+    let cycleFailure0: unknown
+    try { AuditChange.from({ path: 'cycle', before: cyclicArray }) } catch (error) { cycleFailure0 = error }
+    expect(cycleFailure0 instanceof InvalidAuditEventError).toBe(true)
+    expect((cycleFailure0 as InvalidAuditEventError).code).toBe('FINKORE_AUDIT_INVALID_EVENT')
 
     const cyclicObject: Record<string, unknown> = {}
     cyclicObject.self = cyclicObject
-    expect(() => AuditChange.from({ path: 'cycle', after: cyclicObject })).toThrow(InvalidAuditEventError)
+    // Keep mutant failures compact instead of formatting a recursive error trace.
+    let cycleFailure1: unknown
+    try { AuditChange.from({ path: 'cycle', after: cyclicObject }) } catch (error) { cycleFailure1 = error }
+    expect(cycleFailure1 instanceof InvalidAuditEventError).toBe(true)
+    expect((cycleFailure1 as InvalidAuditEventError).code).toBe('FINKORE_AUDIT_INVALID_EVENT')
   })
 
   it('accepts portable null-prototype and shared JSON values without retaining references', () => {
@@ -248,5 +257,98 @@ describe('Audit changes', () => {
       }),
     ).toThrow(InvalidAuditEventError)
     expect(log.toJSON()).toEqual({ history: [committed] })
+  })
+})
+
+// Node compares own constructor members as data; Vitest strict equality treats them as type markers.
+describe('Audit own JSON member preservation', () => {
+  const values: unknown[] = [7, null, { approved: true }, [null, { approved: false }]]
+  for (const key of ['__proto__', 'constructor', 'prototype', 'hasOwnProperty']) {
+    for (const [index, value] of values.entries()) {
+      it(`preserves ${key} value ${index} through construction, append, import, and redaction`, () => {
+        const payload = Object.fromEntries([[key, value]])
+        const shared = { payload }
+        const metadata = { left: shared, right: [shared] }
+        const event = { ...eventBase, actor: { id: 'actor :: opaque', type: 'service', metadata },
+          metadata: { context: payload }, changes: [{ path: 'payload', before: {}, after: payload }] }
+        const expected = structuredClone(event)
+        const prototypeBefore = Object.getOwnPropertyDescriptors(Object.prototype)
+        const instance = AuditEvent.from(event)
+        const log = AuditLog.create().append(event)
+        const imported = AuditLog.create([event])
+        payload[key] = 'caller mutation'
+        shared.payload = {}
+        event.actor.id = 'changed'
+        for (const observe of [() => instance.toJSON(), () => log.events()[0]!, () => imported.toJSON().history[0]!]) {
+          const observed = observe()
+          assertJson(observed, expected)
+          const after = observed.changes![0]!.after as Record<string, unknown>
+          expect(Object.hasOwn(after, key)).toBe(true)
+          expect(Object.getPrototypeOf(after)).toBe(Object.prototype)
+          expect(Object.getOwnPropertyDescriptor(after, key)).toEqual({ value, enumerable: true, writable: true, configurable: true })
+          after[key] = 'observation mutation'
+          const actorMetadata = observed.actor!.metadata as typeof metadata
+          actorMetadata.left.payload[key] = 'observation mutation'
+          assertJson(observe(), expected)
+          assertJson(JSON.parse(JSON.stringify(observe())), expected)
+        }
+        const evidence = { ...eventBase, eventId: 'evt-redaction', eventType: 'AUDIT_CONTENT_REDACTED', actor: { id: 'redactor' } }
+        const result = log.redact({ policy: { id: 'policy', authority: 'retention', protectedPaths: ['actor.metadata'] }, redactionEvent: evidence })
+        assertJson(result.event, { ...expected, actor: { ...expected.actor, metadata: { presence: 'REDACTED' } } })
+        assertJson(log.toJSON(), { history: [expected, evidence] })
+        const changeRedaction = imported.redact({ policy: { id: 'policy', authority: 'retention', protectedPaths: ['payload'] }, redactionEvent: evidence })
+        assertJson(changeRedaction.event, { ...expected, changes: [{ path: 'payload', before: { presence: 'REDACTED' }, after: { presence: 'REDACTED' } }] })
+        assertJson(imported.toJSON(), { history: [expected, evidence] })
+        const changedView = result.event.changes![0]!.after as Record<string, unknown>
+        changedView[key] = 'redacted view mutation'
+        assertJson(log.events()[0], expected)
+        expect(Object.getOwnPropertyDescriptors(Object.prototype)).toEqual(prototypeBefore)
+      })
+      it(`rejects equal ${key} value ${index} without changing committed history`, () => {
+        const payload = Object.fromEntries([[key, value]])
+        const log = AuditLog.create([eventBase])
+        const unchanged = { ...eventBase, eventId: 'evt-equal', changes: [{ path: 'payload', before: payload, after: structuredClone(payload) }] }
+        expect(() => log.append(unchanged)).toThrow(InvalidAuditEventError)
+        assertJson(log.toJSON(), { history: [eventBase] })
+        assertJson(AuditChange.from({ path: 'payload', after: payload }).toJSON(), { path: 'payload', after: payload })
+      })
+    }
+  }
+
+  it('compares member values without Boolean/number coercion or inferred Money semantics', () => {
+    for (const [before, after] of [[true, 1], [null, 0], [{ amount: '1.0', currency: 'USD' }, { amount: '1.00', currency: 'USD' }]]) {
+      const input = { path: 'payload', before: { ['__proto__']: before }, after: { ['__proto__']: after } }
+      assertJson(AuditChange.from(input).toJSON(), input)
+    }
+  })
+})
+
+describe('Audit JSON and Money mutation controls', () => {
+  it('preserves shared arrays as JSON data and rejects unsupported nested values', () => {
+    const shared = [null, { ['__proto__']: true }]
+    const input = { path: 'payload', after: { first: shared, second: shared } }
+    const change = AuditChange.from(input)
+    assertJson(change.toJSON(), input)
+    shared.push(false)
+    assertJson(change.toJSON(), { path: 'payload', after: { first: [null, { ['__proto__']: true }], second: [null, { ['__proto__']: true }] } })
+    for (const value of [undefined, NaN, Infinity, 1n, () => true, new Date(), Symbol('x')]) {
+      expect(() => AuditChange.from({ path: 'payload', after: { ['__proto__']: value } })).toThrow(InvalidAuditEventError)
+    }
+  })
+
+  it('accepts unequal numbers, cross-currency Money and Money-to-null changes exactly', () => {
+    for (const input of [
+      { path: 'number', before: 7, after: 8 },
+      { path: 'amount', valueType: 'MONEY', before: { amount: '1', currency: 'USD' }, after: { amount: '1', currency: 'EUR' } },
+      { path: 'amount', valueType: 'MONEY', before: { amount: '1', currency: 'USD' }, after: null },
+    ]) assertJson(AuditChange.from(input).toJSON(), input)
+  })
+
+  it('rejects unknown declarations even when every supplied Money value is valid', () => {
+    for (const valueType of ['DECIMAL', null, undefined]) {
+      for (const values of [{}, { before: { amount: '1', currency: 'USD' }, after: { amount: '2', currency: 'USD' } }]) {
+        expect(() => AuditChange.from({ path: 'amount', valueType, ...values })).toThrow(InvalidAuditEventError)
+      }
+    }
   })
 })

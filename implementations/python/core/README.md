@@ -5,12 +5,20 @@ derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
 TypeScript financial implementation code. The historical Core 0.9.3 snapshot passes its 331-vector manifest and release
 checks; see the [0.9.3 plan](../../../docs/plans/plan-09.3.md).
 
-The current manifest contains 536 vectors. Core 0.9.4 Milestones 3–5 restore
-all 112 Approval, 157 Entity, and 83 Workflow vectors across TypeScript,
+The current manifest contains 542 vectors. Core 0.9.4 Milestones 3–6 restore
+all 112 Approval, 157 Entity, 83 Workflow, and 76 Audit vectors across TypeScript,
 Python 3.12/3.13, and Java. Native tests also verify lifecycle sequences,
 Entity history reuse, and immutable Workflow guard ownership.
-Python passes all 536 vectors. Full cross-language release verification
+Python passes all 542 vectors. Full cross-language release verification
 remains open in the [0.9.4 plan](../../../docs/plans/plan-09.4.md).
+
+Audit Actor metadata and ordinary Change values preserve every own JSON
+member recursively, including `__proto__` and `constructor`, without assigning
+runtime meaning to names. Construction, history import, repeated observations,
+and redaction preserve these values and keep committed source history unchanged.
+Equal Changes remain invalid; Boolean/number, absence/null, and explicitly
+declared Money comparisons retain their existing rules. Unsupported non-JSON
+values remain invalid. Public API signatures are unchanged.
 
 Workflow definitions own nested guard inputs. Guards require a nonempty fact
 name and a present JSON comparison value; explicit null comparisons are valid,

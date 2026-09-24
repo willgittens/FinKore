@@ -14,6 +14,11 @@ import org.junit.jupiter.api.Test;
 /** JUnit coverage tests for Java Audit behavior. */
 final class AuditCoverageTest {
   @Test
+  void nativeAuditRegressions() {
+    AuditTest.main(new String[0]);
+  }
+
+  @Test
   void successfulRedactionSerializesActorContextChangeValuesAndEvidence() {
     Audit.Log log = Audit.Log.create(List.of(eventWithActorContextAndSensitiveChange()));
 

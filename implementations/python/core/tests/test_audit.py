@@ -238,3 +238,43 @@ class AuditTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+class AuditJsonMemberTests(unittest.TestCase):
+    def test_own_json_members_survive_ownership_import_and_redaction(self):
+        from finkore.audit import validate_history
+        for key in ['__proto__', 'constructor', 'prototype', 'hasOwnProperty']:
+            for value in [7, None, {'approved': True}, [None, {'approved': False}]]:
+                with self.subTest(key=key, value=value):
+                    payload = {key: value}
+                    shared = {'payload': payload}
+                    event = {'eventId': 'event', 'eventType': 'ENTITY_CHANGED',
+                             'entity': {'type': 'invoice', 'id': '1'},
+                             'occurredAt': '2026-09-01T12:00:00Z',
+                             'actor': {'id': 'opaque :: actor', 'type': 'service', 'metadata': {'left': shared, 'right': [shared]}},
+                             'changes': [{'path': 'payload', 'before': {}, 'after': payload}]}
+                    expected = deepcopy(event)
+                    committed = append_event([], event)['history']
+                    imported = validate_history(committed)
+                    payload[key] = 'caller mutation'
+                    event['actor']['id'] = 'changed'
+                    self.assertEqual(committed, [expected])
+                    self.assertEqual(imported, [expected])
+                    observed = validate_history(imported)
+                    observed[0]['changes'][0]['after'][key] = 'observation mutation'
+                    self.assertEqual(validate_history(imported), [expected])
+                    unchanged = {**deepcopy(expected), 'eventId': 'equal', 'changes': [{'path': 'payload', 'before': expected['changes'][0]['after'], 'after': deepcopy(expected['changes'][0]['after'])}]}
+                    with self.assertRaises(FinKoreError) as error:
+                        append_event(imported, unchanged)
+                    self.assertEqual(error.exception.code, 'FINKORE_AUDIT_INVALID_EVENT')
+                    evidence = {'eventId': 'redacted', 'eventType': 'AUDIT_CONTENT_REDACTED', 'entity': expected['entity'], 'occurredAt': '2026-09-02T12:00:00Z'}
+                    redacted = redact_history(imported, {'id': 'policy', 'authority': 'retention', 'protectedPaths': ['actor.metadata']}, evidence)
+                    expected_view = deepcopy(expected); expected_view['actor']['metadata'] = {'presence': 'REDACTED'}
+                    self.assertEqual(redacted['event'], expected_view)
+                    self.assertEqual(redacted['history'], [expected, evidence])
+                    change_redaction = redact_history(imported, {'id': 'policy', 'authority': 'retention', 'protectedPaths': ['payload']}, evidence)
+                    expected_change_view = deepcopy(expected)
+                    expected_change_view['changes'] = [{'path': 'payload', 'before': {'presence': 'REDACTED'}, 'after': {'presence': 'REDACTED'}}]
+                    self.assertEqual(change_redaction['event'], expected_change_view)
+                    redacted['event']['changes'][0]['after'][key] = 'view mutation'
+                    self.assertEqual(imported, [expected])
+                    self.assertEqual(redacted['history'], [expected, evidence])

@@ -2,11 +2,12 @@
 
 ## Status
 
-Milestones 1–5 are complete, including the accepted Entity decisions, permanent
-regressions with valid controls, and Approval, Entity, and Workflow corrections.
-All 112 Approval, 157 Entity, and 83 Workflow vectors pass across TypeScript,
-Python 3.12/3.13, and Java. Python and Java pass all 536 vectors; six TypeScript
-Audit failures remain for Milestone 6. Complete release verification remains open.
+Milestones 1–6 are complete: Approval, Entity, Workflow, and Audit corrections
+and their permanent regression/control tests are implemented. All 542 vectors
+pass on TypeScript, Python 3.12/3.13, and Java, with zero failed, unsupported,
+or infrastructure outcomes. Release-wide verification remains open for
+Milestone 7, including classification of four Audit cycle-validation mutation
+timeouts; these are not credited as behavioral kills.
 The review of `f39bbe1`
 (`core-0.9.3`) reproduced the failures below after the complete existing
 verification command passed. The earlier corrective releases remain historical
@@ -611,32 +612,101 @@ promotion remain assigned to later milestones.
 
 ## Milestone 6 — Audit JSON preservation corrections
 
-- [ ] Preserve arbitrary supported own JSON member names in TypeScript Actor
+- [x] Preserve arbitrary supported own JSON member names in TypeScript Actor
       metadata and Change values without invoking prototype setters. Do not
       filter, rename, drop, or assign domain meaning to `__proto__`, `constructor`,
       or other ordinary JSON member names.
-- [ ] Cover scalar, null, object, and array values under those names, nested
+- [x] Cover scalar, null, object, and array values under those names, nested
       containers, and shared caller references. Check exact observations after
       construction, append, history import, and repeated serialization.
-- [ ] Pair genuinely changed objects differing only in such a member with equal
+- [x] Pair genuinely changed objects differing only in such a member with equal
       controls that must still be rejected as unchanged. Preserve Boolean/number
       distinctions, absent/null semantics, and explicitly declared Money rules.
-- [ ] Verify defensive observations and committed-history immutability, Actor
+- [x] Verify defensive observations and committed-history immutability, Actor
       identity and metadata presence, redaction source preservation, and absence
       of prototype side effects. Preserve existing rejection of unsupported
       non-JSON values rather than silently normalizing them.
-- [ ] Review adjacent Audit copying paths for the same mechanism. Extend to
+- [x] Review adjacent Audit copying paths for the same mechanism. Extend to
       other domain paths only when a concrete contract violation is reproduced
       and covered; avoid an unrelated generic utility refactor.
-- [ ] Update affected public documentation and run Audit unit, adapter, and
+- [x] Update affected public documentation and run Audit unit, adapter, and
       conformance suites on all required runtimes, including controls proving
       Python and Java preserve the same portable observations.
 
 Completion: supported JSON members survive Audit processing exactly and cannot
 silently disappear, create false equality, or change retained history.
 
+### Milestone 6 outcome
+
+Corrected the two unsafe TypeScript object-copy loops in Audit Actor metadata
+and Change values. Copying now defines own data members rather than invoking
+an inherited prototype setter. Every supported JSON member name is preserved;
+there is no reserved-name filter or special financial interpretation. Public
+signatures are unchanged. Python and Java already preserve these members and
+needed additional native controls, not implementation changes.
+
+Reviewed adjacent Audit Event, history import/observation, and redaction paths.
+Their existing copying preserves these values once the Actor/Change boundary
+is corrected. Native tests now exercise construction, append, import, repeated
+serialization, mutations of caller inputs and returned observations, shared
+references, and redaction of either Actor metadata or Change values while the
+unredacted content and source history remain intact. The tests cover scalar,
+null, object, and array values under `__proto__`, `constructor`, `prototype`,
+and `hasOwnProperty`; prototype observations remain unchanged. Equal-value
+controls still fail without committing partial history. Unsupported non-JSON
+values remain rejected. Boolean/number distinctions, absent/null semantics,
+and explicitly declared Money validation/equality have mutation controls.
+
+Six new portable cases cover null and array values under `__proto__`, including
+Actor preservation and changed/equal Change pairs. Existing IDs are retained.
+The manifest now contains **542 vectors**, including **76 Audit** vectors.
+Traceability remains **411 requirements / 329 COVERED / 82 NOT DIRECTLY TESTABLE**.
+Native equality assertions use Node's exact deep comparison because Vitest's
+strict matcher treats an own `constructor` member as a runtime type marker.
+
+Verification completed:
+
+- **542 PASS / 0 FAIL / 0 UNSUPPORTED / 0 INFRASTRUCTURE_ERROR** on TypeScript,
+  Python 3.12, Python 3.13, and Java. Compared with Milestone 5, the six existing
+  TypeScript Audit failures become passes, all six added cases pass everywhere,
+  and all other vector outcomes are unchanged.
+- All workspace tests pass: **130 runner**, **657 TypeScript core**, and
+  **19 TypeScript adapter** tests. Python has **63 passing native tests** on
+  each required runtime and **215 passing adapter tests** on each. Java native
+  tests, **218 adapter tests**, and Maven's **36 tests** pass.
+- Audit Stryker coverage includes Actor, Change, Event, Log, and redaction:
+  **644 behavioral kills, 4 timeouts, 9 equivalent survivors, and 3 uncovered
+  defensive-path mutants**, with no mutation-run errors. The reported score is
+  **98.18%**; counting timeouts as unverified gives **97.58%**, still above 95%.
+  The equivalent survivors retain finite-number validation/comparison or
+  duplicate checks already performed by the public Log/Event boundary. The
+  uncovered redaction exception/precondition branches are unreachable through
+  validated Log calls. Existing exclusions were not broadened.
+- Restoring either unsafe copy loop in an isolated TypeScript copy fails its
+  named own-member preservation assertion while the paired constructor-member
+  controls pass. The unmodified baseline passes. Python critical Audit probes
+  kill **5/5** mutants and Java probes kill **8/8**. The four Stryker timeouts
+  remove cyclic-input rejection from the Actor/Change copy routines; they
+  remain unclassified, are not behavioral closure evidence, and are explicitly
+  carried into Milestone 7. No unsafe-copy mutant survives.
+- Coverage gates pass: TypeScript core **99.67% lines / 99.46% branches**;
+  Python core **89% combined**, with Audit **85% combined**; Java Maven's full
+  coverage gate passes. Build, strict TypeScript, Python compilation on both
+  runtimes, architecture, documentation/traceability, tool tests, licenses, and
+  whitespace checks pass.
+
+JSDoc, package/root READMEs, conformance status, traceability, and suite-count
+assertions are synchronized. The existing specification and Agentic Contract
+already define preservation of arbitrary JSON names; CoreDoc and AGENTS.md
+already cover history immutability and architectural responsibilities. No new
+normative behavior, requirement IDs, portable errors, or operation IDs were
+needed. Release-wide verification and promotion remain open.
+
 ## Milestone 7 — Mutation protection and complete verification
 
+- [ ] Resolve the four Audit Actor/Change cycle-validation mutation timeouts
+      recorded in Milestone 6. Require classified behavioral results rather than
+      counting timeout outcomes as regression closure.
 - [ ] Extend critical mutation protection for every corrected failure mechanism:
       lifecycle evidence loss, lifecycle type override, ambiguous/superseded
       target acceptance, malformed effectiveness counted as approval, evolution

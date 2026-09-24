@@ -31,10 +31,10 @@ function cloneJsonValue<T>(value: T, ancestors = new Set<object>()): T {
     if (ancestors.has(value)) throw new InvalidAuditActorError()
     if (Reflect.ownKeys(value).some((key) => typeof key !== 'string')) throw new InvalidAuditActorError()
     ancestors.add(value)
-    const result: Record<string, unknown> = {}
-    for (const [key, item] of Object.entries(value)) {
-      result[key] = cloneJsonValue(item, ancestors)
-    }
+    // Define own data members; assignment would invoke the __proto__ setter.
+    const result = Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, cloneJsonValue(item, ancestors)]),
+    )
     ancestors.delete(value)
     return result as T
   }
@@ -70,6 +70,8 @@ export class AuditActor {
    * Unknown attribution may be represented by omitting the actor from an Audit
    * Event. FinKore Core 0.9 release candidate leaves a serialized unknown-actor representation
    * open, so this method accepts only known actors with stable identifiers.
+   * Metadata retains every own JSON member recursively, including `__proto__`
+   * and `constructor`, as data. Construction does not mutate caller objects.
    *
    * @param input - Candidate serialized known actor.
    * @returns A validated Audit Actor value.
@@ -110,11 +112,13 @@ export class AuditActor {
    * Returns portable known-actor attribution.
    *
    * The returned object is a defensive copy so consumers cannot mutate a
-   * committed event's actor identity through a retained reference.
+   * committed event's actor identity or nested metadata through a retained
+   * reference. JSON member names are preserved without invoking prototype setters.
    *
    * @returns Serialized known Actor attribution.
    *
    * @see AUDIT-ACTOR-008
+   * @see AUDIT-ACTOR-010
    */
   toJSON(): SerializedAuditActor {
     return cloneJsonValue(this.value)

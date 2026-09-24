@@ -140,14 +140,14 @@ that every implementation preserves the same meaning.
 These scenarios are only a small illustration of FinKore Core 0.9.3:
 
 Across Money, Workflow, Audit, Approvals, Financial Entities, and shared
-conventions, the current 536-vector suite maps vectors to 329 requirements.
+conventions, the current 542-vector suite maps vectors to 329 requirements.
 Core 0.9.4 Milestone 2 adds 201 regression/control cases and native sequence and
 ownership tests. Milestone 3 restores all 112 Approval vectors across TypeScript,
 Python 3.12/3.13, and Java. Milestone 4 restores all 157 Entity vectors on the
 same runtimes. Milestone 5 restores all 83 Workflow vectors and native ownership
-regressions. Python and Java pass all 536 vectors; TypeScript passes 530, with
-six Audit cases remaining for Milestone 6;
-the implementations do not yet pass the expanded full suite.
+regressions. Milestone 6 fixes Audit JSON member preservation and adds six
+null/array controls. All 542 vectors now pass on every required runtime.
+Release-wide verification and promotion remain open.
 See [current traceability](./conformance/traceability.md).
 
 The historical 331-vector Core 0.9.3 manifest includes permanent regressions.
