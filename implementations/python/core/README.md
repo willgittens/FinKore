@@ -5,20 +5,27 @@ derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
 TypeScript financial implementation code. The historical Core 0.9.3 snapshot passes its 331-vector manifest and release
 checks; see the [0.9.3 plan](../../../docs/plans/plan-09.3.md).
 
-The current manifest contains 536 vectors. Core 0.9.4 Milestone 2 adds 201
-regression/control cases and native sequence/ownership tests that expose
-unfixed defects. The expanded suite is intentionally failing during this TDD
-stage; current full conformance and mutation-gate completion are not claimed.
-Corrections are tracked in the [0.9.4 plan](../../../docs/plans/plan-09.4.md).
+The current manifest contains 536 vectors. Core 0.9.4 Milestones 3–5 restore
+all 112 Approval, 157 Entity, and 83 Workflow vectors across TypeScript,
+Python 3.12/3.13, and Java. Native tests also verify lifecycle sequences,
+Entity history reuse, and immutable Workflow guard ownership.
+Python passes all 536 vectors. Full cross-language release verification
+remains open in the [0.9.4 plan](../../../docs/plans/plan-09.4.md).
 
-Milestone 3 restores all 112 Approval conformance vectors on Python 3.12 and
-3.13, including lifecycle recording sequences and invalid quorum evidence.
-Workflow and Audit corrections remain assigned to later milestones.
+Workflow definitions own nested guard inputs. Guards require a nonempty fact
+name and a present JSON comparison value; explicit null comparisons are valid,
+while null guard containers and unsupported native values are rejected with
+`FINKORE_WORKFLOW_INVALID_DEFINITION`. A single `guard` may coexist with
+`guards: []`; a nonempty competing list is invalid. `versionSequence: "DEFAULT"`
+selects validation of `definitionVersionIdentity` as `[1-9][0-9]*`. Without the
+selector, version identities remain opaque; no global sequencing or migration
+is performed.
 
-Milestone 4 restores all 157 Entity conformance vectors. Evolution validates
-Audit evidence before correspondence, complete business observations, and
-consistent history-derived currentness. Workflow and Audit readiness work
-remains open; full-release conformance is not yet claimed.
+`WorkflowTransition(source, target, guards=())` keeps its constructor signature.
+Its `guards` property returns fresh nested JSON copies; mutating them cannot
+change the predicate. Guard storage is now private, so dataclass field
+introspection is not a portable serialization interface. `WorkflowDefinition`
+retains declaration containers as tuples, including direct native construction.
 
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to a Python package registry. The

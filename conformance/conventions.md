@@ -95,6 +95,14 @@ equal rejects the transition with `FINKORE_WORKFLOW_GUARD_REJECTED`. Values are
 not coerced, and an object that resembles Money or another domain type remains
 an ordinary JSON object in this fixture.
 
+Native public-API tests supplement these JSON fixtures by attempting to mutate
+construction inputs and returned definition observations, including nested guard
+objects and arrays. They cover creation and import, accepted and rejected facts,
+and unversioned controls. The same retained predicate must continue to evaluate
+under the original binding; either immutable observations or defensive copies
+satisfy this ownership check. Unsupported native comparison values require
+native tests because they cannot be represented in a JSON vector.
+
 Versioned Workflow fixtures identify the definition family with
 `definitionIdentity` and its version with `definitionVersionIdentity`. When
 `versionSequence` is supplied, its only supported selector is `"DEFAULT"`,

@@ -24,6 +24,72 @@ if (!validTargets.has(requestedTarget)) {
 
 const pythonMutants = [
   {
+    "id": "python-workflow-empty-fact",
+    "expectedVector": "workflow.guard.empty-fact-regression-001",
+    "expectedPassVectors": [
+      "workflow.guard.valid-regression-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/finkore/workflow.py",
+    "from": "not _opaque(guard.get(\"fact\"))",
+    "to": "not isinstance(guard.get(\"fact\"), str)"
+  },
+  {
+    "id": "python-workflow-competing-list",
+    "expectedVector": "workflow.guard.nonempty-competing-list-regression-001",
+    "expectedPassVectors": [
+      "workflow.guard.empty-competing-list-regression-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/finkore/workflow.py",
+    "from": "if guards != []:",
+    "to": "if False:"
+  },
+  {
+    "id": "python-workflow-null-guard-omitted",
+    "expectedVector": "workflow.guard.null-guard-regression-001",
+    "expectedPassVectors": [
+      "workflow.guard.null-equals-regression-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/finkore/workflow.py",
+    "from": "guards = [value[\"guard\"]]",
+    "to": "guards = [] if value[\"guard\"] is None else [value[\"guard\"]]"
+  },
+  {
+    "id": "python-workflow-selector-as-position",
+    "expectedVector": "workflow.version.sequence-one-001",
+    "expectedPassVectors": [
+      "workflow.version.sequence-opaque-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/finkore/workflow.py",
+    "from": "not _version_sequence_valid(version_identity)",
+    "to": "not _version_sequence_valid(value[\"versionSequence\"])"
+  },
+  {
+    "id": "python-workflow-position-bypass",
+    "expectedVector": "workflow.version.sequence-zero-001",
+    "expectedPassVectors": [
+      "workflow.version.sequence-multi-digit-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/finkore/workflow.py",
+    "from": "not _version_sequence_valid(version_identity)",
+    "to": "False"
+  },
+  {
+    "id": "python-workflow-selector-bypass",
+    "expectedVector": "workflow.version.sequence-null-selector-001",
+    "expectedPassVectors": [
+      "workflow.version.sequence-one-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/finkore/workflow.py",
+    "from": "value[\"versionSequence\"] != \"DEFAULT\"",
+    "to": "False"
+  },
+  {
     id: 'python-entity-conflicting-required-effects',
     expectedVector: 'entity.evolution.history.same-step-required-effects-current-001',
     expectedPassVectors: ['entity.evolution.history.same-step-consistent-control-001'],
@@ -526,6 +592,72 @@ const pythonMutants = [
 ]
 
 const javaMutants = [
+  {
+    "id": "java-workflow-empty-fact",
+    "expectedVector": "workflow.guard.empty-fact-regression-001",
+    "expectedPassVectors": [
+      "workflow.guard.valid-regression-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/main/java/org/finkore/Workflow.java",
+    "from": "!opaque(map.get(\"fact\"))",
+    "to": "!(map.get(\"fact\") instanceof String)"
+  },
+  {
+    "id": "java-workflow-competing-list",
+    "expectedVector": "workflow.guard.nonempty-competing-list-regression-001",
+    "expectedPassVectors": [
+      "workflow.guard.empty-competing-list-regression-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/main/java/org/finkore/Workflow.java",
+    "from": "if (!List.of().equals(guards)) {",
+    "to": "if (false) {"
+  },
+  {
+    "id": "java-workflow-null-guard-omitted",
+    "expectedVector": "workflow.guard.null-guard-regression-001",
+    "expectedPassVectors": [
+      "workflow.guard.null-equals-regression-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/main/java/org/finkore/Workflow.java",
+    "from": "guards = Collections.singletonList(map.get(\"guard\"));",
+    "to": "guards = map.get(\"guard\") == null ? List.of() : Collections.singletonList(map.get(\"guard\"));"
+  },
+  {
+    "id": "java-workflow-selector-as-position",
+    "expectedVector": "workflow.version.sequence-one-001",
+    "expectedPassVectors": [
+      "workflow.version.sequence-opaque-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/main/java/org/finkore/Workflow.java",
+    "from": "!versionSequenceValid(version)",
+    "to": "!versionSequenceValid(map.get(\"versionSequence\"))"
+  },
+  {
+    "id": "java-workflow-position-bypass",
+    "expectedVector": "workflow.version.sequence-zero-001",
+    "expectedPassVectors": [
+      "workflow.version.sequence-multi-digit-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/main/java/org/finkore/Workflow.java",
+    "from": "!versionSequenceValid(version)",
+    "to": "false"
+  },
+  {
+    "id": "java-workflow-selector-bypass",
+    "expectedVector": "workflow.version.sequence-null-selector-001",
+    "expectedPassVectors": [
+      "workflow.version.sequence-one-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/main/java/org/finkore/Workflow.java",
+    "from": "!\"DEFAULT\".equals(map.get(\"versionSequence\"))",
+    "to": "false"
+  },
   {
     id: 'java-entity-conflicting-required-effects',
     expectedVector: 'entity.evolution.history.same-step-required-effects-current-001',

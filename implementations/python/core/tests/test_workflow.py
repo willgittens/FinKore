@@ -142,3 +142,43 @@ class WorkflowTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+class WorkflowOwnershipTests(unittest.TestCase):
+    def test_native_json_boundary(self):
+        from finkore.workflow import WorkflowTransition
+        cycle = []; cycle.append(cycle)
+        for value in [float('nan'), float('inf'), float('-inf'), object(), {1: True}, (1,), {1}, cycle, {'x': object()}]:
+            with self.subTest(value=type(value)):
+                with self.assertRaises(FinKoreError) as error:
+                    WorkflowTransition('DRAFT', 'DONE', ({'fact': 'value', 'equals': value},))
+                self.assertEqual(error.exception.code, 'FINKORE_WORKFLOW_INVALID_DEFINITION')
+        for guards in [None, {}, 'guard']:
+            with self.assertRaises(FinKoreError) as error:
+                WorkflowTransition('DRAFT', 'DONE', guards)
+            self.assertEqual(error.exception.code, 'FINKORE_WORKFLOW_INVALID_DEFINITION')
+        for guard in [None, {}, {'fact': '', 'equals': None}, {'fact': 'value'}]:
+            with self.assertRaises(FinKoreError) as error:
+                WorkflowTransition('DRAFT', 'DONE', (guard,))
+            self.assertEqual(error.exception.code, 'FINKORE_WORKFLOW_INVALID_DEFINITION')
+
+    def test_native_constructor_owns_unversioned_guards_and_declarations(self):
+        from finkore.workflow import WorkflowTransition
+        shared = {'approved': True}
+        expected = {'left': [shared, None, 2.5, 'ok'], 'right': shared}
+        guard = {'fact': 'value', 'equals': expected}
+        transition = WorkflowTransition('DRAFT', 'DONE', (guard,))
+        states, terminals, transitions = ['DRAFT', 'DONE'], ['DONE'], [transition]
+        definition = WorkflowDefinition(states, 'DRAFT', terminals, transitions)
+        instance = create_workflow(definition)
+        shared['approved'] = False
+        transition.guards[0]['equals']['right']['approved'] = False
+        transition.guards[0]['fact'] = 'other'
+        states.clear(); terminals.clear(); transitions.clear()
+        self.assertEqual(definition.states, ('DRAFT', 'DONE'))
+        self.assertEqual(definition.terminal_states, ('DONE',))
+        with self.assertRaises(FinKoreError) as error:
+            transition_workflow(definition, instance, 'DONE', {'value': expected})
+        self.assertEqual(error.exception.code, 'FINKORE_WORKFLOW_GUARD_REJECTED')
+        self.assertEqual(instance.to_portable(), {'currentState': 'DRAFT'})
+        facts = {'value': {'left': [{'approved': True}, None, 2.5, 'ok'], 'right': {'approved': True}}}
+        self.assertEqual(transition_workflow(definition, instance, 'DONE', facts).to_portable(), {'currentState': 'DONE'})

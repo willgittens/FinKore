@@ -4,6 +4,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from copy import deepcopy
+from math import isfinite
+import re
 from typing import Any
 
 from .errors import FinKoreError
@@ -29,7 +32,28 @@ def _opaque(value: Any) -> bool:
 
 
 def _version_sequence_valid(value: Any) -> bool:
-    return isinstance(value, str) and value.isdecimal() and value != "0" and not value.startswith("0")
+    return isinstance(value, str) and re.fullmatch(r"[1-9][0-9]*", value) is not None
+
+
+def _copy_json(value: Any, ancestors: set[int] | None = None) -> Any:
+    """Validate and own guard JSON without coercing unsupported native values."""
+    if value is None or isinstance(value, (str, bool, int)):
+        return value
+    if isinstance(value, float) and isfinite(value):
+        return value
+    if ancestors is None:
+        ancestors = set()
+    if id(value) in ancestors:
+        raise FinKoreError(INVALID_DEFINITION)
+    ancestors.add(id(value))
+    try:
+        if isinstance(value, list):
+            return [_copy_json(item, ancestors) for item in value]
+        if isinstance(value, dict) and all(isinstance(key, str) for key in value):
+            return {key: _copy_json(item, ancestors) for key, item in value.items()}
+        raise FinKoreError(INVALID_DEFINITION)
+    finally:
+        ancestors.remove(id(value))
 
 
 def _binding(value: Any) -> dict[str, str] | None:
@@ -72,7 +96,7 @@ def _json_equal(left: Any, right: Any) -> bool:
     return False
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, init=False)
 class WorkflowTransition:
     """Directed Workflow transition with optional deterministic fact guards.
 
@@ -82,7 +106,30 @@ class WorkflowTransition:
 
     source: str
     target: str
-    guards: tuple[dict[str, Any], ...] = ()
+    _guards: tuple[dict[str, Any], ...]
+
+    def __init__(self, source: str, target: str, guards: tuple[dict[str, Any], ...] = ()) -> None:
+        """Retain independent guards; malformed JSON raises INVALID_DEFINITION.
+
+        The positional/keyword constructor is unchanged. Guard observations are
+        defensive JSON copies, including nested objects and arrays.
+        @see WORKFLOW-VERSION-003
+        """
+        if not isinstance(guards, (tuple, list)):
+            raise FinKoreError(INVALID_DEFINITION)
+        retained = []
+        for guard in guards:
+            if not isinstance(guard, dict) or not _opaque(guard.get("fact")) or "equals" not in guard:
+                raise FinKoreError(INVALID_DEFINITION)
+            retained.append({"fact": guard["fact"], "equals": _copy_json(guard["equals"])})
+        object.__setattr__(self, "source", source)
+        object.__setattr__(self, "target", target)
+        object.__setattr__(self, "_guards", tuple(retained))
+
+    @property
+    def guards(self) -> tuple[dict[str, Any], ...]:
+        """Return defensive JSON observations; mutations cannot change guards."""
+        return deepcopy(self._guards)
 
     @staticmethod
     def from_portable(value: Any, states: set[str], terminal_states: set[str]) -> "WorkflowTransition":
@@ -103,10 +150,7 @@ class WorkflowTransition:
             guards = [value["guard"]]
         if not isinstance(guards, list):
             raise FinKoreError(INVALID_DEFINITION)
-        for guard in guards:
-            if not isinstance(guard, dict) or not isinstance(guard.get("fact"), str) or "equals" not in guard:
-                raise FinKoreError(INVALID_DEFINITION)
-        return WorkflowTransition(source=source, target=target, guards=tuple(dict(guard) for guard in guards))
+        return WorkflowTransition(source=source, target=target, guards=tuple(guards))
 
     def guards_pass(self, facts: dict[str, Any]) -> bool:
         """Evaluate guards with presence-aware, type-sensitive JSON equality.
@@ -118,7 +162,7 @@ class WorkflowTransition:
 
         return all(
             guard["fact"] in facts and _json_equal(facts[guard["fact"]], guard["equals"])
-            for guard in self.guards
+            for guard in self._guards
         )
 
 
@@ -137,9 +181,23 @@ class WorkflowDefinition:
     definition_identity: str | None = None
     definition_version_identity: str | None = None
 
+    def __post_init__(self) -> None:
+        """Own declaration containers supplied through the native constructor."""
+        object.__setattr__(self, "states", tuple(self.states))
+        object.__setattr__(self, "terminal_states", tuple(self.terminal_states))
+        object.__setattr__(self, "transitions", tuple(self.transitions))
+
     @staticmethod
     def from_portable(value: Any) -> "WorkflowDefinition":
-        """Validate and parse a portable Workflow definition observation."""
+        """Validate and retain an independent Workflow definition.
+
+        ``versionSequence: "DEFAULT"`` selects positive ASCII integer validation
+        of the version identity; otherwise identities stay opaque. Malformed
+        guards or version metadata raise FINKORE_WORKFLOW_INVALID_DEFINITION.
+        @see WORKFLOW-VERSION-003
+        @see WORKFLOW-VERSION-005
+        @see WORKFLOW-VERSION-006
+        """
 
         if not isinstance(value, dict):
             raise FinKoreError(INVALID_DEFINITION)
@@ -161,11 +219,11 @@ class WorkflowDefinition:
 
         definition_identity = value.get("definitionIdentity")
         version_identity = value.get("definitionVersionIdentity")
-        if (definition_identity is None) != (version_identity is None):
+        if ("definitionIdentity" in value) != ("definitionVersionIdentity" in value):
             raise FinKoreError(INVALID_DEFINITION)
-        if definition_identity is not None and (not _opaque(definition_identity) or not _opaque(version_identity)):
+        if "definitionIdentity" in value and (not _opaque(definition_identity) or not _opaque(version_identity)):
             raise FinKoreError(INVALID_DEFINITION)
-        if "versionSequence" in value and not _version_sequence_valid(value["versionSequence"]):
+        if "versionSequence" in value and (value["versionSequence"] != "DEFAULT" or not _opaque(definition_identity) or not _version_sequence_valid(version_identity)):
             raise FinKoreError(INVALID_DEFINITION)
 
         raw_transitions = value.get("transitions", [])

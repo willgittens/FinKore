@@ -55,7 +55,9 @@ Approval vectors across TypeScript, Python 3.12/3.13, and Java, with native
 sequence coverage for each lifecycle operation and ancillary request type.
 Milestone 4 restores all 157 Entity vectors on the same runtimes, including
 Audit precedence, correspondence, business validation, and consistent imported
-and resulting history. Workflow and Audit corrections remain assigned to Milestones 5–6 in
+and resulting history. Milestone 5 restores all 83 Workflow vectors and native
+ownership checks across those runtimes. Python and Java pass the complete
+536-vector manifest; six TypeScript Audit failures remain for Milestone 6 in
 the [0.9.4 plan](../docs/plans/plan-09.4.md).
 
 Milestone 4 adds four portable currentness regression/control cases. Native

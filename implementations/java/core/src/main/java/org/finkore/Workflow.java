@@ -3,6 +3,8 @@ package org.finkore;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -51,11 +53,14 @@ public final class Workflow {
    */
   public record Transition(String source, String target, List<Map<String, Object>> guards) {
     /**
-     * Creates an immutable transition observation.
+     * Creates an immutable transition observation, deeply copying guard JSON.
+     * Nested observations are unmodifiable; caller mutations cannot change the
+     * retained predicate (WORKFLOW-VERSION-003).
      *
      * @param source declared source state
      * @param target declared target state
      * @param guards guard observations evaluated against explicit facts
+     * @throws FinKoreException with {@link #INVALID_DEFINITION} for malformed guards
      */
     public Transition {
       guards = deepCopyMapList(guards);
@@ -117,6 +122,11 @@ public final class Workflow {
     /**
      * Parses and validates a portable Workflow definition.
      *
+     * <p>The {@code DEFAULT} versionSequence selector validates the version
+     * identity as a positive ASCII integer string (WORKFLOW-VERSION-006).
+     * Without it, identities remain opaque. Guards retain independent,
+     * unmodifiable JSON observations, including explicit null comparisons.
+     *
      * @param value portable definition observation
      * @return validated definition
      * @throws FinKoreException with {@link #INVALID_DEFINITION}
@@ -145,19 +155,19 @@ public final class Workflow {
       }
       Object definitionIdentity = map.get("definitionIdentity");
       Object versionIdentity = map.get("definitionVersionIdentity");
-      if ((definitionIdentity == null) != (versionIdentity == null)) {
+      if (map.containsKey("definitionIdentity") != map.containsKey("definitionVersionIdentity")) {
         throw new FinKoreException(INVALID_DEFINITION);
       }
       String identity = null;
       String version = null;
-      if (definitionIdentity != null) {
+      if (map.containsKey("definitionIdentity")) {
         if (!opaque(definitionIdentity) || !opaque(versionIdentity)) {
           throw new FinKoreException(INVALID_DEFINITION);
         }
         identity = (String) definitionIdentity;
         version = (String) versionIdentity;
       }
-      if (map.containsKey("versionSequence") && !versionSequenceValid(map.get("versionSequence"))) {
+      if (map.containsKey("versionSequence") && (!"DEFAULT".equals(map.get("versionSequence")) || !opaque(identity) || !versionSequenceValid(version))) {
         throw new FinKoreException(INVALID_DEFINITION);
       }
       Object rawTransitions = map.containsKey("transitions") ? map.get("transitions") : List.of();
@@ -380,7 +390,7 @@ public final class Workflow {
       if (!List.of().equals(guards)) {
         throw new FinKoreException(INVALID_DEFINITION);
       }
-      guards = List.of(map.get("guard"));
+      guards = Collections.singletonList(map.get("guard"));
     }
     if (!(guards instanceof List<?> guardList)) {
       throw new FinKoreException(INVALID_DEFINITION);
@@ -461,15 +471,7 @@ public final class Workflow {
   }
 
   private static boolean versionSequenceValid(Object value) {
-    if (!(value instanceof String text) || text.equals("0") || text.startsWith("0")) {
-      return false;
-    }
-    for (int index = 0; index < text.length(); index += 1) {
-      if (!Character.isDigit(text.charAt(index))) {
-        return false;
-      }
-    }
-    return true;
+    return value instanceof String text && text.matches("[1-9][0-9]*");
   }
 
   private static List<String> stringList(Object value) {
@@ -512,10 +514,44 @@ public final class Workflow {
   }
 
   private static List<Map<String, Object>> deepCopyMapList(List<Map<String, Object>> maps) {
+    if (maps == null) throw new FinKoreException(INVALID_DEFINITION);
     List<Map<String, Object>> result = new ArrayList<>();
     for (Map<String, Object> map : maps) {
-      result.add(new LinkedHashMap<>(map));
+      if (map == null || !opaque(map.get("fact")) || !map.containsKey("equals")) {
+        throw new FinKoreException(INVALID_DEFINITION);
+      }
+      Map<String, Object> guard = new LinkedHashMap<>();
+      guard.put("fact", map.get("fact"));
+      guard.put("equals", retainJson(map.get("equals"), Collections.newSetFromMap(new IdentityHashMap<>())));
+      result.add(Collections.unmodifiableMap(guard));
     }
     return List.copyOf(result);
+  }
+
+  private static Object retainJson(Object value, Set<Object> ancestors) {
+    if (value == null || value instanceof String || value instanceof Boolean) return value;
+    if (value instanceof Byte || value instanceof Short || value instanceof Integer || value instanceof Long
+        || value instanceof java.math.BigInteger || value instanceof BigDecimal) return value;
+    if (value instanceof Double number && Double.isFinite(number)) return value;
+    if (value instanceof Float number && Float.isFinite(number)) return value;
+    if (!ancestors.add(value)) throw new FinKoreException(INVALID_DEFINITION);
+    try {
+      if (value instanceof List<?> list) {
+        List<Object> result = new ArrayList<>();
+        for (Object item : list) result.add(retainJson(item, ancestors));
+        return Collections.unmodifiableList(result);
+      }
+      if (value instanceof Map<?, ?> map) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+          if (!(entry.getKey() instanceof String key)) throw new FinKoreException(INVALID_DEFINITION);
+          result.put(key, retainJson(entry.getValue(), ancestors));
+        }
+        return Collections.unmodifiableMap(result);
+      }
+      throw new FinKoreException(INVALID_DEFINITION);
+    } finally {
+      ancestors.remove(value);
+    }
   }
 }

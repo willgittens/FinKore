@@ -130,9 +130,9 @@ def workflow_observations(instance: WorkflowInstance, input_value: dict[str, Any
 
 
 def workflow_error_observations(code: str, input_value: dict[str, Any]) -> dict[str, Any] | None:
+    definition = parse_workflow_definition(input_value)
     instance = parse_workflow_instance(input_value)
     if code == "FINKORE_WORKFLOW_INVALID_STATE":
-        definition = parse_workflow_definition(input_value)
         if instance.current_state not in definition.states:
             return None
     return workflow_observations(instance, input_value)

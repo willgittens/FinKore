@@ -2,10 +2,11 @@
 
 ## Status
 
-Milestones 1–4 are complete, including the accepted Entity decisions, permanent
-regressions with valid controls, and Approval and Entity corrections. All 112
-Approval and 157 Entity vectors pass across TypeScript, Python 3.12/3.13, and
-Java. Workflow and Audit readiness regressions remain for Milestones 5 and 6.
+Milestones 1–5 are complete, including the accepted Entity decisions, permanent
+regressions with valid controls, and Approval, Entity, and Workflow corrections.
+All 112 Approval, 157 Entity, and 83 Workflow vectors pass across TypeScript,
+Python 3.12/3.13, and Java. Python and Java pass all 536 vectors; six TypeScript
+Audit failures remain for Milestone 6. Complete release verification remains open.
 The review of `f39bbe1`
 (`core-0.9.3`) reproduced the failures below after the complete existing
 verification command passed. The earlier corrective releases remain historical
@@ -512,36 +513,101 @@ pending the later milestones.
 
 ## Milestone 5 — Workflow ownership and fixture corrections
 
-- [ ] Make retained definitions independent of caller-owned nested guard values
+- [x] Make retained definitions independent of caller-owned nested guard values
       in TypeScript, Python, and Java. Protect exposed observations as well as
       construction inputs; a shallow container copy or a read-only annotation
       alone does not establish immutable ownership.
-- [ ] Test both acceptance and rejection after attempts to mutate nested guard
+- [x] Test both acceptance and rejection after attempts to mutate nested guard
       objects, arrays, and exposed transitions. Cover creation and import with
       versioned definitions and preserve unversioned behavior. The same facts
       must yield the same predicate result under the retained bound definition.
-- [ ] Enforce nonempty fact names and the supported JSON comparison boundary.
+- [x] Enforce nonempty fact names and the supported JSON comparison boundary.
       Reject explicit null/malformed guards with the existing portable definition
       error, eliminating Java's `List.of(null)` crash. Cover missing versus null
       `equals`, valid explicit-null comparisons, and multiple guards.
-- [ ] Align `guard` plus `guards: []` and the invalid nonempty combination with
+- [x] Align `guard` plus `guards: []` and the invalid nonempty combination with
       the resolved fixture contract. Keep all presence/type checks in the core
       boundary that owns definition validation.
-- [ ] Correct default-sequence fixture translation and validation: the selector
+- [x] Correct default-sequence fixture translation and validation: the selector
       chooses the convention and the version identity supplies the position.
       Cover valid `1` and later positive positions, zero and malformed positions,
       invalid selectors, and opaque version identities without the convention.
       Do not add global sequence tracking or migration authority.
-- [ ] Preserve recursive type-sensitive equality, object/array ordering rules,
+- [x] Preserve recursive type-sensitive equality, object/array ordering rules,
       missing/null distinctions, version binding, conflict checks, and failure
       atomicity established by earlier corrections.
-- [ ] Update public API documentation and fixture descriptions, including any
+- [x] Update public API documentation and fixture descriptions, including any
       compatibility-relevant constructor or observation changes. Run Workflow
       and composing Entity tests and conformance on all required runtimes.
 
 Completion: caller mutation cannot change a retained definition, supported
 fixtures behave consistently, and malformed definitions produce portable errors
 without changing instance state or binding.
+
+### Milestone 5 outcome
+
+Completed the Workflow corrections under the existing guard fixture contract,
+`WORKFLOW-VERSION-003`, `-005`, `-006`, `-009`, and `WORKFLOW-ERROR-007`.
+Definitions retain independent nested guard values. TypeScript observations
+are deeply frozen; Python guard observations are defensive JSON copies; Java
+observations are deeply unmodifiable maps/lists that preserve null values.
+Native constructor signatures remain unchanged. Python's retained guard field
+is now private; dataclass field introspection is not a serialization contract.
+Declaration arrays, exposed transitions, and unversioned controls are covered.
+
+Malformed guard containers, empty fact names, missing comparison values, and
+unsupported native JSON values produce the portable definition error. A single
+guard with an empty competing list is accepted. Python and Java validate the
+`DEFAULT` selector separately from its version identity position, including
+ASCII-only positive positions and opaque identities without that selector.
+Python adapter error observations now require a valid core definition, matching
+the existing fixture expectations; definition validation stays in the core.
+
+Verification completed:
+
+- All **83 Workflow** and **157 Entity** vectors pass on TypeScript,
+  Python 3.12, Python 3.13, and Java. Full-manifest results are TypeScript
+  **530 PASS / 6 FAIL**, and **536 PASS / 0 FAIL** on both Python runtimes
+  and Java. Every runtime has zero unsupported and infrastructure outcomes.
+  Against Milestone 4, only Workflow results change: two TypeScript failures,
+  twelve failures per Python runtime, and five Java failures plus three Java
+  infrastructure errors become passes. Remaining failures are the six
+  TypeScript Audit JSON-member cases assigned to Milestone 6.
+- The permanent creation/import ownership matrix now passes in all languages.
+  Native tests additionally cover unsupported values, cycles, shared references,
+  direct constructors, declaration observations, unversioned ownership, and
+  exact JSON type/container equality. TypeScript core has **619 passing tests**;
+  Python has **62 passing tests** on each required runtime. Java native tests
+  and Maven's **35 tests** pass. Workflow/Entity TypeScript adapter checks and
+  all Python/Java adapter tests pass.
+- TypeScript Workflow mutation score is **96.78%**: 481 of 497 mutants killed,
+  zero timeouts or errors, 15 equivalent survivors, and one unreachable fallback
+  mutant. No critical mutant survives. Equivalent cases retain validation in
+  later checks, preserve undefined metadata observations, or duplicate JSON
+  type/null checks. The final equality fallback is unreachable for the supported
+  JSON comparison boundary. These mutants remain in the score; no exclusions
+  were introduced. Array-like objects with `length` members are tested to
+  distinguish ordinary JSON objects from arrays.
+- The critical probe tool kills **9/9 Python** and **11/11 Java** Workflow
+  mutants, including twelve new guard/sequence probes with named regression
+  and passing-control vectors. Separate temporary-copy native runs kill two
+  Python alias mutants and three Java alias mutants; compilation succeeds and
+  unaffected declaration/sequence controls pass. Integrating these native probes
+  into the unified critical-probe tool remains part of Milestone 7. The permanent
+  TypeScript ownership suite now participates in Stryker configuration.
+- Coverage gates pass: TypeScript core **99.67% lines / 99.39% branches**;
+  Python core **89% combined**, with Workflow **92% combined**; Java Maven's
+  full coverage gate passes, with Workflow **91.38% line coverage**.
+  Build, strict TypeScript, Python compilation on both runtimes, architecture,
+  documentation/traceability, tool tests, licenses, and whitespace checks pass.
+
+Public API documentation, package/root READMEs, fixture descriptions, and
+conformance status are synchronized. Existing portable vectors already cover
+these corrections, so the manifest remains at 536 vectors and requirement IDs
+are unchanged. The specification, CoreDoc, Agentic metadata, and AGENTS.md
+already state the applicable semantics and architecture; no changes are needed
+there. Release-wide mutation, packaging, clean-checkout verification, and
+promotion remain assigned to later milestones.
 
 ## Milestone 6 — Audit JSON preservation corrections
 

@@ -243,3 +243,77 @@ describe('Workflow guards', () => {
     ).toThrow(InvalidWorkflowDefinitionError)
   })
 })
+
+describe('Workflow guard JSON boundary and ownership', () => {
+  const definition = (equals: unknown) => ({
+    states: ['DRAFT', 'DONE'], initialState: 'DRAFT', terminalStates: ['DONE'],
+    transitions: [{ source: 'DRAFT', target: 'DONE', guard: { fact: 'value', equals }, guards: [] }],
+  })
+
+  it('rejects unsupported native comparison values with the portable definition error', () => {
+    const cycle: unknown[] = []; cycle.push(cycle)
+    for (const value of [undefined, NaN, Infinity, -Infinity, 1n, Symbol('x'), () => true,
+      new Date(), new Map(), new Set(), cycle, [undefined], { nested: undefined }, new Array(1)]) {
+      expect(() => Workflow.create(definition(value))).toThrow(InvalidWorkflowDefinitionError)
+    }
+    for (const transition of [
+      { guard: undefined }, { guards: undefined }, { guard: null }, { guards: null },
+      { guard: { fact: '', equals: null } }, { guard: { fact: 'value' } },
+    ]) {
+      expect(() => Workflow.create({ ...definition(null), transitions: [{ source: 'DRAFT', target: 'DONE', ...transition }] }))
+        .toThrow(InvalidWorkflowDefinitionError)
+    }
+  })
+
+  it('owns unversioned nested values and observations without freezing the caller', () => {
+    const shared = { approved: true }
+    const expected = { left: [shared, null, 2.5, 'ok'], right: shared }
+    const input = definition(expected)
+    const workflow = Workflow.create(input)
+    shared.approved = false
+    const observed = workflow.definition.transitionFrom('DRAFT', 'DONE')!
+    for (const mutate of [
+      () => { (observed.guards![0]!.equals as typeof expected).left[0] = null },
+      () => { (observed.guards![0]!.equals as typeof expected).right.approved = false },
+      () => { (observed.guards as unknown[]).pop() },
+      () => { (observed as { target: string }).target = 'OTHER' },
+      () => { (workflow.definition.states as string[]).push('OTHER') },
+      () => { (workflow.definition.terminalStates as string[]).pop() },
+      () => { (workflow.definition as { initialState: string }).initialState = 'DONE' },
+    ]) { try { mutate() } catch (error) { expect(error).toBeInstanceOf(TypeError) } }
+    expect(workflow.definition.states).toEqual(['DRAFT', 'DONE'])
+    expect(workflow.definition.terminalStates).toEqual(['DONE'])
+    expect(workflow.definition.initialState).toBe('DRAFT')
+    expect(() => workflow.transition('DONE', { facts: { value: expected } })).toThrow(WorkflowGuardRejectedError)
+    expect(workflow.toJSON()).toEqual({ currentState: 'DRAFT' })
+    workflow.transition('DONE', { facts: { value: { left: [{ approved: true }, null, 2.5, 'ok'], right: { approved: true } } } })
+    expect(workflow.toJSON()).toEqual({ currentState: 'DONE' })
+  })
+
+  it('compares JSON types, complete member sets, and ordered arrays exactly', () => {
+    const distinct: unknown[] = [null, true, false, 0, 1, '1', '', [], [1], [true], [1, 2], [2, 1],
+      {}, { length: 0 }, { '0': 1, length: 1 }, { a: 1 }, { b: 1 }, { a: 1, b: 2 },
+      { nested: { approved: true } }, { nested: { approved: 1 } }]
+    for (const [leftIndex, left] of distinct.entries()) for (const [rightIndex, right] of distinct.entries()) {
+      const workflow = Workflow.create(definition(left))
+      if (leftIndex === rightIndex) {
+        workflow.transition('DONE', { facts: { value: structuredClone(right) } })
+        expect(workflow.currentState).toBe('DONE')
+      } else {
+        expect(() => workflow.transition('DONE', { facts: { value: right } })).toThrow(WorkflowGuardRejectedError)
+        expect(workflow.toJSON()).toEqual({ currentState: 'DRAFT' })
+      }
+    }
+    const workflow = Workflow.create(definition({ first: [null, true], second: 2 }))
+    workflow.transition('DONE', { facts: { value: { second: 2.0, first: [null, true] } } })
+    expect(workflow.currentState).toBe('DONE')
+  })
+
+  it('retains every own JSON member and null-prototype objects', () => {
+    for (const value of [JSON.parse('{"__proto__":{"ok":true},"constructor":[null]}'), Object.assign(Object.create(null), { x: 1 })]) {
+      const workflow = Workflow.create(definition(value))
+      workflow.transition('DONE', { facts: { value: JSON.parse(JSON.stringify(value)) } })
+      expect(workflow.currentState).toBe('DONE')
+    }
+  })
+})

@@ -37,9 +37,10 @@ Milestone 2 added 201 permanent regression/control cases for both and the other
 review findings. Milestone 4 adds four cases separating contradictory same-step
 assertions, incompatible Supersession effects, and a consistent Correction.
 The manifest now contains 536 vectors. Native API tests supplement it for
-operation sequences and ownership. Milestones 3 and 4 restore Approval and
-Entity conformance across all required runtimes; Workflow and Audit readiness
-failures remain for Milestones 5 and 6. Full conformance is not yet passing.
+operation sequences and ownership. Milestones 3–5 restore Approval,
+Entity, and Workflow conformance across all required runtimes. Python 3.12/3.13
+and Java pass all 536 vectors. TypeScript passes 530, with six Audit failures
+remaining for Milestone 6. Cross-language release verification remains open.
 
 For FinKore Core 0.9 release candidate, [manifest.json](manifest.json) is the
 frozen release-candidate manifest and `finkoreConformance` remains `0.1`. This

@@ -12,6 +12,11 @@ import org.junit.jupiter.api.Test;
 /** JUnit coverage tests for Java Workflow behavior. */
 final class WorkflowCoverageTest {
   @Test
+  void nativeGuardBoundaryAndEquality() {
+    WorkflowTest.main(new String[0]);
+  }
+
+  @Test
   void createsAndImportsVersionedInstances() {
     Workflow.Definition definition = versionedDefinition("1");
     Workflow.Instance created = Workflow.create(definition);

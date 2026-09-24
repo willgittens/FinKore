@@ -76,7 +76,28 @@ function validateGuard(value: unknown): WorkflowTransitionGuard {
   if (!isPlainRecord(value) || typeof value.fact !== 'string' || value.fact.length === 0 || !('equals' in value)) {
     throw new InvalidWorkflowDefinitionError()
   }
-  return { fact: value.fact, equals: value.equals }
+  return Object.freeze({ fact: value.fact, equals: retainJson(value.equals) })
+}
+
+// Own the supported JSON tree without coercion or retaining caller aliases.
+function retainJson(value: unknown, ancestors = new Set<object>()): unknown {
+  if (value === null || typeof value === 'string' || typeof value === 'boolean') return value
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  if (typeof value !== 'object' || value === null || ancestors.has(value)) {
+    throw new InvalidWorkflowDefinitionError()
+  }
+  ancestors.add(value)
+  try {
+    if (Array.isArray(value)) {
+      return Object.freeze(Array.from(value, (item) => retainJson(item, ancestors)))
+    }
+    if (Object.getPrototypeOf(value) !== Object.prototype && Object.getPrototypeOf(value) !== null) {
+      throw new InvalidWorkflowDefinitionError()
+    }
+    return Object.freeze(Object.fromEntries(Object.entries(value).map(([key, item]) => [key, retainJson(item, ancestors)])))
+  } finally {
+    ancestors.delete(value)
+  }
 }
 
 function validateGuards(value: unknown): readonly WorkflowTransitionGuard[] {
@@ -92,18 +113,12 @@ function validateTransition(value: unknown): ValidatedWorkflowTransitionDefiniti
   }
   const source = validateStateIdentifier(value.source)
   const target = validateStateIdentifier(value.target)
-  const guard = value.guard
-  const guards = value.guards
-  if (guard !== undefined && guards !== undefined) {
-    throw new InvalidWorkflowDefinitionError()
+  const guards = 'guards' in value ? validateGuards(value.guards) : []
+  if ('guard' in value) {
+    if (guards.length !== 0) throw new InvalidWorkflowDefinitionError()
+    return { source, target, guards: [validateGuard(value.guard)] }
   }
-  if (guards !== undefined) {
-    return { source, target, guards: validateGuards(guards) }
-  }
-  if (guard !== undefined) {
-    return { source, target, guards: [validateGuard(guard)] }
-  }
-  return { source, target, guards: [] }
+  return { source, target, guards }
 }
 
 function assertUnique(values: readonly string[]): void {
@@ -158,13 +173,16 @@ export class WorkflowDefinition {
     transitions: readonly ValidatedWorkflowTransitionDefinition[],
     metadata: WorkflowDefinitionVersionMetadata,
   ) {
-    this.states = states
+    this.states = Object.freeze(states)
     this.initialState = initialState
-    this.terminalStates = terminalStates
-    this.transitionList = transitions
+    this.terminalStates = Object.freeze(terminalStates)
+    this.transitionList = Object.freeze(transitions.map((transition) => Object.freeze({
+      ...transition, guards: Object.freeze(transition.guards),
+    })))
     this.versionMetadata = metadata
     this.stateSet = new Set(states)
     this.terminalStateSet = new Set(terminalStates)
+    Object.freeze(this)
   }
 
   /**
@@ -335,10 +353,13 @@ export class WorkflowDefinition {
    *
    * @param source - Required current state for the transition.
    * @param target - Requested target state.
-   * @returns The matching transition when declared; otherwise `undefined`.
+   * @returns The matching deeply frozen transition when declared; otherwise
+   * `undefined`. Nested guard values are owned snapshots of the construction
+   * input. Observations cannot change the retained predicate.
    *
    * @see WORKFLOW-TRANSITION-002
    * @see WORKFLOW-TRANSITION-003
+   * @see WORKFLOW-VERSION-003
    */
   transitionFrom(
     source: WorkflowStateIdentifier,

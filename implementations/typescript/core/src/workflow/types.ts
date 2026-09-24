@@ -117,10 +117,15 @@ export type WorkflowErrorCode =
  * @see WORKFLOW-GUARD-005
  */
 export interface WorkflowTransitionGuard {
-  /** Fact key to read from a transition request's supplied facts. */
+  /** Nonempty key selecting one own, top-level member of the supplied facts. */
   readonly fact: string
 
-  /** Expected JSON value for the named fact. */
+  /**
+   * Required expected JSON value, including explicit null. Definition creation
+   * validates finite numbers and ordinary acyclic JSON objects/arrays, rejecting
+   * unsupported native values with FINKORE_WORKFLOW_INVALID_DEFINITION.
+   * Retained values are deeply copied and frozen.
+   */
   readonly equals: unknown
 }
 
@@ -143,7 +148,9 @@ export interface WorkflowTransitionDefinition {
   /**
    * Optional Core 0.9 release candidate fact-equality guard for this transition.
    *
-   * This single-guard form is accepted for existing conformance fixtures.
+   * This single-guard form is accepted for existing conformance fixtures,
+   * including alongside an empty `guards` array. A nonempty competing list
+   * or an explicitly null guard is an invalid definition.
    */
   readonly guard?: WorkflowTransitionGuard
 

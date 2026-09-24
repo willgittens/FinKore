@@ -144,7 +144,9 @@ conventions, the current 536-vector suite maps vectors to 329 requirements.
 Core 0.9.4 Milestone 2 adds 201 regression/control cases and native sequence and
 ownership tests. Milestone 3 restores all 112 Approval vectors across TypeScript,
 Python 3.12/3.13, and Java. Milestone 4 restores all 157 Entity vectors on the
-same runtimes. Workflow and Audit corrections remain open;
+same runtimes. Milestone 5 restores all 83 Workflow vectors and native ownership
+regressions. Python and Java pass all 536 vectors; TypeScript passes 530, with
+six Audit cases remaining for Milestone 6;
 the implementations do not yet pass the expanded full suite.
 See [current traceability](./conformance/traceability.md).
 

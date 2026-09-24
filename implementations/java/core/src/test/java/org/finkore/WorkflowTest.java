@@ -11,6 +11,7 @@ public final class WorkflowTest {
 
   /** Runs Java Workflow tests without an external test framework. */
   public static void main(String[] args) {
+    nativeGuardBoundaryAndOwnership();
     createVersionedInstancePreservesOpaqueBinding();
     terminalOutgoingTransitionIsInvalidDefinition();
     rejectedGuardDoesNotMutateInstanceObservation();
@@ -122,6 +123,36 @@ public final class WorkflowTest {
         Map.of("value", Map.of("steps", List.of("KYC", "LIMIT"), "status", "CLEAR")),
         null,
         null).toPortable());
+  }
+
+  @SuppressWarnings("unchecked")
+  private static void nativeGuardBoundaryAndOwnership() {
+    List<Object> cycle = new java.util.ArrayList<>(); cycle.add(cycle);
+    for (Object value : List.of(Double.NaN, Double.POSITIVE_INFINITY, Float.NEGATIVE_INFINITY,
+        new Object(), Map.of(1, true), java.util.Set.of(1), cycle, Map.of("x", new Object()))) {
+      assertError(Workflow.INVALID_DEFINITION, () -> workflowExpecting(value));
+      assertError(Workflow.INVALID_DEFINITION, () -> new Workflow.Transition("SUBMITTED", "APPROVED", List.of(Map.of("fact", "value", "equals", value))));
+    }
+    Map<String, Object> shared = new LinkedHashMap<>(Map.of("approved", true));
+    Map<String, Object> expected = Map.of("left", java.util.Arrays.asList(shared, null, 2.5, "ok"), "right", shared);
+    Workflow.Transition transition = new Workflow.Transition("SUBMITTED", "APPROVED", List.of(Map.of("fact", "value", "equals", expected)));
+    List<String> states = new java.util.ArrayList<>(List.of("SUBMITTED", "APPROVED"));
+    List<String> terminals = new java.util.ArrayList<>(List.of("APPROVED"));
+    List<Workflow.Transition> transitions = new java.util.ArrayList<>(List.of(transition));
+    Workflow.Definition definition = new Workflow.Definition(states, "SUBMITTED", terminals, transitions, null, null);
+    Workflow.Instance instance = Workflow.create(definition);
+    shared.put("approved", false);
+    try { transition.guards().get(0).put("equals", false); } catch (UnsupportedOperationException expectedError) { /* immutable view */ }
+    Map<String, Object> observed = (Map<String, Object>) transition.guards().get(0).get("equals");
+    try { ((List<Object>) observed.get("left")).set(0, null); } catch (UnsupportedOperationException expectedError) { /* immutable view */ }
+    try { transition.guards().clear(); } catch (UnsupportedOperationException expectedError) { /* immutable view */ }
+    states.clear(); terminals.clear(); transitions.clear();
+    assertEquals(List.of("SUBMITTED", "APPROVED"), definition.states());
+    assertEquals(List.of("APPROVED"), definition.terminalStates());
+    assertError(Workflow.GUARD_REJECTED, () -> Workflow.transition(definition, instance, "APPROVED", Map.of("value", expected), null, null));
+    assertEquals(Map.of("currentState", "SUBMITTED"), instance.toPortable());
+    Object facts = Map.of("value", Map.of("left", java.util.Arrays.asList(Map.of("approved", true), null, 2.5, "ok"), "right", Map.of("approved", true)));
+    assertEquals(Map.of("currentState", "APPROVED"), Workflow.transition(definition, instance, "APPROVED", facts, null, null).toPortable());
   }
 
   private static Workflow.Definition workflowExpecting(Object expected) {
