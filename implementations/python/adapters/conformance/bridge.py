@@ -24,7 +24,7 @@ from finkore.approvals import (
     supersede_requirement,
     withdraw_decision,
 )
-from finkore.entities import create_entity, evolve_entity, import_entity, mutate_entity, transition_entity
+from finkore.entities import create_entity, evolve_entity, import_entity, import_evolution_history, mutate_entity, transition_entity
 from finkore.errors import FinKoreError
 from finkore.money import Money
 from finkore.workflow import WorkflowDefinition, WorkflowInstance, create_workflow, import_workflow, transition_workflow
@@ -287,7 +287,20 @@ def execute_entity_import(input_value: dict[str, Any]) -> dict[str, Any]:
 
 
 def execute_entity_evolution(kind: str, input_value: dict[str, Any]) -> dict[str, Any]:
-    return success(evolve_entity(kind, input_value.get("definition"), input_value), evolution_observation(input_value, kind != "CORRECTION"))
+    observations = {"auditHistory": evolution_observation(input_value)["auditHistory"]}
+    request = dict(input_value)
+    history = input_value.get("evolutionHistory")
+    request["evolutionHistory"] = {"relations": history} if isinstance(history, list) else history
+    try:
+        observations["evolutionHistory"] = import_evolution_history(request["evolutionHistory"])
+        observations["source"] = import_entity(input_value.get("definition"), {"entity": input_value.get("source")})["entity"]
+        if kind != "VOID":
+            key = "successor" if kind == "SUPERSESSION" else "related"
+            observations["related"] = import_entity(input_value.get("definition"), {"entity": input_value.get(key)})["entity"]
+        result = evolve_entity(kind, input_value.get("definition"), request)
+        return success(result, evolution_observation(input_value, kind != "CORRECTION"))
+    except FinKoreError as exc:
+        return {"status": "error", "error": {"code": exc.code}, "observations": observations}
 
 
 HANDLERS: dict[str, Callable[[dict[str, Any]], dict[str, Any]]] = {

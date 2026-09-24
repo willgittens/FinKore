@@ -59,6 +59,15 @@ public final class ReadinessRegressionTest {
     catch (RuntimeException error) { failures.add("UNEXPECTED_EXCEPTION " + name + ": " + error); }
   }
 
+  /** Runs native Entity result-reuse and atomicity sequences independently. */
+  public static void entities() throws IOException {
+    Path root = Files.exists(Path.of("conformance")) ? Path.of(".") : Path.of("../../..");
+    Map<String, Object> document = map(Json.parse(Files.readString(root.resolve("conformance/entities/evolution.json"))));
+    auditFailure(document);
+    evolution(document, false);
+    evolution(document, true);
+  }
+
   private static Map<String, Object> requirement() {
     return Map.of("id", "review", "subject", Map.of("type", "invoice", "id", "invoice-1"), "eligibleActors", List.of("alice"));
   }

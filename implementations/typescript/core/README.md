@@ -4,7 +4,7 @@ TypeScript reference implementation for FinKore Core 0.9 release candidate: Mone
 Audit, Approvals, and Entities. The historical Core 0.9.3 snapshot passes its 331-vector manifest and release
 checks; see the [0.9.3 plan](../../../docs/plans/plan-09.3.md).
 
-The current manifest contains 532 vectors. Core 0.9.4 Milestone 2 adds 201
+The current manifest contains 536 vectors. Core 0.9.4 Milestone 2 adds 201
 regression/control cases and native sequence/ownership tests that expose
 unfixed defects. The expanded suite is intentionally failing during this TDD
 stage; current full conformance and mutation-gate completion are not claimed.
@@ -13,6 +13,11 @@ Corrections are tracked in the [0.9.4 plan](../../../docs/plans/plan-09.4.md).
 Milestone 3 confirms all 112 Approval conformance vectors and extends native
 lifecycle sequence coverage. The TypeScript Approval implementation already
 meets these requirements; remaining corrections belong to later milestones.
+
+Milestone 4 restores all 157 Entity conformance vectors. Evolution validates
+Audit evidence before correspondence, complete business observations, and
+consistent history-derived currentness. Workflow and Audit readiness work
+remains open; full-release conformance is not yet claimed.
 
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to an npm registry. The npm package
@@ -294,6 +299,16 @@ Event/Relationship evidence. The TypeScript core validates that evidence and
 returns new evolution and Audit history observations atomically; it does not
 generate identifiers, compute financial replacement policy, authorize the
 operation, or mutate source Entity observations in place.
+
+Evolution history import and operation results validate post-step currentness.
+Unexplained contradictions return `FINKORE_ENTITY_INVALID_MUTATION`; explicit
+Void and Supersession effects may change earlier observations. Currentness keys
+keep Entity identity, Revision, and named supersession scopes separate. Reuse
+results through `EntityEvolutionHistory.create(result.evolutionHistory.relations)`.
+Intrinsic Audit validation precedes correspondence: invalid Audit history or
+Events retain their Audit code; valid but mismatched evolution evidence returns
+`FINKORE_ENTITY_INVALID_MUTATION`. These checks preserve both histories and all
+supplied Entity facts on failure.
 
 ### Entity Requirement Inventory
 

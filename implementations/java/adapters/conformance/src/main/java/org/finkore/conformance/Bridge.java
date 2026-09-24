@@ -224,22 +224,10 @@ public final class Bridge {
         case "entity.import" -> success(Entities.importEntity(
             inputValue.get("definition"),
             inputValue.get("import")), null);
-        case "finkore.entity.evolution.correct" -> success(Entities.evolve(
-            "CORRECTION",
-            inputValue.get("definition"),
-            inputValue), evolutionObservation(inputValue, false));
-        case "finkore.entity.evolution.reverse" -> success(Entities.evolve(
-            "REVERSAL",
-            inputValue.get("definition"),
-            inputValue), evolutionObservation(inputValue, true));
-        case "finkore.entity.evolution.supersede" -> success(Entities.evolve(
-            "SUPERSESSION",
-            inputValue.get("definition"),
-            inputValue), evolutionObservation(inputValue, true));
-        case "finkore.entity.evolution.void" -> success(Entities.evolve(
-            "VOID",
-            inputValue.get("definition"),
-            inputValue), evolutionObservation(inputValue, true));
+        case "finkore.entity.evolution.correct" -> executeEntityEvolution("CORRECTION", inputValue);
+        case "finkore.entity.evolution.reverse" -> executeEntityEvolution("REVERSAL", inputValue);
+        case "finkore.entity.evolution.supersede" -> executeEntityEvolution("SUPERSESSION", inputValue);
+        case "finkore.entity.evolution.void" -> executeEntityEvolution("VOID", inputValue);
         default -> Map.of("status", "unsupported");
       };
     } catch (FinKoreException error) {
@@ -416,6 +404,26 @@ public final class Bridge {
       observations.put("facts", facts);
     }
     return observations;
+  }
+
+  private static Map<String, Object> executeEntityEvolution(String kind, Map<String, Object> input) {
+    Map<String, Object> observations = new LinkedHashMap<>();
+    observations.put("auditHistory", evolutionObservation(input, true).get("auditHistory"));
+    Map<String, Object> request = new LinkedHashMap<>(input);
+    Object history = input.get("evolutionHistory");
+    request.put("evolutionHistory", history instanceof List<?> ? Map.of("relations", history) : history);
+    try {
+      observations.put("evolutionHistory", Entities.importEvolutionHistory(request.get("evolutionHistory")));
+      Map<String, Object> imported = new LinkedHashMap<>(); imported.put("entity", input.get("source"));
+      observations.put("source", Entities.importEntity(input.get("definition"), imported).get("entity"));
+      if (!"VOID".equals(kind)) {
+        imported.put("entity", input.get("SUPERSESSION".equals(kind) ? "successor" : "related"));
+        observations.put("related", Entities.importEntity(input.get("definition"), imported).get("entity"));
+      }
+      return success(Entities.evolve(kind, input.get("definition"), request), evolutionObservation(input, !"CORRECTION".equals(kind)));
+    } catch (FinKoreException failure) {
+      return error(failure.code(), observations);
+    }
   }
 
   private static Map<String, Object> success(Object value, Map<String, Object> observations) {

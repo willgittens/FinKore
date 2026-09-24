@@ -117,12 +117,37 @@ function validateKind(value: unknown): EntityEvolutionKind {
   }
 }
 
-function sameReference(left: EntityRevisionReference, right: EntityRevisionReference): boolean {
-  return left.type === right.type && left.id === right.id && left.revision === right.revision
+function currentKey(reference: EntityRevisionReference, supersessionScope?: string): string {
+  return JSON.stringify([supersessionScope, reference.type, reference.id, reference.revision])
 }
 
-function currentKey(reference: EntityRevisionReference, supersessionScope?: string): string {
-  return `${supersessionScope ?? ''}\u0000${reference.type}\u0000${reference.id}\u0000${reference.revision}`
+// ENTITY-EVOLUTION-035: assertions are post-step observations. Only an explicit
+// Void or Supersession effect permits a change to a previously observed key.
+function currentness(relations: readonly SerializedEntityEvolutionRelation[]): ReadonlyMap<string, boolean> {
+  const observed = new Map<string, boolean>()
+  for (const relation of relations) {
+    const source = currentKey(relation.source, relation.supersessionScope)
+    const step = new Map([[source, relation.sourceCurrent]])
+    const effects = new Map<string, boolean>()
+    if (relation.kind === 'VOID' || relation.kind === 'SUPERSESSION') effects.set(source, false)
+    if (relation.related !== undefined) {
+      const related = currentKey(relation.related, relation.supersessionScope)
+      // Imported relations validate this pairing; operation results construct it.
+      const relatedCurrent = relation.relatedCurrent!
+      if (step.has(related) && step.get(related) !== relatedCurrent) throw new InvalidEntityMutationError()
+      step.set(related, relatedCurrent)
+      if (relation.kind === 'SUPERSESSION') {
+        if (effects.has(related) && effects.get(related) !== true) throw new InvalidEntityMutationError()
+        effects.set(related, true)
+      }
+    }
+    for (const [key, value] of step) {
+      if (effects.has(key) && effects.get(key) !== value) throw new InvalidEntityMutationError()
+      if (observed.has(key) && observed.get(key) !== value && !effects.has(key)) throw new InvalidEntityMutationError()
+      observed.set(key, value)
+    }
+  }
+  return observed
 }
 
 function auditEventId(event: SerializedAuditEvent): string {
@@ -137,28 +162,26 @@ function validateAuditEvidence(
   related: EntityRevisionReference | undefined,
   supersessionScope: string | undefined,
 ): { readonly log: AuditLog; readonly event: SerializedAuditEvent } {
-  if (!isPlainRecord(evidence)) throw new InvalidEntityMutationError()
-  const eventCandidate = evidence.event
-  if (!isPlainRecord(eventCandidate)) throw new InvalidEntityMutationError()
+  const log = AuditLog.create(isPlainRecord(evidence) ? evidence.history : undefined)
+  log.append(isPlainRecord(evidence) ? evidence.event : undefined)
+  const appended = log.events().at(-1)
+  if (appended === undefined) throw new InvalidEntityMutationError()
+  const eventCandidate = appended
   const metadata = isPlainRecord(eventCandidate.metadata) ? eventCandidate.metadata.entityEvolution : undefined
   if (!isPlainRecord(metadata)) throw new InvalidEntityMutationError()
   if (
     metadata.kind !== kind ||
     metadata.relationId !== relationIdentifier ||
-    !sameReference(validateReference(metadata.source), source)
+    !matchesReference(metadata.source, source)
   ) {
     throw new InvalidEntityMutationError()
   }
   if (related === undefined) {
     if (metadata.related !== undefined) throw new InvalidEntityMutationError()
-  } else if (!sameReference(validateReference(metadata.related), related)) {
+  } else if (!matchesReference(metadata.related, related)) {
     throw new InvalidEntityMutationError()
   }
-  if (supersessionScope === undefined) {
-    if (metadata.supersessionScope !== undefined) throw new InvalidEntityMutationError()
-  } else if (metadata.supersessionScope !== supersessionScope) {
-    throw new InvalidEntityMutationError()
-  }
+  if (metadata.supersessionScope !== supersessionScope) throw new InvalidEntityMutationError()
 
   const relationships = eventCandidate.relationships
   if (!Array.isArray(relationships)) throw new InvalidEntityMutationError()
@@ -166,12 +189,12 @@ function validateAuditEvidence(
     throw new InvalidEntityMutationError()
   }
 
-  const log = AuditLog.create(evidence.history)
-  log.append(eventCandidate)
-  const appended = log.events().at(-1)
-  if (appended === undefined) throw new InvalidEntityMutationError()
   if (appended.entity.type !== source.type || appended.entity.id !== source.id) throw new InvalidEntityMutationError()
   return { log, event: appended }
+}
+
+function matchesReference(value: unknown, reference: EntityRevisionReference): boolean {
+  return isPlainRecord(value) && value.type === reference.type && value.id === reference.id && value.revision === reference.revision
 }
 
 /**
@@ -184,6 +207,8 @@ function validateAuditEvidence(
  * preconditions, and required Audit evidence before returning a new history.
  * Failed operations leave this history, source/related Entity observations, and
  * supplied Audit history unchanged.
+ * Imported and resulting histories must have consistent currentness at every
+ * declared step. Audit validation precedes evolution correspondence validation.
  *
  * @see ENTITY-EVOLUTION-001
  * @see ENTITY-EVOLUTION-003
@@ -192,22 +217,19 @@ function validateAuditEvidence(
  * @see ENTITY-EVOLUTION-023
  * @see ENTITY-EVOLUTION-029
  * @see ENTITY-EVOLUTION-033
+ * @see ENTITY-EVOLUTION-034
+ * @see ENTITY-EVOLUTION-035
  */
 export class EntityEvolutionHistory {
   private readonly relations: readonly SerializedEntityEvolutionRelation[]
   private readonly relationIds: ReadonlySet<string>
-  private readonly nonCurrent: ReadonlySet<string>
+  private readonly observedCurrentness: ReadonlyMap<string, boolean>
   private readonly reversedSources: ReadonlySet<string>
 
   private constructor(relations: readonly SerializedEntityEvolutionRelation[]) {
     this.relations = relations
     this.relationIds = new Set(relations.map((relation) => relation.relationId))
-    this.nonCurrent = new Set(
-      relations.flatMap((relation) => {
-        if (relation.sourceCurrent) return []
-        return [currentKey(relation.source, relation.supersessionScope)]
-      }),
-    )
+    this.observedCurrentness = currentness(relations)
     this.reversedSources = new Set(relations.filter((relation) => relation.kind === 'REVERSAL').map((relation) => currentKey(relation.source)))
   }
 
@@ -215,13 +237,15 @@ export class EntityEvolutionHistory {
    * Creates an Entity Evolution history from existing relation observations.
    *
    * Imported relations must have valid opaque identities and no duplicate
-   * relation identifiers. This method does not infer missing identifiers or
+   * relation identifiers. Post-step currentness must agree with prior observations
+   * unless a declared Void or Supersession effect explains the change.
+   * This method does not infer missing identifiers or
    * construct Entity state from audit history.
    *
    * @param relations - Existing relation observations, defaulting to none.
    * @returns An immutable Entity Evolution history.
    * @throws {InvalidEntityMutationError}
-   * When a relation shape or kind is malformed.
+   * When a relation shape or kind is malformed, or currentness is contradictory.
    * @throws {InvalidEntityIdentityError}
    * When an identity is missing, malformed, or conflicting.
    *
@@ -230,6 +254,7 @@ export class EntityEvolutionHistory {
    * @see ENTITY-EVOLUTION-002
    * @see ENTITY-EVOLUTION-003
    * @see ENTITY-EVOLUTION-014
+   * @see ENTITY-EVOLUTION-035
    */
   static create(relations: readonly unknown[] = []): EntityEvolutionHistory {
     if (!Array.isArray(relations)) throw new InvalidEntityMutationError()
@@ -252,8 +277,10 @@ export class EntityEvolutionHistory {
    * @param request - Correction request and required Audit evidence.
    * @returns Successful correction result with new evolution and Audit history.
    * @throws {InvalidEntityMutationError}
-   * When the request is malformed, unsupported, ineligible, duplicate, or lacks
-   * required safe Audit evidence.
+   * When the request is malformed, unsupported, ineligible, duplicate, or its
+   * Audit evidence does not correspond to the evolution.
+   * @throws {FinKoreAuditError}
+   * When supplied Audit history or Event validation fails, before correspondence.
    * @throws {EntityStateConflictError}
    * When expected state, revision, or currentness does not match.
    * @throws {InvalidEntityIdentityError}
@@ -281,8 +308,10 @@ export class EntityEvolutionHistory {
    * @param request - Reversal request and required Audit evidence.
    * @returns Successful reversal result with new evolution and Audit history.
    * @throws {InvalidEntityMutationError}
-   * When the request is malformed, unsupported, ineligible, duplicate, or lacks
-   * required safe Audit evidence.
+   * When the request is malformed, unsupported, ineligible, duplicate, or its
+   * Audit evidence does not correspond to the evolution.
+   * @throws {FinKoreAuditError}
+   * When supplied Audit history or Event validation fails, before correspondence.
    *
    * @see FINKORE_ENTITY_INVALID_MUTATION
    * @see ENTITY-EVOLUTION-011
@@ -303,8 +332,10 @@ export class EntityEvolutionHistory {
    * @param request - Void request and required Audit evidence.
    * @returns Successful void result with new evolution and Audit history.
    * @throws {InvalidEntityMutationError}
-   * When the request is malformed, unsupported, ineligible, duplicate, or lacks
-   * required safe Audit evidence.
+   * When the request is malformed, unsupported, ineligible, duplicate, or its
+   * Audit evidence does not correspond to the evolution.
+   * @throws {FinKoreAuditError}
+   * When supplied Audit history or Event validation fails, before correspondence.
    *
    * @see FINKORE_ENTITY_INVALID_MUTATION
    * @see ENTITY-EVOLUTION-016
@@ -337,8 +368,10 @@ export class EntityEvolutionHistory {
    * @param request - Supersession request and required Audit evidence.
    * @returns Successful supersession result with new evolution and Audit history.
    * @throws {InvalidEntityMutationError}
-   * When the request is malformed, unsupported, ineligible, duplicate, or lacks
-   * required safe Audit evidence.
+   * When the request is malformed, unsupported, ineligible, duplicate, or its
+   * Audit evidence does not correspond to the evolution.
+   * @throws {FinKoreAuditError}
+   * When supplied Audit history or Event validation fails, before correspondence.
    *
    * @see FINKORE_ENTITY_INVALID_MUTATION
    * @see ENTITY-EVOLUTION-019
@@ -412,7 +445,7 @@ export class EntityEvolutionHistory {
   }
 
   private isCurrent(reference: EntityRevisionReference, supersessionScope?: string): boolean {
-    return !this.nonCurrent.has(currentKey(reference, supersessionScope))
+    return this.observedCurrentness.get(currentKey(reference, supersessionScope)) ?? true
   }
 
   private resultFor(

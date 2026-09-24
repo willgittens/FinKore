@@ -5,15 +5,19 @@ derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
 TypeScript or Python financial implementation code. The historical Core 0.9.3 snapshot passes its 331-vector manifest and release
 checks; see the [0.9.3 plan](../../../docs/plans/plan-09.3.md).
 
-The current manifest contains 532 vectors. Core 0.9.4 Milestone 2 adds 201
+The current manifest contains 536 vectors. Core 0.9.4 Milestone 2 adds 201
 regression/control cases and native sequence/ownership tests that expose
 unfixed defects. The expanded suite is intentionally failing during this TDD
 stage; current full conformance and mutation-gate completion are not claimed.
 Corrections are tracked in the [0.9.4 plan](../../../docs/plans/plan-09.4.md).
 
 Milestone 3 restores all 112 Approval conformance vectors, including lifecycle
-recording sequences and invalid quorum evidence. Entity, Workflow, and Audit
-corrections remain assigned to later milestones.
+recording sequences and invalid quorum evidence. Workflow and Audit corrections remain assigned to later milestones.
+
+Milestone 4 restores all 157 Entity conformance vectors. Evolution validates
+Audit evidence before correspondence, complete business observations, and
+consistent history-derived currentness. Workflow and Audit readiness work
+remains open; full-release conformance is not yet claimed.
 
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to a Maven repository. The Maven
@@ -122,3 +126,22 @@ currently enforces at least 85% line coverage for the Java core package.
 The critical-mutant probe mutates temporary Java Money, Workflow, Audit,
 Approvals, and Entities implementations and requires the relevant conformance
 suites to kill every probe.
+
+### Evolution history reuse
+
+`Entities.importEvolutionHistory(Map.of("relations", priorRelations))` validates
+and owns an ordered history observation. Pass its envelope as `evolutionHistory`
+to `Entities.evolve`, or reuse a previous evolution result's `evolutionHistory`
+directly. Reuse its Audit history's `history` list as the next `auditHistory`.
+Source and related observations must each satisfy all declared business
+validators, including cross-field rules.
+
+Imported and resulting histories reject unexplained currentness changes with
+`FINKORE_ENTITY_INVALID_MUTATION`; explicit Void and Supersession effects may
+change prior observations. Expectations compare against the exact Entity,
+Revision, and scope. Missing or invalid Audit evidence retains its Audit error;
+valid Audit evidence with mismatched evolution correspondence returns
+`FINKORE_ENTITY_INVALID_MUTATION`. Failures leave both histories and Entity
+facts unchanged. The bounded reference duplicate policy rejects a second
+Reversal of the same source Revision, without defining a universal reversal
+policy for other composing domains.

@@ -193,13 +193,28 @@ public final class Entities {
 
   /**
    * Records one Entity evolution relation and its required Audit evidence.
+   * Validates complete source and related business observations and consistent
+   * ordered history. Intrinsic Audit validation precedes correspondence checks.
+   * Neither Entity nor either supplied history is mutated on success or failure.
+   * The bounded reference policy rejects a second Reversal of a source Revision;
+   * this is not a universal reversal restriction for every composing domain.
    *
    * @param kind evolution kind: CORRECTION, REVERSAL, VOID, or SUPERSESSION
    * @param definition portable Entity definition
    * @param input evolution request
    * @return portable evolution result
+   * @throws FinKoreException with INVALID_MUTATION for contradictory history or
+   *     invalid correspondence, STATE_CONFLICT for mismatched expectations,
+   *     VALIDATION_FAILED for business validation, or the primary Audit code
+   * @see <a href="../../../../../../spec/entities/evolution.md">ENTITY-EVOLUTION-023/025/033/034/035</a>
+   * @see <a href="../../../../../../spec/entities/validation.md">ENTITY-VALIDATION-001/003</a>
    */
   public static Map<String, Object> evolve(String kind, Object definition, Map<String, Object> input) {
+    if (kind == null || !Set.of("CORRECTION", "REVERSAL", "VOID", "SUPERSESSION").contains(kind)) {
+      throw new FinKoreException(INVALID_MUTATION);
+    }
+    List<Map<String, Object>> currentRelations = relations(input.get("evolutionHistory"));
+    Map<EvolutionKey, Boolean> observed = currentness(currentRelations);
     Map<String, Object> entityDefinition = validateDefinition(definition);
     Map<String, Object> source = validateEntity(entityDefinition, input.get("source"));
     String relatedKey = "SUPERSESSION".equals(kind) ? "successor" : "related";
@@ -208,7 +223,6 @@ public final class Entities {
     String sourceRevision = opaqueRevision(input.get("sourceRevision"), source);
     String relatedRevision = related == null ? null : opaqueRevision(input.get(revisionKey), related);
     String relationId = requiredString(input.get("relationId"), INVALID_MUTATION);
-    List<Map<String, Object>> currentRelations = relations(input.get("evolutionHistory"));
     for (Map<String, Object> relation : currentRelations) {
       if (relationId.equals(relation.get("relationId"))) {
         throw new FinKoreException(INVALID_MUTATION);
@@ -220,15 +234,27 @@ public final class Entities {
     if (!input.getOrDefault("expectedSourceRevision", sourceRevision).equals(sourceRevision)) {
       throw new FinKoreException(STATE_CONFLICT);
     }
-    if (!Boolean.TRUE.equals(input.getOrDefault("expectedSourceCurrent", Boolean.TRUE))) {
+    String scope = "SUPERSESSION".equals(kind) ? requiredString(input.get("supersessionScope"), INVALID_MUTATION) : null;
+    Map<String, Object> sourceReference = revisionReference(source, sourceRevision);
+    boolean current = observed.getOrDefault(evolutionKey(sourceReference, scope), Boolean.TRUE);
+    if (input.containsKey("expectedSourceCurrent") && !(input.get("expectedSourceCurrent") instanceof Boolean)) {
+      throw new FinKoreException(INVALID_MUTATION);
+    }
+    if (!Boolean.valueOf(current).equals(input.getOrDefault("expectedSourceCurrent", current))) {
       throw new FinKoreException(STATE_CONFLICT);
     }
     if (!Boolean.TRUE.equals(input.get("eligible"))) {
       throw new FinKoreException(INVALID_MUTATION);
     }
-    Map<String, Object> relation = relation(kind, relationId, source, sourceRevision, related, relatedRevision, input.get("supersessionScope"), auditEventId(input.get("auditEvent")));
+    if ("REVERSAL".equals(kind) && currentRelations.stream().anyMatch(item -> "REVERSAL".equals(item.get("kind")) && sourceReference.equals(item.get("source")))) {
+      throw new FinKoreException(INVALID_MUTATION);
+    }
     Audit.Log auditLog = Audit.Log.create(input.get("auditHistory"));
     Map<String, Object> auditHistory = auditLog.append(input.get("auditEvent")).toPortable();
+    Map<String, Object> relation = relation(kind, relationId, source, sourceRevision, related, relatedRevision, scope, auditEventId(input.get("auditEvent")));
+    if ("CORRECTION".equals(kind) || "REVERSAL".equals(kind)) relation.put("sourceCurrent", current);
+    validateEvolutionEvidence(input.get("auditEvent"), relation);
+    Map<String, Object> nextHistory = importEvolutionHistory(historyEnvelope(append(currentRelations, relation)));
 
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("source", copyJson(source, INVALID_IDENTITY));
@@ -236,10 +262,106 @@ public final class Entities {
       result.put("related", copyJson(related, INVALID_IDENTITY));
     }
     result.put("relation", relation);
-    result.put("evolutionHistory", historyEnvelope(append(currentRelations, relation)));
+    result.put("evolutionHistory", nextHistory);
     result.put("auditHistory", auditHistory);
     result.put("auditEvent", copyJson(input.get("auditEvent"), INVALID_MUTATION));
     return result;
+  }
+
+  /**
+   * Imports an ordered relations envelope with consistent post-step currentness.
+   * Required Void and Supersession effects may change earlier observations;
+   * unexplained changes or contradictory observations fail without mutating input.
+   *
+   * @param history existing relations envelope, or null for empty history
+   * @return a defensive history envelope
+   * @throws FinKoreException with INVALID_MUTATION for contradictory history,
+   *     or INVALID_IDENTITY for malformed reference identities
+   * @see <a href="../../../../../../spec/entities/evolution.md">ENTITY-EVOLUTION-014/022/023/035</a>
+   */
+  public static Map<String, Object> importEvolutionHistory(Object history) {
+    List<Map<String, Object>> imported = relations(history);
+    currentness(imported);
+    return historyEnvelope(imported);
+  }
+
+  private record EvolutionKey(String type, String id, String revision, String scope) {}
+
+  private static EvolutionKey evolutionKey(Object reference, String scope) {
+    if (!(reference instanceof Map<?, ?> value)) throw new FinKoreException(INVALID_IDENTITY);
+    String type = requiredString(value.get("type"), INVALID_IDENTITY);
+    String id = requiredString(value.get("id"), INVALID_IDENTITY);
+    String revision = requiredString(value.get("revision"), INVALID_IDENTITY);
+    if (id.equals(revision)) throw new FinKoreException(INVALID_IDENTITY);
+    return new EvolutionKey(type, id, revision, scope);
+  }
+
+  // ENTITY-EVOLUTION-035: only declared effects explain a change between steps.
+  private static Map<EvolutionKey, Boolean> currentness(List<Map<String, Object>> relations) {
+    Map<EvolutionKey, Boolean> observed = new LinkedHashMap<>();
+    Set<String> ids = new HashSet<>();
+    for (Map<String, Object> relation : relations) {
+      String kind = requiredString(relation.get("kind"), INVALID_MUTATION);
+      if (!Set.of("CORRECTION", "REVERSAL", "VOID", "SUPERSESSION").contains(kind)) throw new FinKoreException(INVALID_MUTATION);
+      String id = requiredString(relation.get("relationId"), INVALID_IDENTITY);
+      requiredString(relation.get("auditEventId"), INVALID_IDENTITY);
+      if (!ids.add(id)) throw new FinKoreException(INVALID_MUTATION);
+      if ("SUPERSESSION".equals(kind) != relation.containsKey("supersessionScope")) throw new FinKoreException(INVALID_MUTATION);
+      String scope = relation.containsKey("supersessionScope") ? requiredString(relation.get("supersessionScope"), INVALID_MUTATION) : null;
+      EvolutionKey source = evolutionKey(relation.get("source"), scope);
+      if (!(relation.get("sourceCurrent") instanceof Boolean sourceCurrent)
+          || "VOID".equals(kind) == relation.containsKey("related")) throw new FinKoreException(INVALID_MUTATION);
+      Map<EvolutionKey, Boolean> step = new LinkedHashMap<>();
+      Map<EvolutionKey, Boolean> effects = new LinkedHashMap<>();
+      step.put(source, sourceCurrent);
+      if ("VOID".equals(kind) || "SUPERSESSION".equals(kind)) effects.put(source, false);
+      if ("VOID".equals(kind)) {
+        if (relation.containsKey("relatedCurrent")) throw new FinKoreException(INVALID_MUTATION);
+      } else {
+        EvolutionKey related = evolutionKey(relation.get("related"), scope);
+        if (!(relation.get("relatedCurrent") instanceof Boolean relatedCurrent)
+            || (step.containsKey(related) && !step.get(related).equals(relatedCurrent))) throw new FinKoreException(INVALID_MUTATION);
+        step.put(related, relatedCurrent);
+        if ("SUPERSESSION".equals(kind)) {
+          if (effects.containsKey(related) && !Boolean.TRUE.equals(effects.get(related))) throw new FinKoreException(INVALID_MUTATION);
+          effects.put(related, true);
+        }
+      }
+      for (Map.Entry<EvolutionKey, Boolean> assertion : step.entrySet()) {
+        EvolutionKey key = assertion.getKey();
+        Boolean value = assertion.getValue();
+        if (effects.containsKey(key) && !effects.get(key).equals(value)) throw new FinKoreException(INVALID_MUTATION);
+        if (observed.containsKey(key) && !observed.get(key).equals(value) && !effects.containsKey(key)) throw new FinKoreException(INVALID_MUTATION);
+        observed.put(key, value);
+      }
+    }
+    return observed;
+  }
+
+  private static boolean matchesReference(Object value, Object expected) {
+    if (!(value instanceof Map<?, ?> reference) || !(expected instanceof Map<?, ?> target)) return false;
+    return target.get("type").equals(reference.get("type")) && target.get("id").equals(reference.get("id"))
+        && target.get("revision").equals(reference.get("revision"));
+  }
+
+  private static void validateEvolutionEvidence(Object eventValue, Map<String, Object> relation) {
+    if (!(eventValue instanceof Map<?, ?> event) || !(event.get("metadata") instanceof Map<?, ?> metadata)
+        || !(metadata.get("entityEvolution") instanceof Map<?, ?> evidence)) throw new FinKoreException(INVALID_MUTATION);
+    if (!relation.get("kind").equals(evidence.get("kind")) || !relation.get("relationId").equals(evidence.get("relationId"))
+        || !matchesReference(evidence.get("source"), relation.get("source"))) throw new FinKoreException(INVALID_MUTATION);
+    if (relation.containsKey("related") ? !matchesReference(evidence.get("related"), relation.get("related")) : evidence.containsKey("related")) {
+      throw new FinKoreException(INVALID_MUTATION);
+    }
+    if (relation.containsKey("supersessionScope") ? !relation.get("supersessionScope").equals(evidence.get("supersessionScope")) : evidence.containsKey("supersessionScope")) {
+      throw new FinKoreException(INVALID_MUTATION);
+    }
+    Map<?, ?> source = (Map<?, ?>) relation.get("source");
+    if (!Map.of("type", source.get("type"), "id", source.get("id")).equals(event.get("entity"))) throw new FinKoreException(INVALID_MUTATION);
+    String type = Map.of("CORRECTION", "CORRECTS", "REVERSAL", "REVERSES", "VOID", "VOIDS", "SUPERSESSION", "SUPERSEDES").get(relation.get("kind"));
+    if (!(event.get("relationships") instanceof List<?> relationships)
+        || relationships.stream().noneMatch(item -> item instanceof Map<?, ?> relationship && type.equals(relationship.get("type")))) {
+      throw new FinKoreException(INVALID_MUTATION);
+    }
   }
 
   /**

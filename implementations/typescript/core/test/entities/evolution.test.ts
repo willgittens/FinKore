@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 import { describe, expect, it } from 'vitest'
+import { existsSync, readFileSync } from 'node:fs'
 import {
   EntityEvolutionHistory,
   EntityStateConflictError,
@@ -758,6 +759,7 @@ describe('Entity Evolution history', () => {
   })
 
   it('rejects relation-specific audit metadata that is missing, extra, or malformed', () => {
+    // ENTITY-EVOLUTION-034: Audit representation errors precede correspondence.
     const history = EntityEvolutionHistory.create()
 
     expect(() =>
@@ -779,7 +781,7 @@ describe('Entity Evolution history', () => {
           },
         }),
       ),
-    ).toThrow(InvalidEntityIdentityError)
+    ).toThrow(InvalidEntityMutationError)
     expect(() =>
       history.void({
         source: sourceEntity(),
@@ -802,7 +804,7 @@ describe('Entity Evolution history', () => {
         ...correctionRequest(),
         audit: (() => undefined) as never,
       }),
-    ).toThrow(InvalidEntityMutationError)
+    ).toThrow(InvalidAuditEventError)
     expect(() =>
       history.correct({
         ...correctionRequest(),
@@ -811,7 +813,7 @@ describe('Entity Evolution history', () => {
           event: auditEvent('evt-correction', 'CORRECTS', correctionMetadata()),
         }) as never,
       }),
-    ).toThrow(InvalidEntityMutationError)
+    ).toThrow(InvalidAuditEventError)
     expect(() =>
       history.correct(
         correctionRequest({
@@ -821,7 +823,7 @@ describe('Entity Evolution history', () => {
           },
         }),
       ),
-    ).toThrow(InvalidEntityMutationError)
+    ).toThrow(InvalidAuditEventError)
     expect(() =>
       history.correct(
         correctionRequest({
@@ -866,7 +868,7 @@ describe('Entity Evolution history', () => {
           },
         }),
       ),
-    ).toThrow(InvalidEntityMutationError)
+    ).toThrow(InvalidAuditEventError)
   })
 
   it('accepts audit evidence when the required relationship is one of several valid relationships', () => {
@@ -1141,7 +1143,7 @@ describe('Entity Evolution history', () => {
       },
     ])
 
-    expect(history.toJSON().relations).toEqual([
+    expect(history.toJSON().relations).toStrictEqual([
       {
         relationId: 'rel-void-1',
         kind: 'VOID',
@@ -1211,4 +1213,115 @@ describe('Entity Evolution history', () => {
 
     expect(persisted.toJSON().relations[0]?.source.id).toBe('inv-10')
   })
+})
+
+interface Vector {
+  readonly id: string
+  readonly operation: string
+  readonly input: Record<string, unknown>
+  readonly expected: { readonly status: string; readonly value?: unknown; readonly error?: { readonly code: string } }
+}
+
+// Locate shared vectors from both native runs and isolated mutation sandboxes.
+let repositoryRoot = new URL('.', import.meta.url)
+while (!existsSync(new URL('conformance/manifest.json', repositoryRoot))) {
+  const parent = new URL('../', repositoryRoot)
+  if (parent.href === repositoryRoot.href) throw new Error('Conformance manifest not found')
+  repositoryRoot = parent
+}
+const vectors = ['evolution', 'readiness-regressions'].flatMap((name) =>
+  (JSON.parse(readFileSync(new URL(`conformance/entities/${name}.json`, repositoryRoot), 'utf8')) as { vectors: Vector[] }).vectors,
+)
+
+function execute(operation: string, input: Record<string, unknown>) {
+  const history = EntityEvolutionHistory.create(input.evolutionHistory as readonly unknown[])
+  const source = FinancialEntity.from(input.definition, input.source)
+  const request = {
+    source, sourceRevision: input.sourceRevision, relationId: input.relationId, eligible: input.eligible,
+    ...(Object.hasOwn(input, 'expectedSourceState') ? { expectedSourceState: input.expectedSourceState } : {}),
+    ...(Object.hasOwn(input, 'expectedSourceRevision') ? { expectedSourceRevision: input.expectedSourceRevision } : {}),
+    ...(Object.hasOwn(input, 'expectedSourceCurrent') ? { expectedSourceCurrent: input.expectedSourceCurrent } : {}),
+    audit: { history: input.auditHistory as readonly unknown[], event: input.auditEvent },
+  }
+  if (operation.endsWith('.void')) return history.void(request)
+  if (operation.endsWith('.supersede')) return history.supersede({ ...request, successor: FinancialEntity.from(input.definition, input.successor), successorRevision: input.successorRevision, supersessionScope: input.supersessionScope })
+  const related = { ...request, related: FinancialEntity.from(input.definition, input.related), relatedRevision: input.relatedRevision }
+  return operation.endsWith('.correct') ? history.correct(related) : history.reverse(related)
+}
+
+describe('Entity evolution normative regressions through native APIs', () => {
+  it('rejects incompatible required Supersession effects even when assertions agree', () => {
+    const reference = { type: 'invoice', id: 'invoice-1', revision: 'revision-1' }
+    for (const current of [true, false]) {
+      const relation = { kind: 'SUPERSESSION', relationId: 'same-key', source: reference, related: reference, sourceCurrent: current, relatedCurrent: current, supersessionScope: 'current', auditEventId: 'audit-same-key' }
+      const before = structuredClone(relation)
+      expect(() => EntityEvolutionHistory.create([relation])).toThrow(InvalidEntityMutationError)
+      expect(relation).toStrictEqual(before)
+    }
+  })
+
+  it('rejects contradictory same-step Correction and Reversal assertions', () => {
+    const reference = { type: 'invoice', id: 'invoice-1', revision: 'revision-1' }
+    for (const kind of ['CORRECTION', 'REVERSAL']) for (const current of [false, true]) {
+      const relation = { kind, relationId: 'same-key', source: reference, related: reference, sourceCurrent: current, relatedCurrent: !current, auditEventId: 'audit-same-key' }
+      expect(() => EntityEvolutionHistory.create([relation])).toThrow(InvalidEntityMutationError)
+    }
+  })
+
+  it('accepts a later explicit successor-current effect and consistent same-step assertions', () => {
+    const reference = (id: string) => ({ type: 'invoice', id, revision: 'revision' })
+    const supersession = (id: string, source: string, related: string) => ({
+      kind: 'SUPERSESSION', relationId: id, source: reference(source), related: reference(related),
+      sourceCurrent: false, relatedCurrent: true, supersessionScope: 'current', auditEventId: `audit-${id}`,
+    })
+    const relations = [supersession('a-b', 'a', 'b'), supersession('b-c', 'b', 'c'), supersession('c-b', 'c', 'b')]
+    expect(EntityEvolutionHistory.create(relations).toJSON()).toStrictEqual({ relations })
+    const repeated = [{ kind: 'CORRECTION', relationId: 'same', source: reference('a'), related: reference('a'), sourceCurrent: true, relatedCurrent: true, auditEventId: 'audit-same' }]
+    expect(EntityEvolutionHistory.create(repeated).toJSON()).toStrictEqual({ relations: repeated })
+  })
+
+  it('keeps opaque reference components distinct and rejects malformed reference objects', () => {
+    const first = { type: 'invoice', id: 'id\u0000part', revision: 'r' }
+    const second = { type: 'invoice\u0000id', id: 'part', revision: 'r' }
+    const relations = [
+      { kind: 'VOID', relationId: 'void', source: first, sourceCurrent: false, auditEventId: 'audit-void' },
+      { kind: 'CORRECTION', relationId: 'correction', source: second, related: { ...second, revision: 'r2' }, sourceCurrent: true, relatedCurrent: true, auditEventId: 'audit-correction' },
+    ]
+    expect(EntityEvolutionHistory.create(relations).toJSON()).toStrictEqual({ relations })
+    for (const source of [null, [], false, 1, 'reference']) {
+      expect(() => EntityEvolutionHistory.create([{ ...relations[0], source }])).toThrow(InvalidEntityIdentityError)
+    }
+  })
+
+  for (const vector of vectors) it(vector.id, () => {
+    const input = structuredClone(vector.input)
+    try {
+      if (vector.expected.status === 'error') {
+        expect(() => execute(vector.operation, input)).toThrowError(expect.objectContaining(vector.expected.error))
+      } else expect(execute(vector.operation, input)).toEqual(vector.expected.value)
+    } finally { expect(input).toEqual(vector.input) }
+  })
+})
+
+describe('Entity evolution complete cross-field validation', () => {
+  for (const kind of ['correct', 'reverse', 'void', 'supersede']) {
+    const template = vectors.find((vector) => vector.id === `entity.evolution.${kind}.evidence-valid-control-001`)!
+    for (const key of kind === 'void' ? ['source'] : ['source', kind === 'supersede' ? 'successor' : 'related']) {
+      for (const valid of [false, true]) it(`${kind} ${key} within limit=${valid}`, () => {
+        const input = structuredClone(template.input)
+        ;(input.definition as Record<string, unknown>).validation = [{ id: 'WITHIN_LIMIT', path: 'amount', otherPath: 'limit', rule: 'money-not-greater-than' }]
+        for (const name of ['source', 'related', 'successor']) {
+          const entity = input[name] as { data: Record<string, unknown> } | undefined
+          if (entity !== undefined) entity.data.limit = entity.data.amount
+        }
+        const entity = input[key] as { data: Record<string, unknown> }
+        entity.data.amount = { amount: '20.00', currency: 'EUR' }
+        entity.data.limit = { amount: valid ? '20.0' : '19.99', currency: 'EUR' }
+        const before = structuredClone(input)
+        if (valid) expect(execute(template.operation, input).source).toEqual(input.source)
+        else expect(() => execute(template.operation, input)).toThrowError(expect.objectContaining({ code: 'FINKORE_ENTITY_VALIDATION_FAILED' }))
+        expect(input).toEqual(before)
+      })
+    }
+  }
 })

@@ -14,7 +14,7 @@ from .approvals import (
     supersede_requirement,
     withdraw_decision,
 )
-from .entities import create_entity, evolve_entity, import_entity, mutate_entity, transition_entity
+from .entities import create_entity, evolve_entity, import_entity, import_evolution_history, mutate_entity, transition_entity
 from .money import Money
 from .workflow import WorkflowDefinition, WorkflowInstance, create_workflow, import_workflow, transition_workflow
 
@@ -33,6 +33,7 @@ __all__ = [
     "evaluate_requirement",
     "evolve_entity",
     "import_entity",
+    "import_evolution_history",
     "redact_history",
     "record_decision",
     "remove_event",

@@ -94,6 +94,15 @@ Approval suite passes. The optional final argument selects a suite; omitting it
 retains all probes. A focused run does not establish the full release mutation
 gate or an aggregate mutation score.
 
+Milestone 4 adds Entity probes for Audit precedence and correspondence,
+consistent imported and resulting histories, exact currentness keys, required
+effects, and the bounded duplicate-reversal policy. Run
+`node docs/tools/mutation-critical.js all entities` after the unmodified Entity
+suite passes. Native Entity tests also execute the vectors directly against the
+cores, so adapter-side observation preparation cannot hide missing core checks.
+TypeScript evolution mutation testing can be focused with
+`npm run test:mutation -w @finkore/typescript -- --mutate src/entities/entity-evolution.ts --testFiles 'test/entities/*.test.ts'`.
+
 The Core 0.9.2 survivor review distinguishes these non-critical cases:
 
 - Runner diagnostic text, source labels, and error wrapping do not change

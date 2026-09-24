@@ -24829,6 +24829,973 @@
         "evolution-history-discarded",
         "currentness-validation-bypassed"
       ]
+    },
+    {
+      "id": "entity.evolution.history.same-step-required-effects-current-001",
+      "spec": "entities/evolution",
+      "requirements": [
+        "ENTITY-EVOLUTION-023",
+        "ENTITY-EVOLUTION-024",
+        "ENTITY-EVOLUTION-035"
+      ],
+      "description": "Rejects same-key Supersession whose agreeing currentness assertions cannot satisfy its incompatible required predecessor and successor effects.",
+      "operation": "finkore.entity.evolution.supersede",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "ISSUED"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "ISSUED"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "ISSUED": [
+              "memo"
+            ]
+          }
+        },
+        "evolutionHistory": [
+          {
+            "relationId": "prior-supersession",
+            "kind": "SUPERSESSION",
+            "source": {
+              "type": "invoice",
+              "id": "inv-10",
+              "revision": "rev-1"
+            },
+            "related": {
+              "type": "invoice",
+              "id": "inv-10",
+              "revision": "rev-1"
+            },
+            "supersessionScope": "tenant-a:invoice-current",
+            "sourceCurrent": true,
+            "relatedCurrent": true,
+            "auditEventId": "prior-super-event"
+          }
+        ],
+        "source": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            }
+          }
+        },
+        "sourceRevision": "rev-1",
+        "successor": {
+          "type": "invoice",
+          "id": "inv-10-v2",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "99.00",
+              "currency": "EUR"
+            }
+          }
+        },
+        "successorRevision": "rev-1",
+        "supersessionScope": "tenant-a:invoice-current",
+        "relationId": "rel-supersession-1",
+        "eligible": true,
+        "auditHistory": [
+          {
+            "eventId": "evt-original",
+            "eventType": "ENTITY_ISSUED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "auditEvent": {
+          "eventId": "evt-supersession",
+          "eventType": "ENTITY_EVOLUTION_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
+          "occurredAt": "2026-09-01T11:00:00Z",
+          "metadata": {
+            "entityEvolution": {
+              "kind": "SUPERSESSION",
+              "relationId": "rel-supersession-1",
+              "source": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-1"
+              },
+              "related": {
+                "type": "invoice",
+                "id": "inv-10-v2",
+                "revision": "rev-1"
+              },
+              "supersessionScope": "tenant-a:invoice-current"
+            }
+          },
+          "relationships": [
+            {
+              "relationshipId": "audit-rel-supersession-1",
+              "type": "SUPERSEDES",
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "auditHistory": {
+            "history": [
+              {
+                "eventId": "evt-original",
+                "eventType": "ENTITY_ISSUED",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                },
+                "occurredAt": "2026-09-01T10:00:00Z"
+              }
+            ]
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "evolution-history-discarded",
+        "currentness-validation-bypassed"
+      ]
+    },
+    {
+      "id": "entity.evolution.history.same-step-required-effects-noncurrent-001",
+      "spec": "entities/evolution",
+      "requirements": [
+        "ENTITY-EVOLUTION-023",
+        "ENTITY-EVOLUTION-024",
+        "ENTITY-EVOLUTION-035"
+      ],
+      "description": "Rejects same-key Supersession whose agreeing currentness assertions cannot satisfy its incompatible required predecessor and successor effects.",
+      "operation": "finkore.entity.evolution.supersede",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "ISSUED"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "ISSUED"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "ISSUED": [
+              "memo"
+            ]
+          }
+        },
+        "evolutionHistory": [
+          {
+            "relationId": "prior-supersession",
+            "kind": "SUPERSESSION",
+            "source": {
+              "type": "invoice",
+              "id": "inv-10",
+              "revision": "rev-1"
+            },
+            "related": {
+              "type": "invoice",
+              "id": "inv-10",
+              "revision": "rev-1"
+            },
+            "supersessionScope": "tenant-a:invoice-current",
+            "sourceCurrent": false,
+            "relatedCurrent": false,
+            "auditEventId": "prior-super-event"
+          }
+        ],
+        "source": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            }
+          }
+        },
+        "sourceRevision": "rev-1",
+        "successor": {
+          "type": "invoice",
+          "id": "inv-10-v2",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "99.00",
+              "currency": "EUR"
+            }
+          }
+        },
+        "successorRevision": "rev-1",
+        "supersessionScope": "tenant-a:invoice-current",
+        "relationId": "rel-supersession-1",
+        "eligible": true,
+        "auditHistory": [
+          {
+            "eventId": "evt-original",
+            "eventType": "ENTITY_ISSUED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "auditEvent": {
+          "eventId": "evt-supersession",
+          "eventType": "ENTITY_EVOLUTION_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
+          "occurredAt": "2026-09-01T11:00:00Z",
+          "metadata": {
+            "entityEvolution": {
+              "kind": "SUPERSESSION",
+              "relationId": "rel-supersession-1",
+              "source": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-1"
+              },
+              "related": {
+                "type": "invoice",
+                "id": "inv-10-v2",
+                "revision": "rev-1"
+              },
+              "supersessionScope": "tenant-a:invoice-current"
+            }
+          },
+          "relationships": [
+            {
+              "relationshipId": "audit-rel-supersession-1",
+              "type": "SUPERSEDES",
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "auditHistory": {
+            "history": [
+              {
+                "eventId": "evt-original",
+                "eventType": "ENTITY_ISSUED",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                },
+                "occurredAt": "2026-09-01T10:00:00Z"
+              }
+            ]
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "evolution-history-discarded",
+        "currentness-validation-bypassed"
+      ]
+    },
+    {
+      "id": "entity.evolution.history.same-step-consistent-control-001",
+      "spec": "entities/evolution",
+      "requirements": [
+        "ENTITY-EVOLUTION-022",
+        "ENTITY-EVOLUTION-023",
+        "ENTITY-EVOLUTION-024",
+        "ENTITY-EVOLUTION-025",
+        "ENTITY-EVOLUTION-035"
+      ],
+      "description": "Accepts consistent same-key Correction observations, which declare no conflicting currentness effects.",
+      "operation": "finkore.entity.evolution.correct",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "ISSUED"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "ISSUED"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "ISSUED": [
+              "memo"
+            ]
+          }
+        },
+        "evolutionHistory": [
+          {
+            "relationId": "void1",
+            "kind": "VOID",
+            "source": {
+              "type": "invoice",
+              "id": "inv-10",
+              "revision": "rev-1"
+            },
+            "sourceCurrent": false,
+            "auditEventId": "event-void1"
+          },
+          {
+            "relationId": "void2",
+            "kind": "CORRECTION",
+            "source": {
+              "type": "invoice",
+              "id": "inv-10",
+              "revision": "rev-1"
+            },
+            "sourceCurrent": false,
+            "auditEventId": "event-void2",
+            "related": {
+              "type": "invoice",
+              "id": "inv-10",
+              "revision": "rev-1"
+            },
+            "relatedCurrent": false
+          }
+        ],
+        "source": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "original"
+          }
+        },
+        "sourceRevision": "rev-1",
+        "related": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "99.00",
+              "currency": "EUR"
+            },
+            "memo": "corrected"
+          }
+        },
+        "relatedRevision": "rev-2",
+        "relationId": "rel-correction-1",
+        "eligible": true,
+        "expectedSourceState": "ISSUED",
+        "expectedSourceRevision": "rev-1",
+        "auditHistory": [
+          {
+            "eventId": "evt-original",
+            "eventType": "ENTITY_ISSUED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T10:00:00Z",
+            "changes": [
+              {
+                "path": "amount",
+                "after": {
+                  "amount": "100.00",
+                  "currency": "EUR"
+                }
+              }
+            ]
+          }
+        ],
+        "auditEvent": {
+          "eventId": "evt-correction",
+          "eventType": "ENTITY_EVOLUTION_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
+          "occurredAt": "2026-09-01T11:00:00Z",
+          "metadata": {
+            "entityEvolution": {
+              "kind": "CORRECTION",
+              "relationId": "rel-correction-1",
+              "source": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-1"
+              },
+              "related": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-2"
+              }
+            }
+          },
+          "relationships": [
+            {
+              "relationshipId": "audit-rel-correction-1",
+              "type": "CORRECTS",
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            }
+          ]
+        },
+        "expectedSourceCurrent": false
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "source": {
+            "type": "invoice",
+            "id": "inv-10",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "original"
+            }
+          },
+          "related": {
+            "type": "invoice",
+            "id": "inv-10",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "99.00",
+                "currency": "EUR"
+              },
+              "memo": "corrected"
+            }
+          },
+          "relation": {
+            "relationId": "rel-correction-1",
+            "kind": "CORRECTION",
+            "source": {
+              "type": "invoice",
+              "id": "inv-10",
+              "revision": "rev-1"
+            },
+            "related": {
+              "type": "invoice",
+              "id": "inv-10",
+              "revision": "rev-2"
+            },
+            "sourceCurrent": false,
+            "relatedCurrent": true,
+            "auditEventId": "evt-correction"
+          },
+          "evolutionHistory": {
+            "relations": [
+              {
+                "relationId": "void1",
+                "kind": "VOID",
+                "source": {
+                  "type": "invoice",
+                  "id": "inv-10",
+                  "revision": "rev-1"
+                },
+                "sourceCurrent": false,
+                "auditEventId": "event-void1"
+              },
+              {
+                "relationId": "void2",
+                "kind": "CORRECTION",
+                "source": {
+                  "type": "invoice",
+                  "id": "inv-10",
+                  "revision": "rev-1"
+                },
+                "sourceCurrent": false,
+                "auditEventId": "event-void2",
+                "related": {
+                  "type": "invoice",
+                  "id": "inv-10",
+                  "revision": "rev-1"
+                },
+                "relatedCurrent": false
+              },
+              {
+                "relationId": "rel-correction-1",
+                "kind": "CORRECTION",
+                "source": {
+                  "type": "invoice",
+                  "id": "inv-10",
+                  "revision": "rev-1"
+                },
+                "related": {
+                  "type": "invoice",
+                  "id": "inv-10",
+                  "revision": "rev-2"
+                },
+                "sourceCurrent": false,
+                "relatedCurrent": true,
+                "auditEventId": "evt-correction"
+              }
+            ]
+          },
+          "auditHistory": {
+            "history": [
+              {
+                "eventId": "evt-original",
+                "eventType": "ENTITY_ISSUED",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                },
+                "occurredAt": "2026-09-01T10:00:00Z",
+                "changes": [
+                  {
+                    "path": "amount",
+                    "after": {
+                      "amount": "100.00",
+                      "currency": "EUR"
+                    }
+                  }
+                ]
+              },
+              {
+                "eventId": "evt-correction",
+                "eventType": "ENTITY_EVOLUTION_RECORDED",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                },
+                "occurredAt": "2026-09-01T11:00:00Z",
+                "metadata": {
+                  "entityEvolution": {
+                    "kind": "CORRECTION",
+                    "relationId": "rel-correction-1",
+                    "source": {
+                      "type": "invoice",
+                      "id": "inv-10",
+                      "revision": "rev-1"
+                    },
+                    "related": {
+                      "type": "invoice",
+                      "id": "inv-10",
+                      "revision": "rev-2"
+                    }
+                  }
+                },
+                "relationships": [
+                  {
+                    "relationshipId": "audit-rel-correction-1",
+                    "type": "CORRECTS",
+                    "target": {
+                      "eventId": "evt-original",
+                      "entity": {
+                        "type": "invoice",
+                        "id": "inv-10"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "auditEvent": {
+            "eventId": "evt-correction",
+            "eventType": "ENTITY_EVOLUTION_RECORDED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T11:00:00Z",
+            "metadata": {
+              "entityEvolution": {
+                "kind": "CORRECTION",
+                "relationId": "rel-correction-1",
+                "source": {
+                  "type": "invoice",
+                  "id": "inv-10",
+                  "revision": "rev-1"
+                },
+                "related": {
+                  "type": "invoice",
+                  "id": "inv-10",
+                  "revision": "rev-2"
+                }
+              }
+            },
+            "relationships": [
+              {
+                "relationshipId": "audit-rel-correction-1",
+                "type": "CORRECTS",
+                "target": {
+                  "eventId": "evt-original",
+                  "entity": {
+                    "type": "invoice",
+                    "id": "inv-10"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "observations": {
+          "source": {
+            "type": "invoice",
+            "id": "inv-10",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "original"
+            }
+          },
+          "evolutionHistory": {
+            "relations": [
+              {
+                "relationId": "void1",
+                "kind": "VOID",
+                "source": {
+                  "type": "invoice",
+                  "id": "inv-10",
+                  "revision": "rev-1"
+                },
+                "sourceCurrent": false,
+                "auditEventId": "event-void1"
+              },
+              {
+                "relationId": "void2",
+                "kind": "CORRECTION",
+                "source": {
+                  "type": "invoice",
+                  "id": "inv-10",
+                  "revision": "rev-1"
+                },
+                "sourceCurrent": false,
+                "auditEventId": "event-void2",
+                "related": {
+                  "type": "invoice",
+                  "id": "inv-10",
+                  "revision": "rev-1"
+                },
+                "relatedCurrent": false
+              }
+            ]
+          },
+          "auditHistory": {
+            "history": [
+              {
+                "eventId": "evt-original",
+                "eventType": "ENTITY_ISSUED",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                },
+                "occurredAt": "2026-09-01T10:00:00Z",
+                "changes": [
+                  {
+                    "path": "amount",
+                    "after": {
+                      "amount": "100.00",
+                      "currency": "EUR"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "evolution-history-discarded",
+        "currentness-validation-bypassed"
+      ]
+    },
+    {
+      "id": "entity.evolution.history.same-step-correction-contradiction-001",
+      "spec": "entities/evolution",
+      "requirements": [
+        "ENTITY-EVOLUTION-022",
+        "ENTITY-EVOLUTION-023",
+        "ENTITY-EVOLUTION-024",
+        "ENTITY-EVOLUTION-025",
+        "ENTITY-EVOLUTION-035"
+      ],
+      "description": "Rejects conflicting same-step Correction assertions without choosing the related observation as a winner.",
+      "operation": "finkore.entity.evolution.correct",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "ISSUED"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "ISSUED"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "ISSUED": [
+              "memo"
+            ]
+          }
+        },
+        "evolutionHistory": [
+          {
+            "relationId": "void1",
+            "kind": "VOID",
+            "source": {
+              "type": "invoice",
+              "id": "inv-10",
+              "revision": "rev-1"
+            },
+            "sourceCurrent": false,
+            "auditEventId": "event-void1"
+          },
+          {
+            "relationId": "void2",
+            "kind": "CORRECTION",
+            "source": {
+              "type": "invoice",
+              "id": "inv-10",
+              "revision": "rev-1"
+            },
+            "sourceCurrent": true,
+            "auditEventId": "event-void2",
+            "related": {
+              "type": "invoice",
+              "id": "inv-10",
+              "revision": "rev-1"
+            },
+            "relatedCurrent": false
+          }
+        ],
+        "source": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "original"
+          }
+        },
+        "sourceRevision": "rev-1",
+        "related": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "99.00",
+              "currency": "EUR"
+            },
+            "memo": "corrected"
+          }
+        },
+        "relatedRevision": "rev-2",
+        "relationId": "rel-correction-1",
+        "eligible": true,
+        "expectedSourceState": "ISSUED",
+        "expectedSourceRevision": "rev-1",
+        "auditHistory": [
+          {
+            "eventId": "evt-original",
+            "eventType": "ENTITY_ISSUED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T10:00:00Z",
+            "changes": [
+              {
+                "path": "amount",
+                "after": {
+                  "amount": "100.00",
+                  "currency": "EUR"
+                }
+              }
+            ]
+          }
+        ],
+        "auditEvent": {
+          "eventId": "evt-correction",
+          "eventType": "ENTITY_EVOLUTION_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
+          "occurredAt": "2026-09-01T11:00:00Z",
+          "metadata": {
+            "entityEvolution": {
+              "kind": "CORRECTION",
+              "relationId": "rel-correction-1",
+              "source": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-1"
+              },
+              "related": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-2"
+              }
+            }
+          },
+          "relationships": [
+            {
+              "relationshipId": "audit-rel-correction-1",
+              "type": "CORRECTS",
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            }
+          ]
+        },
+        "expectedSourceCurrent": false
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "auditHistory": {
+            "history": [
+              {
+                "eventId": "evt-original",
+                "eventType": "ENTITY_ISSUED",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                },
+                "occurredAt": "2026-09-01T10:00:00Z",
+                "changes": [
+                  {
+                    "path": "amount",
+                    "after": {
+                      "amount": "100.00",
+                      "currency": "EUR"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "evolution-history-discarded",
+        "currentness-validation-bypassed"
+      ]
     }
   ]
 }

@@ -33,11 +33,13 @@ or establish Core 1.0 readiness.
 The accepted Entity decisions add `ENTITY-EVOLUTION-034` (Audit validation before
 evolution correspondence) and `ENTITY-EVOLUTION-035` (reject unresolved
 contradictory currentness history while accepting valid historical changes).
-Milestone 2 adds permanent regressions for both and the other review findings:
-the manifest now contains 532 vectors, including 201 new regression/control
-cases. Native API tests supplement it for operation sequences and ownership.
-The new tests intentionally expose the unfixed baseline; full conformance is
-not currently passing. Implementation corrections follow in Milestones 3–6.
+Milestone 2 added 201 permanent regression/control cases for both and the other
+review findings. Milestone 4 adds four cases separating contradictory same-step
+assertions, incompatible Supersession effects, and a consistent Correction.
+The manifest now contains 536 vectors. Native API tests supplement it for
+operation sequences and ownership. Milestones 3 and 4 restore Approval and
+Entity conformance across all required runtimes; Workflow and Audit readiness
+failures remain for Milestones 5 and 6. Full conformance is not yet passing.
 
 For FinKore Core 0.9 release candidate, [manifest.json](manifest.json) is the
 frozen release-candidate manifest and `finkoreConformance` remains `0.1`. This

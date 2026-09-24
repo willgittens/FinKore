@@ -2,10 +2,10 @@
 
 ## Status
 
-Milestones 1–3 are complete, including the accepted Entity decisions, permanent
-regressions with valid controls, and Approval corrections. All 112 Approval
-vectors pass across TypeScript, Python 3.12/3.13, and Java. Entity, Workflow, and
-Audit regressions remain failing pending Milestones 4–6.
+Milestones 1–4 are complete, including the accepted Entity decisions, permanent
+regressions with valid controls, and Approval and Entity corrections. All 112
+Approval and 157 Entity vectors pass across TypeScript, Python 3.12/3.13, and
+Java. Workflow and Audit readiness regressions remain for Milestones 5 and 6.
 The review of `f39bbe1`
 (`core-0.9.3`) reproduced the failures below after the complete existing
 verification command passed. The earlier corrective releases remain historical
@@ -409,50 +409,106 @@ fixture labels remain conformance-local.
 
 ## Milestone 4 — Entity evolution validation and history corrections
 
-- [ ] Implement `ENTITY-EVOLUTION-034` in TypeScript, Python, and Java: perform
+- [x] Implement `ENTITY-EVOLUTION-034` in TypeScript, Python, and Java: perform
       intrinsic Audit validation before evolution correspondence and preserve
       its primary error when both fail. Retain atomicity across both histories.
-- [ ] Implement `ENTITY-EVOLUTION-035` in all three cores at history import and
+- [x] Implement `ENTITY-EVOLUTION-035` in all three cores at history import and
       operation-result boundaries. Reject unresolved currentness contradictions
       without requiring an expected-currentness precondition; accept consistent
       effect-driven history changes. Keep this validation out of adapters.
-- [ ] Validate required Audit correspondence for correction, reversal, void,
+- [x] Validate required Audit correspondence for correction, reversal, void,
       and supersession in Python and Java: evolution kind, source identity and
       revision, related identity and revision when applicable, relation identity,
       affected Entity, supersession scope when applicable, and the corresponding
       Audit Relationship. Reuse Audit's own Event and relationship validation.
-- [ ] Pair each missing or mismatched evidence case with valid evidence for the
+- [x] Pair each missing or mismatched evidence case with valid evidence for the
       same evolution kind. Preserve established primary errors for invalid
       Audit Events and Milestone 1's resolved mapping for invalid correspondence.
       Failure must leave both Audit and evolution observations unchanged.
-- [ ] Translate existing conformance history arrays into each core's accepted
+- [x] Translate existing conformance history arrays into each core's accepted
       API representation without financial rules in adapters. Cover empty and
       nonempty histories, successful operations with unrelated prior relations,
       preservation of earlier relations, and subsequent consumption of outputs.
-- [ ] Determine observed currentness from validated history for the applicable
+- [x] Determine observed currentness from validated history for the applicable
       Entity, Revision, and scope before comparing an explicit expectation.
       Cover true/false matches and mismatches, omitted expectations, prior void
       and supersession evidence, and unrelated history. A matching expectation
       does not override a separate eligibility failure.
-- [ ] Ensure duplicate relation/reversal regressions reach the intended domain
+- [x] Ensure duplicate relation/reversal regressions reach the intended domain
       check after successful history parsing. Pair rejection with a permitted
       operation using the same nonempty history structure. Preserve declared
       duplicate policies; do not invent a universal reversal restriction.
-- [ ] Apply all declared Entity business validators to source and related or
+- [x] Apply all declared Entity business validators to source and related or
       successor observations wherever required by the governing contract. Fix
       Python's positive-Money bypass and test the existing cross-field validator
       against complete observations. Preserve established validation and
       domain-error precedence without mutating source financial facts.
-- [ ] Verify histories, identities, revisions, scopes, currentness, and original
+- [x] Verify histories, identities, revisions, scopes, currentness, and original
       financial facts survive success and failure exactly. Use the existing
       correction/reversal relation semantics; add no accounting posting effects.
-- [ ] Update affected API documentation, examples, and README claims. Run Entity,
+- [x] Update affected API documentation, examples, and README claims. Run Entity,
       Audit, and relevant Workflow unit, adapter, sequence, and conformance tests
       across all required runtimes.
 
 Completion: evolution enforces business validity, checks observed currentness,
 preserves usable history, and commits only corresponding valid Audit evidence
 with an atomic evolution result.
+
+### Milestone 4 outcome
+
+All three cores enforce Audit-before-correspondence priority and consistent
+currentness at imported and resulting history boundaries. Python and Java now
+check all required evolution correspondence, consume nonempty fixture histories
+through adapter container translation, apply their bounded duplicate-reversal
+policy, and compare expectations with observed currentness. Python validates
+complete source and related/successor business observations. The new
+`import_evolution_history` and `Entities.importEvolutionHistory` APIs provide
+validated, defensive history envelopes; adapters contain no currentness or
+financial validation rules.
+
+Verification:
+
+- All **157 Entity vectors pass** on TypeScript, Python 3.12, Python 3.13, and
+  Java. Four additional portable cases cover incompatible same-key Supersession
+  effects, conflicting same-step Correction observations, and a consistent
+  control. The manifest now contains **536 vectors**; existing identifiers and
+  normative requirements are unchanged.
+- Native tests execute evolution vectors directly, retain actual result-reuse
+  sequences, validate complete cross-field observations for each evolution kind,
+  and check defensive history import, opaque reference keys, explicit successor
+  effects, and atomic rejection. Entity adapter tests and relevant Entity,
+  Audit, and Workflow unit suites pass on all required runtimes. The runner's
+  130 tests pass with the expanded manifest.
+- TypeScript evolution mutation testing scores **99.20%** (373/376 killed).
+  No critical mutant survives. The remaining two survivors and one uncovered
+  mutant are equivalent: the post-append empty-result guard is unreachable
+  after successful Audit append, and the repeated effect-value comparison is
+  always true when that step's existing source-effect key is present. No
+  exclusions or thresholds were relaxed.
+- **48/48 targeted Python/Java Entity critical probes are killed** (24 per
+  implementation), including 30 new probes with named regressions and positive
+  controls. This is focused evidence, not an aggregate Python/Java mutation
+  score or the complete release mutation gate.
+- Scoped coverage: TypeScript evolution **100% lines / 99.29% branches**;
+  Python Entities **88%** including branch measurement; Java Entities
+  **90.07% lines / 74.59% branches**. Build, strict TypeScript, Python/Java
+  compilation, architecture, tool tests, documentation, traceability, license,
+  and whitespace checks pass.
+- Full-manifest results: TypeScript **528 PASS / 8 FAIL**; Python 3.12 and
+  3.13 each **524 PASS / 12 FAIL**; Java **528 PASS / 5 FAIL /
+  3 INFRASTRUCTURE_ERROR**. Unsupported remains zero. Compared with Milestone 3,
+  only Entity failures become passes (29 TypeScript, 64 per Python runtime,
+  64 Java), and all four added vectors pass. Unrelated results, including
+  Java's existing Workflow infrastructure errors, are unchanged.
+
+Public API documentation, examples, READMEs, conformance status and requirement
+indexes, and verification tooling are synchronized. Older TypeScript error
+assertions were updated specifically to the accepted `ENTITY-EVOLUTION-034`
+priority and correspondence mapping; the rejection cases remain. CoreDoc,
+Agentic metadata, and AGENTS.md already describe the governing obligations and
+boundaries, so no changes are required there. The specification's non-normative
+implementation-status note is current. Full release verification remains open
+pending the later milestones.
 
 ## Milestone 5 — Workflow ownership and fixture corrections
 

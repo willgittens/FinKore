@@ -20,6 +20,12 @@ final class EntitiesVectorCoverageTest {
       Path.of("conformance/entities/readiness-regressions.json"));
 
   @Test
+  void nativeEvolutionRegressions() throws IOException {
+    EntityEvolutionTest.main(new String[0]);
+    ReadinessRegressionTest.entities();
+  }
+
+  @Test
   void entityVectorsExecuteAgainstCoreImplementation() throws IOException {
     Path repositoryRoot = Path.of("../../..").toAbsolutePath().normalize();
     int executed = 0;
@@ -33,7 +39,7 @@ final class EntitiesVectorCoverageTest {
         executed += 1;
       }
     }
-    assertEquals(153, executed);
+    assertEquals(157, executed);
   }
 
   private static Map<String, Object> execute(Map<String, Object> vector) {
@@ -55,22 +61,10 @@ final class EntitiesVectorCoverageTest {
           yield success(result, Map.of("identity", result.get("id")));
         }
         case "entity.import" -> success(Entities.importEntity(input.get("definition"), input.get("import")), null);
-        case "finkore.entity.evolution.correct" -> success(Entities.evolve(
-            "CORRECTION",
-            input.get("definition"),
-            input), Entities.evolutionObservation(input, false));
-        case "finkore.entity.evolution.reverse" -> success(Entities.evolve(
-            "REVERSAL",
-            input.get("definition"),
-            input), Entities.evolutionObservation(input, true));
-        case "finkore.entity.evolution.supersede" -> success(Entities.evolve(
-            "SUPERSESSION",
-            input.get("definition"),
-            input), Entities.evolutionObservation(input, true));
-        case "finkore.entity.evolution.void" -> success(Entities.evolve(
-            "VOID",
-            input.get("definition"),
-            input), Entities.evolutionObservation(input, true));
+        case "finkore.entity.evolution.correct" -> executeEntityEvolution("CORRECTION", input);
+        case "finkore.entity.evolution.reverse" -> executeEntityEvolution("REVERSAL", input);
+        case "finkore.entity.evolution.supersede" -> executeEntityEvolution("SUPERSESSION", input);
+        case "finkore.entity.evolution.void" -> executeEntityEvolution("VOID", input);
         default -> throw new IllegalArgumentException(operation);
       };
     } catch (FinKoreException error) {
@@ -111,6 +105,26 @@ final class EntitiesVectorCoverageTest {
       return observations;
     }
     return null;
+  }
+
+  private static Map<String, Object> executeEntityEvolution(String kind, Map<String, Object> input) {
+    Map<String, Object> observations = new LinkedHashMap<>();
+    observations.put("auditHistory", Entities.evolutionObservation(input, true).get("auditHistory"));
+    Map<String, Object> request = new LinkedHashMap<>(input);
+    Object history = input.get("evolutionHistory");
+    request.put("evolutionHistory", history instanceof List<?> ? Map.of("relations", history) : history);
+    try {
+      observations.put("evolutionHistory", Entities.importEvolutionHistory(request.get("evolutionHistory")));
+      Map<String, Object> imported = new LinkedHashMap<>(); imported.put("entity", input.get("source"));
+      observations.put("source", Entities.importEntity(input.get("definition"), imported).get("entity"));
+      if (!"VOID".equals(kind)) {
+        imported.put("entity", input.get("SUPERSESSION".equals(kind) ? "successor" : "related"));
+        observations.put("related", Entities.importEntity(input.get("definition"), imported).get("entity"));
+      }
+      return success(Entities.evolve(kind, input.get("definition"), request), Entities.evolutionObservation(input, !"CORRECTION".equals(kind)));
+    } catch (FinKoreException failure) {
+      return error(failure.code(), observations);
+    }
   }
 
   private static Map<String, Object> success(Object value, Map<String, Object> observations) {
