@@ -1,0 +1,4706 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z"
+            }
+          ]
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-04T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "4"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-04T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "id": "approval.record.preserves-withdrawn-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-001",
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011"
+      ],
+      "description": "Recording unrelated revision 4 preserves withdrawn evidence exactly.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-evidence-dropped"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "2"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-02T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "successor": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-02T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-04T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "2"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-02T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "4"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-04T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "successor": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-02T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "id": "approval.record.preserves-decision-superseded-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-001",
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011"
+      ],
+      "description": "Recording unrelated revision 4 preserves decision-superseded evidence exactly.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-evidence-dropped"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "finance-review",
+              "successorRequirementId": "controller-review",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-04T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "4"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-04T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "finance-review",
+              "successorRequirementId": "controller-review",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "id": "approval.record.preserves-requirement-superseded-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-001",
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011"
+      ],
+      "description": "Recording unrelated revision 4 preserves requirement-superseded evidence exactly.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-evidence-dropped"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3",
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              }
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z",
+              "type": "WITHDRAWN"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.withdraw.request-type-omitted-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit withdraw operation retains its meaning with omitted redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3",
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              }
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z",
+          "type": "WITHDRAWN"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z",
+              "type": "WITHDRAWN"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.withdraw.request-type-matching-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit withdraw operation retains its meaning with matching redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3",
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              }
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z",
+          "type": "IGNORED"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z",
+              "type": "WITHDRAWN"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.withdraw.request-type-unknown-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit withdraw operation retains its meaning with unknown redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3",
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              }
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z",
+          "type": "DECISION_SUPERSEDED"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z",
+              "type": "WITHDRAWN"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.withdraw.request-type-conflicting-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit withdraw operation retains its meaning with conflicting redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3",
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              }
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z",
+          "type": null
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z",
+              "type": "WITHDRAWN"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.withdraw.request-type-null-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit withdraw operation retains its meaning with null redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3",
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              }
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z",
+              "type": "WITHDRAWN"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.withdraw.request-type-object-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit withdraw operation retains its meaning with object redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "2"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-02T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "successor": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-02T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.supersede.request-type-omitted-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit supersede operation retains its meaning with omitted redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": "DECISION_SUPERSEDED"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "2"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-02T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "successor": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-02T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.supersede.request-type-matching-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit supersede operation retains its meaning with matching redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": "IGNORED"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "2"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-02T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "successor": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-02T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.supersede.request-type-unknown-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit supersede operation retains its meaning with unknown redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": "WITHDRAWN"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "2"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-02T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "successor": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-02T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.supersede.request-type-conflicting-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit supersede operation retains its meaning with conflicting redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": null
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "2"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-02T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "successor": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-02T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.supersede.request-type-null-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit supersede operation retains its meaning with null redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "2"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-02T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "successor": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-02T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.supersede.request-type-object-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit supersede operation retains its meaning with object redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "finance-review",
+              "successorRequirementId": "controller-review",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.requirement.request-type-omitted-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit requirement operation retains its meaning with omitted redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": "REQUIREMENT_SUPERSEDED"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "finance-review",
+              "successorRequirementId": "controller-review",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.requirement.request-type-matching-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit requirement operation retains its meaning with matching redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": "IGNORED"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "finance-review",
+              "successorRequirementId": "controller-review",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.requirement.request-type-unknown-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit requirement operation retains its meaning with unknown redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": "WITHDRAWN"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "finance-review",
+              "successorRequirementId": "controller-review",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.requirement.request-type-conflicting-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit requirement operation retains its meaning with conflicting redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": null
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "finance-review",
+              "successorRequirementId": "controller-review",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.requirement.request-type-null-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit requirement operation retains its meaning with null redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "spec": "approvals/validity",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "finance-review",
+              "successorRequirementId": "controller-review",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "id": "approval.lifecycle.requirement.request-type-object-001",
+      "requirements": [
+        "APPROVAL-VALIDITY-002",
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-012"
+      ],
+      "description": "The explicit requirement operation retains its meaning with object redundant type.",
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "lifecycle-operation-kind-overridden"
+      ]
+    },
+    {
+      "id": "approval.withdraw.target-unique-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-005",
+        "APPROVAL-VALIDITY-012",
+        "APPROVAL-ERROR-006"
+      ],
+      "description": "Withdrawal resolves unique target and preserves evidence on failure.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": []
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "withdrawal-target-validation-bypassed"
+      ]
+    },
+    {
+      "id": "approval.withdraw.target-missing-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-005",
+        "APPROVAL-VALIDITY-012",
+        "APPROVAL-ERROR-006"
+      ],
+      "description": "Withdrawal resolves missing target and preserves evidence on failure.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [],
+          "lifecycle": []
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "withdrawal-target-validation-bypassed"
+      ]
+    },
+    {
+      "id": "approval.withdraw.target-ambiguous-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-005",
+        "APPROVAL-VALIDITY-012",
+        "APPROVAL-ERROR-006"
+      ],
+      "description": "Withdrawal resolves ambiguous target and preserves evidence on failure.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": []
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "withdrawal-target-validation-bypassed"
+      ]
+    },
+    {
+      "id": "approval.withdraw.target-superseded-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-005",
+        "APPROVAL-VALIDITY-012",
+        "APPROVAL-ERROR-006"
+      ],
+      "description": "Withdrawal resolves superseded target and preserves evidence on failure.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "2"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-02T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "successor": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-02T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "2"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-02T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "successor": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-02T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "withdrawal-target-validation-bypassed"
+      ]
+    },
+    {
+      "id": "approval.quorum.effectiveness-true-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-002",
+        "APPROVAL-QUORUM-004",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Quorum requires explicit Boolean effectiveness: true.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "alice-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "alice"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "bob-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "bob"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "carol-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ],
+        "context": {
+          "evaluatedAt": "2026-09-12T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "APPROVED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "malformed-effectiveness-counted",
+        "composition-validation-short-circuited"
+      ]
+    },
+    {
+      "id": "approval.quorum.effectiveness-false-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-002",
+        "APPROVAL-QUORUM-004",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Quorum requires explicit Boolean effectiveness: false.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "alice-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "alice"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "bob-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "bob"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "carol-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": false
+          }
+        ],
+        "context": {
+          "evaluatedAt": "2026-09-12T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "PENDING",
+          "actionableRequirements": [
+            "board-review"
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "malformed-effectiveness-counted",
+        "composition-validation-short-circuited"
+      ]
+    },
+    {
+      "id": "approval.quorum.effectiveness-missing-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-002",
+        "APPROVAL-QUORUM-004",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Quorum requires explicit Boolean effectiveness: missing.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "alice-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "alice"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "bob-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "bob"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "carol-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "bob"
+            },
+            "outcome": "APPROVED"
+          }
+        ],
+        "context": {
+          "evaluatedAt": "2026-09-12T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "bob"
+              },
+              "outcome": "APPROVED"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "malformed-effectiveness-counted",
+        "composition-validation-short-circuited"
+      ]
+    },
+    {
+      "id": "approval.quorum.effectiveness-null-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-002",
+        "APPROVAL-QUORUM-004",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Quorum requires explicit Boolean effectiveness: null.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "alice-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "alice"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "bob-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "bob"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "carol-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": null
+          }
+        ],
+        "context": {
+          "evaluatedAt": "2026-09-12T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": null
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "malformed-effectiveness-counted",
+        "composition-validation-short-circuited"
+      ]
+    },
+    {
+      "id": "approval.quorum.effectiveness-string-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-002",
+        "APPROVAL-QUORUM-004",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Quorum requires explicit Boolean effectiveness: string.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "alice-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "alice"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "bob-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "bob"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "carol-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": "false"
+          }
+        ],
+        "context": {
+          "evaluatedAt": "2026-09-12T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": "false"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "malformed-effectiveness-counted",
+        "composition-validation-short-circuited"
+      ]
+    },
+    {
+      "id": "approval.quorum.effectiveness-number-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-002",
+        "APPROVAL-QUORUM-004",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Quorum requires explicit Boolean effectiveness: number.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "alice-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "alice"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "bob-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "bob"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "carol-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": 1
+          }
+        ],
+        "context": {
+          "evaluatedAt": "2026-09-12T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": 1
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "malformed-effectiveness-counted",
+        "composition-validation-short-circuited"
+      ]
+    },
+    {
+      "id": "approval.quorum.effectiveness-array-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-002",
+        "APPROVAL-QUORUM-004",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Quorum requires explicit Boolean effectiveness: array.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "alice-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "alice"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "bob-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "bob"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "carol-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": []
+          }
+        ],
+        "context": {
+          "evaluatedAt": "2026-09-12T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": []
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "malformed-effectiveness-counted",
+        "composition-validation-short-circuited"
+      ]
+    },
+    {
+      "id": "approval.quorum.effectiveness-object-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-002",
+        "APPROVAL-QUORUM-004",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Quorum requires explicit Boolean effectiveness: object.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "alice-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "alice"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "bob-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "bob"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "carol-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": {}
+          }
+        ],
+        "context": {
+          "evaluatedAt": "2026-09-12T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": {}
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "malformed-effectiveness-counted",
+        "composition-validation-short-circuited"
+      ]
+    },
+    {
+      "id": "approval.quorum.invalid-evidence-decisive-sibling-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-009",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Validate malformed effectiveness even when another branch or earlier stage determines the outcome.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "alice-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "alice"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "bob-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "bob"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "carol-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "ready-group",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "ready-member",
+                  "requirementId": "ready"
+                }
+              ]
+            },
+            {
+              "id": "root",
+              "kind": "ANY_OF",
+              "members": [
+                {
+                  "type": "group",
+                  "id": "ready-child",
+                  "groupId": "ready-group"
+                },
+                {
+                  "type": "group",
+                  "id": "quorum-child",
+                  "groupId": "board-quorum"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          },
+          {
+            "id": "ready",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "bob"
+            },
+            "outcome": "APPROVED"
+          }
+        ],
+        "context": {
+          "evaluatedAt": "2026-09-12T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "bob"
+              },
+              "outcome": "APPROVED"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "malformed-effectiveness-counted",
+        "composition-validation-short-circuited"
+      ]
+    },
+    {
+      "id": "approval.quorum.invalid-evidence-later-stage-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-009",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Validate malformed effectiveness even when another branch or earlier stage determines the outcome.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "alice-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "alice"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "bob-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "bob"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "carol-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "ready-group",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "ready-member",
+                  "requirementId": "ready"
+                }
+              ]
+            }
+          ],
+          "stages": [
+            {
+              "id": "first",
+              "groups": [
+                "ready-group"
+              ]
+            },
+            {
+              "id": "second",
+              "groups": [
+                "board-quorum"
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          },
+          {
+            "id": "ready",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "bob"
+            },
+            "outcome": "APPROVED"
+          }
+        ],
+        "context": {
+          "evaluatedAt": "2026-09-12T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "bob"
+              },
+              "outcome": "APPROVED"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "malformed-effectiveness-counted",
+        "composition-validation-short-circuited"
+      ]
+    },
+    {
+      "id": "approval.quorum.invalid-effectiveness-priority-structure-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Higher-priority structure failure precedes invalid effectiveness.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 0,
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "alice-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "alice"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "bob-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "bob"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "carol-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "bob"
+            },
+            "outcome": "APPROVED"
+          }
+        ],
+        "context": {
+          "evaluatedAt": "2026-09-12T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "bob"
+              },
+              "outcome": "APPROVED"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "malformed-effectiveness-counted",
+        "composition-validation-short-circuited"
+      ]
+    },
+    {
+      "id": "approval.quorum.invalid-effectiveness-priority-applicability-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Higher-priority applicability failure precedes invalid effectiveness.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "alice-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "alice"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "bob-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "bob"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "carol-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "UNRESOLVED",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "bob"
+            },
+            "outcome": "APPROVED"
+          }
+        ],
+        "context": {
+          "evaluatedAt": "2026-09-12T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_CONDITION_UNRESOLVED"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "bob"
+              },
+              "outcome": "APPROVED"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "malformed-effectiveness-counted",
+        "composition-validation-short-circuited"
+      ]
+    },
+    {
+      "id": "approval.quorum.invalid-effectiveness-priority-context-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Higher-priority context failure precedes invalid effectiveness.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "board-quorum",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "alice-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "alice"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "bob-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "bob"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "carol-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED",
+            "requiresEvaluationContext": true
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "bob"
+            },
+            "outcome": "APPROVED"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CONTEXT"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "board-review",
+              "actor": {
+                "type": "user",
+                "id": "bob"
+              },
+              "outcome": "APPROVED"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "malformed-effectiveness-counted",
+        "composition-validation-short-circuited"
+      ]
+    },
+    {
+      "id": "approval.quorum.valid-evidence-decisive-sibling-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-009",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Valid evidence control for complete-validation branch or stage coverage.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "alice-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "alice"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "bob-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "bob"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "carol-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "ready-group",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "ready-member",
+                  "requirementId": "ready"
+                }
+              ]
+            },
+            {
+              "id": "root",
+              "kind": "ANY_OF",
+              "members": [
+                {
+                  "type": "group",
+                  "id": "ready-child",
+                  "groupId": "ready-group"
+                },
+                {
+                  "type": "group",
+                  "id": "quorum-child",
+                  "groupId": "board-quorum"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          },
+          {
+            "id": "ready",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ],
+        "context": {
+          "evaluatedAt": "2026-09-12T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "APPROVED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "malformed-effectiveness-counted",
+        "composition-validation-short-circuited"
+      ]
+    },
+    {
+      "id": "approval.quorum.valid-evidence-later-stage-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-009",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Valid evidence control for complete-validation branch or stage coverage.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "groups": [
+            {
+              "id": "board-quorum",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "alice-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "alice"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "bob-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "bob"
+                  }
+                },
+                {
+                  "type": "requirement",
+                  "id": "carol-seat",
+                  "requirementId": "board-review",
+                  "voter": {
+                    "type": "user",
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "ready-group",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "ready-member",
+                  "requirementId": "ready"
+                }
+              ]
+            }
+          ],
+          "stages": [
+            {
+              "id": "first",
+              "groups": [
+                "ready-group"
+              ]
+            },
+            {
+              "id": "second",
+              "groups": [
+                "board-quorum"
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "board-review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          },
+          {
+            "id": "ready",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "board-review",
+            "actor": {
+              "type": "user",
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ],
+        "context": {
+          "evaluatedAt": "2026-09-12T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "APPROVED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "malformed-effectiveness-counted",
+        "composition-validation-short-circuited"
+      ]
+    }
+  ]
+}

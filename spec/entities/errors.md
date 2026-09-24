@@ -29,6 +29,15 @@ Entity evolution error mapping is defined by **ENTITY-EVOLUTION-024** through
 **ENTITY-EVOLUTION-028** in [Entity Evolution](evolution.md). Core 0.9 release candidate does not
 introduce a dedicated evolution error code.
 
+`ENTITY-EVOLUTION-034` requires intrinsic Audit validation to precede evolution
+correspondence validation, preserving the primary Audit error if both fail.
+Valid Audit evidence that does not correspond to the requested evolution uses
+`FINKORE_ENTITY_INVALID_MUTATION`. `ENTITY-EVOLUTION-035` uses that same Entity
+code for unresolved contradictory currentness history; a known, consistent
+currentness value that differs from a request's expectation instead uses
+`FINKORE_ENTITY_STATE_CONFLICT` under `ENTITY-EVOLUTION-025`. These distinctions
+do not define a total ordering of every possible Entity failure.
+
 ## Invariants
 
 A failed Financial Entity operation must not produce a partially valid Financial Entity.

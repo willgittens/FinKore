@@ -1,0 +1,785 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "audit.actor.json-member-scalar-preserved-001",
+      "spec": "audit/actors",
+      "requirements": [
+        "AUDIT-ACTOR-010",
+        "AUDIT-APPEND-001"
+      ],
+      "description": "Retains every own JSON member in scalar metadata.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-null-metadata",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7",
+            "metadata": {
+              "__proto__": 7
+            }
+          },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "evt-null-metadata",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "metadata": {
+                  "__proto__": 7
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "json-members-lost",
+        "recursive-json-comparison-shortcut"
+      ]
+    },
+    {
+      "id": "audit.change.json-member-scalar-different-001",
+      "spec": "audit/changes",
+      "requirements": [
+        "AUDIT-CHANGE-005",
+        "AUDIT-CHANGE-008"
+      ],
+      "description": "Recursive scalar members participate in exact JSON inequality.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-object-order-unchanged",
+          "eventType": "ENTITY_FACT_CHANGED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "changes": [
+            {
+              "path": "payload",
+              "before": {
+                "__proto__": 7
+              },
+              "after": {}
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "evt-object-order-unchanged",
+              "eventType": "ENTITY_FACT_CHANGED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "changes": [
+                {
+                  "path": "payload",
+                  "before": {
+                    "__proto__": 7
+                  },
+                  "after": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "json-members-lost",
+        "recursive-json-comparison-shortcut"
+      ]
+    },
+    {
+      "id": "audit.change.json-member-scalar-equal-001",
+      "spec": "audit/changes",
+      "requirements": [
+        "AUDIT-CHANGE-005",
+        "AUDIT-CHANGE-008"
+      ],
+      "description": "Recursive scalar members participate in exact JSON equality.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-object-order-unchanged",
+          "eventType": "ENTITY_FACT_CHANGED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "changes": [
+            {
+              "path": "payload",
+              "before": {
+                "__proto__": 7
+              },
+              "after": {
+                "__proto__": 7
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "json-members-lost",
+        "recursive-json-comparison-shortcut"
+      ]
+    },
+    {
+      "id": "audit.actor.json-member-object-preserved-001",
+      "spec": "audit/actors",
+      "requirements": [
+        "AUDIT-ACTOR-010",
+        "AUDIT-APPEND-001"
+      ],
+      "description": "Retains every own JSON member in object metadata.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-null-metadata",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7",
+            "metadata": {
+              "__proto__": {
+                "approved": true
+              }
+            }
+          },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "evt-null-metadata",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "metadata": {
+                  "__proto__": {
+                    "approved": true
+                  }
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "json-members-lost",
+        "recursive-json-comparison-shortcut"
+      ]
+    },
+    {
+      "id": "audit.change.json-member-object-different-001",
+      "spec": "audit/changes",
+      "requirements": [
+        "AUDIT-CHANGE-005",
+        "AUDIT-CHANGE-008"
+      ],
+      "description": "Recursive object members participate in exact JSON inequality.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-object-order-unchanged",
+          "eventType": "ENTITY_FACT_CHANGED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "changes": [
+            {
+              "path": "payload",
+              "before": {
+                "__proto__": {
+                  "approved": true
+                }
+              },
+              "after": {}
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "evt-object-order-unchanged",
+              "eventType": "ENTITY_FACT_CHANGED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "changes": [
+                {
+                  "path": "payload",
+                  "before": {
+                    "__proto__": {
+                      "approved": true
+                    }
+                  },
+                  "after": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "json-members-lost",
+        "recursive-json-comparison-shortcut"
+      ]
+    },
+    {
+      "id": "audit.change.json-member-object-equal-001",
+      "spec": "audit/changes",
+      "requirements": [
+        "AUDIT-CHANGE-005",
+        "AUDIT-CHANGE-008"
+      ],
+      "description": "Recursive object members participate in exact JSON equality.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-object-order-unchanged",
+          "eventType": "ENTITY_FACT_CHANGED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "changes": [
+            {
+              "path": "payload",
+              "before": {
+                "__proto__": {
+                  "approved": true
+                }
+              },
+              "after": {
+                "__proto__": {
+                  "approved": true
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "json-members-lost",
+        "recursive-json-comparison-shortcut"
+      ]
+    },
+    {
+      "id": "audit.actor.json-member-nested-preserved-001",
+      "spec": "audit/actors",
+      "requirements": [
+        "AUDIT-ACTOR-010",
+        "AUDIT-APPEND-001"
+      ],
+      "description": "Retains every own JSON member in nested metadata.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-null-metadata",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7",
+            "metadata": {
+              "items": [
+                {
+                  "__proto__": {
+                    "constructor": null
+                  }
+                }
+              ]
+            }
+          },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "evt-null-metadata",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "metadata": {
+                  "items": [
+                    {
+                      "__proto__": {
+                        "constructor": null
+                      }
+                    }
+                  ]
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "json-members-lost",
+        "recursive-json-comparison-shortcut"
+      ]
+    },
+    {
+      "id": "audit.change.json-member-nested-different-001",
+      "spec": "audit/changes",
+      "requirements": [
+        "AUDIT-CHANGE-005",
+        "AUDIT-CHANGE-008"
+      ],
+      "description": "Recursive nested members participate in exact JSON inequality.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-object-order-unchanged",
+          "eventType": "ENTITY_FACT_CHANGED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "changes": [
+            {
+              "path": "payload",
+              "before": {
+                "items": [
+                  {
+                    "__proto__": {
+                      "constructor": null
+                    }
+                  }
+                ]
+              },
+              "after": {}
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "evt-object-order-unchanged",
+              "eventType": "ENTITY_FACT_CHANGED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "changes": [
+                {
+                  "path": "payload",
+                  "before": {
+                    "items": [
+                      {
+                        "__proto__": {
+                          "constructor": null
+                        }
+                      }
+                    ]
+                  },
+                  "after": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "json-members-lost",
+        "recursive-json-comparison-shortcut"
+      ]
+    },
+    {
+      "id": "audit.change.json-member-nested-equal-001",
+      "spec": "audit/changes",
+      "requirements": [
+        "AUDIT-CHANGE-005",
+        "AUDIT-CHANGE-008"
+      ],
+      "description": "Recursive nested members participate in exact JSON equality.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-object-order-unchanged",
+          "eventType": "ENTITY_FACT_CHANGED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "changes": [
+            {
+              "path": "payload",
+              "before": {
+                "items": [
+                  {
+                    "__proto__": {
+                      "constructor": null
+                    }
+                  }
+                ]
+              },
+              "after": {
+                "items": [
+                  {
+                    "__proto__": {
+                      "constructor": null
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "json-members-lost",
+        "recursive-json-comparison-shortcut"
+      ]
+    },
+    {
+      "id": "audit.actor.json-member-constructor-preserved-001",
+      "spec": "audit/actors",
+      "requirements": [
+        "AUDIT-ACTOR-010",
+        "AUDIT-APPEND-001"
+      ],
+      "description": "Retains every own JSON member in constructor metadata.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-null-metadata",
+          "eventType": "ENTITY_SUBMITTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7",
+            "metadata": {
+              "constructor": {
+                "prototype": 1
+              }
+            }
+          },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "evt-null-metadata",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "metadata": {
+                  "constructor": {
+                    "prototype": 1
+                  }
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "json-members-lost",
+        "recursive-json-comparison-shortcut"
+      ]
+    },
+    {
+      "id": "audit.change.json-member-constructor-different-001",
+      "spec": "audit/changes",
+      "requirements": [
+        "AUDIT-CHANGE-005",
+        "AUDIT-CHANGE-008"
+      ],
+      "description": "Recursive constructor members participate in exact JSON inequality.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-object-order-unchanged",
+          "eventType": "ENTITY_FACT_CHANGED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "changes": [
+            {
+              "path": "payload",
+              "before": {
+                "constructor": {
+                  "prototype": 1
+                }
+              },
+              "after": {}
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "evt-object-order-unchanged",
+              "eventType": "ENTITY_FACT_CHANGED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "changes": [
+                {
+                  "path": "payload",
+                  "before": {
+                    "constructor": {
+                      "prototype": 1
+                    }
+                  },
+                  "after": {}
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "json-members-lost",
+        "recursive-json-comparison-shortcut"
+      ]
+    },
+    {
+      "id": "audit.change.json-member-constructor-equal-001",
+      "spec": "audit/changes",
+      "requirements": [
+        "AUDIT-CHANGE-005",
+        "AUDIT-CHANGE-008"
+      ],
+      "description": "Recursive constructor members participate in exact JSON equality.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "evt-object-order-unchanged",
+          "eventType": "ENTITY_FACT_CHANGED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "changes": [
+            {
+              "path": "payload",
+              "before": {
+                "constructor": {
+                  "prototype": 1
+                }
+              },
+              "after": {
+                "constructor": {
+                  "prototype": 1
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "json-members-lost",
+        "recursive-json-comparison-shortcut"
+      ]
+    }
+  ]
+}

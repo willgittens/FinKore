@@ -16,7 +16,8 @@ final class EntitiesVectorCoverageTest {
   private static final List<Path> VECTOR_FILES = List.of(
       Path.of("conformance/entities/behavior.json"),
       Path.of("conformance/entities/evolution.json"),
-      Path.of("conformance/entities/import.json"));
+      Path.of("conformance/entities/import.json"),
+      Path.of("conformance/entities/readiness-regressions.json"));
 
   @Test
   void entityVectorsExecuteAgainstCoreImplementation() throws IOException {
@@ -32,7 +33,7 @@ final class EntitiesVectorCoverageTest {
         executed += 1;
       }
     }
-    assertEquals(36, executed);
+    assertEquals(153, executed);
   }
 
   private static Map<String, Object> execute(Map<String, Object> vector) {

@@ -16,7 +16,8 @@ final class ApprovalsVectorCoverageTest {
   private static final List<Path> VECTOR_FILES = List.of(
       Path.of("conformance/approvals/decisions.json"),
       Path.of("conformance/approvals/validity.json"),
-      Path.of("conformance/approvals/composition.json"));
+      Path.of("conformance/approvals/composition.json"),
+      Path.of("conformance/approvals/readiness-regressions.json"));
 
   @Test
   void approvalVectorsExecuteAgainstCoreImplementation() throws IOException {
@@ -32,7 +33,7 @@ final class ApprovalsVectorCoverageTest {
         executed += 1;
       }
     }
-    assertEquals(72, executed);
+    assertEquals(112, executed);
   }
 
   private static Map<String, Object> execute(Map<String, Object> vector) {

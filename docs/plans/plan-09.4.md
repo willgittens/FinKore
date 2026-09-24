@@ -2,9 +2,10 @@
 
 ## Status
 
-Milestone 1 contract review and traceability correction are recorded below;
-two Entity specification decisions remain open. Implementation and permanent
-regression work have not started. The review of `f39bbe1`
+Milestones 1 and 2 are complete, including the accepted Entity decisions and
+permanent failing regressions with valid controls. Implementation fixes have
+not started; the expanded tests intentionally expose the defective baseline.
+The review of `f39bbe1`
 (`core-0.9.3`) reproduced the failures below after the complete existing
 verification command passed. The earlier corrective releases remain historical
 snapshots; their passing gates do not close these newly demonstrated defects.
@@ -107,11 +108,11 @@ without checking the governing contract.
       and existing error precedence. Keep effectiveness derivation in its owning
       Approval operation; do not infer effectiveness from missing evidence or
       require a new history interpreter in the composition adapter.
-- [ ] Confirm Entity evolution Audit correspondence and primary error mapping,
+- [x] Confirm Entity evolution Audit correspondence and primary error mapping,
       including valid generic Audit Events that lack required evolution meaning
       versus Events rejected by Audit itself. Resolve any ambiguity between
       Entity and Audit error ownership before assigning expected codes.
-- [ ] Confirm how supplied evolution history determines currentness for the
+- [x] Confirm how supplied evolution history determines currentness for the
       exact Entity, Revision, and applicable supersession scope. Separate
       currentness conflicts from eligibility and declared duplicate policy.
       Specify fixture-to-API history translation in conformance documentation
@@ -149,8 +150,8 @@ claim the implementations already satisfy them.
 | 2 | Implementation violation; fixture documentation clarified. Every supplied quorum Decision has explicit Boolean `effective`. Missing or malformed evidence returns `FINKORE_APPROVAL_INVALID_CHAIN` in the existing state/effectiveness priority category; `false` is valid ineffective evidence. | Missing/null/string/number/container evidence, `true`/`false` controls, decisive sibling/later-stage cases, and competing error categories. |
 | 3a | Implementation violation; fixture translation clarified. The invoked lifecycle operation determines the event kind. The conformance request ignores redundant `type`, including conflicting values. Committed lifecycle event types remain meaningful and validated. Production APIs are not required to adopt this fixture envelope. | Withdraw, Decision supersede, and Requirement supersede with omitted/matching/conflicting/malformed request `type`; evaluate the actual resulting effect. |
 | 3b | Implementation violation. Missing, ambiguous, withdrawn, or superseded withdrawal targets return `FINKORE_APPROVAL_INVALID_DECISION` without changing either history. | Each invalid target paired with exactly one valid target; observe both history and subsequent effectiveness. |
-| 4 | Implementation violation for accepted mismatched evidence; demonstrated normative gap for simultaneous intrinsic Audit and correspondence failures. Valid generic Audit evidence with invalid evolution correspondence yields `FINKORE_ENTITY_INVALID_MUTATION`; intrinsically invalid evidence preserves its primary Audit error when no competing failure requires undefined precedence. | Each evolution kind with valid evidence, then one mismatched correspondence field, missing relationship, and standalone Audit failure. Combined-failure primary-code assertions are blocked by the gap below. |
-| 5a | Implementation violation for ignored unambiguous currentness; demonstrated normative gap for conflicting observations. A mismatch against observed source currentness returns `FINKORE_ENTITY_STATE_CONFLICT`, independently of eligibility. | Exact Entity/Revision/scope matches and unrelated controls with unambiguous history. Conflicting-history expected outcomes remain blocked. |
+| 4 | Implementation violation for accepted mismatched evidence; the demonstrated combined-failure gap is resolved by `ENTITY-EVOLUTION-034`. Intrinsic Audit validation runs first and preserves its primary error. Valid Audit evidence with invalid evolution correspondence yields `FINKORE_ENTITY_INVALID_MUTATION`. | Each evolution kind with valid evidence, correspondence-only, Audit-only, and combined failures; primary-code and atomicity assertions. |
+| 5a | Implementation violation for ignored unambiguous currentness; the contradictory-history gap is resolved by `ENTITY-EVOLUTION-035`. Reject unresolved contradictions with `FINKORE_ENTITY_INVALID_MUTATION`. A mismatch against consistent observed currentness returns `FINKORE_ENTITY_STATE_CONFLICT`, independently of eligibility. | Exact Entity/Revision/scope keys, consistent repeated observations, valid historical changes, unresolved contradictory changes, and unchanged-state assertions with and without expected currentness. |
 | 5b | Fixture translation defect and misleading negative-test coverage. Nonempty history arrays are accepted and preserved when valid; only the declared duplicate policy or other actual invalidity justifies rejection. | An unrelated prior relation succeeds; an actual duplicate fails for its governing rule; native sequences reuse actual returned history. |
 | 6 | Implementation violation. Full source and related/successor Business Validation applies to evolution; business-rule failure returns `FINKORE_ENTITY_VALIDATION_FAILED` unless a different domain failure is primary. | Invalid positive-money input paired with valid data; complete validation findings and atomic failure for all affected observations. |
 | 7 | Implementation violation and traceability rationale correction. Nested caller or observation mutations cannot change retained definition-version semantics. Local ownership needs no registry. | Native tests mutate original and returned nested objects/arrays, then observe unchanged guard behavior, binding, state, and revision. |
@@ -158,43 +159,60 @@ claim the implementations already satisfy them.
 | 9 | Implementation and fixture translation defects. Empty fact names or null/malformed guards return `FINKORE_WORKFLOW_INVALID_DEFINITION` with existing definition-error priority. A valid `guard` plus `guards: []` is accepted; a nonempty competing list is rejected. Explicit null comparison values remain valid JSON. | Paired create/transition fixture cases, combined-invalidity priority, and no host exception substituted for a portable error. |
 | 10 | Fixture translation defect. `DEFAULT` selects the convention; the version identity supplies a positive base-10 position. Valid positions are accepted, invalid selectors/positions return `FINKORE_WORKFLOW_INVALID_DEFINITION`, and omitted selectors retain opaque version identities. | Valid `1` and multi-digit positions paired with zero/leading-zero/sign/fraction/malformed cases and opaque non-default controls. |
 
-### Pending Entity decisions
+### Accepted Entity decisions
 
-Two questions remain in the owning [Entity evolution specification](../../spec/entities/evolution.md#open-questions).
-The corresponding checklist items stay open until a decision is recorded:
+The maintainer accepted both recommendations. The owning
+[Entity evolution specification](../../spec/entities/evolution.md) now assigns
+new stable IDs to the added observable obligations:
 
-1. **Audit error priority:** Does intrinsic Audit validation precede evolution
-   correspondence when both fail? The proposed clarification is Audit validation
-   first, then correspondence. It is not adopted by this milestone. A chosen
-   precedence requires explicit normative wording, compatibility assessment, and
-   combined-failure regressions; existing implementation order is insufficient
-   evidence.
-2. **Conflicting currentness:** Does 0.9.4 explicitly leave conflicting-history
-   resolution outside its guaranteed behavior, or define a universal rule?
-   The proposed scope is unambiguous exact Entity/Revision/scope observations
-   while leaving the conflict policy unresolved. It is not a blanket rule that
-   any prior non-current observation permanently wins.
+1. **Audit error priority — `ENTITY-EVOLUTION-034`:** Validate the supplied
+   Audit history and candidate under `AUDIT-ERROR-004` before choosing an
+   evolution-correspondence error. Preserve the primary Audit error when both
+   fail; otherwise reject mismatched correspondence with
+   `FINKORE_ENTITY_INVALID_MUTATION`. Validation does not commit either history.
+   This does not impose a total order on unrelated Entity validation failures.
+2. **Contradictory currentness — `ENTITY-EVOLUTION-035`:** Reject unresolved
+   contradictory history with `FINKORE_ENTITY_INVALID_MUTATION`, independently
+   of whether expected currentness is supplied. Compare expectations only with
+   consistent observed currentness, using `FINKORE_ENTITY_STATE_CONFLICT` for a
+   mismatch. Evaluate the exact Entity/Revision/scope and distinguish historical
+   steps: valid declared evolution effects may change currentness. Do not choose
+   a winner from timestamps, unexplained later assertions, or any prior `false`.
 
-These documented gaps satisfy the review's requirement to identify undefined
-semantics, but do not authorize implementation guesses. Milestone 2 can proceed
-on the unambiguous boundaries; dependent Entity cases await decisions. Core 1.0
-remains blocked, and the final review must resolve or explicitly bound these
-gaps before any readiness claim.
+The conformance relation array declares local evolution-step order, and its
+Boolean members are observations after each step. This makes valid
+Supersession A → B → C distinguishable from an unexplained currentness change
+without introducing a production history envelope or distributed ordering.
+Unresolved contradictions are rejected; automatic conflict resolution and
+implicit restoration remain outside scope.
+
+Both specification gaps are closed. Coverage and implementation are still
+pending, so Core 1.0 remains blocked. Milestone 2 can now assign portable expected
+results for the dependent cases as well as the other findings.
 
 ### Compatibility and synchronization
 
-The committed review changes explain existing financial obligations and the
-conformance-only input vocabulary. They preserve requirement IDs, portable error
-codes, operation IDs, vector IDs, and serialization version `0.1`. They add no
-domain, expression language, production envelope, registry, or lifecycle policy.
+The review clarifies existing financial obligations and the conformance-only
+input vocabulary, and adds `ENTITY-EVOLUTION-034` and `ENTITY-EVOLUTION-035`
+to resolve demonstrated ambiguities under `SPEC-FREEZE-001`. Existing requirement
+IDs, portable error codes, operation IDs, vector IDs, and serialization version
+`0.1` are preserved. No domain, expression language, production envelope,
+registry, or automatic restoration policy is added.
 Correcting accepted invalid inputs or rejected valid fixtures changes defective
 implementation behavior; it does not establish that current consumers observe
 identical behavior. Release documentation must describe those corrections when
-implemented. A future error-precedence or currentness-policy decision must be
-assessed separately under `SPEC-COMPATIBILITY-005`, `-012`, and `-014`.
+implemented. The two accepted decisions are normative specification additions,
+not editorial edits or version-neutral regression expectations under
+`SPEC-COMPATIBILITY-014`. They select behavior for previously unspecified
+combined failures and contradictory histories without replacing a previously
+prescribed result or reusing an error category. Existing 0.9.3 implementations
+may change primary errors or reject previously accepted input; do not advertise
+behavioral compatibility for those cases. Complete the affected tests,
+implementations, and documentation within this corrective release before its
+release gate, as required by `SPEC-FREEZE-002`.
 
-Traceability now records 290 COVERED, 35 PARTIAL, 2 BLOCKING SPEC GAP, and 82
-NOT DIRECTLY TESTABLE requirements out of 409; all 331 vectors and their existing
+At Milestone 1, traceability recorded 290 COVERED, 37 PARTIAL, 2 UNCOVERED, 0 BLOCKING SPEC GAP,
+and 82 NOT DIRECTLY TESTABLE requirements out of 411; all 331 vectors and their existing
 requirement mappings are retained. Local Workflow ownership remains a native
 test obligation even where isolated JSON vectors cannot express aliasing.
 
@@ -207,43 +225,108 @@ need no change for this contract review.
 
 ## Milestone 2 — Permanent failing regressions and positive controls
 
-- [ ] Reproduce every finding through public APIs before fixing it. Add
+- [x] Reproduce every finding through public APIs before fixing it. Add
       manifest-discovered vectors wherever the behavior is expressible by the
       existing conformance contract. Give new vectors stable IDs, requirement
       references, regression and mutation-sensitive metadata, and exact results.
-- [ ] Add public-API sequence tests that pass actual results into subsequent
+- [x] Add public-API sequence tests that pass actual results into subsequent
       operations: withdraw or supersede, record another Decision, then evaluate;
       evolve an Entity, retain history, then evaluate a later request. Static
       reconstructed-history vectors supplement these tests rather than proving
       that operations preserve each other's outputs.
-- [ ] Pair invalid lifecycle, effectiveness, evolution-evidence, history,
+- [x] Pair invalid lifecycle, effectiveness, evolution-evidence, history,
       validation, guard, and default-version cases with minimally different valid
       controls. In particular, prove that a nonempty unrelated evolution history
       succeeds and that a valid default version position is accepted.
-- [ ] Exercise immutable Workflow ownership in native public-API tests: mutate
+- [x] Cover `ENTITY-EVOLUTION-034` with Audit-only, correspondence-only,
+      combined-invalidity, and fully valid controls, including invalid supplied
+      Audit history, invalid Actor, duplicate Event, and invalid Relationship.
+      Do not introduce expectations for unrelated cross-domain error ordering.
+- [x] Cover `ENTITY-EVOLUTION-035` with conflicting observations within one
+      step, unexplained changes between steps, and observations inconsistent
+      with their evolution kind. Include repeated consistent observations,
+      valid Void and Supersession sequences, exact-key and different-key
+      controls, omitted/supplied expected currentness, and actual output reuse.
+      Verify atomic rejection and distinguish it from a known-currentness
+      precondition mismatch.
+- [x] Exercise immutable Workflow ownership in native public-API tests: mutate
       original nested objects and arrays after creation/import, and mutate
       returned definition/transition observations where APIs expose them. Verify
       the retained version, predicate, state, and revision are unchanged.
       These aliasing checks cannot be replaced by isolated JSON requests.
-- [ ] For Audit key preservation, construct genuine own `__proto__` members
+- [x] For Audit key preservation, construct genuine own `__proto__` members
       using parsed JSON or equivalent native maps. Do not accidentally test a
       JavaScript object literal that changes a prototype instead of containing
       the intended member. Preserve exact member presence and values.
-- [ ] Observe failure atomicity as well as error codes: Decisions, lifecycle
+- [x] Observe failure atomicity as well as error codes: Decisions, lifecycle
       evidence, Entity data and revisions, currentness, evolution relations,
       Workflow binding and facts, and Audit history must remain unchanged where
       the contract requires it. Assert that no partial result is returned.
-- [ ] Run new tests against the defective baseline on TypeScript, Python 3.12,
+- [x] Run new tests against the defective baseline on TypeScript, Python 3.12,
       Python 3.13, and Java. Distinguish assertion failures and portable errors
       from crashes, timeouts, and other infrastructure failures. A Java null
       crash is a defect to fix, not a valid conformance rejection.
-- [ ] Synchronize discovery counts, adapter integration expectations, language
+- [x] Synchronize discovery counts, adapter integration expectations, language
       coverage helpers, and traceability as vectors are added. Keep existing
       regressions and require all paired controls to execute.
 
 Completion: every reproduced mechanism has permanent failing coverage at the
 appropriate boundary, plus controls that prevent unrelated rejection from
 masquerading as the intended validation.
+
+### Milestone 2 outcome
+
+Added 201 manifest-discovered regression/control vectors: 40 Approvals,
+32 Workflow, 12 Audit, and 117 Entities. The manifest now contains 532 vectors.
+The new files are `readiness-regressions.json` in each affected conformance
+domain. All include stable IDs, requirement references, regression and
+mutation-sensitive tags, and plausible defect descriptions. The 65 successful
+controls are executed alongside the rejection cases, including controls that
+the defective baseline itself rejects.
+
+Native `readiness` tests in all three cores exercise actual lifecycle → record
+→ evaluate and Void → Correction outputs, nested object/array ownership through
+Workflow creation/import and exposed observations, declaration-array ownership,
+and failure atomicity. Adapter tests discover the new files through the
+manifest. Runner inventory assertions and Java coverage helpers are synchronized;
+Maven also discovers the Java native regressions. Traceability records 329
+vector-covered and 82 not-directly-vector-testable requirements out of 411.
+Coverage does not claim implementation success.
+
+The full expanded manifest was executed against the unfixed implementations:
+
+| Runtime | PASS | FAIL | UNSUPPORTED | INFRASTRUCTURE_ERROR |
+| --- | ---: | ---: | ---: | ---: |
+| TypeScript | 495 | 37 | 0 | 0 |
+| CPython 3.12 | 430 | 102 | 0 | 0 |
+| CPython 3.13 | 430 | 102 | 0 | 0 |
+| Java | 435 | 94 | 0 | 3 |
+
+All 331 pre-existing vectors still pass on every runtime. Java's three
+infrastructure outcomes are reproduced `NullPointerException` failures for
+explicit null guard fixtures, including the combined-invalid-state case; they
+are not counted as successful portable rejections. Duplicate-Audit controls use
+a distinct relationship target to isolate duplicate identity from self-targeting
+validation. Nonempty-history negative
+cases must be assessed together with their failing valid controls so a blanket
+history rejection cannot masquerade as currentness or duplicate-policy support.
+
+Builds, strict TypeScript, Java stdlib and Maven test compilation, toolchain
+verification, all 130 runner tests, developer-tool tests, documentation,
+traceability, architecture, license, and whitespace checks pass. Core and
+adapter suites execute with expected new regression failures on each required
+runtime. TypeScript's new native suite has 17 failures and 7 passes; Python and
+Java native runs expose lifecycle preservation, Workflow aliasing, and observed
+currentness failures. No financial implementation, runner dispatch, or existing
+regression expectation was changed to make these tests pass.
+
+Coverage percentage and mutation scoring are not claimed for this deliberately
+failing TDD baseline. Restore relevant green suites in the corrective milestones
+before running their coverage and mutation gates; the final release still
+requires the complete verification command. CoreDoc, public API signatures,
+JSDoc, Agentic semantics, AGENTS.md, and release history need no additional
+change for this test-only milestone; README status and conformance traceability
+now describe the failing expanded suite.
 
 ## Milestone 3 — Approval lifecycle and quorum corrections
 
@@ -285,6 +368,13 @@ quorum approval requires valid explicit effectiveness evidence.
 
 ## Milestone 4 — Entity evolution validation and history corrections
 
+- [ ] Implement `ENTITY-EVOLUTION-034` in TypeScript, Python, and Java: perform
+      intrinsic Audit validation before evolution correspondence and preserve
+      its primary error when both fail. Retain atomicity across both histories.
+- [ ] Implement `ENTITY-EVOLUTION-035` in all three cores at history import and
+      operation-result boundaries. Reject unresolved currentness contradictions
+      without requiring an expected-currentness precondition; accept consistent
+      effect-driven history changes. Keep this validation out of adapters.
 - [ ] Validate required Audit correspondence for correction, reversal, void,
       and supersession in Python and Java: evolution kind, source identity and
       revision, related identity and revision when applicable, relation identity,

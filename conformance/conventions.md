@@ -273,6 +273,47 @@ successful operation, and duplicate-rule tests need paired valid histories
 that prove parsing reaches the domain rule. This is a fixture translation
 boundary, not a required production envelope.
 
+The relation array declares local evolution-step order, matching the order in
+which these fixtures append successful relations. It is not storage enumeration
+or a distributed order. `sourceCurrent` and `relatedCurrent` record observations
+after their relation's step. Their key is the exact Entity type/identity and
+Revision within the supplied definition's identity scope, plus the relation's
+supersession scope when applicable. An absent supersession scope is distinct
+from every named scope. The first observation for a key establishes its observed
+value, subject to the relation kind's required effects. Further observations
+must agree unless a declared effect at that step explains the change.
+
+Void establishes a non-current source. Supersession establishes a non-current
+source and current successor in its named scope. Correction and Reversal do not
+by themselves change an already observed source's currentness; a related
+observation also cannot silently override established currentness without a
+declared effect. Incompatible source/related assertions about the same key
+within one step are contradictory. When an operation appends a relation, the
+resulting history must also satisfy these rules; it cannot return evidence that
+would be rejected when consumed by a subsequent operation.
+
+Under **ENTITY-EVOLUTION-035**, contradictory observations return
+`FINKORE_ENTITY_INVALID_MUTATION`, whether or not `expectedSourceCurrent` is
+present. A mismatch against consistent observed currentness instead returns
+`FINKORE_ENTITY_STATE_CONFLICT` under **ENTITY-EVOLUTION-025**. The adapter
+translates these observations; consistency and currentness are core behavior.
+No fixture introduces a timestamp-based winner or an implicit restoration
+operation. For example, Supersession A → B followed by B → C in one scope is
+consistent: B's earlier `relatedCurrent: true` and later `sourceCurrent: false`
+describe different steps with an explicit intervening effect. Separately, an
+unscoped Void of B followed by an unscoped Correction assertion that the same
+B Revision is current is contradictory: Correction supplies no effect
+establishing that change. Different Revisions or scopes are separate keys.
+
+Under **ENTITY-EVOLUTION-034**, supplied Audit history and candidate Event are
+validated using **AUDIT-ERROR-004** before evolution correspondence selects an
+error. An invalid timestamp plus wrong evolution kind returns
+`FINKORE_AUDIT_INVALID_EVENT`; a valid Audit Event with only the wrong evolution
+kind returns `FINKORE_ENTITY_INVALID_MUTATION`. Pair combined failures with
+Audit-only, correspondence-only, and fully valid controls, and verify both
+histories remain unchanged after failure. These examples do not impose
+precedence over unrelated Entity failures.
+
 For Entities, `entity.import` remains conformance-local after the
 Agentic review. It observes import identity mapping, current and
 historical Entity Revision identity, Entity Conflict Version separation, and

@@ -23,14 +23,16 @@
       "id": "workflow",
       "vectorFiles": [
         "./workflow/transitions.json",
-        "./workflow/versioning.json"
+        "./workflow/versioning.json",
+        "./workflow/readiness-regressions.json"
       ]
     },
     {
       "id": "audit",
       "vectorFiles": [
         "./audit/history.json",
-        "./audit/relationships.json"
+        "./audit/relationships.json",
+        "./audit/readiness-regressions.json"
       ]
     },
     {
@@ -38,7 +40,8 @@
       "vectorFiles": [
         "./approvals/decisions.json",
         "./approvals/validity.json",
-        "./approvals/composition.json"
+        "./approvals/composition.json",
+        "./approvals/readiness-regressions.json"
       ]
     },
     {
@@ -46,7 +49,8 @@
       "vectorFiles": [
         "./entities/behavior.json",
         "./entities/evolution.json",
-        "./entities/import.json"
+        "./entities/import.json",
+        "./entities/readiness-regressions.json"
       ]
     }
   ]

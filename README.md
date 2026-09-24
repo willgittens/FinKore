@@ -140,12 +140,14 @@ that every implementation preserves the same meaning.
 These scenarios are only a small illustration of FinKore Core 0.9.3:
 
 Across Money, Workflow, Audit, Approvals, Financial Entities, and shared
-conventions, the conformance suite maps vectors to 327 requirements. The 0.9.4
-review reclassifies 35 as partially covered and two as blocking specification
-gaps, leaving 290 covered. See [current traceability](./conformance/traceability.md).
+conventions, the current 532-vector suite maps vectors to 329 requirements.
+Core 0.9.4 Milestone 2 adds 201 regression/control cases and native sequence and
+ownership tests. These tests expose unfixed defects; coverage does not yet mean
+the implementations pass the expanded suite.
+See [current traceability](./conformance/traceability.md).
 
-The 331-vector manifest includes permanent Core 0.9.3 regressions. Entity
-import, Workflow guard, and Audit portability corrections pass the complete
+The historical 331-vector Core 0.9.3 manifest includes permanent regressions.
+Entity import, Workflow guard, and Audit portability corrections pass that
 manifest across TypeScript, Python 3.12/3.13, and Java, with no unsupported
 cases or infrastructure errors. Coverage, mutation, package, and clean-snapshot
 verification pass for the `core-0.9.3` corrective snapshot. See the completed

@@ -30,6 +30,15 @@ corrects [traceability](traceability.md); it adds no vectors or implementation
 fixes. Passing the existing manifest does not close the reopened requirements
 or establish Core 1.0 readiness.
 
+The accepted Entity decisions add `ENTITY-EVOLUTION-034` (Audit validation before
+evolution correspondence) and `ENTITY-EVOLUTION-035` (reject unresolved
+contradictory currentness history while accepting valid historical changes).
+Milestone 2 adds permanent regressions for both and the other review findings:
+the manifest now contains 532 vectors, including 201 new regression/control
+cases. Native API tests supplement it for operation sequences and ownership.
+The new tests intentionally expose the unfixed baseline; full conformance is
+not currently passing. Implementation corrections follow in Milestones 3–6.
+
 For FinKore Core 0.9 release candidate, [manifest.json](manifest.json) is the
 frozen release-candidate manifest and `finkoreConformance` remains `0.1`. This
 freeze does not permit manifest-listed behavior to change except through the

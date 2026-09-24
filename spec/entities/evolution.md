@@ -81,6 +81,61 @@ Core 0.9 release candidate does not require one serialized envelope or API
 shape. Conformance vectors may use fixture vocabulary to observe the same
 portable semantics.
 
+### Audit validation and correspondence
+
+Audit validity and evolution correspondence are separate checks. Audit validity
+uses the supplied Audit history and candidate Event, including Actor,
+duplicate-identity, and Relationship validation, in the order defined by
+`AUDIT-ERROR-004`. Correspondence then checks whether that valid evidence
+describes the requested evolution: affected Entity, kind, source and related
+Revision references, Relation identity, scope, and corresponding Relationship.
+
+Under `ENTITY-EVOLUTION-034`, an intrinsic Audit failure wins over a simultaneous
+correspondence failure. If Audit validation succeeds but correspondence fails,
+the error is `FINKORE_ENTITY_INVALID_MUTATION`. Missing required Audit evidence
+remains an Audit failure. This ordering does not prescribe precedence between
+Audit validation and unrelated Entity identity, eligibility, Business
+Validation, or currentness failures. Validation does not commit either history;
+all successful observations remain subject to atomicity.
+
+### Consistent currentness observations
+
+Currentness is evaluated for the exact Entity identity within its identity
+scope, Revision identity, and applicable supersession scope. Observations for
+different keys do not contradict or override each other. A scope-free observation
+does not silently become a statement about every named supersession scope.
+
+Historical currentness is an observation at an evolution step, not a timeless
+claim about the present. An ordered sequence can therefore contain both `true`
+and `false` for the same key. A change is explained when a declared evolution
+effect establishes it: Void nullifies its source, and Supersession makes its
+predecessor non-current and its successor current in the declared scope.
+Ordering alone does not authorize a change. A later Boolean assertion without
+an applicable declared effect cannot override an established observation.
+
+For `ENTITY-EVOLUTION-035`, an unresolved contradiction exists when observations
+assign incompatible currentness to the same key at the same evolution step, or
+when a change between steps cannot be explained by declared evolution effects
+and the supplied history's explicit ordering semantics. This includes an
+observation inconsistent with its own operation's required effect. An earlier
+current observation followed by a valid Void or Supersession is not a
+contradiction. Repeated consistent observations are not contradictions either.
+
+An implementation uses ordering explicitly established by the history contract;
+it does not invent precedence from timestamps, identifier spelling, or storage
+enumeration. It rejects unresolved contradictions instead of choosing a winning
+observation, discarding evidence, or returning success with arbitrary
+currentness. Contradictory history is invalid even when the request omits an
+expected-currentness precondition. Once currentness is established consistently,
+an expectation that disagrees with it remains a state conflict under
+`ENTITY-EVOLUTION-025`.
+
+Core does not add an automatic restoration policy, a permanent non-current-wins
+rule, or a universal last-record-wins rule. A composing domain may define
+additional evolution consequences explicitly; they cannot waive Core's
+identity, history-preservation, or atomicity requirements. Conformance uses the
+bounded history semantics in [its conventions](../../conformance/conventions.md).
+
 ## Requirements
 
 - **ENTITY-EVOLUTION-001** - Recording Entity evolution MUST NOT change the stable identity of any continuing Financial Entity.
@@ -116,6 +171,8 @@ portable semantics.
 - **ENTITY-EVOLUTION-031** - Audit evidence for Entity evolution MUST identify the evolution kind, source Entity identity, source Revision identity, related Entity or Revision identity when applicable, Evolution Relation identity, and supersession scope when applicable without exposing unrelated sensitive financial values.
 - **ENTITY-EVOLUTION-032** - Audit evidence for Entity evolution MUST include an Audit Relationship whose relationship type corresponds to the evolution kind and whose target satisfies the Audit Relationship requirements.
 - **ENTITY-EVOLUTION-033** - Entity evolution and required Audit evidence MUST be atomic for portable observation: an Audit failure MUST prevent the evolution relation, currentness change, and success result from becoming observable.
+- **ENTITY-EVOLUTION-034** - When validating required evolution Audit evidence, an implementation MUST apply Audit validation in the order defined by `AUDIT-ERROR-004` before selecting an evolution-correspondence error. A failing Audit validation MUST retain its primary Audit error even when correspondence also fails. If Audit validation succeeds but required evolution correspondence fails, the request MUST fail with `FINKORE_ENTITY_INVALID_MUTATION`. Either failure MUST NOT produce a partial evolution or Audit result.
+- **ENTITY-EVOLUTION-035** - An implementation MUST reject an evolution request whose supplied or resulting evolution history contains unresolved contradictory currentness observations as defined in the Portable Model with `FINKORE_ENTITY_INVALID_MUTATION`, without selecting an arbitrary winner or changing any supplied Entity, Revision, currentness, evolution-history, or Audit-history observation. It MUST validate supplied-history consistency independently of whether an expected-currentness precondition is supplied and before comparing that expectation with observed currentness. It MUST NOT reject a consistent history solely because declared evolution effects change currentness between historical steps.
 
 ## Invariants
 
@@ -153,27 +210,18 @@ Entity evolution reuses the existing Entity portable error catalog in
 [Entity Errors](errors.md). Core 0.9 release candidate does not introduce a dedicated evolution
 error code.
 
+## Core 0.9.4 correction note (non-normative)
+
+`ENTITY-EVOLUTION-034` and `ENTITY-EVOLUTION-035` resolve demonstrated ambiguities
+in combined-error priority and contradictory-history handling. They add
+observable requirements rather than editorial wording. Existing requirement
+IDs and error categories remain unchanged. These corrections may change errors
+or reject histories accepted by 0.9.3 implementations; 0.9.3 behavior is not a
+compatibility guarantee for the formerly unspecified cases. Coverage and
+implementation work remain pending in the [0.9.4 plan](../../docs/plans/plan-09.4.md).
+
 ## Open Questions
 
-- **0.9.4 blocking error-priority gap:** A generically valid Audit Event can
-  fail evolution correspondence (for example, valid metadata identifies a
-  different evolution kind). That invalid request falls under
-  `ENTITY-EVOLUTION-024`; missing or intrinsically invalid Audit evidence retains
-  the primary Audit error under the Portable Model and
-  `ENTITY-EVOLUTION-027`. The contract does not yet order intrinsic Audit
-  validation against correspondence validation when both fail. Do not infer
-  that order from the TypeScript implementation or assign a combined-failure
-  vector's expected primary code until this gap is resolved.
-- **0.9.4 blocking currentness gap:** `ENTITY-EVOLUTION-025` compares an
-  expectation with observed currentness, not with a constant or the expectation
-  itself. An unambiguous prior non-current observation for the same Entity,
-  Revision, and applicable scope cannot satisfy an expectation of currentness.
-  A different Entity, Revision, or unrelated supersession scope does not supply
-  that observation. The contract does not yet define how conflicting
-  currentness observations in supplied history are resolved. Do not introduce
-  a permanent non-current-wins rule, last-record-wins rule, or new rejection
-  policy implicitly. Unambiguous-history tests can proceed; tests requiring
-  conflict resolution remain blocked pending a specification decision.
 - Should a future specification version define a common serialized envelope for Evolution
   Relations?
 - Should a future specification version define branch-aware supersession graphs, or require

@@ -1,0 +1,1874 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "workflow.guard.valid-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates valid at the transition boundary.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "APPROVED",
+        "facts": {
+          "approvalsSatisfied": true
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "APPROVED"
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.create.valid-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates valid at the creation boundary.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "DRAFT"
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.guard.empty-fact-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates empty-fact at the transition boundary.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "APPROVED",
+        "facts": {
+          "approvalsSatisfied": true
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.create.empty-fact-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates empty-fact at the creation boundary.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.guard.null-guard-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates null-guard at the transition boundary.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": null
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "APPROVED",
+        "facts": {
+          "approvalsSatisfied": true
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.create.null-guard-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates null-guard at the creation boundary.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": null
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.guard.null-guards-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates null-guards at the transition boundary.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guards": null
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "APPROVED",
+        "facts": {
+          "approvalsSatisfied": true
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.create.null-guards-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates null-guards at the creation boundary.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guards": null
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.guard.empty-competing-list-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates empty-competing-list at the transition boundary.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              },
+              "guards": []
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "APPROVED",
+        "facts": {
+          "approvalsSatisfied": true
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "APPROVED"
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.create.empty-competing-list-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates empty-competing-list at the creation boundary.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              },
+              "guards": []
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "DRAFT"
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.guard.nonempty-competing-list-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates nonempty-competing-list at the transition boundary.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              },
+              "guards": [
+                {
+                  "fact": "approvalsSatisfied",
+                  "equals": true
+                }
+              ]
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "APPROVED",
+        "facts": {
+          "approvalsSatisfied": true
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.create.nonempty-competing-list-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates nonempty-competing-list at the creation boundary.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              },
+              "guards": [
+                {
+                  "fact": "approvalsSatisfied",
+                  "equals": true
+                }
+              ]
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.guard.null-equals-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates null-equals at the transition boundary.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": null
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "APPROVED",
+        "facts": {
+          "approvalsSatisfied": null
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "APPROVED"
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.create.null-equals-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates null-equals at the creation boundary.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": null
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "DRAFT"
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.guard.missing-equals-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates missing-equals at the transition boundary.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied"
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "APPROVED",
+        "facts": {
+          "approvalsSatisfied": true
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.create.missing-equals-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates missing-equals at the creation boundary.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied"
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.guard.numeric-fact-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates numeric-fact at the transition boundary.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": 1,
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "APPROVED",
+        "facts": {
+          "approvalsSatisfied": true
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.create.numeric-fact-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates numeric-fact at the creation boundary.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": 1,
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.guard.null-fact-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates null-fact at the transition boundary.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": null,
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "APPROVED",
+        "facts": {
+          "approvalsSatisfied": true
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.create.null-fact-regression-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-GUARD-001",
+        "WORKFLOW-GUARD-002",
+        "WORKFLOW-ERROR-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Validates null-fact at the creation boundary.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": null,
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.guard.definition-error-before-state-001",
+      "spec": "workflow/guards",
+      "requirements": [
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "Malformed guard precedes invalid instance state.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": null
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "UNKNOWN"
+        },
+        "target": "APPROVED",
+        "facts": {
+          "approvalsSatisfied": true
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "guard-definition-validation-skipped",
+        "definition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.version.sequence-one-001",
+      "spec": "workflow/versioning",
+      "requirements": [
+        "WORKFLOW-VERSION-005",
+        "WORKFLOW-VERSION-006"
+      ],
+      "description": "Distinguishes DEFAULT selector from version position (one).",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "1",
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ],
+          "versionSequence": "DEFAULT"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "invoice-approval",
+            "definitionVersionIdentity": "1"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "sequence-selector-parsed-as-position"
+      ]
+    },
+    {
+      "id": "workflow.version.sequence-multi-digit-001",
+      "spec": "workflow/versioning",
+      "requirements": [
+        "WORKFLOW-VERSION-005",
+        "WORKFLOW-VERSION-006"
+      ],
+      "description": "Distinguishes DEFAULT selector from version position (multi-digit).",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "12",
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ],
+          "versionSequence": "DEFAULT"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "invoice-approval",
+            "definitionVersionIdentity": "12"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "sequence-selector-parsed-as-position"
+      ]
+    },
+    {
+      "id": "workflow.version.sequence-zero-001",
+      "spec": "workflow/versioning",
+      "requirements": [
+        "WORKFLOW-VERSION-005",
+        "WORKFLOW-VERSION-006"
+      ],
+      "description": "Distinguishes DEFAULT selector from version position (zero).",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "0",
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ],
+          "versionSequence": "DEFAULT"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "sequence-selector-parsed-as-position"
+      ]
+    },
+    {
+      "id": "workflow.version.sequence-leading-zero-001",
+      "spec": "workflow/versioning",
+      "requirements": [
+        "WORKFLOW-VERSION-005",
+        "WORKFLOW-VERSION-006"
+      ],
+      "description": "Distinguishes DEFAULT selector from version position (leading-zero).",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "01",
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ],
+          "versionSequence": "DEFAULT"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "sequence-selector-parsed-as-position"
+      ]
+    },
+    {
+      "id": "workflow.version.sequence-signed-001",
+      "spec": "workflow/versioning",
+      "requirements": [
+        "WORKFLOW-VERSION-005",
+        "WORKFLOW-VERSION-006"
+      ],
+      "description": "Distinguishes DEFAULT selector from version position (signed).",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "+1",
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ],
+          "versionSequence": "DEFAULT"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "sequence-selector-parsed-as-position"
+      ]
+    },
+    {
+      "id": "workflow.version.sequence-fraction-001",
+      "spec": "workflow/versioning",
+      "requirements": [
+        "WORKFLOW-VERSION-005",
+        "WORKFLOW-VERSION-006"
+      ],
+      "description": "Distinguishes DEFAULT selector from version position (fraction).",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "1.0",
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ],
+          "versionSequence": "DEFAULT"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "sequence-selector-parsed-as-position"
+      ]
+    },
+    {
+      "id": "workflow.version.sequence-empty-001",
+      "spec": "workflow/versioning",
+      "requirements": [
+        "WORKFLOW-VERSION-005",
+        "WORKFLOW-VERSION-006"
+      ],
+      "description": "Distinguishes DEFAULT selector from version position (empty).",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "",
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ],
+          "versionSequence": "DEFAULT"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "sequence-selector-parsed-as-position"
+      ]
+    },
+    {
+      "id": "workflow.version.sequence-unicode-001",
+      "spec": "workflow/versioning",
+      "requirements": [
+        "WORKFLOW-VERSION-005",
+        "WORKFLOW-VERSION-006"
+      ],
+      "description": "Distinguishes DEFAULT selector from version position (unicode).",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "١",
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ],
+          "versionSequence": "DEFAULT"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "sequence-selector-parsed-as-position"
+      ]
+    },
+    {
+      "id": "workflow.version.sequence-null-selector-001",
+      "spec": "workflow/versioning",
+      "requirements": [
+        "WORKFLOW-VERSION-005",
+        "WORKFLOW-VERSION-006"
+      ],
+      "description": "Distinguishes DEFAULT selector from version position (null-selector).",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "1",
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ],
+          "versionSequence": null
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "sequence-selector-parsed-as-position"
+      ]
+    },
+    {
+      "id": "workflow.version.sequence-numeric-selector-001",
+      "spec": "workflow/versioning",
+      "requirements": [
+        "WORKFLOW-VERSION-005",
+        "WORKFLOW-VERSION-006"
+      ],
+      "description": "Distinguishes DEFAULT selector from version position (numeric-selector).",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "1",
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ],
+          "versionSequence": "1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "sequence-selector-parsed-as-position"
+      ]
+    },
+    {
+      "id": "workflow.version.sequence-opaque-001",
+      "spec": "workflow/versioning",
+      "requirements": [
+        "WORKFLOW-VERSION-005",
+        "WORKFLOW-VERSION-006"
+      ],
+      "description": "Distinguishes DEFAULT selector from version position (opaque).",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "release-blue",
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "invoice-approval",
+            "definitionVersionIdentity": "release-blue"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "sequence-selector-parsed-as-position"
+      ]
+    }
+  ]
+}

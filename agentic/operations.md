@@ -73,10 +73,10 @@ current gaps are recorded in [traceability](../conformance/traceability.md).
 | `finkore.entity.create` | Entities | `yes` | `unspecified` | `yes` | `may` | `none` | `ENTITY-IDENTITY-001`, `-003`, `ENTITY-LIFECYCLE-001`, `-002`, `-006`, `ENTITY-VALIDATION-001` |
 | `finkore.entity.mutate` | Entities | `yes` | `unspecified` | `yes` | `may` | may invalidate approval-relevant facts | `ENTITY-MUTABILITY-001`, `-002`, `-004`, `-006`, `-007`, `ENTITY-VALIDATION-002`–`-006`, `ENTITY-ERROR-001` |
 | `finkore.entity.transition` | Entities | `yes` | `unspecified` | `yes` | `may` | may be governed by composing-domain approval policy | `ENTITY-LIFECYCLE-003`, `ENTITY-IDENTITY-002`, `ENTITY-ERROR-001`, `-004` |
-| `finkore.entity.evolution.correct` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`–`-010`, `-015`, `-022`–`-027`, `-029`–`-033`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
-| `finkore.entity.evolution.reverse` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`, `-011`–`-015`, `-022`–`-027`, `-029`–`-033`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
-| `finkore.entity.evolution.void` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-016`–`-018`, `-022`–`-027`, `-029`–`-033`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
-| `finkore.entity.evolution.supersede` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-019`–`-027`, `-029`–`-033`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
+| `finkore.entity.evolution.correct` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`–`-010`, `-015`, `-022`–`-027`, `-029`–`-035`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
+| `finkore.entity.evolution.reverse` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`, `-011`–`-015`, `-022`–`-027`, `-029`–`-035`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
+| `finkore.entity.evolution.void` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-016`–`-018`, `-022`–`-027`, `-029`–`-035`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
+| `finkore.entity.evolution.supersede` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-019`–`-027`, `-029`–`-035`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
 
 `Unspecified` is deliberate. A generic Workflow may not be attached to a
 Financial Entity, an Entity may carry non-financial or composing-domain facts,
@@ -492,9 +492,19 @@ policy (`ENTITY-EVOLUTION-025`). Required Audit evidence must satisfy both
 Audit validation and evolution correspondence (`ENTITY-EVOLUTION-027`, `-029`,
 `-031`, and `-032`). Failure preserves Entity observations, evolution history,
 currentness, and Audit history together (`ENTITY-EVOLUTION-023` and `-033`).
-The [Entity evolution open questions](../spec/entities/evolution.md#open-questions)
-record unresolved combined-failure precedence and conflicting-history
-currentness policy. This metadata does not choose either policy.
+Intrinsic Audit validation precedes evolution correspondence under
+`ENTITY-EVOLUTION-034`. If both fail, preserve Audit's primary error; if only
+correspondence fails, return `FINKORE_ENTITY_INVALID_MUTATION`. This specifies
+validation priority, not permission to commit Audit history early.
+
+Under `ENTITY-EVOLUTION-035`, unresolved contradictory currentness history
+returns `FINKORE_ENTITY_INVALID_MUTATION`, independently of an expected-currentness
+precondition. A mismatch against consistent observed currentness remains
+`FINKORE_ENTITY_STATE_CONFLICT`. Valid historical changes explained by declared
+evolution effects are accepted; neither a permanent non-current-wins rule nor
+an arbitrary last-record-wins rule is introduced. The
+[Entity evolution specification](../spec/entities/evolution.md#consistent-currentness-observations)
+defines the exact Entity/Revision/scope and historical-step distinctions.
 
 Conformance evolution history arrays are translated according to the
 [fixture conventions](../conformance/conventions.md). Native production

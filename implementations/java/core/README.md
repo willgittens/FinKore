@@ -2,13 +2,14 @@
 
 This package is the Java implementation track for FinKore Core 0.9 release candidate. It is
 derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`, not from
-TypeScript or Python financial implementation code. The current 331-vector
-manifest includes permanent Core 0.9.3 regressions. Workflow null handling and
-recursive guard comparison, actor metadata presence, and Audit value comparison
-now pass the complete 331-vector manifest. Coverage, critical mutation probes,
-isolated package consumers, and clean-snapshot verification pass. See the
-completed
-[Core 0.9.3 plan](../../../docs/plans/plan-09.3.md).
+TypeScript or Python financial implementation code. The historical Core 0.9.3 snapshot passes its 331-vector manifest and release
+checks; see the [0.9.3 plan](../../../docs/plans/plan-09.3.md).
+
+The current manifest contains 532 vectors. Core 0.9.4 Milestone 2 adds 201
+regression/control cases and native sequence/ownership tests that expose
+unfixed defects. The expanded suite is intentionally failing during this TDD
+stage; current full conformance and mutation-gate completion are not claimed.
+Corrections are tracked in the [0.9.4 plan](../../../docs/plans/plan-09.4.md).
 
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to a Maven repository. The Maven
