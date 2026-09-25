@@ -2,14 +2,17 @@
 
 ## Status
 
-The [Core 0.9.4 corrective prerequisite](plan-09.4.md) is complete. Approval,
-Entity evolution, Workflow, and Audit findings have permanent regressions and
-mutation protection, and the expanded release gate passes from a clean checkout.
-The local annotated `core-0.9.4` tag identifies the corrective snapshot and
-preserves the earlier fixes. Stable promotion may now proceed through the
-milestones below; corrective release completion does not itself declare 1.0.
-Remote tag availability could not be verified because GitHub authentication
-was unavailable. Remote publication and package publication remain separate.
+Stable promotion is blocked by the additional Money, Workflow, Approval, Audit,
+and Entity boundary findings in the [Core 0.9.5 corrective plan](plan-09.5.md).
+The completed [Core 0.9.4 release](plan-09.4.md) retains its corrections and
+passing verification results, but a subsequent review reproduced defects beyond
+its existing coverage. Core 0.9.5 must resolve those findings and pass its expanded
+release gate before stable promotion resumes.
+
+The local annotated `core-0.9.4` tag remains the latest corrective release.
+Remote tag availability could not be verified during that release because
+GitHub authentication was unavailable. Remote publication and package publication
+remain separate from local verification and completion.
 
 The stable 1.0 milestones below remain uncompleted. This document remains
 non-normative and does not declare Core 1.0 stable. In this filename, `10`
@@ -59,7 +62,8 @@ Promote the reviewed 0.9 candidate without adding new behavior.
 ### Tasks
 
 - [ ] Confirm that every 0.9 release blocker is resolved, including every
-      finding and release gate in the [0.9.4 corrective plan](plan-09.4.md).
+      finding and release gate in the [0.9.5 corrective plan](plan-09.5.md),
+      while preserving all earlier corrective releases' protections.
 - [ ] Change CoreDoc status and version to FinKore Core 1.0.
 - [ ] Change specification status from experimental or release candidate to
       stable 1.0.

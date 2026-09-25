@@ -345,8 +345,11 @@ baseline intended to become Core 1.0.
 TypeScript, Python, and Java implement the following domains and pass the
 complete current manifest. The [Core 0.9.4 corrective plan](./docs/plans/plan-09.4.md)
 closes the reviewed Approval, Entity, Workflow, and Audit defects with permanent
-regression and mutation protection. [Core 1.0 promotion](./docs/plans/plan-10.md)
-remains a separate, uncompleted process.
+regression and mutation protection. A subsequent readiness review found further
+public API and cross-domain boundary defects tracked in the
+[Core 0.9.5 corrective plan](./docs/plans/plan-09.5.md).
+[Core 1.0 promotion](./docs/plans/plan-10.md) is blocked until that corrective
+release gate is satisfied.
 
 - Money
 - Workflow

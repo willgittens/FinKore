@@ -665,15 +665,21 @@ references are unchanged.
 
 ## Readiness
 
-**CORE 0.9.4 CORRECTIVE GATE PASSES; CORE 1.0 PROMOTION REMAINS SEPARATE**
+**CORE 0.9.4 GATE PASSED; CORE 1.0 BLOCKED BY THE 0.9.5 REVIEW FINDINGS**
 
 The manifest, schema, operation catalog, exact comparison rules, normalized
 errors, deterministic context, and valid requirement references are sufficient
 for the current runner. TypeScript, Python 3.12/3.13, and Java pass the expanded
 manifest and corrective release verification, including the two Entity
-obligations and native sequence and ownership regressions. The separate
-[Core 1.0 plan](../docs/plans/plan-10.md) still requires stable baseline,
-compatibility, artifact, and release review before a 1.0 declaration.
+obligations and native sequence and ownership regressions. The subsequent
+[0.9.5 review](../docs/plans/plan-09.5.md) reproduced additional serialization,
+binding, association, native value ownership, and Entity composition/validation
+defects despite those passing checks. Existing mappings record exercised
+requirements, not complete coverage of the newly identified boundaries.
+Milestone 1 of that plan will reassess the affected rows and contract gaps;
+planning alone adds no vectors or implementation fixes. The separate
+[Core 1.0 plan](../docs/plans/plan-10.md) remains blocked on those corrections
+and still requires its stable baseline, compatibility, artifact, and release work.
 
 ## Not Directly Testable Review
 
