@@ -20,28 +20,23 @@ The manifest and vector-file version fields describe syntax compatibility, not
 FinKore release numbers. Release scope is determined by the manifest contents,
 referenced requirement IDs, and traceability status.
 
-The `core-0.9.3` tag identifies the corrective snapshot of this manifest.
-Its regression vectors exercise the existing `0.9-rc` behavioral baseline;
-the conformance syntax version remains `0.1`.
+The local `core-0.9.4` tag identifies the corrective snapshot of this manifest.
+The Core label remains `0.9-rc` and conformance syntax remains `0.1`.
 
-The [Core 0.9.4 plan](../docs/plans/plan-09.4.md) reopens demonstrated boundary
-gaps after that snapshot. Milestone 1 clarifies contracts and fixtures and
-corrects [traceability](traceability.md); it adds no vectors or implementation
-fixes. Passing the existing manifest does not close the reopened requirements
-or establish Core 1.0 readiness.
+The [Core 0.9.4 plan](../docs/plans/plan-09.4.md) corrects the demonstrated
+Approval, Entity, Workflow, and Audit defects. Its accepted Entity decisions
+add `ENTITY-EVOLUTION-034` (Audit validation before evolution correspondence)
+and `ENTITY-EVOLUTION-035` (reject unresolved contradictory currentness history
+while accepting valid historical changes), under the release-candidate
+correction policy.
 
-The accepted Entity decisions add `ENTITY-EVOLUTION-034` (Audit validation before
-evolution correspondence) and `ENTITY-EVOLUTION-035` (reject unresolved
-contradictory currentness history while accepting valid historical changes).
-Milestone 2 added 201 permanent regression/control cases for both and the other
-review findings. Milestone 4 adds four cases separating contradictory same-step
-assertions, incompatible Supersession effects, and a consistent Correction.
-Milestone 6 adds six Audit null/array member regression/control cases.
-The manifest now contains 542 vectors. Native API tests supplement it for
-operation sequences and ownership. Milestones 3–6 restore Approval,
-Entity, Workflow, and Audit conformance across all required runtimes. TypeScript,
-Python 3.12/3.13, and Java pass all 542 vectors with no unsupported or
-infrastructure outcomes. Release-wide verification remains open.
+TypeScript, Python 3.12/3.13, and Java pass all 542 manifest vectors with zero
+failed, unsupported, or infrastructure outcomes. Native API sequence and
+ownership tests supplement portable vectors, and complete release verification
+includes coverage, mutation protection, and isolated package consumers.
+[Traceability](traceability.md) records the exercised requirements and declared
+limits; passing this finite manifest does not establish exhaustive boundary
+coverage or complete the separate Core 1.0 promotion process.
 
 For FinKore Core 0.9 release candidate, [manifest.json](manifest.json) is the
 frozen release-candidate manifest and `finkoreConformance` remains `0.1`. This

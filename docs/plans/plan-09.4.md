@@ -2,19 +2,20 @@
 
 ## Status
 
-Milestones 1–7 are complete. Approval, Entity, Workflow, and Audit corrections,
+Milestones 1–8 are complete. Approval, Entity, Workflow, and Audit corrections,
 permanent regressions, and mutation protection pass complete verification from
 a clean candidate checkout. All 542 vectors pass on TypeScript, Python
 3.12/3.13, and Java, with zero failed, unsupported, or infrastructure outcomes.
-The four Audit cycle-validation mutants are now behavioral kills. Milestone 8
-and release promotion remain open; two moderate Stryker dependency advisories
-remain a development-tool dependency-review follow-up.
-The review of `f39bbe1`
-(`core-0.9.3`) reproduced the failures below after the complete existing
-verification command passed. The earlier corrective releases remain historical
-snapshots; their passing gates do not close these newly demonstrated defects.
-[Core 1.0 promotion](plan-10.md) is blocked until this corrective release gate
-is satisfied.
+The four Audit cycle-validation mutants remain behavioral kills. The root
+workspace dependency correction resolves the two moderate Stryker advisories;
+locked installation and `npm audit` report zero vulnerabilities.
+
+The local annotated `core-0.9.4` tag identifies the verified corrective release.
+Existing tags are preserved. Remote availability could not be verified because
+GitHub authentication was unavailable; local release completion does not imply
+remote publication. The defects reproduced against `f39bbe1` (`core-0.9.3`)
+are closed by this plan. [Core 1.0 promotion](plan-10.md) remains a separate,
+uncompleted process; its 0.9.4 corrective prerequisite is now satisfied.
 
 Release type: Corrective release candidate.
 
@@ -820,7 +821,7 @@ with no partial, uncovered, deferred, or blocking-gap entries. Native ownership
 and sequence tests supplement the finite vectors; passing them is not exhaustive
 boundary coverage or authorization to promote 1.0. Locked installation reports
 two moderate transitive development-tool advisories (`typed-rest-client`/`qs`
-under Stryker); those remain a dependency-review follow-up.
+under Stryker); that follow-up was resolved in Milestone 8 below.
 
 Completion review: unit/native/tool and mutation tests and affected README/status
 documentation were updated. No production API or financial behavior changed, so
@@ -830,32 +831,74 @@ promotion remain open.
 
 ## Milestone 8 — Documentation and corrective release
 
-- [ ] Review unit/conformance/mutation tests, public JSDoc and other API
+- [x] Review unit/conformance/mutation tests, public JSDoc and other API
       documentation, examples, implementation READMEs, root README, `/spec`,
       `/conformance`, `/agentic`, CoreDoc, and `AGENTS.md`. Update every affected
       artifact; keep unrelated normative behavior and architecture unchanged.
-- [ ] Describe implemented behavior, passing conformance, unsupported behavior,
+- [x] Describe implemented behavior, passing conformance, unsupported behavior,
       and deferred semantics accurately. Retain the distinction between a
       passing finite manifest and exhaustive financial boundary coverage.
-- [ ] Keep Core release identity, implementation package versions, and
+- [x] Keep Core release identity, implementation package versions, and
       conformance syntax versions distinct. Review Core constants, package
       metadata, report labels, and consumer assertions for the final corrective
       baseline without prematurely promoting any of them to stable 1.0.
-- [ ] After verification, add a concise 0.9.4 summary to the single
+- [x] After verification, add a concise 0.9.4 summary to the single
       [release notes](../releases/README.md). Keep detailed test, mutation, and
       development history in the existing tools and Git; add no separate audit,
       closure, checksum, or provenance reports and no GitHub Actions.
-- [ ] Preserve repository-reference package publication status unless the
+- [x] Preserve repository-reference package publication status unless the
       maintainer changes that decision. Creating this plan does not publish
       packages, create tags, or authorize remote actions.
-- [ ] Through the maintainer's release process, verify the intended commit and
+- [x] Through the maintainer's release process, verify the intended commit and
       existing tag state, then create the annotated `core-0.9.4` tag only after
       all gates pass. Preserve existing tags and distinguish local release
       completion from remote publication and authentication availability.
-- [ ] Verify the final release documentation snapshot from a clean checkout.
+- [x] Verify the final release documentation snapshot from a clean checkout.
       Mark this plan complete and update [Core 1.0 prerequisites](plan-10.md)
       only when every finding and the release gate below are closed. Stable
       1.0 promotion remains a separate task.
+
+Milestone 8 completed on 2026-09-25. Current project, implementation, runner,
+specification-status, conformance, and Agentic documentation now describe the
+0.9.4 corrective snapshot. The release note is kept in the single release
+history, and the 1.0 plan records the closed corrective prerequisite without
+marking any stable-promotion milestone complete.
+
+Core constants, compatibility metadata, runner labels, and isolated consumer
+assertions retain `0.9-rc`; implementation package versions retain `0.1.0`, and
+conformance syntax retains `0.1`. The Entity correction note accurately describes
+`ENTITY-EVOLUTION-034` and `ENTITY-EVOLUTION-035` as observable ambiguity
+corrections, not merely editorial changes. Current claims distinguish passing
+the finite manifest from exhaustive boundary coverage and retain deferred scope.
+
+The root workspace now mirrors the runner's `qs` override and locks 6.16.0.
+No other dependency version changed. Clean `npm ci`, fresh minimal-workspace
+resolution, and `npm audit` confirm the patched dependency and zero advisories.
+With npm 11.12.1, the non-gating `npm ls qs` diagnostic still flags the upstream
+exact pin despite selecting the patched version; this reproducible tooling
+limitation is documented in [Developer Tools](../tools/README.md).
+
+Complete `npm run verify` passes from a clean isolated checkout with the locked
+dependency correction: builds, strict typing, unit/adapter tests, all four
+542-vector runs, coverage, package consumers, repository checks, both full
+Stryker suites, 133 critical conformance probes, and 13 native public-API probes.
+Every Stryker mutant outcome matches the reviewed Milestone 7 result, including
+the four killed Audit cycle-check removals. The final documentation-only changes
+were checked separately from a clean clone; its executable files and lockfiles
+match the fully verified candidate.
+
+The release commit and annotated local `core-0.9.4` tag identify the final
+verified tree. Prior tags are unchanged. Remote tag lookup required unavailable
+GitHub authentication; no remote publication or package publishing is part of
+this local completion.
+
+Completion review: existing unit, conformance, native, and mutation tests,
+public JSDoc/API documentation, and examples already describe the corrected
+behavior and required no further changes in this milestone. Affected READMEs,
+non-normative specification/conformance/Agentic status text, release notes, and
+plans are synchronized. CoreDoc obligations, normative semantics, requirement
+and operation IDs, portable errors, architecture, and AGENTS.md remain current
+without changes. No separate closure report or GitHub Action was added.
 
 ## Execution dependencies
 
@@ -874,27 +917,27 @@ than being hidden by the previous release's passing measurements.
 
 Core 0.9.4 is complete only when:
 
-- [ ] Every finding above, including each lettered failure mechanism, has a
+- [x] Every finding above, including each lettered failure mechanism, has a
       resolved contract, permanent regression, and appropriate valid control.
-- [ ] Approval operations preserve lifecycle evidence, perform their declared
+- [x] Approval operations preserve lifecycle evidence, perform their declared
       effects, reject invalid targets, and count only valid effective votes.
-- [ ] Entity evolution enforces business validation, consumes existing history,
+- [x] Entity evolution enforces business validation, consumes existing history,
       compares expectations with observed currentness, and requires matching
       Audit evidence without partial state.
-- [ ] Workflow definitions retain immutable semantics under caller mutation,
+- [x] Workflow definitions retain immutable semantics under caller mutation,
       and guard/default-sequence fixtures agree across implementations without
       process crashes.
-- [ ] Audit preserves supported JSON keys and values, exact equality semantics,
+- [x] Audit preserves supported JSON keys and values, exact equality semantics,
       defensive observations, and committed history.
-- [ ] Sequence and aliasing tests participate in verification, and invalid cases
+- [x] Sequence and aliasing tests participate in verification, and invalid cases
       cannot pass merely because an earlier unrelated check rejects all inputs.
-- [ ] Every manifest vector passes on TypeScript, Python 3.12, Python 3.13,
+- [x] Every manifest vector passes on TypeScript, Python 3.12, Python 3.13,
       and Java with zero failed, unsupported, or infrastructure outcomes.
-- [ ] Coverage, mutation, package-consumer, repository, and clean-checkout
+- [x] Coverage, mutation, package-consumer, repository, and clean-checkout
       verification gates pass with no surviving critical financial mutant.
-- [ ] Traceability and documentation reflect the actual corrected behavior,
+- [x] Traceability and documentation reflect the actual corrected behavior,
       with no uncovered mandatory boundary or blocking specification gap.
-- [ ] The concise release note and corrective tag identify the verified
+- [x] The concise release note and corrective tag identify the verified
       snapshot, preserving publication choices and prior release identities.
-- [ ] No new domain, invented financial policy, architectural bypass, or
+- [x] No new domain, invented financial policy, architectural bypass, or
       premature Core 1.0 stability claim was introduced.

@@ -2,13 +2,14 @@
 
 ## Status
 
-Stable promotion is blocked by the additional Approval, Entity evolution,
-Workflow, and Audit defects tracked in the [Core 0.9.4 corrective plan](plan-09.4.md).
-The locally tagged [Core 0.9.3 release](plan-09.3.md) passes its existing
-verification gate and retains the earlier corrections, but the subsequent
-review demonstrates missing behavioral coverage. Core 0.9.4 must close those
-findings and pass its expanded release gate before 1.0 promotion resumes.
-Remote publication of the 0.9.3 snapshot remains pending GitHub authentication.
+The [Core 0.9.4 corrective prerequisite](plan-09.4.md) is complete. Approval,
+Entity evolution, Workflow, and Audit findings have permanent regressions and
+mutation protection, and the expanded release gate passes from a clean checkout.
+The local annotated `core-0.9.4` tag identifies the corrective snapshot and
+preserves the earlier fixes. Stable promotion may now proceed through the
+milestones below; corrective release completion does not itself declare 1.0.
+Remote tag availability could not be verified because GitHub authentication
+was unavailable. Remote publication and package publication remain separate.
 
 The stable 1.0 milestones below remain uncompleted. This document remains
 non-normative and does not declare Core 1.0 stable. In this filename, `10`

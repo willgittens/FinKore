@@ -137,27 +137,20 @@ They should not be accidental side effects of a framework or whichever service i
 FinKore specifies each outcome, provides portable tests for it, and verifies
 that every implementation preserves the same meaning.
 
-These scenarios are only a small illustration of FinKore Core 0.9.3:
+These scenarios are only a small illustration of FinKore Core 0.9.4.
 
 Across Money, Workflow, Audit, Approvals, Financial Entities, and shared
 conventions, the current 542-vector suite maps vectors to 329 requirements.
-Core 0.9.4 Milestone 2 adds 201 regression/control cases and native sequence and
-ownership tests. Milestone 3 restores all 112 Approval vectors across TypeScript,
-Python 3.12/3.13, and Java. Milestone 4 restores all 157 Entity vectors on the
-same runtimes. Milestone 5 restores all 83 Workflow vectors and native ownership
-regressions. Milestone 6 fixes Audit JSON member preservation and adds six
-null/array controls. All 542 vectors now pass on every required runtime.
-Milestone 7 passes complete clean-checkout verification, including native
-mutation probes and classified Audit cycle regressions. Release promotion
-remains open in Milestone 8.
-See [current traceability](./conformance/traceability.md).
+Every vector passes on TypeScript, Python 3.12/3.13, and Java, with zero failed,
+unsupported, or infrastructure outcomes. Native tests and mutation probes also
+protect lifecycle sequences, Entity history reuse, Workflow ownership, and
+Audit JSON preservation. Complete clean-checkout verification covers builds,
+coverage, mutation protection, and isolated package consumers.
 
-The historical 331-vector Core 0.9.3 manifest includes permanent regressions.
-Entity import, Workflow guard, and Audit portability corrections pass that
-manifest across TypeScript, Python 3.12/3.13, and Java, with no unsupported
-cases or infrastructure errors. Coverage, mutation, package, and clean-snapshot
-verification pass for the `core-0.9.3` corrective snapshot. See the completed
-[Core 0.9.3 plan](./docs/plans/plan-09.3.md).
+Passing this finite manifest does not establish exhaustive boundary coverage
+or complete the separate Core 1.0 promotion process. See
+[current traceability](./conformance/traceability.md) and the
+[Core 0.9.4 plan](./docs/plans/plan-09.4.md).
 
 ---
 
@@ -215,7 +208,7 @@ This makes financial behavior portable across languages and more resilient to ch
 
 ## What FinKore Core covers
 
-The current Core 0.9.3 release-candidate snapshot defines:
+The current Core 0.9.4 release-candidate snapshot defines:
 
 | Domain | What becomes explicit |
 | --- | --- |
@@ -346,14 +339,14 @@ See [Developer Tools](./docs/tools/README.md) for details.
 
 ## Project status
 
-FinKore Core 0.9.3 is the corrective release candidate for the frozen Core 0.9 baseline intended to become Core 1.0.
+FinKore Core 0.9.4 is the corrective release candidate for the frozen Core 0.9
+baseline intended to become Core 1.0.
 
 TypeScript, Python, and Java implement the following domains and pass the
-complete current manifest. Core 0.9.3 verification passes, but subsequent
-review found additional financial and portability defects. The
-[Core 0.9.4 corrective plan](./docs/plans/plan-09.4.md) tracks the required fixes
-and expanded regression coverage. [Core 1.0 promotion](./docs/plans/plan-10.md)
-is blocked until that corrective release gate is satisfied.
+complete current manifest. The [Core 0.9.4 corrective plan](./docs/plans/plan-09.4.md)
+closes the reviewed Approval, Entity, Workflow, and Audit defects with permanent
+regression and mutation protection. [Core 1.0 promotion](./docs/plans/plan-10.md)
+remains a separate, uncompleted process.
 
 - Money
 - Workflow
@@ -378,13 +371,16 @@ The release identifiers serve different purposes:
 
 | Identifier | Current value | Meaning |
 | --- | --- | --- |
-| Corrective snapshot tag | `core-0.9.3` | Exact repository state containing the corrections. |
+| Corrective snapshot tag | `core-0.9.4` | Exact repository state containing the corrections. |
 | Core constants, package compatibility metadata, and runner Core label | `0.9-rc` | Frozen language-neutral behavioral baseline. |
 | Implementation package versions | `0.1.0` | Unpublished repository reference artifacts. |
 | Conformance syntax version | `0.1` | Manifest and vector format compatibility. |
 
-The corrective release implements existing requirements; it does not change the
-behavioral baseline or declare Core 1.0 stable.
+The corrective release fixes implementation defects and clarifies demonstrated
+Entity evolution ambiguities in Audit validation precedence and contradictory
+history. These release-candidate corrections preserve existing identifiers and
+do not declare Core 1.0 stable. The release tag is local; remote publication is
+separate, and the packages retain repository-reference status.
 
 See the [release notes](./docs/releases/README.md) for the concise history and the implementation READMEs for current public APIs and local package use.
 

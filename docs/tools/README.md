@@ -37,6 +37,18 @@ documentation, traceability, architecture, license, and whitespace checks from
 `npm run check`. The command downloads missing toolchains and package build
 dependencies but does not publish artifacts.
 
+The root workspace and standalone runner both override Stryker's transitive
+`qs` dependency to `^6.16.0`. The root override is necessary for workspace
+installs; the runner's package-local override alone does not govern them.
+Both lockfiles resolve the patched version. This affects development tooling,
+not financial behavior or published implementation dependencies.
+
+With npm 11.12.1, `npm ls qs` still reports the upstream `typed-rest-client`
+exact pin as invalid in a workspace, including a fresh minimal workspace.
+Locked installation and fresh dependency resolution both select `qs` 6.16.0,
+and `npm audit` reports zero vulnerabilities. This dependency-tree diagnostic
+is distinct from installation, audit, and executable verification results.
+
 ## Mutation Scope and Survivor Classification
 
 The Runner Stryker configuration covers every executable module responsible

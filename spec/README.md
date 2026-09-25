@@ -53,6 +53,11 @@ version, and language implementation package versions. Format and package
 versions describe tooling or artifact compatibility; they do not define
 financial behavior.
 
+The `core-0.9.4` corrective snapshot retains the `0.9-rc` Core label. Its
+[Entity evolution correction note](entities/evolution.md#core-094-correction-note-non-normative)
+describes the accepted ambiguity corrections; the snapshot does not promote
+the specification to stable 1.0.
+
 ## Organization
 
 - [Conventions](conventions.md) defines normative language, compatibility policy, stable identifiers, portable values, and error-code conventions.

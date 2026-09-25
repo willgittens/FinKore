@@ -36,40 +36,25 @@ fixture, not a new universal financial rule. Audit redaction observations use
 conformance-only markers; `/spec/audit/redaction.md` leaves production redacted
 representations implementation-defined.
 
-The Core 0.9.3 contract review resolves the Entity import, Workflow guard, and
-Audit comparison/nullability ambiguities without treating existing mappings as
-exhaustive evidence. Milestone 2 adds permanent manifest-discovered regressions
-for imported validation, the Workflow equality matrix, optional actor-string
-and null-metadata boundaries, and the explicit Audit JSON/Money comparison
-rules. Passing implementation work remains tracked separately by later
-milestones.
+The Core 0.9.3 contract review resolved Entity import, Workflow guard, and
+Audit comparison/nullability ambiguities. Its permanent regressions remain in
+the manifest; existing mappings are not exhaustive boundary evidence.
 
 The Core 0.9.4 review reopened 37 requirements and added two Entity obligations.
-Milestone 2 now supplies 201 permanent regression/control vectors and native
-public-API sequence and ownership tests. The inventory records coverage of the
-identified boundaries, not passing implementations: the new tests expose
-defects in all three implementation tracks. Existing vector mappings remain
-retained, and `ENTITY-EVOLUTION-034` and `ENTITY-EVOLUTION-035` have explicit
-combined-error and history-consistency coverage. Milestone 3 restores all 112
-Approval vectors across TypeScript, Python 3.12/3.13, and Java, with native
-sequence coverage for each lifecycle operation and ancillary request type.
-Milestone 4 restores all 157 Entity vectors on the same runtimes, including
-Audit precedence, correspondence, business validation, and consistent imported
-and resulting history. Milestone 5 restores all 83 Workflow vectors and native
-ownership checks across those runtimes. Milestone 6 restores Audit JSON member
-preservation and adds six portable null/array member cases. All 542 vectors
-pass across the required runtimes. Milestone 7 passes complete clean-checkout
-verification, including 133 Python/Java critical probes. Thirteen added native
+The completed [0.9.4 corrective plan](../docs/plans/plan-09.4.md) resolves those
+findings. `ENTITY-EVOLUTION-034` and `ENTITY-EVOLUTION-035` have explicit
+combined-error and history-consistency coverage. All 542 vectors pass on
+TypeScript, Python 3.12/3.13, and Java. Complete clean-checkout verification
+includes coverage, isolated package consumers, full runner and TypeScript
+mutation suites, and 133 Python/Java critical probes. Thirteen added native
 public-API probes each require a named regression failure and a passing paired
-control. The inventory and requirement mappings are unchanged; release promotion
-remains open in the
-[0.9.4 plan](../docs/plans/plan-09.4.md).
+control. These results close the identified defects, not the separate 1.0
+promotion process.
 
-Milestone 4 adds four portable currentness regression/control cases. Native
-Entity tests additionally verify direct-core execution, complete cross-field
-validation, explicit successor effects, defensive history import, and opaque
-reference component separation. These extend the existing requirement coverage
-without adding financial policy or new requirement identifiers.
+Native Entity tests additionally verify direct-core execution, complete
+cross-field validation, explicit successor effects, defensive history import,
+and opaque reference component separation. These supplement the portable
+currentness and correspondence vectors without adding financial policy.
 
 Native readiness tests in TypeScript, Python, and Java cover lifecycle → record
 → evaluate sequences, evolution output reuse, failure atomicity, and original
@@ -648,9 +633,10 @@ boundaries they actually exercise.
 `APPROVAL-QUORUM-009` and `APPROVAL-QUORUM-010` close the identified
 opposing-vote ambiguity and preserve member-specific counting, pending capacity,
 and actionability. That Draft 0.3 review identified no blocking specification
-gaps in its Approval slice. The 0.9.4 review reopens effectiveness-evidence
-coverage and resolves two Entity evolution specification gaps whose regression
-vectors are now present; implementation corrections remain pending.
+gaps in its Approval slice. The 0.9.4 review subsequently expanded
+effectiveness-evidence coverage and resolved two Entity evolution specification
+gaps. Their permanent regressions, implementation corrections, and mutation
+protection pass the corrective release gate.
 
 All 37 directly testable Draft 0.3 composition/quorum/error requirements have
 manifest-listed vectors and pass against the TypeScript reference implementation
@@ -679,13 +665,15 @@ references are unchanged.
 
 ## Readiness
 
-**READY FOR CONFORMANCE RUNNER; NOT READY FOR CORE 1.0**
+**CORE 0.9.4 CORRECTIVE GATE PASSES; CORE 1.0 PROMOTION REMAINS SEPARATE**
 
 The manifest, schema, operation catalog, exact comparison rules, normalized
 errors, deterministic context, and valid requirement references are sufficient
-for the current runner. TypeScript, Python, and Java execute the expanded
-manifest scope. The new regressions, including the two Entity obligations,
-still require implementation corrections before a 1.0 readiness claim.
+for the current runner. TypeScript, Python 3.12/3.13, and Java pass the expanded
+manifest and corrective release verification, including the two Entity
+obligations and native sequence and ownership regressions. The separate
+[Core 1.0 plan](../docs/plans/plan-10.md) still requires stable baseline,
+compatibility, artifact, and release review before a 1.0 declaration.
 
 ## Not Directly Testable Review
 

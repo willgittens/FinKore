@@ -217,9 +217,9 @@ in combined-error priority and contradictory-history handling. They add
 observable requirements rather than editorial wording. Existing requirement
 IDs and error categories remain unchanged. These corrections may change errors
 or reject histories accepted by 0.9.3 implementations; 0.9.3 behavior is not a
-compatibility guarantee for the formerly unspecified cases. Regression coverage and implementation corrections are complete through
-Milestone 4 of the [0.9.4 plan](../../docs/plans/plan-09.4.md); the full corrective
-release gate remains open.
+compatibility guarantee for the formerly unspecified cases. Regression coverage,
+implementation corrections, and complete release verification are recorded in
+the completed [0.9.4 plan](../../docs/plans/plan-09.4.md).
 
 ## Open Questions
 

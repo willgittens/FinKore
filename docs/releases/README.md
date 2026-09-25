@@ -5,6 +5,18 @@ behavior belongs to `/spec`; detailed change history remains available in Git.
 
 ## Unreleased
 
+## FinKore Core 0.9.4 Release Candidate
+
+Corrected Approval lifecycle preservation, request validation, and effective
+quorum evidence; Entity evolution history, currentness, business validation,
+and Audit correspondence; Workflow definition ownership and guard/version
+fixtures; and Audit preservation of arbitrary JSON member names. Clarified
+Audit validation precedence and contradictory evolution history through
+`ENTITY-EVOLUTION-034` and `ENTITY-EVOLUTION-035`. Permanent sequence, ownership,
+and paired regression/control tests protect these corrections. The Core label
+remains `0.9-rc`; package versions and repository-reference publication status
+are unchanged. No new financial domain or stable 1.0 declaration is included.
+
 ## FinKore Core 0.9.3 Release Candidate
 
 Corrected Entity import validation, recursive Workflow guard comparison, Audit

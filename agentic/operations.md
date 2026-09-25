@@ -48,10 +48,11 @@ to the consuming application unless a concrete FinKore rule says otherwise.
 Accounting finality remains unspecified while ledger posting and financial
 commitment are outside Core.
 
-The [0.9.4 contract review](../docs/plans/plan-09.4.md#milestone-1--contract-review-and-traceability-correction)
-reopens boundary coverage and implementation defects in the existing operation
-surface. Registry inclusion is not a claim that those defects are corrected;
-current gaps are recorded in [traceability](../conformance/traceability.md).
+The completed [0.9.4 corrective plan](../docs/plans/plan-09.4.md) resolves the
+reviewed boundary defects in the existing operation surface. Canonical operation
+IDs and promotion boundaries are unchanged. Registry inclusion does not itself
+establish conformance; exercised requirements and coverage limits are recorded
+in [traceability](../conformance/traceability.md).
 
 ## Registry
 
