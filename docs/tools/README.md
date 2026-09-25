@@ -31,7 +31,8 @@ The release command bootstraps and validates CPython 3.12 and 3.13, JDK 21,
 and Maven 3.9.x; validates the supported Node 24 line; runs strict builds, unit
 tests, CPython 3.13 compatibility, every conformance vector against all three
 implementations, coverage, local package checks, both full Stryker suites, and
-the targeted Python and Java critical mutation probes. It also includes the
+the targeted Python and Java critical mutation probes and native public-API
+mutation probes for all three implementations. It also includes the
 documentation, traceability, architecture, license, and whitespace checks from
 `npm run check`. The command downloads missing toolchains and package build
 dependencies but does not publish artifacts.
@@ -85,6 +86,23 @@ import validation, Workflow comparison, Audit Actor validation and metadata
 presence, and Audit ordinary JSON and declared Money comparison. Classification
 tests run through `npm run tools:test`, included in `npm run check` and `npm run
 verify`.
+
+Both mutation tools now require an unmodified passing baseline, including every
+named regression and control. Duplicate result identifiers are rejected.
+`npm run mutation:native` mutates temporary source copies and reuses permanent
+native tests for retained Workflow aliases, Approval record/evaluate sequences,
+Entity returned-history reuse, and TypeScript Audit own-key copying. Every probe
+must fail its named assertion or portable-error expectation while a paired valid
+control passes. Unexpected runtime exceptions, skipped cases, compilation or
+process failures, empty suites, and inconsistent reports fail verification.
+The Python and Java helpers only select tests and classify their results;
+financial behavior remains in the implementations and existing tests.
+
+Audit cycle fixtures retain genuine self-references but bound member reads.
+Correct validation detects the repeated reference immediately; a cycle-check
+removal reaches an ordinary test error that fails the exact portable-error
+assertions before Stryker's execution-count limiter intervenes. Mutation scope,
+coverage selection, existing annotations, and the 95 percent gate are unchanged.
 
 Core 0.9.4 adds paired Approval probes for lifecycle preservation, operation
 kind overrides, ambiguous or previously invalidated withdrawal targets, and

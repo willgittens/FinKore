@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 import { describe, expect, it } from 'vitest'
+import { boundedCycle } from './cyclic-fixture.js'
 import { deepStrictEqual as assertJson } from 'node:assert/strict'
 import { AuditChange, AuditEvent, AuditLog, InvalidAuditEventError } from '../../src/index.js'
 
@@ -198,21 +199,27 @@ describe('Audit changes', () => {
     const symbolValue = { value: 'visible', [Symbol('private')]: true }
     expect(() => AuditChange.from({ path: 'symbol', before: symbolValue })).toThrow(InvalidAuditEventError)
 
-    const cyclicArray: unknown[] = []
-    cyclicArray.push(cyclicArray)
+    const cyclicArray = boundedCycle(true)
     // Keep mutant failures compact instead of formatting a recursive error trace.
     let cycleFailure0: unknown
     try { AuditChange.from({ path: 'cycle', before: cyclicArray }) } catch (error) { cycleFailure0 = error }
     expect(cycleFailure0 instanceof InvalidAuditEventError).toBe(true)
     expect((cycleFailure0 as InvalidAuditEventError).code).toBe('FINKORE_AUDIT_INVALID_EVENT')
 
-    const cyclicObject: Record<string, unknown> = {}
-    cyclicObject.self = cyclicObject
+    // Bound the defective traversal first, then retain ordinary cyclic inputs.
+    const ordinaryArray: unknown[] = []
+    ordinaryArray.push(ordinaryArray)
+    expect(() => AuditChange.from({ path: 'cycle', before: ordinaryArray })).toThrow(InvalidAuditEventError)
+
+    const cyclicObject = boundedCycle(false)
     // Keep mutant failures compact instead of formatting a recursive error trace.
     let cycleFailure1: unknown
     try { AuditChange.from({ path: 'cycle', after: cyclicObject }) } catch (error) { cycleFailure1 = error }
     expect(cycleFailure1 instanceof InvalidAuditEventError).toBe(true)
     expect((cycleFailure1 as InvalidAuditEventError).code).toBe('FINKORE_AUDIT_INVALID_EVENT')
+    const ordinaryObject: Record<string, unknown> = {}
+    ordinaryObject.self = ordinaryObject
+    expect(() => AuditChange.from({ path: 'cycle', after: ordinaryObject })).toThrow(InvalidAuditEventError)
   })
 
   it('accepts portable null-prototype and shared JSON values without retaining references', () => {

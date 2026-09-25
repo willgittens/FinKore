@@ -2,6 +2,7 @@
 import { describe, expect, it } from 'vitest'
 import { deepStrictEqual as assertJson } from 'node:assert/strict'
 import { AuditActor, InvalidAuditActorError } from '../../src/index.js'
+import { boundedCycle } from './cyclic-fixture.js'
 
 describe('Audit actors', () => {
   it('represents a known actor with stable opaque identity and optional type', () => {
@@ -93,21 +94,27 @@ describe('Audit actors', () => {
     const symbolMetadata = { department: 'finance', [Symbol('private')]: true }
     expect(() => AuditActor.from({ id: 'user-7', metadata: symbolMetadata })).toThrow(InvalidAuditActorError)
 
-    const cyclicArray: unknown[] = []
-    cyclicArray.push(cyclicArray)
+    const cyclicArray = boundedCycle(true)
     // Keep mutant failures compact instead of formatting a recursive error trace.
     let cycleFailure0: unknown
     try { AuditActor.from({ id: 'user-7', metadata: cyclicArray }) } catch (error) { cycleFailure0 = error }
     expect(cycleFailure0 instanceof InvalidAuditActorError).toBe(true)
     expect((cycleFailure0 as InvalidAuditActorError).code).toBe('FINKORE_AUDIT_ACTOR_INVALID')
 
-    const cyclicObject: Record<string, unknown> = {}
-    cyclicObject.self = cyclicObject
+    // Retain ordinary data-property cycles as well as the bounded mutant fixture.
+    const ordinaryArray: unknown[] = []
+    ordinaryArray.push(ordinaryArray)
+    expect(() => AuditActor.from({ id: 'user-7', metadata: ordinaryArray })).toThrow(InvalidAuditActorError)
+
+    const cyclicObject = boundedCycle(false)
     // Keep mutant failures compact instead of formatting a recursive error trace.
     let cycleFailure1: unknown
     try { AuditActor.from({ id: 'user-7', metadata: cyclicObject }) } catch (error) { cycleFailure1 = error }
     expect(cycleFailure1 instanceof InvalidAuditActorError).toBe(true)
     expect((cycleFailure1 as InvalidAuditActorError).code).toBe('FINKORE_AUDIT_ACTOR_INVALID')
+    const ordinaryObject: Record<string, unknown> = {}
+    ordinaryObject.self = ordinaryObject
+    expect(() => AuditActor.from({ id: 'user-7', metadata: ordinaryObject })).toThrow(InvalidAuditActorError)
   })
 
   it('returns defensive actor copies', () => {

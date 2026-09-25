@@ -68,6 +68,21 @@ public final class ReadinessRegressionTest {
     evolution(document, true);
   }
 
+  /** Selects existing public-API regressions for isolated native mutation probes. */
+  public static Map<String, Runnable> mutationCases() throws IOException {
+    Path root = Files.exists(Path.of("conformance")) ? Path.of(".") : Path.of("../../..");
+    Map<String, Object> document = map(Json.parse(Files.readString(root.resolve("conformance/entities/evolution.json"))));
+    return Map.of(
+        "approval.sequence", () -> lifecycle("withdraw", Map.of()),
+        "approval.control", () -> ApprovalsTest.main(new String[0]),
+        "workflow.input", () -> ownership(false, false, false, false),
+        "workflow.observation", () -> ownership(false, false, true, false),
+        "workflow.list", () -> WorkflowTest.main(new String[0]),
+        "workflow.control", ReadinessRegressionTest::declarationArrays,
+        "entity.sequence", () -> evolution(document, false),
+        "entity.control", () -> auditFailure(document));
+  }
+
   private static Map<String, Object> requirement() {
     return Map.of("id", "review", "subject", Map.of("type", "invoice", "id", "invoice-1"), "eligibleActors", List.of("alice"));
   }

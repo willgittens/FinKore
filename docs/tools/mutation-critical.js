@@ -10,7 +10,7 @@ import { cpSync, existsSync, mkdtempSync, mkdirSync, readdirSync, readFileSync, 
 import { tmpdir } from 'node:os'
 import { delimiter, join, resolve } from 'node:path'
 import { spawnSync } from 'node:child_process'
-import { assessMutationResult } from './mutation-result.js'
+import { assessMutationResult, conformanceBaselinePassed } from './mutation-result.js'
 
 const repositoryRoot = process.cwd()
 const requestedTarget = process.argv[2] ?? 'all'
@@ -1212,6 +1212,7 @@ function conformanceKilled(env, mutant) {
   ], { env: { ...process.env, ...env } })
   return {
     ...assessMutationResult(result, mutant.expectedVector, mutant.expectedPassVectors),
+    baselinePassed: conformanceBaselinePassed(result, mutant.requiredVectors),
     output: result.stdout,
     error: result.stderr,
   }
@@ -1289,10 +1290,31 @@ if (process.argv.length > 4 || (requestedSuite !== undefined && ![...pythonMutan
   process.exit(2)
 }
 const selected = (mutants) => mutants.filter((mutant) => requestedSuite === undefined || mutant.suite === requestedSuite)
+function requireBaselines(mutants, env) {
+  for (const suite of new Set(mutants.map((mutant) => mutant.suite))) {
+    const requiredVectors = mutants.filter((mutant) => mutant.suite === suite)
+      .flatMap((mutant) => [mutant.expectedVector, ...(mutant.expectedPassVectors ?? [])]).filter(Boolean)
+    const result = conformanceKilled(env, { suite, requiredVectors })
+    if (!result.baselinePassed) throw new Error(`Invalid ${suite} baseline\n${result.output}\n${result.error}`)
+    console.log(`BASELINE PASS ${env.FINKORE_MUTANT_ADAPTER} ${suite}`)
+  }
+}
 if (requestedTarget === 'all' || requestedTarget === 'python') {
+  requireBaselines(selected(pythonMutants), {
+    FINKORE_MUTANT_ADAPTER: 'implementations/python/adapters/conformance/adapter.js',
+    FINKORE_PYTHON_PATH: resolve(repositoryRoot, '.tools/bin/python3.12'),
+    FINKORE_PYTHON_BRIDGE_PATH: resolve(repositoryRoot, 'implementations/python/adapters/conformance/bridge.py'),
+  })
   for (const mutant of selected(pythonMutants)) results.push(runPythonMutant(mutant))
 }
 if (requestedTarget === 'all' || requestedTarget === 'java') {
+  const baseline = compileJava(resolve(repositoryRoot, 'implementations/java'))
+  if (baseline.result.status !== 0) throw new Error(`Java baseline compilation failed\n${baseline.result.stderr}`)
+  requireBaselines(selected(javaMutants), {
+    FINKORE_MUTANT_ADAPTER: 'implementations/java/adapters/conformance/adapter.js',
+    FINKORE_JAVA_PATH: resolve(repositoryRoot, '.tools/bin/java'),
+    FINKORE_JAVA_CLASSPATH: baseline.output,
+  })
   for (const mutant of selected(javaMutants)) results.push(runJavaMutant(mutant))
 }
 report(results)

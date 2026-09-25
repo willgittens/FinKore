@@ -2,12 +2,13 @@
 
 ## Status
 
-Milestones 1–6 are complete: Approval, Entity, Workflow, and Audit corrections
-and their permanent regression/control tests are implemented. All 542 vectors
-pass on TypeScript, Python 3.12/3.13, and Java, with zero failed, unsupported,
-or infrastructure outcomes. Release-wide verification remains open for
-Milestone 7, including classification of four Audit cycle-validation mutation
-timeouts; these are not credited as behavioral kills.
+Milestones 1–7 are complete. Approval, Entity, Workflow, and Audit corrections,
+permanent regressions, and mutation protection pass complete verification from
+a clean candidate checkout. All 542 vectors pass on TypeScript, Python
+3.12/3.13, and Java, with zero failed, unsupported, or infrastructure outcomes.
+The four Audit cycle-validation mutants are now behavioral kills. Milestone 8
+and release promotion remain open; two moderate Stryker dependency advisories
+remain a development-tool dependency-review follow-up.
 The review of `f39bbe1`
 (`core-0.9.3`) reproduced the failures below after the complete existing
 verification command passed. The earlier corrective releases remain historical
@@ -704,50 +705,128 @@ needed. Release-wide verification and promotion remain open.
 
 ## Milestone 7 — Mutation protection and complete verification
 
-- [ ] Resolve the four Audit Actor/Change cycle-validation mutation timeouts
+- [x] Resolve the four Audit Actor/Change cycle-validation mutation timeouts
       recorded in Milestone 6. Require classified behavioral results rather than
       counting timeout outcomes as regression closure.
-- [ ] Extend critical mutation protection for every corrected failure mechanism:
+- [x] Extend critical mutation protection for every corrected failure mechanism:
       lifecycle evidence loss, lifecycle type override, ambiguous/superseded
       target acceptance, malformed effectiveness counted as approval, evolution
       evidence mismatch, constant currentness, rejected valid nonempty history,
       business-validator bypass, mutable guard aliases, malformed guard handling,
       default-sequence misvalidation, and unsafe Audit key copying.
-- [ ] Require each new targeted probe to fail its named behavioral regression
+- [x] Require each new targeted probe to fail its named behavioral regression
       while paired valid controls execute and pass. Compilation failures,
       process crashes, unsupported outcomes, malformed reports, empty suites,
       and unrelated rejection are not valid kills. Preserve and extend existing
       mutation-classification tests if the harness changes.
-- [ ] Include public-API sequence and aliasing tests in mutation verification.
+- [x] Include public-API sequence and aliasing tests in mutation verification.
       Where isolated JSON vectors cannot expose a defect, add narrowly scoped
       public-API mutation probes and wire them into `npm run verify`; do not add
       financial sequence logic to the runner or waive these cases.
-- [ ] Run full runner and TypeScript core Stryker suites with the unchanged
+- [x] Run full runner and TypeScript core Stryker suites with the unchanged
       minimum 95 percent gate and all Python/Java critical probes. Review every
       survivor and uncovered mutant; no critical financial mutant may survive.
       Justify equivalent mutants explicitly without weakening meaningful scope.
-- [ ] Run builds, strict TypeScript, unit and adapter tests, Python 3.12/3.13
+- [x] Run builds, strict TypeScript, unit and adapter tests, Python 3.12/3.13
       compilation and compatibility checks, coverage, and every expanded
       manifest vector on TypeScript, both Python runtimes, and Java. Require
       zero failed, unsupported, or infrastructure conformance results.
-- [ ] Verify normalized portable observations as well as outcomes, especially
+- [x] Verify normalized portable observations as well as outcomes, especially
       history preservation, currentness, error precedence, and special-key
       presence. Re-run all earlier Money and cross-domain regressions.
-- [ ] Run isolated npm, Python wheel/sdist, and Java JAR consumer checks,
+- [x] Run isolated npm, Python wheel/sdist, and Java JAR consumer checks,
       documentation and traceability checks, architecture and license checks,
       developer-tool tests, and whitespace validation. Update affected coverage
       helpers and discovery assertions to include every added vector.
-- [ ] From a clean checkout of the intended candidate, install locked Node
+- [x] From a clean checkout of the intended candidate, install locked Node
       dependencies with `npm ci` and run the complete `npm run verify`. Use the
       prescribed Node 24, CPython 3.12/3.13, JDK 21, and Maven 3.9.x toolchains;
       bootstrap missing runtimes under `.tools` according to `AGENTS.md`.
-- [ ] Reassess traceability and release claims against the new tests. Mandatory
+- [x] Reassess traceability and release claims against the new tests. Mandatory
       uncovered boundaries and unresolved specification gaps remain blockers
       even when aggregate coverage, mutation, and conformance totals pass.
 
 Completion: the expanded regressions and controls participate in repeatable
 local verification, all configured gates pass, and no corrected critical
 failure mechanism survives mutation testing.
+
+Milestone 7 completed on 2026-09-24 after locked installation and the complete
+`npm run verify` passed in a clean, isolated Git checkout containing the intended
+working-tree changes. The repository's index, commits, and tags were not changed.
+The final documentation-only status updates were checked separately.
+
+The four Actor/Change cycle-check removals now fail exact portable-error
+assertions. Bounded self-references stop defective traversal before Stryker's
+hit-count limiter, while ordinary cyclic arrays and objects remain in the same
+regression tests. The focused suite reports 298 kills, zero timeouts, and five
+redundant-comparison survivors. No mutation scope, coverage selection, annotation,
+or threshold was relaxed.
+
+`npm run verify` now includes 13 native public-API mutation probes: four
+TypeScript, four Python, and five Java. They reuse permanent lifecycle sequences,
+returned Entity histories, retained Workflow aliases, and Audit own-key tests.
+Every new probe passes its unmodified baseline, fails its named regression, and
+passes its paired valid control. The conformance probe tool also requires passing
+baselines containing all declared regression/control vectors. Twelve tool tests
+protect classification against duplicate IDs, missing controls, empty suites,
+malformed reports, inconsistent counts, skips, crashes, compilation failures,
+and unrelated failures. All 66 Python and 67 Java conformance probes and all
+13 native probes pass.
+
+The full runner mutation score is 97.06 percent (627 killed, 19 survived, zero
+uncovered or timed out). The full TypeScript core score is 96.69 percent
+(4,021 killed, 16 timed out, 128 survived, 10 uncovered). Excluding every timeout
+still gives 96.31 percent behavioral kills. The remaining Money/Approval
+nonterminating mutants are reported separately; they are not evidence for
+closing the four Audit regressions or any new targeted probe.
+
+Every survivor and uncovered mutant was reviewed:
+
+- Runner diagnostic strings, source labels, and redundant error wrapping retain
+  infrastructure classification; primitive records still fail required fields.
+- Core error-carrier messages, names, optional details, and the Entity validation
+  message do not change portable codes or financial results.
+- Approval timestamp/record checks retain downstream validation; normalized
+  lifecycle event shapes make the redundant type guard equivalent. Synthetic
+  decision entries and state keys cannot match validated identifiers. Internal
+  applicability flags, extra non-pending actionables, and approved/empty stage
+  representations are discarded before observable outcomes.
+- Workflow identity guards retain mandatory downstream string validation;
+  `Number.isFinite` already rejects nonnumbers, null is handled before traversal,
+  and unversioned getters still return undefined. Equality guards are redundant
+  after primitive, null, and array cases; the final fallthrough is unreachable
+  for validated JSON.
+- Audit numeric equality remains strict over prevalidated finite JSON numbers;
+  optional metadata validation preserves omission. Redaction fallback entries
+  cannot match validated paths, and matching is checked by the public log.
+- Entity currentness effects contain only the previously assigned false source
+  effect at the redundant comparison. Money inputs still pass through Money
+  validation; undefined and false findings remain invalid. Conflict identifiers
+  remain checked against mandatory revision identities.
+- Uncovered clone-error and post-append branches cannot be reached through
+  validated public histories; Money rounding modes are validated before dispatch.
+
+Builds, strict TypeScript, 130 runner tests, 657 TypeScript core tests, 19
+TypeScript adapter tests, 64 Python tests on each supported runtime, Python
+adapter tests, Java entry-point and adapter tests, and 36 Maven tests pass.
+All 542 vectors pass on TypeScript, CPython 3.12, CPython 3.13, and Java, with zero
+failed, unsupported, or infrastructure outcomes. Normalized history, currentness,
+error-precedence, and own-member observations participate in those comparisons.
+Coverage gates, npm/wheel/sdist/JAR consumer checks, documentation, traceability,
+architecture, licensing, toolchain, and whitespace checks pass.
+
+Traceability remains 411 requirements: 329 COVERED and 82 NOT DIRECTLY TESTABLE,
+with no partial, uncovered, deferred, or blocking-gap entries. Native ownership
+and sequence tests supplement the finite vectors; passing them is not exhaustive
+boundary coverage or authorization to promote 1.0. Locked installation reports
+two moderate transitive development-tool advisories (`typed-rest-client`/`qs`
+under Stryker); those remain a dependency-review follow-up.
+
+Completion review: unit/native/tool and mutation tests and affected README/status
+documentation were updated. No production API or financial behavior changed, so
+no new vectors, requirements, portable errors, operation metadata, public API
+JSDoc, CoreDoc rules, or AGENTS.md changes were needed. Milestone 8 and release
+promotion remain open.
 
 ## Milestone 8 — Documentation and corrective release
 

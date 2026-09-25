@@ -147,7 +147,9 @@ Python 3.12/3.13, and Java. Milestone 4 restores all 157 Entity vectors on the
 same runtimes. Milestone 5 restores all 83 Workflow vectors and native ownership
 regressions. Milestone 6 fixes Audit JSON member preservation and adds six
 null/array controls. All 542 vectors now pass on every required runtime.
-Release-wide verification and promotion remain open.
+Milestone 7 passes complete clean-checkout verification, including native
+mutation probes and classified Audit cycle regressions. Release promotion
+remains open in Milestone 8.
 See [current traceability](./conformance/traceability.md).
 
 The historical 331-vector Core 0.9.3 manifest includes permanent regressions.

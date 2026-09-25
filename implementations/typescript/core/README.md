@@ -8,8 +8,9 @@ The current manifest contains 542 vectors. Core 0.9.4 Milestones 3–6 restore
 all 112 Approval, 157 Entity, 83 Workflow, and 76 Audit vectors across TypeScript,
 Python 3.12/3.13, and Java. Native tests also verify lifecycle sequences,
 Entity history reuse, and immutable Workflow guard ownership.
-TypeScript passes all 542 vectors. Full release verification remains open in the
-[0.9.4 plan](../../../docs/plans/plan-09.4.md).
+TypeScript passes all 542 vectors. Milestone 7 passes full clean-checkout
+verification and includes repeatable native mutation probes. Release promotion
+remains open in Milestone 8 of the [0.9.4 plan](../../../docs/plans/plan-09.4.md).
 
 Audit Actor metadata and ordinary Change values preserve every own JSON
 member recursively, including `__proto__` and `constructor`, without assigning

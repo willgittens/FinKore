@@ -20,6 +20,9 @@ export function assessMutationResult(result, expectedVector, expectedPassVectors
       || rows.some((row) => !row || typeof row.vectorId !== 'string' || !['PASS', 'FAIL'].includes(row.status))) {
     return { killed: false, reason: 'Missing, empty, or unsuccessful conformance results' }
   }
+  if (new Set(rows.map((row) => row.vectorId)).size !== rows.length) {
+    return { killed: false, reason: 'Duplicate result identifiers' }
+  }
   const failed = rows.filter((row) => row.status === 'FAIL')
   if (summary.total !== rows.length || summary.failed !== failed.length
       || summary.passed !== rows.length - failed.length
@@ -42,4 +45,10 @@ export function assessMutationResult(result, expectedVector, expectedPassVectors
     return { killed: false, reason: `Positive control was not executed: ${missingControl}` }
   }
   return { killed: true, reason: expectedVector ?? `${failed.length} conformance vector(s) failed` }
+}
+
+export function conformanceBaselinePassed(result, requiredVectors = []) {
+  if (assessMutationResult(result).reason !== 'All vectors passed') return false
+  const ids = new Set(JSON.parse(result.stdout).results.map((row) => row.vectorId))
+  return requiredVectors.every((id) => ids.has(id))
 }

@@ -21,6 +21,14 @@ BINDING = {"definitionIdentity": "review-flow", "definitionVersionIdentity": "v1
 
 
 class ReadinessRegressionTests(unittest.TestCase):
+    def test_record_without_lifecycle_preserves_effective_decision(self):
+        """APPROVAL-DECISION-004/007: paired valid control for lifecycle preservation."""
+        history = {"history": [], "lifecycle": []}
+        recorded = record_decision(REQUIREMENT, deepcopy(DECISION), history)
+        self.assertEqual(recorded, {"history": [DECISION]})
+        self.assertEqual(history, {"history": [], "lifecycle": []})
+        self.assertEqual(evaluate_requirement(REQUIREMENT, recorded, {"revision": "3"}, ["revision"]), "APPROVED")
+
     def test_lifecycle_record_evaluate_sequences(self):
         """APPROVAL-VALIDITY-001/002/004/010/011/012: retain actual prior results."""
         for kind, extra in product(("withdraw", "decision", "requirement"), ({}, {"type": "WITHDRAWN"}, {"type": "DECISION_SUPERSEDED"}, {"type": "REQUIREMENT_SUPERSEDED"}, {"type": "UNKNOWN"}, {"type": None}, {"type": {}})):

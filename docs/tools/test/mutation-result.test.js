@@ -5,7 +5,7 @@
  */
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { assessMutationResult } from '../mutation-result.js'
+import { assessMutationResult, conformanceBaselinePassed } from '../mutation-result.js'
 
 function result(statuses = ['PASS', 'FAIL']) {
   const failed = statuses.filter((status) => status === 'FAIL').length
@@ -60,4 +60,19 @@ test('inconsistent counts or exit codes cannot kill a mutant', () => {
   }
   assert.equal(assessMutationResult({ ...result(), status: 0 }).killed, false)
   assert.equal(assessMutationResult({ ...result(['PASS']), status: 1 }).killed, false)
+})
+
+test('duplicate identifiers cannot supply a failed regression and a passing control', () => {
+  const captured = result(), report = JSON.parse(captured.stdout)
+  report.results[0].vectorId = 'vector-1'
+  captured.stdout = JSON.stringify(report)
+  assert.equal(assessMutationResult(captured).killed, false)
+})
+
+test('baseline requires valid all-pass reports including every named regression and control', () => {
+  assert.equal(conformanceBaselinePassed(result(['PASS']), ['vector-0']), true)
+  assert.equal(conformanceBaselinePassed(result(['PASS']), ['missing']), false)
+  assert.equal(conformanceBaselinePassed(result()), false)
+  assert.equal(conformanceBaselinePassed(result([])), false)
+  assert.equal(conformanceBaselinePassed({ ...result(['PASS']), status: 1 }), false)
 })

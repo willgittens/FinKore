@@ -58,8 +58,12 @@ Audit precedence, correspondence, business validation, and consistent imported
 and resulting history. Milestone 5 restores all 83 Workflow vectors and native
 ownership checks across those runtimes. Milestone 6 restores Audit JSON member
 preservation and adds six portable null/array member cases. All 542 vectors
-pass across the required runtimes; release-wide verification remains open in
-the [0.9.4 plan](../docs/plans/plan-09.4.md).
+pass across the required runtimes. Milestone 7 passes complete clean-checkout
+verification, including 133 Python/Java critical probes. Thirteen added native
+public-API probes each require a named regression failure and a passing paired
+control. The inventory and requirement mappings are unchanged; release promotion
+remains open in the
+[0.9.4 plan](../docs/plans/plan-09.4.md).
 
 Milestone 4 adds four portable currentness regression/control cases. Native
 Entity tests additionally verify direct-core execution, complete cross-field
@@ -71,8 +75,9 @@ Native readiness tests in TypeScript, Python, and Java cover lifecycle → recor
 → evaluate sequences, evolution output reuse, failure atomicity, and original
 or exposed nested Workflow aliases. They supplement the JSON vectors for
 `WORKFLOW-VERSION-003` and `WORKFLOW-VERSION-009`; an isolated JSON request
-cannot reproduce shared native references. COVERED does not establish 1.0
-readiness while those tests still fail.
+cannot reproduce shared native references. These native regressions and their
+mutation gates now pass. COVERED records exercised requirements, not exhaustive
+boundary coverage or completion of the separate 1.0 promotion process.
 
 ## Requirement mapping
 
