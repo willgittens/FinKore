@@ -22,6 +22,7 @@ This document defines validation of financial entity state and proposed domain o
 - **ENTITY-VALIDATION-008** — Validation details MUST NOT expose sensitive values unnecessarily.
 - **ENTITY-VALIDATION-006** — Validation evaluation MUST NOT alter the observable Financial Entity.
 - **ENTITY-VALIDATION-007** — A composing domain SHOULD distinguish rules required in every state from rules required only for a transition or target state.
+- **ENTITY-VALIDATION-009** — An unsupported or malformed Entity validator declaration MUST be rejected with `FINKORE_ENTITY_INVALID_MUTATION` before evaluating declared predicates against Entity data. It MUST NOT be silently skipped. A supported, well-formed rule that rejects data continues to use `FINKORE_ENTITY_VALIDATION_FAILED` under **ENTITY-VALIDATION-004**. Rejection MUST preserve existing Entity observations.
 
 ## Invariants
 
@@ -66,25 +67,16 @@ constraint or a standardized validation language.
 - Applying half of a multi-field mutation before reporting another field invalid.
 - Using localized prose as the only machine-readable violation identity.
 
-## Core 0.9.5 declaration review (non-normative, blocking)
+## Core 0.9.5 correction note (non-normative)
 
-Silently skipping an unknown declared rule fails the complete-validation
-obligation. However, **ENTITY-VALIDATION-004** assigns an error to a supported
-rule rejecting data; it does not explicitly select the error for a malformed
-validator declaration. The error catalog has no dedicated invalid-definition
-code for Entity declarations. This primary-error choice is a blocking gap.
-
-The [Milestone 1 proposal](../../docs/plans/plan-09.5.md) uses
-`FINKORE_ENTITY_INVALID_MUTATION` for unsupported/malformed validator
-declarations, before evaluating those declarations against data, and preserves
-`FINKORE_ENTITY_VALIDATION_FAILED` for a supported predicate that returns false.
-That would require a new `ENTITY-VALIDATION` requirement. The bounded fixture
-would continue to support only `positive-money` and `money-not-greater-than`,
-with nonempty rule `id`/`path` and the latter's nonempty `otherPath`; omitted
-validation and an empty list remain valid. No general validation DSL or
-universal positive-Money business rule is proposed. Until adoption, TypeScript's
-current error is evidence of an implementation choice, not authority for a new
-portable expected result.
+The accepted [contract decision](../../docs/plans/plan-09.5.md) adds
+**ENTITY-VALIDATION-009** to distinguish declaration failure from a supported
+predicate rejecting data. The bounded fixture continues to support only
+`positive-money` and `money-not-greater-than`, with nonempty string
+`id`/`path` and the latter's nonempty `otherPath`. Omitted validation and an
+empty list remain valid. No general validation DSL or universal positive-Money
+business rule is introduced, and no total priority over unrelated domain
+failures is specified.
 
 ## Open Questions
 

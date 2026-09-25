@@ -25796,6 +25796,4523 @@
         "evolution-history-discarded",
         "currentness-validation-bypassed"
       ]
+    },
+    {
+      "id": "entity.import.presence-state-null-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007",
+        "ENTITY-IMPORT-008",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Supplied null expected state rejects atomically.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1",
+          "expectedState": null
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_STATE_CONFLICT"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-state-null"
+      ]
+    },
+    {
+      "id": "entity.import.presence-state-number-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007",
+        "ENTITY-IMPORT-008",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Supplied number expected state rejects atomically.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1",
+          "expectedState": 7
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_STATE_CONFLICT"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-state-number"
+      ]
+    },
+    {
+      "id": "entity.import.presence-state-mismatch-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007",
+        "ENTITY-IMPORT-008",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Supplied mismatch expected state rejects atomically.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1",
+          "expectedState": "stale"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_STATE_CONFLICT"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-state-mismatch"
+      ]
+    },
+    {
+      "id": "entity.import.presence-state-matching-control-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007"
+      ],
+      "description": "A matching state precondition permits import.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1",
+          "expectedState": "DRAFT"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "revision": "business-r1",
+            "current": true
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0",
+              "current": false
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-state-matching-control"
+      ]
+    },
+    {
+      "id": "entity.import.presence-revision-null-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007",
+        "ENTITY-IMPORT-008",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Supplied null expected revision rejects atomically.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1",
+          "expectedRevision": null
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_STATE_CONFLICT"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-revision-null"
+      ]
+    },
+    {
+      "id": "entity.import.presence-revision-number-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007",
+        "ENTITY-IMPORT-008",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Supplied number expected revision rejects atomically.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1",
+          "expectedRevision": 7
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_STATE_CONFLICT"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-revision-number"
+      ]
+    },
+    {
+      "id": "entity.import.presence-revision-mismatch-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007",
+        "ENTITY-IMPORT-008",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Supplied mismatch expected revision rejects atomically.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1",
+          "expectedRevision": "stale"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_STATE_CONFLICT"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-revision-mismatch"
+      ]
+    },
+    {
+      "id": "entity.import.presence-revision-matching-control-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007"
+      ],
+      "description": "A matching revision precondition permits import.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1",
+          "expectedRevision": "business-r1"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "revision": "business-r1",
+            "current": true
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0",
+              "current": false
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-revision-matching-control"
+      ]
+    },
+    {
+      "id": "entity.import.presence-revision-missing-observed-null-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007",
+        "ENTITY-IMPORT-008"
+      ],
+      "description": "A supplied expectation cannot match an absent observed token.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1",
+          "expectedRevision": null
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_STATE_CONFLICT"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-revision-missing-observed-null"
+      ]
+    },
+    {
+      "id": "entity.import.presence-revision-missing-observed-value-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007",
+        "ENTITY-IMPORT-008"
+      ],
+      "description": "A supplied expectation cannot match an absent observed token.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1",
+          "expectedRevision": "expected"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_STATE_CONFLICT"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-revision-missing-observed-value"
+      ]
+    },
+    {
+      "id": "entity.import.presence-conflict-version-null-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007",
+        "ENTITY-IMPORT-008",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Supplied null expected conflict-version rejects atomically.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1",
+          "expectedConflictVersion": null
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_STATE_CONFLICT"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-conflict-version-null"
+      ]
+    },
+    {
+      "id": "entity.import.presence-conflict-version-number-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007",
+        "ENTITY-IMPORT-008",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Supplied number expected conflict-version rejects atomically.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1",
+          "expectedConflictVersion": 7
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_STATE_CONFLICT"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-conflict-version-number"
+      ]
+    },
+    {
+      "id": "entity.import.presence-conflict-version-mismatch-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007",
+        "ENTITY-IMPORT-008",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Supplied mismatch expected conflict-version rejects atomically.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1",
+          "expectedConflictVersion": "stale"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_STATE_CONFLICT"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-conflict-version-mismatch"
+      ]
+    },
+    {
+      "id": "entity.import.presence-conflict-version-matching-control-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007"
+      ],
+      "description": "A matching conflict-version precondition permits import.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1",
+          "expectedConflictVersion": "lock-v1"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "revision": "business-r1",
+            "current": true
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0",
+              "current": false
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-conflict-version-matching-control"
+      ]
+    },
+    {
+      "id": "entity.import.presence-conflict-version-missing-observed-null-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007",
+        "ENTITY-IMPORT-008"
+      ],
+      "description": "A supplied expectation cannot match an absent observed token.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "expectedConflictVersion": null
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_STATE_CONFLICT"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-conflict-version-missing-observed-null"
+      ]
+    },
+    {
+      "id": "entity.import.presence-conflict-version-missing-observed-value-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-007",
+        "ENTITY-IMPORT-008"
+      ],
+      "description": "A supplied expectation cannot match an absent observed token.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "expectedConflictVersion": "expected"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_STATE_CONFLICT"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-presence-conflict-version-missing-observed-value"
+      ]
+    },
+    {
+      "id": "entity.import.distinct-token-control-001",
+      "spec": "entities/revisions",
+      "requirements": [
+        "ENTITY-REVISION-002",
+        "ENTITY-REVISION-006",
+        "ENTITY-IMPORT-006"
+      ],
+      "description": "Independent business and conflict identities survive import without lexical normalization.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "revision": "business-r1",
+            "current": true
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0",
+              "current": false
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-distinct-token-control"
+      ]
+    },
+    {
+      "id": "entity.import.equal-revision-conflict-token-001",
+      "spec": "entities/revisions",
+      "requirements": [
+        "ENTITY-REVISION-002",
+        "ENTITY-REVISION-007",
+        "ENTITY-IMPORT-006"
+      ],
+      "description": "The bounded fixture has no declaration permitting one token to carry both identity meanings.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "business-r1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-import-equal-revision-conflict-token"
+      ]
+    },
+    {
+      "id": "entity.binding.unversioned-create-001",
+      "spec": "entities/lifecycle",
+      "requirements": [
+        "ENTITY-LIFECYCLE-001",
+        "ENTITY-LIFECYCLE-002",
+        "WORKFLOW-VERSION-007"
+      ],
+      "description": "Creation retains the unversioned lifecycle observation for subsequent reuse.",
+      "operation": "finkore.entity.create",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "id": "invoice-1",
+        "data": {
+          "amount": {
+            "amount": "1.239",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "invoice-1",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "1.239",
+              "currency": "EUR"
+            }
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-binding-unversioned-create"
+      ]
+    },
+    {
+      "id": "entity.binding.unversioned-draft-transition-001",
+      "spec": "entities/lifecycle",
+      "requirements": [
+        "ENTITY-LIFECYCLE-003",
+        "WORKFLOW-VERSION-008"
+      ],
+      "description": "A unversioned Entity can transition from its explicitly observed State without losing binding.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "invoice-1",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "1.239",
+              "currency": "EUR"
+            }
+          }
+        },
+        "target": "REVIEW"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "invoice-1",
+          "state": "REVIEW",
+          "data": {
+            "amount": {
+              "amount": "1.239",
+              "currency": "EUR"
+            }
+          }
+        },
+        "observations": {
+          "identity": "invoice-1"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-binding-unversioned-draft-transition"
+      ]
+    },
+    {
+      "id": "entity.binding.unversioned-review-transition-001",
+      "spec": "entities/lifecycle",
+      "requirements": [
+        "ENTITY-LIFECYCLE-003",
+        "WORKFLOW-VERSION-008"
+      ],
+      "description": "A unversioned Entity can transition from its explicitly observed State without losing binding.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "invoice-1",
+          "state": "REVIEW",
+          "data": {
+            "amount": {
+              "amount": "1.239",
+              "currency": "EUR"
+            }
+          }
+        },
+        "target": "DONE"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "invoice-1",
+          "state": "DONE",
+          "data": {
+            "amount": {
+              "amount": "1.239",
+              "currency": "EUR"
+            }
+          }
+        },
+        "observations": {
+          "identity": "invoice-1"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-binding-unversioned-review-transition"
+      ]
+    },
+    {
+      "id": "entity.binding.unversioned-import-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-002",
+        "WORKFLOW-VERSION-007"
+      ],
+      "description": "An explicitly bound existing observation can be imported for reuse.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "revision": "business-r1",
+            "current": true
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0",
+              "current": false
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-binding-unversioned-import"
+      ]
+    },
+    {
+      "id": "entity.binding.versioned-create-001",
+      "spec": "entities/lifecycle",
+      "requirements": [
+        "ENTITY-LIFECYCLE-001",
+        "ENTITY-LIFECYCLE-002",
+        "WORKFLOW-VERSION-007"
+      ],
+      "description": "Creation retains the versioned lifecycle observation for subsequent reuse.",
+      "operation": "finkore.entity.create",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ],
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "id": "invoice-1",
+        "data": {
+          "amount": {
+            "amount": "1.239",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "invoice-1",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "1.239",
+              "currency": "EUR"
+            }
+          },
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-binding-versioned-create"
+      ]
+    },
+    {
+      "id": "entity.binding.versioned-draft-transition-001",
+      "spec": "entities/lifecycle",
+      "requirements": [
+        "ENTITY-LIFECYCLE-003",
+        "WORKFLOW-VERSION-008"
+      ],
+      "description": "A versioned Entity can transition from its explicitly observed State without losing binding.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ],
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "invoice-1",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "1.239",
+              "currency": "EUR"
+            }
+          },
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          }
+        },
+        "target": "REVIEW"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "invoice-1",
+          "state": "REVIEW",
+          "data": {
+            "amount": {
+              "amount": "1.239",
+              "currency": "EUR"
+            }
+          },
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          }
+        },
+        "observations": {
+          "identity": "invoice-1"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-binding-versioned-draft-transition"
+      ]
+    },
+    {
+      "id": "entity.binding.versioned-review-transition-001",
+      "spec": "entities/lifecycle",
+      "requirements": [
+        "ENTITY-LIFECYCLE-003",
+        "WORKFLOW-VERSION-008"
+      ],
+      "description": "A versioned Entity can transition from its explicitly observed State without losing binding.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ],
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "invoice-1",
+          "state": "REVIEW",
+          "data": {
+            "amount": {
+              "amount": "1.239",
+              "currency": "EUR"
+            }
+          },
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          }
+        },
+        "target": "DONE"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "invoice-1",
+          "state": "DONE",
+          "data": {
+            "amount": {
+              "amount": "1.239",
+              "currency": "EUR"
+            }
+          },
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          }
+        },
+        "observations": {
+          "identity": "invoice-1"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-binding-versioned-review-transition"
+      ]
+    },
+    {
+      "id": "entity.binding.versioned-import-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-002",
+        "WORKFLOW-VERSION-007"
+      ],
+      "description": "An explicitly bound existing observation can be imported for reuse.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ],
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            },
+            "binding": {
+              "definitionIdentity": "invoice-flow",
+              "definitionVersionIdentity": "1"
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            },
+            "binding": {
+              "definitionIdentity": "invoice-flow",
+              "definitionVersionIdentity": "1"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "revision": "business-r1",
+            "current": true
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0",
+              "current": false
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-binding-versioned-import"
+      ]
+    },
+    {
+      "id": "entity.binding.import-missing-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-002",
+        "WORKFLOW-VERSION-007",
+        "WORKFLOW-VERSION-010",
+        "ENTITY-ERROR-004"
+      ],
+      "description": "A missing historical binding cannot be filled from the supplied definition.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ],
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-binding-import-missing"
+      ]
+    },
+    {
+      "id": "entity.binding.import-null-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-002",
+        "WORKFLOW-VERSION-007",
+        "WORKFLOW-VERSION-010",
+        "ENTITY-ERROR-004"
+      ],
+      "description": "A null historical binding cannot be filled from the supplied definition.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ],
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            },
+            "binding": null
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            },
+            "binding": null
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-binding-import-null"
+      ]
+    },
+    {
+      "id": "entity.binding.import-malformed-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-002",
+        "WORKFLOW-VERSION-007",
+        "WORKFLOW-VERSION-010",
+        "ENTITY-ERROR-004"
+      ],
+      "description": "A malformed historical binding cannot be filled from the supplied definition.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ],
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            },
+            "binding": {}
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            },
+            "binding": {}
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-binding-import-malformed"
+      ]
+    },
+    {
+      "id": "entity.binding.import-mismatch-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-002",
+        "WORKFLOW-VERSION-007",
+        "WORKFLOW-VERSION-010",
+        "ENTITY-ERROR-004"
+      ],
+      "description": "A mismatch historical binding cannot be filled from the supplied definition.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ],
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            },
+            "binding": {
+              "definitionIdentity": "invoice-flow",
+              "definitionVersionIdentity": "2"
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_VERSION_MISMATCH"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            },
+            "binding": {
+              "definitionIdentity": "invoice-flow",
+              "definitionVersionIdentity": "2"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-binding-import-mismatch"
+      ]
+    },
+    {
+      "id": "entity.declaration.unknown-create-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-009",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Malformed unknown declaration is rejected before evaluating data.",
+      "operation": "finkore.entity.create",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-mony",
+              "path": "amount"
+            }
+          ]
+        },
+        "id": "invoice-1",
+        "data": {
+          "amount": {
+            "amount": "1.239",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-declaration-unknown-create"
+      ]
+    },
+    {
+      "id": "entity.declaration.unknown-import-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-009",
+        "ENTITY-IMPORT-008"
+      ],
+      "description": "Import cannot silently skip a unknown declaration.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-mony",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-declaration-unknown-import"
+      ]
+    },
+    {
+      "id": "entity.declaration.null-list-create-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-009",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Malformed null-list declaration is rejected before evaluating data.",
+      "operation": "finkore.entity.create",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": null
+        },
+        "id": "invoice-1",
+        "data": {
+          "amount": {
+            "amount": "1.239",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-declaration-null-list-create"
+      ]
+    },
+    {
+      "id": "entity.declaration.null-list-import-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-009",
+        "ENTITY-IMPORT-008"
+      ],
+      "description": "Import cannot silently skip a null-list declaration.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": null
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-declaration-null-list-import"
+      ]
+    },
+    {
+      "id": "entity.declaration.null-entry-create-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-009",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Malformed null-entry declaration is rejected before evaluating data.",
+      "operation": "finkore.entity.create",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            null
+          ]
+        },
+        "id": "invoice-1",
+        "data": {
+          "amount": {
+            "amount": "1.239",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-declaration-null-entry-create"
+      ]
+    },
+    {
+      "id": "entity.declaration.null-entry-import-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-009",
+        "ENTITY-IMPORT-008"
+      ],
+      "description": "Import cannot silently skip a null-entry declaration.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            null
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-declaration-null-entry-import"
+      ]
+    },
+    {
+      "id": "entity.declaration.missing-id-create-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-009",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Malformed missing-id declaration is rejected before evaluating data.",
+      "operation": "finkore.entity.create",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "id": "invoice-1",
+        "data": {
+          "amount": {
+            "amount": "1.239",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-declaration-missing-id-create"
+      ]
+    },
+    {
+      "id": "entity.declaration.missing-id-import-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-009",
+        "ENTITY-IMPORT-008"
+      ],
+      "description": "Import cannot silently skip a missing-id declaration.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-declaration-missing-id-import"
+      ]
+    },
+    {
+      "id": "entity.declaration.empty-path-create-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-009",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Malformed empty-path declaration is rejected before evaluating data.",
+      "operation": "finkore.entity.create",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": ""
+            }
+          ]
+        },
+        "id": "invoice-1",
+        "data": {
+          "amount": {
+            "amount": "1.239",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-declaration-empty-path-create"
+      ]
+    },
+    {
+      "id": "entity.declaration.empty-path-import-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-009",
+        "ENTITY-IMPORT-008"
+      ],
+      "description": "Import cannot silently skip a empty-path declaration.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": ""
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-declaration-empty-path-import"
+      ]
+    },
+    {
+      "id": "entity.declaration.missing-other-path-create-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-009",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Malformed missing-other-path declaration is rejected before evaluating data.",
+      "operation": "finkore.entity.create",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "money-not-greater-than",
+              "path": "amount"
+            }
+          ]
+        },
+        "id": "invoice-1",
+        "data": {
+          "amount": {
+            "amount": "1.239",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-declaration-missing-other-path-create"
+      ]
+    },
+    {
+      "id": "entity.declaration.missing-other-path-import-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-009",
+        "ENTITY-IMPORT-008"
+      ],
+      "description": "Import cannot silently skip a missing-other-path declaration.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "money-not-greater-than",
+              "path": "amount"
+            }
+          ]
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          },
+          "currentRevision": "business-r1",
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "invoice-1",
+              "revision": "business-r0"
+            }
+          ],
+          "conflictVersion": "lock-v1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "1.239",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-declaration-missing-other-path-import"
+      ]
+    },
+    {
+      "id": "entity.declaration.valid-predicate-rejection-control-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-004"
+      ],
+      "description": "A supported predicate rejecting data is distinct from malformed declaration.",
+      "operation": "finkore.entity.create",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "POSITIVE",
+              "rule": "positive-money",
+              "path": "amount"
+            }
+          ]
+        },
+        "id": "invoice-1",
+        "data": {
+          "amount": {
+            "amount": "-1",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "entity-declaration-valid-predicate-rejection-control"
+      ]
+    },
+    {
+      "id": "entity.declaration.omitted-control-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-009",
+        "ENTITY-VALIDATION-004"
+      ],
+      "description": "A omitted validator declaration is valid; malformed-declaration rejection must not reject this control.",
+      "operation": "finkore.entity.create",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          }
+        },
+        "id": "invoice-1",
+        "data": {
+          "amount": {
+            "amount": "1.239",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "invoice-1",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "1.239",
+              "currency": "EUR"
+            }
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "malformed-validator-rejects-valid-declaration"
+      ]
+    },
+    {
+      "id": "entity.declaration.empty-control-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-009",
+        "ENTITY-VALIDATION-004"
+      ],
+      "description": "A empty validator declaration is valid; malformed-declaration rejection must not reject this control.",
+      "operation": "finkore.entity.create",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": []
+        },
+        "id": "invoice-1",
+        "data": {
+          "amount": {
+            "amount": "1.239",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "invoice-1",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "1.239",
+              "currency": "EUR"
+            }
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "malformed-validator-rejects-valid-declaration"
+      ]
+    },
+    {
+      "id": "entity.declaration.cross-field-control-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-009",
+        "ENTITY-VALIDATION-004"
+      ],
+      "description": "A cross-field validator declaration is valid; malformed-declaration rejection must not reject this control.",
+      "operation": "finkore.entity.create",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "REVIEW",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "REVIEW"
+              },
+              {
+                "source": "REVIEW",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "REVIEW": [
+              "amount"
+            ],
+            "DONE": []
+          },
+          "validation": [
+            {
+              "id": "WITHIN_LIMIT",
+              "rule": "money-not-greater-than",
+              "path": "amount",
+              "otherPath": "amount"
+            }
+          ]
+        },
+        "id": "invoice-1",
+        "data": {
+          "amount": {
+            "amount": "1.239",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "invoice-1",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "1.239",
+              "currency": "EUR"
+            }
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "malformed-validator-rejects-valid-declaration"
+      ]
     }
   ]
 }

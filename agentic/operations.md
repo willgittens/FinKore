@@ -415,6 +415,16 @@ binding, and expected-precondition checks have passed.
 [WORKFLOW-VERSION-003 and -005 through -012](../spec/workflow/versioning.md), and
 [WORKFLOW-CONFLICT-001 through -008](../spec/workflow/conflicts.md).
 
+## Shared Entity declaration obligations
+
+Existing Entity instances retain their owned lifecycle, mutability, and validator
+declarations under [ENTITY-DEFINITION-002](../spec/entities/README.md), including
+unversioned Workflows. Unsupported/malformed validators fail with
+`FINKORE_ENTITY_INVALID_MUTATION` under
+[ENTITY-VALIDATION-009](../spec/entities/validation.md); a supported rule rejecting
+data retains `FINKORE_ENTITY_VALIDATION_FAILED`. These corrections apply to
+Entity create, mutate, transition, and evolution without adding an operation ID.
+
 ## `finkore.entity.create`
 
 **Purpose:** Create a Financial Entity observation under a supplied

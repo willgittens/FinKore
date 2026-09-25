@@ -10,4 +10,9 @@ final class ReadinessCoverageTest {
   void sequencesAndOwnership() throws IOException {
     ReadinessRegressionTest.main(new String[0]);
   }
+
+  @Test
+  void serializationBindingAndNativeValues() throws IOException {
+    BoundaryRegressionTest.main(new String[0]);
+  }
 }

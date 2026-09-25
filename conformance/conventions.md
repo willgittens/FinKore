@@ -332,7 +332,8 @@ registry, storage lock, or concrete migration format.
 
 These fixture interpretations implement the linked specification obligations;
 they do not define a production envelope. Permanent regressions and native
-tests are still pending in [Milestone 2](../docs/plans/plan-09.5.md).
+tests in [Milestone 2](../docs/plans/plan-09.5.md) now reproduce these defects;
+implementation corrections remain pending.
 
 ### Money serialization and native Audit values
 
@@ -360,7 +361,7 @@ errors; acyclic shared structures remain valid. See
 
 ### Workflow presence and ownership
 
-Workflow `expectedState` and `expectedRevision` are optional fixture members.
+Workflow `expectedCurrentState` and `expectedRevision` are optional fixture members.
 Adapters preserve presence, including explicit null. The core applies
 [Workflow Conflicts](../spec/workflow/conflicts.md): null expected State uses
 `FINKORE_WORKFLOW_INVALID_STATE`; null expected revision uses
@@ -390,6 +391,22 @@ empty-object, scalar, and structured fact controls prevent a universal fact
 schema from being inferred. Chain/composition fixtures consume observations;
 their `state`, `applicability`, and `effective` members do not authorize using
 an incomplete concrete Requirement or Decision at record/evaluation boundaries.
+
+### Entity declarations and revision identity
+
+Under **ENTITY-VALIDATION-009**, the bounded fixture rejects an unknown rule,
+malformed validator list/entry, missing or empty string `id`/`path`, or missing
+or empty `otherPath` for `money-not-greater-than`, with
+`FINKORE_ENTITY_INVALID_MUTATION`. A supported predicate rejecting data uses
+`FINKORE_ENTITY_VALIDATION_FAILED`. Omitted validation and an empty list are
+valid; no general validator language is introduced.
+
+The bounded import fixture rejects equal current-revision/conflict tokens with
+`FINKORE_ENTITY_INVALID_IDENTITY` under **ENTITY-REVISION-002**/**007**. It has
+no shared-meaning declaration switch. This is not global lexical uniqueness;
+the composing-specification exception remains in [Entity Revisions](../spec/entities/revisions.md).
+Native retained-definition checks apply **ENTITY-DEFINITION-002**, including
+unversioned Entity instances.
 
 ### Entity version binding and import preconditions
 

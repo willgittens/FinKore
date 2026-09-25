@@ -1,5 +1,11 @@
 # FinKore Python Core
 
+The development tree now includes the [Core 0.9.5 Milestone 2 regressions](../../../docs/plans/plan-09.5.md).
+They intentionally fail against unresolved native API and cross-domain defects.
+The 0.9.4 results below describe that tagged snapshot; the expanded development
+manifest is not yet passing conformance. No correction is claimed until its
+regressions and mutation gates pass.
+
 This package is the Python implementation track for FinKore Core 0.9 release
 candidate. It is derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`,
 not from TypeScript financial implementation code.

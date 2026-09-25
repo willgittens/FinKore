@@ -38,6 +38,10 @@ currentness value that differs from a request's expectation instead uses
 `FINKORE_ENTITY_STATE_CONFLICT` under `ENTITY-EVOLUTION-025`. These distinctions
 do not define a total ordering of every possible Entity failure.
 
+Malformed/unsupported validator declarations use `FINKORE_ENTITY_INVALID_MUTATION`
+under **ENTITY-VALIDATION-009**. A valid declared predicate rejecting data
+retains `FINKORE_ENTITY_VALIDATION_FAILED`.
+
 ## Invariants
 
 A failed Financial Entity operation must not produce a partially valid Financial Entity.

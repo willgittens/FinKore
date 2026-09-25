@@ -15,6 +15,7 @@ A Financial Entity follows the canonical [identity](identity.md), [lifecycle](li
 - **ENTITY-AUDIT-001** — A composing domain MUST identify which Mutations and Transitions require an [Audit Event](../audit/events.md).
 - **ENTITY-AUDIT-002** — Each successful Mutation or Transition identified by **ENTITY-AUDIT-001** MUST produce a corresponding Audit Event.
 - **ENTITY-DEFINITION-001** — A composing domain MUST define its fields, lifecycle, and financially relevant invariants.
+- **ENTITY-DEFINITION-002** — An existing Financial Entity MUST retain stable owned declarations for its lifecycle, mutability, and validation rules, including nested Workflow guards and declaration containers, whether the Workflow is versioned or unversioned. Mutating original constructor/import inputs or returned definition observations MUST NOT change the behavior of that existing Entity. Immutable representations and defensive copies MAY realize this guarantee.
 
 Core 0.9 release candidate Entity Evolution defines portable correction, reversal, void, and supersession relations. Evolution preserves stable Entity identity and historical financial facts, uses explicit Entity Revision and Evolution Relation identities, requires caller-supplied Audit evidence, and rejects invalid or duplicate evolution without creating partial Entity, evolution, or Audit observations.
 
@@ -29,28 +30,17 @@ expected-state/revision/conflict-version observations without partial import.
 
 A Financial Entity's identity must remain stable throughout its lifecycle. Its current State and data must reflect only successful domain operations.
 
-## Core 0.9.5 ownership review (non-normative, blocking)
+## Core 0.9.5 correction note (non-normative)
 
-The existing lifecycle/validation rules require declared behavior, but do not
-explicitly settle whether an unversioned Entity may retain caller-mutable
-declarations. **WORKFLOW-VERSION-003** cannot by itself govern this unversioned
-case. The [Milestone 1 decision](../../docs/plans/plan-09.5.md) proposes that an
-existing Entity retain stable, owned declarations, including nested Workflow
-guards/transitions, mutability lists, and validators. Original input or returned
-observation mutation would not reconfigure it; immutable values or defensive
-copies would both satisfy that guarantee. No migration or dynamic
-reconfiguration API is proposed.
-
-This is a blocking specification gap, not an accepted new requirement. Adoption
-needs a new `ENTITY-DEFINITION` requirement because **ENTITY-DEFINITION-001**
-governs what a composing domain declares, not ownership over an instance's
-lifetime. Native alias tests can establish the proposed boundary; a JSON
-request alone cannot. The proposed successful observation is unchanged retained
-behavior; a previously undeclared transition still fails with the existing
-Workflow transition error. CoreDoc's declared-control obligations remain intact.
+The accepted [contract decision](../../docs/plans/plan-09.5.md) adds
+**ENTITY-DEFINITION-002** for the previously ambiguous unversioned ownership
+boundary. It does not define migration or dynamic reconfiguration. Native alias
+tests establish this guarantee without requiring a definition registry. The
+rule does not require stateless APIs to retain declarations across unrelated
+calls; it governs declarations retained for an existing Entity instance.
 
 ## Non-Goals
 
 Core 0.9 release candidate does not define any concrete financial entity type,
-storage model, ownership model, global identity registry, deduplication service,
+storage model, financial ownership model, global identity registry, deduplication service,
 authorization model, API, or user interface.

@@ -4701,6 +4701,1431 @@
         "malformed-effectiveness-counted",
         "composition-validation-short-circuited"
       ]
+    },
+    {
+      "id": "approval.association.record-null-control-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-DECISION-007"
+      ],
+      "description": "An explicitly supplied null association is valid; absence is distinct.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": null,
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": null,
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "alice"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-null-control"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-null-control-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002"
+      ],
+      "description": "A concrete Decision with explicit null facts can satisfy the Requirement.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": null,
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-null-control"
+      ]
+    },
+    {
+      "id": "approval.association.record-empty-object-control-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-DECISION-007"
+      ],
+      "description": "An explicitly supplied empty-object association is valid; absence is distinct.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {},
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": {},
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "alice"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-empty-object-control"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-empty-object-control-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002"
+      ],
+      "description": "A concrete Decision with explicit empty-object facts can satisfy the Requirement.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": {},
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-empty-object-control"
+      ]
+    },
+    {
+      "id": "approval.association.record-scalar-control-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-DECISION-007"
+      ],
+      "description": "An explicitly supplied scalar association is valid; absence is distinct.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": 7,
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": 7,
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "alice"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-scalar-control"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-scalar-control-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002"
+      ],
+      "description": "A concrete Decision with explicit scalar facts can satisfy the Requirement.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": 7,
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-scalar-control"
+      ]
+    },
+    {
+      "id": "approval.association.record-structured-control-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-DECISION-007"
+      ],
+      "description": "An explicitly supplied structured association is valid; absence is distinct.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "alice"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-structured-control"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-structured-control-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002"
+      ],
+      "description": "A concrete Decision with explicit structured facts can satisfy the Requirement.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-structured-control"
+      ]
+    },
+    {
+      "id": "approval.association.record-missing-facts-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-ERROR-001",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "Absent association cannot be recorded or repaired from current facts.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-missing-facts"
+      ]
+    },
+    {
+      "id": "approval.association.decision-evaluate-missing-facts-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002"
+      ],
+      "description": "An unassociated concrete Decision is invalid rather than effective.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-decision-evaluate-missing-facts"
+      ]
+    },
+    {
+      "id": "approval.association.history-only-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-001",
+        "APPROVAL-DECISION-002",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "Structural association validation includes only incomplete history; no entries are dropped.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-history-only"
+      ]
+    },
+    {
+      "id": "approval.association.history-before-valid-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-001",
+        "APPROVAL-DECISION-002",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "Structural association validation includes before-valid incomplete history; no entries are dropped.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "review",
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-history-before-valid"
+      ]
+    },
+    {
+      "id": "approval.association.history-after-valid-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-001",
+        "APPROVAL-DECISION-002",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "Structural association validation includes after-valid incomplete history; no entries are dropped.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "review",
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-history-after-valid"
+      ]
+    },
+    {
+      "id": "approval.association.history-unrelated-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-001",
+        "APPROVAL-DECISION-002",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "Structural association validation includes unrelated incomplete history; no entries are dropped.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "other",
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-history-unrelated"
+      ]
+    },
+    {
+      "id": "approval.association.record-empty-subject-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-002",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Malformed concrete declaration empty-subject prevents recording, without changing history.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {},
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-empty-subject"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-empty-subject-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-002",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Malformed concrete declaration empty-subject cannot be bypassed during evaluation.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {},
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-empty-subject"
+      ]
+    },
+    {
+      "id": "approval.association.record-null-subject-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-002",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Malformed concrete declaration null-subject prevents recording, without changing history.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": null,
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-null-subject"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-null-subject-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-002",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Malformed concrete declaration null-subject cannot be bypassed during evaluation.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": null,
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-null-subject"
+      ]
+    },
+    {
+      "id": "approval.association.record-subject-missing-id-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-002",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Malformed concrete declaration subject-missing-id prevents recording, without changing history.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-subject-missing-id"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-subject-missing-id-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-002",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Malformed concrete declaration subject-missing-id cannot be bypassed during evaluation.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-subject-missing-id"
+      ]
+    },
+    {
+      "id": "approval.association.record-null-eligibility-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-003",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Malformed concrete declaration null-eligibility prevents recording, without changing history.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": null,
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-null-eligibility"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-null-eligibility-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-003",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Malformed concrete declaration null-eligibility cannot be bypassed during evaluation.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": null,
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-null-eligibility"
+      ]
+    },
+    {
+      "id": "approval.association.record-empty-eligibility-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-003",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Malformed concrete declaration empty-eligibility prevents recording, without changing history.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-empty-eligibility"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-empty-eligibility-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-003",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Malformed concrete declaration empty-eligibility cannot be bypassed during evaluation.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-empty-eligibility"
+      ]
+    },
+    {
+      "id": "approval.association.record-malformed-eligibility-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-003",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Malformed concrete declaration malformed-eligibility prevents recording, without changing history.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": "alice",
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-malformed-eligibility"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-malformed-eligibility-001",
+      "spec": "approvals/requirements",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-003",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Malformed concrete declaration malformed-eligibility cannot be bypassed during evaluation.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": "alice",
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-malformed-eligibility"
+      ]
+    },
+    {
+      "id": "approval.association.ineligible-control-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-004"
+      ],
+      "description": "Valid eligibility excluding an Actor is distinct from a malformed eligibility declaration.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "bob"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INELIGIBLE_ACTOR"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-ineligible-control"
+      ]
     }
   ]
 }

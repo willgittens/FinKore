@@ -140,8 +140,8 @@ that every implementation preserves the same meaning.
 These scenarios are only a small illustration of FinKore Core 0.9.4.
 
 Across Money, Workflow, Audit, Approvals, Financial Entities, and shared
-conventions, the current 542-vector suite maps vectors to 329 requirements.
-Every vector passes on TypeScript, Python 3.12/3.13, and Java, with zero failed,
+conventions, the 0.9.4 snapshot's 542-vector suite maps vectors to 329 requirements.
+Every vector passed on TypeScript, Python 3.12/3.13, and Java, with zero failed,
 unsupported, or infrastructure outcomes. Native tests and mutation probes also
 protect lifecycle sequences, Entity history reuse, Workflow ownership, and
 Audit JSON preservation. Complete clean-checkout verification covers builds,
@@ -342,8 +342,8 @@ See [Developer Tools](./docs/tools/README.md) for details.
 FinKore Core 0.9.4 is the corrective release candidate for the frozen Core 0.9
 baseline intended to become Core 1.0.
 
-TypeScript, Python, and Java implement the following domains and pass the
-complete current manifest. The [Core 0.9.4 corrective plan](./docs/plans/plan-09.4.md)
+TypeScript, Python, and Java implement the following domains and passed the
+complete 0.9.4 manifest. The [Core 0.9.4 corrective plan](./docs/plans/plan-09.4.md)
 closes the reviewed Approval, Entity, Workflow, and Audit defects with permanent
 regression and mutation protection. A subsequent readiness review found further
 public API and cross-domain boundary defects tracked in the
@@ -351,12 +351,13 @@ public API and cross-domain boundary defects tracked in the
 [Core 1.0 promotion](./docs/plans/plan-10.md) is blocked until that corrective
 release gate is satisfied.
 
-The 0.9.5 Milestone 1 review has clarified existing obligations and reassessed
-coverage. It remains blocked on three Entity contract decisions: retained
-definition ownership, equal revision/conflict tokens, and malformed-validator
-errors. [Traceability](./conformance/traceability.md) now distinguishes these
-gaps and partial native/API coverage from the unchanged manifest's passing
-results. Implementation corrections and new regressions remain pending.
+The 0.9.5 contract decisions are accepted. Milestone 2 adds 85 portable
+regressions and controls plus native serialization, binding, ownership, and
+operation-sequence tests. The development manifest now contains 627 vectors
+and exposes known failures; all 542 earlier vectors still pass on all four
+runtimes. [Traceability](./conformance/traceability.md) keeps correction and
+mutation gates open. These failing regressions are deliberate evidence for the
+next implementation milestones, not a new passing-conformance claim.
 
 - Money
 - Workflow

@@ -20,7 +20,7 @@ The manifest and vector-file version fields describe syntax compatibility, not
 FinKore release numbers. Release scope is determined by the manifest contents,
 referenced requirement IDs, and traceability status.
 
-The local `core-0.9.4` tag identifies the corrective snapshot of this manifest.
+The local `core-0.9.4` tag identifies the previous corrective manifest snapshot.
 The Core label remains `0.9-rc` and conformance syntax remains `0.1`.
 
 The [Core 0.9.4 plan](../docs/plans/plan-09.4.md) corrects the demonstrated
@@ -30,7 +30,7 @@ and `ENTITY-EVOLUTION-035` (reject unresolved contradictory currentness history
 while accepting valid historical changes), under the release-candidate
 correction policy.
 
-TypeScript, Python 3.12/3.13, and Java pass all 542 manifest vectors with zero
+TypeScript, Python 3.12/3.13, and Java passed all 542 vectors at that snapshot with zero
 failed, unsupported, or infrastructure outcomes. Native API sequence and
 ownership tests supplement portable vectors, and complete release verification
 includes coverage, mutation protection, and isolated package consumers.
@@ -38,13 +38,14 @@ includes coverage, mutation protection, and isolated package consumers.
 limits; passing this finite manifest does not establish exhaustive boundary
 coverage or complete the separate Core 1.0 promotion process.
 
-The subsequent [Core 0.9.5 Milestone 1 review](../docs/plans/plan-09.5.md)
-reopens native serialization, ownership, presence, and composition boundaries.
-Traceability currently records 52 PARTIAL requirements and three BLOCKING SPEC
-GAPs for Entity declaration ownership, equal revision/conflict tokens, and
-malformed-validator error selection. The 542 existing vectors are unchanged;
-their historical passing results do not close those findings. Milestone 1
-awaits those contract decisions before it can be marked complete.
+The [Core 0.9.5 contract and regression milestones](../docs/plans/plan-09.5.md)
+resolve the three Entity decisions and add 85 manifest-discovered vectors,
+bringing the current total to 627. Native tests cover boundaries JSON cannot
+express. All 542 earlier vectors and the paired controls pass, while the new
+regressions reproduce defects in all implementations. Traceability records
+56 PARTIAL requirements and no remaining reviewed specification gap. The
+expanded manifest is not yet passing conformance; correction and mutation
+verification remain required.
 
 For FinKore Core 0.9 release candidate, [manifest.json](manifest.json) is the
 frozen release-candidate manifest and `finkoreConformance` remains `0.1`. This

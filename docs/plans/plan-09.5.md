@@ -2,8 +2,9 @@
 
 ## Status
 
-Milestone 1 review performed; completion is blocked on the three Entity
-contract decisions recorded below. No implementation milestone is complete.
+Milestones 1 and 2 are complete: the three Entity contract decisions are
+accepted, and permanent failing regressions and passing controls reproduce
+every reviewed finding. Financial implementation corrections remain pending.
 A new readiness review of `d920091`
 (`core-0.9.4`) reproduced the findings below despite passing existing checks.
 [Core 1.0 promotion](plan-10.md) is blocked until these findings and this
@@ -98,7 +99,7 @@ correctness.
 - [x] Classify every finding as an implementation violation, adapter/fixture
       defect, documentation mismatch, or blocking specification gap. Establish
       expected outcomes and primary error selection before implementation.
-- [ ] Resolve the decisions below in their owning documents. Identify any
+- [x] Resolve the decisions below in their owning documents. Identify any
       observable specification change and its compatibility impact; preserve
       stable IDs or introduce a new requirement only when the existing meaning
       cannot correctly carry the clarification.
@@ -113,8 +114,8 @@ correctness.
       specification/conformance documentation. Change CoreDoc only for changed
       foundation obligations, using its existing version fields.
 
-The following recommendations guide review; they are not accepted normative
-decisions or permission to invent implementation semantics.
+The original review directions below are resolved by the recorded outcomes and
+accepted Entity decisions. The owning specifications remain normative.
 
 | Decision | Recommended direction | Boundary requiring resolution |
 | --- | --- | --- |
@@ -149,41 +150,36 @@ concrete Approval error ordering is inferred from implementation order.
 | 4 | Implementation violation; concrete versus composition fixture boundary clarified. `APPROVAL-REQUIREMENT-002`, `APPROVAL-DECISION-001`/`002`, and the Approval error catalog require declared subject and association. Missing association or malformed concrete subject uses `FINKORE_APPROVAL_INVALID_DECISION`, including structurally incomplete reused history. | Record and evaluate directly and through adapters with missing/empty subject, absent association, and malformed historical entries before/after valid evidence. Pair explicit null/empty-object/scalar/structured fact associations and valid record → evaluate; preserve both histories on failure. |
 | 5 | Implementation/fixture presence violation. `WORKFLOW-CONFLICT-001`–`007` and `WORKFLOW-ERROR-007` distinguish omission from null. Null expected State returns `FINKORE_WORKFLOW_INVALID_STATE`; null expected revision returns `FINKORE_WORKFLOW_STATE_CONFLICT`. | Portable and native omission/null/malformed/matching/mismatching tests, absent observed revision, version mismatch plus null expectation, invalid State plus conflict, and unchanged observations. |
 | 6 | Implementation integration violation and missing fixture documentation. `ENTITY-LIFECYCLE-001`–`003`, `ENTITY-IMPORT-002`, and `WORKFLOW-VERSION-007`–`011` require retained binding. Create/transition/observe/import under the same version succeeds. Missing/malformed binding uses `FINKORE_WORKFLOW_INVALID_INSTANCE`; a different version uses `FINKORE_WORKFLOW_VERSION_MISMATCH`. | All-language native create → transition → observe/reconstruct/import → transition, plus versioned JSON fixtures. Compare exact binding and use unversioned, missing-binding, mismatch, and older-version controls; cover mutation/evolution observations too. |
-| 7 | Blocking specification/fixture gap. Semantic distinction and independent observation under `ENTITY-REVISION-002`/`006` do not unambiguously prohibit equal strings. Python/Java acceptance is not yet proven wrong merely because TypeScript rejects it. Proposed bounded-fixture rejection: `FINKORE_ENTITY_INVALID_IDENTITY`. | After decision: equal-token and distinct-token import fixtures; independent revision/conflict preconditions, exact preservation, missing tokens, and explicit shared-meaning boundary. Do not infer global lexical uniqueness. |
+| 7 | Normative ambiguity resolved by the accepted scoped interpretation of `ENTITY-REVISION-002`/`007`: the bounded fixture rejects equal current-revision/conflict tokens with `FINKORE_ENTITY_INVALID_IDENTITY`. Independently observable identities and the composing-specification exception remain intact. | equal-token and distinct-token import fixtures; independent revision/conflict preconditions, exact preservation, missing tokens, and explicit shared-meaning boundary. Do not infer global lexical uniqueness. |
 | 8a | Implementation violation and fixture documentation gap. Null `eligibleActors` does not declare eligibility under `APPROVAL-REQUIREMENT-003`; it uses the existing malformed concrete Requirement outcome `FINKORE_APPROVAL_INVALID_DECISION`. | Null/missing/empty/malformed eligibility with a valid concrete Requirement control. A valid list excluding the deciding Actor instead returns `FINKORE_APPROVAL_INELIGIBLE_ACTOR` at record time; lightweight composition observations retain their own rules. |
 | 8b | Implementation violation. Explicit null expected State/revision/conflict version does not match an otherwise valid Entity observation under `ENTITY-IMPORT-007`; return `FINKORE_ENTITY_STATE_CONFLICT`, not a Java null exception. | Native and portable import with all three omitted/null/malformed/matching/mismatching preconditions and missing observed revision/token. No partial result or changed source under `ENTITY-IMPORT-008` and `ENTITY-ERROR-001`. |
 | 8c | Implementation violation. Cycles are outside JSON: Actor metadata uses `FINKORE_AUDIT_ACTOR_INVALID` under `AUDIT-ACTOR-010`; ordinary Change/Event values use `FINKORE_AUDIT_INVALID_EVENT` under `AUDIT-CHANGE-008`. Preserve `AUDIT-ERROR-004` priority. | Native Python and Java cyclic maps/lists, nested cycles, shared acyclic controls, history import and candidate append. A recursion/stack exception, timeout, or process termination is not the expected failure or a valid mutant kill. |
-| 9 | Blocking specification gap. Versioned Workflow ownership cannot silently establish immutable unversioned Entity declarations. Proposed stable owned definitions require a new Entity definition obligation. | After decision: native TypeScript original/exposed Workflow transitions, nested guards, declaration lists, mutability and validator configuration; unchanged existing-Entity behavior and independent newly created Entity controls. |
-| 10 | Implementation violation for silently skipped validation; blocking primary-error gap for malformed declarations. `ENTITY-VALIDATION-001`–`003` require all declared rules, but `ENTITY-VALIDATION-004` describes a supported rule rejecting data. Proposed declaration failure: `FINKORE_ENTITY_INVALID_MUTATION`. | After decision: all-language create/import/mutate/transition with misspelled rule, malformed rule/list/id/path/otherPath, and paired valid declarations. Supported predicates rejecting data still return `FINKORE_ENTITY_VALIDATION_FAILED`. |
+| 9 | Normative gap resolved by `ENTITY-DEFINITION-002`: existing Entities retain owned declarations, including unversioned Workflows, without caller or exposed aliases changing behavior. | native TypeScript original/exposed Workflow transitions, nested guards, declaration lists, mutability and validator configuration; unchanged existing-Entity behavior and independent newly created Entity controls. |
+| 10 | Implementation violation for skipped validation; the declaration-error gap is resolved by `ENTITY-VALIDATION-009`. Unsupported/malformed declarations use `FINKORE_ENTITY_INVALID_MUTATION`; supported predicates rejecting data retain `FINKORE_ENTITY_VALIDATION_FAILED`. | all-language create/import/mutate/transition with misspelled rule, malformed rule/list/id/path/otherPath, and paired valid declarations. Supported predicates rejecting data still return `FINKORE_ENTITY_VALIDATION_FAILED`. |
 
-### Pending Entity decisions
+### Accepted Entity decisions
 
-These are concrete proposals awaiting the maintainer's contract choice, not
-new normative requirements. Their owning documents record the gap and proposed
-resolution. The clarification request offers adoption of all three proposals
-or retaining them as blocking gaps.
+The maintainer accepted the three proposals before requesting Milestone 2.
+Their owning documents now establish the contracts:
 
-1. [Definition ownership](../../spec/entities/README.md): retain stable owned
-   declarations for an existing Entity, versioned or unversioned. Input and
-   returned-value mutation cannot reconfigure it. Add a new
-   `ENTITY-DEFINITION` requirement; no migration or reconfiguration API.
-2. [Revision/conflict identity](../../spec/entities/revisions.md): the bounded
-   fixture rejects equal current-revision/conflict tokens without an explicit
-   composing-specification shared-meaning declaration. Clarify the scoped
-   meaning of `ENTITY-REVISION-002` without a global string-uniqueness rule.
-   The current fixture exposes no declaration mechanism; do not invent one
-   merely to implement a bypass. The broader shared-meaning exception remains
-   available to composing specifications with independently observable meanings.
-3. [Validator declarations](../../spec/entities/validation.md): reject
-   unsupported/malformed declarations with `FINKORE_ENTITY_INVALID_MUTATION`
-   before predicate evaluation. Add a new `ENTITY-VALIDATION` requirement;
-   keep supported-predicate failures under `ENTITY-VALIDATION-004` and retain
-   the two existing fixture predicates. No new DSL or portable error code.
+1. [Definition ownership](../../spec/entities/README.md),
+   `ENTITY-DEFINITION-002`: retain stable owned declarations for an existing
+   Entity, including unversioned Workflows. Original or exposed input mutation
+   cannot reconfigure the instance. Stateless APIs are not required to retain
+   definitions across unrelated calls; no migration/reconfiguration API is added.
+2. [Revision/conflict identity](../../spec/entities/revisions.md),
+   `ENTITY-REVISION-002`/`007`: the bounded import representation rejects equal
+   current-revision/conflict tokens without explicit composing-specification
+   shared meaning. No fixture flag or global string-uniqueness rule is invented.
+   The declared exception retains independently observable meanings and checks.
+3. [Validator declarations](../../spec/entities/validation.md),
+   `ENTITY-VALIDATION-009`: reject unsupported/malformed declarations with
+   `FINKORE_ENTITY_INVALID_MUTATION` before predicate evaluation; supported
+   predicates rejecting data still use `FINKORE_ENTITY_VALIDATION_FAILED`.
+   Omitted/empty validator lists and the two supported predicates stay valid.
 
-Until those decisions are adopted, Milestone 1 is **not complete**. Dependent
-regressions in Milestone 2 and the affected parts of Milestone 7 are blocked;
-other findings have established contracts. This follows the repository rule
-to surface undefined financial semantics rather than choosing them in code.
+Milestone 1 is complete and no reviewed specification gap blocks Milestone 2.
+Implementation and mutation closure remain separate gates.
 
 ### Compatibility and artifact synchronization
 
@@ -203,14 +199,18 @@ no canonical operation gains a new financial meaning or a canonical import ID.
 The defective versioned output path is not a backward-compatible import source
 that can be repaired by inferring historical binding from a current definition.
 
-The pending ownership and declaration-error proposals add observable obligations
+The accepted ownership and declaration-error corrections add observable obligations
 for previously unsettled boundaries. The scoped equal-token decision also
-selects a previously ambiguous fixture result. If adopted, record them as
+selects a previously ambiguous fixture result. They are recorded as
 corrective normative decisions under `SPEC-FREEZE-001` and
 `SPEC-COMPATIBILITY-012`/`014`, not editorial changes or version-neutral
-regressions. Preserve identifiers whose meaning is unchanged and review any
-canonical contract supersession under `SPEC-COMPATIBILITY-007`; do not claim
-compatibility merely because TypeScript already behaves that way.
+regressions. Existing identifiers are preserved: these corrections resolve previously
+unspecified boundaries rather than replace a prescribed canonical result.
+The new obligations have their own requirement IDs. No canonical operation ID
+is reused for different financial meaning or promoted from an import fixture;
+this documented release-candidate correction path does not claim behavioral
+compatibility for previously unsettled inputs merely because TypeScript
+already rejected some of them.
 
 CoreDoc review found no changed foundation obligation: exactness follows
 CORE-001.1/001.2; declared controls and failure atomicity follow CORE-002;
@@ -220,71 +220,164 @@ CoreDoc version fields therefore remain unchanged. Agentic metadata clarifies
 Workflow/Audit/Entity preservation and errors; Approval/import/serializer fixture
 IDs remain conformance-local. Descriptor coverage is not implementation closure.
 
-The reassessment retains all 542 manifest vectors and 411 requirement IDs:
+At the end of the initial review, the reassessment retained all 542 manifest
+vectors and 411 requirement IDs:
 **275 COVERED, 52 PARTIAL, 0 UNCOVERED, 81 NOT DIRECTLY TESTABLE, 0 DEFERRED,
 3 BLOCKING SPEC GAP**. These are requirement-level classifications. Missing
 native serializer/alias/cycle boundaries are themselves uncovered; their owning
 requirements remain PARTIAL because existing JSON vectors exercise other cases.
-No vectors or tests were added or rerun as financial regression proof here.
+Those were Milestone 1 classifications before acceptance. Milestone 2 adds
+permanent evidence and the current inventory is in conformance traceability.
 
-Permanent native tests belong in the existing TypeScript `core/test` domain
-suites, Python `core/tests/test_money.py`, `test_workflow.py`,
-`test_approvals.py`, `test_audit.py`, `test_entities.py`, and Java's corresponding
-`MoneyTest`, `WorkflowTest`, `ApprovalsTest`, `AuditTest`, and `EntitiesTest`
-suites. Sequence/readiness tests supplement those suites. Portable cases belong
+Permanent native boundary/sequence tests supplement the existing TypeScript,
+Python, and Java domain suites through normal test discovery. Portable cases belong
 in manifest-discovered domain files; existing readiness and critical/native
 mutation tools must discover the new tests in later milestones. Named failing
 regressions and paired passing controls precede fixes; historical passing
 counts cannot substitute for them.
 
-Completion review: specification explanations, conformance conventions and
+Milestone 1 completion review: specification explanations, conformance conventions and
 traceability, Agentic descriptors, and README status need updates in this
 milestone. Public APIs, JSDoc, unit tests, vectors, and mutation implementations
 are unchanged; their coordinated corrections remain mandatory in Milestones
 2–8 under `SPEC-FREEZE-002` before the corrective release can close. AGENTS.md,
 CoreDoc, release notes, packages, and tags need no change for this review.
 
-Verification for this documentation-only review: `npm run docs:check` passed
+Verification for the initial documentation-only review: `npm run docs:check` passed
 (documentation links, CoreDoc references, and requirement/vector/Agentic
 traceability); `git diff --check` passed. These checks validate the edited
 documents, not financial implementation conformance or mutation coverage.
 
 ## Milestone 2 — Permanent failing regressions and valid controls
 
-- [ ] Add manifest-discovered vectors for portable Approval association and
+- [x] Add manifest-discovered vectors for portable Approval association and
       eligibility, Workflow precondition presence, Entity import preconditions
       and revision identity, accepted versioned Entity sequences, and malformed
       validator declarations according to Milestone 1 decisions.
-- [ ] Add native Money serializer tests for exact round trips, safe scale
+- [x] Add native Money serializer tests for exact round trips, safe scale
       extension/reduction, lossy positive/negative reductions, zero, trailing
       zeros, malformed scales, and explicit-rounding controls. Cover both
       Python runtimes and Java's portable error mapping.
-- [ ] Add native Python instance-binding tests for original constructor input,
+- [x] Add native Python instance-binding tests for original constructor input,
       exposed binding, imported instances, and successful transition results.
       Verify that attempts to alter one observation do not alter another
       instance, and that version 2 cannot authorize a version 1 instance.
-- [ ] Add native Java Audit tests for mutable numeric input and returned
+- [x] Add native Java Audit tests for mutable numeric input and returned
       observations, and Python/Java cycle rejection at Actor metadata and
       ordinary Change boundaries. Include acyclic shared-object controls,
       nested arrays/maps, and supported immutable numbers.
-- [ ] Add Entity create → transition → observe/import → transition tests under
+- [x] Add Entity create → transition → observe/import → transition tests under
       an explicit binding, plus unversioned and version-mismatch controls.
       Cover retained definition input and exposed observations under the
       agreed ownership contract.
-- [ ] Exercise each finding through the owning core as well as its adapter
+- [x] Exercise each finding through the owning core as well as its adapter
       where applicable. Check exact outputs, portable codes, and unchanged
       operands, instance binding/state, Entity data, and committed histories.
-- [ ] Demonstrate each new regression fails against the defective implementation
+- [x] Demonstrate each new regression fails against the defective implementation
       while its valid control passes. A crash cannot stand in for the expected
       portable error, and a rejection by an earlier unrelated validator cannot
       count as a regression exposing the intended defect.
-- [ ] Register all new vectors and native tests in existing discovery and
+- [x] Register all new vectors and native tests in existing discovery and
       verification paths. Update traceability without claiming implementation
       closure while regressions still fail.
 
 Completion: every finding, including rows 9 and 10 and each lettered row, has
 repeatable permanent regression coverage and an appropriate passing control.
 No financial implementation fix precedes its demonstrated failing test.
+
+### Milestone 2 evidence
+
+The existing manifest-listed `readiness-regressions.json` files now include
+85 additional vectors: 27 Approval, 12 Workflow, and 46 Entity cases. Native
+tests execute those cases directly against owning cores, independently of
+adapter dispatch, and add non-JSON inputs and actual operation sequences:
+
+- [TypeScript boundary regressions](../../implementations/typescript/core/test/integration/boundary-regressions.test.ts).
+- [Python boundary regressions](../../implementations/python/core/tests/test_boundary_regressions.py), on CPython 3.12 and 3.13.
+- [Java boundary regressions](../../implementations/java/core/src/test/java/org/finkore/BoundaryRegressionTest.java), registered in the Java test tool and Maven coverage suite.
+
+The following prefixes identify permanent vector or native test families;
+native Python names refer to methods in `BoundaryRegressions`. Every finding
+has a failing case on its affected implementation and a passing control.
+Some defensive cases already pass on other implementations, as expected.
+
+| Finding | Permanent failing evidence | Passing control |
+| --- | --- | --- |
+| 1a | Python `test_money_lossy_serialization_rejected`, `test_money_invalid_scale_rejected` | `test_money_exact_serialization_controls`, `test_money_explicit_rounding_control`; unchanged operand and Decimal context |
+| 1b | Java `money.serialization.lossy-*`, `money.serialization.invalid-scale-*` | `money.serialization.exact-control`, `money.serialization.rounding-control` |
+| 2 | Python `test_binding_constructor_input_is_owned`, `test_exposed_binding_cannot_rebind` (created, imported, transitioned instances) | `test_binding_observation_control`, independently retained instances and version-1 transitions |
+| 3 | Java `audit.mutable-number.*` at construction/import/append and returned observations | `audit.immutable-numbers-shared-ownership-control`, including redaction and repeated observations |
+| 4 | `approval.association.*` missing subject/association/history cases, Python/Java native `missing-association` sequences | Explicit null/object/scalar/structured associations; native record → reimport → evaluate controls in all three languages |
+| 5 | `workflow.presence.state-null-001`, `workflow.presence.revision-null-001` and malformed/precedence cases, Python/Java | `workflow.presence.omitted-control-001`, matching State/revision controls |
+| 6 | `entity.binding.versioned-*`, mismatch import, and native versioned create → transition → observe/import → transition in all languages | `entity.binding.unversioned-*` and native unversioned sequences; missing/malformed binding rejection |
+| 7 | `entity.import.equal-revision-conflict-token-001`, Python/Java | `entity.import.distinct-token-control-001`, independently matching revision/conflict preconditions |
+| 8a | `approval.association.record-null-eligibility-001`, `approval.association.evaluate-null-eligibility-001`, Python | Valid eligibility controls and `approval.association.ineligible-control-001` distinguish invalid declarations from ineligible Actors |
+| 8b | `entity.import.presence-*` explicit null preconditions, Java | Omitted and matching State/revision/conflict controls; unchanged imported source |
+| 8c | Python `test_audit_cycles_are_portable_errors`, Java `audit.cycle.*`; Actor/Change map/list/nested cycles at construct/import/append | Python `test_audit_shared_acyclic_and_ownership_controls`, Java shared immutable-number control |
+| 9 | TypeScript original/exposed transition, State/terminal, mutability, and validator declaration alias tests | Independent new Entity declaration control and preserved nested guards |
+| 10 | `entity.declaration.unknown-*` and malformed declaration families, Python/Java | `entity.declaration.omitted-control-001`, `empty-control-001`, `cross-field-control-001`, `valid-predicate-rejection-control-001` |
+
+Python's requested zero-scale formatting also fails
+`test_money_zero_requested_scale`: `0.000` at scale 0 remains `0.000` instead
+of `0`. This additional formatting boundary belongs to Milestone 3. Null
+validator lists and null expected conflict versions with absent observed
+tokens likewise extend the reviewed declaration/presence families.
+
+Final manifest execution against the unchanged implementations:
+
+| Runtime | PASS | FAIL | UNSUPPORTED | INFRASTRUCTURE_ERROR |
+| --- | ---: | ---: | ---: | ---: |
+| TypeScript | 622 | 5 | 0 | 0 |
+| CPython 3.12 | 588 | 35 | 0 | 4 |
+| CPython 3.13 | 588 | 35 | 0 | 4 |
+| Java | 587 | 36 | 0 | 4 |
+
+All 542 earlier vectors and all 24 new portable control cases pass in all four
+runtimes. Python's four infrastructure outcomes are raw `TypeError` exceptions
+for null eligibility and null validator lists. Java's four are raw
+`NullPointerException` exceptions for explicit null import preconditions.
+These are reproduced implementation defects, not valid portable outcomes or
+mutation kills. Native tests likewise reject raw exceptions and accepted
+invalid input; no expected-failure markers or skips conceal them.
+
+The targeted TypeScript suite executes 100 tests (86 pass, 14 fail); Java
+executes 129 cases (50 pass, 79 fail). Each Python runtime executes 99 methods,
+reporting 72 failing assertions including subtests and three unexpected
+portable errors in expected-success versioned Entity sequences. These are
+intentionally red results. Passing controls were checked separately; Python
+subtest counts must not be subtracted from method counts to infer passes.
+Later assertions in a sequence remain unverified until its first failure is
+fixed; their presence does not claim implementation or mutation closure.
+
+Reproduce the native suites from the repository root:
+
+```sh
+npm run test -w @finkore/typescript -- test/integration/boundary-regressions.test.ts
+PYTHONPATH=implementations/python/core/src .tools/bin/python3.12 -m unittest discover -s implementations/python/core/tests -p test_boundary_regressions.py
+PYTHONPATH=implementations/python/core/src .tools/bin/python3.13 -m unittest discover -s implementations/python/core/tests -p test_boundary_regressions.py
+npm run java:compile
+.tools/bin/java -cp implementations/java/target/classes:implementations/java/target/test-classes org.finkore.BoundaryRegressionTest
+```
+
+Use the existing `conformance:typescript`, `conformance:python`,
+`conformance:python:3.13`, and `conformance:java` npm scripts for portable runs.
+Normal unit/coverage discovery includes these tests; runner discovery now
+compares manifest-declared IDs with loaded IDs instead of a historical count.
+No execution depends on temporary review probes.
+
+Build, strict TypeScript (including changed test files), Java compilation,
+toolchain verification, all 130 runner tests, developer-tool tests,
+architecture, documentation/traceability, license, and whitespace checks pass. Full
+financial coverage and mutation closure require a green baseline and remain
+in the correction and mutation milestones; `check`/`verify` are expected to
+fail at these ordinary regressions until then. Critical mutation probe tools
+have not yet gained the Milestone 8 probes.
+
+Completion review: tests, vectors, specification decisions, conformance
+conventions/traceability, Agentic metadata, and root/implementation README
+status are synchronized. Public APIs and production cores/adapters are
+unchanged, so no API/JSDoc correction is claimed. AGENTS.md, CoreDoc, release
+notes, packages, and tags need no change for this regression milestone.
 
 ## Milestone 3 — Exact Money serialization
 

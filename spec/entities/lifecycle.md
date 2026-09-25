@@ -38,8 +38,8 @@ The specification does not prescribe a production Entity envelope. The
 [conformance convention](../../conformance/conventions.md) records the binding
 inside each versioned Entity observation so the actual output can be reused.
 Unversioned observations do not acquire an invented version. Ownership of
-unversioned Entity declarations is a separate 0.9.5 contract decision; it does
-not follow solely from Workflow versioning.
+unversioned Entity declarations follows **ENTITY-DEFINITION-002**, separately
+from Workflow versioning.
 
 ```text
 DRAFT → SUBMITTED → APPROVED
