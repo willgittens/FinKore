@@ -331,9 +331,9 @@ registry, storage lock, or concrete migration format.
 ## Core 0.9.5 boundary review
 
 These fixture interpretations implement the linked specification obligations;
-they do not define a production envelope. Permanent regressions and native
-tests in [Milestone 2](../docs/plans/plan-09.5.md) now reproduce these defects;
-implementation corrections remain pending.
+they do not define a production envelope. The completed
+[Core 0.9.5 plan](../docs/plans/plan-09.5.md) corrects these boundaries, with
+passing permanent regressions, native API sequences, and paired mutation probes.
 
 ### Money serialization and native Audit values
 

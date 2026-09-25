@@ -53,10 +53,13 @@ version, and language implementation package versions. Format and package
 versions describe tooling or artifact compatibility; they do not define
 financial behavior.
 
-The `core-0.9.4` corrective snapshot retains the `0.9-rc` Core label. Its
-[Entity evolution correction note](entities/evolution.md#core-094-correction-note-non-normative)
-describes the accepted ambiguity corrections; the snapshot does not promote
-the specification to stable 1.0.
+The `core-0.9.5` corrective snapshot retains the `0.9-rc` Core label. Its
+[Entity ownership](entities/README.md#core-095-correction-note-non-normative),
+[validator](entities/validation.md#core-095-correction-note-non-normative), and
+[revision/conflict identity](entities/revisions.md) corrections refine demonstrated
+contract gaps while preserving the earlier
+[Entity evolution corrections](entities/evolution.md#core-094-correction-note-non-normative).
+The snapshot does not promote the specification to stable 1.0.
 
 ## Organization
 

@@ -1,10 +1,12 @@
 # FinKore Java Core
 
-[Core 0.9.5 Milestone 7](../../../docs/plans/plan-09.5.md) completes the
-reviewed Entity corrections. The development manifest now passes all 667 vectors
-on TypeScript, Python 3.12/3.13, and Java. Milestone 8 passes complete clean-checkout
-verification, including mutation and isolated package consumers. Corrective release
-closure remains Milestone 9; the 0.9.4 results below describe that snapshot.
+The completed [Core 0.9.5 corrective release](../../../docs/plans/plan-09.5.md)
+passes all 667 manifest vectors on TypeScript, Python 3.12/3.13, and Java.
+Native public API and operation-sequence regressions protect exact serialization,
+Workflow binding and preconditions, Approval association, Audit value ownership,
+and Entity declaration/import boundaries. Complete clean-checkout verification
+passes, including mutation suites and isolated package consumers. Passing these
+finite checks does not establish exhaustive correctness or declare Core 1.0 stable.
 
 Versioned Entity observations carry their original Workflow `binding` through
 create, import, mutation, transition, and evolution. Import requires that explicit
@@ -25,13 +27,6 @@ call; it does not retain a declaration across unrelated calls.
 This package is the Java implementation track for FinKore Core 0.9 release
 candidate. It is derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`,
 not from TypeScript or Python financial implementation code.
-
-The Core 0.9.4 corrective snapshot passes all 542 manifest vectors on TypeScript,
-Python 3.12/3.13, and Java. Native tests and mutation probes also protect
-Approval lifecycle sequences, Entity history reuse, and immutable Workflow
-guard ownership. Complete clean-checkout verification passes; see the
-[0.9.4 plan](../../../docs/plans/plan-09.4.md). Passing the finite manifest does
-not establish exhaustive boundary coverage or declare Core 1.0 stable.
 
 Audit Actor metadata and ordinary Change values preserve every own JSON
 member recursively, including `__proto__` and `constructor`, without assigning
@@ -72,7 +67,7 @@ release-candidate phase. It is not published to a Maven repository. The Maven
 artifact version identifies this implementation artifact; `FinKore.CORE_VERSION`
 identifies the FinKore Core behavioral baseline it implements.
 
-The `core-0.9.4` local repository tag identifies the corrective snapshot.
+The `core-0.9.5` local repository tag identifies the corrective snapshot.
 `FinKore.CORE_VERSION` and packaged Core compatibility metadata remain `0.9-rc`;
 the unpublished Maven artifact version remains `0.1.0`.
 

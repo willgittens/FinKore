@@ -2,17 +2,18 @@
 
 ## Status
 
-Stable promotion is blocked by the additional Money, Workflow, Approval, Audit,
-and Entity boundary findings in the [Core 0.9.5 corrective plan](plan-09.5.md).
-The completed [Core 0.9.4 release](plan-09.4.md) retains its corrections and
-passing verification results, but a subsequent review reproduced defects beyond
-its existing coverage. Core 0.9.5 must resolve those findings and pass its expanded
-release gate before stable promotion resumes.
+The completed [Core 0.9.5 corrective release](plan-09.5.md) resolves the reviewed
+Money, Workflow, Approval, Audit, and Entity boundary findings and passes its
+expanded release gate. It preserves all earlier corrective protections,
+including the completed [Core 0.9.4 release](plan-09.4.md). This corrective
+prerequisite is satisfied; stable promotion still requires the milestones below.
+Passing finite conformance and native tests does not establish exhaustive
+correctness or complete the stable-release review.
 
-The local annotated `core-0.9.4` tag remains the latest corrective release.
-Remote tag availability could not be verified during that release because
-GitHub authentication was unavailable. Remote publication and package publication
-remain separate from local verification and completion.
+The local annotated `core-0.9.5` tag identifies the latest corrective snapshot.
+No remote tag or package publication is part of this local completion. Core
+constants remain `0.9-rc`, reference-package versions remain `0.1.0`, and
+conformance syntax remains `0.1` until their respective release decisions.
 
 The stable 1.0 milestones below remain uncompleted. This document remains
 non-normative and does not declare Core 1.0 stable. In this filename, `10`

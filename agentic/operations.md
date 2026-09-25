@@ -48,7 +48,7 @@ to the consuming application unless a concrete FinKore rule says otherwise.
 Accounting finality remains unspecified while ledger posting and financial
 commitment are outside Core.
 
-The completed [0.9.4 corrective plan](../docs/plans/plan-09.4.md) resolves the
+The completed [0.9.5 corrective plan](../docs/plans/plan-09.5.md) resolves the
 reviewed boundary defects in the existing operation surface. Canonical operation
 IDs and promotion boundaries are unchanged. Registry inclusion does not itself
 establish conformance; exercised requirements and coverage limits are recorded

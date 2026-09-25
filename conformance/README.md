@@ -20,55 +20,31 @@ The manifest and vector-file version fields describe syntax compatibility, not
 FinKore release numbers. Release scope is determined by the manifest contents,
 referenced requirement IDs, and traceability status.
 
-The local `core-0.9.4` tag identifies the previous corrective manifest snapshot.
+The local `core-0.9.5` tag identifies the current corrective manifest snapshot.
 The Core label remains `0.9-rc` and conformance syntax remains `0.1`.
 
-The [Core 0.9.4 plan](../docs/plans/plan-09.4.md) corrects the demonstrated
-Approval, Entity, Workflow, and Audit defects. Its accepted Entity decisions
-add `ENTITY-EVOLUTION-034` (Audit validation before evolution correspondence)
-and `ENTITY-EVOLUTION-035` (reject unresolved contradictory currentness history
-while accepting valid historical changes), under the release-candidate
-correction policy.
+The completed [Core 0.9.5 plan](../docs/plans/plan-09.5.md) corrects native Money
+serialization, Workflow binding and precondition presence, concrete Approval
+association and eligibility, native Audit ownership and cycle rejection, and
+Entity binding, declaration, and import boundaries. The accepted Entity
+ownership, validator, and bounded revision/conflict decisions are defined by
+`/spec` and documented in the [fixture conventions](conventions.md).
+All earlier corrective regressions remain in the suite.
 
-TypeScript, Python 3.12/3.13, and Java passed all 542 vectors at that snapshot with zero
-failed, unsupported, or infrastructure outcomes. Native API sequence and
-ownership tests supplement portable vectors, and complete release verification
-includes coverage, mutation protection, and isolated package consumers.
-[Traceability](traceability.md) records the exercised requirements and declared
-limits; passing this finite manifest does not establish exhaustive boundary
-coverage or complete the separate Core 1.0 promotion process.
+All 667 manifest vectors pass on TypeScript, CPython 3.12, CPython 3.13, and Java
+with zero failed, unsupported, or infrastructure outcomes. This includes 102
+Money, 103 Workflow, 76 Audit, 162 Approval, 212 Entity, and 12 shared vectors.
+Native public API tests cover exact serializer scales, cycles, aliases, and
+actual returned-value sequences that isolated JSON vectors cannot express.
+Complete clean-checkout verification includes coverage, full mutation suites,
+paired critical/native probes, and isolated npm, wheel/sdist, and JAR consumers.
 
-The [Core 0.9.5 contract and regression milestones](../docs/plans/plan-09.5.md)
-resolve the three Entity decisions and add 85 manifest-discovered vectors,
-bringing that milestone's total to 627. Milestone 4 adds eight Workflow
-precedence vectors; Milestone 5 adds 23 Approval vectors for a current total
-of 658. Native tests cover boundaries JSON cannot
-express. All 542 earlier vectors and the paired controls pass, while the new
-regressions reproduce defects in all implementations. Traceability records
-29 PARTIAL requirements and no remaining reviewed specification gap. The
-expanded manifest is not yet passing conformance; correction and mutation
-verification remain required.
-
-Milestone 3 closes the reviewed native Money serializer boundaries. All 102
-Money vectors pass on TypeScript, CPython 3.12/3.13, and Java; native scale tests
-and targeted mutation probes supplement the portable representation tests.
-
-Milestone 4 corrects native Workflow binding ownership and supplied precondition
-handling. All 103 Workflow vectors pass on all four runtimes. Version/import
-requirements shared with the still-failing Entity composition paths remain
-PARTIAL until Milestone 7 closes those paths.
-
-Milestone 5 corrects concrete Approval association, malformed eligibility, and
-reused-history validation. All 162 Approval vectors pass on all four runtimes.
-Native record/evaluate and lifecycle sequences verify failure atomicity, and
-targeted mutation probes protect these boundaries. Lightweight composition
-observations and explicit null or other JSON fact values remain valid.
-
-Milestone 6 closes native Audit cycles, unsupported Java numeric aliases, and
-exposed value ownership. All 76 Audit vectors pass on all four runtimes. Native
-construction/import/append/redaction and mutation tests cover cycles, shared
-acyclic inputs, exact immutable numbers, and portable error priority. Remaining
-partial requirements concern Entity behavior and its Workflow integration.
+[Traceability](traceability.md) records 330 COVERED and 83 NOT DIRECTLY TESTABLE
+requirements, with no PARTIAL or blocking specification gaps. Native tests and
+mutation probes support the relevant non-JSON boundaries. These finite checks
+do not establish exhaustive correctness or complete the separate Core 1.0
+promotion process. Canonical Agentic operation promotion and unpublished
+reference-package status are unchanged.
 
 For FinKore Core 0.9 release candidate, [manifest.json](manifest.json) is the
 frozen release-candidate manifest and `finkoreConformance` remains `0.1`. This

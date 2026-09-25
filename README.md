@@ -137,10 +137,10 @@ They should not be accidental side effects of a framework or whichever service i
 FinKore specifies each outcome, provides portable tests for it, and verifies
 that every implementation preserves the same meaning.
 
-These scenarios are only a small illustration of FinKore Core 0.9.4.
+These scenarios are only a small illustration of FinKore Core 0.9.5.
 
 Across Money, Workflow, Audit, Approvals, Financial Entities, and shared
-conventions, the 0.9.4 snapshot's 542-vector suite maps vectors to 329 requirements.
+conventions, the 0.9.5 snapshot's 667-vector suite maps vectors to 330 requirements.
 Every vector passed on TypeScript, Python 3.12/3.13, and Java, with zero failed,
 unsupported, or infrastructure outcomes. Native tests and mutation probes also
 protect lifecycle sequences, Entity history reuse, Workflow ownership, and
@@ -150,7 +150,7 @@ coverage, mutation protection, and isolated package consumers.
 Passing this finite manifest does not establish exhaustive boundary coverage
 or complete the separate Core 1.0 promotion process. See
 [current traceability](./conformance/traceability.md) and the
-[Core 0.9.4 plan](./docs/plans/plan-09.4.md).
+[Core 0.9.5 plan](./docs/plans/plan-09.5.md).
 
 ---
 
@@ -208,7 +208,7 @@ This makes financial behavior portable across languages and more resilient to ch
 
 ## What FinKore Core covers
 
-The current Core 0.9.4 release-candidate snapshot defines:
+The current Core 0.9.5 release-candidate snapshot defines:
 
 | Domain | What becomes explicit |
 | --- | --- |
@@ -339,42 +339,19 @@ See [Developer Tools](./docs/tools/README.md) for details.
 
 ## Project status
 
-FinKore Core 0.9.4 is the corrective release candidate for the frozen Core 0.9
+FinKore Core 0.9.5 is the corrective release candidate for the frozen Core 0.9
 baseline intended to become Core 1.0.
 
-TypeScript, Python, and Java implement the following domains and passed the
-complete 0.9.4 manifest. The [Core 0.9.4 corrective plan](./docs/plans/plan-09.4.md)
-closes the reviewed Approval, Entity, Workflow, and Audit defects with permanent
-regression and mutation protection. A subsequent readiness review found further
-public API and cross-domain boundary defects tracked in the
-[Core 0.9.5 corrective plan](./docs/plans/plan-09.5.md).
-[Core 1.0 promotion](./docs/plans/plan-10.md) is blocked until that corrective
-release gate is satisfied.
-
-The 0.9.5 contract decisions are accepted. Milestone 2 adds 85 portable
-regressions and controls plus native serialization, binding, ownership, and
-operation-sequence tests. Milestone 4 adds eight Workflow precedence vectors;
-Milestone 5 adds 23 Approval association and history vectors.
-Milestone 7 adds nine Entity binding, declaration, and import vectors. The
-development manifest now passes all 667 vectors on all four runtimes, including
-all 542 earlier vectors. [Traceability](./conformance/traceability.md) records the
-completed boundary corrections. Milestone 8 passes complete verification from a
-clean checkout, including full mutation suites and isolated package consumers;
-documentation and corrective release closure remain Milestone 9.
-
-Milestone 3 now corrects Python and Java Money serialization: scale changes
-preserve exact value or return the specified portable error. Native serializer
-tests, all 102 Money vectors on all four runtimes, and targeted mutation probes
-pass. Milestone 4 also corrects Python instance-binding ownership and Python/Java
-precondition presence and error precedence. All 103 Workflow vectors pass on
-all four runtimes. Milestone 5 corrects concrete Approval subject, association,
-eligibility, and reused-history validation. All 162 Approval vectors pass on
-all four runtimes, with native failure-atomicity and mutation checks. Milestone 6
-corrects native Audit cycle rejection and value ownership: all 76 Audit vectors,
-native boundary tests, and targeted mutation probes pass. Milestone 7 preserves
-Entity Workflow bindings across observation and operation boundaries, separates
-revision/conflict identities, rejects malformed validators and preconditions,
-and gives existing TypeScript Entities owned declarations.
+All 667 manifest vectors pass on TypeScript, CPython 3.12/3.13, and Java,
+including all earlier corrective regressions.
+The completed [Core 0.9.5 corrective plan](./docs/plans/plan-09.5.md) closes the
+reviewed exact serialization, Workflow binding and precondition, Approval
+association, Audit ownership, and Entity integration boundaries. Native public
+API and operation-sequence tests supplement portable vectors; full mutation
+suites and isolated package consumers pass clean-checkout verification.
+[Traceability](./conformance/traceability.md) records the exercised scope and
+coverage limits. [Core 1.0 promotion](./docs/plans/plan-10.md) remains a separate,
+uncompleted process.
 
 - Money
 - Workflow
@@ -399,15 +376,16 @@ The release identifiers serve different purposes:
 
 | Identifier | Current value | Meaning |
 | --- | --- | --- |
-| Corrective snapshot tag | `core-0.9.4` | Exact repository state containing the corrections. |
+| Corrective snapshot tag | `core-0.9.5` | Exact repository state containing the corrections. |
 | Core constants, package compatibility metadata, and runner Core label | `0.9-rc` | Frozen language-neutral behavioral baseline. |
 | Implementation package versions | `0.1.0` | Unpublished repository reference artifacts. |
 | Conformance syntax version | `0.1` | Manifest and vector format compatibility. |
 
 The corrective release fixes implementation defects and clarifies demonstrated
-Entity evolution ambiguities in Audit validation precedence and contradictory
-history. These release-candidate corrections preserve existing identifiers and
-do not declare Core 1.0 stable. The release tag is local; remote publication is
+Entity declaration ownership, validator rejection, and the bounded
+revision/conflict identity contract. These release-candidate corrections preserve
+existing identifiers and do not declare Core 1.0 stable. The release tag is local;
+remote publication is
 separate, and the packages retain repository-reference status.
 
 See the [release notes](./docs/releases/README.md) for the concise history and the implementation READMEs for current public APIs and local package use.

@@ -2,16 +2,24 @@
 
 ## Status
 
-Milestones 1 and 2 are complete: the three Entity contract decisions are
-accepted, and permanent failing regressions and passing controls reproduce
-every reviewed finding. Milestones 3 through 5 complete Money serialization,
-direct Workflow ownership/precondition corrections, and concrete Approval
-association/eligibility/history validation. Milestone 6 completes native Audit
-value ownership and cycle rejection. Entity corrections remain pending.
-A new readiness review of `d920091`
-(`core-0.9.4`) reproduced the findings below despite passing existing checks.
-[Core 1.0 promotion](plan-10.md) is blocked until these findings and this
-corrective release gate are closed. The completed [0.9.4 plan](plan-09.4.md)
+Milestones 1–9 are complete. Every reviewed finding has an agreed contract,
+permanent regression, passing valid control, and mutation protection. Exact
+Money serialization, Workflow binding/preconditions, concrete Approval
+association/eligibility/history, native Audit ownership/rejection, and Entity
+binding/identity/declaration corrections pass complete verification.
+
+All 667 manifest vectors pass on TypeScript, CPython 3.12, CPython 3.13, and
+Java. Full mutation suites, paired critical/native probes, coverage, isolated
+package consumers, and repository checks pass from a clean candidate checkout.
+The final documentation snapshot was checked separately from a clean checkout;
+its executable files and dependency locks match the fully verified candidate.
+
+The annotated local `core-0.9.5` tag identifies the verified corrective release.
+Prior tags remain unchanged. Remote publication and package publication are
+separate and were not performed. The Core label remains `0.9-rc`, reference
+package versions remain `0.1.0`, and conformance syntax remains `0.1`.
+[Core 1.0 promotion](plan-10.md) is a separate, uncompleted process; this plan's
+corrective prerequisite is satisfied. The completed [0.9.4 plan](plan-09.4.md)
 remains the record of its own corrections and verified snapshot.
 
 Release type: Corrective release candidate.
@@ -978,32 +986,71 @@ Milestone 9 owns final documentation and corrective release closure.
 
 ## Milestone 9 — Documentation and corrective release
 
-- [ ] Review tests, public JSDoc and other API docs, examples, root/package
+- [x] Review tests, public JSDoc and other API docs, examples, root/package
       READMEs, `/spec`, `/conformance`, `/agentic`, CoreDoc, and `AGENTS.md`.
       Update affected artifacts together; document actual supported scope and
       unresolved/deferred semantics accurately.
-- [ ] Preserve separate identities for the corrective `core-0.9.5` snapshot,
+- [x] Preserve separate identities for the corrective `core-0.9.5` snapshot,
       `0.9-rc` Core label, `0.1.0` repository-reference package versions, and
       `0.1` conformance syntax unless an explicit reviewed compatibility change
       requires otherwise. Do not promote any of them to stable 1.0 here.
-- [ ] After verification, add a concise 0.9.5 summary to the single
+- [x] After verification, add a concise 0.9.5 summary to the single
       [release history](../releases/README.md). Keep detailed development history
       in Git and existing tools; add no separate closure/provenance reports.
-- [ ] Preserve unpublished reference-package status unless the maintainer
+- [x] Preserve unpublished reference-package status unless the maintainer
       explicitly changes it. Verify the intended release commit and existing
       tags, then create the annotated local `core-0.9.5` tag through the
       maintainer's release process only after every gate passes.
-- [ ] Verify the final documentation snapshot from a clean checkout and ensure
+- [x] Verify the final documentation snapshot from a clean checkout and ensure
       the release tree contains the executable files and dependency locks that
       passed complete verification. Preserve all prior tags and distinguish
       local completion from remote availability/publication.
-- [ ] Close this plan and update [Core 1.0 prerequisites](plan-10.md) only after
+- [x] Close this plan and update [Core 1.0 prerequisites](plan-10.md) only after
       every finding and release gate is resolved. Stable 1.0 promotion remains
       separate; do not convert passing finite coverage into a claim of exhaustive
       correctness.
 
 Completion: documentation, release notes, and the corrective tag identify the
 verified 0.9.5 state, and the 1.0 plan reflects its actual readiness.
+
+### Milestone 9 completion and verification
+
+Root and package READMEs, specification/conformance/Agentic status text,
+traceability, this plan, and the Core 1.0 prerequisites now describe the completed
+0.9.5 corrective candidate. Stale statements that Entity corrections or the
+expanded manifest remain failing have been removed from current documentation.
+The single release history contains a concise correction summary. Core 1.0
+milestones remain unchecked; no new domain or stable compatibility promise was
+introduced.
+
+Existing tests, public JSDoc and Python/Java API documentation, examples,
+specification contracts, Agentic descriptors, CoreDoc obligations, and AGENTS.md
+were reviewed against the corrected behavior. They already describe exact
+serialization, retained bindings, explicit preconditions, association validation,
+native value ownership, and Entity declaration/import semantics. No financial
+implementation, public API, normative requirement, portable error, operation ID,
+architecture, test expectation, or dependency changed in this milestone.
+
+The final documentation candidate passes clean-checkout documentation and
+traceability, architecture, license, and whitespace checks, plus isolated npm,
+wheel/sdist (both Python runtimes), and JAR package-consumer checks. All 226
+non-Markdown tracked files match the clean candidate that passed the complete
+Milestone 8 verify command, including every executable, configuration, and lock.
+That full verification and survivor review remain applicable without rerunning
+unchanged financial code solely for documentation changes.
+
+The release commit and annotated local `core-0.9.5` tag identify the final
+verified tree. Prior tag objects are preserved. No remote push, registry
+publication, or claim of remote availability is part of this completion.
+The existing local release process is retained: review the candidate, pass the
+gates, commit the release documentation, then annotate that verified commit.
+No separate closure/provenance report or GitHub Action was added.
+
+Completion review: affected documentation and release status are synchronized.
+Existing unit, native, conformance, mutation, and consumer tests need no changes;
+public API documentation, normative specifications, Agentic metadata, CoreDoc,
+and AGENTS.md require no further edits. Finite passing coverage supports only
+the exercised scope and does not establish exhaustive correctness.
 
 ## Execution dependencies and scope control
 
@@ -1029,29 +1076,29 @@ learning examples against the applicable public API when those pages are built.
 
 Core 0.9.5 is complete only when:
 
-- [ ] Every finding, including each subcase and rows 9–10, has a resolved
+- [x] Every finding, including each subcase and rows 9–10, has a resolved
       contract, permanent regression, and valid control.
-- [ ] Money serialization preserves exact numeric value and currency, with
+- [x] Money serialization preserves exact numeric value and currency, with
       portable failures for unsupported precision reduction and invalid scale.
-- [ ] Workflow instances retain immutable version bindings and enforce supplied
+- [x] Workflow instances retain immutable version bindings and enforce supplied
       preconditions with correct omission/null semantics and error precedence.
-- [ ] Approval operations require valid subject association and eligibility
+- [x] Approval operations require valid subject association and eligibility
       without losing committed Decisions or lifecycle evidence.
-- [ ] Audit history cannot change through accepted native aliases, and cyclic
+- [x] Audit history cannot change through accepted native aliases, and cyclic
       or unsupported values return the applicable portable errors atomically.
-- [ ] Versioned Entity creation, observation/import, and transition compose
+- [x] Versioned Entity creation, observation/import, and transition compose
       correctly; definition ownership and validator handling follow the agreed
       contract, and revision/conflict identity remains independently meaningful.
-- [ ] No reviewed malformed-input path escapes as a language exception, process
+- [x] No reviewed malformed-input path escapes as a language exception, process
       crash, timeout, or successful operation that skipped required validation.
-- [ ] All manifest vectors pass on TypeScript, Python 3.12, Python 3.13, and
+- [x] All manifest vectors pass on TypeScript, Python 3.12, Python 3.13, and
       Java with zero failed, unsupported, or infrastructure outcomes.
-- [ ] Native sequences, coverage, mutation, package consumers, repository
+- [x] Native sequences, coverage, mutation, package consumers, repository
       checks, and clean-checkout verification pass with no surviving critical
       financial mutant or uncovered mandatory boundary.
-- [ ] Traceability and current documentation reflect the corrected behavior,
+- [x] Traceability and current documentation reflect the corrected behavior,
       with no blocking specification gap or premature stable claim.
-- [ ] The concise release note and annotated corrective tag identify the
+- [x] The concise release note and annotated corrective tag identify the
       verified snapshot, preserving prior releases and publication choices.
-- [ ] No new domain, invented financial policy, architecture bypass, or
+- [x] No new domain, invented financial policy, architecture bypass, or
       premature Core 1.0 promotion was introduced.

@@ -127,7 +127,8 @@ native ownership tests and mutation probes; the other 28 rows return to COVERED.
 No BLOCKING SPEC GAP remains from this review. COVERED records this exercised
 scope. Milestone 8 passes complete clean-checkout verification, including full
 mutation suites, native API probes, and isolated package consumers. Corrective
-release closure remains Milestone 9.
+release closure is complete in Milestone 9; the local `core-0.9.5` tag identifies
+the verified snapshot.
 
 ## Requirement mapping
 
@@ -616,8 +617,8 @@ release closure remains Milestone 9.
 
 Core 0.9.5 native boundaries additionally require serializer-loss, binding-alias,
 mutable-number, cycle-rejection, and Entity-definition-ownership mutation probes.
-The permanent regressions are present; new probe execution belongs to the
-correction and combined verification milestones.
+The permanent regressions and all paired probes pass the correction and
+combined verification gates recorded in the completed 0.9.5 plan.
 
 | Requirement | Critical behavior | Mutation that should be killed |
 | --- | --- | --- |
@@ -739,7 +740,7 @@ references are unchanged.
 
 ## Readiness
 
-**CORE 0.9.5 VERIFICATION PASSES; CORRECTIVE RELEASE CLOSURE REMAINS PENDING**
+**CORE 0.9.5 CORRECTIVE RELEASE COMPLETE; CORE 1.0 PROMOTION REMAINS SEPARATE**
 
 The manifest, schema, operation catalog, exact comparison rules, normalized
 errors, deterministic context, and valid requirement references are sufficient
@@ -750,7 +751,9 @@ with native sequence/ownership tests and mutation protection. Milestone 8 passes
 the complete clean-checkout verification, including all 176 portable critical
 and 50 native mutation probes, the Python 3.13 native repeat, and isolated package
 consumers. These checks establish the exercised boundaries; corrective release
-closure remains Milestone 9 of the [0.9.5 plan](../docs/plans/plan-09.5.md).
+closure is complete in the [0.9.5 plan](../docs/plans/plan-09.5.md). The annotated
+`core-0.9.5` tag identifies the local snapshot; remote and package publication
+remain separate.
 The separate [Core 1.0 plan](../docs/plans/plan-10.md) still requires its stable
 baseline, compatibility, artifact, and release work.
 

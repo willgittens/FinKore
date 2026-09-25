@@ -5,6 +5,19 @@ behavior belongs to `/spec`; detailed change history remains available in Git.
 
 ## Unreleased
 
+## FinKore Core 0.9.5 Release Candidate
+
+Corrected exact Money serialization and portable failures; Workflow instance
+binding ownership and supplied preconditions; concrete Approval association,
+eligibility, and reused-history validation; native Audit cycles and value
+ownership; and Entity binding retention, declaration validation, and import
+identity handling. Defined retained Entity declaration ownership and malformed
+validator rejection, and clarified the bounded revision/conflict contract.
+Permanent native sequences and paired regression/control mutation checks protect
+these corrections. The Core label remains `0.9-rc`, package versions remain
+`0.1.0`, and conformance syntax remains `0.1`. Reference packages remain
+unpublished; no new domain or stable 1.0 declaration is included.
+
 ## FinKore Core 0.9.4 Release Candidate
 
 Corrected Approval lifecycle preservation, request validation, and effective
