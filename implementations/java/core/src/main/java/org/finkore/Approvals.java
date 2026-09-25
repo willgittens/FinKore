@@ -45,12 +45,17 @@ public final class Approvals {
   /**
    * Appends one Approval Decision, preserving all committed lifecycle evidence.
    * Inputs are unchanged on success or failure; the result owns its history data.
+   * The concrete Requirement needs a subject type/id and distinct nonempty
+   * eligibility. Every new or historical Decision needs explicit subjectFacts;
+   * null is valid. Malformed declarations or evidence yield INVALID_DECISION,
+   * while valid eligibility excluding the new Actor yields INELIGIBLE_ACTOR.
    *
    * @param requirement portable Approval Requirement
    * @param decision portable Approval Decision
    * @param history existing decision history as a list or history envelope
    * @return history envelope containing the appended Decision
    * @throws FinKoreException with Approval portable error code
+   * @see <a href="../../../../../../spec/approvals/decisions.md">APPROVAL-DECISION-002</a>
    * @see <a href="../../../../../../spec/approvals/decisions.md">APPROVAL-DECISION-007</a>
    * @see <a href="../../../../../../spec/approvals/validity.md">APPROVAL-VALIDITY-001/002/012</a>
    */
@@ -63,6 +68,8 @@ public final class Approvals {
 
   /**
    * Evaluates one Decision's current effectiveness for supplied current facts.
+   * Missing subjectFacts yields INVALID_DECISION before effectiveness checks;
+   * explicit null and other JSON fact representations remain valid.
    *
    * @param decision portable Approval Decision
    * @param currentSubjectFacts current subject facts
@@ -70,6 +77,7 @@ public final class Approvals {
    * @param evaluatedAt optional explicit evaluation instant
    * @return {@code EFFECTIVE} or {@code INEFFECTIVE}
    * @throws FinKoreException with Approval portable error code
+   * @see <a href="../../../../../../spec/approvals/decisions.md">APPROVAL-DECISION-002</a>
    * @see <a href="../../../../../../spec/approvals/decisions.md">APPROVAL-DECISION-003</a>
    */
   public static String evaluateDecision(
@@ -89,6 +97,9 @@ public final class Approvals {
 
   /**
    * Evaluates an Approval Requirement from currently effective Decisions.
+   * Validates the concrete subject, eligibility, and every historical Decision
+   * before filtering withdrawn, expired, ineligible, or unrelated evidence.
+   * Missing association yields INVALID_DECISION; inputs remain unchanged.
    *
    * @param requirement portable Approval Requirement
    * @param decisions history list or history envelope
@@ -97,6 +108,8 @@ public final class Approvals {
    * @param evaluatedAt optional explicit evaluation instant
    * @return {@code APPROVED}, {@code REJECTED}, or {@code PENDING}
    * @throws FinKoreException with Approval portable error code
+   * @see <a href="../../../../../../spec/approvals/decisions.md">APPROVAL-DECISION-001/002</a>
+   * @see <a href="../../../../../../spec/approvals/requirements.md">APPROVAL-REQUIREMENT-002/003</a>
    */
   public static String evaluateRequirement(
       Object requirement,
@@ -337,15 +350,13 @@ public final class Approvals {
     }
     Map<String, Object> req = stringObjectMap(raw, INVALID_DECISION);
     requiredString(req.get("id"), INVALID_DECISION);
-    if (req.containsKey("subject") && !(req.get("subject") instanceof Map<?, ?>)) {
+    if (!(req.get("subject") instanceof Map<?, ?> subject)) {
       throw new FinKoreException(INVALID_DECISION);
     }
-    if (!req.containsKey("subject") && !req.containsKey("applicability") && !req.containsKey("state")) {
-      throw new FinKoreException(INVALID_DECISION);
-    }
-    if (req.containsKey("eligibleActors")) {
-      stringList(req.get("eligibleActors"), INVALID_DECISION);
-    } else if (!req.containsKey("applicability") && !req.containsKey("state")) {
+    requiredString(subject.get("type"), INVALID_DECISION);
+    requiredString(subject.get("id"), INVALID_DECISION);
+    List<String> eligible = stringList(req.get("eligibleActors"), INVALID_DECISION);
+    if (eligible.isEmpty() || new HashSet<>(eligible).size() != eligible.size()) {
       throw new FinKoreException(INVALID_DECISION);
     }
     if (!"APPROVED".equals(req.getOrDefault("approvedOutcome", "APPROVED"))
@@ -374,10 +385,13 @@ public final class Approvals {
     }
     Map<String, Object> item = stringObjectMap(raw, INVALID_DECISION);
     requiredString(item.get("requirementId"), INVALID_DECISION);
-    if (!Set.of("APPROVED", "REJECTED").contains(item.get("outcome"))) {
+    if (!"APPROVED".equals(item.get("outcome")) && !"REJECTED".equals(item.get("outcome"))) {
       throw new FinKoreException(INVALID_DECISION);
     }
     if (actorId(item.get("actor")) == null) {
+      throw new FinKoreException(INVALID_DECISION);
+    }
+    if (!item.containsKey("subjectFacts")) {
       throw new FinKoreException(INVALID_DECISION);
     }
     instant(item.get("decidedAt"), INVALID_DECISION);
@@ -392,15 +406,21 @@ public final class Approvals {
       return new DecisionSet(List.of(), List.of());
     }
     if (decisions instanceof List<?> list) {
-      return new DecisionSet(copyMapList(list, INVALID_DECISION), List.of());
+      return new DecisionSet(validateHistory(list), List.of());
     }
     if (decisions instanceof Map<?, ?> raw) {
       Map<String, Object> map = stringObjectMap(raw, INVALID_DECISION);
       Object history = map.getOrDefault("history", List.of());
       Object lifecycle = map.getOrDefault("lifecycle", List.of());
-      return new DecisionSet(copyMapList(listValue(history, INVALID_DECISION), INVALID_DECISION), copyMapList(listValue(lifecycle, INVALID_DECISION), INVALID_DECISION));
+      return new DecisionSet(validateHistory(listValue(history, INVALID_DECISION)), copyMapList(listValue(lifecycle, INVALID_DECISION), INVALID_DECISION));
     }
     throw new FinKoreException(INVALID_DECISION);
+  }
+
+  private static List<Map<String, Object>> validateHistory(List<?> history) {
+    List<Map<String, Object>> validated = new ArrayList<>();
+    for (Object decision : history) validated.add(validateDecisionShape(decision));
+    return validated;
   }
 
   private static boolean decisionCurrent(

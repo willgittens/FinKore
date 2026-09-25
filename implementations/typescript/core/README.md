@@ -4,7 +4,9 @@ The development tree now includes the [Core 0.9.5 Milestone 2 regressions](../..
 They intentionally fail against unresolved native API and cross-domain defects.
 The 0.9.4 results below describe that tagged snapshot; the expanded development
 manifest is not yet passing conformance. No correction is claimed until its
-regressions and mutation gates pass.
+regressions and mutation gates pass. Milestone 5 confirms all 162 Approval
+vectors against the existing TypeScript APIs; remaining TypeScript conformance
+failures are Entity binding cases for Milestone 7.
 
 TypeScript reference implementation for FinKore Core 0.9 release candidate:
 Money, Workflow, Audit, Approvals, and Entities.

@@ -123,6 +123,10 @@ public final class ReadinessRegressionTest {
     Object stable = copy(recorded); next.put("outcome", "PENDING");
     error("FINKORE_APPROVAL_INVALID_DECISION", () -> Approvals.recordDecision(requirement(), next, recorded));
     equal(stable, recorded);
+    next.put("outcome", "APPROVED"); next.remove("subjectFacts");
+    error("FINKORE_APPROVAL_INVALID_DECISION", () -> Approvals.recordDecision(requirement(), next, recorded));
+    equal(stable, recorded);
+    equal("PENDING", Approvals.evaluateRequirement(requirement(), recorded, Map.of("revision", "3"), List.of("revision"), null));
     map(list(recorded.get("lifecycle")).get(0)).put("type", "UNKNOWN");
     equal(before, committed);
   }

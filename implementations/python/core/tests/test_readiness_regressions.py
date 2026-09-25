@@ -51,6 +51,13 @@ class ReadinessRegressionTests(unittest.TestCase):
                     record_decision(REQUIREMENT, {**later, "outcome": "PENDING"}, recorded)
                 self.assertEqual(error.exception.code, "FINKORE_APPROVAL_INVALID_DECISION")
                 self.assertEqual(recorded, stable)
+                missing = deepcopy(later)
+                del missing["subjectFacts"]
+                with self.assertRaises(FinKoreError) as error:
+                    record_decision(REQUIREMENT, missing, recorded)
+                self.assertEqual(error.exception.code, "FINKORE_APPROVAL_INVALID_DECISION")
+                self.assertEqual(recorded, stable)
+                self.assertEqual(evaluate_requirement(REQUIREMENT, recorded, {"revision": "3"}, ["revision"]), "PENDING")
                 recorded["lifecycle"][0]["type"] = "UNKNOWN"
                 self.assertEqual(committed, before)
 

@@ -6,7 +6,9 @@ The 0.9.4 results below describe that tagged snapshot; the expanded development
 manifest is not yet passing conformance. Milestone 3 corrects Money serialization;
 its native regressions, Money conformance, and targeted mutation gates pass.
 Milestone 4 corrects Workflow supplied preconditions and error precedence.
-Approval, Audit, and Entity regressions remain open.
+Milestone 5 corrects concrete Approval association, eligibility, and historical
+Decision validation; all 162 Approval vectors and targeted mutation gates pass.
+Native Audit and Entity regressions remain open.
 
 This package is the Java implementation track for FinKore Core 0.9 release
 candidate. It is derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`,
@@ -125,6 +127,17 @@ than depending on Java class names or exception messages. The implementation
 uses portable JSON-shaped `Map` and `List` observations for non-Money domains;
 those shapes follow the conformance vectors and specification, not Java object
 identity.
+
+Concrete Approval Requirements need a `subject` with nonempty `type` and `id`,
+and a nonempty list of distinct eligible Actor identifiers. Every concrete
+Decision requires explicit `subjectFacts`; null, scalar, object, and array facts
+are valid without a universal revision field. Missing association or malformed
+subject/eligibility raises `FINKORE_APPROVAL_INVALID_DECISION`. A valid eligibility
+declaration excluding the deciding Actor raises `FINKORE_APPROVAL_INELIGIBLE_ACTOR`
+at record time. Record and Requirement evaluation validate every historical
+Decision before filtering unrelated, withdrawn, superseded, expired, or
+ineffective evidence. They neither infer missing facts nor discard bad entries.
+These rules do not change lightweight chain/composition observation shapes.
 
 Approval operations return a history envelope. Pass the complete envelope to
 subsequent recording and evaluation so withdrawal and supersession evidence

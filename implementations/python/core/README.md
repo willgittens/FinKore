@@ -6,7 +6,10 @@ The 0.9.4 results below describe that tagged snapshot; the expanded development
 manifest is not yet passing conformance. Milestone 3 corrects Money serialization;
 its native regressions, Money conformance, and targeted mutation gates pass.
 Milestone 4 corrects Workflow binding ownership, supplied preconditions, and
-error precedence. Approval, Audit, and Entity regressions remain open.
+error precedence. Milestone 5 corrects concrete Approval association, eligibility,
+and historical Decision validation; all 162 Approval vectors and targeted
+mutation gates pass.
+Native Audit and Entity regressions remain open.
 
 This package is the Python implementation track for FinKore Core 0.9 release
 candidate. It is derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`,
@@ -153,6 +156,17 @@ The public exports are:
   `withdraw_decision`, `supersede_decision`, and `supersede_requirement`.
 - Entities: `create_entity`, `mutate_entity`, `transition_entity`,
   `import_entity`, `import_evolution_history`, and `evolve_entity`.
+
+Concrete Approval Requirements need a `subject` with nonempty `type` and `id`,
+and a nonempty list of distinct eligible Actor identifiers. Every concrete
+Decision requires explicit `subjectFacts`; null, scalar, object, and array facts
+are valid without a universal revision field. Missing association or malformed
+subject/eligibility raises `FINKORE_APPROVAL_INVALID_DECISION`. A valid eligibility
+declaration excluding the deciding Actor raises `FINKORE_APPROVAL_INELIGIBLE_ACTOR`
+at record time. Record and Requirement evaluation validate every historical
+Decision before filtering unrelated, withdrawn, superseded, expired, or
+ineffective evidence. They neither infer missing facts nor discard bad entries.
+These rules do not change lightweight chain/composition observation shapes.
 
 Approval operations return a history envelope. Pass the complete envelope to
 subsequent recording and evaluation so withdrawal and supersession evidence

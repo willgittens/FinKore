@@ -140,6 +140,17 @@ Approval suite passes. The optional final argument selects a suite; omitting it
 retains all probes. A focused run does not establish the full release mutation
 gate or an aggregate mutation score.
 
+Core 0.9.5 Milestone 5 adds 17 Approval conformance probes for association
+presence, valid null facts, subject identity, malformed eligibility, and complete
+history validation. Each requires its named regression and a passing control.
+The existing eligibility bypass probes now also name their required cases.
+Run `node docs/tools/mutation-critical.js all approvals` and
+`node docs/tools/mutation-native.js approval`; the latter includes two new
+reused-history probes and the existing lifecycle-evidence sequence probes.
+Use `FINKORE_PYTHON_PATH=.tools/bin/python3.13` for native compatibility probes.
+Maven Approval coverage uses `-Dtest=ApprovalsVectorCoverageTest`, which discovers
+all entries in the Approval vector files without a stale fixed vector count.
+
 Milestone 4 adds Entity probes for Audit precedence and correspondence,
 consistent imported and resulting histories, exact currentness keys, required
 effects, and the bounded duplicate-reversal policy. Run

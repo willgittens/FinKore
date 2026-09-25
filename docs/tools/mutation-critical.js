@@ -24,6 +24,105 @@ if (!validTargets.has(requestedTarget)) {
 
 const pythonMutants = [
   {
+    "id": "python-approval-missing-association-accepted",
+    "suite": "approvals",
+    "path": "core/src/finkore/approvals.py",
+    "from": "if \"subjectFacts\" not in decision:",
+    "to": "if False and \"subjectFacts\" not in decision:",
+    "expectedVector": "approval.association.record-missing-facts-001",
+    "expectedPassVectors": [
+      "approval.association.record-null-control-001"
+    ]
+  },
+  {
+    "id": "python-approval-explicit-null-association-rejected",
+    "suite": "approvals",
+    "path": "core/src/finkore/approvals.py",
+    "from": "if \"subjectFacts\" not in decision:",
+    "to": "if decision.get(\"subjectFacts\") is None:",
+    "expectedVector": "approval.association.record-null-control-001",
+    "expectedPassVectors": [
+      "approval.association.record-empty-object-control-001"
+    ]
+  },
+  {
+    "id": "python-approval-subject-type-validation-bypass",
+    "suite": "approvals",
+    "path": "core/src/finkore/approvals.py",
+    "from": " or not _opaque(subject.get(\"type\"))",
+    "to": "",
+    "expectedVector": "approval.association.record-subject-missing-type-001",
+    "expectedPassVectors": [
+      "approval.association.record-null-control-001"
+    ]
+  },
+  {
+    "id": "python-approval-subject-id-validation-bypass",
+    "suite": "approvals",
+    "path": "core/src/finkore/approvals.py",
+    "from": " or not _opaque(subject.get(\"id\"))",
+    "to": "",
+    "expectedVector": "approval.association.record-subject-missing-id-001",
+    "expectedPassVectors": [
+      "approval.association.record-null-control-001"
+    ]
+  },
+  {
+    "id": "python-approval-duplicate-eligibility-accepted",
+    "suite": "approvals",
+    "path": "core/src/finkore/approvals.py",
+    "from": " or len(set(eligible)) != len(eligible)",
+    "to": "",
+    "expectedVector": "approval.association.record-duplicate-eligibility-001",
+    "expectedPassVectors": [
+      "approval.association.record-null-control-001"
+    ]
+  },
+  {
+    "id": "python-approval-empty-eligibility-accepted",
+    "suite": "approvals",
+    "path": "core/src/finkore/approvals.py",
+    "from": " or not eligible or any(",
+    "to": " or any(",
+    "expectedVector": "approval.association.record-empty-eligibility-001",
+    "expectedPassVectors": [
+      "approval.association.record-null-control-001"
+    ]
+  },
+  {
+    "id": "python-approval-null-eligibility-inferred",
+    "suite": "approvals",
+    "path": "core/src/finkore/approvals.py",
+    "from": "eligible = requirement.get(\"eligibleActors\")",
+    "to": "eligible = requirement.get(\"eligibleActors\")\n    if eligible is None:\n        requirement = {**requirement, \"eligibleActors\": [\"alice\"]}\n        eligible = requirement[\"eligibleActors\"]",
+    "expectedVector": "approval.association.evaluate-null-eligibility-001",
+    "expectedPassVectors": [
+      "approval.association.record-null-control-001"
+    ]
+  },
+  {
+    "id": "python-approval-list-history-validation-bypass",
+    "suite": "approvals",
+    "path": "core/src/finkore/approvals.py",
+    "from": "return [_validate_decision_shape(item) for item in decisions], []",
+    "to": "return deepcopy(decisions), []",
+    "expectedVector": "approval.association.history-after-valid-001",
+    "expectedPassVectors": [
+      "approval.association.evaluate-null-control-001"
+    ]
+  },
+  {
+    "id": "python-approval-envelope-history-validation-bypass",
+    "suite": "approvals",
+    "path": "core/src/finkore/approvals.py",
+    "from": "return [_validate_decision_shape(item) for item in history], deepcopy(lifecycle)",
+    "to": "return deepcopy(history), deepcopy(lifecycle)",
+    "expectedVector": "approval.association.history-withdrawn-001",
+    "expectedPassVectors": [
+      "approval.association.evaluate-null-control-001"
+    ]
+  },
+  {
     "id": "python-workflow-adapter-null-state-omitted",
     "suite": "workflow",
     "expectedVector": "workflow.presence.state-null-001",
@@ -622,6 +721,8 @@ const pythonMutants = [
   },
   {
     id: 'python-approval-ineligible-actor-bypass',
+    expectedVector: 'approval.association.ineligible-control-001',
+    expectedPassVectors: ['approval.association.record-null-control-001'],
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
     from: 'if actor_id not in requirement.get("eligibleActors", [actor_id]):\n        raise FinKoreError(INELIGIBLE_ACTOR)',
@@ -658,6 +759,94 @@ const pythonMutants = [
 ]
 
 const javaMutants = [
+  {
+    "id": "java-approval-missing-association-accepted",
+    "suite": "approvals",
+    "path": "core/src/main/java/org/finkore/Approvals.java",
+    "from": "if (!item.containsKey(\"subjectFacts\")) {",
+    "to": "if (false && !item.containsKey(\"subjectFacts\")) {",
+    "expectedVector": "approval.association.record-missing-facts-001",
+    "expectedPassVectors": [
+      "approval.association.record-null-control-001"
+    ]
+  },
+  {
+    "id": "java-approval-explicit-null-association-rejected",
+    "suite": "approvals",
+    "path": "core/src/main/java/org/finkore/Approvals.java",
+    "from": "if (!item.containsKey(\"subjectFacts\")) {",
+    "to": "if (item.get(\"subjectFacts\") == null) {",
+    "expectedVector": "approval.association.record-null-control-001",
+    "expectedPassVectors": [
+      "approval.association.record-empty-object-control-001"
+    ]
+  },
+  {
+    "id": "java-approval-subject-type-validation-bypass",
+    "suite": "approvals",
+    "path": "core/src/main/java/org/finkore/Approvals.java",
+    "from": "    requiredString(subject.get(\"type\"), INVALID_DECISION);",
+    "to": "",
+    "expectedVector": "approval.association.record-subject-missing-type-001",
+    "expectedPassVectors": [
+      "approval.association.record-null-control-001"
+    ]
+  },
+  {
+    "id": "java-approval-subject-id-validation-bypass",
+    "suite": "approvals",
+    "path": "core/src/main/java/org/finkore/Approvals.java",
+    "from": "    requiredString(subject.get(\"id\"), INVALID_DECISION);",
+    "to": "",
+    "expectedVector": "approval.association.record-subject-missing-id-001",
+    "expectedPassVectors": [
+      "approval.association.record-null-control-001"
+    ]
+  },
+  {
+    "id": "java-approval-duplicate-eligibility-accepted",
+    "suite": "approvals",
+    "path": "core/src/main/java/org/finkore/Approvals.java",
+    "from": " || new HashSet<>(eligible).size() != eligible.size()",
+    "to": "",
+    "expectedVector": "approval.association.record-duplicate-eligibility-001",
+    "expectedPassVectors": [
+      "approval.association.record-null-control-001"
+    ]
+  },
+  {
+    "id": "java-approval-empty-eligibility-accepted",
+    "suite": "approvals",
+    "path": "core/src/main/java/org/finkore/Approvals.java",
+    "from": "eligible.isEmpty() || new HashSet<>(eligible)",
+    "to": "new HashSet<>(eligible)",
+    "expectedVector": "approval.association.record-empty-eligibility-001",
+    "expectedPassVectors": [
+      "approval.association.record-null-control-001"
+    ]
+  },
+  {
+    "id": "java-approval-null-eligibility-inferred",
+    "suite": "approvals",
+    "path": "core/src/main/java/org/finkore/Approvals.java",
+    "from": "List<String> eligible = stringList(req.get(\"eligibleActors\"), INVALID_DECISION);",
+    "to": "List<String> eligible = req.get(\"eligibleActors\") == null ? List.of(\"alice\") : stringList(req.get(\"eligibleActors\"), INVALID_DECISION);",
+    "expectedVector": "approval.association.evaluate-null-eligibility-001",
+    "expectedPassVectors": [
+      "approval.association.record-null-control-001"
+    ]
+  },
+  {
+    "id": "java-approval-history-validation-bypass",
+    "suite": "approvals",
+    "path": "core/src/main/java/org/finkore/Approvals.java",
+    "from": "validated.add(validateDecisionShape(decision))",
+    "to": "validated.add(copyMap(stringObjectMap((Map<?, ?>) decision, INVALID_DECISION), INVALID_DECISION))",
+    "expectedVector": "approval.association.history-after-valid-001",
+    "expectedPassVectors": [
+      "approval.association.evaluate-null-control-001"
+    ]
+  },
   {
     "id": "java-workflow-adapter-null-state-omitted",
     "suite": "workflow",
@@ -1254,6 +1443,8 @@ const javaMutants = [
   },
   {
     id: 'java-approval-ineligible-actor-bypass',
+    expectedVector: 'approval.association.ineligible-control-001',
+    expectedPassVectors: ['approval.association.record-null-control-001'],
     suite: 'approvals',
     path: 'core/src/main/java/org/finkore/Approvals.java',
     from: 'if (requirement.containsKey("eligibleActors") && !stringList(requirement.get("eligibleActors"), INVALID_DECISION).contains(actorId)) {\n      throw new FinKoreException(INELIGIBLE_ACTOR);\n    }',

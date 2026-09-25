@@ -81,7 +81,7 @@ class ApprovalTests(unittest.TestCase):
 
     def test_invalid_fact_paths_preserve_committed_decisions_and_current_facts(self) -> None:
         """APPROVAL-VALIDITY-012: a failed comparison leaves caller-owned evidence unchanged."""
-        requirement = {"id": "review", "subject": {}, "eligibleActors": ["user-7"]}
+        requirement = {"id": "review", "subject": {"type": "invoice", "id": "invoice-1"}, "eligibleActors": ["user-7"]}
         decision = {
             "requirementId": "review", "subjectFacts": {"flag": True}, "outcome": "APPROVED",
             "actor": {"id": "user-7"}, "decidedAt": "2026-09-01T12:00:00Z",

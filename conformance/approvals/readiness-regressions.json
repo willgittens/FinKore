@@ -6126,6 +6126,1214 @@
       "guardsAgainst": [
         "approval-association-ineligible-control"
       ]
+    },
+    {
+      "id": "approval.association.record-duplicate-eligibility-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-003",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Concrete Requirements require a valid subject and distinct nonempty eligibility even when lightweight observations are supplied.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice",
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": null,
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-duplicate-eligibility"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-duplicate-eligibility-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-003",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Concrete Requirements require a valid subject and distinct nonempty eligibility even when lightweight observations are supplied.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice",
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": null,
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-duplicate-eligibility"
+      ]
+    },
+    {
+      "id": "approval.association.record-subject-missing-type-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-002",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Concrete Requirements require a valid subject and distinct nonempty eligibility even when lightweight observations are supplied.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": null,
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-subject-missing-type"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-subject-missing-type-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-002",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Concrete Requirements require a valid subject and distinct nonempty eligibility even when lightweight observations are supplied.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": null,
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-subject-missing-type"
+      ]
+    },
+    {
+      "id": "approval.association.record-state-without-subject-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-002",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Concrete Requirements require a valid subject and distinct nonempty eligibility even when lightweight observations are supplied.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED",
+          "state": "APPROVED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": null,
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-state-without-subject"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-state-without-subject-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-002",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Concrete Requirements require a valid subject and distinct nonempty eligibility even when lightweight observations are supplied.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED",
+          "state": "APPROVED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": null,
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-state-without-subject"
+      ]
+    },
+    {
+      "id": "approval.association.record-applicability-without-subject-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-002",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Concrete Requirements require a valid subject and distinct nonempty eligibility even when lightweight observations are supplied.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED",
+          "applicability": true
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": null,
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-applicability-without-subject"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-applicability-without-subject-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-002",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Concrete Requirements require a valid subject and distinct nonempty eligibility even when lightweight observations are supplied.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED",
+          "applicability": true
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": null,
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-applicability-without-subject"
+      ]
+    },
+    {
+      "id": "approval.association.record-state-without-eligibility-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-003",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Concrete Requirements require a valid subject and distinct nonempty eligibility even when lightweight observations are supplied.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED",
+          "state": "APPROVED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": null,
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-state-without-eligibility"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-state-without-eligibility-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-003",
+        "APPROVAL-ERROR-001"
+      ],
+      "description": "Concrete Requirements require a valid subject and distinct nonempty eligibility even when lightweight observations are supplied.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED",
+          "state": "APPROVED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": null,
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-state-without-eligibility"
+      ]
+    },
+    {
+      "id": "approval.association.history-missing-requirement-id-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-001",
+        "APPROVAL-DECISION-002",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "All imported concrete Decisions must be structurally complete, including entries after an approving Decision.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": null,
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "subjectFacts": null,
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-history-missing-requirement-id"
+      ]
+    },
+    {
+      "id": "approval.association.history-missing-actor-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-001",
+        "APPROVAL-DECISION-002",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "All imported concrete Decisions must be structurally complete, including entries after an approving Decision.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": null,
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "review",
+            "subjectFacts": null,
+            "outcome": "APPROVED",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-history-missing-actor"
+      ]
+    },
+    {
+      "id": "approval.association.history-missing-outcome-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-001",
+        "APPROVAL-DECISION-002",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "All imported concrete Decisions must be structurally complete, including entries after an approving Decision.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": null,
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "review",
+            "subjectFacts": null,
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-history-missing-outcome"
+      ]
+    },
+    {
+      "id": "approval.association.history-missing-decided-at-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-001",
+        "APPROVAL-DECISION-002",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "All imported concrete Decisions must be structurally complete, including entries after an approving Decision.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": null,
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "review",
+            "subjectFacts": null,
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            }
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-history-missing-decided-at"
+      ]
+    },
+    {
+      "id": "approval.association.history-missing-subject-facts-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-001",
+        "APPROVAL-DECISION-002",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "All imported concrete Decisions must be structurally complete, including entries after an approving Decision.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": null,
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "review",
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-history-missing-subject-facts"
+      ]
+    },
+    {
+      "id": "approval.association.history-withdrawn-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "Structural validation precedes historical Decision effectiveness filtering.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "review",
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "alice"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-history-withdrawn"
+      ]
+    },
+    {
+      "id": "approval.association.history-expired-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "Structural validation precedes historical Decision effectiveness filtering.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "expiresAt": "2026-09-01T13:00:00Z"
+          }
+        ],
+        "evaluatedAt": "2026-09-02T12:00:00Z"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-history-expired"
+      ]
+    },
+    {
+      "id": "approval.association.history-ineffective-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "Structural validation precedes historical Decision effectiveness filtering.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "effective": false
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-history-ineffective"
+      ]
+    },
+    {
+      "id": "approval.association.history-malformed-outcome-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "Structural validation precedes historical Decision effectiveness filtering.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": null,
+            "outcome": [],
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-history-malformed-outcome"
+      ]
+    },
+    {
+      "id": "approval.association.record-boolean-control-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002"
+      ],
+      "description": "Explicit JSON facts remain valid without a universal revision or object shape.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": false,
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": false,
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "alice"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-boolean-control"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-boolean-control-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002"
+      ],
+      "description": "Explicit JSON facts remain valid without a universal revision or object shape.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": false,
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-boolean-control"
+      ]
+    },
+    {
+      "id": "approval.association.record-array-control-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002"
+      ],
+      "description": "Explicit JSON facts remain valid without a universal revision or object shape.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": [
+            null,
+            false,
+            {
+              "revision": "1"
+            }
+          ],
+          "outcome": "APPROVED",
+          "actor": {
+            "id": "alice"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": []
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": [
+                null,
+                false,
+                {
+                  "revision": "1"
+                }
+              ],
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "alice"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-record-array-control"
+      ]
+    },
+    {
+      "id": "approval.association.evaluate-array-control-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-002"
+      ],
+      "description": "Explicit JSON facts remain valid without a universal revision or object shape.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "subjectFacts": [
+              null,
+              false,
+              {
+                "revision": "1"
+              }
+            ],
+            "outcome": "APPROVED",
+            "actor": {
+              "id": "alice"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "approval-association-evaluate-array-control"
+      ]
     }
   ]
 }

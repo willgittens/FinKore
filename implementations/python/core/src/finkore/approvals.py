@@ -52,22 +52,24 @@ _MISSING = _Missing()
 
 
 def validate_requirement(requirement: Any) -> dict[str, Any]:
-    """Validate an Approval Requirement definition.
+    """Validate a concrete Requirement's subject and nonempty distinct eligibility.
+
+    Lightweight composition observations are validated separately. Malformed
+    declarations raise INVALID_DECISION; inputs remain unchanged.
 
     @see APPROVAL-REQUIREMENT-001
+    @see APPROVAL-REQUIREMENT-002
+    @see APPROVAL-REQUIREMENT-003
     @see APPROVAL-REQUIREMENT-004
     """
 
     if not isinstance(requirement, dict) or not _opaque(requirement.get("id")):
         raise FinKoreError(INVALID_DECISION)
-    if "subject" in requirement and not isinstance(requirement["subject"], dict):
-        raise FinKoreError(INVALID_DECISION)
-    if "subject" not in requirement and all(key not in requirement for key in ("applicability", "state")):
+    subject = requirement.get("subject")
+    if not isinstance(subject, dict) or not _opaque(subject.get("type")) or not _opaque(subject.get("id")):
         raise FinKoreError(INVALID_DECISION)
     eligible = requirement.get("eligibleActors")
-    if eligible is not None and (not isinstance(eligible, list) or any(not _opaque(actor) for actor in eligible)):
-        raise FinKoreError(INVALID_DECISION)
-    if "eligibleActors" not in requirement and all(key not in requirement for key in ("applicability", "state")):
+    if not isinstance(eligible, list) or not eligible or any(not _opaque(actor) for actor in eligible) or len(set(eligible)) != len(eligible):
         raise FinKoreError(INVALID_DECISION)
     if requirement.get("approvedOutcome", "APPROVED") != "APPROVED" or requirement.get("rejectedOutcome", "REJECTED") != "REJECTED":
         raise FinKoreError(INVALID_DECISION)
@@ -75,17 +77,30 @@ def validate_requirement(requirement: Any) -> dict[str, Any]:
 
 
 def validate_decision(requirement: dict[str, Any], decision: Any) -> dict[str, Any]:
-    """Validate an Approval Decision for one requirement."""
+    """Validate a complete Decision against a validated concrete Requirement.
 
-    if not isinstance(decision, dict):
+    Missing association is INVALID_DECISION, while a valid declaration excluding
+    the deciding Actor yields INELIGIBLE_ACTOR. Returns an independent copy.
+    See APPROVAL-DECISION-001/002/005 and APPROVAL-ERROR-001/005.
+    """
+
+    item = _validate_decision_shape(decision)
+    if item["requirementId"] != requirement["id"]:
         raise FinKoreError(INVALID_DECISION)
-    if decision.get("requirementId") != requirement["id"] or decision.get("outcome") not in {"APPROVED", "REJECTED"}:
-        raise FinKoreError(INVALID_DECISION)
-    actor_id = _actor_id(decision.get("actor"))
-    if actor_id is None:
-        raise FinKoreError(INVALID_DECISION)
+    actor_id = _actor_id(item["actor"])
     if actor_id not in requirement.get("eligibleActors", [actor_id]):
         raise FinKoreError(INELIGIBLE_ACTOR)
+    return item
+
+
+def _validate_decision_shape(decision: Any) -> dict[str, Any]:
+    # Validate imported evidence independently of its current applicability.
+    if not isinstance(decision, dict) or not _opaque(decision.get("requirementId")):
+        raise FinKoreError(INVALID_DECISION)
+    if decision.get("outcome") not in ("APPROVED", "REJECTED") or _actor_id(decision.get("actor")) is None:
+        raise FinKoreError(INVALID_DECISION)
+    if "subjectFacts" not in decision:
+        raise FinKoreError(INVALID_DECISION)
     _instant(decision.get("decidedAt"))
     if "expiresAt" in decision:
         _instant(decision["expiresAt"])
@@ -93,18 +108,23 @@ def validate_decision(requirement: dict[str, Any], decision: Any) -> dict[str, A
 
 
 def normalize_decision_set(decisions: Any) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    """Return Approval history and lifecycle observations."""
+    """Validate every concrete Decision and return defensive history observations.
+
+    Missing subjectFacts is INVALID_DECISION, including on ineffective or
+    unrelated evidence; explicit null remains valid. Lifecycle evidence is
+    preserved. See APPROVAL-DECISION-001/002 and APPROVAL-ERROR-005.
+    """
 
     if decisions is None:
         return [], []
     if isinstance(decisions, list):
-        return deepcopy(decisions), []
+        return [_validate_decision_shape(item) for item in decisions], []
     if isinstance(decisions, dict):
         history = decisions.get("history", [])
         lifecycle = decisions.get("lifecycle", [])
         if not isinstance(history, list) or not isinstance(lifecycle, list):
             raise FinKoreError(INVALID_DECISION)
-        return deepcopy(history), deepcopy(lifecycle)
+        return [_validate_decision_shape(item) for item in history], deepcopy(lifecycle)
     raise FinKoreError(INVALID_DECISION)
 
 
@@ -113,6 +133,10 @@ def record_decision(requirement: Any, decision: Any, history: Any) -> dict[str, 
 
     Inputs are not mutated, including on validation failure. Returned history
     owns its data. See APPROVAL-DECISION-007 and APPROVAL-VALIDITY-001/002/012.
+    The Requirement needs a subject type/id and nonempty distinct eligibility.
+    Every new or historical Decision needs explicit subjectFacts (null is valid);
+    malformed declarations/evidence raise INVALID_DECISION. A valid eligibility
+    declaration excluding the new Decision's Actor raises INELIGIBLE_ACTOR.
     """
 
     req = validate_requirement(requirement)
@@ -131,8 +155,11 @@ def evaluate_decision(requirement: Any, decision: Any, current_subject_facts: An
     Comparison distinguishes JSON Booleans from numbers, including within
     objects and arrays. Object member order is immaterial; array order matters.
     The Decision and caller-supplied facts are not mutated.
+    Missing association or malformed concrete Requirement eligibility raises
+    INVALID_DECISION before effectiveness evaluation; explicit null facts are valid.
 
     @see APPROVAL-DECISION-003
+    @see APPROVAL-DECISION-002
     @see APPROVAL-DECISION-007
     @see APPROVAL-VALIDITY-003
     @see APPROVAL-VALIDITY-012
@@ -156,8 +183,11 @@ def evaluate_requirement(requirement: Any, decisions: Any = None, current_subjec
     reject the Requirement. JSON Booleans remain distinct from numbers at
     every nesting level; object member order is ignored and array order retained.
     Committed decisions, lifecycle evidence, and supplied facts remain unchanged.
+    All historical Decisions are structurally validated before filtering; missing
+    association raises INVALID_DECISION even for withdrawn or unrelated evidence.
 
     @see APPROVAL-DECISION-003
+    @see APPROVAL-DECISION-002
     @see APPROVAL-DECISION-007
     @see APPROVAL-VALIDITY-002
     @see APPROVAL-VALIDITY-003

@@ -402,6 +402,12 @@ schema from being inferred. Chain/composition fixtures consume observations;
 their `state`, `applicability`, and `effective` members do not authorize using
 an incomplete concrete Requirement or Decision at record/evaluation boundaries.
 
+Record and Requirement evaluation validate every supplied concrete historical
+Decision before determining current effectiveness. Incomplete evidence remains
+invalid even when unrelated, withdrawn, superseded, expired, ineffective, or
+placed after an approving Decision. Native record tests also reuse these
+malformed histories and verify unchanged Decisions and lifecycle evidence.
+
 ### Entity declarations and revision identity
 
 Under **ENTITY-VALIDATION-009**, the bounded fixture rejects an unknown rule,

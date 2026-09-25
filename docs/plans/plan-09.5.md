@@ -4,9 +4,10 @@
 
 Milestones 1 and 2 are complete: the three Entity contract decisions are
 accepted, and permanent failing regressions and passing controls reproduce
-every reviewed finding. Milestones 3 and 4 complete the Money serialization
-and direct Workflow ownership/precondition corrections. Approval, Audit, and
-Entity corrections remain pending.
+every reviewed finding. Milestones 3 through 5 complete Money serialization,
+direct Workflow ownership/precondition corrections, and concrete Approval
+association/eligibility/history validation. Native Audit and Entity corrections
+remain pending.
 A new readiness review of `d920091`
 (`core-0.9.4`) reproduced the findings below despite passing existing checks.
 [Core 1.0 promotion](plan-10.md) is blocked until these findings and this
@@ -570,27 +571,96 @@ AGENTS.md, CoreDoc, release note, or package version changes are needed.
 
 ## Milestone 5 — Approval association and malformed eligibility
 
-- [ ] Validate required Requirement subject and Decision association in Python
+- [x] Validate required Requirement subject and Decision association in Python
       and Java at concrete record and evaluation boundaries. Missing association
       must not produce an effective or approving Decision.
-- [ ] Reject malformed supplied eligibility with the agreed portable error,
+- [x] Reject malformed supplied eligibility with the agreed portable error,
       including Python's null eligibility crash. Preserve the distinction
       between malformed declarations and a valid but ineligible Actor.
-- [ ] Review imported/reused Decision history at these same boundaries,
+- [x] Review imported/reused Decision history at these same boundaries,
       including incomplete entries; apply the agreed history validation contract
       without inferring missing subject facts or silently dropping evidence.
-- [ ] Preserve lightweight composition/chain observation fixtures and legitimate
+- [x] Preserve lightweight composition/chain observation fixtures and legitimate
       association representations. Do not require a universal subject revision,
       non-null fact value, or a new eligibility model.
-- [ ] Verify failed operations preserve Decisions and lifecycle evidence, and
+- [x] Verify failed operations preserve Decisions and lifecycle evidence, and
       valid record → evaluate sequences still work. Re-run earlier withdrawal,
       supersession, expiration, relevant-fact, and quorum protections.
-- [ ] Run Approval tests and vectors on all runtimes, applicable coverage, and
+- [x] Run Approval tests and vectors on all runtimes, applicable coverage, and
       mutation probes for missing-association acceptance and eligibility bypass.
       Synchronize API documentation and supported operation claims.
 
 Completion: malformed subject/eligibility input yields portable failures, and
 an unassociated Decision cannot be recorded or used to satisfy a Requirement.
+
+### Milestone 5 completion and verification
+
+Python and Java now validate concrete Requirement subject identity and nonempty,
+distinct eligibility. Missing association and malformed declarations produce
+`FINKORE_APPROVAL_INVALID_DECISION`; a valid rule excluding the deciding Actor
+retains `FINKORE_APPROVAL_INELIGIBLE_ACTOR`. Every reused concrete Decision is
+validated before current-effectiveness filtering, including unrelated,
+withdrawn, expired, or ineffective entries and entries after a valid approval.
+Explicit null, Boolean, scalar, object, and array facts remain valid. Chain and
+composition observation validators remain separate; no universal revision or
+fact schema is introduced.
+
+The 23 new vectors supplement the 27 Milestone 2 association cases. Native
+record tests reuse malformed histories directly and verify unchanged input.
+Actual withdrawal/supersession → record → evaluate sequences now also reject
+missing association without losing committed Decisions or lifecycle evidence.
+The existing relevant-fact, expiration, quorum, and invalid-withdrawal tests pass.
+Before the fix, expanded Python tests reported 43 failures and three errors
+across 52 methods/subtests; Java reported 33 failed cases out of 53. The corrected
+native boundary suites pass. A Python fact-path test's formerly empty subject
+fixture now declares a valid subject so it still exercises fact-path validation.
+
+| Check | Result |
+| --- | --- |
+| Approval conformance, TypeScript / CPython 3.12 / CPython 3.13 / Java | 162 PASS each; no FAIL, UNSUPPORTED, or INFRASTRUCTURE_ERROR |
+| TypeScript Approval unit tests | 138 PASS; focused Approval integration/boundary selection also passes |
+| Python Approval, lifecycle, and boundary tests | 66 methods PASS on each supported runtime, including parameterized history and lifecycle cases |
+| Java Approval coverage/native harness | Both JUnit entry points PASS, including all Approval vectors, native Approval/readiness checks, and 53 boundary cases |
+| Python Approval coverage, native tests plus real vectors | 91.62% statements, 86.36% branches, 89.62% combined |
+| Java Approval coverage, native tests plus real vectors | 91.04% lines, 82.39% branches |
+| Critical Approval conformance mutation probes | 27 Python and 23 Java probes killed; 17 new association/eligibility/history probes require named regressions and passing controls |
+| Native Approval mutation probes | 4/4 killed, also passing with CPython 3.13 selected; includes two new reused-history probes |
+| Other checks | Workspace build/strict TypeScript, Python compilation on both runtimes, Java strict compilation, developer-tool tests, architecture, documentation/traceability, license, and whitespace checks pass |
+
+The first null-eligibility Python mutant caused a runtime crash and was correctly
+rejected as mutation evidence. The probe now models invented eligibility and
+fails its named behavioral assertion with its valid control passing. No crash,
+compilation failure, skipped test, or timeout is counted as a kill. These are
+focused Approval mutation results, not a whole-core mutation score or completion
+of the release verification gate.
+
+Full-manifest runs execute 658 vectors; all 542 vectors from `core-0.9.4` still
+pass on each runtime. Remaining portable failures are exclusively Milestone 7
+Entity cases:
+
+| Runtime | PASS | FAIL | INFRASTRUCTURE_ERROR |
+| --- | ---: | ---: | ---: |
+| TypeScript | 653 | 5 | 0 |
+| CPython 3.12 | 637 | 19 | 2 |
+| CPython 3.13 | 637 | 19 | 2 |
+| Java | 634 | 20 | 4 |
+
+Native Audit regressions remain for Milestone 6. No full `check`/`verify` or
+release completion is claimed. Focused mutation commands are
+`node docs/tools/mutation-critical.js all approvals` and
+`node docs/tools/mutation-native.js approval`; native compatibility uses
+`FINKORE_PYTHON_PATH=.tools/bin/python3.13`. Maven coverage selects
+`-Dtest=ApprovalsVectorCoverageTest` and no longer relies on a historical fixed
+vector count.
+
+Completion review: unit/native tests, conformance vectors, mutation-sensitive
+checks, Python docstrings, Java API documentation, root/package README status,
+conformance conventions, developer-tool usage, and traceability are synchronized.
+Eight Approval requirements return to COVERED; 34 other requirements remain
+PARTIAL. Existing specification and Agentic semantics already define these
+rules. No normative requirement, portable error, canonical operation, TypeScript
+API/JSDoc, adapter contract, architectural rule, AGENTS.md, CoreDoc, release note,
+or package version change is needed.
 
 ## Milestone 6 — Native Audit value ownership and rejection
 

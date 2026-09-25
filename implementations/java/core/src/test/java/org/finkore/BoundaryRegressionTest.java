@@ -84,6 +84,8 @@ public final class BoundaryRegressionTest {
     cases.put("entity.sequence.versioned", () -> entitySequence(true));
     cases.put("approval.sequence.control", () -> approvalSequence(false));
     cases.put("approval.sequence.missing-association", () -> approvalSequence(true));
+    Map<String, Object> approvalVectors = map(Json.parse(Files.readString(root.resolve("conformance/approvals/readiness-regressions.json"))));
+    cases.put("approval.sequence.incomplete-reused-history", () -> incompleteApprovalHistory(list(approvalVectors.get("vectors"))));
     for (String location : List.of("actor", "change")) {
       for (String boundary : List.of("construct", "import", "append")) {
         for (String shape : List.of("map", "list", "nested")) {
@@ -105,7 +107,7 @@ public final class BoundaryRegressionTest {
     Map<String, Object> input = map(vector.get("input"));
     return switch ((String) vector.get("operation")) {
       case "approval.decision.record" -> Approvals.recordDecision(input.get("requirement"), input.get("decision"), input.get("history"));
-      case "approval.requirement.evaluate" -> Approvals.evaluateRequirement(input.get("requirement"), input.get("decisions"), null, null, null);
+      case "approval.requirement.evaluate" -> Approvals.evaluateRequirement(input.get("requirement"), input.get("decisions"), input.get("currentSubjectFacts"), input.get("relevantFactPaths"), input.get("evaluatedAt"));
       case "approval.decision.evaluate" -> Approvals.evaluateDecision(input.get("decision"), input.get("currentSubjectFacts"), null, null);
       case "finkore.workflow.transition" -> {
         Workflow.Definition definition = Workflow.Definition.fromPortable(input.get("definition"));
@@ -161,6 +163,21 @@ public final class BoundaryRegressionTest {
 
   private static Map<String, Object> binding() {
     return Map.of("definitionIdentity", "invoice-flow", "definitionVersionIdentity", "1");
+  }
+
+  private static void incompleteApprovalHistory(List<Object> vectors) {
+    for (Object value : vectors) {
+      Map<String, Object> vector = map(value);
+      if (!((String) vector.get("id")).startsWith("approval.association.history-")) continue;
+      Map<String, Object> input = map(vector.get("input"));
+      Object history = copy(input.get("decisions"));
+      Object before = copy(history);
+      Map<String, Object> decision = new LinkedHashMap<>(Map.of("requirementId", "review", "outcome", "APPROVED",
+          "actor", Map.of("id", "alice"), "decidedAt", "2026-09-03T12:00:00Z"));
+      decision.put("subjectFacts", null);
+      try { error(Approvals.INVALID_DECISION, () -> Approvals.recordDecision(input.get("requirement"), decision, history)); }
+      finally { equal(before, history); }
+    }
   }
 
   private static void approvalSequence(boolean rejectMissing) {

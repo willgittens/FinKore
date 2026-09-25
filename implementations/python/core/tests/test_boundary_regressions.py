@@ -39,7 +39,7 @@ def invoke(vector):
     if op == "approval.decision.record":
         return record_decision(i["requirement"], i["decision"], i["history"])
     if op == "approval.requirement.evaluate":
-        return evaluate_requirement(i["requirement"], i["decisions"])
+        return evaluate_requirement(i["requirement"], i["decisions"], i.get("currentSubjectFacts"), i.get("relevantFactPaths"), i.get("evaluatedAt"))
     if op == "approval.decision.evaluate":
         return evaluate_decision(i["requirement"], i["decision"], i.get("currentSubjectFacts"))
     if op == "finkore.workflow.transition":
@@ -84,6 +84,22 @@ class BoundaryRegressions(unittest.TestCase):
     def test_approval_record_evaluate_control(self):
         """APPROVAL-DECISION-002: an actual recorded null association remains valid."""
         self.approval_sequence()
+
+    def test_approval_record_rejects_incomplete_reused_history(self):
+        """APPROVAL-DECISION-001/002: recording validates all imported evidence."""
+        requirement, valid = self.approval_sequence()
+        for vector in vectors():
+            if not vector["id"].startswith("approval.association.history-"):
+                continue
+            with self.subTest(vector=vector["id"]):
+                history = deepcopy(vector["input"]["decisions"])
+                before = deepcopy(history)
+                try:
+                    self.portable_error("FINKORE_APPROVAL_INVALID_DECISION", lambda: record_decision(
+                        requirement, valid["history"][0], history))
+                finally:
+                    self.assertEqual(history, before)
+                    self.assertEqual(evaluate_requirement(requirement, valid), "APPROVED")
 
     def test_missing_association_preserves_committed_history(self):
         requirement, history = self.approval_sequence()
