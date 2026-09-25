@@ -351,6 +351,13 @@ public API and cross-domain boundary defects tracked in the
 [Core 1.0 promotion](./docs/plans/plan-10.md) is blocked until that corrective
 release gate is satisfied.
 
+The 0.9.5 Milestone 1 review has clarified existing obligations and reassessed
+coverage. It remains blocked on three Entity contract decisions: retained
+definition ownership, equal revision/conflict tokens, and malformed-validator
+errors. [Traceability](./conformance/traceability.md) now distinguishes these
+gaps and partial native/API coverage from the unchanged manifest's passing
+results. Implementation corrections and new regressions remain pending.
+
 - Money
 - Workflow
 - Audit

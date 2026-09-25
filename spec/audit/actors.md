@@ -38,6 +38,19 @@ metadata invalid, and copying or observing metadata cannot remove or reinterpret
 them. This clarifies the existing JSON boundary without permitting non-JSON
 runtime values or changing redaction semantics.
 
+## Native value boundaries
+
+The non-JSON rejection in **AUDIT-ACTOR-010** also applies at native API
+boundaries. Cyclic maps or arrays cannot denote a JSON value and use
+`FINKORE_AUDIT_ACTOR_INVALID`, rather than a runtime recursion failure. Shared
+acyclic subobjects can denote JSON and are not cycles. An accepted native
+number must retain an exact, independent value: a mutable numeric reference
+cannot change committed metadata under **AUDIT-APPEND-001**. Which native
+numeric classes are supported belongs to the language API; unsupported values
+use the same actor error, without coercion to a string or lossy number.
+When non-actor content is also invalid, **AUDIT-ERROR-004** still selects the
+non-actor error first.
+
 ## Core 0.9.3 correction note (non-normative)
 
 **AUDIT-ACTOR-010** makes the previously missing metadata nullability boundary

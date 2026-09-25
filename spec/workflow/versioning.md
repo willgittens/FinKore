@@ -66,6 +66,15 @@ consecutively or authorize migration. Fixture encoding is documented in the
 
 ## Examples
 
+The binding itself, as well as the definition, is subject to
+**WORKFLOW-VERSION-007** through **WORKFLOW-VERSION-011**. Changing a native
+constructor's input binding or an exposed binding observation cannot change an
+existing instance's governing version. Creation, import, successful transition,
+and repeated observation must retain that same binding. Immutable values and
+defensive copies are both valid implementations of this guarantee. Import
+cannot reconstruct a missing historical binding from a newly supplied
+definition; that is an invalid instance under **WORKFLOW-ERROR-005**.
+
 Given Workflow Definition Identity `invoice-approval` with versions `1` and `2`,
 an instance created under version `1` continues to validate Transition Requests
 against version `1` until a future migration operation explicitly defines

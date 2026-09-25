@@ -51,6 +51,17 @@ validation failure uses `FINKORE_ENTITY_VALIDATION_FAILED` under
 **ENTITY-VALIDATION-004** and returns no partial import observation under
 **ENTITY-IMPORT-008**.
 
+## Supplied preconditions
+
+For the optional preconditions in **ENTITY-IMPORT-007**, explicit null is
+supplied input, not omission. Null or another malformed expected value cannot
+match a valid State, business revision, or conflict-version identifier; an
+absent observed revision/token also cannot satisfy a supplied expectation.
+These mismatches use `FINKORE_ENTITY_STATE_CONFLICT` and return no partial
+import under **ENTITY-IMPORT-008**. Malformed observed identity/revision input
+remains subject to **ENTITY-IMPORT-009**. This clarification does not introduce
+a total priority among unrelated Entity failures.
+
 ## Core 0.9.3 correction note (non-normative)
 
 The clarification to **ENTITY-IMPORT-002** closes a demonstrated portability

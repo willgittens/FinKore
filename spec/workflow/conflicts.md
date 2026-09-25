@@ -45,6 +45,21 @@ definition, version binding, terminal-state, transition, or guard rules.
 
 ## Errors
 
+Omission in **WORKFLOW-CONFLICT-001** and **WORKFLOW-CONFLICT-004** means no
+precondition was supplied. Explicit null is supplied input, not omission.
+Null Expected Current State is not a declared State and uses
+`FINKORE_WORKFLOW_INVALID_STATE` under **WORKFLOW-CONFLICT-002**. Null Expected
+Workflow Instance Revision does not match a valid observed revision, including
+an absent revision, and uses `FINKORE_WORKFLOW_STATE_CONFLICT` under
+**WORKFLOW-CONFLICT-005**. A malformed revision on the observed instance itself
+remains `FINKORE_WORKFLOW_INVALID_INSTANCE` under **WORKFLOW-ERROR-005**.
+Combined failures retain the complete priority in **WORKFLOW-ERROR-007**;
+for example, version mismatch precedes an invalid expected State.
+
+Native APIs and fixture translators must retain this distinction, whether
+through separate overloads, an omission sentinel, or explicit member presence.
+No particular optional-argument representation is prescribed.
+
 Expected-current-state and expected-revision mismatches use
 `FINKORE_WORKFLOW_STATE_CONFLICT` as defined by [Workflow Errors](errors.md).
 
@@ -53,4 +68,3 @@ Expected-current-state and expected-revision mismatches use
 This document does not define persistence revisions, revision generation,
 revision ordering, automatic retries, conflict resolution policy, locking,
 distributed coordination, or migration across Workflow Definition Versions.
-

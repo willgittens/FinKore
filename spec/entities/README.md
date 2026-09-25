@@ -29,6 +29,26 @@ expected-state/revision/conflict-version observations without partial import.
 
 A Financial Entity's identity must remain stable throughout its lifecycle. Its current State and data must reflect only successful domain operations.
 
+## Core 0.9.5 ownership review (non-normative, blocking)
+
+The existing lifecycle/validation rules require declared behavior, but do not
+explicitly settle whether an unversioned Entity may retain caller-mutable
+declarations. **WORKFLOW-VERSION-003** cannot by itself govern this unversioned
+case. The [Milestone 1 decision](../../docs/plans/plan-09.5.md) proposes that an
+existing Entity retain stable, owned declarations, including nested Workflow
+guards/transitions, mutability lists, and validators. Original input or returned
+observation mutation would not reconfigure it; immutable values or defensive
+copies would both satisfy that guarantee. No migration or dynamic
+reconfiguration API is proposed.
+
+This is a blocking specification gap, not an accepted new requirement. Adoption
+needs a new `ENTITY-DEFINITION` requirement because **ENTITY-DEFINITION-001**
+governs what a composing domain declares, not ownership over an instance's
+lifetime. Native alias tests can establish the proposed boundary; a JSON
+request alone cannot. The proposed successful observation is unchanged retained
+behavior; a previously undeclared transition still fails with the existing
+Workflow transition error. CoreDoc's declared-control obligations remain intact.
+
 ## Non-Goals
 
 Core 0.9 release candidate does not define any concrete financial entity type,

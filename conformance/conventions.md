@@ -328,6 +328,99 @@ historical Entity Revision identity, Entity Conflict Version separation, and
 expected-state/revision/conflict-version preconditions without defining a
 registry, storage lock, or concrete migration format.
 
+## Core 0.9.5 boundary review
+
+These fixture interpretations implement the linked specification obligations;
+they do not define a production envelope. Permanent regressions and native
+tests are still pending in [Milestone 2](../docs/plans/plan-09.5.md).
+
+### Money serialization and native Audit values
+
+`money.serialize` remains a conformance-local operation. Existing vectors
+without a requested presentation scale do not test a native serializer's scale
+argument. Native Python and Java tests must exercise exact extension/reduction,
+lossy reduction of either sign, zero, trailing zeros, malformed/unsupported
+scales, and an explicit-rounding control under
+[Money Serialization](../spec/money/serialization.md). TypeScript's public
+serializer need not gain a new scale argument to make tests uniform.
+
+JSON cannot encode shared references, cycles, or Java numeric classes. Native
+Audit tests therefore supplement Actor/Change vectors at construction, history
+import, append, observation, and redaction boundaries. The Java correction
+will reject mutable or unsupported `Number` implementations, including
+`AtomicInteger` and `AtomicLong`, with the context-specific actor/event error.
+Accepted immutable `Byte`, `Short`, `Integer`, `Long`, `BigInteger`,
+`BigDecimal`, and finite `Float`/`Double` values retain their exact accepted
+JSON numeric meaning; support does not authorize conversion through `double`
+or arbitrary subclass `toString()`. Custom subclasses are not implicitly
+supported. This is the planned Java native boundary, not a requirement that
+other languages implement Java types. Cycles use the existing actor/event
+errors; acyclic shared structures remain valid. See
+[Actors](../spec/audit/actors.md) and [Changes](../spec/audit/changes.md).
+
+### Workflow presence and ownership
+
+Workflow `expectedState` and `expectedRevision` are optional fixture members.
+Adapters preserve presence, including explicit null. The core applies
+[Workflow Conflicts](../spec/workflow/conflicts.md): null expected State uses
+`FINKORE_WORKFLOW_INVALID_STATE`; null expected revision uses
+`FINKORE_WORKFLOW_STATE_CONFLICT`. Tests pair omission, null, malformed,
+matching, and mismatching values, preserving the existing error priority.
+Native optional arguments need a representation that distinguishes omission
+from explicit null. Native binding tests also mutate constructor inputs and
+returned observations after create/import/transition; isolated JSON cannot
+exercise those aliases.
+
+### Concrete Approval association
+
+The concrete Requirement fixture supplies `subject` with nonempty string
+`type` and `id`, and `eligibleActors` as a nonempty list of distinct nonempty
+Actor identifiers. Missing, empty, null, or malformed declarations are invalid;
+they are not a valid rule that happened to reject an Actor. The existing
+missing-subject and missing-eligibility vectors select
+`FINKORE_APPROVAL_INVALID_DECISION`. A valid rule excluding the deciding Actor
+uses `FINKORE_APPROVAL_INELIGIBLE_ACTOR` at record time.
+
+Concrete Decisions supply `subjectFacts` as an explicit JSON value, including
+null. Omission is invalid association under
+[Approval Decisions](../spec/approvals/decisions.md). Neither adapters nor cores
+may insert current facts or `{}` to fill that omission. Native APIs may use
+another explicit association supported by the composing domain. Valid null,
+empty-object, scalar, and structured fact controls prevent a universal fact
+schema from being inferred. Chain/composition fixtures consume observations;
+their `state`, `applicability`, and `effective` members do not authorize using
+an incomplete concrete Requirement or Decision at record/evaluation boundaries.
+
+### Entity version binding and import preconditions
+
+The versioned Entity fixture retains `binding` inside the Entity observation,
+alongside `type`, `id`, `state`, and `data`. It uses the existing Workflow
+binding shape: `{ "definitionIdentity": "invoice-workflow",
+"definitionVersionIdentity": "1" }`. Creation obtains the initial binding
+from the declared Workflow. Every subsequent existing-Entity fixture, including
+`entity.import`'s `entity` member and evolution's source/related/successor,
+supplies the retained binding explicitly. Successful observations preserve it.
+Adapters translate this representation; they never fill a missing binding from
+the currently supplied definition. Missing/malformed bindings and mismatches
+use the Workflow errors in [Entity Lifecycle](../spec/entities/lifecycle.md).
+Unversioned Entity fixtures retain their existing shape.
+
+This closes a fixture documentation omission without changing manifest/vector
+syntax `0.1` or defining a canonical import operation. It is not an ignorable
+optional field on versioned observations: losing it loses the historical
+binding. There was no conforming binding-free versioned observation under
+**WORKFLOW-VERSION-007**. Native create → transition → observe/reconstruct or
+import → transition sequences must reuse actual output, including bindings,
+and have unversioned, malformed-binding, and mismatched-version controls.
+
+Entity import's `expectedState`, `expectedRevision`, and
+`expectedConflictVersion` retain supplied-member presence. With otherwise valid
+observations, null, malformed, mismatching, or absent-observation expectations
+fail with `FINKORE_ENTITY_STATE_CONFLICT` under
+[Entity Import](../spec/entities/import.md). Omission performs no check.
+Malformed observed identities remain invalid identity, not a precondition
+match. No total ordering of unrelated Entity errors is added by these fixtures.
+
 ## Runner contract
 
 A language adapter performs:

@@ -41,6 +41,14 @@ equality obligations rather than adding a reserved-name policy.
 
 ## Example
 
+At native boundaries, **AUDIT-CHANGE-008** rejects cyclic containers and
+unsupported native numeric values with `FINKORE_AUDIT_INVALID_EVENT`.
+Shared acyclic references are not cycles. Every accepted numeric value must
+remain exact and independent of later caller mutation under
+**AUDIT-APPEND-001**. These checks apply to history import and candidate
+validation, with the existing priority in **AUDIT-ERROR-004**. Rejection cannot
+partially commit history or escape as a host recursion/stack failure.
+
 The following JSON is illustrative and non-normative; it does not prescribe serialized member names or a domain-path syntax.
 
 ```json

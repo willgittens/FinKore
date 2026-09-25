@@ -38,6 +38,14 @@ includes coverage, mutation protection, and isolated package consumers.
 limits; passing this finite manifest does not establish exhaustive boundary
 coverage or complete the separate Core 1.0 promotion process.
 
+The subsequent [Core 0.9.5 Milestone 1 review](../docs/plans/plan-09.5.md)
+reopens native serialization, ownership, presence, and composition boundaries.
+Traceability currently records 52 PARTIAL requirements and three BLOCKING SPEC
+GAPs for Entity declaration ownership, equal revision/conflict tokens, and
+malformed-validator error selection. The 542 existing vectors are unchanged;
+their historical passing results do not close those findings. Milestone 1
+awaits those contract decisions before it can be marked complete.
+
 For FinKore Core 0.9 release candidate, [manifest.json](manifest.json) is the
 frozen release-candidate manifest and `finkoreConformance` remains `0.1`. This
 freeze does not permit manifest-listed behavior to change except through the

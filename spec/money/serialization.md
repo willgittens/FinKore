@@ -23,6 +23,25 @@ This document defines the normative portable JSON representation of Money. It sp
 
 Serialization followed by deserialization preserves numeric amount and currency as required by **MONEY-SERIALIZATION-008**.
 
+An optional native serialization scale is a presentation request, not an
+implicit rounding policy. Extending scale or removing only trailing zeros is
+consistent with **MONEY-SERIALIZATION-008**. Discarding a non-zero remainder
+is not: `1.239 EUR` and `-1.239 EUR` cannot be serialized at scale 2 without
+changing value. Such requests fail with `FINKORE_MONEY_ROUNDING_REQUIRED`
+under **MONEY-ROUNDING-006** and **MONEY-ERROR-005**. A caller can explicitly
+round first and serialize the resulting Money value. Failure preserves the
+original operand under **MONEY-ERROR-007**.
+
+This does not require every language API to expose a scale argument or require
+preservation of lexical trailing zeros. The native scale-validation boundary
+uses the non-negative integer target-scale meaning in [Rounding](rounding.md).
+A requested negative, non-integral, malformed, or unsupported scale fails with
+`FINKORE_MONEY_INVALID_ROUNDING` under **MONEY-ERROR-006**, before determining
+whether a valid scale would lose value. Boolean and string coercion cannot
+repair a malformed scale. Native APIs document their supported scale range and
+representation of no scale request; this introduces no universal upper bound
+and does not import Allocation's bounded scale profile into serialization.
+
 ## Normative Example
 
 This example uses the normative member names and value encodings. It does not imply that presentation scale is significant.
@@ -49,4 +68,3 @@ Malformed data fails as defined by **MONEY-ERROR-001** or **MONEY-ERROR-002** in
 ## Open Questions
 
 - Must portable serialization preserve presentation scale as well as numeric value?
-

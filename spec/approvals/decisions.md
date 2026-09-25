@@ -48,6 +48,28 @@ subject state or facts used when it was made.
 
 ## Example
 
+Absence of subject association violates **APPROVAL-DECISION-002** at record
+and evaluation boundaries. A caller cannot repair missing historical facts by
+copying current facts into a Decision. Explicitly recorded null can be a
+legitimate fact value; it is distinct from absent association. The bounded
+fixture uses the presence of `subjectFacts` for that distinction, but native
+APIs may use another explicit association mechanism. No universal non-null
+fact schema or mandatory subject revision follows from this rule.
+
+Malformed Decision evidence and valid evidence that is no longer effective
+are different conditions. Relevant-fact changes, withdrawal, expiration, and
+supersession preserve the historical Decision while changing effectiveness.
+Supplied concrete Decision history must contain Decisions satisfying
+**APPROVAL-DECISION-001**, **APPROVAL-DECISION-002**, **APPROVAL-DECISION-005**,
+and **APPROVAL-DECISION-006**, whether newly recorded or reused. Structural
+validation cannot be skipped because an entry is withdrawn, superseded,
+unrelated to the currently evaluated Requirement, or follows an already
+decisive entry. An incomplete Decision is invalid evidence, not a valid
+historical Decision made ineffective by later facts. Rejecting such input
+preserves the entire supplied history; it does not authorize dropping entries
+or manufacturing associations. Requirement-specific eligibility and relevance
+checks still apply at their own evaluation boundaries.
+
 The following JSON is illustrative and non-normative; it does not prescribe serialized member names.
 
 ```json

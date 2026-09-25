@@ -23,6 +23,24 @@ A Financial Entity must have exactly one current lifecycle State. A Rejected Tra
 
 ## Examples
 
+Referencing a versioned Workflow under **ENTITY-LIFECYCLE-001** also applies
+**WORKFLOW-VERSION-007** through **WORKFLOW-VERSION-011**. Creation records the
+initial binding; subsequent transitions and observations preserve it. Existing
+Entity observations supplied for reconstruction, import, mutation, or evolution
+cannot lose or derive that binding from a replacement definition. A versioned
+observation without its required binding uses
+`FINKORE_WORKFLOW_INVALID_INSTANCE`; a well-formed binding that disagrees with
+the supplied definition uses `FINKORE_WORKFLOW_VERSION_MISMATCH`, following
+Workflow priority and **ENTITY-ERROR-004**. Failure preserves Entity State,
+data, and binding.
+
+The specification does not prescribe a production Entity envelope. The
+[conformance convention](../../conformance/conventions.md) records the binding
+inside each versioned Entity observation so the actual output can be reused.
+Unversioned observations do not acquire an invented version. Ownership of
+unversioned Entity declarations is a separate 0.9.5 contract decision; it does
+not follow solely from Workflow versioning.
+
 ```text
 DRAFT → SUBMITTED → APPROVED
                   └→ REJECTED
@@ -38,7 +56,8 @@ Workflow failures use [Workflow Errors](../workflow/errors.md); entity-specific 
 
 ## Open Questions
 
-- How should imported entities with pre-existing lifecycle history establish their initial FinKore state?
+- Historical replay and provenance beyond the explicit observation boundary in
+  [Entity Import](import.md) remain outside the current contract.
 
 ## Non-Goals
 

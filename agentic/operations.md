@@ -294,6 +294,12 @@ all existing committed event identities and meanings are preserved.
 
 **Failure postcondition:** The supplied logical history remains unchanged.
 
+Accepted native values cannot retain aliases that alter committed meaning.
+Cyclic or unsupported values use the context-specific
+`FINKORE_AUDIT_ACTOR_INVALID` or `FINKORE_AUDIT_INVALID_EVENT` error under
+`AUDIT-ACTOR-010` and `AUDIT-CHANGE-008`; host recursion failures are not domain
+results. Native value representations do not extend the portable JSON contract.
+
 **Known operation-specific errors:** `FINKORE_AUDIT_INVALID_EVENT`,
 `FINKORE_AUDIT_ACTOR_INVALID`, and `FINKORE_AUDIT_DUPLICATE_EVENT`. This
 Stage 1 operation does not perform redaction.
@@ -369,6 +375,11 @@ Retained versioned definition semantics include nested guards, transitions, and
 state declarations. Mutating caller-owned inputs or returned observations must
 not change the retained version's behavior (`WORKFLOW-VERSION-003` and `-009`).
 This local ownership guarantee does not require a definition registry.
+The same ownership guarantee applies to the instance binding itself at native
+construction, import, transition, and observation (`WORKFLOW-VERSION-008`).
+Explicit null preconditions are supplied input: null expected State is invalid
+State, and null expected revision is a conflict. Omission alone skips the
+respective check; all combined failures follow `WORKFLOW-ERROR-007`.
 The [conformance conventions](../conformance/conventions.md) define the guard
 shape and `versionSequence: "DEFAULT"` fixture selector; they do not prescribe
 production serialization or expand the guard language.
@@ -383,7 +394,8 @@ supplied authorization or approval facts without defining an authorization model
 **Success postcondition:** Current State becomes the target exactly once.
 Validation and change are observable as one domain operation.
 
-**Failure postcondition:** Current State remains unchanged.
+**Failure postcondition:** Current State, binding, and instance revision remain
+unchanged.
 
 **Known operation-specific errors:** `FINKORE_WORKFLOW_INVALID_STATE`,
 `FINKORE_WORKFLOW_INVALID_TRANSITION`, `FINKORE_WORKFLOW_GUARD_REJECTED`,
@@ -418,6 +430,8 @@ valid.
 
 **Success postcondition:** Returns an Entity with the supplied stable identity,
 definition type, Workflow initial state, and accepted data.
+For a versioned Workflow, it also retains the initial Workflow binding under
+`WORKFLOW-VERSION-007`. Subsequent operations preserve that binding.
 
 **Failure postcondition:** No Entity observation is created by the failed
 operation.
@@ -441,6 +455,9 @@ of top-level data field changes.
 **Preconditions:** The Entity observation is valid for its definition, every
 target field is mutable in the current lifecycle state, and the complete
 proposed data satisfies declared validation.
+Versioned existing observations include their retained Workflow binding;
+missing/malformed binding and version mismatch retain the applicable Workflow
+error under `ENTITY-ERROR-004`.
 
 **Success postcondition:** Returns a new Entity observation preserving identity,
 type, and lifecycle state with the accepted data changes.
@@ -462,17 +479,22 @@ Workflow.
 
 **Input semantics:** Entity definition, existing Entity observation, and target
 State.
+For versioned lifecycles, the observation includes its original Workflow
+binding. It is never inferred from a later supplied definition.
 
 **Preconditions:** The Entity and referenced Workflow are valid, and the target
 transition is permitted by the Workflow from the current Entity state.
 
 **Success postcondition:** Returns a new Entity observation preserving identity,
 type, and data at the target State.
+The Workflow binding is also preserved under `WORKFLOW-VERSION-008`.
 
 **Failure postcondition:** The original Entity observation remains unchanged.
 
 **Known operation-specific errors:** Workflow transition errors such as
 `FINKORE_WORKFLOW_INVALID_TRANSITION` are preserved as primary portable errors.
+Missing/malformed required binding uses `FINKORE_WORKFLOW_INVALID_INSTANCE`;
+a different definition identity/version uses `FINKORE_WORKFLOW_VERSION_MISMATCH`.
 Entity identity or mutation errors may apply when the supplied Entity or
 definition is malformed.
 

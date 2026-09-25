@@ -22,6 +22,18 @@ This document defines a need for an Approval Decision from an eligible Actor or 
 
 An Approval Requirement must not be considered approved without an effective approving Approval Decision from an eligible Actor.
 
+Concrete record and Requirement/Decision evaluation boundaries require the
+subject and eligibility declarations in **APPROVAL-REQUIREMENT-002** and
+**APPROVAL-REQUIREMENT-003**. An empty subject object does not identify a
+subject. A null eligibility declaration does not identify an eligibility rule.
+An `applicability` or `state` observation cannot replace these declarations at
+a concrete Decision boundary. Lightweight chain/composition observations remain
+governed by their own contracts; they need not repeat a concrete Requirement.
+
+The bounded conformance representation is described in
+[Conformance Conventions](../../conformance/conventions.md); it does not
+standardize every composing domain's subject or eligibility representation.
+
 ## Example
 
 The following JSON is illustrative and non-normative; eligibility is not limited to roles and these member names are not a portable serialization.
@@ -42,4 +54,3 @@ The following JSON is illustrative and non-normative; eligibility is not limited
 ## Open Questions
 
 - Should a future interchange specification define a portable representation for associating Approval Decisions with subject state or facts?
-

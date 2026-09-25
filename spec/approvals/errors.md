@@ -64,6 +64,23 @@ applicability alone does not produce `FINKORE_APPROVAL_INVALID_CHAIN`.
 
 ## Invariants
 
+At concrete Requirement/Decision record and evaluation boundaries, malformed
+subject or eligibility declarations prevent a valid Decision and use
+`FINKORE_APPROVAL_INVALID_DECISION`. Missing Decision subject association is
+also malformed Decision content under **APPROVAL-DECISION-002**, including in
+supplied concrete history. These are structural rejections, not eligibility
+failures or successful `PENDING` evaluations. `FINKORE_APPROVAL_INELIGIBLE_ACTOR`
+instead describes an Actor failing a valid eligibility rule. Valid historical
+Decisions can be ineffective for the currently evaluated Requirement without
+being structurally invalid.
+
+This explains the existing invalid-Decision category and missing-subject/
+missing-eligibility conformance outcomes; it adds no portable error. It does
+not impose a new total ordering of unrelated concrete Approval errors. The
+composition-only priority in **APPROVAL-ERROR-010** remains unchanged, as do
+`FINKORE_APPROVAL_INVALID_CONTEXT` for required evaluation context and
+`FINKORE_APPROVAL_INVALID_CHAIN` for malformed composition observations.
+
 A failed Approval operation must leave existing committed Approval Decisions and lifecycle events unchanged.
 
 ## Open Questions

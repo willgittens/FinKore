@@ -43,6 +43,27 @@ Entity Revisions identify declared business observations. They do not replace
 stable Entity identity and do not define storage locking or a persistence
 transaction model.
 
+## Core 0.9.5 equal-token review (non-normative, blocking)
+
+**ENTITY-REVISION-002** separates meanings and permits an explicit immutable
+shared-meaning declaration. **ENTITY-REVISION-006** requires independently
+observable revision and conflict values. Neither statement unambiguously
+defines whether equal strings in separate fixture members assert one shared
+identity or happen to spell two separately scoped identities the same way.
+TypeScript rejection is not specification authority; Python/Java acceptance
+cannot yet be classified solely as a violation on the basis of lexical equality.
+
+The [Milestone 1 proposal](../../docs/plans/plan-09.5.md) treats the existing
+bounded import fixture as using distinct tokens: equal current business-revision
+and conflict-version tokens without a declared shared meaning would fail with
+`FINKORE_ENTITY_INVALID_IDENTITY`. Distinct values and independently checked
+preconditions remain valid. This is not a global string-uniqueness rule across
+typed/scoped identities. The current fixture has no shared-meaning declaration;
+no arbitrary Boolean flag can waive the requirement. A composing specification
+using the exception must explicitly define its immutable dual meaning and
+preserve independent observation/precondition checks. Adoption requires a scoped
+normative clarification before a vector selects the proposed rejection.
+
 ## Non-Goals
 
 This document does not define concrete invoice revisions, optimistic locking
