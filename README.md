@@ -358,7 +358,9 @@ Milestone 5 adds 23 Approval association and history vectors.
 Milestone 7 adds nine Entity binding, declaration, and import vectors. The
 development manifest now passes all 667 vectors on all four runtimes, including
 all 542 earlier vectors. [Traceability](./conformance/traceability.md) records the
-completed boundary corrections; the full release gate remains Milestones 8 and 9.
+completed boundary corrections. Milestone 8 passes complete verification from a
+clean checkout, including full mutation suites and isolated package consumers;
+documentation and corrective release closure remain Milestone 9.
 
 Milestone 3 now corrects Python and Java Money serialization: scale changes
 preserve exact value or return the specified portable error. Native serializer

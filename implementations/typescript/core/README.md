@@ -2,8 +2,9 @@
 
 [Core 0.9.5 Milestone 7](../../../docs/plans/plan-09.5.md) completes the
 reviewed Entity corrections. The development manifest now passes all 667 vectors
-on TypeScript, Python 3.12/3.13, and Java. The broader release verification and
-closure remain Milestones 8 and 9; the 0.9.4 results below describe that snapshot.
+on TypeScript, Python 3.12/3.13, and Java. Milestone 8 passes complete clean-checkout
+verification, including mutation and isolated package consumers. Corrective release
+closure remains Milestone 9; the 0.9.4 results below describe that snapshot.
 
 Versioned Entity observations carry their original Workflow `binding` through
 create, import, mutation, transition, and evolution. Import requires that explicit

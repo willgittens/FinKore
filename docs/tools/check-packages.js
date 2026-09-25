@@ -5,7 +5,7 @@
  * This developer tool writes only normal build outputs and a temporary package
  * directory, publishes nothing, and does not define financial-domain behavior.
  */
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import { cpSync, copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { basename, delimiter, join, resolve } from 'node:path'
 import { execFileSync } from 'node:child_process'
@@ -14,7 +14,6 @@ const repositoryRoot = process.cwd()
 const artifactDirectory = mkdtempSync(join(tmpdir(), 'finkore-package-check-'))
 const pythonSource = join(artifactDirectory, 'python-source')
 const python = resolve(repositoryRoot, '.tools/python-coverage/bin/python')
-const pythonRuntime = resolve(repositoryRoot, '.tools/bin/python3.12')
 const maven = resolve(repositoryRoot, '.tools/bin/mvn')
 const jar = resolve(repositoryRoot, '.tools/java/jdk-21/bin/jar')
 const java = resolve(repositoryRoot, '.tools/java/jdk-21/bin/java')
@@ -81,11 +80,8 @@ try {
   mkdirSync(nodeConsumer)
   writeFileSync(join(nodeConsumer, 'package.json'), '{"private":true,"type":"module"}\n')
   run('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund', npmArchive], { cwd: nodeConsumer })
-  run(process.execPath, [
-    '--input-type=module',
-    '--eval',
-    "import { FINKORE_CORE_VERSION, Money } from '@finkore/typescript'; const value = Money.from({ amount: '1.20', currency: 'EUR' }).toJSON(); if (FINKORE_CORE_VERSION !== '0.9-rc' || value.amount !== '1.20' || value.currency !== 'EUR') throw new Error('Installed TypeScript package returned an unexpected public value')",
-  ], { cwd: nodeConsumer })
+  copyFileSync(resolve(repositoryRoot, 'docs/tools/package-consumers/typescript.mjs'), join(nodeConsumer, 'consumer.mjs'))
+  process.stdout.write(run(process.execPath, ['consumer.mjs'], { cwd: nodeConsumer }))
 
   cpSync(resolve(repositoryRoot, 'implementations/python/core'), pythonSource, { recursive: true })
   run(python, ['-m', 'pip', 'wheel', pythonSource, '--no-build-isolation', '--no-deps', '--wheel-dir', artifactDirectory])
@@ -111,14 +107,16 @@ try {
   rejectEntries(wheelListing, [/(?:^|\/)(?:tests?|coverage|reports|build)(?:\/|$)/mu, /\.orig$/mu], 'Python wheel')
   rejectEntries(sourceListing, [/(?:^|\/)(?:tests?|coverage|reports|build)(?:\/|$)/mu, /\.orig$/mu], 'Python source distribution')
 
-  const pythonConsumer = join(artifactDirectory, 'python-consumer')
-  run(pythonRuntime, ['-m', 'venv', pythonConsumer])
-  const consumerPython = join(pythonConsumer, 'bin', 'python')
-  run(consumerPython, ['-m', 'pip', 'install', '--no-index', '--no-deps', wheel])
-  run(consumerPython, [
-    '-c',
-    "from finkore import CORE_VERSION, Money; value = Money.from_portable({'amount': '1.20', 'currency': 'EUR'}).to_portable(); assert CORE_VERSION == '0.9-rc' and value == {'amount': '1.20', 'currency': 'EUR'}",
-  ])
+  // Consume both artifacts on both supported runtimes, outside the source tree.
+  for (const version of ['3.12', '3.13']) for (const [kind, artifact] of [['wheel', wheel], ['sdist', sourceArchive]]) {
+    const pythonConsumer = join(artifactDirectory, `python-${version}-${kind}`)
+    run(resolve(repositoryRoot, `.tools/bin/python${version}`), ['-m', 'venv', pythonConsumer])
+    const consumerPython = join(pythonConsumer, 'bin', 'python')
+    if (kind === 'sdist') run(consumerPython, ['-m', 'pip', 'install', 'setuptools>=69', 'wheel'])
+    run(consumerPython, ['-m', 'pip', 'install', '--no-index', '--no-deps', '--no-build-isolation', artifact])
+    copyFileSync(resolve(repositoryRoot, 'docs/tools/package-consumers/python.py'), join(pythonConsumer, 'consumer.py'))
+    process.stdout.write(run(consumerPython, ['-I', 'consumer.py'], { cwd: pythonConsumer }))
+  }
 
   run(maven, ['-q', '-f', 'implementations/java/core/pom.xml', '-DskipTests', 'package'])
   const javaArchive = resolve(repositoryRoot, 'implementations/java/core/target/finkore-java-core-0.1.0.jar')
@@ -148,22 +146,9 @@ try {
   const javaClasses = join(javaConsumer, 'classes')
   mkdirSync(javaClasses, { recursive: true })
   const javaConsumerSource = join(javaConsumer, 'FinKoreConsumer.java')
-  writeFileSync(javaConsumerSource, `
-import java.util.Map;
-import org.finkore.FinKore;
-import org.finkore.Money;
-
-public final class FinKoreConsumer {
-  public static void main(String[] args) {
-    Money value = Money.fromPortable(Map.of("amount", "1.20", "currency", "EUR"));
-    if (!"0.9-rc".equals(FinKore.CORE_VERSION) || !"1.20".equals(value.toPortable().get("amount"))) {
-      throw new IllegalStateException("Installed Java package returned an unexpected public value");
-    }
-  }
-}
-`)
+  copyFileSync(resolve(repositoryRoot, 'docs/tools/package-consumers/FinKoreConsumer.java'), javaConsumerSource)
   run(javac, ['-cp', installedJavaArchive, '-d', javaClasses, javaConsumerSource])
-  run(java, ['-cp', `${installedJavaArchive}${delimiter}${javaClasses}`, 'FinKoreConsumer'])
+  process.stdout.write(run(java, ['-cp', `${installedJavaArchive}${delimiter}${javaClasses}`, 'FinKoreConsumer'], { cwd: javaConsumer }))
 
   console.log(`Local package and consumer check passed: ${basename(npmArchive)}, ${basename(wheel)}, ${basename(sourceArchive)}, ${basename(javaArchive)}`)
 } finally {

@@ -29,6 +29,7 @@
   ],
   "testFiles": [
     "test/integration/readiness-regressions.test.ts",
+    "test/integration/boundary-regressions.test.ts",
     "test/money/*.test.ts",
     "test/workflow/*.test.ts",
     "test/audit/*.test.ts",

@@ -91,9 +91,9 @@ gate passes. The corrections and release steps are tracked in the
 
 A critical probe is killed only by a valid conformance report with behavioral
 failures and no unsupported or infrastructure outcomes. Compilation failures,
-process failures, malformed reports, and empty suites fail the gate. Probes with
-a named regression require that regression to fail; every declared positive
-control must execute and pass. Core 0.9.3 adds this paired protection for Entity
+process failures, malformed reports, and empty suites fail the gate. Every probe
+must name its regression and at least one distinct paired control. That regression
+must fail and every declared control must execute and pass. Core 0.9.3 adds this paired protection for Entity
 import validation, Workflow comparison, Audit Actor validation and metadata
 presence, and Audit ordinary JSON and declared Money comparison. Classification
 tests run through `npm run tools:test`, included in `npm run check` and `npm run
@@ -109,6 +109,17 @@ control passes. Unexpected runtime exceptions, skipped cases, compilation or
 process failures, empty suites, and inconsistent reports fail verification.
 The Python and Java helpers only select tests and classify their results;
 financial behavior remains in the implementations and existing tests.
+
+Core 0.9.5 Milestone 8 supplies regression/control pairs for every one of the
+176 portable critical probes, including the older probes that previously accepted
+any failing vector. Baselines still run each complete suite; every mutant still
+runs its complete suite. Invalid probe metadata fails before mutation execution.
+The 50 native probes include all four TypeScript Entity create/from ×
+input/observation alias combinations. `npm run verify` also executes all 19 native
+Python probes on CPython 3.13 with `npm run mutation:native:python:3.13`.
+The TypeScript Stryker configuration includes the portable boundary integration
+suite, whose fixture lookup works in isolated mutation copies. No mutation scope,
+annotations, or minimum score was relaxed.
 
 Core 0.9.5 Milestone 3 adds 13 native Money serialization probes, covering
 truncation, implicit rounding, portable errors, scale validation, retained
@@ -227,15 +238,19 @@ npm run package:check
 The gate creates all artifacts in or from an isolated temporary directory and
 checks their allowlisted runtime, metadata, license, and notice content. It
 rejects source tests, coverage or mutation reports, backup files, local
-toolchains, and other repository-only material. It then performs three
+toolchains, and other repository-only material. It then performs isolated
 consumer checks:
 
-- installs the npm tarball into an empty Node project and imports the public
-  package root;
-- installs the Python wheel into a new virtual environment without consulting
-  a package index and imports the documented `finkore` surface;
+- installs the npm tarball into an empty Node project and exercises the public
+  package root, Entity binding and declaration ownership, null preconditions,
+  Approval association, and Audit own-member retention;
+- installs each Python wheel and sdist into separate virtual environments on
+  CPython 3.12 and 3.13, then checks lossless serialization, retained binding,
+  import identity/null, validator, Approval association, and Audit cycle rejection;
+  only build dependencies use the package index; the FinKore artifacts are local;
 - installs the Java JAR into an isolated Maven repository, compiles an external
-  consumer against it, and runs that consumer.
+  consumer against it, and checks lossless serialization, Entity binding and null
+  preconditions, validator rejection, and Audit numeric/cycle/ownership behavior.
 
 Temporary consumer environments and artifacts are removed when the check
 finishes. These checks only build and consume implementation artifacts. They do

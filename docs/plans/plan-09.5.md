@@ -860,36 +860,121 @@ and clean-checkout closure remain Milestones 8 and 9.
 
 ## Milestone 8 — Mutation protection and complete verification
 
-- [ ] Wire every new native and portable regression into repeatable verification.
+- [x] Wire every new native and portable regression into repeatable verification.
       Extend existing critical probe tools for all corrected failure mechanisms,
       including each lettered finding and the two Entity definition boundaries.
-- [ ] Require each targeted mutant to fail its named behavioral regression
+- [x] Require each targeted mutant to fail its named behavioral regression
       while its paired valid control executes and passes. Require passing
       unmodified baselines; reject missing results, skipped tests, empty suites,
       compilation failures, crashes, timeouts, and unrelated failures as proof.
-- [ ] Run full runner and TypeScript core mutation suites with the unchanged
+- [x] Run full runner and TypeScript core mutation suites with the unchanged
       minimum 95 percent gate, plus all Python/Java critical and native API
       probes. Review every survivor and uncovered mutant; no critical financial
       mutant may survive. Do not relax scope or ignore meaningful logic to pass.
-- [ ] Run strict builds, unit/adapter tests, CPython 3.12/3.13 compatibility,
+- [x] Run strict builds, unit/adapter tests, CPython 3.12/3.13 compatibility,
       coverage, and every manifest vector on TypeScript, both Python runtimes,
       and Java. Require zero failed, unsupported, or infrastructure outcomes.
-- [ ] Run isolated npm, Python wheel/sdist, and Java JAR consumer checks. Include
+- [x] Run isolated npm, Python wheel/sdist, and Java JAR consumer checks. Include
       representative corrected public API paths where existing import-only
       checks would miss serialization or ownership defects.
-- [ ] Run toolchain, architecture, documentation/traceability, license,
+- [x] Run toolchain, architecture, documentation/traceability, license,
       developer-tool, and whitespace checks. New tools must follow the existing
       purpose/effects comment convention and remain local; add no GitHub Actions.
-- [ ] From a clean checkout of the intended candidate, install locked Node
+- [x] From a clean checkout of the intended candidate, install locked Node
       dependencies with `npm ci` and run the complete `npm run verify` using the
       prescribed Node 24, CPython 3.12/3.13, JDK 21, and Maven 3.9.x toolchains.
       Review dependency audit results separately from financial conformance.
-- [ ] Reassess coverage claims against actual native API, cross-domain sequence,
+- [x] Reassess coverage claims against actual native API, cross-domain sequence,
       and explicit-null tests. A passing aggregate score or manifest does not
       close an uncovered mandatory boundary or blocking specification gap.
 
 Completion: the expanded candidate passes all configured gates from a clean
 checkout, and every corrected critical failure mechanism is mutation-protected.
+
+### Milestone 8 completion and verification
+
+Every portable critical probe now declares its named failing regression and
+independent passing controls, including 50 older probes whose evidence was less
+specific. The classifier rejects unnamed kills; permanent developer-tool tests
+fail against the previous classifier and pass against the corrected one. Full
+suite baselines and mutant executions remain in scope. Missing/skipped/empty
+results, compilation failures, crashes, timeouts, and unrelated failures cannot
+satisfy a targeted probe.
+
+The native gate now explicitly covers all four TypeScript Entity create/from
+and input/observation ownership combinations. The full TypeScript Stryker run
+also executes the portable boundary integration regressions; fixture discovery
+works in both ordinary tests and isolated mutation copies. The complete verify
+command repeats all 19 Python native probes on CPython 3.13.
+
+Isolated consumers now exercise corrected public APIs through the installed npm
+package, both Python wheel and sdist on both supported Python runtimes, and the
+installed Java JAR. Checks include exact serialization and portable failures,
+Entity binding reuse and declaration ownership, null preconditions, Approval
+association validation, and native Audit ownership/cycle boundaries where
+applicable. Consumers import only the installed public API and standard libraries.
+No packages were published.
+
+A fresh local candidate checkout installed locked dependencies with npm ci and
+completed the entire npm run verify command successfully using Node 24.15.0,
+CPython 3.12/3.13, JDK 21, and Maven 3.9.9. The checkout was clean before and after
+verification. All executable files, configuration, and dependency locks match
+this working candidate; the completion/status documentation was checked afterward.
+The separate npm dependency audit reports zero vulnerabilities; no dependency
+or financial behavior changes were made to obtain that result.
+
+| Check | Result |
+| --- | --- |
+| Full manifest on TypeScript / CPython 3.12 / CPython 3.13 / Java | 667 PASS each; zero FAIL, UNSUPPORTED, or INFRASTRUCTURE_ERROR |
+| Builds and tests | Strict builds, 130 runner tests, 836 TypeScript core tests, 19 TypeScript adapter tests, Python/Java native and adapter suites, and 13 developer-tool tests pass |
+| Python compatibility | Compilation, 209 native test methods, adapter tests, full conformance, and 19/19 native mutation probes pass on CPython 3.13 |
+| Runner coverage | 100% lines/functions, 96.61% branches |
+| TypeScript core coverage | 99.67% lines, 99.39% branches, 100% functions |
+| Python / Java coverage | Configured gates pass; Python 91% combined and Java 91.87% lines |
+| Full runner mutation | 627 killed, 19 survivors, zero uncovered/timeouts; 97.06% |
+| Full TypeScript core mutation | 4,035 killed, 16 pre-existing timeouts, 128 survivors, 10 uncovered; Stryker score 96.71%, or 96.32% with no timeout credit |
+| Portable critical mutation | 176/176 named regressions killed with paired controls passing |
+| Native API mutation | 50/50 killed: 8 TypeScript, 19 Python, 23 Java; paired controls pass |
+| Isolated package consumers | npm, wheel and sdist on each Python runtime, and JAR: all six consumer executions pass |
+| Repository checks | Toolchains, architecture, documentation/traceability, licenses, developer tools, and whitespace pass |
+| Locked dependency installation and audit | Clean npm ci passes; zero reported vulnerabilities |
+
+Every survivor and uncovered mutant was reviewed. Runner survivors affect
+diagnostic text, source labels, redundant error wrapping, or record checks whose
+required-field validation still rejects invalid input. Core survivors affect
+diagnostic messages/class names/details, redundant guards with downstream
+validation, or private representations discarded before observable results:
+
+- Approval timestamp/record validation remains enforced downstream; normalized
+  lifecycle states, synthetic keys, internal applicability flags, and discarded
+  stage/actionable representations preserve public outcomes.
+- Workflow identity and numeric guards remain covered by required-string and
+  finite-value checks; null/primitive/array handling precedes redundant equality
+  guards, and unversioned observations retain their defined shape.
+- Audit numeric comparison receives finite validated JSON, optional metadata
+  retains absence semantics, and fallback redaction entries cannot match valid
+  paths or bypass public log validation.
+- Entity currentness/effect comparisons preserve the defined source effect;
+  Money values still undergo decoder validation, falsy private predicate returns
+  reject, and conflict guards remain enforced through required revision checks.
+- Uncovered clone-error and post-append defensive branches are unreachable from
+  validated public histories; Money rounding modes are validated before dispatch.
+
+No critical financial survivor remains. The 16 nonterminating Money/Approval
+mutants already recorded in the 0.9.4 plan remain separately identified and do
+not count as proof for any corrected targeted failure mechanism. The full core
+score still exceeds 95% without timeout credit. Mutation scope, thresholds, and
+all 69 existing ignored-mutant annotations are unchanged; no new exclusion was
+introduced. Native ownership, explicit-null, and actual returned-value sequence
+tests support the coverage claims, rather than aggregate percentages alone.
+
+Completion review: verification tests/tools, package consumers, root/package
+READMEs, and traceability status are synchronized. The inventory remains 413
+requirements: 330 COVERED, 83 NOT DIRECTLY TESTABLE, no PARTIAL or blocking gaps.
+No financial implementation or public API changed, so no new JSDoc, specification,
+conformance vector, Agentic metadata, AGENTS.md, or CoreDoc change is required.
+Release history, package versions, tags, and Core 1.0 promotion remain unchanged;
+Milestone 9 owns final documentation and corrective release closure.
 
 ## Milestone 9 — Documentation and corrective release
 

@@ -125,7 +125,9 @@ bypass, equal-token conflation, aliases, and prior currentness protections.
 ENTITY-DEFINITION-002 is now NOT DIRECTLY TESTABLE by isolated JSON, with passing
 native ownership tests and mutation probes; the other 28 rows return to COVERED.
 No BLOCKING SPEC GAP remains from this review. COVERED records this exercised
-scope; full release verification and closure remain Milestones 8 and 9.
+scope. Milestone 8 passes complete clean-checkout verification, including full
+mutation suites, native API probes, and isolated package consumers. Corrective
+release closure remains Milestone 9.
 
 ## Requirement mapping
 
@@ -737,16 +739,18 @@ references are unchanged.
 
 ## Readiness
 
-**CORE 0.9.5 DOMAIN CORRECTIONS PASS; CORE 1.0 AWAITS THE COMPLETE RELEASE GATE**
+**CORE 0.9.5 VERIFICATION PASSES; CORRECTIVE RELEASE CLOSURE REMAINS PENDING**
 
 The manifest, schema, operation catalog, exact comparison rules, normalized
 errors, deterministic context, and valid requirement references are sufficient
 for the current runner. Core 0.9.5 Milestones 3–7 correct the reviewed serializer,
 binding, association, native value ownership, and Entity definition/import
 boundaries. All 667 vectors now pass on TypeScript, Python 3.12/3.13, and Java,
-with native sequence/ownership tests and scoped mutation protection. These
-checks establish the exercised boundaries; complete release verification and
-closure remain Milestones 8 and 9 of the [0.9.5 plan](../docs/plans/plan-09.5.md).
+with native sequence/ownership tests and mutation protection. Milestone 8 passes
+the complete clean-checkout verification, including all 176 portable critical
+and 50 native mutation probes, the Python 3.13 native repeat, and isolated package
+consumers. These checks establish the exercised boundaries; corrective release
+closure remains Milestone 9 of the [0.9.5 plan](../docs/plans/plan-09.5.md).
 The separate [Core 1.0 plan](../docs/plans/plan-10.md) still requires its stable
 baseline, compatibility, artifact, and release work.
 

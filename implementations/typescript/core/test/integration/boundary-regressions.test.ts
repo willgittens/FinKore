@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { ApprovalDecision, ApprovalDecisionHistory, FinancialEntity, Workflow } from '../../src/index.js'
@@ -10,7 +10,13 @@ interface Vector {
   input: Record<string, unknown>
   expected: { status: 'success'; value: unknown } | { status: 'error'; error: { code: string } }
 }
-const root = resolve(import.meta.dirname, '../../../../..')
+// Resolve the shared manifest from ordinary tests and Stryker's isolated copies.
+let root = import.meta.dirname
+while (!existsSync(resolve(root, 'conformance/manifest.json'))) {
+  const parent = resolve(root, '..')
+  if (parent === root) throw new Error('Conformance manifest not found')
+  root = parent
+}
 const manifest = JSON.parse(readFileSync(resolve(root, 'conformance/manifest.json'), 'utf8')) as { suites: { vectorFiles: string[] }[] }
 const prefixes = ['approval.association.', 'workflow.presence.', 'entity.import.presence-', 'entity.import.equal-revision-', 'entity.import.distinct-token-', 'entity.binding.', 'entity.declaration.']
 const vectors = manifest.suites.flatMap(suite => suite.vectorFiles).flatMap(file =>

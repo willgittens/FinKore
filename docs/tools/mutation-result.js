@@ -31,7 +31,11 @@ export function assessMutationResult(result, expectedVector, expectedPassVectors
     return { killed: false, reason: 'Conformance counts or exit status do not match valid results' }
   }
   if (failed.length === 0) return { killed: false, reason: 'All vectors passed' }
-  if (expectedVector !== undefined && !failed.some((row) => row.vectorId === expectedVector)) {
+  if (typeof expectedVector !== 'string' || expectedVector.length === 0
+      || !Array.isArray(expectedPassVectors) || expectedPassVectors.length === 0) {
+    return { killed: false, reason: 'A named regression and paired controls are required' }
+  }
+  if (!failed.some((row) => row.vectorId === expectedVector)) {
     return { killed: false, reason: `Expected regression did not fail: ${expectedVector}` }
   }
   const failedIds = new Set(failed.map((row) => row.vectorId))

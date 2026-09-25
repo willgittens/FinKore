@@ -632,6 +632,7 @@ const pythonMutants = [
   },
   {
     id: 'python-entity-validates-patch-only',
+    expectedPassVectors: ['entity.validation.cross-field-paired-increase-001'],
     expectedVector: 'entity.validation.cross-field-retained-limit-valid-001',
     suite: 'entities',
     path: 'core/src/finkore/entities.py',
@@ -640,6 +641,7 @@ const pythonMutants = [
   },
   {
     id: 'python-entity-cross-field-validation-bypass',
+    expectedPassVectors: ['entity.validation.cross-field-retained-limit-valid-001'],
     expectedVector: 'entity.validation.cross-field-combined-invalid-001',
     suite: 'entities',
     path: 'core/src/finkore/entities.py',
@@ -648,6 +650,7 @@ const pythonMutants = [
   },
   {
     id: 'python-entity-cross-field-equality-rejected',
+    expectedPassVectors: ['entity.validation.cross-field-retained-limit-valid-001'],
     expectedVector: 'entity.validation.cross-field-paired-increase-001',
     suite: 'entities',
     path: 'core/src/finkore/entities.py',
@@ -656,6 +659,7 @@ const pythonMutants = [
   },
   {
     id: 'python-entity-validates-old-result',
+    expectedPassVectors: ['entity.validation.cross-field-retained-limit-valid-001'],
     expectedVector: 'entity.validation.cross-field-combined-invalid-001',
     suite: 'entities',
     path: 'core/src/finkore/entities.py',
@@ -664,6 +668,7 @@ const pythonMutants = [
   },
   {
     id: 'python-entity-validates-intermediate-result',
+    expectedPassVectors: ['entity.validation.cross-field-retained-limit-valid-001'],
     expectedVector: 'entity.validation.cross-field-paired-increase-001',
     suite: 'entities',
     path: 'core/src/finkore/entities.py',
@@ -672,6 +677,7 @@ const pythonMutants = [
   },
   {
     id: 'python-approval-native-fact-equality',
+    expectedPassVectors: ['approval.validity.structured-facts-unchanged-001'],
     expectedVector: 'approval.validity.boolean-number-fact-change-001',
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
@@ -680,6 +686,7 @@ const pythonMutants = [
   },
   {
     id: 'python-approval-shallow-object-fact-equality',
+    expectedPassVectors: ['approval.validity.structured-facts-unchanged-001'],
     expectedVector: 'approval.validity.nested-number-boolean-fact-change-001',
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
@@ -688,6 +695,7 @@ const pythonMutants = [
   },
   {
     id: 'python-approval-shallow-array-fact-equality',
+    expectedPassVectors: ['approval.validity.structured-facts-unchanged-001'],
     expectedVector: 'approval.validity.array-number-boolean-fact-change-001',
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
@@ -696,6 +704,7 @@ const pythonMutants = [
   },
   {
     id: 'python-approval-unchanged-boolean-facts-rejected',
+    expectedPassVectors: ['approval.validity.boolean-number-fact-change-001'],
     expectedVector: 'approval.validity.structured-facts-unchanged-001',
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
@@ -704,6 +713,7 @@ const pythonMutants = [
   },
   {
     id: 'python-money-subtraction-context-rounding',
+    expectedPassVectors: ['money.subtract.basic-001'],
     expectedVector: 'money.subtract.high-precision-right-operand-001',
     suite: 'money',
     path: 'core/src/finkore/money.py',
@@ -712,6 +722,7 @@ const pythonMutants = [
   },
   {
     id: 'python-money-negation-context-rounding',
+    expectedPassVectors: ['money.negate.positive-001'],
     expectedVector: 'money.negate.high-precision-001',
     suite: 'money',
     path: 'core/src/finkore/money.py',
@@ -720,6 +731,7 @@ const pythonMutants = [
   },
   {
     id: 'python-money-allocation-context-rounding',
+    expectedPassVectors: ['money.allocate.equal.remainder-positive-001'],
     expectedVector: 'money.allocate.equal.high-precision-single-part-001',
     suite: 'money',
     path: 'core/src/finkore/money.py',
@@ -728,6 +740,8 @@ const pythonMutants = [
   },
   {
     id: 'python-money-currency-mismatch-bypass',
+    expectedVector: 'money.add.currency-mismatch-001',
+    expectedPassVectors: ['money.add.same-currency.basic-001'],
     suite: 'money',
     path: 'core/src/finkore/money.py',
     from: 'if self.currency != other.currency:\n            raise FinKoreError(CURRENCY_MISMATCH)',
@@ -735,6 +749,8 @@ const pythonMutants = [
   },
   {
     id: 'python-money-addition-subtracts',
+    expectedVector: 'money.add.same-currency.basic-001',
+    expectedPassVectors: ['money.add.zero-001'],
     suite: 'money',
     path: 'core/src/finkore/money.py',
     from: 'return Money(_add_decimal(self.amount, other.amount), self.currency)',
@@ -742,6 +758,8 @@ const pythonMutants = [
   },
   {
     id: 'python-money-floor-becomes-down',
+    expectedVector: 'money.round.floor.negative-001',
+    expectedPassVectors: ['money.round.floor.positive-001'],
     suite: 'money',
     path: 'core/src/finkore/money.py',
     from: 'elif mode == "FLOOR":\n            increment = sign < 0',
@@ -749,6 +767,8 @@ const pythonMutants = [
   },
   {
     id: 'python-money-allocation-upper-bound-bypass',
+    expectedVector: 'money.allocate.scale.out-of-range-001',
+    expectedPassVectors: ['money.allocate.scale.maximum-001'],
     suite: 'money',
     path: 'core/src/finkore/money.py',
     from: 'if integer < minimum or integer > maximum:\n        raise FinKoreError(INVALID_ALLOCATION)',
@@ -756,6 +776,8 @@ const pythonMutants = [
   },
   {
     id: 'python-money-allocation-maximum-rejected',
+    expectedVector: 'money.allocate.scale.maximum-001',
+    expectedPassVectors: ['money.allocate.equal.remainder-positive-001'],
     suite: 'money',
     path: 'core/src/finkore/money.py',
     from: 'if integer < minimum or integer > maximum:\n        raise FinKoreError(INVALID_ALLOCATION)',
@@ -763,6 +785,8 @@ const pythonMutants = [
   },
   {
     id: 'python-workflow-guard-bypass',
+    expectedVector: 'workflow.guard.reject-001',
+    expectedPassVectors: ['workflow.guard.pass-001'],
     suite: 'workflow',
     path: 'core/src/finkore/workflow.py',
     from: 'if not transition.guards_pass(request_facts):\n        raise FinKoreError(GUARD_REJECTED)',
@@ -770,6 +794,8 @@ const pythonMutants = [
   },
   {
     id: 'python-audit-replace-append-only-bypass',
+    expectedVector: 'audit.append-only.replace-forbidden-001',
+    expectedPassVectors: ['audit.relationship.corrects.append-001'],
     suite: 'audit',
     path: 'core/src/finkore/audit.py',
     from: 'if not _opaque(event_id) or not isinstance(replacement, dict):\n        raise FinKoreError(INVALID_EVENT)\n    raise FinKoreError(APPEND_ONLY_VIOLATION)',
@@ -777,6 +803,8 @@ const pythonMutants = [
   },
   {
     id: 'python-approval-expiration-bypass',
+    expectedVector: 'approval.validity.expiration-at-boundary-001',
+    expectedPassVectors: ['approval.validity.expiration-before-boundary-001'],
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
     from: 'return _instant(evaluated_at, INVALID_CONTEXT) >= _instant(decision["expiresAt"], INVALID_CONTEXT)',
@@ -784,6 +812,8 @@ const pythonMutants = [
   },
   {
     id: 'python-timestamp-nanoseconds-truncated',
+    expectedVector: 'shared.timestamp.expiration-subnanosecond-before-001',
+    expectedPassVectors: ['shared.timestamp.expiration-equivalent-offset-nanoseconds-001'],
     suite: 'shared',
     path: 'core/src/finkore/_timestamp.py',
     from: 'return local_second - offset_seconds, nanosecond',
@@ -791,6 +821,8 @@ const pythonMutants = [
   },
   {
     id: 'python-timestamp-unknown-offset-accepted',
+    expectedVector: 'shared.timestamp.unknown-offset-invalid-001',
+    expectedPassVectors: ['shared.timestamp.maximum-precision-001'],
     suite: 'shared',
     path: 'core/src/finkore/_timestamp.py',
     from: 'if offset_hour > 23 or offset_minute > 59 or (sign == "-" and offset_hour == 0 and offset_minute == 0):',
@@ -807,6 +839,8 @@ const pythonMutants = [
   },
   {
     id: 'python-audit-actor-identity-bypass',
+    expectedVector: 'audit.actor.missing-id-001',
+    expectedPassVectors: ['audit.actor.opaque-identity-001'],
     suite: 'audit',
     path: 'core/src/finkore/audit.py',
     from: 'if not isinstance(actor, dict) or not _opaque(actor.get("id")):\n        raise FinKoreError(ACTOR_INVALID)',
@@ -814,6 +848,8 @@ const pythonMutants = [
   },
   {
     id: 'python-entity-immutability-bypass',
+    expectedVector: 'entity.mutate.immutable-financial-field-001',
+    expectedPassVectors: ['entity.mutate.mutable-field-001'],
     suite: 'entities',
     path: 'core/src/finkore/entities.py',
     from: 'if any(path not in mutable for path in changes):\n        raise FinKoreError(IMMUTABLE)',
@@ -821,6 +857,8 @@ const pythonMutants = [
   },
   {
     id: 'python-entity-positive-money-validation-bypass',
+    expectedVector: 'entity.import.validation-positive-money-invalid-001',
+    expectedPassVectors: ['entity.import.validation-positive-money-valid-001'],
     suite: 'entities',
     path: 'core/src/finkore/entities.py',
     from: 'if money.amount <= Decimal("0"):\n                findings.append({"rule": rule.get("id"), "path": rule.get("path")})',
@@ -828,6 +866,8 @@ const pythonMutants = [
   },
   {
     id: 'python-entity-duplicate-revision-bypass',
+    expectedVector: 'entity.import.duplicate-revision-invalid-identity-001',
+    expectedPassVectors: ['entity.import.distinct-token-control-001'],
     suite: 'entities',
     path: 'core/src/finkore/entities.py',
     from: 'if len({revision["revision"] for revision in revisions}) != len(revisions):\n        raise FinKoreError(INVALID_IDENTITY)',
@@ -1452,6 +1492,7 @@ const javaMutants = [
   },
   {
     id: 'java-entity-validates-patch-only',
+    expectedPassVectors: ['entity.validation.cross-field-paired-increase-001'],
     expectedVector: 'entity.validation.cross-field-retained-limit-valid-001',
     suite: 'entities',
     path: 'core/src/main/java/org/finkore/Entities.java',
@@ -1460,6 +1501,7 @@ const javaMutants = [
   },
   {
     id: 'java-entity-cross-field-validation-bypass',
+    expectedPassVectors: ['entity.validation.cross-field-retained-limit-valid-001'],
     expectedVector: 'entity.validation.cross-field-combined-invalid-001',
     suite: 'entities',
     path: 'core/src/main/java/org/finkore/Entities.java',
@@ -1468,6 +1510,7 @@ const javaMutants = [
   },
   {
     id: 'java-entity-cross-field-equality-rejected',
+    expectedPassVectors: ['entity.validation.cross-field-retained-limit-valid-001'],
     expectedVector: 'entity.validation.cross-field-paired-increase-001',
     suite: 'entities',
     path: 'core/src/main/java/org/finkore/Entities.java',
@@ -1476,6 +1519,7 @@ const javaMutants = [
   },
   {
     id: 'java-entity-validates-old-result',
+    expectedPassVectors: ['entity.validation.cross-field-retained-limit-valid-001'],
     expectedVector: 'entity.validation.cross-field-combined-invalid-001',
     suite: 'entities',
     path: 'core/src/main/java/org/finkore/Entities.java',
@@ -1484,6 +1528,7 @@ const javaMutants = [
   },
   {
     id: 'java-entity-validates-intermediate-result',
+    expectedPassVectors: ['entity.validation.cross-field-retained-limit-valid-001'],
     expectedVector: 'entity.validation.cross-field-paired-increase-001',
     suite: 'entities',
     path: 'core/src/main/java/org/finkore/Entities.java',
@@ -1492,6 +1537,8 @@ const javaMutants = [
   },
   {
     id: 'java-money-currency-mismatch-bypass',
+    expectedVector: 'money.add.currency-mismatch-001',
+    expectedPassVectors: ['money.add.same-currency.basic-001'],
     suite: 'money',
     path: 'core/src/main/java/org/finkore/Money.java',
     from: 'if (!currency.equals(other.currency)) {\n      throw new FinKoreException(CURRENCY_MISMATCH);\n    }',
@@ -1499,6 +1546,8 @@ const javaMutants = [
   },
   {
     id: 'java-money-addition-subtracts',
+    expectedVector: 'money.add.same-currency.basic-001',
+    expectedPassVectors: ['money.add.zero-001'],
     suite: 'money',
     path: 'core/src/main/java/org/finkore/Money.java',
     from: 'return new Money(amount.add(other.amount), currency, null);',
@@ -1506,6 +1555,8 @@ const javaMutants = [
   },
   {
     id: 'java-money-floor-becomes-down',
+    expectedVector: 'money.round.floor.negative-001',
+    expectedPassVectors: ['money.round.floor.positive-001'],
     suite: 'money',
     path: 'core/src/main/java/org/finkore/Money.java',
     from: 'case "FLOOR" -> RoundingMode.FLOOR;',
@@ -1513,6 +1564,8 @@ const javaMutants = [
   },
   {
     id: 'java-money-percentage-not-scaled',
+    expectedVector: 'money.rate.percentage-conversion-001',
+    expectedPassVectors: ['money.rate.decimal-exact-001'],
     suite: 'money',
     path: 'core/src/main/java/org/finkore/Money.java',
     from: 'scalar = scalar.divide(new BigDecimal("100"));',
@@ -1520,6 +1573,8 @@ const javaMutants = [
   },
   {
     id: 'java-money-allocation-remainder-reversed',
+    expectedVector: 'money.allocate.equal.remainder-positive-001',
+    expectedPassVectors: ['money.allocate.ratio.zero-source-001'],
     suite: 'money',
     path: 'core/src/main/java/org/finkore/Money.java',
     from: 'base.set(index, base.get(index).add(BigInteger.ONE));',
@@ -1527,6 +1582,8 @@ const javaMutants = [
   },
   {
     id: 'java-money-allocation-upper-bound-bypass',
+    expectedVector: 'money.allocate.scale.out-of-range-001',
+    expectedPassVectors: ['money.allocate.scale.maximum-001'],
     suite: 'money',
     path: 'core/src/main/java/org/finkore/Money.java',
     from: 'if (integer.compareTo(BigInteger.valueOf(minimum)) < 0\n        || integer.compareTo(BigInteger.valueOf(maximum)) > 0) {\n      throw new FinKoreException(INVALID_ALLOCATION);\n    }',
@@ -1534,6 +1591,8 @@ const javaMutants = [
   },
   {
     id: 'java-money-allocation-maximum-rejected',
+    expectedVector: 'money.allocate.scale.maximum-001',
+    expectedPassVectors: ['money.allocate.equal.remainder-positive-001'],
     suite: 'money',
     path: 'core/src/main/java/org/finkore/Money.java',
     from: 'if (integer.compareTo(BigInteger.valueOf(minimum)) < 0\n        || integer.compareTo(BigInteger.valueOf(maximum)) > 0) {\n      throw new FinKoreException(INVALID_ALLOCATION);\n    }',
@@ -1541,6 +1600,8 @@ const javaMutants = [
   },
   {
     id: 'java-workflow-guard-bypass',
+    expectedVector: 'workflow.guard.reject-001',
+    expectedPassVectors: ['workflow.guard.pass-001'],
     suite: 'workflow',
     path: 'core/src/main/java/org/finkore/Workflow.java',
     from: 'if (!transition.guardsPass(factMap)) {\n      throw new FinKoreException(GUARD_REJECTED);\n    }',
@@ -1548,6 +1609,8 @@ const javaMutants = [
   },
   {
     id: 'java-workflow-terminal-bypass',
+    expectedVector: 'workflow.terminal.transition-rejected-001',
+    expectedPassVectors: ['workflow.terminal.entry-allowed-001'],
     suite: 'workflow',
     path: 'core/src/main/java/org/finkore/Workflow.java',
     from: 'if (definition.terminalStates().contains(instance.currentState())) {\n      throw new FinKoreException(TERMINAL_STATE);\n    }',
@@ -1555,6 +1618,8 @@ const javaMutants = [
   },
   {
     id: 'java-audit-duplicate-event-bypass',
+    expectedVector: 'audit.event.duplicate-identity-001',
+    expectedPassVectors: ['audit.relationship.corrects.append-001'],
     suite: 'audit',
     path: 'core/src/main/java/org/finkore/Audit.java',
     from: 'if (eventIds.contains(event.eventId())) {\n        throw new FinKoreException(DUPLICATE_EVENT);\n      }',
@@ -1562,6 +1627,8 @@ const javaMutants = [
   },
   {
     id: 'java-audit-replace-append-only-bypass',
+    expectedVector: 'audit.append-only.replace-forbidden-001',
+    expectedPassVectors: ['audit.relationship.corrects.append-001'],
     suite: 'audit',
     path: 'core/src/main/java/org/finkore/Audit.java',
     from: 'public void replace() {\n      throw new FinKoreException(APPEND_ONLY_VIOLATION);\n    }',
@@ -1569,6 +1636,8 @@ const javaMutants = [
   },
   {
     id: 'java-audit-relationship-target-bypass',
+    expectedVector: 'audit.relationship.target-entity-mismatch-001',
+    expectedPassVectors: ['audit.relationship.corrects.append-001'],
     suite: 'audit',
     path: 'core/src/main/java/org/finkore/Audit.java',
     from: 'if (target == null || !relationship.target().entity().equals(target.entity())) {\n        throw new FinKoreException(INVALID_EVENT);\n      }',
@@ -1576,6 +1645,8 @@ const javaMutants = [
   },
   {
     id: 'java-approval-expiration-bypass',
+    expectedVector: 'approval.validity.expiration-at-boundary-001',
+    expectedPassVectors: ['approval.validity.expiration-before-boundary-001'],
     suite: 'approvals',
     path: 'core/src/main/java/org/finkore/Approvals.java',
     from: 'return instant(evaluatedAt, INVALID_CONTEXT).compareTo(instant(decision.get("expiresAt"), INVALID_CONTEXT)) >= 0;',
@@ -1583,6 +1654,8 @@ const javaMutants = [
   },
   {
     id: 'java-timestamp-nanoseconds-truncated',
+    expectedVector: 'shared.timestamp.expiration-subnanosecond-before-001',
+    expectedPassVectors: ['shared.timestamp.expiration-equivalent-offset-nanoseconds-001'],
     suite: 'shared',
     path: 'core/src/main/java/org/finkore/PortableTimestamp.java',
     from: 'return new InstantValue(localSecond - offsetSeconds, nanosecond);',
@@ -1590,6 +1663,8 @@ const javaMutants = [
   },
   {
     id: 'java-timestamp-unknown-offset-accepted',
+    expectedVector: 'shared.timestamp.unknown-offset-invalid-001',
+    expectedPassVectors: ['shared.timestamp.maximum-precision-001'],
     suite: 'shared',
     path: 'core/src/main/java/org/finkore/PortableTimestamp.java',
     from: '|| ("-".equals(sign) && offsetHour == 0 && offsetMinute == 0)) {',
@@ -1606,6 +1681,8 @@ const javaMutants = [
   },
   {
     id: 'java-approval-opposing-quorum-bypass',
+    expectedVector: 'approval.composition.quorum-opposing-effective-votes-invalid-001',
+    expectedPassVectors: ['approval.composition.quorum-two-of-three-approved-boundary-001'],
     suite: 'approvals',
     path: 'core/src/main/java/org/finkore/Approvals.java',
     from: 'if (approved && rejected) {\n      throw new FinKoreException(INVALID_CHAIN);\n    }',
@@ -1622,6 +1699,8 @@ const javaMutants = [
   },
   {
     id: 'java-entity-immutability-bypass',
+    expectedVector: 'entity.mutate.immutable-financial-field-001',
+    expectedPassVectors: ['entity.mutate.mutable-field-001'],
     suite: 'entities',
     path: 'core/src/main/java/org/finkore/Entities.java',
     from: 'if (!mutable.contains(path)) {\n        throw new FinKoreException(IMMUTABLE);\n      }',
@@ -1629,6 +1708,8 @@ const javaMutants = [
   },
   {
     id: 'java-entity-positive-money-validation-bypass',
+    expectedVector: 'entity.import.validation-positive-money-invalid-001',
+    expectedPassVectors: ['entity.import.validation-positive-money-valid-001'],
     suite: 'entities',
     path: 'core/src/main/java/org/finkore/Entities.java',
     from: 'invalid = new BigDecimal(amount).compareTo(BigDecimal.ZERO) <= 0;',
@@ -1636,6 +1717,8 @@ const javaMutants = [
   },
   {
     id: 'java-entity-duplicate-revision-bypass',
+    expectedVector: 'entity.import.duplicate-revision-invalid-identity-001',
+    expectedPassVectors: ['entity.import.distinct-token-control-001'],
     suite: 'entities',
     path: 'core/src/main/java/org/finkore/Entities.java',
     from: 'if (!seen.add(revision.get("revision"))) {',
@@ -1761,6 +1844,14 @@ function report(results) {
   if (failures > 0) process.exit(1)
 }
 
+for (const mutant of [...pythonMutants, ...javaMutants]) {
+  if (typeof mutant.expectedVector !== 'string' || mutant.expectedVector.length === 0
+      || !Array.isArray(mutant.expectedPassVectors) || mutant.expectedPassVectors.length === 0
+      || mutant.expectedPassVectors.includes(mutant.expectedVector)) {
+    throw new Error(`${mutant.id}: declare a named regression and independent paired controls`)
+  }
+}
+
 const results = []
 if (process.argv.length > 4 || (requestedSuite !== undefined && ![...pythonMutants, ...javaMutants].some((mutant) => mutant.suite === requestedSuite))) {
   console.error('Unknown mutation suite or extra arguments')
@@ -1782,7 +1873,7 @@ if (requestedTarget === 'all' || requestedTarget === 'python') {
     FINKORE_PYTHON_PATH: resolve(repositoryRoot, '.tools/bin/python3.12'),
     FINKORE_PYTHON_BRIDGE_PATH: resolve(repositoryRoot, 'implementations/python/adapters/conformance/bridge.py'),
   })
-  for (const mutant of selected(pythonMutants)) results.push(runPythonMutant(mutant))
+  for (const mutant of selected(pythonMutants)) { const result = runPythonMutant(mutant); results.push(result); report([result]) }
 }
 if (requestedTarget === 'all' || requestedTarget === 'java') {
   const baseline = compileJava(resolve(repositoryRoot, 'implementations/java'))
@@ -1792,6 +1883,6 @@ if (requestedTarget === 'all' || requestedTarget === 'java') {
     FINKORE_JAVA_PATH: resolve(repositoryRoot, '.tools/bin/java'),
     FINKORE_JAVA_CLASSPATH: baseline.output,
   })
-  for (const mutant of selected(javaMutants)) results.push(runJavaMutant(mutant))
+  for (const mutant of selected(javaMutants)) { const result = runJavaMutant(mutant); results.push(result); report([result]) }
 }
 report(results)

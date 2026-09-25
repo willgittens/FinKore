@@ -16,6 +16,30 @@ const workflowControl = 'Workflow retained definition ownership retains state, t
 const integration = 'test/integration/readiness-regressions.test.ts'
 const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const probes = [
+{
+  "id": "typescript-entity-definition-from-input-alias",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "workflow: cloneJsonValue(input.workflow)",
+  "to": "workflow: input.workflow",
+  "tests": [
+    "test/entities/boundaries.test.ts"
+  ],
+  "target": "Entity result reuse and retained declarations from: rejects an undeclared transition after changing input transitions",
+  "control": "Entity result reuse and retained declarations new independently declared Entity control uses its own transitions"
+},
+{
+  "id": "typescript-entity-definition-create-observation-alias",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "return cloneJsonValue(this.retainedDefinition)",
+  "to": "return this.retainedDefinition",
+  "tests": [
+    "test/entities/boundaries.test.ts"
+  ],
+  "target": "Entity result reuse and retained declarations create: preserves rejected data after changing observation validators",
+  "control": "Entity result reuse and retained declarations new independently declared Entity control uses its own transitions"
+},
   {
   "id": "typescript-entity-definition-input-alias",
   "language": "typescript",
