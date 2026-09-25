@@ -368,8 +368,10 @@ pass. Milestone 4 also corrects Python instance-binding ownership and Python/Jav
 precondition presence and error precedence. All 103 Workflow vectors pass on
 all four runtimes. Milestone 5 corrects concrete Approval subject, association,
 eligibility, and reused-history validation. All 162 Approval vectors pass on
-all four runtimes, with native failure-atomicity and mutation checks. Native
-Audit and Entity corrections stay open.
+all four runtimes, with native failure-atomicity and mutation checks. Milestone 6
+corrects native Audit cycle rejection and value ownership: all 76 Audit vectors,
+native boundary tests, and targeted mutation probes pass. Entity corrections
+remain open for Milestone 7.
 
 - Money
 - Workflow

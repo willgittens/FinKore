@@ -238,9 +238,9 @@ class BoundaryRegressions(unittest.TestCase):
 
     def test_audit_cycles_are_portable_errors(self):
         """AUDIT-ACTOR-010/CHANGE-008/ERROR-004: cycles are errors, shared DAGs are valid."""
-        for location in ("actor", "change"):
+        for location in ("actor", "change", "metadata"):
             for shape in ("map", "list", "nested"):
-                for boundary in ("construct", "import", "append"):
+                for boundary in ("construct", "import", "append", "redact"):
                     with self.subTest(location=location, shape=shape, boundary=boundary):
                         value = {} if shape != "list" else []
                         if shape == "map":
@@ -252,16 +252,52 @@ class BoundaryRegressions(unittest.TestCase):
                         candidate = deepcopy(EVENT)
                         if location == "actor":
                             candidate["actor"] = {"id": "alice", "metadata": value}
-                        else:
+                        elif location == "change":
                             candidate["changes"] = [{"path": "payload", "before": None, "after": value}]
-                        history = [{**EVENT, "eventId": "prior"}]
+                        else:
+                            candidate["metadata"] = value
+                        history = [{**EVENT, "eventId": "prior", "actor": {"id": "alice", "metadata": None}}]
                         before = deepcopy(history)
                         action = (lambda: validate_event(candidate, {}, set())) if boundary == "construct" else (
-                            (lambda: validate_history([candidate])) if boundary == "import" else lambda: append_event(history, candidate))
+                            (lambda: validate_history([candidate])) if boundary == "import" else (
+                                (lambda: append_event(history, candidate)) if boundary == "append" else lambda: redact_history(
+                                    history, {"protectedPaths": ["actor.metadata"]}, candidate)))
                         try:
                             self.portable_error("FINKORE_AUDIT_ACTOR_INVALID" if location == "actor" else "FINKORE_AUDIT_INVALID_EVENT", action)
                         finally:
                             self.assertEqual(history, before)
+
+    def test_audit_native_error_precedence(self):
+        """AUDIT-ERROR-004: native JSON failures obey history/non-actor/actor priority."""
+        cycle = {}; cycle["self"] = cycle
+        actor_bad = {**EVENT, "actor": {"id": "alice", "metadata": cycle}}
+        change_bad = {**EVENT, "changes": [{"path": "x", "after": cycle}]}
+        cases = [([], {**actor_bad, "changes": change_bad["changes"]}, "FINKORE_AUDIT_INVALID_EVENT"),
+                 ([], {**actor_bad, "metadata": cycle}, "FINKORE_AUDIT_INVALID_EVENT"),
+                 ([EVENT], actor_bad, "FINKORE_AUDIT_ACTOR_INVALID"),
+                 ([actor_bad], change_bad, "FINKORE_AUDIT_ACTOR_INVALID"),
+                 ([change_bad], actor_bad, "FINKORE_AUDIT_INVALID_EVENT")]
+        for history, candidate, code in cases:
+            with self.subTest(code=code, count=len(history)):
+                self.portable_error(code, lambda: append_event(history, candidate))
+                self.assertIs(cycle["self"], cycle)
+                self.assertEqual(set(cycle), {"self"})
+
+    def test_audit_event_metadata_is_owned_json(self):
+        """AUDIT-APPEND-001: retained Event context has the same JSON ownership boundary."""
+        shared = {"__proto__": [None, False, 123456789012345678901]}
+        candidate = {**EVENT, "metadata": {"left": shared, "right": shared}}
+        expected = deepcopy(candidate)
+        constructed = validate_event(candidate, {}, set())
+        imported = validate_history([constructed])
+        shared["__proto__"].append("changed")
+        self.assertEqual(constructed, expected)
+        constructed["metadata"]["left"]["__proto__"].append("exposed")
+        self.assertEqual(imported, [expected])
+        for value in (set(), object(), float("nan"), float("inf")):
+            with self.subTest(value=type(value).__name__):
+                self.portable_error("FINKORE_AUDIT_INVALID_EVENT", lambda: append_event(imported, {**EVENT, "metadata": value}))
+                self.assertEqual(imported, [expected])
 
     def test_audit_shared_acyclic_and_ownership_controls(self):
         shared = {"number": 1, "values": [None, False, 3.5, {"exact": 1234567890123456789}]}

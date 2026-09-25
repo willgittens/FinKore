@@ -86,8 +86,8 @@ public final class BoundaryRegressionTest {
     cases.put("approval.sequence.missing-association", () -> approvalSequence(true));
     Map<String, Object> approvalVectors = map(Json.parse(Files.readString(root.resolve("conformance/approvals/readiness-regressions.json"))));
     cases.put("approval.sequence.incomplete-reused-history", () -> incompleteApprovalHistory(list(approvalVectors.get("vectors"))));
-    for (String location : List.of("actor", "change")) {
-      for (String boundary : List.of("construct", "import", "append")) {
+    for (String location : List.of("actor", "change", "metadata")) {
+      for (String boundary : List.of("construct", "import", "append", "redact")) {
         for (String shape : List.of("map", "list", "nested")) {
           cases.put("audit.cycle." + location + "." + boundary + "." + shape, () -> auditCycle(location, boundary, shape));
         }
@@ -99,6 +99,10 @@ public final class BoundaryRegressionTest {
     }
     cases.put("audit.mutable-number.returned-observation", BoundaryRegressionTest::numericObservation);
     cases.put("audit.immutable-numbers-shared-ownership-control", BoundaryRegressionTest::auditControl);
+    cases.put("audit.native-record-ownership", BoundaryRegressionTest::auditRecordOwnership);
+    cases.put("audit.native-error-precedence", BoundaryRegressionTest::auditErrorPrecedence);
+    cases.put("audit.unsupported-number-subclasses", BoundaryRegressionTest::unsupportedNumberSubclasses);
+    cases.put("audit.scalar-control", () -> equal(event(), Audit.Event.fromPortable(event()).toPortable()));
     return cases;
   }
 
@@ -228,19 +232,22 @@ public final class BoundaryRegressionTest {
   private static Map<String, Object> eventWith(String location, Object value) {
     Map<String, Object> result = event();
     if (location.equals("actor")) result.put("actor", Map.of("id", "alice", "metadata", value));
-    else result.put("changes", List.of(Map.of("path", "payload", "before", Map.of(), "after", value)));
+    else if (location.equals("change")) result.put("changes", List.of(Map.of("path", "payload", "before", Map.of(), "after", value)));
+    else result.put("metadata", value);
     return result;
   }
 
   private static void rejectAudit(String location, String boundary, Object value) {
     Map<String, Object> candidate = eventWith(location, value);
     Map<String, Object> prior = event(); prior.put("eventId", "prior");
+    prior.put("actor", Map.of("id", "alice", "metadata", Map.of()));
     Audit.Log log = Audit.Log.create(List.of(prior));
     Object before = copy(log.events());
     Runnable action = switch (boundary) {
       case "construct" -> () -> Audit.Event.fromPortable(candidate);
       case "import" -> () -> Audit.Log.create(List.of(candidate));
       case "append" -> () -> log.append(candidate);
+      case "redact" -> () -> log.redact(Map.of("id", "policy", "authority", "retention", "protectedPaths", List.of("actor.metadata")), candidate);
       default -> throw new AssertionError(boundary);
     };
     try { error(location.equals("actor") ? Audit.ACTOR_INVALID : Audit.INVALID_EVENT, action); }
@@ -259,6 +266,63 @@ public final class BoundaryRegressionTest {
 
   private static void mutableNumber(String location, String boundary, Number value) {
     rejectAudit(location, boundary, Map.of("nested", List.of(value)));
+  }
+
+  private static void unsupportedNumberSubclasses() {
+    for (Number value : List.of(new BigDecimal("1") { private static final long serialVersionUID = 1L; },
+        new BigInteger("1") { private static final long serialVersionUID = 1L; })) {
+      for (String location : List.of("actor", "change", "metadata")) rejectAudit(location, "append", value);
+    }
+    error(Audit.ACTOR_INVALID, () -> new Audit.Actor("alice", null, null, true, new AtomicInteger(1)));
+    error(Audit.INVALID_EVENT, () -> new Audit.Change("x", true, new AtomicLong(1), false, null));
+    error(Audit.INVALID_EVENT, () -> new Audit.Event("e", "CHANGED", new Audit.EntityReference("invoice", "i"),
+        "2026-09-01T12:00:00Z", null, null, null, new AtomicInteger(1)));
+  }
+
+  private static void auditErrorPrecedence() {
+    Map<String, Object> cycle = new LinkedHashMap<>(); cycle.put("self", cycle);
+    Map<String, Object> actorBad = eventWith("actor", cycle);
+    Map<String, Object> changeBad = eventWith("change", cycle);
+    Map<String, Object> both = new LinkedHashMap<>(actorBad); both.put("changes", changeBad.get("changes"));
+    Audit.Log log = Audit.Log.create(List.of(event())); Object before = copy(log.events());
+    error(Audit.INVALID_EVENT, () -> log.append(both));
+    error(Audit.ACTOR_INVALID, () -> log.append(actorBad));
+    error(Audit.ACTOR_INVALID, () -> Audit.Log.create(List.of(actorBad, changeBad)));
+    error(Audit.INVALID_EVENT, () -> Audit.Log.create(List.of(changeBad, actorBad)));
+    equal(before, log.events());
+    if (cycle.get("self") != cycle || cycle.size() != 1) throw new AssertionError("Changed cyclic input");
+  }
+
+  private static void auditRecordOwnership() {
+    for (boolean direct : List.of(false, true)) {
+      Map<String, Object> source = new LinkedHashMap<>(Map.of("__proto__", new ArrayList<>(List.of(1))));
+      Audit.Actor actor = direct ? new Audit.Actor("alice", null, null, true, source)
+          : Audit.Actor.fromPortable(Map.of("id", "alice", "metadata", source));
+      Audit.Change change = direct ? new Audit.Change("x", true, source, true, List.of(source))
+          : Audit.Change.fromPortable(Map.of("path", "x", "before", source, "after", List.of(source)));
+      Map<String, Object> candidate = eventWith("metadata", source);
+      candidate.put("actor", actor.toPortable()); candidate.put("changes", List.of(change.toPortable()));
+      Audit.Event event = direct ? new Audit.Event("event-1", "ENTITY_CHANGED", new Audit.EntityReference("invoice", "invoice-1"),
+          "2026-09-01T12:00:00Z", actor, List.of(change), null, source) : Audit.Event.fromPortable(candidate);
+      Object expected = copy(event.toPortable());
+      Audit.Log log = Audit.Log.create(List.of(event.toPortable()));
+      list(source.get("__proto__")).add(2);
+      equal(expected, event.toPortable());
+      map(actor.metadata()).put("exposed", true);
+      map(change.before()).put("exposed", true);
+      map(list(change.after()).get(0)).put("exposed", true);
+      map(event.metadata()).put("exposed", true);
+      map(event.actor().metadata()).put("nested", true);
+      map(event.changes().get(0).before()).put("nested", true);
+      equal(expected, event.toPortable()); equal(List.of(expected), log.events());
+      Map<String, Object> evidence = eventWith("metadata", new LinkedHashMap<>(Map.of("reason", List.of("retention"))));
+      evidence.put("eventId", "redaction"); evidence.put("eventType", "AUDIT_CONTENT_REDACTED");
+      Object evidenceBefore = copy(evidence);
+      Audit.RedactionResult result = log.redact(Map.of("id", "policy", "authority", "retention", "protectedPaths", List.of("actor.metadata", "x")), evidence);
+      map(evidence.get("metadata")).put("reason", "changed");
+      result.event().put("eventType", "CHANGED"); result.evidenceEvent().put("eventType", "CHANGED");
+      equal(List.of(expected, evidenceBefore), log.events());
+    }
   }
 
   private static void numericObservation() {
@@ -318,9 +382,6 @@ public final class BoundaryRegressionTest {
   private static void error(String code, Runnable action) {
     try { action.run(); }
     catch (FinKoreException failure) { equal(code, failure.code()); return; }
-    catch (StackOverflowError failure) {
-      throw new AssertionError("Expected " + code + "; unexpected " + failure.getClass().getSimpleName());
-    }
     throw new AssertionError("Expected " + code + "; operation succeeded");
   }
 }

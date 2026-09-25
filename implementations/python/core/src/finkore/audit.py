@@ -1,5 +1,12 @@
 # SPDX-License-Identifier: MPL-2.0
-"""FinKore logical Audit history behavior."""
+"""FinKore logical Audit history with owned JSON values and portable rejection.
+
+Native JSON values are None, strings, Booleans, integers, finite floats, lists,
+and dictionaries with string keys. Shared acyclic containers are valid; cycles
+and unsupported values raise ACTOR_INVALID in Actor content, INVALID_EVENT in
+other Event content. Public validation/append/redaction operations return owned
+observations and leave source data unchanged, including on failure.
+"""
 
 from __future__ import annotations
 
@@ -50,8 +57,15 @@ def _relationship_identity(relationship: dict[str, Any]) -> str:
 def validate_event(event: Any, committed_events: dict[str, dict[str, Any]], committed_relationships: set[str]) -> dict[str, Any]:
     """Validate one Audit Event against already committed logical history.
 
+    Returns an independent observation. Cyclic or unsupported Actor metadata
+    raises ACTOR_INVALID; other non-JSON Event values raise INVALID_EVENT before
+    actor validation. No native value is silently coerced or repaired.
+
     @see AUDIT-EVENT-001
     @see AUDIT-RELATIONSHIP-001
+    @see AUDIT-ACTOR-010
+    @see AUDIT-CHANGE-008
+    @see AUDIT-ERROR-004
     """
 
     validated = _validate_event_representation(event)
@@ -78,6 +92,9 @@ def _validate_event_representation(event: Any) -> dict[str, Any]:
     metadata = event.get("metadata")
     if isinstance(metadata, dict) and any(key in metadata for key in ("eventId", "eventType", "entity", "actor", "occurredAt", "changes", "relationships")):
         raise FinKoreError(INVALID_EVENT)
+    # Every retained non-actor value is JSON; validate it before actor content
+    # so native cycles and unsupported context retain AUDIT-ERROR-004 priority.
+    _validate_json_value({key: value for key, value in event.items() if key != "actor"}, INVALID_EVENT)
     if "changes" in event:
         _validate_changes(event["changes"])
     if "relationships" in event:
@@ -88,7 +105,12 @@ def _validate_event_representation(event: Any) -> dict[str, Any]:
 
 
 def validate_history(history: Any) -> list[dict[str, Any]]:
-    """Validate a complete logical Audit history without changing it."""
+    """Validate history in order, returning an independent list of owned Events.
+
+    Cyclic/non-JSON Actor values raise ACTOR_INVALID; other Event values raise
+    INVALID_EVENT. Shared acyclic values remain valid. Failure leaves the whole
+    source unchanged. See AUDIT-APPEND-001 and AUDIT-ERROR-001/004.
+    """
 
     if not isinstance(history, list):
         raise FinKoreError(INVALID_EVENT)
@@ -110,6 +132,10 @@ def validate_history(history: Any) -> list[dict[str, Any]]:
 
 def append_event(history: Any, event: Any) -> dict[str, list[dict[str, Any]]]:
     """Append one valid Audit Event to logical history.
+
+    Owns all accepted JSON values without numeric coercion. Cyclic or unsupported
+    Actor values raise ACTOR_INVALID; other Event values raise INVALID_EVENT.
+    Failure leaves source history and the candidate unchanged.
 
     @see AUDIT-APPEND-001
     @see AUDIT-APPEND-003
@@ -160,6 +186,9 @@ def redact_history(history: Any, policy: Any, redaction_event: Any) -> dict[str,
     The source event remains present in the committed logical history
     observation; redaction is represented by the returned event view and a
     separate evidence event.
+    Source and evidence values are validated using the native JSON boundary;
+    cycles and unsupported values retain the Actor/Event portable errors. Both
+    returned representations and history are independent of the caller's inputs.
 
     @see AUDIT-REDACTION-002
     @see AUDIT-REDACTION-006
@@ -186,12 +215,11 @@ def _validate_actor(actor: Any) -> None:
         raise FinKoreError(ACTOR_INVALID)
     if "displayName" in actor and not _opaque(actor["displayName"]):
         raise FinKoreError(ACTOR_INVALID)
-    if "metadata" in actor:
-        _validate_json_value(actor["metadata"], ACTOR_INVALID)
+    _validate_json_value(actor, ACTOR_INVALID)
 
 
-def _validate_json_value(value: Any, error_code: str) -> None:
-    """Reject values outside the portable JSON data model."""
+def _validate_json_value(value: Any, error_code: str, ancestors: set[int] | None = None) -> None:
+    """Reject non-JSON values and ancestor cycles, allowing shared acyclic values."""
 
     if value is None or isinstance(value, (str, bool, int)):
         return
@@ -199,15 +227,21 @@ def _validate_json_value(value: Any, error_code: str) -> None:
         if not math.isfinite(value):
             raise FinKoreError(error_code)
         return
-    if isinstance(value, list):
-        for item in value:
-            _validate_json_value(item, error_code)
-        return
-    if isinstance(value, dict) and all(isinstance(key, str) for key in value):
-        for item in value.values():
-            _validate_json_value(item, error_code)
-        return
-    raise FinKoreError(error_code)
+    if not isinstance(value, (list, dict)):
+        raise FinKoreError(error_code)
+    if isinstance(value, dict) and any(not isinstance(key, str) for key in value):
+        raise FinKoreError(error_code)
+    if ancestors is None:
+        ancestors = set()
+    identity = id(value)
+    if identity in ancestors:
+        raise FinKoreError(error_code)
+    ancestors.add(identity)
+    try:
+        for item in value.values() if isinstance(value, dict) else value:
+            _validate_json_value(item, error_code, ancestors)
+    finally:
+        ancestors.remove(identity)
 
 
 def _json_values_equal(left: Any, right: Any) -> bool:

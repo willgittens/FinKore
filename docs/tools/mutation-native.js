@@ -16,6 +16,150 @@ const workflowControl = 'Workflow retained definition ownership retains state, t
 const integration = 'test/integration/readiness-regressions.test.ts'
 const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const probes = [
+  {
+    "id": "python-audit-cycle-silently-accepted",
+    "language": "python",
+    "path": "audit.py",
+    "from": "if identity in ancestors:\n        raise FinKoreError(error_code)",
+    "to": "if identity in ancestors:\n        return",
+    "target": "test_boundary_regressions.BoundaryRegressions.test_audit_cycles_are_portable_errors",
+    "control": "test_boundary_regressions.BoundaryRegressions.test_audit_shared_acyclic_and_ownership_controls"
+  },
+  {
+    "id": "python-audit-cycle-error-context-lost",
+    "language": "python",
+    "path": "audit.py",
+    "from": "if identity in ancestors:\n        raise FinKoreError(error_code)",
+    "to": "if identity in ancestors:\n        raise FinKoreError(INVALID_EVENT)",
+    "target": "test_boundary_regressions.BoundaryRegressions.test_audit_cycles_are_portable_errors",
+    "control": "test_boundary_regressions.BoundaryRegressions.test_audit_shared_acyclic_and_ownership_controls"
+  },
+  {
+    "id": "python-audit-shared-values-rejected",
+    "language": "python",
+    "path": "audit.py",
+    "from": "ancestors.remove(identity)",
+    "to": "pass",
+    "target": "test_boundary_regressions.BoundaryRegressions.test_audit_shared_acyclic_and_ownership_controls",
+    "control": "test_audit.AuditTests.test_appends_event_without_mutating_history"
+  },
+  {
+    "id": "python-audit-event-context-validation-bypass",
+    "language": "python",
+    "path": "audit.py",
+    "from": "    _validate_json_value({key: value for key, value in event.items() if key != \"actor\"}, INVALID_EVENT)",
+    "to": "    pass",
+    "target": "test_boundary_regressions.BoundaryRegressions.test_audit_event_metadata_is_owned_json",
+    "control": "test_boundary_regressions.BoundaryRegressions.test_audit_shared_acyclic_and_ownership_controls"
+  },
+  {
+    "id": "python-audit-event-input-alias",
+    "language": "python",
+    "path": "audit.py",
+    "from": "return deepcopy(event)",
+    "to": "return event",
+    "target": "test_boundary_regressions.BoundaryRegressions.test_audit_shared_acyclic_and_ownership_controls",
+    "control": "test_audit.AuditTests.test_rejects_duplicate_event_identity"
+  },
+  {
+    "id": "java-audit-cycle-silently-repaired",
+    "language": "java",
+    "path": "Audit.java",
+    "from": "if (!ancestors.add(value)) {\n      throw new FinKoreException(code);",
+    "to": "if (!ancestors.add(value)) {\n      return null;",
+    "target": "audit.cycle.actor.append.map",
+    "control": "audit.immutable-numbers-shared-ownership-control"
+  },
+  {
+    "id": "java-audit-cycle-error-context-lost",
+    "language": "java",
+    "path": "Audit.java",
+    "from": "if (!ancestors.add(value)) {\n      throw new FinKoreException(code);",
+    "to": "if (!ancestors.add(value)) {\n      throw new FinKoreException(INVALID_EVENT);",
+    "target": "audit.cycle.actor.append.list",
+    "control": "audit.immutable-numbers-shared-ownership-control"
+  },
+  {
+    "id": "java-audit-shared-values-rejected",
+    "language": "java",
+    "path": "Audit.java",
+    "from": "ancestors.remove(value);",
+    "to": "// Retain all visited containers.",
+    "target": "audit.immutable-numbers-shared-ownership-control",
+    "control": "audit.scalar-control"
+  },
+  {
+    "id": "java-audit-mutable-number-accepted",
+    "language": "java",
+    "path": "Audit.java",
+    "from": "if (kind != Byte.class && kind != Short.class",
+    "to": "if (false && kind != Byte.class && kind != Short.class",
+    "target": "audit.mutable-number.actor.append.integer",
+    "control": "audit.immutable-numbers-shared-ownership-control"
+  },
+  {
+    "id": "java-audit-number-subclass-accepted",
+    "language": "java",
+    "path": "Audit.java",
+    "from": "kind != java.math.BigDecimal.class",
+    "to": "!(value instanceof java.math.BigDecimal)",
+    "target": "audit.unsupported-number-subclasses",
+    "control": "audit.immutable-numbers-shared-ownership-control"
+  },
+  {
+    "id": "java-audit-numeric-coercion",
+    "language": "java",
+    "path": "Audit.java",
+    "from": "      return value;\n    }\n    if (!ancestors.add(value))",
+    "to": "      return ((Number) value).doubleValue();\n    }\n    if (!ancestors.add(value))",
+    "target": "audit.immutable-numbers-shared-ownership-control",
+    "control": "audit.scalar-control"
+  },
+  {
+    "id": "java-audit-actor-observation-alias",
+    "language": "java",
+    "path": "Audit.java",
+    "from": "return copyJson(metadata, ACTOR_INVALID);",
+    "to": "return metadata;",
+    "target": "audit.native-record-ownership",
+    "control": "audit.immutable-numbers-shared-ownership-control"
+  },
+  {
+    "id": "java-audit-event-observation-alias",
+    "language": "java",
+    "path": "Audit.java",
+    "from": "return copyJson(metadata, INVALID_EVENT);",
+    "to": "return metadata;",
+    "target": "audit.native-record-ownership",
+    "control": "audit.immutable-numbers-shared-ownership-control"
+  },
+  {
+    "id": "java-audit-change-before-observation-alias",
+    "language": "java",
+    "path": "Audit.java",
+    "from": "return copyJson(before, INVALID_EVENT);",
+    "to": "return before;",
+    "target": "audit.native-record-ownership",
+    "control": "audit.immutable-numbers-shared-ownership-control"
+  },
+  {
+    "id": "java-audit-change-after-observation-alias",
+    "language": "java",
+    "path": "Audit.java",
+    "from": "return copyJson(after, INVALID_EVENT);",
+    "to": "return after;",
+    "target": "audit.native-record-ownership",
+    "control": "audit.immutable-numbers-shared-ownership-control"
+  },
+  {
+    "id": "java-audit-change-input-alias",
+    "language": "java",
+    "path": "Audit.java",
+    "from": "before = copyJson(before, INVALID_EVENT);",
+    "to": "before = before;",
+    "target": "audit.native-record-ownership",
+    "control": "audit.immutable-numbers-shared-ownership-control"
+  },
   { id: 'python-workflow-binding-input-alias', language: 'python', path: 'workflow.py',
     from: 'object.__setattr__(self, "_bound_version", deepcopy(binding))',
     to: 'object.__setattr__(self, "_bound_version", binding)',

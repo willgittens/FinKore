@@ -6,8 +6,8 @@ Milestones 1 and 2 are complete: the three Entity contract decisions are
 accepted, and permanent failing regressions and passing controls reproduce
 every reviewed finding. Milestones 3 through 5 complete Money serialization,
 direct Workflow ownership/precondition corrections, and concrete Approval
-association/eligibility/history validation. Native Audit and Entity corrections
-remain pending.
+association/eligibility/history validation. Milestone 6 completes native Audit
+value ownership and cycle rejection. Entity corrections remain pending.
 A new readiness review of `d920091`
 (`core-0.9.4`) reproduced the findings below despite passing existing checks.
 [Core 1.0 promotion](plan-10.md) is blocked until these findings and this
@@ -664,28 +664,97 @@ or package version change is needed.
 
 ## Milestone 6 — Native Audit value ownership and rejection
 
-- [ ] Remove Java's mutable numeric aliases from accepted Actor metadata,
+- [x] Remove Java's mutable numeric aliases from accepted Actor metadata,
       ordinary Changes, and other Audit JSON-copy entry points governed by the
       reviewed contract. Reject unsupported native values or retain exact
       independent values according to Milestone 1; never silently coerce them.
-- [ ] Reject cyclic native metadata and Change values in Python and Java with
+- [x] Reject cyclic native metadata and Change values in Python and Java with
       the context-specific portable errors. Distinguish cycles from valid shared
       acyclic references; include object and array/list cycles.
-- [ ] Exercise construction, history import, append, repeated observations, and
+- [x] Exercise construction, history import, append, repeated observations, and
       redaction. Attempt to mutate both original inputs and exposed values, and
       verify committed Event meaning and source history remain unchanged.
-- [ ] Preserve JSON-member presence, explicit null, arbitrary member names,
+- [x] Preserve JSON-member presence, explicit null, arbitrary member names,
       Boolean/number distinctions, declared Money comparisons, and prior Audit
       error precedence. Do not turn ordinary JSON numbers into Money.
-- [ ] Require exact portable-error assertions with failure atomicity. Stack
+- [x] Require exact portable-error assertions with failure atomicity. Stack
       overflow, recursion failure, timeout, and process termination cannot close
       these regressions or qualify as successful targeted mutant kills.
-- [ ] Run native/unit tests, all Audit vectors, applicable coverage, and critical
+- [x] Run native/unit tests, all Audit vectors, applicable coverage, and critical
       numeric-alias/cycle-validation mutation probes. Update supported native
       value and defensive-observation API documentation.
 
 Completion: no accepted value can mutate committed Audit history through an
 alias, and unsupported cyclic/native values fail deterministically and portably.
+
+### Milestone 6 completion and verification
+
+Python and Java reject ancestor cycles with `FINKORE_AUDIT_ACTOR_INVALID` in
+Actor context and `FINKORE_AUDIT_INVALID_EVENT` in ordinary Changes/Event
+metadata. Traversal tracks ancestor identity, not every previously seen value,
+so shared acyclic subobjects remain valid. Python validates all retained Event
+JSON before Actor content, preserving the existing non-actor error priority.
+No missing member, explicit null, JSON member name, Boolean/number distinction,
+or declared Money comparison is normalized away.
+
+Java accepts exactly the immutable numeric classes recorded in Milestone 1:
+Byte, Short, Integer, Long, BigInteger, BigDecimal, and finite Float/Double.
+Atomic numbers and unsupported subclasses are rejected without coercion. Direct
+Change construction owns its values; Actor metadata, Change before/after, and
+Event metadata accessors return defensive copies. Native tests mutate original
+and exposed nested values, then observe the retained Event and history again.
+Redaction evidence and returned redacted views cannot alter committed source
+meaning through caller aliases.
+
+Before the fix, the original Python cycle suite reported 18 errors; Java failed
+31 of 32 Audit boundary cases. Expanded Python tests additionally reproduced
+acceptance of cyclic/unsupported Event metadata and native error-priority
+failures. A new Java test reproduced mutable record-accessor aliases. All these
+regressions now pass without expected-failure markers. Cyclic Maps, Lists, and
+nested cycles are exercised through construction, import, append, and redaction
+evidence validation. Rejected appends/redactions leave logical history unchanged.
+
+| Check | Result |
+| --- | --- |
+| Audit conformance, TypeScript / CPython 3.12 / CPython 3.13 / Java | 76 PASS each; no FAIL, UNSUPPORTED, or INFRASTRUCTURE_ERROR |
+| TypeScript Audit tests | 116 PASS |
+| Python Audit unit/native tests | 15 methods PASS on each runtime, including 36 cycle boundary combinations, precedence, ownership, and redaction controls |
+| Java Audit tests/coverage harness | 9 JUnit tests PASS, including existing native Audit checks and 66 boundary cases |
+| Python Audit coverage, native tests plus real vectors | 90.42% statements, 79.45% branches, 86.49% combined |
+| Java Audit coverage, native tests plus real vectors | 94.79% lines and 85.49% branches across Audit and its nested value/history types |
+| Native Audit mutation probes | 18/18 killed: 16 new Python/Java probes plus two existing TypeScript JSON-member probes; all five Python probes also pass on CPython 3.13 |
+| Critical portable Audit mutation probes | 13/13 killed |
+| Other checks | Workspace build/strict TypeScript, Python compilation on both runtimes, Java strict compilation, developer-tool tests, architecture, documentation/traceability, license, and whitespace checks pass |
+
+The Java native assertion helper no longer converts StackOverflowError into an
+assertion failure. The mutation harness classifies it as infrastructure failure;
+Python recursion failures retain the same classification. Temporary copies with
+cycle detection deliberately disabled verified one infrastructure error and one
+passing control on each language. Such failures are not counted as kills.
+Targeted cycle mutants instead exercise silent acceptance/repair or the wrong
+portable error, requiring the named regression to fail and a valid control to
+pass. The focused results do not establish a whole-core mutation score.
+
+Full-manifest results remain unchanged from Milestone 5: TypeScript has 653 PASS
+and 5 FAIL; both Python runtimes have 637 PASS, 19 FAIL, and 2 infrastructure
+errors; Java has 634 PASS, 20 FAIL, and 4 infrastructure errors. All 542 original
+vectors still pass. The remaining portable failures belong to Milestone 7 Entity
+cases; full `check`/`verify` and release closure remain pending.
+
+Focused commands are `node docs/tools/mutation-native.js audit` and
+`node docs/tools/mutation-critical.js all audit`. Python native compatibility
+selects `python-audit` with `FINKORE_PYTHON_PATH=.tools/bin/python3.13`; Maven
+coverage selects `-Dtest=AuditCoverageTest`.
+
+Completion review: native/unit tests, mutation-sensitive cases, Python docstrings,
+Java public API documentation, package/root README status, native conformance
+conventions, developer-tool documentation, and traceability are synchronized.
+Five Audit rows return to COVERED; 29 Entity/Workflow rows remain PARTIAL. The
+76 existing Audit vectors already cover portable representation, comparison,
+and precedence. Cycles, aliases, and native numeric classes cannot be encoded
+in JSON, so their additional evidence is native. No new vector, normative rule,
+portable error, canonical Agentic operation, TypeScript API/JSDoc, architecture,
+AGENTS.md, CoreDoc, release note, or package version change is required.
 
 ## Milestone 7 — Entity binding, identity, and definition boundaries
 

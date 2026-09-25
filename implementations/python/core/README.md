@@ -9,7 +9,8 @@ Milestone 4 corrects Workflow binding ownership, supplied preconditions, and
 error precedence. Milestone 5 corrects concrete Approval association, eligibility,
 and historical Decision validation; all 162 Approval vectors and targeted
 mutation gates pass.
-Native Audit and Entity regressions remain open.
+Milestone 6 corrects native Audit value ownership and cycle rejection; all 76
+Audit vectors and targeted mutation gates pass. Entity regressions remain open.
 
 This package is the Python implementation track for FinKore Core 0.9 release
 candidate. It is derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`,
@@ -29,6 +30,15 @@ and redaction preserve these values and keep committed source history unchanged.
 Equal Changes remain invalid; Boolean/number, absence/null, and explicitly
 declared Money comparisons retain their existing rules. Unsupported non-JSON
 values remain invalid. Public API signatures are unchanged.
+
+Native Audit input accepts null, strings, Booleans, integers, finite floats,
+lists, and dictionaries with string keys. Cyclic containers raise
+`FINKORE_AUDIT_ACTOR_INVALID` in Actor context and
+`FINKORE_AUDIT_INVALID_EVENT` in other Event content, including ordinary Changes
+and Event metadata. Shared acyclic references remain valid. Validation, history
+import, append, and redaction return owned observations; changing caller input
+or another returned observation cannot change their retained source values.
+History and non-actor validation retain their existing error priority.
 
 Workflow definitions own nested guard inputs. Guards require a nonempty fact
 name and a present JSON comparison value; explicit null comparisons are valid,

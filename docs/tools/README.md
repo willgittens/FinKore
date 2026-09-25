@@ -151,6 +151,17 @@ Use `FINKORE_PYTHON_PATH=.tools/bin/python3.13` for native compatibility probes.
 Maven Approval coverage uses `-Dtest=ApprovalsVectorCoverageTest`, which discovers
 all entries in the Approval vector files without a stale fixed vector count.
 
+Core 0.9.5 Milestone 6 adds 16 native Audit probes for cycle rejection, error
+context, valid shared structures, Event metadata validation, native numeric
+classes, numeric coercion, and record input/accessor aliases. Run
+`node docs/tools/mutation-native.js audit` for these and the two existing
+TypeScript own-member probes, and `node docs/tools/mutation-critical.js all audit`
+for the existing portable Audit gates. Python compatibility uses
+`FINKORE_PYTHON_PATH=.tools/bin/python3.13 node docs/tools/mutation-native.js python-audit`.
+Native assertions let recursion/stack failures reach the classification helpers;
+they must not wrap them as assertion failures. Maven Audit coverage selects
+`-Dtest=AuditCoverageTest`, including the native boundary suite.
+
 Milestone 4 adds Entity probes for Audit precedence and correspondence,
 consistent imported and resulting histories, exact currentness keys, required
 effects, and the bounded duplicate-reversal policy. Run

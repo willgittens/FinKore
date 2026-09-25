@@ -14,8 +14,9 @@ import org.junit.jupiter.api.Test;
 /** JUnit coverage tests for Java Audit behavior. */
 final class AuditCoverageTest {
   @Test
-  void nativeAuditRegressions() {
+  void nativeAuditRegressions() throws java.io.IOException {
     AuditTest.main(new String[0]);
+    BoundaryRegressionTest.main(new String[]{"audit."});
   }
 
   @Test

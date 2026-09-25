@@ -8,7 +8,8 @@ its native regressions, Money conformance, and targeted mutation gates pass.
 Milestone 4 corrects Workflow supplied preconditions and error precedence.
 Milestone 5 corrects concrete Approval association, eligibility, and historical
 Decision validation; all 162 Approval vectors and targeted mutation gates pass.
-Native Audit and Entity regressions remain open.
+Milestone 6 corrects native Audit value ownership and cycle rejection; all 76
+Audit vectors and targeted mutation gates pass. Entity regressions remain open.
 
 This package is the Java implementation track for FinKore Core 0.9 release
 candidate. It is derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`,
@@ -28,6 +29,18 @@ and redaction preserve these values and keep committed source history unchanged.
 Equal Changes remain invalid; Boolean/number, absence/null, and explicitly
 declared Money comparisons retain their existing rules. Unsupported non-JSON
 values remain invalid. Public API signatures are unchanged.
+
+Native Audit numbers are exactly `Byte`, `Short`, `Integer`, `Long`,
+`BigInteger`, `BigDecimal`, and finite `Float`/`Double`. Other `Number` classes,
+including `AtomicInteger`, `AtomicLong`, and subclasses of `BigInteger` or
+`BigDecimal`, are rejected without numeric or string coercion. Cyclic Maps/Lists
+are rejected; shared acyclic structures remain valid. Actor context uses
+`FINKORE_AUDIT_ACTOR_INVALID`; Changes and Event metadata use
+`FINKORE_AUDIT_INVALID_EVENT`, preserving non-actor error priority.
+`Actor.metadata()`, `Change.before()`/`after()`, and `Event.metadata()` return
+defensive copies, including for records built through direct constructors.
+Construction, history import, append, repeated observations, and redaction
+preserve exact accepted values and leave source history unchanged on failure.
 
 Workflow definitions own nested guard inputs. Guards require a nonempty fact
 name and a present JSON comparison value; explicit null comparisons are valid,

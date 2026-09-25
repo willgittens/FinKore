@@ -347,14 +347,14 @@ serializer need not gain a new scale argument to make tests uniform.
 
 JSON cannot encode shared references, cycles, or Java numeric classes. Native
 Audit tests therefore supplement Actor/Change vectors at construction, history
-import, append, observation, and redaction boundaries. The Java correction
-will reject mutable or unsupported `Number` implementations, including
+import, append, observation, and redaction boundaries. The Java implementation
+rejects mutable or unsupported `Number` implementations, including
 `AtomicInteger` and `AtomicLong`, with the context-specific actor/event error.
 Accepted immutable `Byte`, `Short`, `Integer`, `Long`, `BigInteger`,
 `BigDecimal`, and finite `Float`/`Double` values retain their exact accepted
 JSON numeric meaning; support does not authorize conversion through `double`
 or arbitrary subclass `toString()`. Custom subclasses are not implicitly
-supported. This is the planned Java native boundary, not a requirement that
+supported. This Java native boundary does not require that
 other languages implement Java types. Cycles use the existing actor/event
 errors; acyclic shared structures remain valid. See
 [Actors](../spec/audit/actors.md) and [Changes](../spec/audit/changes.md).

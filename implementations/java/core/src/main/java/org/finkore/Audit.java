@@ -2,6 +2,8 @@
 package org.finkore;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,6 +21,14 @@ import java.util.regex.Pattern;
  * validates and defensively copies those observations without deriving event
  * identity, event type, timestamps, actor attribution, or financial meaning
  * from implementation details.
+ *
+ * <p>Supported native numbers are exactly Byte, Short, Integer, Long, BigInteger,
+ * BigDecimal, and finite Float/Double values. Other Number classes (including
+ * subclasses of BigInteger/BigDecimal) are rejected without coercion. Maps have
+ * String keys; Lists and Maps may share acyclic values, but ancestor cycles are
+ * rejected. Non-JSON Actor context raises ACTOR_INVALID; other Event content
+ * raises INVALID_EVENT. Constructors and value accessors own or defensively
+ * copy accepted context under AUDIT-ACTOR-010, AUDIT-CHANGE-008, and AUDIT-APPEND-001.
  *
  * @see <a href="../../../../../../spec/audit/events.md">AUDIT-EVENT-001</a>
  * @see <a href="../../../../../../spec/audit/append-only.md">AUDIT-APPEND-001</a>
@@ -94,12 +104,21 @@ public final class Audit {
    * @see <a href="../../../../../../spec/audit/actors.md">AUDIT-ACTOR-010</a>
    */
   public record Actor(String id, String type, String displayName, boolean hasMetadata, Object metadata) {
-    /** Creates an Actor while preserving and defensively copying metadata presence. */
+    /**
+     * Creates an Actor while preserving and defensively copying metadata presence.
+     * Cyclic or unsupported context raises {@link Audit#ACTOR_INVALID}.
+     */
     public Actor {
       if (!hasMetadata && metadata != null) {
         throw new FinKoreException(ACTOR_INVALID);
       }
       metadata = hasMetadata ? copyJson(metadata, ACTOR_INVALID) : null;
+    }
+
+    /** Returns independent JSON context, preserving explicit null via {@link #hasMetadata()}. */
+    @Override
+    public Object metadata() {
+      return copyJson(metadata, ACTOR_INVALID);
     }
 
     /**
@@ -170,6 +189,28 @@ public final class Audit {
    * @see <a href="../../../../../../spec/audit/changes.md">AUDIT-CHANGE-009</a>
    */
   public record Change(String path, boolean hasBefore, Object before, boolean hasAfter, Object after, String valueType) {
+    /**
+     * Owns the supplied JSON values without changing their numeric meaning.
+     * Cycles and unsupported native numbers raise {@link Audit#INVALID_EVENT}.
+     * @see <a href="../../../../../../spec/audit/changes.md">AUDIT-CHANGE-008</a>
+     */
+    public Change {
+      before = copyJson(before, INVALID_EVENT);
+      after = copyJson(after, INVALID_EVENT);
+    }
+
+    /** Returns an independent prior value; {@link #hasBefore()} distinguishes absence. */
+    @Override
+    public Object before() {
+      return copyJson(before, INVALID_EVENT);
+    }
+
+    /** Returns an independent resulting value; {@link #hasAfter()} distinguishes absence. */
+    @Override
+    public Object after() {
+      return copyJson(after, INVALID_EVENT);
+    }
+
     /** Preserves the pre-declaration constructor for ordinary JSON Changes. */
     public Change(String path, boolean hasBefore, Object before, boolean hasAfter, Object after) {
       this(path, hasBefore, before, hasAfter, after, null);
@@ -339,11 +380,18 @@ public final class Audit {
      * @param changes optional Changes
      * @param relationships optional Relationships
      * @param metadata optional metadata
+     * @throws FinKoreException with {@link Audit#INVALID_EVENT} for cyclic or unsupported metadata
      */
     public Event {
       changes = changes == null ? null : List.copyOf(changes);
       relationships = relationships == null ? null : List.copyOf(relationships);
       metadata = metadata == null ? null : copyJson(metadata, INVALID_EVENT);
+    }
+
+    /** Returns Event context as an independent JSON observation. */
+    @Override
+    public Object metadata() {
+      return copyJson(metadata, INVALID_EVENT);
     }
 
     /**
@@ -825,30 +873,50 @@ public final class Audit {
   }
 
   private static Object copyJson(Object value, String code) {
+    return copyJson(value, code, Collections.newSetFromMap(new IdentityHashMap<>()));
+  }
+
+  private static Object copyJson(Object value, String code, Set<Object> ancestors) {
     if ((value instanceof Double doubleValue && !Double.isFinite(doubleValue))
         || (value instanceof Float floatValue && !Float.isFinite(floatValue))) {
       throw new FinKoreException(code);
     }
-    if (value == null || value instanceof String || value instanceof Number || value instanceof Boolean) {
+    if (value == null || value instanceof String || value instanceof Boolean) {
       return value;
     }
-    if (value instanceof List<?> list) {
-      List<Object> result = new ArrayList<>();
-      for (Object item : list) {
-        result.add(copyJson(item, code));
+    if (value instanceof Number) {
+      // Exact classes: even BigInteger/BigDecimal subclasses may be mutable.
+      Class<?> kind = value.getClass();
+      if (kind != Byte.class && kind != Short.class && kind != Integer.class && kind != Long.class
+          && kind != Float.class && kind != Double.class && kind != java.math.BigInteger.class && kind != java.math.BigDecimal.class) {
+        throw new FinKoreException(code);
       }
-      return result;
+      return value;
     }
-    if (value instanceof Map<?, ?> map) {
-      Map<String, Object> result = new LinkedHashMap<>();
-      for (Map.Entry<?, ?> entry : map.entrySet()) {
-        if (!(entry.getKey() instanceof String key)) {
-          throw new FinKoreException(code);
+    if (!ancestors.add(value)) {
+      throw new FinKoreException(code);
+    }
+    try {
+      if (value instanceof List<?> list) {
+        List<Object> result = new ArrayList<>();
+        for (Object item : list) {
+          result.add(copyJson(item, code, ancestors));
         }
-        result.put(key, copyJson(entry.getValue(), code));
+        return result;
       }
-      return result;
+      if (value instanceof Map<?, ?> map) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+          if (!(entry.getKey() instanceof String key)) {
+            throw new FinKoreException(code);
+          }
+          result.put(key, copyJson(entry.getValue(), code, ancestors));
+        }
+        return result;
+      }
+      throw new FinKoreException(code);
+    } finally {
+      ancestors.remove(value);
     }
-    throw new FinKoreException(code);
   }
 }

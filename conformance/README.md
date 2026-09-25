@@ -45,7 +45,7 @@ precedence vectors; Milestone 5 adds 23 Approval vectors for a current total
 of 658. Native tests cover boundaries JSON cannot
 express. All 542 earlier vectors and the paired controls pass, while the new
 regressions reproduce defects in all implementations. Traceability records
-34 PARTIAL requirements and no remaining reviewed specification gap. The
+29 PARTIAL requirements and no remaining reviewed specification gap. The
 expanded manifest is not yet passing conformance; correction and mutation
 verification remain required.
 
@@ -63,6 +63,12 @@ reused-history validation. All 162 Approval vectors pass on all four runtimes.
 Native record/evaluate and lifecycle sequences verify failure atomicity, and
 targeted mutation probes protect these boundaries. Lightweight composition
 observations and explicit null or other JSON fact values remain valid.
+
+Milestone 6 closes native Audit cycles, unsupported Java numeric aliases, and
+exposed value ownership. All 76 Audit vectors pass on all four runtimes. Native
+construction/import/append/redaction and mutation tests cover cycles, shared
+acyclic inputs, exact immutable numbers, and portable error priority. Remaining
+partial requirements concern Entity behavior and its Workflow integration.
 
 For FinKore Core 0.9 release candidate, [manifest.json](manifest.json) is the
 frozen release-candidate manifest and `finkoreConformance` remains `0.1`. This

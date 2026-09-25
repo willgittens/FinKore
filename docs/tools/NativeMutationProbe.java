@@ -24,6 +24,7 @@ public final class NativeMutationProbe {
       catch (AssertionError error) { status = "FAIL"; kind = "ASSERTION"; failed++; }
       catch (FinKoreException error) { status = "FAIL"; kind = "PORTABLE_ERROR_MISMATCH"; failed++; }
       catch (RuntimeException error) { status = "INFRASTRUCTURE_ERROR"; kind = "UNEXPECTED_EXCEPTION"; infrastructure++; }
+      catch (StackOverflowError error) { status = "INFRASTRUCTURE_ERROR"; kind = "UNEXPECTED_EXCEPTION"; infrastructure++; }
       rows.add("{\"caseId\":\"" + id + "\",\"status\":\"" + status + "\",\"failureKind\":\"" + kind + "\"}");
     }
     System.out.println("{\"summary\":{\"total\":" + args.length + ",\"passed\":" + passed
