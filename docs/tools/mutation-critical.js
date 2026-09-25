@@ -24,6 +24,72 @@ if (!validTargets.has(requestedTarget)) {
 
 const pythonMutants = [
   {
+    "id": "python-workflow-adapter-null-state-omitted",
+    "suite": "workflow",
+    "expectedVector": "workflow.presence.state-null-001",
+    "expectedPassVectors": [
+      "workflow.presence.omitted-control-001"
+    ],
+    "path": "adapters/conformance/bridge.py",
+    "from": ") if portable in input_value}",
+    "to": ") if portable in input_value and (portable != \"expectedCurrentState\" or input_value[portable] is not None)}"
+  },
+  {
+    "id": "python-workflow-adapter-null-revision-omitted",
+    "suite": "workflow",
+    "expectedVector": "workflow.presence.revision-null-001",
+    "expectedPassVectors": [
+      "workflow.presence.omitted-control-001"
+    ],
+    "path": "adapters/conformance/bridge.py",
+    "from": ") if portable in input_value}",
+    "to": ") if portable in input_value and (portable != \"expectedRevision\" or input_value[portable] is not None)}"
+  },
+  {
+    "id": "python-workflow-state-null-omitted",
+    "expectedVector": "workflow.presence.state-null-001",
+    "expectedPassVectors": [
+      "workflow.presence.omitted-control-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/finkore/workflow.py",
+    "from": "if expected_current_state is not _OMITTED:",
+    "to": "if expected_current_state is not _OMITTED and expected_current_state is not None:"
+  },
+  {
+    "id": "python-workflow-revision-null-omitted",
+    "expectedVector": "workflow.presence.revision-null-001",
+    "expectedPassVectors": [
+      "workflow.presence.omitted-control-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/finkore/workflow.py",
+    "from": "if expected_revision is not _OMITTED:",
+    "to": "if expected_revision is not _OMITTED and expected_revision is not None:"
+  },
+  {
+    "id": "python-workflow-invalid-target-priority",
+    "expectedVector": "workflow.presence.target-before-conflict-001",
+    "expectedPassVectors": [
+      "workflow.presence.omitted-control-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/finkore/workflow.py",
+    "from": "if not isinstance(target, str) or target not in definition.states:",
+    "to": "if not isinstance(target, str):"
+  },
+  {
+    "id": "python-workflow-binding-mismatch-bypass",
+    "expectedVector": "workflow.presence.version-mismatch-before-null-001",
+    "expectedPassVectors": [
+      "workflow.presence.omitted-control-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/finkore/workflow.py",
+    "from": "if instance.binding != definition.binding():",
+    "to": "if False:"
+  },
+  {
     "id": "python-workflow-empty-fact",
     "expectedVector": "workflow.guard.empty-fact-regression-001",
     "expectedPassVectors": [
@@ -592,6 +658,72 @@ const pythonMutants = [
 ]
 
 const javaMutants = [
+  {
+    "id": "java-workflow-adapter-null-state-omitted",
+    "suite": "workflow",
+    "expectedVector": "workflow.presence.state-null-001",
+    "expectedPassVectors": [
+      "workflow.presence.omitted-control-001"
+    ],
+    "path": "adapters/conformance/src/main/java/org/finkore/conformance/Bridge.java",
+    "from": "inputValue.getOrDefault(\"expectedCurrentState\", Workflow.OMITTED)",
+    "to": "(inputValue.get(\"expectedCurrentState\") == null ? Workflow.OMITTED : inputValue.get(\"expectedCurrentState\"))"
+  },
+  {
+    "id": "java-workflow-adapter-null-revision-omitted",
+    "suite": "workflow",
+    "expectedVector": "workflow.presence.revision-null-001",
+    "expectedPassVectors": [
+      "workflow.presence.omitted-control-001"
+    ],
+    "path": "adapters/conformance/src/main/java/org/finkore/conformance/Bridge.java",
+    "from": "inputValue.getOrDefault(\"expectedRevision\", Workflow.OMITTED)",
+    "to": "(inputValue.get(\"expectedRevision\") == null ? Workflow.OMITTED : inputValue.get(\"expectedRevision\"))"
+  },
+  {
+    "id": "java-workflow-state-null-omitted",
+    "expectedVector": "workflow.presence.state-null-001",
+    "expectedPassVectors": [
+      "workflow.presence.omitted-control-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/main/java/org/finkore/Workflow.java",
+    "from": "if (expectedCurrentState != OMITTED) {",
+    "to": "if (expectedCurrentState != OMITTED && expectedCurrentState != null) {"
+  },
+  {
+    "id": "java-workflow-revision-null-omitted",
+    "expectedVector": "workflow.presence.revision-null-001",
+    "expectedPassVectors": [
+      "workflow.presence.omitted-control-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/main/java/org/finkore/Workflow.java",
+    "from": "if (expectedRevision != OMITTED) {",
+    "to": "if (expectedRevision != OMITTED && expectedRevision != null) {"
+  },
+  {
+    "id": "java-workflow-invalid-target-priority",
+    "expectedVector": "workflow.presence.target-before-conflict-001",
+    "expectedPassVectors": [
+      "workflow.presence.omitted-control-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/main/java/org/finkore/Workflow.java",
+    "from": "if (!(target instanceof String targetState) || !definition.states().contains(targetState)) {",
+    "to": "if (!(target instanceof String targetState)) {"
+  },
+  {
+    "id": "java-workflow-binding-mismatch-bypass",
+    "expectedVector": "workflow.presence.version-mismatch-before-null-001",
+    "expectedPassVectors": [
+      "workflow.presence.omitted-control-001"
+    ],
+    "suite": "workflow",
+    "path": "core/src/main/java/org/finkore/Workflow.java",
+    "from": "if (!definition.binding().equals(instance.binding())) {",
+    "to": "if (false) {"
+  },
   {
     "id": "java-workflow-empty-fact",
     "expectedVector": "workflow.guard.empty-fact-regression-001",

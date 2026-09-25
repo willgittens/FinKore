@@ -120,6 +120,12 @@ Python compatibility. Raw runtime exceptions from serializer assertions remain
 infrastructure failures, not mutation kills. These targeted results are not an
 aggregate mutation score for the whole implementation.
 
+Milestone 4 adds two Python instance-binding alias probes and twelve Workflow
+conformance probes for core/adapter null handling, invalid-target priority, and
+version mismatch rejection. Run `node docs/tools/mutation-native.js workflow`
+and `node docs/tools/mutation-critical.js all workflow`. Existing guard ownership,
+default-sequence, terminal-state, and JSON comparison probes remain included.
+
 Audit cycle fixtures retain genuine self-references but bound member reads.
 Correct validation detects the repeated reference immediately; a cycle-check
 removal reaches an ordinary test error that fails the exact portable-error

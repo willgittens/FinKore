@@ -19,6 +19,7 @@ GUARD_REJECTED = "FINKORE_WORKFLOW_GUARD_REJECTED"
 TERMINAL_STATE = "FINKORE_WORKFLOW_TERMINAL_STATE"
 VERSION_MISMATCH = "FINKORE_WORKFLOW_VERSION_MISMATCH"
 STATE_CONFLICT = "FINKORE_WORKFLOW_STATE_CONFLICT"
+_OMITTED = object()
 
 
 def _string_list(value: Any) -> list[str] | None:
@@ -260,17 +261,39 @@ class WorkflowDefinition:
         return None
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, init=False)
 class WorkflowInstance:
-    """A FinKore Workflow instance observation.
+    """A FinKore Workflow instance with an owned definition-version binding.
 
     @see WORKFLOW-STATES-007
     @see WORKFLOW-IMPORT-004
+    @see WORKFLOW-VERSION-008
     """
 
     current_state: str
-    binding: dict[str, str] | None = None
+    _bound_version: dict[str, str] | None
     revision: str | None = None
+
+    def __init__(self, current_state: str, binding: dict[str, str] | None = None, revision: str | None = None) -> None:
+        """Own the supplied binding while preserving the positional/keyword API.
+
+        Original input and public observations cannot change the instance's
+        governing version. No binding is inferred from a later definition.
+        @see WORKFLOW-VERSION-007
+        @see WORKFLOW-VERSION-008
+        """
+        object.__setattr__(self, "current_state", current_state)
+        object.__setattr__(self, "_bound_version", deepcopy(binding))
+        object.__setattr__(self, "revision", revision)
+
+    @property
+    def binding(self) -> dict[str, str] | None:
+        """Return an independent binding observation, or None when unversioned.
+
+        Mutating the returned dictionary does not rebind this instance.
+        @see WORKFLOW-VERSION-008
+        """
+        return deepcopy(self._bound_version)
 
     @staticmethod
     def from_portable(value: Any) -> "WorkflowInstance":
@@ -329,30 +352,41 @@ def transition_workflow(
     instance: WorkflowInstance,
     target: Any,
     facts: Any | None = None,
-    expected_current_state: Any | None = None,
-    expected_revision: Any | None = None,
+    expected_current_state: Any = _OMITTED,
+    expected_revision: Any = _OMITTED,
 ) -> WorkflowInstance:
     """Request a declared Workflow transition without mutating the input instance.
 
+    Omit an expected argument to skip that precondition. Explicit None is
+    supplied input: expected_current_state=None raises INVALID_STATE and
+    expected_revision=None raises STATE_CONFLICT. Definition/instance/version
+    checks precede all State checks, then conflicts, terminal State, declared
+    Transition, and guards. Failure preserves State, binding, and revision;
+    success returns a new instance with the same owned binding and revision.
+
+    @throws FinKoreError with the applicable FINKORE_WORKFLOW_* portable code.
     @see WORKFLOW-ERROR-007
     @see WORKFLOW-TRANSITION-006
+    @see WORKFLOW-CONFLICT-001
+    @see WORKFLOW-CONFLICT-004
+    @see WORKFLOW-CONFLICT-007
     """
 
     _validate_binding(definition, instance)
     if instance.current_state not in definition.states:
         raise FinKoreError(INVALID_STATE)
-    if expected_current_state is not None:
+    if not isinstance(target, str) or target not in definition.states:
+        raise FinKoreError(INVALID_STATE)
+    if expected_current_state is not _OMITTED:
         if not isinstance(expected_current_state, str) or expected_current_state not in definition.states:
             raise FinKoreError(INVALID_STATE)
         if expected_current_state != instance.current_state:
             raise FinKoreError(STATE_CONFLICT)
-    if expected_revision is not None:
+    if expected_revision is not _OMITTED:
         if not _opaque(expected_revision) or instance.revision != expected_revision:
             raise FinKoreError(STATE_CONFLICT)
     if instance.current_state in definition.terminal_states:
         raise FinKoreError(TERMINAL_STATE)
-    if not isinstance(target, str) or target not in definition.states:
-        raise FinKoreError(INVALID_STATE)
     transition = definition.transition(instance.current_state, target)
     if transition is None:
         raise FinKoreError(INVALID_TRANSITION)

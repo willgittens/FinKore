@@ -2,11 +2,29 @@
 from __future__ import annotations
 
 import unittest
+from copy import deepcopy
 
 from finkore import FinKoreError, WorkflowDefinition, WorkflowInstance, create_workflow, import_workflow, transition_workflow
 
 
 class WorkflowTests(unittest.TestCase):
+    def test_import_binding_input_and_repeated_observations(self) -> None:
+        """WORKFLOW-VERSION-007/008/011: an imported observation cannot rebind instances."""
+        binding = {"definitionIdentity": "review", "definitionVersionIdentity": "1"}
+        definition = WorkflowDefinition.from_portable({**binding, "states": ["DRAFT", "DONE"],
+            "initialState": "DRAFT", "terminalStates": ["DONE"],
+            "transitions": [{"source": "DRAFT", "target": "DONE"}]})
+        source = {"currentState": "DRAFT", "binding": deepcopy(binding), "revision": "opaque:r1"}
+        instance = import_workflow(definition, WorkflowInstance.from_portable(source))
+        before = deepcopy(source)
+        independent = WorkflowInstance.from_portable(source)
+        source["binding"]["definitionVersionIdentity"] = "2"
+        instance.to_portable()["binding"]["definitionVersionIdentity"] = "3"
+        self.assertEqual(instance.to_portable(), before)
+        self.assertEqual(independent.to_portable(), before)
+        self.assertEqual(transition_workflow(definition, instance, "DONE").to_portable(), {**before, "currentState": "DONE"})
+        self.assertEqual(instance.to_portable(), before)
+
     def test_create_uses_declared_initial_state_and_binding(self) -> None:
         definition = WorkflowDefinition.from_portable(
             {

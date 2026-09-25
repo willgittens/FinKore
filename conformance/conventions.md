@@ -372,6 +372,16 @@ from explicit null. Native binding tests also mutate constructor inputs and
 returned observations after create/import/transition; isolated JSON cannot
 exercise those aliases.
 
+The reference Python API expresses omission by leaving the corresponding
+keyword argument out. Java provides a four-argument transition overload and
+`Workflow.OMITTED` for independently omitted preconditions in the six-argument
+overload. Explicit native null remains supplied input. These are API
+representations, not additions to the portable fixture or operation identifier.
+Workflow invalid-instance fixtures omit normalized error observations; native
+tests independently check unchanged source observations. Failures on valid
+instances retain State, binding, revision, and supplied guard facts in fixture
+observations where applicable.
+
 ### Concrete Approval association
 
 The concrete Requirement fixture supplies `subject` with nonempty string

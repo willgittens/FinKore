@@ -139,8 +139,8 @@ public final class Bridge {
               instance,
               inputValue.get("target"),
               inputValue.get("facts"),
-              inputValue.get("expectedCurrentState"),
-              inputValue.get("expectedRevision"));
+              inputValue.getOrDefault("expectedCurrentState", Workflow.OMITTED),
+              inputValue.getOrDefault("expectedRevision", Workflow.OMITTED));
           yield success(result.toPortable(), null);
         }
         case "finkore.audit.append" -> {
@@ -231,7 +231,7 @@ public final class Bridge {
         default -> Map.of("status", "unsupported");
       };
     } catch (FinKoreException error) {
-      return error(error.code(), observationsFor(operation, inputValue));
+      return error(error.code(), observationsFor(operation, inputValue, error.code()));
     }
   }
 
@@ -265,7 +265,7 @@ public final class Bridge {
     return Audit.Log.create(input.get("history"));
   }
 
-  private static Map<String, Object> observationsFor(String operation, Map<String, Object> input) {
+  private static Map<String, Object> observationsFor(String operation, Map<String, Object> input, String code) {
     try {
       if (List.of("finkore.money.add", "finkore.money.subtract", "finkore.money.compare").contains(operation)) {
         return pair(input).observations;
@@ -274,7 +274,7 @@ public final class Bridge {
         return operand(input).observations;
       }
       if ("finkore.workflow.transition".equals(operation)) {
-        return workflowErrorObservations(input);
+        return Workflow.INVALID_INSTANCE.equals(code) ? null : workflowErrorObservations(input);
       }
       if (List.of("finkore.audit.append", "finkore.audit.replace", "finkore.audit.remove", "audit.redact").contains(operation)) {
         return Map.of("history", auditLog(input).events());

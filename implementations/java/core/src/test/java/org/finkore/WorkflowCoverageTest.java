@@ -12,6 +12,11 @@ import org.junit.jupiter.api.Test;
 /** JUnit coverage tests for Java Workflow behavior. */
 final class WorkflowCoverageTest {
   @Test
+  void nativePreconditionPresence() throws java.io.IOException {
+    BoundaryRegressionTest.main(new String[]{"workflow.presence."});
+  }
+
+  @Test
   void nativeGuardBoundaryAndEquality() {
     WorkflowTest.main(new String[0]);
   }
@@ -116,11 +121,11 @@ final class WorkflowCoverageTest {
     assertEquals(Map.of("currentState", "SUBMITTED", "revision", "wf-rev:0007"), instance.toPortable());
 
     assertEquals(Workflow.GUARD_REJECTED, assertThrows(FinKoreException.class, () -> Workflow.transition(
-        definition, instance, "APPROVED", Map.of("approvalsSatisfied", false), null, null)).code());
+        definition, instance, "APPROVED", Map.of("approvalsSatisfied", false))).code());
     assertEquals(Workflow.STATE_CONFLICT, assertThrows(FinKoreException.class, () -> Workflow.transition(
-        definition, instance, "APPROVED", Map.of("approvalsSatisfied", true, "riskAccepted", true), "DRAFT", null)).code());
+        definition, instance, "APPROVED", Map.of("approvalsSatisfied", true, "riskAccepted", true), "DRAFT", Workflow.OMITTED)).code());
     assertEquals(Workflow.STATE_CONFLICT, assertThrows(FinKoreException.class, () -> Workflow.transition(
-        definition, instance, "APPROVED", Map.of("approvalsSatisfied", true, "riskAccepted", true), null, "old")).code());
+        definition, instance, "APPROVED", Map.of("approvalsSatisfied", true, "riskAccepted", true), Workflow.OMITTED, "old")).code());
   }
 
   @Test
@@ -131,30 +136,22 @@ final class WorkflowCoverageTest {
         definition,
         Workflow.Instance.fromPortable(Map.of("currentState", "PAID")),
         "APPROVED",
-        Map.of(),
-        null,
-        null)).code());
+        Map.of())).code());
     assertEquals(Workflow.TERMINAL_STATE, assertThrows(FinKoreException.class, () -> Workflow.transition(
         definition,
         Workflow.Instance.fromPortable(Map.of("currentState", "APPROVED")),
         "REJECTED",
-        Map.of(),
-        null,
-        null)).code());
+        Map.of())).code());
     assertEquals(Workflow.INVALID_TRANSITION, assertThrows(FinKoreException.class, () -> Workflow.transition(
         definition,
         Workflow.Instance.fromPortable(Map.of("currentState", "DRAFT")),
         "APPROVED",
-        Map.of(),
-        null,
-        null)).code());
+        Map.of())).code());
     assertEquals(Workflow.INVALID_STATE, assertThrows(FinKoreException.class, () -> Workflow.transition(
         definition,
         Workflow.Instance.fromPortable(Map.of("currentState", "DRAFT")),
         "draft",
-        Map.of(),
-        null,
-        null)).code());
+        Map.of())).code());
   }
 
   @Test

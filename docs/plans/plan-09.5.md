@@ -4,8 +4,9 @@
 
 Milestones 1 and 2 are complete: the three Entity contract decisions are
 accepted, and permanent failing regressions and passing controls reproduce
-every reviewed finding. Milestone 3 now completes the Money serialization
-correction. Workflow, Approval, Audit, and Entity corrections remain pending.
+every reviewed finding. Milestones 3 and 4 complete the Money serialization
+and direct Workflow ownership/precondition corrections. Approval, Audit, and
+Entity corrections remain pending.
 A new readiness review of `d920091`
 (`core-0.9.4`) reproduced the findings below despite passing existing checks.
 [Core 1.0 promotion](plan-10.md) is blocked until these findings and this
@@ -468,23 +469,104 @@ remain pending.
 
 ## Milestone 4 — Workflow binding and precondition preservation
 
-- [ ] Eliminate Python binding aliases at native construction, creation, import,
+- [x] Eliminate Python binding aliases at native construction, creation, import,
       successful transition, and observation boundaries. Verify both original
       input mutation and exposed-value mutation leave retained binding intact.
-- [ ] Preserve supplied null versus omitted expected State/revision through
+- [x] Preserve supplied null versus omitted expected State/revision through
       Python and Java adapters and cores. Keep financial precondition checks in
       cores and preserve valid omitted, matching, and mismatching controls.
-- [ ] Apply existing definition, instance, mismatch, State, conflict, terminal,
+- [x] Apply existing definition, instance, mismatch, State, conflict, terminal,
       transition, and guard precedence to combined-error cases.
-- [ ] Verify all failed requests preserve current State, binding, and instance
+- [x] Verify all failed requests preserve current State, binding, and instance
       revision. Preserve earlier nested guard ownership and default-sequence
       corrections, including older-version behavior after a new version exists.
-- [ ] Run Workflow native/unit/adapter tests and portable vectors across all
+- [x] Run Workflow native/unit/adapter tests and portable vectors across all
       runtimes. Kill binding-alias, silent-rebinding, and null-as-omitted probes;
       update public API documentation for ownership and optional arguments.
 
 Completion: callers cannot rebind existing instances through aliases, and
 explicit preconditions cannot be silently discarded.
+
+### Milestone 4 completion and verification
+
+Python `WorkflowInstance` now copies constructor bindings and returns defensive
+binding observations. Create, import, transition, and repeated observation
+preserve the governing version; mutating one observation cannot authorize a
+newer definition or alter another instance. The constructor signature and public
+properties are preserved, while the retained binding becomes a private dataclass
+field. Native tests also reuse imported and transitioned instances, reject a
+different version, and verify the original version still works.
+
+Python transition defaults now distinguish omitted arguments from explicit
+`None`. Java provides a four-argument transition overload for omitted
+preconditions and `Workflow.OMITTED` for independent omission in the existing
+six-argument overload. Explicit null remains supplied input. Callers that used
+null placeholders must migrate to omission; all repository Java callers were
+updated, including the Entity caller without changing Entity financial behavior.
+Package examples and method documentation describe this corrective API change.
+
+Adapters preserve member presence and leave precondition validation in cores.
+Malformed-instance errors omit normalized observations, matching the fixture
+convention; native assertions still verify unchanged input. Python and Java
+validate target State before conflicts and terminal State, as required by
+WORKFLOW-ERROR-007. Eight additional `workflow.presence.*` vectors cover
+definition/instance priority, target priority, null revision versus terminal
+State, and matching preconditions that still face terminal, transition, and
+guard checks. The existing 12 presence cases and these eight cases execute
+through native cores and adapters. Seven failed on each defective Python/Java
+implementation before correction; the binding alias tests failed separately.
+
+| Check | Result |
+| --- | --- |
+| Python Workflow unit/native tests | 32 methods pass on both CPython 3.12 and 3.13, including all 20 presence/priority cases and three binding methods |
+| Java Workflow unit/native tests | Stdlib Workflow tests, 20 presence/priority cases, and ten JUnit tests pass |
+| TypeScript regression controls | All 75 existing Workflow unit tests and 130 runner tests pass |
+| Adapter tests | Infrastructure tests and all 52 Workflow readiness cases pass for Python 3.12/3.13 and Java |
+| Real Workflow conformance | 103/103 pass on all four runtimes, with no unsupported or infrastructure outcomes |
+| Native mutation protection | 9/9 Workflow probes killed, including two new instance-binding alias probes; all four Python probes also pass on CPython 3.13 |
+| Conformance mutation protection | 32/32 Workflow probes killed, including twelve new core/adapter null-presence, target-priority, and mismatch probes |
+| Python focused coverage | Workflow: 219/231 statements (94.81%) and 104/116 branches (89.66%); changed constructor, binding accessor, and transition function have 100% line/branch coverage |
+| Java focused coverage | Workflow outer class: 137/147 lines (93.20%) and 166/206 branches (80.58%); transition overloads have 100% line coverage and 27/28 branches covered |
+| Repository checks | Build, strict TypeScript, Java compilation, toolchain, tool tests, architecture, documentation/traceability, license, and whitespace checks pass |
+
+Coverage used fresh focused unit/native and real conformance runs; Java
+instrumentation and reporting used the same Maven-compiled classes. These are
+scoped measurements, not the whole-core coverage or aggregate mutation gate.
+No raw exception, skipped assertion, or infrastructure failure counts as a kill.
+
+Full manifest verification now executes 635 vectors. All 542 original vectors
+remain passing on every runtime. Remaining outcomes are from the later
+milestone regressions:
+
+| Runtime | PASS | FAIL | UNSUPPORTED | INFRASTRUCTURE_ERROR |
+| --- | ---: | ---: | ---: | ---: |
+| TypeScript | 630 | 5 | 0 | 0 |
+| CPython 3.12 | 600 | 31 | 0 | 4 |
+| CPython 3.13 | 600 | 31 | 0 | 4 |
+| Java | 599 | 32 | 0 | 4 |
+
+The unfiltered Python adapter readiness suite also remains red on the known
+Approval and Entity regressions. Workflow's focused suite is green; this does
+not claim `check`/`verify` or a corrective release is complete.
+
+Focused mutation commands are
+`node docs/tools/mutation-native.js workflow` and
+`node docs/tools/mutation-critical.js all workflow`; Python native compatibility
+uses `FINKORE_PYTHON_PATH=.tools/bin/python3.13`. Existing conformance scripts
+accept `-- --suite workflow`; for Java compile first and invoke the runner
+directly with its Java adapter and `--suite workflow`. Native boundary tests
+select `-k workflow` in Python and `workflow.presence` in Java; the three Python
+binding methods named in the Milestone 2 evidence table run separately. Maven
+coverage selects `-Dtest=WorkflowCoverageTest`.
+
+Completion review: unit/native tests, vectors, adapter discovery, mutation probes,
+public API documentation, package/root README status, conformance conventions,
+developer-tool usage, and traceability are synchronized. Eight conflict/error
+requirements return to COVERED. Ten Workflow rows remain PARTIAL for their
+Entity composition/import/error paths in Milestone 7. Existing specification
+and Agentic semantics already define these guarantees, so no normative rule,
+portable code, canonical operation, TypeScript API/JSDoc, architectural rule,
+AGENTS.md, CoreDoc, release note, or package version changes are needed.
 
 ## Milestone 5 — Approval association and malformed eligibility
 

@@ -130,6 +130,8 @@ def workflow_observations(instance: WorkflowInstance, input_value: dict[str, Any
 
 
 def workflow_error_observations(code: str, input_value: dict[str, Any]) -> dict[str, Any] | None:
+    if code == "FINKORE_WORKFLOW_INVALID_INSTANCE":
+        return None
     definition = parse_workflow_definition(input_value)
     instance = parse_workflow_instance(input_value)
     if code == "FINKORE_WORKFLOW_INVALID_STATE":
@@ -151,13 +153,15 @@ def execute_workflow_import(input_value: dict[str, Any]) -> dict[str, Any]:
 def execute_workflow_transition(input_value: dict[str, Any]) -> dict[str, Any]:
     definition = parse_workflow_definition(input_value)
     instance = parse_workflow_instance(input_value)
+    preconditions = {native: input_value[portable] for portable, native in (
+        ("expectedCurrentState", "expected_current_state"), ("expectedRevision", "expected_revision")
+    ) if portable in input_value}
     result = transition_workflow(
         definition,
         instance,
         input_value.get("target"),
         input_value.get("facts"),
-        input_value.get("expectedCurrentState"),
-        input_value.get("expectedRevision"),
+        **preconditions,
     )
     return success(result.to_portable())
 

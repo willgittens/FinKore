@@ -23,6 +23,13 @@ import java.util.Set;
  * @see <a href="../../../../../../spec/workflow/versioning.md">WORKFLOW-VERSION-001</a>
  */
 public final class Workflow {
+  /**
+   * Omitted optional transition precondition. Unlike {@code null}, this value
+   * skips the corresponding expected-State or expected-revision check.
+   *
+   * @see <a href="../../../../../../spec/workflow/conflicts.md">WORKFLOW-CONFLICT-001 and WORKFLOW-CONFLICT-004</a>
+   */
+  public static final Object OMITTED = new Object();
   /** Portable error for malformed Workflow definitions. */
   public static final String INVALID_DEFINITION = "FINKORE_WORKFLOW_INVALID_DEFINITION";
   /** Portable error for malformed Workflow instances. */
@@ -319,18 +326,40 @@ public final class Workflow {
   }
 
   /**
+   * Applies a declared transition with both preconditions omitted.
+   *
+   * @param definition Workflow definition
+   * @param instance current instance observation, preserved on success and failure
+   * @param target requested target State
+   * @param facts explicit facts for guard evaluation
+   * @return new instance retaining the original binding and revision
+   * @throws FinKoreException with the applicable Workflow portable error code
+   * @see #transition(Definition, Instance, Object, Object, Object, Object)
+   */
+  public static Instance transition(Definition definition, Instance instance, Object target, Object facts) {
+    return transition(definition, instance, target, facts, OMITTED, OMITTED);
+  }
+
+  /**
    * Applies a declared transition without mutating the supplied instance.
+   *
+   * <p>Explicit {@code null} is supplied input: null expected State is
+   * {@link #INVALID_STATE}, null expected revision is {@link #STATE_CONFLICT}.
+   * Definition/instance/version checks precede State validation, conflicts,
+   * terminal State, declared Transition, then guards. Failure preserves State,
+   * binding, and revision; success retains the original binding and revision.
    *
    * @param definition Workflow definition
    * @param instance current instance observation
    * @param target requested target state
    * @param facts explicit facts for guard evaluation
-   * @param expectedCurrentState optional optimistic state precondition
-   * @param expectedRevision optional optimistic revision precondition
+   * @param expectedCurrentState expected State, or {@link #OMITTED} to skip it
+   * @param expectedRevision expected revision, or {@link #OMITTED} to skip it
    * @return new Workflow instance in the target state
    * @throws FinKoreException with Workflow portable error code
    * @see <a href="../../../../../../spec/workflow/transitions.md">WORKFLOW-TRANSITION-006</a>
    * @see <a href="../../../../../../spec/workflow/conflicts.md">WORKFLOW-CONFLICT-001</a>
+   * @see <a href="../../../../../../spec/workflow/errors.md">WORKFLOW-ERROR-007</a>
    */
   public static Instance transition(
       Definition definition,
@@ -343,7 +372,10 @@ public final class Workflow {
     if (!definition.states().contains(instance.currentState())) {
       throw new FinKoreException(INVALID_STATE);
     }
-    if (expectedCurrentState != null) {
+    if (!(target instanceof String targetState) || !definition.states().contains(targetState)) {
+      throw new FinKoreException(INVALID_STATE);
+    }
+    if (expectedCurrentState != OMITTED) {
       if (!(expectedCurrentState instanceof String expected) || !definition.states().contains(expected)) {
         throw new FinKoreException(INVALID_STATE);
       }
@@ -351,16 +383,13 @@ public final class Workflow {
         throw new FinKoreException(STATE_CONFLICT);
       }
     }
-    if (expectedRevision != null) {
+    if (expectedRevision != OMITTED) {
       if (!opaque(expectedRevision) || !expectedRevision.equals(instance.revision())) {
         throw new FinKoreException(STATE_CONFLICT);
       }
     }
     if (definition.terminalStates().contains(instance.currentState())) {
       throw new FinKoreException(TERMINAL_STATE);
-    }
-    if (!(target instanceof String targetState) || !definition.states().contains(targetState)) {
-      throw new FinKoreException(INVALID_STATE);
     }
     Transition transition = definition.transition(instance.currentState(), targetState);
     if (transition == null) {

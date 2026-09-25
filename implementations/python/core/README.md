@@ -5,6 +5,8 @@ They intentionally fail against unresolved native API and cross-domain defects.
 The 0.9.4 results below describe that tagged snapshot; the expanded development
 manifest is not yet passing conformance. Milestone 3 corrects Money serialization;
 its native regressions, Money conformance, and targeted mutation gates pass.
+Milestone 4 corrects Workflow binding ownership, supplied preconditions, and
+error precedence. Approval, Audit, and Entity regressions remain open.
 
 This package is the Python implementation track for FinKore Core 0.9 release
 candidate. It is derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`,
@@ -39,6 +41,28 @@ Its `guards` property returns fresh nested JSON copies; mutating them cannot
 change the predicate. Guard storage is now private, so dataclass field
 introspection is not a portable serialization interface. `WorkflowDefinition`
 retains declaration containers as tuples, including direct native construction.
+
+`WorkflowInstance(current_state, binding=None, revision=None)` also owns its
+binding. The `binding` property and `to_portable()` return independent
+observations; mutating original or returned dictionaries cannot change the
+instance's governing version. Its constructor signature is unchanged, while
+the retained binding is now a private dataclass field. Use the public properties
+or `to_portable()` rather than dataclass field introspection for interchange.
+
+Omit `expected_current_state` or `expected_revision` from `transition_workflow`
+to skip that check. Explicit `None` is supplied input and fails with
+`FINKORE_WORKFLOW_INVALID_STATE` or `FINKORE_WORKFLOW_STATE_CONFLICT`,
+respectively. Calls that previously passed `None` as an omission placeholder
+must omit the argument instead; keyword arguments permit independent omission:
+
+```python
+transition_workflow(definition, instance, "SUBMITTED")
+transition_workflow(definition, instance, "SUBMITTED", expected_revision="rev-7")
+```
+
+Version checks precede State validation; all State checks precede conflicts,
+terminal State, declared Transition, and guards. Neither failure nor success
+mutates the original instance. Successful results retain its binding and revision.
 
 This artifact is a repository reference implementation for the 0.9
 release-candidate phase. It is not published to a Python package registry. The

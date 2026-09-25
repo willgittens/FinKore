@@ -112,8 +112,6 @@ public final class Entities {
         workflow,
         new Workflow.Instance((String) current.get("state"), null, null),
         target,
-        null,
-        null,
         null);
     Map<String, Object> result = copyMap(current, INVALID_IDENTITY);
     result.put("state", transitioned.currentState());

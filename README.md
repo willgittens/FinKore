@@ -353,7 +353,8 @@ release gate is satisfied.
 
 The 0.9.5 contract decisions are accepted. Milestone 2 adds 85 portable
 regressions and controls plus native serialization, binding, ownership, and
-operation-sequence tests. The development manifest now contains 627 vectors
+operation-sequence tests. Milestone 4 adds eight Workflow precedence vectors;
+the development manifest now contains 635 vectors
 and exposes known failures; all 542 earlier vectors still pass on all four
 runtimes. [Traceability](./conformance/traceability.md) keeps correction and
 mutation gates open. These failing regressions are deliberate evidence for the
@@ -362,7 +363,9 @@ next implementation milestones, not a new passing-conformance claim.
 Milestone 3 now corrects Python and Java Money serialization: scale changes
 preserve exact value or return the specified portable error. Native serializer
 tests, all 102 Money vectors on all four runtimes, and targeted mutation probes
-pass. The remaining Workflow, Approval, Audit, and Entity corrections stay open.
+pass. Milestone 4 also corrects Python instance-binding ownership and Python/Java
+precondition presence and error precedence. All 103 Workflow vectors pass on
+all four runtimes. Approval, Audit, and Entity corrections stay open.
 
 - Money
 - Workflow

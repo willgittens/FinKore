@@ -14,20 +14,27 @@ const root = process.cwd()
 const py = 'test_readiness_regressions.ReadinessRegressionTests.'
 const workflowControl = 'Workflow retained definition ownership retains state, terminal and transition arrays after construction'
 const integration = 'test/integration/readiness-regressions.test.ts'
-const moneyPy = 'test_boundary_regressions.BoundaryRegressions.'
+const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const probes = [
+  { id: 'python-workflow-binding-input-alias', language: 'python', path: 'workflow.py',
+    from: 'object.__setattr__(self, "_bound_version", deepcopy(binding))',
+    to: 'object.__setattr__(self, "_bound_version", binding)',
+    target: boundaryPy + 'test_binding_constructor_input_is_owned', control: boundaryPy + 'test_binding_observation_control' },
+  { id: 'python-workflow-binding-observation-alias', language: 'python', path: 'workflow.py',
+    from: 'return deepcopy(self._bound_version)', to: 'return self._bound_version',
+    target: boundaryPy + 'test_exposed_binding_cannot_rebind', control: boundaryPy + 'test_binding_observation_control' },
   ...[
     { id: 'loss-check-removed',
       from: 'if any(digit != "0" for digit in fraction[scale:]):', to: 'if False:',
-      target: moneyPy + 'test_money_lossy_serialization_rejected' },
+      target: boundaryPy + 'test_money_lossy_serialization_rejected' },
     { id: 'implicit-rounding',
       from: 'if any(digit != "0" for digit in fraction[scale:]):\n            raise FinKoreError(ROUNDING_REQUIRED)',
       to: 'if any(digit != "0" for digit in fraction[scale:]):\n            return _format_decimal(_round_decimal(value, scale, "HALF_UP"), scale)',
-      target: moneyPy + 'test_money_lossy_serialization_rejected' },
+      target: boundaryPy + 'test_money_lossy_serialization_rejected' },
     { id: 'wrong-portable-error',
       from: 'if any(digit != "0" for digit in fraction[scale:]):\n            raise FinKoreError(ROUNDING_REQUIRED)',
       to: 'if any(digit != "0" for digit in fraction[scale:]):\n            raise FinKoreError(INVALID_ROUNDING)',
-      target: moneyPy + 'test_money_lossy_serialization_rejected' },
+      target: boundaryPy + 'test_money_lossy_serialization_rejected' },
     { id: 'scale-validation-removed', from: '        _valid_scale(scale)', to: '        pass',
       target: 'test_money.MoneyTests.test_serialization_rejects_negative_and_boolean_scales' },
     { id: 'boolean-scale-accepted', from: 'not isinstance(value, int) or isinstance(value, bool) or value < 0',
@@ -36,9 +43,9 @@ const probes = [
     { id: 'retained-scale-ignored', from: 'self.presentation_scale if scale is None else scale', to: 'scale',
       target: 'test_money.MoneyTests.test_serialization_checks_native_presentation_scale' },
     { id: 'zero-scale-ignored', from: '        if scale == 0:\n            return integer',
-      to: '        if scale == 0:\n            return text', target: moneyPy + 'test_money_zero_requested_scale' },
+      to: '        if scale == 0:\n            return text', target: boundaryPy + 'test_money_zero_requested_scale' },
   ].map(probe => ({ ...probe, id: 'python-money-serialization-' + probe.id, language: 'python', path: 'money.py',
-    control: moneyPy + 'test_money_explicit_rounding_control' })),
+    control: boundaryPy + 'test_money_explicit_rounding_control' })),
   ...[
     { id: 'implicit-truncation',
       from: 'if (value.stripTrailingZeros().scale() > scale) throw new FinKoreException(ROUNDING_REQUIRED);',

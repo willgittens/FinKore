@@ -56,9 +56,7 @@ public final class WorkflowTest {
         definition,
         instance,
         "APPROVED",
-        Map.of("approvalsSatisfied", false),
-        null,
-        null));
+        Map.of("approvalsSatisfied", false)));
     assertEquals(Map.of("currentState", "SUBMITTED"), instance.toPortable());
   }
 
@@ -90,7 +88,7 @@ public final class WorkflowTest {
         instance,
         "APPROVED",
         Map.of("approvalsSatisfied", true),
-        null,
+        Workflow.OMITTED,
         "wf-rev:old"));
     assertEquals(Map.of("currentState", "SUBMITTED", "revision", "wf-rev:0007"), instance.toPortable());
   }
@@ -98,12 +96,12 @@ public final class WorkflowTest {
   private static void guardEqualityIsPresenceAwareTypeSensitiveAndRecursive() {
     Workflow.Instance typeMismatch = Workflow.Instance.fromPortable(Map.of("currentState", "SUBMITTED"));
     assertError(Workflow.GUARD_REJECTED, () -> Workflow.transition(
-        workflowExpecting(true), typeMismatch, "APPROVED", Map.of("value", 1L), null, null));
+        workflowExpecting(true), typeMismatch, "APPROVED", Map.of("value", 1L)));
     assertEquals(Map.of("currentState", "SUBMITTED"), typeMismatch.toPortable());
 
     Workflow.Instance missing = Workflow.Instance.fromPortable(Map.of("currentState", "SUBMITTED"));
     assertError(Workflow.GUARD_REJECTED, () -> Workflow.transition(
-        workflowExpecting(null), missing, "APPROVED", Map.of(), null, null));
+        workflowExpecting(null), missing, "APPROVED", Map.of()));
     assertEquals(Map.of("currentState", "SUBMITTED"), missing.toPortable());
 
     Map<String, Object> explicitNull = new LinkedHashMap<>();
@@ -112,17 +110,13 @@ public final class WorkflowTest {
         workflowExpecting(null),
         Workflow.Instance.fromPortable(Map.of("currentState", "SUBMITTED")),
         "APPROVED",
-        explicitNull,
-        null,
-        null).toPortable());
+        explicitNull).toPortable());
 
     assertEquals(Map.of("currentState", "APPROVED"), Workflow.transition(
         workflowExpecting(Map.of("status", "CLEAR", "steps", List.of("KYC", "LIMIT"))),
         Workflow.Instance.fromPortable(Map.of("currentState", "SUBMITTED")),
         "APPROVED",
-        Map.of("value", Map.of("steps", List.of("KYC", "LIMIT"), "status", "CLEAR")),
-        null,
-        null).toPortable());
+        Map.of("value", Map.of("steps", List.of("KYC", "LIMIT"), "status", "CLEAR"))).toPortable());
   }
 
   @SuppressWarnings("unchecked")
@@ -149,10 +143,10 @@ public final class WorkflowTest {
     states.clear(); terminals.clear(); transitions.clear();
     assertEquals(List.of("SUBMITTED", "APPROVED"), definition.states());
     assertEquals(List.of("APPROVED"), definition.terminalStates());
-    assertError(Workflow.GUARD_REJECTED, () -> Workflow.transition(definition, instance, "APPROVED", Map.of("value", expected), null, null));
+    assertError(Workflow.GUARD_REJECTED, () -> Workflow.transition(definition, instance, "APPROVED", Map.of("value", expected)));
     assertEquals(Map.of("currentState", "SUBMITTED"), instance.toPortable());
     Object facts = Map.of("value", Map.of("left", java.util.Arrays.asList(Map.of("approved", true), null, 2.5, "ok"), "right", Map.of("approved", true)));
-    assertEquals(Map.of("currentState", "APPROVED"), Workflow.transition(definition, instance, "APPROVED", facts, null, null).toPortable());
+    assertEquals(Map.of("currentState", "APPROVED"), Workflow.transition(definition, instance, "APPROVED", facts).toPortable());
   }
 
   private static Workflow.Definition workflowExpecting(Object expected) {

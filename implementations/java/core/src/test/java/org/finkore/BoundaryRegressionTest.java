@@ -108,12 +108,14 @@ public final class BoundaryRegressionTest {
       case "approval.requirement.evaluate" -> Approvals.evaluateRequirement(input.get("requirement"), input.get("decisions"), null, null, null);
       case "approval.decision.evaluate" -> Approvals.evaluateDecision(input.get("decision"), input.get("currentSubjectFacts"), null, null);
       case "finkore.workflow.transition" -> {
-        Map<String, Object> instance = map(input.get("instance"));
-        // Supply matching other preconditions to isolate each explicitly null native argument.
-        // Omission itself is exercised without translation by the adapter vectors.
-        yield Workflow.transition(Workflow.Definition.fromPortable(input.get("definition")), Workflow.Instance.fromPortable(instance),
-            input.get("target"), Map.of(), input.getOrDefault("expectedCurrentState", instance.get("currentState")),
-            input.getOrDefault("expectedRevision", instance.get("revision"))).toPortable();
+        Workflow.Definition definition = Workflow.Definition.fromPortable(input.get("definition"));
+        Workflow.Instance instance = Workflow.Instance.fromPortable(input.get("instance"));
+        Object before = copy(instance.toPortable());
+        try {
+          yield Workflow.transition(definition, instance, input.get("target"), input.get("facts"),
+              input.getOrDefault("expectedCurrentState", Workflow.OMITTED),
+              input.getOrDefault("expectedRevision", Workflow.OMITTED)).toPortable();
+        } finally { equal(before, instance.toPortable()); }
       }
       case "finkore.entity.create" -> Entities.create(input.get("definition"), input.get("id"), input.get("data"));
       case "finkore.entity.transition" -> Entities.transition(input.get("definition"), input.get("entity"), input.get("target"));

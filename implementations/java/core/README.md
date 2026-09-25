@@ -5,6 +5,8 @@ They intentionally fail against unresolved native API and cross-domain defects.
 The 0.9.4 results below describe that tagged snapshot; the expanded development
 manifest is not yet passing conformance. Milestone 3 corrects Money serialization;
 its native regressions, Money conformance, and targeted mutation gates pass.
+Milestone 4 corrects Workflow supplied preconditions and error precedence.
+Approval, Audit, and Entity regressions remain open.
 
 This package is the Java implementation track for FinKore Core 0.9 release
 candidate. It is derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`,
@@ -77,6 +79,23 @@ predicates exercise declared validation; they do not standardize a general
 validation language or impose a universal amount/limit policy.
 
 ## Public Package Surface
+
+Use `Workflow.transition(definition, instance, target, facts)` to omit both
+preconditions. The six-argument overload accepts `Workflow.OMITTED` for either
+omitted precondition. Explicit `null` now means supplied input: null expected
+State fails with `FINKORE_WORKFLOW_INVALID_STATE`, and null expected revision
+fails with `FINKORE_WORKFLOW_STATE_CONFLICT`. Migrate calls that used null
+placeholders to the four-argument overload or `Workflow.OMITTED`:
+
+```java
+Workflow.transition(definition, instance, "SUBMITTED", Map.of());
+Workflow.transition(definition, instance, "SUBMITTED", Map.of(), Workflow.OMITTED, "rev-7");
+```
+
+This preserves omission independently of null across the native API and JSON
+adapter. Version checks precede all State validation, then conflicts, terminal
+State, declared Transition, and guards. Both success and failure preserve the
+original instance; successful results retain its binding and revision.
 
 The intentional Java package surface is `org.finkore`. The public classes are:
 

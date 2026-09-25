@@ -185,10 +185,10 @@ public final class ReadinessRegressionTest {
     Map<String, Object> facts = Map.of("decision", array ? Map.of("checks", List.of(Map.of("approved", approved))) : Map.of("approved", approved));
     Object factsBefore = copy(facts);
     if (approved) {
-      Workflow.Instance result = Workflow.transition(definition, instance, "DONE", facts, null, null);
+      Workflow.Instance result = Workflow.transition(definition, instance, "DONE", facts);
       Map<String, Object> expected = new LinkedHashMap<>(map(before)); expected.put("currentState", "DONE");
       equal(expected, result.toPortable());
-    } else error("FINKORE_WORKFLOW_GUARD_REJECTED", () -> Workflow.transition(definition, instance, "DONE", facts, null, null));
+    } else error("FINKORE_WORKFLOW_GUARD_REJECTED", () -> Workflow.transition(definition, instance, "DONE", facts));
     equal(before, instance.toPortable()); equal(factsBefore, facts);
   }
 
@@ -199,9 +199,9 @@ public final class ReadinessRegressionTest {
     Workflow.Instance instance = Workflow.create(definition);
     list(raw.get("states")).clear(); list(raw.get("terminalStates")).clear();
     map(list(raw.get("transitions")).get(0)).put("target", "OTHER");
-    Workflow.Instance result = Workflow.transition(definition, instance, "DONE", Map.of(), null, null);
+    Workflow.Instance result = Workflow.transition(definition, instance, "DONE", Map.of());
     equal(Map.of("currentState", "DONE", "binding", binding()), result.toPortable());
-    error("FINKORE_WORKFLOW_TERMINAL_STATE", () -> Workflow.transition(definition, result, "DRAFT", Map.of(), null, null));
+    error("FINKORE_WORKFLOW_TERMINAL_STATE", () -> Workflow.transition(definition, result, "DRAFT", Map.of()));
   }
 
   // ENTITY-EVOLUTION-022/023/025/033/035: consume real histories through the native API.

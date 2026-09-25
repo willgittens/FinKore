@@ -45,8 +45,14 @@ def invoke(vector):
     if op == "finkore.workflow.transition":
         options = {native: i[field] for field, native in (("expectedCurrentState", "expected_current_state"),
                    ("expectedRevision", "expected_revision")) if field in i}
-        return transition_workflow(WorkflowDefinition.from_portable(i["definition"]),
-                                   WorkflowInstance.from_portable(i["instance"]), i["target"], **options).to_portable()
+        definition = WorkflowDefinition.from_portable(i["definition"])
+        instance = WorkflowInstance.from_portable(i["instance"])
+        before = deepcopy(instance.to_portable())
+        try:
+            return transition_workflow(definition, instance, i["target"], i.get("facts"), **options).to_portable()
+        finally:
+            if instance.to_portable() != before:
+                raise AssertionError("Transition changed the original State, binding, or revision")
     if op == "finkore.entity.create":
         return create_entity(i["definition"], i["id"], i["data"])
     if op == "finkore.entity.transition":
@@ -176,6 +182,9 @@ class BoundaryRegressions(unittest.TestCase):
                 finally:
                     self.assertEqual(value.to_portable(), before)
                     self.assertEqual(original.to_portable(), original_before)
+                accepted = transition_workflow(definition, value, "DONE" if boundary == "transition" else "REVIEW")
+                self.assertEqual(accepted.binding, BINDING)
+                self.assertEqual(accepted.revision, value.revision)
 
     def test_binding_observation_control(self):
         definition = WorkflowDefinition.from_portable({**FLOW, **BINDING})

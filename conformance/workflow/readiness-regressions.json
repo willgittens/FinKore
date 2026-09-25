@@ -1695,7 +1695,7 @@
       "input": {
         "definition": {
           "definitionIdentity": "invoice-approval",
-          "definitionVersionIdentity": "١",
+          "definitionVersionIdentity": "\u0661",
           "states": [
             "DRAFT",
             "SUBMITTED"
@@ -2706,6 +2706,540 @@
       ],
       "guardsAgainst": [
         "workflow-presence-invalid-state-before-conflict"
+      ]
+    },
+    {
+      "id": "workflow.presence.definition-before-null-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-ERROR-001"
+      ],
+      "description": "Definition before null.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "DONE"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "REVIEW"
+            },
+            {
+              "source": "REVIEW",
+              "target": "DONE"
+            }
+          ],
+          "definitionIdentity": "invoice-flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        },
+        "target": "REVIEW",
+        "expectedCurrentState": null
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "workflow-precondition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.presence.instance-before-null-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-ERROR-005"
+      ],
+      "description": "Instance before null.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "REVIEW",
+            "DONE"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "DONE"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "REVIEW"
+            },
+            {
+              "source": "REVIEW",
+              "target": "DONE"
+            }
+          ],
+          "definitionIdentity": "invoice-flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "revision": "r1"
+        },
+        "target": "REVIEW",
+        "expectedCurrentState": null
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "workflow-precondition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.presence.target-before-conflict-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-CONFLICT-003"
+      ],
+      "description": "Target before conflict.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "REVIEW",
+            "DONE"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "DONE"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "REVIEW"
+            },
+            {
+              "source": "REVIEW",
+              "target": "DONE"
+            }
+          ],
+          "definitionIdentity": "invoice-flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        },
+        "target": "MISSING",
+        "expectedCurrentState": "REVIEW",
+        "expectedRevision": "stale"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_STATE"
+        },
+        "observations": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "workflow-precondition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.presence.target-before-terminal-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-ERROR-001"
+      ],
+      "description": "Target before terminal.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "REVIEW",
+            "DONE"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "DONE"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "REVIEW"
+            },
+            {
+              "source": "REVIEW",
+              "target": "DONE"
+            }
+          ],
+          "definitionIdentity": "invoice-flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DONE",
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        },
+        "target": "MISSING"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_STATE"
+        },
+        "observations": {
+          "currentState": "DONE",
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "workflow-precondition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.presence.null-revision-before-terminal-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-CONFLICT-005",
+        "WORKFLOW-CONFLICT-007"
+      ],
+      "description": "Null revision before terminal.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "REVIEW",
+            "DONE"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "DONE"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "REVIEW"
+            },
+            {
+              "source": "REVIEW",
+              "target": "DONE"
+            }
+          ],
+          "definitionIdentity": "invoice-flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DONE",
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        },
+        "target": "REVIEW",
+        "expectedRevision": null
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_STATE_CONFLICT"
+        },
+        "observations": {
+          "currentState": "DONE",
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "workflow-precondition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.presence.matching-preconditions-still-terminal-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-CONFLICT-006"
+      ],
+      "description": "Matching preconditions still terminal.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "REVIEW",
+            "DONE"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "DONE"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "REVIEW"
+            },
+            {
+              "source": "REVIEW",
+              "target": "DONE"
+            }
+          ],
+          "definitionIdentity": "invoice-flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DONE",
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        },
+        "target": "REVIEW",
+        "expectedCurrentState": "DONE",
+        "expectedRevision": "r1"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_TERMINAL_STATE"
+        },
+        "observations": {
+          "currentState": "DONE",
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "workflow-precondition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.presence.matching-preconditions-still-undeclared-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-CONFLICT-006"
+      ],
+      "description": "Matching preconditions still undeclared.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "REVIEW",
+            "DONE"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "DONE"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "REVIEW"
+            },
+            {
+              "source": "REVIEW",
+              "target": "DONE"
+            }
+          ],
+          "definitionIdentity": "invoice-flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        },
+        "target": "DONE",
+        "expectedCurrentState": "DRAFT",
+        "expectedRevision": "r1"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_TRANSITION"
+        },
+        "observations": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "workflow-precondition-error-priority-changed"
+      ]
+    },
+    {
+      "id": "workflow.presence.matching-preconditions-still-guarded-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-CONFLICT-006"
+      ],
+      "description": "Matching preconditions still guarded.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "REVIEW",
+            "DONE"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "DONE"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "REVIEW",
+              "guard": {
+                "fact": "approved",
+                "equals": true
+              }
+            },
+            {
+              "source": "REVIEW",
+              "target": "DONE"
+            }
+          ],
+          "definitionIdentity": "invoice-flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        },
+        "target": "REVIEW",
+        "expectedCurrentState": "DRAFT",
+        "expectedRevision": "r1",
+        "facts": {
+          "approved": false
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_GUARD_REJECTED"
+        },
+        "observations": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "invoice-flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1",
+          "facts": {
+            "approved": false
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "workflow-precondition-error-priority-changed"
       ]
     }
   ]
