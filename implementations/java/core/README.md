@@ -1,15 +1,25 @@
 # FinKore Java Core
 
-The development tree now includes the [Core 0.9.5 Milestone 2 regressions](../../../docs/plans/plan-09.5.md).
-They intentionally fail against unresolved native API and cross-domain defects.
-The 0.9.4 results below describe that tagged snapshot; the expanded development
-manifest is not yet passing conformance. Milestone 3 corrects Money serialization;
-its native regressions, Money conformance, and targeted mutation gates pass.
-Milestone 4 corrects Workflow supplied preconditions and error precedence.
-Milestone 5 corrects concrete Approval association, eligibility, and historical
-Decision validation; all 162 Approval vectors and targeted mutation gates pass.
-Milestone 6 corrects native Audit value ownership and cycle rejection; all 76
-Audit vectors and targeted mutation gates pass. Entity regressions remain open.
+[Core 0.9.5 Milestone 7](../../../docs/plans/plan-09.5.md) completes the
+reviewed Entity corrections. The development manifest now passes all 667 vectors
+on TypeScript, Python 3.12/3.13, and Java. The broader release verification and
+closure remain Milestones 8 and 9; the 0.9.4 results below describe that snapshot.
+
+Versioned Entity observations carry their original Workflow `binding` through
+create, import, mutation, transition, and evolution. Import requires that explicit
+binding: missing/malformed binding returns `FINKORE_WORKFLOW_INVALID_INSTANCE`,
+and a different definition/version returns `FINKORE_WORKFLOW_VERSION_MISMATCH`.
+Binding is independent of Entity identity, business revision, and conflict token.
+The bounded import API rejects equal current-revision/conflict tokens; it has no
+shared-meaning declaration mechanism. Supplied null or nonmatching expected
+State/revision/conflict tokens return `FINKORE_ENTITY_STATE_CONFLICT` after
+observed identities are validated. Omitted expectations impose no check.
+Malformed/unsupported validator declarations return
+`FINKORE_ENTITY_INVALID_MUTATION` before evaluating predicates; supported rules
+that reject financial data retain `FINKORE_ENTITY_VALIDATION_FAILED`.
+
+The stateless native API validates the supplied definition and binding on each
+call; it does not retain a declaration across unrelated calls.
 
 This package is the Java implementation track for FinKore Core 0.9 release
 candidate. It is derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`,

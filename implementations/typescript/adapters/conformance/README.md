@@ -122,3 +122,10 @@ escalation, dynamic approver resolution, authorization/RBAC, MCP,
 executable agent integrations, generic entity validation rule engines, workflow
 migration, concurrency resolution, persistence, concrete ledger reversal
 posting, or broader guard frameworks.
+
+Versioned Entity fixtures include the original Workflow `binding` inside each
+Entity observation, alongside `type`, `id`, `state`, and `data`. The adapter passes
+this observation to the core and preserves returned bindings, including evolution
+source/related values. It never reconstructs historical binding from a supplied
+definition. This is the documented bounded fixture shape, not a universal Entity
+serialization schema; see [conventions](../../../../conformance/conventions.md).

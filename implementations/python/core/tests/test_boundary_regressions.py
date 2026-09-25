@@ -10,7 +10,7 @@ from finkore import FinKoreError, Money, WorkflowDefinition, WorkflowInstance
 from finkore.workflow import create_workflow, import_workflow, transition_workflow
 from finkore.approvals import record_decision, evaluate_decision, evaluate_requirement
 from finkore.audit import append_event, validate_event, validate_history, redact_history
-from finkore.entities import create_entity, import_entity, transition_entity
+from finkore.entities import create_entity, import_entity, transition_entity, mutate_entity, evolve_entity
 
 ROOT = Path(__file__).resolve().parents[4]
 BINDING = {"definitionIdentity": "invoice-flow", "definitionVersionIdentity": "1"}
@@ -57,6 +57,8 @@ def invoke(vector):
         return create_entity(i["definition"], i["id"], i["data"])
     if op == "finkore.entity.transition":
         return transition_entity(i["definition"], i["entity"], i["target"])
+    if op == "finkore.entity.mutate":
+        return mutate_entity(i["definition"], i["entity"], i["changes"])
     if op == "entity.import":
         return import_entity(i["definition"], i["import"])
     raise AssertionError("Missing native test dispatch: " + op)
@@ -266,6 +268,44 @@ class BoundaryRegressions(unittest.TestCase):
                             self.portable_error("FINKORE_AUDIT_ACTOR_INVALID" if location == "actor" else "FINKORE_AUDIT_INVALID_EVENT", action)
                         finally:
                             self.assertEqual(history, before)
+
+    def test_entity_binding_mutation_and_reuse(self):
+        """WORKFLOW-VERSION-008/010: mutation/import retain bindings; never repair them."""
+        definition = {**deepcopy(DEFINITION), "workflow": {**deepcopy(FLOW), **BINDING}}
+        first = create_entity(definition, "invoice-1", DATA)
+        updated = mutate_entity(definition, first, {"amount": {"amount": "2", "currency": "EUR"}})
+        self.assertEqual(first["data"], DATA)
+        imported = import_entity(definition, {"entity": updated})["entity"]
+        self.assertEqual(transition_entity(definition, imported, "REVIEW")["binding"], BINDING)
+        for binding, code in ((None, "FINKORE_WORKFLOW_INVALID_INSTANCE"), ({}, "FINKORE_WORKFLOW_INVALID_INSTANCE"),
+                              ({**BINDING, "definitionVersionIdentity": "2"}, "FINKORE_WORKFLOW_VERSION_MISMATCH")):
+            candidate = {**deepcopy(imported), "binding": binding}
+            before = deepcopy(candidate)
+            for action in (lambda: mutate_entity(definition, candidate, {"amount": DATA["amount"]}),
+                           lambda: transition_entity(definition, candidate, "REVIEW")):
+                self.portable_error(code, action)
+                self.assertEqual(candidate, before)
+        updated["binding"]["definitionVersionIdentity"] = "2"
+        self.assertEqual(imported["binding"], BINDING)
+        self.assertEqual(first["binding"], BINDING)
+
+    def test_entity_declarations_before_mutation_transition_evolution(self):
+        """ENTITY-VALIDATION-009: every boundary rejects declarations before predicates."""
+        entity = create_entity(DEFINITION, "invoice-1", DATA)
+        templates = json.loads((ROOT / "conformance/entities/readiness-regressions.json").read_text())["vectors"]
+        template = next(v["input"] for v in templates if v["id"] == "entity.evolution.correct.evidence-valid-control-001")
+        for rules in (None, [None], [{"id": "X", "path": "amount", "rule": "typo"}], [{"rule": "positive-money", "path": "amount"}]):
+            bad = {**deepcopy(DEFINITION), "validation": rules}
+            for action in (lambda: mutate_entity(bad, entity, {"amount": DATA["amount"]}),
+                           lambda: transition_entity(bad, entity, "REVIEW")):
+                self.portable_error("FINKORE_ENTITY_INVALID_MUTATION", action)
+            request = deepcopy(template)
+            request["evolutionHistory"] = {"relations": request["evolutionHistory"]}
+            request["definition"]["validation"] = rules
+            before = deepcopy(request)
+            self.portable_error("FINKORE_ENTITY_INVALID_MUTATION", lambda: evolve_entity("CORRECTION", request["definition"], request))
+            self.assertEqual(request, before)
+            self.assertEqual(entity, create_entity(DEFINITION, "invoice-1", DATA))
 
     def test_audit_native_error_precedence(self):
         """AUDIT-ERROR-004: native JSON failures obey history/non-actor/actor priority."""

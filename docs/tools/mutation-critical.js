@@ -24,6 +24,83 @@ if (!validTargets.has(requestedTarget)) {
 
 const pythonMutants = [
   {
+  "id": "python-entity-create-binding-lost",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "        entity[\"binding\"] = instance.binding",
+  "to": "        pass",
+  "expectedVector": "entity.binding.versioned-create-001",
+  "expectedPassVectors": [
+    "entity.binding.unversioned-create-001"
+  ]
+},
+  {
+  "id": "python-entity-binding-validation-bypass",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "    import_workflow(workflow, _workflow_instance(entity))",
+  "to": "    pass",
+  "expectedVector": "entity.binding.import-mismatch-001",
+  "expectedPassVectors": [
+    "entity.binding.versioned-import-001"
+  ]
+},
+  {
+  "id": "python-entity-revision-conflict-conflated",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "if current_revision is not None and current_revision[\"revision\"] == conflict_version:",
+  "to": "if False:",
+  "expectedVector": "entity.import.equal-revision-conflict-token-001",
+  "expectedPassVectors": [
+    "entity.import.distinct-token-control-001"
+  ]
+},
+  {
+  "id": "python-entity-validator-unknown-skipped",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "rule.get(\"rule\") not in (\"positive-money\", \"money-not-greater-than\")",
+  "to": "False",
+  "expectedVector": "entity.declaration.unknown-create-001",
+  "expectedPassVectors": [
+    "entity.declaration.cross-field-control-001"
+  ]
+},
+  {
+  "id": "python-entity-state-null-omitted",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "if import_value.get(\"expectedState\", entity[\"state\"]) != entity[\"state\"]:",
+  "to": "if import_value.get(\"expectedState\") is not None and import_value[\"expectedState\"] != entity[\"state\"]:",
+  "expectedVector": "entity.import.presence-state-null-001",
+  "expectedPassVectors": [
+    "entity.import.presence-state-matching-control-001"
+  ]
+},
+  {
+  "id": "python-entity-revision-null-omitted",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "if \"expectedRevision\" in import_value and ",
+  "to": "if import_value.get(\"expectedRevision\") is not None and ",
+  "expectedVector": "entity.import.presence-revision-null-001",
+  "expectedPassVectors": [
+    "entity.import.presence-revision-matching-control-001"
+  ]
+},
+  {
+  "id": "python-entity-conflict-version-null-omitted",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "if \"expectedConflictVersion\" in import_value and ",
+  "to": "if import_value.get(\"expectedConflictVersion\") is not None and ",
+  "expectedVector": "entity.import.presence-conflict-version-null-001",
+  "expectedPassVectors": [
+    "entity.import.presence-conflict-version-matching-control-001"
+  ]
+},
+  {
     "id": "python-approval-missing-association-accepted",
     "suite": "approvals",
     "path": "core/src/finkore/approvals.py",
@@ -759,6 +836,83 @@ const pythonMutants = [
 ]
 
 const javaMutants = [
+  {
+  "id": "java-entity-create-binding-lost",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "if (instance.binding() != null) entity.put(\"binding\", instance.binding());",
+  "to": "// Lost binding.",
+  "expectedVector": "entity.binding.versioned-create-001",
+  "expectedPassVectors": [
+    "entity.binding.unversioned-create-001"
+  ]
+},
+  {
+  "id": "java-entity-binding-validation-bypass",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "    Workflow.importInstance(workflow, workflowInstance(value));",
+  "to": "    // Skip binding validation.",
+  "expectedVector": "entity.binding.import-mismatch-001",
+  "expectedPassVectors": [
+    "entity.binding.versioned-import-001"
+  ]
+},
+  {
+  "id": "java-entity-revision-conflict-conflated",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "if (currentRevision != null && currentRevision.get(\"revision\").equals(conflictVersion)) {",
+  "to": "if (false) {",
+  "expectedVector": "entity.import.equal-revision-conflict-token-001",
+  "expectedPassVectors": [
+    "entity.import.distinct-token-control-001"
+  ]
+},
+  {
+  "id": "java-entity-validator-unknown-skipped",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "(!\"positive-money\".equals(rule.get(\"rule\")) && !\"money-not-greater-than\".equals(rule.get(\"rule\")))",
+  "to": "false",
+  "expectedVector": "entity.declaration.unknown-create-001",
+  "expectedPassVectors": [
+    "entity.declaration.cross-field-control-001"
+  ]
+},
+  {
+  "id": "java-entity-state-null-omitted",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "if (input.containsKey(\"expectedState\")",
+  "to": "if (input.get(\"expectedState\") != null",
+  "expectedVector": "entity.import.presence-state-null-001",
+  "expectedPassVectors": [
+    "entity.import.presence-state-matching-control-001"
+  ]
+},
+  {
+  "id": "java-entity-revision-null-omitted",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "if (input.containsKey(\"expectedRevision\")",
+  "to": "if (input.get(\"expectedRevision\") != null",
+  "expectedVector": "entity.import.presence-revision-null-001",
+  "expectedPassVectors": [
+    "entity.import.presence-revision-matching-control-001"
+  ]
+},
+  {
+  "id": "java-entity-conflict-version-null-omitted",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "if (input.containsKey(\"expectedConflictVersion\")",
+  "to": "if (input.get(\"expectedConflictVersion\") != null",
+  "expectedVector": "entity.import.presence-conflict-version-null-001",
+  "expectedPassVectors": [
+    "entity.import.presence-conflict-version-matching-control-001"
+  ]
+},
   {
     "id": "java-approval-missing-association-accepted",
     "suite": "approvals",

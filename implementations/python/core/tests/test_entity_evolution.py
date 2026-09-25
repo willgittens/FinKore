@@ -9,7 +9,8 @@ from finkore import FinKoreError, evolve_entity, import_evolution_history
 
 ROOT = Path(__file__).resolve().parents[4]
 VECTORS = [vector for name in ("evolution", "readiness-regressions")
-           for vector in json.loads((ROOT / f"conformance/entities/{name}.json").read_text())["vectors"]]
+           for vector in json.loads((ROOT / f"conformance/entities/{name}.json").read_text())["vectors"]
+           if vector["operation"].startswith("finkore.entity.evolution.")]
 KINDS = {"correct": "CORRECTION", "reverse": "REVERSAL", "void": "VOID", "supersede": "SUPERSESSION"}
 
 
@@ -46,6 +47,24 @@ class EntityEvolutionTests(unittest.TestCase):
                         self.assertEqual(evolve_entity(kind, request["definition"], request), vector["expected"]["value"])
                 finally:
                     self.assertEqual(request, before)
+
+    def test_versioned_binding_failures_preserve_complete_request(self):
+        for operation, kind in KINDS.items():
+            template = next(v["input"] for v in VECTORS if v["id"] == f"entity.evolution.{operation}.versioned-binding-001")
+            for key in ("source",) if kind == "VOID" else ("source", "successor" if kind == "SUPERSESSION" else "related"):
+                for fault in ("missing", "null", "malformed", "mismatch"):
+                    with self.subTest(kind=kind, key=key, fault=fault):
+                        request = deepcopy(template)
+                        request["evolutionHistory"] = {"relations": request["evolutionHistory"]}
+                        if fault == "missing":
+                            del request[key]["binding"]
+                        else:
+                            request[key]["binding"] = None if fault == "null" else {} if fault == "malformed" else {"definitionIdentity": "invoice-workflow", "definitionVersionIdentity": "2"}
+                        before = deepcopy(request)
+                        with self.assertRaises(FinKoreError) as error:
+                            evolve_entity(kind, request["definition"], request)
+                        self.assertEqual(error.exception.code, "FINKORE_WORKFLOW_VERSION_MISMATCH" if fault == "mismatch" else "FINKORE_WORKFLOW_INVALID_INSTANCE")
+                        self.assertEqual(request, before)
 
     def test_cross_field_validation_of_complete_observations(self):
         for operation, kind in KINDS.items():

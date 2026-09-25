@@ -27,6 +27,7 @@ public final class EntityEvolutionTest {
       input.put("evolutionHistory", Map.of("relations", input.getOrDefault("evolutionHistory", List.of())));
       Object before = copy(input);
       String operation = (String) vector.get("operation");
+      if (!operation.startsWith("finkore.entity.evolution.")) continue;
       String kind = kinds.get(operation.substring(operation.lastIndexOf('.') + 1));
       Map<String, Object> expected = map(vector.get("expected"));
       try {
@@ -37,10 +38,29 @@ public final class EntityEvolutionTest {
         throw new AssertionError(vector.get("id") + ": " + failure.getMessage(), failure);
       } finally { equal(before, input); }
     }
+    bindingFailures(vectors, kinds);
     crossField(vectors, kinds);
     historyImport(vectors);
     explicitSuccessorEffect();
     System.out.println("Java native Entity evolution regressions passed.");
+  }
+
+  private static void bindingFailures(List<Map<String, Object>> vectors, Map<String, String> kinds) {
+    for (Map.Entry<String, String> operation : kinds.entrySet()) {
+      Map<String, Object> template = input(vectors, "entity.evolution." + operation.getKey() + ".versioned-binding-001");
+      List<String> keys = "VOID".equals(operation.getValue()) ? List.of("source") : List.of("source", "SUPERSESSION".equals(operation.getValue()) ? "successor" : "related");
+      for (String key : keys) for (String fault : List.of("missing", "null", "malformed", "mismatch")) {
+        Map<String, Object> request = map(copy(template));
+        request.put("evolutionHistory", Map.of("relations", request.get("evolutionHistory")));
+        Map<String, Object> entity = map(request.get(key));
+        if ("missing".equals(fault)) entity.remove("binding");
+        else entity.put("binding", "null".equals(fault) ? null : "malformed".equals(fault) ? Map.of() : Map.of("definitionIdentity", "invoice-workflow", "definitionVersionIdentity", "2"));
+        Object before = copy(request);
+        error("mismatch".equals(fault) ? Workflow.VERSION_MISMATCH : Workflow.INVALID_INSTANCE,
+            () -> Entities.evolve(operation.getValue(), request.get("definition"), request));
+        equal(before, request);
+      }
+    }
   }
 
   private static void crossField(List<Map<String, Object>> vectors, Map<String, String> kinds) {

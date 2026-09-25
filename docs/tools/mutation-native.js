@@ -17,6 +17,30 @@ const integration = 'test/integration/readiness-regressions.test.ts'
 const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const probes = [
   {
+  "id": "typescript-entity-definition-input-alias",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "workflow: cloneJsonValue(input.workflow)",
+  "to": "workflow: input.workflow",
+  "target": "Entity result reuse and retained declarations create: rejects an undeclared transition after changing input transitions",
+  "control": "Entity result reuse and retained declarations new independently declared Entity control uses its own transitions",
+  "tests": [
+    "test/entities/boundaries.test.ts"
+  ]
+},
+  {
+  "id": "typescript-entity-definition-observation-alias",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "return cloneJsonValue(this.retainedDefinition)",
+  "to": "return this.retainedDefinition",
+  "target": "Entity result reuse and retained declarations from: preserves rejected data after changing observation validators",
+  "control": "Entity result reuse and retained declarations new independently declared Entity control uses its own transitions",
+  "tests": [
+    "test/entities/boundaries.test.ts"
+  ]
+},
+  {
     "id": "python-audit-cycle-silently-accepted",
     "language": "python",
     "path": "audit.py",

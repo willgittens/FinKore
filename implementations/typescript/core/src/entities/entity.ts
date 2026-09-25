@@ -48,7 +48,7 @@ function validateDefinition(input: unknown): EntityDefinition {
   return {
     type: requiredString(input.type),
     identityScope: requiredString(input.identityScope),
-    workflow: input.workflow,
+    workflow: cloneJsonValue(input.workflow),
     mutability: validateMutability(input.mutability),
     validation: validateValidationRules(input.validation),
   }
@@ -109,10 +109,17 @@ function validateSerializedEntity(definition: EntityDefinition, input: unknown):
   const type = requiredString(input.type)
   const id = requiredString(input.id)
   if (type !== definition.type) throw new InvalidEntityIdentityError()
+  const state = requiredString(input.state)
+  const workflow = Workflow.from(definition.workflow, {
+    currentState: state,
+    ...(Object.hasOwn(input, 'binding') ? { binding: input.binding } : {}),
+  })
+  const binding = workflow.versionBinding()
   return {
     type,
     id,
-    state: requiredString(input.state),
+    state,
+    ...(binding === undefined ? {} : { binding }),
     data: cloneJsonValue(input.data),
   }
 }
@@ -186,7 +193,6 @@ function assertExpected(value: unknown, expected: unknown): void {
 function validateEntityImportResult(definition: EntityDefinition, input: unknown): EntityImportResult {
   if (!isPlainRecord(input) || !Object.hasOwn(input, 'entity')) throw new InvalidEntityIdentityError()
   const entity = validateSerializedEntity(definition, input.entity)
-  Workflow.from(definition.workflow, { currentState: entity.state })
   mutableFieldsFor(definition, entity.state)
   assertValidEntityData(definition, entity.data)
 
@@ -280,6 +286,14 @@ function assertValidEntityData(definition: EntityDefinition, data: unknown): voi
  * predicates. The latter compares two declared top-level Money fields in the
  * complete proposed data using exact, compatible-currency ordering.
  *
+ * Existing instances own their declarations; exposed definition observations
+ * cannot reconfigure them. Versioned Workflow bindings are retained unchanged.
+ * Unsupported or malformed validators fail with FINKORE_ENTITY_INVALID_MUTATION
+ * before predicates run; rejected data uses FINKORE_ENTITY_VALIDATION_FAILED.
+ *
+ * @see ENTITY-DEFINITION-002
+ * @see ENTITY-VALIDATION-009
+ * @see WORKFLOW-VERSION-008
  * @see ENTITY-IDENTITY-001
  * @see ENTITY-IDENTITY-002
  * @see ENTITY-IDENTITY-003
@@ -299,13 +313,21 @@ function assertValidEntityData(definition: EntityDefinition, data: unknown): voi
  * @see ENTITY-VALIDATION-006
  */
 export class FinancialEntity {
-  /** Validated Entity definition governing this entity. */
-  readonly definition: EntityDefinition
+  private readonly retainedDefinition: EntityDefinition
+
+  /**
+   * Returns a defensive observation of this Entity's governing declarations.
+   * Changing original inputs or this observation cannot reconfigure the Entity.
+   * @see ENTITY-DEFINITION-002
+   */
+  get definition(): EntityDefinition {
+    return cloneJsonValue(this.retainedDefinition)
+  }
 
   private readonly value: SerializedFinancialEntity
 
   private constructor(definition: EntityDefinition, value: SerializedFinancialEntity) {
-    this.definition = definition
+    this.retainedDefinition = definition
     this.value = value
   }
 
@@ -313,12 +335,17 @@ export class FinancialEntity {
    * Creates a new Financial Entity in its referenced Workflow's initial state.
    *
    * Identity is supplied by the caller and preserved exactly; this method never
-   * generates, normalizes, or replaces it.
+   * generates, normalizes, or replaces it. A versioned Workflow supplies the
+   * original binding, retained in every subsequent Entity observation.
    *
    * @param definitionInput - Candidate composing-domain Entity definition.
    * @param id - Caller-supplied stable entity identifier.
    * @param data - Initial composing-domain data carried without interpretation.
    * @returns A new Financial Entity in the Workflow initial state.
+   * @throws {InvalidEntityMutationError}
+   * When validator declarations are malformed or unsupported.
+   * @throws {EntityValidationFailedError}
+   * When declared predicates reject the initial data.
    * @throws {InvalidEntityIdentityError}
    * When Entity type, identity scope, or entity identifier is missing or
    * malformed.
@@ -336,10 +363,12 @@ export class FinancialEntity {
     const workflow = Workflow.create(definition.workflow)
     mutableFieldsFor(definition, workflow.currentState)
     assertValidEntityData(definition, data)
+    const binding = workflow.versionBinding()
     return new FinancialEntity(definition, {
       type: definition.type,
       id: requiredString(id),
       state: workflow.currentState,
+      ...(binding === undefined ? {} : { binding }),
       data: cloneJsonValue(data),
     })
   }
@@ -350,6 +379,8 @@ export class FinancialEntity {
    * The supplied state must be exactly one state declared by the referenced
    * Workflow. This method is for conformance/import boundaries and does not
    * infer identity from object position or regenerate missing identifiers.
+   * Versioned observations must supply their original binding; this method never
+   * derives a historical binding from the supplied definition.
    *
    * @param definitionInput - Candidate composing-domain Entity definition.
    * @param entityInput - Existing serialized Entity observation.
@@ -359,6 +390,14 @@ export class FinancialEntity {
    * definition.
    * @throws {InvalidWorkflowStateError}
    * When the current lifecycle state is missing or undeclared.
+   * @throws {InvalidWorkflowInstanceError}
+   * When a versioned observation has missing or malformed binding.
+   * @throws {WorkflowVersionMismatchError}
+   * When the original binding differs from the referenced definition/version.
+   * @throws {InvalidEntityMutationError}
+   * When validator declarations are malformed or unsupported.
+   * @throws {EntityValidationFailedError}
+   * When declared predicates reject the complete Entity data.
    *
    * @see FINKORE_ENTITY_INVALID_IDENTITY
    * @see FINKORE_WORKFLOW_INVALID_STATE
@@ -368,7 +407,6 @@ export class FinancialEntity {
   static from(definitionInput: unknown, entityInput: unknown): FinancialEntity {
     const definition = validateDefinition(definitionInput)
     const entity = validateSerializedEntity(definition, entityInput)
-    Workflow.from(definition.workflow, { currentState: entity.state })
     mutableFieldsFor(definition, entity.state)
     assertValidEntityData(definition, entity.data)
     return new FinancialEntity(definition, entity)
@@ -383,7 +421,11 @@ export class FinancialEntity {
    * historical Entity Revisions are preserved as business revision identity,
    * while the optional conflict version remains a distinct stale-observation
    * token. Expected state, revision, and conflict-version preconditions are
-   * checked after the supplied observation is structurally valid.
+   * checked independently after the supplied observation is structurally valid.
+   * Supplied null expectations do not match; omitted expectations impose no check.
+   * This bounded import API rejects equal current-revision/conflict tokens and
+   * has no composing-domain shared-meaning declaration mechanism.
+   * The original Workflow binding is required for a versioned observation.
    *
    * @param definitionInput - Candidate composing-domain Entity definition.
    * @param importInput - Existing Entity import observation and optional
@@ -396,6 +438,12 @@ export class FinancialEntity {
    * @throws {EntityStateConflictError}
    * When an expected state, revision, or conflict version does not match the
    * supplied observation.
+   * @throws {InvalidWorkflowInstanceError}
+   * When a versioned observation has missing or malformed binding.
+   * @throws {WorkflowVersionMismatchError}
+   * When the original binding differs from the referenced definition/version.
+   * @throws {InvalidEntityMutationError}
+   * When validator declarations are malformed or unsupported.
    * @throws {EntityValidationFailedError}
    * When the complete supplied Entity observation violates a declared
    * validation rule for its current state.
@@ -461,7 +509,10 @@ export class FinancialEntity {
    * @see ENTITY-ERROR-004
    */
   transition(target: unknown): FinancialEntity {
-    const workflow = Workflow.from(this.definition.workflow, { currentState: this.value.state })
+    const workflow = Workflow.from(this.retainedDefinition.workflow, {
+      currentState: this.value.state,
+      ...(this.value.binding === undefined ? {} : { binding: this.value.binding }),
+    })
     if (
       typeof target === 'string' &&
       !workflow.definition.isTerminalState(workflow.currentState) &&
@@ -470,7 +521,7 @@ export class FinancialEntity {
       throw new InvalidWorkflowTransitionError()
     }
     workflow.transition(target)
-    return new FinancialEntity(this.definition, { ...this.value, state: workflow.currentState })
+    return new FinancialEntity(this.retainedDefinition, { ...this.value, state: workflow.currentState })
   }
 
   /**
@@ -517,7 +568,7 @@ export class FinancialEntity {
   mutate(changesInput: unknown): FinancialEntity {
     if (!isPlainRecord(this.value.data)) throw new InvalidEntityMutationError()
     const changes = validateChanges(changesInput)
-    const mutableFields = mutableFieldsFor(this.definition, this.value.state)
+    const mutableFields = mutableFieldsFor(this.retainedDefinition, this.value.state)
 
     for (const field of Object.keys(changes)) {
       if (field === 'id' || field === 'type' || field === 'state' || !mutableFields.has(field)) {
@@ -526,8 +577,8 @@ export class FinancialEntity {
     }
 
     const data = cloneJsonValue({ ...this.value.data, ...changes })
-    assertValidEntityData(this.definition, data)
-    return new FinancialEntity(this.definition, { ...this.value, data })
+    assertValidEntityData(this.retainedDefinition, data)
+    return new FinancialEntity(this.retainedDefinition, { ...this.value, data })
   }
 
   /**
@@ -547,14 +598,14 @@ export class FinancialEntity {
    * @see ENTITY-VALIDATION-008
    */
   validate(): EntityValidationResult {
-    return cloneJsonValue(validateEntityData(this.definition, this.value.data))
+    return cloneJsonValue(validateEntityData(this.retainedDefinition, this.value.data))
   }
 
   /**
    * Returns the portable Entity observation.
    *
    * The returned value is a defensive copy. Mutating it cannot modify this
-   * Entity's stable identity, lifecycle state, or data.
+   * Entity's stable identity, lifecycle state, Workflow binding, or data.
    *
    * @returns Serialized Financial Entity content.
    *

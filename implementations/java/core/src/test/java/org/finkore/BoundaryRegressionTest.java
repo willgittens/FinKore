@@ -82,6 +82,8 @@ public final class BoundaryRegressionTest {
     });
     cases.put("entity.sequence.unversioned-control", () -> entitySequence(false));
     cases.put("entity.sequence.versioned", () -> entitySequence(true));
+    cases.put("entity.binding.mutation-reuse", BoundaryRegressionTest::entityBindingReuse);
+    cases.put("entity.declaration.operation-boundaries", BoundaryRegressionTest::entityDeclarationBoundaries);
     cases.put("approval.sequence.control", () -> approvalSequence(false));
     cases.put("approval.sequence.missing-association", () -> approvalSequence(true));
     Map<String, Object> approvalVectors = map(Json.parse(Files.readString(root.resolve("conformance/approvals/readiness-regressions.json"))));
@@ -125,6 +127,7 @@ public final class BoundaryRegressionTest {
       }
       case "finkore.entity.create" -> Entities.create(input.get("definition"), input.get("id"), input.get("data"));
       case "finkore.entity.transition" -> Entities.transition(input.get("definition"), input.get("entity"), input.get("target"));
+      case "finkore.entity.mutate" -> Entities.mutate(input.get("definition"), input.get("entity"), input.get("changes"));
       case "entity.import" -> Entities.importEntity(input.get("definition"), input.get("import"));
       default -> throw new AssertionError("Missing native dispatch " + vector.get("operation"));
     };
@@ -227,6 +230,37 @@ public final class BoundaryRegressionTest {
 
   private static Map<String, Object> event() {
     return new LinkedHashMap<>(Map.of("eventId", "event-1", "eventType", "ENTITY_CHANGED", "entity", Map.of("type", "invoice", "id", "invoice-1"), "occurredAt", "2026-09-01T12:00:00Z"));
+  }
+
+  private static void entityBindingReuse() {
+    Map<String, Object> definition = definition(true);
+    Map<String, Object> first = Entities.create(definition, "invoice-1", Map.of("amount", Map.of("amount", "1", "currency", "EUR")));
+    Object firstBefore = copy(first);
+    Map<String, Object> updated = Entities.mutate(definition, first, Map.of("amount", Map.of("amount", "2", "currency", "EUR")));
+    Map<String, Object> imported = map(Entities.importEntity(definition, Map.of("entity", updated)).get("entity"));
+    equal(binding(), Entities.transition(definition, imported, "REVIEW").get("binding"));
+    for (Object binding : java.util.Arrays.asList(null, Map.of(), Map.of("definitionIdentity", "invoice-flow", "definitionVersionIdentity", "2"))) {
+      Map<String, Object> candidate = map(copy(imported)); candidate.put("binding", binding);
+      Object before = copy(candidate);
+      String code = binding instanceof Map<?, ?> map && !map.isEmpty() ? Workflow.VERSION_MISMATCH : Workflow.INVALID_INSTANCE;
+      error(code, () -> Entities.mutate(definition, candidate, Map.of("amount", Map.of("amount", "3", "currency", "EUR"))));
+      error(code, () -> Entities.transition(definition, candidate, "REVIEW")); equal(before, candidate);
+    }
+    map(updated.get("binding")).put("definitionVersionIdentity", "2");
+    equal(binding(), imported.get("binding")); equal(firstBefore, first);
+  }
+
+  private static void entityDeclarationBoundaries() {
+    Map<String, Object> definition = new LinkedHashMap<>(definition(false));
+    Map<String, Object> entity = Entities.create(definition, "invoice-1", Map.of("amount", Map.of("amount", "1", "currency", "EUR")));
+    Object before = copy(entity);
+    for (Object rules : java.util.Arrays.asList(null, java.util.Arrays.asList((Object) null), List.of(Map.of("id", "X", "path", "amount", "rule", "typo")), List.of(Map.of("path", "amount", "rule", "positive-money")))) {
+      definition.put("validation", rules);
+      error(Entities.INVALID_MUTATION, () -> Entities.mutate(definition, entity, Map.of("amount", Map.of("amount", "2", "currency", "EUR"))));
+      error(Entities.INVALID_MUTATION, () -> Entities.transition(definition, entity, "REVIEW"));
+      error(Entities.INVALID_MUTATION, () -> Entities.evolve("CORRECTION", definition, Map.of("source", entity)));
+      equal(before, entity);
+    }
   }
 
   private static Map<String, Object> eventWith(String location, Object value) {

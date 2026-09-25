@@ -1,12 +1,27 @@
 # FinKore TypeScript
 
-The development tree now includes the [Core 0.9.5 Milestone 2 regressions](../../../docs/plans/plan-09.5.md).
-They intentionally fail against unresolved native API and cross-domain defects.
-The 0.9.4 results below describe that tagged snapshot; the expanded development
-manifest is not yet passing conformance. No correction is claimed until its
-regressions and mutation gates pass. Milestone 5 confirms all 162 Approval
-vectors against the existing TypeScript APIs; remaining TypeScript conformance
-failures are Entity binding cases for Milestone 7.
+[Core 0.9.5 Milestone 7](../../../docs/plans/plan-09.5.md) completes the
+reviewed Entity corrections. The development manifest now passes all 667 vectors
+on TypeScript, Python 3.12/3.13, and Java. The broader release verification and
+closure remain Milestones 8 and 9; the 0.9.4 results below describe that snapshot.
+
+Versioned Entity observations carry their original Workflow `binding` through
+create, import, mutation, transition, and evolution. Import requires that explicit
+binding: missing/malformed binding returns `FINKORE_WORKFLOW_INVALID_INSTANCE`,
+and a different definition/version returns `FINKORE_WORKFLOW_VERSION_MISMATCH`.
+Binding is independent of Entity identity, business revision, and conflict token.
+The bounded import API rejects equal current-revision/conflict tokens; it has no
+shared-meaning declaration mechanism. Supplied null or nonmatching expected
+State/revision/conflict tokens return `FINKORE_ENTITY_STATE_CONFLICT` after
+observed identities are validated. Omitted expectations impose no check.
+Malformed/unsupported validator declarations return
+`FINKORE_ENTITY_INVALID_MUTATION` before evaluating predicates; supported rules
+that reject financial data retain `FINKORE_ENTITY_VALIDATION_FAILED`.
+
+`FinancialEntity` owns the governing Workflow, guards, mutability, and validator
+declarations. Its `definition` getter and `toJSON()` return defensive observations;
+editing either cannot reconfigure an existing Entity. `SerializedFinancialEntity`
+includes optional `binding` for versioned Workflows.
 
 TypeScript reference implementation for FinKore Core 0.9 release candidate:
 Money, Workflow, Audit, Approvals, and Entities.

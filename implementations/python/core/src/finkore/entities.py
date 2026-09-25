@@ -10,7 +10,7 @@ from typing import Any
 from .audit import append_event
 from .errors import FinKoreError
 from .money import Money
-from .workflow import WorkflowDefinition, WorkflowInstance, create_workflow, transition_workflow
+from .workflow import WorkflowDefinition, WorkflowInstance, create_workflow, import_workflow, transition_workflow
 
 INVALID_IDENTITY = "FINKORE_ENTITY_INVALID_IDENTITY"
 IMMUTABLE = "FINKORE_ENTITY_IMMUTABLE"
@@ -97,43 +97,81 @@ def _currentness(relations: list[dict[str, Any]]) -> dict[tuple[Any, str, str, s
 
 
 def validate_definition(definition: Any) -> dict[str, Any]:
-    """Validate an Entity definition and referenced Workflow."""
+    """Validate the Workflow and every bounded validator before any predicate.
+
+    Malformed/unsupported declarations raise FINKORE_ENTITY_INVALID_MUTATION;
+    supported predicates rejecting data use FINKORE_ENTITY_VALIDATION_FAILED.
+    See ENTITY-VALIDATION-009.
+    """
 
     if not isinstance(definition, dict) or not _opaque(definition.get("type")):
         raise FinKoreError(INVALID_IDENTITY)
     WorkflowDefinition.from_portable(definition.get("workflow"))
     if not isinstance(definition.get("mutability", {}), dict):
         raise FinKoreError(INVALID_MUTATION)
+    rules = definition.get("validation", [])
+    if not isinstance(rules, list):
+        raise FinKoreError(INVALID_MUTATION)
+    for rule in rules:
+        if (not isinstance(rule, dict) or rule.get("rule") not in ("positive-money", "money-not-greater-than")
+                or not _opaque(rule.get("id")) or not _opaque(rule.get("path"))
+                or (rule["rule"] == "money-not-greater-than" and not _opaque(rule.get("otherPath")))):
+            raise FinKoreError(INVALID_MUTATION)
     return deepcopy(definition)
 
 
 def validate_entity(definition: dict[str, Any], entity: Any) -> dict[str, Any]:
-    """Validate one Entity observation."""
+    """Validate an Entity and its explicitly retained Workflow binding.
+
+    Versioned observations require binding; missing/malformed bindings use
+    FINKORE_WORKFLOW_INVALID_INSTANCE and mismatches use
+    FINKORE_WORKFLOW_VERSION_MISMATCH. No binding is inferred from a definition.
+    See WORKFLOW-VERSION-007/008/010 and ENTITY-IMPORT-002.
+    """
 
     if not isinstance(entity, dict) or entity.get("type") != definition["type"] or not _opaque(entity.get("id")):
         raise FinKoreError(INVALID_IDENTITY)
     workflow = WorkflowDefinition.from_portable(definition["workflow"])
-    if not isinstance(entity.get("state"), str) or entity["state"] not in workflow.states:
+    if not isinstance(entity.get("state"), str):
         raise FinKoreError("FINKORE_WORKFLOW_INVALID_STATE")
+    import_workflow(workflow, _workflow_instance(entity))
     if not isinstance(entity.get("data"), dict):
         raise FinKoreError(VALIDATION_FAILED)
     return deepcopy(entity)
 
 
+def _workflow_instance(entity: dict[str, Any]) -> WorkflowInstance:
+    # Translate the retained observation; never infer binding from a definition.
+    return WorkflowInstance.from_portable({"currentState": entity["state"], **(
+        {"binding": entity["binding"]} if "binding" in entity else {})})
+
+
 def create_entity(definition: Any, entity_id: Any, data: Any) -> dict[str, Any]:
-    """Create an Entity in the referenced Workflow initial State."""
+    """Create an Entity with the Workflow initial State and original binding.
+
+    Returns owned data without mutating inputs. See ENTITY-LIFECYCLE-001/002
+    and WORKFLOW-VERSION-007/008; validator errors follow validate_definition.
+    """
 
     entity_definition = validate_definition(definition)
     if not _opaque(entity_id) or not isinstance(data, dict):
         raise FinKoreError(INVALID_IDENTITY)
     workflow = WorkflowDefinition.from_portable(entity_definition["workflow"])
-    entity = {"type": entity_definition["type"], "id": entity_id, "state": create_workflow(workflow).current_state, "data": deepcopy(data)}
+    instance = create_workflow(workflow)
+    entity = {"type": entity_definition["type"], "id": entity_id, "state": instance.current_state, "data": deepcopy(data)}
+    if instance.binding is not None:
+        entity["binding"] = instance.binding
     _validate_entity_data(entity_definition, entity)
     return entity
 
 
 def mutate_entity(definition: Any, entity: Any, changes: Any) -> dict[str, Any]:
-    """Apply a declared Entity mutation without changing the source value."""
+    """Apply declared changes, preserving identity, State and Workflow binding.
+
+    Validate the supplied definition and original binding on each call; failure
+    leaves the source unchanged. See ENTITY-MUTABILITY-002/004 and
+    WORKFLOW-VERSION-008/010.
+    """
 
     entity_definition = validate_definition(definition)
     current = validate_entity(entity_definition, entity)
@@ -151,14 +189,18 @@ def mutate_entity(definition: Any, entity: Any, changes: Any) -> dict[str, Any]:
 
 
 def transition_entity(definition: Any, entity: Any, target: Any) -> dict[str, Any]:
-    """Transition an Entity through its referenced Workflow."""
+    """Transition through the bound Workflow without changing source or binding.
+
+    Validate declarations and the original binding before transition. See
+    ENTITY-LIFECYCLE-003 and WORKFLOW-VERSION-008/010.
+    """
 
     entity_definition = validate_definition(definition)
     current = validate_entity(entity_definition, entity)
     workflow = WorkflowDefinition.from_portable(entity_definition["workflow"])
     if target not in workflow.states:
         raise FinKoreError("FINKORE_WORKFLOW_INVALID_TRANSITION")
-    result = transition_workflow(workflow, WorkflowInstance(current["state"]), target)
+    result = transition_workflow(workflow, _workflow_instance(current), target)
     transitioned = deepcopy(current)
     transitioned["state"] = result.current_state
     _validate_entity_data(entity_definition, transitioned)
@@ -168,6 +210,15 @@ def transition_entity(definition: Any, entity: Any, target: Any) -> dict[str, An
 def import_entity(definition: Any, import_value: Any) -> dict[str, Any]:
     """Validate and preserve a complete imported Entity observation.
 
+    Require the original versioned Workflow binding; never infer it. The bounded
+    API rejects equal current-revision/conflict tokens with INVALID_IDENTITY;
+    it exposes no shared-meaning declaration. Omitted expectations impose no
+    check; supplied null, missing observed, and nonmatching expected identities
+    use STATE_CONFLICT. No input is mutated on success or failure.
+
+    @see ENTITY-IMPORT-007
+    @see ENTITY-VALIDATION-009
+    @see WORKFLOW-VERSION-008/010
     @see ENTITY-IMPORT-002
     @see ENTITY-IMPORT-008
     @see ENTITY-VALIDATION-004
@@ -194,13 +245,15 @@ def import_entity(definition: Any, import_value: Any) -> dict[str, Any]:
     if len({revision["revision"] for revision in revisions}) != len(revisions):
         raise FinKoreError(INVALID_IDENTITY)
     conflict_version = import_value.get("conflictVersion")
-    if conflict_version is not None and not _opaque(conflict_version):
+    if "conflictVersion" in import_value and not _opaque(conflict_version):
+        raise FinKoreError(INVALID_IDENTITY)
+    if current_revision is not None and current_revision["revision"] == conflict_version:
         raise FinKoreError(INVALID_IDENTITY)
     if import_value.get("expectedState", entity["state"]) != entity["state"]:
         raise FinKoreError(STATE_CONFLICT)
     if "expectedRevision" in import_value and (current_revision is None or import_value["expectedRevision"] != current_revision["revision"]):
         raise FinKoreError(STATE_CONFLICT)
-    if "expectedConflictVersion" in import_value and import_value["expectedConflictVersion"] != conflict_version:
+    if "expectedConflictVersion" in import_value and (conflict_version is None or import_value["expectedConflictVersion"] != conflict_version):
         raise FinKoreError(STATE_CONFLICT)
     result: dict[str, Any] = {"entity": entity}
     if current_revision is not None:

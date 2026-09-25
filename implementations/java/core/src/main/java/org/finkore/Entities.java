@@ -17,6 +17,13 @@ import java.util.Set;
  * They preserve caller-supplied opaque identity and delegate referenced
  * Workflow, Money, and Audit behavior to their domain implementations.
  *
+ * Versioned observations carry their original Workflow binding on every call;
+ * missing/malformed bindings use WORKFLOW_INVALID_INSTANCE and mismatches use
+ * WORKFLOW_VERSION_MISMATCH. Stateless calls never infer historical binding.
+ * All bounded validator declarations are checked before predicates: malformed
+ * declarations use INVALID_MUTATION; rejected financial data uses VALIDATION_FAILED.
+ * @see "WORKFLOW-VERSION-007/008/010"
+ * @see "ENTITY-VALIDATION-009"
  * @see <a href="../../../../../../spec/entities/identity.md">ENTITY-IDENTITY-001</a>
  * @see <a href="../../../../../../spec/entities/lifecycle.md">ENTITY-LIFECYCLE-001</a>
  * @see <a href="../../../../../../spec/entities/evolution.md">ENTITY-EVOLUTION-001</a>
@@ -36,7 +43,8 @@ public final class Entities {
   private Entities() {}
 
   /**
-   * Creates a Financial Entity in its referenced Workflow initial state.
+   * Creates a Financial Entity in its referenced Workflow initial state with
+   * the original binding. Returned observations own their data.
    *
    * @param definition portable Entity definition
    * @param entityId caller-supplied stable Entity identity
@@ -52,14 +60,17 @@ public final class Entities {
     Map<String, Object> entity = new LinkedHashMap<>();
     entity.put("type", entityDefinition.get("type"));
     entity.put("id", entityId);
-    entity.put("state", Workflow.create(workflow).currentState());
+    Workflow.Instance instance = Workflow.create(workflow);
+    entity.put("state", instance.currentState());
+    if (instance.binding() != null) entity.put("binding", instance.binding());
     entity.put("data", stringObjectMap(dataMap, VALIDATION_FAILED));
     validateEntityData(entityDefinition, entity);
     return copyMap(entity, INVALID_IDENTITY);
   }
 
   /**
-   * Applies declared mutable data changes without mutating the supplied Entity.
+   * Applies declared mutable data changes without mutating the supplied Entity
+   * or changing its original Workflow binding.
    *
    * @param definition portable Entity definition
    * @param entity current Entity observation
@@ -94,7 +105,7 @@ public final class Entities {
 
   /**
    * Transitions an Entity through the referenced Workflow without changing its
-   * identity or data.
+   * identity, data, or original Workflow binding.
    *
    * @param definition portable Entity definition
    * @param entity current Entity observation
@@ -110,7 +121,7 @@ public final class Entities {
     }
     Workflow.Instance transitioned = Workflow.transition(
         workflow,
-        new Workflow.Instance((String) current.get("state"), null, null),
+        workflowInstance(current),
         target,
         null);
     Map<String, Object> result = copyMap(current, INVALID_IDENTITY);
@@ -121,7 +132,13 @@ public final class Entities {
 
   /**
    * Validates the complete imported Entity observation and preserves its source
-   * mapping, revisions, and conflict-version context.
+   * mapping, original Workflow binding, revisions, and conflict-version context.
+   * The bounded API rejects equal current-revision/conflict tokens with
+   * INVALID_IDENTITY; it has no shared-meaning declaration mechanism.
+   * Omitted expectations impose no check. Supplied null or nonmatching expected
+   * State/revision/conflict tokens use STATE_CONFLICT after identities validate.
+   * Missing observed revision/conflict tokens cannot match an expectation.
+   * Failure leaves the supplied observation unchanged.
    *
    * @param definition portable Entity definition
    * @param importValue import request observation
@@ -159,17 +176,20 @@ public final class Entities {
     revisions.addAll(historical);
     ensureUniqueRevisions(revisions);
     Object conflictVersion = input.get("conflictVersion");
-    if (conflictVersion != null && !opaque(conflictVersion)) {
+    if (input.containsKey("conflictVersion") && !opaque(conflictVersion)) {
       throw new FinKoreException(INVALID_IDENTITY);
     }
-    if (!input.getOrDefault("expectedState", entity.get("state")).equals(entity.get("state"))) {
+    if (currentRevision != null && currentRevision.get("revision").equals(conflictVersion)) {
+      throw new FinKoreException(INVALID_IDENTITY);
+    }
+    if (input.containsKey("expectedState") && !entity.get("state").equals(input.get("expectedState"))) {
       throw new FinKoreException(STATE_CONFLICT);
     }
     if (input.containsKey("expectedRevision")
-        && (currentRevision == null || !input.get("expectedRevision").equals(currentRevision.get("revision")))) {
+        && (currentRevision == null || !currentRevision.get("revision").equals(input.get("expectedRevision")))) {
       throw new FinKoreException(STATE_CONFLICT);
     }
-    if (input.containsKey("expectedConflictVersion") && !input.get("expectedConflictVersion").equals(conflictVersion)) {
+    if (input.containsKey("expectedConflictVersion") && (conflictVersion == null || !conflictVersion.equals(input.get("expectedConflictVersion")))) {
       throw new FinKoreException(STATE_CONFLICT);
     }
     Map<String, Object> result = new LinkedHashMap<>();
@@ -425,8 +445,16 @@ public final class Entities {
       throw new FinKoreException(INVALID_MUTATION);
     }
     Object validation = entityDefinition.getOrDefault("validation", List.of());
-    if (!(validation instanceof List<?>)) {
-      throw new FinKoreException(VALIDATION_FAILED);
+    if (!(validation instanceof List<?> rules)) {
+      throw new FinKoreException(INVALID_MUTATION);
+    }
+    for (Object candidate : rules) {
+      if (!(candidate instanceof Map<?, ?> rule)
+          || (!"positive-money".equals(rule.get("rule")) && !"money-not-greater-than".equals(rule.get("rule")))
+          || !opaque(rule.get("id")) || !opaque(rule.get("path"))
+          || ("money-not-greater-than".equals(rule.get("rule")) && !opaque(rule.get("otherPath")))) {
+        throw new FinKoreException(INVALID_MUTATION);
+      }
     }
     return copyMap(entityDefinition, INVALID_IDENTITY);
   }
@@ -440,15 +468,23 @@ public final class Entities {
       throw new FinKoreException(INVALID_IDENTITY);
     }
     Workflow.Definition workflow = Workflow.Definition.fromPortable(definition.get("workflow"));
-    if (!(value.get("state") instanceof String state) || !workflow.states().contains(state)) {
+    if (!(value.get("state") instanceof String)) {
       throw new FinKoreException(Workflow.INVALID_STATE);
     }
+    Workflow.importInstance(workflow, workflowInstance(value));
     if (!(value.get("data") instanceof Map<?, ?>)) {
       throw new FinKoreException(VALIDATION_FAILED);
     }
     Map<String, Object> result = copyMap(value, INVALID_IDENTITY);
     validateEntityData(definition, result);
     return result;
+  }
+
+  private static Workflow.Instance workflowInstance(Map<String, Object> entity) {
+    Map<String, Object> observation = new LinkedHashMap<>();
+    observation.put("currentState", entity.get("state"));
+    if (entity.containsKey("binding")) observation.put("binding", entity.get("binding"));
+    return Workflow.Instance.fromPortable(observation);
   }
 
   private static void validateEntityData(Map<String, Object> definition, Map<String, Object> entity) {

@@ -758,37 +758,105 @@ AGENTS.md, CoreDoc, release note, or package version change is required.
 
 ## Milestone 7 — Entity binding, identity, and definition boundaries
 
-- [ ] Implement the reviewed versioned Entity binding contract across TypeScript,
+- [x] Implement the reviewed versioned Entity binding contract across TypeScript,
       Python, and Java. Creation, reconstruction/import, lifecycle transitions,
       and relevant evolution observations must preserve the original binding.
       Reject mismatches without selecting a new definition as a repair.
-- [ ] Preserve binding through returned observations and subsequent operations;
+- [x] Preserve binding through returned observations and subsequent operations;
       keep it distinct from Entity identity, business revision, and conflict
       version. Update fixture translation and serialization documentation only
       under the approved compatibility decision.
-- [ ] Correct revision/conflict identity handling in Python and Java according
+- [x] Correct revision/conflict identity handling in Python and Java according
       to the bounded contract, retaining any specified shared-meaning exception.
       Test independent expected-revision and expected-conflict-version checks.
-- [ ] Replace Java null-precondition crashes with the reviewed portable
+- [x] Replace Java null-precondition crashes with the reviewed portable
       outcomes. Cover omission, null, malformed, matching, mismatching, and
       missing-observation cases without partial import results.
-- [ ] Apply the agreed retained-definition ownership rule to TypeScript Entity
+- [x] Apply the agreed retained-definition ownership rule to TypeScript Entity
       instances. Test original Workflow input and exposed definition references,
       plus relevant nested guards, declaration lists, mutability, and validators.
-- [ ] Reject unknown/malformed bounded validator declarations in Python and
+- [x] Reject unknown/malformed bounded validator declarations in Python and
       Java instead of skipping them. Preserve the distinction between invalid
       declarations and valid business rules that reject proposed financial data.
-- [ ] Re-run create/import/mutate/transition/evolution sequences with positive
+- [x] Re-run create/import/mutate/transition/evolution sequences with positive
       and negative controls. Preserve identity, validation completeness,
       currentness, history consistency, Audit correspondence, and failure
       atomicity from earlier releases.
-- [ ] Run Entity tests and vectors across all runtimes, applicable coverage, and
+- [x] Run Entity tests and vectors across all runtimes, applicable coverage, and
       mutation probes for binding loss, aliasing, precondition bypass, identity
       conflation, and skipped validation. Synchronize APIs, examples, and docs.
 
 Completion: supported versioned Entity lifecycles remain usable across
 observation boundaries, identity meanings stay distinct, and malformed
 definitions/preconditions cannot silently pass or crash.
+
+### Milestone 7 completion and verification
+
+Entities now retain their original Workflow binding across creation, native
+reconstruction/import, mutation, transition, and all four evolution observations.
+Each owning core delegates binding validation to Workflow; adapters pass through
+the explicit observation without deriving historical binding from the supplied
+definition. Missing/malformed bindings produce WORKFLOW_INVALID_INSTANCE and
+mismatches produce WORKFLOW_VERSION_MISMATCH. Unversioned observations retain
+their previous shape.
+
+Python and Java bounded imports now reject equal current-revision/conflict tokens
+with ENTITY_INVALID_IDENTITY. The composing-specification shared-meaning exception
+remains normative, but the bounded API has no declaration mechanism for it.
+Expected revision and conflict tokens are checked independently. Java explicit
+null expectations return ENTITY_STATE_CONFLICT without a null exception;
+missing observed tokens cannot match an expectation. Malformed observed identities
+remain identity errors. Python and Java validate every bounded validator declaration
+before predicates, preserving INVALID_MUTATION versus VALIDATION_FAILED.
+
+TypeScript FinancialEntity retains owned Workflow, nested guard, mutability,
+and validator declarations. Its definition getter returns a defensive observation.
+Native tests exercise both create/from boundaries, original/exposed references,
+independently declared controls, and actual returned values reused across calls.
+Entity ownership tests now live in test/entities/boundaries.test.ts so the existing
+Stryker Entity glob executes them directly. Portable boundary dispatch remains in
+the integration test; evolution harnesses select evolution operations explicitly.
+
+Nine additional manifest vectors cover versioned mutation, all four evolution
+results, malformed observed conflict tokens, independent revision/conflict checks,
+and malformed declarations after a data-rejecting valid rule. Native tests also
+reject missing/null/malformed/mismatched source and related bindings before any
+changed Entity, evolution history, or Audit history becomes observable.
+The existing complete-result validation, currentness, correspondence, history,
+identity, and failure-atomicity regressions remain active.
+
+| Check | Result |
+| --- | --- |
+| Full manifest, TypeScript / CPython 3.12 / CPython 3.13 / Java | 667 PASS each, including all 212 Entity vectors and all 542 original vectors; no FAIL, UNSUPPORTED, or INFRASTRUCTURE_ERROR |
+| Workspace check | Build, strict TypeScript, 130 runner tests, 836 TypeScript core tests, 19 TypeScript adapter tests, Python/Java native and adapter tests, developer-tool tests, architecture, docs/traceability, license, and whitespace pass |
+| Python compatibility | Compilation, 209 native test methods, adapter tests and full conformance pass on CPython 3.13 |
+| TypeScript full coverage | 99.67% lines, 99.39% branches, 100% functions; Entity files have 100% lines |
+| Python native plus full conformance coverage | Configured gate passes at 91% combined; Entities 89% combined |
+| Java Maven clean verify | Pass; Entities 90.91% lines and 78.35% branches, full bundle 91.87% lines |
+| TypeScript Entity mutation | 400/406 killed, 98.52%; zero timeouts, uncovered mutants, or critical survivors |
+| Python/Java critical Entity mutation | 62/62 killed, including 14 new binding, identity, validator and null-precondition probes; named regressions fail and paired controls pass |
+| Native Entity mutation | 4/4 killed, including two new TypeScript declaration aliases and two existing currentness sequence probes; paired controls pass |
+
+The six TypeScript survivors were reviewed: redundant conflict-token and Money
+shape guards, private predicate catches with equivalent falsy returns, and a
+diagnostic message. No binding, identity, validation, financial-value, or portable
+error mutant survives; no exclusions or thresholds were changed. Ordinary Vitest
+checks were rerun after Stryker finished to avoid discovering its temporary test
+copies. One Java adapter subprocess emitted malformed output during a concurrent
+check; its full 336-case readiness suite and the complete repository check passed
+on rerun.
+
+Completion review: native/unit tests, conformance vectors, mutation probes,
+TypeScript JSDoc, Python/Java API documentation, package/root/adapter READMEs,
+developer tools documentation, and traceability are synchronized. Of 29 reopened
+Entity/Workflow rows, 28 return to COVERED; ENTITY-DEFINITION-002 becomes NOT
+DIRECTLY TESTABLE by isolated JSON with passing native ownership and mutation
+tests. Inventory: 413 requirements, 330 COVERED, 83 NOT DIRECTLY TESTABLE, no
+PARTIAL or blocking-gap rows. Existing specification, fixture conventions, and
+Agentic metadata already define the corrected behavior. No new normative rule,
+portable error, canonical operation, architecture, AGENTS.md, CoreDoc, release
+note, or package-version change is required. Full release mutation, packaging,
+and clean-checkout closure remain Milestones 8 and 9.
 
 ## Milestone 8 — Mutation protection and complete verification
 

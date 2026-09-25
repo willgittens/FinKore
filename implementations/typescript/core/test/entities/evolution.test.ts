@@ -1293,7 +1293,7 @@ describe('Entity evolution normative regressions through native APIs', () => {
     }
   })
 
-  for (const vector of vectors) it(vector.id, () => {
+  for (const vector of vectors.filter((candidate) => candidate.operation.startsWith('finkore.entity.evolution.'))) it(vector.id, () => {
     const input = structuredClone(vector.input)
     try {
       if (vector.expected.status === 'error') {
@@ -1321,6 +1321,23 @@ describe('Entity evolution complete cross-field validation', () => {
         if (valid) expect(execute(template.operation, input).source).toEqual(input.source)
         else expect(() => execute(template.operation, input)).toThrowError(expect.objectContaining({ code: 'FINKORE_ENTITY_VALIDATION_FAILED' }))
         expect(input).toEqual(before)
+      })
+    }
+  }
+})
+
+describe('Entity evolution requires each original Workflow binding', () => {
+  for (const kind of ['correct', 'reverse', 'void', 'supersede']) {
+    const template = vectors.find(vector => vector.id === `entity.evolution.${kind}.versioned-binding-001`)!
+    for (const key of kind === 'void' ? ['source'] : ['source', kind === 'supersede' ? 'successor' : 'related']) {
+      for (const fault of ['missing', 'null', 'malformed', 'mismatch']) it(`${kind} rejects ${key} ${fault} binding atomically`, () => {
+        const input = structuredClone(template.input)
+        const entity = input[key] as Record<string, unknown>
+        if (fault === 'missing') delete entity.binding
+        else entity.binding = fault === 'null' ? null : fault === 'malformed' ? {} : { definitionIdentity: 'invoice-workflow', definitionVersionIdentity: '2' }
+        const before = structuredClone(input)
+        expect(() => execute(template.operation, input)).toThrowError(expect.objectContaining({ code: fault === 'mismatch' ? 'FINKORE_WORKFLOW_VERSION_MISMATCH' : 'FINKORE_WORKFLOW_INVALID_INSTANCE' }))
+        expect(input).toStrictEqual(before)
       })
     }
   }

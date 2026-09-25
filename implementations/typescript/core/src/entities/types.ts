@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
-import type { WorkflowDefinitionInput, WorkflowStateIdentifier } from '../workflow/types.js'
+import type { WorkflowDefinitionInput, WorkflowDefinitionVersionBinding, WorkflowStateIdentifier } from '../workflow/types.js'
 import type { SerializedAuditEvent, SerializedAuditHistory } from '../audit/types.js'
 
 /**
@@ -151,7 +151,7 @@ export interface EntityDefinitionInput {
   /** Declared identity scope for stable entity identifiers. */
   readonly identityScope?: unknown
 
-  /** Workflow definition that governs lifecycle state. */
+  /** Owned Workflow declarations; exposed observations cannot reconfigure an existing Entity. */
   readonly workflow?: WorkflowDefinitionInput | unknown
 
   /** Top-level data fields declared mutable by lifecycle state. */
@@ -176,7 +176,7 @@ export interface EntityDefinition {
   /** Declared identity scope for stable entity identifiers. */
   readonly identityScope: EntityIdentityScope
 
-  /** Workflow definition that governs lifecycle state. */
+  /** Owned Workflow declarations; exposed observations cannot reconfigure an existing Entity. */
   readonly workflow: WorkflowDefinitionInput | unknown
 
   /** Top-level data fields declared mutable by lifecycle state. */
@@ -196,6 +196,14 @@ export interface EntityDefinition {
  * @see ENTITY-LIFECYCLE-006
  */
 export interface SerializedFinancialEntity {
+  /**
+   * Retained Workflow identity/version binding, required for versioned reuse.
+   * Import validates this supplied observation; it never infers or repairs it.
+   * @see WORKFLOW-VERSION-007
+   * @see WORKFLOW-VERSION-008
+   * @see ENTITY-IMPORT-002
+   */
+  readonly binding?: WorkflowDefinitionVersionBinding
   /** Composing-domain entity type identifier. */
   readonly type: EntityTypeIdentifier
 

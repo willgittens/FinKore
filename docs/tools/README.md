@@ -171,6 +171,26 @@ cores, so adapter-side observation preparation cannot hide missing core checks.
 TypeScript evolution mutation testing can be focused with
 `npm run test:mutation -w @finkore/typescript -- --mutate src/entities/entity-evolution.ts --testFiles 'test/entities/*.test.ts'`.
 
+Core 0.9.5 Milestone 7 adds 14 portable Entity probes for binding loss/check
+bypass, equal revision/conflict tokens, skipped declarations, and null expected
+State/revision/conflict preconditions. The Entity suite includes 62 critical
+probes in total. Two additional TypeScript native probes protect original and
+exposed Entity definitions; run `node docs/tools/mutation-native.js entity` for
+these and the two existing currentness sequence probes. Native TypeScript Entity
+sequences live in `test/entities/boundaries.test.ts`, so the existing Stryker
+Entity test glob discovers them without filesystem-dependent fixture discovery.
+Run focused Entity mutation with
+`npm run test:mutation -w @finkore/typescript -- --mutate src/entities/entity.ts`.
+Run ordinary Vitest coverage/checks after Stryker finishes: its temporary test
+copies otherwise overlap Vitest's default file discovery.
+
+The Milestone 7 Entity Stryker review leaves six non-critical survivors: one
+redundant optional conflict-token guard, two redundant Money shape guards
+followed by the same caught decoder rejection, two private predicate catch
+returns whose `undefined` remains falsy, and one diagnostic message string.
+None changes portable errors, binding, validation, identity or financial data.
+No exclusions or thresholds were changed.
+
 The Core 0.9.2 survivor review distinguishes these non-critical cases:
 
 - Runner diagnostic text, source labels, and error wrapping do not change

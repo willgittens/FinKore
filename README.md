@@ -355,11 +355,10 @@ The 0.9.5 contract decisions are accepted. Milestone 2 adds 85 portable
 regressions and controls plus native serialization, binding, ownership, and
 operation-sequence tests. Milestone 4 adds eight Workflow precedence vectors;
 Milestone 5 adds 23 Approval association and history vectors.
-The development manifest now contains 658 vectors
-and exposes known failures; all 542 earlier vectors still pass on all four
-runtimes. [Traceability](./conformance/traceability.md) keeps correction and
-mutation gates open. These failing regressions are deliberate evidence for the
-next implementation milestones, not a new passing-conformance claim.
+Milestone 7 adds nine Entity binding, declaration, and import vectors. The
+development manifest now passes all 667 vectors on all four runtimes, including
+all 542 earlier vectors. [Traceability](./conformance/traceability.md) records the
+completed boundary corrections; the full release gate remains Milestones 8 and 9.
 
 Milestone 3 now corrects Python and Java Money serialization: scale changes
 preserve exact value or return the specified portable error. Native serializer
@@ -370,8 +369,10 @@ all four runtimes. Milestone 5 corrects concrete Approval subject, association,
 eligibility, and reused-history validation. All 162 Approval vectors pass on
 all four runtimes, with native failure-atomicity and mutation checks. Milestone 6
 corrects native Audit cycle rejection and value ownership: all 76 Audit vectors,
-native boundary tests, and targeted mutation probes pass. Entity corrections
-remain open for Milestone 7.
+native boundary tests, and targeted mutation probes pass. Milestone 7 preserves
+Entity Workflow bindings across observation and operation boundaries, separates
+revision/conflict identities, rejects malformed validators and preconditions,
+and gives existing TypeScript Entities owned declarations.
 
 - Money
 - Workflow
