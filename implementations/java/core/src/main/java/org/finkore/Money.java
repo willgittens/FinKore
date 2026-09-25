@@ -74,8 +74,17 @@ public final class Money {
   /**
    * Serializes this value with an explicit presentation scale when supplied.
    *
-   * @param scale desired amount scale, or {@code null} to use the value scale
+   * <p>Scale extension and removal of trailing zeros preserve the exact value.
+   * Lossy reductions require an explicit {@link #round(Object, Object)} first.
+   * Neither success nor failure changes this Money value.
+   *
+   * @param scale non-negative Java Integer scale, or {@code null} to use the
+   *     value scale; supported sizes also depend on BigDecimal and available memory
    * @return map containing amount and currency
+   * @throws FinKoreException with {@link #INVALID_ROUNDING} for an invalid or
+   *     unsupported scale, or {@link #ROUNDING_REQUIRED} for loss of nonzero digits
+   * @see <a href="../../../../../../spec/money/serialization.md">MONEY-SERIALIZATION-008</a>
+   * @see <a href="../../../../../../spec/money/errors.md">MONEY-ERROR-005 through MONEY-ERROR-007</a>
    */
   public Map<String, Object> toPortable(Integer scale) {
     Map<String, Object> result = new LinkedHashMap<>();
@@ -360,7 +369,17 @@ public final class Money {
   }
 
   private static String format(BigDecimal value, Integer scale) {
-    BigDecimal output = scale == null ? value : value.setScale(scale);
+    BigDecimal output = value;
+    if (scale != null) {
+      if (scale < 0) throw new FinKoreException(INVALID_ROUNDING);
+      if (value.stripTrailingZeros().scale() > scale) throw new FinKoreException(ROUNDING_REQUIRED);
+      try {
+        output = value.setScale(scale, RoundingMode.UNNECESSARY);
+      } catch (ArithmeticException unsupportedScale) {
+        // Loss was checked above; remaining arithmetic failures are capacity limits.
+        throw new FinKoreException(INVALID_ROUNDING);
+      }
+    }
     if (output.signum() == 0) {
       output = output.abs();
     }

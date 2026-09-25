@@ -5,11 +5,57 @@ from copy import deepcopy
 from decimal import Context, Decimal, Inexact, Rounded, ROUND_DOWN, ROUND_HALF_EVEN, ROUND_UP, getcontext, localcontext
 from fractions import Fraction
 import unittest
+import sys
 
 from finkore import FinKoreError, Money
 
 
 class MoneyTests(unittest.TestCase):
+    def test_serialization_rejects_negative_and_boolean_scales(self) -> None:
+        """MONEY-ERROR-006: scale validation precedes loss, even for exact zero."""
+        for scale in (-1, True, False):
+            for amount in ("0.00", "1.239"):
+                with self.subTest(scale=scale, amount=amount):
+                    value = Money.from_portable({"amount": amount, "currency": "EUR"})
+                    before = value.to_portable()
+                    with self.assertRaises(FinKoreError) as caught:
+                        value.to_portable(scale)
+                    self.assertEqual(caught.exception.code, "FINKORE_MONEY_INVALID_ROUNDING")
+                    self.assertEqual(value.to_portable(), before)
+
+    def test_serialization_checks_native_presentation_scale(self) -> None:
+        """MONEY-SERIALIZATION-008/ERROR-006: native construction cannot bypass checks."""
+        for scale in (2, -1, True, "2", sys.maxsize + 1):
+            value = Money(Decimal("1.239"), "EUR", scale)
+            with self.subTest(scale=scale):
+                with self.assertRaises(FinKoreError) as caught:
+                    value.to_portable()
+                self.assertEqual(caught.exception.code, "FINKORE_MONEY_ROUNDING_REQUIRED" if scale == 2 else "FINKORE_MONEY_INVALID_ROUNDING")
+                self.assertEqual(value.amount, Decimal("1.239"))
+                self.assertEqual(value.presentation_scale, scale)
+                self.assertEqual(value.to_portable(3), {"amount": "1.239", "currency": "EUR"})
+
+    def test_serialization_preserves_context_and_high_precision(self) -> None:
+        """MONEY-SERIALIZATION-008/ERROR-007: context cannot select rounding or limit digits."""
+        for mode in (ROUND_DOWN, ROUND_UP):
+            with localcontext(Context(prec=3, rounding=mode)) as context:
+                context.traps[Inexact] = context.traps[Rounded] = True
+                context.flags[Inexact] = True
+                before = repr(context)
+                for text in ("1" * 5000 + ".2300", "-" + "1" * 5000 + ".2300", "-0.000", "10.00"):
+                    value = Money(Decimal(text), "EUR")
+                    exact = value.to_portable(2)
+                    self.assertEqual(Decimal(exact["amount"]), value.amount)
+                    self.assertEqual(exact["currency"], "EUR")
+                    self.assertEqual(value.to_portable(None), value.to_portable())
+                value = Money(Decimal("-1.239"), "EUR")
+                with self.assertRaises(FinKoreError) as caught:
+                    value.to_portable(2)
+                self.assertEqual(caught.exception.code, "FINKORE_MONEY_ROUNDING_REQUIRED")
+                self.assertEqual(value.amount, Decimal("-1.239"))
+                self.assertIs(getcontext(), context)
+                self.assertEqual(repr(context), before)
+
     def assert_money_value(self, result: Money, expected: str) -> None:
         """Check exact numeric serialization and round-trip without prescribing trailing zeros."""
         serialized = result.to_portable()

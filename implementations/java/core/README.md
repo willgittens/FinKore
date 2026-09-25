@@ -3,8 +3,8 @@
 The development tree now includes the [Core 0.9.5 Milestone 2 regressions](../../../docs/plans/plan-09.5.md).
 They intentionally fail against unresolved native API and cross-domain defects.
 The 0.9.4 results below describe that tagged snapshot; the expanded development
-manifest is not yet passing conformance. No correction is claimed until its
-regressions and mutation gates pass.
+manifest is not yet passing conformance. Milestone 3 corrects Money serialization;
+its native regressions, Money conformance, and targeted mutation gates pass.
 
 This package is the Java implementation track for FinKore Core 0.9 release
 candidate. It is derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`,
@@ -123,6 +123,22 @@ amounts use `BigDecimal` from plain decimal strings. Portable allocation scales
 are bounded by `50`, equal-part counts by `100`, and ratios by
 `9007199254740991`. Money rounding scales must fit Java `int` as an
 implementation-specific `BigDecimal` constraint.
+
+`Money.toPortable(Integer scale)` accepts non-negative Java `Integer` scales,
+subject to `BigDecimal` capacity and available memory. `null` uses the value's
+scale; the no-argument overload uses its retained presentation scale. Scale
+extension and removal of trailing zeros preserve the exact amount. Discarding
+nonzero digits raises `FINKORE_MONEY_ROUNDING_REQUIRED`; negative or unsupported
+scales raise `FINKORE_MONEY_INVALID_ROUNDING`. Both success and failure preserve
+the operand. Fractional, Boolean, and string scales are not representable by
+this typed overload. Explicit rounding remains a separate operation:
+
+```java
+Money value = Money.fromPortable(Map.of("amount", "1.239", "currency", "EUR"));
+value.toPortable(3); // amount "1.239", currency "EUR"
+value.toPortable(2); // throws FinKoreException: FINKORE_MONEY_ROUNDING_REQUIRED
+value.round(2, "HALF_UP").toPortable(2); // amount "1.24", currency "EUR"
+```
 
 The JAR intentionally includes compiled `org.finkore` classes plus
 `META-INF/LICENSE`, `META-INF/NOTICE.md`, `META-INF/THIRD_PARTY_LICENSES.md`,

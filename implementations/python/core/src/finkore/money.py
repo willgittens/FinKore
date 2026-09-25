@@ -8,6 +8,7 @@ from decimal import Decimal, InvalidOperation
 from fractions import Fraction
 import math
 import re
+import sys
 from typing import Any
 
 from .errors import FinKoreError
@@ -42,19 +43,21 @@ def _scale(value: str) -> int:
 
 
 def _format_decimal(value: Decimal, scale: int | None = None) -> str:
-    if value.is_zero():
-        if scale is None or scale == 0:
-            text = format(value, "f")
-            return text[1:] if text.startswith("-") else text
-        return f"0.{''.join('0' for _ in range(scale))}"
+    # Inspect plain digits, without Decimal arithmetic or the caller's context.
+    if scale is not None:
+        _valid_scale(scale)
+        if scale > sys.maxsize:
+            raise FinKoreError(INVALID_ROUNDING)
     text = format(value, "f")
-    if text.startswith("-0") and Decimal(text).is_zero():
+    if value.is_zero() and text.startswith("-"):
         text = text[1:]
     if scale is not None:
-        integer, dot, fraction = text.partition(".")
+        integer, _, fraction = text.partition(".")
+        if any(digit != "0" for digit in fraction[scale:]):
+            raise FinKoreError(ROUNDING_REQUIRED)
         if scale == 0:
             return integer
-        fraction = (fraction if dot else "").ljust(scale, "0")
+        fraction = fraction.ljust(scale, "0")
         return f"{integer}.{fraction[:scale]}"
     return text
 
@@ -206,8 +209,22 @@ class Money:
     def to_portable(self, scale: int | None = None) -> dict[str, str]:
         """Serialize this value to FinKore portable Money JSON.
 
+        A supplied scale is a non-negative Python integer (excluding bool), at
+        most sys.maxsize, subject to available memory. None uses the retained
+        presentation scale, or the Decimal's scale if none was retained.
+        Retained native-constructor scales undergo the same validation.
+        Only exact scale changes are allowed; use round(scale, mode) explicitly
+        before serialization when precision must be reduced. Neither this
+        operand nor the caller's Decimal context is changed, including on failure.
+
         @returns a dictionary containing ``amount`` and ``currency``.
+        @throws FinKoreError with ``FINKORE_MONEY_INVALID_ROUNDING`` for an
+        invalid/unsupported scale, or ``FINKORE_MONEY_ROUNDING_REQUIRED`` if
+        the requested scale would discard nonzero digits.
         @see MONEY-SERIALIZATION-008
+        @see MONEY-ERROR-005
+        @see MONEY-ERROR-006
+        @see MONEY-ERROR-007
         """
 
         return {"amount": _format_decimal(self.amount, self.presentation_scale if scale is None else scale), "currency": self.currency}

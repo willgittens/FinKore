@@ -43,9 +43,13 @@ resolve the three Entity decisions and add 85 manifest-discovered vectors,
 bringing the current total to 627. Native tests cover boundaries JSON cannot
 express. All 542 earlier vectors and the paired controls pass, while the new
 regressions reproduce defects in all implementations. Traceability records
-56 PARTIAL requirements and no remaining reviewed specification gap. The
+50 PARTIAL requirements and no remaining reviewed specification gap. The
 expanded manifest is not yet passing conformance; correction and mutation
 verification remain required.
+
+Milestone 3 closes the reviewed native Money serializer boundaries. All 102
+Money vectors pass on TypeScript, CPython 3.12/3.13, and Java; native scale tests
+and targeted mutation probes supplement the portable representation tests.
 
 For FinKore Core 0.9 release candidate, [manifest.json](manifest.json) is the
 frozen release-candidate manifest and `finkoreConformance` remains `0.1`. This

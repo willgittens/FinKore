@@ -14,6 +14,11 @@ import org.junit.jupiter.api.Test;
 /** JUnit coverage tests for Java Money behavior. */
 final class MoneyCoverageTest {
   @Test
+  void nativeSerializationBoundaries() throws java.io.IOException {
+    BoundaryRegressionTest.main(new String[]{"money.serialization."});
+  }
+
+  @Test
   void exactAdditionDoesNotUseBinaryFloatingPoint() {
     Money left = Money.fromPortable(Map.of("amount", "0.1", "currency", "EUR"));
     Money right = Money.fromPortable(Map.of("amount", "0.2", "currency", "EUR"));

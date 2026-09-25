@@ -4,7 +4,8 @@
 
 Milestones 1 and 2 are complete: the three Entity contract decisions are
 accepted, and permanent failing regressions and passing controls reproduce
-every reviewed finding. Financial implementation corrections remain pending.
+every reviewed finding. Milestone 3 now completes the Money serialization
+correction. Workflow, Approval, Audit, and Entity corrections remain pending.
 A new readiness review of `d920091`
 (`core-0.9.4`) reproduced the findings below despite passing existing checks.
 [Core 1.0 promotion](plan-10.md) is blocked until these findings and this
@@ -381,23 +382,89 @@ notes, packages, and tags need no change for this regression milestone.
 
 ## Milestone 3 — Exact Money serialization
 
-- [ ] Correct Python serialization so a requested presentation scale never
+- [x] Correct Python serialization so a requested presentation scale never
       truncates financial value. Preserve exact amount and currency across
       serialize → deserialize, including negative and high-precision values.
-- [ ] Correct Java's serialization failure mapping according to the reviewed
+- [x] Correct Java's serialization failure mapping according to the reviewed
       Money contract; do not expose an arithmetic exception as the domain result.
-- [ ] Validate supplied scale at the owning public boundary. Preserve safe
+- [x] Validate supplied scale at the owning public boundary. Preserve safe
       formatting and existing explicit rounding behavior; add no implicit mode
       or currency-minor-unit default and do not use floating-point arithmetic.
-- [ ] Confirm failure preserves the Money operand and Python Decimal context.
+- [x] Confirm failure preserves the Money operand and Python Decimal context.
       Review direct public construction/serialization paths relevant to these
       guarantees, rather than testing only the conformance adapter.
-- [ ] Run Money unit/native tests, portable vectors on all required runtimes,
+- [x] Run Money unit/native tests, portable vectors on all required runtimes,
       applicable coverage, and mutation protection for truncation, rounding
       substitution, and portable errors. Update API docs and examples.
 
 Completion: no serializer changes numeric value, all supported safe scale
 controls pass, and lossy/invalid requests fail with the agreed portable errors.
+
+### Milestone 3 completion and verification
+
+Python now validates the selected presentation scale and examines discarded
+plain decimal digits without Decimal arithmetic. This preserves arbitrary
+precision and the caller's precision, rounding mode, traps, and flags. Scale 0
+formats zero correctly. The same checks protect a `presentation_scale` supplied
+through the native Money constructor. Java checks exact representability before
+rescaling and maps unsupported BigDecimal capacity to the portable invalid-scale
+error; ordinary lossy reduction returns the rounding-required error. Neither
+implementation mutates Money operands or introduces an implicit rounding mode.
+
+The Milestone 2 tests failed before the correction: Python reported 12 failing
+serializer assertions and Java six failing serializer cases. Additional Python
+constructor/context regressions also failed before the fix. The permanent tests
+now pass, including signed reductions, safe extension/trailing-zero removal,
+zero, malformed scales, 5,000-digit native Decimal values, explicit rounding,
+and Java's unsupported scale boundary. Scale ranges and no-request semantics
+are documented in both public method documentation and package READMEs.
+
+| Check | Result |
+| --- | --- |
+| Python Money unit/native tests | 23 methods pass on CPython 3.12 and 3.13 |
+| Java Money tests | Stdlib Money tests and all nine native serializer cases pass; 14 Money JUnit tests pass |
+| Real Money conformance | 102/102 pass on TypeScript, CPython 3.12, CPython 3.13, and Java; no unsupported or infrastructure outcomes |
+| Python focused coverage | Money: 222/232 statements (95.69%), 86/94 branches (91.49%); corrected formatter and public serializer have 100% line/branch coverage |
+| Java focused coverage | Money: 149/160 lines (93.13%), 88/103 branches (85.44%); corrected formatter and public serializers have 100% line/branch coverage |
+| New native serializer mutations | 13/13 killed with passing paired controls; all seven Python probes also pass on CPython 3.13 |
+| Existing Money conformance mutations | 15/15 killed |
+| Complete native mutation tool | 26/26 killed, retaining all 13 earlier probes |
+| Repository checks | Build, strict TypeScript, Java compilation, toolchain, mutation-result tests, architecture, documentation/traceability, license, and whitespace checks pass |
+
+Coverage used fresh data from the focused Money unit/native and real Money
+conformance runs. These scoped measurements and targeted mutation results do
+not claim a whole-core coverage gate or aggregate mutation score. Runtime
+exceptions propagate out of serializer assertions so mutation classification
+cannot count a raw arithmetic/type exception as a behavioral kill.
+
+Reproduce focused unit and mutation checks from the repository root:
+
+```sh
+PYTHONPATH=implementations/python/core/src .tools/bin/python3.12 -m unittest discover -s implementations/python/core/tests -p test_money.py
+PYTHONPATH=implementations/python/core/src .tools/bin/python3.12 -m unittest discover -s implementations/python/core/tests -p test_boundary_regressions.py -k money
+npm run java:compile
+.tools/bin/java -cp implementations/java/target/classes:implementations/java/target/test-classes org.finkore.MoneyTest
+.tools/bin/java -cp implementations/java/target/classes:implementations/java/target/test-classes org.finkore.BoundaryRegressionTest money.serialization
+.tools/bin/mvn -o -f implementations/java/core/pom.xml -Dtest=MoneyCoverageTest test
+node docs/tools/mutation-native.js money-serialization
+FINKORE_PYTHON_PATH=.tools/bin/python3.13 node docs/tools/mutation-native.js python-money-serialization
+node docs/tools/mutation-critical.js all money
+```
+
+Repeat the two Python unit commands with `python3.13` for compatibility. The
+existing conformance scripts accept `-- --suite money` (for Java, compile first
+and invoke the runner directly with its Java adapter and `--suite money`).
+
+Completion review: native tests, coverage registration, mutation probes, method
+documentation, package/root README status, developer-tool usage, and traceability
+are synchronized. The six Money requirements reopened for these boundaries
+return to COVERED; the remaining 50 PARTIAL requirements stay open. Existing
+Money vectors already exercise the portable representation, and optional native
+serializer scales remain native API tests. No new vector, specification rule,
+portable error, Agentic operation, adapter logic, JSDoc-bearing TypeScript API,
+AGENTS.md rule, CoreDoc obligation, or release note is needed. Later milestone
+regressions still fail, so full `check`/`verify` and corrective release closure
+remain pending.
 
 ## Milestone 4 — Workflow binding and precondition preservation
 

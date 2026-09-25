@@ -110,6 +110,16 @@ process failures, empty suites, and inconsistent reports fail verification.
 The Python and Java helpers only select tests and classify their results;
 financial behavior remains in the implementations and existing tests.
 
+Core 0.9.5 Milestone 3 adds 13 native Money serialization probes, covering
+truncation, implicit rounding, portable errors, scale validation, retained
+presentation scales, and zero formatting. Run
+`node docs/tools/mutation-native.js money-serialization` for this focused gate.
+The optional argument filters probe IDs; an unmatched filter fails. Omitting it
+retains every probe. Set `FINKORE_PYTHON_PATH=.tools/bin/python3.13` to exercise
+Python compatibility. Raw runtime exceptions from serializer assertions remain
+infrastructure failures, not mutation kills. These targeted results are not an
+aggregate mutation score for the whole implementation.
+
 Audit cycle fixtures retain genuine self-references but bound member reads.
 Correct validation detects the repeated reference immediately; a cycle-check
 removal reaches an ordinary test error that fails the exact portable-error

@@ -10,14 +10,14 @@ Audit, Approvals, and Entities scope.
 | Domain | Requirements | MUST / MUST NOT | SHOULD / SHOULD NOT | MAY | Covered | Partial | Uncovered | Not directly testable | Deferred | Blocking spec gap |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Shared | 51 | 41 | 5 | 5 | 10 | 0 | 0 | 41 | 0 | 0 |
-| Money | 74 | 69 | 1 | 4 | 63 | 6 | 0 | 5 | 0 | 0 |
+| Money | 74 | 69 | 1 | 4 | 69 | 0 | 0 | 5 | 0 | 0 |
 | Workflow | 57 | 55 | 1 | 1 | 30 | 18 | 0 | 9 | 0 | 0 |
 | Audit | 57 | 49 | 4 | 4 | 42 | 5 | 0 | 10 | 0 | 0 |
 | Approvals | 86 | 83 | 1 | 2 | 73 | 8 | 0 | 5 | 0 | 0 |
 | Entities | 88 | 83 | 3 | 2 | 57 | 19 | 0 | 12 | 0 | 0 |
-| **Total** | 413 | 380 | 15 | 18 | 275 | 56 | 0 | 82 | 0 | 0 |
+| **Total** | 413 | 380 | 15 | 18 | 281 | 50 | 0 | 82 | 0 | 0 |
 
-The suite contains 627 vectors. Overall: **275 covered (66.6%)**, **56 partially covered (13.6%)**, **0 uncovered (0.0%)**, **82 not directly testable (19.9%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
+The suite contains 627 vectors. Overall: **281 covered (68.0%)**, **50 partially covered (12.1%)**, **0 uncovered (0.0%)**, **82 not directly testable (19.9%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. PARTIAL means current vectors exercise part of a requirement but do not yet cover a mandatory observable boundary. DEFERRED means the requirement is explicitly outside the current release candidate. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published.
 
@@ -79,7 +79,16 @@ reuse. JSON vectors cannot encode native cycles, mutable Number values, binding
 aliases, or Entity definition aliases. The serializer scale argument is also
 tested natively; adapters do not gain a rounding or formatting shortcut.
 
-PARTIAL statuses remain open: the tests now reproduce the reviewed defects,
+Milestone 3 closes the six Money rows reopened for serialization:
+MONEY-SERIALIZATION-008, MONEY-ROUNDING-001/006, and MONEY-ERROR-005/006/007.
+Python and Java native loss, invalid-scale, safe-formatting, and unchanged-value
+tests now pass, including Python direct-constructor scales and Decimal context.
+All 102 Money vectors pass on all four runtimes. Thirteen new native probes and
+15 existing Money conformance probes are killed with their required controls;
+Python's seven serializer probes also pass on CPython 3.13. This is scoped
+boundary closure, not a whole-core mutation score or release gate.
+
+Other PARTIAL statuses remain open: the tests reproduce the reviewed defects,
 but subsequent sequence assertions after failing steps and mutation protection
 remain pending. A new test is not implementation closure. No BLOCKING SPEC GAP
 remains from this review. The plan records per-language outcomes and paired
@@ -187,9 +196,9 @@ controls; no expected-failure marks or skipped regressions hide the failures.
 | MONEY-ERROR-002 | Money | MUST / MUST NOT | COVERED | money.deserialize.lowercase-currency-001, money.deserialize.missing-currency-001 |
 | MONEY-ERROR-003 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.subtract.currency-mismatch-001 |
 | MONEY-ERROR-004 | Money | MUST / MUST NOT | COVERED | money.divide.zero-001 |
-| MONEY-ERROR-005 | Money | MUST / MUST NOT | PARTIAL | money.allocate.unrepresentable-source-scale-001, money.divide.rounding-required-001; Core 0.9.5 portable/native boundary regressions supplement these mappings. Tests reproduce defects; dependent sequence checks and mutation protection remain pending. See the Milestone 2 evidence table. |
-| MONEY-ERROR-006 | Money | MUST / MUST NOT | PARTIAL | money.rate.invalid-rounding-001, money.round.invalid-mode-001, money.round.invalid-scale-001; Core 0.9.5 portable/native boundary regressions supplement these mappings. Tests reproduce defects; dependent sequence checks and mutation protection remain pending. See the Milestone 2 evidence table. |
-| MONEY-ERROR-007 | Money | MUST / MUST NOT | PARTIAL | money.add.currency-mismatch-001, money.allocate.equal.invalid-zero-parts-001, money.allocate.unrepresentable-source-scale-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.divide.rounding-required-001, money.divide.zero-001, money.subtract.currency-mismatch-001; Core 0.9.5 portable/native boundary regressions supplement these mappings. Tests reproduce defects; dependent sequence checks and mutation protection remain pending. See the Milestone 2 evidence table. |
+| MONEY-ERROR-005 | Money | MUST / MUST NOT | COVERED | money.allocate.unrepresentable-source-scale-001, money.divide.rounding-required-001 |
+| MONEY-ERROR-006 | Money | MUST / MUST NOT | COVERED | money.rate.invalid-rounding-001, money.round.invalid-mode-001, money.round.invalid-scale-001 |
+| MONEY-ERROR-007 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.allocate.equal.invalid-zero-parts-001, money.allocate.unrepresentable-source-scale-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.divide.rounding-required-001, money.divide.zero-001, money.subtract.currency-mismatch-001 |
 | MONEY-ERROR-008 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.invalid-negative-parts-001, money.allocate.equal.invalid-zero-parts-001, money.allocate.equal.part-count-out-of-range-001, money.allocate.invalid-method-001, money.allocate.invalid-scale-001, money.allocate.ratio.invalid-empty-ratios-001, money.allocate.ratio.invalid-fractional-ratio-001, money.allocate.ratio.invalid-malformed-ratio-001, money.allocate.ratio.invalid-negative-ratio-001, money.allocate.ratio.invalid-zero-ratio-001, money.allocate.ratio.out-of-range-001, money.allocate.scale.out-of-range-001 |
 | MONEY-REPRESENTATION-001 | Money | MUST / MUST NOT | COVERED | money.deserialize.missing-amount-001, money.deserialize.missing-currency-001, money.deserialize.positive-001 |
 | MONEY-REPRESENTATION-002 | Money | MUST / MUST NOT | COVERED | money.add.deep-positive-scale-001, money.add.large-significant-digits-001, money.deserialize.positive-001, money.divide.terminating-scale-40-001, money.multiply.large-product-growth-001, money.rate.large-percentage-growth-001, money.round.scale-50-half-even-001, money.subtract.large-negative-001 |
@@ -197,12 +206,12 @@ controls; no expected-failure marks or skipped regressions hide the failures.
 | MONEY-REPRESENTATION-004 | Money | MUST / MUST NOT | COVERED | money.add.negative-001, money.deserialize.negative-001, money.deserialize.zero-001, money.subtract.large-negative-001 |
 | MONEY-REPRESENTATION-005 | Money | MUST / MUST NOT | COVERED | audit.change.money-trailing-zero-unchanged-001, money.compare.equal-trailing-zeros-001 |
 | MONEY-REPRESENTATION-006 | Money | MAY | NOT DIRECTLY TESTABLE | Internal numeric representation is intentionally unobservable. |
-| MONEY-ROUNDING-001 | Money | MUST / MUST NOT | PARTIAL | money.rate.round.half-even-001, money.rate.round.half-up-001, money.round.explicit-scale-001, money.round.invalid-mode-001, money.round.invalid-scale-001, money.round.scale-50-half-even-001; Core 0.9.5 portable/native boundary regressions supplement these mappings. Tests reproduce defects; dependent sequence checks and mutation protection remain pending. See the Milestone 2 evidence table. |
+| MONEY-ROUNDING-001 | Money | MUST / MUST NOT | COVERED | money.rate.round.half-even-001, money.rate.round.half-up-001, money.round.explicit-scale-001, money.round.invalid-mode-001, money.round.invalid-scale-001, money.round.scale-50-half-even-001 |
 | MONEY-ROUNDING-002 | Money | MUST / MUST NOT | COVERED | money.round.above-half-positive-001, money.round.below-half-positive-001, money.round.ceiling.negative-001, money.round.ceiling.positive-001, money.round.down.negative-001, money.round.down.positive-001, money.round.floor.negative-001, money.round.floor.positive-001, money.round.half-even.tie-even-down-001, money.round.half-even.tie-negative-even-001, money.round.half-even.tie-odd-up-001, money.round.half-up.tie-negative-001, money.round.half-up.tie-positive-001, money.round.scale-50-half-even-001, money.round.up.negative-001, money.round.up.positive-001 |
 | MONEY-ROUNDING-003 | Money | MUST / MUST NOT | COVERED | money.rate.round.half-even-001, money.rate.round.half-up-001, money.round.above-half-positive-001, money.round.below-half-positive-001, money.round.ceiling.negative-001, money.round.ceiling.positive-001, money.round.down.negative-001, money.round.down.positive-001, money.round.floor.negative-001, money.round.floor.positive-001, money.round.half-even.tie-even-down-001, money.round.half-even.tie-negative-even-001, money.round.half-even.tie-odd-up-001, money.round.half-up.tie-negative-001, money.round.half-up.tie-positive-001, money.round.no-discard-001, money.round.scale-50-half-even-001, money.round.up.negative-001, money.round.up.positive-001 |
 | MONEY-ROUNDING-004 | Money | MUST / MUST NOT | COVERED | money.round.explicit-scale-001, money.round.scale-50-half-even-001 |
 | MONEY-ROUNDING-005 | Money | MAY | NOT DIRECTLY TESTABLE | Declaring a domain rounding policy is optional and outside generic Money operations. |
-| MONEY-ROUNDING-006 | Money | MUST / MUST NOT | PARTIAL | money.divide.rounding-required-001; Core 0.9.5 portable/native boundary regressions supplement these mappings. Tests reproduce defects; dependent sequence checks and mutation protection remain pending. See the Milestone 2 evidence table. |
+| MONEY-ROUNDING-006 | Money | MUST / MUST NOT | COVERED | money.divide.rounding-required-001 |
 | MONEY-ROUNDING-007 | Money | MUST / MUST NOT | NOT DIRECTLY TESTABLE | This constrains composing specifications that declare policies; no policy-definition operation exists. |
 | MONEY-ROUNDING-008 | Money | MUST / MUST NOT | COVERED | money.round.above-half-positive-001, money.round.below-half-positive-001, money.round.ceiling.negative-001, money.round.ceiling.positive-001, money.round.down.negative-001, money.round.down.positive-001, money.round.explicit-scale-001, money.round.floor.negative-001, money.round.floor.positive-001, money.round.half-even.tie-even-down-001, money.round.half-even.tie-negative-even-001, money.round.half-even.tie-odd-up-001, money.round.half-up.tie-negative-001, money.round.half-up.tie-positive-001, money.round.no-discard-001, money.round.scale-50-half-even-001, money.round.up.negative-001, money.round.up.positive-001 |
 | MONEY-ROUNDING-009 | Money | MUST / MUST NOT | COVERED | money.round.no-discard-001 |
@@ -213,7 +222,7 @@ controls; no expected-failure marks or skipped regressions hide the failures.
 | MONEY-SERIALIZATION-005 | Money | MUST / MUST NOT | COVERED | money.deserialize.exponent-001, money.deserialize.leading-plus-001, money.deserialize.non-finite-001 |
 | MONEY-SERIALIZATION-006 | Money | MAY | COVERED | money.deserialize.unknown-members-001 |
 | MONEY-SERIALIZATION-007 | Money | MUST / MUST NOT | COVERED | money.deserialize.unknown-members-001 |
-| MONEY-SERIALIZATION-008 | Money | MUST / MUST NOT | PARTIAL | money.deserialize.positive-001, money.deserialize.unknown-members-001, money.divide.quotient-plain-expansion-001, money.serialize.roundtrip-001; Core 0.9.5 portable/native boundary regressions supplement these mappings. Tests reproduce defects; dependent sequence checks and mutation protection remain pending. See the Milestone 2 evidence table. |
+| MONEY-SERIALIZATION-008 | Money | MUST / MUST NOT | COVERED | money.deserialize.positive-001, money.deserialize.unknown-members-001, money.divide.quotient-plain-expansion-001, money.serialize.roundtrip-001 |
 | WORKFLOW-ERROR-001 | Workflow | MUST / MUST NOT | COVERED | workflow.create.empty-competing-list-regression-001, workflow.create.empty-fact-regression-001, workflow.create.missing-equals-regression-001, workflow.create.nonempty-competing-list-regression-001, workflow.create.null-equals-regression-001, workflow.create.null-fact-regression-001, workflow.create.null-guard-regression-001, workflow.create.null-guards-regression-001, workflow.create.numeric-fact-regression-001, workflow.create.valid-regression-001, workflow.guard.empty-competing-list-regression-001, workflow.guard.empty-fact-regression-001, workflow.guard.missing-equals-regression-001, workflow.guard.nonempty-competing-list-regression-001, workflow.guard.null-equals-regression-001, workflow.guard.null-fact-regression-001, workflow.guard.null-guard-regression-001, workflow.guard.null-guards-regression-001, workflow.guard.numeric-fact-regression-001, workflow.guard.valid-regression-001, workflow.terminal.transition-rejected-001 |
 | WORKFLOW-ERROR-002 | Workflow | MAY | NOT DIRECTLY TESTABLE | Optional safe diagnostics are omitted from normalized vector errors. |
 | WORKFLOW-ERROR-003 | Workflow | MUST / MUST NOT | COVERED | workflow.terminal.not-inferred-no-outgoing-001, workflow.terminal.transition-rejected-001, workflow.transition.reverse-not-implied-001, workflow.transition.state-identity-exact-001, workflow.transition.undeclared-001 |

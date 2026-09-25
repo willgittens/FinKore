@@ -13,11 +13,12 @@ public final class NativeMutationProbe {
 
   /** Executes explicitly named test cases; unexpected exceptions are infrastructure failures. */
   public static void main(String[] args) throws Exception {
-    Map<String, Runnable> cases = ReadinessRegressionTest.mutationCases();
+    Map<String, Runnable> cases = new java.util.LinkedHashMap<>(ReadinessRegressionTest.mutationCases());
+    cases.putAll(BoundaryRegressionTest.cases());
     List<String> rows = new ArrayList<>();
     int passed = 0, failed = 0, infrastructure = 0;
     for (String id : args) {
-      if (!id.matches("[a-z.]+") || !cases.containsKey(id)) throw new IllegalArgumentException("Unknown case");
+      if (!id.matches("[a-zA-Z0-9_.-]+") || !cases.containsKey(id)) throw new IllegalArgumentException("Unknown case");
       String status = "PASS", kind = "";
       try { cases.get(id).run(); passed++; }
       catch (AssertionError error) { status = "FAIL"; kind = "ASSERTION"; failed++; }

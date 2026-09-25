@@ -3,8 +3,8 @@
 The development tree now includes the [Core 0.9.5 Milestone 2 regressions](../../../docs/plans/plan-09.5.md).
 They intentionally fail against unresolved native API and cross-domain defects.
 The 0.9.4 results below describe that tagged snapshot; the expanded development
-manifest is not yet passing conformance. No correction is claimed until its
-regressions and mutation gates pass.
+manifest is not yet passing conformance. Milestone 3 corrects Money serialization;
+its native regressions, Money conformance, and targeted mutation gates pass.
 
 This package is the Python implementation track for FinKore Core 0.9 release
 candidate. It is derived from CoreDoc, `/spec`, `/conformance`, and `/agentic`,
@@ -88,6 +88,27 @@ predicates exercise declared validation; they do not standardize a general
 validation language or impose a universal amount/limit policy.
 
 ## Public Package Surface
+
+`Money.to_portable(scale)` changes presentation only. A requested scale must be
+a non-negative Python `int`, excluding Boolean values, no greater than
+`sys.maxsize`; practical output sizes depend on available memory. Omission or
+`None` uses the retained `presentation_scale`, or the Decimal's scale when none
+is retained. Direct `Money(Decimal(...), currency, presentation_scale)` values
+receive the same scale and exactness checks when serialized.
+
+Removing nonzero digits raises `FINKORE_MONEY_ROUNDING_REQUIRED`. Invalid or
+unsupported scales raise `FINKORE_MONEY_INVALID_ROUNDING` before checking loss.
+Success and failure preserve the operand and the caller's Decimal context.
+To reduce precision deliberately, round first with an explicit policy:
+
+```python
+from finkore import Money
+
+value = Money.from_portable({"amount": "1.239", "currency": "EUR"})
+value.to_portable(3)  # {"amount": "1.239", "currency": "EUR"}
+value.to_portable(2)  # raises FinKoreError: FINKORE_MONEY_ROUNDING_REQUIRED
+value.round(2, "HALF_UP").to_portable(2)  # {"amount": "1.24", "currency": "EUR"}
+```
 
 The intentional Python package surface is the top-level `finkore` package and
 its `__all__` list. Submodule helpers that are not re-exported from

@@ -62,8 +62,6 @@ class BoundaryRegressions(unittest.TestCase):
             action()
         except FinKoreError as error:
             self.assertEqual(error.code, code)
-        except Exception as error:
-            raise self.failureException("Expected " + code + "; unexpected " + type(error).__name__) from None
         else:
             self.fail("Expected " + code + "; operation succeeded")
 

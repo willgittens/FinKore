@@ -60,6 +60,12 @@ public final class BoundaryRegressionTest {
     if (cases.isEmpty()) throw new AssertionError("No boundary vectors discovered");
     cases.put("money.serialization.exact-control", BoundaryRegressionTest::exactSerialization);
     cases.put("money.serialization.rounding-control", BoundaryRegressionTest::roundingControl);
+    cases.put("money.serialization.unsupported-scale", () -> {
+      Money money = Money.fromPortable(Map.of("amount", "1", "currency", "EUR"));
+      Object before = money.toPortable();
+      try { error(Money.INVALID_ROUNDING, () -> money.toPortable(Integer.MAX_VALUE)); }
+      finally { equal(before, money.toPortable()); }
+    });
     for (String amount : List.of("1.239", "-1.239", "0.001", "-0.001")) {
       cases.put("money.serialization.lossy-" + amount, () -> {
         Money money = Money.fromPortable(Map.of("amount", amount, "currency", "EUR"));
@@ -131,7 +137,7 @@ public final class BoundaryRegressionTest {
   private static void exactSerialization() {
     for (String[] item : List.of(new String[]{"1.2300", "2", "1.23"}, new String[]{"-1.2300", "2", "-1.23"},
         new String[]{"1.239", "3", "1.239"}, new String[]{"1.239", "5", "1.23900"},
-        new String[]{"0.000", "0", "0"}, new String[]{"-0.000", "2", "0.00"},
+        new String[]{"0.000", "0", "0"}, new String[]{"-0.000", "2", "0.00"}, new String[]{"10.00", "0", "10"},
         new String[]{"123456789012345678901.123456789", "9", "123456789012345678901.123456789"})) {
       Money money = Money.fromPortable(Map.of("amount", item[0], "currency", "EUR"));
       Object before = money.toPortable();
@@ -139,6 +145,7 @@ public final class BoundaryRegressionTest {
       equal(Map.of("amount", item[2], "currency", "EUR"), result);
       equal("EQUAL", money.compare(Money.fromPortable(result)));
       equal(before, money.toPortable());
+      equal(before, money.toPortable(null));
     }
   }
 
@@ -292,7 +299,7 @@ public final class BoundaryRegressionTest {
   private static void error(String code, Runnable action) {
     try { action.run(); }
     catch (FinKoreException failure) { equal(code, failure.code()); return; }
-    catch (RuntimeException | StackOverflowError failure) {
+    catch (StackOverflowError failure) {
       throw new AssertionError("Expected " + code + "; unexpected " + failure.getClass().getSimpleName());
     }
     throw new AssertionError("Expected " + code + "; operation succeeded");

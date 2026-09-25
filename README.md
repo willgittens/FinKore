@@ -359,6 +359,11 @@ runtimes. [Traceability](./conformance/traceability.md) keeps correction and
 mutation gates open. These failing regressions are deliberate evidence for the
 next implementation milestones, not a new passing-conformance claim.
 
+Milestone 3 now corrects Python and Java Money serialization: scale changes
+preserve exact value or return the specified portable error. Native serializer
+tests, all 102 Money vectors on all four runtimes, and targeted mutation probes
+pass. The remaining Workflow, Approval, Audit, and Entity corrections stay open.
+
 - Money
 - Workflow
 - Audit

@@ -14,7 +14,53 @@ const root = process.cwd()
 const py = 'test_readiness_regressions.ReadinessRegressionTests.'
 const workflowControl = 'Workflow retained definition ownership retains state, terminal and transition arrays after construction'
 const integration = 'test/integration/readiness-regressions.test.ts'
+const moneyPy = 'test_boundary_regressions.BoundaryRegressions.'
 const probes = [
+  ...[
+    { id: 'loss-check-removed',
+      from: 'if any(digit != "0" for digit in fraction[scale:]):', to: 'if False:',
+      target: moneyPy + 'test_money_lossy_serialization_rejected' },
+    { id: 'implicit-rounding',
+      from: 'if any(digit != "0" for digit in fraction[scale:]):\n            raise FinKoreError(ROUNDING_REQUIRED)',
+      to: 'if any(digit != "0" for digit in fraction[scale:]):\n            return _format_decimal(_round_decimal(value, scale, "HALF_UP"), scale)',
+      target: moneyPy + 'test_money_lossy_serialization_rejected' },
+    { id: 'wrong-portable-error',
+      from: 'if any(digit != "0" for digit in fraction[scale:]):\n            raise FinKoreError(ROUNDING_REQUIRED)',
+      to: 'if any(digit != "0" for digit in fraction[scale:]):\n            raise FinKoreError(INVALID_ROUNDING)',
+      target: moneyPy + 'test_money_lossy_serialization_rejected' },
+    { id: 'scale-validation-removed', from: '        _valid_scale(scale)', to: '        pass',
+      target: 'test_money.MoneyTests.test_serialization_rejects_negative_and_boolean_scales' },
+    { id: 'boolean-scale-accepted', from: 'not isinstance(value, int) or isinstance(value, bool) or value < 0',
+      to: 'not isinstance(value, int) or value < 0',
+      target: 'test_money.MoneyTests.test_serialization_rejects_negative_and_boolean_scales' },
+    { id: 'retained-scale-ignored', from: 'self.presentation_scale if scale is None else scale', to: 'scale',
+      target: 'test_money.MoneyTests.test_serialization_checks_native_presentation_scale' },
+    { id: 'zero-scale-ignored', from: '        if scale == 0:\n            return integer',
+      to: '        if scale == 0:\n            return text', target: moneyPy + 'test_money_zero_requested_scale' },
+  ].map(probe => ({ ...probe, id: 'python-money-serialization-' + probe.id, language: 'python', path: 'money.py',
+    control: moneyPy + 'test_money_explicit_rounding_control' })),
+  ...[
+    { id: 'implicit-truncation',
+      from: 'if (value.stripTrailingZeros().scale() > scale) throw new FinKoreException(ROUNDING_REQUIRED);',
+      to: 'if (value.stripTrailingZeros().scale() > scale) return value.setScale(scale, RoundingMode.DOWN).toPlainString();',
+      target: 'money.serialization.lossy-1.239' },
+    { id: 'implicit-rounding',
+      from: 'if (value.stripTrailingZeros().scale() > scale) throw new FinKoreException(ROUNDING_REQUIRED);',
+      to: 'if (value.stripTrailingZeros().scale() > scale) return value.setScale(scale, RoundingMode.HALF_UP).toPlainString();',
+      target: 'money.serialization.lossy--1.239' },
+    { id: 'wrong-portable-error',
+      from: 'if (value.stripTrailingZeros().scale() > scale) throw new FinKoreException(ROUNDING_REQUIRED);',
+      to: 'if (value.stripTrailingZeros().scale() > scale) throw new FinKoreException(INVALID_ROUNDING);',
+      target: 'money.serialization.lossy-1.239' },
+    { id: 'negative-scale-accepted', from: 'if (scale < 0) throw new FinKoreException(INVALID_ROUNDING);',
+      to: 'if (scale < 0) return value.toPlainString();', target: 'money.serialization.invalid-scale--1' },
+    { id: 'unsupported-scale-wrong-error', from: 'catch (ArithmeticException unsupportedScale) {\n        // Loss was checked above; remaining arithmetic failures are capacity limits.\n        throw new FinKoreException(INVALID_ROUNDING);',
+      to: 'catch (ArithmeticException unsupportedScale) {\n        throw new FinKoreException(ROUNDING_REQUIRED);',
+      target: 'money.serialization.unsupported-scale' },
+    { id: 'exact-reduction-rejected', from: 'value.stripTrailingZeros().scale() > scale', to: 'value.scale() > scale',
+      target: 'money.serialization.exact-control' },
+  ].map(probe => ({ ...probe, id: 'java-money-serialization-' + probe.id, language: 'java', path: 'Money.java',
+    control: 'money.serialization.rounding-control' })),
   ...['actor', 'change'].map((name) => {
     const fn = name === 'actor' ? 'cloneJsonValue' : 'cloneAuditValue'
     return { id: `typescript-audit-${name}-unsafe-copy`, language: 'typescript',
@@ -72,7 +118,7 @@ function sources(directory) {
 }
 function execute(probe, directory) {
   const cases = [probe.target, probe.control]
-  if (probe.language === 'python') return run(join(root, '.tools/bin/python3.12'), [
+  if (probe.language === 'python') return run(process.env.FINKORE_PYTHON_PATH ?? join(root, '.tools/bin/python3.12'), [
     join(root, 'docs/tools/mutation-native-python.py'), ...cases,
   ], { env: { ...process.env, PYTHONPATH: [directory, join(root, 'implementations/python/core/tests')].join(delimiter) } })
   if (probe.language === 'java') {
@@ -105,7 +151,9 @@ function execute(probe, directory) {
     summary: { total: rows.length, passed: rows.length - failed, failed, unsupported: 0, infrastructureErrors: 0 } }) }
 }
 
-for (const probe of probes) {
+const selected = probes.filter(probe => process.argv[2] === undefined || probe.id.includes(process.argv[2]))
+if (selected.length === 0) throw new Error('No native mutation probes match the requested ID fragment')
+for (const probe of selected) {
   const directory = mkdtempSync(join(tmpdir(), 'finkore-native-mutant-'))
   try {
     let path
@@ -132,4 +180,4 @@ for (const probe of probes) {
     console.log(`KILLED ${probe.id}: ${assessment.reason}; paired control PASS`)
   } finally { rmSync(directory, { recursive: true, force: true }) }
 }
-console.log(`Native public-API mutant probes: ${probes.length}/${probes.length} killed`)
+console.log(`Native public-API mutant probes: ${selected.length}/${selected.length} killed`)
