@@ -8,8 +8,9 @@ protections including [Core 0.9.4](plan-09.4.md). A subsequent readiness review
 found additional native construction, Approval evaluation/evidence, Audit
 authority, and Workflow/Entity validation gaps despite passing existing checks.
 Stable promotion is blocked on the [Core 0.9.6 corrective
-plan](plan-09.6.md), whose Milestone 1 review has four open contract decisions,
-its subsequent corrections and fresh boundary review, and the milestones below.
+plan](plan-09.6.md), whose contract decisions and permanent regressions are
+complete but whose expanded suites remain red, its subsequent corrections and
+fresh boundary review, and the milestones below.
 Passing finite conformance and native tests does not establish exhaustive
 correctness or complete the stable-release review.
 

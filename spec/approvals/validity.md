@@ -26,6 +26,9 @@ Approval history.
 - **APPROVAL-VALIDITY-011** — A lifecycle event that supersedes a Requirement MUST make Decisions for the superseded Requirement ineffective for current evaluation of that superseded Requirement; it MUST NOT make those Decisions satisfy the successor Requirement.
 - **APPROVAL-VALIDITY-012** — Failed lifecycle operations and failed current-effectiveness evaluations MUST leave committed Decisions and lifecycle events unchanged.
 
+- **APPROVAL-VALIDITY-013** — Before returning a concrete Requirement evaluation outcome, an implementation MUST validate required expiration context for every currently considered Decision, independently of Decision order or a decisive outcome. For this purpose, a currently considered Decision identifies the evaluated Requirement and is not excluded by committed withdrawal, Decision supersession, or Requirement supersession. Fact/revision staleness MUST NOT waive required expiration context for these Decisions. Unrelated or lifecycle-excluded Decisions MUST NOT require an evaluation instant solely because they have an expiration. All supplied Decision and lifecycle structure MUST still be validated, including excluded evidence. Missing or malformed required context MUST use `FINKORE_APPROVAL_INVALID_CONTEXT`. This rule does not define a total priority among unrelated concrete Approval failures.
+- **APPROVAL-VALIDITY-014** — Before record, lifecycle mutation, or current-effectiveness evaluation reuses supplied committed lifecycle history, the implementation MUST validate supported discriminators, required field structure, and relationships in the history's declared local event order against committed Decisions and earlier lifecycle events. Decision withdrawal targets and Decision supersession targets/successors MUST resolve uniquely; supersession target and successor MUST be distinct. A withdrawal or Decision supersession target MUST NOT already be withdrawn or superseded. Requirement supersession target and successor identifiers MUST be distinct, and a Requirement MUST NOT be superseded twice. Invalid evidence MUST use `FINKORE_APPROVAL_INVALID_DECISION` without changing either history. Requirement references MUST remain opaque; this rule MUST NOT require an absent Requirement registry or infer event order from timestamps.
+
 ## Invariants
 
 Current-effectiveness is an observation over append-only evidence. A Decision
@@ -88,40 +91,24 @@ The following existing obligations do not depend on a new evaluation policy:
   reuse that history; invalid evidence uses `FINKORE_APPROVAL_INVALID_DECISION`
   and leaves both histories unchanged.
 
-Two adjacent boundaries need explicit contract decisions before new expectations
-are written. They are **blocking specification gaps** for the expanded 0.9.6
-Approval boundary work, rather than permission to copy TypeScript's behavior:
+The two Milestone 1 proposals were accepted for the Milestone 2 regression
+baseline. APPROVAL-VALIDITY-013 defines the considered-set/context boundary;
+APPROVAL-VALIDITY-014 defines imported lifecycle relationship validation.
+These are corrective normative additions, not retroactive claims that every
+boundary was previously specified. The bounded fixture declares local lifecycle
+order through its array; Decision references use Requirement identity, Actor
+identity, and decision instant. Timestamp equality retains SPEC-TIMESTAMP-005.
 
-1. **Currently considered Decisions.** APPROVAL-VALIDITY-007 and the expiration
-   invariant do not explicitly settle whether independently stale facts or
-   revision evidence remove a Decision before evaluation context is required.
-   Proposed resolution: validate all supplied Decision/lifecycle structure;
-   exclude unrelated, withdrawn, Decision-superseded, and Requirement-superseded
-   evidence from expiration evaluation. For the remaining matching Decisions,
-   require valid time context for every expiration before aggregating an
-   outcome, including when relevant facts later establish staleness. A native
-   facts-only helper is not this evaluation. This proposal selects a context
-   boundary; agreement among current runtimes would not make it normative.
-2. **Imported supersession relationships.** APPROVAL-VALIDITY-005 explicitly
-   defines withdrawal target checks. APPROVAL-VALIDITY-010/011 do not fully
-   specify self-supersession, repeated/conflicting supersessions, successor
-   resolution, or the ordering used to validate imported lifecycle events.
-   Proposed bounded resolution: validate lifecycle events in their declared
-   local sequence against the supplied committed Decisions and earlier events;
-   Decision targets and successors resolve uniquely, are distinct, and a target
-   cannot already be withdrawn or superseded. Requirement target/successor
-   identifiers are distinct and a target cannot be superseded twice. Requirement
-   identifiers need not resolve through an invented registry absent from the
-   input. Do not add a same-Requirement successor restriction, a successor
-   effectiveness requirement, timestamp sorting, or a general graph/cycle
-   policy without a further governing rule.
+No same-Requirement successor restriction, successor-effectiveness condition,
+or general graph/cycle policy is introduced. A successor can later be withdrawn
+without rewriting its predecessor's supersession. Requirement identifiers do
+not need to resolve through a registry absent from the input. Operation-specific
+request kind remains distinct from committed history's discriminator.
 
-Acceptance requires explicit normative clauses for the unsettled boundaries,
-with new stable requirement IDs where new obligations are introduced. It is a
-corrective normative change under SPEC-FREEZE-001, not an editorial update;
-SPEC-FREEZE-002 requires synchronized tests, implementations, and public docs.
-The proposals above are not yet normative. Existing withdrawal and unknown-kind
-regressions may proceed independently, using their already-defined errors.
+Milestone 2 provides permanent regressions. Milestone 5 must deliver the core,
+adapter, and public API corrections with those requirements and tests before
+the corrective change satisfies SPEC-FREEZE-002 or is released. Existing IDs
+retain their meaning; new obligations have new IDs.
 
 ## Example
 

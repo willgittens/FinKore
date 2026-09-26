@@ -23,6 +23,8 @@ An Approval Decision outcome is `APPROVED` or `REJECTED`. `PENDING` describes an
 - **APPROVAL-DECISION-007** — A committed Approval Decision MUST NOT be overwritten or removed from logical approval history, including when later lifecycle evidence makes it no longer currently effective.
 - **APPROVAL-DECISION-008** — When a composing domain requires an [Audit Event](../audit/events.md) for an Approval Decision, that Audit Event MUST preserve the Approval Decision's domain meaning.
 
+- **APPROVAL-DECISION-009** — A concrete single-Decision effectiveness evaluation MUST validate the supplied concrete Requirement, Decision structure, Requirement association, and Actor eligibility before returning effectiveness. Malformed declarations or a mismatched association MUST use `FINKORE_APPROVAL_INVALID_DECISION`; a valid eligibility declaration excluding the Actor MUST use `FINKORE_APPROVAL_INELIGIBLE_ACTOR`. It MUST evaluate caller-declared relevant facts and any expiration under Approval Validity using explicit required context. Expired or fact-stale valid evidence MUST return `INEFFECTIVE`; otherwise it MUST return `EFFECTIVE`. Without supplied lifecycle history this observation MUST NOT claim lifecycle-aware effectiveness. A separately documented facts-only helper MAY remain available, but MUST NOT be used as the complete concrete evaluation.
+
 ## Invariants
 
 Each effective Approval Decision must have exactly one outcome and exactly one attributable Actor.
@@ -96,34 +98,19 @@ Invalid decisions must use an applicable [Approval Error](errors.md).
 
 ## Core 0.9.6 evaluation scope decision (non-normative)
 
-**Blocking contract gap:** the conformance-local `approval.decision.evaluate`
-catalog describes fact effectiveness, while concrete Requirement/Decision
-evaluation requires subject association and eligibility and current validity
-includes expiration. The TypeScript native `evaluateEffectiveness` helper
-compares facts only; it does not take a Requirement or evaluation instant.
-The Python and Java helpers have different scopes. Neither the shared return
-word `EFFECTIVE` nor an adapter's choice of helper settles the fixture contract.
+The Milestone 1 proposal was accepted when Milestone 2 was requested.
+APPROVAL-DECISION-009 establishes the concrete boundary for the conformance-local
+`approval.decision.evaluate` fixture. Its previous facts-only catalog wording is
+superseded by this documented corrective contract path. The supplied Requirement
+is required; `evaluatedAt` is required only when expiration applies. Existing
+result categories and identifiers are retained. A native facts-only helper
+retains its documented scope and signature.
 
-Proposed resolution: the fixture evaluates one concrete Decision against the
-supplied concrete Requirement, current subject facts, declared relevant fact
-paths, and explicit evaluation instant when expiration requires one. Malformed
-Requirement/Decision evidence or a mismatched Requirement association uses
-`FINKORE_APPROVAL_INVALID_DECISION`; a valid eligibility rule excluding the
-Actor uses `FINKORE_APPROVAL_INELIGIBLE_ACTOR`. Missing or malformed required
-time context uses `FINKORE_APPROVAL_INVALID_CONTEXT`; expiration at or before
-the evaluation instant and changed relevant facts yield `INEFFECTIVE`.
-Otherwise the result is `EFFECTIVE`. It makes no lifecycle-history claim when
-no lifecycle history is supplied. Fact comparison preserves legitimate null
-facts and existing explicit relevant-path semantics; it invents no fact schema.
-
-A separately documented native facts-only helper can remain available with
-its existing signature. An adapter delegates the complete fixture evaluation
-to a core API; it cannot add the financial checks itself. This proposal changes
-the previously documented fixture scope and is not yet accepted or normative.
-Its acceptance needs an explicit corrective contract record and synchronized
-tests, implementations, adapter translation, and public documentation under
-SPEC-FREEZE-001/002 and SPEC-COMPATIBILITY-012/014. The label remains
-conformance-local; no canonical `finkore.*` identifier is added or repurposed.
+This is an observable corrective contract change under SPEC-FREEZE-001 and
+SPEC-COMPATIBILITY-012/014, not an editorial clarification. Milestone 2 adds
+permanent tests; implementation, adapter, and public API synchronization remains
+required in Milestone 5 before the corrective change can satisfy SPEC-FREEZE-002
+or be released. No canonical Agentic operation is added or repurposed.
 
 ## Non-Goals
 

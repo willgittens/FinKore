@@ -2,9 +2,10 @@
 
 ## Status
 
-Milestone 1 review is recorded; completion awaits four explicit contract
-decisions described below. Milestones 2–9 are unstarted. No implementation or
-regression expectation has been changed by this review.
+Milestones 1 and 2 are complete: the four contract decisions are accepted and
+permanent regressions reproduce the defects with passing valid controls.
+Milestones 3–9 are unstarted. Implementations remain defective; the expanded
+suites intentionally fail until their owning correction milestones land.
 The readiness review of commit `e300bb1`
 (`core-0.9.5`) found additional mandatory behavior and portability gaps despite
 passing existing checks. Core 1.0 promotion is blocked pending this corrective
@@ -20,8 +21,8 @@ This plan is non-normative. [CoreDoc](../coreDoc/core-doc.md) establishes
 foundation obligations; `/spec` defines financial behavior. Any normative
 correction must follow `SPEC-FREEZE-001` through `SPEC-FREEZE-004` and the
 compatibility rules in [Specification Conventions](../../spec/conventions.md).
-Unresolved recommendations below remain proposals, not accepted changes to
-financial semantics. Planning does not implement fixes, create a release tag,
+Accepted decisions are normative in their owning specification documents; this
+plan records their implementation work. Planning does not implement fixes, create a release tag,
 publish packages, or declare Core 1.0 stable.
 
 ## Objective and scope
@@ -95,7 +96,7 @@ separate failure mechanisms; they are planning labels, not requirement IDs.
 - [x] Classify every finding as implementation violation, adapter defect,
       documentation mismatch, or specification gap. Establish the expected
       result, portable error, and applicable priority before writing expectations.
-- [ ] Resolve the decisions below in their owning documents. Record outcomes
+- [x] Resolve the decisions below in their owning documents. Record outcomes
       and compatibility assessments here; do not let this plan or a fixture
       become a second specification. Surface unresolved financial semantics
       before implementing dependent behavior.
@@ -110,17 +111,17 @@ separate failure mechanisms; they are planning labels, not requirement IDs.
       and lightweight composition observations. Do not require concrete subject
       facts on a composition observation or invent a universal fact schema.
 
-### Decisions and recommended directions
+### Accepted directions and scope limits
 
-| Decision | Recommended direction | Limit to resolve explicitly |
+| Decision | Accepted direction | Scope limit |
 | --- | --- | --- |
 | Native constructor validation | Keep public construction supported and validate before exposing an invalid domain value or instance. Reuse core validation with portable parsing. | Preserve valid Decimal values, constructor signatures where practical, exactness, and owned declarations. Do not route valid native Decimal values through a parser that only accepts portable plain strings. |
-| Decision evaluation meaning | Give `approval.decision.evaluate` one concrete, bounded meaning across runtimes: validate the supplied Requirement association/eligibility and Decision, evaluate relevant facts, and honor expiration with explicit context. | Review this proposal against the existing facts-only fixture description and native APIs. A facts-only helper may remain explicitly documented as such. Do not imply lifecycle-aware evaluation without supplied lifecycle evidence, add a canonical operation ID, or silently change a fixture contract. |
-| Complete evaluation validation | Validate required evidence/context before returning a decisive result. Reordering equivalent Decision inputs must not hide missing required context. | Specify which Decisions are currently considered, including unrelated, withdrawn, superseded, and stale evidence; do not impose evaluation-time requirements on excluded evidence without a governing rule. Preserve defined error priority without inventing a total order for unrelated concrete Approval failures. |
-| Imported lifecycle evidence | Validate committed discriminators, field structure, and resolvable relationships before record, lifecycle mutation, or evaluation reuses history. | Distinguish a request's redundant `type` member from committed history's meaningful discriminator. Review self-reference, ambiguity, duplicate events, and successor checks against the specification before choosing results. No new authorization or lifecycle kinds. |
+| Decision evaluation meaning | Give `approval.decision.evaluate` one concrete, bounded meaning across runtimes: validate the supplied Requirement association/eligibility and Decision, evaluate relevant facts, and honor expiration with explicit context. | APPROVAL-DECISION-009 and the corrected fixture catalog define this boundary. A facts-only helper may remain explicitly documented as such. Do not imply lifecycle-aware evaluation without supplied lifecycle evidence, add a canonical operation ID, or silently change a fixture contract. |
+| Complete evaluation validation | Validate required evidence/context before returning a decisive result. Reordering equivalent Decision inputs must not hide missing required context. | APPROVAL-VALIDITY-013 specifies unrelated, withdrawn, superseded, and stale evidence; do not impose evaluation-time requirements on excluded evidence without a governing rule. Preserve defined error priority without inventing a total order for unrelated concrete Approval failures. |
+| Imported lifecycle evidence | Validate committed discriminators, field structure, and resolvable relationships before record, lifecycle mutation, or evaluation reuses history. | Distinguish a request's redundant `type` member from committed history's meaningful discriminator. APPROVAL-VALIDITY-014 defines self-reference, ambiguity, duplicate events, and successor checks. No new authorization or lifecycle kinds. |
 | Required timestamps | Use the existing portable timestamp parser for required evaluation instants, including calendar, offset, and fractional precision checks. | Preserve original valid lexical values and nanosecond semantics. Do not require an instant where the contract does not require one or introduce a clock default. |
 | Redaction policy authority | Reject absent, null, empty, or malformed authority declarations with the existing redaction error. | Validate the declared authority representation; do not implement RBAC, authenticate an authority, or invent policy lookup. Resolve any other policy-field requirements separately. |
-| Source Identity presence | Reject supplied malformed Source Identity even when otherwise valid mapping evidence exists. | Resolve omitted Source Identity with standalone complete mapping separately from explicit null; do not assume TypeScript's pair-required representation is normative. Preserve opaque identity values. |
+| Source Identity presence | Reject supplied malformed Source Identity even when otherwise valid mapping evidence exists. | ENTITY-IMPORT-011 permits standalone complete mapping when Source Identity is omitted; explicit null is invalid. Preserve opaque identity values. |
 | Malformed native values and errors | Validate types before enum membership, iteration, casting, or equality; use the owning domain's existing error. | Define supported native types and omission sentinels where necessary. Do not coerce malformed input, catch every runtime defect as a domain error, or copy one runtime's accidental priority. |
 
 Completion: every finding has an agreed owning contract and test boundary, with
@@ -131,8 +132,8 @@ no unresolved semantic decision blocking its implementation milestone.
 The review read the owning domain/error specifications, CoreDoc, compatibility
 and freeze rules, conformance conventions and mapped vectors, native public APIs,
 adapter dispatch, and applicable Agentic descriptors. The table classifies the
-reported observations by contract; it is not a claim that permanent reproductions
-or implementation fixes have been delivered. Milestone 2 supplies those tests.
+reported observations by contract. The accepted decisions below resolve its
+original gaps; Milestone 2 supplies permanent reproductions, without fixes.
 Expected errors below assume otherwise valid input unless a priority is stated.
 
 | Finding | Classification and governing outcome | Permanent test boundary and valid control |
@@ -142,47 +143,40 @@ Expected errors below assume otherwise valid input unless a priority is stated.
 | 3 | Implementation violation. WORKFLOW-STATES-001–004 and WORKFLOW-ERROR-001/007 require `FINKORE_WORKFLOW_INVALID_DEFINITION` for an undeclared initial State. | Python/Java direct definition constructors, then create/import/transition. Validate unique States, terminal declarations, endpoints, guards and version structure; valid owned definitions remain usable. JSON parsing alone cannot close this boundary. |
 | 4 | Implementation violation. AUDIT-REDACTION-001 and its error catalog require `FINKORE_AUDIT_REDACTION_INVALID` for absent/malformed authority. | Native and portable redact with absent/null/empty/wrong-type authority; a nonempty authority control preserves Event meaning, relationships, and redaction evidence. Failed redaction leaves history unchanged. No new RBAC or unrelated policy-field requirement. |
 | 5 | Implementation violation. APPROVAL-COMPOSITION-010, APPROVAL-VALIDITY-008, SPEC-TIMESTAMP-001–006 and APPROVAL-ERROR-007/010 require `FINKORE_APPROVAL_INVALID_CONTEXT` for malformed required instants. | Applicable `requiresEvaluationContext: true` with absent/null/calendar-invalid/offset-invalid/excess-precision timestamps; exact valid offsets/nanoseconds and context-not-required controls. Pair each composition priority category. |
-| 6a | Fixture contract/documentation mismatch and blocking scope decision. Concrete Requirement validation is already required by APPROVAL-REQUIREMENT-002/003, but the facts-only fixture description and TypeScript/Java dispatch omit that boundary. Proposed concrete evaluation rejects empty subject with `FINKORE_APPROVAL_INVALID_DECISION`. | After scope acceptance: concrete Requirement subject/eligibility, Decision association, valid eligible/ineligible Actor, and explicit null/scalar/structured facts, directly and through adapters. Keep native facts-only helper tests separate. |
-| 6b | Blocking fixture scope decision, not a proven defect in a documented facts-only native helper. Under the proposed concrete fixture, APPROVAL-VALIDITY-007–009 require expiration handling: expired → INEFFECTIVE; required absent/malformed time → `FINKORE_APPROVAL_INVALID_CONTEXT`. | Exact expiry, just-before/after, equivalent offsets, nanosecond boundaries, no-expiration control. Do not change a native facts-only helper's signature implicitly. |
+| 6a | Fixture contract/documentation mismatch resolved by APPROVAL-DECISION-009. Concrete Requirement validation is already required by APPROVAL-REQUIREMENT-002/003, but the facts-only fixture description and TypeScript/Java dispatch omit that boundary. Accepted concrete evaluation rejects empty subject with `FINKORE_APPROVAL_INVALID_DECISION`. | Concrete Requirement subject/eligibility, Decision association, valid eligible/ineligible Actor, and explicit null/scalar/structured facts, directly and through adapters. Keep native facts-only helper tests separate. |
+| 6b | Fixture scope resolved by APPROVAL-DECISION-009; the documented facts-only native helper retains its scope. For concrete evaluation, APPROVAL-VALIDITY-007–009 require expiration handling: expired → INEFFECTIVE; required absent/malformed time → `FINKORE_APPROVAL_INVALID_CONTEXT`. | Exact expiry, just-before/after, equivalent offsets, nanosecond boundaries, no-expiration control. Do not change a native facts-only helper's signature implicitly. |
 | 7a | Implementation violation. APPROVAL-VALIDITY-001/012 and the existing committed-history fixture require meaningful lifecycle kinds; unknown committed discriminator uses `FINKORE_APPROVAL_INVALID_DECISION`. | Core history import/record/lifecycle/evaluate reuse, unknown/null/missing/wrong-type committed kind, paired valid kinds. Redundant request `type` remains ignored by operation-specific lifecycle requests. |
-| 7b | Implementation violation for unresolved withdrawal target under APPROVAL-VALIDITY-004/005/012; `FINKORE_APPROVAL_INVALID_DECISION`. Adjacent supersession constraints need the separate decision below. | Missing/ambiguous withdrawal targets, prior withdrawal/supersession, real returned-history reuse and unchanged histories; valid uniquely resolving target control. Do not infer supersession policy from TypeScript. |
-| 8 | Implementation violation for the reported pair of considered Decisions under APPROVAL-VALIDITY-007/008/012: required absent time → `FINKORE_APPROVAL_INVALID_CONTEXT`, regardless of rejection order. Adjacent stale/excluded evidence requires the considered-set decision below. | Rejection followed/preceded by matching expiring Decision, valid explicit time, unchanged Decisions/lifecycle. Add excluded/stale cases only after their context boundary is settled. |
+| 7b | Implementation violation for unresolved withdrawal target under APPROVAL-VALIDITY-004/005/012; `FINKORE_APPROVAL_INVALID_DECISION`. APPROVAL-VALIDITY-014 now specifies adjacent supersession constraints. | Missing/ambiguous withdrawal targets, prior withdrawal/supersession, real returned-history reuse and unchanged histories; valid uniquely resolving target control. Do not infer supersession policy from TypeScript. |
+| 8 | Implementation violation for the reported pair of considered Decisions under APPROVAL-VALIDITY-007/008/012: required absent time → `FINKORE_APPROVAL_INVALID_CONTEXT`, regardless of rejection order. APPROVAL-VALIDITY-013 now specifies stale/excluded evidence. | Rejection followed/preceded by matching expiring Decision, valid explicit time, unchanged Decisions/lifecycle. Exercise the accepted excluded/stale context boundary. |
 | 9a | Implementation violation. MONEY-RATE-001/007 and MONEY-ERROR-001/007 require `FINKORE_MONEY_INVALID_AMOUNT`, not Python TypeError. | Portable Rate kind `{}`, array, null, number, Boolean, unknown string; DECIMAL/PERCENTAGE controls and unchanged Money. Native unsupported types separately; review rounding/allocation under their own existing error codes. |
 | 9b | Implementation violation. Missing chain State → `FINKORE_APPROVAL_INVALID_CHAIN`; null/unresolved composition applicability → `FINKORE_APPROVAL_CONDITION_UNRESOLVED`, subject to APPROVAL-ERROR-010 for compositions. | Java null and Python unhashable containers at native/core and adapter boundaries, all valid enum controls; no fabricated PENDING/inapplicability. Chain validation has no invented total error hierarchy. |
 | 9c | Implementation violation. ENTITY-EVOLUTION-025 and ENTITY-ERROR-001/004 require `FINKORE_ENTITY_STATE_CONFLICT` for supplied null expected source State/Revision against a valid source. | Native overloads and all four portable evolution kinds: omitted/null/malformed/matching/mismatching expectations; no source, relation, currentness, or Audit partial effect. Preserve primary domain errors without inventing a total Entity priority. |
 | 10a | Implementation violation. WORKFLOW-ERROR-005/007 require `FINKORE_WORKFLOW_INVALID_INSTANCE` before simultaneous version mismatch. | Import/transition with malformed observed revision plus mismatched binding; valid-instance mismatch control; expected-revision conflict and invalid-definition controls. Preserve State/binding/revision on failure. |
-| 10b | Implementation violation for explicit null under ENTITY-IMPORT-003/005/008/009: `FINKORE_ENTITY_INVALID_IDENTITY` despite valid mapping. Omitted Source Identity plus standalone mapping is a separate gap. | Core/adapter import presence matrix, opaque source values and unchanged observations, paired valid identity/mapping; standalone-mapping expected result waits for decision. |
+| 10b | Implementation violation for explicit null under ENTITY-IMPORT-003/005/008/009: `FINKORE_ENTITY_INVALID_IDENTITY` despite valid mapping. ENTITY-IMPORT-011 permits omitted Source Identity plus standalone mapping. | Core/adapter import presence matrix, opaque source values and unchanged observations, paired valid identity/mapping; standalone mapping preserves its declared references without synthesizing Source Identity. |
 
-### Contract decisions still required
+### Accepted contract decisions
 
-Four decisions remain unresolved. Their proposals are recorded in their owning
-documents, without modifying normative requirements or fixture expectations:
+The request to proceed with Milestone 2 accepted the four proposed directions.
+Their owning documents now define the outcomes with distinct stable IDs:
 
-1. [Decision evaluation scope](../../spec/approvals/decisions.md#core-096-evaluation-scope-decision-non-normative):
-   adopt bounded concrete Requirement/Decision evaluation, with association,
-   eligibility, facts and expiration, while retaining a documented native
-   facts-only helper. No lifecycle claim without lifecycle evidence. This
-   corrects the documented fixture scope rather than silently redefining it.
-2. [Currently considered Decisions](../../spec/approvals/validity.md#core-096-boundary-review-non-normative):
-   exclude unrelated and lifecycle-excluded evidence from expiration checks;
-   require explicit time for every remaining matching expiring Decision before
-   aggregation, including fact/revision-stale Decisions. Validate all supplied
-   evidence structurally regardless of exclusion. The stale/context boundary
-   is not settled merely because runtimes currently agree.
-3. [Imported supersession relationships](../../spec/approvals/validity.md#core-096-boundary-review-non-normative):
-   establish declared local sequence, distinct uniquely resolving Decision
-   target/successor references, and rejection of repeat/conflicting targets;
-   keep Requirement references opaque without a registry. The owning proposal
-   explicitly avoids adding successor-effectiveness or general graph policies.
-4. [Standalone mapping](../../spec/entities/import.md#core-096-open-contract-decision-non-normative):
-   accept complete mapping when separate Source Identity is omitted, preserving
-   its source and Entity references without synthesizing a Source Identity.
-   Explicit null/malformed Source Identity stays invalid.
+1. [APPROVAL-DECISION-009](../../spec/approvals/decisions.md): concrete
+   Requirement/Decision evaluation validates association and eligibility, compares
+   relevant facts, and honors expiration with explicit context. Native facts-only
+   helpers retain their scope; no lifecycle claim is made without history.
+2. [APPROVAL-VALIDITY-013](../../spec/approvals/validity.md): validate expiration
+   context for all currently considered matching Decisions before aggregation,
+   including stale facts/revisions. Unrelated, withdrawn, and superseded evidence
+   is excluded from this context requirement but still structurally validated.
+3. [APPROVAL-VALIDITY-014](../../spec/approvals/validity.md): validate committed
+   history in declared local order, with unique resolvable Decision targets and
+   successors, distinct supersession references, and no repeat/conflicting
+   targets. Requirement references remain opaque; no registry is invented.
+4. [ENTITY-IMPORT-011](../../spec/entities/import.md): accept complete standalone
+   mapping when Source Identity is omitted, preserve the mapping, and synthesize
+   no Source Identity. Explicit null/malformed Source Identity remains invalid.
 
-All four require acceptance of their concrete proposals or another specified
-rule. Dependent expectations and fixes are blocked; independent existing-rule
-work has an established contract. Milestone 1 is not complete until these
-decisions are resolved.
+No semantic decision remains open for these regressions. Implementation and
+public API synchronization are still required before release.
 
 ### Compatibility and synchronization assessment
 
@@ -196,21 +190,22 @@ runtime exceptions or errors contrary to already-specified priority; it does
 not change a previously conforming error mapping. Regression additions for
 these rules fall under SPEC-COMPATIBILITY-013, not new financial policy.
 
-The four unresolved proposals select previously unsettled outcomes or expand a
-documented fixture contract. Acceptance is corrective normative/contract work
+The four accepted decisions select previously unsettled outcomes or expand a
+documented fixture contract. This is corrective normative/contract work
 under SPEC-FREEZE-001 and SPEC-COMPATIBILITY-012/014, not editorial work. New
 obligations need distinct stable requirement IDs; existing IDs cannot be reused
 for materially different meaning. Fixture requiredness and expiration scope
 must be explicitly documented. No canonical operation is repurposed; Approval,
 redaction, creation/import and serializer labels remain conformance-local.
-Manifest/vector syntax stays 0.1 because these proposals do not change its
+Manifest/vector syntax stays 0.1 because these decisions do not change its
 structural format. No blanket backward-compatibility claim is made for them.
 
 SPEC-FREEZE-002 requires accepted normative corrections to land with affected
 implementation, tests/conformance, public documentation, and Agentic metadata
-in the same change. This Milestone 1 review therefore records open proposals
-instead of activating new normative clauses before dependent work is available.
-Later milestone planning does not waive that synchronization requirement.
+in the same change. The branch now contains the accepted specification and
+regressions; Milestones 5 and 7 must complete implementation, adapter, and public
+API synchronization before the corrective change can satisfy SPEC-FREEZE-002
+or be released. The intentionally red Milestone 2 baseline is not that closure.
 
 CoreDoc review found no proposed foundation change: CORE-001 monetary validity,
 CORE-002 declared control/atomicity, CORE-003.4 redaction authority, CORE-004
@@ -219,46 +214,46 @@ findings. CoreDoc version fields remain unchanged. Agentic descriptors clarify
 existing Workflow priority and Entity evolution presence; no capability is
 added or claimed corrected. README implementation claims, JSDoc, regression
 tests, coverage, and mutation gates change with their owning implementation
-milestones. No code, public API, vector, release note, or AGENTS.md change is
-required merely to record this review; no release verification is claimed.
+milestones. Milestone 2 changes tests, fixtures, and their discovery, with no implementation
+or public API changes. No release note or AGENTS.md change is needed; no release
+verification is claimed.
 
 Traceability now reopens affected requirement rows and distinguishes native
 constructor/sequence boundaries from existing JSON mappings. See the current
 [coverage inventory](../../conformance/traceability.md#core-096-reassessment).
 Historical 0.9.5 completion is preserved as evidence of that release only.
 
-Review validation: `npm run docs:check` and `git diff --check` pass. The
-traceability check retains 413 requirements and 667 vectors, with 263 COVERED,
-62 PARTIAL, 83 NOT DIRECTLY TESTABLE, and five BLOCKING SPEC GAP rows representing
-the four decisions above. Root README and Core 1.0 plan status reflect this
-review. Runtime, coverage, and mutation suites were not rerun for this
-documentation-only milestone; their earlier results are not new verification.
+Historical Milestone 1 validation passed `npm run docs:check` and
+`git diff --check`, retaining 413 requirements and 667 vectors with 263 COVERED,
+62 PARTIAL, 83 NOT DIRECTLY TESTABLE, and five BLOCKING SPEC GAP rows for four
+then-open decisions. Milestone 2 supersedes that inventory and records fresh
+runtime results below. Historical results are not new release verification.
 
 ## Milestone 2 — Permanent regressions and boundary inventory
 
-- [ ] Inventory supported public constructors, parsers/importers, serializers,
+- [x] Inventory supported public constructors, parsers/importers, serializers,
       operations, and history reuse paths across all three implementations.
       Map findings to native tests, portable vectors, adapter tests, and targeted
       mutation probes as appropriate. Keep mappings in this plan and existing
       traceability/test artifacts rather than a new audit-report system.
-- [ ] Reproduce every finding and lettered subcase with a failing permanent
+- [x] Reproduce every finding and lettered subcase with a failing permanent
       regression against the defective candidate and an independently passing
       valid control. Assert exact portable codes and observable outcomes.
-- [ ] Add specification-derived JSON vectors to manifest-listed files where
+- [x] Add specification-derived JSON vectors to manifest-listed files where
       behavior is portable. Use native tests for Decimal construction, Java
       records, ownership, unsupported native values, and public overloads.
-- [ ] Apply the matrix below to relevant entry points, including boundaries
+- [x] Apply the matrix below to relevant entry points, including boundaries
       adjacent to each finding. Use deterministic representative cases and
       meaningful combinations, not an indiscriminate Cartesian product.
-- [ ] Compare equivalent portable inputs after a JSON round trip. Classify
+- [x] Compare equivalent portable inputs after a JSON round trip. Classify
       differences against `/spec`, including agreement on incorrect behavior;
       no implementation is the expected-result oracle. Treat native sparse
       arrays and unsupported objects separately from JSON fixtures.
-- [ ] Add sequence tests that pass actual returned values through record,
+- [x] Add sequence tests that pass actual returned values through record,
       lifecycle changes, evaluation, observation/import, and subsequent calls.
       On failure assert unchanged source values, bindings, Decisions, lifecycle
       history, evolution relations, and Audit history where applicable.
-- [ ] Review adjacent discrepancies for a governing requirement before fixing
+- [x] Review adjacent discrepancies for a governing requirement before fixing
       them. Record any additional confirmed mandatory gap and its regression
       here; do not silently expand scope or dismiss it because existing tests pass.
 
@@ -275,6 +270,116 @@ documentation-only milestone; their earlier results are not new verification.
 Completion: every finding has a demonstrated failing regression and valid
 control. The expanded tests may remain red until their owning fixes land; do
 not weaken expectations or describe this milestone as release verification.
+
+### Milestone 2 boundary inventory and results
+
+The permanent native suites are
+[TypeScript](../../implementations/typescript/core/test/integration/construction-evaluation-regressions.test.ts),
+[Python](../../implementations/python/core/tests/test_construction_evaluation_regressions.py), and
+[Java](../../implementations/java/core/src/test/java/org/finkore/ConstructionEvaluationRegressionTest.java).
+They call public cores directly. The
+[TypeScript adapter test](../../implementations/typescript/adapters/conformance/test/construction-evaluation-regressions.test.ts)
+and real runner executions on all runtimes exercise representation translation
+separately. Every new JSON file is in the normal manifest; native tests are in
+normal Vitest, unittest, Java entry-point, and Maven test discovery. Nothing is
+skipped, marked expected-failure, or inverted to make the defective code pass.
+
+| Public surface | TypeScript | Python | Java | Exercised boundary / remaining correction work |
+| --- | --- | --- | --- | --- |
+| Money construction and observation | `Money.from`, `applyRate`, `toJSON`; private constructor | `Money(Decimal, currency)`, `from_portable`, `apply_rate`, `to_portable` | `Money.fromPortable`, `applyRate`, `toPortable`; private constructor | Direct Python amount/currency matrix, finite Decimal arithmetic/serialization controls, portable Rate kinds on every core and adapter. Existing rounding/allocation suites remain in discovery; corrective package-consumer/mutation checks belong to M3. |
+| Workflow definitions and instances | `Workflow.create/from/import`, `transition`, `toJSON` | `WorkflowDefinition` / `WorkflowInstance`, portable parsers, `create_workflow`, `import_workflow`, `transition_workflow` | `Workflow.Definition` / `Instance` / `Transition` records, portable parsers, `create`, `importInstance`, `transition` | Direct definition construction, initial/terminal/duplicate/endpoint/version faults, owned valid definition → create → observe/import → transition. Portable import/transition pair observed revision with version mismatch and invalid definition. Existing guard/binding suites retained; adjacent instance/Transition constructor corrections remain M4 review. |
+| Approval concrete values and evaluation | `ApprovalDecision`, `ApprovalDecisionHistory.create/record/evaluateRequirement`; `evaluateEffectiveness` is facts-only | `record_decision`, `evaluate_decision`, `evaluate_requirement` | `Approvals.recordDecision/evaluateDecision/evaluateRequirement`; old Decision helper lacks Requirement input | Concrete fixture validates Requirement subject/association/eligibility and expiration. TS/Java concrete evaluation runs through adapters pending a core boundary in M5; native facts-only semantics are not silently expanded. |
+| Approval history reuse | history `toJSON/create/withdraw/supersede/supersedeRequirement` | `withdraw_decision`, `supersede_decision`, `supersede_requirement` | `Approvals.withdrawDecision/supersedeDecision/supersedeRequirement` | Actual record → withdraw → reconstruct → record → evaluate outputs; malformed committed history reused through all five Python/Java operations and TS reconstruction. Decisions and lifecycle remain unchanged on failure. |
+| Composition and chain | `ApprovalComposition.from/evaluate`, `ApprovalChain.from/evaluate` | `evaluate_composition`, `evaluate_chain` | `Approvals.evaluateComposition/evaluateChain` | State/applicability/context presence and type matrix, specified priority, nested/later-stage evidence, empty/false/missing effectiveness quorum controls. Lightweight observations do not gain concrete Requirement fields. |
+| Audit | `AuditLog.create/events/redact` | `redact_history` | `Audit.Log.create/events/redact` | Authority declaration matrix, valid evidence append, unchanged source/history on rejected redaction. Existing append/serialize/ownership cases retained. |
+| Entity import/observation/evolution | `FinancialEntity.from/import/toJSON`, `EntityEvolutionHistory.create/toJSON/correct/reverse/void/supersede` | `import_entity`, `evolve_entity` | `Entities.importEntity/evolve` | Source Identity presence with mapping; all four evolution kinds with supplied null/malformed/mismatch State and revision. Returned relations and Audit history feed the next evolution; source/history snapshots prove failure atomicity. Other public overloads retain existing native coverage and M7 correction review. |
+
+The 177 additions comprise 9 Money, 18 Workflow, 8 Audit, 105 Approval, and
+37 Entity vectors. The following representative cases map each original finding;
+full matrices and all 22 distinct independently passing control IDs are recorded
+by each vector's `reviewFinding` and `pairedControl`. Portable names below are full stable vector IDs. Native names are literal test
+names. Existing vectors and expectations remain
+unchanged; adapter suite counts increase only for newly registered vectors.
+
+| Finding | Representative regression | Passing control | Reproduced failure / correction mutation target |
+| --- | --- | --- | --- |
+| 1 | `approval.boundary096.state-any-of-absent-001` | `approval.boundary096.state-any-of-control-001` | Python/Java infer missing State; remove required-evidence validation (M5). |
+| 2 | Python `test_money_constructor_nan` and `test_money_currency_empty` | `test_money_decimal_controls` | Python exposes invalid native Money; bypass constructor validation (M3). |
+| 3 | Python `test_workflow_constructor_initial`; Java `workflow.native.constructor-initial` | `test_workflow_native_control`; `workflow.native.control` | Python/Java expose invalid definitions; bypass shared definition validation (M4). |
+| 4 | `audit.boundary096.authority-absent-001` | `audit.boundary096.authority-control-001` | Python accepts absent authority; remove authority validation (M6). |
+| 5 | `approval.boundary096.context-invalid-001` | `approval.boundary096.context-control-001` | All runtimes accept malformed required instant; bypass timestamp parsing (M5). |
+| 6a | `approval.boundary096.decision-subject-empty-001` | `approval.boundary096.decision-control-001` | TypeScript/Java accept invalid concrete Requirement; omit concrete validation (M5). |
+| 6b | `approval.boundary096.decision-expiry-after-001` | `approval.boundary096.decision-control-001` and `approval.boundary096.decision-expiry-before-001` | TypeScript ignores expiration; bypass expiration or change exact boundary (M5). |
+| 7a | `approval.boundary096.history-evaluate-unknown-kind-001` | `approval.boundary096.history-control-001` | Python/Java accept unknown committed kind; bypass history validation (M5). |
+| 7b | `approval.boundary096.history-evaluate-missing-target-001` | `approval.boundary096.history-control-001` | Python/Java accept unresolved target; skip target uniqueness/relationship validation (M5). |
+| 8 | `approval.boundary096.complete-context-reject-first-001` | `approval.boundary096.complete-context-control-001` | TypeScript short-circuits required context; return outcome before validating considered evidence (M5). |
+| 9a | `money.boundary096.rate-kind-object-001` | `money.boundary096.rate-control-001` | Python raises TypeError; remove type validation before membership (M3). |
+| 9b | `approval.boundary096.chain-state-absent-001`, `approval.boundary096.applicability-null-001` | `approval.boundary096.chain-control-001`, `approval.boundary096.state-any-of-control-001` | Java raises NullPointerException; Python container cases raise TypeError; bypass explicit evidence/applicability validation (M5). |
+| 9c | `entity.boundary096.evolution-correct-expectedsourcerevision-null-001` | `entity.boundary096.evolution-correct-control-001` | Java raises NullPointerException; erase supplied precondition presence (M7). |
+| 10a | `workflow.boundary096.import-revision-empty-before-mismatch-001` | `workflow.boundary096.import-mismatch-control-001` | TypeScript reports mismatch before invalid revision; reorder instance and binding validation (M4). |
+| 10b | `entity.boundary096.import-source-null-001` | `entity.boundary096.import-control-001` | Python/Java accept supplied null; conflate omission with malformed identity (M7). |
+
+These are targets for the existing portable critical and native mutation tools
+(`docs/tools/mutation-critical.js` and `docs/tools/mutation-native.js`) in the
+owning fixes. The new vector tags/requirements and named native cases provide
+permanent selection points. Mutation testing cannot establish defect detection
+against an already red baseline; no mutation score or coverage closure is claimed
+here. Installed-package consumer checks also remain with the corrected surfaces.
+
+Adjacent confirmed mandatory defects stay within the same findings: Python and
+Java mishandle explicit null observed Workflow revisions before version mismatch;
+all runtimes return incorrect applicability errors in composition cases (with
+Python sometimes inferring applicability and Java crashing on null); Python
+raises AttributeError for several malformed Source Identity shapes. Accepted
+context and supersession boundaries also expose additional failures. None was
+fixed or dismissed by cross-language agreement. JSON files are parsed normally
+on every runtime; native Decimal/type tests remain separate from JSON values.
+
+Fresh full-manifest results against the unfixed candidate:
+
+| Runtime | PASS | FAIL | INFRASTRUCTURE_ERROR | UNSUPPORTED |
+| --- | ---: | ---: | ---: | ---: |
+| TypeScript | 800 | 44 | 0 | 0 |
+| CPython 3.12 | 779 | 51 | 14 | 0 |
+| CPython 3.13 | 779 | 51 | 14 | 0 |
+| Java | 776 | 54 | 14 | 0 |
+
+All 667 original vectors and all 22 distinct paired controls pass on all four
+runtimes. Infrastructure outcomes above are uncaught implementation exceptions,
+not accepted domain errors. The full TypeScript run passes all 130 runner tests
+and 972 of 1,000 core tests (28 new failures); adapter discovery has 18 passing
+and two failing tests after count synchronization. Python discovery runs 415
+tests on each version and reports 79 failures plus 14 errors, including subtest
+failures. Java's previous test entry points pass; its new native suite runs 175
+cases, with 104 passing and 71 failing. Valid native constructor and returned
+history controls pass. These red outcomes are the intended Milestone 2 result.
+
+Reproduce from the repository root with the checked toolchain:
+
+```sh
+npm run tools:check
+npm run build
+npm test
+npm run python:unit
+npm run python:unit:3.13
+npm run java:test
+npm run conformance:typescript
+npm run conformance:python
+npm run conformance:python:3.13
+npm run conformance:java
+```
+
+Run each command independently because the red suites return nonzero status.
+The aggregate `npm run conformance` stops after the first failing runtime.
+No temporary probe or generated report is required for test discovery.
+
+Build, strict TypeScript (including the new tests), Java compilation, toolchain,
+architecture, developer-tool tests, documentation/traceability, license, and
+whitespace checks pass. The completion review required specification,
+conformance, unit/adapter tests, test discovery, and README updates, all included.
+No production API, JSDoc, canonical Agentic descriptor, CoreDoc obligation, or
+AGENTS.md rule changes were needed. Critical mutation targets are mapped above;
+execution and coverage closure await green implementation fixes.
 
 ## Milestone 3 — Money native validity and portable rejection
 

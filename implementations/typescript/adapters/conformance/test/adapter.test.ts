@@ -222,7 +222,7 @@ describe('TypeScript conformance adapter', () => {
       adapter: createTypeScriptConformanceAdapter(),
     }).run({ suites: ['audit'] })
 
-    expect(report.summary).toEqual({ total: 76, passed: 76, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 84, passed: 84, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current Audit relationship vectors', async () => {
@@ -280,7 +280,7 @@ describe('TypeScript conformance adapter', () => {
       adapter: createTypeScriptConformanceAdapter(),
     }).run({ suites: ['approvals'] })
 
-    expect(report.summary).toEqual({ total: 162, passed: 162, failed: 0, unsupported: 0, infrastructureErrors: 0 })
+    expect(report.summary).toEqual({ total: 267, passed: 267, failed: 0, unsupported: 0, infrastructureErrors: 0 })
   })
 
   it('passes current Workflow state and transition vectors', async () => {

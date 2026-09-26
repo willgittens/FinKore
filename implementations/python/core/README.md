@@ -1,5 +1,11 @@
 # FinKore Python Core
 
+Core 0.9.6 status: [Milestone 2](../../../docs/plans/plan-09.6.md) adds permanent
+regressions that intentionally fail against the current implementation. The
+original 667 portable vectors still pass; expanded conformance, native fixes,
+coverage, and mutation closure remain pending. Existing capability descriptions
+do not establish conformance at these newly tested boundaries.
+
 The completed [Core 0.9.5 corrective release](../../../docs/plans/plan-09.5.md)
 passes all 667 manifest vectors on TypeScript, Python 3.12/3.13, and Java.
 Native public API and operation-sequence regressions protect exact serialization,

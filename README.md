@@ -356,7 +356,9 @@ uncompleted process.
 A subsequent readiness review found additional native construction, Approval
 evaluation/evidence, Audit authority, and Workflow/Entity validation gaps.
 The [Core 0.9.6 corrective plan](./docs/plans/plan-09.6.md) records the Milestone 1
-contract review, with four decisions still open and implementation work unstarted.
+contract decisions and Milestone 2 permanent regressions. All 667 original
+vectors still pass across the four runtimes; the expanded 844-vector suite
+exposes the defects and remains red. Implementation corrections are unstarted.
 Core 1.0 promotion is blocked pending those corrections and fresh review;
 `core-0.9.5` remains the latest completed corrective snapshot.
 

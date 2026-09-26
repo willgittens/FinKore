@@ -175,7 +175,7 @@ These identifiers name observable behavior, not implementation methods.
 | `approval.requirement.evaluate` | Derive one requirement's `PENDING`, `APPROVED`, or `REJECTED` state. |
 | `approval.requirement.supersede` | Append Requirement supersession lifecycle evidence without altering Decision history. |
 | `approval.decision.record` | Validate and commit a decision. |
-| `approval.decision.evaluate` | Determine whether a decision remains effective for supplied subject facts. |
+| `approval.decision.evaluate` | Validate a concrete Requirement and associated eligible Decision, compare relevant subject facts, and honor expiration with explicit context under APPROVAL-DECISION-009; no lifecycle effectiveness claim without history. |
 | `approval.decision.withdraw` | Append Decision withdrawal lifecycle evidence without altering Decision history. |
 | `approval.decision.supersede` | Append Decision supersession lifecycle evidence without altering Decision history. |
 | `approval.condition.evaluate` | Return `APPLICABLE` or `NOT_APPLICABLE` from explicit facts. |
@@ -456,11 +456,12 @@ match. No total ordering of unrelated Entity errors is added by these fixtures.
 
 ## Core 0.9.6 boundary review
 
-The [Milestone 1 review](../docs/plans/plan-09.6.md) reopens native construction,
+The [Milestone 2 regressions](../docs/plans/plan-09.6.md) exercise native construction,
 Approval evaluation/history, redaction authority, Workflow priority, and Entity
 presence boundaries. Existing vectors remain evidence only for their exercised
-inputs. The contract proposals linked below are pending; they do not silently
-change the semantic operation catalog or justify new expected results.
+inputs. Four accepted contract decisions are now normative in their owning
+specification documents. The expanded suites are intentionally red until the
+implementation corrections land; fixture publication is not conformance.
 
 - Native Python Money construction accepts its declared exact `Decimal` type;
   finite exponent forms, signed zero, trailing zeros, and retained scale are
@@ -498,16 +499,29 @@ change the semantic operation catalog or justify new expected results.
 - Entity import's supplied `sourceIdentity` is an object with nonempty string
   `sourceSystem` and `sourceId`. Null and wrong types are malformed even with a
   complete `identityMapping`; they use `FINKORE_ENTITY_INVALID_IDENTITY` and
-  return no partial import. The separate omitted-source/standalone-mapping
-  question remains pending in [Entity Import](../spec/entities/import.md#core-096-open-contract-decision-non-normative).
+  return no partial import. Under ENTITY-IMPORT-011, omitted Source Identity
+  permits complete standalone mapping, which is preserved without synthesizing
+  Source Identity. Omitting both remains valid.
 
-The disputed Decision fixture scope is recorded in
-[Approval Decisions](../spec/approvals/decisions.md#core-096-evaluation-scope-decision-non-normative).
-The currently-considered and imported-supersession gaps are recorded in
-[Approval Validity](../spec/approvals/validity.md#core-096-boundary-review-non-normative).
-Do not write portable expectations for those unsettled boundaries by selecting
-one implementation as the oracle. Known committed-history discriminator and
-withdrawal-target violations remain independently testable under existing rules.
+The concrete `approval.decision.evaluate` fixture supplies `requirement`,
+`decision`, and `currentSubjectFacts`, with optional `relevantFactPaths` and
+`evaluatedAt` when expiration applies.
+APPROVAL-DECISION-009 defines its validation and effectiveness boundary. Native
+facts-only helpers remain separately tested and are not evidence of concrete
+Requirement validation. The fixture remains conformance-local, with its existing
+EFFECTIVE/INEFFECTIVE results and portable Approval errors.
+
+APPROVAL-VALIDITY-013 defines which Decisions require expiration context before
+aggregation. APPROVAL-VALIDITY-014 defines committed history validation in the
+supplied lifecycle array's local order. The fixture's `type` discriminators and
+Decision target/successor references carry those meanings; a redundant request
+`type` does not replace an operation-specific request. Neither fixture infers a
+Requirement registry, global ordering, or missing subject facts.
+
+The manifest lists each domain's `construction-evaluation-regressions.json`.
+Optional `reviewFinding` and `pairedControl` metadata link review labels and
+independently passing control vector IDs; the runner ignores them. Requirements
+and exact expected results still define each test, with no new fixture DSL.
 Native arrays with holes, cycles, or unsupported objects are not JSON null
 fixtures. Structural input failures are core domain errors; unexpected runtime
 defects remain infrastructure failures and must not be broadly remapped.

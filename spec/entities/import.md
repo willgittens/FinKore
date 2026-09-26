@@ -40,6 +40,8 @@ the imported observation.
 - **ENTITY-IMPORT-009** - Missing, malformed, conflicting, or incomplete identity, mapping, or revision input MUST fail with `FINKORE_ENTITY_INVALID_IDENTITY` unless a more specific primary domain error applies.
 - **ENTITY-IMPORT-010** - Entity Import diagnostics, when supplied, MUST remain safe diagnostic context and MUST NOT expose sensitive source identity values, financial values, or implementation storage identifiers by default.
 
+- **ENTITY-IMPORT-011** - Entity Import MUST accept complete valid Entity Identity Mapping evidence when the separate Source Identity is omitted, provided it identifies the source system, source identity, mapping identity, and the same Entity type and identity as the imported observation. It MUST preserve that evidence without synthesizing a separate Source Identity observation. Supplied null or malformed Source Identity MUST still fail under ENTITY-IMPORT-009. Omission of both Source Identity and mapping MUST remain valid when the rest of the import is valid.
+
 ## Invariants
 
 Import observes existing Entity continuity. It preserves the stable FinKore
@@ -71,23 +73,19 @@ import under **ENTITY-IMPORT-008**. Malformed observed identity/revision input
 remains subject to **ENTITY-IMPORT-009**. This clarification does not introduce
 a total priority among unrelated Entity failures.
 
-## Core 0.9.6 open contract decision (non-normative)
+## Core 0.9.6 contract decision (non-normative)
 
-**Blocking specification gap:** **ENTITY-IMPORT-003** requires mapping when
-Source Identity is supplied, but does not explicitly decide whether a complete
-standalone mapping is accepted when the separate Source Identity is omitted.
-The existing paired fixture does not settle that question. TypeScript's
-pair-required implementation is not normative authority.
+The standalone-mapping proposal was accepted for the Milestone 2 regression
+baseline. ENTITY-IMPORT-011 resolves the previously unspecified result while
+preserving ENTITY-IMPORT-003's requirement for mapping whenever Source Identity
+is supplied. Neither explicit null nor malformed Source Identity is omission.
 
-Proposed resolution: accept a complete standalone mapping that identifies its
-source system, source identity, mapping identity, and the same Entity type and
-identity as the imported observation. Preserve it without inventing a separate
-Source Identity observation. Supplying neither remains valid; supplying Source
-Identity without mapping or supplying malformed identity/mapping remains
-invalid. Acceptance would resolve an observable boundary and must be recorded
-as a corrective specification decision under **SPEC-FREEZE-001** and
-**SPEC-COMPATIBILITY-012**/**014**, with synchronized implementation, vectors,
-and documentation under **SPEC-FREEZE-002**. This proposal is not yet normative.
+This is a corrective normative addition under SPEC-FREEZE-001 and
+SPEC-COMPATIBILITY-012/014, not an editorial change or a claim of compatibility
+for TypeScript's former pair-required behavior. Milestone 2 adds permanent
+vectors and native regressions. Milestone 7 must synchronize implementations
+and public API documentation before the corrective change satisfies
+SPEC-FREEZE-002 or is released. No canonical import operation is introduced.
 
 ## Core 0.9.3 correction note (non-normative)
 

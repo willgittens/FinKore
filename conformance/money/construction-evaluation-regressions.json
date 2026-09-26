@@ -1,0 +1,409 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "money.boundary096.rate-control-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-001",
+        "MONEY-RATE-003",
+        "MONEY-RATE-009"
+      ],
+      "description": "rate control; Core 0.9.6 finding 9a.",
+      "operation": "finkore.money.applyrate",
+      "input": {
+        "value": {
+          "amount": "200.00",
+          "currency": "USD"
+        },
+        "rate": {
+          "kind": "DECIMAL",
+          "value": "0.075"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "15.00000",
+          "currency": "USD"
+        },
+        "observations": {
+          "operand": {
+            "amount": "200.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "boundary096-9a-validation-bypass"
+      ],
+      "reviewFinding": "9a"
+    },
+    {
+      "id": "money.boundary096.rate-kind-absent-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-007",
+        "MONEY-ERROR-001",
+        "MONEY-ERROR-007"
+      ],
+      "description": "rate kind absent; Core 0.9.6 finding 9a.",
+      "operation": "finkore.money.applyrate",
+      "input": {
+        "value": {
+          "amount": "200.00",
+          "currency": "USD"
+        },
+        "rate": {
+          "value": "0.075"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        },
+        "observations": {
+          "operand": {
+            "amount": "200.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "boundary096-9a-validation-bypass"
+      ],
+      "reviewFinding": "9a",
+      "pairedControl": "money.boundary096.rate-control-001"
+    },
+    {
+      "id": "money.boundary096.rate-kind-null-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-007",
+        "MONEY-ERROR-001",
+        "MONEY-ERROR-007"
+      ],
+      "description": "rate kind null; Core 0.9.6 finding 9a.",
+      "operation": "finkore.money.applyrate",
+      "input": {
+        "value": {
+          "amount": "200.00",
+          "currency": "USD"
+        },
+        "rate": {
+          "kind": null,
+          "value": "0.075"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        },
+        "observations": {
+          "operand": {
+            "amount": "200.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "boundary096-9a-validation-bypass"
+      ],
+      "reviewFinding": "9a",
+      "pairedControl": "money.boundary096.rate-control-001"
+    },
+    {
+      "id": "money.boundary096.rate-kind-empty-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-007",
+        "MONEY-ERROR-001",
+        "MONEY-ERROR-007"
+      ],
+      "description": "rate kind empty; Core 0.9.6 finding 9a.",
+      "operation": "finkore.money.applyrate",
+      "input": {
+        "value": {
+          "amount": "200.00",
+          "currency": "USD"
+        },
+        "rate": {
+          "kind": "",
+          "value": "0.075"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        },
+        "observations": {
+          "operand": {
+            "amount": "200.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "boundary096-9a-validation-bypass"
+      ],
+      "reviewFinding": "9a",
+      "pairedControl": "money.boundary096.rate-control-001"
+    },
+    {
+      "id": "money.boundary096.rate-kind-number-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-007",
+        "MONEY-ERROR-001",
+        "MONEY-ERROR-007"
+      ],
+      "description": "rate kind number; Core 0.9.6 finding 9a.",
+      "operation": "finkore.money.applyrate",
+      "input": {
+        "value": {
+          "amount": "200.00",
+          "currency": "USD"
+        },
+        "rate": {
+          "kind": 7,
+          "value": "0.075"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        },
+        "observations": {
+          "operand": {
+            "amount": "200.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "boundary096-9a-validation-bypass"
+      ],
+      "reviewFinding": "9a",
+      "pairedControl": "money.boundary096.rate-control-001"
+    },
+    {
+      "id": "money.boundary096.rate-kind-boolean-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-007",
+        "MONEY-ERROR-001",
+        "MONEY-ERROR-007"
+      ],
+      "description": "rate kind boolean; Core 0.9.6 finding 9a.",
+      "operation": "finkore.money.applyrate",
+      "input": {
+        "value": {
+          "amount": "200.00",
+          "currency": "USD"
+        },
+        "rate": {
+          "kind": false,
+          "value": "0.075"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        },
+        "observations": {
+          "operand": {
+            "amount": "200.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "boundary096-9a-validation-bypass"
+      ],
+      "reviewFinding": "9a",
+      "pairedControl": "money.boundary096.rate-control-001"
+    },
+    {
+      "id": "money.boundary096.rate-kind-array-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-007",
+        "MONEY-ERROR-001",
+        "MONEY-ERROR-007"
+      ],
+      "description": "rate kind array; Core 0.9.6 finding 9a.",
+      "operation": "finkore.money.applyrate",
+      "input": {
+        "value": {
+          "amount": "200.00",
+          "currency": "USD"
+        },
+        "rate": {
+          "kind": [],
+          "value": "0.075"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        },
+        "observations": {
+          "operand": {
+            "amount": "200.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "boundary096-9a-validation-bypass"
+      ],
+      "reviewFinding": "9a",
+      "pairedControl": "money.boundary096.rate-control-001"
+    },
+    {
+      "id": "money.boundary096.rate-kind-object-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-007",
+        "MONEY-ERROR-001",
+        "MONEY-ERROR-007"
+      ],
+      "description": "rate kind object; Core 0.9.6 finding 9a.",
+      "operation": "finkore.money.applyrate",
+      "input": {
+        "value": {
+          "amount": "200.00",
+          "currency": "USD"
+        },
+        "rate": {
+          "kind": {},
+          "value": "0.075"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        },
+        "observations": {
+          "operand": {
+            "amount": "200.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "boundary096-9a-validation-bypass"
+      ],
+      "reviewFinding": "9a",
+      "pairedControl": "money.boundary096.rate-control-001"
+    },
+    {
+      "id": "money.boundary096.rate-kind-unknown-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-007",
+        "MONEY-ERROR-001",
+        "MONEY-ERROR-007"
+      ],
+      "description": "rate kind unknown; Core 0.9.6 finding 9a.",
+      "operation": "finkore.money.applyrate",
+      "input": {
+        "value": {
+          "amount": "200.00",
+          "currency": "USD"
+        },
+        "rate": {
+          "kind": "FX",
+          "value": "0.075"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        },
+        "observations": {
+          "operand": {
+            "amount": "200.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "boundary096-9a-validation-bypass"
+      ],
+      "reviewFinding": "9a",
+      "pairedControl": "money.boundary096.rate-control-001"
+    }
+  ]
+}

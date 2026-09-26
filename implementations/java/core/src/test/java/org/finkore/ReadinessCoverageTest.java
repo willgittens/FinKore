@@ -15,4 +15,9 @@ final class ReadinessCoverageTest {
   void serializationBindingAndNativeValues() throws IOException {
     BoundaryRegressionTest.main(new String[0]);
   }
+
+  @Test
+  void constructionEvidenceAndEvaluation() throws IOException {
+    ConstructionEvaluationRegressionTest.main(new String[0]);
+  }
 }

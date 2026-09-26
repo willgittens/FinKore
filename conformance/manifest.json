@@ -16,7 +16,8 @@
         "./money/comparison.json",
         "./money/rounding.json",
         "./money/rates.json",
-        "./money/allocation.json"
+        "./money/allocation.json",
+        "./money/construction-evaluation-regressions.json"
       ]
     },
     {
@@ -24,7 +25,8 @@
       "vectorFiles": [
         "./workflow/transitions.json",
         "./workflow/versioning.json",
-        "./workflow/readiness-regressions.json"
+        "./workflow/readiness-regressions.json",
+        "./workflow/construction-evaluation-regressions.json"
       ]
     },
     {
@@ -32,7 +34,8 @@
       "vectorFiles": [
         "./audit/history.json",
         "./audit/relationships.json",
-        "./audit/readiness-regressions.json"
+        "./audit/readiness-regressions.json",
+        "./audit/construction-evaluation-regressions.json"
       ]
     },
     {
@@ -41,7 +44,8 @@
         "./approvals/decisions.json",
         "./approvals/validity.json",
         "./approvals/composition.json",
-        "./approvals/readiness-regressions.json"
+        "./approvals/readiness-regressions.json",
+        "./approvals/construction-evaluation-regressions.json"
       ]
     },
     {
@@ -50,7 +54,8 @@
         "./entities/behavior.json",
         "./entities/evolution.json",
         "./entities/import.json",
-        "./entities/readiness-regressions.json"
+        "./entities/readiness-regressions.json",
+        "./entities/construction-evaluation-regressions.json"
       ]
     }
   ]
