@@ -10,14 +10,14 @@ Audit, Approvals, and Entities scope.
 | Domain | Requirements | MUST / MUST NOT | SHOULD / SHOULD NOT | MAY | Covered | Partial | Uncovered | Not directly testable | Deferred | Blocking spec gap |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Shared | 51 | 41 | 5 | 5 | 4 | 6 | 0 | 41 | 0 | 0 |
-| Money | 74 | 69 | 1 | 4 | 60 | 9 | 0 | 5 | 0 | 0 |
+| Money | 74 | 69 | 1 | 4 | 69 | 0 | 0 | 5 | 0 | 0 |
 | Workflow | 57 | 55 | 1 | 1 | 34 | 14 | 0 | 9 | 0 | 0 |
 | Audit | 57 | 49 | 4 | 4 | 44 | 3 | 0 | 10 | 0 | 0 |
 | Approvals | 89 | 86 | 1 | 2 | 54 | 30 | 0 | 5 | 0 | 0 |
 | Entities | 89 | 84 | 3 | 2 | 67 | 9 | 0 | 13 | 0 | 0 |
-| **Total** | 417 | 384 | 15 | 18 | 263 | 71 | 0 | 83 | 0 | 0 |
+| **Total** | 417 | 384 | 15 | 18 | 272 | 62 | 0 | 83 | 0 | 0 |
 
-The suite contains 844 vectors. Overall: **263 covered (63.1%)**, **71 partially covered (17.0%)**, **0 uncovered (0.0%)**, **83 not directly testable (19.9%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
+The suite contains 844 vectors. Overall: **272 covered (65.2%)**, **62 partially covered (14.9%)**, **0 uncovered (0.0%)**, **83 not directly testable (19.9%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. PARTIAL means current vectors exercise part of a requirement but do not yet cover a mandatory observable boundary. DEFERRED means the requirement is explicitly outside the current release candidate. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published.
 
@@ -132,16 +132,16 @@ the verified snapshot.
 
 ## Core 0.9.6 reassessment
 
-[Milestones 1 and 2](../docs/plans/plan-09.6.md) have accepted the four contract
+[Milestones 1–3](../docs/plans/plan-09.6.md) have accepted the four contract
 decisions and added 177 permanent vectors plus native construction and sequence
 tests. The inventory retains every original identifier and now contains 417
-requirements and 844 vectors: **263 COVERED**, **71 PARTIAL**, **83 NOT DIRECTLY
+requirements and 844 vectors: **272 COVERED**, **62 PARTIAL**, **83 NOT DIRECTLY
 TESTABLE**, and **0 BLOCKING SPEC GAP**. The five previously blocked rows and
 four new normative requirements are PARTIAL pending correction and verification.
 
 | Exercised boundary | Permanent regression surface | Correction milestone |
 | --- | --- | --- |
-| Money construction → arithmetic/serialization | Python direct Decimal construction, finite controls, malformed Rate kinds in native and portable tests. | 3 |
+| Money construction → arithmetic/serialization | Python direct Decimal construction, finite controls, malformed Rate kinds in native and portable tests; verified coverage, mutation probes and installed consumers. | 3 complete |
 | Workflow definition → create/import/transition | Python/Java direct construction, owned valid definitions, observed revision before version mismatch. | 4 |
 | Composition and chain evaluation | State presence, quorum evidence controls, applicability, required timestamp profile, priority, later stages and nested alternatives. | 5 |
 | Concrete Decision evaluation | APPROVAL-DECISION-009: Requirement subject/eligibility/association and exact expiration; native facts-only controls stay separate. | 5 |
@@ -151,16 +151,22 @@ four new normative requirements are PARTIAL pending correction and verification.
 | Entity evolution | Four kinds with omitted/null/malformed/mismatching expectations; actual returned evolution/Audit history reused. | 7 |
 | Entity import | Malformed Source Identity despite mapping; ENTITY-IMPORT-011 standalone-mapping acceptance and preservation. | 7 |
 
-Every original 667 vector and all 22 paired controls pass on TypeScript,
-CPython 3.12/3.13, and Java. The expanded manifest is red: TypeScript has 44 FAIL;
-Python has 51 FAIL and 14 INFRASTRUCTURE_ERROR on each version; Java has 54 FAIL
+At the Milestone 2 baseline, every original 667 vector and all 22 paired controls passed on TypeScript,
+CPython 3.12/3.13, and Java. That expanded manifest was red: TypeScript had 44 FAIL;
+Python had 51 FAIL and 14 INFRASTRUCTURE_ERROR on each version; Java had 54 FAIL
 and 14 INFRASTRUCTURE_ERROR. Runtime exceptions are recorded as defects, not
 accepted portable errors. The plan maps each finding to its permanent cases,
 native public entry points, and future mutation checks.
 
-These tests do not close the correction, native package-consumer, coverage, or
-mutation gates. PARTIAL rows preserve that remaining work even where a new
-vector exercises the reported defect. Earlier release notes remain historical
+Milestone 3 closes the nine reopened Money rows: 111/111 Money vectors and 53
+focused native tests pass on each Python version; 11 portable and 17 native
+Money mutation probes are killed on each, with independent controls passing.
+Money branch-enabled coverage is 96%, and installed wheel/sdist consumers pass
+on Python 3.12/3.13. No exclusion or financial behavior was added to improve
+these checks. The current full Python manifest has 781 PASS, 51 FAIL, and 12
+INFRASTRUCTURE_ERROR on each version, with every original vector still passing.
+Remaining PARTIAL rows retain their correction, coverage, mutation, and
+package-consumer gates even where a vector already exercises the defect. Earlier release notes remain historical
 evidence and do not close these boundaries.
 
 ## Requirement mapping
@@ -241,36 +247,36 @@ evidence and do not close these boundaries.
 | MONEY-ALLOCATION-012 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.hundred-parts-001, money.allocate.equal.integral-json-number-001, money.allocate.equal.remainder-negative-001, money.allocate.equal.remainder-positive-001, money.allocate.ratio.declared-order-001, money.allocate.ratio.integral-json-number-001, money.allocate.ratio.remainder-positive-001, money.allocate.ratio.safe-integer-boundary-001, money.allocate.ratio.zero-source-001, money.allocate.scale.maximum-001 |
 | MONEY-ALLOCATION-013 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.high-precision-single-part-001, money.allocate.equal.hundred-parts-001, money.allocate.equal.integral-json-number-001, money.allocate.equal.invalid-zero-parts-001, money.allocate.equal.part-count-out-of-range-001, money.allocate.equal.remainder-negative-001, money.allocate.equal.remainder-positive-001, money.allocate.ratio.integral-json-number-001, money.allocate.ratio.out-of-range-001, money.allocate.ratio.remainder-positive-001, money.allocate.ratio.safe-integer-boundary-001, money.allocate.scale.maximum-001, money.allocate.scale.out-of-range-001, money.allocate.unrepresentable-source-scale-001 |
 | MONEY-ALLOCATION-014 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.hundred-parts-001, money.allocate.equal.integral-json-number-001, money.allocate.equal.part-count-out-of-range-001, money.allocate.ratio.integral-json-number-001, money.allocate.ratio.out-of-range-001, money.allocate.ratio.safe-integer-boundary-001, money.allocate.scale.maximum-001, money.allocate.scale.out-of-range-001 |
-| MONEY-RATE-001 | Money | MUST / MUST NOT | PARTIAL | money.boundary096.rate-control-001, money.rate.decimal-exact-001, money.rate.fractional-percentage-001, money.rate.invalid-exponent-value-001, money.rate.invalid-kind-001, money.rate.invalid-numeric-value-001, money.rate.large-percentage-growth-001, money.rate.percentage-conversion-001; Core 0.9.6 permanent regressions exercise this boundary; red tests and native/mutation closure remain pending. |
+| MONEY-RATE-001 | Money | MUST / MUST NOT | COVERED | money.boundary096.rate-control-001, money.rate.decimal-exact-001, money.rate.fractional-percentage-001, money.rate.invalid-exponent-value-001, money.rate.invalid-kind-001, money.rate.invalid-numeric-value-001, money.rate.large-percentage-growth-001, money.rate.percentage-conversion-001 |
 | MONEY-RATE-002 | Money | MUST / MUST NOT | COVERED | money.rate.fractional-percentage-001, money.rate.large-percentage-growth-001, money.rate.percentage-conversion-001 |
 | MONEY-RATE-003 | Money | MUST / MUST NOT | COVERED | money.boundary096.rate-control-001, money.rate.decimal-exact-001, money.rate.fractional-base10-001, money.rate.fractional-percentage-001, money.rate.large-percentage-growth-001, money.rate.negative-decimal-001, money.rate.percentage-conversion-001, money.rate.zero-decimal-001 |
 | MONEY-RATE-004 | Money | MUST / MUST NOT | COVERED | money.rate.negative-decimal-001, money.rate.zero-decimal-001 |
 | MONEY-RATE-005 | Money | MUST / MUST NOT | COVERED | money.rate.decimal-exact-001, money.rate.fractional-base10-001, money.rate.fractional-percentage-001, money.rate.large-percentage-growth-001, money.rate.percentage-conversion-001 |
 | MONEY-RATE-006 | Money | MUST / MUST NOT | COVERED | money.rate.invalid-rounding-001, money.rate.round.half-even-001, money.rate.round.half-up-001 |
-| MONEY-RATE-007 | Money | MUST / MUST NOT | PARTIAL | money.boundary096.rate-kind-absent-001, money.boundary096.rate-kind-array-001, money.boundary096.rate-kind-boolean-001, money.boundary096.rate-kind-empty-001, money.boundary096.rate-kind-null-001, money.boundary096.rate-kind-number-001, money.boundary096.rate-kind-object-001, money.boundary096.rate-kind-unknown-001, money.rate.invalid-exponent-value-001, money.rate.invalid-kind-001, money.rate.invalid-numeric-value-001; Core 0.9.6 permanent regressions exercise this boundary; red tests and native/mutation closure remain pending. |
+| MONEY-RATE-007 | Money | MUST / MUST NOT | COVERED | money.boundary096.rate-kind-absent-001, money.boundary096.rate-kind-array-001, money.boundary096.rate-kind-boolean-001, money.boundary096.rate-kind-empty-001, money.boundary096.rate-kind-null-001, money.boundary096.rate-kind-number-001, money.boundary096.rate-kind-object-001, money.boundary096.rate-kind-unknown-001, money.rate.invalid-exponent-value-001, money.rate.invalid-kind-001, money.rate.invalid-numeric-value-001 |
 | MONEY-RATE-008 | Money | MUST / MUST NOT | COVERED | money.rate.invalid-rounding-001 |
-| MONEY-RATE-009 | Money | MUST / MUST NOT | PARTIAL | money.boundary096.rate-control-001, money.rate.decimal-exact-001, money.rate.fractional-base10-001, money.rate.invalid-exponent-value-001, money.rate.invalid-kind-001, money.rate.invalid-numeric-value-001, money.rate.invalid-rounding-001, money.rate.large-percentage-growth-001, money.rate.negative-decimal-001, money.rate.percentage-conversion-001, money.rate.round.half-even-001, money.rate.round.half-up-001, money.rate.zero-decimal-001; Core 0.9.6 permanent regressions exercise this boundary; red tests and native/mutation closure remain pending. |
+| MONEY-RATE-009 | Money | MUST / MUST NOT | COVERED | money.boundary096.rate-control-001, money.rate.decimal-exact-001, money.rate.fractional-base10-001, money.rate.invalid-exponent-value-001, money.rate.invalid-kind-001, money.rate.invalid-numeric-value-001, money.rate.invalid-rounding-001, money.rate.large-percentage-growth-001, money.rate.negative-decimal-001, money.rate.percentage-conversion-001, money.rate.round.half-even-001, money.rate.round.half-up-001, money.rate.zero-decimal-001 |
 | MONEY-COMPARISON-001 | Money | MUST / MUST NOT | COVERED | money.compare.equal-trailing-zeros-001 |
 | MONEY-COMPARISON-002 | Money | MUST / MUST NOT | COVERED | audit.change.money-trailing-zero-unchanged-001, money.compare.equal-trailing-zeros-001, money.compare.equal-zero-scale-001 |
 | MONEY-COMPARISON-003 | Money | MUST / MUST NOT | COVERED | money.compare.greater-negative-001, money.compare.less-001 |
 | MONEY-COMPARISON-004 | Money | MUST / MUST NOT | COVERED | money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001 |
 | MONEY-COMPARISON-005 | Money | MAY | NOT DIRECTLY TESTABLE | Representation equality is an optional API and cannot be required by portable vectors. |
 | MONEY-COMPARISON-006 | Money | MUST / MUST NOT | COVERED | money.compare.equal-zero-scale-001 |
-| MONEY-CURRENCY-001 | Money | MUST / MUST NOT | PARTIAL | money.deserialize.positive-001; Core 0.9.6 permanent regressions exercise this boundary; red tests and native/mutation closure remain pending. |
+| MONEY-CURRENCY-001 | Money | MUST / MUST NOT | COVERED | money.deserialize.positive-001 |
 | MONEY-CURRENCY-002 | Money | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | This recommendation permits justified non-ISO identifiers and has no mandatory single result. |
 | MONEY-CURRENCY-003 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001 |
 | MONEY-CURRENCY-004 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.subtract.currency-mismatch-001 |
 | MONEY-CURRENCY-005 | Money | MUST / MUST NOT | COVERED | money.deserialize.unknown-members-001 |
-| MONEY-ERROR-001 | Money | MUST / MUST NOT | PARTIAL | money.boundary096.rate-kind-absent-001, money.boundary096.rate-kind-array-001, money.boundary096.rate-kind-boolean-001, money.boundary096.rate-kind-empty-001, money.boundary096.rate-kind-null-001, money.boundary096.rate-kind-number-001, money.boundary096.rate-kind-object-001, money.boundary096.rate-kind-unknown-001, money.deserialize.exponent-001, money.deserialize.leading-plus-001, money.deserialize.missing-amount-001, money.deserialize.non-finite-001, money.deserialize.numeric-amount-001, money.rate.invalid-exponent-value-001, money.rate.invalid-kind-001, money.rate.invalid-numeric-value-001; Core 0.9.6 permanent regressions exercise this boundary; red tests and native/mutation closure remain pending. |
-| MONEY-ERROR-002 | Money | MUST / MUST NOT | PARTIAL | money.deserialize.lowercase-currency-001, money.deserialize.missing-currency-001; Core 0.9.6 permanent regressions exercise this boundary; red tests and native/mutation closure remain pending. |
+| MONEY-ERROR-001 | Money | MUST / MUST NOT | COVERED | money.boundary096.rate-kind-absent-001, money.boundary096.rate-kind-array-001, money.boundary096.rate-kind-boolean-001, money.boundary096.rate-kind-empty-001, money.boundary096.rate-kind-null-001, money.boundary096.rate-kind-number-001, money.boundary096.rate-kind-object-001, money.boundary096.rate-kind-unknown-001, money.deserialize.exponent-001, money.deserialize.leading-plus-001, money.deserialize.missing-amount-001, money.deserialize.non-finite-001, money.deserialize.numeric-amount-001, money.rate.invalid-exponent-value-001, money.rate.invalid-kind-001, money.rate.invalid-numeric-value-001 |
+| MONEY-ERROR-002 | Money | MUST / MUST NOT | COVERED | money.deserialize.lowercase-currency-001, money.deserialize.missing-currency-001 |
 | MONEY-ERROR-003 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.subtract.currency-mismatch-001 |
 | MONEY-ERROR-004 | Money | MUST / MUST NOT | COVERED | money.divide.zero-001 |
 | MONEY-ERROR-005 | Money | MUST / MUST NOT | COVERED | money.allocate.unrepresentable-source-scale-001, money.divide.rounding-required-001 |
 | MONEY-ERROR-006 | Money | MUST / MUST NOT | COVERED | money.rate.invalid-rounding-001, money.round.invalid-mode-001, money.round.invalid-scale-001 |
-| MONEY-ERROR-007 | Money | MUST / MUST NOT | PARTIAL | money.add.currency-mismatch-001, money.allocate.equal.invalid-zero-parts-001, money.allocate.unrepresentable-source-scale-001, money.boundary096.rate-kind-absent-001, money.boundary096.rate-kind-array-001, money.boundary096.rate-kind-boolean-001, money.boundary096.rate-kind-empty-001, money.boundary096.rate-kind-null-001, money.boundary096.rate-kind-number-001, money.boundary096.rate-kind-object-001, money.boundary096.rate-kind-unknown-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.divide.rounding-required-001, money.divide.zero-001, money.subtract.currency-mismatch-001; Core 0.9.6 permanent regressions exercise this boundary; red tests and native/mutation closure remain pending. |
+| MONEY-ERROR-007 | Money | MUST / MUST NOT | COVERED | money.add.currency-mismatch-001, money.allocate.equal.invalid-zero-parts-001, money.allocate.unrepresentable-source-scale-001, money.boundary096.rate-kind-absent-001, money.boundary096.rate-kind-array-001, money.boundary096.rate-kind-boolean-001, money.boundary096.rate-kind-empty-001, money.boundary096.rate-kind-null-001, money.boundary096.rate-kind-number-001, money.boundary096.rate-kind-object-001, money.boundary096.rate-kind-unknown-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.divide.rounding-required-001, money.divide.zero-001, money.subtract.currency-mismatch-001 |
 | MONEY-ERROR-008 | Money | MUST / MUST NOT | COVERED | money.allocate.equal.invalid-negative-parts-001, money.allocate.equal.invalid-zero-parts-001, money.allocate.equal.part-count-out-of-range-001, money.allocate.invalid-method-001, money.allocate.invalid-scale-001, money.allocate.ratio.invalid-empty-ratios-001, money.allocate.ratio.invalid-fractional-ratio-001, money.allocate.ratio.invalid-malformed-ratio-001, money.allocate.ratio.invalid-negative-ratio-001, money.allocate.ratio.invalid-zero-ratio-001, money.allocate.ratio.out-of-range-001, money.allocate.scale.out-of-range-001 |
-| MONEY-REPRESENTATION-001 | Money | MUST / MUST NOT | PARTIAL | money.deserialize.missing-amount-001, money.deserialize.missing-currency-001, money.deserialize.positive-001; Core 0.9.6 permanent regressions exercise this boundary; red tests and native/mutation closure remain pending. |
-| MONEY-REPRESENTATION-002 | Money | MUST / MUST NOT | PARTIAL | money.add.deep-positive-scale-001, money.add.large-significant-digits-001, money.deserialize.positive-001, money.divide.terminating-scale-40-001, money.multiply.large-product-growth-001, money.rate.large-percentage-growth-001, money.round.scale-50-half-even-001, money.subtract.large-negative-001; Core 0.9.6 permanent regressions exercise this boundary; red tests and native/mutation closure remain pending. |
+| MONEY-REPRESENTATION-001 | Money | MUST / MUST NOT | COVERED | money.deserialize.missing-amount-001, money.deserialize.missing-currency-001, money.deserialize.positive-001 |
+| MONEY-REPRESENTATION-002 | Money | MUST / MUST NOT | COVERED | money.add.deep-positive-scale-001, money.add.large-significant-digits-001, money.deserialize.positive-001, money.divide.terminating-scale-40-001, money.multiply.large-product-growth-001, money.rate.large-percentage-growth-001, money.round.scale-50-half-even-001, money.subtract.large-negative-001 |
 | MONEY-REPRESENTATION-003 | Money | MUST / MUST NOT | COVERED | money.deserialize.missing-currency-001, money.deserialize.positive-001 |
 | MONEY-REPRESENTATION-004 | Money | MUST / MUST NOT | COVERED | money.add.negative-001, money.deserialize.negative-001, money.deserialize.zero-001, money.subtract.large-negative-001 |
 | MONEY-REPRESENTATION-005 | Money | MUST / MUST NOT | COVERED | audit.change.money-trailing-zero-unchanged-001, money.compare.equal-trailing-zeros-001 |
@@ -784,8 +790,8 @@ references are unchanged.
 **CORE 0.9.6 REGRESSIONS REPRODUCED; CORRECTIONS PENDING, CORE 1.0 PROMOTION BLOCKED**
 
 The current 0.9.6 reassessment above takes precedence over historical coverage
-claims. Contract decisions and permanent regressions are complete; implementation
-corrections and their verification remain outstanding. No current whole-core
+claims. Contract decisions, permanent regressions, and the Money correction are
+complete; remaining corrections and whole-core verification are outstanding. No current whole-core
 readiness claim follows from the 667 original passing vectors or the expanded
 844-vector red baseline. The following paragraph records the completed 0.9.5 snapshot only.
 

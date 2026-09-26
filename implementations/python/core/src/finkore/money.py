@@ -174,15 +174,34 @@ class Money:
     """A FinKore Money value containing one exact amount and one currency.
 
     Money arithmetic uses exact decimal semantics, preserves currency, and never
-    mutates operands.
+    mutates operands. Native construction requires a finite ``Decimal`` amount
+    and a three-letter uppercase currency string. Exponent forms, signed zero,
+    and trailing zeros are retained without applying the caller's Decimal
+    context. Other amount types are rejected without coercion.
+
+    Raises ``FinKoreError`` with ``FINKORE_MONEY_INVALID_AMOUNT`` or
+    ``FINKORE_MONEY_INVALID_CURRENCY`` before exposing an invalid value.
+    The optional presentation scale is checked when serializing; it never
+    changes the amount or implicitly rounds it.
 
     @see MONEY-REPRESENTATION-001
+    @see MONEY-REPRESENTATION-002
+    @see MONEY-CURRENCY-001
+    @see MONEY-ERROR-001
+    @see MONEY-ERROR-002
     @see MONEY-SERIALIZATION-001
     """
 
     amount: Decimal
     currency: str
     presentation_scale: int | None = None
+
+    def __post_init__(self) -> None:
+        """Validate native and parsed components without decimal arithmetic."""
+        if not isinstance(self.amount, Decimal) or not self.amount.is_finite():
+            raise FinKoreError(INVALID_AMOUNT)
+        if not isinstance(self.currency, str) or _CURRENCY_RE.fullmatch(self.currency) is None:
+            raise FinKoreError(INVALID_CURRENCY)
 
     @staticmethod
     def from_portable(value: Any) -> "Money":
@@ -202,9 +221,7 @@ class Money:
             raise FinKoreError(INVALID_AMOUNT)
         amount_text = value["amount"]
         amount = _plain_decimal(amount_text)
-        if "currency" not in value or not isinstance(value["currency"], str) or _CURRENCY_RE.fullmatch(value["currency"]) is None:
-            raise FinKoreError(INVALID_CURRENCY)
-        return Money(amount=amount, currency=value["currency"], presentation_scale=_scale(amount_text))
+        return Money(amount=amount, currency=value.get("currency"), presentation_scale=_scale(amount_text))
 
     def to_portable(self, scale: int | None = None) -> dict[str, str]:
         """Serialize this value to FinKore portable Money JSON.
@@ -305,12 +322,23 @@ class Money:
         return Money(rounded, self.currency, target_scale)
 
     def apply_rate(self, rate: Any, rounding: Any | None = None) -> "Money":
-        """Apply an exact decimal or percentage Rate to this Money value."""
+        """Apply an exact decimal or percentage Rate without changing this value.
+
+        Malformed or unsupported Rate representations/values raise
+        ``FinKoreError`` with ``FINKORE_MONEY_INVALID_AMOUNT``. An invalid
+        explicit rounding policy uses ``FINKORE_MONEY_INVALID_ROUNDING``.
+        No precision reduction occurs without that explicit policy.
+
+        @see MONEY-RATE-001
+        @see MONEY-RATE-007
+        @see MONEY-RATE-008
+        @see MONEY-RATE-009
+        """
 
         if not isinstance(rate, dict):
             raise FinKoreError(INVALID_AMOUNT)
         kind = rate.get("kind")
-        if kind not in {"DECIMAL", "PERCENTAGE"}:
+        if not isinstance(kind, str) or kind not in {"DECIMAL", "PERCENTAGE"}:
             raise FinKoreError(INVALID_AMOUNT)
         value = _plain_decimal(rate.get("value"))
         scalar = value if kind == "DECIMAL" else _shift_decimal_scale(value, 2)

@@ -1,10 +1,10 @@
 # FinKore Python Core
 
-Core 0.9.6 status: [Milestone 2](../../../docs/plans/plan-09.6.md) adds permanent
-regressions that intentionally fail against the current implementation. The
-original 667 portable vectors still pass; expanded conformance, native fixes,
-coverage, and mutation closure remain pending. Existing capability descriptions
-do not establish conformance at these newly tested boundaries.
+Core 0.9.6 status: [Milestone 3](../../../docs/plans/plan-09.6.md) corrects native
+Money construction and malformed Rate rejection. All 111 Money vectors pass on
+Python 3.12/3.13, with native tests, focused coverage, mutation probes, and isolated
+package consumers verified. The complete 844-vector suite still has the known
+Workflow, Approval, Audit, and Entity defects; this is not whole-core conformance.
 
 The completed [Core 0.9.5 corrective release](../../../docs/plans/plan-09.5.md)
 passes all 667 manifest vectors on TypeScript, Python 3.12/3.13, and Java.
@@ -137,6 +137,34 @@ validation language or impose a universal amount/limit policy.
 
 ## Public Package Surface
 
+`Money(amount, currency, presentation_scale=None)` requires a finite Python
+`Decimal` amount and a three-letter uppercase currency string. It validates
+both components immediately, including when called by `from_portable`.
+NaN (including signaling NaN), infinities, strings, floats, integers, Booleans,
+and other unsupported amount types raise `FINKORE_MONEY_INVALID_AMOUNT`.
+Invalid currencies raise `FINKORE_MONEY_INVALID_CURRENCY`. There is no implicit
+coercion, currency normalization, or currency registry lookup.
+
+Finite Decimal exponent forms, signed zero, trailing zeros, and arbitrary
+supported precision remain valid. Construction and exact operations do not apply
+or change the caller's Decimal context. Portable parsing still requires a plain
+decimal string; native exponent notation is not passed through that parser.
+
+```python
+from decimal import Decimal
+from finkore import Money
+
+native = Money(Decimal("1E+3"), "EUR")
+native.to_portable()  # {"amount": "1000", "currency": "EUR"}
+Money(Decimal("sNaN"), "EUR")  # raises FINKORE_MONEY_INVALID_AMOUNT
+```
+
+`apply_rate` rejects malformed Rate kinds (including arrays and objects) with
+`FINKORE_MONEY_INVALID_AMOUNT`, preserves the source on failure, and retains the
+existing explicit-rounding contract. These checks implement
+MONEY-REPRESENTATION-002, MONEY-CURRENCY-001, MONEY-ERROR-001/002/007, and
+MONEY-RATE-007/009; no new financial rule or portable error is introduced.
+
 `Money.to_portable(scale)` changes presentation only. A requested scale must be
 a non-negative Python `int`, excluding Boolean values, no greater than
 `sys.maxsize`; practical output sizes depend on available memory. Omission or
@@ -201,7 +229,7 @@ Composition Decision observations require explicit Boolean `effective`:
 `FINKORE_APPROVAL_INVALID_CHAIN` under the specified error priority.
 
 This package supports CPython 3.12 and 3.13 and uses Python `int` and exact
-`Decimal` construction from plain decimal strings. Portable allocation scales
+`Decimal` values (plain decimal strings at the portable boundary). Portable allocation scales
 are bounded by `50`, equal-part counts by `100`, and ratios by
 `9007199254740991`. Money amount precision and other practical limits depend on
 the Python runtime and available memory. Portable timestamps have the normative
@@ -230,7 +258,10 @@ The packaged Python coverage gate runs unit tests and the complete conformance
 manifest through coverage. It currently enforces at least 85% line coverage
 across `finkore` source. The critical-mutant probe mutates temporary copies of
 Money, Workflow, Audit, Approvals, and Entities and requires the real
-conformance runner to kill every probe.
+conformance runner to kill every probe. Until later 0.9.6 fixes land, the full
+coverage/mutation commands encounter the known red baselines. Money verification
+uses the focused commands recorded in Milestone 3; it does not exclude those
+failures from the eventual whole-core release gate.
 
 ### Evolution history reuse
 

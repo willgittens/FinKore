@@ -2,10 +2,10 @@
 
 ## Status
 
-Milestones 1 and 2 are complete: the four contract decisions are accepted and
-permanent regressions reproduce the defects with passing valid controls.
-Milestones 3–9 are unstarted. Implementations remain defective; the expanded
-suites intentionally fail until their owning correction milestones land.
+Milestones 1–3 are complete: contract decisions and permanent regressions are
+recorded, and Python Money constructor/Rate defects are corrected and verified.
+Milestones 4–9 are unstarted. The remaining domains still have the recorded
+defects, so the complete suites remain red until their owning fixes land.
 The readiness review of commit `e300bb1`
 (`core-0.9.5`) found additional mandatory behavior and portability gaps despite
 passing existing checks. Core 1.0 promotion is blocked pending this corrective
@@ -383,25 +383,96 @@ execution and coverage closure await green implementation fixes.
 
 ## Milestone 3 — Money native validity and portable rejection
 
-- [ ] Validate Python native Money amount and currency before an invalid Money
+- [x] Validate Python native Money amount and currency before an invalid Money
       value can escape. Cover quiet/signaling NaN, both infinities, empty/invalid
       currency, and unsupported native amount types under the agreed API contract.
-- [ ] Preserve valid finite Decimal construction, including exponent forms,
+- [x] Preserve valid finite Decimal construction, including exponent forms,
       signed zero, negative values, trailing zeros, and retained presentation
       scales. Construction and subsequent arithmetic/serialization must preserve
       exact value independently of the caller's Decimal context.
-- [ ] Correct Rate type validation so `kind: {}` and analogous unsupported
+- [x] Correct Rate type validation so `kind: {}` and analogous unsupported
       scalar/container forms produce the Money portable error instead of a
       Python hashing exception. Review neighboring rounding and allocation
       enum/container boundaries without adding limits or rounding defaults.
-- [ ] Retain 0.9.5 exact serialization, invalid-scale, loss-rejection, and explicit
+- [x] Retain 0.9.5 exact serialization, invalid-scale, loss-rejection, and explicit
       round-then-serialize regressions; constructor validation must not weaken them.
-- [ ] Run focused native/unit, Money conformance, coverage, and mutation checks
+- [x] Run focused native/unit, Money conformance, coverage, and mutation checks
       on affected implementations, including Python 3.13. Update public API docs
       and package consumer cases for the direct constructor boundary.
 
 Completion: findings 2 and 9a fail portably, valid native values remain usable,
 and invalid construction cannot later emit invalid portable Money.
+
+### Milestone 3 results
+
+Findings 2 and 9a are corrected in the Python core. `Money.__post_init__`
+validates a finite native `Decimal` and a valid currency before exposing the
+value; portable construction shares that validation. No coercion or Decimal
+arithmetic is used by validation, so finite exponent forms, signed zero, trailing
+zeros, retained presentation scale, and exact arithmetic remain supported.
+Presentation-scale validation still occurs at serialization, including exact
+reduction, invalid-scale rejection, and explicit round-then-serialize behavior.
+Rate kinds are type-checked before enum membership, returning the specified
+Money error for malformed containers without changing the source.
+
+The pre-fix focused Milestone 2 cases reproduced 16 constructor failures and two
+Rate TypeErrors in 26 tests. They now pass. Additional permanent unit cases
+verify rejection without changing Decimal flags/traps and the adjacent Rate,
+rounding, and allocation scalar/container boundaries. Those neighboring paths
+already reject invalid input portably and needed no production change. Existing
+0.9.5 serialization and exact-arithmetic tests remain unchanged.
+
+| Verification | Result |
+| --- | --- |
+| Focused Money unit/native tests | 53 pass on CPython 3.12 and 3.13. |
+| Real Money conformance | 111/111 pass on both versions, zero FAIL/UNSUPPORTED/INFRASTRUCTURE_ERROR. |
+| Money coverage | 96% with branches enabled, measured across focused native tests and real Money vectors; no source lines excluded. |
+| Portable Money mutation | 11/11 killed on each version, including three new Rate validation/error probes; paired controls pass. |
+| Native Money mutation | 17/17 killed on each version, including ten new constructor validation/exactness/error probes and seven retained serializer probes; paired controls pass. |
+| Installed artifacts | Updated consumer passes for wheel and sdist on Python 3.12/3.13; TypeScript and Java consumers also pass in the existing package check. Nothing published. |
+| Adapter regression | All 340 existing Python adapter tests pass. |
+| Full Python unit discovery | 417 tests on each version; remaining 63 failures and 12 errors belong to later milestones. No Money failure remains. |
+| Full Python conformance | 781 PASS, 51 FAIL, 12 INFRASTRUCTURE_ERROR on each version. All 667 original vectors pass; the two Rate infrastructure defects are gone. |
+
+All 28 selected Money probes are killed on both versions (100% of these targeted
+probes); this is not an exhaustive mutation score for every Python statement.
+The full suites remain red because Milestones 4–7 are unimplemented. No expected
+failure, skip, exception remapping, or weakened expectation hides those defects.
+The nine reopened Money traceability rows are COVERED; the inventory now has
+272 COVERED and 62 PARTIAL requirements, with all 417 IDs and 844 vectors retained.
+
+Focused verification commands, from the repository root after `npm run build`
+and the local toolchain/coverage environment setup:
+
+```sh
+PYTHONPATH=implementations/python/core/src .tools/bin/python3.12 -m unittest discover -s implementations/python/core/tests -k money
+PYTHONPATH=implementations/python/core/src .tools/bin/python3.13 -m unittest discover -s implementations/python/core/tests -k money
+npm run conformance:python -- --suite money
+npm run conformance:python:3.13 -- --suite money
+node docs/tools/mutation-critical.js python money
+FINKORE_PYTHON_PATH=.tools/bin/python3.13 node docs/tools/mutation-critical.js python money
+node docs/tools/mutation-native.js python-money
+FINKORE_PYTHON_PATH=.tools/bin/python3.13 node docs/tools/mutation-native.js python-money
+node docs/tools/check-packages.js
+```
+
+For scoped coverage, use a fresh coverage data path and run the focused unittest
+selection with `coverage run --branch --parallel-mode --source=finkore.money`.
+Run the real runner with `--suite money`, the same `COVERAGE_FILE`,
+`FINKORE_PYTHON_PATH=.tools/python-coverage/bin/python`, and
+`FINKORE_PYTHON_COVERAGE_RCFILE=implementations/python/core/pyproject.toml`.
+Combine those measurements and report `--include='*/finkore/money.py'` with
+`--fail-under=95`. This measures the corrected module while preserving the full
+coverage gate for the later release milestone.
+
+Completion review: unit tests, mutation probes, package consumers, Python API
+docstrings, README status/usage, plan, and traceability were updated. Existing
+Milestone 2 vectors already express the normative defects and were retained.
+No specification, error ID, operation ID, Agentic descriptor, architectural
+boundary, CoreDoc obligation, or AGENTS.md rule changes were needed. Build,
+strict TypeScript, Python compilation on both versions, toolchain, architecture,
+developer-tool tests, documentation/traceability, license, and whitespace checks
+pass. Full release verification remains pending.
 
 ## Milestone 4 — Workflow construction and validation precedence
 

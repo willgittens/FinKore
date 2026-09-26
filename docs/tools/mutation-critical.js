@@ -24,6 +24,30 @@ if (!validTargets.has(requestedTarget)) {
 
 const pythonMutants = [
   {
+    id: 'python-money-rate-container-accepted',
+    suite: 'money', path: 'core/src/finkore/money.py',
+    from: 'if not isinstance(kind, str) or kind not in {"DECIMAL", "PERCENTAGE"}:',
+    to: 'if isinstance(kind, str) and kind not in {"DECIMAL", "PERCENTAGE"}:',
+    expectedVector: 'money.boundary096.rate-kind-object-001',
+    expectedPassVectors: ['money.boundary096.rate-control-001'],
+  },
+  {
+    id: 'python-money-rate-unknown-kind-accepted',
+    suite: 'money', path: 'core/src/finkore/money.py',
+    from: 'if not isinstance(kind, str) or kind not in {"DECIMAL", "PERCENTAGE"}:',
+    to: 'if not isinstance(kind, str):',
+    expectedVector: 'money.boundary096.rate-kind-unknown-001',
+    expectedPassVectors: ['money.boundary096.rate-control-001'],
+  },
+  {
+    id: 'python-money-rate-wrong-error',
+    suite: 'money', path: 'core/src/finkore/money.py',
+    from: 'if not isinstance(kind, str) or kind not in {"DECIMAL", "PERCENTAGE"}:\n            raise FinKoreError(INVALID_AMOUNT)',
+    to: 'if not isinstance(kind, str) or kind not in {"DECIMAL", "PERCENTAGE"}:\n            raise FinKoreError(INVALID_ROUNDING)',
+    expectedVector: 'money.boundary096.rate-kind-array-001',
+    expectedPassVectors: ['money.boundary096.rate-control-001'],
+  },
+  {
   "id": "python-entity-create-binding-lost",
   "suite": "entities",
   "path": "core/src/finkore/entities.py",
@@ -1786,7 +1810,7 @@ function runPythonMutant(mutant) {
     applyMutation(join(implementationRoot, mutant.path), mutant.from, mutant.to)
     const result = conformanceKilled({
       FINKORE_MUTANT_ADAPTER: 'implementations/python/adapters/conformance/adapter.js',
-      FINKORE_PYTHON_PATH: resolve(repositoryRoot, '.tools/bin/python3.12'),
+      FINKORE_PYTHON_PATH: process.env.FINKORE_PYTHON_PATH ?? resolve(repositoryRoot, '.tools/bin/python3.12'),
       FINKORE_PYTHON_BRIDGE_PATH: join(implementationRoot, 'adapters/conformance/bridge.py'),
     }, mutant)
     return { ...result, id: mutant.id }
@@ -1870,7 +1894,7 @@ function requireBaselines(mutants, env) {
 if (requestedTarget === 'all' || requestedTarget === 'python') {
   requireBaselines(selected(pythonMutants), {
     FINKORE_MUTANT_ADAPTER: 'implementations/python/adapters/conformance/adapter.js',
-    FINKORE_PYTHON_PATH: resolve(repositoryRoot, '.tools/bin/python3.12'),
+    FINKORE_PYTHON_PATH: process.env.FINKORE_PYTHON_PATH ?? resolve(repositoryRoot, '.tools/bin/python3.12'),
     FINKORE_PYTHON_BRIDGE_PATH: resolve(repositoryRoot, 'implementations/python/adapters/conformance/bridge.py'),
   })
   for (const mutant of selected(pythonMutants)) { const result = runPythonMutant(mutant); results.push(result); report([result]) }

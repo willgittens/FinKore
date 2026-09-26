@@ -11,6 +11,48 @@ from finkore import FinKoreError, Money
 
 
 class MoneyTests(unittest.TestCase):
+    def test_constructor_rejection_preserves_decimal_context(self) -> None:
+        """MONEY-ERROR-001/002: even signaling NaN fails without setting flags."""
+        with localcontext(Context(prec=3, rounding=ROUND_UP)) as context:
+            context.traps[Inexact] = context.traps[Rounded] = True
+            context.flags[Inexact] = True
+            before = repr(context)
+            for text in ("NaN", "sNaN", "Infinity", "-Infinity"):
+                with self.subTest(amount=text):
+                    with self.assertRaises(FinKoreError) as caught:
+                        Money(Decimal(text), "EUR")
+                    self.assertEqual(caught.exception.code, "FINKORE_MONEY_INVALID_AMOUNT")
+                    self.assertEqual(repr(context), before)
+            with self.assertRaises(FinKoreError) as caught:
+                Money(Decimal("1E+30"), "eur")
+            self.assertEqual(caught.exception.code, "FINKORE_MONEY_INVALID_CURRENCY")
+            self.assertEqual(repr(context), before)
+
+    def test_rounding_and_allocation_malformed_containers_preserve_source(self) -> None:
+        """MONEY-ERROR-006/007/008 and RATE-008: type errors stay portable."""
+        value = Money(Decimal("-1.239"), "EUR")
+        before = value.to_portable()
+        for malformed in (None, "", False, 2.5, [], {}):
+            operations = [
+                (lambda: value.apply_rate(malformed), "FINKORE_MONEY_INVALID_AMOUNT"),
+                (lambda: value.round(2, malformed), "FINKORE_MONEY_INVALID_ROUNDING"),
+                (lambda: value.apply_rate({"kind": "DECIMAL", "value": "1"}, {"scale": 2, "mode": malformed}), "FINKORE_MONEY_INVALID_ROUNDING"),
+                (lambda: value.allocate({"method": malformed, "parts": 2}, 3), "FINKORE_MONEY_INVALID_ALLOCATION"),
+                (lambda: value.allocate({"method": "RATIO", "ratios": [1, malformed]}, 3), "FINKORE_MONEY_INVALID_ALLOCATION"),
+            ]
+            if malformed is not None:  # None explicitly requests no Rate rounding.
+                operations.append((lambda: value.apply_rate({"kind": "DECIMAL", "value": "1"}, malformed), "FINKORE_MONEY_INVALID_ROUNDING"))
+            for operation, code in operations:
+                with self.subTest(value=malformed, code=code):
+                    with self.assertRaises(FinKoreError) as caught:
+                        operation()
+                    self.assertEqual(caught.exception.code, code)
+                    self.assertEqual(value.to_portable(), before)
+        self.assertEqual(value.round(2, "FLOOR").to_portable(), {"amount": "-1.24", "currency": "EUR"})
+        self.assertEqual([part.to_portable() for part in value.allocate({"method": "EQUAL", "parts": 2}, 3)],
+                         [{"amount": "-0.620", "currency": "EUR"}, {"amount": "-0.619", "currency": "EUR"}])
+        self.assertEqual(value.to_portable(), before)
+
     def test_serialization_rejects_negative_and_boolean_scales(self) -> None:
         """MONEY-ERROR-006: scale validation precedes loss, even for exact zero."""
         for scale in (-1, True, False):

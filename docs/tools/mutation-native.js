@@ -15,7 +15,48 @@ const py = 'test_readiness_regressions.ReadinessRegressionTests.'
 const workflowControl = 'Workflow retained definition ownership retains state, terminal and transition arrays after construction'
 const integration = 'test/integration/readiness-regressions.test.ts'
 const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
+const constructionPy = 'test_construction_evaluation_regressions.ConstructionEvaluationRegressions.'
 const probes = [
+  ...[
+    { id: 'amount-validation-removed',
+      from: 'if not isinstance(self.amount, Decimal) or not self.amount.is_finite():', to: 'if False:',
+      target: constructionPy + 'test_money_constructor_nan' },
+    { id: 'infinity-accepted',
+      from: 'not self.amount.is_finite()', to: 'self.amount.is_nan()',
+      target: constructionPy + 'test_money_constructor_negative_infinity' },
+    { id: 'integer-coerced',
+      from: '        if not isinstance(self.amount, Decimal) or not self.amount.is_finite():',
+      to: '        if isinstance(self.amount, int):\n            object.__setattr__(self, "amount", Decimal(self.amount))\n        if not isinstance(self.amount, Decimal) or not self.amount.is_finite():',
+      target: constructionPy + 'test_money_constructor_integer' },
+    { id: 'amount-error-changed',
+      from: 'if not isinstance(self.amount, Decimal) or not self.amount.is_finite():\n            raise FinKoreError(INVALID_AMOUNT)',
+      to: 'if not isinstance(self.amount, Decimal) or not self.amount.is_finite():\n            raise FinKoreError(INVALID_CURRENCY)',
+      target: constructionPy + 'test_money_constructor_signaling_nan' },
+    { id: 'currency-validation-removed',
+      from: 'if not isinstance(self.currency, str) or _CURRENCY_RE.fullmatch(self.currency) is None:', to: 'if False:',
+      target: constructionPy + 'test_money_currency_empty' },
+    { id: 'currency-type-accepted',
+      from: 'if not isinstance(self.currency, str) or _CURRENCY_RE.fullmatch(self.currency) is None:',
+      to: 'if isinstance(self.currency, str) and _CURRENCY_RE.fullmatch(self.currency) is None:',
+      target: constructionPy + 'test_money_currency_object' },
+    { id: 'currency-case-normalized',
+      from: '_CURRENCY_RE.fullmatch(self.currency)', to: '_CURRENCY_RE.fullmatch(self.currency.upper())',
+      target: constructionPy + 'test_money_currency_lowercase' },
+    { id: 'currency-error-changed',
+      from: 'if not isinstance(self.currency, str) or _CURRENCY_RE.fullmatch(self.currency) is None:\n            raise FinKoreError(INVALID_CURRENCY)',
+      to: 'if not isinstance(self.currency, str) or _CURRENCY_RE.fullmatch(self.currency) is None:\n            raise FinKoreError(INVALID_AMOUNT)',
+      target: constructionPy + 'test_money_currency_null' },
+  ].map(probe => ({ ...probe, id: 'python-money-construction-' + probe.id, language: 'python', path: 'money.py',
+    control: constructionPy + 'test_money_decimal_controls' })),
+  ...[
+    { id: 'context-rounded',
+      from: '        if not isinstance(self.amount, Decimal) or not self.amount.is_finite():',
+      to: '        if isinstance(self.amount, Decimal):\n            object.__setattr__(self, "amount", +self.amount)\n        if not isinstance(self.amount, Decimal) or not self.amount.is_finite():' },
+    { id: 'exponent-rejected',
+      from: 'not self.amount.is_finite()', to: 'not self.amount.is_finite() or self.amount.as_tuple().exponent > 0' },
+  ].map(probe => ({ ...probe, id: 'python-money-construction-' + probe.id, language: 'python', path: 'money.py',
+    target: constructionPy + 'test_money_decimal_controls',
+    control: constructionPy + 'test_money_boundary096_rate_control_001' })),
 {
   "id": "typescript-entity-definition-from-input-alias",
   "language": "typescript",

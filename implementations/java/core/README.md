@@ -4,7 +4,8 @@ Core 0.9.6 status: [Milestone 2](../../../docs/plans/plan-09.6.md) adds permanen
 regressions that intentionally fail against the current implementation. The
 original 667 portable vectors still pass; expanded conformance, native fixes,
 coverage, and mutation closure remain pending. Existing capability descriptions
-do not establish conformance at these newly tested boundaries.
+do not establish conformance at these newly tested boundaries. Python Money corrections are
+verified in Milestone 3; this implementation is unchanged by that milestone.
 
 The completed [Core 0.9.5 corrective release](../../../docs/plans/plan-09.5.md)
 passes all 667 manifest vectors on TypeScript, Python 3.12/3.13, and Java.

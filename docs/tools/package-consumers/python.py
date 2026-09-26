@@ -2,6 +2,7 @@
 # Exercises installed wheel/sdist public APIs in an isolated consumer. Creates
 # only in-memory observations and defines no financial behavior.
 from copy import deepcopy
+from decimal import Context, Decimal, Inexact, Rounded, localcontext
 from finkore import CORE_VERSION, FinKoreError, Money, WorkflowDefinition
 from finkore.workflow import create_workflow, transition_workflow
 from finkore.entities import create_entity, transition_entity, import_entity
@@ -19,7 +20,25 @@ def error(code, action):
 
 
 assert CORE_VERSION == '0.9-rc'
+for amount in (Decimal('NaN'), Decimal('sNaN'), Decimal('Infinity'), Decimal('-Infinity'), '1', 1, 1.0, True, None, [], {}):
+    error('FINKORE_MONEY_INVALID_AMOUNT', lambda: Money(amount, 'EUR'))
+for currency in ('', 'eur', None, [], {}):
+    error('FINKORE_MONEY_INVALID_CURRENCY', lambda: Money(Decimal('1'), currency))
+with localcontext(Context(prec=3)) as context:
+    context.traps[Inexact] = context.traps[Rounded] = True
+    before_context = repr(context)
+    for text, expected in [('1E+3', '1000'), ('-0.000', '0.000'), ('-1.2300', '-1.2300'),
+                           ('12345678901234567890.123456789', '12345678901234567890.123456789')]:
+        native = Money(Decimal(text), 'EUR')
+        assert native.to_portable() == {'amount': expected, 'currency': 'EUR'}
+        assert native.add(Money(Decimal('0'), 'EUR')).amount == Decimal(text)
+        assert Money.from_portable(native.to_portable()).amount == Decimal(text)
+    assert Money(Decimal('1.2300'), 'EUR', 2).to_portable()['amount'] == '1.23'
+    assert repr(context) == before_context
 money = Money.from_portable({'amount': '1.239', 'currency': 'EUR'})
+for kind in ({}, [], None, '', True, 1, 'UNKNOWN'):
+    error('FINKORE_MONEY_INVALID_AMOUNT', lambda: money.apply_rate({'kind': kind, 'value': '1'}))
+assert money.apply_rate({'kind': 'DECIMAL', 'value': '2'}).to_portable()['amount'] == '2.478'
 error('FINKORE_MONEY_ROUNDING_REQUIRED', lambda: money.to_portable(2))
 assert money.to_portable(4) == {'amount': '1.2390', 'currency': 'EUR'}
 assert money.to_portable() == {'amount': '1.239', 'currency': 'EUR'}
@@ -51,4 +70,4 @@ event = {'eventId': 'event-1', 'eventType': 'ENTITY_CHANGED', 'entity': requirem
 cycle = {}; cycle['self'] = cycle
 error('FINKORE_AUDIT_ACTOR_INVALID', lambda: append_event([], {**event, 'actor': {'id': 'alice', 'metadata': cycle}}))
 assert append_event([], event)['history'] == [event]
-print('Installed Python consumer: lossless serialization, binding, import identity/null, validator, Approval and Audit boundaries pass')
+print('Installed Python consumer: native Money, Rate rejection, lossless serialization, binding, import identity/null, validator, Approval and Audit boundaries pass')
