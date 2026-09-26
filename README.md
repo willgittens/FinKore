@@ -353,6 +353,12 @@ suites and isolated package consumers pass clean-checkout verification.
 coverage limits. [Core 1.0 promotion](./docs/plans/plan-10.md) remains a separate,
 uncompleted process.
 
+A subsequent readiness review found additional native construction, Approval
+evaluation/evidence, Audit authority, and Workflow/Entity validation gaps.
+The [Core 0.9.6 corrective plan](./docs/plans/plan-09.6.md) tracks this unstarted
+work. Core 1.0 promotion is blocked pending those corrections and fresh review;
+`core-0.9.5` remains the latest completed corrective snapshot.
+
 - Money
 - Workflow
 - Audit

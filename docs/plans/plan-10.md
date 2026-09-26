@@ -2,11 +2,13 @@
 
 ## Status
 
-The completed [Core 0.9.5 corrective release](plan-09.5.md) resolves the reviewed
-Money, Workflow, Approval, Audit, and Entity boundary findings and passes its
-expanded release gate. It preserves all earlier corrective protections,
-including the completed [Core 0.9.4 release](plan-09.4.md). This corrective
-prerequisite is satisfied; stable promotion still requires the milestones below.
+The completed [Core 0.9.5 corrective release](plan-09.5.md) resolved its reviewed
+findings and passed its expanded release gate, preserving earlier corrective
+protections including [Core 0.9.4](plan-09.4.md). A subsequent readiness review
+found additional native construction, Approval evaluation/evidence, Audit
+authority, and Workflow/Entity validation gaps despite passing existing checks.
+Stable promotion is blocked on the unstarted [Core 0.9.6 corrective
+plan](plan-09.6.md), its fresh boundary review, and the milestones below.
 Passing finite conformance and native tests does not establish exhaustive
 correctness or complete the stable-release review.
 
@@ -63,7 +65,7 @@ Promote the reviewed 0.9 candidate without adding new behavior.
 ### Tasks
 
 - [ ] Confirm that every 0.9 release blocker is resolved, including every
-      finding and release gate in the [0.9.5 corrective plan](plan-09.5.md),
+      finding and release gate in the [0.9.6 corrective plan](plan-09.6.md),
       while preserving all earlier corrective releases' protections.
 - [ ] Change CoreDoc status and version to FinKore Core 1.0.
 - [ ] Change specification status from experimental or release candidate to
