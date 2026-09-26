@@ -357,11 +357,14 @@ A subsequent readiness review found additional native construction, Approval
 evaluation/evidence, Audit authority, and Workflow/Entity validation gaps.
 The [Core 0.9.6 corrective plan](./docs/plans/plan-09.6.md) records the Milestone 1
 contract decisions and Milestone 2 permanent regressions. All 667 original
-vectors still pass across the four runtimes; the expanded 844-vector suite
+vectors still pass across the four runtimes; the expanded 858-vector suite
 exposes the defects and remains red. Milestone 3 fixes Python native Money
 construction and malformed Rate rejection; all 111 Money vectors pass on Python
 3.12/3.13 with focused native, coverage, mutation, and package verification.
-The remaining correction milestones are unstarted.
+Milestone 4 fixes native Workflow definition construction and instance error
+priority; all 135 Workflow vectors pass on all four runtimes, with focused
+coverage, mutation, ownership, and installed-package checks. Milestones 5–9
+remain unstarted.
 Core 1.0 promotion is blocked pending those corrections and fresh review;
 `core-0.9.5` remains the latest completed corrective snapshot.
 

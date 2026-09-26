@@ -12,6 +12,10 @@ import org.junit.jupiter.api.Test;
 /** JUnit coverage tests for Java Workflow behavior. */
 final class WorkflowCoverageTest {
   @Test
+  void nativeConstructionAndErrorPriority() throws java.io.IOException {
+    ConstructionEvaluationRegressionTest.main(new String[]{"workflow"});
+  }
+  @Test
   void nativePreconditionPresence() throws java.io.IOException {
     BoundaryRegressionTest.main(new String[]{"workflow.presence."});
   }

@@ -67,9 +67,10 @@ public final class Workflow {
      * @param source declared source state
      * @param target declared target state
      * @param guards guard observations evaluated against explicit facts
-     * @throws FinKoreException with {@link #INVALID_DEFINITION} for malformed guards
+     * @throws FinKoreException with {@link #INVALID_DEFINITION} for null endpoints or malformed guards
      */
     public Transition {
+      if (source == null || target == null) throw new FinKoreException(INVALID_DEFINITION);
       guards = deepCopyMapList(guards);
     }
 
@@ -111,7 +112,9 @@ public final class Workflow {
       String definitionIdentity,
       String definitionVersionIdentity) {
     /**
-     * Creates an immutable Workflow definition.
+     * Validates and owns an immutable Workflow definition before exposing it.
+     * Native null/null identities declare an unversioned definition; partial or
+     * empty version pairs are invalid. Parsed definitions use this same boundary.
      *
      * @param states declared state identifiers
      * @param initialState one initial state
@@ -119,8 +122,30 @@ public final class Workflow {
      * @param transitions declared transitions
      * @param definitionIdentity optional opaque definition identity
      * @param definitionVersionIdentity optional opaque version identity
+     * @throws FinKoreException with {@link #INVALID_DEFINITION} for malformed
+     * declarations, undeclared endpoints/initial State, or outgoing terminal transitions
+     * @see <a href="../../../../../../spec/workflow/states.md">WORKFLOW-STATES-001 and WORKFLOW-STATES-002</a>
+     * @see <a href="../../../../../../spec/workflow/terminal-states.md">WORKFLOW-TERMINAL-002</a>
      */
     public Definition {
+      if (stringList(states) == null || states.isEmpty() || new HashSet<>(states).size() != states.size()
+          || initialState == null || !states.contains(initialState)) {
+        throw new FinKoreException(INVALID_DEFINITION);
+      }
+      if (stringList(terminalStates) == null || new HashSet<>(terminalStates).size() != terminalStates.size()
+          || !states.containsAll(terminalStates)) {
+        throw new FinKoreException(INVALID_DEFINITION);
+      }
+      if (transitions == null) throw new FinKoreException(INVALID_DEFINITION);
+      for (Transition transition : transitions) {
+        if (transition == null || !states.contains(transition.source()) || !states.contains(transition.target())
+            || terminalStates.contains(transition.source())) {
+          throw new FinKoreException(INVALID_DEFINITION);
+        }
+      }
+      if (definitionIdentity != null || definitionVersionIdentity != null) {
+        if (!opaque(definitionIdentity) || !opaque(definitionVersionIdentity)) throw new FinKoreException(INVALID_DEFINITION);
+      }
       states = List.copyOf(states);
       terminalStates = List.copyOf(terminalStates);
       transitions = List.copyOf(transitions);
@@ -239,18 +264,27 @@ public final class Workflow {
    */
   public record Instance(String currentState, Map<String, String> binding, String revision) {
     /**
-     * Creates an immutable Workflow instance.
+     * Creates a structurally valid immutable Workflow instance. Native null
+     * binding/revision means omission. State membership and matching the supplied
+     * definition are checked by import/transition, in WORKFLOW-ERROR-007 order.
      *
      * @param currentState current lifecycle state
      * @param binding optional definition version binding
      * @param revision optional opaque revision
+     * @throws FinKoreException with {@link #INVALID_INSTANCE} for malformed structure
      */
     public Instance {
+      if (currentState == null || (revision != null && !opaque(revision))
+          || (binding != null && parseBinding(binding) == null)) {
+        throw new FinKoreException(INVALID_INSTANCE);
+      }
       binding = binding == null ? null : Map.copyOf(binding);
     }
 
     /**
-     * Parses a portable Workflow instance observation.
+     * Parses a portable Workflow instance observation. Supplied null revision
+     * or binding is malformed; omission remains valid where optional. Structural
+     * validation precedes version matching (WORKFLOW-ERROR-005/007).
      *
      * @param value portable instance observation
      * @return parsed instance
@@ -265,12 +299,12 @@ public final class Workflow {
         throw new FinKoreException(INVALID_INSTANCE);
       }
       Object revision = map.get("revision");
-      if (revision != null && !opaque(revision)) {
+      if (map.containsKey("revision") && !opaque(revision)) {
         throw new FinKoreException(INVALID_INSTANCE);
       }
       Object rawBinding = map.get("binding");
       Map<String, String> binding = null;
-      if (rawBinding != null) {
+      if (map.containsKey("binding")) {
         binding = parseBinding(rawBinding);
         if (binding == null) {
           throw new FinKoreException(INVALID_INSTANCE);

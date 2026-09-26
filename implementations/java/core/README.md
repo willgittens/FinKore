@@ -1,11 +1,11 @@
 # FinKore Java Core
 
-Core 0.9.6 status: [Milestone 2](../../../docs/plans/plan-09.6.md) adds permanent
-regressions that intentionally fail against the current implementation. The
-original 667 portable vectors still pass; expanded conformance, native fixes,
-coverage, and mutation closure remain pending. Existing capability descriptions
-do not establish conformance at these newly tested boundaries. Python Money corrections are
-verified in Milestone 3; this implementation is unchanged by that milestone.
+Core 0.9.6 status: [Milestones 3 and 4](../../../docs/plans/plan-09.6.md)
+verify Money and Workflow corrections. All 135 Workflow vectors pass on
+TypeScript, Python 3.12/3.13, and Java, with native construction, error-priority,
+ownership, coverage, mutation, and installed-consumer checks. The complete
+858-vector suite retains known Approval, Audit, and Entity defects; these
+focused results do not establish whole-core conformance.
 
 The completed [Core 0.9.5 corrective release](../../../docs/plans/plan-09.5.md)
 passes all 667 manifest vectors on TypeScript, Python 3.12/3.13, and Java.
@@ -107,6 +107,27 @@ predicates exercise declared validation; they do not standardize a general
 validation language or impose a universal amount/limit policy.
 
 ## Public Package Surface
+
+Native `Workflow.Definition` records validate before exposure: States are unique,
+the initial State and all Transition endpoints are declared, terminal States have
+no outgoing Transitions, and version identities form a valid pair. Null or
+malformed declaration lists and elements raise
+`FINKORE_WORKFLOW_INVALID_DEFINITION`. Declaration lists and nested guards remain
+owned and immutable. `Workflow.Transition` rejects null endpoints and malformed
+guards with the same portable definition error.
+
+`Workflow.Instance` validates current-State, binding, and revision structure.
+Native null binding/revision means omission. Portable `fromPortable` input
+preserves member presence, so supplied null binding/revision instead raises
+`FINKORE_WORKFLOW_INVALID_INSTANCE`.
+
+Import and transition apply WORKFLOW-ERROR-007: invalid definition, malformed
+instance, version mismatch, invalid State, expected-State/revision conflict,
+terminal State, undeclared Transition, then rejected guard. A well-formed
+undeclared State retains `FINKORE_WORKFLOW_INVALID_STATE`; an invalid observed
+revision differs from a supplied invalid expected revision, which is a conflict.
+No historical binding is inferred or replaced, and failures preserve all supplied
+observations. These checks implement existing requirements, not Workflow migration.
 
 Use `Workflow.transition(definition, instance, target, facts)` to omit both
 preconditions. The six-argument overload accepts `Workflow.OMITTED` for either

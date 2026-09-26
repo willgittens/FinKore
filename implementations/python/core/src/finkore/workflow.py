@@ -110,13 +110,13 @@ class WorkflowTransition:
     _guards: tuple[dict[str, Any], ...]
 
     def __init__(self, source: str, target: str, guards: tuple[dict[str, Any], ...] = ()) -> None:
-        """Retain independent guards; malformed JSON raises INVALID_DEFINITION.
+        """Validate endpoints and own guards; malformed input raises INVALID_DEFINITION.
 
         The positional/keyword constructor is unchanged. Guard observations are
         defensive JSON copies, including nested objects and arrays.
         @see WORKFLOW-VERSION-003
         """
-        if not isinstance(guards, (tuple, list)):
+        if not isinstance(source, str) or not isinstance(target, str) or not isinstance(guards, (tuple, list)):
             raise FinKoreError(INVALID_DEFINITION)
         retained = []
         for guard in guards:
@@ -183,7 +183,33 @@ class WorkflowDefinition:
     definition_version_identity: str | None = None
 
     def __post_init__(self) -> None:
-        """Own declaration containers supplied through the native constructor."""
+        """Validate and own native declarations before exposing a definition.
+
+        Lists and tuples are supported declaration containers. Invalid States,
+        endpoints, terminal declarations, or version pairs raise INVALID_DEFINITION.
+        Native None/None identities declare an unversioned definition; portable
+        null identities remain malformed supplied metadata.
+        @see WORKFLOW-STATES-001
+        @see WORKFLOW-STATES-002
+        @see WORKFLOW-TERMINAL-002
+        @see WORKFLOW-VERSION-001
+        """
+        if not isinstance(self.states, (tuple, list)) or not self.states or any(not isinstance(state, str) for state in self.states):
+            raise FinKoreError(INVALID_DEFINITION)
+        if len(set(self.states)) != len(self.states) or not isinstance(self.initial_state, str) or self.initial_state not in self.states:
+            raise FinKoreError(INVALID_DEFINITION)
+        if not isinstance(self.terminal_states, (tuple, list)) or any(not isinstance(state, str) or state not in self.states for state in self.terminal_states):
+            raise FinKoreError(INVALID_DEFINITION)
+        if len(set(self.terminal_states)) != len(self.terminal_states):
+            raise FinKoreError(INVALID_DEFINITION)
+        if not isinstance(self.transitions, (tuple, list)) or any(not isinstance(transition, WorkflowTransition) for transition in self.transitions):
+            raise FinKoreError(INVALID_DEFINITION)
+        for transition in self.transitions:
+            if transition.source not in self.states or transition.target not in self.states or transition.source in self.terminal_states:
+                raise FinKoreError(INVALID_DEFINITION)
+        if self.definition_identity is not None or self.definition_version_identity is not None:
+            if not _opaque(self.definition_identity) or not _opaque(self.definition_version_identity):
+                raise FinKoreError(INVALID_DEFINITION)
         object.__setattr__(self, "states", tuple(self.states))
         object.__setattr__(self, "terminal_states", tuple(self.terminal_states))
         object.__setattr__(self, "transitions", tuple(self.transitions))
@@ -275,13 +301,20 @@ class WorkflowInstance:
     revision: str | None = None
 
     def __init__(self, current_state: str, binding: dict[str, str] | None = None, revision: str | None = None) -> None:
-        """Own the supplied binding while preserving the positional/keyword API.
+        """Validate structure and own binding, preserving the positional/keyword API.
 
         Original input and public observations cannot change the instance's
         governing version. No binding is inferred from a later definition.
+        Native None means no optional binding/revision. Malformed supplied values
+        raise INVALID_INSTANCE; declared-State membership is checked at import
+        or transition, after binding validation under WORKFLOW-ERROR-007.
         @see WORKFLOW-VERSION-007
         @see WORKFLOW-VERSION-008
         """
+        if not isinstance(current_state, str) or (revision is not None and not _opaque(revision)):
+            raise FinKoreError(INVALID_INSTANCE)
+        if binding is not None and _binding(binding) is None:
+            raise FinKoreError(INVALID_INSTANCE)
         object.__setattr__(self, "current_state", current_state)
         object.__setattr__(self, "_bound_version", deepcopy(binding))
         object.__setattr__(self, "revision", revision)
@@ -297,7 +330,13 @@ class WorkflowInstance:
 
     @staticmethod
     def from_portable(value: Any) -> "WorkflowInstance":
-        """Parse a portable Workflow instance observation."""
+        """Parse an observation; supplied null revision/binding is INVALID_INSTANCE.
+
+        Instance structure is validated before version matching or State
+        membership. Omitted revision/binding remains distinct from supplied null.
+        @see WORKFLOW-ERROR-005
+        @see WORKFLOW-ERROR-007
+        """
 
         if not isinstance(value, dict) or "currentStates" in value:
             raise FinKoreError(INVALID_INSTANCE)
@@ -305,11 +344,11 @@ class WorkflowInstance:
         if not isinstance(current_state, str):
             raise FinKoreError(INVALID_INSTANCE)
         revision = value.get("revision")
-        if revision is not None and not _opaque(revision):
+        if "revision" in value and not _opaque(revision):
             raise FinKoreError(INVALID_INSTANCE)
         raw_binding = value.get("binding")
         binding = None if raw_binding is None else _binding(raw_binding)
-        if raw_binding is not None and binding is None:
+        if "binding" in value and binding is None:
             raise FinKoreError(INVALID_INSTANCE)
         return WorkflowInstance(current_state=current_state, binding=binding, revision=revision)
 

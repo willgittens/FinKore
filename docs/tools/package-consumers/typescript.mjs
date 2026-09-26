@@ -27,6 +27,13 @@ const imported = FinancialEntity.import(entity.definition, { entity: entity.tran
 assert.deepEqual(FinancialEntity.from(entity.definition, imported.entity).transition('DONE').toJSON().binding, binding)
 error('FINKORE_ENTITY_STATE_CONFLICT', () => FinancialEntity.import(entity.definition, { entity: before, expectedState: null }))
 const workflow = Workflow.create(entity.definition.workflow)
+for (const revision of [null, '', [], {}, false, 7]) {
+  const observation = { currentState: 'DRAFT', binding: { ...binding, definitionVersionIdentity: 'wrong' }, revision }
+  const original = structuredClone(observation)
+  error('FINKORE_WORKFLOW_INVALID_INSTANCE', () => Workflow.import(entity.definition.workflow, observation))
+  assert.deepEqual(observation, original)
+}
+error('FINKORE_WORKFLOW_VERSION_MISMATCH', () => Workflow.import(entity.definition.workflow, { currentState: 'DRAFT', binding: { ...binding, definitionVersionIdentity: 'wrong' }, revision: 'r1' }))
 error('FINKORE_WORKFLOW_INVALID_STATE', () => workflow.transition('REVIEW', { expectedCurrentState: null }))
 const requirement = { id: 'review', subject: { type: 'invoice', id: 'invoice-1' }, eligibleActors: ['alice'], approvedOutcome: 'APPROVED', rejectedOutcome: 'REJECTED' }
 const decision = { requirementId: 'review', subjectFacts: null, outcome: 'APPROVED', actor: { id: 'alice' }, decidedAt: '2026-09-01T12:00:00Z' }

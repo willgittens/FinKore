@@ -23,6 +23,17 @@ if (!validTargets.has(requestedTarget)) {
 }
 
 const pythonMutants = [
+{
+  "id": "python-workflow-observed-null-revision-omitted",
+  "suite": "workflow",
+  "path": "core/src/finkore/workflow.py",
+  "from": "if \"revision\" in value and not _opaque(revision):",
+  "to": "if revision is not None and not _opaque(revision):",
+  "expectedVector": "workflow.boundary096.import-revision-null-before-mismatch-001",
+  "expectedPassVectors": [
+    "workflow.boundary096.import-mismatch-control-001"
+  ]
+},
   {
     id: 'python-money-rate-container-accepted',
     suite: 'money', path: 'core/src/finkore/money.py',
@@ -900,6 +911,17 @@ const pythonMutants = [
 ]
 
 const javaMutants = [
+{
+  "id": "java-workflow-observed-null-revision-omitted",
+  "suite": "workflow",
+  "path": "core/src/main/java/org/finkore/Workflow.java",
+  "from": "if (map.containsKey(\"revision\") && !opaque(revision)) {",
+  "to": "if (revision != null && !opaque(revision)) {",
+  "expectedVector": "workflow.boundary096.import-revision-null-before-mismatch-001",
+  "expectedPassVectors": [
+    "workflow.boundary096.import-mismatch-control-001"
+  ]
+},
   {
   "id": "java-entity-create-binding-lost",
   "suite": "entities",

@@ -175,6 +175,8 @@ export class Workflow {
    * supplied opaque Workflow Instance Revision, and does not perform a
    * Transition Request, evaluate guards, create Audit evidence, or migrate
    * between definition versions.
+   * Complete instance structure (including revision) is validated before
+   * version matching; version mismatch precedes undeclared-State rejection.
    *
    * @param definitionInput - Candidate Workflow definition.
    * @param instance - Candidate Workflow instance observation.
@@ -198,6 +200,7 @@ export class Workflow {
    * @see WORKFLOW-STATES-007
    * @see WORKFLOW-ERROR-004
    * @see WORKFLOW-ERROR-005
+   * @see WORKFLOW-ERROR-007
    * @see WORKFLOW-VERSION-007
    * @see WORKFLOW-VERSION-009
    * @see WORKFLOW-VERSION-010
@@ -210,9 +213,10 @@ export class Workflow {
    */
   static import(definitionInput: unknown, instance: unknown): Workflow {
     const definition = WorkflowDefinition.from(definitionInput)
-    if (!isPlainRecord(instance) || !('currentState' in instance)) {
+    if (!isPlainRecord(instance) || typeof instance.currentState !== 'string' || 'currentStates' in instance) {
       throw new InvalidWorkflowInstanceError()
     }
+    const revision = 'revision' in instance ? parseRevision(instance.revision) : undefined
     const expectedBinding = definition.versionBinding()
     let binding: WorkflowDefinitionVersionBinding | undefined
     if (expectedBinding !== undefined) {
@@ -229,7 +233,6 @@ export class Workflow {
     if (!definition.hasState(currentState as WorkflowStateIdentifier)) {
       throw new InvalidWorkflowStateError()
     }
-    const revision = 'revision' in instance ? parseRevision(instance.revision) : undefined
     return new Workflow(definition, currentState as WorkflowStateIdentifier, binding, revision)
   }
 

@@ -2,9 +2,9 @@
 
 ## Status
 
-Milestones 1–3 are complete: contract decisions and permanent regressions are
-recorded, and Python Money constructor/Rate defects are corrected and verified.
-Milestones 4–9 are unstarted. The remaining domains still have the recorded
+Milestones 1–4 are complete: contract decisions and permanent regressions are
+recorded, and Money plus Workflow constructor/priority corrections are verified.
+Milestones 5–9 are unstarted. Approval, Audit, and Entity still have the recorded
 defects, so the complete suites remain red until their owning fixes land.
 The readiness review of commit `e300bb1`
 (`core-0.9.5`) found additional mandatory behavior and portability gaps despite
@@ -476,27 +476,128 @@ pass. Full release verification remains pending.
 
 ## Milestone 4 — Workflow construction and validation precedence
 
-- [ ] Enforce definition validity for direct Python/Java construction as well
+- [x] Enforce definition validity for direct Python/Java construction as well
       as portable parsing. Cover unique declared States, a declared initial
       State, valid terminal declarations, Transition endpoints, guards, and
       version identity structure under existing requirements.
-- [ ] Exercise valid and invalid native definitions through create, import,
+- [x] Exercise valid and invalid native definitions through create, import,
       and transition; no public path may create an undeclared current State.
       Review native instance/Transition constructors for the same bypass family.
-- [ ] Correct TypeScript import/transition validation so malformed revision or
+- [x] Correct TypeScript import/transition validation so malformed revision or
       instance structure precedes version mismatch under `WORKFLOW-ERROR-007`.
       Pair each combined-failure case with valid-structure mismatch controls.
-- [ ] Cover the specified failure hierarchy, including malformed observed
+- [x] Cover the specified failure hierarchy, including malformed observed
       revision versus malformed expected revision. Preserve their distinct
       invalid-instance/state-conflict meanings and omission/null handling.
-- [ ] Preserve owned definitions/guards/bindings and versioned Entity sequences
+- [x] Preserve owned definitions/guards/bindings and versioned Entity sequences
       from 0.9.5. Reuse validation without deriving historical binding from the
       current definition or introducing Workflow migration.
-- [ ] Run affected native/unit, Workflow and Entity integration conformance,
+- [x] Run affected native/unit, Workflow and Entity integration conformance,
       coverage, and mutation checks. Update public constructor and error docs.
 
 Completion: findings 3 and 10a are corrected across direct and portable APIs,
 with correct primary errors and unchanged instances on failure.
+
+### Milestone 4 results
+
+Findings 3 and 10a are corrected. Python and Java definition constructors now
+validate declaration containers, unique States, initial/terminal membership,
+Transition endpoints and terminal restrictions, and version pairs before exposing
+an owned definition. Existing guard validation/copying remains in force. Native
+Transition endpoints and instance structure are also validated. Portable parsing
+uses these constructor boundaries; no adapter implements financial validation.
+
+Native optional None/null binding and revision retain their omission meaning.
+Portable supplied null revision/binding is malformed input, not omission.
+TypeScript validates the complete observed instance before checking binding
+mismatch or State membership. A malformed observed revision is INVALID_INSTANCE;
+a malformed expected revision remains STATE_CONFLICT at transition time. No
+binding is inferred, changed, or migrated. Existing returned-value, nested guard,
+versioned Entity, and failure-atomicity regressions remain intact.
+
+The pre-fix runs reproduced 24 TypeScript Workflow regression failures and 21
+Java constructor/portable failures; Python reproduced constructor, native-shape,
+and null-revision failures. Fourteen permanent portable cases extend single-State
+structure and observed-revision/binding presence coverage. Their expected results
+come from WORKFLOW-ERROR-005/007 and existing fixture observation conventions.
+Invalid-instance fixtures return an error without manufacturing a valid instance
+observation; native tests independently assert unchanged input. No pre-existing
+vector expectation or stable identifier changed.
+
+| Verification | Result |
+| --- | --- |
+| Workflow conformance | 135/135 PASS on TypeScript, CPython 3.12, CPython 3.13, and Java; zero unsupported/infrastructure outcomes in this domain. |
+| Native and integration tests | 73 focused Python Workflow cases pass; both full Python versions retain no Workflow failures. Java's 52 construction/priority cases pass alongside existing Workflow/ownership suites. TypeScript's 244 scoped Workflow/retained-boundary tests pass. |
+| TypeScript changed-module coverage | `workflow.ts`: 98.66% lines, 98.90% branches. |
+| Python Workflow coverage | 96.02% statements, 92.75% branches across native tests and real Workflow vectors; no exclusions. |
+| Java Workflow coverage | 96.03% lines, 84.82% branches across JUnit/native tests and real Workflow vectors using the same Maven-compiled classes. |
+| Portable critical mutation | Python 16/16 killed on each version; Java 18/18 killed, with paired controls passing. Includes observed-null-revision regression probes. |
+| Native critical mutation | 22/22 Workflow probes killed across TypeScript/Python/Java; the ten Python probes also pass on 3.13. Includes twelve constructor probes and a TypeScript priority-reversal probe. |
+| TypeScript Stryker | 97.00% for the changed `workflow.ts`: 226 killed, six equivalent survivors, one unreachable fallback, zero errors/timeouts. |
+| Installed consumers | npm, Java JAR, Python wheel and sdist on 3.12/3.13 pass constructor, binding, priority, and retained earlier checks. Nothing published. |
+
+Stryker survivors were reviewed, not suppressed. Three mutations to the null
+shortcut still yield the same result via the remaining null/type/record checks.
+Removing the preliminary type comparison also leaves the primitive, array, and
+record branches rejecting mismatched types. The two record-condition mutations
+are equivalent after null, primitive, array, and differing-type cases have
+returned. The final fallback is unreachable when one compared value is validated
+guard JSON. No critical validation, state mutation, binding, error-priority, or
+guard-result mutant survives; no exclusions or ignore annotations were added.
+
+All 667 original vectors still pass on all runtimes. The complete manifest has
+858 vectors and retains only known Milestone 5–7 defects:
+
+| Runtime | PASS | FAIL | INFRASTRUCTURE_ERROR |
+| --- | ---: | ---: | ---: |
+| TypeScript | 826 | 32 | 0 |
+| CPython 3.12 / 3.13 (each) | 797 | 49 | 12 |
+| Java | 792 | 52 | 14 |
+
+All 249 Entity vectors were executed as integration checks: remaining failures
+are the previously recorded Source Identity/standalone-mapping/evolution cases,
+not Workflow regressions. Full unit discovery likewise retains later-milestone
+failures: TypeScript 16 of 1,018 core tests; Python 54 failures and 12 errors in
+433 tests on each version; Java 62 failures in its 201-case expanded regression
+entry point. Earlier Java entry points and all 130 runner tests pass. The two
+TypeScript adapter tests for the still-defective expanded suites remain red.
+
+Reproduce focused checks from the repository root after toolchain/build setup:
+
+```sh
+PYTHONPATH=implementations/python/core/src .tools/bin/python3.12 -m unittest discover -s implementations/python/core/tests -k workflow
+PYTHONPATH=implementations/python/core/src .tools/bin/python3.13 -m unittest discover -s implementations/python/core/tests -k workflow
+npm run conformance:typescript -- --suite workflow
+npm run conformance:python -- --suite workflow
+npm run conformance:python:3.13 -- --suite workflow
+npm run conformance:java -- --suite workflow
+node docs/tools/mutation-critical.js python workflow
+FINKORE_PYTHON_PATH=.tools/bin/python3.13 node docs/tools/mutation-critical.js python workflow
+node docs/tools/mutation-critical.js java workflow
+node docs/tools/mutation-native.js workflow
+FINKORE_PYTHON_PATH=.tools/bin/python3.13 node docs/tools/mutation-native.js python-workflow
+npm run test:mutation -w @finkore/typescript -- --mutate src/workflow/workflow.ts --testFiles 'test/workflow/*.test.ts,test/integration/readiness-regressions.test.ts,test/integration/boundary-regressions.test.ts' --concurrency 2
+.tools/bin/mvn -f implementations/java/core/pom.xml -Dtest=WorkflowCoverageTest test
+node docs/tools/check-packages.js
+```
+
+Coverage uses the same scoped native/real-vector procedure as Milestone 3 for
+Python, selecting `workflow`. Java combines the JUnit JaCoCo data with real
+Workflow vectors using Maven's compiled core classes first on the classpath;
+TypeScript coverage runs the same eight test files as the scoped Stryker run.
+The full coverage/mutation release commands retain their complete scope and
+remain pending while unrelated domains are red.
+
+Completion review updated native/unit/adapter-discovered cases, portable vectors,
+critical mutation probes, installed consumers, public JSDoc/docstrings, package
+READMEs, root status, and traceability. All 14 reopened Workflow rows are COVERED:
+417 requirements now comprise 286 COVERED, 48 PARTIAL, and 83 NOT DIRECTLY
+TESTABLE, with no blocking specification gap. No new financial rule, error code,
+operation ID, Agentic effect, CoreDoc obligation, or AGENTS.md rule was needed.
+Build, strict TypeScript (including new tests), Java compilation, Python
+compilation on both versions, toolchain, architecture, developer-tool tests,
+documentation/traceability, license, and whitespace checks pass. Full release
+verification remains pending.
 
 ## Milestone 5 — Approval evidence, history, and evaluation
 

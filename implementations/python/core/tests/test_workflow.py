@@ -8,6 +8,37 @@ from finkore import FinKoreError, WorkflowDefinition, WorkflowInstance, create_w
 
 
 class WorkflowTests(unittest.TestCase):
+    def test_native_constructor_shapes(self) -> None:
+        """Native definitions reject malformed containers before exposing values."""
+        from finkore.workflow import WorkflowTransition
+        base = dict(states=('DRAFT', 'DONE'), initial_state='DRAFT', terminal_states=('DONE',),
+                    transitions=(WorkflowTransition('DRAFT', 'DONE'),))
+        faults = [{'states': None}, {'states': 'DRAFT'}, {'states': ([],)},
+                  {'initial_state': []}, {'terminal_states': None}, {'terminal_states': ('DONE', 'DONE')},
+                  {'transitions': None}, {'transitions': ({'source': 'DRAFT', 'target': 'DONE'},)},
+                  {'definition_identity': ''}, {'definition_version_identity': 'v1'}]
+        for fault in faults:
+            with self.subTest(fault=fault):
+                with self.assertRaises(FinKoreError) as caught:
+                    WorkflowDefinition(**{**base, **fault})
+                self.assertEqual(caught.exception.code, 'FINKORE_WORKFLOW_INVALID_DEFINITION')
+
+    def test_native_transition_and_instance_structure(self) -> None:
+        """Malformed native observations fail before later binding/state checks."""
+        from finkore.workflow import WorkflowTransition
+        for source, target in [(None, 'DONE'), ('DRAFT', []), ({}, 'DONE')]:
+            with self.subTest(source=source, target=target):
+                with self.assertRaises(FinKoreError) as caught:
+                    WorkflowTransition(source, target)
+                self.assertEqual(caught.exception.code, 'FINKORE_WORKFLOW_INVALID_DEFINITION')
+        for args in [(None,), ([],), ('DRAFT', {}), ('DRAFT', {'definitionIdentity': 'f'}),
+                     ('DRAFT', None, ''), ('DRAFT', None, 7)]:
+            with self.subTest(args=args):
+                with self.assertRaises(FinKoreError) as caught:
+                    WorkflowInstance(*args)
+                self.assertEqual(caught.exception.code, 'FINKORE_WORKFLOW_INVALID_INSTANCE')
+        self.assertEqual(WorkflowInstance('DRAFT', None, None).to_portable(), {'currentState': 'DRAFT'})
+
     def test_import_binding_input_and_repeated_observations(self) -> None:
         """WORKFLOW-VERSION-007/008/011: an imported observation cannot rebind instances."""
         binding = {"definitionIdentity": "review", "definitionVersionIdentity": "1"}

@@ -53,6 +53,30 @@ public final class ConstructionEvaluationRegressionTest {
     for (String fault : List.of("initial", "empty", "duplicate", "terminal", "outgoing-terminal", "endpoint", "version"))
       result.put("workflow.native.constructor-" + fault, () -> error(Workflow.INVALID_DEFINITION, () -> definition(fault)));
     result.put("workflow.native.control", ConstructionEvaluationRegressionTest::workflowControl);
+    result.put("workflow.native.null-states", () -> error(Workflow.INVALID_DEFINITION,
+        () -> new Workflow.Definition(null, "DRAFT", List.of(), List.of(), null, null)));
+    result.put("workflow.native.null-state-member", () -> error(Workflow.INVALID_DEFINITION,
+        () -> new Workflow.Definition(java.util.Arrays.asList("DRAFT", null), "DRAFT", List.of(), List.of(), null, null)));
+    result.put("workflow.native.null-terminals", () -> error(Workflow.INVALID_DEFINITION,
+        () -> new Workflow.Definition(List.of("DRAFT"), "DRAFT", null, List.of(), null, null)));
+    result.put("workflow.native.duplicate-terminals", () -> error(Workflow.INVALID_DEFINITION,
+        () -> new Workflow.Definition(List.of("DRAFT"), "DRAFT", List.of("DRAFT", "DRAFT"), List.of(), null, null)));
+    result.put("workflow.native.null-transitions", () -> error(Workflow.INVALID_DEFINITION,
+        () -> new Workflow.Definition(List.of("DRAFT"), "DRAFT", List.of(), null, null, null)));
+    result.put("workflow.native.null-transition-member", () -> error(Workflow.INVALID_DEFINITION,
+        () -> new Workflow.Definition(List.of("DRAFT"), "DRAFT", List.of(), java.util.Collections.singletonList(null), null, null)));
+    result.put("workflow.native.empty-version", () -> error(Workflow.INVALID_DEFINITION,
+        () -> new Workflow.Definition(List.of("DRAFT"), "DRAFT", List.of(), List.of(), "f", "")));
+    result.put("workflow.native.null-transition-source", () -> error(Workflow.INVALID_DEFINITION,
+        () -> new Workflow.Transition(null, "DONE", List.of())));
+    result.put("workflow.native.null-transition-target", () -> error(Workflow.INVALID_DEFINITION,
+        () -> new Workflow.Transition("DRAFT", null, List.of())));
+    result.put("workflow.native.null-instance-state", () -> error(Workflow.INVALID_INSTANCE,
+        () -> new Workflow.Instance(null, null, null)));
+    result.put("workflow.native.empty-instance-revision", () -> error(Workflow.INVALID_INSTANCE,
+        () -> new Workflow.Instance("DRAFT", null, "")));
+    result.put("workflow.native.malformed-instance-binding", () -> error(Workflow.INVALID_INSTANCE,
+        () -> new Workflow.Instance("DRAFT", Map.of("definitionIdentity", "f"), null)));
     result.put("approval.sequence.control", () -> approvalSequence());
     for (String boundary : List.of("record", "evaluate", "withdraw", "supersede", "supersede-requirement"))
       result.put("approval.sequence.invalid-history-" + boundary, () -> invalidHistory(boundary));

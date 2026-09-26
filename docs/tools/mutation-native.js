@@ -17,6 +17,126 @@ const integration = 'test/integration/readiness-regressions.test.ts'
 const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const constructionPy = 'test_construction_evaluation_regressions.ConstructionEvaluationRegressions.'
 const probes = [
+{
+  "id": "python-workflow-constructor-initial",
+  "language": "python",
+  "path": "workflow.py",
+  "from": " or self.initial_state not in self.states",
+  "to": "",
+  "target": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_workflow_constructor_initial",
+  "control": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_workflow_native_control"
+},
+{
+  "id": "python-workflow-constructor-duplicate",
+  "language": "python",
+  "path": "workflow.py",
+  "from": "len(set(self.states)) != len(self.states) or ",
+  "to": "",
+  "target": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_workflow_constructor_duplicate",
+  "control": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_workflow_native_control"
+},
+{
+  "id": "python-workflow-constructor-terminal",
+  "language": "python",
+  "path": "workflow.py",
+  "from": "or state not in self.states for state in self.terminal_states",
+  "to": "for state in self.terminal_states",
+  "target": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_workflow_constructor_terminal",
+  "control": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_workflow_native_control"
+},
+{
+  "id": "python-workflow-constructor-endpoint",
+  "language": "python",
+  "path": "workflow.py",
+  "from": "transition.target not in self.states",
+  "to": "False",
+  "target": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_workflow_constructor_endpoint",
+  "control": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_workflow_native_control"
+},
+{
+  "id": "python-workflow-constructor-outgoing-terminal",
+  "language": "python",
+  "path": "workflow.py",
+  "from": "transition.source in self.terminal_states",
+  "to": "False",
+  "target": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_workflow_constructor_outgoing_terminal",
+  "control": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_workflow_native_control"
+},
+{
+  "id": "python-workflow-constructor-version",
+  "language": "python",
+  "path": "workflow.py",
+  "from": "if self.definition_identity is not None or self.definition_version_identity is not None:",
+  "to": "if False:",
+  "target": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_workflow_constructor_version",
+  "control": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_workflow_native_control"
+},
+{
+  "id": "java-workflow-constructor-initial",
+  "language": "java",
+  "path": "Workflow.java",
+  "from": "|| initialState == null || !states.contains(initialState)",
+  "to": "|| initialState == null",
+  "target": "workflow.native.constructor-initial",
+  "control": "workflow.native.control"
+},
+{
+  "id": "java-workflow-constructor-duplicate",
+  "language": "java",
+  "path": "Workflow.java",
+  "from": "stringList(states) == null || states.isEmpty() || new HashSet<>(states).size() != states.size()",
+  "to": "stringList(states) == null || states.isEmpty()",
+  "target": "workflow.native.constructor-duplicate",
+  "control": "workflow.native.control"
+},
+{
+  "id": "java-workflow-constructor-terminal",
+  "language": "java",
+  "path": "Workflow.java",
+  "from": "|| !states.containsAll(terminalStates)",
+  "to": "|| false",
+  "target": "workflow.native.constructor-terminal",
+  "control": "workflow.native.control"
+},
+{
+  "id": "java-workflow-constructor-endpoint",
+  "language": "java",
+  "path": "Workflow.java",
+  "from": "!states.contains(transition.target())",
+  "to": "false",
+  "target": "workflow.native.constructor-endpoint",
+  "control": "workflow.native.control"
+},
+{
+  "id": "java-workflow-constructor-outgoing-terminal",
+  "language": "java",
+  "path": "Workflow.java",
+  "from": "terminalStates.contains(transition.source())",
+  "to": "false",
+  "target": "workflow.native.constructor-outgoing-terminal",
+  "control": "workflow.native.control"
+},
+{
+  "id": "java-workflow-constructor-version",
+  "language": "java",
+  "path": "Workflow.java",
+  "from": "if (definitionIdentity != null || definitionVersionIdentity != null) {",
+  "to": "if (false) {",
+  "target": "workflow.native.constructor-version",
+  "control": "workflow.native.control"
+},
+{
+  "id": "typescript-workflow-instance-priority-reversed",
+  "language": "typescript",
+  "path": "src/workflow/workflow.ts",
+  "from": "    const revision = 'revision' in instance ? parseRevision(instance.revision) : undefined\n    const expectedBinding = definition.versionBinding()\n    let binding: WorkflowDefinitionVersionBinding | undefined\n    if (expectedBinding !== undefined) {\n      binding = parseObservedBinding(instance.binding)\n      if (!bindingsMatch(binding, expectedBinding)) {\n        throw new WorkflowVersionMismatchError()\n      }\n    } else if ('binding' in instance) {\n      parseObservedBinding(instance.binding)\n      throw new WorkflowVersionMismatchError()\n    }\n\n    const currentState = instance.currentState\n    if (!definition.hasState(currentState as WorkflowStateIdentifier)) {\n      throw new InvalidWorkflowStateError()\n    }\n",
+  "to": "    const expectedBinding = definition.versionBinding()\n    let binding: WorkflowDefinitionVersionBinding | undefined\n    if (expectedBinding !== undefined) {\n      binding = parseObservedBinding(instance.binding)\n      if (!bindingsMatch(binding, expectedBinding)) {\n        throw new WorkflowVersionMismatchError()\n      }\n    } else if ('binding' in instance) {\n      parseObservedBinding(instance.binding)\n      throw new WorkflowVersionMismatchError()\n    }\n\n    const currentState = instance.currentState\n    if (!definition.hasState(currentState as WorkflowStateIdentifier)) {\n      throw new InvalidWorkflowStateError()\n    }\n    const revision = 'revision' in instance ? parseRevision(instance.revision) : undefined\n",
+  "tests": [
+    "test/workflow/errors.test.ts"
+  ],
+  "target": "Workflow errors complete instance validation precedes version mismatch",
+  "control": "Workflow errors valid instance mismatch control precedes State and conflict checks"
+},
   ...[
     { id: 'amount-validation-removed',
       from: 'if not isinstance(self.amount, Decimal) or not self.amount.is_finite():', to: 'if False:',

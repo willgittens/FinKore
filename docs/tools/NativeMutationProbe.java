@@ -15,6 +15,9 @@ public final class NativeMutationProbe {
   public static void main(String[] args) throws Exception {
     Map<String, Runnable> cases = new java.util.LinkedHashMap<>(ReadinessRegressionTest.mutationCases());
     cases.putAll(BoundaryRegressionTest.cases());
+    ConstructionEvaluationRegressionTest.cases().forEach((id, test) -> {
+      if (id.startsWith("workflow.")) cases.put(id, test);
+    });
     List<String> rows = new ArrayList<>();
     int passed = 0, failed = 0, infrastructure = 0;
     for (String id : args) {

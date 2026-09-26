@@ -1,11 +1,11 @@
 # FinKore TypeScript
 
-Core 0.9.6 status: [Milestone 2](../../../docs/plans/plan-09.6.md) adds permanent
-regressions that intentionally fail against the current implementation. The
-original 667 portable vectors still pass; expanded conformance, native fixes,
-coverage, and mutation closure remain pending. Existing capability descriptions
-do not establish conformance at these newly tested boundaries. Python Money corrections are
-verified in Milestone 3; this implementation is unchanged by that milestone.
+Core 0.9.6 status: [Milestones 3 and 4](../../../docs/plans/plan-09.6.md)
+verify Money and Workflow corrections. All 135 Workflow vectors pass on
+TypeScript, Python 3.12/3.13, and Java, with native construction, error-priority,
+ownership, coverage, mutation, and installed-consumer checks. The complete
+858-vector suite retains known Approval, Audit, and Entity defects; these
+focused results do not establish whole-core conformance.
 
 The completed [Core 0.9.5 corrective release](../../../docs/plans/plan-09.5.md)
 passes all 667 manifest vectors on TypeScript, Python 3.12/3.13, and Java.
@@ -186,6 +186,15 @@ documented package-root surface.
 - `money.round({ scale, mode })` returns a new Money value rounded to the explicit target scale using `HALF_UP`, `HALF_EVEN`, `DOWN`, `UP`, `FLOOR`, or `CEILING`; invalid scale or mode values throw `FINKORE_MONEY_INVALID_ROUNDING`.
 
 ## Current Workflow API
+
+`Workflow.import` and its `Workflow.from` alias validate complete instance
+structure before version matching, including the single current-State shape
+and every supplied revision. Malformed observed revisions (including null) use
+`FINKORE_WORKFLOW_INVALID_INSTANCE`, even when a binding also mismatches.
+Version mismatch still precedes an undeclared well-formed State. Invalid expected
+revisions remain `FINKORE_WORKFLOW_STATE_CONFLICT` at transition time. This is
+WORKFLOW-ERROR-005/007 priority; State, binding, revision, and caller input remain
+unchanged on failure.
 
 - `Workflow.create(definition)` validates a workflow definition and creates an instance in its declared initial state, with an immutable bound definition version when the definition is versioned.
 - `Workflow.import(definition, { currentState, binding, revision })` validates an existing current-state observation against the definition instead of inferring the initial state, requires a matching supplied binding for versioned definitions, and preserves any supplied opaque instance revision exactly.

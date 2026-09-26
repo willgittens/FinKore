@@ -1,10 +1,11 @@
 # FinKore Python Core
 
-Core 0.9.6 status: [Milestone 3](../../../docs/plans/plan-09.6.md) corrects native
-Money construction and malformed Rate rejection. All 111 Money vectors pass on
-Python 3.12/3.13, with native tests, focused coverage, mutation probes, and isolated
-package consumers verified. The complete 844-vector suite still has the known
-Workflow, Approval, Audit, and Entity defects; this is not whole-core conformance.
+Core 0.9.6 status: [Milestones 3 and 4](../../../docs/plans/plan-09.6.md)
+verify Money and Workflow corrections. All 135 Workflow vectors pass on
+TypeScript, Python 3.12/3.13, and Java, with native construction, error-priority,
+ownership, coverage, mutation, and installed-consumer checks. The complete
+858-vector suite retains known Approval, Audit, and Entity defects; these
+focused results do not establish whole-core conformance.
 
 The completed [Core 0.9.5 corrective release](../../../docs/plans/plan-09.5.md)
 passes all 667 manifest vectors on TypeScript, Python 3.12/3.13, and Java.
@@ -136,6 +137,28 @@ predicates exercise declared validation; they do not standardize a general
 validation language or impose a universal amount/limit policy.
 
 ## Public Package Surface
+
+Native `WorkflowDefinition(states, initial_state, terminal_states, transitions,
+definition_identity=None, definition_version_identity=None)` validates before
+exposing the definition. State, terminal, and Transition containers accept lists
+or tuples and are owned independently. States are unique, the initial State and
+all Transition endpoints are declared, terminal States have no outgoing
+Transitions, and version identities form a valid pair. Invalid input raises
+`FINKORE_WORKFLOW_INVALID_DEFINITION`; guards retain their existing validated,
+defensively copied JSON semantics.
+
+`WorkflowInstance(current_state, binding=None, revision=None)` validates instance
+structure and retains its own binding. Native `None` means no optional binding or
+revision. Portable `from_portable` input instead preserves member presence:
+supplied null binding/revision is `FINKORE_WORKFLOW_INVALID_INSTANCE`.
+
+Import and transition apply WORKFLOW-ERROR-007: invalid definition, malformed
+instance, version mismatch, invalid State, expected-State/revision conflict,
+terminal State, undeclared Transition, then rejected guard. A well-formed
+undeclared State retains `FINKORE_WORKFLOW_INVALID_STATE`; an invalid observed
+revision differs from a supplied invalid expected revision, which is a conflict.
+No historical binding is inferred or replaced, and failures preserve all supplied
+observations. These checks implement existing requirements, not Workflow migration.
 
 `Money(amount, currency, presentation_scale=None)` requires a finite Python
 `Decimal` amount and a three-letter uppercase currency string. It validates

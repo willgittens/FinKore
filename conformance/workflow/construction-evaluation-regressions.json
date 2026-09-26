@@ -1014,6 +1014,799 @@
       ],
       "reviewFinding": "3",
       "pairedControl": "workflow.boundary096.transition-control-001"
+    },
+    {
+      "id": "workflow.boundary096.import-state-null-before-mismatch-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-005",
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-IMPORT-006"
+      ],
+      "description": "Malformed instance state-null precedes mismatched binding; preserves supplied observation.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": null,
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "2"
+          },
+          "revision": "r1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary096-10a-validation-bypass"
+      ],
+      "reviewFinding": "10a",
+      "pairedControl": "workflow.boundary096.import-mismatch-control-001"
+    },
+    {
+      "id": "workflow.boundary096.import-state-number-before-mismatch-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-005",
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-IMPORT-006"
+      ],
+      "description": "Malformed instance state-number precedes mismatched binding; preserves supplied observation.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": 7,
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "2"
+          },
+          "revision": "r1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary096-10a-validation-bypass"
+      ],
+      "reviewFinding": "10a",
+      "pairedControl": "workflow.boundary096.import-mismatch-control-001"
+    },
+    {
+      "id": "workflow.boundary096.import-state-array-before-mismatch-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-005",
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-IMPORT-006"
+      ],
+      "description": "Malformed instance state-array precedes mismatched binding; preserves supplied observation.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": [],
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "2"
+          },
+          "revision": "r1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary096-10a-validation-bypass"
+      ],
+      "reviewFinding": "10a",
+      "pairedControl": "workflow.boundary096.import-mismatch-control-001"
+    },
+    {
+      "id": "workflow.boundary096.import-state-object-before-mismatch-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-005",
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-IMPORT-006"
+      ],
+      "description": "Malformed instance state-object precedes mismatched binding; preserves supplied observation.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": {},
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "2"
+          },
+          "revision": "r1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary096-10a-validation-bypass"
+      ],
+      "reviewFinding": "10a",
+      "pairedControl": "workflow.boundary096.import-mismatch-control-001"
+    },
+    {
+      "id": "workflow.boundary096.import-multiple-states-before-mismatch-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-005",
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-IMPORT-006"
+      ],
+      "description": "Malformed instance multiple-states precedes mismatched binding; preserves supplied observation.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "2"
+          },
+          "revision": "r1",
+          "currentStates": [
+            "DRAFT",
+            "FINAL"
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary096-10a-validation-bypass"
+      ],
+      "reviewFinding": "10a",
+      "pairedControl": "workflow.boundary096.import-mismatch-control-001"
+    },
+    {
+      "id": "workflow.boundary096.import-revision-before-state-before-mismatch-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-005",
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-IMPORT-006"
+      ],
+      "description": "Malformed instance revision-before-state precedes mismatched binding; preserves supplied observation.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "GHOST",
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "2"
+          },
+          "revision": ""
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary096-10a-validation-bypass"
+      ],
+      "reviewFinding": "10a",
+      "pairedControl": "workflow.boundary096.import-mismatch-control-001"
+    },
+    {
+      "id": "workflow.boundary096.transition-state-null-before-mismatch-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-005",
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-IMPORT-006"
+      ],
+      "description": "Malformed instance state-null precedes mismatched binding; preserves supplied observation.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": null,
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "2"
+          },
+          "revision": "r1"
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "boundary096-10a-validation-bypass"
+      ],
+      "reviewFinding": "10a",
+      "pairedControl": "workflow.boundary096.transition-mismatch-control-001"
+    },
+    {
+      "id": "workflow.boundary096.transition-state-number-before-mismatch-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-005",
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-IMPORT-006"
+      ],
+      "description": "Malformed instance state-number precedes mismatched binding; preserves supplied observation.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": 7,
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "2"
+          },
+          "revision": "r1"
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "boundary096-10a-validation-bypass"
+      ],
+      "reviewFinding": "10a",
+      "pairedControl": "workflow.boundary096.transition-mismatch-control-001"
+    },
+    {
+      "id": "workflow.boundary096.transition-state-array-before-mismatch-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-005",
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-IMPORT-006"
+      ],
+      "description": "Malformed instance state-array precedes mismatched binding; preserves supplied observation.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": [],
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "2"
+          },
+          "revision": "r1"
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "boundary096-10a-validation-bypass"
+      ],
+      "reviewFinding": "10a",
+      "pairedControl": "workflow.boundary096.transition-mismatch-control-001"
+    },
+    {
+      "id": "workflow.boundary096.transition-state-object-before-mismatch-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-005",
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-IMPORT-006"
+      ],
+      "description": "Malformed instance state-object precedes mismatched binding; preserves supplied observation.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": {},
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "2"
+          },
+          "revision": "r1"
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "boundary096-10a-validation-bypass"
+      ],
+      "reviewFinding": "10a",
+      "pairedControl": "workflow.boundary096.transition-mismatch-control-001"
+    },
+    {
+      "id": "workflow.boundary096.transition-multiple-states-before-mismatch-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-005",
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-IMPORT-006"
+      ],
+      "description": "Malformed instance multiple-states precedes mismatched binding; preserves supplied observation.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "2"
+          },
+          "revision": "r1",
+          "currentStates": [
+            "DRAFT",
+            "FINAL"
+          ]
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "boundary096-10a-validation-bypass"
+      ],
+      "reviewFinding": "10a",
+      "pairedControl": "workflow.boundary096.transition-mismatch-control-001"
+    },
+    {
+      "id": "workflow.boundary096.transition-revision-before-state-before-mismatch-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-005",
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-IMPORT-006"
+      ],
+      "description": "Malformed instance revision-before-state precedes mismatched binding; preserves supplied observation.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "GHOST",
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "2"
+          },
+          "revision": ""
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "boundary096-10a-validation-bypass"
+      ],
+      "reviewFinding": "10a",
+      "pairedControl": "workflow.boundary096.transition-mismatch-control-001"
+    },
+    {
+      "id": "workflow.boundary096.import-null-binding-unversioned-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-005",
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-IMPORT-006"
+      ],
+      "description": "Supplied null binding is malformed even for an unversioned definition.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "binding": null,
+          "revision": "r1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary096-10a-validation-bypass"
+      ],
+      "reviewFinding": "10a",
+      "pairedControl": "workflow.boundary096.import-control-001"
+    },
+    {
+      "id": "workflow.boundary096.transition-null-binding-unversioned-001",
+      "spec": "workflow/errors",
+      "requirements": [
+        "WORKFLOW-ERROR-005",
+        "WORKFLOW-ERROR-007",
+        "WORKFLOW-IMPORT-006"
+      ],
+      "description": "Supplied null binding is malformed even for an unversioned definition.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "binding": null,
+          "revision": "r1"
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary096-10a-validation-bypass"
+      ],
+      "reviewFinding": "10a",
+      "pairedControl": "workflow.boundary096.transition-control-001"
     }
   ]
 }

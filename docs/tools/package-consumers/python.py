@@ -3,8 +3,8 @@
 # only in-memory observations and defines no financial behavior.
 from copy import deepcopy
 from decimal import Context, Decimal, Inexact, Rounded, localcontext
-from finkore import CORE_VERSION, FinKoreError, Money, WorkflowDefinition
-from finkore.workflow import create_workflow, transition_workflow
+from finkore import CORE_VERSION, FinKoreError, Money, WorkflowDefinition, WorkflowInstance
+from finkore.workflow import create_workflow, import_workflow, transition_workflow, WorkflowTransition
 from finkore.entities import create_entity, transition_entity, import_entity
 from finkore.approvals import record_decision, evaluate_requirement
 from finkore.audit import append_event
@@ -56,6 +56,13 @@ error('FINKORE_ENTITY_STATE_CONFLICT', lambda: import_entity(definition, {'entit
 error('FINKORE_ENTITY_INVALID_IDENTITY', lambda: import_entity(definition, {'entity': entity, 'currentRevision': {'type': 'invoice', 'id': 'invoice-1', 'revision': 'r1', 'current': True}, 'conflictVersion': 'r1'}))
 error('FINKORE_ENTITY_INVALID_MUTATION', lambda: create_entity({**definition, 'validation': [{'id': 'X', 'path': 'amount', 'rule': 'typo'}]}, 'invoice-2', entity['data']))
 workflow_definition = WorkflowDefinition.from_portable(flow)
+error('FINKORE_WORKFLOW_INVALID_DEFINITION', lambda: WorkflowDefinition(('DRAFT', 'DONE'), 'GHOST', ('DONE',), ()))
+error('FINKORE_WORKFLOW_INVALID_DEFINITION', lambda: WorkflowDefinition(('DRAFT', 'DONE'), 'DRAFT', ('DONE',), (WorkflowTransition('DONE', 'DRAFT'),)))
+native_definition = WorkflowDefinition(('DRAFT', 'DONE'), 'DRAFT', ('DONE',), (WorkflowTransition('DRAFT', 'DONE'),), 'native', 'v1')
+native_instance = import_workflow(native_definition, create_workflow(native_definition))
+assert transition_workflow(native_definition, native_instance, 'DONE').binding == native_instance.binding
+error('FINKORE_WORKFLOW_INVALID_INSTANCE', lambda: WorkflowInstance('DRAFT', {}, 'r1'))
+error('FINKORE_WORKFLOW_INVALID_INSTANCE', lambda: import_workflow(workflow_definition, WorkflowInstance.from_portable({'currentState': 'DRAFT', 'binding': {**binding, 'definitionVersionIdentity': 'wrong'}, 'revision': None})))
 workflow = create_workflow(workflow_definition)
 workflow.binding['definitionVersionIdentity'] = '2'
 assert workflow.binding == binding
