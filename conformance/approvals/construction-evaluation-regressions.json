@@ -7474,6 +7474,503 @@
       ],
       "reviewFinding": "1",
       "pairedControl": "approval.boundary096.quorum-control-001"
+    },
+    {
+      "id": "approval.boundary096.history-offset-control-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-014",
+        "SPEC-TIMESTAMP-005"
+      ],
+      "description": "Lifecycle Decision references compare by exact instant and preserve timestamp spelling: history-offset-control",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T12:00:00+02:00"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T10:00:00Z"
+            }
+          ]
+        },
+        "currentSubjectFacts": {
+          "revision": "r1"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary096-7a-validation-bypass"
+      ],
+      "reviewFinding": "7a"
+    },
+    {
+      "id": "approval.boundary096.record-history-offset-control-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-001",
+        "APPROVAL-VALIDITY-014",
+        "SPEC-TIMESTAMP-005"
+      ],
+      "description": "Lifecycle Decision references compare by exact instant and preserve timestamp spelling: record-history-offset-control",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-03T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T12:00:00+02:00"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T10:00:00Z"
+            }
+          ]
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "actor": {
+            "id": "alice"
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-04T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-03T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-04T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T12:00:00+02:00"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary096-7b-validation-bypass"
+      ],
+      "reviewFinding": "7a"
+    },
+    {
+      "id": "approval.boundary096.history-offset-ambiguous-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-ERROR-006",
+        "APPROVAL-VALIDITY-012",
+        "APPROVAL-VALIDITY-014",
+        "SPEC-TIMESTAMP-005"
+      ],
+      "description": "Lifecycle Decision references compare by exact instant and preserve timestamp spelling: history-offset-ambiguous",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-03T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T12:00:00+02:00"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T10:00:00Z"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T10:00:00Z"
+            }
+          ]
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "actor": {
+            "id": "alice"
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-03T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary096-7b-validation-bypass"
+      ],
+      "reviewFinding": "7a",
+      "pairedControl": "approval.boundary096.record-history-offset-control-001"
+    },
+    {
+      "id": "approval.boundary096.supersession-offset-self-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-010",
+        "APPROVAL-VALIDITY-014",
+        "SPEC-TIMESTAMP-005"
+      ],
+      "description": "Lifecycle Decision references compare by exact instant and preserve timestamp spelling: supersession-offset-self",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-03T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T10:00:00Z"
+              },
+              "successor": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T12:00:00+02:00"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-04T10:00:00Z"
+            }
+          ]
+        },
+        "currentSubjectFacts": {
+          "revision": "r1"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary096-7b-validation-bypass"
+      ],
+      "reviewFinding": "7a",
+      "pairedControl": "approval.boundary096.history-offset-control-001"
+    },
+    {
+      "id": "approval.boundary096.history-nanosecond-distinct-control-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-004",
+        "APPROVAL-VALIDITY-014",
+        "SPEC-TIMESTAMP-005"
+      ],
+      "description": "Lifecycle Decision references compare by exact instant and preserve timestamp spelling: history-nanosecond-distinct-control",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00.000000001Z"
+            },
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00.000000002Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T12:00:00.000000001+02:00"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T10:00:00Z"
+            }
+          ]
+        },
+        "currentSubjectFacts": {
+          "revision": "r1"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary096-7a-validation-bypass"
+      ],
+      "reviewFinding": "7a"
     }
   ]
 }

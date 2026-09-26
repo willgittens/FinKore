@@ -10,6 +10,7 @@ import org.finkore.FinKoreException;
 import org.finkore.Money;
 import org.finkore.Entities;
 import org.finkore.Audit;
+import org.finkore.Approvals;
 import org.finkore.Workflow;
 
 public final class FinKoreConsumer {
@@ -53,6 +54,22 @@ public final class FinKoreConsumer {
     Map<String, Object> badDefinition = new LinkedHashMap<>(definition);
     badDefinition.put("validation", List.of(Map.of("id", "X", "path", "amount", "rule", "typo")));
     error(Entities.INVALID_MUTATION, () -> Entities.create(badDefinition, "invoice-2", entity.get("data")));
+    Map<String, Object> requirement = Map.of("id", "review", "subject", Map.of("type", "invoice", "id", "invoice-1"),
+        "eligibleActors", List.of("alice"), "approvedOutcome", "APPROVED", "rejectedOutcome", "REJECTED");
+    String expiry = "2026-09-26T10:00:00.123456789Z";
+    Map<String, Object> decision = Map.of("requirementId", "review", "actor", Map.of("id", "alice"), "outcome", "APPROVED",
+        "subjectFacts", Map.of(), "decidedAt", "2026-09-01T00:00:00Z", "expiresAt", expiry);
+    equal("INEFFECTIVE", Approvals.evaluateDecision(requirement, decision, Map.of(), null, expiry));
+    error(Approvals.INVALID_CONTEXT, () -> Approvals.evaluateDecision(requirement, decision, Map.of(), null, null));
+    Map<String, Object> history = Approvals.recordDecision(requirement, decision, List.of());
+    Map<String, Object> withdrawal = Map.of("target", Map.of("requirementId", "review", "actorId", "alice", "decidedAt", decision.get("decidedAt")),
+        "actor", Map.of("id", "alice"), "recordedAt", expiry);
+    Map<String, Object> withdrawn = Approvals.withdrawDecision(requirement, history, withdrawal);
+    equal(withdrawn, Approvals.importHistory(withdrawn));
+    equal("PENDING", Approvals.evaluateRequirement(requirement, withdrawn, Map.of(), null, null));
+    Map<String, Object> invalidEvent = new LinkedHashMap<>(withdrawal); invalidEvent.put("type", "UNKNOWN");
+    error(Approvals.INVALID_DECISION, () -> Approvals.importHistory(Map.of("history", history.get("history"), "lifecycle", List.of(invalidEvent))));
+    equal(Map.of("history", List.of(decision)), history);
     error(Audit.ACTOR_INVALID, () -> Audit.Actor.fromPortable(Map.of("id", "alice", "metadata", new AtomicInteger(1))));
     Map<String, Object> cycle = new LinkedHashMap<>(); cycle.put("self", cycle);
     error(Audit.ACTOR_INVALID, () -> Audit.Actor.fromPortable(Map.of("id", "alice", "metadata", cycle)));
@@ -60,6 +77,6 @@ public final class FinKoreConsumer {
     Audit.Actor actor = Audit.Actor.fromPortable(Map.of("id", "alice", "metadata", metadata));
     metadata.put("value", 2);
     equal(Map.of("value", 1), actor.metadata());
-    System.out.println("Installed Java consumer: lossless serialization, Entity binding/null/validators, Audit numeric/cycle/ownership boundaries pass");
+    System.out.println("Installed Java consumer: lossless serialization, Entity binding/null/validators, Approval concrete/history, Audit numeric/cycle/ownership boundaries pass");
   }
 }

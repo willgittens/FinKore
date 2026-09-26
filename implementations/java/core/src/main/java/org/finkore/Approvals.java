@@ -43,6 +43,21 @@ public final class Approvals {
   private Approvals() {}
 
   /**
+   * Reconstructs a defensive history after validating every Decision and lifecycle
+   * event, including unique references and local-order supersession constraints.
+   * Inputs are unchanged; failed reconstruction creates no committed history.
+   *
+   * @param history Decision list or envelope with optional lifecycle events
+   * @return independently owned validated history envelope
+   * @throws FinKoreException INVALID_DECISION for malformed historical evidence
+   * @see <a href="../../../../../../spec/approvals/validity.md">APPROVAL-VALIDITY-014</a>
+   */
+  public static Map<String, Object> importHistory(Object history) {
+    DecisionSet current = normalizeDecisionSet(history);
+    return historyEnvelope(current.history(), current.lifecycle());
+  }
+
+  /**
    * Appends one Approval Decision, preserving all committed lifecycle evidence.
    * Inputs are unchanged on success or failure; the result owns its history data.
    * The concrete Requirement needs a subject type/id and distinct nonempty
@@ -67,7 +82,8 @@ public final class Approvals {
   }
 
   /**
-   * Evaluates one Decision's current effectiveness for supplied current facts.
+   * Legacy facts/expiration helper without concrete Requirement validation.
+   * Use the five-argument overload for association and eligibility checks.
    * Missing subjectFacts yields INVALID_DECISION before effectiveness checks;
    * explicit null and other JSON fact representations remain valid.
    *
@@ -96,9 +112,39 @@ public final class Approvals {
   }
 
   /**
+   * Evaluates a concrete Decision against its Requirement, facts and expiration.
+   * Validates subject, eligibility and association before effectiveness checks.
+   * Without lifecycle history this makes no withdrawal or supersession claim.
+   * Inputs remain unchanged. The four-argument overload is a separate helper.
+   *
+   * @param requirement concrete Requirement with subject and eligibility
+   * @param decision complete associated Decision
+   * @param currentSubjectFacts current facts to compare
+   * @param relevantFactPaths optional relevant paths; null compares all facts
+   * @param evaluatedAt explicit portable timestamp required for expiration
+   * @return EFFECTIVE or INEFFECTIVE
+   * @throws FinKoreException INVALID_DECISION for malformed/mismatched evidence,
+   *     INELIGIBLE_ACTOR for excluded Actor, INVALID_CONTEXT for required time
+   * @see <a href="../../../../../../spec/approvals/decisions.md">APPROVAL-DECISION-009</a>
+   * @see <a href="../../../../../../spec/approvals/validity.md">APPROVAL-VALIDITY-007</a>
+   */
+  public static String evaluateDecision(
+      Object requirement, Object decision, Object currentSubjectFacts,
+      Object relevantFactPaths, Object evaluatedAt) {
+    Map<String, Object> item = validateDecision(validateRequirement(requirement), decision);
+    if (expired(item, evaluatedAt)) return "INEFFECTIVE";
+    boolean matches = relevantFactPaths == null
+        ? Objects.equals(item.get("subjectFacts"), currentSubjectFacts)
+        : factsMatch(item.get("subjectFacts"), currentSubjectFacts, relevantFactPaths);
+    return matches ? "EFFECTIVE" : "INEFFECTIVE";
+  }
+
+  /**
    * Evaluates an Approval Requirement from currently effective Decisions.
    * Validates the concrete subject, eligibility, and every historical Decision
-   * before filtering withdrawn, expired, ineligible, or unrelated evidence.
+   * and lifecycle relationships before filtering excluded evidence. Required
+   * expiration context is checked for every considered Decision before outcomes.
+   * See APPROVAL-VALIDITY-013 and APPROVAL-VALIDITY-014.
    * Missing association yields INVALID_DECISION; inputs remain unchanged.
    *
    * @param requirement portable Approval Requirement
@@ -119,6 +165,11 @@ public final class Approvals {
       Object evaluatedAt) {
     Map<String, Object> req = validateRequirement(requirement);
     DecisionSet decisionSet = normalizeDecisionSet(decisions);
+    for (Map<String, Object> decision : decisionSet.history()) {
+      if (decisionConsidered(req, decision, decisionSet.lifecycle()) && decision.containsKey("expiresAt")) {
+        instant(evaluatedAt, INVALID_CONTEXT);
+      }
+    }
     boolean approved = false;
     boolean rejected = false;
     for (Map<String, Object> decision : decisionSet.history()) {
@@ -180,12 +231,12 @@ public final class Approvals {
     }
     for (String requirement : requirements) {
       Object state = stateMap.get(requirement);
-      if (!Set.of("APPROVED", "REJECTED", "PENDING", "NOT_APPLICABLE").contains(state)) {
+      if (!(state instanceof String) || !Set.of("APPROVED", "REJECTED", "PENDING", "NOT_APPLICABLE").contains(state)) {
         throw new FinKoreException(INVALID_CHAIN);
       }
-      if ("REJECTED".equals(state)) {
-        return "REJECTED";
-      }
+    }
+    for (String requirement : requirements) {
+      if ("REJECTED".equals(stateMap.get(requirement))) return "REJECTED";
     }
     boolean allApproved = true;
     for (String requirement : requirements) {
@@ -222,16 +273,11 @@ public final class Approvals {
    * @see <a href="../../../../../../spec/approvals/validity.md">APPROVAL-VALIDITY-004/005/012</a>
    */
   public static Map<String, Object> withdrawDecision(Object requirement, Object history, Object withdrawal) {
-    validateRequirement(requirement);
+    Map<String, Object> req = validateRequirement(requirement);
     DecisionSet current = normalizeDecisionSet(history);
-    Map<String, Object> event = lifecycle(withdrawal, "WITHDRAWN", false);
-    @SuppressWarnings("unchecked")
-    Map<String, Object> target = (Map<String, Object>) event.get("target");
-    long matches = current.history().stream().filter(decision -> decisionKey(decision).equals(target)).count();
-    if (matches != 1 || lifecycleContains(current.lifecycle(), "WITHDRAWN", target)
-        || lifecycleContains(current.lifecycle(), "DECISION_SUPERSEDED", target)) {
-      throw new FinKoreException(INVALID_DECISION);
-    }
+    Map<String, Object> event = validateLifecycle(lifecycle(withdrawal, "WITHDRAWN"), current.history(), current.lifecycle());
+    if (!Objects.equals(((Map<?, ?>) event.get("target")).get("requirementId"), req.get("id"))) throw new FinKoreException(INVALID_DECISION);
+    if (!((List<?>) req.get("eligibleActors")).contains(actorId(event.get("actor")))) throw new FinKoreException(INELIGIBLE_ACTOR);
     return historyEnvelope(current.history(), append(current.lifecycle(), event));
   }
 
@@ -247,14 +293,7 @@ public final class Approvals {
    */
   public static Map<String, Object> supersedeDecision(Object history, Object supersession) {
     DecisionSet current = normalizeDecisionSet(history);
-    Map<String, Object> event = lifecycle(supersession, "DECISION_SUPERSEDED", true);
-    @SuppressWarnings("unchecked")
-    Map<String, Object> target = (Map<String, Object>) event.get("target");
-    @SuppressWarnings("unchecked")
-    Map<String, Object> successor = (Map<String, Object>) event.get("successor");
-    if (findDecision(current.history(), target) == null || findDecision(current.history(), successor) == null) {
-      throw new FinKoreException(INVALID_DECISION);
-    }
+    Map<String, Object> event = validateLifecycle(lifecycle(supersession, "DECISION_SUPERSEDED"), current.history(), current.lifecycle());
     return historyEnvelope(current.history(), append(current.lifecycle(), event));
   }
 
@@ -280,6 +319,7 @@ public final class Approvals {
     Map<String, Object> lifecycle = new LinkedHashMap<>();
     lifecycle.putAll(copyMap(event, INVALID_DECISION));
     lifecycle.put("type", "REQUIREMENT_SUPERSEDED");
+    validateLifecycle(lifecycle, current.history(), current.lifecycle());
     return historyEnvelope(current.history(), append(current.lifecycle(), lifecycle));
   }
 
@@ -307,7 +347,7 @@ public final class Approvals {
     Map<String, Map<String, Object>> groups = validateCompositionStructure(composition);
     @SuppressWarnings("unchecked")
     Map<String, Object> compositionMap = (Map<String, Object>) copyJson(composition, INVALID_CHAIN);
-    Map<String, Map<String, Object>> reqs = validateCompositionRequirements(requirements, context);
+    Map<String, Map<String, Object>> reqs = validateCompositionRequirements(requirements, context, groups);
     List<Map<String, Object>> decisionHistory = decisions instanceof List<?> list ? copyMapList(list, INVALID_CHAIN) : List.of();
     validateCompositionEvidence(reqs, decisionHistory);
     if (compositionMap.containsKey("stages")) {
@@ -412,7 +452,12 @@ public final class Approvals {
       Map<String, Object> map = stringObjectMap(raw, INVALID_DECISION);
       Object history = map.getOrDefault("history", List.of());
       Object lifecycle = map.getOrDefault("lifecycle", List.of());
-      return new DecisionSet(validateHistory(listValue(history, INVALID_DECISION)), copyMapList(listValue(lifecycle, INVALID_DECISION), INVALID_DECISION));
+      List<Map<String, Object>> current = validateHistory(listValue(history, INVALID_DECISION));
+      List<Map<String, Object>> validated = new ArrayList<>();
+      for (Object event : listValue(lifecycle, INVALID_DECISION)) {
+        validated.add(validateLifecycle(event, current, validated));
+      }
+      return new DecisionSet(current, validated);
     }
     throw new FinKoreException(INVALID_DECISION);
   }
@@ -423,6 +468,22 @@ public final class Approvals {
     return validated;
   }
 
+  private static boolean decisionConsidered(
+      Map<String, Object> requirement, Map<String, Object> decision, List<Map<String, Object>> lifecycle) {
+    if (!Objects.equals(requirement.get("id"), decision.get("requirementId"))) return false;
+    Map<String, Object> key = decisionKey(decision);
+    for (Map<String, Object> item : lifecycle) {
+      Object type = item.get("type");
+      if (("WITHDRAWN".equals(type) || "DECISION_SUPERSEDED".equals(type)) && sameDecisionRef(key, item.get("target"))) {
+        return false;
+      }
+      if ("REQUIREMENT_SUPERSEDED".equals(type) && Objects.equals(item.get("targetRequirementId"), requirement.get("id"))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   private static boolean decisionCurrent(
       Map<String, Object> requirement,
       Map<String, Object> decision,
@@ -430,22 +491,13 @@ public final class Approvals {
       Object currentSubjectFacts,
       Object relevantFactPaths,
       Object evaluatedAt) {
+    if (!decisionConsidered(requirement, decision, lifecycle)) return false;
     try {
       validateDecision(requirement, decision);
     } catch (FinKoreException error) {
       return false;
     }
-    Map<String, Object> key = decisionKey(decision);
-    for (Map<String, Object> item : lifecycle) {
-      Object type = item.get("type");
-      if (("WITHDRAWN".equals(type) || "DECISION_SUPERSEDED".equals(type)) && key.equals(item.get("target"))) {
-        return false;
-      }
-      if ("REQUIREMENT_SUPERSEDED".equals(type) && Objects.equals(item.get("targetRequirementId"), requirement.get("id"))) {
-        return false;
-      }
-    }
-    if (Boolean.FALSE.equals(decision.get("effective")) || expired(decision, evaluatedAt)) {
+    if (expired(decision, evaluatedAt) || Boolean.FALSE.equals(decision.get("effective"))) {
       return false;
     }
     return relevantFactPaths == null || factsMatch(decision.get("subjectFacts"), currentSubjectFacts, relevantFactPaths);
@@ -496,37 +548,66 @@ public final class Approvals {
     return key;
   }
 
-  private static Map<String, Object> findDecision(List<Map<String, Object>> history, Map<String, Object> target) {
-    for (Map<String, Object> decision : history) {
-      if (decisionKey(decision).equals(target)) {
-        return decision;
-      }
-    }
-    return null;
+  private static boolean sameDecisionRef(Object left, Object right) {
+    Map<?, ?> a = (Map<?, ?>) left;
+    Map<?, ?> b = (Map<?, ?>) right;
+    return Objects.equals(a.get("requirementId"), b.get("requirementId"))
+        && Objects.equals(a.get("actorId"), b.get("actorId"))
+        && instant(a.get("decidedAt"), INVALID_DECISION).compareTo(instant(b.get("decidedAt"), INVALID_DECISION)) == 0;
   }
 
   private static boolean lifecycleContains(List<Map<String, Object>> lifecycle, String type, Map<String, Object> target) {
     for (Map<String, Object> item : lifecycle) {
-      if (type.equals(item.get("type")) && target.equals(item.get("target"))) {
+      if (type.equals(item.get("type")) && sameDecisionRef(target, item.get("target"))) {
         return true;
       }
     }
     return false;
   }
 
-  private static Map<String, Object> lifecycle(Object value, String type, boolean successor) {
-    if (!(value instanceof Map<?, ?> raw) || !(raw.get("target") instanceof Map<?, ?>)) {
-      throw new FinKoreException(INVALID_DECISION);
-    }
-    Map<String, Object> source = stringObjectMap(raw, INVALID_DECISION);
-    instant(source.get("recordedAt"), INVALID_DECISION);
-    if (successor && !(source.get("successor") instanceof Map<?, ?>)) {
-      throw new FinKoreException(INVALID_DECISION);
-    }
-    Map<String, Object> event = new LinkedHashMap<>();
-    event.putAll(copyMap(source, INVALID_DECISION));
+  private static Map<String, Object> lifecycle(Object value, String type) {
+    if (!(value instanceof Map<?, ?> raw)) throw new FinKoreException(INVALID_DECISION);
+    Map<String, Object> event = copyMap(stringObjectMap(raw, INVALID_DECISION), INVALID_DECISION);
     event.put("type", type);
     return event;
+  }
+
+  // Validate committed evidence in declared local order (APPROVAL-VALIDITY-014).
+  private static Map<String, Object> validateLifecycle(
+      Object value, List<Map<String, Object>> history, List<Map<String, Object>> previous) {
+    if (!(value instanceof Map<?, ?> raw)) throw new FinKoreException(INVALID_DECISION);
+    Map<String, Object> event = stringObjectMap(raw, INVALID_DECISION);
+    Object kind = event.get("type");
+    if (!"WITHDRAWN".equals(kind) && !"DECISION_SUPERSEDED".equals(kind) && !"REQUIREMENT_SUPERSEDED".equals(kind)) {
+      throw new FinKoreException(INVALID_DECISION);
+    }
+    if (actorId(event.get("actor")) == null) throw new FinKoreException(INVALID_DECISION);
+    Map<?, ?> actor = (Map<?, ?>) event.get("actor");
+    if (actor.containsKey("type")) requiredString(actor.get("type"), INVALID_DECISION);
+    instant(event.get("recordedAt"), INVALID_DECISION);
+    if ("REQUIREMENT_SUPERSEDED".equals(kind)) {
+      String target = requiredString(event.get("targetRequirementId"), INVALID_DECISION);
+      String successor = requiredString(event.get("successorRequirementId"), INVALID_DECISION);
+      if (event.containsKey("target") || event.containsKey("successor") || target.equals(successor)) throw new FinKoreException(INVALID_DECISION);
+      if (previous.stream().anyMatch(item -> "REQUIREMENT_SUPERSEDED".equals(item.get("type")) && target.equals(item.get("targetRequirementId")))) {
+        throw new FinKoreException(INVALID_DECISION);
+      }
+    } else {
+      if (event.containsKey("targetRequirementId") || event.containsKey("successorRequirementId")
+          || ("WITHDRAWN".equals(kind) && event.containsKey("successor"))) throw new FinKoreException(INVALID_DECISION);
+      for (String field : "DECISION_SUPERSEDED".equals(kind) ? List.of("target", "successor") : List.of("target")) {
+        if (!(event.get(field) instanceof Map<?, ?> ref)) throw new FinKoreException(INVALID_DECISION);
+        requiredString(ref.get("requirementId"), INVALID_DECISION);
+        requiredString(ref.get("actorId"), INVALID_DECISION);
+        instant(ref.get("decidedAt"), INVALID_DECISION);
+        if (history.stream().filter(decision -> sameDecisionRef(decisionKey(decision), ref)).count() != 1) throw new FinKoreException(INVALID_DECISION);
+      }
+      if ("DECISION_SUPERSEDED".equals(kind) && sameDecisionRef(event.get("target"), event.get("successor"))) throw new FinKoreException(INVALID_DECISION);
+      @SuppressWarnings("unchecked")
+      Map<String, Object> target = (Map<String, Object>) event.get("target");
+      if (lifecycleContains(previous, "WITHDRAWN", target) || lifecycleContains(previous, "DECISION_SUPERSEDED", target)) throw new FinKoreException(INVALID_DECISION);
+    }
+    return copyMap(event, INVALID_DECISION);
   }
 
   private static Map<String, Map<String, Object>> validateCompositionStructure(Object composition) {
@@ -545,7 +626,7 @@ public final class Approvals {
       }
       Map<String, Object> group = stringObjectMap(groupRaw, INVALID_CHAIN);
       String id = requiredString(group.get("id"), INVALID_CHAIN);
-      if (groups.containsKey(id) || !Set.of("ALL_OF", "ANY_OF", "N_OF_M").contains(group.get("kind"))) {
+      if (groups.containsKey(id) || !(group.get("kind") instanceof String) || !Set.of("ALL_OF", "ANY_OF", "N_OF_M").contains(group.get("kind"))) {
         throw new FinKoreException(INVALID_CHAIN);
       }
       validateMembers(group);
@@ -632,46 +713,48 @@ public final class Approvals {
     }
   }
 
-  private static Map<String, Map<String, Object>> validateCompositionRequirements(Object requirements, Object context) {
-    if (!(requirements instanceof List<?> list)) {
-      throw new FinKoreException(INVALID_CHAIN);
-    }
+  private static Map<String, Map<String, Object>> validateCompositionRequirements(
+      Object requirements, Object context, Map<String, Map<String, Object>> groups) {
+    if (!(requirements instanceof List<?> list)) throw new FinKoreException(INVALID_CHAIN);
     Map<String, Map<String, Object>> reqs = new LinkedHashMap<>();
-    boolean unresolved = false;
-    boolean invalidContext = false;
-    boolean invalidState = false;
     for (Object item : list) {
-      if (!(item instanceof Map<?, ?> raw)) {
-        throw new FinKoreException(INVALID_CHAIN);
-      }
-      Map<String, Object> requirement = stringObjectMap(raw, INVALID_CHAIN);
-      String id = requiredString(requirement.get("id"), INVALID_CHAIN);
-      if (reqs.containsKey(id)) {
-        throw new FinKoreException(INVALID_CHAIN);
-      }
-      Object applicability = requirement.getOrDefault("applicability", "APPLICABLE");
-      if ("UNRESOLVED".equals(applicability)) {
-        unresolved = true;
-      } else if (!Set.of("APPLICABLE", "NOT_APPLICABLE").contains(applicability)) {
-        invalidState = true;
-      }
-      if (Boolean.TRUE.equals(requirement.get("requiresEvaluationContext"))
-          && (!(context instanceof Map<?, ?> contextMap) || !contextMap.containsKey("evaluatedAt"))) {
-        invalidContext = true;
-      }
-      if (requirement.containsKey("state") && !Set.of("APPROVED", "REJECTED", "PENDING").contains(requirement.get("state"))) {
-        invalidState = true;
-      }
-      reqs.put(id, requirement);
+      if (!(item instanceof Map<?, ?> raw)) throw new FinKoreException(INVALID_CHAIN);
+      Map<String, Object> req = stringObjectMap(raw, INVALID_CHAIN);
+      String id = requiredString(req.get("id"), INVALID_CHAIN);
+      if (reqs.containsKey(id)) throw new FinKoreException(INVALID_CHAIN);
+      if (req.containsKey("requiresEvaluationContext") && !(req.get("requiresEvaluationContext") instanceof Boolean)) throw new FinKoreException(INVALID_CHAIN);
+      reqs.put(id, req);
     }
-    if (unresolved) {
-      throw new FinKoreException(CONDITION_UNRESOLVED);
+    Set<String> required = new HashSet<>();
+    Set<String> stateRequired = new HashSet<>();
+    for (Map<String, Object> group : groups.values()) {
+      for (Object item : (List<?>) group.get("members")) {
+        Map<?, ?> member = (Map<?, ?>) item;
+        if ("requirement".equals(member.get("type"))) {
+          String id = (String) member.get("requirementId");
+          if (!reqs.containsKey(id)) throw new FinKoreException(INVALID_CHAIN);
+          required.add(id);
+          if (!"N_OF_M".equals(group.get("kind"))) stateRequired.add(id);
+        }
+      }
     }
-    if (invalidContext) {
-      throw new FinKoreException(INVALID_CONTEXT);
+    for (String id : required) {
+      Object applicability = reqs.get(id).get("applicability");
+      if (!"APPLICABLE".equals(applicability) && !"NOT_APPLICABLE".equals(applicability)) throw new FinKoreException(CONDITION_UNRESOLVED);
     }
-    if (invalidState) {
-      throw new FinKoreException(INVALID_CHAIN);
+    for (String id : required) {
+      Map<String, Object> req = reqs.get(id);
+      if ("APPLICABLE".equals(req.get("applicability")) && Boolean.TRUE.equals(req.get("requiresEvaluationContext"))) {
+        instant(context instanceof Map<?, ?> map ? map.get("evaluatedAt") : null, INVALID_CONTEXT);
+      }
+    }
+    for (String id : required) {
+      Map<String, Object> req = reqs.get(id);
+      boolean needsState = "APPLICABLE".equals(req.get("applicability")) && stateRequired.contains(id);
+      if (req.containsKey("state") || needsState) {
+        Object state = req.get("state");
+        if (!(state instanceof String) || !Set.of("APPROVED", "REJECTED", "PENDING").contains(state)) throw new FinKoreException(INVALID_CHAIN);
+      }
     }
     return reqs;
   }
@@ -684,7 +767,7 @@ public final class Approvals {
       if (!(decision.get("effective") instanceof Boolean)) {
         throw new FinKoreException(INVALID_CHAIN);
       }
-      if (actorId(decision.get("actor")) == null || !Set.of("APPROVED", "REJECTED").contains(decision.get("outcome"))) {
+      if (actorId(decision.get("actor")) == null || !(decision.get("outcome") instanceof String) || !Set.of("APPROVED", "REJECTED").contains(decision.get("outcome"))) {
         throw new FinKoreException(INVALID_CHAIN);
       }
     }
@@ -752,7 +835,7 @@ public final class Approvals {
     if ("NOT_APPLICABLE".equals(requirement.getOrDefault("applicability", "APPLICABLE"))) {
       return new GroupResult("APPROVED", false, List.of());
     }
-    String state = "N_OF_M".equals(group.get("kind")) ? quorumMemberState(requirement, member, decisions) : (String) requirement.getOrDefault("state", "PENDING");
+    String state = "N_OF_M".equals(group.get("kind")) ? quorumMemberState(requirement, member, decisions) : (String) requirement.get("state");
     return new GroupResult(state, true, "PENDING".equals(state) ? List.of((String) requirement.get("id")) : List.of());
   }
 

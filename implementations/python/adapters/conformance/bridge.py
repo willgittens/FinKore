@@ -20,6 +20,7 @@ from finkore.approvals import (
     evaluate_decision,
     evaluate_requirement,
     record_decision,
+    normalize_decision_set,
     supersede_decision,
     supersede_requirement,
     withdraw_decision,
@@ -368,6 +369,7 @@ def execute(request: dict[str, Any]) -> dict[str, Any]:
                 observations = audit_history_observation(input_value)
             elif operation_id in {"approval.decision.record", "approval.decision.withdraw", "approval.decision.supersede", "approval.requirement.supersede"}:
                 history_value = input_value.get("history")
+                normalize_decision_set(history_value)
                 if isinstance(history_value, dict):
                     observations = {"history": history_value.get("history", [])}
                     if history_value.get("lifecycle"):

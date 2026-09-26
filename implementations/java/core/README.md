@@ -1,11 +1,28 @@
 # FinKore Java Core
 
-Core 0.9.6 status: [Milestones 3 and 4](../../../docs/plans/plan-09.6.md)
-verify Money and Workflow corrections. All 135 Workflow vectors pass on
-TypeScript, Python 3.12/3.13, and Java, with native construction, error-priority,
-ownership, coverage, mutation, and installed-consumer checks. The complete
-858-vector suite retains known Approval, Audit, and Entity defects; these
-focused results do not establish whole-core conformance.
+Core 0.9.6 status: [Milestones 3–5](../../../docs/plans/plan-09.6.md)
+verify Money, Workflow, and Approval corrections. All 272 Approval vectors pass
+on TypeScript, Python 3.12/3.13, and Java, with native sequence, coverage,
+mutation, and installed-consumer checks. The complete 863-vector suite retains
+known Audit and Entity defects; focused results do not establish whole-core
+conformance.
+
+`Approvals.importHistory` returns a defensive, validated history envelope. The
+legacy four-argument `evaluateDecision` overload remains a separate facts/expiration
+helper and does not validate a concrete Requirement.
+
+Concrete Decision evaluation uses `Approvals.evaluateDecision(requirement, decision, currentSubjectFacts, relevantFactPaths, evaluatedAt)`.
+It validates the concrete Requirement, Decision association, and Actor eligibility,
+then checks relevant facts and exact expiration. Invalid required evaluation
+time raises `FINKORE_APPROVAL_INVALID_CONTEXT`; at the expiration instant the
+Decision is `INEFFECTIVE`. Without lifecycle history it makes no withdrawal or
+supersession claim. Imported histories validate committed kinds, unique Decision
+references, and local-order withdrawal/supersession constraints before reuse.
+References compare timestamps by instant while retaining their original spelling.
+Requirement evaluation checks required context for every considered Decision
+before returning a decisive outcome. Composition requires explicit applicability,
+required State/effectiveness evidence, and valid portable timestamps, in the
+portable error priority. Explicit PENDING and empty valid vote sets remain valid.
 
 The completed [Core 0.9.5 corrective release](../../../docs/plans/plan-09.5.md)
 passes all 667 manifest vectors on TypeScript, Python 3.12/3.13, and Java.

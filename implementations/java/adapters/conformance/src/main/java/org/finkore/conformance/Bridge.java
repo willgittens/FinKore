@@ -175,6 +175,7 @@ public final class Bridge {
             inputValue.get("decision"),
             inputValue.get("history")), null);
         case "approval.decision.evaluate" -> success(Approvals.evaluateDecision(
+            inputValue.get("requirement"),
             inputValue.get("decision"),
             inputValue.get("currentSubjectFacts"),
             inputValue.get("relevantFactPaths"),
@@ -331,16 +332,7 @@ public final class Bridge {
   }
 
   private static Map<String, Object> approvalHistoryObservation(Object history) {
-    Map<String, Object> result = new LinkedHashMap<>();
-    if (history instanceof Map<?, ?> envelope) {
-      result.put("history", envelope.get("history") instanceof List<?> list ? list : List.of());
-      if (envelope.get("lifecycle") instanceof List<?> lifecycle && !lifecycle.isEmpty()) {
-        result.put("lifecycle", lifecycle);
-      }
-      return result;
-    }
-    result.put("history", history instanceof List<?> list ? list : List.of());
-    return result;
+    return Approvals.importHistory(history);
   }
 
   private static Map<String, Object> evolutionObservation(Map<String, Object> input, boolean includeSameIdentityRelated) {

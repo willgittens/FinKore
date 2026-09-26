@@ -2,7 +2,7 @@
 // Exercises installed npm public APIs in an isolated consumer. Creates only
 // in-memory observations and defines no financial behavior.
 import assert from 'node:assert/strict'
-import { FINKORE_CORE_VERSION, Money, FinancialEntity, Workflow, ApprovalDecisionHistory, AuditLog } from '@finkore/typescript'
+import { FINKORE_CORE_VERSION, Money, FinancialEntity, Workflow, ApprovalDecision, ApprovalDecisionHistory, AuditLog } from '@finkore/typescript'
 
 const error = (code, action) => assert.throws(action, value => value?.code === code)
 assert.equal(FINKORE_CORE_VERSION, '0.9-rc')
@@ -38,6 +38,18 @@ error('FINKORE_WORKFLOW_INVALID_STATE', () => workflow.transition('REVIEW', { ex
 const requirement = { id: 'review', subject: { type: 'invoice', id: 'invoice-1' }, eligibleActors: ['alice'], approvedOutcome: 'APPROVED', rejectedOutcome: 'REJECTED' }
 const decision = { requirementId: 'review', subjectFacts: null, outcome: 'APPROVED', actor: { id: 'alice' }, decidedAt: '2026-09-01T12:00:00Z' }
 const history = ApprovalDecisionHistory.create().record(requirement, decision)
+assert.equal(history.evaluateRequirement(requirement), 'APPROVED')
+const expiresAt = '2026-09-26T10:00:00.123456789Z'
+const expiring = { ...decision, expiresAt }
+assert.equal(ApprovalDecision.evaluate(requirement, expiring, null, undefined, expiresAt), 'INEFFECTIVE')
+error('FINKORE_APPROVAL_INVALID_CONTEXT', () => ApprovalDecision.evaluate(requirement, expiring, null))
+error('FINKORE_APPROVAL_INVALID_DECISION', () => ApprovalDecision.evaluate({ ...requirement, id: 'other' }, decision, null))
+const withdrawn = ApprovalDecisionHistory.create(history.toJSON()).withdraw(requirement, {
+  target: { requirementId: 'review', actorId: 'alice', decidedAt: decision.decidedAt }, actor: { id: 'alice' }, recordedAt: expiresAt,
+})
+assert.equal(ApprovalDecisionHistory.create(withdrawn.toJSON()).evaluateRequirement(requirement), 'PENDING')
+const invalidHistory = structuredClone(withdrawn.toJSON()); invalidHistory.lifecycle[0].type = 'UNKNOWN'
+error('FINKORE_APPROVAL_INVALID_DECISION', () => ApprovalDecisionHistory.create(invalidHistory))
 assert.equal(history.evaluateRequirement(requirement), 'APPROVED')
 const absent = { ...decision }; delete absent.subjectFacts
 error('FINKORE_APPROVAL_INVALID_DECISION', () => ApprovalDecisionHistory.create().record(requirement, absent))

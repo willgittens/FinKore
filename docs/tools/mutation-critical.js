@@ -24,6 +24,94 @@ if (!validTargets.has(requestedTarget)) {
 
 const pythonMutants = [
 {
+  "id": "python-approval096-reference-instant",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "_instant(left[\"decidedAt\"]) == _instant(right[\"decidedAt\"])",
+  "to": "left[\"decidedAt\"] == right[\"decidedAt\"]",
+  "expectedVector": "approval.boundary096.history-offset-control-001",
+  "expectedPassVectors": [
+    "approval.boundary096.history-control-001"
+  ]
+},
+{
+  "id": "python-approval096-missing-state",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "if req[\"applicability\"] == \"APPLICABLE\" and group[\"kind\"] != \"N_OF_M\" and \"state\" not in req:\n            raise FinKoreError(INVALID_CHAIN)",
+  "to": "if req[\"applicability\"] == \"APPLICABLE\" and group[\"kind\"] != \"N_OF_M\" and \"state\" not in req:\n            req[\"state\"] = \"PENDING\"",
+  "expectedVector": "approval.boundary096.state-all-of-absent-001",
+  "expectedPassVectors": [
+    "approval.boundary096.state-all-of-control-001"
+  ]
+},
+{
+  "id": "python-approval096-context-parser",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "_instant(context.get(\"evaluatedAt\") if isinstance(context, dict) else None, INVALID_CONTEXT)",
+  "to": "pass",
+  "expectedVector": "approval.boundary096.context-calendar-001",
+  "expectedPassVectors": [
+    "approval.boundary096.context-control-001"
+  ]
+},
+{
+  "id": "python-approval096-association",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "item = validate_decision(req, decision)",
+  "to": "item = _validate_decision_shape(decision)",
+  "expectedVector": "approval.boundary096.decision-association-001",
+  "expectedPassVectors": [
+    "approval.boundary096.decision-control-001"
+  ]
+},
+{
+  "id": "python-approval096-history-validation",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "validated.append(_validate_lifecycle(event, current, validated))",
+  "to": "if event.get(\"type\") in (\"WITHDRAWN\", \"DECISION_SUPERSEDED\", \"REQUIREMENT_SUPERSEDED\"):\n                validated.append(_validate_lifecycle(event, current, validated))",
+  "expectedVector": "approval.boundary096.history-record-unknown-kind-001",
+  "expectedPassVectors": [
+    "approval.boundary096.record-history-control-001"
+  ]
+},
+{
+  "id": "python-approval096-self-supersession",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "kind == \"DECISION_SUPERSEDED\" and _same_decision_ref(value[\"target\"], value[\"successor\"])",
+  "to": "False",
+  "expectedVector": "approval.boundary096.supersession-self-001",
+  "expectedPassVectors": [
+    "approval.boundary096.supersession-successor-withdrawn-001"
+  ]
+},
+{
+  "id": "python-approval096-repeat-requirement",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "any(item[\"type\"] == kind and item[\"targetRequirementId\"] == target for item in previous)",
+  "to": "False",
+  "expectedVector": "approval.boundary096.requirement-supersession-repeat-001",
+  "expectedPassVectors": [
+    "approval.boundary096.requirement-supersession-valid-001"
+  ]
+},
+{
+  "id": "python-approval096-decisive-return",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "    for decision in history:\n        if _decision_considered(req, decision, lifecycle) and \"expiresAt\" in decision:\n            _instant(evaluated_at, INVALID_CONTEXT)",
+  "to": "    if any(decision.get(\"outcome\") == \"REJECTED\" for decision in history):\n        return \"REJECTED\"",
+  "expectedVector": "approval.boundary096.complete-context-reject-first-001",
+  "expectedPassVectors": [
+    "approval.boundary096.complete-context-control-001"
+  ]
+},
+{
   "id": "python-workflow-observed-null-revision-omitted",
   "suite": "workflow",
   "path": "core/src/finkore/workflow.py",
@@ -217,7 +305,7 @@ const pythonMutants = [
     "suite": "approvals",
     "path": "core/src/finkore/approvals.py",
     "from": "return [_validate_decision_shape(item) for item in decisions], []",
-    "to": "return deepcopy(decisions), []",
+    "to": "return [_validate_decision_shape(dict(item, subjectFacts=item.get(\"subjectFacts\"))) if isinstance(item, dict) else _validate_decision_shape(item) for item in decisions], []",
     "expectedVector": "approval.association.history-after-valid-001",
     "expectedPassVectors": [
       "approval.association.evaluate-null-control-001"
@@ -227,8 +315,8 @@ const pythonMutants = [
     "id": "python-approval-envelope-history-validation-bypass",
     "suite": "approvals",
     "path": "core/src/finkore/approvals.py",
-    "from": "return [_validate_decision_shape(item) for item in history], deepcopy(lifecycle)",
-    "to": "return deepcopy(history), deepcopy(lifecycle)",
+    "from": "current = [_validate_decision_shape(item) for item in history]",
+    "to": "current = [_validate_decision_shape(dict(item, subjectFacts=item.get(\"subjectFacts\"))) if isinstance(item, dict) else _validate_decision_shape(item) for item in history]",
     "expectedVector": "approval.association.history-withdrawn-001",
     "expectedPassVectors": [
       "approval.association.evaluate-null-control-001"
@@ -518,8 +606,8 @@ const pythonMutants = [
     expectedPassVectors: ['approval.lifecycle.withdraw.request-type-omitted-001'],
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
-    from: 'event = {**deepcopy(value), "type": lifecycle_type}',
-    to: 'event = {"type": lifecycle_type, **deepcopy(value)} if lifecycle_type == "WITHDRAWN" else {**deepcopy(value), "type": lifecycle_type}',
+    from: 'return {**deepcopy(value), "type": lifecycle_type}',
+    to: 'return {"type": lifecycle_type, **deepcopy(value)} if lifecycle_type == "WITHDRAWN" else {**deepcopy(value), "type": lifecycle_type}',
   },
   {
     id: 'python-approval-supersede-request-type-override',
@@ -527,8 +615,8 @@ const pythonMutants = [
     expectedPassVectors: ['approval.lifecycle.supersede.request-type-omitted-001'],
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
-    from: 'event = {**deepcopy(value), "type": lifecycle_type}',
-    to: 'event = {"type": lifecycle_type, **deepcopy(value)} if lifecycle_type == "DECISION_SUPERSEDED" else {**deepcopy(value), "type": lifecycle_type}',
+    from: 'return {**deepcopy(value), "type": lifecycle_type}',
+    to: 'return {"type": lifecycle_type, **deepcopy(value)} if lifecycle_type == "DECISION_SUPERSEDED" else {**deepcopy(value), "type": lifecycle_type}',
   },
   {
     id: 'python-approval-requirement-request-type-override',
@@ -536,8 +624,8 @@ const pythonMutants = [
     expectedPassVectors: ['approval.lifecycle.requirement.request-type-omitted-001'],
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
-    from: '{**deepcopy(supersession), "type": "REQUIREMENT_SUPERSEDED"}',
-    to: '{"type": "REQUIREMENT_SUPERSEDED", **deepcopy(supersession)}',
+    from: '{**supersession, "type": "REQUIREMENT_SUPERSEDED"}',
+    to: '{"type": "REQUIREMENT_SUPERSEDED", **supersession}',
   },
   {
     id: 'python-approval-withdraw-first-match',
@@ -545,8 +633,8 @@ const pythonMutants = [
     expectedPassVectors: ['approval.withdraw.target-unique-001'],
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
-    from: 'sum(_decision_key(decision) == target for decision in current) != 1',
-    to: '_find_decision(current, target) is None',
+    from: 'sum(_same_decision_ref(_decision_key(decision), ref) for decision in history) != 1',
+    to: 'not any(_same_decision_ref(_decision_key(decision), ref) for decision in history)',
   },
   {
     id: 'python-approval-withdraw-superseded-accepted',
@@ -554,8 +642,8 @@ const pythonMutants = [
     expectedPassVectors: ['approval.withdraw.target-unique-001'],
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
-    from: 'item.get("type") in ("WITHDRAWN", "DECISION_SUPERSEDED")',
-    to: 'item.get("type") == "WITHDRAWN"',
+    from: 'item["type"] in ("WITHDRAWN", "DECISION_SUPERSEDED") and _same_decision_ref(item["target"], value["target"])',
+    to: 'item["type"] == "WITHDRAWN" and _same_decision_ref(item["target"], value["target"])',
   },
   {
     id: 'python-approval-withdraw-withdrawn-accepted',
@@ -563,8 +651,8 @@ const pythonMutants = [
     expectedPassVectors: ['approval.withdraw.target-unique-001'],
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
-    from: 'item.get("type") in ("WITHDRAWN", "DECISION_SUPERSEDED")',
-    to: 'item.get("type") == "DECISION_SUPERSEDED"',
+    from: 'item["type"] in ("WITHDRAWN", "DECISION_SUPERSEDED") and _same_decision_ref(item["target"], value["target"])',
+    to: 'item["type"] == "DECISION_SUPERSEDED" and _same_decision_ref(item["target"], value["target"])',
   },
   {
     id: 'python-approval-effectiveness-validation-bypass',
@@ -911,6 +999,94 @@ const pythonMutants = [
 ]
 
 const javaMutants = [
+{
+  "id": "java-approval096-reference-instant",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "instant(a.get(\"decidedAt\"), INVALID_DECISION).compareTo(instant(b.get(\"decidedAt\"), INVALID_DECISION)) == 0",
+  "to": "Objects.equals(a.get(\"decidedAt\"), b.get(\"decidedAt\"))",
+  "expectedVector": "approval.boundary096.history-offset-control-001",
+  "expectedPassVectors": [
+    "approval.boundary096.history-control-001"
+  ]
+},
+{
+  "id": "java-approval096-missing-state",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "req.containsKey(\"state\") || needsState",
+  "to": "req.containsKey(\"state\")",
+  "expectedVector": "approval.boundary096.state-all-of-absent-001",
+  "expectedPassVectors": [
+    "approval.boundary096.state-all-of-control-001"
+  ]
+},
+{
+  "id": "java-approval096-context-parser",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "instant(context instanceof Map<?, ?> map ? map.get(\"evaluatedAt\") : null, INVALID_CONTEXT);",
+  "to": "// omitted context validation",
+  "expectedVector": "approval.boundary096.context-calendar-001",
+  "expectedPassVectors": [
+    "approval.boundary096.context-control-001"
+  ]
+},
+{
+  "id": "java-approval096-association",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "Map<String, Object> item = validateDecision(validateRequirement(requirement), decision);",
+  "to": "Map<String, Object> item = validateDecisionShape(decision);",
+  "expectedVector": "approval.boundary096.decision-association-001",
+  "expectedPassVectors": [
+    "approval.boundary096.decision-control-001"
+  ]
+},
+{
+  "id": "java-approval096-history-validation",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "validated.add(validateLifecycle(event, current, validated));",
+  "to": "if (event instanceof Map<?, ?> rawEvent && (\"WITHDRAWN\".equals(rawEvent.get(\"type\")) || \"DECISION_SUPERSEDED\".equals(rawEvent.get(\"type\")) || \"REQUIREMENT_SUPERSEDED\".equals(rawEvent.get(\"type\")))) validated.add(validateLifecycle(event, current, validated));",
+  "expectedVector": "approval.boundary096.history-record-unknown-kind-001",
+  "expectedPassVectors": [
+    "approval.boundary096.record-history-control-001"
+  ]
+},
+{
+  "id": "java-approval096-self-supersession",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "\"DECISION_SUPERSEDED\".equals(kind) && sameDecisionRef(event.get(\"target\"), event.get(\"successor\"))",
+  "to": "false",
+  "expectedVector": "approval.boundary096.supersession-self-001",
+  "expectedPassVectors": [
+    "approval.boundary096.supersession-successor-withdrawn-001"
+  ]
+},
+{
+  "id": "java-approval096-repeat-requirement",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "previous.stream().anyMatch(item -> \"REQUIREMENT_SUPERSEDED\".equals(item.get(\"type\")) && target.equals(item.get(\"targetRequirementId\")))",
+  "to": "false",
+  "expectedVector": "approval.boundary096.requirement-supersession-repeat-001",
+  "expectedPassVectors": [
+    "approval.boundary096.requirement-supersession-valid-001"
+  ]
+},
+{
+  "id": "java-approval096-decisive-return",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "    for (Map<String, Object> decision : decisionSet.history()) {\n      if (decisionConsidered(req, decision, decisionSet.lifecycle()) && decision.containsKey(\"expiresAt\")) {\n        instant(evaluatedAt, INVALID_CONTEXT);\n      }\n    }",
+  "to": "    if (decisionSet.history().stream().anyMatch(decision -> \"REJECTED\".equals(decision.get(\"outcome\")))) return \"REJECTED\";",
+  "expectedVector": "approval.boundary096.complete-context-reject-first-001",
+  "expectedPassVectors": [
+    "approval.boundary096.complete-context-control-001"
+  ]
+},
 {
   "id": "java-workflow-observed-null-revision-omitted",
   "suite": "workflow",
@@ -1372,7 +1548,7 @@ const javaMutants = [
     suite: 'approvals',
     path: 'core/src/main/java/org/finkore/Approvals.java',
     from: 'event.put("type", type);\n    return event;',
-    to: 'event.put("type", type);\n    if ("WITHDRAWN".equals(type)) event.putAll(copyMap(source, INVALID_DECISION));\n    return event;',
+    to: 'event.put("type", type);\n    if ("WITHDRAWN".equals(type)) event.putAll(stringObjectMap(raw, INVALID_DECISION));\n    return event;',
   },
   {
     id: 'java-approval-supersede-request-type-override',
@@ -1381,7 +1557,7 @@ const javaMutants = [
     suite: 'approvals',
     path: 'core/src/main/java/org/finkore/Approvals.java',
     from: 'event.put("type", type);\n    return event;',
-    to: 'event.put("type", type);\n    if ("DECISION_SUPERSEDED".equals(type)) event.putAll(copyMap(source, INVALID_DECISION));\n    return event;',
+    to: 'event.put("type", type);\n    if ("DECISION_SUPERSEDED".equals(type)) event.putAll(stringObjectMap(raw, INVALID_DECISION));\n    return event;',
   },
   {
     id: 'java-approval-requirement-request-type-override',
@@ -1398,8 +1574,8 @@ const javaMutants = [
     expectedPassVectors: ['approval.withdraw.target-unique-001'],
     suite: 'approvals',
     path: 'core/src/main/java/org/finkore/Approvals.java',
-    from: 'if (matches != 1 ||',
-    to: 'if (matches == 0 ||',
+    from: 'history.stream().filter(decision -> sameDecisionRef(decisionKey(decision), ref)).count() != 1',
+    to: 'history.stream().filter(decision -> sameDecisionRef(decisionKey(decision), ref)).count() == 0',
   },
   {
     id: 'java-approval-withdraw-superseded-accepted',
@@ -1407,8 +1583,8 @@ const javaMutants = [
     expectedPassVectors: ['approval.withdraw.target-unique-001'],
     suite: 'approvals',
     path: 'core/src/main/java/org/finkore/Approvals.java',
-    from: 'lifecycleContains(current.lifecycle(), "DECISION_SUPERSEDED", target)',
-    to: '(false && lifecycleContains(current.lifecycle(), "DECISION_SUPERSEDED", target))',
+    from: 'lifecycleContains(previous, "DECISION_SUPERSEDED", target)',
+    to: '(false && lifecycleContains(previous, "DECISION_SUPERSEDED", target))',
   },
   {
     id: 'java-approval-withdraw-withdrawn-accepted',
@@ -1416,8 +1592,8 @@ const javaMutants = [
     expectedPassVectors: ['approval.withdraw.target-unique-001'],
     suite: 'approvals',
     path: 'core/src/main/java/org/finkore/Approvals.java',
-    from: 'lifecycleContains(current.lifecycle(), "WITHDRAWN", target)',
-    to: '(false && lifecycleContains(current.lifecycle(), "WITHDRAWN", target))',
+    from: 'lifecycleContains(previous, "WITHDRAWN", target)',
+    to: '(false && lifecycleContains(previous, "WITHDRAWN", target))',
   },
   {
     id: 'java-approval-effectiveness-validation-bypass',

@@ -1,11 +1,27 @@
 # FinKore TypeScript
 
-Core 0.9.6 status: [Milestones 3 and 4](../../../docs/plans/plan-09.6.md)
-verify Money and Workflow corrections. All 135 Workflow vectors pass on
-TypeScript, Python 3.12/3.13, and Java, with native construction, error-priority,
-ownership, coverage, mutation, and installed-consumer checks. The complete
-858-vector suite retains known Approval, Audit, and Entity defects; these
-focused results do not establish whole-core conformance.
+Core 0.9.6 status: [Milestones 3–5](../../../docs/plans/plan-09.6.md)
+verify Money, Workflow, and Approval corrections. All 272 Approval vectors pass
+on TypeScript, Python 3.12/3.13, and Java, with native sequence, coverage,
+mutation, and installed-consumer checks. The complete 863-vector suite retains
+known Audit and Entity defects; focused results do not establish whole-core
+conformance.
+
+`ApprovalDecision.evaluateEffectiveness` remains a facts-only helper: it does
+not check Requirement eligibility, expiration, or lifecycle history.
+
+Concrete Decision evaluation uses `ApprovalDecision.evaluate(requirement, decision, currentFacts, relevantFactPaths?, evaluatedAt?)`.
+It validates the concrete Requirement, Decision association, and Actor eligibility,
+then checks relevant facts and exact expiration. Invalid required evaluation
+time raises `FINKORE_APPROVAL_INVALID_CONTEXT`; at the expiration instant the
+Decision is `INEFFECTIVE`. Without lifecycle history it makes no withdrawal or
+supersession claim. Imported histories validate committed kinds, unique Decision
+references, and local-order withdrawal/supersession constraints before reuse.
+References compare timestamps by instant while retaining their original spelling.
+Requirement evaluation checks required context for every considered Decision
+before returning a decisive outcome. Composition requires explicit applicability,
+required State/effectiveness evidence, and valid portable timestamps, in the
+portable error priority. Explicit PENDING and empty valid vote sets remain valid.
 
 The completed [Core 0.9.5 corrective release](../../../docs/plans/plan-09.5.md)
 passes all 667 manifest vectors on TypeScript, Python 3.12/3.13, and Java.
@@ -271,7 +287,8 @@ Audit failures expose portable codes: `FINKORE_AUDIT_INVALID_EVENT`,
 - `approvalRequirement.stateForOutcome(outcome)` maps an effective Decision outcome to `APPROVED` or `REJECTED`.
 - `ApprovalDecision.from(decision)` validates a decision with requirement identity, subject facts, `APPROVED` or `REJECTED` outcome, actor attribution, a timestamp using the portable FinKore RFC 3339 profile, and an optional expiration timestamp using the same profile.
 - `ApprovalDecision.forRequirement(requirement, decision)` validates Decision-to-Requirement association and actor eligibility.
-- `approvalDecision.evaluateEffectiveness(currentSubjectFacts, relevantFactPaths)` returns `EFFECTIVE` only when the decision remains associated with unchanged relevant subject facts.
+- `ApprovalDecision.evaluate(requirement, decision, currentSubjectFacts, relevantFactPaths, evaluatedAt)` validates the concrete Requirement, association, eligibility, relevant facts, and exact expiration.
+- `approvalDecision.evaluateEffectiveness(currentSubjectFacts, relevantFactPaths)` is the separate facts-only comparison helper; it does not establish current lifecycle or expiration effectiveness.
 - `ApprovalDecisionHistory.create(history)` creates a logical append-only Approval Decision history from either the legacy Decision array shape or `{ history, lifecycle }` observations.
 - `approvalDecisionHistory.record(requirement, decision)` validates and appends one Decision, leaving prior history unchanged on failure.
 - `approvalDecisionHistory.withdraw(requirement, withdrawal)` appends withdrawal lifecycle evidence for exactly one committed Decision. The Decision remains historical, while current evaluation no longer counts it.

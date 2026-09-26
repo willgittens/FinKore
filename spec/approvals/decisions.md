@@ -108,9 +108,9 @@ retains its documented scope and signature.
 
 This is an observable corrective contract change under SPEC-FREEZE-001 and
 SPEC-COMPATIBILITY-012/014, not an editorial clarification. Milestone 2 adds
-permanent tests; implementation, adapter, and public API synchronization remains
-required in Milestone 5 before the corrective change can satisfy SPEC-FREEZE-002
-or be released. No canonical Agentic operation is added or repurposed.
+permanent tests; Milestone 5 synchronizes implementations, adapters, public API
+documentation, and package consumers for this corrective contract. The complete
+Core 0.9.6 release gate remains pending. No canonical Agentic operation is added or repurposed.
 
 ## Non-Goals
 

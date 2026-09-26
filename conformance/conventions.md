@@ -570,3 +570,10 @@ Optional issue metadata is informational and repository-specific. It MUST NOT af
 ## Specification gaps
 
 A vector must not settle an open question. If the specification does not define an observable result, document the gap and wait for a normative rule. Tests are evidence for the specification, never an accidental second specification.
+
+Core 0.9.6 Approval lifecycle reference regressions compare `decidedAt` by exact
+portable instant, including equivalent offsets and nanosecond distinctions.
+Two committed Decisions with the same Requirement, Actor, and instant make a
+reference ambiguous even when their timestamp spellings differ. Successful
+history observations preserve those spellings; rejected history reconstruction
+does not claim that malformed input became a committed core observation.

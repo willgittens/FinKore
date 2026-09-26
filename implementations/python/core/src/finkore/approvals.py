@@ -112,7 +112,10 @@ def normalize_decision_set(decisions: Any) -> tuple[list[dict[str, Any]], list[d
 
     Missing subjectFacts is INVALID_DECISION, including on ineffective or
     unrelated evidence; explicit null remains valid. Lifecycle evidence is
-    preserved. See APPROVAL-DECISION-001/002 and APPROVAL-ERROR-005.
+    validated in local order against committed Decisions and prior lifecycle
+    events, including unique references and nonrepeatable targets. Invalid
+    evidence raises INVALID_DECISION. See APPROVAL-VALIDITY-014,
+    APPROVAL-DECISION-001/002 and APPROVAL-ERROR-005.
     """
 
     if decisions is None:
@@ -124,7 +127,11 @@ def normalize_decision_set(decisions: Any) -> tuple[list[dict[str, Any]], list[d
         lifecycle = decisions.get("lifecycle", [])
         if not isinstance(history, list) or not isinstance(lifecycle, list):
             raise FinKoreError(INVALID_DECISION)
-        return [_validate_decision_shape(item) for item in history], deepcopy(lifecycle)
+        current = [_validate_decision_shape(item) for item in history]
+        validated: list[dict[str, Any]] = []
+        for event in lifecycle:
+            validated.append(_validate_lifecycle(event, current, validated))
+        return current, validated
     raise FinKoreError(INVALID_DECISION)
 
 
@@ -151,7 +158,9 @@ def record_decision(requirement: Any, decision: Any, history: Any) -> dict[str, 
 def evaluate_decision(requirement: Any, decision: Any, current_subject_facts: Any = None, relevant_fact_paths: Any = None, evaluated_at: Any = None) -> str:
     """Evaluate whether one Decision is currently effective for supplied facts.
 
-    When relevant fact paths are supplied, each must exist in both fact sets.
+    Expiration requires a valid portable evaluated_at and compares exact instants.
+    Without paths, compare the complete facts; with paths, each must exist in both
+    fact sets. This observation does not claim lifecycle-aware effectiveness.
     Comparison distinguishes JSON Booleans from numbers, including within
     objects and arrays. Object member order is immaterial; array order matters.
     The Decision and caller-supplied facts are not mutated.
@@ -161,17 +170,17 @@ def evaluate_decision(requirement: Any, decision: Any, current_subject_facts: An
     @see APPROVAL-DECISION-003
     @see APPROVAL-DECISION-002
     @see APPROVAL-DECISION-007
+    @see APPROVAL-DECISION-009
+    @see APPROVAL-VALIDITY-013
     @see APPROVAL-VALIDITY-003
     @see APPROVAL-VALIDITY-012
     """
 
     req = validate_requirement(requirement)
     item = validate_decision(req, decision)
-    if item.get("effective") is False:
-        return "INEFFECTIVE"
     if _expired(item, evaluated_at):
         return "INEFFECTIVE"
-    if relevant_fact_paths is not None and not _facts_match(item.get("subjectFacts"), current_subject_facts, relevant_fact_paths):
+    if not _facts_match(item.get("subjectFacts"), current_subject_facts, relevant_fact_paths):
         return "INEFFECTIVE"
     return "EFFECTIVE"
 
@@ -183,19 +192,27 @@ def evaluate_requirement(requirement: Any, decisions: Any = None, current_subjec
     reject the Requirement. JSON Booleans remain distinct from numbers at
     every nesting level; object member order is ignored and array order retained.
     Committed decisions, lifecycle evidence, and supplied facts remain unchanged.
-    All historical Decisions are structurally validated before filtering; missing
+    All historical Decisions and lifecycle relationships are validated before
+    filtering. Every considered expiring Decision requires valid context even if
+    stale or preceded by rejection. Unrelated/lifecycle-excluded Decisions do not.
+    Missing
     association raises INVALID_DECISION even for withdrawn or unrelated evidence.
 
     @see APPROVAL-DECISION-003
     @see APPROVAL-DECISION-002
     @see APPROVAL-DECISION-007
     @see APPROVAL-VALIDITY-002
+    @see APPROVAL-DECISION-009
+    @see APPROVAL-VALIDITY-013
     @see APPROVAL-VALIDITY-003
     @see APPROVAL-VALIDITY-012
     """
 
     req = validate_requirement(requirement)
     history, lifecycle = normalize_decision_set(decisions)
+    for decision in history:
+        if _decision_considered(req, decision, lifecycle) and "expiresAt" in decision:
+            _instant(evaluated_at, INVALID_CONTEXT)
     approved = False
     rejected = False
     for decision in history:
@@ -217,7 +234,7 @@ def evaluate_condition(condition: Any, facts: Any, result: Any = None) -> str:
     for fact in condition.get("requiredFacts", []):
         if fact not in facts:
             raise FinKoreError(CONDITION_UNRESOLVED)
-    if result not in {"APPLICABLE", "NOT_APPLICABLE"}:
+    if result not in ("APPLICABLE", "NOT_APPLICABLE"):
         raise FinKoreError(CONDITION_UNRESOLVED)
     return result
 
@@ -230,9 +247,9 @@ def evaluate_chain(chain: Any, states: Any) -> Any:
     requirements = chain.get("requirements")
     if not isinstance(requirements, list) or len(requirements) == 0 or any(not _opaque(item) for item in requirements):
         raise FinKoreError(INVALID_CHAIN)
-    if len(set(requirements)) != len(requirements) or chain.get("mode") not in {"SEQUENTIAL", "UNORDERED"}:
+    if len(set(requirements)) != len(requirements) or chain.get("mode") not in ("SEQUENTIAL", "UNORDERED"):
         raise FinKoreError(INVALID_CHAIN)
-    if any(states.get(requirement) not in {"APPROVED", "REJECTED", "PENDING", "NOT_APPLICABLE"} for requirement in requirements):
+    if any(states.get(requirement) not in ("APPROVED", "REJECTED", "PENDING", "NOT_APPLICABLE") for requirement in requirements):
         raise FinKoreError(INVALID_CHAIN)
     if any(states[requirement] == "REJECTED" for requirement in requirements):
         return "REJECTED"
@@ -252,12 +269,13 @@ def withdraw_decision(requirement: Any, history: Any, withdrawal: Any) -> dict[s
     See APPROVAL-VALIDITY-004/005/012.
     """
 
-    validate_requirement(requirement)
+    req = validate_requirement(requirement)
     current, lifecycle = normalize_decision_set(history)
-    event = _lifecycle(withdrawal, "WITHDRAWN")
-    target = event["target"]
-    if sum(_decision_key(decision) == target for decision in current) != 1 or any(item.get("type") in ("WITHDRAWN", "DECISION_SUPERSEDED") and item.get("target") == target for item in lifecycle):
+    event = _validate_lifecycle(_lifecycle(withdrawal, "WITHDRAWN"), current, lifecycle)
+    if event["target"].get("requirementId") != req["id"]:
         raise FinKoreError(INVALID_DECISION)
+    if _actor_id(event.get("actor")) not in req["eligibleActors"]:
+        raise FinKoreError(INELIGIBLE_ACTOR)
     return {"history": current, "lifecycle": [*lifecycle, event]}
 
 
@@ -269,9 +287,7 @@ def supersede_decision(history: Any, supersession: Any) -> dict[str, Any]:
     """
 
     current, lifecycle = normalize_decision_set(history)
-    event = _lifecycle(supersession, "DECISION_SUPERSEDED", successor=True)
-    if _find_decision(current, event["target"]) is None or _find_decision(current, event["successor"]) is None:
-        raise FinKoreError(INVALID_DECISION)
+    event = _validate_lifecycle(_lifecycle(supersession, "DECISION_SUPERSEDED"), current, lifecycle)
     return {"history": current, "lifecycle": [*lifecycle, event]}
 
 
@@ -283,10 +299,10 @@ def supersede_requirement(history: Any, supersession: Any) -> dict[str, Any]:
     """
 
     current, lifecycle = normalize_decision_set(history)
-    if not isinstance(supersession, dict) or not _opaque(supersession.get("targetRequirementId")) or not _opaque(supersession.get("successorRequirementId")):
+    if not isinstance(supersession, dict):
         raise FinKoreError(INVALID_DECISION)
-    _instant(supersession.get("recordedAt"))
-    return {"history": current, "lifecycle": [*lifecycle, {**deepcopy(supersession), "type": "REQUIREMENT_SUPERSEDED"}]}
+    event = _validate_lifecycle({**supersession, "type": "REQUIREMENT_SUPERSEDED"}, current, lifecycle)
+    return {"history": current, "lifecycle": [*lifecycle, event]}
 
 
 @dataclass
@@ -307,8 +323,10 @@ def evaluate_composition(composition: Any, requirements: Any, decisions: Any = N
     """
 
     groups = _validate_composition_structure(composition)
-    reqs = _validate_composition_requirements(requirements, context)
-    decision_history = deepcopy(decisions) if isinstance(decisions, list) else []
+    reqs = _validate_composition_requirements(requirements, context, groups)
+    if decisions is not None and not isinstance(decisions, list):
+        raise FinKoreError(INVALID_CHAIN)
+    decision_history = deepcopy(decisions) if decisions is not None else []
     _validate_composition_evidence(reqs, decision_history)
     if "stages" in composition:
         stage_results: list[GroupResult] = []
@@ -333,19 +351,27 @@ def evaluate_composition(composition: Any, requirements: Any, decisions: Any = N
     return {"outcome": outcome, "actionableRequirements": result.actionables if outcome == "PENDING" else []}
 
 
+def _decision_considered(req: dict[str, Any], decision: dict[str, Any], lifecycle: list[dict[str, Any]]) -> bool:
+    if decision["requirementId"] != req["id"]:
+        return False
+    key = _decision_key(decision)
+    return not any(
+        (item["type"] in ("WITHDRAWN", "DECISION_SUPERSEDED") and _same_decision_ref(item["target"], key))
+        or (item["type"] == "REQUIREMENT_SUPERSEDED" and item["targetRequirementId"] == req["id"])
+        for item in lifecycle
+    )
+
+
 def _decision_current(req: dict[str, Any], decision: dict[str, Any], lifecycle: list[dict[str, Any]], current_subject_facts: Any, relevant_fact_paths: Any, evaluated_at: Any) -> bool:
+    if not _decision_considered(req, decision, lifecycle):
+        return False
     try:
         validate_decision(req, decision)
     except FinKoreError:
         return False
-    key = _decision_key(decision)
-    if any(item.get("type") in {"WITHDRAWN", "DECISION_SUPERSEDED"} and item.get("target") == key for item in lifecycle):
-        return False
-    if any(item.get("type") == "REQUIREMENT_SUPERSEDED" and item.get("targetRequirementId") == req["id"] for item in lifecycle):
+    if _expired(decision, evaluated_at):
         return False
     if decision.get("effective") is False:
-        return False
-    if _expired(decision, evaluated_at):
         return False
     if relevant_fact_paths is not None and not _facts_match(decision.get("subjectFacts"), current_subject_facts, relevant_fact_paths):
         return False
@@ -368,6 +394,8 @@ def _json_fact_equal(left: Any, right: Any) -> bool:
     retains its existing meaning.
 
     @see APPROVAL-DECISION-003
+    @see APPROVAL-DECISION-009
+    @see APPROVAL-VALIDITY-013
     @see APPROVAL-VALIDITY-003
     """
     if isinstance(left, bool) or isinstance(right, bool):
@@ -384,6 +412,8 @@ def _json_fact_equal(left: Any, right: Any) -> bool:
 
 
 def _facts_match(decision_facts: Any, current_facts: Any, paths: Any) -> bool:
+    if paths is None:
+        return _json_fact_equal(decision_facts, current_facts)
     if not isinstance(paths, list) or any(not _opaque(path) for path in paths):
         raise FinKoreError(INVALID_DECISION)
     for fact_path in paths:
@@ -401,18 +431,47 @@ def _decision_key(decision: dict[str, Any]) -> dict[str, str]:
     return {"requirementId": decision["requirementId"], "actorId": actor_id, "decidedAt": decision["decidedAt"]}
 
 
-def _find_decision(history: list[dict[str, Any]], target: dict[str, Any]) -> dict[str, Any] | None:
-    return next((decision for decision in history if _decision_key(decision) == target), None)
+def _same_decision_ref(left: dict[str, Any], right: dict[str, Any]) -> bool:
+    return (left["requirementId"] == right["requirementId"] and left["actorId"] == right["actorId"]
+            and _instant(left["decidedAt"]) == _instant(right["decidedAt"]))
 
 
-def _lifecycle(value: Any, lifecycle_type: str, successor: bool = False) -> dict[str, Any]:
-    if not isinstance(value, dict) or not isinstance(value.get("target"), dict):
+def _lifecycle(value: Any, lifecycle_type: str) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        raise FinKoreError(INVALID_DECISION)
+    return {**deepcopy(value), "type": lifecycle_type}
+
+
+def _validate_lifecycle(value: Any, history: list[dict[str, Any]], previous: list[dict[str, Any]]) -> dict[str, Any]:
+    # Committed event kinds and local-order relationships are evidence (VALIDITY-014).
+    if not isinstance(value, dict) or value.get("type") not in ("WITHDRAWN", "DECISION_SUPERSEDED", "REQUIREMENT_SUPERSEDED"):
+        raise FinKoreError(INVALID_DECISION)
+    actor = value.get("actor")
+    if _actor_id(actor) is None or ("type" in actor and not _opaque(actor["type"])):
         raise FinKoreError(INVALID_DECISION)
     _instant(value.get("recordedAt"))
-    event = {**deepcopy(value), "type": lifecycle_type}
-    if successor and not isinstance(value.get("successor"), dict):
-        raise FinKoreError(INVALID_DECISION)
-    return event
+    kind = value["type"]
+    if kind == "REQUIREMENT_SUPERSEDED":
+        target, successor = value.get("targetRequirementId"), value.get("successorRequirementId")
+        if "target" in value or "successor" in value or not _opaque(target) or not _opaque(successor) or target == successor:
+            raise FinKoreError(INVALID_DECISION)
+        if any(item["type"] == kind and item["targetRequirementId"] == target for item in previous):
+            raise FinKoreError(INVALID_DECISION)
+    else:
+        if "targetRequirementId" in value or "successorRequirementId" in value or (kind == "WITHDRAWN" and "successor" in value):
+            raise FinKoreError(INVALID_DECISION)
+        for field in (["target", "successor"] if kind == "DECISION_SUPERSEDED" else ["target"]):
+            ref = value.get(field)
+            if not isinstance(ref, dict) or not _opaque(ref.get("requirementId")) or not _opaque(ref.get("actorId")):
+                raise FinKoreError(INVALID_DECISION)
+            _instant(ref.get("decidedAt"))
+            if sum(_same_decision_ref(_decision_key(decision), ref) for decision in history) != 1:
+                raise FinKoreError(INVALID_DECISION)
+        if kind == "DECISION_SUPERSEDED" and _same_decision_ref(value["target"], value["successor"]):
+            raise FinKoreError(INVALID_DECISION)
+        if any(item["type"] in ("WITHDRAWN", "DECISION_SUPERSEDED") and _same_decision_ref(item["target"], value["target"]) for item in previous):
+            raise FinKoreError(INVALID_DECISION)
+    return deepcopy(value)
 
 
 def _validate_composition_structure(composition: Any) -> dict[str, dict[str, Any]]:
@@ -422,7 +481,7 @@ def _validate_composition_structure(composition: Any) -> dict[str, dict[str, Any
         raise FinKoreError(INVALID_CHAIN)
     groups: dict[str, dict[str, Any]] = {}
     for group in composition["groups"]:
-        if not isinstance(group, dict) or not _opaque(group.get("id")) or group["id"] in groups or group.get("kind") not in {"ALL_OF", "ANY_OF", "N_OF_M"}:
+        if not isinstance(group, dict) or not _opaque(group.get("id")) or group["id"] in groups or group.get("kind") not in ("ALL_OF", "ANY_OF", "N_OF_M"):
             raise FinKoreError(INVALID_CHAIN)
         members = group.get("members")
         if not isinstance(members, list) or len(members) == 0:
@@ -451,51 +510,56 @@ def _validate_composition_structure(composition: Any) -> dict[str, dict[str, Any
         if group["kind"] == "N_OF_M" and (not isinstance(group.get("threshold"), int) or isinstance(group.get("threshold"), bool) or group["threshold"] <= 0 or group["threshold"] > len(members)):
             raise FinKoreError(INVALID_CHAIN)
         groups[group["id"]] = group
-    roots = [composition["rootGroup"]] if "rootGroup" in composition else [group_id for stage in composition.get("stages", []) for group_id in stage.get("groups", [])]
-    if "stages" in composition and (not isinstance(composition["stages"], list) or len(composition["stages"]) == 0):
-        raise FinKoreError(INVALID_CHAIN)
-    for stage in composition.get("stages", []):
-        if not isinstance(stage, dict) or not isinstance(stage.get("groups"), list) or len(stage["groups"]) == 0:
+    if "stages" in composition:
+        stages = composition["stages"]
+        if not isinstance(stages, list) or not stages:
             raise FinKoreError(INVALID_CHAIN)
+        for stage in stages:
+            if not isinstance(stage, dict) or not isinstance(stage.get("groups"), list) or not stage["groups"]:
+                raise FinKoreError(INVALID_CHAIN)
+        roots = [group_id for stage in stages for group_id in stage["groups"]]
+    else:
+        roots = [composition["rootGroup"]]
     for root in roots:
         _check_group(root, groups, 1, [])
     return groups
 
 
 def _check_group(group_id: str, groups: dict[str, dict[str, Any]], depth: int, path: list[str]) -> None:
-    if group_id not in groups or group_id in path or depth > 4:
+    if not _opaque(group_id) or group_id not in groups or group_id in path or depth > 4:
         raise FinKoreError(INVALID_CHAIN)
     for member in groups[group_id]["members"]:
         if member["type"] == "group":
             _check_group(member["groupId"], groups, depth + 1, [*path, group_id])
 
 
-def _validate_composition_requirements(requirements: Any, context: Any) -> dict[str, dict[str, Any]]:
+def _validate_composition_requirements(requirements: Any, context: Any, groups: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
     if not isinstance(requirements, list):
         raise FinKoreError(INVALID_CHAIN)
     reqs: dict[str, dict[str, Any]] = {}
-    unresolved = False
-    invalid_context = False
-    invalid_state = False
     for requirement in requirements:
         if not isinstance(requirement, dict) or not _opaque(requirement.get("id")) or requirement["id"] in reqs:
             raise FinKoreError(INVALID_CHAIN)
-        applicability = requirement.get("applicability", "APPLICABLE")
-        if applicability == "UNRESOLVED":
-            unresolved = True
-        elif applicability not in {"APPLICABLE", "NOT_APPLICABLE"}:
-            invalid_state = True
-        if requirement.get("requiresEvaluationContext") is True and (not isinstance(context, dict) or "evaluatedAt" not in context):
-            invalid_context = True
-        if "state" in requirement and requirement["state"] not in {"APPROVED", "REJECTED", "PENDING"}:
-            invalid_state = True
+        if "requiresEvaluationContext" in requirement and not isinstance(requirement["requiresEvaluationContext"], bool):
+            raise FinKoreError(INVALID_CHAIN)
         reqs[requirement["id"]] = requirement
-    if unresolved:
-        raise FinKoreError(CONDITION_UNRESOLVED)
-    if invalid_context:
-        raise FinKoreError(INVALID_CONTEXT)
-    if invalid_state:
+    members = [(group, member) for group in groups.values() for member in group["members"] if member["type"] == "requirement"]
+    if any(member["requirementId"] not in reqs for _, member in members):
         raise FinKoreError(INVALID_CHAIN)
+    required = {member["requirementId"] for _, member in members}
+    if any(reqs[key].get("applicability") not in ("APPLICABLE", "NOT_APPLICABLE") for key in required):
+        raise FinKoreError(CONDITION_UNRESOLVED)
+    for key in required:
+        req = reqs[key]
+        if req["applicability"] == "APPLICABLE" and req.get("requiresEvaluationContext") is True:
+            _instant(context.get("evaluatedAt") if isinstance(context, dict) else None, INVALID_CONTEXT)
+    for key in required:
+        if "state" in reqs[key] and reqs[key]["state"] not in ("APPROVED", "REJECTED", "PENDING"):
+            raise FinKoreError(INVALID_CHAIN)
+    for group, member in members:
+        req = reqs[member["requirementId"]]
+        if req["applicability"] == "APPLICABLE" and group["kind"] != "N_OF_M" and "state" not in req:
+            raise FinKoreError(INVALID_CHAIN)
     return reqs
 
 
@@ -506,7 +570,7 @@ def _validate_composition_evidence(reqs: dict[str, dict[str, Any]], decisions: l
         if not isinstance(decision.get("effective"), bool):
             raise FinKoreError(INVALID_CHAIN)
         actor_id = _actor_id(decision.get("actor"))
-        if actor_id is None or decision.get("outcome") not in {"APPROVED", "REJECTED"}:
+        if actor_id is None or decision.get("outcome") not in ("APPROVED", "REJECTED"):
             raise FinKoreError(INVALID_CHAIN)
 
 
@@ -549,7 +613,7 @@ def _evaluate_member(member: dict[str, Any], group: dict[str, Any], groups: dict
     if group["kind"] == "N_OF_M":
         state = _quorum_member_state(req, member, decisions)
     else:
-        state = req.get("state", "PENDING")
+        state = req["state"]
     return GroupResult(state, True, [req["id"]] if state == "PENDING" else [])
 
 

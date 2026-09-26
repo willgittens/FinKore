@@ -16,7 +16,9 @@ public final class NativeMutationProbe {
     Map<String, Runnable> cases = new java.util.LinkedHashMap<>(ReadinessRegressionTest.mutationCases());
     cases.putAll(BoundaryRegressionTest.cases());
     ConstructionEvaluationRegressionTest.cases().forEach((id, test) -> {
-      if (id.startsWith("workflow.")) cases.put(id, test);
+      if (id.startsWith("workflow.") || id.startsWith("approval.boundary096.")
+          || id.startsWith("approval.context.") || id.startsWith("approval.sequence.invalid-history-")
+          || id.equals("approval.sequence.supersession-across-requirements")) cases.put(id, test);
     });
     List<String> rows = new ArrayList<>();
     int passed = 0, failed = 0, infrastructure = 0;

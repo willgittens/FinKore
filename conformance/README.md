@@ -20,7 +20,7 @@ The manifest and vector-file version fields describe syntax compatibility, not
 FinKore release numbers. Release scope is determined by the manifest contents,
 referenced requirement IDs, and traceability status.
 
-The local `core-0.9.5` tag identifies the current corrective manifest snapshot.
+The local `core-0.9.5` tag identifies the latest completed corrective snapshot.
 The Core label remains `0.9-rc` and conformance syntax remains `0.1`.
 
 The completed [Core 0.9.5 plan](../docs/plans/plan-09.5.md) corrects native Money
@@ -31,7 +31,8 @@ ownership, validator, and bounded revision/conflict decisions are defined by
 `/spec` and documented in the [fixture conventions](conventions.md).
 All earlier corrective regressions remain in the suite.
 
-All 667 manifest vectors pass on TypeScript, CPython 3.12, CPython 3.13, and Java
+At the completed Core 0.9.5 snapshot, all 667 vectors passed on TypeScript,
+CPython 3.12, CPython 3.13, and Java
 with zero failed, unsupported, or infrastructure outcomes. This includes 102
 Money, 103 Workflow, 76 Audit, 162 Approval, 212 Entity, and 12 shared vectors.
 Native public API tests cover exact serializer scales, cycles, aliases, and
@@ -39,12 +40,20 @@ actual returned-value sequences that isolated JSON vectors cannot express.
 Complete clean-checkout verification includes coverage, full mutation suites,
 paired critical/native probes, and isolated npm, wheel/sdist, and JAR consumers.
 
-[Traceability](traceability.md) records 330 COVERED and 83 NOT DIRECTLY TESTABLE
-requirements, with no PARTIAL or blocking specification gaps. Native tests and
+That snapshot recorded 330 COVERED and 83 NOT DIRECTLY TESTABLE requirements,
+with no PARTIAL or blocking specification gaps. Native tests and
 mutation probes support the relevant non-JSON boundaries. These finite checks
 do not establish exhaustive correctness or complete the separate Core 1.0
 promotion process. Canonical Agentic operation promotion and unpublished
 reference-package status are unchanged.
+
+The [Core 0.9.6 corrective plan](../docs/plans/plan-09.6.md) expands the current
+manifest to 863 vectors. Milestones 3–5 verify Money, Workflow, and Approval
+corrections. All 272 Approval vectors pass on TypeScript, Python 3.12/3.13, and
+Java, including concrete Decision evaluation, complete required context, imported
+lifecycle validation, and exact-instant reference resolution. The full suite
+retains known Audit and Entity failures. Current [traceability](traceability.md)
+is 322 COVERED, 12 PARTIAL, and 83 NOT DIRECTLY TESTABLE, with no blocking gaps.
 
 For FinKore Core 0.9 release candidate, [manifest.json](manifest.json) is the
 frozen release-candidate manifest and `finkoreConformance` remains `0.1`. This

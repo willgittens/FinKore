@@ -6,7 +6,7 @@ from decimal import Context, Decimal, Inexact, Rounded, localcontext
 from finkore import CORE_VERSION, FinKoreError, Money, WorkflowDefinition, WorkflowInstance
 from finkore.workflow import create_workflow, import_workflow, transition_workflow, WorkflowTransition
 from finkore.entities import create_entity, transition_entity, import_entity
-from finkore.approvals import record_decision, evaluate_requirement
+from finkore.approvals import record_decision, evaluate_requirement, evaluate_decision, withdraw_decision, normalize_decision_set
 from finkore.audit import append_event
 
 
@@ -70,6 +70,16 @@ error('FINKORE_WORKFLOW_INVALID_STATE', lambda: transition_workflow(workflow_def
 requirement = {'id': 'review', 'subject': {'type': 'invoice', 'id': 'invoice-1'}, 'eligibleActors': ['alice'], 'approvedOutcome': 'APPROVED', 'rejectedOutcome': 'REJECTED'}
 decision = {'requirementId': 'review', 'subjectFacts': None, 'outcome': 'APPROVED', 'actor': {'id': 'alice'}, 'decidedAt': '2026-09-01T12:00:00Z'}
 history = record_decision(requirement, decision, [])
+assert evaluate_requirement(requirement, history) == 'APPROVED'
+expires_at = '2026-09-26T10:00:00.123456789Z'
+expiring = dict(decision, expiresAt=expires_at)
+assert evaluate_decision(requirement, expiring, None, None, expires_at) == 'INEFFECTIVE'
+error('FINKORE_APPROVAL_INVALID_CONTEXT', lambda: evaluate_decision(requirement, expiring))
+error('FINKORE_APPROVAL_INVALID_DECISION', lambda: evaluate_decision(dict(requirement, id='other'), decision))
+withdrawn = withdraw_decision(requirement, history, {'target': {'requirementId': 'review', 'actorId': 'alice', 'decidedAt': decision['decidedAt']}, 'actor': {'id': 'alice'}, 'recordedAt': expires_at})
+assert evaluate_requirement(requirement, withdrawn) == 'PENDING'
+invalid_history = deepcopy(withdrawn); invalid_history['lifecycle'][0]['type'] = 'UNKNOWN'
+error('FINKORE_APPROVAL_INVALID_DECISION', lambda: normalize_decision_set(invalid_history))
 assert evaluate_requirement(requirement, history) == 'APPROVED'
 absent = dict(decision); del absent['subjectFacts']
 error('FINKORE_APPROVAL_INVALID_DECISION', lambda: record_decision(requirement, absent, []))

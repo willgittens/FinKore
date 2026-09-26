@@ -118,6 +118,30 @@ class ConstructionEvaluationRegressions(unittest.TestCase):
     def test_approval_returned_history_control(self):
         self.approval_sequence()
 
+    def test_approval_supersession_across_requirements(self):
+        req, previous, decision = self.approval_sequence()
+        other = dict(req, id='other')
+        successor = dict(decision, requirementId='other')
+        current = record_decision(other, successor, previous)
+        ref = lambda value: {'requirementId': value['requirementId'], 'actorId': 'alice', 'decidedAt': value['decidedAt']}
+        event = {'target': ref(decision), 'successor': ref(successor), 'actor': {'id': 'alice'}, 'recordedAt': '2026-09-05T00:00:00Z'}
+        superseded = supersede_decision(current, event)
+        before = deepcopy(superseded)
+        self.assertEqual(evaluate_requirement(req, superseded), 'PENDING')
+        self.assertEqual(evaluate_requirement(other, superseded), 'APPROVED')
+        new = dict(decision, decidedAt='2026-09-06T00:00:00Z')
+        recorded = record_decision(req, new, superseded)
+        self.assertEqual(recorded, {'history': [*before['history'], new], 'lifecycle': before['lifecycle']})
+        self.assertEqual(evaluate_requirement(req, recorded), 'APPROVED')
+        self.portable_error('FINKORE_APPROVAL_INVALID_DECISION', lambda: supersede_decision(superseded, event))
+        self.assertEqual(superseded, before)
+        self.assertEqual(current['lifecycle'], previous['lifecycle'])
+
+    def test_approval_considered_ineligible_expiration_context(self):
+        req, _, decision = self.approval_sequence()
+        ineligible = dict(decision, actor={'id': 'bob'}, expiresAt='2026-09-26T00:00:00Z')
+        self.portable_error('FINKORE_APPROVAL_INVALID_CONTEXT', lambda: evaluate_requirement(req, [decision, ineligible]))
+
     def test_approval_invalid_history_reuse_boundaries(self):
         """APPROVAL-VALIDITY-014/012: each reuse boundary rejects an unknown committed kind."""
         req, history, second = self.approval_sequence()

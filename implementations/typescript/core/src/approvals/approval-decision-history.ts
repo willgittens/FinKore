@@ -88,7 +88,7 @@ function validateDecisionRef(value: unknown): SerializedApprovalDecisionReferenc
 }
 
 function sameDecisionRef(left: SerializedApprovalDecisionReference, right: SerializedApprovalDecisionReference): boolean {
-  return left.requirementId === right.requirementId && left.actorId === right.actorId && left.decidedAt === right.decidedAt
+  return left.requirementId === right.requirementId && left.actorId === right.actorId && comparePortableTimestamps(left.decidedAt, right.decidedAt) === 0
 }
 
 function decisionRef(decision: ApprovalDecision): SerializedApprovalDecisionReference {
@@ -241,6 +241,8 @@ export class ApprovalDecisionHistory {
    * @see APPROVAL-VALIDITY-004
    * @see APPROVAL-VALIDITY-005
    * @see APPROVAL-VALIDITY-006
+   * @see APPROVAL-VALIDITY-013
+   * @see APPROVAL-VALIDITY-014
    * @see APPROVAL-VALIDITY-012
    */
   withdraw(requirementInput: unknown, withdrawalInput: unknown): ApprovalDecisionHistory {
@@ -272,6 +274,8 @@ export class ApprovalDecisionHistory {
    *
    * @see FINKORE_APPROVAL_INVALID_DECISION
    * @see APPROVAL-VALIDITY-010
+   * @see APPROVAL-VALIDITY-013
+   * @see APPROVAL-VALIDITY-014
    * @see APPROVAL-VALIDITY-012
    */
   supersedeDecision(supersessionInput: unknown): ApprovalDecisionHistory {
@@ -301,6 +305,8 @@ export class ApprovalDecisionHistory {
    *
    * @see FINKORE_APPROVAL_INVALID_DECISION
    * @see APPROVAL-VALIDITY-011
+   * @see APPROVAL-VALIDITY-013
+   * @see APPROVAL-VALIDITY-014
    * @see APPROVAL-VALIDITY-012
    */
   supersedeRequirement(supersessionInput: unknown): ApprovalDecisionHistory {
@@ -347,6 +353,8 @@ export class ApprovalDecisionHistory {
    * @see APPROVAL-VALIDITY-007
    * @see APPROVAL-VALIDITY-008
    * @see APPROVAL-VALIDITY-009
+   * @see APPROVAL-VALIDITY-013
+   * @see APPROVAL-VALIDITY-014
    * @see APPROVAL-VALIDITY-012
    * @see APPROVAL-ERROR-005
    * @see SPEC-TIMESTAMP-005
@@ -361,6 +369,12 @@ export class ApprovalDecisionHistory {
   ): ApprovalRequirementState {
     const requirement = ApprovalRequirement.from(requirementInput)
     if (this.isRequirementSuperseded(requirement.id)) return 'PENDING'
+    // Validate every considered expiration before any decisive outcome (VALIDITY-013).
+    for (const decision of this.committedDecisions) {
+      if (decision.requirementId === requirement.id && this.isDecisionLifecycleEffective(decision) && decision.expiresAt !== undefined) {
+        validateEvaluationTimestamp(options.evaluatedAt)
+      }
+    }
     let hasEffectiveApproval = false
     for (const decision of this.committedDecisions) {
       if (decision.requirementId !== requirement.id) continue

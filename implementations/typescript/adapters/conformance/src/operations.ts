@@ -353,23 +353,14 @@ function inputApprovalRequirementSupersede(input: unknown): {
 }
 
 function inputApprovalDecisionEvaluate(input: unknown): {
-  readonly decision: unknown
-  readonly currentSubjectFacts: unknown
+  readonly requirement?: unknown
+  readonly decision?: unknown
+  readonly currentSubjectFacts?: unknown
+  readonly evaluatedAt?: unknown
   readonly relevantFactPaths?: readonly string[]
 } {
-  if (typeof input !== 'object' || input === null || !('decision' in input) || !('currentSubjectFacts' in input)) {
-    return { decision: undefined, currentSubjectFacts: undefined }
-  }
-  const candidate = input as {
-    readonly decision: unknown
-    readonly currentSubjectFacts: unknown
-    readonly relevantFactPaths?: readonly string[]
-  }
-  return {
-    decision: candidate.decision,
-    currentSubjectFacts: candidate.currentSubjectFacts,
-    ...(candidate.relevantFactPaths === undefined ? {} : { relevantFactPaths: candidate.relevantFactPaths }),
-  }
+  if (typeof input !== 'object' || input === null) return {}
+  return input
 }
 
 function inputApprovalConditionEvaluate(input: unknown): {
@@ -1207,16 +1198,15 @@ function executeApprovalDecisionRecord(request: AdapterRequest): NormalizedResul
 /**
  * Executes Approval Decision effectiveness checks through the TypeScript core API.
  *
- * The supplied Requirement fixture is intentionally not interpreted here; this
- * operation observes whether a Decision's subject facts still match the current
- * relevant subject facts.
+ * Concrete Requirement, association, eligibility, facts, and expiration checks
+ * are delegated to the core; this adapter only translates the fixture.
  */
 function executeApprovalDecisionEvaluate(request: AdapterRequest): NormalizedResult {
   const input = inputApprovalDecisionEvaluate(request.input)
   try {
     return {
       status: 'success',
-      value: ApprovalDecision.from(input.decision).evaluateEffectiveness(input.currentSubjectFacts, input.relevantFactPaths),
+      value: ApprovalDecision.evaluate(input.requirement, input.decision, input.currentSubjectFacts, input.relevantFactPaths, input.evaluatedAt),
     }
   } catch (error) {
     return normalizeThrown(error)

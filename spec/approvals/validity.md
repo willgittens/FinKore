@@ -105,10 +105,11 @@ without rewriting its predecessor's supersession. Requirement identifiers do
 not need to resolve through a registry absent from the input. Operation-specific
 request kind remains distinct from committed history's discriminator.
 
-Milestone 2 provides permanent regressions. Milestone 5 must deliver the core,
-adapter, and public API corrections with those requirements and tests before
-the corrective change satisfies SPEC-FREEZE-002 or is released. Existing IDs
-retain their meaning; new obligations have new IDs.
+Milestone 2 provides permanent regressions. Milestone 5 synchronizes core,
+adapter, public API, and package behavior, including exact-instant lifecycle
+references and preservation of their timestamp spelling. The complete Core 0.9.6
+release gate remains pending. Existing IDs retain their meaning; new obligations
+have new IDs.
 
 ## Example
 

@@ -25,6 +25,7 @@ final class ApprovalsVectorCoverageTest {
     ApprovalsTest.main(new String[0]);
     ReadinessRegressionTest.main(new String[]{"approvals"});
     BoundaryRegressionTest.main(new String[]{"approval."});
+    ConstructionEvaluationRegressionTest.main(new String[]{"approval."});
   }
 
   @Test
@@ -63,6 +64,7 @@ final class ApprovalsVectorCoverageTest {
             input.get("decision"),
             input.get("history")), null);
         case "approval.decision.evaluate" -> success(Approvals.evaluateDecision(
+            input.get("requirement"),
             input.get("decision"),
             input.get("currentSubjectFacts"),
             input.get("relevantFactPaths"),

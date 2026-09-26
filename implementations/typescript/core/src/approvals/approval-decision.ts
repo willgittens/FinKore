@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 import { ApprovalRequirement } from './approval-requirement.js'
-import { IneligibleApprovalActorError, InvalidApprovalDecisionError } from './errors.js'
-import { parsePortableTimestamp } from '../portable-timestamp.js'
+import { IneligibleApprovalActorError, InvalidApprovalContextError, InvalidApprovalDecisionError } from './errors.js'
+import { comparePortableTimestamps, parsePortableTimestamp } from '../portable-timestamp.js'
 import type {
   ApprovalDecisionEffectiveness,
   ApprovalDecisionOutcome,
@@ -114,8 +114,8 @@ function jsonEquivalent(left: unknown, right: unknown): boolean {
  * A Decision identifies exactly one Approval Requirement, one deciding Actor,
  * one `APPROVED` or `REJECTED` outcome, one unambiguous timestamp, and the
  * subject facts or state against which it was made. It validates an optional
- * expiration timestamp; Approval Decision history evaluates that timestamp
- * against explicit context. This class does not define withdrawal,
+ * expiration timestamp; concrete evaluation and Approval Decision history
+ * evaluate that timestamp against explicit context. This class does not define withdrawal,
  * supersession, delegation, escalation, audit integration, or persistence.
  *
  * @see APPROVAL-DECISION-001
@@ -192,6 +192,45 @@ export class ApprovalDecision {
   }
 
   /**
+   * Evaluates a concrete Decision against its Requirement and current facts.
+   * Validates subject, eligibility, association and exact expiration context
+   * before comparing relevant facts. Neither input nor history is mutated.
+   * Without lifecycle history this makes no withdrawal/supersession claim.
+   *
+   * @param requirementInput - Concrete Requirement with subject and eligibility.
+   * @param decisionInput - Complete Decision associated with that Requirement.
+   * @param currentSubjectFacts - Current facts; absent paths compare all facts.
+   * @param relevantFactPaths - Optional declared relevant fact paths.
+   * @param evaluatedAt - Required portable timestamp when the Decision expires.
+   * @returns `EFFECTIVE` or `INEFFECTIVE` for the supplied concrete context.
+   * @throws {InvalidApprovalDecisionError} For malformed or mismatched evidence.
+   * @throws {IneligibleApprovalActorError} For an excluded deciding Actor.
+   * @throws {InvalidApprovalContextError} For invalid required expiration context.
+   * @see APPROVAL-DECISION-009
+   * @see APPROVAL-VALIDITY-007
+   * @see SPEC-TIMESTAMP-005
+   */
+  static evaluate(
+    requirementInput: unknown,
+    decisionInput: unknown,
+    currentSubjectFacts: unknown,
+    relevantFactPaths?: readonly string[],
+    evaluatedAt?: unknown,
+  ): ApprovalDecisionEffectiveness {
+    const decision = ApprovalDecision.forRequirement(ApprovalRequirement.from(requirementInput), decisionInput)
+    if (decision.expiresAt !== undefined) {
+      try {
+        if (typeof evaluatedAt !== 'string') throw new InvalidApprovalContextError()
+        parsePortableTimestamp(evaluatedAt)
+      } catch {
+        throw new InvalidApprovalContextError()
+      }
+      if (comparePortableTimestamps(evaluatedAt, decision.expiresAt) >= 0) return 'INEFFECTIVE'
+    }
+    return decision.evaluateEffectiveness(currentSubjectFacts, relevantFactPaths)
+  }
+
+  /**
    * Requirement identity this Decision addresses.
    *
    * @see APPROVAL-DECISION-001
@@ -232,7 +271,7 @@ export class ApprovalDecision {
    * Optional instant at which this Decision expires for current evaluation.
    *
    * Expiration requires explicit evaluation context and is handled by
-   * `ApprovalDecisionHistory.evaluateRequirement`.
+   * `ApprovalDecision.evaluate` and `ApprovalDecisionHistory.evaluateRequirement`.
    *
    * @see APPROVAL-VALIDITY-007
    * @see APPROVAL-VALIDITY-009
@@ -247,8 +286,9 @@ export class ApprovalDecision {
    *
    * Only caller-declared relevant fact paths are compared when supplied. Without
    * explicit relevant paths, the full supplied subject-fact value is compared.
-   * This method does not define which mutations are material; that remains a
-   * composing-domain policy choice under Core 0.9 release candidate.
+   * This facts-only helper does not validate Requirement association, eligibility,
+   * expiration, or lifecycle history. Use `ApprovalDecision.evaluate` for concrete
+   * Decision evaluation. The composing domain defines which changes are material.
    *
    * @param currentSubjectFacts - Current subject facts or state to compare.
    * @param relevantFactPaths - Optional domain-defined relevant fact paths.

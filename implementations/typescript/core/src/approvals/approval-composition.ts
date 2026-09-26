@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { parsePortableTimestamp } from '../portable-timestamp.js'
 import { ApprovalConditionUnresolvedError, InvalidApprovalChainError, InvalidApprovalContextError } from './errors.js'
 import type {
   ApprovalActorIdentifier,
@@ -209,9 +210,9 @@ type ApplicableGroupEvaluation =
 
 type GroupEvaluation = { readonly applicable: false } | ApplicableGroupEvaluation
 
-function validateApplicability(value: unknown): ApprovalCompositionRequirementApplicability {
-  if (value === 'APPLICABLE' || value === 'NOT_APPLICABLE' || value === 'UNRESOLVED') return value
-  throw new InvalidApprovalChainError()
+function validateApplicability(value: unknown): Exclude<ApprovalCompositionRequirementApplicability, 'UNRESOLVED'> {
+  if (value === 'APPLICABLE' || value === 'NOT_APPLICABLE') return value
+  throw new ApprovalConditionUnresolvedError()
 }
 
 function validateRequirementState(value: unknown): ApprovalRequirementState {
@@ -248,7 +249,13 @@ function validateDecisionObservations(value: unknown): readonly SerializedApprov
 }
 
 function hasValidEvaluationContext(value: unknown): boolean {
-  return isPlainRecord(value) && typeof value.evaluatedAt === 'string' && value.evaluatedAt.length > 0
+  if (!isPlainRecord(value) || typeof value.evaluatedAt !== 'string') return false
+  try {
+    parsePortableTimestamp(value.evaluatedAt)
+    return true
+  } catch {
+    return false
+  }
 }
 
 function uniqueInOrder(values: readonly ApprovalRequirementIdentifier[]): readonly ApprovalRequirementIdentifier[] {
@@ -320,8 +327,11 @@ function validateEvaluationInput(
     if (!rawById.has(requirementId)) throw new InvalidApprovalChainError()
   }
   for (const requirementId of requiredRequirementIds) {
+    validateApplicability(rawById.get(requirementId)!.applicability)
+  }
+  for (const requirementId of requiredRequirementIds) {
     const raw = rawById.get(requirementId)!
-    if (raw.requiresEvaluationContext === true && !hasValidEvaluationContext(input.context)) {
+    if (raw.applicability === 'APPLICABLE' && raw.requiresEvaluationContext === true && !hasValidEvaluationContext(input.context)) {
       throw new InvalidApprovalContextError()
     }
   }
@@ -331,7 +341,6 @@ function validateEvaluationInput(
   for (const requirementId of requiredRequirementIds) {
     const raw = rawById.get(requirementId)!
     const applicability = validateApplicability(raw.applicability)
-    if (applicability === 'UNRESOLVED') throw new ApprovalConditionUnresolvedError()
     const state = raw.state === undefined ? undefined : validateRequirementState(raw.state)
     if (applicability === 'APPLICABLE' && stateRequirementSet.has(requirementId) && state === undefined) {
       throw new InvalidApprovalChainError()

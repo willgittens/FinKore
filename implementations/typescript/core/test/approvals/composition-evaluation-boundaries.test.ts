@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 import { describe, expect, it } from 'vitest'
-import { ApprovalComposition, InvalidApprovalChainError, InvalidApprovalContextError } from '../../src/index.js'
+import { ApprovalComposition, ApprovalConditionUnresolvedError, InvalidApprovalChainError, InvalidApprovalContextError } from '../../src/index.js'
 
 describe('Approval composition evaluation boundaries', () => {
   it('lets an entirely inapplicable stage pass to a later approved stage', () => {
@@ -96,7 +96,7 @@ describe('Approval composition evaluation boundaries', () => {
         requirements: [{ id: 'finance-review', applicability: 'MAYBE', state: 'PENDING' }],
         context: { evaluatedAt: '2026-09-12T10:00:00Z' },
       }),
-    ).toThrow(InvalidApprovalChainError)
+    ).toThrow(ApprovalConditionUnresolvedError)
   })
 
   it('returns no actionable requirements for approved or rejected compositions', () => {

@@ -43,9 +43,7 @@ public final class ConstructionEvaluationRegressionTest {
         Map<String, Object> v = map(item);
         String id = (String) v.get("id");
         if (!id.contains(".boundary096.")) continue;
-        // The old native Decision helper has no Requirement parameter. The complete
-        // concrete contract is tested through the adapter until Milestone 5 adds a core boundary.
-        if (!"approval.decision.evaluate".equals(v.get("operation"))) result.put(id, () -> nativeVector(v));
+        result.put(id, () -> nativeVector(v));
         if (id.equals("entity.boundary096.evolution-correct-control-001")) correction = v;
       }
     }
@@ -77,6 +75,12 @@ public final class ConstructionEvaluationRegressionTest {
         () -> new Workflow.Instance("DRAFT", null, "")));
     result.put("workflow.native.malformed-instance-binding", () -> error(Workflow.INVALID_INSTANCE,
         () -> new Workflow.Instance("DRAFT", Map.of("definitionIdentity", "f"), null)));
+    result.put("approval.sequence.supersession-across-requirements", ConstructionEvaluationRegressionTest::supersessionSequence);
+    result.put("approval.context.ineligible-expiration", () -> {
+      Map<String, Object> expiring = new LinkedHashMap<>(decision("2026-09-05T00:00:00Z"));
+      expiring.put("actor", Map.of("id", "bob")); expiring.put("expiresAt", "2026-09-26T00:00:00Z");
+      error(Approvals.INVALID_CONTEXT, () -> Approvals.evaluateRequirement(requirement(), List.of(expiring), null, null, null));
+    });
     result.put("approval.sequence.control", () -> approvalSequence());
     for (String boundary : List.of("record", "evaluate", "withdraw", "supersede", "supersede-requirement"))
       result.put("approval.sequence.invalid-history-" + boundary, () -> invalidHistory(boundary));
@@ -110,6 +114,7 @@ public final class ConstructionEvaluationRegressionTest {
       case "approval.composition.evaluate" -> Approvals.evaluateComposition(i.get("composition"), i.get("requirements"), i.get("decisions"), i.get("context"));
       case "approval.chain.evaluate" -> Approvals.evaluateChain(i.get("chain"), i.get("states"));
       case "approval.requirement.evaluate" -> Approvals.evaluateRequirement(i.get("requirement"), i.get("decisions"), i.get("currentSubjectFacts"), i.get("relevantFactPaths"), i.get("evaluatedAt"));
+      case "approval.decision.evaluate" -> Approvals.evaluateDecision(i.get("requirement"), i.get("decision"), i.get("currentSubjectFacts"), i.get("relevantFactPaths"), i.get("evaluatedAt"));
       case "approval.decision.record" -> Approvals.recordDecision(i.get("requirement"), i.get("decision"), i.get("history"));
       case "entity.import" -> Entities.importEntity(i.get("definition"), i.get("import"));
       default -> {
@@ -174,6 +179,30 @@ public final class ConstructionEvaluationRegressionTest {
     equal("APPROVED", evaluate(result)); equal(Map.of("history", List.of(first)), history);
     return result;
   }
+  private static void supersessionSequence() {
+    Map<String, Object> req = requirement();
+    Map<String, Object> other = new LinkedHashMap<>(req); other.put("id", "other");
+    Map<String, Object> first = decision("2026-09-01T10:00:00Z");
+    Map<String, Object> second = new LinkedHashMap<>(first); second.put("requirementId", "other");
+    Map<String, Object> history = Approvals.recordDecision(req, first, List.of());
+    history = Approvals.recordDecision(other, second, history);
+    Map<String, Object> successor = new LinkedHashMap<>(reference("2026-09-01T10:00:00Z")); successor.put("requirementId", "other");
+    Map<String, Object> event = Map.of("target", reference("2026-09-01T10:00:00Z"), "successor", successor,
+        "actor", Map.of("id", "alice"), "recordedAt", "2026-09-05T00:00:00Z");
+    Map<String, Object> superseded = Approvals.supersedeDecision(history, event);
+    Object before = copy(superseded);
+    equal("PENDING", evaluate(superseded));
+    equal("APPROVED", Approvals.evaluateRequirement(other, superseded, null, null, null));
+    Map<String, Object> newDecision = decision("2026-09-06T00:00:00Z");
+    Map<String, Object> recorded = Approvals.recordDecision(req, newDecision, Approvals.importHistory(superseded));
+    equal(List.of(first, second, newDecision), recorded.get("history"));
+    equal(superseded.get("lifecycle"), recorded.get("lifecycle"));
+    equal("APPROVED", evaluate(recorded));
+    error(Approvals.INVALID_DECISION, () -> Approvals.supersedeDecision(superseded, event));
+    equal(before, superseded);
+    equal(Map.of("history", List.of(first, second)), history);
+  }
+
   private static void invalidHistory(String boundary) {
     Map<String, Object> valid = approvalSequence(); Object preserved = copy(valid);
     Map<String, Object> malformed = map(copy(valid)); map(list(malformed.get("lifecycle")).get(0)).put("type", "UNKNOWN");

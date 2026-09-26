@@ -2,10 +2,10 @@
 
 ## Status
 
-Milestones 1–4 are complete: contract decisions and permanent regressions are
-recorded, and Money plus Workflow constructor/priority corrections are verified.
-Milestones 5–9 are unstarted. Approval, Audit, and Entity still have the recorded
-defects, so the complete suites remain red until their owning fixes land.
+Milestones 1–5 are complete: accepted contracts, permanent regressions, Money,
+Workflow, and Approval corrections are implemented and verified. Milestones 6–9
+are unstarted. Audit and Entity retain recorded defects, so complete suites
+remain red until their owning fixes land.
 The readiness review of commit `e300bb1`
 (`core-0.9.5`) found additional mandatory behavior and portability gaps despite
 passing existing checks. Core 1.0 promotion is blocked pending this corrective
@@ -288,8 +288,8 @@ skipped, marked expected-failure, or inverted to make the defective code pass.
 | --- | --- | --- | --- | --- |
 | Money construction and observation | `Money.from`, `applyRate`, `toJSON`; private constructor | `Money(Decimal, currency)`, `from_portable`, `apply_rate`, `to_portable` | `Money.fromPortable`, `applyRate`, `toPortable`; private constructor | Direct Python amount/currency matrix, finite Decimal arithmetic/serialization controls, portable Rate kinds on every core and adapter. Existing rounding/allocation suites remain in discovery; corrective package-consumer/mutation checks belong to M3. |
 | Workflow definitions and instances | `Workflow.create/from/import`, `transition`, `toJSON` | `WorkflowDefinition` / `WorkflowInstance`, portable parsers, `create_workflow`, `import_workflow`, `transition_workflow` | `Workflow.Definition` / `Instance` / `Transition` records, portable parsers, `create`, `importInstance`, `transition` | Direct definition construction, initial/terminal/duplicate/endpoint/version faults, owned valid definition → create → observe/import → transition. Portable import/transition pair observed revision with version mismatch and invalid definition. Existing guard/binding suites retained; adjacent instance/Transition constructor corrections remain M4 review. |
-| Approval concrete values and evaluation | `ApprovalDecision`, `ApprovalDecisionHistory.create/record/evaluateRequirement`; `evaluateEffectiveness` is facts-only | `record_decision`, `evaluate_decision`, `evaluate_requirement` | `Approvals.recordDecision/evaluateDecision/evaluateRequirement`; old Decision helper lacks Requirement input | Concrete fixture validates Requirement subject/association/eligibility and expiration. TS/Java concrete evaluation runs through adapters pending a core boundary in M5; native facts-only semantics are not silently expanded. |
-| Approval history reuse | history `toJSON/create/withdraw/supersede/supersedeRequirement` | `withdraw_decision`, `supersede_decision`, `supersede_requirement` | `Approvals.withdrawDecision/supersedeDecision/supersedeRequirement` | Actual record → withdraw → reconstruct → record → evaluate outputs; malformed committed history reused through all five Python/Java operations and TS reconstruction. Decisions and lifecycle remain unchanged on failure. |
+| Approval concrete values and evaluation | `ApprovalDecision.evaluate`, `ApprovalDecisionHistory.create/record/evaluateRequirement`; `evaluateEffectiveness` remains facts-only | `record_decision`, `evaluate_decision`, `evaluate_requirement` | `Approvals.recordDecision/evaluateDecision/evaluateRequirement`; five-argument Decision evaluation validates the Requirement | M5 implements concrete subject/association/eligibility, facts, and exact expiration directly in cores and tests every Decision vector natively and through adapters. Existing separate helper semantics remain documented. |
+| Approval history reuse | history `toJSON/create/withdraw/supersede/supersedeRequirement` | `withdraw_decision`, `supersede_decision`, `supersede_requirement` | `Approvals.importHistory/withdrawDecision/supersedeDecision/supersedeRequirement` | Actual record → withdraw → reconstruct → record → evaluate outputs; malformed committed history reused through all five Python/Java operations and TS reconstruction. Decisions and lifecycle remain unchanged on failure. |
 | Composition and chain | `ApprovalComposition.from/evaluate`, `ApprovalChain.from/evaluate` | `evaluate_composition`, `evaluate_chain` | `Approvals.evaluateComposition/evaluateChain` | State/applicability/context presence and type matrix, specified priority, nested/later-stage evidence, empty/false/missing effectiveness quorum controls. Lightweight observations do not gain concrete Requirement fields. |
 | Audit | `AuditLog.create/events/redact` | `redact_history` | `Audit.Log.create/events/redact` | Authority declaration matrix, valid evidence append, unchanged source/history on rejected redaction. Existing append/serialize/ownership cases retained. |
 | Entity import/observation/evolution | `FinancialEntity.from/import/toJSON`, `EntityEvolutionHistory.create/toJSON/correct/reverse/void/supersede` | `import_entity`, `evolve_entity` | `Entities.importEntity/evolve` | Source Identity presence with mapping; all four evolution kinds with supplied null/malformed/mismatch State and revision. Returned relations and Audit history feed the next evolution; source/history snapshots prove failure atomicity. Other public overloads retain existing native coverage and M7 correction review. |
@@ -601,32 +601,32 @@ verification remains pending.
 
 ## Milestone 5 — Approval evidence, history, and evaluation
 
-- [ ] Reject missing required member State instead of inferring `PENDING`.
+- [x] Reject missing required member State instead of inferring `PENDING`.
       Test ALL_OF, ANY_OF, quorum-related boundaries, nested alternatives, and
       later stages, including otherwise decisive approval/rejection results.
       Explicit valid `PENDING` and empty valid effective-vote sets remain valid.
-- [ ] Validate required evaluation timestamps with the shared portable profile.
+- [x] Validate required evaluation timestamps with the shared portable profile.
       Cover absent/null/empty/wrong types, invalid dates/offsets, excessive
       fractional precision, and valid offset/nanosecond boundary controls.
-- [ ] Implement the Milestone 1 Decision evaluation contract consistently in
+- [x] Implement the Milestone 1 Decision evaluation contract consistently in
       cores and adapters. Test concrete subject/eligibility/association, changed
       facts, missing or malformed expiration context, and exact expiration.
       Preserve separately documented fact-comparison helpers as agreed.
-- [ ] Validate imported lifecycle discriminators, shape, references, and agreed
+- [x] Validate imported lifecycle discriminators, shape, references, and agreed
       duplicate/supersession constraints before reuse. Cover record, withdraw,
       supersede, history reconstruction, and evaluation. Do not drop invalid
       entries or lose valid lifecycle evidence during normalization.
-- [ ] Remove outcome-dependent skipping of required context checks. Exercise
+- [x] Remove outcome-dependent skipping of required context checks. Exercise
       rejection before/after a considered expiring Decision, both without and
       with valid context; test excluded evidence according to the agreed scope.
-- [ ] Correct missing/null/malformed chain and composition values before set
+- [x] Correct missing/null/malformed chain and composition values before set
       membership, casting, or iteration. Include Java missing State/null
       applicability and Python unhashable enum/container cases. Keep portable
       error priority stable across member and stage order.
-- [ ] Test actual record → withdraw/supersede → record → evaluate sequences,
+- [x] Test actual record → withdraw/supersede → record → evaluate sequences,
       valid imported histories, multiple Requirements, and failure preservation
       of both Decision and lifecycle histories in every runtime.
-- [ ] Run focused unit/native/adapter tests, Approval conformance, coverage,
+- [x] Run focused unit/native/adapter tests, Approval conformance, coverage,
       and mutation checks; update API docs, fixture conventions, traceability,
       package examples, and Agentic metadata only where applicable. Do not
       promote conformance-local Approval operations to canonical IDs.
@@ -634,6 +634,98 @@ verification remains pending.
 Completion: findings 1, 5, 6a/6b, 7a/7b, 8, and 9b are resolved. Incomplete
 required evidence cannot produce a successful outcome, and complete valid
 evidence produces the agreed result consistently across runtimes.
+
+### Milestone 5 implementation and verification
+
+The three cores now reject incomplete applicable composition State, unresolved
+applicability, and malformed required timestamps before deriving outcomes.
+Validation follows structure, applicability, context, then state/effectiveness
+priority across branches and stages. Explicit PENDING, inapplicability, and empty
+valid vote sets retain their specified meanings. Python avoids hashing untrusted
+JSON enum values; Java validates values before null-sensitive set membership.
+
+Concrete Decision evaluation validates subject, eligibility, association, facts,
+and exact expiration: TypeScript adds `ApprovalDecision.evaluate`; Java adds the
+five-argument `Approvals.evaluateDecision`; Python corrects `evaluate_decision`.
+The TypeScript facts-only method and legacy Java helper retain separate scopes.
+Every considered expiring Decision requires context before decisive outcomes;
+unrelated and lifecycle-excluded evidence imposes no expiration-context demand.
+
+Python and Java reconstruct lifecycle evidence through core validation of kinds,
+field structure, unique references, and local-order supersession constraints.
+Java exposes `Approvals.importHistory`; adapters use core reconstruction before
+reporting committed error observations. Native returned-history sequences cover
+withdrawal, supersession across Requirements, record, reconstruction, evaluation,
+and preservation on errors. No same-Requirement successor, global graph, registry,
+or timestamp-order rule was added.
+
+Final contract review found that Decision references were still comparing
+`decidedAt` lexically. Five permanent vectors first reproduced offset failures,
+then verified exact-instant lookup, ambiguity, self-supersession, nanosecond
+separation, and original timestamp spelling. Approval now has 272 vectors; the
+manifest has 863, preserving all original 667 vectors. One older TypeScript
+assertion expecting INVALID_CHAIN for malformed applicability was corrected to
+CONDITION_UNRESOLVED under APPROVAL-COMPOSITION-009 and APPROVAL-ERROR-010.
+
+Validation results:
+
+- Build, strict TypeScript (including the new native tests), tools, architecture,
+  documentation, license checks, and local npm/wheel/sdist/JAR consumers pass.
+- All 272 Approval vectors pass on TypeScript, Python 3.12/3.13, and Java, with
+  no unsupported operations or infrastructure errors in this domain.
+- Focused TypeScript Approval tests: 164 pass; scoped coverage is 99.81% lines,
+  100% branches and functions. Python has 176 focused Approval tests; Java's
+  construction/evaluation suite has 118 passing Approval cases, alongside the
+  existing Approval native/vector coverage tests.
+- TypeScript Approval mutation: 98.07%, 1,243 mutants (1,213 killed, six timed out,
+  22 surviving and two uncovered). No critical financial survivor remains.
+  The survivors/uncovered paths are explained below; none were excluded.
+- Python portable critical probes: 35/35 killed on both 3.12 and 3.13; Java:
+  31/31 killed, with independent controls passing. Runtime exceptions were not
+  counted as kills. The list/envelope association probes now remove only required
+  fact presence while retaining other shape checks, so an unrelated malformed
+  fixture cannot turn their result into an infrastructure failure.
+- Python branch-enabled Approval coverage is 90% (395/432 statements covered).
+  Combined Java native/vector coverage is 92.19% lines (496/538) and 83.07%
+  branches (427/514). These are scoped reports; complete coverage/mutation
+  release gates remain pending the other domain fixes.
+- Python adapter tests pass 340/340 on each version; Java adapter tests pass
+  343/343. TypeScript runner tests pass 130/130, core tests pass 1066/1067,
+  and adapter tests pass 19/20; the remaining TypeScript failures are Entity
+  standalone-mapping regression checks. Python full unit tests retain eight
+  Audit/Entity failures and four Entity runtime errors; Java native failures
+  remain in Entity source identity and null evolution preconditions.
+- Eight native Approval probes pass; the Python subset also passes on 3.13.
+- Full manifest: TypeScript 862 PASS/1 FAIL; Python 3.12/3.13 each 851 PASS/8 FAIL/
+  4 INFRASTRUCTURE_ERROR; Java 854 PASS/1 FAIL/8 INFRASTRUCTURE_ERROR. All failures
+  are the recorded Milestone 6 Audit and Milestone 7 Entity defects. Complete
+  unit/adapter suites remain red for those same boundaries; focused Approval
+  results do not establish whole-core conformance.
+
+Remaining Stryker mutations are observationally equivalent at these public
+boundaries: redundant timestamp type guards still feed the strict parser;
+substituting one invalid fallback timestamp for another preserves INVALID_CONTEXT;
+removing a false return from the context predicate leaves a falsy value; the
+Requirement-supersession kind guard is redundant with its exclusive target field;
+an absent-vote sentinel is filtered as ineffective; collecting an undefined
+state-Requirement identifier for a child group cannot match a declared identity;
+optional outcome guards are redundant with validated distinct mapped outcomes;
+an internal quorum applicability field is unused; a rejecting quorum member's
+alternative non-APPROVED/non-PENDING marker preserves the same count and capacity;
+extra actionable data on a nonpending member is ignored; omitted false
+applicability fields and stage filtering/approved-stage markers preserve the same
+public outcome and actionable set. The two uncovered lifecycle serialization
+catch mutants cannot execute for internally validated cloneable events. These
+are not exclusions, and no public evidence/context/history-validation bypass was
+accepted as equivalent.
+
+The 30 reopened Approval rows and six shared timestamp rows are covered. The
+inventory is 417 requirements: 322 COVERED, 12 PARTIAL, 83 NOT DIRECTLY TESTABLE,
+and zero blocking specification gaps. Public API documentation, package examples,
+fixture conventions, traceability, root/package status, and corrective spec notes
+are synchronized. Agentic operation IDs/metadata, CoreDoc normative rules,
+AGENTS.md, and release notes need no change: this milestone adds no canonical
+operation or architectural dependency and does not complete the release.
 
 ## Milestone 6 — Audit redaction policy validation
 

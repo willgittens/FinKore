@@ -25,8 +25,7 @@ const vectors = manifest.suites.flatMap(s => s.vectorFiles).flatMap(file =>
 ).filter(v => v.id.includes('.boundary096.'))
 if (vectors.length === 0) throw new Error('No Core 0.9.6 vectors discovered')
 
-// This dispatch translates representations only. The Decision fixture is tested
-// through the adapter: the existing native facts-only helper has a different contract.
+// This dispatch translates representations only; financial validation belongs in core.
 function invoke(vector: Vector): unknown {
   const i = vector.input
   switch (vector.operation) {
@@ -58,6 +57,7 @@ function invoke(vector: Vector): unknown {
         ...(Object.hasOwn(i, 'relevantFactPaths') ? { relevantFactPaths: i.relevantFactPaths as readonly string[] } : {}),
       }) } finally { expect(history.toJSON()).toEqual(before) }
     }
+    case 'approval.decision.evaluate': return ApprovalDecision.evaluate(i.requirement, i.decision, i.currentSubjectFacts, i.relevantFactPaths as readonly string[] | undefined, i.evaluatedAt)
     case 'approval.decision.record': return ApprovalDecisionHistory.create(i.history).record(i.requirement, i.decision).toJSON()
     case 'entity.import': return FinancialEntity.import(i.definition, i.import)
     default: {
@@ -83,7 +83,7 @@ function invoke(vector: Vector): unknown {
 }
 
 describe('Core 0.9.6 native core boundaries', () => {
-  for (const vector of vectors.filter(v => v.operation !== 'approval.decision.evaluate')) it(vector.id, () => {
+  for (const vector of vectors) it(vector.id, () => {
     const candidate = structuredClone(vector)
     const before = structuredClone(candidate.input)
     try {

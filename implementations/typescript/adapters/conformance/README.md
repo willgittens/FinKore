@@ -9,6 +9,13 @@ rather than copying TypeScript adapter internals as architecture.
 This repository adapter supports Node `>=24.11.0 <25` and is not a standalone
 financial-domain package.
 
+The conformance-local `approval.decision.evaluate` fixture delegates to
+`ApprovalDecision.evaluate`, validating the supplied concrete Requirement,
+association, eligibility, relevant facts, and exact expiration context in core.
+It does not promote an Approval fixture label to a canonical Agentic operation.
+Imported lifecycle validation also belongs to core; failed reconstruction does
+not produce a committed-history observation.
+
 The adapter supports:
 
 - `finkore.money.add`
