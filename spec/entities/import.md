@@ -53,6 +53,15 @@ validation failure uses `FINKORE_ENTITY_VALIDATION_FAILED` under
 
 ## Supplied preconditions
 
+Supplied Source Identity is validated independently of whether mapping evidence
+is also present. Explicit null or another malformed supplied Source Identity
+is not omission and cannot be repaired by taking source values from a valid
+mapping. It fails with `FINKORE_ENTITY_INVALID_IDENTITY` under
+**ENTITY-IMPORT-009**, without a partial import under **ENTITY-IMPORT-008**.
+When both are supplied and valid, their source references agree and the mapping
+identifies the imported Entity under **ENTITY-IMPORT-003** and
+**ENTITY-IMPORT-005**. Valid identity values remain opaque.
+
 For the optional preconditions in **ENTITY-IMPORT-007**, explicit null is
 supplied input, not omission. Null or another malformed expected value cannot
 match a valid State, business revision, or conflict-version identifier; an
@@ -61,6 +70,24 @@ These mismatches use `FINKORE_ENTITY_STATE_CONFLICT` and return no partial
 import under **ENTITY-IMPORT-008**. Malformed observed identity/revision input
 remains subject to **ENTITY-IMPORT-009**. This clarification does not introduce
 a total priority among unrelated Entity failures.
+
+## Core 0.9.6 open contract decision (non-normative)
+
+**Blocking specification gap:** **ENTITY-IMPORT-003** requires mapping when
+Source Identity is supplied, but does not explicitly decide whether a complete
+standalone mapping is accepted when the separate Source Identity is omitted.
+The existing paired fixture does not settle that question. TypeScript's
+pair-required implementation is not normative authority.
+
+Proposed resolution: accept a complete standalone mapping that identifies its
+source system, source identity, mapping identity, and the same Entity type and
+identity as the imported observation. Preserve it without inventing a separate
+Source Identity observation. Supplying neither remains valid; supplying Source
+Identity without mapping or supplying malformed identity/mapping remains
+invalid. Acceptance would resolve an observable boundary and must be recorded
+as a corrective specification decision under **SPEC-FREEZE-001** and
+**SPEC-COMPATIBILITY-012**/**014**, with synchronized implementation, vectors,
+and documentation under **SPEC-FREEZE-002**. This proposal is not yet normative.
 
 ## Core 0.9.3 correction note (non-normative)
 

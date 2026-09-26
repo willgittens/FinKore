@@ -49,7 +49,22 @@ The following JSON is illustrative and non-normative; the normative interchange 
 
 Invalid components fail as defined by **MONEY-ERROR-001** and **MONEY-ERROR-002** in [Money Errors](errors.md).
 
+### Public construction boundaries
+
+The finite-amount and valid-currency obligations apply when a public native
+constructor exposes a Money value, as well as when a portable parser does so.
+A constructor cannot expose NaN, infinity, or an invalid currency as valid
+Money and defer rejection until arithmetic or serialization. Invalid native
+amounts and currencies use the same component errors above. This is an
+application of the existing requirements, not a prescribed constructor shape.
+
+Native exact decimal values need not use the portable plain-string encoding.
+In particular, a supported finite decimal with an exponent, signed zero, or
+trailing zeros remains a valid amount; validation cannot round it through the
+caller's arithmetic context or reject it solely because its native spelling
+would not be a portable decimal string. Native supported types are documented
+by each implementation; unsupported types are not implicitly coerced.
+
 ## Open Questions
 
 - What portable precision, scale, and overflow limits, if any, should a later revision require of implementations?
-

@@ -94,6 +94,37 @@ For example, a manager approves an invoice for `9,000 EUR`. If its amount change
 
 Invalid decisions must use an applicable [Approval Error](errors.md).
 
+## Core 0.9.6 evaluation scope decision (non-normative)
+
+**Blocking contract gap:** the conformance-local `approval.decision.evaluate`
+catalog describes fact effectiveness, while concrete Requirement/Decision
+evaluation requires subject association and eligibility and current validity
+includes expiration. The TypeScript native `evaluateEffectiveness` helper
+compares facts only; it does not take a Requirement or evaluation instant.
+The Python and Java helpers have different scopes. Neither the shared return
+word `EFFECTIVE` nor an adapter's choice of helper settles the fixture contract.
+
+Proposed resolution: the fixture evaluates one concrete Decision against the
+supplied concrete Requirement, current subject facts, declared relevant fact
+paths, and explicit evaluation instant when expiration requires one. Malformed
+Requirement/Decision evidence or a mismatched Requirement association uses
+`FINKORE_APPROVAL_INVALID_DECISION`; a valid eligibility rule excluding the
+Actor uses `FINKORE_APPROVAL_INELIGIBLE_ACTOR`. Missing or malformed required
+time context uses `FINKORE_APPROVAL_INVALID_CONTEXT`; expiration at or before
+the evaluation instant and changed relevant facts yield `INEFFECTIVE`.
+Otherwise the result is `EFFECTIVE`. It makes no lifecycle-history claim when
+no lifecycle history is supplied. Fact comparison preserves legitimate null
+facts and existing explicit relevant-path semantics; it invents no fact schema.
+
+A separately documented native facts-only helper can remain available with
+its existing signature. An adapter delegates the complete fixture evaluation
+to a core API; it cannot add the financial checks itself. This proposal changes
+the previously documented fixture scope and is not yet accepted or normative.
+Its acceptance needs an explicit corrective contract record and synchronized
+tests, implementations, adapter translation, and public documentation under
+SPEC-FREEZE-001/002 and SPEC-COMPATIBILITY-012/014. The label remains
+conformance-local; no canonical `finkore.*` identifier is added or repurposed.
+
 ## Non-Goals
 
 FinKore Core does not define delegation, escalation, approval-definition migration, or complex dependency graphs. Subject-state association is semantic; this document does not require revision identifiers, version numbers, hashes, snapshots, or immutable references.

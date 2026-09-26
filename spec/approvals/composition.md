@@ -190,6 +190,15 @@ Complete validation still applies before this report is returned.
 
 ## Complete Validation
 
+Required evaluation instants use **SPEC-TIMESTAMP-001** through
+**SPEC-TIMESTAMP-006**; mere member presence or a nonempty string is not timestamp
+validation. In the bounded fixture, an applicable observation declaring
+`requiresEvaluationContext: true` requires a valid `context.evaluatedAt`.
+Absent, null, malformed, calendar-invalid, or excessive-precision values use
+`FINKORE_APPROVAL_INVALID_CONTEXT` in category 3 of **APPROVAL-ERROR-010**.
+Valid timestamps retain their original spelling and exact instant semantics.
+This does not require time context on observations that do not require it.
+
 Before any composition outcome is returned, validate all declared structure and
 required observations, including later stages and alternative branches that would
 otherwise be unnecessary to the result. An approved ANY_OF branch cannot hide

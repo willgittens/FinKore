@@ -28,6 +28,17 @@ A redacted representation must preserve the fact that an Audit Event occurred an
 
 ## Representation boundary
 
+Identifying authority in **AUDIT-REDACTION-001** is required before a redacted
+representation or redaction evidence is returned. Missing or malformed
+authority is `FINKORE_AUDIT_REDACTION_INVALID`; the existence of protected
+paths alone does not establish authority. The bounded fixture represents that
+declaration as a nonempty string `policy.authority`; omitted, null, empty,
+numeric, Boolean, array, or object values do not satisfy that representation.
+This does not standardize an authority registry, authenticate the declaration,
+or introduce RBAC. Other policy fields retain their separately declared
+contracts. Invalid policy input cannot partially redact committed history or
+commit a redaction evidence Event.
+
 Core 0.9 release candidate defines the meaning of redaction, including optional
 Actor context under **AUDIT-ACTOR-006**, without standardizing a production
 redacted-value encoding. The representation is implementation-defined and must

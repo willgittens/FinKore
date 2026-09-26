@@ -2,7 +2,10 @@
 
 ## Status
 
-Planned. Milestones 1–9 are unstarted. The readiness review of commit `e300bb1`
+Milestone 1 review is recorded; completion awaits four explicit contract
+decisions described below. Milestones 2–9 are unstarted. No implementation or
+regression expectation has been changed by this review.
+The readiness review of commit `e300bb1`
 (`core-0.9.5`) found additional mandatory behavior and portability gaps despite
 passing existing checks. Core 1.0 promotion is blocked pending this corrective
 work and a fresh review of the resulting candidate.
@@ -17,7 +20,7 @@ This plan is non-normative. [CoreDoc](../coreDoc/core-doc.md) establishes
 foundation obligations; `/spec` defines financial behavior. Any normative
 correction must follow `SPEC-FREEZE-001` through `SPEC-FREEZE-004` and the
 compatibility rules in [Specification Conventions](../../spec/conventions.md).
-Recommendations below are proposals for Milestone 1, not accepted changes to
+Unresolved recommendations below remain proposals, not accepted changes to
 financial semantics. Planning does not implement fixes, create a release tag,
 publish packages, or declare Core 1.0 stable.
 
@@ -86,24 +89,24 @@ separate failure mechanisms; they are planning labels, not requirement IDs.
 
 ## Milestone 1 — Contract decisions and traceability
 
-- [ ] Read the owning Money, Workflow, Approval, Audit, and Entity specifications,
+- [x] Read the owning Money, Workflow, Approval, Audit, and Entity specifications,
       their error catalogs, CoreDoc obligations, conformance conventions and
       traceability, and applicable Agentic descriptors.
-- [ ] Classify every finding as implementation violation, adapter defect,
+- [x] Classify every finding as implementation violation, adapter defect,
       documentation mismatch, or specification gap. Establish the expected
       result, portable error, and applicable priority before writing expectations.
 - [ ] Resolve the decisions below in their owning documents. Record outcomes
       and compatibility assessments here; do not let this plan or a fixture
       become a second specification. Surface unresolved financial semantics
       before implementing dependent behavior.
-- [ ] Preserve requirement, error, operation, and vector identifiers. Apply the
+- [x] Preserve requirement, error, operation, and vector identifiers. Apply the
       compatibility policy to changed API validation, fixture requiredness,
       operation meaning, and primary error selection. Do not label observable
       normative changes as editorial or silently redefine an existing identifier.
-- [ ] Reassess affected traceability claims by public entry point and boundary.
+- [x] Reassess affected traceability claims by public entry point and boundary.
       Mark PARTIAL, UNCOVERED, or BLOCKING SPEC GAP where warranted; existing
       mapped vectors do not prove native or sequence coverage.
-- [ ] Preserve the distinction between concrete Approval Requirements/Decisions
+- [x] Preserve the distinction between concrete Approval Requirements/Decisions
       and lightweight composition observations. Do not require concrete subject
       facts on a composition observation or invent a universal fact schema.
 
@@ -122,6 +125,114 @@ separate failure mechanisms; they are planning labels, not requirement IDs.
 
 Completion: every finding has an agreed owning contract and test boundary, with
 no unresolved semantic decision blocking its implementation milestone.
+
+### Milestone 1 review results
+
+The review read the owning domain/error specifications, CoreDoc, compatibility
+and freeze rules, conformance conventions and mapped vectors, native public APIs,
+adapter dispatch, and applicable Agentic descriptors. The table classifies the
+reported observations by contract; it is not a claim that permanent reproductions
+or implementation fixes have been delivered. Milestone 2 supplies those tests.
+Expected errors below assume otherwise valid input unless a priority is stated.
+
+| Finding | Classification and governing outcome | Permanent test boundary and valid control |
+| --- | --- | --- |
+| 1 | Implementation violation. APPROVAL-COMPOSITION-010/024 and APPROVAL-ERROR-008/010 require `FINKORE_APPROVAL_INVALID_CHAIN` for missing required State, in evidence category 4. | Core and adapter ALL_OF/ANY_OF, nested and later-stage observations; explicit PENDING and quorum-derived pending controls. Pair missing State with higher-priority applicability/context failures. |
+| 2 | Implementation violation and native support documentation gap. MONEY-REPRESENTATION-002, MONEY-CURRENCY-001, MONEY-ERROR-001/002 reject non-finite amounts and invalid currencies before exposing Money. | Python direct `Money(Decimal, currency)` construction: quiet/signaling NaN, both infinities, invalid currency and unsupported types. Finite exponent, signed-zero, negative, trailing-zero, retained-scale, arithmetic and serialization controls under altered Decimal context. |
+| 3 | Implementation violation. WORKFLOW-STATES-001–004 and WORKFLOW-ERROR-001/007 require `FINKORE_WORKFLOW_INVALID_DEFINITION` for an undeclared initial State. | Python/Java direct definition constructors, then create/import/transition. Validate unique States, terminal declarations, endpoints, guards and version structure; valid owned definitions remain usable. JSON parsing alone cannot close this boundary. |
+| 4 | Implementation violation. AUDIT-REDACTION-001 and its error catalog require `FINKORE_AUDIT_REDACTION_INVALID` for absent/malformed authority. | Native and portable redact with absent/null/empty/wrong-type authority; a nonempty authority control preserves Event meaning, relationships, and redaction evidence. Failed redaction leaves history unchanged. No new RBAC or unrelated policy-field requirement. |
+| 5 | Implementation violation. APPROVAL-COMPOSITION-010, APPROVAL-VALIDITY-008, SPEC-TIMESTAMP-001–006 and APPROVAL-ERROR-007/010 require `FINKORE_APPROVAL_INVALID_CONTEXT` for malformed required instants. | Applicable `requiresEvaluationContext: true` with absent/null/calendar-invalid/offset-invalid/excess-precision timestamps; exact valid offsets/nanoseconds and context-not-required controls. Pair each composition priority category. |
+| 6a | Fixture contract/documentation mismatch and blocking scope decision. Concrete Requirement validation is already required by APPROVAL-REQUIREMENT-002/003, but the facts-only fixture description and TypeScript/Java dispatch omit that boundary. Proposed concrete evaluation rejects empty subject with `FINKORE_APPROVAL_INVALID_DECISION`. | After scope acceptance: concrete Requirement subject/eligibility, Decision association, valid eligible/ineligible Actor, and explicit null/scalar/structured facts, directly and through adapters. Keep native facts-only helper tests separate. |
+| 6b | Blocking fixture scope decision, not a proven defect in a documented facts-only native helper. Under the proposed concrete fixture, APPROVAL-VALIDITY-007–009 require expiration handling: expired → INEFFECTIVE; required absent/malformed time → `FINKORE_APPROVAL_INVALID_CONTEXT`. | Exact expiry, just-before/after, equivalent offsets, nanosecond boundaries, no-expiration control. Do not change a native facts-only helper's signature implicitly. |
+| 7a | Implementation violation. APPROVAL-VALIDITY-001/012 and the existing committed-history fixture require meaningful lifecycle kinds; unknown committed discriminator uses `FINKORE_APPROVAL_INVALID_DECISION`. | Core history import/record/lifecycle/evaluate reuse, unknown/null/missing/wrong-type committed kind, paired valid kinds. Redundant request `type` remains ignored by operation-specific lifecycle requests. |
+| 7b | Implementation violation for unresolved withdrawal target under APPROVAL-VALIDITY-004/005/012; `FINKORE_APPROVAL_INVALID_DECISION`. Adjacent supersession constraints need the separate decision below. | Missing/ambiguous withdrawal targets, prior withdrawal/supersession, real returned-history reuse and unchanged histories; valid uniquely resolving target control. Do not infer supersession policy from TypeScript. |
+| 8 | Implementation violation for the reported pair of considered Decisions under APPROVAL-VALIDITY-007/008/012: required absent time → `FINKORE_APPROVAL_INVALID_CONTEXT`, regardless of rejection order. Adjacent stale/excluded evidence requires the considered-set decision below. | Rejection followed/preceded by matching expiring Decision, valid explicit time, unchanged Decisions/lifecycle. Add excluded/stale cases only after their context boundary is settled. |
+| 9a | Implementation violation. MONEY-RATE-001/007 and MONEY-ERROR-001/007 require `FINKORE_MONEY_INVALID_AMOUNT`, not Python TypeError. | Portable Rate kind `{}`, array, null, number, Boolean, unknown string; DECIMAL/PERCENTAGE controls and unchanged Money. Native unsupported types separately; review rounding/allocation under their own existing error codes. |
+| 9b | Implementation violation. Missing chain State → `FINKORE_APPROVAL_INVALID_CHAIN`; null/unresolved composition applicability → `FINKORE_APPROVAL_CONDITION_UNRESOLVED`, subject to APPROVAL-ERROR-010 for compositions. | Java null and Python unhashable containers at native/core and adapter boundaries, all valid enum controls; no fabricated PENDING/inapplicability. Chain validation has no invented total error hierarchy. |
+| 9c | Implementation violation. ENTITY-EVOLUTION-025 and ENTITY-ERROR-001/004 require `FINKORE_ENTITY_STATE_CONFLICT` for supplied null expected source State/Revision against a valid source. | Native overloads and all four portable evolution kinds: omitted/null/malformed/matching/mismatching expectations; no source, relation, currentness, or Audit partial effect. Preserve primary domain errors without inventing a total Entity priority. |
+| 10a | Implementation violation. WORKFLOW-ERROR-005/007 require `FINKORE_WORKFLOW_INVALID_INSTANCE` before simultaneous version mismatch. | Import/transition with malformed observed revision plus mismatched binding; valid-instance mismatch control; expected-revision conflict and invalid-definition controls. Preserve State/binding/revision on failure. |
+| 10b | Implementation violation for explicit null under ENTITY-IMPORT-003/005/008/009: `FINKORE_ENTITY_INVALID_IDENTITY` despite valid mapping. Omitted Source Identity plus standalone mapping is a separate gap. | Core/adapter import presence matrix, opaque source values and unchanged observations, paired valid identity/mapping; standalone-mapping expected result waits for decision. |
+
+### Contract decisions still required
+
+Four decisions remain unresolved. Their proposals are recorded in their owning
+documents, without modifying normative requirements or fixture expectations:
+
+1. [Decision evaluation scope](../../spec/approvals/decisions.md#core-096-evaluation-scope-decision-non-normative):
+   adopt bounded concrete Requirement/Decision evaluation, with association,
+   eligibility, facts and expiration, while retaining a documented native
+   facts-only helper. No lifecycle claim without lifecycle evidence. This
+   corrects the documented fixture scope rather than silently redefining it.
+2. [Currently considered Decisions](../../spec/approvals/validity.md#core-096-boundary-review-non-normative):
+   exclude unrelated and lifecycle-excluded evidence from expiration checks;
+   require explicit time for every remaining matching expiring Decision before
+   aggregation, including fact/revision-stale Decisions. Validate all supplied
+   evidence structurally regardless of exclusion. The stale/context boundary
+   is not settled merely because runtimes currently agree.
+3. [Imported supersession relationships](../../spec/approvals/validity.md#core-096-boundary-review-non-normative):
+   establish declared local sequence, distinct uniquely resolving Decision
+   target/successor references, and rejection of repeat/conflicting targets;
+   keep Requirement references opaque without a registry. The owning proposal
+   explicitly avoids adding successor-effectiveness or general graph policies.
+4. [Standalone mapping](../../spec/entities/import.md#core-096-open-contract-decision-non-normative):
+   accept complete mapping when separate Source Identity is omitted, preserving
+   its source and Entity references without synthesizing a Source Identity.
+   Explicit null/malformed Source Identity stays invalid.
+
+All four require acceptance of their concrete proposals or another specified
+rule. Dependent expectations and fixes are blocked; independent existing-rule
+work has an established contract. Milestone 1 is not complete until these
+decisions are resolved.
+
+### Compatibility and synchronization assessment
+
+Existing-obligation clarifications preserve all requirement, error, operation,
+and vector IDs. Constructor validation applies existing domain invariants to
+native APIs; it preserves valid Decimal inputs and documented constructor
+signatures where practical. Rejection of previously accepted invalid native
+values is an observable API tightening, even though native signatures are not
+the portable compatibility surface. Correct portable error selection replaces
+runtime exceptions or errors contrary to already-specified priority; it does
+not change a previously conforming error mapping. Regression additions for
+these rules fall under SPEC-COMPATIBILITY-013, not new financial policy.
+
+The four unresolved proposals select previously unsettled outcomes or expand a
+documented fixture contract. Acceptance is corrective normative/contract work
+under SPEC-FREEZE-001 and SPEC-COMPATIBILITY-012/014, not editorial work. New
+obligations need distinct stable requirement IDs; existing IDs cannot be reused
+for materially different meaning. Fixture requiredness and expiration scope
+must be explicitly documented. No canonical operation is repurposed; Approval,
+redaction, creation/import and serializer labels remain conformance-local.
+Manifest/vector syntax stays 0.1 because these proposals do not change its
+structural format. No blanket backward-compatibility claim is made for them.
+
+SPEC-FREEZE-002 requires accepted normative corrections to land with affected
+implementation, tests/conformance, public documentation, and Agentic metadata
+in the same change. This Milestone 1 review therefore records open proposals
+instead of activating new normative clauses before dependent work is available.
+Later milestone planning does not waive that synchronization requirement.
+
+CoreDoc review found no proposed foundation change: CORE-001 monetary validity,
+CORE-002 declared control/atomicity, CORE-003.4 redaction authority, CORE-004
+Approval evidence, and CORE-005 identity/presence/context already govern these
+findings. CoreDoc version fields remain unchanged. Agentic descriptors clarify
+existing Workflow priority and Entity evolution presence; no capability is
+added or claimed corrected. README implementation claims, JSDoc, regression
+tests, coverage, and mutation gates change with their owning implementation
+milestones. No code, public API, vector, release note, or AGENTS.md change is
+required merely to record this review; no release verification is claimed.
+
+Traceability now reopens affected requirement rows and distinguishes native
+constructor/sequence boundaries from existing JSON mappings. See the current
+[coverage inventory](../../conformance/traceability.md#core-096-reassessment).
+Historical 0.9.5 completion is preserved as evidence of that release only.
+
+Review validation: `npm run docs:check` and `git diff --check` pass. The
+traceability check retains 413 requirements and 667 vectors, with 263 COVERED,
+62 PARTIAL, 83 NOT DIRECTLY TESTABLE, and five BLOCKING SPEC GAP rows representing
+the four decisions above. Root README and Core 1.0 plan status reflect this
+review. Runtime, coverage, and mutation suites were not rerun for this
+documentation-only milestone; their earlier results are not new verification.
 
 ## Milestone 2 — Permanent regressions and boundary inventory
 

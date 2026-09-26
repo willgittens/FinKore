@@ -136,6 +136,19 @@ additional evolution consequences explicitly; they cannot waive Core's
 identity, history-preservation, or atomicity requirements. Conformance uses the
 bounded history semantics in [its conventions](../../conformance/conventions.md).
 
+### Supplied source preconditions
+
+For **ENTITY-EVOLUTION-025**, omission of an optional expected source State or
+Revision means no corresponding check. Explicit null is supplied input and
+cannot match a valid observed State or Revision. It uses
+`FINKORE_ENTITY_STATE_CONFLICT`, including when the observed Revision is absent;
+it is not a runtime null exception or a reason to skip the precondition.
+Malformed observed identity/revision input retains its own domain error.
+Failure preserves source and related observations, evolution relations,
+currentness, and Audit history under **ENTITY-EVOLUTION-023** and
+**ENTITY-EVOLUTION-033**. No total ordering among unrelated Entity failures is
+introduced by this clarification.
+
 ## Requirements
 
 - **ENTITY-EVOLUTION-001** - Recording Entity evolution MUST NOT change the stable identity of any continuing Financial Entity.

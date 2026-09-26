@@ -72,6 +72,57 @@ when there is no prior withdrawal. These failures use
 These 0.9.4 clarifications apply existing validity and history obligations;
 they introduce no new lifecycle kind, eligibility policy, or portable error.
 
+## Core 0.9.6 boundary review (non-normative)
+
+The following existing obligations do not depend on a new evaluation policy:
+
+- A required evaluation instant is a portable timestamp, not merely a present
+  member. Invalid required context uses `FINKORE_APPROVAL_INVALID_CONTEXT`.
+- Returning a decisive outcome cannot hide missing required context for another
+  currently considered Decision. Reordering equivalent Decisions cannot make
+  the same required context optional.
+- Committed lifecycle history has a meaningful discriminator. An unknown kind
+  is invalid evidence, not a harmless ancillary request member. A withdrawal
+  of a missing or ambiguous Decision cannot become valid merely by importing
+  it as history. Record, lifecycle mutation, and Requirement evaluation all
+  reuse that history; invalid evidence uses `FINKORE_APPROVAL_INVALID_DECISION`
+  and leaves both histories unchanged.
+
+Two adjacent boundaries need explicit contract decisions before new expectations
+are written. They are **blocking specification gaps** for the expanded 0.9.6
+Approval boundary work, rather than permission to copy TypeScript's behavior:
+
+1. **Currently considered Decisions.** APPROVAL-VALIDITY-007 and the expiration
+   invariant do not explicitly settle whether independently stale facts or
+   revision evidence remove a Decision before evaluation context is required.
+   Proposed resolution: validate all supplied Decision/lifecycle structure;
+   exclude unrelated, withdrawn, Decision-superseded, and Requirement-superseded
+   evidence from expiration evaluation. For the remaining matching Decisions,
+   require valid time context for every expiration before aggregating an
+   outcome, including when relevant facts later establish staleness. A native
+   facts-only helper is not this evaluation. This proposal selects a context
+   boundary; agreement among current runtimes would not make it normative.
+2. **Imported supersession relationships.** APPROVAL-VALIDITY-005 explicitly
+   defines withdrawal target checks. APPROVAL-VALIDITY-010/011 do not fully
+   specify self-supersession, repeated/conflicting supersessions, successor
+   resolution, or the ordering used to validate imported lifecycle events.
+   Proposed bounded resolution: validate lifecycle events in their declared
+   local sequence against the supplied committed Decisions and earlier events;
+   Decision targets and successors resolve uniquely, are distinct, and a target
+   cannot already be withdrawn or superseded. Requirement target/successor
+   identifiers are distinct and a target cannot be superseded twice. Requirement
+   identifiers need not resolve through an invented registry absent from the
+   input. Do not add a same-Requirement successor restriction, a successor
+   effectiveness requirement, timestamp sorting, or a general graph/cycle
+   policy without a further governing rule.
+
+Acceptance requires explicit normative clauses for the unsettled boundaries,
+with new stable requirement IDs where new obligations are introduced. It is a
+corrective normative change under SPEC-FREEZE-001, not an editorial update;
+SPEC-FREEZE-002 requires synchronized tests, implementations, and public docs.
+The proposals above are not yet normative. Existing withdrawal and unknown-kind
+regressions may proceed independently, using their already-defined errors.
+
 ## Example
 
 The following JSON is illustrative and non-normative:

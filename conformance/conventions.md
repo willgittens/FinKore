@@ -454,6 +454,64 @@ fail with `FINKORE_ENTITY_STATE_CONFLICT` under
 Malformed observed identities remain invalid identity, not a precondition
 match. No total ordering of unrelated Entity errors is added by these fixtures.
 
+## Core 0.9.6 boundary review
+
+The [Milestone 1 review](../docs/plans/plan-09.6.md) reopens native construction,
+Approval evaluation/history, redaction authority, Workflow priority, and Entity
+presence boundaries. Existing vectors remain evidence only for their exercised
+inputs. The contract proposals linked below are pending; they do not silently
+change the semantic operation catalog or justify new expected results.
+
+- Native Python Money construction accepts its declared exact `Decimal` type;
+  finite exponent forms, signed zero, trailing zeros, and retained scale are
+  valid controls. NaN/infinities and unsupported native amount types use
+  `FINKORE_MONEY_INVALID_AMOUNT`; invalid currency uses
+  `FINKORE_MONEY_INVALID_CURRENCY`. These constructor tests belong in native
+  suites, alongside portable `money.deserialize` and serializer checks.
+  Malformed Rate `kind` containers are JSON-testable and use
+  `FINKORE_MONEY_INVALID_AMOUNT` under MONEY-RATE-007. Neither hashing errors nor
+  adapter coercion satisfy that error contract.
+- Native Workflow definitions are validated before an invalid domain definition
+  is exposed. Exercise direct construction followed by create/import/transition,
+  including valid controls and owned nested declarations. Portable combined
+  failures exercise WORKFLOW-ERROR-007: invalid definition, invalid instance,
+  version mismatch, invalid State, conflict, terminal State, invalid Transition,
+  then guard rejection. A malformed observed revision precedes version mismatch;
+  a malformed expected revision has the separate conflict meaning.
+- Applicable non-quorum composition observations supply explicit valid State;
+  an omitted State cannot become `PENDING`. Quorum state instead derives from
+  member-specific effective Decision evidence under APPROVAL-QUORUM-010; no
+  redundant concrete Requirement or State declaration is added. An empty valid
+  effective-vote set is a valid pending control. Null/malformed applicability
+  remains unresolved, not false or inapplicable. Required timestamp validation
+  uses the complete portable profile and APPROVAL-ERROR-010 category priority,
+  including otherwise decisive alternatives and later stages.
+- `audit.redact` represents authority as a nonempty string `policy.authority`.
+  Missing, null, empty, or wrong-type authority uses
+  `FINKORE_AUDIT_REDACTION_INVALID`, without a partial redaction or evidence
+  append. This is declaration validation, not an authorization service. This
+  review adds no independent policy-ID, policy-lookup, or protected-path rule.
+- Evolution `expectedSourceState` and `expectedSourceRevision` preserve supplied
+  presence. Against a valid source, explicit null/malformed or mismatching
+  expectations use `FINKORE_ENTITY_STATE_CONFLICT`; omitted members skip their
+  checks. Native overloads need presence-aware tests as well as JSON fixtures.
+- Entity import's supplied `sourceIdentity` is an object with nonempty string
+  `sourceSystem` and `sourceId`. Null and wrong types are malformed even with a
+  complete `identityMapping`; they use `FINKORE_ENTITY_INVALID_IDENTITY` and
+  return no partial import. The separate omitted-source/standalone-mapping
+  question remains pending in [Entity Import](../spec/entities/import.md#core-096-open-contract-decision-non-normative).
+
+The disputed Decision fixture scope is recorded in
+[Approval Decisions](../spec/approvals/decisions.md#core-096-evaluation-scope-decision-non-normative).
+The currently-considered and imported-supersession gaps are recorded in
+[Approval Validity](../spec/approvals/validity.md#core-096-boundary-review-non-normative).
+Do not write portable expectations for those unsettled boundaries by selecting
+one implementation as the oracle. Known committed-history discriminator and
+withdrawal-target violations remain independently testable under existing rules.
+Native arrays with holes, cycles, or unsupported objects are not JSON null
+fixtures. Structural input failures are core domain errors; unexpected runtime
+defects remain infrastructure failures and must not be broadly remapped.
+
 ## Runner contract
 
 A language adapter performs:

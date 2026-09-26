@@ -31,6 +31,24 @@ A Workflow instance must not occupy multiple current States simultaneously. A St
 
 Invalid definitions or state values must report an applicable code from [Workflow Errors](errors.md).
 
+### Native definition boundaries
+
+The definition requirements apply equally to public native construction and
+portable parsing. A definition with an undeclared initial State is an invalid
+definition, not a valid definition that can create an instance in that State.
+The same boundary includes unique declared States, terminal declarations,
+Transition endpoints, guards, and version identity declarations under their
+owning requirements. Native construction cannot provide a validation bypass
+when that definition is later used by creation, import, or transition.
+
+Definition failures use `FINKORE_WORKFLOW_INVALID_DEFINITION`. A malformed
+instance, including its revision, instead uses
+`FINKORE_WORKFLOW_INVALID_INSTANCE`, preceding a simultaneous version mismatch
+under **WORKFLOW-ERROR-007**. An undeclared current State in an otherwise
+well-formed instance retains `FINKORE_WORKFLOW_INVALID_STATE`. Constructor
+signatures and validation reuse are implementation choices; accepted declarations
+retain their existing ownership and version-binding guarantees.
+
 ## Open Questions
 
 - How should a future migration specification map active instances and states between Workflow Definition Versions?

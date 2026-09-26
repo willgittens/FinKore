@@ -380,6 +380,10 @@ construction, import, transition, and observation (`WORKFLOW-VERSION-008`).
 Explicit null preconditions are supplied input: null expected State is invalid
 State, and null expected revision is a conflict. Omission alone skips the
 respective check; all combined failures follow `WORKFLOW-ERROR-007`.
+That priority includes invalid definition before invalid instance, and invalid
+instance before version mismatch. A malformed observed revision cannot be hidden
+by a simultaneous binding mismatch. Public native definition construction is
+subject to the same definition validity as portable parsing.
 The [conformance conventions](../conformance/conventions.md) define the guard
 shape and `versionSequence: "DEFAULT"` fixture selector; they do not prescribe
 production serialization or expand the guard language.
@@ -529,6 +533,13 @@ Intrinsic Audit validation precedes evolution correspondence under
 `ENTITY-EVOLUTION-034`. If both fail, preserve Audit's primary error; if only
 correspondence fails, return `FINKORE_ENTITY_INVALID_MUTATION`. This specifies
 validation priority, not permission to commit Audit history early.
+
+For optional expected source State and Revision, explicit null remains supplied
+input and fails with `FINKORE_ENTITY_STATE_CONFLICT` against a valid observation
+under `ENTITY-EVOLUTION-025`. Omission skips that check. Native overloads and
+adapters preserve presence; a null-handling runtime exception is not a portable
+domain failure. Malformed observed identities retain their own domain error,
+and this does not add priority between unrelated Entity failures.
 
 Under `ENTITY-EVOLUTION-035`, unresolved contradictory currentness history
 returns `FINKORE_ENTITY_INVALID_MUTATION`, independently of an expected-currentness
