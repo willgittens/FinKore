@@ -139,14 +139,20 @@ public final class Entities {
    * State/revision/conflict tokens use STATE_CONFLICT after identities validate.
    * Missing observed revision/conflict tokens cannot match an expectation.
    * Failure leaves the supplied observation unchanged.
+   * Complete mapping-only evidence is accepted without synthesizing Source
+   * Identity. Supplied Source Identity must be complete and match its mapping;
+   * null or malformed values fail with INVALID_IDENTITY.
    *
    * @param definition portable Entity definition
    * @param importValue import request observation
    * @return portable import result
-   * @throws FinKoreException with {@link #VALIDATION_FAILED} when a declared
-   *     validator rejects the complete imported Entity
+   * @throws FinKoreException with {@link #INVALID_IDENTITY} for invalid supplied
+   *     source or mapping identity, {@link #STATE_CONFLICT} for mismatched
+   *     expectations, or {@link #VALIDATION_FAILED} when a declared validator
+   *     rejects the complete imported Entity
    * @see <a href="../../../../../../spec/entities/import.md">ENTITY-IMPORT-002</a>
    * @see <a href="../../../../../../spec/entities/import.md">ENTITY-IMPORT-008</a>
+   * @see <a href="../../../../../../spec/entities/import.md">ENTITY-IMPORT-011</a>
    * @see <a href="../../../../../../spec/entities/revisions.md">ENTITY-REVISION-007</a>
    */
   public static Map<String, Object> importEntity(Object definition, Object importValue) {
@@ -158,6 +164,11 @@ public final class Entities {
     Map<String, Object> entity = validateEntity(entityDefinition, input.get("entity"));
     Map<String, Object> mapping = null;
     if (input.containsKey("sourceIdentity")) {
+      if (!(input.get("sourceIdentity") instanceof Map<?, ?> sourceIdentity)) {
+        throw new FinKoreException(INVALID_IDENTITY);
+      }
+      requiredString(sourceIdentity.get("sourceSystem"), INVALID_IDENTITY);
+      requiredString(sourceIdentity.get("sourceId"), INVALID_IDENTITY);
       mapping = identityMapping(input.get("identityMapping"), entity, input.get("sourceIdentity"));
     } else if (input.containsKey("identityMapping")) {
       mapping = identityMapping(input.get("identityMapping"), entity, null);
@@ -214,6 +225,9 @@ public final class Entities {
    * Validates complete source and related business observations and consistent
    * ordered history. Intrinsic Audit validation precedes correspondence checks.
    * Neither Entity nor either supplied history is mutated on success or failure.
+   * Omitted source State/Revision expectations impose no check. Supplied null,
+   * malformed, or unequal expectations fail with STATE_CONFLICT. Currentness
+   * expectations must be Boolean; malformed values use INVALID_MUTATION.
    * The bounded reference policy rejects a second Reversal of a source Revision;
    * this is not a universal reversal restriction for every composing domain.
    *
@@ -246,10 +260,10 @@ public final class Entities {
         throw new FinKoreException(INVALID_MUTATION);
       }
     }
-    if (!input.getOrDefault("expectedSourceState", source.get("state")).equals(source.get("state"))) {
+    if (input.containsKey("expectedSourceState") && !source.get("state").equals(input.get("expectedSourceState"))) {
       throw new FinKoreException(STATE_CONFLICT);
     }
-    if (!input.getOrDefault("expectedSourceRevision", sourceRevision).equals(sourceRevision)) {
+    if (input.containsKey("expectedSourceRevision") && !sourceRevision.equals(input.get("expectedSourceRevision"))) {
       throw new FinKoreException(STATE_CONFLICT);
     }
     String scope = "SUPERSESSION".equals(kind) ? requiredString(input.get("supersessionScope"), INVALID_MUTATION) : null;

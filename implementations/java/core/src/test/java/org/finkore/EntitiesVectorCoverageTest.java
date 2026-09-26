@@ -25,6 +25,7 @@ final class EntitiesVectorCoverageTest {
     EntityEvolutionTest.main(new String[0]);
     ReadinessRegressionTest.entities();
     BoundaryRegressionTest.main(new String[]{"entity."});
+    ConstructionEvaluationRegressionTest.main(new String[]{"entity."});
   }
 
   @Test

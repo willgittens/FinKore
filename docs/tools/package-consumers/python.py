@@ -52,6 +52,12 @@ observed = transition_entity(definition, entity, 'REVIEW')
 imported = import_entity(definition, {'entity': observed})['entity']
 assert transition_entity(definition, imported, 'DONE')['binding'] == binding
 assert entity == before
+mapping = {'mappingId': ' map ', 'sourceSystem': ' legacy ', 'sourceId': ' 001 ', 'entity': {'type': entity['type'], 'id': entity['id']}}
+mapped = import_entity(definition, {'entity': entity, 'identityMapping': mapping})
+assert mapped['identityMapping'] == mapping and 'sourceIdentity' not in mapped
+assert transition_entity(definition, mapped['entity'], 'REVIEW')['binding'] == binding
+for source in (None, [], False, 1, '', {}, {'sourceSystem': ' legacy '}):
+    error('FINKORE_ENTITY_INVALID_IDENTITY', lambda: import_entity(definition, {'entity': entity, 'identityMapping': mapping, 'sourceIdentity': source}))
 error('FINKORE_ENTITY_STATE_CONFLICT', lambda: import_entity(definition, {'entity': entity, 'expectedState': None}))
 error('FINKORE_ENTITY_INVALID_IDENTITY', lambda: import_entity(definition, {'entity': entity, 'currentRevision': {'type': 'invoice', 'id': 'invoice-1', 'revision': 'r1', 'current': True}, 'conflictVersion': 'r1'}))
 error('FINKORE_ENTITY_INVALID_MUTATION', lambda: create_entity({**definition, 'validation': [{'id': 'X', 'path': 'amount', 'rule': 'typo'}]}, 'invoice-2', entity['data']))

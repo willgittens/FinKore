@@ -18,7 +18,9 @@ public final class NativeMutationProbe {
     ConstructionEvaluationRegressionTest.cases().forEach((id, test) -> {
       if (id.startsWith("workflow.") || id.startsWith("approval.boundary096.")
           || id.startsWith("approval.context.") || id.startsWith("approval.sequence.invalid-history-")
-          || id.equals("approval.sequence.supersession-across-requirements")) cases.put(id, test);
+          || id.equals("approval.sequence.supersession-across-requirements")
+          || id.startsWith("entity.boundary096.") || id.equals("entity.sequence.null-precondition")
+          || id.equals("entity.sequence.versioned-import")) cases.put(id, test);
     });
     List<String> rows = new ArrayList<>();
     int passed = 0, failed = 0, infrastructure = 0;

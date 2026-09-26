@@ -47,6 +47,14 @@ public final class FinKoreConsumer {
     Object imported = Entities.importEntity(definition, Map.of("entity", reviewed)).get("entity");
     equal(binding, Entities.transition(definition, imported, "DONE").get("binding"));
     equal("DRAFT", entity.get("state"));
+    Map<String, Object> mapping = Map.of("mappingId", " map ", "sourceSystem", " legacy ", "sourceId", " 001 ", "entity", Map.of("type", entity.get("type"), "id", entity.get("id")));
+    Map<String, Object> mapped = Entities.importEntity(definition, Map.of("entity", entity, "identityMapping", mapping));
+    equal(mapping, mapped.get("identityMapping")); equal(false, mapped.containsKey("sourceIdentity"));
+    equal(binding, Entities.transition(definition, mapped.get("entity"), "REVIEW").get("binding"));
+    for (Object source : new Object[]{null, List.of(), false, 1, "", Map.of(), Map.of("sourceSystem", " legacy ")}) {
+      Map<String, Object> input = new LinkedHashMap<>(Map.of("entity", entity, "identityMapping", mapping)); input.put("sourceIdentity", source);
+      error(Entities.INVALID_IDENTITY, () -> Entities.importEntity(definition, input));
+    }
     for (String expectation : List.of("expectedState", "expectedRevision", "expectedConflictVersion")) {
       Map<String, Object> input = new LinkedHashMap<>(Map.of("entity", entity)); input.put(expectation, null);
       error(Entities.STATE_CONFLICT, () -> Entities.importEntity(definition, input));

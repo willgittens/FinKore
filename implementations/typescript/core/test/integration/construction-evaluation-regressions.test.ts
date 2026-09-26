@@ -83,6 +83,21 @@ function invoke(vector: Vector): unknown {
 }
 
 describe('Core 0.9.6 native core boundaries', () => {
+  for (const vector of vectors.filter(v => v.id.startsWith('entity.boundary096.evolution-') && v.id.endsWith('-control-001'))) {
+    it(`${vector.id}: omission and Boolean currentness`, () => {
+      const omitted = structuredClone(vector)
+      for (const key of ['expectedSourceState', 'expectedSourceRevision', 'expectedSourceCurrent']) delete omitted.input[key]
+      if (vector.expected.status !== 'success') throw new Error('Expected a valid control')
+      expect(invoke(omitted)).toEqual(vector.expected.value)
+      for (const current of [null, '', 1, [], {}]) {
+        const candidate = structuredClone(omitted)
+        candidate.input.expectedSourceCurrent = current
+        const before = structuredClone(candidate)
+        expect(() => invoke(candidate)).toThrowError(expect.objectContaining({ code: 'FINKORE_ENTITY_INVALID_MUTATION' }))
+        expect(candidate).toEqual(before)
+      }
+    })
+  }
   for (const vector of vectors) it(vector.id, () => {
     const candidate = structuredClone(vector)
     const before = structuredClone(candidate.input)
@@ -132,11 +147,22 @@ it('native facts-only helper control retains its separately documented scope', (
 for (const invalid of [false, true]) it(invalid ? 'evolution returned history null precondition' : 'evolution returned history control', () => {
   const vector = vectors.find(v => v.id === 'entity.boundary096.evolution-correct-control-001')!
   const i = structuredClone(vector.input)
-  const source = FinancialEntity.from(i.definition, i.source)
-  const related = FinancialEntity.from(i.definition, i.related)
+  const binding = { definitionIdentity: ' invoice-flow ', definitionVersionIdentity: ' v1 ' }
+  const definition = i.definition as { workflow: object }
+  Object.assign(definition.workflow, binding)
+  const original = i.source as { type: string; id: string; state: string; data: object }
+  const identity = { type: original.type, id: original.id }
+  const identityMapping = { mappingId: ' map:1 ', sourceSystem: ' legacy ', sourceId: ' 0001 ', entity: identity }
+  const imported = FinancialEntity.import(definition, { entity: { ...original, state: 'DRAFT', binding }, identityMapping, currentRevision: i.sourceRevision, historicalRevisions: ['rev-0'], conflictVersion: ' token ' })
+  expect(imported).toEqual({ entity: { ...original, state: 'DRAFT', binding }, identityMapping, currentRevision: { ...identity, revision: i.sourceRevision, current: true }, historicalRevisions: [{ ...identity, revision: 'rev-0', current: false }], conflictVersion: ' token ' })
+  expect(FinancialEntity.import(definition, imported)).toEqual(imported)
+  const source = FinancialEntity.from(definition, imported.entity).mutate({ memo: 'updated' }).transition('ISSUED')
+  const related = FinancialEntity.from(definition, { ...(i.related as object), binding })
   const history = EntityEvolutionHistory.create([])
   const request = { ...i, source, related, audit: { history: i.auditHistory, event: i.auditEvent } } as unknown as Parameters<EntityEvolutionHistory['correct']>[0]
   const first = history.correct(request)
+  expect(first.source).toEqual(source.toJSON())
+  expect(first.source.binding).toEqual(binding)
   const nextHistory = EntityEvolutionHistory.create(first.evolutionHistory.relations)
   const event = structuredClone(i.auditEvent) as { eventId: string; metadata: { entityEvolution: { relationId: string } }; relationships: { relationshipId: string }[] }
   event.eventId = 'second-audit'

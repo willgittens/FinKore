@@ -284,10 +284,12 @@ export interface EntityImportSourceIdentity {
  *
  * This is not a registry lookup or deduplication result; it is preserved
  * caller-supplied continuity evidence.
+ * Complete mapping evidence may be imported without a separate Source Identity.
  *
  * @see ENTITY-IDENTITY-006
  * @see ENTITY-IMPORT-003
  * @see ENTITY-IMPORT-004
+ * @see ENTITY-IMPORT-011
  */
 export interface EntityIdentityMapping extends EntityImportSourceIdentity {
   /** Opaque mapping evidence identity supplied by the caller. */

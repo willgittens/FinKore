@@ -18,6 +18,96 @@ const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const constructionPy = 'test_construction_evaluation_regressions.ConstructionEvaluationRegressions.'
 const probes = [
 {
+  "id": "python-entity096-source-null-omitted",
+  "language": "python",
+  "path": "entities.py",
+  "from": "if \"sourceIdentity\" in import_value:",
+  "to": "if import_value.get(\"sourceIdentity\") is not None:",
+  "target": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_entity_boundary096_import_source_null_001",
+  "control": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_entity_boundary096_import_control_001"
+},
+{
+  "id": "python-entity096-source-type-omitted",
+  "language": "python",
+  "path": "entities.py",
+  "from": "if \"sourceIdentity\" in import_value:",
+  "to": "if isinstance(import_value.get(\"sourceIdentity\"), dict):",
+  "target": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_entity_boundary096_import_source_array_001",
+  "control": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_entity_boundary096_import_control_001"
+},
+{
+  "id": "python-entity096-standalone-mapping-rejected",
+  "language": "python",
+  "path": "entities.py",
+  "from": "elif \"identityMapping\" in import_value:\n        mapping = _identity_mapping(import_value[\"identityMapping\"], entity, None)",
+  "to": "elif \"identityMapping\" in import_value:\n        raise FinKoreError(INVALID_IDENTITY)",
+  "target": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_entity_boundary096_import_standalone_mapping_001",
+  "control": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_entity_boundary096_import_control_001"
+},
+{
+  "id": "python-entity096-evolution-null-state",
+  "language": "python",
+  "path": "entities.py",
+  "from": "if input_value.get(\"expectedSourceState\", source[\"state\"]) != source[\"state\"]:",
+  "to": "if input_value.get(\"expectedSourceState\") is not None and input_value[\"expectedSourceState\"] != source[\"state\"]:",
+  "target": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_entity_boundary096_evolution_correct_expectedsourcestate_null_001",
+  "control": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_entity_boundary096_evolution_correct_control_001"
+},
+{
+  "id": "python-entity096-evolution-null-revision",
+  "language": "python",
+  "path": "entities.py",
+  "from": "if input_value.get(\"expectedSourceRevision\", source_revision) != source_revision:",
+  "to": "if input_value.get(\"expectedSourceRevision\") is not None and input_value[\"expectedSourceRevision\"] != source_revision:",
+  "target": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_entity_boundary096_evolution_correct_expectedsourcerevision_null_001",
+  "control": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_entity_boundary096_evolution_correct_control_001"
+},
+{
+  "id": "java-entity096-source-null-omitted",
+  "language": "java",
+  "path": "Entities.java",
+  "from": "if (input.containsKey(\"sourceIdentity\")) {",
+  "to": "if (input.get(\"sourceIdentity\") != null) {",
+  "target": "entity.boundary096.import-source-null-001",
+  "control": "entity.boundary096.import-control-001"
+},
+{
+  "id": "java-entity096-source-type-omitted",
+  "language": "java",
+  "path": "Entities.java",
+  "from": "if (input.containsKey(\"sourceIdentity\")) {",
+  "to": "if (input.get(\"sourceIdentity\") instanceof Map<?, ?>) {",
+  "target": "entity.boundary096.import-source-array-001",
+  "control": "entity.boundary096.import-control-001"
+},
+{
+  "id": "java-entity096-standalone-mapping-rejected",
+  "language": "java",
+  "path": "Entities.java",
+  "from": "mapping = identityMapping(input.get(\"identityMapping\"), entity, null);",
+  "to": "throw new FinKoreException(INVALID_IDENTITY);",
+  "target": "entity.boundary096.import-standalone-mapping-001",
+  "control": "entity.boundary096.import-control-001"
+},
+{
+  "id": "java-entity096-evolution-null-state",
+  "language": "java",
+  "path": "Entities.java",
+  "from": "if (input.containsKey(\"expectedSourceState\") && !source.get(\"state\").equals(input.get(\"expectedSourceState\"))) {",
+  "to": "if (input.get(\"expectedSourceState\") != null && !source.get(\"state\").equals(input.get(\"expectedSourceState\"))) {",
+  "target": "entity.boundary096.evolution-correct-expectedsourcestate-null-001",
+  "control": "entity.boundary096.evolution-correct-control-001"
+},
+{
+  "id": "java-entity096-evolution-null-revision",
+  "language": "java",
+  "path": "Entities.java",
+  "from": "if (input.containsKey(\"expectedSourceRevision\") && !sourceRevision.equals(input.get(\"expectedSourceRevision\"))) {",
+  "to": "if (input.get(\"expectedSourceRevision\") != null && !sourceRevision.equals(input.get(\"expectedSourceRevision\"))) {",
+  "target": "entity.boundary096.evolution-correct-expectedsourcerevision-null-001",
+  "control": "entity.boundary096.evolution-correct-control-001"
+},
+{
   "id": "python-audit096-authority-preservation",
   "language": "python",
   "path": "audit.py",

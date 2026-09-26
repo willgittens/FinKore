@@ -1,12 +1,23 @@
 # FinKore Python Core
 
-Core 0.9.6 status: [Milestones 3–6](../../../docs/plans/plan-09.6.md)
-verify Money, Workflow, Approval, and Audit corrections. All 272 Approval and
-84 Audit vectors pass on TypeScript, Python 3.12/3.13, and Java. Python redaction
-now rejects missing or malformed authority before returning a view or evidence.
-Native sequence, ownership, coverage, mutation, and installed-consumer checks
-pass for the corrected boundaries. The complete 863-vector suite retains known
-Entity defects; focused results do not establish whole-core conformance.
+Core 0.9.6 status: [Milestones 3–7](../../../docs/plans/plan-09.6.md)
+verify Money, Workflow, Approval, Audit, and Entity corrections. All 863 manifest
+vectors pass on TypeScript, Python 3.12/3.13, and Java, with no unsupported cases
+or infrastructure errors. Native sequence, coverage, mutation, and isolated
+package-consumer checks support the corrected boundaries. Milestone 8 combined
+verification and fresh review, and Milestone 9 release closure, remain pending.
+
+Entity import accepts complete mapping evidence without a separate Source
+Identity, preserving its opaque values without synthesizing Source Identity.
+When supplied, Source Identity must be complete and agree with its mapping;
+null and malformed values raise `FINKORE_ENTITY_INVALID_IDENTITY`. Returned
+versioned observations retain their original Workflow binding for later
+mutation, transition, and evolution. Omitted evolution State/Revision
+expectations impose no check; null, malformed, or unequal expectations raise
+`FINKORE_ENTITY_STATE_CONFLICT` without changing Entities or either history.
+Currentness expectations have a separate Boolean contract: malformed values
+raise `FINKORE_ENTITY_INVALID_MUTATION`, while a Boolean mismatch is a state
+conflict.
 
 `redact_history(history, policy, redaction_event)` requires a nonempty string
 `policy["authority"]` and declared `protectedPaths`. Omitted, null, empty, numeric,

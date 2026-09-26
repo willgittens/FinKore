@@ -24,6 +24,61 @@ if (!validTargets.has(requestedTarget)) {
 
 const pythonMutants = [
 {
+  "id": "python-entity096-source-null-omitted",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "if \"sourceIdentity\" in import_value:",
+  "to": "if import_value.get(\"sourceIdentity\") is not None:",
+  "expectedVector": "entity.boundary096.import-source-null-001",
+  "expectedPassVectors": [
+    "entity.boundary096.import-control-001"
+  ]
+},
+{
+  "id": "python-entity096-source-type-omitted",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "if \"sourceIdentity\" in import_value:",
+  "to": "if isinstance(import_value.get(\"sourceIdentity\"), dict):",
+  "expectedVector": "entity.boundary096.import-source-array-001",
+  "expectedPassVectors": [
+    "entity.boundary096.import-control-001"
+  ]
+},
+{
+  "id": "python-entity096-standalone-mapping-rejected",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "elif \"identityMapping\" in import_value:\n        mapping = _identity_mapping(import_value[\"identityMapping\"], entity, None)",
+  "to": "elif \"identityMapping\" in import_value:\n        raise FinKoreError(INVALID_IDENTITY)",
+  "expectedVector": "entity.boundary096.import-standalone-mapping-001",
+  "expectedPassVectors": [
+    "entity.boundary096.import-control-001"
+  ]
+},
+{
+  "id": "python-entity096-evolution-null-state",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "if input_value.get(\"expectedSourceState\", source[\"state\"]) != source[\"state\"]:",
+  "to": "if input_value.get(\"expectedSourceState\") is not None and input_value[\"expectedSourceState\"] != source[\"state\"]:",
+  "expectedVector": "entity.boundary096.evolution-correct-expectedsourcestate-null-001",
+  "expectedPassVectors": [
+    "entity.boundary096.evolution-correct-control-001"
+  ]
+},
+{
+  "id": "python-entity096-evolution-null-revision",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "if input_value.get(\"expectedSourceRevision\", source_revision) != source_revision:",
+  "to": "if input_value.get(\"expectedSourceRevision\") is not None and input_value[\"expectedSourceRevision\"] != source_revision:",
+  "expectedVector": "entity.boundary096.evolution-correct-expectedsourcerevision-null-001",
+  "expectedPassVectors": [
+    "entity.boundary096.evolution-correct-control-001"
+  ]
+},
+{
   "id": "python-audit096-authority-bypass",
   "suite": "audit",
   "path": "core/src/finkore/audit.py",
@@ -1044,6 +1099,61 @@ const pythonMutants = [
 
 const javaMutants = [
 {
+  "id": "java-entity096-source-null-omitted",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "if (input.containsKey(\"sourceIdentity\")) {",
+  "to": "if (input.get(\"sourceIdentity\") != null) {",
+  "expectedVector": "entity.boundary096.import-source-null-001",
+  "expectedPassVectors": [
+    "entity.boundary096.import-control-001"
+  ]
+},
+{
+  "id": "java-entity096-source-type-omitted",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "if (input.containsKey(\"sourceIdentity\")) {",
+  "to": "if (input.get(\"sourceIdentity\") instanceof Map<?, ?>) {",
+  "expectedVector": "entity.boundary096.import-source-array-001",
+  "expectedPassVectors": [
+    "entity.boundary096.import-control-001"
+  ]
+},
+{
+  "id": "java-entity096-standalone-mapping-rejected",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "mapping = identityMapping(input.get(\"identityMapping\"), entity, null);",
+  "to": "throw new FinKoreException(INVALID_IDENTITY);",
+  "expectedVector": "entity.boundary096.import-standalone-mapping-001",
+  "expectedPassVectors": [
+    "entity.boundary096.import-control-001"
+  ]
+},
+{
+  "id": "java-entity096-evolution-null-state",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "if (input.containsKey(\"expectedSourceState\") && !source.get(\"state\").equals(input.get(\"expectedSourceState\"))) {",
+  "to": "if (input.get(\"expectedSourceState\") != null && !source.get(\"state\").equals(input.get(\"expectedSourceState\"))) {",
+  "expectedVector": "entity.boundary096.evolution-correct-expectedsourcestate-null-001",
+  "expectedPassVectors": [
+    "entity.boundary096.evolution-correct-control-001"
+  ]
+},
+{
+  "id": "java-entity096-evolution-null-revision",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "if (input.containsKey(\"expectedSourceRevision\") && !sourceRevision.equals(input.get(\"expectedSourceRevision\"))) {",
+  "to": "if (input.get(\"expectedSourceRevision\") != null && !sourceRevision.equals(input.get(\"expectedSourceRevision\"))) {",
+  "expectedVector": "entity.boundary096.evolution-correct-expectedsourcerevision-null-001",
+  "expectedPassVectors": [
+    "entity.boundary096.evolution-correct-control-001"
+  ]
+},
+{
   "id": "java-approval096-reference-instant",
   "suite": "approvals",
   "path": "core/src/main/java/org/finkore/Approvals.java",
@@ -2019,6 +2129,7 @@ function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
     cwd: repositoryRoot,
     encoding: 'utf8',
+    maxBuffer: 8 * 1024 * 1024,
     ...options,
   })
   if (result.error !== undefined) throw result.error

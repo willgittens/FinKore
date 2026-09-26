@@ -44,6 +44,10 @@ public final class ConstructionEvaluationRegressionTest {
         String id = (String) v.get("id");
         if (!id.contains(".boundary096.")) continue;
         result.put(id, () -> nativeVector(v));
+        if (id.startsWith("entity.boundary096.evolution-") && id.endsWith("-control-001"))
+          result.put(id + ".presence", () -> evolutionPresence(v));
+        if (id.equals("entity.boundary096.import-control-001"))
+          result.put("entity.native.import-presence", () -> importPresence(v));
         if (id.equals("entity.boundary096.evolution-correct-control-001")) correction = v;
       }
     }
@@ -87,6 +91,7 @@ public final class ConstructionEvaluationRegressionTest {
     Map<String, Object> template = correction;
     result.put("entity.sequence.control", () -> evolutionSequence(template, false));
     result.put("entity.sequence.null-precondition", () -> evolutionSequence(template, true));
+    result.put("entity.sequence.versioned-import", () -> versionedImportSequence(template));
     return result;
   }
 
@@ -219,6 +224,74 @@ public final class ConstructionEvaluationRegressionTest {
       }
     }); } finally { equal(before, malformed); equal(preserved, valid); equal("APPROVED", evaluate(valid)); }
   }
+  private static void evolutionPresence(Map<String, Object> vector) {
+    Map<String, Object> omitted = map(copy(vector));
+    for (String key : List.of("expectedSourceState", "expectedSourceRevision", "expectedSourceCurrent")) map(omitted.get("input")).remove(key);
+    equal(map(vector.get("expected")).get("value"), invoke(omitted));
+    for (Object current : new Object[]{null, "", 1, List.of(), Map.of()}) {
+      Map<String, Object> candidate = map(copy(omitted)); map(candidate.get("input")).put("expectedSourceCurrent", current);
+      Object before = copy(candidate);
+      error(Entities.INVALID_MUTATION, () -> invoke(candidate)); equal(before, candidate);
+    }
+  }
+
+  private static void importPresence(Map<String, Object> vector) {
+    for (String key : List.of("sourceSystem", "sourceId")) {
+      Map<String, Object> candidate = map(copy(vector)); map(map(map(candidate.get("input")).get("import")).get("sourceIdentity")).remove(key);
+      error(Entities.INVALID_IDENTITY, () -> invoke(candidate));
+    }
+    for (Object source : new Object[]{null, Map.of(), Map.of("sourceSystem", "other", "sourceId", "LEGACY-000042")}) for (boolean mapping : List.of(false, true)) {
+      Map<String, Object> candidate = map(copy(vector)); Map<String, Object> imported = map(map(candidate.get("input")).get("import"));
+      imported.put("sourceIdentity", source); if (!mapping) imported.remove("identityMapping");
+      Object before = copy(candidate); error(Entities.INVALID_IDENTITY, () -> invoke(candidate)); equal(before, candidate);
+    }
+    for (String key : List.of("mappingId", "sourceSystem", "sourceId", "entity")) for (boolean standalone : List.of(false, true)) {
+      Map<String, Object> candidate = map(copy(vector)); Map<String, Object> imported = map(map(candidate.get("input")).get("import"));
+      map(imported.get("identityMapping")).remove(key); if (standalone) imported.remove("sourceIdentity");
+      error(Entities.INVALID_IDENTITY, () -> invoke(candidate));
+    }
+    for (String key : List.of("type", "id")) {
+      Map<String, Object> candidate = map(copy(vector)); map(map(map(map(candidate.get("input")).get("import")).get("identityMapping")).get("entity")).put(key, "other");
+      error(Entities.INVALID_IDENTITY, () -> invoke(candidate));
+    }
+  }
+
+  private static void versionedImportSequence(Map<String, Object> vector) {
+    Map<String, Object> request = map(copy(vector.get("input")));
+    Map<String, Object> definition = map(request.get("definition"));
+    Map<String, Object> binding = Map.of("definitionIdentity", " invoice-flow ", "definitionVersionIdentity", " v1 ");
+    map(definition.get("workflow")).putAll(binding);
+    map(request.get("source")).put("binding", copy(binding));
+    map(request.get("related")).put("binding", copy(binding));
+    Map<String, Object> entity = map(copy(request.get("source"))); entity.put("state", "DRAFT");
+    Map<String, Object> identity = Map.of("type", entity.get("type"), "id", entity.get("id"));
+    Map<String, Object> mapping = Map.of("mappingId", " map:1 ", "sourceSystem", " legacy ", "sourceId", " 0001 ", "entity", identity);
+    Map<String, Object> input = Map.of("entity", entity, "identityMapping", mapping, "currentRevision", "rev-1", "historicalRevisions", List.of("rev-0"), "conflictVersion", " token ");
+    Object before = copy(input);
+    Map<String, Object> imported = Entities.importEntity(definition, input);
+    Map<String, Object> current = new LinkedHashMap<>(identity); current.put("revision", "rev-1"); current.put("current", true);
+    Map<String, Object> historical = new LinkedHashMap<>(identity); historical.put("revision", "rev-0"); historical.put("current", false);
+    equal(Map.of("entity", entity, "identityMapping", mapping, "currentRevision", current, "historicalRevisions", List.of(historical), "conflictVersion", " token "), imported);
+    equal(imported, Entities.importEntity(definition, imported));
+    Map<String, Object> updated = Entities.mutate(definition, imported.get("entity"), Map.of("memo", "updated"));
+    request.put("source", Entities.transition(definition, updated, "ISSUED"));
+    request.put("sourceRevision", map(imported.get("currentRevision")).get("revision"));
+    Map<String, Object> first = Entities.evolve("CORRECTION", definition, request);
+    equal(request.get("source"), first.get("source")); equal(binding, map(first.get("source")).get("binding"));
+    request.put("source", first.get("source")); request.put("evolutionHistory", first.get("evolutionHistory"));
+    request.put("auditHistory", map(first.get("auditHistory")).get("history")); request.put("relationId", "second");
+    Map<String, Object> event = map(request.get("auditEvent")); event.put("eventId", "second-event");
+    map(map(event.get("metadata")).get("entityEvolution")).put("relationId", "second");
+    map(list(event.get("relationships")).get(0)).put("relationshipId", "second-evidence");
+    Map<String, Object> invalid = map(copy(request)); invalid.put("expectedSourceRevision", null);
+    Object preserved = copy(invalid);
+    error(Entities.STATE_CONFLICT, () -> Entities.evolve("CORRECTION", definition, invalid)); equal(preserved, invalid);
+    Map<String, Object> second = Entities.evolve("CORRECTION", definition, request);
+    equal(List.of(first.get("relation"), second.get("relation")), map(second.get("evolutionHistory")).get("relations"));
+    List<Object> audit = new ArrayList<>(list(map(first.get("auditHistory")).get("history"))); audit.add(event);
+    equal(audit, map(second.get("auditHistory")).get("history")); equal(before, input);
+  }
+
   private static void evolutionSequence(Map<String, Object> vector, boolean invalid) {
     Map<String, Object> first = map(invoke(map(copy(vector))));
     Map<String, Object> request = map(copy(vector.get("input")));

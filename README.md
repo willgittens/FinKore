@@ -355,22 +355,16 @@ uncompleted process.
 
 A subsequent readiness review found additional native construction, Approval
 evaluation/evidence, Audit authority, and Workflow/Entity validation gaps.
-The [Core 0.9.6 corrective plan](./docs/plans/plan-09.6.md) records the Milestone 1
-contract decisions and Milestone 2 permanent regressions. All 667 original
-vectors still pass across the four runtimes; the expanded 863-vector suite
-exposes the defects and remains red. Milestone 3 fixes Python native Money
-construction and malformed Rate rejection; all 111 Money vectors pass on Python
-3.12/3.13 with focused native, coverage, mutation, and package verification.
-Milestone 4 fixes native Workflow definition construction and instance error
-priority; all 135 Workflow vectors pass on all four runtimes, with focused
-coverage, mutation, ownership, and installed-package checks. Milestone 5 fixes
-Approval evidence, concrete Decision evaluation, lifecycle history validation,
-and required timestamp context. All 272 Approval vectors pass on four runtimes
-with native sequences, coverage, mutation, and package checks. Milestone 6 fixes
-Python redaction authority validation; all 84 Audit vectors pass on four runtimes
-with preserved history, native ownership, coverage, mutation, and package checks.
-Milestones 7–9 remain unstarted; Entity defects keep complete verification red.
-Core 1.0 promotion is blocked pending those corrections and fresh review;
+[Core 0.9.6 Milestones 1–7](./docs/plans/plan-09.6.md) resolve the reviewed
+contracts and implement their permanent regressions and corrections. All 863
+manifest vectors now pass on TypeScript, CPython 3.12/3.13, and Java, including
+all original 667 vectors. Entity imports accept valid standalone mappings and
+reject malformed supplied Source Identity; evolution precondition failures
+preserve Entities, relation history, and Audit history. Native sequences reuse
+returned versioned imports and evolution results, with coverage, targeted
+mutation, and isolated package-consumer verification.
+Milestones 8–9 (combined verification, fresh review, and release closure) remain
+unstarted. Core 1.0 promotion remains blocked pending those gates;
 `core-0.9.5` remains the latest completed corrective snapshot.
 
 - Money

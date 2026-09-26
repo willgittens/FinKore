@@ -132,7 +132,7 @@ function validateSourceIdentity(input: unknown): EntityImportSourceIdentity {
   }
 }
 
-function validateIdentityMapping(input: unknown, sourceIdentity: EntityImportSourceIdentity, entity: SerializedFinancialEntity): EntityIdentityMapping {
+function validateIdentityMapping(input: unknown, sourceIdentity: EntityImportSourceIdentity | undefined, entity: SerializedFinancialEntity): EntityIdentityMapping {
   if (!isPlainRecord(input)) throw new InvalidEntityIdentityError()
   const mappedEntity = input.entity
   if (!isPlainRecord(mappedEntity)) throw new InvalidEntityIdentityError()
@@ -146,8 +146,8 @@ function validateIdentityMapping(input: unknown, sourceIdentity: EntityImportSou
     },
   }
   if (
-    mapping.sourceSystem !== sourceIdentity.sourceSystem ||
-    mapping.sourceId !== sourceIdentity.sourceId ||
+    (sourceIdentity !== undefined && (mapping.sourceSystem !== sourceIdentity.sourceSystem ||
+      mapping.sourceId !== sourceIdentity.sourceId)) ||
     mapping.entity.type !== entity.type ||
     mapping.entity.id !== entity.id
   ) {
@@ -208,9 +208,9 @@ function validateEntityImportResult(definition: EntityDefinition, input: unknown
 
   const sourceIdentity =
     input.sourceIdentity === undefined ? undefined : validateSourceIdentity(input.sourceIdentity)
-  if ((sourceIdentity === undefined) !== (input.identityMapping === undefined)) throw new InvalidEntityIdentityError()
+  if (sourceIdentity !== undefined && input.identityMapping === undefined) throw new InvalidEntityIdentityError()
   const identityMapping =
-    sourceIdentity === undefined ? undefined : validateIdentityMapping(input.identityMapping, sourceIdentity, entity)
+    input.identityMapping === undefined ? undefined : validateIdentityMapping(input.identityMapping, sourceIdentity, entity)
 
   assertExpected(entity.state, input.expectedState)
   assertExpected(currentRevision?.revision, input.expectedRevision)
@@ -426,6 +426,10 @@ export class FinancialEntity {
    * This bounded import API rejects equal current-revision/conflict tokens and
    * has no composing-domain shared-meaning declaration mechanism.
    * The original Workflow binding is required for a versioned observation.
+   * Complete mapping evidence may be supplied without a separate Source Identity;
+   * no Source Identity observation is synthesized. A supplied Source Identity
+   * must be valid and accompanied by matching mapping evidence. Explicit null
+   * is malformed Source Identity.
    *
    * @param definitionInput - Candidate composing-domain Entity definition.
    * @param importInput - Existing Entity import observation and optional
@@ -458,6 +462,7 @@ export class FinancialEntity {
    * @see ENTITY-IMPORT-006
    * @see ENTITY-IMPORT-007
    * @see ENTITY-IMPORT-008
+   * @see ENTITY-IMPORT-011
    * @see ENTITY-VALIDATION-004
    */
   static import(definitionInput: unknown, importInput: unknown): EntityImportResult {

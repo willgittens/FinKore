@@ -8,12 +8,11 @@ protections including [Core 0.9.4](plan-09.4.md). A subsequent readiness review
 found additional native construction, Approval evaluation/evidence, Audit
 authority, and Workflow/Entity validation gaps despite passing existing checks.
 Stable promotion is blocked on the [Core 0.9.6 corrective
-plan](plan-09.6.md), whose contract decisions and permanent regressions are
-complete and whose Money, Workflow, Approval, and Audit corrections are verified, but whose
-complete suites remain red, its subsequent corrections and fresh boundary
-review, and the milestones below.
-Passing finite conformance and native tests does not establish exhaustive
-correctness or complete the stable-release review.
+plan](plan-09.6.md). Milestones 1–7 implement and verify the reviewed contract,
+construction, evaluation, Audit, and Entity corrections; all 863 vectors pass
+on all four runtimes. Combined verification, fresh review, and release closure
+remain pending in Milestones 8–9. Earlier passing vectors do not waive those
+gates.
 
 The local annotated `core-0.9.5` tag identifies the latest corrective snapshot.
 No remote tag or package publication is part of this local completion. Core

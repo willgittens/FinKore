@@ -586,6 +586,29 @@ describe('Financial Entity validation', () => {
 })
 
 describe('Financial Entity import', () => {
+  it('reuses mapping-only versioned imports without synthesizing Source Identity', () => {
+    const binding = { definitionIdentity: 'invoice flow ', definitionVersionIdentity: ' v1' }
+    const definition = { ...invoiceDefinition, workflow: { ...invoiceDefinition.workflow, ...binding } }
+    const entity = FinancialEntity.create(definition, 'inv-42', invoiceData).toJSON()
+    const identityMapping = { mappingId: ' map:42 ', sourceSystem: ' legacy ', sourceId: ' 00042 ', entity: { type: entity.type, id: entity.id } }
+    const input = { entity, identityMapping, currentRevision: 'rev-2', historicalRevisions: ['rev-1'], conflictVersion: 'token-3' }
+    const before = structuredClone(input)
+    const imported = FinancialEntity.import(definition, input)
+    expect(imported).toEqual({ entity, identityMapping, currentRevision: { ...identityMapping.entity, revision: 'rev-2', current: true }, historicalRevisions: [{ ...identityMapping.entity, revision: 'rev-1', current: false }], conflictVersion: 'token-3' })
+    expect(FinancialEntity.import(definition, imported)).toEqual(imported)
+    expect(FinancialEntity.from(definition, imported.entity).mutate({ memo: 'updated' }).transition('SUBMITTED').toJSON()).toEqual({ ...entity, state: 'SUBMITTED', data: { ...invoiceData, memo: 'updated' } })
+    expect(input).toEqual(before)
+    for (const sourceIdentity of [null, [], '', 1, false, {}, { sourceSystem: ' legacy ' }, { sourceId: ' 00042 ' }, { sourceSystem: 'other', sourceId: ' 00042 ' }]) {
+      const invalid = { ...input, sourceIdentity }
+      const preserved = structuredClone(invalid)
+      expect(() => FinancialEntity.import(definition, invalid)).toThrowError(expect.objectContaining({ code: 'FINKORE_ENTITY_INVALID_IDENTITY' }))
+      expect(invalid).toEqual(preserved)
+    }
+    for (const identityMapping of [null, {}, { ...input.identityMapping, mappingId: '' }, { ...input.identityMapping, sourceSystem: '' }, { ...input.identityMapping, sourceId: '' }, { ...input.identityMapping, entity: { type: 'other', id: entity.id } }, { ...input.identityMapping, entity: { type: entity.type, id: 'other' } }]) {
+      expect(() => FinancialEntity.import(definition, { ...input, identityMapping })).toThrowError(expect.objectContaining({ code: 'FINKORE_ENTITY_INVALID_IDENTITY' }))
+    }
+  })
+
   it('applies declared positive-money and cross-field validators without mutating source input', () => {
     const definition = {
       ...invoiceDefinition,
@@ -702,18 +725,6 @@ describe('Financial Entity import', () => {
           sourceSystem: 'legacy-ar',
           sourceId: 'LEGACY-000042',
           entity: { type: 'invoice', id: 'LEGACY-000042' },
-        },
-      }),
-    ).toThrow(InvalidEntityIdentityError)
-
-    expect(() =>
-      FinancialEntity.import(invoiceDefinition, {
-        entity: { type: 'invoice', id: 'inv-42', state: 'SUBMITTED', data: invoiceData },
-        identityMapping: {
-          mappingId: 'map-legacy-ar-42',
-          sourceSystem: 'legacy-ar',
-          sourceId: 'LEGACY-000042',
-          entity: { type: 'invoice', id: 'inv-42' },
         },
       }),
     ).toThrow(InvalidEntityIdentityError)

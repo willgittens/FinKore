@@ -215,12 +215,16 @@ def import_entity(definition: Any, import_value: Any) -> dict[str, Any]:
     it exposes no shared-meaning declaration. Omitted expectations impose no
     check; supplied null, missing observed, and nonmatching expected identities
     use STATE_CONFLICT. No input is mutated on success or failure.
+    Complete mapping-only evidence is valid without synthesizing Source Identity.
+    A supplied Source Identity must be a complete object with matching mapping;
+    explicit null and malformed values use INVALID_IDENTITY.
 
     @see ENTITY-IMPORT-007
     @see ENTITY-VALIDATION-009
     @see WORKFLOW-VERSION-008/010
     @see ENTITY-IMPORT-002
     @see ENTITY-IMPORT-008
+    @see ENTITY-IMPORT-011
     @see ENTITY-VALIDATION-004
     @see ENTITY-REVISION-007
     """
@@ -231,6 +235,9 @@ def import_entity(definition: Any, import_value: Any) -> dict[str, Any]:
     entity = validate_entity(entity_definition, import_value.get("entity"))
     _validate_entity_data(entity_definition, entity)
     if "sourceIdentity" in import_value:
+        source_identity = import_value["sourceIdentity"]
+        if not isinstance(source_identity, dict) or not _opaque(source_identity.get("sourceSystem")) or not _opaque(source_identity.get("sourceId")):
+            raise FinKoreError(INVALID_IDENTITY)
         mapping = _identity_mapping(import_value.get("identityMapping"), entity, import_value["sourceIdentity"])
     elif "identityMapping" in import_value:
         mapping = _identity_mapping(import_value["identityMapping"], entity, None)

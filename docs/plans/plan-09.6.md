@@ -2,10 +2,10 @@
 
 ## Status
 
-Milestones 1–6 are complete: accepted contracts, permanent regressions, Money,
-Workflow, Approval, and Audit corrections are implemented and verified.
-Milestones 7–9 are unstarted. Entity retains recorded defects, so complete
-suites remain red until its owning fixes land.
+Milestones 1–7 are complete: accepted contracts, permanent regressions, Money,
+Workflow, Approval, Audit, and Entity corrections are implemented and verified.
+All 863 vectors pass on TypeScript, Python 3.12/3.13, and Java. Milestones 8–9
+(combined verification, fresh review, and release closure) remain unstarted.
 The readiness review of commit `e300bb1`
 (`core-0.9.5`) found additional mandatory behavior and portability gaps despite
 passing existing checks. Core 1.0 promotion is blocked pending this corrective
@@ -802,29 +802,107 @@ release status are unchanged. Milestone 7 and the final release gates remain ope
 
 ## Milestone 7 — Entity evolution and import presence
 
-- [ ] Replace Java null-sensitive evolution precondition checks with explicit
+- [x] Replace Java null-sensitive evolution precondition checks with explicit
       presence-aware validation. Cover expected source State and Revision
       omission, null, malformed, matching, and mismatching values across
       Correction, Reversal, Void, and Supersession. Review currentness under
       its own Boolean/error contract rather than assigning it a string rule.
-- [ ] Return `FINKORE_ENTITY_STATE_CONFLICT` for the reviewed State/Revision
+- [x] Return `FINKORE_ENTITY_STATE_CONFLICT` for the reviewed State/Revision
       mismatches. Failure must preserve source/related Entities, relation
       history, and Audit history, with no partial result or appended evidence.
-- [ ] Reject explicit null and other malformed Source Identity in Python/Java
+- [x] Reject explicit null and other malformed Source Identity in Python/Java
       imports even when mapping exists. Cover source/mapping presence pairs,
       incomplete fields, source mismatches, and mapped Entity mismatches.
       Retain the separately agreed valid omission/mapping-only behavior.
-- [ ] Preserve opaque mapping values, stable identity, current/historical
+- [x] Preserve opaque mapping values, stable identity, current/historical
       revisions, conflict tokens, and versioned Workflow bindings. Retain 0.9.5
       import-precondition and validator-declaration protections.
-- [ ] Exercise returned Entity import/evolution observations in later valid
+- [x] Exercise returned Entity import/evolution observations in later valid
       operations, including versioned Workflows. Confirm adapters expose core
       errors without repairing observations or crashing while normalizing them.
-- [ ] Run Entity native/unit/adapter and cross-domain conformance tests,
+- [x] Run Entity native/unit/adapter and cross-domain conformance tests,
       coverage, and mutation checks; update public docs and affected examples.
 
 Completion: findings 9c and 10b fail atomically with portable errors, while
 valid import and evolution sequences remain usable across runtimes.
+
+### Milestone 7 implementation and verification
+
+Java evolution now checks expected source State/Revision presence and compares
+against the validated observed value. Supplied null uses STATE_CONFLICT instead
+of throwing NullPointerException. Python and Java validate supplied Source
+Identity before consuming mapping evidence. TypeScript accepts complete
+standalone mapping under ENTITY-IMPORT-011 without synthesizing Source Identity.
+No adapter financial logic or operation identifier was added.
+
+The pre-fix native suites reproduced Python's one failure/four runtime errors,
+Java's ten Entity failures (including returned-history reuse), and TypeScript's
+standalone-mapping rejection. An older TypeScript assertion requiring that valid
+mapping to fail contradicted the Milestone 1 accepted requirement; it is replaced
+by exact preservation and subsequent-use assertions, not removed as a workaround.
+All 37 Milestone 2 Entity vectors remain unchanged.
+
+Native tests exercise source/mapping presence pairs, incomplete source/mapping
+fields, source and mapped-Entity disagreement, omitted source expectations for
+all four evolution kinds, and malformed currentness under its Boolean contract.
+Versioned mapping-only import → reimport → mutation → transition → Correction
+sequences preserve opaque values, revisions, conflict tokens, and binding.
+Returned evolution and Audit histories feed the next request; a null Revision
+expectation fails without mutation, and the valid retry appends both histories.
+Existing validator, import-precondition, and ownership protections remain active.
+
+Verification results:
+
+- Build, strict TypeScript (including changed tests), Python compilation on both
+  versions, and Java warning-as-error compilation pass.
+- Full TypeScript discovery passes 1,072 core, 130 runner, and 20 adapter tests.
+  Python 3.12/3.13 each pass 445 unit tests and 340 adapter tests. Java passes all
+  native entry points, including 232 construction/evaluation cases, and 343
+  adapter tests.
+- All 863 vectors pass on TypeScript, Python 3.12, Python 3.13, and Java:
+  12 Shared, 111 Money, 135 Workflow, 84 Audit, 272 Approval, and 249 Entity cases.
+  There are no FAIL, UNSUPPORTED, or INFRASTRUCTURE_ERROR results.
+- TypeScript Entity coverage is 100% lines/functions, 99.71% statements, and
+  99.65% branches. Python Entity native-plus-vector branch-enabled coverage is
+  91%. Java Entity native/vector coverage is 92.40% lines, 80.96% branches,
+  92.36% instructions, and 100% methods.
+- TypeScript `entity.ts` Stryker kills 402/408 mutants (98.53%), with no uncovered
+  mutants. The six survivors are observationally equivalent: the conflict-token
+  presence guard is redundant beside string equality; two positive-Money shape
+  guards are backed by Money deserialization; two internal predicate catches
+  return false or undefined, both rejected by their sole truthiness caller; and
+  the remaining mutant changes only non-portable diagnostic text. No meaningful
+  financial logic was excluded or suppressed.
+- Sixteen Entity native mutation probes pass across languages, including ten new
+  source presence/type, standalone-mapping, and null-precondition probes. All
+  six Python Entity native probes also pass on 3.13. Every probe requires its
+  named regression to fail and an independent valid control to pass.
+- Updated isolated npm, Python wheel/sdist (3.12/3.13), and Java JAR consumers
+  pass mapping-only imports, malformed Source Identity rejection, and retained
+  versioned Workflow reuse. Package versions and publication status are unchanged.
+- Tool tests, architecture boundaries, documentation links, requirement
+  traceability, license validation, and diff whitespace checks pass.
+
+The portable mutation tool's default child-output buffer was too small for the
+expanded Entity failure observations. Its buffer is now 8 MiB, matching the
+native tool; runtime failures still cannot count as killed mutants. The full
+Entity portable critical reruns pass: 36/36 Python and 36/36 Java mutants
+are killed, including all ten new probes. Both unmodified Entity baselines pass;
+each new probe has its named regression failure and passing paired control.
+There are no critical survivors.
+
+Findings 9c and 10b are corrected and verified. Traceability closes the nine
+remaining Entity rows: 334 COVERED, 0 PARTIAL, and 83 NOT DIRECTLY TESTABLE across
+417 requirements. This closes Milestone 7, not the combined release gate.
+
+Completion synchronization: unit/native tests, mutation probes, public API docs,
+package READMEs, executable consumer examples, root/conformance status, and the
+import correction note are updated. Existing conformance vectors already cover
+the normative changes; no new financial rule, identifier, or vector expectation
+was introduced here. Agentic metadata already states presence/error and atomic
+failure semantics, so it needs no change. CoreDoc and AGENTS.md obligations and
+architecture remain unchanged. Release notes remain maintainer-owned and no
+release action is performed. Milestones 8–9 remain unstarted.
 
 ## Milestone 8 — Mutation protection, full verification, and fresh review
 

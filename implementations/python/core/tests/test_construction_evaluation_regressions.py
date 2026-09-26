@@ -11,7 +11,7 @@ from finkore.workflow import WorkflowTransition, create_workflow, import_workflo
 from finkore.approvals import (evaluate_composition, evaluate_chain, evaluate_decision,
     evaluate_requirement, record_decision, withdraw_decision, supersede_decision, supersede_requirement)
 from finkore.audit import redact_history
-from finkore.entities import import_entity, evolve_entity
+from finkore.entities import import_entity, evolve_entity, mutate_entity, transition_entity
 
 ROOT = Path(__file__).resolve().parents[4]
 KINDS = {'correct': 'CORRECTION', 'reverse': 'REVERSAL', 'void': 'VOID', 'supersede': 'SUPERSESSION'}
@@ -196,6 +196,80 @@ class ConstructionEvaluationRegressions(unittest.TestCase):
         finally:
             self.assertEqual(request, before)
             self.assertEqual(first, preserved)
+
+    def test_entity_versioned_import_sequence(self):
+        vector = deepcopy(next(v for v in vectors() if v['id'] == 'entity.boundary096.evolution-correct-control-001'))
+        request = vector['input']
+        binding = {'definitionIdentity': ' invoice-flow ', 'definitionVersionIdentity': ' v1 '}
+        request['definition']['workflow'].update(binding)
+        request['source']['binding'] = deepcopy(binding)
+        request['related']['binding'] = deepcopy(binding)
+        entity = {**request['source'], 'state': 'DRAFT'}
+        mapping = {'mappingId': ' map:1 ', 'sourceSystem': ' legacy ', 'sourceId': ' 0001 ', 'entity': {'type': entity['type'], 'id': entity['id']}}
+        input_value = {'entity': entity, 'identityMapping': mapping, 'currentRevision': request['sourceRevision'], 'historicalRevisions': ['rev-0'], 'conflictVersion': ' token '}
+        before = deepcopy(input_value)
+        imported = import_entity(request['definition'], input_value)
+        self.assertEqual(imported, {**input_value, 'currentRevision': {**mapping['entity'], 'revision': 'rev-1', 'current': True}, 'historicalRevisions': [{**mapping['entity'], 'revision': 'rev-0', 'current': False}]})
+        self.assertEqual(import_entity(request['definition'], imported), imported)
+        updated = mutate_entity(request['definition'], imported['entity'], {'memo': 'updated'})
+        request['source'] = transition_entity(request['definition'], updated, 'ISSUED')
+        request['sourceRevision'] = imported['currentRevision']['revision']
+        first = evolve_entity('CORRECTION', request['definition'], request)
+        self.assertEqual(first['source'], request['source'])
+        self.assertEqual(first['source']['binding'], binding)
+        request['source'] = first['source']
+        request['evolutionHistory'] = first['evolutionHistory']
+        request['auditHistory'] = first['auditHistory']['history']
+        request['relationId'] = 'second'
+        request['auditEvent']['eventId'] = 'second-event'
+        request['auditEvent']['metadata']['entityEvolution']['relationId'] = 'second'
+        request['auditEvent']['relationships'][0]['relationshipId'] = 'second-evidence'
+        preserved = deepcopy(request)
+        self.portable_error('FINKORE_ENTITY_STATE_CONFLICT', lambda: evolve_entity('CORRECTION', request['definition'], {**request, 'expectedSourceRevision': None}))
+        self.assertEqual(request, preserved)
+        second = evolve_entity('CORRECTION', request['definition'], request)
+        self.assertEqual(second['evolutionHistory']['relations'], [first['relation'], second['relation']])
+        self.assertEqual(second['auditHistory']['history'], first['auditHistory']['history'] + [request['auditEvent']])
+        self.assertEqual(input_value, before)
+
+    def test_entity_presence_boundaries(self):
+        for template in vectors():
+            if template['id'].startswith('entity.boundary096.evolution-') and template['id'].endswith('-control-001'):
+                omitted = deepcopy(template)
+                for key in ('expectedSourceState', 'expectedSourceRevision', 'expectedSourceCurrent'):
+                    omitted['input'].pop(key, None)
+                self.assertEqual(invoke(omitted), template['expected']['value'])
+                for current in (None, '', 1, [], {}):
+                    candidate = deepcopy(omitted)
+                    candidate['input']['expectedSourceCurrent'] = current
+                    before = deepcopy(candidate)
+                    self.portable_error('FINKORE_ENTITY_INVALID_MUTATION', lambda: invoke(candidate))
+                    self.assertEqual(candidate, before)
+        template = next(v for v in vectors() if v['id'] == 'entity.boundary096.import-control-001')
+        for missing in ('sourceSystem', 'sourceId'):
+            candidate = deepcopy(template)
+            del candidate['input']['import']['sourceIdentity'][missing]
+            self.portable_error('FINKORE_ENTITY_INVALID_IDENTITY', lambda: invoke(candidate))
+        for source in (None, {}, {'sourceSystem': 'other', 'sourceId': 'LEGACY-000042'}):
+            for has_mapping in (False, True):
+                candidate = deepcopy(template)
+                candidate['input']['import']['sourceIdentity'] = source
+                if not has_mapping:
+                    del candidate['input']['import']['identityMapping']
+                before = deepcopy(candidate)
+                self.portable_error('FINKORE_ENTITY_INVALID_IDENTITY', lambda: invoke(candidate))
+                self.assertEqual(candidate, before)
+        for key in ('mappingId', 'sourceSystem', 'sourceId', 'entity'):
+            for standalone in (False, True):
+                candidate = deepcopy(template)
+                del candidate['input']['import']['identityMapping'][key]
+                if standalone:
+                    del candidate['input']['import']['sourceIdentity']
+                self.portable_error('FINKORE_ENTITY_INVALID_IDENTITY', lambda: invoke(candidate))
+        for key in ('type', 'id'):
+            candidate = deepcopy(template)
+            candidate['input']['import']['identityMapping']['entity'][key] = 'other'
+            self.portable_error('FINKORE_ENTITY_INVALID_IDENTITY', lambda: invoke(candidate))
 
 
 def native_vector_test(vector):

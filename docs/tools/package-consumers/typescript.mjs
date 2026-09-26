@@ -25,6 +25,14 @@ error('FINKORE_ENTITY_VALIDATION_FAILED', () => entity.mutate({ amount: { amount
 assert.deepEqual(entity.toJSON(), before)
 const imported = FinancialEntity.import(entity.definition, { entity: entity.transition('REVIEW').toJSON() })
 assert.deepEqual(FinancialEntity.from(entity.definition, imported.entity).transition('DONE').toJSON().binding, binding)
+const mapping = { mappingId: ' map ', sourceSystem: ' legacy ', sourceId: ' 001 ', entity: { type: before.type, id: before.id } }
+const mapped = FinancialEntity.import(entity.definition, { entity: before, identityMapping: mapping })
+assert.deepEqual(mapped.identityMapping, mapping)
+assert.equal(Object.hasOwn(mapped, 'sourceIdentity'), false)
+assert.deepEqual(FinancialEntity.from(entity.definition, mapped.entity).transition('REVIEW').toJSON().binding, binding)
+for (const sourceIdentity of [null, [], false, 1, '', {}, { sourceSystem: ' legacy ' }]) {
+  error('FINKORE_ENTITY_INVALID_IDENTITY', () => FinancialEntity.import(entity.definition, { entity: before, identityMapping: mapping, sourceIdentity }))
+}
 error('FINKORE_ENTITY_STATE_CONFLICT', () => FinancialEntity.import(entity.definition, { entity: before, expectedState: null }))
 const workflow = Workflow.create(entity.definition.workflow)
 for (const revision of [null, '', [], {}, false, 7]) {
