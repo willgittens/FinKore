@@ -48,12 +48,14 @@ promotion process. Canonical Agentic operation promotion and unpublished
 reference-package status are unchanged.
 
 The [Core 0.9.6 corrective plan](../docs/plans/plan-09.6.md) expands the current
-manifest to 863 vectors. Milestones 3–5 verify Money, Workflow, and Approval
-corrections. All 272 Approval vectors pass on TypeScript, Python 3.12/3.13, and
+manifest to 863 vectors. Milestones 3–6 verify Money, Workflow, Approval, and
+Audit corrections. All 272 Approval vectors pass on TypeScript, Python 3.12/3.13, and
 Java, including concrete Decision evaluation, complete required context, imported
 lifecycle validation, and exact-instant reference resolution. The full suite
-retains known Audit and Entity failures. Current [traceability](traceability.md)
-is 322 COVERED, 12 PARTIAL, and 83 NOT DIRECTLY TESTABLE, with no blocking gaps.
+retains known Entity failures. All 84 Audit vectors pass after Python redaction
+authority validation, with native preservation and ownership checks. Current
+[traceability](traceability.md) is 325 COVERED, 9 PARTIAL, and 83 NOT DIRECTLY
+TESTABLE, with no blocking gaps.
 
 For FinKore Core 0.9 release candidate, [manifest.json](manifest.json) is the
 frozen release-candidate manifest and `finkoreConformance` remains `0.1`. This

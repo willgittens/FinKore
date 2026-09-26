@@ -18,6 +18,33 @@ const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const constructionPy = 'test_construction_evaluation_regressions.ConstructionEvaluationRegressions.'
 const probes = [
 {
+  "id": "python-audit096-authority-preservation",
+  "language": "python",
+  "path": "audit.py",
+  "from": "if not _opaque(policy.get(\"authority\")):",
+  "to": "if False:",
+  "target": "test_audit_redaction_policy.AuditRedactionPolicyTests.test_invalid_authority_preserves_history_policy_and_evidence",
+  "control": "test_audit_redaction_policy.AuditRedactionPolicyTests.test_authorized_change_only_control"
+},
+{
+  "id": "python-audit096-source-history-redacted",
+  "language": "python",
+  "path": "audit.py",
+  "from": "redacted = deepcopy(event)",
+  "to": "redacted = event",
+  "target": "test_audit_redaction_policy.AuditRedactionPolicyTests.test_authorized_redaction_preserves_meaning_and_owns_observations",
+  "control": "test_audit.AuditTests.test_appends_event_without_mutating_history"
+},
+{
+  "id": "python-audit096-evidence-input-alias",
+  "language": "python",
+  "path": "audit.py",
+  "from": "\"evidenceEvent\": evidence, \"history\": [*current, evidence]",
+  "to": "\"evidenceEvent\": redaction_event, \"history\": [*current, evidence]",
+  "target": "test_audit_redaction_policy.AuditRedactionPolicyTests.test_authorized_redaction_preserves_meaning_and_owns_observations",
+  "control": "test_audit_redaction_policy.AuditRedactionPolicyTests.test_authorized_change_only_control"
+},
+{
   "id": "python-workflow-constructor-initial",
   "language": "python",
   "path": "workflow.py",

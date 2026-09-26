@@ -7,7 +7,7 @@ from finkore import CORE_VERSION, FinKoreError, Money, WorkflowDefinition, Workf
 from finkore.workflow import create_workflow, import_workflow, transition_workflow, WorkflowTransition
 from finkore.entities import create_entity, transition_entity, import_entity
 from finkore.approvals import record_decision, evaluate_requirement, evaluate_decision, withdraw_decision, normalize_decision_set
-from finkore.audit import append_event
+from finkore.audit import append_event, redact_history
 
 
 def error(code, action):
@@ -87,4 +87,19 @@ event = {'eventId': 'event-1', 'eventType': 'ENTITY_CHANGED', 'entity': requirem
 cycle = {}; cycle['self'] = cycle
 error('FINKORE_AUDIT_ACTOR_INVALID', lambda: append_event([], {**event, 'actor': {'id': 'alice', 'metadata': cycle}}))
 assert append_event([], event)['history'] == [event]
+audit_source = {**event, 'actor': {'id': 'alice', 'type': 'user', 'metadata': None},
+                'changes': [{'path': 'secret', 'after': 'protected'}]}
+audit_history = append_event([], audit_source)['history']
+redaction_evidence = {**event, 'eventId': 'redacted', 'eventType': 'AUDIT_CONTENT_REDACTED'}
+policy = {'authority': 'retention-policy', 'protectedPaths': ['actor.metadata', 'secret']}
+before_redaction = deepcopy((audit_history, policy, redaction_evidence))
+for invalid_policy in ({'protectedPaths': policy['protectedPaths']}, *({**policy, 'authority': value} for value in [None, '', 7, True, [], {}])):
+    error('FINKORE_AUDIT_REDACTION_INVALID', lambda: redact_history(audit_history, invalid_policy, redaction_evidence))
+assert (audit_history, policy, redaction_evidence) == before_redaction
+redaction = redact_history(audit_history, policy, redaction_evidence)
+assert redaction['history'] == [audit_source, redaction_evidence]
+assert redaction['event']['actor'] == {'id': 'alice', 'type': 'user', 'metadata': {'presence': 'REDACTED'}}
+assert redaction['event']['changes'] == [{'path': 'secret', 'after': {'presence': 'REDACTED'}}]
+redaction['event']['actor']['id'] = 'edited-view'
+assert (audit_history, policy, redaction_evidence) == before_redaction
 print('Installed Python consumer: native Money, Rate rejection, lossless serialization, binding, import identity/null, validator, Approval and Audit boundaries pass')

@@ -185,11 +185,16 @@ def redact_history(history: Any, policy: Any, redaction_event: Any) -> dict[str,
 
     The source event remains present in the committed logical history
     observation; redaction is represented by the returned event view and a
-    separate evidence event.
+    separate evidence event. The policy must declare a nonempty string
+    ``authority`` and protected paths. Missing or malformed authority raises
+    FINKORE_AUDIT_REDACTION_INVALID before any view or evidence is returned;
+    history, policy, and candidate evidence remain unchanged. Authority is an
+    explicit declaration, not an authenticated identity or authorization lookup.
     Source and evidence values are validated using the native JSON boundary;
     cycles and unsupported values retain the Actor/Event portable errors. Both
     returned representations and history are independent of the caller's inputs.
 
+    @see AUDIT-REDACTION-001
     @see AUDIT-REDACTION-002
     @see AUDIT-REDACTION-006
     """
@@ -363,6 +368,8 @@ def _relationship_ids(history: list[dict[str, Any]]) -> set[str]:
 
 def _protected_paths(policy: Any) -> list[str]:
     if not isinstance(policy, dict):
+        raise FinKoreError(REDACTION_INVALID)
+    if not _opaque(policy.get("authority")):
         raise FinKoreError(REDACTION_INVALID)
     paths = policy.get("protectedPaths")
     if not isinstance(paths, list) or len(paths) == 0 or any(not _opaque(path) for path in paths):

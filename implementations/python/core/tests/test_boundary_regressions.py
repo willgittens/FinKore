@@ -263,7 +263,7 @@ class BoundaryRegressions(unittest.TestCase):
                         action = (lambda: validate_event(candidate, {}, set())) if boundary == "construct" else (
                             (lambda: validate_history([candidate])) if boundary == "import" else (
                                 (lambda: append_event(history, candidate)) if boundary == "append" else lambda: redact_history(
-                                    history, {"protectedPaths": ["actor.metadata"]}, candidate)))
+                                    history, {"authority": "retention-policy", "protectedPaths": ["actor.metadata"]}, candidate)))
                         try:
                             self.portable_error("FINKORE_AUDIT_ACTOR_INVALID" if location == "actor" else "FINKORE_AUDIT_INVALID_EVENT", action)
                         finally:

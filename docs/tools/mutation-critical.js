@@ -24,6 +24,50 @@ if (!validTargets.has(requestedTarget)) {
 
 const pythonMutants = [
 {
+  "id": "python-audit096-authority-bypass",
+  "suite": "audit",
+  "path": "core/src/finkore/audit.py",
+  "from": "if not _opaque(policy.get(\"authority\")):",
+  "to": "if False:",
+  "expectedVector": "audit.boundary096.authority-absent-001",
+  "expectedPassVectors": [
+    "audit.boundary096.authority-control-001"
+  ]
+},
+{
+  "id": "python-audit096-authority-empty-accepted",
+  "suite": "audit",
+  "path": "core/src/finkore/audit.py",
+  "from": "if not _opaque(policy.get(\"authority\")):",
+  "to": "if not isinstance(policy.get(\"authority\"), str):",
+  "expectedVector": "audit.boundary096.authority-empty-001",
+  "expectedPassVectors": [
+    "audit.boundary096.authority-control-001"
+  ]
+},
+{
+  "id": "python-audit096-authority-truthiness",
+  "suite": "audit",
+  "path": "core/src/finkore/audit.py",
+  "from": "if not _opaque(policy.get(\"authority\")):",
+  "to": "if not policy.get(\"authority\"):",
+  "expectedVector": "audit.boundary096.authority-number-001",
+  "expectedPassVectors": [
+    "audit.boundary096.authority-control-001"
+  ]
+},
+{
+  "id": "python-audit096-authority-wrong-error",
+  "suite": "audit",
+  "path": "core/src/finkore/audit.py",
+  "from": "if not _opaque(policy.get(\"authority\")):\n        raise FinKoreError(REDACTION_INVALID)",
+  "to": "if not _opaque(policy.get(\"authority\")):\n        raise FinKoreError(INVALID_EVENT)",
+  "expectedVector": "audit.boundary096.authority-null-001",
+  "expectedPassVectors": [
+    "audit.boundary096.authority-control-001"
+  ]
+},
+{
   "id": "python-approval096-reference-instant",
   "suite": "approvals",
   "path": "core/src/finkore/approvals.py",

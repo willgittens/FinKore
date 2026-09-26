@@ -12,12 +12,12 @@ Audit, Approvals, and Entities scope.
 | Shared | 51 | 41 | 5 | 5 | 10 | 0 | 0 | 41 | 0 | 0 |
 | Money | 74 | 69 | 1 | 4 | 69 | 0 | 0 | 5 | 0 | 0 |
 | Workflow | 57 | 55 | 1 | 1 | 48 | 0 | 0 | 9 | 0 | 0 |
-| Audit | 57 | 49 | 4 | 4 | 44 | 3 | 0 | 10 | 0 | 0 |
+| Audit | 57 | 49 | 4 | 4 | 47 | 0 | 0 | 10 | 0 | 0 |
 | Approvals | 89 | 86 | 1 | 2 | 84 | 0 | 0 | 5 | 0 | 0 |
 | Entities | 89 | 84 | 3 | 2 | 67 | 9 | 0 | 13 | 0 | 0 |
-| **Total** | 417 | 384 | 15 | 18 | 322 | 12 | 0 | 83 | 0 | 0 |
+| **Total** | 417 | 384 | 15 | 18 | 325 | 9 | 0 | 83 | 0 | 0 |
 
-The suite contains 863 vectors. Overall: **322 covered (77.2%)**, **12 partially covered (2.9%)**, **0 uncovered (0.0%)**, **83 not directly testable (19.9%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
+The suite contains 863 vectors. Overall: **325 covered (77.9%)**, **9 partially covered (2.2%)**, **0 uncovered (0.0%)**, **83 not directly testable (19.9%)**, **0 deferred (0.0%)**, **0 blocking spec gaps (0.0%)**.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. PARTIAL means current vectors exercise part of a requirement but do not yet cover a mandatory observable boundary. DEFERRED means the requirement is explicitly outside the current release candidate. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector is feasible but not yet published.
 
@@ -132,13 +132,13 @@ the verified snapshot.
 
 ## Core 0.9.6 reassessment
 
-[Milestones 1–5](../docs/plans/plan-09.6.md) have accepted the four contract
+[Milestones 1–6](../docs/plans/plan-09.6.md) have accepted the four contract
 decisions and added 196 permanent vectors plus native construction and sequence
 tests. The inventory retains every original identifier and now contains 417
-requirements and 863 vectors: **322 COVERED**, **12 PARTIAL**, **83 NOT DIRECTLY
-TESTABLE**, and **0 BLOCKING SPEC GAP**. Approval corrections and the shared
-timestamp boundaries are verified; Audit and Entity rows remain PARTIAL pending
-their corrections and verification.
+requirements and 863 vectors: **325 COVERED**, **9 PARTIAL**, **83 NOT DIRECTLY
+TESTABLE**, and **0 BLOCKING SPEC GAP**. Approval, Audit, and shared timestamp
+boundaries are verified; Entity rows remain PARTIAL pending their corrections
+and verification.
 
 | Exercised boundary | Permanent regression surface | Correction milestone |
 | --- | --- | --- |
@@ -148,7 +148,7 @@ their corrections and verification.
 | Concrete Decision evaluation | APPROVAL-DECISION-009: Requirement subject/eligibility/association and exact expiration; native facts-only controls stay separate. | 5 complete |
 | Complete context evaluation | APPROVAL-VALIDITY-013: reordered rejection, stale evidence, and unrelated/withdrawn/superseded controls. | 5 complete |
 | Returned history → record/lifecycle/evaluation | APPROVAL-VALIDITY-014: committed kinds, unique targets/successors, repeat/conflicting history, unchanged source histories. | 5 complete |
-| Audit redaction | Missing/malformed authority, valid authority, unchanged history and no evidence append on failure. | 6 |
+| Audit redaction | Missing/malformed authority rejected in core; valid actor/Change redactions, unchanged inputs on failure, and independently owned returned observations; coverage, mutation, and installed consumers pass. | 6 complete |
 | Entity evolution | Four kinds with omitted/null/malformed/mismatching expectations; actual returned evolution/Audit history reused. | 7 |
 | Entity import | Malformed Source Identity despite mapping; ENTITY-IMPORT-011 standalone-mapping acceptance and preservation. | 7 |
 
@@ -183,6 +183,16 @@ scoped coverage, mutation checks, and installed consumers verify the concrete
 Decision and history boundaries. The complete 863-vector suite retains only
 known Audit and Entity defects, so these results do not establish whole-core
 conformance. Verification details and remaining limits are in the plan.
+
+Milestone 6 closes AUDIT-REDACTION-001, AUDIT-REDACTION-006, and AUDIT-ERROR-001.
+All 84 Audit vectors pass on all four runtimes. Python 3.12/3.13 each pass 27
+focused native Audit tests, nine portable critical probes, and eight native
+probes. The cross-language native Audit gate passes 21 probes. Branch-enabled
+Python Audit coverage is 87%; installed wheel/sdist consumers verify authority,
+redaction preservation, and failure atomicity on both Python versions. The
+manifest remains 863 vectors; Python now has 858 PASS, one Entity FAIL, and four
+Entity INFRASTRUCTURE_ERROR results on each version. Complete gates remain red
+until Milestone 7 fixes the remaining Entity boundaries.
 
 Remaining PARTIAL rows retain their correction, coverage, mutation, and
 package-consumer gates even where a vector already exercises the defect. Earlier release notes remain historical
@@ -398,7 +408,7 @@ evidence and do not close these boundaries.
 | AUDIT-CHANGE-007 | Audit | MAY | NOT DIRECTLY TESTABLE | Change omission is optional and depends on event type or disclosure policy. |
 | AUDIT-CHANGE-008 | Audit | MUST / MUST NOT | COVERED | audit.change.array-order-unchanged-001, audit.change.array-reordering-changed-001, audit.change.boolean-to-number-distinct-001, audit.change.json-member-array-different-001, audit.change.json-member-array-equal-001, audit.change.json-member-constructor-different-001, audit.change.json-member-constructor-equal-001, audit.change.json-member-nested-different-001, audit.change.json-member-nested-equal-001, audit.change.json-member-null-different-001, audit.change.json-member-null-equal-001, audit.change.json-member-object-different-001, audit.change.json-member-object-equal-001, audit.change.json-member-scalar-different-001, audit.change.json-member-scalar-equal-001, audit.change.money-shaped-ordinary-json-001, audit.change.nested-boolean-number-distinct-001, audit.change.number-to-boolean-distinct-001, audit.change.object-member-order-unchanged-001, audit.change.unchanged-boolean-rejected-001 |
 | AUDIT-CHANGE-009 | Audit | MUST / MUST NOT | COVERED | audit.change.money-amount-changed-001, audit.change.money-currency-changed-001, audit.change.money-malformed-declared-value-001, audit.change.money-trailing-zero-unchanged-001 |
-| AUDIT-ERROR-001 | Audit | MUST / MUST NOT | PARTIAL | audit.actor.empty-display-name-001, audit.actor.empty-id-001, audit.actor.invalid-display-name-precedes-duplicate-001, audit.actor.invalid-history-display-name-precedence-001, audit.actor.invalid-type-001, audit.actor.malformed-representation-001, audit.actor.missing-id-001, audit.actor.null-display-name-001, audit.actor.null-type-001, audit.actor.numeric-display-name-001, audit.actor.precedence-duplicate-001, audit.actor.precedence-invalid-event-001, audit.actor.precedence-relationship-001, audit.boundary096.authority-absent-001, audit.boundary096.authority-array-001, audit.boundary096.authority-boolean-001, audit.boundary096.authority-empty-001, audit.boundary096.authority-null-001, audit.boundary096.authority-number-001, audit.boundary096.authority-object-001, audit.change.array-order-unchanged-001, audit.change.money-malformed-declared-value-001, audit.change.money-trailing-zero-unchanged-001, audit.change.object-member-order-unchanged-001, audit.change.unchanged-boolean-rejected-001, audit.change.unchanged-rejected-001, audit.event.implementation-type-rejected-001, audit.event.metadata-conflict-001, audit.event.missing-entity-id-001, audit.event.missing-timestamp-001, audit.redaction.actor-metadata-omitted-001, audit.redaction.unknown-path-001, shared.timestamp.excess-precision-001, shared.timestamp.invalid-calendar-001; Core 0.9.6 permanent regressions exercise this boundary; red tests and native/mutation closure remain pending. |
+| AUDIT-ERROR-001 | Audit | MUST / MUST NOT | COVERED | audit.actor.empty-display-name-001, audit.actor.empty-id-001, audit.actor.invalid-display-name-precedes-duplicate-001, audit.actor.invalid-history-display-name-precedence-001, audit.actor.invalid-type-001, audit.actor.malformed-representation-001, audit.actor.missing-id-001, audit.actor.null-display-name-001, audit.actor.null-type-001, audit.actor.numeric-display-name-001, audit.actor.precedence-duplicate-001, audit.actor.precedence-invalid-event-001, audit.actor.precedence-relationship-001, audit.boundary096.authority-absent-001, audit.boundary096.authority-array-001, audit.boundary096.authority-boolean-001, audit.boundary096.authority-empty-001, audit.boundary096.authority-null-001, audit.boundary096.authority-number-001, audit.boundary096.authority-object-001, audit.change.array-order-unchanged-001, audit.change.money-malformed-declared-value-001, audit.change.money-trailing-zero-unchanged-001, audit.change.object-member-order-unchanged-001, audit.change.unchanged-boolean-rejected-001, audit.change.unchanged-rejected-001, audit.event.implementation-type-rejected-001, audit.event.metadata-conflict-001, audit.event.missing-entity-id-001, audit.event.missing-timestamp-001, audit.redaction.actor-metadata-omitted-001, audit.redaction.unknown-path-001, shared.timestamp.excess-precision-001, shared.timestamp.invalid-calendar-001 |
 | AUDIT-ERROR-002 | Audit | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Normalized errors omit messages/details, so protected-detail absence needs security review. |
 | AUDIT-ERROR-003 | Audit | MAY | NOT DIRECTLY TESTABLE | Additional safe diagnostic context is optional. |
 | AUDIT-ERROR-004 | Audit | MUST / MUST NOT | COVERED | audit.actor.invalid-display-name-precedes-duplicate-001, audit.actor.invalid-history-display-name-precedence-001, audit.actor.precedence-duplicate-001, audit.actor.precedence-invalid-event-001, audit.actor.precedence-invalid-history-001, audit.actor.precedence-relationship-001 |
@@ -410,12 +420,12 @@ evidence and do not close these boundaries.
 | AUDIT-EVENT-006 | Audit | MAY | NOT DIRECTLY TESTABLE | Event metadata is optional and has no required contents. |
 | AUDIT-EVENT-007 | Audit | MUST / MUST NOT | COVERED | audit.event.append-complete-001, audit.event.missing-entity-id-001, audit.event.missing-timestamp-001 |
 | AUDIT-EVENT-008 | Audit | MUST / MUST NOT | COVERED | audit.event.metadata-conflict-001 |
-| AUDIT-REDACTION-001 | Audit | MUST / MUST NOT | PARTIAL | audit.boundary096.authority-absent-001, audit.boundary096.authority-array-001, audit.boundary096.authority-boolean-001, audit.boundary096.authority-control-001, audit.boundary096.authority-empty-001, audit.boundary096.authority-null-001, audit.boundary096.authority-number-001, audit.boundary096.authority-object-001, audit.redaction.preserve-evidence-001, audit.redaction.unknown-path-001; Core 0.9.6 permanent regressions exercise this boundary; red tests and native/mutation closure remain pending. |
+| AUDIT-REDACTION-001 | Audit | MUST / MUST NOT | COVERED | audit.boundary096.authority-absent-001, audit.boundary096.authority-array-001, audit.boundary096.authority-boolean-001, audit.boundary096.authority-control-001, audit.boundary096.authority-empty-001, audit.boundary096.authority-null-001, audit.boundary096.authority-number-001, audit.boundary096.authority-object-001, audit.redaction.preserve-evidence-001, audit.redaction.unknown-path-001 |
 | AUDIT-REDACTION-002 | Audit | MUST / MUST NOT | COVERED | audit.redaction.actor-context-001, audit.redaction.actor-metadata-null-001, audit.redaction.actor-metadata-omitted-001, audit.redaction.preserve-evidence-001 |
 | AUDIT-REDACTION-003 | Audit | MUST / MUST NOT | COVERED | audit.boundary096.authority-control-001, audit.redaction.actor-context-001, audit.redaction.actor-metadata-null-001, audit.redaction.preserve-evidence-001 |
 | AUDIT-REDACTION-004 | Audit | SHOULD / SHOULD NOT | NOT DIRECTLY TESTABLE | The required redaction marker is covered, but sufficient explanatory category detail remains a recommendation. |
 | AUDIT-REDACTION-005 | Audit | MAY | NOT DIRECTLY TESTABLE | Access-time masking is an optional integration behavior. |
-| AUDIT-REDACTION-006 | Audit | MUST / MUST NOT | PARTIAL | audit.boundary096.authority-control-001, audit.redaction.actor-metadata-null-001, audit.redaction.preserve-evidence-001; Core 0.9.6 permanent regressions exercise this boundary; red tests and native/mutation closure remain pending. |
+| AUDIT-REDACTION-006 | Audit | MUST / MUST NOT | COVERED | audit.boundary096.authority-control-001, audit.redaction.actor-metadata-null-001, audit.redaction.preserve-evidence-001 |
 | AUDIT-REDACTION-007 | Audit | MUST / MUST NOT | COVERED | audit.redaction.actor-context-001, audit.redaction.actor-metadata-null-001, audit.redaction.preserve-evidence-001 |
 | AUDIT-RELATIONSHIP-001 | Audit | MUST / MUST NOT | COVERED | audit.relationship.corrects.append-001 |
 | AUDIT-RELATIONSHIP-002 | Audit | MUST / MUST NOT | COVERED | audit.relationship.corrects.append-001 |

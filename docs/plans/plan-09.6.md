@@ -2,10 +2,10 @@
 
 ## Status
 
-Milestones 1–5 are complete: accepted contracts, permanent regressions, Money,
-Workflow, and Approval corrections are implemented and verified. Milestones 6–9
-are unstarted. Audit and Entity retain recorded defects, so complete suites
-remain red until their owning fixes land.
+Milestones 1–6 are complete: accepted contracts, permanent regressions, Money,
+Workflow, Approval, and Audit corrections are implemented and verified.
+Milestones 7–9 are unstarted. Entity retains recorded defects, so complete
+suites remain red until its owning fixes land.
 The readiness review of commit `e300bb1`
 (`core-0.9.5`) found additional mandatory behavior and portability gaps despite
 passing existing checks. Core 1.0 promotion is blocked pending this corrective
@@ -729,20 +729,76 @@ operation or architectural dependency and does not complete the release.
 
 ## Milestone 6 — Audit redaction policy validation
 
-- [ ] Validate Python redaction authority before producing a redacted view or
+- [x] Validate Python redaction authority before producing a redacted view or
       appending evidence. Apply the agreed portable redaction error to missing,
       null, empty, and malformed declarations.
-- [ ] Pair invalid policy cases with valid actor-context and ordinary Change
+- [x] Pair invalid policy cases with valid actor-context and ordinary Change
       redactions. Preserve event identity, Actor attribution, relationships,
       timestamps, redacted-versus-absent distinctions, and evidence Events.
-- [ ] Assert unchanged committed source history and candidate evidence on
+- [x] Assert unchanged committed source history and candidate evidence on
       failure; verify returned observations cannot mutate retained content.
       Preserve native numeric ownership and cycle rejection from 0.9.5.
-- [ ] Run Audit native/unit tests, portable conformance, coverage, and mutation
+- [x] Run Audit native/unit tests, portable conformance, coverage, and mutation
       checks, including Python 3.13. Update policy API docs and relevant examples.
 
 Completion: finding 4 is corrected without adding authorization infrastructure
 or changing the meaning of valid policy-authorized redaction.
+
+### Milestone 6 implementation and verification
+
+Python core validates `policy.authority` as a nonempty string before producing
+any redacted representation or evidence. Missing, null, empty, Boolean, numeric,
+list, and dictionary declarations return FINKORE_AUDIT_REDACTION_INVALID. The
+existing specification, policy fields, opaque authority meaning, and adapter
+boundary are unchanged; no lookup, policy-ID requirement, or authorization
+infrastructure was added.
+
+The seven existing portable regressions first failed against the old core.
+New native tests also failed for absent and malformed authority, then passed
+after the core correction. Valid controls cover Actor metadata and ordinary
+Change redaction, exact preservation of identity, attribution, timestamps and
+relationships, null/absent/redacted distinctions, repeated use of returned
+history, and unchanged history/policy/evidence on rejection. Returned views,
+history, and evidence cannot modify the caller's inputs. Three older successful
+redaction/cycle fixtures now supply valid authority; their original assertions
+and portable cycle error expectations were preserved.
+
+Verification:
+
+- All 84 Audit vectors pass on TypeScript, Python 3.12/3.13, and Java, with zero
+  unsupported operations or infrastructure errors in the Audit domain.
+- Python 3.12 and 3.13 each pass 27 focused Audit tests, including native cycle,
+  numeric/Boolean, shared-container ownership, and policy regressions.
+- Python portable critical mutations: 9/9 killed on each version, including
+  missing, empty, truthy wrong-type authority and incorrect portable error probes.
+- Cross-language native Audit mutations: 21/21 killed (Python 8, Java 11,
+  TypeScript 2); Python's eight probes also pass on 3.13. New probes protect
+  authority rejection, unchanged committed source content, and candidate-evidence
+  ownership. Every probe has an independent passing control; no exclusions or
+  runtime-exception kills were introduced.
+- Python Audit branch-enabled coverage from native tests and real vectors is
+  87%, above the configured 85% floor. This is scoped Audit coverage, not a
+  claim that the complete release gate passes.
+- Build, strict TypeScript, Python compilation, adapter tests, tool tests,
+  architecture, documentation/traceability, license and whitespace checks pass.
+  Local npm/wheel/sdist/JAR package consumers pass; the Python wheel/sdist
+  consumers on both versions exercise invalid authority, valid redaction,
+  ownership, and unchanged inputs.
+- Full Python conformance on each version: 858 PASS, 1 FAIL, 4
+  INFRASTRUCTURE_ERROR across 863 vectors. Full native suites have 443 tests,
+  with one failure and four errors. All remaining failures are the recorded
+  Entity Source Identity boundaries owned by Milestone 7. The other runtimes'
+  complete-suite Entity failures remain outside this milestone.
+
+AUDIT-REDACTION-001, AUDIT-REDACTION-006, and AUDIT-ERROR-001 are now COVERED.
+Traceability retains 417 requirements and 863 vectors: 325 COVERED, 9 PARTIAL,
+83 NOT DIRECTLY TESTABLE, zero blocking specification gaps. Existing conformance
+vectors and conventions already define the corrected contract; no new vector
+IDs, financial specification rules, portable errors, or Agentic operations were
+needed. Native tests, mutation probes, Python API docs, installed examples,
+READMEs, and traceability are synchronized. TypeScript JSDoc, CoreDoc, AGENTS.md,
+and release notes need no change because their contracts, responsibilities, and
+release status are unchanged. Milestone 7 and the final release gates remain open.
 
 ## Milestone 7 — Entity evolution and import presence
 

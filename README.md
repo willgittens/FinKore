@@ -366,8 +366,10 @@ priority; all 135 Workflow vectors pass on all four runtimes, with focused
 coverage, mutation, ownership, and installed-package checks. Milestone 5 fixes
 Approval evidence, concrete Decision evaluation, lifecycle history validation,
 and required timestamp context. All 272 Approval vectors pass on four runtimes
-with native sequences, coverage, mutation, and package checks. Milestones 6–9
-remain unstarted; Audit and Entity defects keep complete verification red.
+with native sequences, coverage, mutation, and package checks. Milestone 6 fixes
+Python redaction authority validation; all 84 Audit vectors pass on four runtimes
+with preserved history, native ownership, coverage, mutation, and package checks.
+Milestones 7–9 remain unstarted; Entity defects keep complete verification red.
 Core 1.0 promotion is blocked pending those corrections and fresh review;
 `core-0.9.5` remains the latest completed corrective snapshot.
 

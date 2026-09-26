@@ -1,11 +1,32 @@
 # FinKore Python Core
 
-Core 0.9.6 status: [Milestones 3–5](../../../docs/plans/plan-09.6.md)
-verify Money, Workflow, and Approval corrections. All 272 Approval vectors pass
-on TypeScript, Python 3.12/3.13, and Java, with native sequence, coverage,
-mutation, and installed-consumer checks. The complete 863-vector suite retains
-known Audit and Entity defects; focused results do not establish whole-core
-conformance.
+Core 0.9.6 status: [Milestones 3–6](../../../docs/plans/plan-09.6.md)
+verify Money, Workflow, Approval, and Audit corrections. All 272 Approval and
+84 Audit vectors pass on TypeScript, Python 3.12/3.13, and Java. Python redaction
+now rejects missing or malformed authority before returning a view or evidence.
+Native sequence, ownership, coverage, mutation, and installed-consumer checks
+pass for the corrected boundaries. The complete 863-vector suite retains known
+Entity defects; focused results do not establish whole-core conformance.
+
+`redact_history(history, policy, redaction_event)` requires a nonempty string
+`policy["authority"]` and declared `protectedPaths`. Omitted, null, empty, numeric,
+Boolean, list, or dictionary authority raises `FINKORE_AUDIT_REDACTION_INVALID`.
+Failure leaves history, policy, and candidate evidence unchanged. The declared
+authority is opaque; FinKore does not look it up or authenticate it.
+
+```python
+result = redact_history(
+    committed_history,
+    {"authority": "retention-policy", "protectedPaths": ["actor.metadata"]},
+    evidence_event,
+)
+```
+
+The result contains the redacted `event`, `evidenceEvent`, and a new `history`
+containing the original Events followed by evidence. Actor identity/type, Event
+identity/type, Entity reference, occurrence timestamp, and relationships remain
+intact. Redacted values are distinguishable from absent members and explicit
+null; returned observations cannot mutate caller-owned source or evidence.
 
 Concrete Decision evaluation uses `evaluate_decision(requirement, decision, current_subject_facts, relevant_fact_paths=None, evaluated_at=None)`.
 It validates the concrete Requirement, Decision association, and Actor eligibility,

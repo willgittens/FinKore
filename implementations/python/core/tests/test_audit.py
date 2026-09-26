@@ -129,7 +129,7 @@ class AuditTests(unittest.TestCase):
             "occurredAt": "2026-09-01T13:00:00Z",
         }
         self.assertEqual(
-            redact_history([event], {"protectedPaths": ["bankAccount"]}, evidence),
+            redact_history([event], {"authority": "retention-policy", "protectedPaths": ["bankAccount"]}, evidence),
             {
                 "event": {
                     **event,
@@ -181,7 +181,7 @@ class AuditTests(unittest.TestCase):
             "occurredAt": "2026-09-01T13:00:00Z",
         }
         self.assertEqual(append_event([], event), {"history": [event]})
-        result = redact_history([event], {"protectedPaths": ["actor.metadata"]}, evidence)
+        result = redact_history([event], {"authority": "retention-policy", "protectedPaths": ["actor.metadata"]}, evidence)
         self.assertEqual(result["event"]["actor"], {"type": "user", "id": "user-7", "metadata": {"presence": "REDACTED"}})
         self.assertEqual(result["history"], [event, evidence])
 
