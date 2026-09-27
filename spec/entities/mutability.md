@@ -21,6 +21,16 @@ This document defines how declared field-level mutability rules constrain Financ
 - **ENTITY-MUTABILITY-005** — Declaring data immutable in a State MUST NOT erase or detach prior audit history.
 - **ENTITY-MUTABILITY-006** — A terminal, approved, posted, or finalized State MUST NOT by itself make every entity field immutable; immutability applies only as declared by the composing domain or lifecycle policy.
 - **ENTITY-MUTABILITY-007** — Operational metadata MAY remain mutable when financial fields are immutable only when the composing domain identifies that metadata and applies the Audit Event requirements declared under [Financial Entities](README.md).
+- **ENTITY-MUTABILITY-008** — An Entity operation consuming a mutability declaration MUST validate its structure before returning a successful Entity observation or applying a change. A missing or malformed required declaration, including a null field-permission rule, MUST use `FINKORE_ENTITY_INVALID_MUTATION`; it MUST NOT be treated as a valid rule making every field immutable. An explicit valid empty permitted-field set MUST remain valid, with a mutation targeting a protected field using `FINKORE_ENTITY_IMMUTABLE`. Rejection MUST preserve identity, State, data, revisions, and retained declarations without a partial result.
+
+The bounded per-state representation is specified in conformance conventions.
+Its own State and field names retain their domain meaning, including names such
+as `__proto__`, `constructor`, and `prototype`. Under ENTITY-DEFINITION-002,
+retention and definition observation preserve those declarations for reuse;
+host object prototypes are not declarations and do not justify dropping or
+forbidding valid names. This is a preservation clarification, not a new naming
+restriction. The malformed-declaration mapping above is a corrective addition;
+it does not impose a total priority among unrelated Entity failures.
 
 ## Invariants
 

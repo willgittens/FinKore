@@ -4,7 +4,9 @@
 
 **FinKore Core 0.9 release candidate.** This is the shared,
 language-neutral behavioral candidate intended to become FinKore Core 1.0.
-It remains pre-1.0, but no planned behavioral changes are expected before 1.0.
+It remains pre-1.0. The accepted [Core 0.9.7 contract corrections](../docs/plans/plan-09.7.md)
+resolve demonstrated ambiguity and portability defects under the release-candidate
+freeze; implementation and regression milestones remain pending.
 The 0.9 domain scope is Money, Workflow, Audit, Approvals, and Entities.
 
 ## Purpose

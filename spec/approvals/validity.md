@@ -31,6 +31,16 @@ Approval history.
 
 ## Invariants
 
+- **APPROVAL-VALIDITY-015** — Before successfully recording a Decision, an implementation MUST validate retained lifecycle relationships against the complete proposed resulting Decision history under APPROVAL-VALIDITY-014. The new Decision MUST NOT make a retained withdrawal target or Decision supersession target or successor ambiguous or otherwise invalidate a required historical relationship. Such a record request MUST fail with `FINKORE_APPROVAL_INVALID_DECISION` and MUST preserve both input histories without exposing a partial append. Equal Decision reference tuples alone MUST NOT be rejected by this rule when they invalidate no retained relationship.
+
+This 0.9.7 corrective addition explicitly covers the proposed result, whereas
+APPROVAL-VALIDITY-014 validates supplied evidence before reuse. Successful
+recording preserves earlier Decisions and lifecycle events and appends exactly
+the accepted Decision, yielding history reusable by subsequent operations.
+Reference equality uses SPEC-TIMESTAMP-005's exact instant, including equivalent
+offset spellings, while retained timestamps keep their spelling under
+SPEC-TIMESTAMP-006. There is no global Decision uniqueness rule or new registry.
+
 Current-effectiveness is an observation over append-only evidence. A Decision
 can be historically committed and still be ineffective for current evaluation
 because relevant facts changed, the subject revision changed, the Decision was

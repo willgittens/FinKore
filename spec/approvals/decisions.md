@@ -25,6 +25,41 @@ An Approval Decision outcome is `APPROVED` or `REJECTED`. `PENDING` describes an
 
 - **APPROVAL-DECISION-009** — A concrete single-Decision effectiveness evaluation MUST validate the supplied concrete Requirement, Decision structure, Requirement association, and Actor eligibility before returning effectiveness. Malformed declarations or a mismatched association MUST use `FINKORE_APPROVAL_INVALID_DECISION`; a valid eligibility declaration excluding the Actor MUST use `FINKORE_APPROVAL_INELIGIBLE_ACTOR`. It MUST evaluate caller-declared relevant facts and any expiration under Approval Validity using explicit required context. Expired or fact-stale valid evidence MUST return `INEFFECTIVE`; otherwise it MUST return `EFFECTIVE`. Without supplied lifecycle history this observation MUST NOT claim lifecycle-aware effectiveness. A separately documented facts-only helper MAY remain available, but MUST NOT be used as the complete concrete evaluation.
 
+## Core 0.9.7 fact comparison correction
+
+The accepted D1–D4 decisions in the [0.9.7 plan](../../docs/plans/plan-09.7.md)
+resolve differing concrete evaluation and native-value behavior. These are
+corrective normative additions under SPEC-FREEZE-001, staged for implementation
+and verification in that plan; they are not claims of current conformance.
+
+- **APPROVAL-FACT-001** — When concrete Decision or Requirement evaluation is supplied current subject facts, omission of a relevance selector MUST compare the complete supplied fact value against the Decision's retained fact value. An explicitly supplied nonempty selector list MUST narrow comparison to the selected facts. Null, empty, or malformed selector declarations MUST fail with `FINKORE_APPROVAL_INVALID_DECISION`, even when another validity condition would make the Decision ineffective. Implementations MUST NOT synthesize current facts from historical facts. Concrete single-Decision evaluation MUST reject absent current facts with `FINKORE_APPROVAL_INVALID_DECISION`. Requirement evaluation MAY omit both current facts and selectors to evaluate history without claiming current-fact validation; supplied selectors without current facts MUST use `FINKORE_APPROVAL_INVALID_DECISION`. Explicit null current facts MUST remain a supplied value, not omission.
+- **APPROVAL-FACT-002** — An Approval fact selector MUST identify a nonempty sequence of nonempty object-member names. Selection MUST traverse only own object members and MUST NOT traverse arrays, inherited members, or implicit conversions. A selected fact MUST be present in both historical and current facts to match; absence on both sides MUST NOT count as equality. Explicit null at a selected leaf MUST count as present. Missing intermediate members or a non-object intermediate value MUST make the selected fact unavailable. The bounded dot-separated encoding is defined in conformance conventions; no wildcard, fallback to a literal dotted key, escaping, expression, or array-index language is implied.
+- **APPROVAL-FACT-003** — Supported Approval facts MUST compare structurally without coercion. Objects MUST have the same own member names and recursively equal values, independent of member order. Arrays MUST have equal lengths and recursively equal values in the same order. Null, Boolean, string, and number categories MUST remain distinct; strings MUST compare exactly without normalization. Supported finite numbers MUST compare by exact accepted numeric value, independently of native decimal scale; positive and negative zero MUST compare equal. Numeric strings and Money-shaped objects MUST NOT acquire numeric or Money semantics. Missing members MUST remain distinct from explicit null. Comparison MUST NOT round exact numbers through binary floating-point conversion.
+- **APPROVAL-FACT-004** — An implementation accepting native Approval fact values MUST document their supported value set and exact numeric interpretation. It MUST capture independently owned containers and retain only immutable supported scalar values. Unsupported or mutable numeric objects, including unsupported subclasses of otherwise supported numeric classes, MUST be rejected before retention with `FINKORE_APPROVAL_INVALID_DECISION` at concrete Decision/history/fact boundaries. Unsupported values in composition evidence MUST use `FINKORE_APPROVAL_INVALID_CHAIN` under its existing evidence priority. Invalid input MUST NOT alter previously committed Decisions or lifecycle evidence. Copying supported containers MUST preserve their complete fact meaning, including own member names; a serializer or arbitrary numeric string coercion MUST NOT silently repair unsupported input.
+
+Concrete single-Decision evaluation requires supplied current facts; absent
+current facts use `FINKORE_APPROVAL_INVALID_DECISION`. Explicit null is a supplied
+fact value. Requirement evaluation retains the optional-current-facts scope of
+APPROVAL-VALIDITY-001: with neither current facts nor selectors, it evaluates
+declared history, eligibility, and lifecycle/context without asserting that
+current facts were checked. Supplying selectors without current facts is an
+invalid comparison request using `FINKORE_APPROVAL_INVALID_DECISION`. This
+preserves existing history-only Requirement controls without inventing facts.
+
+Fact mismatch produces `INEFFECTIVE` for a valid concrete Decision; it contributes
+neither approval nor rejection to Requirement evaluation. The Requirement is
+`PENDING` when no other effective Decision determines an outcome. Withdrawal,
+supersession, eligibility, and required expiration context still apply, including
+APPROVAL-VALIDITY-013's complete context check. These rules do not extend the
+composition-only total error priority to concrete Approval operations.
+
+Separately documented native facts-only helpers retain the limited scope allowed
+by APPROVAL-DECISION-009. They cannot replace concrete validation or be used by
+an adapter to bypass these comparison rules. Native APIs must distinguish
+omission from explicitly supplied null at the concrete boundary; the old use of
+null/None as an optional selector default needs an explicit migration path in
+the implementation milestone.
+
 ## Invariants
 
 Each effective Approval Decision must have exactly one outcome and exactly one attributable Actor.

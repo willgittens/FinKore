@@ -67,12 +67,12 @@ in [traceability](../conformance/traceability.md).
 | `finkore.money.round` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ROUNDING-001`–`-004`, `-008`, `-009` |
 | `finkore.money.applyrate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-RATE-001`–`-009` |
 | `finkore.money.allocate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ALLOCATION-001`–`-014`, `MONEY-ERROR-008` |
-| `finkore.workflow.transition` | Workflow | `yes` | `unspecified` | `yes` | `may` | may be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007`, `WORKFLOW-GUARD-001`–`-006`, `WORKFLOW-VERSION-003`, `-005`–`-012`, `WORKFLOW-CONFLICT-001`–`-008` |
+| `finkore.workflow.transition` | Workflow | `yes` | `unspecified` | `yes` | `may` | may be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007`, `WORKFLOW-GUARD-001`–`-007`, `WORKFLOW-VERSION-003`, `-005`–`-012`, `WORKFLOW-CONFLICT-001`–`-008` |
 | `finkore.audit.append` | Audit | `yes` | `no` | `yes` | `required` | `none` | `AUDIT-EVENT-001`–`-005`, `-007`, `-008`, `AUDIT-ACTOR-001`–`-004`, `-007`–`-010`, `AUDIT-CHANGE-001`–`-005`, `-008`, `-009`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001`, `-004` |
 | `finkore.audit.replace` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
 | `finkore.audit.remove` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
 | `finkore.entity.create` | Entities | `yes` | `unspecified` | `yes` | `may` | `none` | `ENTITY-IDENTITY-001`, `-003`, `ENTITY-LIFECYCLE-001`, `-002`, `-006`, `ENTITY-VALIDATION-001` |
-| `finkore.entity.mutate` | Entities | `yes` | `unspecified` | `yes` | `may` | may invalidate approval-relevant facts | `ENTITY-MUTABILITY-001`, `-002`, `-004`, `-006`, `-007`, `ENTITY-VALIDATION-002`–`-006`, `ENTITY-ERROR-001` |
+| `finkore.entity.mutate` | Entities | `yes` | `unspecified` | `yes` | `may` | may invalidate approval-relevant facts | `ENTITY-MUTABILITY-001`, `-002`, `-004`, `-006`, `-007`, `-008`, `ENTITY-VALIDATION-002`–`-006`, `ENTITY-ERROR-001` |
 | `finkore.entity.transition` | Entities | `yes` | `unspecified` | `yes` | `may` | may be governed by composing-domain approval policy | `ENTITY-LIFECYCLE-003`, `ENTITY-IDENTITY-002`, `ENTITY-ERROR-001`, `-004` |
 | `finkore.entity.evolution.correct` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`–`-010`, `-015`, `-022`–`-027`, `-029`–`-035`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
 | `finkore.entity.evolution.reverse` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`, `-011`–`-015`, `-022`–`-027`, `-029`–`-035`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
@@ -375,6 +375,11 @@ Retained versioned definition semantics include nested guards, transitions, and
 state declarations. Mutating caller-owned inputs or returned observations must
 not change the retained version's behavior (`WORKFLOW-VERSION-003` and `-009`).
 This local ownership guarantee does not require a definition registry.
+The accepted Core 0.9.7 correction in `WORKFLOW-GUARD-007` requires documented
+native comparison-value support and rejection of mutable/unsupported numeric
+objects and subclasses with `FINKORE_WORKFLOW_INVALID_DEFINITION` before
+retention. Supported exact values retain their meaning. Implementation and
+regression work remains tracked in the [0.9.7 plan](../docs/plans/plan-09.7.md).
 The same ownership guarantee applies to the instance binding itself at native
 construction, import, transition, and observation (`WORKFLOW-VERSION-008`).
 Explicit null preconditions are supplied input: null expected State is invalid
@@ -412,7 +417,7 @@ binding, and expected-precondition checks have passed.
 
 **Normative traceability:**
 [WORKFLOW-TRANSITION-001 through -007](../spec/workflow/transitions.md),
-[WORKFLOW-GUARD-001 through -006](../spec/workflow/guards.md),
+[WORKFLOW-GUARD-001 through -007](../spec/workflow/guards.md),
 [WORKFLOW-TERMINAL-001 through -004](../spec/workflow/terminal-states.md),
 [WORKFLOW-STATES-004 and -007](../spec/workflow/states.md), and
 [WORKFLOW-ERROR-001 through -007](../spec/workflow/errors.md),
@@ -428,6 +433,13 @@ unversioned Workflows. Unsupported/malformed validators fail with
 [ENTITY-VALIDATION-009](../spec/entities/validation.md); a supported rule rejecting
 data retains `FINKORE_ENTITY_VALIDATION_FAILED`. These corrections apply to
 Entity create, mutate, transition, and evolution without adding an operation ID.
+
+`ENTITY-MUTABILITY-008` distinguishes malformed mutability declarations
+(`FINKORE_ENTITY_INVALID_MUTATION`) from a valid rule protecting a requested
+field (`FINKORE_ENTITY_IMMUTABLE`). Own valid State/field names, including
+`__proto__`, retain their declarations through definition observation and reuse
+under `ENTITY-DEFINITION-002`. These Core 0.9.7 corrections retain the existing
+operation IDs and result shapes; implementation verification remains pending.
 
 ## `finkore.entity.create`
 
@@ -532,7 +544,10 @@ currentness, and Audit history together (`ENTITY-EVOLUTION-023` and `-033`).
 Intrinsic Audit validation precedes evolution correspondence under
 `ENTITY-EVOLUTION-034`. If both fail, preserve Audit's primary error; if only
 correspondence fails, return `FINKORE_ENTITY_INVALID_MUTATION`. This specifies
-validation priority, not permission to commit Audit history early.
+validation priority, not permission to commit Audit history early. Malformed
+supplied Audit history, including explicit null, retains
+`FINKORE_AUDIT_INVALID_EVENT`; adapter failure observations cannot replace that
+code or manufacture a successfully imported history.
 
 For optional expected source State and Revision, explicit null remains supplied
 input and fails with `FINKORE_ENTITY_STATE_CONFLICT` against a valid observation

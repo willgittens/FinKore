@@ -342,6 +342,11 @@ See [Developer Tools](./docs/tools/README.md) for details.
 FinKore Core 0.9.6 is the corrective release candidate for the frozen Core 0.9
 baseline intended to become Core 1.0.
 
+Subsequent review identified additional gaps despite a fresh passing full
+verification run. The [Core 0.9.7 corrective plan](./docs/plans/plan-09.7.md)
+has completed contract resolution (Milestone 1). Its regressions, corrections,
+and final review remain prerequisites for Core 1.0 promotion.
+
 All 884 manifest vectors pass on TypeScript, CPython 3.12/3.13, and Java,
 including all earlier corrective regressions. The completed
 [Core 0.9.6 corrective plan](./docs/plans/plan-09.6.md) closes the reviewed native

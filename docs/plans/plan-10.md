@@ -2,6 +2,13 @@
 
 ## Status
 
+The [Core 0.9.7 corrective plan](plan-09.7.md) is an open prerequisite for
+stable promotion. Post-0.9.6 review reproduced additional Approval, native
+ownership, Entity declaration, and malformed-input gaps despite a fresh passing
+full verification run. Its contract decisions are accepted in Milestone 1;
+regressions, corrections, and final review must be completed before the stable
+milestones below proceed.
+
 The completed [Core 0.9.6 corrective release](plan-09.6.md) resolves its reviewed
 findings and passes its expanded release gate, preserving earlier corrective
 protections including [Core 0.9.5](plan-09.5.md) and [Core 0.9.4](plan-09.4.md).
@@ -11,8 +18,8 @@ on all four runtimes. Fresh review also corrects revision-currentness and
 composition Decision-container validation. Milestone 8 passes complete
 clean-candidate verification, full configured mutation, and all portable/native
 probes. Milestone 9 completes documentation and the local corrective release.
-This prerequisite is complete; stable promotion still requires the milestones
-below. Passing corrective-release checks do not waive those gates.
+The 0.9.6 work is complete as recorded; the additional 0.9.7 prerequisite remains
+open. Passing corrective-release checks do not waive the stable milestones below.
 
 The local annotated `core-0.9.6` tag identifies the latest corrective snapshot.
 No remote tag or package publication is part of this local completion. Core
@@ -67,7 +74,7 @@ Promote the reviewed 0.9 candidate without adding new behavior.
 ### Tasks
 
 - [ ] Confirm that every 0.9 release blocker is resolved, including every
-      finding and release gate in the [0.9.6 corrective plan](plan-09.6.md),
+      finding and release gate in the [0.9.7 corrective plan](plan-09.7.md),
       while preserving all earlier corrective releases' protections.
 - [ ] Change CoreDoc status and version to FinKore Core 1.0.
 - [ ] Change specification status from experimental or release candidate to

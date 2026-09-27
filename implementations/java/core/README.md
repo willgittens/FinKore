@@ -1,5 +1,12 @@
 # FinKore Java Core
 
+Core 0.9.7 contracts are accepted in [Milestone 1](../../../docs/plans/plan-09.7.md).
+New Approval fact/condition/history and native-value rules, complete composition
+validation, and Entity declaration/failure corrections remain pending regression
+and implementation work. The 0.9.6 results below describe that tagged snapshot;
+they do not establish conformance to the new contracts. Concrete selector APIs
+will need to distinguish omission from explicit null under the accepted rules.
+
 Core 0.9.6 status: [Completed corrective release](../../../docs/plans/plan-09.6.md).
 Money, Workflow, Approval, Audit, and Entity corrections are verified. All 884 manifest
 vectors pass on TypeScript, Python 3.12/3.13, and Java, with no unsupported cases

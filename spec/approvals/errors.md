@@ -64,6 +64,18 @@ applicability alone does not produce `FINKORE_APPROVAL_INVALID_CHAIN`.
 
 ## Invariants
 
+The 0.9.7 corrections retain existing error categories: malformed condition or
+selector declarations and unsupported concrete fact values use
+`FINKORE_APPROVAL_INVALID_DECISION`; unavailable facts for a valid condition use
+`FINKORE_APPROVAL_CONDITION_UNRESOLVED`. A record that would invalidate retained
+lifecycle references uses `FINKORE_APPROVAL_INVALID_DECISION` under
+APPROVAL-VALIDITY-015 and leaves both histories unchanged. Missing quorum
+eligibility/outcome evidence uses `FINKORE_APPROVAL_INVALID_CHAIN` in composition
+category 4; disconnected cycles or unresolved declared references use category 1.
+Only composition has the total priority in APPROVAL-ERROR-010. Declaration
+validation before accepting a condition result does not create such a priority
+for all concrete Approval operations.
+
 At concrete Requirement/Decision record and evaluation boundaries, malformed
 subject or eligibility declarations prevent a valid Decision and use
 `FINKORE_APPROVAL_INVALID_DECISION`. Missing Decision subject association is

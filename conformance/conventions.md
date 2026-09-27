@@ -533,6 +533,176 @@ Native arrays with holes, cycles, or unsupported objects are not JSON null
 fixtures. Structural input failures are core domain errors; unexpected runtime
 defects remain infrastructure failures and must not be broadly remapped.
 
+## Core 0.9.7 accepted correction fixtures
+
+These conventions encode the accepted [Milestone 1 decisions](../docs/plans/plan-09.7.md).
+The owning specifications define behavior; M2 adds permanent regressions and
+M3–M7 synchronize implementations. The existing 884 passing vectors do not
+establish these newly reviewed boundaries.
+
+### Approval relevance, selectors, and equality
+
+Under APPROVAL-FACT-001 through APPROVAL-FACT-004, concrete
+`approval.decision.evaluate` requires `currentSubjectFacts` as a present JSON
+value, including explicit null. `approval.requirement.evaluate` retains optional
+current facts: omission together with omitted selectors evaluates history without
+claiming current-fact comparison. Neither core nor adapter fills omitted current
+facts from a historical Decision. Historical `subjectFacts` remains required.
+
+When current facts are supplied, omitted `relevantFactPaths` compares the entire
+value. A supplied list must be nonempty and contain valid selector strings;
+null, an empty list, a wrong-type list/member, or malformed selector yields
+`FINKORE_APPROVAL_INVALID_DECISION`. Supplied selectors without current facts
+have that same error. Duplicate relevance paths merely repeat the same comparison
+and do not disable validation. Explicit null current facts are compared as null.
+
+Both `relevantFactPaths` and condition `requiredFacts` use dot-separated object
+member paths. A path and every segment must be nonempty: `invoice.amount` is
+valid; `""`, `.amount`, `invoice.`, and `invoice..amount` are malformed.
+Member names are case-sensitive and are not trimmed or normalized. Each step
+uses only an own member of an object. Numeric-looking segments may address
+object keys; they never index arrays. Other characters have literal member-name
+meaning, not wildcard, bracket, or expression syntax. There is no escaping or
+fallback to a literal dotted key: `invoice.amount` does not select the top-level
+key `"invoice.amount"`. Such a key remains part of whole-value comparison.
+Own `__proto__`, `constructor`, and `prototype` members are ordinary facts;
+inherited members do not supply evidence.
+
+A missing selected leaf, a missing intermediate member, or traversal through
+null/scalar/array is unavailable. Required condition facts then yield
+`FINKORE_APPROVAL_CONDITION_UNRESOLVED`; selected Decision facts do not match,
+even when absent on both sides. Present null, false, zero, and empty string
+leaves are available. Equality of selected leaves or complete values is recursive:
+object member order is immaterial, arrays preserve length/order, types remain
+distinct, and exact accepted numbers compare independently of decimal scale.
+For example, numeric 1 and native decimal 1.00 compare equal; `"1"`, true, and
+1 do not. A Money-shaped object remains an ordinary object, so amount strings
+`"1.0"` and `"1.00"` differ. Missing object members differ from null members.
+Signed numeric zero compares equal. No Money rounding or tolerance is involved.
+
+Native numeric tests supplement JSON vectors. Shared JSON vectors use values
+whose numeric meaning survives each adapter's supported parse/serialization
+boundary; arbitrary-precision decimal and large-integer equality is tested
+natively rather than passed through a lossy JavaScript JSON number. This does
+not make JSON numbers a serialization for exact decimal domain values under
+SPEC-DECIMAL-002 or allow converting strings into numbers.
+
+### Condition declaration and evidence
+
+Under APPROVAL-CONDITION-007, `condition` is an object with nonempty string `id`
+and `evaluation`, and `requiredFacts` is an explicit nonempty array of distinct
+valid selectors. `evaluation` identifies the composing evaluation boundary; it
+is not executable code. Missing/null/wrong-type declarations, empty required
+lists, duplicate required selectors, and malformed paths use
+`FINKORE_APPROVAL_INVALID_DECISION` before any external result is accepted.
+The `facts` member is an object. Omitted facts leave required facts unavailable
+(`FINKORE_APPROVAL_CONDITION_UNRESOLVED`); a supplied null or non-object facts
+container is malformed (`FINKORE_APPROVAL_INVALID_DECISION`). Missing required
+members of a valid object remain unresolved. With complete facts, `result` must
+be exactly `APPLICABLE` or `NOT_APPLICABLE`, otherwise it is unresolved. No
+declaration or result substitutes for actual required fact presence.
+
+### Quorum evidence and disconnected declarations
+
+Each applicable quorum Requirement observation supplies `eligibleActors` as an
+array of nonempty Actor identifier strings and explicit `approvedOutcome` and
+`rejectedOutcome` mappings to distinct supported Decision outcomes. An empty
+eligibility list is valid evidence that no Actor qualifies; it is not omitted
+evidence, and repetition cannot create votes. The mappings are not filled with
+defaults. Missing, null, or malformed required evidence uses
+`FINKORE_APPROVAL_INVALID_CHAIN` in APPROVAL-ERROR-010 category 4, even for an
+empty Decision list. A valid list excluding the voter yields no vote; it does
+not make the definition malformed. A pending member and unreachable threshold
+retain APPROVAL-QUORUM-006/010 outcomes.
+
+An explicitly `NOT_APPLICABLE` member requires no eligibility/mapping evidence
+or vote. Optional evidence, when supplied, must still have valid shape. Every
+Requirement referenced by any declared group requires applicability evidence;
+unused groups do not escape validation or become actionable. Quorum observations
+do not require a concrete `subject` or redundant `state`. Non-quorum applicable
+observations retain their required State. Decision `effective` remains a required
+Boolean; `decisions: []` is a valid no-vote control.
+
+Disconnected cycles and unresolved children are invalid structure (category 1),
+not missing observation evidence (category 4). A valid unused group is permitted.
+Root/stage-to-child depth remains four, checked on every evaluated path; a shared
+child reached through different depths cannot hide the deeper path. Whole-graph
+cycle validation does not create artificial evaluation roots for unused groups.
+Success retains the existing exact `{outcome, actionableRequirements}` shape,
+with actionability restricted to the existing reachable pending branches/order.
+
+### Proposed Approval history
+
+APPROVAL-VALIDITY-015 checks the proposed appended Decision array against all
+retained lifecycle events before returning record success. A collision with any
+retained withdrawal target or supersession target/successor yields
+`FINKORE_APPROVAL_INVALID_DECISION`, with both histories unchanged. Reference
+tuples are Requirement identifier, Actor identifier, and exact decision instant.
+Equivalent offset spellings collide; nanosecond-distinct instants do not.
+Equal tuples unreferenced by lifecycle evidence are not banned. A successful
+record returns all earlier history and lifecycle evidence plus the new Decision,
+preserving timestamps and local order. Tests use actual returned envelopes in
+subsequent record/lifecycle/evaluation calls without repairing them.
+
+### Supported native retained values
+
+APPROVAL-FACT-004 and WORKFLOW-GUARD-007 require validation in owning cores.
+The reference correction profiles use null, strings, Booleans, finite supported
+numbers, arrays/lists, and objects/maps with string own member names. Containers
+are captured independently; acyclic shared children are valid, cycles and
+unsupported scalar objects are rejected. This profile governs Approval facts
+and retained Workflow comparison values, not arbitrary application objects or
+new persistence serialization.
+
+| Reference runtime | Supported numeric values and exact comparison interpretation |
+| --- | --- |
+| TypeScript | Finite primitive `number`, interpreted by its ECMAScript decimal round-trip spelling. No boxed number, bigint, NaN, infinity, or custom numeric object is implicitly supported. Integers already rounded by the caller cannot be recovered. |
+| Python | Built-in `int` and finite built-in `float`; Approval also retains immutable finite `Decimal`. Workflow guards retain their existing rejection of Decimal. Boolean stays a separate category. For Approval comparison, integers/Decimals retain exact value and floats use their decimal round-trip spelling. Numeric subclasses and other numeric objects are unsupported. Decimal context must not round equality. |
+| Java | Exact classes `Byte`, `Short`, `Integer`, `Long`, `BigInteger`, `BigDecimal`, and finite `Float`/`Double`. Integral/decimal values retain exact value; float/double use their standard decimal round-trip spelling. No conversion of exact values through double; no arbitrary `Number.toString()` coercion. `AtomicInteger`, `AtomicLong`, other Number classes, and BigInteger/BigDecimal subclasses are rejected. |
+
+The comparison interpretation above governs Approval facts; it does not extend
+Workflow guard equality or its supported Python numeric set.
+Round-trip spelling assigns the supported native binary scalar its documented
+JSON numeric meaning; subsequent equality compares that decimal value exactly.
+It is not a way to repair an unsupported value or round an exact decimal.
+Representations outside the common JSON range remain native-only test inputs.
+Numeric strings remain strings. Native collection APIs are language-specific;
+neither mutable container aliases nor returned observations may change captured
+facts or bound guard meaning.
+
+Unsupported concrete Approval facts use `FINKORE_APPROVAL_INVALID_DECISION`;
+composition evidence uses `FINKORE_APPROVAL_INVALID_CHAIN` in its evidence
+category. Unsupported retained guard values use
+`FINKORE_WORKFLOW_INVALID_DEFINITION`, with existing Workflow error priority.
+Native tests must include supported immutable controls and mutate original and
+returned containers separately. Existing facts-only helpers remain documented
+as such. Concrete APIs/bridges need omission-aware arguments: migrating Python
+`None`/Java null selector defaults must not erase explicit portable null.
+
+### Entity mutability and failure observation
+
+Under ENTITY-MUTABILITY-008 the bounded `definition.mutability` is a required
+object whose own nonempty State names map to arrays of nonempty field names.
+Each declared lifecycle State has an explicit entry; an empty array means no
+fields may change. Missing/null/wrong-type containers, absent required entries,
+and malformed field lists/members use `FINKORE_ENTITY_INVALID_MUTATION`.
+A valid empty permission list instead produces `FINKORE_ENTITY_IMMUTABLE` when
+a protected field is targeted. This distinguishes a malformed declaration from
+valid immutable data. Own special names survive construction, observation,
+serialization/import, and subsequent operations under ENTITY-DEFINITION-002.
+
+For evolution, omitted `auditHistory` retains the existing empty-history fixture
+default; `[]` or `{history: []}` explicitly supplies empty history. A null or
+wrong-type supplied history is malformed, not omission. AUDIT-ERROR-004 validates
+history before candidate evidence, and ENTITY-EVOLUTION-034 preserves its primary
+Audit error before correspondence checks. Empty history does not waive required
+relationship-target resolution. A valid control needs corresponding Audit
+evidence with resolvable targets. A failure adapter preserves the core error and
+observes unchanged supplied inputs without calling object methods on null or
+claiming a malformed history was successfully imported. Native tests establish
+unchanged Entity/revision/currentness/relation/Audit state; invalid histories
+need not be fabricated into valid normalized observations.
+
 ## Runner contract
 
 A language adapter performs:

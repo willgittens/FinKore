@@ -42,6 +42,13 @@ Malformed/unsupported validator declarations use `FINKORE_ENTITY_INVALID_MUTATIO
 under **ENTITY-VALIDATION-009**. A valid declared predicate rejecting data
 retains `FINKORE_ENTITY_VALIDATION_FAILED`.
 
+Malformed mutability declarations use `FINKORE_ENTITY_INVALID_MUTATION` under
+ENTITY-MUTABILITY-008; a valid rule protecting a requested field instead uses
+`FINKORE_ENTITY_IMMUTABLE`. Malformed supplied Audit history, including explicit
+null, retains `FINKORE_AUDIT_INVALID_EVENT` under AUDIT-ERROR-004 and
+ENTITY-EVOLUTION-034. Constructing an adapter's failure observations cannot
+replace that primary domain error or imply a partial successful history import.
+
 ## Invariants
 
 A failed Financial Entity operation must not produce a partially valid Financial Entity.

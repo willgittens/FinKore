@@ -190,6 +190,32 @@ Complete validation still applies before this report is returned.
 
 ## Complete Validation
 
+"Entire composition definition" in APPROVAL-COMPOSITION-024 includes groups
+disconnected from the standalone root or every stage root. Every declared
+member reference resolves under APPROVAL-COMPOSITION-004, and every declared
+component is cycle-free under APPROVAL-COMPOSITION-006. A disconnected self-cycle,
+multi-group cycle, or missing child is invalid structure in category 1 of
+APPROVAL-ERROR-010. A valid unused group remains permitted. Validation does not
+give that group an outcome contribution or actionable Requirements.
+
+The depth-four bound in APPROVAL-COMPOSITION-007 measures paths from declared
+standalone/stage roots, including each path to a shared child. Checking cycles
+throughout the declaration does not make each unused group an evaluation root
+or impose a depth bound on unreachable paths. Applicability and required evidence
+for every declared Requirement member remain subject to complete validation,
+including members in disconnected groups.
+
+For an applicable quorum member, eligibility and both outcome mappings are
+required evidence under APPROVAL-QUORUM-002/010 and APPROVAL-COMPOSITION-010.
+A voter declaration supplies an identity, not evidence of eligibility. Missing,
+null, or malformed required eligibility/mapping evidence uses
+`FINKORE_APPROVAL_INVALID_CHAIN` in category 4 of APPROVAL-ERROR-010, after
+structure, applicability, and required context. These checks apply even with no
+votes or a decisive result elsewhere. Explicit inapplicability requires no vote
+or quorum eligibility/mapping evidence; supplied malformed evidence is not
+repaired. The bounded fixture is specified in conformance conventions. No
+concrete subject schema is added to lightweight composition observations.
+
 Required evaluation instants use **SPEC-TIMESTAMP-001** through
 **SPEC-TIMESTAMP-006**; mere member presence or a nonempty string is not timestamp
 validation. In the bounded fixture, an applicable observation declaring
