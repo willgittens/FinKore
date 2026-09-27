@@ -5,6 +5,18 @@ behavior belongs to `/spec`; detailed change history remains available in Git.
 
 ## Unreleased
 
+## FinKore Core 0.9.6 Release Candidate
+
+Corrected native Money and Workflow construction, concrete Approval evaluation,
+complete context and lifecycle-history validation, Audit redaction authority,
+and Workflow/Entity input presence and error priority. Defined bounded concrete
+Decision evaluation, complete considered-evidence validation, committed lifecycle
+relationships, and standalone Entity import mappings. Corrected supplied revision
+currentness and malformed composition Decision containers. Permanent regressions
+and mutation controls protect these boundaries. The Core label remains `0.9-rc`,
+package versions remain `0.1.0`, and conformance syntax remains `0.1`. Reference
+packages remain unpublished; no new domain or stable 1.0 declaration is included.
+
 ## FinKore Core 0.9.5 Release Candidate
 
 Corrected exact Money serialization and portable failures; Workflow instance

@@ -109,8 +109,9 @@ retains its documented scope and signature.
 This is an observable corrective contract change under SPEC-FREEZE-001 and
 SPEC-COMPATIBILITY-012/014, not an editorial clarification. Milestone 2 adds
 permanent tests; Milestone 5 synchronizes implementations, adapters, public API
-documentation, and package consumers for this corrective contract. The complete
-Core 0.9.6 release gate remains pending. No canonical Agentic operation is added or repurposed.
+documentation, and package consumers for this corrective contract. Milestones
+8–9 complete combined verification, fresh review, and local release closure for
+Core 0.9.6. No canonical Agentic operation is added or repurposed.
 
 ## Non-Goals
 

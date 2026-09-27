@@ -1,12 +1,13 @@
 # FinKore Python Core
 
-Core 0.9.6 status: [Milestones 3–8](../../../docs/plans/plan-09.6.md)
-verify Money, Workflow, Approval, Audit, and Entity corrections. All 884 manifest
+Core 0.9.6 status: [Completed corrective release](../../../docs/plans/plan-09.6.md).
+Money, Workflow, Approval, Audit, and Entity corrections are verified. All 884 manifest
 vectors pass on TypeScript, Python 3.12/3.13, and Java, with no unsupported cases
 or infrastructure errors. Complete clean-candidate verification passes, including
 coverage, full TypeScript mutation, all portable/native probes, and isolated
-package consumers. The fresh review is complete; Milestone 9 release closure
-remains pending.
+package consumers. Fresh review and local release closure are complete.
+The annotated local `core-0.9.6` tag identifies the snapshot; remote and package
+publication remain separate, and stable 1.0 promotion remains uncompleted.
 
 Entity import accepts complete mapping evidence without a separate Source
 Identity, preserving its opaque values without synthesizing Source Identity.
@@ -146,7 +147,7 @@ release-candidate phase. It is not published to a Python package registry. The
 Python package version identifies this implementation artifact; `CORE_VERSION`
 identifies the FinKore Core behavioral baseline it implements.
 
-The `core-0.9.5` local repository tag identifies the corrective snapshot. `CORE_VERSION`
+The `core-0.9.6` local repository tag identifies the corrective snapshot. `CORE_VERSION`
 remains `0.9-rc`, and the unpublished package version remains `0.1.0`.
 
 Current status:

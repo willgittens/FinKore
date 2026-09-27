@@ -139,7 +139,8 @@ requirements and 884 vectors: **334 COVERED**, **0 PARTIAL**, **83 NOT DIRECTLY
 TESTABLE**, and **0 BLOCKING SPEC GAP**. All reopened boundaries are verified,
 including Entity import/evolution presence, failure atomicity, and returned
 versioned-observation reuse. Complete clean-candidate verification and fresh
-review pass; corrective release closure remains Milestone 9.
+review pass; Milestone 9 completes the local corrective release, identified by
+the annotated `core-0.9.6` tag. Remote and package publication remain separate.
 
 | Exercised boundary | Permanent regression surface | Correction milestone |
 | --- | --- | --- |
@@ -838,14 +839,14 @@ references are unchanged.
 
 ## Readiness
 
-**CORE 0.9.6 MILESTONES 1–8 VERIFIED; RELEASE PENDING, CORE 1.0 PROMOTION BLOCKED**
+**CORE 0.9.6 VERIFIED AND LOCALLY RELEASED; CORE 1.0 PROMOTION REMAINS SEPARATE**
 
 The current 0.9.6 reassessment above takes precedence over historical coverage
 claims. Milestones 1–8 implement the accepted contracts and reviewed corrections;
 all 884 vectors pass across four runtimes. Full combined verification and fresh
-review pass. Milestone 9 release closure and the separate Core 1.0 promotion
-remain outstanding. The following paragraph records the completed 0.9.5 snapshot
-only.
+review pass. Milestone 9 completes the local corrective release. Core 1.0
+promotion remains outstanding, as do remote and package publication. The
+following paragraph records the completed 0.9.5 snapshot only.
 
 The manifest, schema, operation catalog, exact comparison rules, normalized
 errors, deterministic context, and valid requirement references are sufficient

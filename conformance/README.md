@@ -20,7 +20,7 @@ The manifest and vector-file version fields describe syntax compatibility, not
 FinKore release numbers. Release scope is determined by the manifest contents,
 referenced requirement IDs, and traceability status.
 
-The local `core-0.9.5` tag identifies the latest completed corrective snapshot.
+The local `core-0.9.6` tag identifies the latest completed corrective snapshot.
 The Core label remains `0.9-rc` and conformance syntax remains `0.1`.
 
 The completed [Core 0.9.5 plan](../docs/plans/plan-09.5.md) corrects native Money
@@ -47,7 +47,7 @@ do not establish exhaustive correctness or complete the separate Core 1.0
 promotion process. Canonical Agentic operation promotion and unpublished
 reference-package status are unchanged.
 
-The [Core 0.9.6 corrective plan](../docs/plans/plan-09.6.md) expands the current
+The completed [Core 0.9.6 corrective plan](../docs/plans/plan-09.6.md) expands the current
 manifest to 884 vectors. Milestones 3–8 verify Money, Workflow, Approval, Audit,
 and Entity corrections. All vectors pass on TypeScript, Python 3.12/3.13, and
 Java, with no unsupported cases or infrastructure errors. Native tests cover
@@ -60,7 +60,8 @@ Milestone 8 passes complete clean-candidate verification, full configured
 TypeScript mutation, all 222 portable critical probes, all 92 native probes,
 and the 47-probe Python 3.13 native repeat. These targeted Python/Java probes
 do not establish full implementation mutation coverage. The fresh review is
-complete; Milestone 9 release closure remains pending.
+complete. Milestone 9 closes the local corrective release; remote tag and package
+publication remain separate.
 
 For FinKore Core 0.9 release candidate, [manifest.json](manifest.json) is the
 frozen release-candidate manifest and `finkoreConformance` remains `0.1`. This

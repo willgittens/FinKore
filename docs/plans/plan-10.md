@@ -2,21 +2,19 @@
 
 ## Status
 
-The completed [Core 0.9.5 corrective release](plan-09.5.md) resolved its reviewed
-findings and passed its expanded release gate, preserving earlier corrective
-protections including [Core 0.9.4](plan-09.4.md). A subsequent readiness review
-found additional native construction, Approval evaluation/evidence, Audit
-authority, and Workflow/Entity validation gaps despite passing existing checks.
-Stable promotion is blocked on the [Core 0.9.6 corrective
-plan](plan-09.6.md). Milestones 1–8 implement the reviewed contract,
+The completed [Core 0.9.6 corrective release](plan-09.6.md) resolves its reviewed
+findings and passes its expanded release gate, preserving earlier corrective
+protections including [Core 0.9.5](plan-09.5.md) and [Core 0.9.4](plan-09.4.md).
+Milestones 1–8 implement the reviewed contract,
 construction, evaluation, Audit, and Entity corrections; all 884 vectors pass
 on all four runtimes. Fresh review also corrects revision-currentness and
 composition Decision-container validation. Milestone 8 passes complete
 clean-candidate verification, full configured mutation, and all portable/native
-probes. Release closure remains pending in Milestone 9; stable promotion remains
-a separate task. Earlier passing vectors do not waive those gates.
+probes. Milestone 9 completes documentation and the local corrective release.
+This prerequisite is complete; stable promotion still requires the milestones
+below. Passing corrective-release checks do not waive those gates.
 
-The local annotated `core-0.9.5` tag identifies the latest corrective snapshot.
+The local annotated `core-0.9.6` tag identifies the latest corrective snapshot.
 No remote tag or package publication is part of this local completion. Core
 constants remain `0.9-rc`, reference-package versions remain `0.1.0`, and
 conformance syntax remains `0.1` until their respective release decisions.

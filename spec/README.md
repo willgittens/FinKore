@@ -53,13 +53,16 @@ version, and language implementation package versions. Format and package
 versions describe tooling or artifact compatibility; they do not define
 financial behavior.
 
-The `core-0.9.5` corrective snapshot retains the `0.9-rc` Core label. Its
+The `core-0.9.6` corrective snapshot retains the `0.9-rc` Core label. Its
+[concrete Decision evaluation](approvals/decisions.md),
+[complete context and lifecycle validation](approvals/validity.md), and
+[standalone Entity import mappings](entities/import.md) resolve demonstrated
+contract gaps. The earlier
 [Entity ownership](entities/README.md#core-095-correction-note-non-normative),
 [validator](entities/validation.md#core-095-correction-note-non-normative), and
-[revision/conflict identity](entities/revisions.md) corrections refine demonstrated
-contract gaps while preserving the earlier
-[Entity evolution corrections](entities/evolution.md#core-094-correction-note-non-normative).
-The snapshot does not promote the specification to stable 1.0.
+[revision/conflict identity](entities/revisions.md) corrections, together with
+the [Entity evolution corrections](entities/evolution.md#core-094-correction-note-non-normative),
+remain in force. The snapshot does not promote the specification to stable 1.0.
 
 ## Organization
 

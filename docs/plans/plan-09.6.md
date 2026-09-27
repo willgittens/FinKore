@@ -2,17 +2,19 @@
 
 ## Status
 
-Milestones 1–8 are complete: accepted contracts, permanent regressions, Money,
+Milestones 1–9 are complete: accepted contracts, permanent regressions, Money,
 Workflow, Approval, Audit, and Entity corrections are implemented and verified.
 Fresh review adds 21 regressions and corrects Python
 revision-currentness validation and Java composition evidence-container handling.
 The expanded manifest has 884 vectors; complete clean-candidate verification,
 full configured mutation suites, and all portable/native probe gates pass.
-Milestone 9 release closure remains unstarted.
+Milestone 9 completes documentation and the local corrective release. The
+annotated `core-0.9.6` tag identifies the verified snapshot; earlier tags are
+preserved. Remote and package publication remain separate.
 The readiness review of commit `e300bb1`
 (`core-0.9.5`) found additional mandatory behavior and portability gaps despite
-passing existing checks. Core 1.0 promotion is blocked pending this corrective
-release closure and the separate stable-promotion gates.
+passing existing checks. Those findings are resolved. Core 1.0 promotion still
+requires the separate stable-promotion gates.
 
 The completed [0.9.5 plan](plan-09.5.md) remains the record of its corrections
 and verified release snapshot. Its completion does not establish coverage of
@@ -179,7 +181,8 @@ Their owning documents now define the outcomes with distinct stable IDs:
    no Source Identity. Explicit null/malformed Source Identity remains invalid.
 
 No semantic decision remains open for these regressions. Implementation and
-public API synchronization are still required before release.
+public API synchronization were completed in the owning milestones and verified
+by the combined release gate.
 
 ### Compatibility and synchronization assessment
 
@@ -205,10 +208,10 @@ structural format. No blanket backward-compatibility claim is made for them.
 
 SPEC-FREEZE-002 requires accepted normative corrections to land with affected
 implementation, tests/conformance, public documentation, and Agentic metadata
-in the same change. The branch now contains the accepted specification and
-regressions; Milestones 5 and 7 must complete implementation, adapter, and public
-API synchronization before the corrective change can satisfy SPEC-FREEZE-002
-or be released. The intentionally red Milestone 2 baseline is not that closure.
+in the same change. The release contains the accepted specification, regressions,
+and the implementation, adapter, and public API synchronization completed in
+Milestones 5 and 7. Milestone 8 verifies the combined candidate. The intentionally
+red Milestone 2 baseline remains historical evidence rather than release closure.
 
 CoreDoc review found no proposed foundation change: CORE-001 monetary validity,
 CORE-002 declared control/atomicity, CORE-003.4 redaction authority, CORE-004
@@ -1088,31 +1091,64 @@ closure remain Milestone 9.
 
 ## Milestone 9 — Documentation and corrective release
 
-- [ ] Review unit/native/conformance/mutation tests, JSDoc and Python/Java API
+- [x] Review unit/native/conformance/mutation tests, JSDoc and Python/Java API
       docs, examples, root/package READMEs, `/spec`, `/conformance`, `/agentic`,
       CoreDoc, and `AGENTS.md`; update every affected artifact in the same
       change. Document implemented, conformant, unsupported, and deferred scope
       accurately. Change CoreDoc version fields only for changed foundation rules.
-- [ ] Preserve separate identities for the corrective `core-0.9.6` snapshot,
+- [x] Preserve separate identities for the corrective `core-0.9.6` snapshot,
       `0.9-rc` Core label, `0.1.0` reference-package versions, and `0.1`
       conformance syntax unless a reviewed compatibility decision requires
       otherwise. Stable 1.0 promotion remains a separate task.
-- [ ] After verification, add a concise 0.9.6 summary to the single
+- [x] After verification, add a concise 0.9.6 summary to the single
       [release history](../releases/README.md). Keep detailed development
       history in Git and existing tools, not additional release reports.
-- [ ] Follow the maintainer's release process for the verified commit and
+- [x] Follow the maintainer's release process for the verified commit and
       annotated local `core-0.9.6` tag. Preserve prior tags and unpublished
       reference-package status; remote or registry publication requires its
       own explicit release instruction.
-- [ ] Verify final documentation from a clean checkout and ensure executable
+- [x] Verify final documentation from a clean checkout and ensure executable
       files, configuration, and locks match the fully verified candidate.
       Rerun affected gates if the release candidate changes after verification.
-- [ ] Mark this plan complete and update [Core 1.0 prerequisites](plan-10.md)
+- [x] Mark this plan complete and update [Core 1.0 prerequisites](plan-10.md)
       only after every finding and gate is resolved. Distinguish local release
       completion, remote availability, and stable Core 1.0 readiness.
 
 Completion: documentation, release history, and the corrective tag identify
 the verified 0.9.6 snapshot without making a premature stable-release claim.
+
+### Milestone 9 completion and verification
+
+Current root/package READMEs, specification/conformance status, traceability,
+the concise release history, and Core 1.0 prerequisites describe the completed
+0.9.6 corrective release. Historical milestone results retain their original
+counts and failure evidence. Core 1.0 milestones remain uncompleted; remote
+availability and registry publication are not claimed.
+
+The final documentation candidate passes documentation/traceability, architecture,
+license, toolchain, developer-tool tests, and whitespace checks from a clean
+checkout after `npm ci`. Installed npm, Python wheel/sdist on CPython 3.12/3.13,
+and Java JAR consumers pass with the final packaged documentation. Every tracked
+non-Markdown file matches `2f9d8eb`, the committed Milestone 8 state verified in
+the preceding milestone, including executable sources, tests, vectors,
+configuration, and dependency locks. Its complete verification and mutation
+review remain applicable; this milestone introduces no financial code changes.
+
+The existing local release process is retained: review the candidate, pass the
+affected gates, commit the release documentation, then create the annotated
+`core-0.9.6` tag on that exact commit. Earlier tag objects are preserved. No
+remote push, package publication, new report system, or GitHub Action is included.
+The snapshot tag, `0.9-rc` Core label, `0.1.0` package versions, and `0.1`
+conformance syntax retain their distinct meanings.
+
+Completion review: unit/native/conformance/mutation tests, installed examples,
+TypeScript JSDoc, Python/Java API docs, normative specifications, Agentic
+operation metadata, CoreDoc, and AGENTS.md were reviewed against the corrected
+behavior. Existing contracts and tests remain current; this documentation-only
+milestone adds no requirement, portable error, public API, operation, dependency,
+or foundation rule. CoreDoc version fields and all executable artifacts are
+unchanged. Affected README, release, traceability, and planning text is updated.
+Finite passing tests support the exercised scope, not exhaustive correctness.
 
 ## Execution dependencies and completion discipline
 
@@ -1155,7 +1191,7 @@ Core 0.9.6 is complete only when:
       prescribed runtimes, with no surviving critical financial mutant.
 - [x] Clean-checkout verification and a fresh boundary review pass; all newly
       confirmed mandatory gaps are resolved and traceability reflects actual scope.
-- [ ] Documentation and compatibility decisions are synchronized, earlier
+- [x] Documentation and compatibility decisions are synchronized, earlier
       regressions and tags are preserved, and no architecture boundary is violated.
-- [ ] Concise release notes and the annotated corrective tag identify the
+- [x] Concise release notes and the annotated corrective tag identify the
       verified snapshot. No unrequested publication or Core 1.0 promotion occurs.

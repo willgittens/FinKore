@@ -107,8 +107,9 @@ request kind remains distinct from committed history's discriminator.
 
 Milestone 2 provides permanent regressions. Milestone 5 synchronizes core,
 adapter, public API, and package behavior, including exact-instant lifecycle
-references and preservation of their timestamp spelling. The complete Core 0.9.6
-release gate remains pending. Existing IDs retain their meaning; new obligations
+references and preservation of their timestamp spelling. Milestones 8–9 complete
+the Core 0.9.6 verification, fresh review, and local release gate. Existing IDs
+retain their meaning; new obligations
 have new IDs.
 
 ## Example

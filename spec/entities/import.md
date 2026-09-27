@@ -85,8 +85,9 @@ SPEC-COMPATIBILITY-012/014, not an editorial change or a claim of compatibility
 for TypeScript's former pair-required behavior. Milestone 2 adds permanent
 vectors and native regressions. Milestone 7 synchronizes implementations
 and public API documentation, including valid returned-observation reuse.
-Combined verification, fresh review, and corrective release closure remain
-required before claiming SPEC-FREEZE-002 or releasing the correction. No canonical import operation is introduced.
+Milestones 8–9 complete combined verification, fresh review, and local corrective
+release closure, satisfying the synchronization required by SPEC-FREEZE-002.
+No canonical import operation is introduced.
 
 ## Core 0.9.3 correction note (non-normative)
 
