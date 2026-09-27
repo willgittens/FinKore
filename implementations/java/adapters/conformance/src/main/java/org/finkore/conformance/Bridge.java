@@ -288,8 +288,10 @@ public final class Bridge {
           .contains(operation)) {
         return approvalHistoryObservation(input.get("history"));
       }
-      if ("approval.composition.evaluate".equals(operation) && input.get("decisions") instanceof List<?>) {
-        return Map.of("decisions", input.get("decisions"));
+      if ("approval.composition.evaluate".equals(operation) && input.containsKey("decisions")) {
+        Map<String, Object> observations = new LinkedHashMap<>();
+        observations.put("decisions", input.get("decisions"));
+        return observations;
       }
       if ("finkore.entity.mutate".equals(operation)) {
         Map<String, Object> observations = entityObservation(input.get("entity"));

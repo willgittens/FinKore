@@ -424,6 +424,13 @@ the composing-specification exception remains in [Entity Revisions](../spec/enti
 Native retained-definition checks apply **ENTITY-DEFINITION-002**, including
 unversioned Entity instances.
 
+An imported revision object may omit its `current` marker; its enclosing
+`currentRevision` or `historicalRevisions` field declares its role. A supplied
+marker must be Boolean and agree with that role. A contradictory or malformed
+marker is invalid revision input under **ENTITY-REVISION-007** and
+**ENTITY-IMPORT-009**; import must not silently rewrite it. Failure preserves
+the supplied observation under **ENTITY-IMPORT-008**.
+
 ### Entity version binding and import preconditions
 
 The versioned Entity fixture retains `binding` inside the Entity observation,

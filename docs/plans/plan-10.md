@@ -8,11 +8,13 @@ protections including [Core 0.9.4](plan-09.4.md). A subsequent readiness review
 found additional native construction, Approval evaluation/evidence, Audit
 authority, and Workflow/Entity validation gaps despite passing existing checks.
 Stable promotion is blocked on the [Core 0.9.6 corrective
-plan](plan-09.6.md). Milestones 1–7 implement and verify the reviewed contract,
-construction, evaluation, Audit, and Entity corrections; all 863 vectors pass
-on all four runtimes. Combined verification, fresh review, and release closure
-remain pending in Milestones 8–9. Earlier passing vectors do not waive those
-gates.
+plan](plan-09.6.md). Milestones 1–8 implement the reviewed contract,
+construction, evaluation, Audit, and Entity corrections; all 884 vectors pass
+on all four runtimes. Fresh review also corrects revision-currentness and
+composition Decision-container validation. Milestone 8 passes complete
+clean-candidate verification, full configured mutation, and all portable/native
+probes. Release closure remains pending in Milestone 9; stable promotion remains
+a separate task. Earlier passing vectors do not waive those gates.
 
 The local annotated `core-0.9.5` tag identifies the latest corrective snapshot.
 No remote tag or package publication is part of this local completion. Core

@@ -218,6 +218,8 @@ def import_entity(definition: Any, import_value: Any) -> dict[str, Any]:
     Complete mapping-only evidence is valid without synthesizing Source Identity.
     A supplied Source Identity must be a complete object with matching mapping;
     explicit null and malformed values use INVALID_IDENTITY.
+    Supplied revision currentness must be Boolean and agree with its current or
+    historical position; conflicting declarations are never silently rewritten.
 
     @see ENTITY-IMPORT-007
     @see ENTITY-VALIDATION-009
@@ -404,6 +406,8 @@ def _revision(value: Any, entity: dict[str, Any], current: bool) -> dict[str, An
     if not isinstance(value, dict) or value.get("type") != entity["type"] or value.get("id") != entity["id"] or not _opaque(value.get("revision")):
         raise FinKoreError(INVALID_IDENTITY)
     if value["revision"] == entity["id"]:
+        raise FinKoreError(INVALID_IDENTITY)
+    if "current" in value and (not isinstance(value["current"], bool) or value["current"] != current):
         raise FinKoreError(INVALID_IDENTITY)
     return {"type": value["type"], "id": value["id"], "revision": value["revision"], "current": current}
 

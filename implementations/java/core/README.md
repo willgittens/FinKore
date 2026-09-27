@@ -1,11 +1,12 @@
 # FinKore Java Core
 
-Core 0.9.6 status: [Milestones 3–7](../../../docs/plans/plan-09.6.md)
-verify Money, Workflow, Approval, Audit, and Entity corrections. All 863 manifest
+Core 0.9.6 status: [Milestones 3–8](../../../docs/plans/plan-09.6.md)
+verify Money, Workflow, Approval, Audit, and Entity corrections. All 884 manifest
 vectors pass on TypeScript, Python 3.12/3.13, and Java, with no unsupported cases
-or infrastructure errors. Native sequence, coverage, mutation, and isolated
-package-consumer checks support the corrected boundaries. Milestone 8 combined
-verification and fresh review, and Milestone 9 release closure, remain pending.
+or infrastructure errors. Complete clean-candidate verification passes, including
+coverage, full TypeScript mutation, all portable/native probes, and isolated
+package consumers. The fresh review is complete; Milestone 9 release closure
+remains pending.
 
 Entity import accepts complete mapping evidence without a separate Source
 Identity, preserving its opaque values without synthesizing Source Identity.
@@ -18,6 +19,12 @@ expectations impose no check; null, malformed, or unequal expectations raise
 Currentness expectations have a separate Boolean contract: malformed values
 raise `FINKORE_ENTITY_INVALID_MUTATION`, while a Boolean mismatch is a state
 conflict.
+
+The Milestone 8 review additionally rejects supplied non-list composition
+Decision containers with `FINKORE_APPROVAL_INVALID_CHAIN`, after structure,
+applicability, and required context validation. Malformed evidence is not
+silently replaced by an empty list. Permanent portable/native regressions and
+paired mutation controls cover this boundary.
 
 `Approvals.importHistory` returns a defensive, validated history envelope. The
 legacy four-argument `evaluateDecision` overload remains a separate facts/expiration

@@ -1,11 +1,12 @@
 # FinKore Python Core
 
-Core 0.9.6 status: [Milestones 3–7](../../../docs/plans/plan-09.6.md)
-verify Money, Workflow, Approval, Audit, and Entity corrections. All 863 manifest
+Core 0.9.6 status: [Milestones 3–8](../../../docs/plans/plan-09.6.md)
+verify Money, Workflow, Approval, Audit, and Entity corrections. All 884 manifest
 vectors pass on TypeScript, Python 3.12/3.13, and Java, with no unsupported cases
-or infrastructure errors. Native sequence, coverage, mutation, and isolated
-package-consumer checks support the corrected boundaries. Milestone 8 combined
-verification and fresh review, and Milestone 9 release closure, remain pending.
+or infrastructure errors. Complete clean-candidate verification passes, including
+coverage, full TypeScript mutation, all portable/native probes, and isolated
+package consumers. The fresh review is complete; Milestone 9 release closure
+remains pending.
 
 Entity import accepts complete mapping evidence without a separate Source
 Identity, preserving its opaque values without synthesizing Source Identity.
@@ -18,6 +19,12 @@ expectations impose no check; null, malformed, or unequal expectations raise
 Currentness expectations have a separate Boolean contract: malformed values
 raise `FINKORE_ENTITY_INVALID_MUTATION`, while a Boolean mismatch is a state
 conflict.
+
+The Milestone 8 review additionally checks supplied revision `current` markers:
+when present they must be Boolean and agree with the current/historical role.
+Malformed or contradictory markers raise `FINKORE_ENTITY_INVALID_IDENTITY`
+without rewriting the supplied observation. Permanent portable/native regressions
+and paired mutation controls cover this boundary.
 
 `redact_history(history, policy, redaction_event)` requires a nonempty string
 `policy["authority"]` and declared `protectedPaths`. Omitted, null, empty, numeric,
@@ -323,13 +330,13 @@ npm run conformance:python
 ```
 
 The packaged Python coverage gate runs unit tests and the complete conformance
-manifest through coverage. It currently enforces at least 85% line coverage
-across `finkore` source. The critical-mutant probe mutates temporary copies of
+manifest through branch-enabled coverage. It enforces at least 85% combined
+statement/branch coverage across `finkore` source. The critical-mutant probe mutates temporary copies of
 Money, Workflow, Audit, Approvals, and Entities and requires the real
-conformance runner to kill every probe. Until later 0.9.6 fixes land, the full
-coverage/mutation commands encounter the known red baselines. Money verification
-uses the focused commands recorded in Milestone 3; it does not exclude those
-failures from the eventual whole-core release gate.
+conformance runner to kill every probe through a named regression while an
+independent valid control passes. Crashes and infrastructure failures do not
+count as kills. These targeted probes supplement native tests; they do not
+provide full mutation coverage of the Python implementation.
 
 ### Evolution history reuse
 

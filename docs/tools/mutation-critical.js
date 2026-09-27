@@ -24,6 +24,72 @@ if (!validTargets.has(requestedTarget)) {
 
 const pythonMutants = [
 {
+  "id": "python-approval096-concrete-subject-bypass",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "if not isinstance(subject, dict) or not _opaque(subject.get(\"type\")) or not _opaque(subject.get(\"id\")):",
+  "to": "if False:",
+  "expectedVector": "approval.boundary096.decision-subject-object-001",
+  "expectedPassVectors": [
+    "approval.boundary096.decision-control-001"
+  ]
+},
+{
+  "id": "python-approval096-history-target-bypass",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "if sum(_same_decision_ref(_decision_key(decision), ref) for decision in history) != 1:",
+  "to": "if False:",
+  "expectedVector": "approval.boundary096.history-evaluate-missing-target-001",
+  "expectedPassVectors": [
+    "approval.boundary096.history-control-001"
+  ]
+},
+{
+  "id": "python-approval096-chain-state-bypass",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "if any(states.get(requirement) not in (\"APPROVED\", \"REJECTED\", \"PENDING\", \"NOT_APPLICABLE\") for requirement in requirements):\n        raise FinKoreError(INVALID_CHAIN)",
+  "to": "if any(states.get(requirement) not in (\"APPROVED\", \"REJECTED\", \"PENDING\", \"NOT_APPLICABLE\") for requirement in requirements):\n        return \"PENDING\"",
+  "expectedVector": "approval.boundary096.chain-state-null-001",
+  "expectedPassVectors": [
+    "approval.boundary096.chain-control-001"
+  ]
+},
+{
+  "id": "python-approval096-applicability-bypass",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "if any(reqs[key].get(\"applicability\") not in (\"APPLICABLE\", \"NOT_APPLICABLE\") for key in required):",
+  "to": "if any(\"applicability\" not in reqs[key] for key in required):",
+  "expectedVector": "approval.boundary096.applicability-null-001",
+  "expectedPassVectors": [
+    "approval.boundary096.state-all-of-control-001"
+  ]
+},
+{
+  "id": "python-entity096-revision-currentness-number",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "if \"current\" in value and (not isinstance(value[\"current\"], bool) or value[\"current\"] != current):",
+  "to": "if \"current\" in value and value[\"current\"] != current:",
+  "expectedVector": "entity.boundary096.import-revision-current-one-001",
+  "expectedPassVectors": [
+    "entity.boundary096.import-revision-current-matching-001"
+  ]
+},
+{
+  "id": "python-entity096-revision-currentness-bypass",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "if \"current\" in value and (not isinstance(value[\"current\"], bool) or value[\"current\"] != current):",
+  "to": "if False:",
+  "expectedVector": "entity.boundary096.import-revision-current-opposite-001",
+  "expectedPassVectors": [
+    "entity.boundary096.import-revision-current-matching-001"
+  ]
+},
+{
   "id": "python-entity096-source-null-omitted",
   "suite": "entities",
   "path": "core/src/finkore/entities.py",
@@ -1098,6 +1164,61 @@ const pythonMutants = [
 ]
 
 const javaMutants = [
+{
+  "id": "java-approval096-decision-container-discarded",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "if (decisions != null && !(decisions instanceof List<?>)) throw new FinKoreException(INVALID_CHAIN);",
+  "to": "// discarded malformed evidence container",
+  "expectedVector": "approval.boundary096.decision-container-object-001",
+  "expectedPassVectors": [
+    "approval.boundary096.decision-container-empty-control-001"
+  ]
+},
+{
+  "id": "java-approval096-concrete-subject-bypass",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "requiredString(subject.get(\"type\"), INVALID_DECISION);\n    requiredString(subject.get(\"id\"), INVALID_DECISION);",
+  "to": "// omitted concrete subject validation",
+  "expectedVector": "approval.boundary096.decision-subject-object-001",
+  "expectedPassVectors": [
+    "approval.boundary096.decision-control-001"
+  ]
+},
+{
+  "id": "java-approval096-history-target-bypass",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "if (history.stream().filter(decision -> sameDecisionRef(decisionKey(decision), ref)).count() != 1) throw new FinKoreException(INVALID_DECISION);",
+  "to": "// omitted committed target resolution",
+  "expectedVector": "approval.boundary096.history-evaluate-missing-target-001",
+  "expectedPassVectors": [
+    "approval.boundary096.history-control-001"
+  ]
+},
+{
+  "id": "java-approval096-chain-state-bypass",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "if (!(state instanceof String) || !Set.of(\"APPROVED\", \"REJECTED\", \"PENDING\", \"NOT_APPLICABLE\").contains(state)) {\n        throw new FinKoreException(INVALID_CHAIN);",
+  "to": "if (!(state instanceof String) || !Set.of(\"APPROVED\", \"REJECTED\", \"PENDING\", \"NOT_APPLICABLE\").contains(state)) {\n        return \"PENDING\";",
+  "expectedVector": "approval.boundary096.chain-state-null-001",
+  "expectedPassVectors": [
+    "approval.boundary096.chain-control-001"
+  ]
+},
+{
+  "id": "java-approval096-applicability-bypass",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "if (!\"APPLICABLE\".equals(applicability) && !\"NOT_APPLICABLE\".equals(applicability)) throw new FinKoreException(CONDITION_UNRESOLVED);",
+  "to": "// omitted applicability validation",
+  "expectedVector": "approval.boundary096.applicability-null-001",
+  "expectedPassVectors": [
+    "approval.boundary096.state-all-of-control-001"
+  ]
+},
 {
   "id": "java-entity096-source-null-omitted",
   "suite": "entities",

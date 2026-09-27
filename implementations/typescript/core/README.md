@@ -1,11 +1,12 @@
 # FinKore TypeScript
 
-Core 0.9.6 status: [Milestones 3–7](../../../docs/plans/plan-09.6.md)
-verify Money, Workflow, Approval, Audit, and Entity corrections. All 863 manifest
+Core 0.9.6 status: [Milestones 3–8](../../../docs/plans/plan-09.6.md)
+verify Money, Workflow, Approval, Audit, and Entity corrections. All 884 manifest
 vectors pass on TypeScript, Python 3.12/3.13, and Java, with no unsupported cases
-or infrastructure errors. Native sequence, coverage, mutation, and isolated
-package-consumer checks support the corrected boundaries. Milestone 8 combined
-verification and fresh review, and Milestone 9 release closure, remain pending.
+or infrastructure errors. Complete clean-candidate verification passes, including
+coverage, full TypeScript mutation, all portable/native probes, and isolated
+package consumers. The fresh review is complete; Milestone 9 release closure
+remains pending.
 
 Entity import accepts complete mapping evidence without a separate Source
 Identity, preserving its opaque values without synthesizing Source Identity.

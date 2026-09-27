@@ -6,7 +6,7 @@ from decimal import Context, Decimal, Inexact, Rounded, localcontext
 from finkore import CORE_VERSION, FinKoreError, Money, WorkflowDefinition, WorkflowInstance
 from finkore.workflow import create_workflow, import_workflow, transition_workflow, WorkflowTransition
 from finkore.entities import create_entity, transition_entity, import_entity
-from finkore.approvals import record_decision, evaluate_requirement, evaluate_decision, withdraw_decision, normalize_decision_set
+from finkore.approvals import record_decision, evaluate_requirement, evaluate_decision, withdraw_decision, normalize_decision_set, evaluate_composition
 from finkore.audit import append_event, redact_history
 
 
@@ -58,6 +58,10 @@ assert mapped['identityMapping'] == mapping and 'sourceIdentity' not in mapped
 assert transition_entity(definition, mapped['entity'], 'REVIEW')['binding'] == binding
 for source in (None, [], False, 1, '', {}, {'sourceSystem': ' legacy '}):
     error('FINKORE_ENTITY_INVALID_IDENTITY', lambda: import_entity(definition, {'entity': entity, 'identityMapping': mapping, 'sourceIdentity': source}))
+revision = {'type': entity['type'], 'id': entity['id'], 'revision': 'business-r1', 'current': True}
+assert import_entity(definition, {'entity': entity, 'currentRevision': revision})['currentRevision'] == revision
+for current in (False, None, 0, 1, 'true', [], {}):
+    error('FINKORE_ENTITY_INVALID_IDENTITY', lambda: import_entity(definition, {'entity': entity, 'currentRevision': {**revision, 'current': current}}))
 error('FINKORE_ENTITY_STATE_CONFLICT', lambda: import_entity(definition, {'entity': entity, 'expectedState': None}))
 error('FINKORE_ENTITY_INVALID_IDENTITY', lambda: import_entity(definition, {'entity': entity, 'currentRevision': {'type': 'invoice', 'id': 'invoice-1', 'revision': 'r1', 'current': True}, 'conflictVersion': 'r1'}))
 error('FINKORE_ENTITY_INVALID_MUTATION', lambda: create_entity({**definition, 'validation': [{'id': 'X', 'path': 'amount', 'rule': 'typo'}]}, 'invoice-2', entity['data']))
@@ -73,6 +77,13 @@ workflow = create_workflow(workflow_definition)
 workflow.binding['definitionVersionIdentity'] = '2'
 assert workflow.binding == binding
 error('FINKORE_WORKFLOW_INVALID_STATE', lambda: transition_workflow(workflow_definition, workflow, 'REVIEW', expected_current_state=None))
+composition = {'rootGroup': 'root', 'groups': [{'id': 'root', 'kind': 'ALL_OF', 'members': [{'type': 'requirement', 'id': 'member', 'requirementId': 'review'}]}]}
+observations = [{'id': 'review', 'applicability': 'APPLICABLE', 'state': 'PENDING', 'requiresEvaluationContext': True}]
+context = {'evaluatedAt': '2026-09-26T10:00:00Z'}
+assert evaluate_composition(composition, observations, [], context) == {'outcome': 'PENDING', 'actionableRequirements': ['review']}
+error('FINKORE_APPROVAL_INVALID_CHAIN', lambda: evaluate_composition(composition, observations, {}, context))
+error('FINKORE_APPROVAL_INVALID_CONTEXT', lambda: evaluate_composition(composition, observations, [], {'evaluatedAt': 'invalid'}))
+error('FINKORE_APPROVAL_INVALID_CHAIN', lambda: evaluate_composition(composition, [{'id': 'review', 'applicability': 'APPLICABLE'}]))
 requirement = {'id': 'review', 'subject': {'type': 'invoice', 'id': 'invoice-1'}, 'eligibleActors': ['alice'], 'approvedOutcome': 'APPROVED', 'rejectedOutcome': 'REJECTED'}
 decision = {'requirementId': 'review', 'subjectFacts': None, 'outcome': 'APPROVED', 'actor': {'id': 'alice'}, 'decidedAt': '2026-09-01T12:00:00Z'}
 history = record_decision(requirement, decision, [])

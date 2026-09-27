@@ -1,6 +1,7 @@
 {
   "$schema": "../../../../node_modules/@stryker-mutator/core/schema/stryker-schema.json",
   "testRunner": "vitest",
+  "concurrency": 2,
   "mutate": [
     "src/money/currency.ts",
     "src/money/errors.ts",
@@ -30,6 +31,7 @@
   "testFiles": [
     "test/integration/readiness-regressions.test.ts",
     "test/integration/boundary-regressions.test.ts",
+    "test/integration/construction-evaluation-regressions.test.ts",
     "test/money/*.test.ts",
     "test/workflow/*.test.ts",
     "test/audit/*.test.ts",

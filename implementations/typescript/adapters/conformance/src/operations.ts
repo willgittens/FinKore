@@ -413,6 +413,7 @@ function inputApprovalCompositionEvaluate(input: unknown): {
 }
 
 function compositionDecisionObservations(input: { readonly decisions?: unknown }, result: NormalizedResult): Readonly<Record<string, unknown>> | undefined {
+  if (result.status === 'error' && Object.hasOwn(input, 'decisions')) return { decisions: input.decisions }
   if (!Array.isArray(input.decisions)) return undefined
   if (input.decisions.length === 0 || result.status === 'error') return { decisions: input.decisions }
   return undefined

@@ -62,6 +62,13 @@ public final class FinKoreConsumer {
     Map<String, Object> badDefinition = new LinkedHashMap<>(definition);
     badDefinition.put("validation", List.of(Map.of("id", "X", "path", "amount", "rule", "typo")));
     error(Entities.INVALID_MUTATION, () -> Entities.create(badDefinition, "invoice-2", entity.get("data")));
+    Map<String, Object> composition = Map.of("rootGroup", "root", "groups", List.of(Map.of("id", "root", "kind", "ALL_OF", "members", List.of(Map.of("type", "requirement", "id", "member", "requirementId", "review")))));
+    List<Map<String, Object>> observations = List.of(Map.of("id", "review", "applicability", "APPLICABLE", "state", "PENDING", "requiresEvaluationContext", true));
+    Map<String, Object> context = Map.of("evaluatedAt", "2026-09-26T10:00:00Z");
+    equal(Map.of("outcome", "PENDING", "actionableRequirements", List.of("review")), Approvals.evaluateComposition(composition, observations, List.of(), context));
+    error(Approvals.INVALID_CHAIN, () -> Approvals.evaluateComposition(composition, observations, Map.of(), context));
+    error(Approvals.INVALID_CONTEXT, () -> Approvals.evaluateComposition(composition, observations, List.of(), Map.of("evaluatedAt", "invalid")));
+    error(Approvals.INVALID_CHAIN, () -> Approvals.evaluateComposition(composition, List.of(Map.of("id", "review", "applicability", "APPLICABLE")), List.of(), null));
     Map<String, Object> requirement = Map.of("id", "review", "subject", Map.of("type", "invoice", "id", "invoice-1"),
         "eligibleActors", List.of("alice"), "approvedOutcome", "APPROVED", "rejectedOutcome", "REJECTED");
     String expiry = "2026-09-26T10:00:00.123456789Z";

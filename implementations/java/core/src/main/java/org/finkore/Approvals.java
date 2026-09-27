@@ -348,6 +348,7 @@ public final class Approvals {
     @SuppressWarnings("unchecked")
     Map<String, Object> compositionMap = (Map<String, Object>) copyJson(composition, INVALID_CHAIN);
     Map<String, Map<String, Object>> reqs = validateCompositionRequirements(requirements, context, groups);
+    if (decisions != null && !(decisions instanceof List<?>)) throw new FinKoreException(INVALID_CHAIN);
     List<Map<String, Object>> decisionHistory = decisions instanceof List<?> list ? copyMapList(list, INVALID_CHAIN) : List.of();
     validateCompositionEvidence(reqs, decisionHistory);
     if (compositionMap.containsKey("stages")) {

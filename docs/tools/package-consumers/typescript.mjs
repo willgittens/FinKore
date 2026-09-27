@@ -2,7 +2,7 @@
 // Exercises installed npm public APIs in an isolated consumer. Creates only
 // in-memory observations and defines no financial behavior.
 import assert from 'node:assert/strict'
-import { FINKORE_CORE_VERSION, Money, FinancialEntity, Workflow, ApprovalDecision, ApprovalDecisionHistory, AuditLog } from '@finkore/typescript'
+import { FINKORE_CORE_VERSION, Money, FinancialEntity, Workflow, ApprovalComposition, ApprovalDecision, ApprovalDecisionHistory, AuditLog } from '@finkore/typescript'
 
 const error = (code, action) => assert.throws(action, value => value?.code === code)
 assert.equal(FINKORE_CORE_VERSION, '0.9-rc')
@@ -43,6 +43,13 @@ for (const revision of [null, '', [], {}, false, 7]) {
 }
 error('FINKORE_WORKFLOW_VERSION_MISMATCH', () => Workflow.import(entity.definition.workflow, { currentState: 'DRAFT', binding: { ...binding, definitionVersionIdentity: 'wrong' }, revision: 'r1' }))
 error('FINKORE_WORKFLOW_INVALID_STATE', () => workflow.transition('REVIEW', { expectedCurrentState: null }))
+const composition = ApprovalComposition.from({ rootGroup: 'root', groups: [{ id: 'root', kind: 'ALL_OF', members: [{ type: 'requirement', id: 'member', requirementId: 'review' }] }] })
+const observations = [{ id: 'review', applicability: 'APPLICABLE', state: 'PENDING', requiresEvaluationContext: true }]
+const context = { evaluatedAt: '2026-09-26T10:00:00Z' }
+assert.deepEqual(composition.evaluate({ requirements: observations, decisions: [], context }), { outcome: 'PENDING', actionableRequirements: ['review'] })
+error('FINKORE_APPROVAL_INVALID_CHAIN', () => composition.evaluate({ requirements: observations, decisions: {}, context }))
+error('FINKORE_APPROVAL_INVALID_CONTEXT', () => composition.evaluate({ requirements: observations, context: { evaluatedAt: 'invalid' } }))
+error('FINKORE_APPROVAL_INVALID_CHAIN', () => composition.evaluate({ requirements: [{ id: 'review', applicability: 'APPLICABLE' }] }))
 const requirement = { id: 'review', subject: { type: 'invoice', id: 'invoice-1' }, eligibleActors: ['alice'], approvedOutcome: 'APPROVED', rejectedOutcome: 'REJECTED' }
 const decision = { requirementId: 'review', subjectFacts: null, outcome: 'APPROVED', actor: { id: 'alice' }, decidedAt: '2026-09-01T12:00:00Z' }
 const history = ApprovalDecisionHistory.create().record(requirement, decision)
@@ -66,4 +73,11 @@ const event = { eventId: 'event-1', eventType: 'ENTITY_CHANGED', entity: require
 const log = AuditLog.create().append(event)
 metadata.__proto__.kept = false
 assert.equal(log.toJSON().history[0].actor.metadata.__proto__.kept, true)
+const auditBefore = log.toJSON()
+const evidence = { ...event, eventId: 'redaction', eventType: 'AUDIT_CONTENT_REDACTED' }
+error('FINKORE_AUDIT_REDACTION_INVALID', () => log.redact({ policy: { id: 'retention-policy', protectedPaths: ['actor.metadata'] }, redactionEvent: evidence }))
+assert.deepEqual(log.toJSON(), auditBefore)
+const redacted = log.redact({ policy: { id: 'retention-policy', authority: 'retention', protectedPaths: ['actor.metadata'] }, redactionEvent: evidence })
+assert.deepEqual(redacted.event.actor.metadata, { presence: 'REDACTED' })
+assert.deepEqual(log.toJSON(), { history: [...auditBefore.history, redacted.evidenceEvent] })
 console.log('Installed npm consumer: exact Money, Entity binding/ownership, null preconditions, Approval association and Audit ownership pass')

@@ -7971,6 +7971,339 @@
         "boundary096-7a-validation-bypass"
       ],
       "reviewFinding": "7a"
+    },
+    {
+      "id": "approval.boundary096.decision-container-empty-control-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Validate supplied composition Decision evidence containers before selecting an outcome.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "root",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "a-member",
+                  "requirementId": "a"
+                },
+                {
+                  "type": "requirement",
+                  "id": "b-member",
+                  "requirementId": "b"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "a",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "b",
+            "applicability": "APPLICABLE",
+            "state": "PENDING"
+          }
+        ],
+        "decisions": []
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "PENDING",
+          "actionableRequirements": [
+            "b"
+          ]
+        },
+        "observations": {
+          "decisions": []
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "malformed-decision-container-discarded"
+      ],
+      "reviewFinding": "fresh-review-decision-container"
+    },
+    {
+      "id": "approval.boundary096.decision-container-object-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Validate supplied composition Decision evidence containers before selecting an outcome.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "root",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "a-member",
+                  "requirementId": "a"
+                },
+                {
+                  "type": "requirement",
+                  "id": "b-member",
+                  "requirementId": "b"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "a",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "b",
+            "applicability": "APPLICABLE",
+            "state": "PENDING"
+          }
+        ],
+        "decisions": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": {}
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "malformed-decision-container-discarded"
+      ],
+      "reviewFinding": "fresh-review-decision-container"
+    },
+    {
+      "id": "approval.boundary096.decision-container-string-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Validate supplied composition Decision evidence containers before selecting an outcome.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "root",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "a-member",
+                  "requirementId": "a"
+                },
+                {
+                  "type": "requirement",
+                  "id": "b-member",
+                  "requirementId": "b"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "a",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "b",
+            "applicability": "APPLICABLE",
+            "state": "PENDING"
+          }
+        ],
+        "decisions": "invalid"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": "invalid"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "malformed-decision-container-discarded"
+      ],
+      "reviewFinding": "fresh-review-decision-container"
+    },
+    {
+      "id": "approval.boundary096.decision-container-number-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Validate supplied composition Decision evidence containers before selecting an outcome.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "root",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "a-member",
+                  "requirementId": "a"
+                },
+                {
+                  "type": "requirement",
+                  "id": "b-member",
+                  "requirementId": "b"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "a",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "b",
+            "applicability": "APPLICABLE",
+            "state": "PENDING"
+          }
+        ],
+        "decisions": 1
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": 1
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "malformed-decision-container-discarded"
+      ],
+      "reviewFinding": "fresh-review-decision-container"
+    },
+    {
+      "id": "approval.boundary096.decision-container-boolean-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Validate supplied composition Decision evidence containers before selecting an outcome.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "root",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "type": "requirement",
+                  "id": "a-member",
+                  "requirementId": "a"
+                },
+                {
+                  "type": "requirement",
+                  "id": "b-member",
+                  "requirementId": "b"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "a",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "b",
+            "applicability": "APPLICABLE",
+            "state": "PENDING"
+          }
+        ],
+        "decisions": false
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": false
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "malformed-decision-container-discarded"
+      ],
+      "reviewFinding": "fresh-review-decision-container"
     }
   ]
 }

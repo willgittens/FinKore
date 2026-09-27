@@ -18,6 +18,24 @@ const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const constructionPy = 'test_construction_evaluation_regressions.ConstructionEvaluationRegressions.'
 const probes = [
 {
+  "id": "python-entity096-revision-currentness-number",
+  "language": "python",
+  "path": "entities.py",
+  "from": "if \"current\" in value and (not isinstance(value[\"current\"], bool) or value[\"current\"] != current):",
+  "to": "if \"current\" in value and value[\"current\"] != current:",
+  "target": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_entity_boundary096_import_revision_current_one_001",
+  "control": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_entity_boundary096_import_revision_current_matching_001"
+},
+{
+  "id": "python-entity096-revision-currentness-bypass",
+  "language": "python",
+  "path": "entities.py",
+  "from": "if \"current\" in value and (not isinstance(value[\"current\"], bool) or value[\"current\"] != current):",
+  "to": "if False:",
+  "target": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_entity_boundary096_import_revision_current_opposite_001",
+  "control": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_entity_boundary096_import_revision_current_matching_001"
+},
+{
   "id": "python-entity096-source-null-omitted",
   "language": "python",
   "path": "entities.py",

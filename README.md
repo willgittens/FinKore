@@ -355,16 +355,19 @@ uncompleted process.
 
 A subsequent readiness review found additional native construction, Approval
 evaluation/evidence, Audit authority, and Workflow/Entity validation gaps.
-[Core 0.9.6 Milestones 1–7](./docs/plans/plan-09.6.md) resolve the reviewed
-contracts and implement their permanent regressions and corrections. All 863
+[Core 0.9.6 Milestones 1–8](./docs/plans/plan-09.6.md) resolve the reviewed
+contracts and implement their permanent regressions and corrections. All 884
 manifest vectors now pass on TypeScript, CPython 3.12/3.13, and Java, including
 all original 667 vectors. Entity imports accept valid standalone mappings and
 reject malformed supplied Source Identity; evolution precondition failures
 preserve Entities, relation history, and Audit history. Native sequences reuse
 returned versioned imports and evolution results, with coverage, targeted
 mutation, and isolated package-consumer verification.
-Milestones 8–9 (combined verification, fresh review, and release closure) remain
-unstarted. Core 1.0 promotion remains blocked pending those gates;
+Fresh review also corrects revision-currentness validation and malformed
+composition Decision containers. Milestone 8 complete clean-candidate verification
+passes, including full configured mutation and all portable/native probes.
+Milestone 9 release closure remains pending. Core 1.0 promotion
+remains blocked pending release and its separate promotion gates;
 `core-0.9.5` remains the latest completed corrective snapshot.
 
 - Money

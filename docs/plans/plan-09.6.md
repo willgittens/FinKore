@@ -2,14 +2,17 @@
 
 ## Status
 
-Milestones 1–7 are complete: accepted contracts, permanent regressions, Money,
+Milestones 1–8 are complete: accepted contracts, permanent regressions, Money,
 Workflow, Approval, Audit, and Entity corrections are implemented and verified.
-All 863 vectors pass on TypeScript, Python 3.12/3.13, and Java. Milestones 8–9
-(combined verification, fresh review, and release closure) remain unstarted.
+Fresh review adds 21 regressions and corrects Python
+revision-currentness validation and Java composition evidence-container handling.
+The expanded manifest has 884 vectors; complete clean-candidate verification,
+full configured mutation suites, and all portable/native probe gates pass.
+Milestone 9 release closure remains unstarted.
 The readiness review of commit `e300bb1`
 (`core-0.9.5`) found additional mandatory behavior and portability gaps despite
 passing existing checks. Core 1.0 promotion is blocked pending this corrective
-work and a fresh review of the resulting candidate.
+release closure and the separate stable-promotion gates.
 
 The completed [0.9.5 plan](plan-09.5.md) remains the record of its corrections
 and verified release snapshot. Its completion does not establish coverage of
@@ -902,50 +905,186 @@ the normative changes; no new financial rule, identifier, or vector expectation
 was introduced here. Agentic metadata already states presence/error and atomic
 failure semantics, so it needs no change. CoreDoc and AGENTS.md obligations and
 architecture remain unchanged. Release notes remain maintainer-owned and no
-release action is performed. Milestones 8–9 remain unstarted.
+release action is performed. At Milestone 7 completion, Milestones 8–9 remained
+unstarted.
 
 ## Milestone 8 — Mutation protection, full verification, and fresh review
 
-- [ ] Wire all regressions and boundary controls into repeatable repository
+- [x] Wire all regressions and boundary controls into repeatable repository
       verification. Extend existing portable critical and native mutation tools
       for every corrected failure mechanism, including each lettered subcase.
-- [ ] Require passing unmodified baselines and named behavioral regression
+- [x] Require passing unmodified baselines and named behavioral regression
       failures for targeted mutants, with independent valid controls passing.
       Reject crashes, timeouts, compilation failures, skipped/missing/empty
       results, and unrelated failures as proof of a targeted mutant kill.
-- [ ] Run full runner and TypeScript core mutation suites with the unchanged
+- [x] Run full runner and TypeScript core mutation suites with the unchanged
       minimum 95 percent gate; review every survivor and uncovered mutant.
       No critical financial mutant may survive. Report timeouts separately;
       do not hide meaningful logic with exclusions or weaken tests for scores.
-- [ ] Run all Python/Java critical and native probes, including the Python 3.13
+- [x] Run all Python/Java critical and native probes, including the Python 3.13
       native gate. Do not describe selected probes as full mutation coverage
       of those implementations.
-- [ ] Run strict builds, native/unit/adapter tests, configured coverage gates,
+- [x] Run strict builds, native/unit/adapter tests, configured coverage gates,
       and every manifest vector on TypeScript, Python 3.12, Python 3.13, and
       Java. Require zero failed, unsupported, or infrastructure vector outcomes.
-- [ ] Extend installed npm, Python wheel/sdist on both runtimes, and Java JAR
+- [x] Extend installed npm, Python wheel/sdist on both runtimes, and Java JAR
       consumer checks with corrected native constructors and relevant evaluation,
       redaction, and reuse paths. Import-only checks do not cover these defects.
-- [ ] Run toolchain, architecture, documentation/traceability, license,
+- [x] Run toolchain, architecture, documentation/traceability, license,
       developer-tool, and whitespace checks. Follow executable tool header
       conventions under `docs/tools`; verification remains local, with no
       GitHub Actions or new closure/provenance report system.
-- [ ] From a clean candidate checkout, install locked dependencies with
+- [x] From a clean candidate checkout, install locked dependencies with
       `npm ci` and run the complete `npm run verify` using Node 24, CPython
       3.12/3.13, JDK 21, and Maven 3.9.x. Review dependency audit results
       separately from financial conformance and preserve the verified locks.
-- [ ] Perform a fresh contract-driven review after the fixes, beyond replaying
+- [x] Perform a fresh contract-driven review after the fixes, beyond replaying
       this finding list. Revisit the Milestone 2 inventory, native versus
       portable validation, presence/type families, shared incorrect behavior,
       error priority, ownership, and actual cross-domain sequences. Turn any
       new confirmed mandatory gap into a failing regression before closure.
-- [ ] Reassess traceability against the actual evidence. Finite passing tests
+- [x] Reassess traceability against the actual evidence. Finite passing tests
       support the exercised scope; they do not prove exhaustive correctness.
       Close neither a blocking specification gap nor an untested mandatory
       boundary by pointing to an aggregate coverage or mutation percentage.
 
 Completion: the combined candidate passes complete verification and a fresh
 review, with no unresolved demonstrated blocker or surviving critical mutant.
+
+### Milestone 8 fresh review and verification
+
+The fresh contract-driven review revisits the Milestone 2 inventory and public
+native/portable entry points, presence and type families, validation priority,
+revision identity, ownership, and reuse of actual observations. It confirms two
+additional implementation violations under existing requirements:
+
+- Python import silently rewrote a supplied revision `current` marker, accepting
+  opposite Booleans and malformed values. Fourteen failing regressions preceded
+  the fix; two matching controls preserve current/historical observations.
+  ENTITY-REVISION-007 and ENTITY-IMPORT-006/008/009 govern rejection and atomicity.
+- Java composition silently replaced non-list Decision evidence with an empty
+  list. Four failing regressions preceded the fix, with an empty-list control.
+  APPROVAL-COMPOSITION-010/024 and APPROVAL-ERROR-010 govern complete evidence
+  validation and its priority after applicability and required context.
+
+All 21 vectors are in normal manifest/native/adapter discovery. No requirement,
+error, or operation identifier is added. The fixture conventions clarify the
+revision marker's existing current/historical role; no new financial policy is
+introduced. Public docs and installed consumers exercise the corrected behavior.
+
+The full core Stryker configuration now includes construction/evaluation
+regressions. Both Stryker configurations use two workers for repeatable resource
+use; mutation scope and the 95 percent thresholds are unchanged. Portable probes
+now explicitly protect concrete Requirement subject validation (6a), committed
+lifecycle target resolution (7b), chain State and composition applicability (9b),
+and both fresh-review defects. Existing expiration, complete-context, native
+constructor, authority, identity, and priority probes remain active. New Python
+native probes reject revision rewriting and Boolean/numeric coercion.
+
+The probe inventory maps the original findings to named regression/control
+pairs (the Python/Java prefixes below identify separate probes). Full Stryker
+adds TypeScript behavioral mutation coverage; native probes supplement portable
+cases where construction or retained observations cannot be encoded in JSON.
+
+| Finding | Targeted protection |
+| --- | --- |
+| 1 | Python/Java `approval096-missing-state`; composition State absence/type matrices. |
+| 2 | Python native `money-construction-*` probes for amount/currency validation, exact context independence, and valid finite controls. |
+| 3 | Python/Java native `workflow-constructor-*` probes for initial/terminal/endpoint/version validity and owned declarations. |
+| 4 | Python `audit096-authority-*` portable probes plus native preservation/ownership probes. |
+| 5 | Python/Java `approval096-context-parser` and native `approval096-required-context`, plus timestamp vectors and full TypeScript mutation. |
+| 6a | Python/Java `approval096-concrete-subject-bypass`, `approval096-association`, subject/eligibility probes, and TypeScript concrete evaluation tests. |
+| 6b | Python/Java `approval-expiration-bypass`, exact-instant controls, and TypeScript concrete expiration tests. |
+| 7a | Python/Java `approval096-history-validation` and native imported-lifecycle validation across reuse boundaries. |
+| 7b | Python/Java `approval096-history-target-bypass`, lifecycle relation/reference/repetition probes, and returned-history tests. |
+| 8 | Python/Java `approval096-decisive-return`, reordered complete-context controls, and TypeScript evaluation mutations. |
+| 9a | Python `money-rate-container-accepted`, unsupported-kind/wrong-error probes, and native/adapter type matrices. |
+| 9b | Python/Java `approval096-chain-state-bypass` and `approval096-applicability-bypass`, paired with valid chain/composition controls. |
+| 9c | Python/Java `entity096-evolution-null-state/revision`, plus all-kind precondition and actual history-reuse tests. |
+| 10a | Native `typescript-workflow-instance-priority-reversed`; all-runtime malformed-instance-before-mismatch vectors. |
+| 10b | Python/Java `entity096-source-null-omitted`, `source-type-omitted`, and standalone mapping controls; TypeScript import mutations. |
+| Fresh revision finding | Python portable/native `entity096-revision-currentness-bypass` and `revision-currentness-number`. |
+| Fresh container finding | Java `approval096-decision-container-discarded`; all-runtime native/adapter failure and unchanged-evidence observations. |
+
+The complete clean-candidate runner and TypeScript core Stryker runs pass with
+unchanged 95 percent gates. Runner: 627 killed, 19 survived, zero uncovered or
+timed out (97.06%). Core: 4,069 killed, 131 survived, nine uncovered, 16 timed
+out, and 69 pre-existing justified exclusions (96.69%). Excluding timeout credit,
+the core still detects 4,069 of 4,225 scored mutants (96.31%). No exclusion was
+added or broadened.
+
+Every survivor and uncovered mutant was reviewed against its callers and public
+observations. Runner survivors affect diagnostic text/source labels, a redundant
+metadata-error wrapper, or record-type checks already enforced by required JSON
+fields. Core survivors affect non-portable diagnostics or equivalent internal
+paths: validation repeated after constructors/parsers, exclusive lifecycle target
+fields, absent-vote sentinels, unused applicability markers, equivalent quorum
+and nonpending actionable calculations, validated JSON cloning, Entity conflict
+comparison/decoding and falsy predicate catches, and Workflow binding/equality
+checks backed by validated shapes. None changes a portable error, accepted
+financial outcome, retained history, required validation, or public ownership.
+
+The nine uncovered mutants are defensive paths unreachable through validated
+public values: two Approval history clone catches, two Audit redaction clone
+catches and its repeated policy-match check, an Entity check after successful
+Audit append, two Money rounding-default diagnostics behind mode validation,
+and the Workflow comparison fallback behind JSON-value validation. These remain
+in mutation scope rather than being suppressed.
+
+The 16 timeouts are reported separately: ten Money divisor/GCD/factor-reduction
+mutations introduce nontermination, three Approval group-depth mutations permit
+unbounded recursion, and three Decision record-shape mutations recurse without
+progress. They are not named behavioral kills in the targeted probe tools.
+Finite tests and these reviewed equivalent paths do not establish exhaustive
+correctness.
+
+The isolated candidate was installed with `npm ci`: 229 packages installed,
+233 audited, zero reported vulnerabilities, and no lockfile changes. The
+prescribed Node 24, CPython 3.12/3.13, JDK 21, and Maven 3.9 toolchains are used.
+Builds and strict checks pass, including 1,093 TypeScript core tests, 130 runner
+tests, 20 TypeScript adapter tests, 466 Python unit tests and 340 adapter tests
+on each version, all Java native entry points (253 construction/evaluation
+cases), and 343 Java adapter tests. All 884 manifest vectors pass on each of
+the four runtimes: 12 Shared, 111 Money, 135 Workflow, 84 Audit, 277 Approval,
+and 265 Entity, with zero FAIL, UNSUPPORTED, or INFRASTRUCTURE_ERROR outcomes.
+
+Configured coverage gates pass: runner 100% lines and 96.61% branches;
+TypeScript core 99.67% lines and 99.47% branches; Python branch-enabled coverage
+92%; Java 92.85% lines and 81.82% branches. Installed npm, wheel/sdist consumers
+on both Python versions, and JAR consumers pass native constructor, composition
+context/evidence, redaction, ownership, and returned-observation reuse checks.
+Toolchain, architecture, documentation/traceability, developer-tool, license,
+and whitespace checks pass.
+
+The complete `npm run verify` passes from the clean candidate after locked
+installation. All 222 portable critical probes pass (Python 115, Java 107),
+as do all 92 native probes (Python 47, Java 36, TypeScript 9) and the separate
+47-probe Python 3.13 native gate. Each targeted probe requires an unmodified
+passing baseline, its named behavioral regression, and independent passing
+controls. Classifier tests reject process failures, timeouts, compilation errors,
+missing/empty/skipped results, unsupported/infrastructure outcomes, and unrelated
+failures. One new applicability probe initially caused a missing-key crash;
+it was narrowed to bypass invalid supplied values while retaining presence
+validation, then passed both the preflight and complete gate. No classifier was
+weakened. These are targeted Python/Java probes, not full implementation mutation
+coverage.
+
+Traceability records 417 requirements and 884 vectors: 334 COVERED, zero PARTIAL,
+83 NOT DIRECTLY TESTABLE, and zero blocking specification gaps. Every original
+finding and lettered subcase has regression/control and mutation protection;
+both fresh-review findings are corrected. No demonstrated mandatory blocker or
+critical surviving financial mutant remains within the reviewed scope.
+
+Completion synchronization: manifest-derived native/unit and adapter tests,
+conformance vectors/conventions/traceability, mutation probes and configuration,
+Python API docs, installed consumers, package/root READMEs, and current plan
+status are updated. Existing TypeScript JSDoc and Java API docs already describe
+the applicable invalid-evidence and atomic-failure contract. No new public API,
+financial requirement, portable error, operation ID, dependency direction, or
+foundation rule was introduced, so `/spec`, `/agentic`, CoreDoc, and AGENTS.md
+need no change. Dependency locks are preserved. Final documentation is checked
+against the verified executable candidate; release notes, tagging, and release
+closure remain Milestone 9.
 
 ## Milestone 9 — Documentation and corrective release
 
@@ -998,23 +1137,23 @@ work does not close this corrective gate or authorize new financial semantics.
 
 Core 0.9.6 is complete only when:
 
-- [ ] Every numbered finding and lettered subcase has an agreed contract,
+- [x] Every numbered finding and lettered subcase has an agreed contract,
       permanent regression, valid control, and appropriate mutation protection.
-- [ ] Native Money and Workflow construction cannot expose the reviewed invalid
+- [x] Native Money and Workflow construction cannot expose the reviewed invalid
       domain values, while valid native and portable paths preserve exact semantics.
-- [ ] Approval evaluation has one agreed portable scope; missing required
+- [x] Approval evaluation has one agreed portable scope; missing required
       evidence/context, malformed lifecycle history, and decisive outcomes cannot
       bypass required validation or change committed history.
-- [ ] Required timestamps follow the portable profile in every implementation.
-- [ ] Redaction requires a valid declared authority and preserves Audit meaning.
-- [ ] Workflow errors follow specified precedence; Entity import/evolution
+- [x] Required timestamps follow the portable profile in every implementation.
+- [x] Redaction requires a valid declared authority and preserves Audit meaning.
+- [x] Workflow errors follow specified precedence; Entity import/evolution
       distinguish malformed supplied values from omission and fail atomically.
-- [ ] Reviewed malformed-input families produce applicable portable errors,
+- [x] Reviewed malformed-input families produce applicable portable errors,
       never language exceptions, process failures, or fabricated success.
-- [ ] All manifest vectors, native sequences, installed consumers, coverage,
+- [x] All manifest vectors, native sequences, installed consumers, coverage,
       full configured mutation suites, and critical/native probes pass on the
       prescribed runtimes, with no surviving critical financial mutant.
-- [ ] Clean-checkout verification and a fresh boundary review pass; all newly
+- [x] Clean-checkout verification and a fresh boundary review pass; all newly
       confirmed mandatory gaps are resolved and traceability reflects actual scope.
 - [ ] Documentation and compatibility decisions are synchronized, earlier
       regressions and tags are preserved, and no architecture boundary is violated.

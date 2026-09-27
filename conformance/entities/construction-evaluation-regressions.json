@@ -6576,6 +6576,2096 @@
       ],
       "reviewFinding": "9c",
       "pairedControl": "entity.boundary096.evolution-supersede-control-001"
+    },
+    {
+      "id": "entity.boundary096.import-revision-current-matching-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2",
+            "current": true
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1"
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2",
+            "current": true
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1",
+              "current": false
+            }
+          ],
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
+    },
+    {
+      "id": "entity.boundary096.import-revision-current-opposite-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2",
+            "current": false
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1"
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
+    },
+    {
+      "id": "entity.boundary096.import-revision-current-null-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2",
+            "current": null
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1"
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
+    },
+    {
+      "id": "entity.boundary096.import-revision-current-zero-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2",
+            "current": 0
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1"
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
+    },
+    {
+      "id": "entity.boundary096.import-revision-current-one-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2",
+            "current": 1
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1"
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
+    },
+    {
+      "id": "entity.boundary096.import-revision-current-string-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2",
+            "current": "true"
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1"
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
+    },
+    {
+      "id": "entity.boundary096.import-revision-current-array-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2",
+            "current": []
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1"
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
+    },
+    {
+      "id": "entity.boundary096.import-revision-current-object-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2",
+            "current": {}
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1"
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
+    },
+    {
+      "id": "entity.boundary096.import-revision-historical-matching-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2"
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1",
+              "current": false
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2",
+            "current": true
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1",
+              "current": false
+            }
+          ],
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
+    },
+    {
+      "id": "entity.boundary096.import-revision-historical-opposite-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2"
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1",
+              "current": true
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
+    },
+    {
+      "id": "entity.boundary096.import-revision-historical-null-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2"
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1",
+              "current": null
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
+    },
+    {
+      "id": "entity.boundary096.import-revision-historical-zero-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2"
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1",
+              "current": 0
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
+    },
+    {
+      "id": "entity.boundary096.import-revision-historical-one-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2"
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1",
+              "current": 1
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
+    },
+    {
+      "id": "entity.boundary096.import-revision-historical-string-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2"
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1",
+              "current": "false"
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
+    },
+    {
+      "id": "entity.boundary096.import-revision-historical-array-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2"
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1",
+              "current": []
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
+    },
+    {
+      "id": "entity.boundary096.import-revision-historical-object-001",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-006",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009",
+        "ENTITY-REVISION-007"
+      ],
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "SUBMITTED",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "SUBMITTED"
+              },
+              {
+                "source": "SUBMITTED",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "SUBMITTED": [
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "inv-42",
+            "revision": "business-rev-2"
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "inv-42",
+              "revision": "business-rev-1",
+              "current": {}
+            }
+          ],
+          "sourceIdentity": {
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042"
+          },
+          "identityMapping": {
+            "mappingId": "map-legacy-ar-42",
+            "sourceSystem": "legacy-ar",
+            "sourceId": "LEGACY-000042",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-42"
+            }
+          },
+          "conflictVersion": "storage-token-9",
+          "expectedState": "SUBMITTED",
+          "expectedRevision": "business-rev-2",
+          "expectedConflictVersion": "storage-token-9"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "SUBMITTED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "legacy import",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "revision-currentness-silently-rewritten",
+        "revision-boolean-number-coercion"
+      ],
+      "reviewFinding": "fresh-review-revision-currentness"
     }
   ]
 }
