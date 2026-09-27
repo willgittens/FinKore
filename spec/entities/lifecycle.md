@@ -16,6 +16,7 @@ This document defines how a Financial Entity progresses through declared domain 
 - **ENTITY-LIFECYCLE-004** — Audit requirements for lifecycle Transitions MUST be declared as specified by [Financial Entities](README.md).
 - **ENTITY-LIFECYCLE-005** — A composing domain MUST define the domain consequences of each state.
 - **ENTITY-LIFECYCLE-006** — A Financial Entity MUST have exactly one current lifecycle State.
+- **ENTITY-LIFECYCLE-007** — In the bounded Entity representation, an existing observation's missing, null, empty, or non-string current State MUST use `FINKORE_WORKFLOW_INVALID_INSTANCE`. A nonempty string identifying an undeclared State MUST use `FINKORE_WORKFLOW_INVALID_STATE`. Consuming Entity operations MUST preserve Workflow validation priority under **WORKFLOW-ERROR-007**, including definition validation before instance validation, and MUST preserve existing observations on failure.
 
 ## Invariants
 

@@ -16,6 +16,7 @@ This document defines stable domain identity and continuity for a Financial Enti
 - **ENTITY-IDENTITY-004** — Revisions, versions, and display numbers MUST NOT replace stable identity unless a composing specification explicitly makes them identical and immutable.
 - **ENTITY-IDENTITY-005** — Two distinct entities MUST NOT share the same identifier within the same scope.
 - **ENTITY-IDENTITY-006** — Import or migration MUST preserve identity or record an explicit identity mapping.
+- **ENTITY-IDENTITY-007** — The bounded Entity definition MUST explicitly supply a nonempty string identity scope. Omission, null, or a malformed scope MUST use `FINKORE_ENTITY_INVALID_IDENTITY`. This fixture requirement MUST NOT be interpreted as a global identity registry or a production serialization format.
 
 Core 0.9 release candidate refines import mapping in [Entity Import](import.md). That refinement
 does not create a global registry or permit Source Identity to replace stable

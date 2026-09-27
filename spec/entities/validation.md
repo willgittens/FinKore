@@ -24,6 +24,8 @@ This document defines validation of financial entity state and proposed domain o
 - **ENTITY-VALIDATION-007** — A composing domain SHOULD distinguish rules required in every state from rules required only for a transition or target state.
 - **ENTITY-VALIDATION-009** — An unsupported or malformed Entity validator declaration MUST be rejected with `FINKORE_ENTITY_INVALID_MUTATION` before evaluating declared predicates against Entity data. It MUST NOT be silently skipped. A supported, well-formed rule that rejects data continues to use `FINKORE_ENTITY_VALIDATION_FAILED` under **ENTITY-VALIDATION-004**. Rejection MUST preserve existing Entity observations.
 
+- **ENTITY-VALIDATION-010** — The bounded Entity representation MUST supply object-valued data at creation and at every boundary consuming an existing Entity observation, including import and evolution. Omission, null, or non-object data MUST use `FINKORE_ENTITY_VALIDATION_FAILED`, even when no business validator is declared. This requirement defines the bounded fixture shape, not a universal composing-domain data schema. Failure MUST preserve prior observations and MUST NOT expose a partial result.
+
 ## Invariants
 
 A successful operation must leave the Financial Entity valid for its resulting State. A failed operation must leave the Financial Entity unchanged.

@@ -119,4 +119,11 @@ assert redaction['event']['actor'] == {'id': 'alice', 'type': 'user', 'metadata'
 assert redaction['event']['changes'] == [{'path': 'secret', 'after': {'presence': 'REDACTED'}}]
 redaction['event']['actor']['id'] = 'edited-view'
 assert (audit_history, policy, redaction_evidence) == before_redaction
+# Core 0.9.7: reuse actual histories, with a distinct-instant passing control.
+control097 = record_decision(requirement, dict(decision, decidedAt='2026-09-27T10:00:00Z'), withdrawn)
+assert normalize_decision_set(control097) == (control097['history'], control097['lifecycle'])
+before097 = deepcopy(withdrawn)
+error('FINKORE_APPROVAL_INVALID_DECISION', lambda: record_decision(requirement, dict(decision, subjectFacts={'changed': True}), withdrawn))
+assert withdrawn == before097
+assert evaluate_requirement(requirement, history, {'changed': True}) == 'PENDING'
 print('Installed Python consumer: native Money, Rate rejection, lossless serialization, binding, import identity/null, validator, Approval and Audit boundaries pass')

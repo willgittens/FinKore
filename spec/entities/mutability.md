@@ -23,6 +23,8 @@ This document defines how declared field-level mutability rules constrain Financ
 - **ENTITY-MUTABILITY-007** — Operational metadata MAY remain mutable when financial fields are immutable only when the composing domain identifies that metadata and applies the Audit Event requirements declared under [Financial Entities](README.md).
 - **ENTITY-MUTABILITY-008** — An Entity operation consuming a mutability declaration MUST validate its structure before returning a successful Entity observation or applying a change. A missing or malformed required declaration, including a null field-permission rule, MUST use `FINKORE_ENTITY_INVALID_MUTATION`; it MUST NOT be treated as a valid rule making every field immutable. An explicit valid empty permitted-field set MUST remain valid, with a mutation targeting a protected field using `FINKORE_ENTITY_IMMUTABLE`. Rejection MUST preserve identity, State, data, revisions, and retained declarations without a partial result.
 
+- **ENTITY-MUTABILITY-009** — A bounded Entity mutation request MUST supply at least one proposed field change. An empty change object MUST use `FINKORE_ENTITY_INVALID_MUTATION`, preserving the existing Entity observation. This rule does not turn a nonempty request proposing an equal field value into an empty request.
+
 The bounded per-state representation is specified in conformance conventions.
 Its own State and field names retain their domain meaning, including names such
 as `__proto__`, `constructor`, and `prototype`. Under ENTITY-DEFINITION-002,

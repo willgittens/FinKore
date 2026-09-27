@@ -7,6 +7,11 @@ import org.junit.jupiter.api.Test;
 /** Includes native sequence and ownership regressions in Maven coverage runs. */
 final class ReadinessCoverageTest {
   @Test
+  void evidenceAndReturnedValues() throws IOException {
+    EvidenceRegressionTest.main(new String[0]);
+  }
+
+  @Test
   void sequencesAndOwnership() throws IOException {
     ReadinessRegressionTest.main(new String[0]);
   }

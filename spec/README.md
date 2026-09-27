@@ -6,7 +6,8 @@
 language-neutral behavioral candidate intended to become FinKore Core 1.0.
 It remains pre-1.0. The accepted [Core 0.9.7 contract corrections](../docs/plans/plan-09.7.md)
 resolve demonstrated ambiguity and portability defects under the release-candidate
-freeze; implementation and regression milestones remain pending.
+freeze. M2 regressions are published and intentionally fail before implementation
+corrections. D6–D7 discovery contracts are accepted; D8 remains unresolved.
 The 0.9 domain scope is Money, Workflow, Audit, Approvals, and Entities.
 
 ## Purpose

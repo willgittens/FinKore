@@ -344,10 +344,11 @@ baseline intended to become Core 1.0.
 
 Subsequent review identified additional gaps despite a fresh passing full
 verification run. The [Core 0.9.7 corrective plan](./docs/plans/plan-09.7.md)
-has completed contract resolution (Milestone 1). Its regressions, corrections,
+has accepted D1–D7 contracts and published baseline regressions (Milestone 2).
+D8 remains unresolved. Its implementation corrections
 and final review remain prerequisites for Core 1.0 promotion.
 
-All 884 manifest vectors pass on TypeScript, CPython 3.12/3.13, and Java,
+At the 0.9.6 tag, all 884 manifest vectors pass on TypeScript, CPython 3.12/3.13, and Java,
 including all earlier corrective regressions. The completed
 [Core 0.9.6 corrective plan](./docs/plans/plan-09.6.md) closes the reviewed native
 construction, Approval evaluation/evidence, Audit authority, and Workflow/Entity

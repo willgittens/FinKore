@@ -5,9 +5,9 @@
 The [Core 0.9.7 corrective plan](plan-09.7.md) is an open prerequisite for
 stable promotion. Post-0.9.6 review reproduced additional Approval, native
 ownership, Entity declaration, and malformed-input gaps despite a fresh passing
-full verification run. Its contract decisions are accepted in Milestone 1;
-regressions, corrections, and final review must be completed before the stable
-milestones below proceed.
+full verification run. D1–D7 are accepted and Milestone 2 regressions are
+published. D8 remains explicitly unresolved. Implementation corrections and
+final verification must be completed before the stable milestones below proceed.
 
 The completed [Core 0.9.6 corrective release](plan-09.6.md) resolves its reviewed
 findings and passes its expanded release gate, preserving earlier corrective

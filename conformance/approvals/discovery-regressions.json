@@ -1,0 +1,5613 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "approval.boundary097.discovery-control-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "Unchanged shared.timestamp.expiration-subnanosecond-before-001 control for the 0.9.7 discovery regressions.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00.000000001Z",
+            "expiresAt": "2026-09-02T12:00:00.000000005Z"
+          }
+        ],
+        "evaluatedAt": "2026-09-02T12:00:00.000000004Z"
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "reviewFinding": "F8a",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "F8a: approval.requirement.evaluate, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from original case shared.timestamp.expiration-subnanosecond-before-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00.000000001Z",
+            "expiresAt": "2026-09-02T12:00:00.000000005Z"
+          }
+        ],
+        "evaluatedAt": "2026-09-02T12:00:00.000000004Z"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-001",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-002",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "F8a: approval.requirement.evaluate, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically. Reconstructed from original case shared.timestamp.expiration-subnanosecond-before-001/[\"requirement\",\"rejectedOutcome\"]/omit.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED"
+        },
+        "decisions": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00.000000001Z",
+            "expiresAt": "2026-09-02T12:00:00.000000005Z"
+          }
+        ],
+        "evaluatedAt": "2026-09-02T12:00:00.000000004Z"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-001",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-003",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-010"
+      ],
+      "description": "F8a: approval.requirement.evaluate, [\"decisions\"] null; reject atomically. Reconstructed from original case shared.timestamp.expiration-subnanosecond-before-001/[\"decisions\"]/null.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": null,
+        "evaluatedAt": "2026-09-02T12:00:00.000000004Z"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-001",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-004",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-010"
+      ],
+      "description": "F8a: approval.requirement.evaluate, [\"decisions\"] object; reject atomically. Reconstructed from original case shared.timestamp.expiration-subnanosecond-before-001/[\"decisions\"]/object.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {},
+        "evaluatedAt": "2026-09-02T12:00:00.000000004Z"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-001",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-005",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-010"
+      ],
+      "description": "F8a: approval.requirement.evaluate, [\"decisions\"] omit; reject atomically. Reconstructed from original case shared.timestamp.expiration-subnanosecond-before-001/[\"decisions\"]/omit.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "evaluatedAt": "2026-09-02T12:00:00.000000004Z"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-001",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-control-002",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "Unchanged approval.decision.append-history-001 control for the 0.9.7 discovery regressions.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "REJECTED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "4"
+              },
+              "outcome": "REJECTED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-006",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "F8a: approval.decision.record, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "REJECTED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "user-7",
+                "type": "user"
+              },
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-002",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-007",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "F8a: approval.decision.record, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"requirement\",\"rejectedOutcome\"]/omit.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "REJECTED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "user-7",
+                "type": "user"
+              },
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-002",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-008",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.record, [\"decision\",\"actor\",\"type\"] null; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"decision\",\"actor\",\"type\"]/null.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "REJECTED",
+          "actor": {
+            "type": null,
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "user-7",
+                "type": "user"
+              },
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-002",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-009",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.record, [\"decision\",\"actor\",\"type\"] object; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"decision\",\"actor\",\"type\"]/object.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "REJECTED",
+          "actor": {
+            "type": {},
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "user-7",
+                "type": "user"
+              },
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-002",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-010",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.record, [\"decision\",\"actor\",\"type\"] array; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"decision\",\"actor\",\"type\"]/array.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "REJECTED",
+          "actor": {
+            "type": [],
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "user-7",
+                "type": "user"
+              },
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-002",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-011",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.record, [\"decision\",\"actor\",\"type\"] false; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"decision\",\"actor\",\"type\"]/false.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "REJECTED",
+          "actor": {
+            "type": false,
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "user-7",
+                "type": "user"
+              },
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-002",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-012",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.record, [\"decision\",\"actor\",\"type\"] zero; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"decision\",\"actor\",\"type\"]/zero.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "REJECTED",
+          "actor": {
+            "type": 0,
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "user-7",
+                "type": "user"
+              },
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-002",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-013",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.record, [\"decision\",\"actor\",\"type\"] empty; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"decision\",\"actor\",\"type\"]/empty.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "REJECTED",
+          "actor": {
+            "type": "",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "user-7",
+                "type": "user"
+              },
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-002",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-014",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-010"
+      ],
+      "description": "F8a: approval.decision.record, [\"history\"] null; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"history\"]/null.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "REJECTED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": null
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-002",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-015",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-010"
+      ],
+      "description": "F8a: approval.decision.record, [\"history\"] object; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"history\"]/object.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "REJECTED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "history": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-002",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-016",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-010"
+      ],
+      "description": "F8a: approval.decision.record, [\"history\"] omit; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"history\"]/omit.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "4"
+          },
+          "outcome": "REJECTED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-002",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-control-006",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "Unchanged approval.decision.subject-facts-unchanged-001 control for the 0.9.7 discovery regressions.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "3",
+            "amount": {
+              "amount": "9000.00",
+              "currency": "EUR"
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "revision": "3",
+          "amount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        },
+        "relevantFactPaths": [
+          "revision",
+          "amount"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "EFFECTIVE"
+      },
+      "reviewFinding": "F8a",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-025",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "F8a: approval.decision.evaluate, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "3",
+            "amount": {
+              "amount": "9000.00",
+              "currency": "EUR"
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "revision": "3",
+          "amount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        },
+        "relevantFactPaths": [
+          "revision",
+          "amount"
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-006",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-026",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "F8a: approval.decision.evaluate, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"requirement\",\"rejectedOutcome\"]/omit.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "3",
+            "amount": {
+              "amount": "9000.00",
+              "currency": "EUR"
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "revision": "3",
+          "amount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        },
+        "relevantFactPaths": [
+          "revision",
+          "amount"
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-006",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-027",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] null; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"decision\",\"actor\",\"type\"]/null.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "3",
+            "amount": {
+              "amount": "9000.00",
+              "currency": "EUR"
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": null,
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "revision": "3",
+          "amount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        },
+        "relevantFactPaths": [
+          "revision",
+          "amount"
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-006",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-028",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] object; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"decision\",\"actor\",\"type\"]/object.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "3",
+            "amount": {
+              "amount": "9000.00",
+              "currency": "EUR"
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": {},
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "revision": "3",
+          "amount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        },
+        "relevantFactPaths": [
+          "revision",
+          "amount"
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-006",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-029",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] array; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"decision\",\"actor\",\"type\"]/array.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "3",
+            "amount": {
+              "amount": "9000.00",
+              "currency": "EUR"
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": [],
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "revision": "3",
+          "amount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        },
+        "relevantFactPaths": [
+          "revision",
+          "amount"
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-006",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-030",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] false; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"decision\",\"actor\",\"type\"]/false.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "3",
+            "amount": {
+              "amount": "9000.00",
+              "currency": "EUR"
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": false,
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "revision": "3",
+          "amount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        },
+        "relevantFactPaths": [
+          "revision",
+          "amount"
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-006",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-031",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] zero; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"decision\",\"actor\",\"type\"]/zero.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "3",
+            "amount": {
+              "amount": "9000.00",
+              "currency": "EUR"
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": 0,
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "revision": "3",
+          "amount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        },
+        "relevantFactPaths": [
+          "revision",
+          "amount"
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-006",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-032",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] empty; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"decision\",\"actor\",\"type\"]/empty.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "finance-review",
+          "subjectFacts": {
+            "revision": "3",
+            "amount": {
+              "amount": "9000.00",
+              "currency": "EUR"
+            }
+          },
+          "outcome": "APPROVED",
+          "actor": {
+            "type": "",
+            "id": "user-7"
+          },
+          "decidedAt": "2026-09-01T12:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "revision": "3",
+          "amount": {
+            "amount": "9000.00",
+            "currency": "EUR"
+          }
+        },
+        "relevantFactPaths": [
+          "revision",
+          "amount"
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-006",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-control-007",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "Unchanged approval.chain.all-approved-001 control for the 0.9.7 discovery regressions.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "UNORDERED",
+          "requirements": [
+            "manager",
+            "finance"
+          ],
+          "rejectionOutcome": "REJECTED"
+        },
+        "states": {
+          "manager": "APPROVED",
+          "finance": "APPROVED"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "reviewFinding": "F8a",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-033",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] null; reject atomically. Reconstructed from original case approval.chain.all-approved-001/[\"chain\",\"rejectionOutcome\"]/null.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "UNORDERED",
+          "requirements": [
+            "manager",
+            "finance"
+          ],
+          "rejectionOutcome": null
+        },
+        "states": {
+          "manager": "APPROVED",
+          "finance": "APPROVED"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-007",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-034",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] object; reject atomically. Reconstructed from original case approval.chain.all-approved-001/[\"chain\",\"rejectionOutcome\"]/object.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "UNORDERED",
+          "requirements": [
+            "manager",
+            "finance"
+          ],
+          "rejectionOutcome": {}
+        },
+        "states": {
+          "manager": "APPROVED",
+          "finance": "APPROVED"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-007",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-035",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] array; reject atomically. Reconstructed from original case approval.chain.all-approved-001/[\"chain\",\"rejectionOutcome\"]/array.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "UNORDERED",
+          "requirements": [
+            "manager",
+            "finance"
+          ],
+          "rejectionOutcome": []
+        },
+        "states": {
+          "manager": "APPROVED",
+          "finance": "APPROVED"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-007",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-036",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] false; reject atomically. Reconstructed from original case approval.chain.all-approved-001/[\"chain\",\"rejectionOutcome\"]/false.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "UNORDERED",
+          "requirements": [
+            "manager",
+            "finance"
+          ],
+          "rejectionOutcome": false
+        },
+        "states": {
+          "manager": "APPROVED",
+          "finance": "APPROVED"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-007",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-037",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] zero; reject atomically. Reconstructed from original case approval.chain.all-approved-001/[\"chain\",\"rejectionOutcome\"]/zero.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "UNORDERED",
+          "requirements": [
+            "manager",
+            "finance"
+          ],
+          "rejectionOutcome": 0
+        },
+        "states": {
+          "manager": "APPROVED",
+          "finance": "APPROVED"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-007",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-038",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] empty; reject atomically. Reconstructed from original case approval.chain.all-approved-001/[\"chain\",\"rejectionOutcome\"]/empty.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "UNORDERED",
+          "requirements": [
+            "manager",
+            "finance"
+          ],
+          "rejectionOutcome": ""
+        },
+        "states": {
+          "manager": "APPROVED",
+          "finance": "APPROVED"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-007",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-039",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] omit; reject atomically. Reconstructed from original case approval.chain.all-approved-001/[\"chain\",\"rejectionOutcome\"]/omit.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "mode": "UNORDERED",
+          "requirements": [
+            "manager",
+            "finance"
+          ]
+        },
+        "states": {
+          "manager": "APPROVED",
+          "finance": "APPROVED"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-007",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-control-008",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "Unchanged approval.validity.withdraw-preserves-history-001 control for the 0.9.7 discovery regressions.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3",
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              }
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-040",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "F8a: approval.decision.withdraw, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from original case approval.validity.withdraw-preserves-history-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3",
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              }
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "user-7",
+                "type": "user"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-008",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-041",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "F8a: approval.decision.withdraw, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically. Reconstructed from original case approval.validity.withdraw-preserves-history-001/[\"requirement\",\"rejectedOutcome\"]/omit.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED"
+        },
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3",
+              "amount": {
+                "amount": "9000.00",
+                "currency": "EUR"
+              }
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "user-7",
+                "type": "user"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-008",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-control-009",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-010"
+      ],
+      "description": "Unchanged approval.validity.requirement-supersession-preserves-history-001 control for the 0.9.7 discovery regressions.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "finance-review",
+              "successorRequirementId": "controller-review",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-042",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-010"
+      ],
+      "description": "F8a: approval.requirement.supersede, [\"history\"] null; reject atomically. Reconstructed from original case approval.validity.requirement-supersession-preserves-history-001/[\"history\"]/null.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": null,
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-009",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-043",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-010"
+      ],
+      "description": "F8a: approval.requirement.supersede, [\"history\"] object; reject atomically. Reconstructed from original case approval.validity.requirement-supersession-preserves-history-001/[\"history\"]/object.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": {},
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-009",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-044",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-010"
+      ],
+      "description": "F8a: approval.requirement.supersede, [\"history\"] omit; reject atomically. Reconstructed from original case approval.validity.requirement-supersession-preserves-history-001/[\"history\"]/omit.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-009",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-control-018",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "Unchanged approval.boundary096.history-nanosecond-distinct-control-001 control for the 0.9.7 discovery regressions.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00.000000001Z"
+            },
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00.000000002Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T12:00:00.000000001+02:00"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T10:00:00Z"
+            }
+          ]
+        },
+        "currentSubjectFacts": {
+          "revision": "r1"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "reviewFinding": "F8a",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-430",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "F8a: approval.requirement.evaluate, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from expanded case approval.boundary096.history-nanosecond-distinct-control-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00.000000001Z"
+            },
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00.000000002Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T12:00:00.000000001+02:00"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T10:00:00Z"
+            }
+          ]
+        },
+        "currentSubjectFacts": {
+          "revision": "r1"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-018",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-control-019",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "Unchanged approval.boundary096.record-history-offset-control-001 control for the 0.9.7 discovery regressions.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-03T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T12:00:00+02:00"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T10:00:00Z"
+            }
+          ]
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "actor": {
+            "id": "alice"
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-04T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-03T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-04T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T12:00:00+02:00"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-431",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "F8a: approval.decision.record, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from expanded case approval.boundary096.record-history-offset-control-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-03T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T12:00:00+02:00"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T10:00:00Z"
+            }
+          ]
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "actor": {
+            "id": "alice"
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-04T10:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "alice"
+              },
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "alice"
+              },
+              "decidedAt": "2026-09-03T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-019",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-control-024",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "Unchanged approval.boundary096.decision-expiry-offset-001 control for the 0.9.7 discovery regressions.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "actor": {
+            "id": "alice"
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T10:00:00Z",
+          "expiresAt": "2026-09-26T10:00:00.123456789Z"
+        },
+        "currentSubjectFacts": {
+          "revision": "r1"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ],
+        "evaluatedAt": "2026-09-26T12:00:00.123456789+02:00"
+      },
+      "expected": {
+        "status": "success",
+        "value": "INEFFECTIVE"
+      },
+      "reviewFinding": "F8a",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-441",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "F8a: approval.decision.evaluate, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from expanded case approval.boundary096.decision-expiry-offset-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "actor": {
+            "id": "alice"
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T10:00:00Z",
+          "expiresAt": "2026-09-26T10:00:00.123456789Z"
+        },
+        "currentSubjectFacts": {
+          "revision": "r1"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ],
+        "evaluatedAt": "2026-09-26T12:00:00.123456789+02:00"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-024",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-442",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "F8a: approval.decision.evaluate, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically. Reconstructed from expanded case approval.boundary096.decision-expiry-offset-001/[\"requirement\",\"rejectedOutcome\"]/omit.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "actor": {
+            "id": "alice"
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T10:00:00Z",
+          "expiresAt": "2026-09-26T10:00:00.123456789Z"
+        },
+        "currentSubjectFacts": {
+          "revision": "r1"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ],
+        "evaluatedAt": "2026-09-26T12:00:00.123456789+02:00"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-024",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-control-025",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "Unchanged approval.boundary096.chain-control-001 control for the 0.9.7 discovery regressions.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "requirements": [
+            "a",
+            "b"
+          ],
+          "mode": "UNORDERED",
+          "rejectionOutcome": "REJECTED"
+        },
+        "states": {
+          "a": "APPROVED",
+          "b": "PENDING"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "reviewFinding": "F8a",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-443",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] null; reject atomically. Reconstructed from expanded case approval.boundary096.chain-control-001/[\"chain\",\"rejectionOutcome\"]/null.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "requirements": [
+            "a",
+            "b"
+          ],
+          "mode": "UNORDERED",
+          "rejectionOutcome": null
+        },
+        "states": {
+          "a": "APPROVED",
+          "b": "PENDING"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-025",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-444",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] object; reject atomically. Reconstructed from expanded case approval.boundary096.chain-control-001/[\"chain\",\"rejectionOutcome\"]/object.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "requirements": [
+            "a",
+            "b"
+          ],
+          "mode": "UNORDERED",
+          "rejectionOutcome": {}
+        },
+        "states": {
+          "a": "APPROVED",
+          "b": "PENDING"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-025",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-445",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] array; reject atomically. Reconstructed from expanded case approval.boundary096.chain-control-001/[\"chain\",\"rejectionOutcome\"]/array.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "requirements": [
+            "a",
+            "b"
+          ],
+          "mode": "UNORDERED",
+          "rejectionOutcome": []
+        },
+        "states": {
+          "a": "APPROVED",
+          "b": "PENDING"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-025",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-446",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] false; reject atomically. Reconstructed from expanded case approval.boundary096.chain-control-001/[\"chain\",\"rejectionOutcome\"]/false.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "requirements": [
+            "a",
+            "b"
+          ],
+          "mode": "UNORDERED",
+          "rejectionOutcome": false
+        },
+        "states": {
+          "a": "APPROVED",
+          "b": "PENDING"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-025",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-447",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] zero; reject atomically. Reconstructed from expanded case approval.boundary096.chain-control-001/[\"chain\",\"rejectionOutcome\"]/zero.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "requirements": [
+            "a",
+            "b"
+          ],
+          "mode": "UNORDERED",
+          "rejectionOutcome": 0
+        },
+        "states": {
+          "a": "APPROVED",
+          "b": "PENDING"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-025",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-448",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] empty; reject atomically. Reconstructed from expanded case approval.boundary096.chain-control-001/[\"chain\",\"rejectionOutcome\"]/empty.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "requirements": [
+            "a",
+            "b"
+          ],
+          "mode": "UNORDERED",
+          "rejectionOutcome": ""
+        },
+        "states": {
+          "a": "APPROVED",
+          "b": "PENDING"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-025",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-449",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-CHAIN-007"
+      ],
+      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] omit; reject atomically. Reconstructed from expanded case approval.boundary096.chain-control-001/[\"chain\",\"rejectionOutcome\"]/omit.",
+      "operation": "approval.chain.evaluate",
+      "input": {
+        "chain": {
+          "requirements": [
+            "a",
+            "b"
+          ],
+          "mode": "UNORDERED"
+        },
+        "states": {
+          "a": "APPROVED",
+          "b": "PENDING"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-025",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-control-026",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "Unchanged approval.withdraw.target-unique-001 control for the 0.9.7 discovery regressions.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": []
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-450",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004"
+      ],
+      "description": "F8a: approval.decision.withdraw, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from expanded case approval.withdraw.target-unique-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": []
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "id": "user-7",
+                "type": "user"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-026",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-451",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] null; reject atomically. Reconstructed from expanded case approval.withdraw.target-unique-001/[\"history\",\"history\",0,\"actor\",\"type\"]/null.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": null,
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": []
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-026",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-452",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] object; reject atomically. Reconstructed from expanded case approval.withdraw.target-unique-001/[\"history\",\"history\",0,\"actor\",\"type\"]/object.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": {},
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": []
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-026",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-453",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] array; reject atomically. Reconstructed from expanded case approval.withdraw.target-unique-001/[\"history\",\"history\",0,\"actor\",\"type\"]/array.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": [],
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": []
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-026",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-454",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] false; reject atomically. Reconstructed from expanded case approval.withdraw.target-unique-001/[\"history\",\"history\",0,\"actor\",\"type\"]/false.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": false,
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": []
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-026",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-455",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] zero; reject atomically. Reconstructed from expanded case approval.withdraw.target-unique-001/[\"history\",\"history\",0,\"actor\",\"type\"]/zero.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": 0,
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": []
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-026",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-456",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] empty; reject atomically. Reconstructed from expanded case approval.withdraw.target-unique-001/[\"history\",\"history\",0,\"actor\",\"type\"]/empty.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {
+          "id": "finance-review",
+          "subject": {
+            "type": "invoice",
+            "id": "inv-42"
+          },
+          "eligibleActors": [
+            "user-7"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3",
+                "amount": {
+                  "amount": "9000.00",
+                  "currency": "EUR"
+                }
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": []
+        },
+        "withdrawal": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-026",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-control-027",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "Unchanged approval.lifecycle.supersede.request-type-object-001 control for the 0.9.7 discovery regressions.",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "2"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-02T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-01T12:00:00Z"
+              },
+              "successor": {
+                "requirementId": "finance-review",
+                "actorId": "user-7",
+                "decidedAt": "2026-09-02T12:00:00Z"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-457",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] null; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/null.",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": null,
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-027",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-458",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] object; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/object.",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": {},
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-027",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-459",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] array; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/array.",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": [],
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-027",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-460",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] false; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/false.",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": false,
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-027",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-461",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] zero; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/zero.",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": 0,
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-027",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-462",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] empty; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/empty.",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-027",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-463",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] null; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",1,\"actor\",\"type\"]/null.",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": null,
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-027",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-464",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] object; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",1,\"actor\",\"type\"]/object.",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": {},
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-027",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-465",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] array; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",1,\"actor\",\"type\"]/array.",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": [],
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-027",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-466",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] false; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",1,\"actor\",\"type\"]/false.",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": false,
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-027",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-467",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] zero; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",1,\"actor\",\"type\"]/zero.",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": 0,
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-027",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-468",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] empty; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",1,\"actor\",\"type\"]/empty.",
+      "operation": "approval.decision.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "2"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-02T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "target": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-01T12:00:00Z"
+          },
+          "successor": {
+            "requirementId": "finance-review",
+            "actorId": "user-7",
+            "decidedAt": "2026-09-02T12:00:00Z"
+          },
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-027",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-control-028",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-010"
+      ],
+      "description": "Unchanged approval.lifecycle.requirement.request-type-object-001 control for the 0.9.7 discovery regressions.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "user",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "requirementId": "finance-review",
+              "subjectFacts": {
+                "revision": "3"
+              },
+              "outcome": "APPROVED",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "decidedAt": "2026-09-01T12:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "finance-review",
+              "successorRequirementId": "controller-review",
+              "actor": {
+                "type": "user",
+                "id": "user-7"
+              },
+              "recordedAt": "2026-09-02T12:30:00Z"
+            }
+          ]
+        }
+      },
+      "reviewFinding": "F8a",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-469",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-010"
+      ],
+      "description": "F8a: approval.requirement.supersede, [\"history\"] null; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\"]/null.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": null,
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-028",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-470",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-010"
+      ],
+      "description": "F8a: approval.requirement.supersede, [\"history\"] object; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\"]/object.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": {},
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-028",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-471",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-010"
+      ],
+      "description": "F8a: approval.requirement.supersede, [\"history\"] omit; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\"]/omit.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-028",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-472",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] null; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/null.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": null,
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-028",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-473",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] object; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/object.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": {},
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-028",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-474",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] array; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/array.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": [],
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-028",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-475",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] false; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/false.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": false,
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-028",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-476",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] zero; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/zero.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": 0,
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-028",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    },
+    {
+      "id": "approval.boundary097.discovery-f8a-477",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-DECISION-011"
+      ],
+      "description": "F8a: approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] empty; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/empty.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [
+          {
+            "requirementId": "finance-review",
+            "subjectFacts": {
+              "revision": "3"
+            },
+            "outcome": "APPROVED",
+            "actor": {
+              "type": "",
+              "id": "user-7"
+            },
+            "decidedAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "supersession": {
+          "targetRequirementId": "finance-review",
+          "successorRequirementId": "controller-review",
+          "actor": {
+            "type": "user",
+            "id": "user-7"
+          },
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "type": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "reviewFinding": "F8a",
+      "pairedControl": "approval.boundary097.discovery-control-028",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8a"
+      ]
+    }
+  ]
+}

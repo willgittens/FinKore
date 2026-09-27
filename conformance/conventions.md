@@ -754,3 +754,40 @@ Two committed Decisions with the same Requirement, Actor, and instant make a
 reference ambiguous even when their timestamp spellings differ. Successful
 history observations preserve those spellings; rejected history reconstruction
 does not claim that malformed input became a committed core observation.
+
+## Core 0.9.7 discovery corrections
+
+The maintainer accepted D6–D7 in the [plan](../docs/plans/plan-09.7.md).
+WORKFLOW-STATES-008 requires explicit array-valued `terminalStates` and
+`transitions` in the bounded definition, including embedded Entity Workflows.
+Empty arrays remain valid. Native convenience defaults are separate from
+portable parsing and cannot repair missing fixture members.
+
+APPROVAL-DECISION-010 requires explicit `history` or `decisions` at concrete
+operations consuming those collections. An array or an envelope with an explicit
+`history` array is valid; an absent member, null, or missing envelope array is
+invalid Decision input. This does not change composition's separate collection
+and INVALID_CHAIN rules. APPROVAL-DECISION-011 keeps Actor `type` optional;
+a supplied type is a nonempty string at concrete Decision/lifecycle boundaries.
+
+ENTITY-IDENTITY-007 requires explicit nonempty `definition.identityScope`.
+ENTITY-VALIDATION-010 requires object-valued `data` on creation and existing
+Entity observations; missing/null/non-object data uses ENTITY_VALIDATION_FAILED.
+ENTITY-LIFECYCLE-007 preserves Workflow errors: malformed/missing/empty current
+`state` uses WORKFLOW_INVALID_INSTANCE, undeclared nonempty State uses
+WORKFLOW_INVALID_STATE, after definition validation. ENTITY-MUTABILITY-009
+rejects an empty `changes` object with ENTITY_INVALID_MUTATION. These bounded
+representations do not standardize a production Entity envelope or data schema.
+
+The review does not select a `policy.id` redaction contract. D8 remains explicitly
+unresolved. Redaction authority and protected-target obligations retain their
+existing requirements and tests.
+
+M2 full-envelope vectors remain manifest-listed and are compared exactly by the
+unchanged runner. The supplementary [boundary cases](boundary097-cases.json)
+cover native behavior and adapter results whose optional diagnostic envelope is
+not specified. Their tests compare complete success values or exact portable
+error codes and independently snapshot supplied input. They do not make optional
+diagnostics mandatory or infer domain results from implementation agreement.
+`reviewFinding` and `pairedControl` are non-normative review metadata, now also
+recognized by the vector schema; they do not affect runner execution.

@@ -32,6 +32,7 @@
     "test/integration/readiness-regressions.test.ts",
     "test/integration/boundary-regressions.test.ts",
     "test/integration/construction-evaluation-regressions.test.ts",
+    "test/integration/evidence-regressions.test.ts",
     "test/money/*.test.ts",
     "test/workflow/*.test.ts",
     "test/audit/*.test.ts",

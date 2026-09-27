@@ -1,0 +1,1255 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "workflow.boundary097.discovery-control-003",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "Unchanged workflow.create.initial-state-001 control for the 0.9.7 discovery regressions.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "DRAFT"
+        }
+      },
+      "reviewFinding": "F8b",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-017",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "F8b: workflow.create, [\"definition\",\"terminalStates\"] omit; reject atomically. Reconstructed from original case workflow.create.initial-state-001/[\"definition\",\"terminalStates\"]/omit.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-003",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-018",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "F8b: workflow.create, [\"definition\",\"transitions\"] omit; reject atomically. Reconstructed from original case workflow.create.initial-state-001/[\"definition\",\"transitions\"]/omit.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-003",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-control-004",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "Unchanged workflow.transition.valid-001 control for the 0.9.7 discovery regressions.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "DRAFT"
+        },
+        "target": "SUBMITTED",
+        "facts": {}
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "SUBMITTED"
+        }
+      },
+      "reviewFinding": "F8b",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-019",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "F8b: finkore.workflow.transition, [\"definition\",\"terminalStates\"] omit; reject atomically. Reconstructed from original case workflow.transition.valid-001/[\"definition\",\"terminalStates\"]/omit.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "DRAFT"
+        },
+        "target": "SUBMITTED",
+        "facts": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-004",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-020",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "F8b: finkore.workflow.transition, [\"definition\",\"transitions\"] omit; reject atomically. Reconstructed from original case workflow.transition.valid-001/[\"definition\",\"transitions\"]/omit.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ]
+        },
+        "instance": {
+          "currentState": "DRAFT"
+        },
+        "target": "SUBMITTED",
+        "facts": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-004",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-021",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "F8b: finkore.workflow.transition, [\"instance\"] omit; reject atomically. Reconstructed from original case workflow.transition.valid-001/[\"instance\"]/omit.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "target": "SUBMITTED",
+        "facts": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-004",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-control-005",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "Unchanged workflow.import.current-state-preserved-001 control for the 0.9.7 discovery regressions.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "SUBMITTED"
+        }
+      },
+      "reviewFinding": "F8b",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-022",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "F8b: workflow.import, [\"definition\",\"terminalStates\"] omit; reject atomically. Reconstructed from original case workflow.import.current-state-preserved-001/[\"definition\",\"terminalStates\"]/omit.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED"
+          ],
+          "initialState": "DRAFT",
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-005",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-023",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "F8b: workflow.import, [\"definition\",\"transitions\"] omit; reject atomically. Reconstructed from original case workflow.import.current-state-preserved-001/[\"definition\",\"transitions\"]/omit.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED"
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-005",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-024",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "F8b: workflow.import, [\"instance\"] omit; reject atomically. Reconstructed from original case workflow.import.current-state-preserved-001/[\"instance\"]/omit.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-005",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-control-020",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "Unchanged workflow.version.sequence-opaque-001 control for the 0.9.7 discovery regressions.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "release-blue",
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "invoice-approval",
+            "definitionVersionIdentity": "release-blue"
+          }
+        }
+      },
+      "reviewFinding": "F8b",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-432",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "F8b: workflow.create, [\"definition\",\"terminalStates\"] omit; reject atomically. Reconstructed from expanded case workflow.version.sequence-opaque-001/[\"definition\",\"terminalStates\"]/omit.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "release-blue",
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-020",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-433",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "F8b: workflow.create, [\"definition\",\"transitions\"] omit; reject atomically. Reconstructed from expanded case workflow.version.sequence-opaque-001/[\"definition\",\"transitions\"]/omit.",
+      "operation": "workflow.create",
+      "input": {
+        "definition": {
+          "definitionIdentity": "invoice-approval",
+          "definitionVersionIdentity": "release-blue",
+          "states": [
+            "DRAFT",
+            "SUBMITTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "SUBMITTED"
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-020",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-control-021",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "Unchanged workflow.boundary096.transition-control-001 control for the 0.9.7 discovery regressions.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "FINAL",
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        }
+      },
+      "reviewFinding": "F8b",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-434",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "F8b: finkore.workflow.transition, [\"definition\",\"terminalStates\"] omit; reject atomically. Reconstructed from expanded case workflow.boundary096.transition-control-001/[\"definition\",\"terminalStates\"]/omit.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-021",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-435",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "F8b: finkore.workflow.transition, [\"definition\",\"transitions\"] omit; reject atomically. Reconstructed from expanded case workflow.boundary096.transition-control-001/[\"definition\",\"transitions\"]/omit.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-021",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-436",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "F8b: finkore.workflow.transition, [\"instance\"] omit; reject atomically. Reconstructed from expanded case workflow.boundary096.transition-control-001/[\"instance\"]/omit.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-021",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-control-022",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-TRANSITION-001"
+      ],
+      "description": "Unchanged workflow.transition.reverse-not-implied-001 control for the 0.9.7 discovery regressions.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "DRAFT",
+        "facts": {}
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_TRANSITION"
+        },
+        "observations": {
+          "currentState": "SUBMITTED"
+        }
+      },
+      "reviewFinding": "F9a",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f9a"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f9a-437",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-TRANSITION-001"
+      ],
+      "description": "F9a: finkore.workflow.transition, [\"facts\"] null; reject atomically. Reconstructed from expanded case workflow.transition.reverse-not-implied-001/[\"facts\"]/null.",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "DRAFT",
+        "facts": null
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_TRANSITION"
+        },
+        "observations": {
+          "currentState": "SUBMITTED"
+        }
+      },
+      "reviewFinding": "F9a",
+      "pairedControl": "workflow.boundary097.discovery-control-022",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f9a"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-control-023",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "Unchanged workflow.boundary096.import-control-001 control for the 0.9.7 discovery regressions.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        }
+      },
+      "reviewFinding": "F8b",
+      "tags": [
+        "regression",
+        "boundary",
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-438",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "F8b: workflow.import, [\"definition\",\"terminalStates\"] omit; reject atomically. Reconstructed from expanded case workflow.boundary096.import-control-001/[\"definition\",\"terminalStates\"]/omit.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-023",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-439",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-STATES-008"
+      ],
+      "description": "F8b: workflow.import, [\"definition\",\"transitions\"] omit; reject atomically. Reconstructed from expanded case workflow.boundary096.import-control-001/[\"definition\",\"transitions\"]/omit.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        },
+        "instance": {
+          "currentState": "DRAFT",
+          "binding": {
+            "definitionIdentity": "flow",
+            "definitionVersionIdentity": "1"
+          },
+          "revision": "r1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_DEFINITION"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-023",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    },
+    {
+      "id": "workflow.boundary097.discovery-f8b-440",
+      "spec": "workflow/states",
+      "requirements": [
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "F8b: workflow.import, [\"instance\"] omit; reject atomically. Reconstructed from expanded case workflow.boundary096.import-control-001/[\"instance\"]/omit.",
+      "operation": "workflow.import",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "FINAL"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "FINAL"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "FINAL"
+            }
+          ],
+          "definitionIdentity": "flow",
+          "definitionVersionIdentity": "1"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "reviewFinding": "F8b",
+      "pairedControl": "workflow.boundary097.discovery-control-023",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8b"
+      ]
+    }
+  ]
+}

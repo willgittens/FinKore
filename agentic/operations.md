@@ -379,7 +379,9 @@ The accepted Core 0.9.7 correction in `WORKFLOW-GUARD-007` requires documented
 native comparison-value support and rejection of mutable/unsupported numeric
 objects and subclasses with `FINKORE_WORKFLOW_INVALID_DEFINITION` before
 retention. Supported exact values retain their meaning. Implementation and
-regression work remains tracked in the [0.9.7 plan](../docs/plans/plan-09.7.md).
+regression verification remains tracked in the [0.9.7 plan](../docs/plans/plan-09.7.md).
+The bounded definition also requires explicit terminal-State and Transition
+collections under `WORKFLOW-STATES-008`; omission uses INVALID_DEFINITION.
 The same ownership guarantee applies to the instance binding itself at native
 construction, import, transition, and observation (`WORKFLOW-VERSION-008`).
 Explicit null preconditions are supplied input: null expected State is invalid
@@ -440,6 +442,14 @@ field (`FINKORE_ENTITY_IMMUTABLE`). Own valid State/field names, including
 `__proto__`, retain their declarations through definition observation and reuse
 under `ENTITY-DEFINITION-002`. These Core 0.9.7 corrections retain the existing
 operation IDs and result shapes; implementation verification remains pending.
+
+D6–D7 additionally specify the bounded Entity representation: explicit nonempty
+identity scope (`ENTITY-IDENTITY-007`), object-valued data with VALIDATION_FAILED
+for missing/malformed data (`ENTITY-VALIDATION-010`), Workflow instance/State
+errors for current-State shape (`ENTITY-LIFECYCLE-007`), and INVALID_MUTATION for
+empty change objects (`ENTITY-MUTABILITY-009`). Existing Workflow priority and
+non-mutation guarantees apply. These are staged compatibility corrections;
+M2 regression publication does not claim implementation conformance.
 
 ## `finkore.entity.create`
 

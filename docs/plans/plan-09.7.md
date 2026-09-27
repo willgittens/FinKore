@@ -2,9 +2,11 @@
 
 ## Status
 
-Milestone 1 is complete; Milestones 2–9 remain uncompleted. D1–D5 were explicitly
-accepted by the maintainer on 2026-09-27. Contracts and compatibility dispositions
-are recorded below; implementations and new regressions remain pending.
+Milestone 2 regression/discovery work is complete; implementation Milestones
+3–9 remain uncompleted. D1–D7 were explicitly accepted on 2026-09-27. M1 is
+reopened only for D8, which the maintainer explicitly left unresolved. The new
+tests deliberately fail on the defective baseline; implementation scope remains
+open until D8 is settled.
 Release type: corrective release candidate. Core 1.0 promotion is blocked pending this work and the separate
 [Core 1.0 promotion gates](plan-10.md).
 
@@ -290,32 +292,55 @@ completion authorizes its dependent regression work; it does not close M2–M9.
 
 ## Milestone 2 — Permanent regressions and broader discovery
 
-- [ ] Reproduce every finding and subcase as a permanent failing regression on
+### Discovery decisions (D6–D7 accepted; D8 unresolved)
+
+The reconstructed baseline exactly reproduces 3,861 cases and 478 status/code
+differences or exceptions. Comparing complete results adds 186 leads, including
+optional observation differences that are not automatically defects. Investigation
+also exposes the following representation gaps; no expected result is selected
+by implementation majority voting.
+
+| Decision | Accepted correction or explicitly unresolved gap | Compatibility and owner |
+| --- | --- | --- |
+| D6 — Required fixture collections and optional Actor type | Require explicit `terminalStates` and `transitions` arrays in the bounded Workflow definition, and explicit array/envelope `history` or `decisions` at Approval fixture operations that consume them; explicit null or an envelope without its required history array is malformed. Empty arrays remain valid. Document native convenience constructors/defaults separately. Approval Actor `type` stays optional, but when supplied is a nonempty string. | Resolves omitted-list and malformed Actor type differences without requiring a production serialization. Workflow failures use INVALID_DEFINITION; Approval failures use INVALID_DECISION. M4 handles Approval; M5 handles Workflow declaration boundaries. |
+| D7 — Entity representation | Require the bounded Entity definition's explicit nonempty `identityScope` and object-valued Entity `data`; absent/null/non-object data uses ENTITY_VALIDATION_FAILED. For an existing Entity, malformed/missing current State uses WORKFLOW_INVALID_INSTANCE and an undeclared nonempty State uses WORKFLOW_INVALID_STATE, preserving Workflow error priority. An empty mutation change object uses ENTITY_INVALID_MUTATION. | Adds explicit representation/error rules rather than treating an implementation as the oracle. Native composing-domain APIs need no universal data schema. M7 owns shape/error correction and M6 own-member preservation. |
+| D8 — Redaction policy identity | Do not select requiredness or malformed-value handling for `policy.id`; authority and protected targets retain their existing requirements. Classify its malformed/omitted fixture differences as a contract gap, with no new normative regression until that optional fixture member is separately settled. | The earlier 0.9.6 scope explicitly added no independent policy-ID obligation. This gap does not authorize a new authorization model or invented ID requirement. |
+
+Other discoveries are assessed against existing requirements: missing concrete
+Requirement outcome mappings (APPROVAL-REQUIREMENT-004), missing Chain rejection
+declarations (APPROVAL-CHAIN-007), malformed Workflow instance/Entity transition
+target error preservation, and evolution history/relation/scope input errors.
+Their permanent cases and implementation owners are recorded in the
+discrepancy classification below. This section reopens M1 only for the new decisions;
+D1–D5 remain accepted.
+
+- [x] Reproduce every finding and subcase as a permanent failing regression on
       `4041ec2`, with an independently passing valid control. Use an isolated
       checkout when testing the defective baseline; never reset working changes.
-- [ ] Add portable vectors to manifest-listed files where the behavior is
+- [x] Add portable vectors to manifest-listed files where the behavior is
       specified. Use native tests for retained references, unsupported numeric
       classes, subclass behavior, and actual multi-operation result reuse.
-- [ ] Reconstruct the exploratory review deterministically and classify its
+- [x] Reconstruct the exploratory review deterministically and classify its
       distinct failure families. Account for every observed discrepancy as a
       confirmed defect, contract gap, permitted difference, duplicate, or invalid
       probe, with reasons in this plan or existing traceability/test artifacts.
       Do not treat implementation majority voting as the expected-result oracle.
-- [ ] Expand beyond one successful seed per operation and shallow leaf changes.
+- [x] Expand beyond one successful seed per operation and shallow leaf changes.
       Cover meaningful success/error variants, nested containers, complete
       normalized values and observations, and domain-relevant interactions.
-- [ ] Inventory all supported public boundaries across Money, Workflow, Audit,
+- [x] Inventory all supported public boundaries across Money, Workflow, Audit,
       Approvals, and Entities: constructors, factories, parsers/importers,
       serializers, operations, adapters, observations, and result reuse. Explain
       inapplicable dimensions rather than claiming exhaustive combinations.
-- [ ] Add actual-output sequences with failure snapshots. Never rebuild the
+- [x] Add actual-output sequences with failure snapshots. Never rebuild the
       expected history by hand between operations or repair a returned value
       before giving it to its next consumer.
-- [ ] Include new tests in ordinary test discovery, coverage, configured mutation
+- [x] Include new tests in ordinary test discovery, coverage, configured mutation
       test selection, and package-consumer checks where applicable. Shared
       fixtures do not replace assertions about native public behavior.
-- [ ] Add any newly confirmed mandatory gap to this plan before fixing it;
-      resolve new ambiguity through M1. Complete this discovery pass before
+- [x] Add any newly confirmed mandatory gap to this plan before fixing it;
+      resolve new ambiguity through M1 (D6–D7 accepted; D8 explicitly left
+      unresolved by the maintainer). Complete this discovery pass before
       declaring the implementation scope closed.
 
 | Dimension | Minimum relevant coverage |
@@ -334,6 +359,191 @@ Completion: every confirmed case fails for the intended behavioral assertion
 on the defective baseline, its control passes, and unexplained exploratory
 families are not silently dropped. Contract-gap cases become normative tests
 only after their decisions are resolved.
+
+### Milestone 2 result — 2026-09-27
+
+The maintainer explicitly selected “Adopt D6–D7; keep D8 unresolved.” D6–D7
+are now normative in WORKFLOW-STATES-008, APPROVAL-DECISION-010/011,
+ENTITY-IDENTITY-007, ENTITY-VALIDATION-010, ENTITY-LIFECYCLE-007, and
+ENTITY-MUTABILITY-009, with bounded representations in conformance conventions.
+These are corrective compatibility changes under SPEC-FREEZE-001 and
+SPEC-COMPATIBILITY-005/008/009/012/014: callers relying on omitted collections,
+malformed Actor types, default identity scope, non-object data, malformed State
+error categories, or empty mutation no-ops must migrate. Native convenience
+constructors retain their separately documented scope. No new operation ID,
+portable error code, production serialization, domain, or total Entity error
+priority is introduced. D8 reopens M1 and prevents implementation-scope closure;
+it does not acquire an expected result through this discovery milestone.
+
+#### Permanent cases and independent controls
+
+There are **896 new identified cases**: **699 manifest-listed full-envelope
+vectors** and **197 supplementary native/adapter cases** in
+[boundary097-cases.json](../../conformance/boundary097-cases.json). The latter
+cover specified domain results where optional diagnostic observations lack a
+single prescribed envelope, and cases whose result is incorrect on every
+baseline implementation. They assert exact complete success values or portable
+error codes and unchanged supplied inputs. They do not select diagnostics by
+majority vote or weaken the runner. Full-envelope vectors preserve exact
+observation comparison; their unchanged-history/Entity observations come from
+the supplied fixture state. No baseline failure below is solely an optional
+observation mismatch.
+
+The original 884 vectors and their expectations remain unchanged; the manifest
+now contains **1,583 vectors**. Cases retain their finding label, requirement
+references, and `pairedControl` where applicable. All **61 referenced portable
+controls pass independently on all four configurations**. Additional healthy
+neighbors include no-vote/inapplicable evidence, valid unused groups, shared
+children at valid depths, equal tuples without lifecycle references, same-scale
+exact values, equal/selected facts, and ordinary/special-name Entity operations.
+These controls and boundary cases are not counted as additional defects merely
+because they were added during a corrective review.
+
+Native suites in each implementation use direct public APIs, in addition to
+shared JSON cases. They record actual histories, withdraw or supersede, record
+again, and import/evaluate the actual returned values. Collision cases cover
+withdrawal targets and supersession targets/successors, including equivalent
+UTC-offset spellings; distinct-instant and Requirement-supersession controls
+pass. Failed operations snapshot Decision/lifecycle histories and caller input.
+TypeScript's successful history methods intentionally mutate their receiver;
+non-mutation assertions apply to rejected operations and independent retained
+observations, not a falsely assumed persistent API.
+
+Native tests require Java to reject AtomicInteger/AtomicLong, mutable BigDecimal/BigInteger subclasses,
+and unsupported numeric values in the new tests, with immutable numeric controls;
+these rejection tests fail on the defective baseline where indicated below.
+Exact Java/Python decimal cases compare scale-independent values without
+rounding through binary floats or Python decimal context. Native container tests
+mutate original inputs and returned views independently. TypeScript exercises
+own `__proto__`, `constructor`, and `prototype` declarations through actual
+Entity definition observation, reconstruction, allowed/forbidden mutation, and
+transition, checking the original observation and global prototype. Ordinary
+names are independently passing controls. Native condition APIs with a required
+positional facts argument are not tested by an invalid call-arity trick: omitted
+fixture facts have adapter coverage; TypeScript's options-object API can also
+represent native omission.
+
+#### Complete exploratory accounting
+
+[explore-boundaries.js](../tools/explore-boundaries.js) reconstructs the original
+matrix on the old manifest: 3,861 cases across 33 operations, exactly 478
+status/code differences or exceptions. Comparing complete normalized results
+finds 664 leads in total. The expanded matrix adds 5,980 cases across the same
+operations, selecting last-success and first-error seeds, depth-six paths,
+first/last array positions, and at most 24 deterministic paths per seed. It
+finds 1,001 complete-result leads, including 494 status/code/exception leads.
+Both runs execute TypeScript, CPython 3.12, CPython 3.13, and Java with independent
+JSON-round-tripped requests, preserved explicit context, and input snapshots.
+No input mutation was observed. This finite sample is not exhaustive.
+
+[classify-boundaries.js](../tools/classify-boundaries.js) accounts for every
+lead by deterministic case ID and fails on an unclassified family. The reasons
+below are contract-based; implementation agreement is not an oracle. Repeated
+variants and operations within a family are duplicate exposures of its stated
+obligation, not separate financial rules or an aggregate defect count.
+
+| Disposition/family | Original leads | Expanded leads | Reason and owning correction |
+| --- | ---: | ---: | --- |
+| F1 | 0 | 1 | Composition null decision evidence bypass; COMPOSITION-010, INVALID_CHAIN; M3. |
+| F6a | 34 | 74 | Malformed condition declarations accepted, misclassified, or throwing; CONDITION-007; M4. |
+| F6b | 109 | 84 | Missing/malformed mutability rules or field members across consuming boundaries; MUTABILITY-008; M7. |
+| F6c | 16 | 4 | Malformed evolution Audit history masks the domain result; AUDIT-ERROR-004 and EVOLUTION-034; M7. |
+| F7a | 1 | 2 | Null selector bypass and selectors without current facts, including a complete-value disagreement; FACT-001; M4. |
+| F7b | 6 | 12 | Absent versus malformed condition facts; CONDITION-007/FACT-002; M4. Nested-path neighbors have permanent targeted cases. |
+| F8a | 36 | 50 | Required concrete outcome mappings, history/Decision collections, optional Actor type, and Chain rejection declarations; REQUIREMENT-004, DECISION-010/011, CHAIN-007; M4. |
+| F8b | 30 | 26 | Omitted Workflow collections, omitted instances, and Entity transition target error preservation; STATES-008, WORKFLOW-ERROR-007, ENTITY-ERROR-004; M5 for definitions, M7 for adapter/error preservation. |
+| F8c | 238 | 141 | Entity identity scope/data/current-State/empty-change contracts plus malformed evolution history, relation identity, and supersession scope; new D7 requirements and EVOLUTION-024; M7. Invalid relation/scope request fields use INVALID_MUTATION, not an Entity identity error. |
+| F9a | 0 | 1 | TypeScript adapter throws on null facts for an otherwise rejected undeclared reverse transition; TRANSITION-001/002/003 and ERROR-007 require INVALID_TRANSITION, unchanged instance; M7. |
+| F9b | 0 | 10 | Python Audit relationship type object/array raises an unhashable-type exception, including evolution's first/last relationships; AUDIT-ERROR-004 requires INVALID_EVENT before correspondence; M7 Audit core and bridge. |
+| F9c | 0 | 35 | Python mutation can overwrite malformed existing Money-valued Entity data and return success; supplied Entity observations also need their declared validation, VALIDATION-001/004; M7. Transition neighbors and exact error preservation are included. |
+| P1 — permitted diagnostic difference | 184 | 505 | Same domain error, differing optional failure observations: omitted lifecycle, partial Entity observations, absent/null diagnostics, or empty-history presentation. No success value or primary code differs. Native/input snapshots separately verify preservation; diagnostics are not promoted into normative state. |
+| P2 — permitted redaction error selection | 1 | 2 | Omitted history also leaves the redaction target unavailable. Both reject. AUDIT-ERROR-004 orders append validation, not every redaction failure; no total redaction priority is invented. |
+| P3 — permitted empty observation | 2 | 1 | Entity import returns the same Entity/mapping with absent versus empty optional historicalRevisions when no revisions were supplied. No historical revision is lost or invented. |
+| P4 — invalid precedence probe | 0 | 53 | An already-malformed Entity validator seed also receives an invalid Workflow declaration. Both fail; no total priority across these unrelated Entity declaration errors exists. Isolated valid controls govern their individual failures. |
+| D8 — unresolved contract gap | 7 | 0 | Malformed/omitted policy.id differs. Maintainer explicitly left policy identity unresolved. No normative assertion or implementation change. |
+| **Total** | **664** | **1,001** | **910 contract-backed defect exposures, 695 permitted differences, 53 invalid precedence probes, 7 unresolved-gap exposures.** |
+
+F2–F5 and the deeper fact-equality/selector interactions are independently
+reproduced by targeted cases and native sequences; their absence from a shallow
+sweep's lead count is not an exemption. Newly confirmed F8/F9 obligations are
+recorded here before fixes. Their owners inherit the earlier requirement for
+unit/native, portable, mutation, API-documentation, and installed-consumer closure.
+
+#### Public boundary inventory and limits
+
+| Domain | Supported public boundaries reviewed | Relevant exercised dimensions and limits |
+| --- | --- | --- |
+| Money | TypeScript Currency validation/Money factories; Python Money constructor/from_portable; Java Money native construction/fromPortable; amount/currency observations; add/subtract/compare/multiply/divide/round/apply-rate/allocate; serialize/toJSON/to_portable/toPortable and arithmetic-result reuse; all adapter operations. | Original/expanded portable shape and success/error seeds plus existing native exactness, requested-scale serialization, constructor, and package controls. No new Money arithmetic semantics or defects selected. Graphs, lifecycle histories, eligibility, and Entity declaration retention do not apply. |
+| Workflow | Definition/Transition/Instance native constructors, portable factories/parsers, create/import/transition, binding/definition/current-State/revision observations and serialization; actual create→transition reuse and adapters. | Required collections, malformed instances, definition-before-instance priority, terminal/endpoint/guard validation, null facts, native immutable/mutable numeric classes, retained definition values and original instance snapshots. No registry, migration, concurrency, or distributed version work. |
+| Audit | Actor/Change/Event constructors and portable parsing, log/history import, append, redaction, history/event/actor/change observations and serialization; append/redaction result reuse and adapters. | Existing ownership/cycle/exact-number/native suites remain active; expanded nested relationship types and evolution error preservation are added. D8 policy identity is explicitly not tested as a chosen rule. No general ordering operation or production redaction encoding is invented. |
+| Approvals | Requirement/Decision/Condition/Chain/Composition factories and evaluation; native validation functions; history creation/import/normalization, record/withdraw/Decision supersession/Requirement supersession, concrete and history-only evaluation; observation/serialization and result reuse; all conformance-local adapters. | Required evidence, applicability/context/error order, disconnected graphs/shared children/depth, malformed first/last declarations, own-member paths, exact structural/native numeric comparison, input/output ownership, all actual lifecycle result sequences. Java facts-only overload remains a distinct limited helper. No canonical Approval operation, expression language, delegation, or dynamic eligibility extension is added. |
+| Entities | Native definition/observation validation, create/from/reconstruction/import, mutate/transition, evolution-history import and correct/reverse/void/supersede, definition/data/identity/State/binding/revision/currentness/relation observations, serialization and adapters. | Shape/presence, own special names, complete permission lists and malformed members across states, validation before source reuse, target/primary-domain errors, Audit correspondence/history, revisions and unchanged-state controls. Existing actual evolution/import/binding sequence suites remain active. No accounting effects or universal data schema is invented. |
+| Shared surface | Exported error constructors/predicates/codes, timestamp parsing through public operations, version constants and exported data types; TypeScript dispatch and Python/Java JSON bridges; installed npm, wheel/sdist, and JAR consumers. | Existing exact error/version/timestamp controls and architecture checks remain active. Types and constants have no independent history/graph behavior; private helpers are not separately promoted into public APIs. Same-instant offsets and fixed timestamps are explicit; host clock, locale and timezone do not choose outcomes. |
+
+The expanded sampler covers portable entry points; native tests cover values,
+references, and successful stateful reuse that JSON cannot preserve. Earlier
+readiness/boundary/construction suites remain part of ordinary discovery. This
+inventory records reviewed surfaces and relevant tests, not every Cartesian
+combination or a new full-domain conformance claim.
+
+#### Baseline verification and gate status
+
+The defective baseline was archived into an isolated `/tmp` checkout from
+`4041ec2838d4cbcf9333b8c6c651affe9ee10500`, built there, then overlaid only with
+new conformance/spec metadata and regression tests. Implementation and adapter
+sources were not replaced or fixed. The working tree's implementation sources
+also still match that commit. Reconstruction uses the original manifest before
+these overlays; instructions are in [developer tools](../tools/README.md#core-097-discovery-and-red-regressions).
+No working changes were reset.
+
+| Baseline configuration | Full vectors PASS / FAIL / INFRASTRUCTURE_ERROR | Direct native suite PASS / unsuccessful | Supplementary adapter cases PASS / unsuccessful |
+| --- | --- | --- | --- |
+| TypeScript | 1,494 / 88 / 1 | 265 / 42 of 307 | 92 / 105 of 197 |
+| CPython 3.12 | 1,106 / 447 / 30 | 144 / 155 of 299 | 28 / 169 of 197 |
+| CPython 3.13 | 1,106 / 447 / 30 | 144 / 155 of 299 | 28 / 169 of 197 |
+| Java 21 | 1,215 / 368 / 0 | 172 / 146 of 318 | 98 / 99 of 197 |
+
+All original 884 vectors pass on every runtime; there are no UNSUPPORTED
+results. Infrastructure outcomes above are reproduced domain-boundary crashes,
+not setup failures, and are not accepted as portable errors. Python native
+unsuccessful results comprise 142 assertion failures and 13 unexpected errors
+(including incorrect portable failures on expected-success cases). All referenced
+controls pass, and native ordinary-name, exact-value, ownership and distinct-time
+controls pass. Each original finding/subcase has at least one intended red
+assertion on an affected runtime, alongside its independently passing control.
+
+Build, strict TypeScript, Java `-Xlint:all -Werror` compilation, local toolchains,
+17 developer-tool tests, documentation/traceability, architecture, licensing,
+and whitespace checks pass. The inventory is 432 requirements: 288 COVERED,
+63 PARTIAL, 80 NOT DIRECTLY TESTABLE, and one BLOCKING SPEC GAP (D8); no new
+conformance closure is claimed. Ordinary coverage entry points discover the new
+tests and stop on the expected red suites: TypeScript runs 1,400 tests with
+42 failures; Python coverage runs the 299 new native cases; Java Maven runs
+42 aggregate tests with the new native-suite entry failing. No passing coverage
+percentage or release verification is claimed.
+
+Stryker's initial test run and the native mutation preflight reject this red
+baseline. No mutation kill/score is claimed for these defects before their
+implementation corrections; existing mutation assertions are not weakened.
+New targeted perturbations remain owned by M3–M7. All six locally installed
+consumers reach their new intended failures after their existing controls:
+TypeScript own declaration retention, four Python wheel/sdist consumers'
+proposed-history collision, and Java unsupported AtomicInteger evidence.
+A temporary collection wrapper ran all consumers after each expected failure;
+ordinary package verification remains fail-fast. Artifacts were local only and
+were not published.
+
+Completion review: tests, vectors/supplementary cases, mutation selection,
+coverage discovery, consumers, owning specs, conventions/schema/traceability,
+Agentic references, and relevant README status notices are updated. No public
+production API or implementation behavior changed, so production JSDoc/native
+API changes accompany M3–M7 rather than describing an unimplemented fix now.
+CoreDoc obligations and AGENTS.md architecture/rules are unchanged; no foundation
+version update, release note, provenance record, tag, publication, or Core 1.0
+promotion is needed or performed.
+
+**M2 regression/discovery work is complete. M3–M7 implementation remains
+pending; D8 is deliberately unresolved and implementation scope is not closed.**
 
 ## Milestone 3 — Complete composition validation and quorum evidence
 
@@ -360,6 +570,11 @@ approval through any reviewed placement; valid compositions retain their exact
 outcome and actionable Requirement order on every runtime.
 
 ## Milestone 4 — Approval histories, conditions, and fact semantics
+
+- [ ] Close F8a discovery regressions: concrete outcome mappings, explicit
+      fixture histories/Decision collections, supplied Actor type, and Chain
+      rejection declarations. Preserve native convenience defaults separately
+      from D6 portable requiredness.
 
 - [ ] Fix F3 by validating the proposed committed result before exposing it.
       A new Decision cannot make an existing target or successor ambiguous.
@@ -389,6 +604,10 @@ portable fact inputs have the accepted specified meaning across runtimes, with
 no language exceptions or implicit approval caused by missing required facts.
 
 ## Milestone 5 — Native value ownership across retained domain data
+
+- [ ] Enforce D6/F8b explicit Workflow terminal-State/Transition fixture
+      collections at standalone and embedded Entity definition boundaries.
+
 
 - [ ] Fix F2a/F2b under the accepted native value contract. Validate before
       retaining caller-provided values; preserve supported exact immutable
@@ -435,6 +654,13 @@ observation and reuse, including valid special member names, without runtime
 exceptions or accidental changes to permitted mutations.
 
 ## Milestone 7 — Portable malformed-input failures and adapter observations
+
+- [ ] Close F8b/F8c and F9a–F9c from M2: Workflow instance/target error
+      preservation; Entity scope/data/State/empty-change/evolution request
+      validation; TypeScript null-facts adapter failure; Python Audit relationship
+      type exceptions; and validation of existing Entity data before mutation.
+      Keep each primary error and non-mutation obligation under its owning spec.
+
 
 - [ ] Fix F6b in the Python core and review adjacent mutability containers and
       list entries at create/import, mutation, transition, and evolution boundaries

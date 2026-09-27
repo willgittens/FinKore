@@ -80,4 +80,16 @@ assert.deepEqual(log.toJSON(), auditBefore)
 const redacted = log.redact({ policy: { id: 'retention-policy', authority: 'retention', protectedPaths: ['actor.metadata'] }, redactionEvent: evidence })
 assert.deepEqual(redacted.event.actor.metadata, { presence: 'REDACTED' })
 assert.deepEqual(log.toJSON(), { history: [...auditBefore.history, redacted.evidenceEvent] })
+// Core 0.9.7: the ordinary-name control precedes actual definition/result reuse.
+for (const state of ['DRAFT', '__proto__', 'constructor', 'prototype']) {
+  const ownDefinition = { type: 'invoice', identityScope: 'scope', workflow: { states: [state, 'DONE'], initialState: state, terminalStates: ['DONE'], transitions: [{ source: state, target: 'DONE' }] }, mutability: { [state]: ['memo'], DONE: [] } }
+  const ownEntity = FinancialEntity.create(ownDefinition, 'own', { memo: 'old' })
+  assert.equal(Object.hasOwn(ownEntity.definition.mutability, state), true)
+  const reconstructed = FinancialEntity.from(ownEntity.definition, ownEntity.toJSON())
+  assert.equal(reconstructed.mutate({ memo: 'new' }).toJSON().data.memo, 'new')
+  assert.equal(ownEntity.toJSON().data.memo, 'old')
+}
+const withdrawnBefore097 = withdrawn.toJSON()
+error('FINKORE_APPROVAL_INVALID_DECISION', () => withdrawn.record(requirement, { ...decision, subjectFacts: { changed: true } }))
+assert.deepEqual(withdrawn.toJSON(), withdrawnBefore097)
 console.log('Installed npm consumer: exact Money, Entity binding/ownership, null preconditions, Approval association and Audit ownership pass')

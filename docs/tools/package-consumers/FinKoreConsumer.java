@@ -92,6 +92,17 @@ public final class FinKoreConsumer {
     Audit.Actor actor = Audit.Actor.fromPortable(Map.of("id", "alice", "metadata", metadata));
     metadata.put("value", 2);
     equal(Map.of("value", 1), actor.metadata());
+    // Core 0.9.7: supported immutable evidence control before unsupported values.
+    Map<String, Object> nativeDecision097 = new LinkedHashMap<>(decision);
+    nativeDecision097.remove("expiresAt");
+    nativeDecision097.put("subjectFacts", Map.of("value", new java.math.BigDecimal("1.0")));
+    Map<String, Object> nativeHistory097 = Approvals.recordDecision(requirement, nativeDecision097, List.of());
+    equal("EFFECTIVE", Approvals.evaluateDecision(requirement, nativeDecision097, Map.of("value", new java.math.BigDecimal("1.0")), List.of("value"), null));
+    Map<String, Object> mutable097 = new LinkedHashMap<>(nativeDecision097);
+    mutable097.put("subjectFacts", Map.of("value", new AtomicInteger(1)));
+    error(Approvals.INVALID_DECISION, () -> Approvals.recordDecision(requirement, mutable097, nativeHistory097));
+    equal(Map.of("history", List.of(nativeDecision097)), nativeHistory097);
+    equal("EFFECTIVE", Approvals.evaluateDecision(requirement, nativeDecision097, Map.of("value", new java.math.BigDecimal("1.00")), List.of("value"), null));
     System.out.println("Installed Java consumer: lossless serialization, Entity binding/null/validators, Approval concrete/history, Audit numeric/cycle/ownership boundaries pass");
   }
 }

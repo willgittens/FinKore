@@ -27,6 +27,9 @@ An Approval Decision outcome is `APPROVED` or `REJECTED`. `PENDING` describes an
 
 ## Core 0.9.7 fact comparison correction
 
+- **APPROVAL-DECISION-010** — A bounded concrete Approval fixture operation consuming a Decision history or Decision collection MUST receive an explicit array or supported history envelope containing an explicit history array. Omission, null, or a malformed envelope MUST use `FINKORE_APPROVAL_INVALID_DECISION`. An empty array remains valid evidence of no Decisions. Native convenience constructors MAY provide documented empty defaults; fixture translation MUST NOT use them to repair missing evidence.
+- **APPROVAL-DECISION-011** — A concrete Approval Actor's optional type, when supplied, MUST be a nonempty string. Null, empty, or non-string type values MUST use `FINKORE_APPROVAL_INVALID_DECISION` at Decision and lifecycle boundaries. Omission MUST remain valid and MUST NOT synthesize a type.
+
 The accepted D1–D4 decisions in the [0.9.7 plan](../../docs/plans/plan-09.7.md)
 resolve differing concrete evaluation and native-value behavior. These are
 corrective normative additions under SPEC-FREEZE-001, staged for implementation

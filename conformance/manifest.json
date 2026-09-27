@@ -26,7 +26,8 @@
         "./workflow/transitions.json",
         "./workflow/versioning.json",
         "./workflow/readiness-regressions.json",
-        "./workflow/construction-evaluation-regressions.json"
+        "./workflow/construction-evaluation-regressions.json",
+        "./workflow/discovery-regressions.json"
       ]
     },
     {
@@ -45,7 +46,9 @@
         "./approvals/validity.json",
         "./approvals/composition.json",
         "./approvals/readiness-regressions.json",
-        "./approvals/construction-evaluation-regressions.json"
+        "./approvals/construction-evaluation-regressions.json",
+        "./approvals/evidence-regressions.json",
+        "./approvals/discovery-regressions.json"
       ]
     },
     {
@@ -55,7 +58,9 @@
         "./entities/evolution.json",
         "./entities/import.json",
         "./entities/readiness-regressions.json",
-        "./entities/construction-evaluation-regressions.json"
+        "./entities/construction-evaluation-regressions.json",
+        "./entities/evidence-regressions.json",
+        "./entities/discovery-regressions.json"
       ]
     }
   ]

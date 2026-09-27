@@ -658,6 +658,17 @@ function execute(probe, directory) {
 
 const selected = probes.filter(probe => process.argv[2] === undefined || probe.id.includes(process.argv[2]))
 if (selected.length === 0) throw new Error('No native mutation probes match the requested ID fragment')
+// Mandatory regression preflight: a red corrective baseline is not a killed mutant.
+for (const language of new Set(selected.map(probe => probe.language))) {
+  let baseline
+  if (language === 'python') baseline = run(process.env.FINKORE_PYTHON_PATH ?? join(root, '.tools/bin/python3.12'), ['-m', 'unittest', 'discover', '-s', 'implementations/python/core/tests', '-p', 'test_evidence_regressions.py'], { env: { ...process.env, PYTHONPATH: join(root, 'implementations/python/core/src') } })
+  else if (language === 'java') {
+    const compiled = run(process.execPath, ['docs/tools/compile-java.js'])
+    if (compiled.status !== 0) throw new Error(`Java regression preflight compile failed\n${compiled.stderr}`)
+    baseline = run(join(root, '.tools/bin/java'), ['-cp', [join(root, 'implementations/java/target/classes'), join(root, 'implementations/java/target/test-classes')].join(delimiter), 'org.finkore.EvidenceRegressionTest'])
+  } else baseline = run(process.execPath, [join(root, 'node_modules/vitest/vitest.mjs'), 'run', '--root', 'implementations/typescript/core', 'test/integration/evidence-regressions.test.ts'])
+  if (baseline.status !== 0) throw new Error(`${language}: Core 0.9.7 regression baseline failed; no mutation result claimed\n${baseline.stdout}\n${baseline.stderr}`)
+}
 for (const probe of selected) {
   const directory = mkdtempSync(join(tmpdir(), 'finkore-native-mutant-'))
   try {

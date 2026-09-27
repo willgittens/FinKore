@@ -23,11 +23,13 @@ referenced requirement IDs, and traceability status.
 The local `core-0.9.6` tag identifies the latest completed corrective snapshot.
 The Core label remains `0.9-rc` and conformance syntax remains `0.1`.
 
-[Core 0.9.7 Milestone 1](../docs/plans/plan-09.7.md) accepts contract corrections
-and reopens affected [traceability](traceability.md) boundaries. The current 884
-vectors retain their existing expectations; new permanent regressions begin in
-Milestone 2. Passing this existing suite does not establish conformance to the
-newly specified boundaries.
+[Core 0.9.7 Milestone 2](../docs/plans/plan-09.7.md) publishes 699 new
+full-envelope vectors and 197 supplementary native/adapter cases, alongside the
+unchanged 884 vectors. The suite now contains 1,583 manifest vectors. Baseline
+failures are intentional pending M3–M7; [traceability](traceability.md) stays open,
+and D8 remains an unresolved contract gap. Supplementary tests assert exact
+domain results and input preservation where optional diagnostics have no single
+portable envelope. They do not weaken the runner's exact comparison.
 
 The completed [Core 0.9.5 plan](../docs/plans/plan-09.5.md) corrects native Money
 serialization, Workflow binding and precondition presence, concrete Approval

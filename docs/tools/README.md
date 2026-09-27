@@ -255,3 +255,37 @@ consumer checks:
 Temporary consumer environments and artifacts are removed when the check
 finishes. These checks only build and consume implementation artifacts. They do
 not define financial behavior.
+
+## Core 0.9.7 discovery and red regressions
+
+`explore-boundaries.js` reconstructs the original 3,861-case sweep and expands it
+with last-success/first-error seeds, depth-six paths, first/last array entries,
+complete normalized results, input snapshots, and CPython 3.13. It runs built
+adapters from `--root` and writes investigation data only. It does not decide
+which implementation is correct. `classify-boundaries.js` applies the reviewed
+[plan dispositions](../plans/plan-09.7.md); an unknown lead fails classification.
+
+Use an isolated checkout of `4041ec2838d4cbcf9333b8c6c651affe9ee10500`, install its
+locked dependencies, and build its TypeScript and Java adapters first. Preserve
+that checkout's original manifest while exploring. Run the current tools against
+it (replace the example absolute paths with your checkouts):
+
+```bash
+node /path/to/current/docs/tools/explore-boundaries.js --root /path/to/baseline --mode original --output /tmp/original.json
+node /path/to/current/docs/tools/explore-boundaries.js --root /path/to/baseline --mode expanded --output /tmp/expanded.json
+node /path/to/current/docs/tools/classify-boundaries.js /tmp/original.json /tmp/expanded.json --output /tmp/dispositions.json
+```
+
+For red-regression verification, overlay the current `conformance`/`spec`
+metadata and the new test files onto a separate copy of that baseline. Do not
+replace implementation or adapter sources. Ordinary native/adapter discovery
+loads the manifest vectors and `conformance/boundary097-cases.json`. The latter
+asserts domain results plus unchanged input without inventing mandatory optional
+diagnostics; the runner's full-envelope comparisons remain unchanged.
+
+TypeScript Stryker selection, Python unit/coverage discovery, Java native/Maven
+coverage entry points, and installed consumers include the new regressions.
+Native mutation execution first requires these regression suites to pass; a red
+baseline is never counted as a killed mutant. The specific new financial
+perturbations are added with their implementation corrections in M3–M7. M2
+intentionally leaves financial tests red and cannot pass release verification.

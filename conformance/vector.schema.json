@@ -40,6 +40,16 @@
             "enum": ["positive", "negative", "boundary", "invariant", "regression", "mutation-sensitive"]
           }
         },
+        "reviewFinding": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Non-normative review label; requirements remain the normative mapping."
+        },
+        "pairedControl": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$",
+          "description": "Existing vector or supplementary case checked as an independent control."
+        },
         "guardsAgainst": {
           "type": "array",
           "minItems": 1,

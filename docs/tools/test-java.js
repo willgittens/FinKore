@@ -26,6 +26,7 @@ for (const testClass of [
   'org.finkore.ReadinessRegressionTest',
   'org.finkore.BoundaryRegressionTest',
   'org.finkore.ConstructionEvaluationRegressionTest',
+  'org.finkore.EvidenceRegressionTest',
 ]) {
   const child = spawnSync(java, ['-cp', classpath, testClass], {
     encoding: 'utf8',
