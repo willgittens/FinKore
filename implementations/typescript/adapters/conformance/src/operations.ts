@@ -368,7 +368,7 @@ function inputApprovalConditionEvaluate(input: unknown): {
   readonly facts: unknown
   readonly result?: unknown
 } {
-  if (typeof input !== 'object' || input === null || !('condition' in input) || !('facts' in input)) {
+  if (typeof input !== 'object' || input === null || !('condition' in input)) {
     return { condition: undefined, facts: undefined }
   }
   const candidate = input as { readonly condition: unknown; readonly facts: unknown; readonly result?: unknown }
@@ -1095,7 +1095,7 @@ function executeAuditRemove(request: AdapterRequest): NormalizedResult {
 function executeApprovalRequirementEvaluate(request: AdapterRequest): NormalizedResult {
   const input = inputApprovalRequirementEvaluate(request.input)
   try {
-    const history = ApprovalDecisionHistory.create(input.decisions as readonly unknown[])
+    const history = ApprovalDecisionHistory.from(input.decisions as readonly unknown[])
     return {
       status: 'success',
       value: history.evaluateRequirement(input.requirement, {
@@ -1121,13 +1121,14 @@ function executeApprovalDecisionWithdraw(request: AdapterRequest): NormalizedRes
   const input = inputApprovalDecisionWithdraw(request.input)
   let history: ApprovalDecisionHistory | undefined
   try {
-    history = ApprovalDecisionHistory.create(input.history)
+    history = ApprovalDecisionHistory.from(input.history)
     return { status: 'success', value: history.withdraw(input.requirement, input.withdrawal).toJSON() }
   } catch (error) {
     const result = normalizeThrown(error)
     if (result.status === 'error' && history !== undefined) {
       return { ...result, observations: approvalHistoryObservations(history) }
     }
+    if (result.status === 'error' && input.history === undefined) return { ...result, observations: { history: [] } }
     return result
   }
 }
@@ -1142,13 +1143,14 @@ function executeApprovalDecisionSupersede(request: AdapterRequest): NormalizedRe
   const input = inputApprovalDecisionSupersede(request.input)
   let history: ApprovalDecisionHistory | undefined
   try {
-    history = ApprovalDecisionHistory.create(input.history)
+    history = ApprovalDecisionHistory.from(input.history)
     return { status: 'success', value: history.supersedeDecision(input.supersession).toJSON() }
   } catch (error) {
     const result = normalizeThrown(error)
     if (result.status === 'error' && history !== undefined) {
       return { ...result, observations: approvalHistoryObservations(history) }
     }
+    if (result.status === 'error' && input.history === undefined) return { ...result, observations: { history: [] } }
     return result
   }
 }
@@ -1163,13 +1165,14 @@ function executeApprovalRequirementSupersede(request: AdapterRequest): Normalize
   const input = inputApprovalRequirementSupersede(request.input)
   let history: ApprovalDecisionHistory | undefined
   try {
-    history = ApprovalDecisionHistory.create(input.history)
+    history = ApprovalDecisionHistory.from(input.history)
     return { status: 'success', value: history.supersedeRequirement(input.supersession).toJSON() }
   } catch (error) {
     const result = normalizeThrown(error)
     if (result.status === 'error' && history !== undefined) {
       return { ...result, observations: approvalHistoryObservations(history) }
     }
+    if (result.status === 'error' && input.history === undefined) return { ...result, observations: { history: [] } }
     return result
   }
 }
@@ -1185,13 +1188,14 @@ function executeApprovalDecisionRecord(request: AdapterRequest): NormalizedResul
   const input = inputApprovalDecisionRecord(request.input)
   let history: ApprovalDecisionHistory | undefined
   try {
-    history = ApprovalDecisionHistory.create(input.history as readonly unknown[])
+    history = ApprovalDecisionHistory.from(input.history as readonly unknown[])
     return { status: 'success', value: history.record(input.requirement, input.decision).toJSON() }
   } catch (error) {
     const result = normalizeThrown(error)
     if (result.status === 'error' && history !== undefined) {
       return { ...result, observations: { history: history.decisions() } }
     }
+    if (result.status === 'error' && input.history === undefined) return { ...result, observations: { history: [] } }
     return result
   }
 }

@@ -144,10 +144,6 @@ def vector_test(v):
 
 
 for vector in vectors():
-    # Omitted fixture facts are tested by adapters. This native function requires
-    # a positional facts argument; a Python call-arity error is not a domain defect.
-    if vector['operation'] == 'approval.condition.evaluate' and 'facts' not in vector['input']:
-        continue
     setattr(EvidenceRegressions, 'test_' + vector['id'].replace('.', '_').replace('-', '_'), vector_test(vector))
 for lifecycle in ['withdraw', 'target', 'successor', 'requirement']:
     for variant in ['control', 'collision', 'offset']:

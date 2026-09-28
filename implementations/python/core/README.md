@@ -6,13 +6,36 @@ unused references/cycles and quorum evidence, before choosing an outcome. All
 176 composition vectors pass on TypeScript, Python 3.12/3.13, and Java. Applicable
 quorum observations require explicit eligibility and distinct outcome mappings;
 unused groups never add actionables. Depth four still applies to actual roots.
-Milestones 4–7 remain pending and full suites remain red. D8 redaction policy
+Milestone 4 also closes concrete Approval history, declaration, condition, and
+fact-comparison corrections: all 579 Approval suite vectors pass on all four
+runtimes. Milestones 5–7 remain pending and full suites remain red. D8 redaction policy
 identity is unresolved. The 0.9.6 results below describe the tagged snapshot.
 
 For `evaluate_composition`, omit `decisions` (or supply `[]`) for no votes.
 Explicit `None` now raises `FINKORE_APPROVAL_INVALID_CHAIN`; callers that used
 `None` as an omission placeholder must omit the argument instead. This preserves
 composition's lightweight observations without requiring concrete subject data.
+
+Approval fact comparison now uses all supplied facts when selectors are omitted.
+Concrete Decision evaluation requires current facts; Requirement evaluation may
+omit both facts and selectors for history-only evaluation. Null facts are values;
+null/empty selectors are invalid even for expired or excluded Decisions. Paths
+use dot-separated own object members, with no array indexing or literal dotted
+key fallback. Missing leaves differ from present null/false/zero. Equality is
+structural and type-sensitive, ignores object order and decimal scale, and
+preserves array order and exact numeric values. Strings never become Money.
+Condition declarations are validated before accepting an external result.
+
+Omit `relevant_fact_paths` for complete comparison; migrate old `None` selector
+placeholders to omission (use `evaluated_at=` for time). Omitted Requirement
+decisions still default to an empty native history; explicit `None` is invalid.
+
+Concrete histories/Decision lists and outcome mappings must be explicit;
+swapped distinct mappings remain valid. Supplied Actor type must be nonempty,
+and Chain rejection outcome must be `REJECTED`. Recording validates the proposed
+history before returning, so a new Decision cannot make a retained lifecycle
+reference ambiguous. Native unsupported-value rejection and ownership closure
+remain Milestone 5 work; passing portable vectors does not claim that closure.
 
 Core 0.9.6 status: [Completed corrective release](../../../docs/plans/plan-09.6.md).
 Money, Workflow, Approval, Audit, and Entity corrections are verified. All 884 manifest
@@ -61,7 +84,7 @@ identity/type, Entity reference, occurrence timestamp, and relationships remain
 intact. Redacted values are distinguishable from absent members and explicit
 null; returned observations cannot mutate caller-owned source or evidence.
 
-Concrete Decision evaluation uses `evaluate_decision(requirement, decision, current_subject_facts, relevant_fact_paths=None, evaluated_at=None)`.
+Concrete Decision evaluation uses `evaluate_decision(requirement, decision, current_subject_facts, evaluated_at=None)`.
 It validates the concrete Requirement, Decision association, and Actor eligibility,
 then checks relevant facts and exact expiration. Invalid required evaluation
 time raises `FINKORE_APPROVAL_INVALID_CONTEXT`; at the expiration instant the

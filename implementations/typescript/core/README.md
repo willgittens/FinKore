@@ -6,8 +6,31 @@ unused references/cycles and quorum evidence, before choosing an outcome. All
 176 composition vectors pass on TypeScript, Python 3.12/3.13, and Java. Applicable
 quorum observations require explicit eligibility and distinct outcome mappings;
 unused groups never add actionables. Depth four still applies to actual roots.
-Milestones 4–7 remain pending and full suites remain red. D8 redaction policy
+Milestone 4 also closes concrete Approval history, declaration, condition, and
+fact-comparison corrections: all 579 Approval suite vectors pass on all four
+runtimes. Milestones 5–7 remain pending and full suites remain red. D8 redaction policy
 identity is unresolved. The 0.9.6 results below describe the tagged snapshot.
+
+Approval fact comparison now uses all supplied facts when selectors are omitted.
+Concrete Decision evaluation requires current facts; Requirement evaluation may
+omit both facts and selectors for history-only evaluation. Null facts are values;
+null/empty selectors are invalid even for expired or excluded Decisions. Paths
+use dot-separated own object members, with no array indexing or literal dotted
+key fallback. Missing leaves differ from present null/false/zero. Equality is
+structural and type-sensitive, ignores object order and decimal scale, and
+preserves array order and exact numeric values. Strings never become Money.
+Condition declarations are validated before accepting an external result.
+
+Omit selectors (or pass `undefined`) for complete comparison.
+`ApprovalDecisionHistory.from(input)` requires an explicit history; `create()`
+retains the native empty-history convenience.
+
+Concrete histories/Decision lists and outcome mappings must be explicit;
+swapped distinct mappings remain valid. Supplied Actor type must be nonempty,
+and Chain rejection outcome must be `REJECTED`. Recording validates the proposed
+history before returning, so a new Decision cannot make a retained lifecycle
+reference ambiguous. Native unsupported-value rejection and ownership closure
+remain Milestone 5 work; passing portable vectors does not claim that closure.
 
 Core 0.9.6 status: [Completed corrective release](../../../docs/plans/plan-09.6.md).
 Money, Workflow, Approval, Audit, and Entity corrections are verified. All 884 manifest

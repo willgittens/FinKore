@@ -5,6 +5,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import dataclass
+from decimal import Decimal
 from typing import Any
 
 from ._timestamp import parse_portable_timestamp
@@ -54,7 +55,8 @@ _MISSING = _Missing()
 def validate_requirement(requirement: Any) -> dict[str, Any]:
     """Validate a concrete Requirement's subject and nonempty distinct eligibility.
 
-    Lightweight composition observations are validated separately. Malformed
+    Explicit approved/rejected mappings must be supported and distinct; swapped
+    mappings are valid. Lightweight composition observations are validated separately. Malformed
     declarations raise INVALID_DECISION; inputs remain unchanged.
 
     @see APPROVAL-REQUIREMENT-001
@@ -71,7 +73,7 @@ def validate_requirement(requirement: Any) -> dict[str, Any]:
     eligible = requirement.get("eligibleActors")
     if not isinstance(eligible, list) or not eligible or any(not _opaque(actor) for actor in eligible) or len(set(eligible)) != len(eligible):
         raise FinKoreError(INVALID_DECISION)
-    if requirement.get("approvedOutcome", "APPROVED") != "APPROVED" or requirement.get("rejectedOutcome", "REJECTED") != "REJECTED":
+    if requirement.get("approvedOutcome") not in ("APPROVED", "REJECTED") or requirement.get("rejectedOutcome") not in ("APPROVED", "REJECTED") or requirement["approvedOutcome"] == requirement["rejectedOutcome"]:
         raise FinKoreError(INVALID_DECISION)
     return deepcopy(requirement)
 
@@ -99,6 +101,8 @@ def _validate_decision_shape(decision: Any) -> dict[str, Any]:
         raise FinKoreError(INVALID_DECISION)
     if decision.get("outcome") not in ("APPROVED", "REJECTED") or _actor_id(decision.get("actor")) is None:
         raise FinKoreError(INVALID_DECISION)
+    if "type" in decision["actor"] and not _opaque(decision["actor"]["type"]):
+        raise FinKoreError(INVALID_DECISION)
     if "subjectFacts" not in decision:
         raise FinKoreError(INVALID_DECISION)
     _instant(decision.get("decidedAt"))
@@ -107,10 +111,11 @@ def _validate_decision_shape(decision: Any) -> dict[str, Any]:
     return deepcopy(decision)
 
 
-def normalize_decision_set(decisions: Any) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+def normalize_decision_set(decisions: Any = _MISSING) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """Validate every concrete Decision and return defensive history observations.
 
-    Missing subjectFacts is INVALID_DECISION, including on ineffective or
+    Omission is an empty native history; explicit None or an envelope without
+    its history array is INVALID_DECISION. Missing subjectFacts is INVALID_DECISION, including on ineffective or
     unrelated evidence; explicit null remains valid. Lifecycle evidence is
     validated in local order against committed Decisions and prior lifecycle
     events, including unique references and nonrepeatable targets. Invalid
@@ -118,12 +123,12 @@ def normalize_decision_set(decisions: Any) -> tuple[list[dict[str, Any]], list[d
     APPROVAL-DECISION-001/002 and APPROVAL-ERROR-005.
     """
 
-    if decisions is None:
+    if decisions is _MISSING:
         return [], []
     if isinstance(decisions, list):
         return [_validate_decision_shape(item) for item in decisions], []
     if isinstance(decisions, dict):
-        history = decisions.get("history", [])
+        history = decisions.get("history")
         lifecycle = decisions.get("lifecycle", [])
         if not isinstance(history, list) or not isinstance(lifecycle, list):
             raise FinKoreError(INVALID_DECISION)
@@ -139,7 +144,9 @@ def record_decision(requirement: Any, decision: Any, history: Any) -> dict[str, 
     """Append a Decision, preserving committed Decisions and lifecycle evidence.
 
     Inputs are not mutated, including on validation failure. Returned history
-    owns its data. See APPROVAL-DECISION-007 and APPROVAL-VALIDITY-001/002/012.
+    owns its data for supported retained values. Before returning, the proposed
+    history is revalidated so no retained lifecycle reference becomes ambiguous
+    (APPROVAL-VALIDITY-015). See APPROVAL-DECISION-007 and VALIDITY-001/002/012.
     The Requirement needs a subject type/id and nonempty distinct eligibility.
     Every new or historical Decision needs explicit subjectFacts (null is valid);
     malformed declarations/evidence raise INVALID_DECISION. A valid eligibility
@@ -152,14 +159,17 @@ def record_decision(requirement: Any, decision: Any, history: Any) -> dict[str, 
     result = {"history": [*current, recorded]}
     if lifecycle:
         result["lifecycle"] = lifecycle
+    normalize_decision_set(result)
     return result
 
 
-def evaluate_decision(requirement: Any, decision: Any, current_subject_facts: Any = None, relevant_fact_paths: Any = None, evaluated_at: Any = None) -> str:
+def evaluate_decision(requirement: Any, decision: Any, current_subject_facts: Any = _MISSING, relevant_fact_paths: Any = _MISSING, evaluated_at: Any = None) -> str:
     """Evaluate whether one Decision is currently effective for supplied facts.
 
     Expiration requires a valid portable evaluated_at and compares exact instants.
-    Without paths, compare the complete facts; with paths, each must exist in both
+    Omit paths to compare the complete facts; explicit None/empty paths are invalid.
+    Current facts are required, with None a supplied value. Nonempty dot-separated
+    paths select own object members, and each must exist in both
     fact sets. This observation does not claim lifecycle-aware effectiveness.
     Comparison distinguishes JSON Booleans from numbers, including within
     objects and arrays. Object member order is immaterial; array order matters.
@@ -178,6 +188,7 @@ def evaluate_decision(requirement: Any, decision: Any, current_subject_facts: An
 
     req = validate_requirement(requirement)
     item = validate_decision(req, decision)
+    _validate_comparison(current_subject_facts, relevant_fact_paths)
     if _expired(item, evaluated_at):
         return "INEFFECTIVE"
     if not _facts_match(item.get("subjectFacts"), current_subject_facts, relevant_fact_paths):
@@ -185,9 +196,13 @@ def evaluate_decision(requirement: Any, decision: Any, current_subject_facts: An
     return "EFFECTIVE"
 
 
-def evaluate_requirement(requirement: Any, decisions: Any = None, current_subject_facts: Any = None, relevant_fact_paths: Any = None, evaluated_at: Any = None) -> str:
+def evaluate_requirement(requirement: Any, decisions: Any = _MISSING, current_subject_facts: Any = _MISSING, relevant_fact_paths: Any = _MISSING, evaluated_at: Any = None) -> str:
     """Evaluate an Approval Requirement from currently effective Decisions.
 
+    Omit both facts and paths for history-only evaluation. Supplied facts, including
+    None, are compared completely when paths are omitted; explicit None/empty paths
+    are invalid, even without effective Decisions. Omitted decisions default to an
+    empty native history; supplied None or an envelope without history is invalid.
     A Decision whose declared relevant facts changed can neither satisfy nor
     reject the Requirement. JSON Booleans remain distinct from numbers at
     every nesting level; object member order is ignored and array order retained.
@@ -195,8 +210,7 @@ def evaluate_requirement(requirement: Any, decisions: Any = None, current_subjec
     All historical Decisions and lifecycle relationships are validated before
     filtering. Every considered expiring Decision requires valid context even if
     stale or preceded by rejection. Unrelated/lifecycle-excluded Decisions do not.
-    Missing
-    association raises INVALID_DECISION even for withdrawn or unrelated evidence.
+    Missing association raises INVALID_DECISION even for withdrawn or unrelated evidence.
 
     @see APPROVAL-DECISION-003
     @see APPROVAL-DECISION-002
@@ -210,6 +224,7 @@ def evaluate_requirement(requirement: Any, decisions: Any = None, current_subjec
 
     req = validate_requirement(requirement)
     history, lifecycle = normalize_decision_set(decisions)
+    _validate_comparison(current_subject_facts, relevant_fact_paths, allow_omission=True)
     for decision in history:
         if _decision_considered(req, decision, lifecycle) and "expiresAt" in decision:
             _instant(evaluated_at, INVALID_CONTEXT)
@@ -217,8 +232,8 @@ def evaluate_requirement(requirement: Any, decisions: Any = None, current_subjec
     rejected = False
     for decision in history:
         if _decision_current(req, decision, lifecycle, current_subject_facts, relevant_fact_paths, evaluated_at):
-            approved = approved or decision.get("outcome") == "APPROVED"
-            rejected = rejected or decision.get("outcome") == "REJECTED"
+            approved = approved or decision["outcome"] == req["approvedOutcome"]
+            rejected = rejected or decision["outcome"] == req["rejectedOutcome"]
     if rejected:
         return "REJECTED"
     if approved:
@@ -226,23 +241,39 @@ def evaluate_requirement(requirement: Any, decisions: Any = None, current_subjec
     return "PENDING"
 
 
-def evaluate_condition(condition: Any, facts: Any, result: Any = None) -> str:
-    """Evaluate an explicitly supplied Approval condition result."""
+def evaluate_condition(condition: Any, facts: Any = _MISSING, result: Any = None) -> str:
+    """Validate a declaration and own-member fact completeness before its result.
 
-    if not isinstance(condition, dict) or not isinstance(facts, dict):
+    Malformed declarations/facts use INVALID_DECISION; unavailable required facts
+    or results use CONDITION_UNRESOLVED. Explicit null/false/zero leaves are
+    present. Inputs remain unchanged. See APPROVAL-CONDITION-007 and FACT-002.
+    """
+    if not isinstance(condition, dict) or not _opaque(condition.get("id")) or not _opaque(condition.get("evaluation")):
+        raise FinKoreError(INVALID_DECISION)
+    paths = _validate_paths(condition.get("requiredFacts"))
+    if len(set(paths)) != len(paths):
+        raise FinKoreError(INVALID_DECISION)
+    if facts is _MISSING:
         raise FinKoreError(CONDITION_UNRESOLVED)
-    for fact in condition.get("requiredFacts", []):
-        if fact not in facts:
-            raise FinKoreError(CONDITION_UNRESOLVED)
+    if not isinstance(facts, dict):
+        raise FinKoreError(INVALID_DECISION)
+    if any(_path(facts, path) is _MISSING for path in paths):
+        raise FinKoreError(CONDITION_UNRESOLVED)
     if result not in ("APPLICABLE", "NOT_APPLICABLE"):
         raise FinKoreError(CONDITION_UNRESOLVED)
     return result
 
 
 def evaluate_chain(chain: Any, states: Any) -> Any:
-    """Evaluate a Core 0.9 release candidate all-required Approval Chain."""
+    """Evaluate the bounded all-required Chain without mutating inputs.
+
+    A concrete declaration requires explicit rejectionOutcome REJECTED;
+    malformed declarations/states raise INVALID_CHAIN (APPROVAL-CHAIN-007).
+    """
 
     if not isinstance(chain, dict) or not isinstance(states, dict):
+        raise FinKoreError(INVALID_CHAIN)
+    if chain.get("rejectionOutcome") != "REJECTED":
         raise FinKoreError(INVALID_CHAIN)
     requirements = chain.get("requirements")
     if not isinstance(requirements, list) or len(requirements) == 0 or any(not _opaque(item) for item in requirements):
@@ -384,7 +415,7 @@ def _decision_current(req: dict[str, Any], decision: dict[str, Any], lifecycle: 
         return False
     if decision.get("effective") is False:
         return False
-    if relevant_fact_paths is not None and not _facts_match(decision.get("subjectFacts"), current_subject_facts, relevant_fact_paths):
+    if current_subject_facts is not _MISSING and not _facts_match(decision.get("subjectFacts"), current_subject_facts, relevant_fact_paths):
         return False
     return True
 
@@ -401,8 +432,8 @@ def _json_fact_equal(left: Any, right: Any) -> bool:
     """Compare JSON facts without Python's Boolean/numeric equality coercion.
 
     Containers must be traversed before using native scalar equality so that
-    nested Booleans cannot compare equal to numbers. Numeric scalar equality
-    retains its existing meaning.
+    nested Booleans cannot compare equal to numbers. Accepted numeric scalars
+    compare exactly, independent of decimal scale or ambient context. Finite floats use their roundtrip decimal value.
 
     @see APPROVAL-DECISION-003
     @see APPROVAL-DECISION-009
@@ -419,14 +450,35 @@ def _json_fact_equal(left: Any, right: Any) -> bool:
         if not isinstance(left, list) or not isinstance(right, list) or len(left) != len(right):
             return False
         return all(_json_fact_equal(a, b) for a, b in zip(left, right))
-    return left == right
+    numeric = (int, float, Decimal)
+    if type(left) in numeric or type(right) in numeric:
+        if type(left) not in numeric or type(right) not in numeric:
+            return False
+        a = Decimal(str(left)) if type(left) is float else Decimal(left)
+        b = Decimal(str(right)) if type(right) is float else Decimal(right)
+        if not a.is_finite() or not b.is_finite():
+            raise FinKoreError(INVALID_DECISION)
+        return a == b
+    return type(left) is type(right) and left == right
+
+
+def _validate_paths(paths: Any) -> list[str]:
+    if not isinstance(paths, list) or not paths or any(not _opaque(path) or any(not part for part in path.split(".")) for path in paths):
+        raise FinKoreError(INVALID_DECISION)
+    return paths
+
+
+def _validate_comparison(current_facts: Any, paths: Any, allow_omission: bool = False) -> None:
+    if paths is not _MISSING:
+        _validate_paths(paths)
+    if current_facts is _MISSING and (not allow_omission or paths is not _MISSING):
+        raise FinKoreError(INVALID_DECISION)
 
 
 def _facts_match(decision_facts: Any, current_facts: Any, paths: Any) -> bool:
-    if paths is None:
+    if paths is _MISSING:
         return _json_fact_equal(decision_facts, current_facts)
-    if not isinstance(paths, list) or any(not _opaque(path) for path in paths):
-        raise FinKoreError(INVALID_DECISION)
+    _validate_paths(paths)
     for fact_path in paths:
         left = _path(decision_facts, fact_path)
         right = _path(current_facts, fact_path)

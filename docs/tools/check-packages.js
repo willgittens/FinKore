@@ -11,8 +11,8 @@ import { basename, delimiter, join, resolve } from 'node:path'
 import { execFileSync } from 'node:child_process'
 
 const repositoryRoot = process.cwd()
-const consumerArgs = process.argv.includes('--composition') ? ['--composition'] : []
-if (process.argv.slice(2).some(arg => arg !== '--composition')) throw new Error('Unknown package check option')
+const consumerArgs = process.argv.slice(2)
+if (process.argv.slice(2).some(arg => !['--composition', '--approvals'].includes(arg))) throw new Error('Unknown package check option')
 const artifactDirectory = mkdtempSync(join(tmpdir(), 'finkore-package-check-'))
 const pythonSource = join(artifactDirectory, 'python-source')
 const python = resolve(repositoryRoot, '.tools/python-coverage/bin/python')

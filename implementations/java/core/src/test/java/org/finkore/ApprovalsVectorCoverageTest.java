@@ -54,8 +54,8 @@ final class ApprovalsVectorCoverageTest {
         case "approval.requirement.evaluate" -> success(Approvals.evaluateRequirement(
             input.get("requirement"),
             input.get("decisions"),
-            input.get("currentSubjectFacts"),
-            input.get("relevantFactPaths"),
+            input.getOrDefault("currentSubjectFacts", Approvals.OMITTED),
+            input.getOrDefault("relevantFactPaths", Approvals.OMITTED),
             input.get("evaluatedAt")),
             Boolean.TRUE.equals(input.get("observeHistory"))
                 ? Map.of("history", input.get("decisions")) : null);
@@ -66,8 +66,8 @@ final class ApprovalsVectorCoverageTest {
         case "approval.decision.evaluate" -> success(Approvals.evaluateDecision(
             input.get("requirement"),
             input.get("decision"),
-            input.get("currentSubjectFacts"),
-            input.get("relevantFactPaths"),
+            input.getOrDefault("currentSubjectFacts", Approvals.OMITTED),
+            input.getOrDefault("relevantFactPaths", Approvals.OMITTED),
             input.get("evaluatedAt")), null);
         case "approval.condition.evaluate" -> success(Approvals.evaluateCondition(
             input.get("condition"),

@@ -22,7 +22,7 @@ public final class ApprovalsTest {
     Map<String, Object> decision = approvedDecision("2026-09-01T12:00:00Z");
 
     assertEquals(Map.of("history", List.of(decision)), Approvals.recordDecision(requirement(), decision, List.of()));
-    assertEquals("APPROVED", Approvals.evaluateRequirement(requirement(), List.of(decision), null, null, null));
+    assertEquals("APPROVED", Approvals.evaluateRequirement(requirement(), List.of(decision), Approvals.OMITTED, Approvals.OMITTED, null));
   }
 
   private static void rejectsIneligibleActorWithoutMutatingHistory() {
@@ -46,12 +46,12 @@ public final class ApprovalsTest {
         "decidedAt", "2026-09-01T12:00:00Z",
         "expiresAt", "2026-09-02T12:00:00Z");
 
-    assertError(Approvals.INVALID_CONTEXT, () -> Approvals.evaluateRequirement(requirement(), List.of(expiringDecision), null, null, null));
+    assertError(Approvals.INVALID_CONTEXT, () -> Approvals.evaluateRequirement(requirement(), List.of(expiringDecision), Approvals.OMITTED, Approvals.OMITTED, null));
     assertEquals("PENDING", Approvals.evaluateRequirement(
         requirement(),
         List.of(expiringDecision),
-        null,
-        null,
+        Approvals.OMITTED,
+        Approvals.OMITTED,
         "2026-09-02T12:00:00Z"));
   }
 
@@ -67,14 +67,14 @@ public final class ApprovalsTest {
     assertEquals("APPROVED", Approvals.evaluateRequirement(
         requirement(),
         List.of(expiringDecision),
-        null,
-        null,
+        Approvals.OMITTED,
+        Approvals.OMITTED,
         "2026-09-02T12:00:00.000000004Z"));
     assertEquals("PENDING", Approvals.evaluateRequirement(
         requirement(),
         List.of(expiringDecision),
-        null,
-        null,
+        Approvals.OMITTED,
+        Approvals.OMITTED,
         "2026-09-02T14:00:00.000000005+02:00"));
   }
 

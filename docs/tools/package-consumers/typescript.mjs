@@ -2,7 +2,7 @@
 // Exercises installed npm public APIs in an isolated consumer. Creates only
 // in-memory observations and defines no financial behavior.
 import assert from 'node:assert/strict'
-import { FINKORE_CORE_VERSION, Money, FinancialEntity, Workflow, ApprovalComposition, ApprovalDecision, ApprovalDecisionHistory, AuditLog } from '@finkore/typescript'
+import { FINKORE_CORE_VERSION, Money, FinancialEntity, Workflow, ApprovalCondition, ApprovalComposition, ApprovalDecision, ApprovalDecisionHistory, AuditLog } from '@finkore/typescript'
 
 const error = (code, action) => assert.throws(action, value => value?.code === code)
 // Composition validation must survive packaging and installation.
@@ -23,6 +23,27 @@ error('FINKORE_APPROVAL_INVALID_CHAIN', () => ApprovalComposition.from(quorum097
 assert.deepEqual(ApprovalComposition.from(quorum097).evaluate({ requirements: evidence097.requirements }), { outcome: 'PENDING', actionableRequirements: ['review'] })
 if (process.argv.includes('--composition')) {
   console.log('Installed npm composition checks passed')
+  process.exit(0)
+}
+
+const req097 = { id: 'review', subject: { type: 'invoice', id: '1' }, eligibleActors: ['alice'], approvedOutcome: 'APPROVED', rejectedOutcome: 'REJECTED' }
+const dec097 = { requirementId: 'review', actor: { id: 'alice' }, outcome: 'APPROVED', subjectFacts: { invoice: { amount: 1 } }, decidedAt: '2026-09-01T12:00:00Z' }
+const hist097 = ApprovalDecisionHistory.from([]).record(req097, dec097)
+assert.equal(hist097.evaluateRequirement(req097, { currentSubjectFacts: { invoice: { amount: 2 } } }), 'PENDING')
+assert.equal(ApprovalDecision.evaluate(req097, dec097, { invoice: { amount: 1 } }), 'EFFECTIVE')
+error('FINKORE_APPROVAL_INVALID_DECISION', () => ApprovalDecision.evaluate(req097, dec097, dec097.subjectFacts, null))
+const condDeclaration097 = { id: 'c', requiredFacts: ['invoice.amount'], evaluation: 'external' }
+const cond097 = ApprovalCondition.from(condDeclaration097)
+condDeclaration097.requiredFacts.push('missing')
+assert.equal(cond097.evaluate({ facts: { invoice: { amount: null } }, result: 'APPLICABLE' }), 'APPLICABLE')
+error('FINKORE_APPROVAL_CONDITION_UNRESOLVED', () => cond097.evaluate({ facts: { 'invoice.amount': 1 }, result: 'APPLICABLE' }))
+const wd097 = ApprovalDecisionHistory.from(hist097.toJSON()).withdraw(req097, { target: { requirementId: 'review', actorId: 'alice', decidedAt: dec097.decidedAt }, actor: { id: 'alice' }, recordedAt: '2026-09-02T00:00:00Z' })
+const before097 = wd097.toJSON()
+error('FINKORE_APPROVAL_INVALID_DECISION', () => wd097.record(req097, { ...dec097, subjectFacts: null }))
+assert.deepEqual(wd097.toJSON(), before097)
+assert.equal(ApprovalDecisionHistory.from(before097).evaluateRequirement(req097), 'PENDING')
+if (process.argv.includes('--approvals')) {
+  console.log('Installed npm Approval checks passed')
   process.exit(0)
 }
 

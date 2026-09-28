@@ -83,7 +83,7 @@ public final class ConstructionEvaluationRegressionTest {
     result.put("approval.context.ineligible-expiration", () -> {
       Map<String, Object> expiring = new LinkedHashMap<>(decision("2026-09-05T00:00:00Z"));
       expiring.put("actor", Map.of("id", "bob")); expiring.put("expiresAt", "2026-09-26T00:00:00Z");
-      error(Approvals.INVALID_CONTEXT, () -> Approvals.evaluateRequirement(requirement(), List.of(expiring), null, null, null));
+      error(Approvals.INVALID_CONTEXT, () -> Approvals.evaluateRequirement(requirement(), List.of(expiring), Approvals.OMITTED, Approvals.OMITTED, null));
     });
     result.put("approval.sequence.control", () -> approvalSequence());
     for (String boundary : List.of("record", "evaluate", "withdraw", "supersede", "supersede-requirement"))
@@ -118,8 +118,8 @@ public final class ConstructionEvaluationRegressionTest {
       }
       case "approval.composition.evaluate" -> Approvals.evaluateComposition(i.get("composition"), i.get("requirements"), i.getOrDefault("decisions", List.of()), i.get("context"));
       case "approval.chain.evaluate" -> Approvals.evaluateChain(i.get("chain"), i.get("states"));
-      case "approval.requirement.evaluate" -> Approvals.evaluateRequirement(i.get("requirement"), i.get("decisions"), i.get("currentSubjectFacts"), i.get("relevantFactPaths"), i.get("evaluatedAt"));
-      case "approval.decision.evaluate" -> Approvals.evaluateDecision(i.get("requirement"), i.get("decision"), i.get("currentSubjectFacts"), i.get("relevantFactPaths"), i.get("evaluatedAt"));
+      case "approval.requirement.evaluate" -> Approvals.evaluateRequirement(i.get("requirement"), i.get("decisions"), i.getOrDefault("currentSubjectFacts", Approvals.OMITTED), i.getOrDefault("relevantFactPaths", Approvals.OMITTED), i.get("evaluatedAt"));
+      case "approval.decision.evaluate" -> Approvals.evaluateDecision(i.get("requirement"), i.get("decision"), i.getOrDefault("currentSubjectFacts", Approvals.OMITTED), i.getOrDefault("relevantFactPaths", Approvals.OMITTED), i.get("evaluatedAt"));
       case "approval.decision.record" -> Approvals.recordDecision(i.get("requirement"), i.get("decision"), i.get("history"));
       case "entity.import" -> Entities.importEntity(i.get("definition"), i.get("import"));
       default -> {
@@ -171,7 +171,7 @@ public final class ConstructionEvaluationRegressionTest {
     result.put("subjectFacts", null); return result;
   }
   private static Map<String, Object> reference(String timestamp) { return Map.of("requirementId", "review", "actorId", "alice", "decidedAt", timestamp); }
-  private static String evaluate(Object history) { return Approvals.evaluateRequirement(requirement(), history, null, null, null); }
+  private static String evaluate(Object history) { return Approvals.evaluateRequirement(requirement(), history, Approvals.OMITTED, Approvals.OMITTED, null); }
   private static Map<String, Object> approvalSequence() {
     Map<String, Object> first = decision("2026-09-01T10:00:00Z");
     Map<String, Object> history = Approvals.recordDecision(requirement(), first, List.of());
@@ -197,7 +197,7 @@ public final class ConstructionEvaluationRegressionTest {
     Map<String, Object> superseded = Approvals.supersedeDecision(history, event);
     Object before = copy(superseded);
     equal("PENDING", evaluate(superseded));
-    equal("APPROVED", Approvals.evaluateRequirement(other, superseded, null, null, null));
+    equal("APPROVED", Approvals.evaluateRequirement(other, superseded, Approvals.OMITTED, Approvals.OMITTED, null));
     Map<String, Object> newDecision = decision("2026-09-06T00:00:00Z");
     Map<String, Object> recorded = Approvals.recordDecision(req, newDecision, Approvals.importHistory(superseded));
     equal(List.of(first, second, newDecision), recorded.get("history"));

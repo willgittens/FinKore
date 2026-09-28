@@ -18,6 +18,55 @@ const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const constructionPy = 'test_construction_evaluation_regressions.ConstructionEvaluationRegressions.'
 const probes = [
 {
+  id: 'typescript-approval097-condition-selector-alias',
+  scope: 'approval-contracts', language: 'typescript',
+  path: 'src/approvals/approval-condition.ts',
+  from: 'return [...facts]', to: 'return facts',
+  tests: ['test/approvals/approval-condition-ownership.test.ts'],
+  target: 'owns condition selectors after validating the caller declaration',
+  control: 'keeps unmodified condition selectors valid',
+},
+{
+  "id": "python-approval097-lossy-numeric-equality",
+  "scope": "approval-contracts",
+  "language": "python",
+  "path": "approvals.py",
+  "from": "return a == b",
+  "to": "return float(a) == float(b)",
+  "target": "test_approval_contracts.ApprovalContracts.test_adjacent_large_numbers_are_distinct",
+  "control": "test_evidence_regressions.EvidenceRegressions.test_exact_numeric_fact_control"
+},
+{
+  "id": "python-approval097-binary-float-interpretation",
+  "scope": "approval-contracts",
+  "language": "python",
+  "path": "approvals.py",
+  "from": "Decimal(str(left)) if type(left) is float",
+  "to": "Decimal(left) if type(left) is float",
+  "target": "test_approval_contracts.ApprovalContracts.test_exact_native_numbers_and_full_structure",
+  "control": "test_evidence_regressions.EvidenceRegressions.test_exact_numeric_fact_control"
+},
+{
+  "id": "java-approval097-scale-sensitive-equality",
+  "scope": "approval-contracts",
+  "language": "java",
+  "path": "Approvals.java",
+  "from": "factNumber(left).compareTo(factNumber(right)) == 0",
+  "to": "factNumber(left).equals(factNumber(right))",
+  "target": "approval097.numeric",
+  "control": "native097.numeric-control-Integer"
+},
+{
+  "id": "java-approval097-lossy-numeric-equality",
+  "scope": "approval-contracts",
+  "language": "java",
+  "path": "Approvals.java",
+  "from": "factNumber(left).compareTo(factNumber(right)) == 0",
+  "to": "factNumber(left).doubleValue() == factNumber(right).doubleValue()",
+  "target": "approval097.numeric",
+  "control": "native097.numeric-control-Integer"
+},
+{
   "id": "python-entity096-revision-currentness-number",
   "language": "python",
   "path": "entities.py",
@@ -605,8 +654,8 @@ const probes = [
   { id: 'java-workflow-observation-list-alias', language: 'java', path: 'Workflow.java',
     from: 'return Collections.unmodifiableList(result);', to: 'return result;', target: 'workflow.list', control: 'workflow.control' },
   { id: 'java-approval-sequence-evidence-loss', language: 'java', path: 'Approvals.java',
-    from: 'return historyEnvelope(append(current.history(), recorded), current.lifecycle());',
-    to: 'return historyEnvelope(append(current.history(), recorded), List.of());', target: 'approval.sequence', control: 'approval.control' },
+    from: 'return importHistory(historyEnvelope(append(current.history(), recorded), current.lifecycle()));',
+    to: 'return importHistory(historyEnvelope(append(current.history(), recorded), List.of()));', target: 'approval.sequence', control: 'approval.control' },
   { id: 'java-entity-sequence-constant-currentness', language: 'java', path: 'Entities.java',
     from: 'boolean current = observed.getOrDefault(evolutionKey(sourceReference, scope), Boolean.TRUE);',
     to: 'boolean current = true;', target: 'entity.sequence', control: 'entity.control' },
@@ -660,13 +709,14 @@ const selected = probes.filter(probe => process.argv[2] === undefined || probe.i
 if (selected.length === 0) throw new Error('No native mutation probes match the requested ID fragment')
 // Mandatory regression preflight: a red corrective baseline is not a killed mutant.
 for (const language of new Set(selected.map(probe => probe.language))) {
+  const approvalScope = selected.filter(probe => probe.language === language).every(probe => probe.scope === 'approval-contracts')
   let baseline
-  if (language === 'python') baseline = run(process.env.FINKORE_PYTHON_PATH ?? join(root, '.tools/bin/python3.12'), ['-m', 'unittest', 'discover', '-s', 'implementations/python/core/tests', '-p', 'test_evidence_regressions.py'], { env: { ...process.env, PYTHONPATH: join(root, 'implementations/python/core/src') } })
+  if (language === 'python') baseline = run(process.env.FINKORE_PYTHON_PATH ?? join(root, '.tools/bin/python3.12'), ['-m', 'unittest', 'discover', '-s', 'implementations/python/core/tests', '-p', approvalScope ? 'test_approval_contracts.py' : 'test_evidence_regressions.py'], { env: { ...process.env, PYTHONPATH: join(root, 'implementations/python/core/src') } })
   else if (language === 'java') {
     const compiled = run(process.execPath, ['docs/tools/compile-java.js'])
     if (compiled.status !== 0) throw new Error(`Java regression preflight compile failed\n${compiled.stderr}`)
-    baseline = run(join(root, '.tools/bin/java'), ['-cp', [join(root, 'implementations/java/target/classes'), join(root, 'implementations/java/target/test-classes')].join(delimiter), 'org.finkore.EvidenceRegressionTest'])
-  } else baseline = run(process.execPath, [join(root, 'node_modules/vitest/vitest.mjs'), 'run', '--root', 'implementations/typescript/core', 'test/integration/evidence-regressions.test.ts'])
+    baseline = run(join(root, '.tools/bin/java'), ['-cp', [join(root, 'implementations/java/target/classes'), join(root, 'implementations/java/target/test-classes')].join(delimiter), approvalScope ? 'org.finkore.ApprovalContractsTest' : 'org.finkore.EvidenceRegressionTest'])
+  } else baseline = run(process.execPath, [join(root, 'node_modules/vitest/vitest.mjs'), 'run', '--root', 'implementations/typescript/core', ...(approvalScope ? ['--config', join(root, 'implementations/typescript/core/vitest.approvals.config.ts')] : ['test/integration/evidence-regressions.test.ts'])])
   if (baseline.status !== 0) throw new Error(`${language}: Core 0.9.7 regression baseline failed; no mutation result claimed\n${baseline.stdout}\n${baseline.stderr}`)
 }
 for (const probe of selected) {

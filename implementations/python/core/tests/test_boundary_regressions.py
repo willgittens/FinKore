@@ -39,7 +39,7 @@ def invoke(vector):
     if op == "approval.decision.record":
         return record_decision(i["requirement"], i["decision"], i["history"])
     if op == "approval.requirement.evaluate":
-        return evaluate_requirement(i["requirement"], i["decisions"], i.get("currentSubjectFacts"), i.get("relevantFactPaths"), i.get("evaluatedAt"))
+        return evaluate_requirement(i["requirement"], i["decisions"], **{native: i[key] for key, native in [('currentSubjectFacts', 'current_subject_facts'), ('relevantFactPaths', 'relevant_fact_paths'), ('evaluatedAt', 'evaluated_at')] if key in i})
     if op == "approval.decision.evaluate":
         return evaluate_decision(i["requirement"], i["decision"], i.get("currentSubjectFacts"))
     if op == "finkore.workflow.transition":

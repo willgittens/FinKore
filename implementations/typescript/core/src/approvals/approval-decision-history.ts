@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { validateFactComparison } from './approval-facts.js'
 import { ApprovalDecision } from './approval-decision.js'
 import { ApprovalRequirement } from './approval-requirement.js'
 import { IneligibleApprovalActorError, InvalidApprovalContextError, InvalidApprovalDecisionError } from './errors.js'
@@ -190,17 +191,34 @@ export class ApprovalDecisionHistory {
   }
 
   /**
+   * Imports an explicit Decision list or history envelope without an empty default.
+   * Inputs remain unchanged; omission, null, or malformed evidence is invalid.
+   * Use create() for the native empty-history convenience.
+   * @param history - Explicit committed Decision and lifecycle evidence.
+   * @returns Independently owned, validated history.
+   * @throws {InvalidApprovalDecisionError} When required evidence is absent or invalid.
+   * @see APPROVAL-DECISION-010
+   * @see APPROVAL-VALIDITY-014
+   */
+  static from(history: unknown): ApprovalDecisionHistory {
+    if (history === undefined) throw new InvalidApprovalDecisionError()
+    return ApprovalDecisionHistory.create(history)
+  }
+
+  /**
    * Records one valid Approval Decision for a Requirement.
    *
    * The candidate is fully validated before history changes. Decisions for a
    * different Requirement and decisions by ineligible Actors are rejected before
-   * commit, so failed attempts leave existing history unchanged.
+   * commit. The proposed history must keep every retained lifecycle reference
+   * unambiguous, so failed attempts leave both histories unchanged.
    *
    * @param requirementInput - Requirement the Decision must address.
    * @param decisionInput - Candidate Approval Decision to commit.
    * @returns This history after the Decision is appended.
    * @throws {InvalidApprovalDecisionError}
-   * When the decision is malformed or identifies another Requirement.
+   * When the decision is malformed, identifies another Requirement, or would
+   * make retained lifecycle evidence ambiguous.
    * @throws {IneligibleApprovalActorError}
    * When the deciding Actor does not satisfy the Requirement eligibility rule.
    *
@@ -211,10 +229,12 @@ export class ApprovalDecisionHistory {
    * @see APPROVAL-DECISION-007
    * @see APPROVAL-ERROR-001
    * @see APPROVAL-ERROR-005
+   * @see APPROVAL-VALIDITY-015
    */
   record(requirementInput: unknown, decisionInput: unknown): ApprovalDecisionHistory {
     const requirement = ApprovalRequirement.from(requirementInput)
     const decision = ApprovalDecision.forRequirement(requirement, decisionInput)
+    ApprovalDecisionHistory.from({ history: [...this.decisions(), decision.toJSON()], lifecycle: this.lifecycleEvents() })
     this.committedDecisions.push(decision)
     return this
   }
@@ -332,6 +352,10 @@ export class ApprovalDecisionHistory {
    * applicable Requirement with no effective Decision remains `PENDING`.
    *
    * @param requirementInput - Requirement to evaluate.
+   * Supplied facts (including null) compare completely when paths are omitted.
+   * Explicit null/empty paths are invalid before lifecycle filtering. Omitting
+   * both facts and paths retains history-only evaluation.
+   *
    * @param options - Optional current facts and paths, plus explicit evaluation
    * time when expiration applies.
    * @returns Requirement state derived from effective associated Decisions.
@@ -368,6 +392,7 @@ export class ApprovalDecisionHistory {
     } = {},
   ): ApprovalRequirementState {
     const requirement = ApprovalRequirement.from(requirementInput)
+    validateFactComparison(options.currentSubjectFacts, options.relevantFactPaths, true)
     if (this.isRequirementSuperseded(requirement.id)) return 'PENDING'
     // Validate every considered expiration before any decisive outcome (VALIDITY-013).
     for (const decision of this.committedDecisions) {

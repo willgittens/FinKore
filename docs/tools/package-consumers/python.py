@@ -6,7 +6,7 @@ from decimal import Context, Decimal, Inexact, Rounded, localcontext
 from finkore import CORE_VERSION, FinKoreError, Money, WorkflowDefinition, WorkflowInstance
 from finkore.workflow import create_workflow, import_workflow, transition_workflow, WorkflowTransition
 from finkore.entities import create_entity, transition_entity, import_entity
-from finkore.approvals import record_decision, evaluate_requirement, evaluate_decision, withdraw_decision, normalize_decision_set, evaluate_composition
+from finkore.approvals import record_decision, evaluate_requirement, evaluate_decision, withdraw_decision, normalize_decision_set, evaluate_composition, evaluate_condition
 from finkore.audit import append_event, redact_history
 
 
@@ -38,6 +38,24 @@ assert evaluate_composition(quorum097, evidence097) == {'outcome': 'PENDING', 'a
 import sys
 if '--composition' in sys.argv:
     print('Installed Python composition checks passed')
+    sys.exit(0)
+
+req097 = {'id': 'review', 'subject': {'type': 'invoice', 'id': '1'}, 'eligibleActors': ['alice'], 'approvedOutcome': 'APPROVED', 'rejectedOutcome': 'REJECTED'}
+dec097 = {'requirementId': 'review', 'actor': {'id': 'alice'}, 'outcome': 'APPROVED', 'subjectFacts': {'invoice': {'amount': Decimal('1.00')}}, 'decidedAt': '2026-09-01T12:00:00Z'}
+hist097 = record_decision(req097, dec097, [])
+assert evaluate_requirement(req097, hist097, {'invoice': {'amount': 2}}) == 'PENDING'
+assert evaluate_decision(req097, dec097, {'invoice': {'amount': 1}}) == 'EFFECTIVE'
+error('FINKORE_APPROVAL_INVALID_DECISION', lambda: evaluate_decision(req097, dec097, dec097['subjectFacts'], None))
+cond097 = {'id': 'c', 'requiredFacts': ['invoice.amount'], 'evaluation': 'external'}
+assert evaluate_condition(cond097, {'invoice': {'amount': None}}, 'APPLICABLE') == 'APPLICABLE'
+error('FINKORE_APPROVAL_CONDITION_UNRESOLVED', lambda: evaluate_condition(cond097, {'invoice.amount': 1}, 'APPLICABLE'))
+wd097 = withdraw_decision(req097, hist097, {'target': {'requirementId': 'review', 'actorId': 'alice', 'decidedAt': dec097['decidedAt']}, 'actor': {'id': 'alice'}, 'recordedAt': '2026-09-02T00:00:00Z'})
+before097 = deepcopy(wd097)
+error('FINKORE_APPROVAL_INVALID_DECISION', lambda: record_decision(req097, dict(dec097, subjectFacts=None), wd097))
+assert wd097 == before097
+assert evaluate_requirement(req097, wd097) == 'PENDING'
+if '--approvals' in sys.argv:
+    print('Installed Python Approval checks passed')
     sys.exit(0)
 
 assert CORE_VERSION == '0.9-rc'
@@ -111,8 +129,8 @@ history = record_decision(requirement, decision, [])
 assert evaluate_requirement(requirement, history) == 'APPROVED'
 expires_at = '2026-09-26T10:00:00.123456789Z'
 expiring = dict(decision, expiresAt=expires_at)
-assert evaluate_decision(requirement, expiring, None, None, expires_at) == 'INEFFECTIVE'
-error('FINKORE_APPROVAL_INVALID_CONTEXT', lambda: evaluate_decision(requirement, expiring))
+assert evaluate_decision(requirement, expiring, None, evaluated_at=expires_at) == 'INEFFECTIVE'
+error('FINKORE_APPROVAL_INVALID_CONTEXT', lambda: evaluate_decision(requirement, expiring, None))
 error('FINKORE_APPROVAL_INVALID_DECISION', lambda: evaluate_decision(dict(requirement, id='other'), decision))
 withdrawn = withdraw_decision(requirement, history, {'target': {'requirementId': 'review', 'actorId': 'alice', 'decidedAt': decision['decidedAt']}, 'actor': {'id': 'alice'}, 'recordedAt': expires_at})
 assert evaluate_requirement(requirement, withdrawn) == 'PENDING'

@@ -113,7 +113,7 @@ public final class BoundaryRegressionTest {
     Map<String, Object> input = map(vector.get("input"));
     return switch ((String) vector.get("operation")) {
       case "approval.decision.record" -> Approvals.recordDecision(input.get("requirement"), input.get("decision"), input.get("history"));
-      case "approval.requirement.evaluate" -> Approvals.evaluateRequirement(input.get("requirement"), input.get("decisions"), input.get("currentSubjectFacts"), input.get("relevantFactPaths"), input.get("evaluatedAt"));
+      case "approval.requirement.evaluate" -> Approvals.evaluateRequirement(input.get("requirement"), input.get("decisions"), input.getOrDefault("currentSubjectFacts", Approvals.OMITTED), input.getOrDefault("relevantFactPaths", Approvals.OMITTED), input.get("evaluatedAt"));
       case "approval.decision.evaluate" -> Approvals.evaluateDecision(input.get("decision"), input.get("currentSubjectFacts"), null, null);
       case "finkore.workflow.transition" -> {
         Workflow.Definition definition = Workflow.Definition.fromPortable(input.get("definition"));
@@ -193,7 +193,7 @@ public final class BoundaryRegressionTest {
     decision.put("subjectFacts", null);
     Map<String, Object> history = Approvals.recordDecision(requirement, decision, List.of());
     equal(Map.of("history", List.of(decision)), history);
-    equal("APPROVED", Approvals.evaluateRequirement(requirement, history, null, null, null));
+    equal("APPROVED", Approvals.evaluateRequirement(requirement, history, Approvals.OMITTED, Approvals.OMITTED, null));
     if (rejectMissing) {
       Map<String, Object> missing = new LinkedHashMap<>(decision);
       missing.remove("subjectFacts"); missing.put("decidedAt", "2026-09-02T12:00:00Z");
@@ -201,7 +201,7 @@ public final class BoundaryRegressionTest {
       try { error(Approvals.INVALID_DECISION, () -> Approvals.recordDecision(requirement, missing, history)); }
       finally {
         equal(before, history);
-        equal("APPROVED", Approvals.evaluateRequirement(requirement, history, null, null, null));
+        equal("APPROVED", Approvals.evaluateRequirement(requirement, history, Approvals.OMITTED, Approvals.OMITTED, null));
       }
     }
   }

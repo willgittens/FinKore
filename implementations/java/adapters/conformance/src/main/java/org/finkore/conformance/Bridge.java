@@ -165,8 +165,8 @@ public final class Bridge {
         case "approval.requirement.evaluate" -> success(Approvals.evaluateRequirement(
             inputValue.get("requirement"),
             inputValue.get("decisions"),
-            inputValue.get("currentSubjectFacts"),
-            inputValue.get("relevantFactPaths"),
+            inputValue.getOrDefault("currentSubjectFacts", Approvals.OMITTED),
+            inputValue.getOrDefault("relevantFactPaths", Approvals.OMITTED),
             inputValue.get("evaluatedAt")),
             Boolean.TRUE.equals(inputValue.get("observeHistory"))
                 ? Map.of("history", inputValue.get("decisions")) : null);
@@ -177,12 +177,12 @@ public final class Bridge {
         case "approval.decision.evaluate" -> success(Approvals.evaluateDecision(
             inputValue.get("requirement"),
             inputValue.get("decision"),
-            inputValue.get("currentSubjectFacts"),
-            inputValue.get("relevantFactPaths"),
+            inputValue.getOrDefault("currentSubjectFacts", Approvals.OMITTED),
+            inputValue.getOrDefault("relevantFactPaths", Approvals.OMITTED),
             inputValue.get("evaluatedAt")), null);
         case "approval.condition.evaluate" -> success(Approvals.evaluateCondition(
             inputValue.get("condition"),
-            inputValue.get("facts"),
+            inputValue.getOrDefault("facts", Approvals.OMITTED),
             inputValue.get("result")), null);
         case "approval.chain.evaluate" -> success(Approvals.evaluateChain(
             inputValue.get("chain"),
@@ -286,7 +286,8 @@ public final class Bridge {
               "approval.decision.supersede",
               "approval.requirement.supersede")
           .contains(operation)) {
-        return approvalHistoryObservation(input.get("history"));
+        Map<String, Object> observed = approvalHistoryObservation(input.getOrDefault("history", List.of()));
+        return "approval.decision.record".equals(operation) ? Map.of("history", observed.get("history")) : observed;
       }
       if ("approval.composition.evaluate".equals(operation) && input.containsKey("decisions")) {
         Map<String, Object> observations = new LinkedHashMap<>();

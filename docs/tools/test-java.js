@@ -17,6 +17,7 @@ const classpath = [
 ].join(delimiter)
 
 for (const testClass of [
+  'org.finkore.ApprovalContractsTest',
   'org.finkore.CompositionValidationTest',
   'org.finkore.MoneyTest',
   'org.finkore.WorkflowTest',

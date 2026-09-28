@@ -197,9 +197,9 @@ def execute_approval_requirement_evaluate(input_value: dict[str, Any]) -> dict[s
         evaluate_requirement(
             input_value.get("requirement"),
             input_value.get("decisions"),
-            input_value.get("currentSubjectFacts"),
-            input_value.get("relevantFactPaths"),
-            input_value.get("evaluatedAt"),
+            **{native: input_value[portable] for portable, native in (
+                ("currentSubjectFacts", "current_subject_facts"), ("relevantFactPaths", "relevant_fact_paths"), ("evaluatedAt", "evaluated_at")
+            ) if portable in input_value},
         ),
         {"history": input_value.get("decisions")} if input_value.get("observeHistory") is True else None,
     )
@@ -214,15 +214,15 @@ def execute_approval_decision_evaluate(input_value: dict[str, Any]) -> dict[str,
         evaluate_decision(
             input_value.get("requirement"),
             input_value.get("decision"),
-            input_value.get("currentSubjectFacts"),
-            input_value.get("relevantFactPaths"),
-            input_value.get("evaluatedAt"),
+            **{native: input_value[portable] for portable, native in (
+                ("currentSubjectFacts", "current_subject_facts"), ("relevantFactPaths", "relevant_fact_paths"), ("evaluatedAt", "evaluated_at")
+            ) if portable in input_value},
         )
     )
 
 
 def execute_approval_condition_evaluate(input_value: dict[str, Any]) -> dict[str, Any]:
-    return success(evaluate_condition(input_value.get("condition"), input_value.get("facts"), input_value.get("result")))
+    return success(evaluate_condition(input_value.get("condition"), result=input_value.get("result"), **({"facts": input_value["facts"]} if "facts" in input_value else {})))
 
 
 def execute_approval_chain_evaluate(input_value: dict[str, Any]) -> dict[str, Any]:
@@ -369,10 +369,10 @@ def execute(request: dict[str, Any]) -> dict[str, Any]:
                 observations = audit_history_observation(input_value)
             elif operation_id in {"approval.decision.record", "approval.decision.withdraw", "approval.decision.supersede", "approval.requirement.supersede"}:
                 history_value = input_value.get("history")
-                normalize_decision_set(history_value)
+                normalize_decision_set(history_value if "history" in input_value else [])
                 if isinstance(history_value, dict):
                     observations = {"history": history_value.get("history", [])}
-                    if history_value.get("lifecycle"):
+                    if operation_id != "approval.decision.record" and history_value.get("lifecycle"):
                         observations["lifecycle"] = history_value["lifecycle"]
                 else:
                     observations = {"history": history_value if isinstance(history_value, list) else []}

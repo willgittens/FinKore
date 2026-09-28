@@ -669,37 +669,140 @@ remain unchanged. No release note, tag, publication, or Core 1.0 promotion occur
 
 ## Milestone 4 — Approval histories, conditions, and fact semantics
 
-- [ ] Close F8a discovery regressions: concrete outcome mappings, explicit
+- [x] Close F8a discovery regressions: concrete outcome mappings, explicit
       fixture histories/Decision collections, supplied Actor type, and Chain
       rejection declarations. Preserve native convenience defaults separately
       from D6 portable requiredness.
 
-- [ ] Fix F3 by validating the proposed committed result before exposing it.
+- [x] Fix F3 by validating the proposed committed result before exposing it.
       A new Decision cannot make an existing target or successor ambiguous.
       Rejection preserves both Decision and lifecycle histories.
-- [ ] Test actual returned histories through record, withdrawal, Decision and
+- [x] Test actual returned histories through record, withdrawal, Decision and
       Requirement supersession, evaluation, and observation/reuse. Include
       same-instant offset variants, different facts/outcomes, and distinct-instant
       controls without introducing global Decision uniqueness.
-- [ ] Implement the accepted D1–D3 contracts for concrete Decision evaluation,
+- [x] Implement the accepted D1–D3 contracts for concrete Decision evaluation,
       Requirement evaluation, and condition fact completeness. Preserve the
       documented scope of native facts-only helpers.
-- [ ] Fix F6a declaration validation before iterating required facts or accepting
+- [x] Fix F6a declaration validation before iterating required facts or accepting
       an external condition result. Present null/false/zero fact values must not
       be confused with absent facts.
-- [ ] Preserve consideration of withdrawal, expiration, supersession, eligibility,
+- [x] Preserve consideration of withdrawal, expiration, supersession, eligibility,
       and required evaluation context when fact comparison is changed. Exercise
       rejecting and approving Decisions before and after stale evidence.
-- [ ] Add exact structural/numeric equality and selector controls in each
+- [x] Add exact structural/numeric equality and selector controls in each
       implementation. Compare full facts and selected facts recursively without
       Python boolean-number coercion or Java scale-sensitive host equality.
-- [ ] Add mutations for stale-fact acceptance, skipped result-history validation,
+- [x] Add mutations for stale-fact acceptance, skipped result-history validation,
       shallow equality, ignored required facts, and absent/null conflation.
       Synchronize public docs, fixtures, traceability, and installed examples.
 
 Completion: successful recording produces reusable valid history; equivalent
 portable fact inputs have the accepted specified meaning across runtimes, with
 no language exceptions or implicit approval caused by missing required facts.
+
+### M4 implementation and verification
+
+M4 implements the accepted D1–D3/D6 contracts in all three cores, with fixture
+presence preserved by adapters. It closes F3, F6a, F7a–F7c comparison behavior,
+and F8a. F2 native retained-value rejection/ownership remains M5, including the
+native-value portion of FACT-004; D8 remains unresolved.
+
+Recording validates the proposed history against retained lifecycle references
+before exposing success. Native sequences consume actual record, withdrawal,
+Decision supersession, and Requirement supersession results, checking observation,
+reimport, evaluation, same-instant offset collisions, and distinct-instant controls.
+Unreferenced equal tuples remain permitted. Conditions validate declarations and
+own-member path completeness before accepting external results. Concrete fact
+comparison distinguishes omitted selectors from null/empty declarations, compares
+complete supplied facts, preserves lifecycle/context checks, and uses exact typed
+structural equality. Swapped distinct Requirement mappings remain supported.
+
+Compatibility: Python callers must omit selector arguments instead of passing
+`None`; Java concrete callers use `Approvals.OMITTED` instead of null placeholders.
+Explicit null facts remain values. Java's legacy four-argument facts-only helper
+retains its documented limited scope. TypeScript `ApprovalDecisionHistory.from`
+requires an explicit collection; `create()` retains the empty native convenience.
+Python native omitted histories also retain their documented empty default.
+Fixture histories and outcome mappings are explicit, supplied Actor types are
+nonempty strings, and Chain rejection declarations are `REJECTED`.
+
+Evidence and scope:
+
+- A clean HEAD TypeScript native Approval baseline reproduced 31 failures before
+  correction. Before correction, the 542-vector Approval suite had 113 failures
+  and three infrastructure errors on Python, and 116 failures on Java.
+- The manifest now has 1667 vectors: six existing F3 supplementary cases were
+  promoted unchanged in identity, and 31 new selector/filtering/mapping/equality
+  controls were added. The remaining supplementary inventory is 182 cases.
+- All **579 Approval suite vectors pass** on TypeScript, CPython 3.12/3.13, and
+  Java, with no unsupported or infrastructure outcomes. All 584 Approval operation
+  vectors (including five shared timestamp vectors) pass at the adapter boundary.
+- Direct native vector suites and returned-history sequences pass, including
+  decimal scale, mixed accepted native numeric types, signed zero, nested
+  Boolean/numeric differences, adjacent large decimals, and unchanged ambient
+  Python decimal context. Installed npm, wheel/sdist on both Python versions,
+  and JAR consumers pass composition plus concrete Approval checks.
+- Scoped TypeScript Approval coverage is 99.82% lines, 100% branches, and 100%
+  functions. The unexecuted history-cloning exception path belongs to the M5
+  unsupported-native boundary. A reproduced selector-array alias introduced during
+  the helper change is corrected and retained as a native/unit/installed regression.
+  Sparse native selector arrays also fail with a portable error. Python Approval
+  line coverage is 94%; Java Approval line coverage is 93.68% (578/617 lines).
+- Scoped TypeScript mutation passes at **98.05%**: 1608 killed, two timed out,
+  30 survived, and two uncovered out of 1642 mutants, with 905 passing baseline
+  tests. No financial outcome, portable error, selector, or committed-history
+  validation mutant survives within M4 scope.
+- All **105/105** Python/Java portable Approval critical probes are killed with
+  passing controls; Python 3.13 separately kills **54/54**. Five new native probes
+  (four exact numeric and one retained Condition selector array) are killed, and both Python probes also pass on 3.13. New probes
+  cover skipped proposed-history validation, stale complete facts, null omission,
+  shallow/Boolean equality, ignored required facts, absent/null confusion, and
+  selector validation before ineffective evidence. Scoped commands preserve
+  passing baselines; default full-suite gates remain unchanged.
+
+Survivor review: the 18 composition survivors retain the M3 equivalence
+explanations above. Three condition mutants remove validation duplicated by the
+shared selector validator. Two Decision and two history timestamp mutants remove
+checks or change invalid fallback strings still rejected by the timestamp parser.
+The remaining history mutant broadens an event-kind guard but compares an absent
+Requirement target on other event kinds, leaving the result unchanged. Four
+error-class mutants change only non-normative diagnostics, names, or undefined
+optional properties. The two uncovered mutants are the retained-value cloning
+exception path reserved for M5. These are counted in the score, not excluded.
+
+Build, strict TypeScript, Java warning-as-error compilation, Python compilation
+on both versions, developer-tool tests, architecture, documentation/traceability,
+licensing, and whitespace checks pass. Full adapter suites also ran and retain
+out-of-scope failures (TypeScript 79; Python 142 on each version; Java 72).
+
+Full conformance remains red outside M4:
+
+| Runtime | PASS | FAIL | INFRASTRUCTURE_ERROR | UNSUPPORTED |
+| --- | ---: | ---: | ---: | ---: |
+| TypeScript | 1579 | 87 | 1 | 0 |
+| CPython 3.12 | 1333 | 310 | 24 | 0 |
+| CPython 3.13 | 1333 | 310 | 24 | 0 |
+| Java | 1437 | 230 | 0 | 0 |
+
+All original **884** vectors still pass on every runtime. Full unit suites retain
+M5–M7 regressions (TypeScript core: seven failures; Python: 50 failures/three
+errors; Java evidence suite: 47 failures). These include native Approval retained
+values, Entity declarations/ownership, and Workflow boundaries. Infrastructure
+errors remain defects, not accepted portable errors. Full release verification
+and native-value closure are not claimed.
+
+Completion review: tests, vectors, critical/native mutation probes, public API
+JSDoc/docstrings, package consumers, READMEs, conventions, and traceability are
+updated. Nineteen Approval requirement rows return to COVERED: 318 covered,
+33 partial, 80 not directly testable, and one D8 gap. Six Approval rows retain M5
+native-value qualifications. Existing accepted `/spec` contracts define the
+behavior; no new normative semantics are selected. Agentic metadata and canonical
+operation IDs are unchanged because these Approval fixtures are conformance-local.
+CoreDoc, AGENTS.md, and architecture obligations remain unchanged. No release
+note, tag, publication, or Core 1.0 promotion occurs.
+
+**M4 is complete. M5–M7 remain pending; D8 remains unresolved.**
 
 ## Milestone 5 — Native value ownership across retained domain data
 

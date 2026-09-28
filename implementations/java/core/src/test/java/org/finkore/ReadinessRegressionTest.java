@@ -84,7 +84,7 @@ public final class ReadinessRegressionTest {
   }
 
   private static Map<String, Object> requirement() {
-    return Map.of("id", "review", "subject", Map.of("type", "invoice", "id", "invoice-1"), "eligibleActors", List.of("alice"));
+    return Map.of("id", "review", "subject", Map.of("type", "invoice", "id", "invoice-1"), "eligibleActors", List.of("alice"), "approvedOutcome", "APPROVED", "rejectedOutcome", "REJECTED");
   }
 
   private static Map<String, Object> decision(String revision, String date) {

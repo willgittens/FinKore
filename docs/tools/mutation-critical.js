@@ -13,9 +13,11 @@ import { spawnSync } from 'node:child_process'
 import { assessMutationResult, conformanceBaselinePassed } from './mutation-result.js'
 
 const repositoryRoot = process.cwd()
-const requestedTarget = process.argv[2] ?? 'all'
-const requestedSuite = process.argv[3]
-const requestedOperation = process.argv[4]
+const pairedOnly = process.argv.includes('--paired')
+const arguments_ = process.argv.slice(2).filter(arg => arg !== '--paired')
+const requestedTarget = arguments_[0] ?? 'all'
+const requestedSuite = arguments_[1]
+const requestedOperation = arguments_[2]
 const manifest = JSON.parse(readFileSync(resolve(repositoryRoot, 'conformance/manifest.json'), 'utf8'))
 const vectorOperations = new Map(manifest.suites.flatMap(suite => suite.vectorFiles).flatMap(file =>
   JSON.parse(readFileSync(resolve(repositoryRoot, 'conformance', file), 'utf8')).vectors,
@@ -25,11 +27,88 @@ if (requestedOperation !== undefined && operationVectors.length === 0) throw new
 const validTargets = new Set(['all', 'python', 'java'])
 
 if (!validTargets.has(requestedTarget)) {
-  console.error('Usage: node docs/tools/mutation-critical.js [all|python|java] [suite] [operation]')
+  console.error('Usage: node docs/tools/mutation-critical.js [all|python|java] [suite] [operation] [--paired]')
   process.exit(2)
 }
 
 const pythonMutants = [
+{
+  "id": "python-approval097-skip-proposed-history",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "    normalize_decision_set(result)\n    return result",
+  "to": "    return result",
+  "expectedVector": "approval.boundary097.record-withdrawal-offset-001",
+  "expectedPassVectors": [
+    "approval.boundary097.discovery-control-019"
+  ]
+},
+{
+  "id": "python-approval097-stale-whole-facts",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "if current_subject_facts is not _MISSING and not _facts_match",
+  "to": "if relevant_fact_paths is not _MISSING and current_subject_facts is not _MISSING and not _facts_match",
+  "expectedVector": "approval.boundary097.requirement-whole-changed-001",
+  "expectedPassVectors": [
+    "approval.boundary097.requirement-whole-equal-001"
+  ]
+},
+{
+  "id": "python-approval097-null-facts-as-omitted",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "if current_subject_facts is not _MISSING and not _facts_match",
+  "to": "if current_subject_facts is not None and current_subject_facts is not _MISSING and not _facts_match",
+  "expectedVector": "approval.boundary097.requirement-current-null-001",
+  "expectedPassVectors": [
+    "approval.boundary097.requirement-whole-equal-001"
+  ]
+},
+{
+  "id": "python-approval097-bool-number-coercion",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "if isinstance(left, bool) or isinstance(right, bool):\n        return left is right",
+  "to": "if isinstance(left, bool) or isinstance(right, bool):\n        return left == right",
+  "expectedVector": "approval.boundary097.requirement-equality-number-boolean-001",
+  "expectedPassVectors": [
+    "approval.boundary097.requirement-whole-equal-001"
+  ]
+},
+{
+  "id": "python-approval097-ignore-required-facts",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "if any(_path(facts, path) is _MISSING for path in paths):",
+  "to": "if False:",
+  "expectedVector": "approval.boundary097.condition-facts-literal-dot-001",
+  "expectedPassVectors": [
+    "approval.boundary097.condition-facts-nested-null-001"
+  ]
+},
+{
+  "id": "python-approval097-absent-null-leaf",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "return _MISSING\n        current = current[part]",
+  "to": "return None\n        current = current[part]",
+  "expectedVector": "approval.boundary097.condition-facts-literal-dot-001",
+  "expectedPassVectors": [
+    "approval.boundary097.condition-facts-nested-null-001"
+  ]
+},
+{
+  "id": "python-approval097-skip-selector-validation",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "    _validate_comparison(current_subject_facts, relevant_fact_paths, allow_omission=True)",
+  "to": "    pass",
+  "expectedVector": "approval.facts097.expired-selectors-null",
+  "expectedPassVectors": [
+    "approval.facts097.expired-control"
+  ]
+},
 {
   "id": "python-composition097-null-decisions-as-omission",
   "suite": "approvals",
@@ -1268,6 +1347,83 @@ const pythonMutants = [
 
 const javaMutants = [
 {
+  "id": "java-approval097-skip-proposed-history",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "return importHistory(historyEnvelope(append(current.history(), recorded), current.lifecycle()));",
+  "to": "return historyEnvelope(append(current.history(), recorded), current.lifecycle());",
+  "expectedVector": "approval.boundary097.record-withdrawal-offset-001",
+  "expectedPassVectors": [
+    "approval.boundary097.discovery-control-019"
+  ]
+},
+{
+  "id": "java-approval097-stale-whole-facts",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "return currentSubjectFacts == OMITTED || factsMatch",
+  "to": "return relevantFactPaths == OMITTED || currentSubjectFacts == OMITTED || factsMatch",
+  "expectedVector": "approval.boundary097.requirement-whole-changed-001",
+  "expectedPassVectors": [
+    "approval.boundary097.requirement-whole-equal-001"
+  ]
+},
+{
+  "id": "java-approval097-null-facts-as-omitted",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "return currentSubjectFacts == OMITTED || factsMatch",
+  "to": "return currentSubjectFacts == null || currentSubjectFacts == OMITTED || factsMatch",
+  "expectedVector": "approval.boundary097.requirement-current-null-001",
+  "expectedPassVectors": [
+    "approval.boundary097.requirement-whole-equal-001"
+  ]
+},
+{
+  "id": "java-approval097-shallow-equality",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "if (!factEqual(a.get(key), b.get(key))) return false;",
+  "to": "if (false) return false;",
+  "expectedVector": "approval.boundary097.requirement-equality-nested-type-001",
+  "expectedPassVectors": [
+    "approval.boundary097.requirement-whole-equal-001"
+  ]
+},
+{
+  "id": "java-approval097-ignore-required-facts",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "if (path(facts, fact) == MISSING) throw new FinKoreException(CONDITION_UNRESOLVED);",
+  "to": "if (false) throw new FinKoreException(CONDITION_UNRESOLVED);",
+  "expectedVector": "approval.boundary097.condition-facts-literal-dot-001",
+  "expectedPassVectors": [
+    "approval.boundary097.condition-facts-nested-null-001"
+  ]
+},
+{
+  "id": "java-approval097-absent-null-leaf",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "return MISSING;\n      }\n      current = map.get(part);",
+  "to": "return null;\n      }\n      current = map.get(part);",
+  "expectedVector": "approval.boundary097.condition-facts-literal-dot-001",
+  "expectedPassVectors": [
+    "approval.boundary097.condition-facts-nested-null-001"
+  ]
+},
+{
+  "id": "java-approval097-skip-selector-validation",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "    validateComparison(currentSubjectFacts, relevantFactPaths, true);",
+  "to": "    // skipped comparison request validation",
+  "expectedVector": "approval.facts097.expired-selectors-null",
+  "expectedPassVectors": [
+    "approval.facts097.expired-control"
+  ]
+},
+{
   "id": "java-composition097-null-decisions-as-omission",
   "suite": "approvals",
   "path": "core/src/main/java/org/finkore/Approvals.java",
@@ -2012,8 +2168,8 @@ const javaMutants = [
     expectedPassVectors: ['approval.withdraw.target-unique-001'],
     suite: 'approvals',
     path: 'core/src/main/java/org/finkore/Approvals.java',
-    from: 'return historyEnvelope(append(current.history(), recorded), current.lifecycle());',
-    to: 'return historyEnvelope(append(current.history(), recorded), List.of());',
+    from: 'return importHistory(historyEnvelope(append(current.history(), recorded), current.lifecycle()));',
+    to: 'return importHistory(historyEnvelope(append(current.history(), recorded), List.of()));',
   },
   {
     id: 'java-approval-withdraw-request-type-override',
@@ -2465,7 +2621,7 @@ function conformanceKilled(env, mutant) {
     env.FINKORE_MUTANT_ADAPTER,
     '--suite',
     mutant.suite,
-    ...(requestedOperation === undefined ? [] : operationVectors.flatMap(id => ['--vector', id])),
+    ...((pairedOnly && mutant.expectedVector !== undefined) ? [mutant.expectedVector, ...mutant.expectedPassVectors].flatMap(id => ['--vector', id]) : requestedOperation === undefined ? [] : operationVectors.flatMap(id => ['--vector', id])),
     '--json',
   ], { env: { ...process.env, ...env } })
   return {
@@ -2551,7 +2707,7 @@ for (const mutant of [...pythonMutants, ...javaMutants]) {
 }
 
 const results = []
-if (process.argv.length > 5 || (requestedSuite !== undefined && ![...pythonMutants, ...javaMutants].some((mutant) => mutant.suite === requestedSuite))) {
+if (arguments_.length > 3 || (requestedSuite !== undefined && ![...pythonMutants, ...javaMutants].some((mutant) => mutant.suite === requestedSuite))) {
   console.error('Unknown mutation suite or extra arguments')
   process.exit(2)
 }

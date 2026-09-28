@@ -12,7 +12,7 @@ from finkore.approvals import withdraw_decision, supersede_decision, supersede_r
 from finkore.entities import evolve_entity
 
 ROOT = Path(__file__).resolve().parents[4]
-REQUIREMENT = {"id": "review", "subject": {"type": "invoice", "id": "invoice-1"}, "eligibleActors": ["alice"]}
+REQUIREMENT = {"id": "review", "subject": {"type": "invoice", "id": "invoice-1"}, "eligibleActors": ["alice"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED"}
 DECISION = {"requirementId": "review", "subjectFacts": {"revision": "3"}, "outcome": "APPROVED", "actor": {"id": "alice"}, "decidedAt": "2026-09-01T12:00:00Z"}
 TARGET = {"requirementId": "review", "actorId": "alice", "decidedAt": DECISION["decidedAt"]}
 EVENT = {"target": TARGET, "actor": {"id": "alice"}, "recordedAt": "2026-09-02T12:00:00Z"}

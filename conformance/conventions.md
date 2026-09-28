@@ -646,6 +646,12 @@ record returns all earlier history and lifecycle evidence plus the new Decision,
 preserving timestamps and local order. Tests use actual returned envelopes in
 subsequent record/lifecycle/evaluation calls without repairing them.
 
+Record error diagnostics retain the existing `observations.history` Decision
+array convention. Native tests separately assert that the lifecycle collection
+also remains unchanged. For an omitted input history, diagnostics may show an
+empty history; the operation still rejects the missing required collection.
+This diagnostic projection does not imply successful history import.
+
 ### Supported native retained values
 
 APPROVAL-FACT-004 and WORKFLOW-GUARD-007 require validation in owning cores.

@@ -45,12 +45,12 @@ public final class EvidenceRegressionTest {
       for (Object raw : list(map(Json.parse(Files.readString(root.resolve("conformance").resolve((String) file)))).get("vectors"))) {
         Map<String, Object> vector = map(raw);
         String id = (String) vector.get("id");
-        if (id.contains(".boundary097.") && nativeApplicable(vector)) cases.put(id, () -> vector(vector));
+        if (id.contains(".boundary097.")) cases.put(id, () -> vector(vector));
       }
     }
     for (Object raw : list(map(Json.parse(Files.readString(root.resolve("conformance/boundary097-cases.json")))).get("cases"))) {
       Map<String, Object> v = map(raw);
-      if ("core-and-adapter".equals(v.get("testBoundary")) && nativeApplicable(v)) cases.put((String) v.get("id"), () -> vector(v));
+      if ("core-and-adapter".equals(v.get("testBoundary"))) cases.put((String) v.get("id"), () -> vector(v));
     }
     for (String lifecycle : List.of("withdraw", "target", "successor", "requirement"))
       for (String variant : List.of("control", "collision", "offset"))
@@ -76,26 +76,19 @@ public final class EvidenceRegressionTest {
         equal("DRAFT", instance.currentState());
       });
     cases.put("native097.decimal-scale-selected", () -> exactNumbers(List.of("value")));
-    // The existing concrete Java overload documents null as omission. M4 must
-    // migrate this call to its explicit omission representation, not change the assertion.
-    cases.put("native097.decimal-scale-complete", () -> exactNumbers(null));
+    cases.put("native097.decimal-scale-complete", () -> exactNumbers(Approvals.OMITTED));
     return cases;
   }
 
-  private static boolean nativeApplicable(Map<String, Object> v) {
-    // Omitted fixture facts have adapter coverage; the native method has a
-    // required facts argument, so null would represent a different input.
-    return !"approval.condition.evaluate".equals(v.get("operation")) || map(v.get("input")).containsKey("facts");
-  }
   private static Object invoke(Map<String, Object> v) {
     Map<String, Object> i = map(v.get("input"));
     String op = (String) v.get("operation");
     return switch (op) {
       case "approval.composition.evaluate" -> Approvals.evaluateComposition(i.get("composition"), i.get("requirements"), i.getOrDefault("decisions", List.of()), i.get("context"));
-      case "approval.condition.evaluate" -> Approvals.evaluateCondition(i.get("condition"), i.get("facts"), i.get("result"));
+      case "approval.condition.evaluate" -> Approvals.evaluateCondition(i.get("condition"), i.getOrDefault("facts", Approvals.OMITTED), i.get("result"));
       case "approval.decision.record" -> Approvals.recordDecision(i.get("requirement"), i.get("decision"), i.get("history"));
-      case "approval.decision.evaluate" -> Approvals.evaluateDecision(i.get("requirement"), i.get("decision"), i.get("currentSubjectFacts"), i.get("relevantFactPaths"), i.get("evaluatedAt"));
-      case "approval.requirement.evaluate" -> Approvals.evaluateRequirement(i.get("requirement"), i.get("decisions"), i.get("currentSubjectFacts"), i.get("relevantFactPaths"), i.get("evaluatedAt"));
+      case "approval.decision.evaluate" -> Approvals.evaluateDecision(i.get("requirement"), i.get("decision"), i.getOrDefault("currentSubjectFacts", Approvals.OMITTED), i.getOrDefault("relevantFactPaths", Approvals.OMITTED), i.get("evaluatedAt"));
+      case "approval.requirement.evaluate" -> Approvals.evaluateRequirement(i.get("requirement"), i.get("decisions"), i.getOrDefault("currentSubjectFacts", Approvals.OMITTED), i.getOrDefault("relevantFactPaths", Approvals.OMITTED), i.get("evaluatedAt"));
       case "finkore.entity.create" -> Entities.create(i.get("definition"), i.get("id"), i.get("data"));
       case "finkore.entity.mutate" -> Entities.mutate(i.get("definition"), i.get("entity"), i.get("changes"));
       case "finkore.entity.transition" -> Entities.transition(i.get("definition"), i.get("entity"), i.get("target"));

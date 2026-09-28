@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { validateFactPaths } from './approval-facts.js'
 import { ApprovalConditionUnresolvedError, InvalidApprovalDecisionError } from './errors.js'
 import type {
   ApprovalConditionEvaluationResult,
@@ -18,9 +19,9 @@ function requiredString(value: unknown): string {
 
 function validateRequiredFacts(value: unknown): readonly ApprovalConditionFactPath[] {
   if (!Array.isArray(value) || value.length === 0) throw new InvalidApprovalDecisionError()
-  const facts = value.map(requiredString)
+  const facts = validateFactPaths(value)
   if (new Set(facts).size !== facts.length) throw new InvalidApprovalDecisionError()
-  return facts
+  return [...facts]
 }
 
 function validateEvaluationResult(value: unknown): ApprovalConditionEvaluationResult {
@@ -63,7 +64,7 @@ export class ApprovalCondition {
    * Creates and validates an Approval Condition from a portable candidate.
    *
    * Condition identity and evaluation ownership are preserved exactly. Required
-   * facts are explicit identifiers and are not interpreted as expressions.
+   * facts are nonempty dot-separated own-member paths, not expressions.
    *
    * @param input - Candidate serialized Approval Condition.
    * @returns A validated Approval Condition value.
@@ -105,7 +106,8 @@ export class ApprovalCondition {
   /**
    * Validates fact completeness and accepts an explicit composing-domain result.
    *
-   * Missing required facts produce `FINKORE_APPROVAL_CONDITION_UNRESOLVED`.
+   * Paths traverse own object members, without array indexing or literal dotted-key
+   * fallback. Missing required facts produce `FINKORE_APPROVAL_CONDITION_UNRESOLVED`.
    * Present facts with values such as `null`, `false`, `0`, or `""` count as
    * present; FinKore does not interpret those values as truthy or falsey rule
    * outcomes. The result is deterministic for the same condition, supplied
@@ -124,9 +126,10 @@ export class ApprovalCondition {
    * @see APPROVAL-CONDITION-006
    */
   evaluate(input: {
-    readonly facts: unknown
+    readonly facts?: unknown
     readonly result?: unknown
   }): ApprovalConditionEvaluationResult {
+    if (input.facts === undefined) throw new ApprovalConditionUnresolvedError()
     if (!isPlainRecord(input.facts)) throw new InvalidApprovalDecisionError()
     for (const fact of this.value.requiredFacts) {
       if (!factPresent(input.facts, fact)) throw new ApprovalConditionUnresolvedError()

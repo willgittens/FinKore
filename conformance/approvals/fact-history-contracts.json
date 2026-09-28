@@ -1,0 +1,2658 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "approval.boundary097.record-withdrawal-same-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-015",
+        "APPROVAL-VALIDITY-014",
+        "APPROVAL-DECISION-007",
+        "APPROVAL-ERROR-005",
+        "APPROVAL-ERROR-006"
+      ],
+      "description": "Core 0.9.7 F3: record withdrawal same.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "actor": {
+            "id": "alice"
+          },
+          "subjectFacts": {
+            "changed": true
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T10:00:00Z"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "10"
+                },
+                "memo": "old"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T10:00:00Z"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-03T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "10"
+                },
+                "memo": "old"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F3",
+      "pairedControl": "approval.boundary097.record-withdrawal-distinct-001",
+      "reason": "No implementation returns the required domain result; preserve the specification-derived assertion independently of unspecified diagnostics."
+    },
+    {
+      "id": "approval.boundary097.record-withdrawal-offset-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-015",
+        "APPROVAL-VALIDITY-014",
+        "APPROVAL-DECISION-007",
+        "APPROVAL-ERROR-005",
+        "APPROVAL-ERROR-006"
+      ],
+      "description": "Core 0.9.7 F3: record withdrawal offset.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "actor": {
+            "id": "alice"
+          },
+          "subjectFacts": {
+            "changed": true
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T12:00:00+02:00"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "10"
+                },
+                "memo": "old"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T10:00:00Z"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-03T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "10"
+                },
+                "memo": "old"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F3",
+      "pairedControl": "approval.boundary097.record-withdrawal-distinct-001",
+      "reason": "No implementation returns the required domain result; preserve the specification-derived assertion independently of unspecified diagnostics."
+    },
+    {
+      "id": "approval.boundary097.record-supersession-target-same-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-015",
+        "APPROVAL-VALIDITY-014",
+        "APPROVAL-DECISION-007",
+        "APPROVAL-ERROR-005",
+        "APPROVAL-ERROR-006"
+      ],
+      "description": "Core 0.9.7 F3: record supersession target same.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "actor": {
+            "id": "alice"
+          },
+          "subjectFacts": {
+            "changed": true
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T10:00:00Z"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "10"
+                },
+                "memo": "old"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "20"
+                }
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-02T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T10:00:00Z"
+              },
+              "successor": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-02T10:00:00Z"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-03T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "10"
+                },
+                "memo": "old"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "20"
+                }
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-02T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F3",
+      "pairedControl": "approval.boundary097.record-supersession-target-distinct-001",
+      "reason": "No implementation returns the required domain result; preserve the specification-derived assertion independently of unspecified diagnostics."
+    },
+    {
+      "id": "approval.boundary097.record-supersession-target-offset-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-015",
+        "APPROVAL-VALIDITY-014",
+        "APPROVAL-DECISION-007",
+        "APPROVAL-ERROR-005",
+        "APPROVAL-ERROR-006"
+      ],
+      "description": "Core 0.9.7 F3: record supersession target offset.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "actor": {
+            "id": "alice"
+          },
+          "subjectFacts": {
+            "changed": true
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T12:00:00+02:00"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "10"
+                },
+                "memo": "old"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "20"
+                }
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-02T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T10:00:00Z"
+              },
+              "successor": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-02T10:00:00Z"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-03T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "10"
+                },
+                "memo": "old"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "20"
+                }
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-02T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F3",
+      "pairedControl": "approval.boundary097.record-supersession-target-distinct-001",
+      "reason": "No implementation returns the required domain result; preserve the specification-derived assertion independently of unspecified diagnostics."
+    },
+    {
+      "id": "approval.boundary097.record-supersession-successor-same-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-015",
+        "APPROVAL-VALIDITY-014",
+        "APPROVAL-DECISION-007",
+        "APPROVAL-ERROR-005",
+        "APPROVAL-ERROR-006"
+      ],
+      "description": "Core 0.9.7 F3: record supersession successor same.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "actor": {
+            "id": "alice"
+          },
+          "subjectFacts": {
+            "changed": true
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-02T10:00:00Z"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "10"
+                },
+                "memo": "old"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "20"
+                }
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-02T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T10:00:00Z"
+              },
+              "successor": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-02T10:00:00Z"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-03T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "10"
+                },
+                "memo": "old"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "20"
+                }
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-02T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F3",
+      "pairedControl": "approval.boundary097.record-supersession-successor-distinct-001",
+      "reason": "No implementation returns the required domain result; preserve the specification-derived assertion independently of unspecified diagnostics."
+    },
+    {
+      "id": "approval.boundary097.record-supersession-successor-offset-001",
+      "spec": "approvals/validity",
+      "requirements": [
+        "APPROVAL-VALIDITY-015",
+        "APPROVAL-VALIDITY-014",
+        "APPROVAL-DECISION-007",
+        "APPROVAL-ERROR-005",
+        "APPROVAL-ERROR-006"
+      ],
+      "description": "Core 0.9.7 F3: record supersession successor offset.",
+      "operation": "approval.decision.record",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "actor": {
+            "id": "alice"
+          },
+          "subjectFacts": {
+            "changed": true
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-02T12:00:00+02:00"
+        },
+        "history": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "10"
+                },
+                "memo": "old"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "20"
+                }
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-02T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "DECISION_SUPERSEDED",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T10:00:00Z"
+              },
+              "successor": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-02T10:00:00Z"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-03T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "10"
+                },
+                "memo": "old"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "20"
+                }
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-02T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F3",
+      "pairedControl": "approval.boundary097.record-supersession-successor-distinct-001",
+      "reason": "No implementation returns the required domain result; preserve the specification-derived assertion independently of unspecified diagnostics."
+    },
+    {
+      "id": "approval.facts097.expired-control",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: expired-control.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "subjectFacts": {
+              "invoice": {
+                "amount": 10
+              },
+              "flag": false
+            },
+            "outcome": "APPROVED",
+            "decidedAt": "2026-09-01T10:00:00Z",
+            "expiresAt": "2026-09-02T00:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "evaluatedAt": "2026-09-03T00:00:00Z"
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.expired-selectors-null",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: expired-selectors-null.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "subjectFacts": {
+              "invoice": {
+                "amount": 10
+              },
+              "flag": false
+            },
+            "outcome": "APPROVED",
+            "decidedAt": "2026-09-01T10:00:00Z",
+            "expiresAt": "2026-09-02T00:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "evaluatedAt": "2026-09-03T00:00:00Z",
+        "relevantFactPaths": null
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.expired-selectors-empty",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: expired-selectors-empty.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "subjectFacts": {
+              "invoice": {
+                "amount": 10
+              },
+              "flag": false
+            },
+            "outcome": "APPROVED",
+            "decidedAt": "2026-09-01T10:00:00Z",
+            "expiresAt": "2026-09-02T00:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "evaluatedAt": "2026-09-03T00:00:00Z",
+        "relevantFactPaths": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.expired-selectors-trailing",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: expired-selectors-trailing.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "subjectFacts": {
+              "invoice": {
+                "amount": 10
+              },
+              "flag": false
+            },
+            "outcome": "APPROVED",
+            "decidedAt": "2026-09-01T10:00:00Z",
+            "expiresAt": "2026-09-02T00:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "evaluatedAt": "2026-09-03T00:00:00Z",
+        "relevantFactPaths": [
+          "invoice."
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.withdrawn-control",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: withdrawn-control.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": 10
+                },
+                "flag": false
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T10:00:00Z"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T00:00:00Z"
+            }
+          ]
+        },
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.withdrawn-selectors-null",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: withdrawn-selectors-null.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": 10
+                },
+                "flag": false
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T10:00:00Z"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T00:00:00Z"
+            }
+          ]
+        },
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "relevantFactPaths": null
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.withdrawn-selectors-empty",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: withdrawn-selectors-empty.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": 10
+                },
+                "flag": false
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T10:00:00Z"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T00:00:00Z"
+            }
+          ]
+        },
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "relevantFactPaths": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.withdrawn-selectors-trailing",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: withdrawn-selectors-trailing.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": 10
+                },
+                "flag": false
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "WITHDRAWN",
+              "target": {
+                "requirementId": "review",
+                "actorId": "alice",
+                "decidedAt": "2026-09-01T10:00:00Z"
+              },
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T00:00:00Z"
+            }
+          ]
+        },
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "relevantFactPaths": [
+          "invoice."
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.superseded-control",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: superseded-control.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": 10
+                },
+                "flag": false
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "review",
+              "successorRequirementId": "next",
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T00:00:00Z"
+            }
+          ]
+        },
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.superseded-selectors-null",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: superseded-selectors-null.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": 10
+                },
+                "flag": false
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "review",
+              "successorRequirementId": "next",
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T00:00:00Z"
+            }
+          ]
+        },
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "relevantFactPaths": null
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.superseded-selectors-empty",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: superseded-selectors-empty.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": 10
+                },
+                "flag": false
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "review",
+              "successorRequirementId": "next",
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T00:00:00Z"
+            }
+          ]
+        },
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "relevantFactPaths": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.superseded-selectors-trailing",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: superseded-selectors-trailing.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": 10
+                },
+                "flag": false
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z"
+            }
+          ],
+          "lifecycle": [
+            {
+              "type": "REQUIREMENT_SUPERSEDED",
+              "targetRequirementId": "review",
+              "successorRequirementId": "next",
+              "actor": {
+                "id": "alice"
+              },
+              "recordedAt": "2026-09-02T00:00:00Z"
+            }
+          ]
+        },
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "relevantFactPaths": [
+          "invoice."
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.empty-control",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: empty-control.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [],
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "PENDING"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.empty-selectors-null",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: empty-selectors-null.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [],
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "relevantFactPaths": null
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.empty-selectors-empty",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: empty-selectors-empty.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [],
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "relevantFactPaths": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.empty-selectors-trailing",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: empty-selectors-trailing.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [],
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "relevantFactPaths": [
+          "invoice."
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.expired-decision-control",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: expired-decision-control.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "actor": {
+            "id": "alice"
+          },
+          "subjectFacts": {
+            "invoice": {
+              "amount": 10
+            },
+            "flag": false
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T10:00:00Z",
+          "expiresAt": "2026-09-02T00:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "evaluatedAt": "2026-09-03T00:00:00Z"
+      },
+      "expected": {
+        "status": "success",
+        "value": "INEFFECTIVE"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.expired-decision-null",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: expired-decision-null.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "actor": {
+            "id": "alice"
+          },
+          "subjectFacts": {
+            "invoice": {
+              "amount": 10
+            },
+            "flag": false
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T10:00:00Z",
+          "expiresAt": "2026-09-02T00:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "evaluatedAt": "2026-09-03T00:00:00Z",
+        "relevantFactPaths": null
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.expired-decision-empty",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: expired-decision-empty.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "actor": {
+            "id": "alice"
+          },
+          "subjectFacts": {
+            "invoice": {
+              "amount": 10
+            },
+            "flag": false
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T10:00:00Z",
+          "expiresAt": "2026-09-02T00:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "evaluatedAt": "2026-09-03T00:00:00Z",
+        "relevantFactPaths": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.expired-decision-trailing",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: expired-decision-trailing.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "actor": {
+            "id": "alice"
+          },
+          "subjectFacts": {
+            "invoice": {
+              "amount": 10
+            },
+            "flag": false
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T10:00:00Z",
+          "expiresAt": "2026-09-02T00:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        },
+        "evaluatedAt": "2026-09-03T00:00:00Z",
+        "relevantFactPaths": [
+          "invoice."
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.expired-decision-missing-current",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: expired-decision-missing-current.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "actor": {
+            "id": "alice"
+          },
+          "subjectFacts": {
+            "invoice": {
+              "amount": 10
+            },
+            "flag": false
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T10:00:00Z",
+          "expiresAt": "2026-09-02T00:00:00Z"
+        },
+        "evaluatedAt": "2026-09-03T00:00:00Z"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.swapped-approved",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004",
+        "APPROVAL-FACT-001"
+      ],
+      "description": "Approval fact/history contract: swapped-approved.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "REJECTED",
+          "rejectedOutcome": "APPROVED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "subjectFacts": {
+              "invoice": {
+                "amount": 10
+              },
+              "flag": false
+            },
+            "outcome": "APPROVED",
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "REJECTED"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.stale-approved-first",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: stale-approved-first.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "subjectFacts": {
+              "invoice": {
+                "amount": 11
+              },
+              "flag": false
+            },
+            "outcome": "APPROVED",
+            "decidedAt": "2026-09-01T10:00:00Z"
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "subjectFacts": {
+              "invoice": {
+                "amount": 10
+              },
+              "flag": false
+            },
+            "outcome": "REJECTED",
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "REJECTED"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.stale-approved-last",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: stale-approved-last.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "subjectFacts": {
+              "invoice": {
+                "amount": 10
+              },
+              "flag": false
+            },
+            "outcome": "REJECTED",
+            "decidedAt": "2026-09-01T10:00:00Z"
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "subjectFacts": {
+              "invoice": {
+                "amount": 11
+              },
+              "flag": false
+            },
+            "outcome": "APPROVED",
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "REJECTED"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.swapped-rejected",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-REQUIREMENT-004",
+        "APPROVAL-FACT-001"
+      ],
+      "description": "Approval fact/history contract: swapped-rejected.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "REJECTED",
+          "rejectedOutcome": "APPROVED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "subjectFacts": {
+              "invoice": {
+                "amount": 10
+              },
+              "flag": false
+            },
+            "outcome": "REJECTED",
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.stale-rejected-first",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: stale-rejected-first.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "subjectFacts": {
+              "invoice": {
+                "amount": 11
+              },
+              "flag": false
+            },
+            "outcome": "REJECTED",
+            "decidedAt": "2026-09-01T10:00:00Z"
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "subjectFacts": {
+              "invoice": {
+                "amount": 10
+              },
+              "flag": false
+            },
+            "outcome": "APPROVED",
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.stale-rejected-last",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: stale-rejected-last.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "subjectFacts": {
+              "invoice": {
+                "amount": 10
+              },
+              "flag": false
+            },
+            "outcome": "APPROVED",
+            "decidedAt": "2026-09-01T10:00:00Z"
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "subjectFacts": {
+              "invoice": {
+                "amount": 11
+              },
+              "flag": false
+            },
+            "outcome": "REJECTED",
+            "decidedAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "currentSubjectFacts": {
+          "invoice": {
+            "amount": 10
+          },
+          "flag": false
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "APPROVED"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.negative-zero",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: negative-zero.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "actor": {
+            "id": "alice"
+          },
+          "subjectFacts": -0.0,
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T10:00:00Z"
+        },
+        "currentSubjectFacts": 0
+      },
+      "expected": {
+        "status": "success",
+        "value": "EFFECTIVE"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.own-null",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: own-null.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "actor": {
+            "id": "alice"
+          },
+          "subjectFacts": {
+            "a": null
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T10:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "a": null
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "EFFECTIVE"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.nested-type",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: nested-type.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "actor": {
+            "id": "alice"
+          },
+          "subjectFacts": {
+            "a": [
+              1
+            ]
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T10:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "a": [
+            true
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": "INEFFECTIVE"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.facts097.array-index",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-FACT-002",
+        "APPROVAL-FACT-003"
+      ],
+      "description": "Approval fact/history contract: array-index.",
+      "operation": "approval.decision.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED"
+        },
+        "decision": {
+          "requirementId": "review",
+          "actor": {
+            "id": "alice"
+          },
+          "subjectFacts": {
+            "a": [
+              1
+            ]
+          },
+          "outcome": "APPROVED",
+          "decidedAt": "2026-09-01T10:00:00Z"
+        },
+        "currentSubjectFacts": {
+          "a": [
+            1
+          ]
+        },
+        "relevantFactPaths": [
+          "a.0"
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": "INEFFECTIVE"
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    }
+  ]
+}

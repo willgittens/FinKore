@@ -23,17 +23,18 @@ referenced requirement IDs, and traceability status.
 The local `core-0.9.6` tag identifies the latest completed corrective snapshot.
 The Core label remains `0.9-rc` and conformance syntax remains `0.1`.
 
-[Core 0.9.7 Milestone 3](../docs/plans/plan-09.7.md) closes F1/F4 composition
-validation on all four runtimes: 176 composition vectors pass. The manifest now
-contains 1630 vectors; 188 supplementary cases remain. Nine M2 composition cases
-were promoted with their existing IDs and full observation envelopes, and 38
-additional composition controls/regressions were added. Other domain corrections
-remain pending; this is not a full-domain conformance claim.
+[Core 0.9.7 Milestones 3–4](../docs/plans/plan-09.7.md) close composition and
+concrete Approval histories, conditions, and fact semantics on all four runtimes:
+all 579 Approval suite vectors pass. The manifest contains 1667 vectors and 182
+supplementary cases remain. M4 promotes six history-collision cases with their
+existing IDs and full observation envelopes and adds 31 fact/history controls.
+Native value retention and other domain corrections remain pending; this is not
+a full-domain conformance claim.
 
 [Core 0.9.7 Milestone 2](../docs/plans/plan-09.7.md) published 699 new
 full-envelope vectors and 197 supplementary native/adapter cases, alongside the
 unchanged 884 vectors, establishing a 1,583-vector baseline. Failures outside
-composition remain pending M4–M7; [traceability](traceability.md) stays open,
+the completed Approval scope remain pending M5–M7; [traceability](traceability.md) stays open,
 and D8 remains an unresolved contract gap. Supplementary tests assert exact
 domain results and input preservation where optional diagnostics have no single
 portable envelope. They do not weaken the runner's exact comparison.

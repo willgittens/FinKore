@@ -2,6 +2,7 @@
 package org.finkore;
 
 import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,6 +40,13 @@ public final class Approvals {
   public static final String INVALID_CONTEXT = "FINKORE_APPROVAL_INVALID_CONTEXT";
 
   private static final Missing MISSING = new Missing();
+  /**
+   * Represents omitted current facts or selectors at concrete evaluation APIs.
+   * Explicit null remains a supplied fact value and is invalid as a selector.
+   * This marker is not a portable fact value or an empty-history substitute.
+   * @see <a href="../../../../../../spec/approvals/decisions.md">APPROVAL-FACT-001</a>
+   */
+  public static final Object OMITTED = new Missing();
 
   private Approvals() {}
 
@@ -64,6 +72,8 @@ public final class Approvals {
    * eligibility. Every new or historical Decision needs explicit subjectFacts;
    * null is valid. Malformed declarations or evidence yield INVALID_DECISION,
    * while valid eligibility excluding the new Actor yields INELIGIBLE_ACTOR.
+   * The proposed history is revalidated before return; a newly ambiguous retained
+   * lifecycle reference yields INVALID_DECISION without changing either history.
    *
    * @param requirement portable Approval Requirement
    * @param decision portable Approval Decision
@@ -72,13 +82,13 @@ public final class Approvals {
    * @throws FinKoreException with Approval portable error code
    * @see <a href="../../../../../../spec/approvals/decisions.md">APPROVAL-DECISION-002</a>
    * @see <a href="../../../../../../spec/approvals/decisions.md">APPROVAL-DECISION-007</a>
-   * @see <a href="../../../../../../spec/approvals/validity.md">APPROVAL-VALIDITY-001/002/012</a>
+   * @see <a href="../../../../../../spec/approvals/validity.md">APPROVAL-VALIDITY-001/002/012/015</a>
    */
   public static Map<String, Object> recordDecision(Object requirement, Object decision, Object history) {
     Map<String, Object> req = validateRequirement(requirement);
     DecisionSet current = normalizeDecisionSet(history);
     Map<String, Object> recorded = validateDecision(req, decision);
-    return historyEnvelope(append(current.history(), recorded), current.lifecycle());
+    return importHistory(historyEnvelope(append(current.history(), recorded), current.lifecycle()));
   }
 
   /**
@@ -89,7 +99,7 @@ public final class Approvals {
    *
    * @param decision portable Approval Decision
    * @param currentSubjectFacts current subject facts
-   * @param relevantFactPaths optional relevant fact paths
+   * @param relevantFactPaths relevant fact paths; legacy null skips fact comparison
    * @param evaluatedAt optional explicit evaluation instant
    * @return {@code EFFECTIVE} or {@code INEFFECTIVE}
    * @throws FinKoreException with Approval portable error code
@@ -115,12 +125,14 @@ public final class Approvals {
    * Evaluates a concrete Decision against its Requirement, facts and expiration.
    * Validates subject, eligibility and association before effectiveness checks.
    * Without lifecycle history this makes no withdrawal or supersession claim.
-   * Inputs remain unchanged. The four-argument overload is a separate helper.
+   * Inputs remain unchanged. Selectors are validated before expiration filtering.
+   * Equality is structural and type-sensitive; accepted numbers compare exactly
+   * without decimal scale significance. The four-argument overload is a separate helper.
    *
    * @param requirement concrete Requirement with subject and eligibility
    * @param decision complete associated Decision
    * @param currentSubjectFacts current facts to compare
-   * @param relevantFactPaths optional relevant paths; null compares all facts
+   * @param relevantFactPaths nonempty own-member paths, or {@link #OMITTED} for all facts; null is invalid
    * @param evaluatedAt explicit portable timestamp required for expiration
    * @return EFFECTIVE or INEFFECTIVE
    * @throws FinKoreException INVALID_DECISION for malformed/mismatched evidence,
@@ -132,10 +144,9 @@ public final class Approvals {
       Object requirement, Object decision, Object currentSubjectFacts,
       Object relevantFactPaths, Object evaluatedAt) {
     Map<String, Object> item = validateDecision(validateRequirement(requirement), decision);
+    validateComparison(currentSubjectFacts, relevantFactPaths, false);
     if (expired(item, evaluatedAt)) return "INEFFECTIVE";
-    boolean matches = relevantFactPaths == null
-        ? Objects.equals(item.get("subjectFacts"), currentSubjectFacts)
-        : factsMatch(item.get("subjectFacts"), currentSubjectFacts, relevantFactPaths);
+    boolean matches = factsMatch(item.get("subjectFacts"), currentSubjectFacts, relevantFactPaths);
     return matches ? "EFFECTIVE" : "INEFFECTIVE";
   }
 
@@ -149,8 +160,8 @@ public final class Approvals {
    *
    * @param requirement portable Approval Requirement
    * @param decisions history list or history envelope
-   * @param currentSubjectFacts current subject facts
-   * @param relevantFactPaths optional fact paths that determine continued effectiveness
+   * @param currentSubjectFacts supplied facts, including null; {@link #OMITTED} with omitted paths retains history-only evaluation
+   * @param relevantFactPaths nonempty own-member paths, or {@link #OMITTED} for all supplied facts
    * @param evaluatedAt optional explicit evaluation instant
    * @return {@code APPROVED}, {@code REJECTED}, or {@code PENDING}
    * @throws FinKoreException with Approval portable error code
@@ -165,6 +176,7 @@ public final class Approvals {
       Object evaluatedAt) {
     Map<String, Object> req = validateRequirement(requirement);
     DecisionSet decisionSet = normalizeDecisionSet(decisions);
+    validateComparison(currentSubjectFacts, relevantFactPaths, true);
     for (Map<String, Object> decision : decisionSet.history()) {
       if (decisionConsidered(req, decision, decisionSet.lifecycle()) && decision.containsKey("expiresAt")) {
         instant(evaluatedAt, INVALID_CONTEXT);
@@ -174,8 +186,8 @@ public final class Approvals {
     boolean rejected = false;
     for (Map<String, Object> decision : decisionSet.history()) {
       if (decisionCurrent(req, decision, decisionSet.lifecycle(), currentSubjectFacts, relevantFactPaths, evaluatedAt)) {
-        approved = approved || "APPROVED".equals(decision.get("outcome"));
-        rejected = rejected || "REJECTED".equals(decision.get("outcome"));
+        approved = approved || Objects.equals(req.get("approvedOutcome"), decision.get("outcome"));
+        rejected = rejected || Objects.equals(req.get("rejectedOutcome"), decision.get("outcome"));
       }
     }
     if (rejected) {
@@ -186,23 +198,29 @@ public final class Approvals {
 
   /**
    * Evaluates an Approval Condition from explicit facts and explicit result.
+   * Validates a nonempty distinct required-path declaration before accepting any
+   * result. Dot-separated paths traverse own map members, without array indexing.
+   * Present null, false, and zero leaves count as facts. Inputs remain unchanged.
    *
    * @param condition portable condition
-   * @param facts explicit fact map
+   * @param facts explicit fact map, or {@link #OMITTED} for absent evidence
    * @param result explicit result supplied by the composing domain
    * @return {@code APPLICABLE} or {@code NOT_APPLICABLE}
+   * @throws FinKoreException INVALID_DECISION for malformed declarations/facts,
+   *     CONDITION_UNRESOLVED for missing facts or explicit result
+   * @see <a href="../../../../../../spec/approvals/conditions.md">APPROVAL-CONDITION-007</a>
+   * @see <a href="../../../../../../spec/approvals/decisions.md">APPROVAL-FACT-002</a>
    */
   public static String evaluateCondition(Object condition, Object facts, Object result) {
-    if (!(condition instanceof Map<?, ?> conditionMap) || !(facts instanceof Map<?, ?> factsMap)) {
-      throw new FinKoreException(CONDITION_UNRESOLVED);
-    }
-    Object requiredFacts = conditionMap.get("requiredFacts");
-    if (requiredFacts instanceof List<?> factList) {
-      for (Object fact : factList) {
-        if (!(fact instanceof String key) || !factsMap.containsKey(key)) {
-          throw new FinKoreException(CONDITION_UNRESOLVED);
-        }
-      }
+    if (!(condition instanceof Map<?, ?> conditionMap)) throw new FinKoreException(INVALID_DECISION);
+    requiredString(conditionMap.get("id"), INVALID_DECISION);
+    requiredString(conditionMap.get("evaluation"), INVALID_DECISION);
+    List<String> requiredFacts = validatePaths(conditionMap.get("requiredFacts"));
+    if (new HashSet<>(requiredFacts).size() != requiredFacts.size()) throw new FinKoreException(INVALID_DECISION);
+    if (facts == OMITTED) throw new FinKoreException(CONDITION_UNRESOLVED);
+    if (!(facts instanceof Map<?, ?>)) throw new FinKoreException(INVALID_DECISION);
+    for (String fact : requiredFacts) {
+      if (path(facts, fact) == MISSING) throw new FinKoreException(CONDITION_UNRESOLVED);
     }
     if (!"APPLICABLE".equals(result) && !"NOT_APPLICABLE".equals(result)) {
       throw new FinKoreException(CONDITION_UNRESOLVED);
@@ -225,6 +243,7 @@ public final class Approvals {
     if (requirements.isEmpty() || new HashSet<>(requirements).size() != requirements.size()) {
       throw new FinKoreException(INVALID_CHAIN);
     }
+    if (!"REJECTED".equals(chainMap.get("rejectionOutcome"))) throw new FinKoreException(INVALID_CHAIN);
     Object mode = chainMap.get("mode");
     if (!"SEQUENTIAL".equals(mode) && !"UNORDERED".equals(mode)) {
       throw new FinKoreException(INVALID_CHAIN);
@@ -428,8 +447,10 @@ public final class Approvals {
     if (eligible.isEmpty() || new HashSet<>(eligible).size() != eligible.size()) {
       throw new FinKoreException(INVALID_DECISION);
     }
-    if (!"APPROVED".equals(req.getOrDefault("approvedOutcome", "APPROVED"))
-        || !"REJECTED".equals(req.getOrDefault("rejectedOutcome", "REJECTED"))) {
+    if (!(req.get("approvedOutcome") instanceof String) || !(req.get("rejectedOutcome") instanceof String)
+        || !Set.of("APPROVED", "REJECTED").contains(req.get("approvedOutcome"))
+        || !Set.of("APPROVED", "REJECTED").contains(req.get("rejectedOutcome"))
+        || Objects.equals(req.get("approvedOutcome"), req.get("rejectedOutcome"))) {
       throw new FinKoreException(INVALID_DECISION);
     }
     return copyMap(req, INVALID_DECISION);
@@ -460,6 +481,8 @@ public final class Approvals {
     if (actorId(item.get("actor")) == null) {
       throw new FinKoreException(INVALID_DECISION);
     }
+    Map<?, ?> actor = (Map<?, ?>) item.get("actor");
+    if (actor.containsKey("type")) requiredString(actor.get("type"), INVALID_DECISION);
     if (!item.containsKey("subjectFacts")) {
       throw new FinKoreException(INVALID_DECISION);
     }
@@ -471,15 +494,12 @@ public final class Approvals {
   }
 
   private static DecisionSet normalizeDecisionSet(Object decisions) {
-    if (decisions == null) {
-      return new DecisionSet(List.of(), List.of());
-    }
     if (decisions instanceof List<?> list) {
       return new DecisionSet(validateHistory(list), List.of());
     }
     if (decisions instanceof Map<?, ?> raw) {
       Map<String, Object> map = stringObjectMap(raw, INVALID_DECISION);
-      Object history = map.getOrDefault("history", List.of());
+      Object history = map.get("history");
       Object lifecycle = map.getOrDefault("lifecycle", List.of());
       List<Map<String, Object>> current = validateHistory(listValue(history, INVALID_DECISION));
       List<Map<String, Object>> validated = new ArrayList<>();
@@ -529,7 +549,7 @@ public final class Approvals {
     if (expired(decision, evaluatedAt) || Boolean.FALSE.equals(decision.get("effective"))) {
       return false;
     }
-    return relevantFactPaths == null || factsMatch(decision.get("subjectFacts"), currentSubjectFacts, relevantFactPaths);
+    return currentSubjectFacts == OMITTED || factsMatch(decision.get("subjectFacts"), currentSubjectFacts, relevantFactPaths);
   }
 
   private static boolean expired(Map<String, Object> decision, Object evaluatedAt) {
@@ -542,12 +562,57 @@ public final class Approvals {
     return instant(evaluatedAt, INVALID_CONTEXT).compareTo(instant(decision.get("expiresAt"), INVALID_CONTEXT)) >= 0;
   }
 
+  private static List<String> validatePaths(Object paths) {
+    List<String> result = stringList(paths, INVALID_DECISION);
+    if (result.isEmpty()) throw new FinKoreException(INVALID_DECISION);
+    for (String value : result) {
+      for (String part : value.split("\\.", -1)) {
+        if (part.isEmpty()) throw new FinKoreException(INVALID_DECISION);
+      }
+    }
+    return result;
+  }
+
+  private static void validateComparison(Object facts, Object paths, boolean allowOmission) {
+    if (paths != OMITTED) validatePaths(paths);
+    if (facts == OMITTED && (!allowOmission || paths != OMITTED)) throw new FinKoreException(INVALID_DECISION);
+  }
+
+  // Exact accepted numeric values, never via double or arbitrary Number coercion.
+  private static BigDecimal factNumber(Object value) {
+    Class<?> kind = value.getClass();
+    if (kind == BigDecimal.class) return (BigDecimal) value;
+    if (kind == BigInteger.class) return new BigDecimal((BigInteger) value);
+    if (kind == Byte.class || kind == Short.class || kind == Integer.class || kind == Long.class) return BigDecimal.valueOf(((Number) value).longValue());
+    if (kind == Float.class && Float.isFinite((Float) value)) return new BigDecimal(Float.toString((Float) value));
+    if (kind == Double.class && Double.isFinite((Double) value)) return new BigDecimal(Double.toString((Double) value));
+    throw new FinKoreException(INVALID_DECISION);
+  }
+
+  private static boolean factEqual(Object left, Object right) {
+    if (left instanceof Number || right instanceof Number) {
+      return left instanceof Number && right instanceof Number && factNumber(left).compareTo(factNumber(right)) == 0;
+    }
+    if (left instanceof Map<?, ?> || right instanceof Map<?, ?>) {
+      if (!(left instanceof Map<?, ?> a) || !(right instanceof Map<?, ?> b) || !a.keySet().equals(b.keySet())) return false;
+      for (Object key : a.keySet()) if (!factEqual(a.get(key), b.get(key))) return false;
+      return true;
+    }
+    if (left instanceof List<?> || right instanceof List<?>) {
+      if (!(left instanceof List<?> a) || !(right instanceof List<?> b) || a.size() != b.size()) return false;
+      for (int i = 0; i < a.size(); i++) if (!factEqual(a.get(i), b.get(i))) return false;
+      return true;
+    }
+    return Objects.equals(left, right);
+  }
+
   private static boolean factsMatch(Object decisionFacts, Object currentFacts, Object paths) {
-    List<String> pathList = stringList(paths, INVALID_DECISION);
+    if (paths == OMITTED) return factEqual(decisionFacts, currentFacts);
+    List<String> pathList = validatePaths(paths);
     for (String factPath : pathList) {
       Object left = path(decisionFacts, factPath);
       Object right = path(currentFacts, factPath);
-      if (left == MISSING || right == MISSING || !Objects.equals(left, right)) {
+      if (left == MISSING || right == MISSING || !factEqual(left, right)) {
         return false;
       }
     }

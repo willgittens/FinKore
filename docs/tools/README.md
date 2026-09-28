@@ -292,7 +292,7 @@ intentionally leaves financial tests red and cannot pass release verification.
 
 ## Composition milestone checks
 
-While unrelated M4–M7 regressions remain red, M3 has explicit scoped checks.
+While M5–M7 regressions remain red, composition has explicit scoped checks.
 The default complete-suite gates remain unchanged:
 
 ```sh
@@ -311,3 +311,30 @@ and probes, with a passing baseline required first. Omitting it retains the full
 suite. Package `--composition` runs installed composition consumers on npm,
 Python wheel/sdist on both versions, and the JAR. Those same assertions also run
 in the default complete package checks. Neither filter claims full conformance.
+
+## Approval milestone checks
+
+M4 checks the full Approval vector suite, returned-history reuse, and exact fact
+comparison while M5–M7 remain pending. Default complete-suite gates still include
+all outstanding regressions:
+
+```sh
+npm exec -w @finkore/typescript -- vitest run --config vitest.approvals.config.ts --coverage
+npm exec -w @finkore/typescript -- stryker run stryker.approvals.config.json
+PYTHONPATH=implementations/python/core/src .tools/bin/python3.12 -m unittest discover -s implementations/python/core/tests -p test_approval_contracts.py
+PYTHONPATH=implementations/python/core/src .tools/bin/python3.13 -m unittest discover -s implementations/python/core/tests -p test_approval_contracts.py
+.tools/bin/mvn -f implementations/java/core/pom.xml -Dtest=ApprovalContractsCoverageTest test
+node docs/tools/mutation-critical.js all approvals --paired
+FINKORE_PYTHON_PATH=.tools/bin/python3.13 node docs/tools/mutation-critical.js python approvals --paired
+node docs/tools/mutation-native.js approval097
+FINKORE_PYTHON_PATH=.tools/bin/python3.13 node docs/tools/mutation-native.js python-approval097
+node docs/tools/check-packages.js --approvals
+```
+
+`--paired` retains the entire selected suite's passing baseline, then runs each
+mutant's named regression and independent controls. Without the flag, each mutant
+runs the entire selected suite. Native `approval097` probes require the dedicated
+Approval contract baseline, including vector results and actual history reuse.
+The complete native gate retains its broader baseline. Package `--approvals`
+checks installed composition plus concrete history/facts/condition APIs in npm,
+both Python wheel/sdist versions, and the JAR; these assertions also run by default.

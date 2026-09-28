@@ -44,6 +44,26 @@ public final class FinKoreConsumer {
       System.out.println("Installed JAR composition checks passed");
       return;
     }
+    Map<String, Object> req097 = Map.of("id", "review", "subject", Map.of("type", "invoice", "id", "1"), "eligibleActors", List.of("alice"), "approvedOutcome", "APPROVED", "rejectedOutcome", "REJECTED");
+    Map<String, Object> dec097 = Map.of("requirementId", "review", "actor", Map.of("id", "alice"), "outcome", "APPROVED", "subjectFacts", Map.of("invoice", Map.of("amount", new java.math.BigDecimal("1.00"))), "decidedAt", "2026-09-01T12:00:00Z");
+    Map<String, Object> hist097 = Approvals.recordDecision(req097, dec097, List.of());
+    equal("PENDING", Approvals.evaluateRequirement(req097, hist097, Map.of("invoice", Map.of("amount", 2)), Approvals.OMITTED, null));
+    equal("EFFECTIVE", Approvals.evaluateDecision(req097, dec097, Map.of("invoice", Map.of("amount", 1)), Approvals.OMITTED, null));
+    error(Approvals.INVALID_DECISION, () -> Approvals.evaluateDecision(req097, dec097, dec097.get("subjectFacts"), null, null));
+    Map<String, Object> cond097 = Map.of("id", "c", "requiredFacts", List.of("invoice.amount"), "evaluation", "external");
+    equal("APPLICABLE", Approvals.evaluateCondition(cond097, Map.of("invoice", java.util.Collections.singletonMap("amount", null)), "APPLICABLE"));
+    error(Approvals.CONDITION_UNRESOLVED, () -> Approvals.evaluateCondition(cond097, Map.of("invoice.amount", 1), "APPLICABLE"));
+    Map<String, Object> wd097 = Approvals.withdrawDecision(req097, hist097, Map.of("target", Map.of("requirementId", "review", "actorId", "alice", "decidedAt", dec097.get("decidedAt")), "actor", Map.of("id", "alice"), "recordedAt", "2026-09-02T00:00:00Z"));
+    Map<String, Object> before097 = Approvals.importHistory(wd097);
+    Map<String, Object> collision097 = new LinkedHashMap<>(dec097);
+    collision097.put("subjectFacts", null);
+    error(Approvals.INVALID_DECISION, () -> Approvals.recordDecision(req097, collision097, wd097));
+    equal(before097, wd097);
+    equal("PENDING", Approvals.evaluateRequirement(req097, Approvals.importHistory(wd097), Approvals.OMITTED, Approvals.OMITTED, null));
+    if (List.of(args).contains("--approvals")) {
+      System.out.println("Installed JAR Approval checks passed");
+      return;
+    }
     equal("0.9-rc", FinKore.CORE_VERSION);
     Money money = Money.fromPortable(Map.of("amount", "1.239", "currency", "EUR"));
     error("FINKORE_MONEY_ROUNDING_REQUIRED", () -> money.toPortable(2));
@@ -96,14 +116,14 @@ public final class FinKoreConsumer {
     String expiry = "2026-09-26T10:00:00.123456789Z";
     Map<String, Object> decision = Map.of("requirementId", "review", "actor", Map.of("id", "alice"), "outcome", "APPROVED",
         "subjectFacts", Map.of(), "decidedAt", "2026-09-01T00:00:00Z", "expiresAt", expiry);
-    equal("INEFFECTIVE", Approvals.evaluateDecision(requirement, decision, Map.of(), null, expiry));
-    error(Approvals.INVALID_CONTEXT, () -> Approvals.evaluateDecision(requirement, decision, Map.of(), null, null));
+    equal("INEFFECTIVE", Approvals.evaluateDecision(requirement, decision, Map.of(), Approvals.OMITTED, expiry));
+    error(Approvals.INVALID_CONTEXT, () -> Approvals.evaluateDecision(requirement, decision, Map.of(), Approvals.OMITTED, null));
     Map<String, Object> history = Approvals.recordDecision(requirement, decision, List.of());
     Map<String, Object> withdrawal = Map.of("target", Map.of("requirementId", "review", "actorId", "alice", "decidedAt", decision.get("decidedAt")),
         "actor", Map.of("id", "alice"), "recordedAt", expiry);
     Map<String, Object> withdrawn = Approvals.withdrawDecision(requirement, history, withdrawal);
     equal(withdrawn, Approvals.importHistory(withdrawn));
-    equal("PENDING", Approvals.evaluateRequirement(requirement, withdrawn, Map.of(), null, null));
+    equal("PENDING", Approvals.evaluateRequirement(requirement, withdrawn, Map.of(), Approvals.OMITTED, null));
     Map<String, Object> invalidEvent = new LinkedHashMap<>(withdrawal); invalidEvent.put("type", "UNKNOWN");
     error(Approvals.INVALID_DECISION, () -> Approvals.importHistory(Map.of("history", history.get("history"), "lifecycle", List.of(invalidEvent))));
     equal(Map.of("history", List.of(decision)), history);

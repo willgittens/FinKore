@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { validateFactComparison } from './approval-facts.js'
 import { ApprovalRequirement } from './approval-requirement.js'
 import { IneligibleApprovalActorError, InvalidApprovalContextError, InvalidApprovalDecisionError } from './errors.js'
 import { comparePortableTimestamps, parsePortableTimestamp } from '../portable-timestamp.js'
@@ -48,14 +49,6 @@ function validateActor(value: unknown): SerializedApprovalActor {
   return { id: requiredString(value.id), ...(type === undefined ? {} : { type }) }
 }
 
-function validateRelevantFactPaths(value: readonly string[] | undefined): readonly string[] | undefined {
-  if (value === undefined) return undefined
-  if (!Array.isArray(value) || value.some((path) => typeof path !== 'string' || path.length === 0)) {
-    throw new InvalidApprovalDecisionError()
-  }
-  return value
-}
-
 function hasPath(value: unknown, path: string): boolean {
   let current = value
   for (const segment of path.split('.')) {
@@ -82,7 +75,7 @@ function jsonFactShape(value: unknown): JsonFactShape | undefined {
 }
 
 function jsonEquivalent(left: unknown, right: unknown): boolean {
-  if (Object.is(left, right)) return true
+  if (left === right) return true
 
   const leftShape = jsonFactShape(left)
   const rightShape = jsonFactShape(right)
@@ -197,6 +190,9 @@ export class ApprovalDecision {
    * before comparing relevant facts. Neither input nor history is mutated.
    * Without lifecycle history this makes no withdrawal/supersession claim.
    *
+   * Omitted selectors compare complete facts; null/empty selectors are invalid
+   * before expiration filtering. Equality is structural and type-sensitive.
+   *
    * @param requirementInput - Concrete Requirement with subject and eligibility.
    * @param decisionInput - Complete Decision associated with that Requirement.
    * @param currentSubjectFacts - Current facts; absent paths compare all facts.
@@ -218,6 +214,7 @@ export class ApprovalDecision {
     evaluatedAt?: unknown,
   ): ApprovalDecisionEffectiveness {
     const decision = ApprovalDecision.forRequirement(ApprovalRequirement.from(requirementInput), decisionInput)
+    validateFactComparison(currentSubjectFacts, relevantFactPaths)
     if (decision.expiresAt !== undefined) {
       try {
         if (typeof evaluatedAt !== 'string') throw new InvalidApprovalContextError()
@@ -303,7 +300,7 @@ export class ApprovalDecision {
     currentSubjectFacts: unknown,
     relevantFactPaths?: readonly string[],
   ): ApprovalDecisionEffectiveness {
-    const paths = validateRelevantFactPaths(relevantFactPaths)
+    const paths = validateFactComparison(currentSubjectFacts, relevantFactPaths)
     if (paths === undefined) {
       return jsonEquivalent(this.value.subjectFacts, currentSubjectFacts) ? 'EFFECTIVE' : 'INEFFECTIVE'
     }
