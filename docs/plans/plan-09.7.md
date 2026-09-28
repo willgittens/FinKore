@@ -542,32 +542,130 @@ CoreDoc obligations and AGENTS.md architecture/rules are unchanged; no foundatio
 version update, release note, provenance record, tag, publication, or Core 1.0
 promotion is needed or performed.
 
-**M2 regression/discovery work is complete. M3–M7 implementation remains
-pending; D8 is deliberately unresolved and implementation scope is not closed.**
+**At M2 completion, implementation remained pending. M3 is now complete below;
+M4–M7 and D8 remain open. Implementation scope is not closed.**
 
 ## Milestone 3 — Complete composition validation and quorum evidence
 
-- [ ] Fix F1 and F4 in all affected cores. Validate every declared group's
+- [x] Fix F1 and F4 in all affected cores. Validate every declared group's
       structure and references, including disconnected cycles and missing children,
       before returning an outcome.
-- [ ] Validate required eligibility and outcome evidence explicitly; remove
+- [x] Validate required eligibility and outcome evidence explicitly; remove
       defaults that make a declared voter eligible or manufacture an outcome
       mapping. Preserve the lightweight composition-observation boundary rather
       than requiring an invented concrete subject schema.
-- [ ] Preserve APPROVAL-ERROR-010 across invalid structure, unresolved
+- [x] Preserve APPROVAL-ERROR-010 across invalid structure, unresolved
       applicability, required context, and invalid state/effectiveness evidence.
       Exercise mixed failures in both declaration orders and after decisive roots.
-- [ ] Preserve quorum member-specific counting, opposing-vote rejection,
+- [x] Preserve quorum member-specific counting, opposing-vote rejection,
       threshold capacity, inapplicability, and ordered actionability. Validation
       of unused/later declarations must not make them actionable.
-- [ ] Add critical mutations for implicit eligibility/mapping, skipped
+- [x] Add critical mutations for implicit eligibility/mapping, skipped
       disconnected validation, and early outcome return, with paired controls.
-- [ ] Update affected public API documentation, vectors, traceability, and
+- [x] Update affected public API documentation, vectors, traceability, and
       package behavior together with the implementation.
 
 Completion: invalid declarations or incomplete required evidence cannot produce
 approval through any reviewed placement; valid compositions retain their exact
 outcome and actionable Requirement order on every runtime.
+
+### M3 implementation and verification — 2026-09-28
+
+F1/F4 are corrected in all three cores. Whole-declaration graph validation uses
+incoming-edge counts to reject missing children and cycles without recursion
+through arbitrarily long unused components. The existing depth-four check still
+starts only at actual standalone/stage roots. All applicable declared quorum
+members are validated before outcome selection, including opposing effective
+votes in unused groups. Python/Java no longer infer eligibility or either
+outcome mapping. Valid unused declarations never contribute actionables.
+
+The additional F1 null-Decision-container discovery is also fixed. Omitted
+composition decisions retain the empty-list convenience; explicit null/None
+uses INVALID_CHAIN. Python callers using None as an omission placeholder must
+omit it or pass []; Java callers use the new three-argument evaluateComposition
+omission overload or an explicit empty List. Adapters preserve presence and
+only translate fixtures. Concrete Approval collection changes remain M4.
+
+Permanent regressions were demonstrated red before correction: the initial
+155-vector native set had 15 TypeScript failures and 42 Python assertion failures
+plus three native exceptions; Java first failed by approving missing eligibility.
+The added null-container test also failed before its correction. Final coverage
+includes every composition manifest vector at each native boundary, exact output
+and error assertions, and unchanged-input checks. The Java opposing-vote unit
+fixture now supplies valid explicit effectiveness/mappings and an approving
+control, so missing evidence cannot satisfy that negative test accidentally.
+
+`conformance/approvals/composition-validation.json` adds 47 full-envelope cases:
+nine promoted supplementary cases retain their IDs and paired-control references,
+and 38 further cases exercise mixed-member priority in both declaration orders,
+unused conflicts, decisive pending/rejected/no-obligation roots, optional malformed
+inapplicable evidence, swapped mappings, empty votes, null/omitted collections,
+and the valid unused depth-eight control. The manifest contains 1630 vectors;
+188 supplementary cases remain, without duplicate IDs.
+
+Verification:
+
+- All **176 composition vectors pass on TypeScript, CPython 3.12, CPython 3.13,
+  and Java**, both through native APIs and real adapters. No composition case is
+  unsupported or an infrastructure error. TypeScript's scoped suite has 244 tests.
+- TypeScript composition coverage is 100% for statements, branches, functions,
+  and lines. Native composition-function line coverage is 193/210 (91.90%) for
+  Python and 243/257 (94.55%) for Java composition methods. These scoped coverage
+  results do not claim whole-package coverage; unrelated red suites still block
+  the complete coverage gates.
+- Stryker composition score is **97.62%**: 735 killed, two timed out, 18 survived,
+  no uncovered or errored mutants. No exclusions were added. All 16 Python
+  critical probes pass on each Python runtime; all 18 Java critical probes pass.
+  Each probe requires its named behavioral failure and independent passing
+  controls; infrastructure failures do not count. Two legacy applicability
+  probes now model an invalid applicability assumption without crashing when
+  required evidence is absent, and the Java container probe targets the new
+  explicit-list validation. Their original regression/control assertions remain.
+- Installed npm, Python wheel and sdist on both runtimes, and JAR consumers pass
+  the composition controls, missing-evidence failures, disconnected cycles,
+  explicit null rejection, and native omission convenience. Default package
+  verification still includes all later-milestone assertions; scoped verification
+  is available with `node docs/tools/check-packages.js --composition`.
+- Build, strict TypeScript, Java warning-as-error compilation, developer-tool
+  tests, architecture, documentation/traceability, licensing, and whitespace
+  checks pass. Scoped commands are documented in `docs/tools/README.md`.
+
+The surviving TypeScript mutants were reviewed against observable behavior:
+219 adds only an unused NaN scratch-map entry for a non-group member; 311 adds
+an ineffective ignored placeholder to an omitted Decision list; 318/321/328
+leave malformed context falsy through the timestamp parser/catch; 376 adds only
+an unused undefined state-requirement key; 455/456/458 loosen redundant mapping
+presence guards without changing equality; 514 changes an unused internal
+applicability label; 548 changes the private rejected-member label while retaining
+its zero approvals/zero pending capacity; 613 and 615 change only omitted or
+non-pending internal fields; 696/698/700/726/727 change stage no-obligation/internal
+approved representations that never become open or actionable. None changes a
+portable outcome, error, order, or input. These remain counted as survivors.
+
+Full 1630-vector results remain red outside composition, as expected for M4–M7:
+
+| Runtime | PASS | FAIL | INFRASTRUCTURE_ERROR | UNSUPPORTED |
+| --- | ---: | ---: | ---: | ---: |
+| TypeScript | 1541 | 88 | 1 | 0 |
+| CPython 3.12 | 1180 | 423 | 27 | 0 |
+| CPython 3.13 | 1180 | 423 | 27 | 0 |
+| Java | 1284 | 346 | 0 | 0 |
+
+Full unit suites were also executed and retain non-composition M4–M7 failures.
+All original 884 conformance vectors still pass on every runtime.
+The reported infrastructure results are existing domain-boundary failures, not
+accepted portable errors. No full-domain or release verification is claimed.
+
+Completion review: unit/vector/critical mutation tests, API JSDoc/docstrings,
+package consumers, root/package READMEs, conventions, and traceability are updated.
+Eleven F1/F4 requirement rows return to COVERED (299 covered, 52 partial, 80 not
+directly testable, one D8 gap). The accepted `/spec` contracts already define this
+behavior; no new normative requirement is introduced. Agentic metadata needs no
+change: composition remains a conformance-local operation and canonical operation
+IDs/effects are unchanged. CoreDoc and AGENTS.md obligations and architecture
+remain unchanged. No release note, tag, publication, or Core 1.0 promotion occurs.
+
+**M3 is complete. M4–M7 remain pending; D8 remains unresolved.**
 
 ## Milestone 4 — Approval histories, conditions, and fact semantics
 

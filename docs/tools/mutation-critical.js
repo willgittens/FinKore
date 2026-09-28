@@ -15,14 +15,117 @@ import { assessMutationResult, conformanceBaselinePassed } from './mutation-resu
 const repositoryRoot = process.cwd()
 const requestedTarget = process.argv[2] ?? 'all'
 const requestedSuite = process.argv[3]
+const requestedOperation = process.argv[4]
+const manifest = JSON.parse(readFileSync(resolve(repositoryRoot, 'conformance/manifest.json'), 'utf8'))
+const vectorOperations = new Map(manifest.suites.flatMap(suite => suite.vectorFiles).flatMap(file =>
+  JSON.parse(readFileSync(resolve(repositoryRoot, 'conformance', file), 'utf8')).vectors,
+).map(vector => [vector.id, vector.operation]))
+const operationVectors = [...vectorOperations].filter(([, operation]) => operation === requestedOperation).map(([id]) => id)
+if (requestedOperation !== undefined && operationVectors.length === 0) throw new Error('Unknown operation filter')
 const validTargets = new Set(['all', 'python', 'java'])
 
 if (!validTargets.has(requestedTarget)) {
-  console.error('Usage: node docs/tools/mutation-critical.js [all|python|java] [suite]')
+  console.error('Usage: node docs/tools/mutation-critical.js [all|python|java] [suite] [operation]')
   process.exit(2)
 }
 
 const pythonMutants = [
+{
+  "id": "python-composition097-null-decisions-as-omission",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "if decisions is not _MISSING and not isinstance(decisions, list):",
+  "to": "if decisions is None:\n        decisions = _MISSING\n    if decisions is not _MISSING and not isinstance(decisions, list):",
+  "expectedVector": "approval.composition097.decisions-null",
+  "expectedPassVectors": [
+    "approval.composition097.decisions-empty",
+    "approval.composition097.decisions-omitted"
+  ]
+},
+{
+  "id": "python-composition097-unused-reference-pass",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "    # Validate the entire graph without creating artificial depth roots.\n    incoming = dict.fromkeys(groups, 0)\n    for group in groups.values():\n        for member in group[\"members\"]:\n            if member[\"type\"] == \"group\":\n                child = member[\"groupId\"]\n                if child not in incoming:\n                    raise FinKoreError(INVALID_CHAIN)\n                incoming[child] += 1\n    pending = [key for key, count in incoming.items() if count == 0]\n    visited = 0\n    while pending:\n        group = groups[pending.pop()]\n        visited += 1\n        for member in group[\"members\"]:\n            if member[\"type\"] == \"group\":\n                child = member[\"groupId\"]\n                incoming[child] -= 1\n                if incoming[child] == 0:\n                    pending.append(child)\n    if visited != len(groups):\n        raise FinKoreError(INVALID_CHAIN)\n",
+  "to": "",
+  "expectedVector": "approval.boundary097.disconnected-last-missing-child-001",
+  "expectedPassVectors": [
+    "approval.composition097.unused-depth-eight-control",
+    "approval.boundary097.quorum-empty-votes-001"
+  ]
+},
+{
+  "id": "python-composition097-implicit-eligibility",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "req = reqs[key]\n        if \"eligibleActors\" in req",
+  "to": "req = dict(reqs[key])\n        req.setdefault(\"eligibleActors\", [\"alice\", \"bob\", \"carol\"])\n        reqs[key] = req\n        if \"eligibleActors\" in req",
+  "expectedVector": "approval.boundary097.quorum-eligibleactors-absent-001",
+  "expectedPassVectors": [
+    "approval.boundary097.quorum-control-001",
+    "approval.boundary097.quorum-empty-votes-001"
+  ]
+},
+{
+  "id": "python-composition097-implicit-approvedOutcome",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "req = reqs[key]\n        if \"eligibleActors\" in req",
+  "to": "req = dict(reqs[key])\n        req.setdefault(\"approvedOutcome\", \"APPROVED\")\n        reqs[key] = req\n        if \"eligibleActors\" in req",
+  "expectedVector": "approval.boundary097.quorum-approvedoutcome-absent-001",
+  "expectedPassVectors": [
+    "approval.boundary097.quorum-control-001",
+    "approval.boundary097.quorum-empty-votes-001"
+  ]
+},
+{
+  "id": "python-composition097-implicit-rejectedOutcome",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "req = reqs[key]\n        if \"eligibleActors\" in req",
+  "to": "req = dict(reqs[key])\n        req.setdefault(\"rejectedOutcome\", \"REJECTED\")\n        reqs[key] = req\n        if \"eligibleActors\" in req",
+  "expectedVector": "approval.boundary097.quorum-rejectedoutcome-absent-001",
+  "expectedPassVectors": [
+    "approval.boundary097.quorum-control-001",
+    "approval.boundary097.quorum-empty-votes-001"
+  ]
+},
+{
+  "id": "python-composition097-unused-cycles",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "if visited != len(groups):",
+  "to": "if False:",
+  "expectedVector": "approval.boundary097.disconnected-last-self-cycle-001",
+  "expectedPassVectors": [
+    "approval.composition097.unused-depth-eight-control",
+    "approval.boundary097.quorum-empty-votes-001"
+  ]
+},
+{
+  "id": "python-composition097-unused-vote-conflict",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "_quorum_member_state(req, member, decision_history)",
+  "to": "None",
+  "expectedVector": "approval.composition097.first-unused-opposing",
+  "expectedPassVectors": [
+    "approval.composition097.first-unused-valid",
+    "approval.boundary097.quorum-empty-votes-001"
+  ]
+},
+{
+  "id": "python-composition097-early-outcome",
+  "suite": "approvals",
+  "path": "core/src/finkore/approvals.py",
+  "from": "reqs = _validate_composition_requirements(requirements, context, groups)",
+  "to": "if composition.get(\"rootGroup\") == \"decisive\":\n        return {\"outcome\": \"APPROVED\", \"actionableRequirements\": []}\n    reqs = _validate_composition_requirements(requirements, context, groups)",
+  "expectedVector": "approval.boundary097.quorum-disconnected-eligibleactors-absent-001",
+  "expectedPassVectors": [
+    "approval.boundary097.quorum-disconnected-control-001",
+    "approval.boundary097.quorum-empty-votes-001"
+  ]
+},
 {
   "id": "python-approval096-concrete-subject-bypass",
   "suite": "approvals",
@@ -60,8 +163,8 @@ const pythonMutants = [
   "id": "python-approval096-applicability-bypass",
   "suite": "approvals",
   "path": "core/src/finkore/approvals.py",
-  "from": "if any(reqs[key].get(\"applicability\") not in (\"APPLICABLE\", \"NOT_APPLICABLE\") for key in required):",
-  "to": "if any(\"applicability\" not in reqs[key] for key in required):",
+  "from": "if any(reqs[key].get(\"applicability\") not in (\"APPLICABLE\", \"NOT_APPLICABLE\") for key in required):\n        raise FinKoreError(CONDITION_UNRESOLVED)",
+  "to": "for key in required:\n        if reqs[key].get(\"applicability\") not in (\"APPLICABLE\", \"NOT_APPLICABLE\"):\n            reqs[key] = {**reqs[key], \"applicability\": \"APPLICABLE\"}",
   "expectedVector": "approval.boundary096.applicability-null-001",
   "expectedPassVectors": [
     "approval.boundary096.state-all-of-control-001"
@@ -1165,11 +1268,107 @@ const pythonMutants = [
 
 const javaMutants = [
 {
+  "id": "java-composition097-null-decisions-as-omission",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "if (!(decisions instanceof List<?> list)) throw new FinKoreException(INVALID_CHAIN);",
+  "to": "if (decisions == null) decisions = List.of();\n    if (!(decisions instanceof List<?> list)) throw new FinKoreException(INVALID_CHAIN);",
+  "expectedVector": "approval.composition097.decisions-null",
+  "expectedPassVectors": [
+    "approval.composition097.decisions-empty",
+    "approval.composition097.decisions-omitted"
+  ]
+},
+{
+  "id": "java-composition097-unused-reference-pass",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "    // Check the whole graph without making disconnected declarations depth roots.\n    Map<String, Integer> incoming = new LinkedHashMap<>();\n    for (String id : groups.keySet()) incoming.put(id, 0);\n    for (Map<String, Object> group : groups.values()) {\n      for (Object item : (List<?>) group.get(\"members\")) {\n        Map<?, ?> member = (Map<?, ?>) item;\n        if (!\"group\".equals(member.get(\"type\"))) continue;\n        String child = (String) member.get(\"groupId\");\n        if (!incoming.containsKey(child)) throw new FinKoreException(INVALID_CHAIN);\n        incoming.put(child, incoming.get(child) + 1);\n      }\n    }\n    List<String> pending = new ArrayList<>();\n    incoming.forEach((id, count) -> { if (count == 0) pending.add(id); });\n    int visited = 0;\n    while (visited < pending.size()) {\n      Map<String, Object> group = groups.get(pending.get(visited++));\n      for (Object item : (List<?>) group.get(\"members\")) {\n        Map<?, ?> member = (Map<?, ?>) item;\n        if (!\"group\".equals(member.get(\"type\"))) continue;\n        String child = (String) member.get(\"groupId\");\n        int count = incoming.get(child) - 1;\n        incoming.put(child, count);\n        if (count == 0) pending.add(child);\n      }\n    }\n    if (visited != groups.size()) throw new FinKoreException(INVALID_CHAIN);\n",
+  "to": "",
+  "expectedVector": "approval.boundary097.disconnected-last-missing-child-001",
+  "expectedPassVectors": [
+    "approval.composition097.unused-depth-eight-control",
+    "approval.boundary097.quorum-empty-votes-001"
+  ]
+},
+{
+  "id": "java-composition097-implicit-eligibility",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "boolean needsState = \"APPLICABLE\".equals(req.get(\"applicability\")) && stateRequired.contains(id);",
+  "to": "req = new LinkedHashMap<>(req);\n      req.putIfAbsent(\"eligibleActors\", List.of(\"alice\", \"bob\", \"carol\"));\n      reqs.put(id, req);\n      boolean needsState = \"APPLICABLE\".equals(req.get(\"applicability\")) && stateRequired.contains(id);",
+  "expectedVector": "approval.boundary097.quorum-eligibleactors-absent-001",
+  "expectedPassVectors": [
+    "approval.boundary097.quorum-control-001",
+    "approval.boundary097.quorum-empty-votes-001"
+  ]
+},
+{
+  "id": "java-composition097-implicit-approvedOutcome",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "boolean needsState = \"APPLICABLE\".equals(req.get(\"applicability\")) && stateRequired.contains(id);",
+  "to": "req = new LinkedHashMap<>(req);\n      req.putIfAbsent(\"approvedOutcome\", \"APPROVED\");\n      reqs.put(id, req);\n      boolean needsState = \"APPLICABLE\".equals(req.get(\"applicability\")) && stateRequired.contains(id);",
+  "expectedVector": "approval.boundary097.quorum-approvedoutcome-absent-001",
+  "expectedPassVectors": [
+    "approval.boundary097.quorum-control-001",
+    "approval.boundary097.quorum-empty-votes-001"
+  ]
+},
+{
+  "id": "java-composition097-implicit-rejectedOutcome",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "boolean needsState = \"APPLICABLE\".equals(req.get(\"applicability\")) && stateRequired.contains(id);",
+  "to": "req = new LinkedHashMap<>(req);\n      req.putIfAbsent(\"rejectedOutcome\", \"REJECTED\");\n      reqs.put(id, req);\n      boolean needsState = \"APPLICABLE\".equals(req.get(\"applicability\")) && stateRequired.contains(id);",
+  "expectedVector": "approval.boundary097.quorum-rejectedoutcome-absent-001",
+  "expectedPassVectors": [
+    "approval.boundary097.quorum-control-001",
+    "approval.boundary097.quorum-empty-votes-001"
+  ]
+},
+{
+  "id": "java-composition097-unused-cycles",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "if (visited != groups.size()) throw new FinKoreException(INVALID_CHAIN);",
+  "to": "if (false) throw new FinKoreException(INVALID_CHAIN);",
+  "expectedVector": "approval.boundary097.disconnected-last-self-cycle-001",
+  "expectedPassVectors": [
+    "approval.composition097.unused-depth-eight-control",
+    "approval.boundary097.quorum-empty-votes-001"
+  ]
+},
+{
+  "id": "java-composition097-unused-vote-conflict",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "if (\"APPLICABLE\".equals(req.get(\"applicability\"))) quorumMemberState(req, member, decisionHistory);",
+  "to": "if (false) quorumMemberState(req, member, decisionHistory);",
+  "expectedVector": "approval.composition097.first-unused-opposing",
+  "expectedPassVectors": [
+    "approval.composition097.first-unused-valid",
+    "approval.boundary097.quorum-empty-votes-001"
+  ]
+},
+{
+  "id": "java-composition097-early-outcome",
+  "suite": "approvals",
+  "path": "core/src/main/java/org/finkore/Approvals.java",
+  "from": "Map<String, Map<String, Object>> reqs = validateCompositionRequirements(requirements, context, groups);",
+  "to": "if (\"decisive\".equals(compositionMap.get(\"rootGroup\"))) return compositionResult(\"APPROVED\", List.of());\n    Map<String, Map<String, Object>> reqs = validateCompositionRequirements(requirements, context, groups);",
+  "expectedVector": "approval.boundary097.quorum-disconnected-eligibleactors-absent-001",
+  "expectedPassVectors": [
+    "approval.boundary097.quorum-disconnected-control-001",
+    "approval.boundary097.quorum-empty-votes-001"
+  ]
+},
+{
   "id": "java-approval096-decision-container-discarded",
   "suite": "approvals",
   "path": "core/src/main/java/org/finkore/Approvals.java",
-  "from": "if (decisions != null && !(decisions instanceof List<?>)) throw new FinKoreException(INVALID_CHAIN);",
-  "to": "// discarded malformed evidence container",
+  "from": "if (!(decisions instanceof List<?> list)) throw new FinKoreException(INVALID_CHAIN);\n    List<Map<String, Object>> decisionHistory = copyMapList(list, INVALID_CHAIN);",
+  "to": "List<Map<String, Object>> decisionHistory = decisions instanceof List<?> list ? copyMapList(list, INVALID_CHAIN) : List.of();",
   "expectedVector": "approval.boundary096.decision-container-object-001",
   "expectedPassVectors": [
     "approval.boundary096.decision-container-empty-control-001"
@@ -1213,7 +1412,7 @@ const javaMutants = [
   "suite": "approvals",
   "path": "core/src/main/java/org/finkore/Approvals.java",
   "from": "if (!\"APPLICABLE\".equals(applicability) && !\"NOT_APPLICABLE\".equals(applicability)) throw new FinKoreException(CONDITION_UNRESOLVED);",
-  "to": "// omitted applicability validation",
+  "to": "if (!\"APPLICABLE\".equals(applicability) && !\"NOT_APPLICABLE\".equals(applicability)) { Map<String, Object> assumed = new LinkedHashMap<>(reqs.get(id)); assumed.put(\"applicability\", \"APPLICABLE\"); reqs.put(id, assumed); }",
   "expectedVector": "approval.boundary096.applicability-null-001",
   "expectedPassVectors": [
     "approval.boundary096.state-all-of-control-001"
@@ -2266,6 +2465,7 @@ function conformanceKilled(env, mutant) {
     env.FINKORE_MUTANT_ADAPTER,
     '--suite',
     mutant.suite,
+    ...(requestedOperation === undefined ? [] : operationVectors.flatMap(id => ['--vector', id])),
     '--json',
   ], { env: { ...process.env, ...env } })
   return {
@@ -2351,11 +2551,11 @@ for (const mutant of [...pythonMutants, ...javaMutants]) {
 }
 
 const results = []
-if (process.argv.length > 4 || (requestedSuite !== undefined && ![...pythonMutants, ...javaMutants].some((mutant) => mutant.suite === requestedSuite))) {
+if (process.argv.length > 5 || (requestedSuite !== undefined && ![...pythonMutants, ...javaMutants].some((mutant) => mutant.suite === requestedSuite))) {
   console.error('Unknown mutation suite or extra arguments')
   process.exit(2)
 }
-const selected = (mutants) => mutants.filter((mutant) => requestedSuite === undefined || mutant.suite === requestedSuite)
+const selected = (mutants) => mutants.filter((mutant) => requestedSuite === undefined || mutant.suite === requestedSuite).filter(mutant => requestedOperation === undefined || vectorOperations.get(mutant.expectedVector) === requestedOperation)
 function requireBaselines(mutants, env) {
   for (const suite of new Set(mutants.map((mutant) => mutant.suite))) {
     const requiredVectors = mutants.filter((mutant) => mutant.suite === suite)

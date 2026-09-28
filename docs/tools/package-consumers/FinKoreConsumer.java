@@ -22,6 +22,28 @@ public final class FinKoreConsumer {
     throw new AssertionError("Expected " + code);
   }
   public static void main(String[] args) {
+    Map<String, Object> quorum097 = Map.of("rootGroup", "q", "groups", List.of(Map.of("id", "q", "kind", "N_OF_M", "threshold", 1, "members", List.of(Map.of("id", "seat", "type", "requirement", "requirementId", "review", "voter", Map.of("id", "alice"))))));
+    Map<String, Object> evidence097 = Map.of("id", "review", "applicability", "APPLICABLE", "eligibleActors", List.of("alice"), "approvedOutcome", "APPROVED", "rejectedOutcome", "REJECTED");
+    List<Object> votes097 = List.of(Map.of("requirementId", "review", "actor", Map.of("id", "alice"), "effective", true, "outcome", "APPROVED"));
+    equal(Map.of("outcome", "APPROVED", "actionableRequirements", List.of()), Approvals.evaluateComposition(quorum097, List.of(evidence097), votes097, null));
+    for (String field : List.of("eligibleActors", "approvedOutcome", "rejectedOutcome")) {
+      Map<String, Object> incomplete097 = new LinkedHashMap<>(evidence097);
+      incomplete097.remove(field);
+      Map<String, Object> before097 = new LinkedHashMap<>(incomplete097);
+      error(Approvals.INVALID_CHAIN, () -> Approvals.evaluateComposition(quorum097, List.of(incomplete097), votes097, null));
+      equal(before097, incomplete097);
+    }
+    Map<String, Object> disconnected097 = new LinkedHashMap<>(quorum097);
+    List<Object> groups097 = new java.util.ArrayList<>((List<?>) quorum097.get("groups"));
+    groups097.add(Map.of("id", "unused", "kind", "ALL_OF", "members", List.of(Map.of("id", "self", "type", "group", "groupId", "unused"))));
+    disconnected097.put("groups", groups097);
+    error(Approvals.INVALID_CHAIN, () -> Approvals.evaluateComposition(disconnected097, List.of(evidence097), votes097, null));
+    error(Approvals.INVALID_CHAIN, () -> Approvals.evaluateComposition(quorum097, List.of(evidence097), null, null));
+    equal(Map.of("outcome", "PENDING", "actionableRequirements", List.of("review")), Approvals.evaluateComposition(quorum097, List.of(evidence097), null));
+    if (List.of(args).contains("--composition")) {
+      System.out.println("Installed JAR composition checks passed");
+      return;
+    }
     equal("0.9-rc", FinKore.CORE_VERSION);
     Money money = Money.fromPortable(Map.of("amount", "1.239", "currency", "EUR"));
     error("FINKORE_MONEY_ROUNDING_REQUIRED", () -> money.toPortable(2));

@@ -312,22 +312,33 @@ class GroupResult:
     actionables: list[str]
 
 
-def evaluate_composition(composition: Any, requirements: Any, decisions: Any = None, context: Any = None) -> dict[str, Any]:
+def evaluate_composition(composition: Any, requirements: Any, decisions: Any = _MISSING, context: Any = None) -> dict[str, Any]:
     """Evaluate bounded Approval Composition groups, quorum, and stages.
 
+    Omitted decisions mean an empty list; explicitly supplied None is invalid.
     Every supplied quorum Decision must have explicit Boolean ``effective``
     evidence; false is valid but cannot count as a vote. Invalid evidence raises
     FINKORE_APPROVAL_INVALID_CHAIN before any outcome, following the structure,
     applicability, context, then state/effectiveness priority. Inputs are not
-    mutated. See APPROVAL-COMPOSITION-024 and APPROVAL-ERROR-010.
+    mutated. All declared groups, including disconnected groups, must be acyclic
+    with resolved references. Applicable quorum observations require explicit
+    eligibility and distinct outcome mappings, including unused members; unused
+    members never become actionable. Depth four applies to actual root paths.
+    See APPROVAL-COMPOSITION-004/006/007/024 and APPROVAL-ERROR-010.
     """
 
     groups = _validate_composition_structure(composition)
     reqs = _validate_composition_requirements(requirements, context, groups)
-    if decisions is not None and not isinstance(decisions, list):
+    if decisions is not _MISSING and not isinstance(decisions, list):
         raise FinKoreError(INVALID_CHAIN)
-    decision_history = deepcopy(decisions) if decisions is not None else []
+    decision_history = deepcopy(decisions) if decisions is not _MISSING else []
     _validate_composition_evidence(reqs, decision_history)
+    for group in groups.values():
+        if group["kind"] == "N_OF_M":
+            for member in group["members"]:
+                req = reqs[member["requirementId"]]
+                if req["applicability"] == "APPLICABLE":
+                    _quorum_member_state(req, member, decision_history)
     if "stages" in composition:
         stage_results: list[GroupResult] = []
         for stage in composition["stages"]:
@@ -520,6 +531,28 @@ def _validate_composition_structure(composition: Any) -> dict[str, dict[str, Any
         roots = [group_id for stage in stages for group_id in stage["groups"]]
     else:
         roots = [composition["rootGroup"]]
+    # Validate the entire graph without creating artificial depth roots.
+    incoming = dict.fromkeys(groups, 0)
+    for group in groups.values():
+        for member in group["members"]:
+            if member["type"] == "group":
+                child = member["groupId"]
+                if child not in incoming:
+                    raise FinKoreError(INVALID_CHAIN)
+                incoming[child] += 1
+    pending = [key for key, count in incoming.items() if count == 0]
+    visited = 0
+    while pending:
+        group = groups[pending.pop()]
+        visited += 1
+        for member in group["members"]:
+            if member["type"] == "group":
+                child = member["groupId"]
+                incoming[child] -= 1
+                if incoming[child] == 0:
+                    pending.append(child)
+    if visited != len(groups):
+        raise FinKoreError(INVALID_CHAIN)
     for root in roots:
         _check_group(root, groups, 1, [])
     return groups
@@ -556,9 +589,19 @@ def _validate_composition_requirements(requirements: Any, context: Any, groups: 
     for key in required:
         if "state" in reqs[key] and reqs[key]["state"] not in ("APPROVED", "REJECTED", "PENDING"):
             raise FinKoreError(INVALID_CHAIN)
+        req = reqs[key]
+        if "eligibleActors" in req and (not isinstance(req["eligibleActors"], list) or not all(_opaque(actor) for actor in req["eligibleActors"])):
+            raise FinKoreError(INVALID_CHAIN)
+        for field in ("approvedOutcome", "rejectedOutcome"):
+            if field in req and req[field] not in ("APPROVED", "REJECTED"):
+                raise FinKoreError(INVALID_CHAIN)
+        if "approvedOutcome" in req and "rejectedOutcome" in req and req["approvedOutcome"] == req["rejectedOutcome"]:
+            raise FinKoreError(INVALID_CHAIN)
     for group, member in members:
         req = reqs[member["requirementId"]]
         if req["applicability"] == "APPLICABLE" and group["kind"] != "N_OF_M" and "state" not in req:
+            raise FinKoreError(INVALID_CHAIN)
+        if req["applicability"] == "APPLICABLE" and group["kind"] == "N_OF_M" and any(field not in req for field in ("eligibleActors", "approvedOutcome", "rejectedOutcome")):
             raise FinKoreError(INVALID_CHAIN)
     return reqs
 
@@ -624,10 +667,10 @@ def _quorum_member_state(req: dict[str, Any], member: dict[str, Any], decisions:
     for decision in decisions:
         if decision.get("requirementId") != req["id"] or _actor_id(decision.get("actor")) != voter_id or decision.get("effective") is False:
             continue
-        if voter_id not in req.get("eligibleActors", [voter_id]):
+        if voter_id not in req["eligibleActors"]:
             continue
-        approved = approved or decision.get("outcome") == req.get("approvedOutcome", "APPROVED")
-        rejected = rejected or decision.get("outcome") == req.get("rejectedOutcome", "REJECTED")
+        approved = approved or decision["outcome"] == req["approvedOutcome"]
+        rejected = rejected or decision["outcome"] == req["rejectedOutcome"]
     if approved and rejected:
         raise FinKoreError(INVALID_CHAIN)
     if approved:

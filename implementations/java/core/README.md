@@ -1,12 +1,19 @@
 # FinKore Java Core
 
 The [Core 0.9.7 plan](../../../docs/plans/plan-09.7.md) has accepted D1–D7
-contracts and published Milestone 2 baseline regressions. Those tests deliberately
-fail before the M3–M7 corrections; D8 redaction policy identity remains unresolved.
-New fixture requiredness, Approval fact/history rules, native-value restrictions,
-and Entity validation/error mappings are corrective compatibility changes.
-The 0.9.6 results below describe that tagged snapshot, not the current red test
-suite or conformance to the new contracts.
+contracts. Milestone 3 now validates every declared composition group, including
+unused references/cycles and quorum evidence, before choosing an outcome. All
+176 composition vectors pass on TypeScript, Python 3.12/3.13, and Java. Applicable
+quorum observations require explicit eligibility and distinct outcome mappings;
+unused groups never add actionables. Depth four still applies to actual roots.
+Milestones 4–7 remain pending and full suites remain red. D8 redaction policy
+identity is unresolved. The 0.9.6 results below describe the tagged snapshot.
+
+Use `evaluateComposition(composition, requirements, context)` for no votes, or
+supply an explicit Decision list to the four-argument overload. A null Decision
+list now raises `FINKORE_APPROVAL_INVALID_CHAIN`; migrate null omission
+placeholders to the three-argument overload or `List.of()`. Composition retains
+its lightweight observations without requiring concrete subject data.
 
 Core 0.9.6 status: [Completed corrective release](../../../docs/plans/plan-09.6.md).
 Money, Workflow, Approval, Audit, and Entity corrections are verified. All 884 manifest

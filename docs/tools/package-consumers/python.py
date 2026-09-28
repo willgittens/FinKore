@@ -19,6 +19,27 @@ def error(code, action):
         raise AssertionError('Expected ' + code)
 
 
+# Composition checks execute in every installed-artifact run.
+quorum097 = {'rootGroup': 'q', 'groups': [{'id': 'q', 'kind': 'N_OF_M', 'threshold': 1, 'members': [{'id': 'seat', 'type': 'requirement', 'requirementId': 'review', 'voter': {'id': 'alice'}}]}]}
+evidence097 = [{'id': 'review', 'applicability': 'APPLICABLE', 'eligibleActors': ['alice'], 'approvedOutcome': 'APPROVED', 'rejectedOutcome': 'REJECTED'}]
+votes097 = [{'requirementId': 'review', 'actor': {'id': 'alice'}, 'effective': True, 'outcome': 'APPROVED'}]
+assert evaluate_composition(quorum097, evidence097, votes097) == {'outcome': 'APPROVED', 'actionableRequirements': []}
+for field in ('eligibleActors', 'approvedOutcome', 'rejectedOutcome'):
+    incomplete097 = deepcopy(evidence097)
+    del incomplete097[0][field]
+    before097 = deepcopy(incomplete097)
+    error('FINKORE_APPROVAL_INVALID_CHAIN', lambda: evaluate_composition(quorum097, incomplete097, votes097))
+    assert incomplete097 == before097
+disconnected097 = deepcopy(quorum097)
+disconnected097['groups'].append({'id': 'unused', 'kind': 'ALL_OF', 'members': [{'id': 'self', 'type': 'group', 'groupId': 'unused'}]})
+error('FINKORE_APPROVAL_INVALID_CHAIN', lambda: evaluate_composition(disconnected097, evidence097, votes097))
+error('FINKORE_APPROVAL_INVALID_CHAIN', lambda: evaluate_composition(quorum097, evidence097, None))
+assert evaluate_composition(quorum097, evidence097) == {'outcome': 'PENDING', 'actionableRequirements': ['review']}
+import sys
+if '--composition' in sys.argv:
+    print('Installed Python composition checks passed')
+    sys.exit(0)
+
 assert CORE_VERSION == '0.9-rc'
 for amount in (Decimal('NaN'), Decimal('sNaN'), Decimal('Infinity'), Decimal('-Infinity'), '1', 1, 1.0, True, None, [], {}):
     error('FINKORE_MONEY_INVALID_AMOUNT', lambda: Money(amount, 'EUR'))

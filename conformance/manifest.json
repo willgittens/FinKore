@@ -48,7 +48,8 @@
         "./approvals/readiness-regressions.json",
         "./approvals/construction-evaluation-regressions.json",
         "./approvals/evidence-regressions.json",
-        "./approvals/discovery-regressions.json"
+        "./approvals/discovery-regressions.json",
+        "./approvals/composition-validation.json"
       ]
     },
     {

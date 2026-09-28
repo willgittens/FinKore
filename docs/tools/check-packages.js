@@ -11,6 +11,8 @@ import { basename, delimiter, join, resolve } from 'node:path'
 import { execFileSync } from 'node:child_process'
 
 const repositoryRoot = process.cwd()
+const consumerArgs = process.argv.includes('--composition') ? ['--composition'] : []
+if (process.argv.slice(2).some(arg => arg !== '--composition')) throw new Error('Unknown package check option')
 const artifactDirectory = mkdtempSync(join(tmpdir(), 'finkore-package-check-'))
 const pythonSource = join(artifactDirectory, 'python-source')
 const python = resolve(repositoryRoot, '.tools/python-coverage/bin/python')
@@ -81,7 +83,7 @@ try {
   writeFileSync(join(nodeConsumer, 'package.json'), '{"private":true,"type":"module"}\n')
   run('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund', npmArchive], { cwd: nodeConsumer })
   copyFileSync(resolve(repositoryRoot, 'docs/tools/package-consumers/typescript.mjs'), join(nodeConsumer, 'consumer.mjs'))
-  process.stdout.write(run(process.execPath, ['consumer.mjs'], { cwd: nodeConsumer }))
+  process.stdout.write(run(process.execPath, ['consumer.mjs', ...consumerArgs], { cwd: nodeConsumer }))
 
   cpSync(resolve(repositoryRoot, 'implementations/python/core'), pythonSource, { recursive: true })
   run(python, ['-m', 'pip', 'wheel', pythonSource, '--no-build-isolation', '--no-deps', '--wheel-dir', artifactDirectory])
@@ -115,7 +117,7 @@ try {
     if (kind === 'sdist') run(consumerPython, ['-m', 'pip', 'install', 'setuptools>=69', 'wheel'])
     run(consumerPython, ['-m', 'pip', 'install', '--no-index', '--no-deps', '--no-build-isolation', artifact])
     copyFileSync(resolve(repositoryRoot, 'docs/tools/package-consumers/python.py'), join(pythonConsumer, 'consumer.py'))
-    process.stdout.write(run(consumerPython, ['-I', 'consumer.py'], { cwd: pythonConsumer }))
+    process.stdout.write(run(consumerPython, ['-I', 'consumer.py', ...consumerArgs], { cwd: pythonConsumer }))
   }
 
   run(maven, ['-q', '-f', 'implementations/java/core/pom.xml', '-DskipTests', 'package'])
@@ -148,7 +150,7 @@ try {
   const javaConsumerSource = join(javaConsumer, 'FinKoreConsumer.java')
   copyFileSync(resolve(repositoryRoot, 'docs/tools/package-consumers/FinKoreConsumer.java'), javaConsumerSource)
   run(javac, ['-cp', installedJavaArchive, '-d', javaClasses, javaConsumerSource])
-  process.stdout.write(run(java, ['-cp', `${installedJavaArchive}${delimiter}${javaClasses}`, 'FinKoreConsumer'], { cwd: javaConsumer }))
+  process.stdout.write(run(java, ['-cp', `${installedJavaArchive}${delimiter}${javaClasses}`, 'FinKoreConsumer', ...consumerArgs], { cwd: javaConsumer }))
 
   console.log(`Local package and consumer check passed: ${basename(npmArchive)}, ${basename(wheel)}, ${basename(sourceArchive)}, ${basename(javaArchive)}`)
 } finally {

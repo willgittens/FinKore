@@ -5,6 +5,27 @@ import assert from 'node:assert/strict'
 import { FINKORE_CORE_VERSION, Money, FinancialEntity, Workflow, ApprovalComposition, ApprovalDecision, ApprovalDecisionHistory, AuditLog } from '@finkore/typescript'
 
 const error = (code, action) => assert.throws(action, value => value?.code === code)
+// Composition validation must survive packaging and installation.
+const quorum097 = { rootGroup: 'q', groups: [{ id: 'q', kind: 'N_OF_M', threshold: 1, members: [{ id: 'seat', type: 'requirement', requirementId: 'review', voter: { id: 'alice' } }] }] }
+const evidence097 = { requirements: [{ id: 'review', applicability: 'APPLICABLE', eligibleActors: ['alice'], approvedOutcome: 'APPROVED', rejectedOutcome: 'REJECTED' }], decisions: [{ requirementId: 'review', actor: { id: 'alice' }, effective: true, outcome: 'APPROVED' }] }
+assert.deepEqual(ApprovalComposition.from(quorum097).evaluate(evidence097), { outcome: 'APPROVED', actionableRequirements: [] })
+for (const field of ['eligibleActors', 'approvedOutcome', 'rejectedOutcome']) {
+  const incomplete = structuredClone(evidence097)
+  delete incomplete.requirements[0][field]
+  const before097 = structuredClone(incomplete)
+  error('FINKORE_APPROVAL_INVALID_CHAIN', () => ApprovalComposition.from(quorum097).evaluate(incomplete))
+  assert.deepEqual(incomplete, before097)
+}
+const disconnected097 = structuredClone(quorum097)
+disconnected097.groups.push({ id: 'unused', kind: 'ALL_OF', members: [{ id: 'self', type: 'group', groupId: 'unused' }] })
+error('FINKORE_APPROVAL_INVALID_CHAIN', () => ApprovalComposition.from(disconnected097))
+error('FINKORE_APPROVAL_INVALID_CHAIN', () => ApprovalComposition.from(quorum097).evaluate({ ...evidence097, decisions: null }))
+assert.deepEqual(ApprovalComposition.from(quorum097).evaluate({ requirements: evidence097.requirements }), { outcome: 'PENDING', actionableRequirements: ['review'] })
+if (process.argv.includes('--composition')) {
+  console.log('Installed npm composition checks passed')
+  process.exit(0)
+}
+
 assert.equal(FINKORE_CORE_VERSION, '0.9-rc')
 assert.deepEqual(Money.from({ amount: '1.239', currency: 'EUR' }).toJSON(), { amount: '1.239', currency: 'EUR' })
 const binding = { definitionIdentity: 'invoice-flow', definitionVersionIdentity: '1' }

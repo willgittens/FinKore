@@ -324,15 +324,34 @@ public final class Approvals {
   }
 
   /**
+   * Evaluates composition with no Decision observations, preserving native omission.
+   * All declaration, applicability, context, and evidence checks still apply.
+   *
+   * @param composition portable composition definition
+   * @param requirements current Requirement observations
+   * @param context explicit evaluation context
+   * @return composition outcome and ordered actionable Requirements
+   * @throws FinKoreException with the portable composition validation error code
+   * @see #evaluateComposition(Object, Object, Object, Object)
+   * @see <a href="../../../../../../spec/approvals/composition.md">APPROVAL-COMPOSITION-024</a>
+   */
+  public static Map<String, Object> evaluateComposition(Object composition, Object requirements, Object context) {
+    return evaluateComposition(composition, requirements, List.of(), context);
+  }
+
+  /**
    * Evaluates bounded Approval Composition groups, quorum, and stages.
    * Every supplied quorum Decision requires explicit Boolean {@code effective}
    * evidence. False is valid but cannot count as a vote. All evidence is validated
    * before any outcome, after structure, applicability, and required context.
-   * Inputs are not mutated.
+   * Inputs are not mutated. All declared groups, including disconnected groups,
+   * must have resolved references and be acyclic. Depth four applies to actual
+   * root paths. Applicable quorum observations require explicit eligibility and
+   * distinct outcome mappings; validation of unused members adds no actionables.
    *
    * @param composition portable composition definition
    * @param requirements current requirement observations
-   * @param decisions current-effective decision observations for quorum groups
+   * @param decisions explicit current-effective decision list; null is invalid
    * @param context explicit evaluation context
    * @return composition evaluation
    * @throws FinKoreException with {@code FINKORE_APPROVAL_INVALID_CHAIN} for invalid evidence
@@ -348,9 +367,18 @@ public final class Approvals {
     @SuppressWarnings("unchecked")
     Map<String, Object> compositionMap = (Map<String, Object>) copyJson(composition, INVALID_CHAIN);
     Map<String, Map<String, Object>> reqs = validateCompositionRequirements(requirements, context, groups);
-    if (decisions != null && !(decisions instanceof List<?>)) throw new FinKoreException(INVALID_CHAIN);
-    List<Map<String, Object>> decisionHistory = decisions instanceof List<?> list ? copyMapList(list, INVALID_CHAIN) : List.of();
+    if (!(decisions instanceof List<?> list)) throw new FinKoreException(INVALID_CHAIN);
+    List<Map<String, Object>> decisionHistory = copyMapList(list, INVALID_CHAIN);
     validateCompositionEvidence(reqs, decisionHistory);
+    for (Map<String, Object> group : groups.values()) {
+      if (!"N_OF_M".equals(group.get("kind"))) continue;
+      for (Object item : (List<?>) group.get("members")) {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> member = (Map<String, Object>) item;
+        Map<String, Object> req = reqs.get(member.get("requirementId"));
+        if ("APPLICABLE".equals(req.get("applicability"))) quorumMemberState(req, member, decisionHistory);
+      }
+    }
     if (compositionMap.containsKey("stages")) {
       List<GroupResult> stageResults = new ArrayList<>();
       for (Object stageObject : listValue(compositionMap.get("stages"), INVALID_CHAIN)) {
@@ -653,6 +681,33 @@ public final class Approvals {
         roots.addAll(stageGroups);
       }
     }
+    // Check the whole graph without making disconnected declarations depth roots.
+    Map<String, Integer> incoming = new LinkedHashMap<>();
+    for (String id : groups.keySet()) incoming.put(id, 0);
+    for (Map<String, Object> group : groups.values()) {
+      for (Object item : (List<?>) group.get("members")) {
+        Map<?, ?> member = (Map<?, ?>) item;
+        if (!"group".equals(member.get("type"))) continue;
+        String child = (String) member.get("groupId");
+        if (!incoming.containsKey(child)) throw new FinKoreException(INVALID_CHAIN);
+        incoming.put(child, incoming.get(child) + 1);
+      }
+    }
+    List<String> pending = new ArrayList<>();
+    incoming.forEach((id, count) -> { if (count == 0) pending.add(id); });
+    int visited = 0;
+    while (visited < pending.size()) {
+      Map<String, Object> group = groups.get(pending.get(visited++));
+      for (Object item : (List<?>) group.get("members")) {
+        Map<?, ?> member = (Map<?, ?>) item;
+        if (!"group".equals(member.get("type"))) continue;
+        String child = (String) member.get("groupId");
+        int count = incoming.get(child) - 1;
+        incoming.put(child, count);
+        if (count == 0) pending.add(child);
+      }
+    }
+    if (visited != groups.size()) throw new FinKoreException(INVALID_CHAIN);
     for (String root : roots) {
       checkGroup(root, groups, 1, List.of());
     }
@@ -728,6 +783,7 @@ public final class Approvals {
     }
     Set<String> required = new HashSet<>();
     Set<String> stateRequired = new HashSet<>();
+    Set<String> quorumRequired = new HashSet<>();
     for (Map<String, Object> group : groups.values()) {
       for (Object item : (List<?>) group.get("members")) {
         Map<?, ?> member = (Map<?, ?>) item;
@@ -736,6 +792,7 @@ public final class Approvals {
           if (!reqs.containsKey(id)) throw new FinKoreException(INVALID_CHAIN);
           required.add(id);
           if (!"N_OF_M".equals(group.get("kind"))) stateRequired.add(id);
+          else quorumRequired.add(id);
         }
       }
     }
@@ -756,6 +813,15 @@ public final class Approvals {
         Object state = req.get("state");
         if (!(state instanceof String) || !Set.of("APPROVED", "REJECTED", "PENDING").contains(state)) throw new FinKoreException(INVALID_CHAIN);
       }
+      boolean needsQuorum = "APPLICABLE".equals(req.get("applicability")) && quorumRequired.contains(id);
+      if (req.containsKey("eligibleActors") || needsQuorum) stringList(req.get("eligibleActors"), INVALID_CHAIN);
+      for (String field : List.of("approvedOutcome", "rejectedOutcome")) {
+        if (req.containsKey(field) || needsQuorum) {
+          Object outcome = req.get(field);
+          if (!(outcome instanceof String) || !Set.of("APPROVED", "REJECTED").contains(outcome)) throw new FinKoreException(INVALID_CHAIN);
+        }
+      }
+      if (req.containsKey("approvedOutcome") && req.containsKey("rejectedOutcome") && Objects.equals(req.get("approvedOutcome"), req.get("rejectedOutcome"))) throw new FinKoreException(INVALID_CHAIN);
     }
     return reqs;
   }
@@ -852,11 +918,11 @@ public final class Approvals {
           || Boolean.FALSE.equals(decision.get("effective"))) {
         continue;
       }
-      if (requirement.containsKey("eligibleActors") && !stringList(requirement.get("eligibleActors"), INVALID_CHAIN).contains(voterId)) {
+      if (!stringList(requirement.get("eligibleActors"), INVALID_CHAIN).contains(voterId)) {
         continue;
       }
-      approved = approved || Objects.equals(decision.get("outcome"), requirement.getOrDefault("approvedOutcome", "APPROVED"));
-      rejected = rejected || Objects.equals(decision.get("outcome"), requirement.getOrDefault("rejectedOutcome", "REJECTED"));
+      approved = approved || Objects.equals(decision.get("outcome"), requirement.get("approvedOutcome"));
+      rejected = rejected || Objects.equals(decision.get("outcome"), requirement.get("rejectedOutcome"));
     }
     if (approved && rejected) {
       throw new FinKoreException(INVALID_CHAIN);

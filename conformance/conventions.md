@@ -621,7 +621,9 @@ Requirement referenced by any declared group requires applicability evidence;
 unused groups do not escape validation or become actionable. Quorum observations
 do not require a concrete `subject` or redundant `state`. Non-quorum applicable
 observations retain their required State. Decision `effective` remains a required
-Boolean; `decisions: []` is a valid no-vote control.
+Boolean; `decisions: []` is a valid no-vote control. Composition omission retains
+its empty-list convenience; explicitly supplied null is malformed evidence and
+uses `FINKORE_APPROVAL_INVALID_CHAIN`. Adapters preserve that distinction.
 
 Disconnected cycles and unresolved children are invalid structure (category 1),
 not missing observation evidence (category 4). A valid unused group is permitted.

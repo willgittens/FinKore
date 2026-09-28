@@ -172,6 +172,31 @@ function assertReferencesAndBounded(
 ): void {
   const groupsById = new Map(groups.map((group) => [group.id, group]))
 
+  // Remove incoming edges across the entire declaration graph. This checks
+  // disconnected components without treating them as evaluation/depth roots.
+  const incoming = new Map(groups.map((group) => [group.id, 0]))
+  for (const group of groups) {
+    for (const member of group.members) {
+      if (member.type !== 'group') continue
+      const count = incoming.get(member.groupId)
+      if (count === undefined) throw new InvalidApprovalChainError()
+      incoming.set(member.groupId, count + 1)
+    }
+  }
+  const pending = groups.filter((group) => incoming.get(group.id) === 0)
+  let visited = 0
+  while (pending.length > 0) {
+    const group = pending.pop()!
+    visited += 1
+    for (const member of group.members) {
+      if (member.type !== 'group') continue
+      const count = incoming.get(member.groupId)! - 1
+      incoming.set(member.groupId, count)
+      if (count === 0) pending.push(groupsById.get(member.groupId)!)
+    }
+  }
+  if (visited !== groups.length) throw new InvalidApprovalChainError()
+
   const visit = (groupId: ApprovalCompositionGroupIdentifier, depth: number): void => {
     if (depth > MAX_GROUP_DEPTH) throw new InvalidApprovalChainError()
     const group = groupsById.get(groupId)
@@ -471,7 +496,9 @@ export class ApprovalComposition {
    * observations.
    *
    * Evaluation validates every referenced Requirement observation before
-   * returning an outcome, including alternative branches and later stages.
+   * returning an outcome, including disconnected groups, alternative branches,
+   * and later stages. Applicable quorum members require explicit eligibility
+   * and distinct outcome mappings; inapplicable members need no vote evidence.
    * Quorum members are counted only from currently effective eligible Decision
    * observations matching the declared voter and referenced Requirement.
    *
@@ -552,6 +579,14 @@ export class ApprovalComposition {
       if (hasApproval) return 'APPROVED'
       if (hasRejection) return 'REJECTED'
       return 'PENDING'
+    }
+
+    // Unused declarations must be valid but never contribute actionability.
+    for (const group of this.value.groups) {
+      if (group.kind !== 'N_OF_M') continue
+      for (const member of group.members as readonly SerializedApprovalCompositionRequirementMember[]) {
+        if (observations.get(member.requirementId)!.applicability === 'APPLICABLE') evaluateQuorumMember(member)
+      }
     }
 
     const evaluateQuorumGroup = (group: SerializedApprovalCompositionGroup): GroupEvaluation => {

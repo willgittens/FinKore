@@ -89,7 +89,7 @@ final class ApprovalsVectorCoverageTest {
         case "approval.composition.evaluate" -> success(Approvals.evaluateComposition(
             input.get("composition"),
             input.get("requirements"),
-            input.get("decisions"),
+            input.getOrDefault("decisions", List.of()),
             input.get("context")), compositionSuccessObservations(input));
         default -> throw new IllegalArgumentException(operation);
       };

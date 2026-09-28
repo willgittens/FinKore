@@ -91,7 +91,7 @@ public final class EvidenceRegressionTest {
     Map<String, Object> i = map(v.get("input"));
     String op = (String) v.get("operation");
     return switch (op) {
-      case "approval.composition.evaluate" -> Approvals.evaluateComposition(i.get("composition"), i.get("requirements"), i.get("decisions"), i.get("context"));
+      case "approval.composition.evaluate" -> Approvals.evaluateComposition(i.get("composition"), i.get("requirements"), i.getOrDefault("decisions", List.of()), i.get("context"));
       case "approval.condition.evaluate" -> Approvals.evaluateCondition(i.get("condition"), i.get("facts"), i.get("result"));
       case "approval.decision.record" -> Approvals.recordDecision(i.get("requirement"), i.get("decision"), i.get("history"));
       case "approval.decision.evaluate" -> Approvals.evaluateDecision(i.get("requirement"), i.get("decision"), i.get("currentSubjectFacts"), i.get("relevantFactPaths"), i.get("evaluatedAt"));

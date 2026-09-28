@@ -344,8 +344,9 @@ baseline intended to become Core 1.0.
 
 Subsequent review identified additional gaps despite a fresh passing full
 verification run. The [Core 0.9.7 corrective plan](./docs/plans/plan-09.7.md)
-has accepted D1–D7 contracts and published baseline regressions (Milestone 2).
-D8 remains unresolved. Its implementation corrections
+has accepted D1–D7 contracts and completed composition validation (Milestone 3):
+all 176 composition vectors pass on all four runtimes. Milestones 4–7 and
+D8 remain open; full suites still contain the published red regressions. The remaining corrections
 and final review remain prerequisites for Core 1.0 promotion.
 
 At the 0.9.6 tag, all 884 manifest vectors pass on TypeScript, CPython 3.12/3.13, and Java,

@@ -242,7 +242,7 @@ def execute_approval_requirement_supersede(input_value: dict[str, Any]) -> dict[
 
 
 def execute_approval_composition_evaluate(input_value: dict[str, Any]) -> dict[str, Any]:
-    result = evaluate_composition(input_value.get("composition"), input_value.get("requirements"), input_value.get("decisions"), input_value.get("context"))
+    result = evaluate_composition(input_value.get("composition"), input_value.get("requirements"), context=input_value.get("context"), **({"decisions": input_value["decisions"]} if "decisions" in input_value else {}))
     observations = {"decisions": input_value["decisions"]} if input_value.get("decisions") == [] else None
     return success(result, observations)
 

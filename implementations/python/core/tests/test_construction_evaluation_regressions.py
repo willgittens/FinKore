@@ -43,7 +43,7 @@ def invoke(vector):
         result = redact_history(i['history'], i['policy'], i['redactionEvent'])
         return {k: result[k] for k in ('event', 'evidenceEvent')}
     if op == 'approval.composition.evaluate':
-        return evaluate_composition(i['composition'], i['requirements'], i.get('decisions'), i.get('context'))
+        return evaluate_composition(i['composition'], i['requirements'], context=i.get('context'), **({'decisions': i['decisions']} if 'decisions' in i else {}))
     if op == 'approval.chain.evaluate':
         return evaluate_chain(i['chain'], i['states'])
     if op == 'approval.decision.evaluate':

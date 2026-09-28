@@ -116,7 +116,7 @@ public final class ConstructionEvaluationRegressionTest {
         try { yield log.redact(i.get("policy"), i.get("redactionEvent")).toPortable(); }
         catch (FinKoreException failure) { equal(before, log.events()); throw failure; }
       }
-      case "approval.composition.evaluate" -> Approvals.evaluateComposition(i.get("composition"), i.get("requirements"), i.get("decisions"), i.get("context"));
+      case "approval.composition.evaluate" -> Approvals.evaluateComposition(i.get("composition"), i.get("requirements"), i.getOrDefault("decisions", List.of()), i.get("context"));
       case "approval.chain.evaluate" -> Approvals.evaluateChain(i.get("chain"), i.get("states"));
       case "approval.requirement.evaluate" -> Approvals.evaluateRequirement(i.get("requirement"), i.get("decisions"), i.get("currentSubjectFacts"), i.get("relevantFactPaths"), i.get("evaluatedAt"));
       case "approval.decision.evaluate" -> Approvals.evaluateDecision(i.get("requirement"), i.get("decision"), i.get("currentSubjectFacts"), i.get("relevantFactPaths"), i.get("evaluatedAt"));

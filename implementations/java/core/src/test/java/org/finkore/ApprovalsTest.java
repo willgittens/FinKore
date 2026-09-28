@@ -98,12 +98,20 @@ public final class ApprovalsTest {
         "id", "finance-review",
         "applicability", "APPLICABLE",
         "state", "PENDING",
-        "eligibleActors", List.of("user-7")));
+        "eligibleActors", List.of("user-7"),
+        "approvedOutcome", "APPROVED",
+        "rejectedOutcome", "REJECTED"));
 
+    Map<String, Object> approval = new java.util.LinkedHashMap<>(approvedDecision("2026-09-01T12:00:00Z"));
+    Map<String, Object> rejection = new java.util.LinkedHashMap<>(rejectedDecision("2026-09-01T12:05:00Z"));
+    approval.put("effective", true);
+    rejection.put("effective", true);
+    assertEquals(Map.of("outcome", "APPROVED", "actionableRequirements", List.of()),
+        Approvals.evaluateComposition(composition, requirements, List.of(approval), null));
     assertError(Approvals.INVALID_CHAIN, () -> Approvals.evaluateComposition(
         composition,
         requirements,
-        List.of(approvedDecision("2026-09-01T12:00:00Z"), rejectedDecision("2026-09-01T12:05:00Z")),
+        List.of(approval, rejection),
         Map.of("evaluatedAt", "2026-09-01T13:00:00Z")));
   }
 

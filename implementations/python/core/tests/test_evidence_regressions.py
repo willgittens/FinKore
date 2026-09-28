@@ -28,7 +28,7 @@ def vectors():
 def invoke(v):
     i, op = v['input'], v['operation']
     if op == 'approval.composition.evaluate':
-        return evaluate_composition(i['composition'], i['requirements'], i.get('decisions'), i.get('context'))
+        return evaluate_composition(i['composition'], i['requirements'], context=i.get('context'), **({'decisions': i['decisions']} if 'decisions' in i else {}))
     if op == 'approval.condition.evaluate':
         args = {k: i[k] for k in ('facts', 'result') if k in i}
         return evaluate_condition(i['condition'], **args)

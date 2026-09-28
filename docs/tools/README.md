@@ -289,3 +289,25 @@ Native mutation execution first requires these regression suites to pass; a red
 baseline is never counted as a killed mutant. The specific new financial
 perturbations are added with their implementation corrections in M3–M7. M2
 intentionally leaves financial tests red and cannot pass release verification.
+
+## Composition milestone checks
+
+While unrelated M4–M7 regressions remain red, M3 has explicit scoped checks.
+The default complete-suite gates remain unchanged:
+
+```sh
+npm exec -w @finkore/typescript -- vitest run --config vitest.composition.config.ts --coverage
+npm exec -w @finkore/typescript -- stryker run stryker.composition.config.json
+PYTHONPATH=implementations/python/core/src .tools/bin/python3.12 -m unittest discover -s implementations/python/core/tests -p test_composition_validation.py
+PYTHONPATH=implementations/python/core/src .tools/bin/python3.13 -m unittest discover -s implementations/python/core/tests -p test_composition_validation.py
+.tools/bin/mvn -f implementations/java/core/pom.xml -Dtest=CompositionValidationCoverageTest test
+node docs/tools/mutation-critical.js all approvals approval.composition.evaluate
+FINKORE_PYTHON_PATH=.tools/bin/python3.13 node docs/tools/mutation-critical.js python approvals approval.composition.evaluate
+node docs/tools/check-packages.js --composition
+```
+
+The optional fourth mutation argument selects an existing operation's vectors
+and probes, with a passing baseline required first. Omitting it retains the full
+suite. Package `--composition` runs installed composition consumers on npm,
+Python wheel/sdist on both versions, and the JAR. Those same assertions also run
+in the default complete package checks. Neither filter claims full conformance.

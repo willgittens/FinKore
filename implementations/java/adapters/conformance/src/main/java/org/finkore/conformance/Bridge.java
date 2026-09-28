@@ -201,7 +201,7 @@ public final class Bridge {
             Approvals.evaluateComposition(
                 inputValue.get("composition"),
                 inputValue.get("requirements"),
-                inputValue.get("decisions"),
+                inputValue.getOrDefault("decisions", List.of()),
                 inputValue.get("context")),
             compositionSuccessObservations(inputValue));
         case "finkore.entity.create" -> success(Entities.create(

@@ -1,0 +1,5384 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "approval.boundary097.quorum-disconnected-eligibleactors-absent-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-002",
+        "APPROVAL-QUORUM-004",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Core 0.9.7 F1: quorum disconnected eligibleactors absent. Paired control: approval.boundary097.quorum-disconnected-control-001.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.boundary097.quorum-disconnected-approvedoutcome-absent-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-002",
+        "APPROVAL-QUORUM-004",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Core 0.9.7 F1: quorum disconnected approvedoutcome absent. Paired control: approval.boundary097.quorum-disconnected-control-001.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.boundary097.quorum-disconnected-rejectedoutcome-absent-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-010",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-002",
+        "APPROVAL-QUORUM-004",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Core 0.9.7 F1: quorum disconnected rejectedoutcome absent. Paired control: approval.boundary097.quorum-disconnected-control-001.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.boundary097.disconnected-first-self-cycle-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-008",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Core 0.9.7 F4: disconnected first self cycle. Paired control: approval.boundary097.disconnected-first-valid-001.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "unused",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "unused-child",
+                  "type": "group",
+                  "groupId": "unused"
+                }
+              ]
+            },
+            {
+              "id": "root",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "review-seat",
+                  "type": "requirement",
+                  "requirementId": "review"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "state": "PENDING"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.boundary097.disconnected-first-mutual-cycle-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-008",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Core 0.9.7 F4: disconnected first mutual cycle. Paired control: approval.boundary097.disconnected-first-valid-001.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "unused",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "other-child",
+                  "type": "group",
+                  "groupId": "other"
+                }
+              ]
+            },
+            {
+              "id": "other",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "unused-child",
+                  "type": "group",
+                  "groupId": "unused"
+                }
+              ]
+            },
+            {
+              "id": "root",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "review-seat",
+                  "type": "requirement",
+                  "requirementId": "review"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "state": "PENDING"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.boundary097.disconnected-first-missing-child-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-008",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Core 0.9.7 F4: disconnected first missing child. Paired control: approval.boundary097.disconnected-first-valid-001.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "unused",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "missing-child",
+                  "type": "group",
+                  "groupId": "missing"
+                }
+              ]
+            },
+            {
+              "id": "root",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "review-seat",
+                  "type": "requirement",
+                  "requirementId": "review"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "state": "PENDING"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.boundary097.disconnected-last-self-cycle-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-008",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Core 0.9.7 F4: disconnected last self cycle. Paired control: approval.boundary097.disconnected-last-valid-001.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "root",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "review-seat",
+                  "type": "requirement",
+                  "requirementId": "review"
+                }
+              ]
+            },
+            {
+              "id": "unused",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "unused-child",
+                  "type": "group",
+                  "groupId": "unused"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "state": "PENDING"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.boundary097.disconnected-last-mutual-cycle-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-008",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Core 0.9.7 F4: disconnected last mutual cycle. Paired control: approval.boundary097.disconnected-last-valid-001.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "root",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "review-seat",
+                  "type": "requirement",
+                  "requirementId": "review"
+                }
+              ]
+            },
+            {
+              "id": "unused",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "other-child",
+                  "type": "group",
+                  "groupId": "other"
+                }
+              ]
+            },
+            {
+              "id": "other",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "unused-child",
+                  "type": "group",
+                  "groupId": "unused"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "state": "PENDING"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.boundary097.disconnected-last-missing-child-001",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-ERROR-008",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Core 0.9.7 F4: disconnected last missing child. Paired control: approval.boundary097.disconnected-last-valid-001.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "root",
+          "groups": [
+            {
+              "id": "root",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "review-seat",
+                  "type": "requirement",
+                  "requirementId": "review"
+                }
+              ]
+            },
+            {
+              "id": "unused",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "missing-child",
+                  "type": "group",
+                  "groupId": "missing"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "state": "PENDING"
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "approval.composition097.first-unused-valid",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: first-unused-valid.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "APPROVED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.first-unused-opposing",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: first-unused-opposing.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "REJECTED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "REJECTED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.first-unused-missing-eligibility",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: first-unused-missing-eligibility.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.first-unused-unresolved",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: first-unused-unresolved.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "UNRESOLVED",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED",
+            "requiresEvaluationContext": true
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_CONDITION_UNRESOLVED"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.first-unused-context",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: first-unused-context.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED",
+            "requiresEvaluationContext": true
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CONTEXT"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.first-unused-structure",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: first-unused-structure.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "cycle",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "self",
+                  "type": "group",
+                  "groupId": "cycle"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "UNRESOLVED",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED",
+            "requiresEvaluationContext": true
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.last-unused-valid",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: last-unused-valid.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "APPROVED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.last-unused-opposing",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: last-unused-opposing.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "REJECTED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "REJECTED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.last-unused-missing-eligibility",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: last-unused-missing-eligibility.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.last-unused-unresolved",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: last-unused-unresolved.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "UNRESOLVED",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED",
+            "requiresEvaluationContext": true
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_CONDITION_UNRESOLVED"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.last-unused-context",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: last-unused-context.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED",
+            "requiresEvaluationContext": true
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CONTEXT"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.last-unused-structure",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: last-unused-structure.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "cycle",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "self",
+                  "type": "group",
+                  "groupId": "cycle"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "UNRESOLVED",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED",
+            "requiresEvaluationContext": true
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.unused-depth-eight-control",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: unused-depth-eight-control.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "unused-0",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "edge",
+                  "type": "group",
+                  "groupId": "unused-1"
+                }
+              ]
+            },
+            {
+              "id": "unused-1",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "edge",
+                  "type": "group",
+                  "groupId": "unused-2"
+                }
+              ]
+            },
+            {
+              "id": "unused-2",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "edge",
+                  "type": "group",
+                  "groupId": "unused-3"
+                }
+              ]
+            },
+            {
+              "id": "unused-3",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "edge",
+                  "type": "group",
+                  "groupId": "unused-4"
+                }
+              ]
+            },
+            {
+              "id": "unused-4",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "edge",
+                  "type": "group",
+                  "groupId": "unused-5"
+                }
+              ]
+            },
+            {
+              "id": "unused-5",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "edge",
+                  "type": "group",
+                  "groupId": "unused-6"
+                }
+              ]
+            },
+            {
+              "id": "unused-6",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "edge",
+                  "type": "group",
+                  "groupId": "unused-7"
+                }
+              ]
+            },
+            {
+              "id": "unused-7",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "leaf",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "APPROVED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.inapplicable-invalid-eligibleactors",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: inapplicable-invalid-eligibleActors.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "q",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "NOT_APPLICABLE",
+            "eligibleActors": [
+              null
+            ]
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.inapplicable-invalid-approvedoutcome",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: inapplicable-invalid-approvedOutcome.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "q",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "NOT_APPLICABLE",
+            "approvedOutcome": "INVALID"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.inapplicable-invalid-rejectedoutcome",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: inapplicable-invalid-rejectedOutcome.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "q",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "NOT_APPLICABLE",
+            "rejectedOutcome": null
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.swapped-mapping-control",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Whole-declaration composition validation: swapped-mapping-control.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "q",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "REJECTED",
+            "rejectedOutcome": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "REJECTED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "REJECTED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "APPROVED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.first-cross-member-applicability-before-context",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Unresolved applicability on another member precedes required context in either declaration order.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED",
+            "requiresEvaluationContext": true
+          },
+          {
+            "id": "review",
+            "applicability": "UNRESOLVED",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_CONDITION_UNRESOLVED"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.last-cross-member-applicability-before-context",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Unresolved applicability on another member precedes required context in either declaration order.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "UNRESOLVED",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          },
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED",
+            "requiresEvaluationContext": true
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_CONDITION_UNRESOLVED"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.inapplicable-context-not-required",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "An explicitly inapplicable quorum member needs no current-effectiveness context.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "NOT_APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED",
+            "requiresEvaluationContext": true
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "APPROVED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.first-pending-unused-control",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Unused quorum evidence is validated after a PENDING root in either declaration order, without adding actionables.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "PENDING"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "PENDING",
+          "actionableRequirements": [
+            "done"
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.first-pending-unused-missing-evidence",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Unused quorum evidence is validated after a PENDING root in either declaration order, without adding actionables.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "PENDING"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.last-pending-unused-control",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Unused quorum evidence is validated after a PENDING root in either declaration order, without adding actionables.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          },
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "PENDING"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "PENDING",
+          "actionableRequirements": [
+            "done"
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.last-pending-unused-missing-evidence",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Unused quorum evidence is validated after a PENDING root in either declaration order, without adding actionables.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          },
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "PENDING"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.first-rejected-unused-control",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Unused quorum evidence is validated after a REJECTED root in either declaration order, without adding actionables.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "REJECTED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "REJECTED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.first-rejected-unused-missing-evidence",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Unused quorum evidence is validated after a REJECTED root in either declaration order, without adding actionables.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "REJECTED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.last-rejected-unused-control",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Unused quorum evidence is validated after a REJECTED root in either declaration order, without adding actionables.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          },
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "REJECTED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.last-rejected-unused-missing-evidence",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Unused quorum evidence is validated after a REJECTED root in either declaration order, without adding actionables.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          },
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.first-not-applicable-unused-control",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Unused quorum evidence is validated after a NOT_APPLICABLE root in either declaration order, without adding actionables.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "NOT_APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "APPROVED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.first-not-applicable-unused-missing-evidence",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Unused quorum evidence is validated after a NOT_APPLICABLE root in either declaration order, without adding actionables.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "NOT_APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.last-not-applicable-unused-control",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Unused quorum evidence is validated after a NOT_APPLICABLE root in either declaration order, without adding actionables.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          },
+          {
+            "id": "done",
+            "applicability": "NOT_APPLICABLE",
+            "state": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "APPROVED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.last-not-applicable-unused-missing-evidence",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Unused quorum evidence is validated after a NOT_APPLICABLE root in either declaration order, without adding actionables.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            },
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          },
+          {
+            "id": "done",
+            "applicability": "NOT_APPLICABLE",
+            "state": "APPROVED"
+          }
+        ],
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          },
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "bob"
+            },
+            "outcome": "APPROVED",
+            "effective": true
+          }
+        ]
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            },
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "bob"
+              },
+              "outcome": "APPROVED",
+              "effective": true
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.empty-votes-missing-eligibleactors",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "No Decision iteration may conceal absent required quorum eligibleActors.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.empty-votes-missing-approvedoutcome",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "No Decision iteration may conceal absent required quorum approvedOutcome.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.empty-votes-missing-rejectedoutcome",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "No Decision iteration may conceal absent required quorum rejectedOutcome.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED"
+          }
+        ],
+        "decisions": []
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": []
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.decisions-null",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Composition Decision collection null preserves explicit presence at the core and adapter boundaries.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": null
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        },
+        "observations": {
+          "decisions": null
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.decisions-empty",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Composition Decision collection empty preserves explicit presence at the core and adapter boundaries.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ],
+        "decisions": []
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "APPROVED",
+          "actionableRequirements": []
+        },
+        "observations": {
+          "decisions": []
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    },
+    {
+      "id": "approval.composition097.decisions-omitted",
+      "spec": "approvals/composition",
+      "requirements": [
+        "APPROVAL-COMPOSITION-004",
+        "APPROVAL-COMPOSITION-006",
+        "APPROVAL-COMPOSITION-007",
+        "APPROVAL-COMPOSITION-024",
+        "APPROVAL-QUORUM-010",
+        "APPROVAL-ERROR-010"
+      ],
+      "description": "Composition Decision collection omitted preserves explicit presence at the core and adapter boundaries.",
+      "operation": "approval.composition.evaluate",
+      "input": {
+        "composition": {
+          "rootGroup": "decisive",
+          "groups": [
+            {
+              "id": "q",
+              "kind": "N_OF_M",
+              "threshold": 2,
+              "members": [
+                {
+                  "id": "alice-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "alice"
+                  }
+                },
+                {
+                  "id": "bob-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "bob"
+                  }
+                },
+                {
+                  "id": "carol-seat",
+                  "type": "requirement",
+                  "requirementId": "review",
+                  "voter": {
+                    "id": "carol"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "decisive",
+              "kind": "ALL_OF",
+              "members": [
+                {
+                  "id": "done-seat",
+                  "type": "requirement",
+                  "requirementId": "done"
+                }
+              ]
+            }
+          ]
+        },
+        "requirements": [
+          {
+            "id": "done",
+            "applicability": "APPLICABLE",
+            "state": "APPROVED"
+          },
+          {
+            "id": "review",
+            "applicability": "APPLICABLE",
+            "eligibleActors": [
+              "alice",
+              "bob",
+              "carol"
+            ],
+            "approvedOutcome": "APPROVED",
+            "rejectedOutcome": "REJECTED"
+          }
+        ]
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "outcome": "APPROVED",
+          "actionableRequirements": []
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F1"
+    }
+  ]
+}
