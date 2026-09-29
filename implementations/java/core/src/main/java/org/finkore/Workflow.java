@@ -62,7 +62,10 @@ public final class Workflow {
     /**
      * Creates an immutable transition observation, deeply copying guard JSON.
      * Nested observations are unmodifiable; caller mutations cannot change the
-     * retained predicate (WORKFLOW-VERSION-003).
+     * retained predicate (WORKFLOW-VERSION-003). Exact Byte, Short, Integer,
+     * Long, BigInteger, BigDecimal, and finite Float/Double classes are supported.
+     * Other Number classes and numeric subclasses are rejected before retention
+     * with INVALID_DEFINITION (WORKFLOW-GUARD-007).
      *
      * @param source declared source state
      * @param target declared target state
@@ -153,6 +156,7 @@ public final class Workflow {
 
     /**
      * Parses and validates a portable Workflow definition.
+     * Explicit terminalStates and transitions arrays are required (WORKFLOW-STATES-008).
      *
      * <p>The {@code DEFAULT} versionSequence selector validates the version
      * identity as a positive ASCII integer string (WORKFLOW-VERSION-006).
@@ -176,7 +180,7 @@ public final class Workflow {
       if (!(initial instanceof String initialState) || !stateSet.contains(initialState) || map.containsKey("initialStates")) {
         throw new FinKoreException(INVALID_DEFINITION);
       }
-      Object rawTerminalStates = map.containsKey("terminalStates") ? map.get("terminalStates") : List.of();
+      Object rawTerminalStates = map.get("terminalStates");
       List<String> terminalStates = stringList(rawTerminalStates);
       if (terminalStates == null || new HashSet<>(terminalStates).size() != terminalStates.size()) {
         throw new FinKoreException(INVALID_DEFINITION);
@@ -202,7 +206,7 @@ public final class Workflow {
       if (map.containsKey("versionSequence") && (!"DEFAULT".equals(map.get("versionSequence")) || !opaque(identity) || !versionSequenceValid(version))) {
         throw new FinKoreException(INVALID_DEFINITION);
       }
-      Object rawTransitions = map.containsKey("transitions") ? map.get("transitions") : List.of();
+      Object rawTransitions = map.get("transitions");
       if (!(rawTransitions instanceof List<?> transitionList)) {
         throw new FinKoreException(INVALID_DEFINITION);
       }
@@ -593,10 +597,14 @@ public final class Workflow {
 
   private static Object retainJson(Object value, Set<Object> ancestors) {
     if (value == null || value instanceof String || value instanceof Boolean) return value;
-    if (value instanceof Byte || value instanceof Short || value instanceof Integer || value instanceof Long
-        || value instanceof java.math.BigInteger || value instanceof BigDecimal) return value;
-    if (value instanceof Double number && Double.isFinite(number)) return value;
-    if (value instanceof Float number && Float.isFinite(number)) return value;
+    if (value instanceof Number) {
+      Class<?> kind = value.getClass();
+      if (kind == Byte.class || kind == Short.class || kind == Integer.class || kind == Long.class
+          || kind == java.math.BigInteger.class || kind == BigDecimal.class) return value;
+      if (kind == Double.class && Double.isFinite((Double) value)) return value;
+      if (kind == Float.class && Float.isFinite((Float) value)) return value;
+      throw new FinKoreException(INVALID_DEFINITION);
+    }
     if (!ancestors.add(value)) throw new FinKoreException(INVALID_DEFINITION);
     try {
       if (value instanceof List<?> list) {

@@ -37,10 +37,14 @@ def _version_sequence_valid(value: Any) -> bool:
 
 
 def _copy_json(value: Any, ancestors: set[int] | None = None) -> Any:
-    """Validate and own guard JSON without coercing unsupported native values."""
-    if value is None or isinstance(value, (str, bool, int)):
+    """Own guard JSON with exact built-in numeric types (WORKFLOW-GUARD-007).
+
+    Numeric subclasses and Decimal are unsupported. Failure precedes retention;
+    acyclic shared containers remain valid and are independently copied.
+    """
+    if value is None or type(value) in (str, bool, int):
         return value
-    if isinstance(value, float) and isfinite(value):
+    if type(value) is float and isfinite(value):
         return value
     if ancestors is None:
         ancestors = set()
@@ -218,6 +222,8 @@ class WorkflowDefinition:
     def from_portable(value: Any) -> "WorkflowDefinition":
         """Validate and retain an independent Workflow definition.
 
+        Portable terminalStates and transitions arrays are required (WORKFLOW-STATES-008).
+
         ``versionSequence: "DEFAULT"`` selects positive ASCII integer validation
         of the version identity; otherwise identities stay opaque. Malformed
         guards or version metadata raise FINKORE_WORKFLOW_INVALID_DEFINITION.
@@ -237,7 +243,7 @@ class WorkflowDefinition:
             raise FinKoreError(INVALID_DEFINITION)
         if "initialStates" in value:
             raise FinKoreError(INVALID_DEFINITION)
-        terminal_states = _string_list(value.get("terminalStates", []))
+        terminal_states = _string_list(value.get("terminalStates"))
         if terminal_states is None or any(state not in state_set for state in terminal_states):
             raise FinKoreError(INVALID_DEFINITION)
         terminal_set = set(terminal_states)
@@ -253,7 +259,7 @@ class WorkflowDefinition:
         if "versionSequence" in value and (value["versionSequence"] != "DEFAULT" or not _opaque(definition_identity) or not _version_sequence_valid(version_identity)):
             raise FinKoreError(INVALID_DEFINITION)
 
-        raw_transitions = value.get("transitions", [])
+        raw_transitions = value.get("transitions")
         if not isinstance(raw_transitions, list):
             raise FinKoreError(INVALID_DEFINITION)
         transitions = tuple(WorkflowTransition.from_portable(item, state_set, terminal_set) for item in raw_transitions)

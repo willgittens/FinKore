@@ -18,6 +18,162 @@ const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const constructionPy = 'test_construction_evaluation_regressions.ConstructionEvaluationRegressions.'
 const probes = [
 {
+  "id": "typescript-ownership097-nonfinite",
+  "scope": "native-ownership",
+  "language": "typescript",
+  "path": "src/approvals/approval-value.ts",
+  "from": "typeof value === 'number' && Number.isFinite(value)",
+  "to": "typeof value === 'number'",
+  "tests": [
+    "test/integration/native-ownership.test.ts"
+  ],
+  "target": "native retention rejects unsupported Approval value 2",
+  "control": "native retention captures shared supported Approval children independently"
+},
+{
+  "id": "typescript-ownership097-input-alias",
+  "scope": "native-ownership",
+  "language": "typescript",
+  "path": "src/approvals/approval-value.ts",
+  "from": "return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, copyApprovalValue(item, category, ancestors)])) as T",
+  "to": "return value",
+  "tests": [
+    "test/integration/native-ownership.test.ts"
+  ],
+  "target": "native retention captures shared supported Approval children independently",
+  "control": "native retention requires explicit Workflow terminalStates standalone and embedded"
+},
+{
+  "id": "python-ownership097-numeric-subclass",
+  "scope": "native-ownership",
+  "language": "python",
+  "path": "approvals.py",
+  "from": "type(value) in (str, bool, int)",
+  "to": "isinstance(value, (str, bool, int))",
+  "target": "test_native_ownership.NativeOwnership.test_unsupported_approval_values",
+  "control": "test_native_ownership.NativeOwnership.test_supported_facts_capture_and_observation"
+},
+{
+  "id": "python-ownership097-decimal-subclass",
+  "scope": "native-ownership",
+  "language": "python",
+  "path": "approvals.py",
+  "from": "type(value) is Decimal",
+  "to": "isinstance(value, Decimal)",
+  "target": "test_native_ownership.NativeOwnership.test_unsupported_approval_values",
+  "control": "test_native_ownership.NativeOwnership.test_supported_facts_capture_and_observation"
+},
+{
+  "id": "python-ownership097-input-alias",
+  "scope": "native-ownership",
+  "language": "python",
+  "path": "approvals.py",
+  "from": "return {key: _copy_approval(item, code, ancestors) for key, item in value.items()}",
+  "to": "return value",
+  "target": "test_native_ownership.NativeOwnership.test_supported_facts_capture_and_observation",
+  "control": "test_native_ownership.NativeOwnership.test_required_workflow_collections"
+},
+{
+  "id": "python-ownership097-cycles",
+  "scope": "native-ownership",
+  "language": "python",
+  "path": "approvals.py",
+  "from": "if id(value) in ancestors:\n        raise FinKoreError(code)",
+  "to": "if id(value) in ancestors:\n        return None",
+  "target": "test_native_ownership.NativeOwnership.test_unsupported_approval_values",
+  "control": "test_native_ownership.NativeOwnership.test_supported_facts_capture_and_observation"
+},
+{
+  "id": "python-ownership097-guard-subclass",
+  "scope": "native-ownership",
+  "language": "python",
+  "path": "workflow.py",
+  "from": "type(value) in (str, bool, int)",
+  "to": "isinstance(value, (str, bool, int))",
+  "target": "test_native_ownership.NativeOwnership.test_workflow_native_numbers",
+  "control": "test_native_ownership.NativeOwnership.test_workflow_owned_guard_control"
+},
+{
+  "id": "python-ownership097-terminal-default",
+  "scope": "native-ownership",
+  "language": "python",
+  "path": "workflow.py",
+  "from": "value.get(\"terminalStates\")",
+  "to": "value.get(\"terminalStates\", [])",
+  "target": "test_native_ownership.NativeOwnership.test_required_workflow_collections",
+  "control": "test_native_ownership.NativeOwnership.test_workflow_owned_guard_control"
+},
+{
+  "id": "python-ownership097-transition-default",
+  "scope": "native-ownership",
+  "language": "python",
+  "path": "workflow.py",
+  "from": "value.get(\"transitions\")",
+  "to": "value.get(\"transitions\", [])",
+  "target": "test_native_ownership.NativeOwnership.test_required_workflow_collections",
+  "control": "test_native_ownership.NativeOwnership.test_workflow_owned_guard_control"
+},
+{
+  "id": "java-ownership097-mutable-number",
+  "scope": "native-ownership",
+  "language": "java",
+  "path": "Approvals.java",
+  "from": "// Exact classes: even BigInteger/BigDecimal subclasses may be mutable.",
+  "to": "if (value instanceof java.util.concurrent.atomic.AtomicInteger) return value;",
+  "target": "ownership097.current-facts",
+  "control": "native097.numeric-control-Integer"
+},
+{
+  "id": "java-ownership097-decimal-subclass",
+  "scope": "native-ownership",
+  "language": "java",
+  "path": "Approvals.java",
+  "from": "kind != java.math.BigInteger.class && kind != java.math.BigDecimal.class",
+  "to": "kind != java.math.BigInteger.class && !(value instanceof java.math.BigDecimal)",
+  "target": "native097.approval-reject-MutableDecimal-1",
+  "control": "native097.numeric-control-BigDecimal"
+},
+{
+  "id": "java-ownership097-guard-subclass",
+  "scope": "native-ownership",
+  "language": "java",
+  "path": "Workflow.java",
+  "from": "kind == java.math.BigInteger.class || kind == BigDecimal.class",
+  "to": "kind == java.math.BigInteger.class || value instanceof BigDecimal",
+  "target": "native097.workflow-reject-MutableDecimal-1",
+  "control": "native097.numeric-control-BigDecimal"
+},
+{
+  "id": "java-ownership097-input-alias",
+  "scope": "native-ownership",
+  "language": "java",
+  "path": "Approvals.java",
+  "from": "result.put(key, copyJson(entry.getValue(), code, ancestors));",
+  "to": "result.put(key, entry.getValue());",
+  "target": "ownership097.shared-control",
+  "control": "native097.numeric-control-Integer"
+},
+{
+  "id": "java-ownership097-terminal-default",
+  "scope": "native-ownership",
+  "language": "java",
+  "path": "Workflow.java",
+  "from": "Object rawTerminalStates = map.get(\"terminalStates\");",
+  "to": "Object rawTerminalStates = map.containsKey(\"terminalStates\") ? map.get(\"terminalStates\") : List.of();",
+  "target": "ownership097.collections",
+  "control": "native097.numeric-control-Integer"
+},
+{
+  "id": "java-ownership097-transition-default",
+  "scope": "native-ownership",
+  "language": "java",
+  "path": "Workflow.java",
+  "from": "Object rawTransitions = map.get(\"transitions\");",
+  "to": "Object rawTransitions = map.containsKey(\"transitions\") ? map.get(\"transitions\") : List.of();",
+  "target": "ownership097.collections",
+  "control": "native097.numeric-control-Integer"
+},
+{
   id: 'typescript-approval097-condition-selector-alias',
   scope: 'approval-contracts', language: 'typescript',
   path: 'src/approvals/approval-condition.ts',
@@ -635,7 +791,7 @@ const probes = [
   {"id": "python-approval096-required-context", "language": "python", "path": "approvals.py", "from": "_instant(context.get(\"evaluatedAt\") if isinstance(context, dict) else None, INVALID_CONTEXT)", "to": "pass", "target": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_approval_boundary096_context_calendar_001", "control": "test_construction_evaluation_regressions.ConstructionEvaluationRegressions.test_approval_boundary096_context_control_001"},
   {"id": "java-approval096-required-context", "language": "java", "path": "Approvals.java", "from": "instant(context instanceof Map<?, ?> map ? map.get(\"evaluatedAt\") : null, INVALID_CONTEXT);", "to": "// omitted context validation", "target": "approval.boundary096.context-calendar-001", "control": "approval.boundary096.context-control-001"},
   { id: 'python-approval-reused-history-validation', language: 'python', path: 'approvals.py',
-    from: 'return [_validate_decision_shape(item) for item in decisions], []', to: 'return deepcopy(decisions), []',
+    from: 'return [_validate_decision_shape(item) for item in decisions], []', to: 'return _copy_approval(decisions), []',
     target: boundaryPy + 'test_approval_record_rejects_incomplete_reused_history', control: boundaryPy + 'test_approval_record_evaluate_control' },
   { id: 'java-approval-reused-history-validation', language: 'java', path: 'Approvals.java',
     from: 'validated.add(validateDecisionShape(decision))', to: 'validated.add(copyMap(stringObjectMap((Map<?, ?>) decision, INVALID_DECISION), INVALID_DECISION))',
@@ -709,14 +865,15 @@ const selected = probes.filter(probe => process.argv[2] === undefined || probe.i
 if (selected.length === 0) throw new Error('No native mutation probes match the requested ID fragment')
 // Mandatory regression preflight: a red corrective baseline is not a killed mutant.
 for (const language of new Set(selected.map(probe => probe.language))) {
+  const ownershipScope = selected.filter(probe => probe.language === language).every(probe => probe.scope === 'native-ownership')
   const approvalScope = selected.filter(probe => probe.language === language).every(probe => probe.scope === 'approval-contracts')
   let baseline
-  if (language === 'python') baseline = run(process.env.FINKORE_PYTHON_PATH ?? join(root, '.tools/bin/python3.12'), ['-m', 'unittest', 'discover', '-s', 'implementations/python/core/tests', '-p', approvalScope ? 'test_approval_contracts.py' : 'test_evidence_regressions.py'], { env: { ...process.env, PYTHONPATH: join(root, 'implementations/python/core/src') } })
+  if (language === 'python') baseline = run(process.env.FINKORE_PYTHON_PATH ?? join(root, '.tools/bin/python3.12'), ['-m', 'unittest', 'discover', '-s', 'implementations/python/core/tests', '-p', ownershipScope ? 'test_native_ownership.py' : approvalScope ? 'test_approval_contracts.py' : 'test_evidence_regressions.py'], { env: { ...process.env, PYTHONPATH: join(root, 'implementations/python/core/src') } })
   else if (language === 'java') {
     const compiled = run(process.execPath, ['docs/tools/compile-java.js'])
     if (compiled.status !== 0) throw new Error(`Java regression preflight compile failed\n${compiled.stderr}`)
-    baseline = run(join(root, '.tools/bin/java'), ['-cp', [join(root, 'implementations/java/target/classes'), join(root, 'implementations/java/target/test-classes')].join(delimiter), approvalScope ? 'org.finkore.ApprovalContractsTest' : 'org.finkore.EvidenceRegressionTest'])
-  } else baseline = run(process.execPath, [join(root, 'node_modules/vitest/vitest.mjs'), 'run', '--root', 'implementations/typescript/core', ...(approvalScope ? ['--config', join(root, 'implementations/typescript/core/vitest.approvals.config.ts')] : ['test/integration/evidence-regressions.test.ts'])])
+    baseline = run(join(root, '.tools/bin/java'), ['-cp', [join(root, 'implementations/java/target/classes'), join(root, 'implementations/java/target/test-classes')].join(delimiter), ownershipScope ? 'org.finkore.NativeOwnershipTest' : approvalScope ? 'org.finkore.ApprovalContractsTest' : 'org.finkore.EvidenceRegressionTest'])
+  } else baseline = run(process.execPath, [join(root, 'node_modules/vitest/vitest.mjs'), 'run', '--root', 'implementations/typescript/core', ...(ownershipScope ? ['--config', join(root, 'implementations/typescript/core/vitest.ownership.config.ts')] : approvalScope ? ['--config', join(root, 'implementations/typescript/core/vitest.approvals.config.ts')] : ['test/integration/evidence-regressions.test.ts'])])
   if (baseline.status !== 0) throw new Error(`${language}: Core 0.9.7 regression baseline failed; no mutation result claimed\n${baseline.stdout}\n${baseline.stderr}`)
 }
 for (const probe of selected) {

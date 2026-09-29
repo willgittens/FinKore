@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { copyApprovalValue } from './approval-value.js'
 import { validateFactComparison } from './approval-facts.js'
 import { ApprovalRequirement } from './approval-requirement.js'
 import { IneligibleApprovalActorError, InvalidApprovalContextError, InvalidApprovalDecisionError } from './errors.js'
@@ -17,14 +18,6 @@ function isPlainRecord(value: unknown): value is Readonly<Record<string, unknown
 function requiredString(value: unknown): string {
   if (typeof value !== 'string' || value.length === 0) throw new InvalidApprovalDecisionError()
   return value
-}
-
-function cloneJsonValue<T>(value: T): T {
-  try {
-    return structuredClone(value)
-  } catch {
-    throw new InvalidApprovalDecisionError()
-  }
 }
 
 function validateOutcome(value: unknown): ApprovalDecisionOutcome {
@@ -115,6 +108,14 @@ function jsonEquivalent(left: unknown, right: unknown): boolean {
  * @see APPROVAL-DECISION-002
  * @see APPROVAL-DECISION-005
  * @see APPROVAL-DECISION-006
+ *
+ * @remarks
+ * Native facts accept null, strings, Booleans, finite primitive numbers, arrays,
+ * and plain or null-prototype records. Containers are copied independently;
+ * shared acyclic children are valid. Cycles, undefined, bigint, boxed numbers,
+ * nonfinite numbers, and custom scalar objects fail before retention with
+ * FINKORE_APPROVAL_INVALID_DECISION. No numeric coercion is performed.
+ * @see APPROVAL-FACT-004
  */
 export class ApprovalDecision {
   private readonly value: SerializedApprovalDecision
@@ -150,7 +151,7 @@ export class ApprovalDecision {
     if (input.subjectFacts === undefined) throw new InvalidApprovalDecisionError()
     return new ApprovalDecision({
       requirementId: requiredString(input.requirementId),
-      subjectFacts: cloneJsonValue(input.subjectFacts),
+      subjectFacts: copyApprovalValue(input.subjectFacts),
       outcome: validateOutcome(input.outcome),
       actor: validateActor(input.actor),
       decidedAt: validateTimestamp(input.decidedAt),
@@ -325,6 +326,6 @@ export class ApprovalDecision {
    * @see APPROVAL-DECISION-007
    */
   toJSON(): SerializedApprovalDecision {
-    return cloneJsonValue(this.value)
+    return copyApprovalValue(this.value)
   }
 }

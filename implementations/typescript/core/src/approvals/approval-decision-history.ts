@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { copyApprovalValue } from './approval-value.js'
 import { validateFactComparison } from './approval-facts.js'
 import { ApprovalDecision } from './approval-decision.js'
 import { ApprovalRequirement } from './approval-requirement.js'
@@ -42,14 +43,6 @@ function isPlainRecord(value: unknown): value is Readonly<Record<string, unknown
 function requiredString(value: unknown): string {
   if (typeof value !== 'string' || value.length === 0) throw new InvalidApprovalDecisionError()
   return value
-}
-
-function cloneJsonValue<T>(value: T): T {
-  try {
-    return structuredClone(value)
-  } catch {
-    throw new InvalidApprovalDecisionError()
-  }
 }
 
 function validateTimestamp(value: unknown): string {
@@ -150,6 +143,14 @@ function lifecycleCandidate(input: unknown, type: SerializedApprovalLifecycleEve
  * @see APPROVAL-ERROR-001
  * @see APPROVAL-ERROR-005
  * @see APPROVAL-ERROR-006
+ *
+ * @remarks
+ * Native facts accept null, strings, Booleans, finite primitive numbers, arrays,
+ * and plain or null-prototype records. Containers are copied independently;
+ * shared acyclic children are valid. Cycles, undefined, bigint, boxed numbers,
+ * nonfinite numbers, and custom scalar objects fail before retention with
+ * FINKORE_APPROVAL_INVALID_DECISION. No numeric coercion is performed.
+ * @see APPROVAL-FACT-004
  */
 export class ApprovalDecisionHistory {
   private readonly committedDecisions: ApprovalDecision[]
@@ -441,7 +442,7 @@ export class ApprovalDecisionHistory {
    * @see APPROVAL-VALIDITY-011
    */
   lifecycleEvents(): readonly SerializedApprovalLifecycleEvent[] {
-    return this.committedLifecycleEvents.map((event) => cloneJsonValue(event))
+    return this.committedLifecycleEvents.map((event) => copyApprovalValue(event))
   }
 
   /**

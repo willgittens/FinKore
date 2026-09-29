@@ -2,11 +2,11 @@
 
 ## Status
 
-Milestone 2 regression/discovery work is complete; implementation Milestones
-3–9 remain uncompleted. D1–D7 were explicitly accepted on 2026-09-27. M1 is
-reopened only for D8, which the maintainer explicitly left unresolved. The new
-tests deliberately fail on the defective baseline; implementation scope remains
-open until D8 is settled.
+Milestones 2–5 are complete for their accepted contracts. Milestones 6–9
+remain uncompleted. D1–D7 were explicitly accepted on 2026-09-27. M1 remains
+open for D8 (explicitly left unresolved) and D9 (the Entity native-value policy
+gap discovered during M5). No Entity numeric policy has been selected.
+Implementation scope and release verification remain open.
 Release type: corrective release candidate. Core 1.0 promotion is blocked pending this work and the separate
 [Core 1.0 promotion gates](plan-10.md).
 
@@ -806,33 +806,143 @@ note, tag, publication, or Core 1.0 promotion occurs.
 
 ## Milestone 5 — Native value ownership across retained domain data
 
-- [ ] Enforce D6/F8b explicit Workflow terminal-State/Transition fixture
+- [x] Enforce D6/F8b explicit Workflow terminal-State/Transition fixture
       collections at standalone and embedded Entity definition boundaries.
 
 
-- [ ] Fix F2a/F2b under the accepted native value contract. Validate before
+- [x] Fix F2a/F2b under the accepted native value contract. Validate before
       retaining caller-provided values; preserve supported exact immutable
       numbers and reject unsupported values through documented domain errors.
-- [ ] Exercise Java `AtomicInteger`, related mutable numeric objects, and mutable
+- [x] Exercise Java `AtomicInteger`, related mutable numeric objects, and mutable
       `BigDecimal`/`BigInteger` subclasses in nested facts and guard values.
       Include supported immutable controls and nonfinite/unsupported values.
-- [ ] Review analogous retention paths across all implementations and domains:
+- [x] Review analogous retention paths across all implementations and domains:
       Decision history, lifecycle metadata, condition observations, Workflow
       definitions/bindings, Entity definitions/data, and Audit evidence.
       Add tests for confirmed ownership obligations rather than a generic freeze.
-- [ ] Test original-input and output-observation mutation separately, including
+- [x] Test original-input and output-observation mutation separately, including
       repeated observation and later domain operations. Changing a rejected
       input must never alter earlier committed state.
-- [ ] Keep native validation in cores and JSON bridges lossless within their
+- [x] Keep native validation in cores and JSON bridges lossless within their
       documented supported value sets. Do not catch arbitrary runtime exceptions
       and relabel them as financial errors.
-- [ ] Extend native mutation probes and installed Java consumer tests for these
+- [x] Extend native mutation probes and installed Java consumer tests for these
       cases. Review TypeScript JSDoc and Python/Java API docs for supported-value
       and mutation guarantees.
 
 Completion: supported retained values preserve their captured meaning; rejected
 native values fail portably and atomically. Caller aliases cannot rewrite
 Approval history or a bound Workflow definition.
+
+### D9 — Entity application-data native numbers: unresolved
+
+The M5 adjacent-path review reproduced a Java Entity data alias: create an
+Entity with a nested `AtomicInteger(1)` as `memo`, change the original number
+to 999, and observe the returned Entity data change from 1 to 999 without an
+Entity mutation. Entity declaration ownership is already specified, but the
+accepted APPROVAL-FACT-004 / WORKFLOW-GUARD-007 native numeric profile expressly
+does not define arbitrary Entity application data. The allowed native number
+set and error category for create/import/current data versus proposed mutations
+remain unspecified at that boundary.
+
+A clarification was requested to extend the immutable-number profile with
+ENTITY_VALIDATION_FAILED for create/import/current data and
+ENTITY_INVALID_MUTATION for proposed changes, preserving existing priority.
+No answer has selected that extension. No normative expectation, broad copier
+change, or native rejection policy is invented here. D9 remains open for M1
+resolution and prevents a claim of complete Entity ownership closure.
+
+### M5 implementation and verification — 2026-09-29
+
+The three cores enforce the accepted Approval native value profile before
+retention and before fact comparison. Supported immutable numbers retain their
+exact values; unsupported objects, numeric subclasses, nonfinite values, and
+cycles fail portably without invoking custom copy hooks. Shared acyclic
+children remain supported and become independent observations. Composition
+native evidence retains applicability/context-before-evidence priority and
+INVALID_CHAIN; concrete facts use INVALID_DECISION. No arbitrary runtime
+exception is caught and relabeled as a financial error.
+
+Python and Java Workflow imports require explicit terminalStates/transitions,
+including embedded Entity declarations. Their native guard validation rejects
+numeric subclasses without changing supported guard equality; Python Decimal
+remains unsupported for Workflow. TypeScript already enforced those Workflow
+boundaries. Python/Java failure-observation bridges now ask the owning Workflow
+core to validate embedded definitions before emitting Entity observations;
+invalid definitions no longer produce misleading diagnostic observations.
+
+| Reviewed retention path | Outcome |
+| --- | --- |
+| Approval Decisions, histories, lifecycle metadata, requirement/condition observations | Native value validation and independent containers; actual returned histories are reused, with original/output mutations and rejected-input atomicity tested. Existing condition ownership controls remain active. |
+| Workflow definitions, guards, bindings, later transitions | Supported controls preserve captured meaning and binding; mutable numbers and subclasses reject before retention. Original and observed containers are tested independently. |
+| Entity definitions and embedded Workflow | Explicit collections and core guard validation apply. Special-key declaration reuse remains M6; malformed Entity boundaries remain M7. |
+| Entity application data | D9 reproduced above; supported native numbers/error policy remains unresolved. |
+| Audit evidence | Existing validated JSON ownership, numeric/cycle controls, append/import/redaction observations, and special-key regressions reviewed and retained. No generic freeze or Audit policy change. D8 remains open. |
+
+The new native suite was demonstrated red before correction: TypeScript
+11/14 initial tests failed, Python reported 14 subtest failures, and Java
+reported 12 failures including a cyclic-value stack overflow. Final native
+suites pass, including exact error priority for unsupported Requirement as well
+as Decision composition evidence. Existing TypeScript tests that treated native
+undefined members as merely ineffective now require INVALID_DECISION under D4;
+missing-path controls remain ineffective. The adapter's stale Approval-vector
+count was corrected from 277 to 579, without weakening result assertions.
+
+Compatibility: callers must provide explicit portable Workflow collections,
+replace unsupported native numeric objects with supported immutable values,
+and omit optional members instead of supplying unsupported undefined values.
+Native convenience constructors retain their documented defaults. No supported
+exact number is rounded, stringified, or normalized into an accepted value.
+
+Verification results:
+
+| Gate | Observed result |
+| --- | --- |
+| Toolchains/build/strict typing | Toolchain check, all workspace builds/strict TypeScript, Python compilation on 3.12/3.13, strict Java compilation, tools tests, and architecture check pass. |
+| Focused unit/native suites | TypeScript 1009 tests pass (130 Entity cases omitted only in the dedicated M5 configuration); Python six native methods with subtests pass on 3.12/3.13; Java 41 named native cases pass. All remain included in full-suite discovery. |
+| Scoped coverage | TypeScript Approval/Workflow: 99.87% lines, 99.74% branches, 100% functions. Python native + Approval contracts + Workflow tests: 90% combined statement/branch coverage for Approval/Workflow. Clean Maven native + Approval contracts + Workflow coverage: 93.95% lines / 85.04% branches for Approval/Workflow. These are scoped measurements, not a claim that the full release coverage gate passes. |
+| Mutation | Focused TypeScript Approval/Workflow Stryker: 96.42% (2154 killed, two timeouts, 79 survivors, one uncovered; 96.33% without timeout credit). Approval alone is 97.87%; Workflow is 91.96%, including diagnostic error-class mutants. The unchanged combined 95% gate passes. No new exclusions or ignore annotations. |
+| Targeted probes | 15/15 new native ownership probes killed with independent passing controls; Python's seven repeat on 3.13. Existing Approval critical probes remain 105/105 killed (54/54 Python repeat on 3.13). Source targets for renamed Python copying are updated without changing fault intent. |
+| Installed consumers | npm, wheel and sdist on Python 3.12/3.13, and JAR pass `--ownership`; these assertions also execute in default consumers before pending Entity checks. |
+| Whole-manifest conformance | Of 1667 vectors: TypeScript 1579 PASS / 87 FAIL / 1 INFRASTRUCTURE_ERROR; each Python runtime 1361 / 282 / 24; Java 1465 / 202 / 0. No UNSUPPORTED outcomes. All 579 Approval vectors, all 34 explicit Workflow collection cases, and every one of the original 884 vectors pass on every runtime. Remaining failing/error results belong to M6–M7 Entity corrections. |
+| Whole unit suites | Runner 130/130 pass. TypeScript core 1987 pass / 2 Entity failures; adapter 125 pass / 78 Entity failures. Each Python runtime has 45 failures / 3 errors in the full suite; Java evidence regressions have 39 failures. These known red M6–M7 gates remain visible and block full verification. |
+| Repository consistency | Documentation links, traceability, licensing, developer-tool tests, and whitespace checks pass. |
+
+Survivor review: the 18 composition survivors retain the M3 equivalence
+explanations; unsupported Requirement evidence now kills the additional
+INVALID_CHAIN-category mutation. Condition selector validation and timestamp
+fallback survivors remain redundant as recorded in M4. The extra Decision
+presence checks are redundant with native value validation; equal-length key
+comparison without the name guard still differs on an absent value because
+undefined is unsupported. The three new copy-helper survivors change the
+default category to another value taking the same concrete-error branch, remove
+a typeof check already enforced by Number.isFinite, or repeat an already-returned
+null check. None changes supported evidence or its portable error.
+
+Workflow survivors remove binding checks repeated by required-string validation,
+return the same absent binding fields from unversioned getters, or remove
+comparison branches made redundant by earlier type/shape checks for supported
+guard values. The one uncovered comparison fallback is unreachable with a
+supported retained guard operand. Workflow's 28 error-class survivors and four
+Approval error-class survivors alter non-normative diagnostics, class names,
+or absent optional properties. All remain counted; these explanations do not
+waive critical mutations. The original/output alias, numeric-class, finite-value,
+cycle, exact comparison, and portable error-category probes are killed.
+
+Synchronization review: native/unit tests, mutation tools, installed consumers,
+public JSDoc/docstrings, package/root/conformance READMEs, and traceability are
+updated. Existing M2 vectors exercise all 34 collection cases; no new portable
+vector can encode native object identity, mutable Number classes, or aliases.
+Seven rows return to COVERED and three native/registry-only rows use NOT DIRECTLY
+TESTABLE with explicit native evidence; 432 requirements remain (325 covered,
+23 partial, 83 not directly testable, one D8 blocking gap). D9 is a newly
+identified policy gap, not an invented requirement. Existing approved /spec
+contracts already define the implemented behavior; Agentic IDs/metadata,
+CoreDoc, AGENTS.md, and architectural boundaries are unchanged. No release note,
+tag, publication, or Core 1.0 promotion occurs.
+
+**M5 is complete for the accepted Approval/Workflow profile and adjacent-path
+review. M6–M7 remain pending; D8 and D9 remain unresolved.**
 
 ## Milestone 6 — Preserve Entity declarations through observation and reuse
 

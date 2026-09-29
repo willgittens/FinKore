@@ -953,8 +953,8 @@ const pythonMutants = [
     expectedPassVectors: ['approval.lifecycle.withdraw.request-type-omitted-001'],
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
-    from: 'return {**deepcopy(value), "type": lifecycle_type}',
-    to: 'return {"type": lifecycle_type, **deepcopy(value)} if lifecycle_type == "WITHDRAWN" else {**deepcopy(value), "type": lifecycle_type}',
+    from: 'return {**_copy_approval(value), "type": lifecycle_type}',
+    to: 'return {"type": lifecycle_type, **_copy_approval(value)} if lifecycle_type == "WITHDRAWN" else {**_copy_approval(value), "type": lifecycle_type}',
   },
   {
     id: 'python-approval-supersede-request-type-override',
@@ -962,8 +962,8 @@ const pythonMutants = [
     expectedPassVectors: ['approval.lifecycle.supersede.request-type-omitted-001'],
     suite: 'approvals',
     path: 'core/src/finkore/approvals.py',
-    from: 'return {**deepcopy(value), "type": lifecycle_type}',
-    to: 'return {"type": lifecycle_type, **deepcopy(value)} if lifecycle_type == "DECISION_SUPERSEDED" else {**deepcopy(value), "type": lifecycle_type}',
+    from: 'return {**_copy_approval(value), "type": lifecycle_type}',
+    to: 'return {"type": lifecycle_type, **_copy_approval(value)} if lifecycle_type == "DECISION_SUPERSEDED" else {**_copy_approval(value), "type": lifecycle_type}',
   },
   {
     id: 'python-approval-requirement-request-type-override',

@@ -248,6 +248,9 @@ def execute_approval_composition_evaluate(input_value: dict[str, Any]) -> dict[s
 
 
 def entity_observation(input_value: dict[str, Any]) -> dict[str, Any] | None:
+    # A rejected embedded definition cannot produce a reconstructed observation.
+    definition = input_value.get("definition")
+    WorkflowDefinition.from_portable(definition.get("workflow") if isinstance(definition, dict) else None)
     if isinstance(input_value.get("entity"), dict):
         return {"entity": input_value["entity"]}
     return None

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { copyApprovalValue } from './approval-value.js'
 import { InvalidApprovalDecisionError } from './errors.js'
 
 /**
@@ -21,6 +22,7 @@ export function validateFactPaths(value: unknown): readonly string[] {
  * Validates fact presence and selector declarations before lifecycle filtering.
  * Only Requirement evaluation permits both facts and selectors to be omitted.
  * Explicit null facts are supplied values; explicit null selectors are invalid.
+ * Supplied facts must also satisfy the supported native value profile.
  * @throws {InvalidApprovalDecisionError} For malformed comparison requests.
  * @internal
  * @see APPROVAL-FACT-001
@@ -28,5 +30,6 @@ export function validateFactPaths(value: unknown): readonly string[] {
 export function validateFactComparison(currentFacts: unknown, paths: unknown, allowOmission = false): readonly string[] | undefined {
   const selected = paths === undefined ? undefined : validateFactPaths(paths)
   if (currentFacts === undefined && (!allowOmission || selected !== undefined)) throw new InvalidApprovalDecisionError()
+  if (currentFacts !== undefined) copyApprovalValue(currentFacts)
   return selected
 }

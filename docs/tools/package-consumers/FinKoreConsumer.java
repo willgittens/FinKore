@@ -14,6 +14,16 @@ import org.finkore.Approvals;
 import org.finkore.Workflow;
 
 public final class FinKoreConsumer {
+  private static final class MutableDecimal097 extends java.math.BigDecimal {
+    private static final long serialVersionUID = 1L;
+    MutableDecimal097() { super("1"); }
+    @Override public String toString() { return "999"; }
+  }
+  private static final class MutableInteger097 extends java.math.BigInteger {
+    private static final long serialVersionUID = 1L;
+    MutableInteger097() { super("1"); }
+    @Override public String toString() { return "999"; }
+  }
   private static void equal(Object expected, Object actual) {
     if (!expected.equals(actual)) throw new AssertionError("Expected " + expected + ", got " + actual);
   }
@@ -62,6 +72,23 @@ public final class FinKoreConsumer {
     equal("PENDING", Approvals.evaluateRequirement(req097, Approvals.importHistory(wd097), Approvals.OMITTED, Approvals.OMITTED, null));
     if (List.of(args).contains("--approvals")) {
       System.out.println("Installed JAR Approval checks passed");
+      return;
+    }
+    for (Object value : List.of(new AtomicInteger(1), new java.util.concurrent.atomic.AtomicLong(1), new MutableDecimal097(), new MutableInteger097(), Double.NaN, Double.POSITIVE_INFINITY)) {
+      Map<String, Object> candidate = new LinkedHashMap<>(dec097);
+      candidate.put("subjectFacts", Map.of("nested", List.of(value)));
+      Map<String, Object> captured = Approvals.importHistory(hist097);
+      error(Approvals.INVALID_DECISION, () -> Approvals.recordDecision(req097, candidate, hist097));
+      error(Workflow.INVALID_DEFINITION, () -> Workflow.Definition.fromPortable(Map.of("states", List.of("DRAFT", "DONE"), "initialState", "DRAFT", "terminalStates", List.of("DONE"), "transitions", List.of(Map.of("source", "DRAFT", "target", "DONE", "guard", Map.of("fact", "value", "equals", Map.of("nested", List.of(value))))))));
+      equal(captured, hist097);
+    }
+    for (String field : List.of("terminalStates", "transitions")) {
+      Map<String, Object> candidate = new LinkedHashMap<>(Map.of("states", List.of("DRAFT"), "initialState", "DRAFT", "terminalStates", List.of(), "transitions", List.of()));
+      candidate.remove(field);
+      error(Workflow.INVALID_DEFINITION, () -> Workflow.Definition.fromPortable(candidate));
+    }
+    if (List.of(args).contains("--ownership")) {
+      System.out.println("Installed JAR native ownership checks passed");
       return;
     }
     equal("0.9-rc", FinKore.CORE_VERSION);

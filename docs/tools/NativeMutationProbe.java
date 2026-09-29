@@ -23,6 +23,7 @@ public final class NativeMutationProbe {
           || id.equals("entity.sequence.versioned-import")) cases.put(id, test);
     });
     cases.putAll(EvidenceRegressionTest.cases());
+    cases.putAll(NativeOwnershipTest.cases());
     cases.put("approval097.numeric", ApprovalContractsTest::exactNumbers);
     List<String> rows = new ArrayList<>();
     int passed = 0, failed = 0, infrastructure = 0;

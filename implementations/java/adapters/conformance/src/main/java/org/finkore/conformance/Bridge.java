@@ -308,6 +308,8 @@ public final class Bridge {
         return observations;
       }
       if ("finkore.entity.transition".equals(operation)) {
+        Object definition = input.get("definition");
+        Workflow.Definition.fromPortable(definition instanceof Map<?, ?> map ? map.get("workflow") : null);
         return entityObservation(input.get("entity"));
       }
       if ("entity.import".equals(operation)) {

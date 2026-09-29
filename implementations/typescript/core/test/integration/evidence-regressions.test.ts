@@ -140,7 +140,7 @@ for (const state of ['DRAFT', '__proto__', 'constructor', 'prototype']) it(`enti
 it('approval097 owned facts control retains original and observed values independently', () => {
   const input = { ...first, subjectFacts: { nested: { value: 1 }, array: [2, 3] } }
   const history = ApprovalDecisionHistory.create().record(requirement, input)
-  const before = history.toJSON()
+  const before = structuredClone(history.toJSON())
   input.subjectFacts.nested.value = 999
   const exposed = history.toJSON() as unknown as { history: { subjectFacts: { nested: { value: number } } }[] }
   exposed.history[0]!.subjectFacts.nested.value = 555

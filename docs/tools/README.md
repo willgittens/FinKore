@@ -292,7 +292,7 @@ intentionally leaves financial tests red and cannot pass release verification.
 
 ## Composition milestone checks
 
-While M5–M7 regressions remain red, composition has explicit scoped checks.
+While M6–M7 regressions remain red, composition has explicit scoped checks.
 The default complete-suite gates remain unchanged:
 
 ```sh
@@ -338,3 +338,25 @@ Approval contract baseline, including vector results and actual history reuse.
 The complete native gate retains its broader baseline. Package `--approvals`
 checks installed composition plus concrete history/facts/condition APIs in npm,
 both Python wheel/sdist versions, and the JAR; these assertions also run by default.
+
+## Native ownership milestone checks
+
+M5 verifies the accepted Approval/Workflow native profile. Entity policy outside
+that profile remains explicitly unresolved (D9). Complete-suite checks still
+include all M6–M7 failures.
+
+```sh
+npm exec -w @finkore/typescript -- vitest run --config vitest.ownership.config.ts --coverage
+npm exec -w @finkore/typescript -- stryker run stryker.ownership.config.json
+PYTHONPATH=implementations/python/core/src .tools/bin/python3.12 -m unittest discover -s implementations/python/core/tests -p test_native_ownership.py
+PYTHONPATH=implementations/python/core/src .tools/bin/python3.13 -m unittest discover -s implementations/python/core/tests -p test_native_ownership.py
+.tools/bin/mvn -f implementations/java/core/pom.xml -Dtest=NativeOwnershipCoverageTest,ApprovalContractsCoverageTest test
+node docs/tools/mutation-native.js ownership097
+FINKORE_PYTHON_PATH=.tools/bin/python3.13 node docs/tools/mutation-native.js python-ownership097
+node docs/tools/check-packages.js --ownership
+```
+
+The ownership probe filter requires a passing dedicated native baseline and
+independent passing controls. It never counts infrastructure failure as a kill.
+Installed ownership assertions run by default as well as under `--ownership`;
+the scoped option stops before the pending Entity assertions.

@@ -4,6 +4,8 @@ package org.finkore;
 import java.math.BigInteger;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -15,6 +17,13 @@ import java.util.Set;
 /**
  * FinKore Approval behavior for requirements, decisions, lifecycle validity,
  * chains, and bounded composition.
+ * Native facts retain only exact Byte, Short, Integer, Long, BigInteger,
+ * BigDecimal and finite Float/Double classes, plus null, Boolean, String,
+ * lists and string-key maps. Mutable Number classes and numeric subclasses,
+ * nonfinite values and cycles fail with INVALID_DECISION before retention.
+ * Composition evidence uses INVALID_CHAIN after applicability and context.
+ * Shared acyclic containers are captured independently without numeric coercion.
+ * @see <a href="../../../../../../spec/approvals/decisions.md">APPROVAL-FACT-004</a>
  *
  * <p>The current Java API accepts portable JSON-shaped observations at the
  * conformance boundary while preserving Approval semantics in core code. It
@@ -575,6 +584,7 @@ public final class Approvals {
 
   private static void validateComparison(Object facts, Object paths, boolean allowOmission) {
     if (paths != OMITTED) validatePaths(paths);
+    if (facts != OMITTED) copyJson(facts, INVALID_DECISION);
     if (facts == OMITTED && (!allowOmission || paths != OMITTED)) throw new FinKoreException(INVALID_DECISION);
   }
 
@@ -840,7 +850,11 @@ public final class Approvals {
     Map<String, Map<String, Object>> reqs = new LinkedHashMap<>();
     for (Object item : list) {
       if (!(item instanceof Map<?, ?> raw)) throw new FinKoreException(INVALID_CHAIN);
-      Map<String, Object> req = stringObjectMap(raw, INVALID_CHAIN);
+      Map<String, Object> req = new LinkedHashMap<>();
+      for (Map.Entry<?, ?> field : raw.entrySet()) {
+        if (!(field.getKey() instanceof String key)) throw new FinKoreException(INVALID_CHAIN);
+        req.put(key, field.getValue());
+      }
       String id = requiredString(req.get("id"), INVALID_CHAIN);
       if (reqs.containsKey(id)) throw new FinKoreException(INVALID_CHAIN);
       if (req.containsKey("requiresEvaluationContext") && !(req.get("requiresEvaluationContext") instanceof Boolean)) throw new FinKoreException(INVALID_CHAIN);
@@ -871,6 +885,7 @@ public final class Approvals {
         instant(context instanceof Map<?, ?> map ? map.get("evaluatedAt") : null, INVALID_CONTEXT);
       }
     }
+    for (Map<String, Object> req : reqs.values()) copyJson(req, INVALID_CHAIN);
     for (String id : required) {
       Map<String, Object> req = reqs.get(id);
       boolean needsState = "APPLICABLE".equals(req.get("applicability")) && stateRequired.contains(id);
@@ -1138,27 +1153,51 @@ public final class Approvals {
   }
 
   private static Object copyJson(Object value, String code) {
-    if (value == null || value instanceof String || value instanceof Number || value instanceof Boolean) {
+    return copyJson(value, code, Collections.newSetFromMap(new IdentityHashMap<>()));
+  }
+
+  private static Object copyJson(Object value, String code, Set<Object> ancestors) {
+    if ((value instanceof Double doubleValue && !Double.isFinite(doubleValue))
+        || (value instanceof Float floatValue && !Float.isFinite(floatValue))) {
+      throw new FinKoreException(code);
+    }
+    if (value == null || value instanceof String || value instanceof Boolean) {
       return value;
     }
-    if (value instanceof List<?> list) {
-      List<Object> result = new ArrayList<>();
-      for (Object item : list) {
-        result.add(copyJson(item, code));
+    if (value instanceof Number) {
+      // Exact classes: even BigInteger/BigDecimal subclasses may be mutable.
+      Class<?> kind = value.getClass();
+      if (kind != Byte.class && kind != Short.class && kind != Integer.class && kind != Long.class
+          && kind != Float.class && kind != Double.class && kind != java.math.BigInteger.class && kind != java.math.BigDecimal.class) {
+        throw new FinKoreException(code);
       }
-      return result;
+      return value;
     }
-    if (value instanceof Map<?, ?> map) {
-      Map<String, Object> result = new LinkedHashMap<>();
-      for (Map.Entry<?, ?> entry : map.entrySet()) {
-        if (!(entry.getKey() instanceof String key)) {
-          throw new FinKoreException(code);
+    if (!ancestors.add(value)) {
+      throw new FinKoreException(code);
+    }
+    try {
+      if (value instanceof List<?> list) {
+        List<Object> result = new ArrayList<>();
+        for (Object item : list) {
+          result.add(copyJson(item, code, ancestors));
         }
-        result.put(key, copyJson(entry.getValue(), code));
+        return result;
       }
-      return result;
+      if (value instanceof Map<?, ?> map) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+          if (!(entry.getKey() instanceof String key)) {
+            throw new FinKoreException(code);
+          }
+          result.put(key, copyJson(entry.getValue(), code, ancestors));
+        }
+        return result;
+      }
+      throw new FinKoreException(code);
+    } finally {
+      ancestors.remove(value);
     }
-    throw new FinKoreException(code);
   }
 
   private record DecisionSet(List<Map<String, Object>> history, List<Map<String, Object>> lifecycle) {}

@@ -10,7 +10,8 @@
     "src/approvals/approval-decision-history.ts",
     "src/approvals/approval-requirement.ts",
     "src/approvals/errors.ts",
-    "src/approvals/approval-facts.ts"
+    "src/approvals/approval-facts.ts",
+    "src/approvals/approval-value.ts"
   ],
   "testFiles": [
     "test/approvals/*.test.ts",

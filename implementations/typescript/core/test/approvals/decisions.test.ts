@@ -950,12 +950,10 @@ describe('Approval decisions', () => {
         ['revision', 'missingFact'],
       ),
     ).toBe('INEFFECTIVE')
-    expect(
-      approvalDecision.evaluateEffectiveness(
-        { revision: '3', amount: { amount: '9000.00', currency: 'EUR' }, missingFact: undefined },
-        ['revision', 'missingFact'],
-      ),
-    ).toBe('INEFFECTIVE')
+    expect(() => approvalDecision.evaluateEffectiveness(
+      { revision: '3', amount: { amount: '9000.00', currency: 'EUR' }, missingFact: undefined },
+      ['revision', 'missingFact'],
+    )).toThrowError(expect.objectContaining({ code: 'FINKORE_APPROVAL_INVALID_DECISION' }))
 
     expect(
       ApprovalDecision.from({ ...decision, subjectFacts: { revision: '3' } }).evaluateEffectiveness(
@@ -1125,8 +1123,8 @@ describe('Approval decisions', () => {
     expect(ApprovalDecision.from({ ...decision, subjectFacts: { a: 1 } }).evaluateEffectiveness({ b: 1 })).toBe(
       'INEFFECTIVE',
     )
-    expect(ApprovalDecision.from({ ...decision, subjectFacts: { a: undefined } }).evaluateEffectiveness({ b: undefined })).toBe(
-      'INEFFECTIVE',
+    expect(() => ApprovalDecision.from({ ...decision, subjectFacts: { a: undefined } })).toThrowError(
+      expect.objectContaining({ code: 'FINKORE_APPROVAL_INVALID_DECISION' }),
     )
     expect(ApprovalDecision.from({ ...decision, subjectFacts: { a: { b: false } } }).evaluateEffectiveness({ a: 1 })).toBe(
       'INEFFECTIVE',

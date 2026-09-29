@@ -2,7 +2,7 @@
 // Exercises installed npm public APIs in an isolated consumer. Creates only
 // in-memory observations and defines no financial behavior.
 import assert from 'node:assert/strict'
-import { FINKORE_CORE_VERSION, Money, FinancialEntity, Workflow, ApprovalCondition, ApprovalComposition, ApprovalDecision, ApprovalDecisionHistory, AuditLog } from '@finkore/typescript'
+import { FINKORE_CORE_VERSION, Money, FinancialEntity, Workflow, WorkflowDefinition, ApprovalCondition, ApprovalComposition, ApprovalDecision, ApprovalDecisionHistory, AuditLog } from '@finkore/typescript'
 
 const error = (code, action) => assert.throws(action, value => value?.code === code)
 // Composition validation must survive packaging and installation.
@@ -44,6 +44,29 @@ assert.deepEqual(wd097.toJSON(), before097)
 assert.equal(ApprovalDecisionHistory.from(before097).evaluateRequirement(req097), 'PENDING')
 if (process.argv.includes('--approvals')) {
   console.log('Installed npm Approval checks passed')
+  process.exit(0)
+}
+
+// Native retained values must survive packaging with their validation intact.
+for (const value of [new Number(1), NaN, Infinity, 1n, new Date(0)]) {
+  const before = hist097.toJSON()
+  error('FINKORE_APPROVAL_INVALID_DECISION', () => hist097.record(req097, { ...dec097, subjectFacts: { nested: [value] } }))
+  error('FINKORE_WORKFLOW_INVALID_DEFINITION', () => WorkflowDefinition.from({ states: ['DRAFT', 'DONE'], initialState: 'DRAFT', terminalStates: ['DONE'], transitions: [{ source: 'DRAFT', target: 'DONE', guard: { fact: 'value', equals: { nested: [value] } } }] }))
+  assert.deepEqual(hist097.toJSON(), before)
+}
+const ownedFacts097 = { nested: { value: 1 } }
+const ownedHistory097 = ApprovalDecisionHistory.create().record(req097, { ...dec097, subjectFacts: ownedFacts097 })
+const ownedBefore097 = structuredClone(ownedHistory097.toJSON())
+ownedFacts097.nested.value = 999
+ownedHistory097.toJSON().history[0].subjectFacts.nested.value = 888
+assert.deepEqual(ownedHistory097.toJSON(), ownedBefore097)
+for (const field of ['terminalStates', 'transitions']) {
+  const flow = { states: ['DRAFT'], initialState: 'DRAFT', terminalStates: [], transitions: [] }
+  delete flow[field]
+  error('FINKORE_WORKFLOW_INVALID_DEFINITION', () => WorkflowDefinition.from(flow))
+}
+if (process.argv.includes('--ownership')) {
+  console.log('Installed npm native ownership checks passed')
   process.exit(0)
 }
 

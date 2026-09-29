@@ -58,6 +58,22 @@ if '--approvals' in sys.argv:
     print('Installed Python Approval checks passed')
     sys.exit(0)
 
+class MutableInt097(int): pass
+class MutableFloat097(float): pass
+class MutableDecimal097(Decimal): pass
+for value in [MutableInt097(1), MutableFloat097(1), MutableDecimal097('1'), float('nan'), Decimal('Infinity')]:
+    before = deepcopy(hist097)
+    error('FINKORE_APPROVAL_INVALID_DECISION', lambda: record_decision(req097, dict(dec097, subjectFacts={'nested': [value]}), hist097))
+    error('FINKORE_WORKFLOW_INVALID_DEFINITION', lambda: WorkflowDefinition.from_portable({'states': ['DRAFT', 'DONE'], 'initialState': 'DRAFT', 'terminalStates': ['DONE'], 'transitions': [{'source': 'DRAFT', 'target': 'DONE', 'guard': {'fact': 'value', 'equals': {'nested': [value]}}}]}))
+    assert hist097 == before
+for field in ['terminalStates', 'transitions']:
+    flow = {'states': ['DRAFT'], 'initialState': 'DRAFT', 'terminalStates': [], 'transitions': []}
+    del flow[field]
+    error('FINKORE_WORKFLOW_INVALID_DEFINITION', lambda: WorkflowDefinition.from_portable(flow))
+if '--ownership' in sys.argv:
+    print('Installed Python native ownership checks passed')
+    sys.exit(0)
+
 assert CORE_VERSION == '0.9-rc'
 for amount in (Decimal('NaN'), Decimal('sNaN'), Decimal('Infinity'), Decimal('-Infinity'), '1', 1, 1.0, True, None, [], {}):
     error('FINKORE_MONEY_INVALID_AMOUNT', lambda: Money(amount, 'EUR'))

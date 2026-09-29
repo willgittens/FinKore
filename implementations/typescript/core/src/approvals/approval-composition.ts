@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { copyApprovalValue } from './approval-value.js'
 import { parsePortableTimestamp } from '../portable-timestamp.js'
 import { ApprovalConditionUnresolvedError, InvalidApprovalChainError, InvalidApprovalContextError } from './errors.js'
 import type {
@@ -258,6 +259,7 @@ function validateEligibleActors(value: unknown): readonly ApprovalActorIdentifie
 
 function validateDecisionObservation(value: unknown): SerializedApprovalCompositionDecisionObservation {
   if (!isPlainRecord(value)) throw new InvalidApprovalChainError()
+  copyApprovalValue(value, 'chain')
   if (typeof value.effective !== 'boolean') throw new InvalidApprovalChainError()
   return {
     requirementId: requiredString(value.requirementId),
@@ -361,6 +363,7 @@ function validateEvaluationInput(
     }
   }
 
+  copyApprovalValue(input.requirements, 'chain')
   const stateRequirementSet = new Set(stateRequirementIds)
   const observations = new Map<ApprovalRequirementIdentifier, CompositionRequirementObservation>()
   for (const requirementId of requiredRequirementIds) {
@@ -400,7 +403,9 @@ function validateEvaluationInput(
  *
  * This class validates Composition definitions and evaluates `ALL_OF`, `ANY_OF`,
  * and `N_OF_M` groups from explicit current Requirement and Decision
- * observations. Decision-history effectiveness derivation, authorization,
+ * observations. Native evidence is checked against the supported Approval value
+ * profile after applicability and required context, using INVALID_CHAIN for
+ * unsupported values (APPROVAL-FACT-004). Decision-history effectiveness derivation, authorization,
  * dynamic approvers, callbacks, history mutation, and adapter normalization
  * remain outside this class's current scope.
  *

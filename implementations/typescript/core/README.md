@@ -8,7 +8,9 @@ quorum observations require explicit eligibility and distinct outcome mappings;
 unused groups never add actionables. Depth four still applies to actual roots.
 Milestone 4 also closes concrete Approval history, declaration, condition, and
 fact-comparison corrections: all 579 Approval suite vectors pass on all four
-runtimes. Milestones 5–7 remain pending and full suites remain red. D8 redaction policy
+runtimes. Milestone 5 implements the accepted native Approval/Workflow value profile and
+required embedded Workflow collections. Milestones 6–7 remain pending and full
+suites remain red. D8 redaction policy
 identity is unresolved. The 0.9.6 results below describe the tagged snapshot.
 
 Approval fact comparison now uses all supplied facts when selectors are omitted.
@@ -29,8 +31,21 @@ Concrete histories/Decision lists and outcome mappings must be explicit;
 swapped distinct mappings remain valid. Supplied Actor type must be nonempty,
 and Chain rejection outcome must be `REJECTED`. Recording validates the proposed
 history before returning, so a new Decision cannot make a retained lifecycle
-reference ambiguous. Native unsupported-value rejection and ownership closure
-remain Milestone 5 work; passing portable vectors does not claim that closure.
+reference ambiguous. Native unsupported-value rejection and ownership are verified for the accepted
+Approval/Workflow profile. Broader Entity native numeric policy is an explicit
+new gap (D9 in the plan); these checks do not claim full Entity closure.
+
+Native ownership profile: finite primitive numbers; boxed numbers, bigint, nonfinite numbers, undefined,
+and custom scalar objects are rejected. Arrays and plain or null-prototype string-key records are independently
+captured; shared acyclic children are valid and cycles fail portably. Concrete
+Approval facts use `FINKORE_APPROVAL_INVALID_DECISION`; composition evidence
+uses `FINKORE_APPROVAL_INVALID_CHAIN` after applicability and required context.
+Retained Workflow guards use `FINKORE_WORKFLOW_INVALID_DEFINITION`, preserving
+definition-first error priority. No arbitrary numeric conversion is used.
+
+Portable Workflow definitions require explicit `terminalStates` and `transitions`
+arrays, including inside Entities. Empty arrays remain valid. Malformed embedded
+definitions do not produce reconstructed Entity diagnostics.
 
 Core 0.9.6 status: [Completed corrective release](../../../docs/plans/plan-09.6.md).
 Money, Workflow, Approval, Audit, and Entity corrections are verified. All 884 manifest

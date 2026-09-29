@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from copy import deepcopy
+from math import isfinite
 from dataclasses import dataclass
 from decimal import Decimal
 from typing import Any
@@ -52,6 +52,38 @@ class _Missing:
 _MISSING = _Missing()
 
 
+def _copy_approval(value: Any, code: str = INVALID_DECISION, ancestors: set[int] | None = None) -> Any:
+    """Capture supported native facts before retention (APPROVAL-FACT-004).
+
+    Exact built-in numeric classes and finite Decimal preserve exact values.
+    Numeric subclasses, unsupported objects, and cycles fail without calling
+    user-defined copy hooks. Shared acyclic children are copied independently.
+    """
+    if value is None or type(value) in (str, bool, int):
+        return value
+    if type(value) is float:
+        if not isfinite(value):
+            raise FinKoreError(code)
+        return value
+    if type(value) is Decimal:
+        if not value.is_finite():
+            raise FinKoreError(code)
+        return value
+    if ancestors is None:
+        ancestors = set()
+    if id(value) in ancestors:
+        raise FinKoreError(code)
+    ancestors.add(id(value))
+    try:
+        if isinstance(value, list):
+            return [_copy_approval(item, code, ancestors) for item in value]
+        if isinstance(value, dict) and all(isinstance(key, str) for key in value):
+            return {key: _copy_approval(item, code, ancestors) for key, item in value.items()}
+        raise FinKoreError(code)
+    finally:
+        ancestors.remove(id(value))
+
+
 def validate_requirement(requirement: Any) -> dict[str, Any]:
     """Validate a concrete Requirement's subject and nonempty distinct eligibility.
 
@@ -75,7 +107,7 @@ def validate_requirement(requirement: Any) -> dict[str, Any]:
         raise FinKoreError(INVALID_DECISION)
     if requirement.get("approvedOutcome") not in ("APPROVED", "REJECTED") or requirement.get("rejectedOutcome") not in ("APPROVED", "REJECTED") or requirement["approvedOutcome"] == requirement["rejectedOutcome"]:
         raise FinKoreError(INVALID_DECISION)
-    return deepcopy(requirement)
+    return _copy_approval(requirement)
 
 
 def validate_decision(requirement: dict[str, Any], decision: Any) -> dict[str, Any]:
@@ -108,12 +140,15 @@ def _validate_decision_shape(decision: Any) -> dict[str, Any]:
     _instant(decision.get("decidedAt"))
     if "expiresAt" in decision:
         _instant(decision["expiresAt"])
-    return deepcopy(decision)
+    return _copy_approval(decision)
 
 
 def normalize_decision_set(decisions: Any = _MISSING) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """Validate every concrete Decision and return defensive history observations.
 
+    Facts accept null, built-in strings/Booleans/integers/finite floats, finite
+    Decimal, lists and string-key dictionaries. Numeric subclasses, cycles and
+    unsupported objects fail before retention; no custom copy hook is used.
     Omission is an empty native history; explicit None or an envelope without
     its history array is INVALID_DECISION. Missing subjectFacts is INVALID_DECISION, including on ineffective or
     unrelated evidence; explicit null remains valid. Lifecycle evidence is
@@ -362,7 +397,8 @@ def evaluate_composition(composition: Any, requirements: Any, decisions: Any = _
     reqs = _validate_composition_requirements(requirements, context, groups)
     if decisions is not _MISSING and not isinstance(decisions, list):
         raise FinKoreError(INVALID_CHAIN)
-    decision_history = deepcopy(decisions) if decisions is not _MISSING else []
+    _copy_approval(requirements, INVALID_CHAIN)
+    decision_history = _copy_approval(decisions, INVALID_CHAIN) if decisions is not _MISSING else []
     _validate_composition_evidence(reqs, decision_history)
     for group in groups.values():
         if group["kind"] == "N_OF_M":
@@ -471,6 +507,8 @@ def _validate_paths(paths: Any) -> list[str]:
 def _validate_comparison(current_facts: Any, paths: Any, allow_omission: bool = False) -> None:
     if paths is not _MISSING:
         _validate_paths(paths)
+    if current_facts is not _MISSING:
+        _copy_approval(current_facts)
     if current_facts is _MISSING and (not allow_omission or paths is not _MISSING):
         raise FinKoreError(INVALID_DECISION)
 
@@ -502,7 +540,7 @@ def _same_decision_ref(left: dict[str, Any], right: dict[str, Any]) -> bool:
 def _lifecycle(value: Any, lifecycle_type: str) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise FinKoreError(INVALID_DECISION)
-    return {**deepcopy(value), "type": lifecycle_type}
+    return {**_copy_approval(value), "type": lifecycle_type}
 
 
 def _validate_lifecycle(value: Any, history: list[dict[str, Any]], previous: list[dict[str, Any]]) -> dict[str, Any]:
@@ -534,7 +572,7 @@ def _validate_lifecycle(value: Any, history: list[dict[str, Any]], previous: lis
             raise FinKoreError(INVALID_DECISION)
         if any(item["type"] in ("WITHDRAWN", "DECISION_SUPERSEDED") and _same_decision_ref(item["target"], value["target"]) for item in previous):
             raise FinKoreError(INVALID_DECISION)
-    return deepcopy(value)
+    return _copy_approval(value)
 
 
 def _validate_composition_structure(composition: Any) -> dict[str, dict[str, Any]]:

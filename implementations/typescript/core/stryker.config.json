@@ -27,7 +27,8 @@
     "src/approvals/approval-requirement.ts",
     "src/approvals/errors.ts",
     "src/portable-timestamp.ts",
-    "src/approvals/approval-facts.ts"
+    "src/approvals/approval-facts.ts",
+    "src/approvals/approval-value.ts"
   ],
   "testFiles": [
     "test/integration/readiness-regressions.test.ts",
