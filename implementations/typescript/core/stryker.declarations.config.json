@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../../node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "testRunner": "vitest",
+  "concurrency": 2,
+  "mutate": [
+    "src/entities/entity.ts"
+  ],
+  "testFiles": [
+    "test/**/*.test.ts"
+  ],
+  "reporters": [
+    "clear-text",
+    "html",
+    "json"
+  ],
+  "thresholds": {
+    "high": 95,
+    "low": 90,
+    "break": 95
+  },
+  "vitest": {
+    "related": true,
+    "configFile": "vitest.declarations.config.ts"
+  },
+  "disableTypeChecks": "src/**/*.ts"
+}

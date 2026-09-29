@@ -85,12 +85,10 @@ function validateFieldList(value: unknown): readonly string[] {
 
 function validateMutability(value: unknown): Readonly<Record<string, readonly string[]>> {
   if (!isPlainRecord(value)) throw new InvalidEntityMutationError()
-  const mutability: Record<string, readonly string[]> = {}
-  for (const [state, fields] of Object.entries(value)) {
+  return Object.fromEntries(Object.entries(value).map(([state, fields]) => {
     if (state.length === 0) throw new InvalidEntityMutationError()
-    mutability[state] = validateFieldList(fields)
-  }
-  return mutability
+    return [state, validateFieldList(fields)]
+  }))
 }
 
 function validateChanges(value: unknown): Readonly<Record<string, unknown>> {
@@ -99,8 +97,8 @@ function validateChanges(value: unknown): Readonly<Record<string, unknown>> {
 }
 
 function mutableFieldsFor(definition: EntityDefinition, state: string): ReadonlySet<string> {
+  if (!Object.hasOwn(definition.mutability, state)) throw new InvalidEntityMutationError()
   const fields = definition.mutability[state]
-  if (fields === undefined) throw new InvalidEntityMutationError()
   return new Set(fields)
 }
 
@@ -226,7 +224,7 @@ function validateEntityImportResult(definition: EntityDefinition, input: unknown
 }
 
 function valueAtTopLevelPath(data: unknown, path: string): unknown {
-  if (!isPlainRecord(data)) return undefined
+  if (!isPlainRecord(data) || !Object.hasOwn(data, path)) return undefined
   return data[path]
 }
 
@@ -284,10 +282,13 @@ function assertValidEntityData(definition: EntityDefinition, data: unknown): voi
  * validation language; this implementation supports only the small
  * `positive-money` and cross-field `money-not-greater-than` conformance fixture
  * predicates. The latter compares two declared top-level Money fields in the
- * complete proposed data using exact, compatible-currency ordering.
+ * complete proposed data using exact, compatible-currency ordering. Validator
+ * paths read own top-level data fields; inherited values are not retained facts.
  *
  * Existing instances own their declarations; exposed definition observations
- * cannot reconfigure them. Versioned Workflow bindings are retained unchanged.
+ * cannot reconfigure them. Own State and field names, including `__proto__`,
+ * survive definition observation and reuse; inherited members grant no mutation
+ * permission. Versioned Workflow bindings are retained unchanged.
  * Unsupported or malformed validators fail with FINKORE_ENTITY_INVALID_MUTATION
  * before predicates run; rejected data uses FINKORE_ENTITY_VALIDATION_FAILED.
  *
@@ -318,6 +319,8 @@ export class FinancialEntity {
   /**
    * Returns a defensive observation of this Entity's governing declarations.
    * Changing original inputs or this observation cannot reconfigure the Entity.
+   * All own State names and field permissions survive serialization and reuse,
+   * including `__proto__`, `constructor`, and `prototype`.
    * @see ENTITY-DEFINITION-002
    */
   get definition(): EntityDefinition {
@@ -343,7 +346,8 @@ export class FinancialEntity {
    * @param data - Initial composing-domain data carried without interpretation.
    * @returns A new Financial Entity in the Workflow initial state.
    * @throws {InvalidEntityMutationError}
-   * When validator declarations are malformed or unsupported.
+   * When validator declarations are malformed/unsupported, or mutability
+   * declarations are malformed or lack an own entry for the current State.
    * @throws {EntityValidationFailedError}
    * When declared predicates reject the initial data.
    * @throws {InvalidEntityIdentityError}
@@ -395,7 +399,8 @@ export class FinancialEntity {
    * @throws {WorkflowVersionMismatchError}
    * When the original binding differs from the referenced definition/version.
    * @throws {InvalidEntityMutationError}
-   * When validator declarations are malformed or unsupported.
+   * When validator declarations are malformed/unsupported, or mutability
+   * declarations are malformed or lack an own entry for the current State.
    * @throws {EntityValidationFailedError}
    * When declared predicates reject the complete Entity data.
    *

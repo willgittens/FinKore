@@ -14,10 +14,10 @@ Audit, Approvals, and Entities scope.
 | Workflow | 59 | 57 | 1 | 1 | 47 | 3 | 0 | 9 | 0 | 0 |
 | Audit | 57 | 49 | 4 | 4 | 45 | 1 | 0 | 10 | 0 | 1 |
 | Approvals | 97 | 94 | 1 | 2 | 91 | 0 | 0 | 6 | 0 | 0 |
-| Entities | 94 | 89 | 3 | 2 | 63 | 19 | 0 | 12 | 0 | 0 |
-| **Total** | 432 | 399 | 15 | 18 | 325 | 23 | 0 | 83 | 0 | 1 |
+| Entities | 94 | 89 | 3 | 2 | 65 | 17 | 0 | 12 | 0 | 0 |
+| **Total** | 432 | 399 | 15 | 18 | 327 | 21 | 0 | 83 | 0 | 1 |
 
-The suite contains 1667 vectors. Current counts above include intentionally failing Core 0.9.7 regressions; coverage is not a passing-conformance claim.
+The suite contains 1671 vectors. Current counts above include intentionally failing Core 0.9.7 regressions; coverage is not a passing-conformance claim.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. PARTIAL means current vectors exercise part of a requirement but do not yet cover a mandatory observable boundary. DEFERRED means the requirement is explicitly outside the current release candidate. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector or native regression is feasible but not yet published.
 
@@ -570,7 +570,7 @@ complete exploratory accounting.
 | ENTITY-AUDIT-001 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Audit policy declaration belongs to a composing domain; no generic declaration operation exists. |
 | ENTITY-AUDIT-002 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Event production is conditional on composing-domain policy and needs an Entity/Audit integration operation. |
 | ENTITY-DEFINITION-001 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Declaring fields, lifecycle, and invariants is a composing-domain obligation; retained-instance ownership is separately tested under ENTITY-DEFINITION-002. |
-| ENTITY-DEFINITION-002 | Entities | MUST / MUST NOT | PARTIAL | Core 0.9.7 M2 permanent portable/native regressions; baseline fails, correction and mutation closure pending. Manifest retains exact vector mapping. |
+| ENTITY-DEFINITION-002 | Entities | MUST / MUST NOT | COVERED | entity.boundary097.special-field-constructor-mutate-001, entity.boundary097.special-field-ordinary-mutate-001, entity.boundary097.special-field-proto-mutate-001, entity.boundary097.special-field-prototype-mutate-001, entity.boundary097.special-state-constructor-control-001, entity.boundary097.special-state-constructor-mutate-001, entity.boundary097.special-state-proto-control-001, entity.boundary097.special-state-proto-mutate-001, entity.boundary097.special-state-prototype-control-001, entity.boundary097.special-state-prototype-mutate-001 |
 | ENTITY-ERROR-001 | Entities | MUST / MUST NOT | PARTIAL | entity.declaration.empty-path-create-001, entity.declaration.invalid-after-failing-rule-001, entity.declaration.missing-id-create-001, entity.declaration.missing-other-path-create-001, entity.declaration.null-entry-create-001, entity.declaration.null-list-create-001, entity.declaration.unknown-create-001, entity.import.presence-conflict-version-mismatch-001, entity.import.presence-conflict-version-null-001, entity.import.presence-conflict-version-number-001, entity.import.presence-revision-mismatch-001, entity.import.presence-revision-null-001, entity.import.presence-revision-number-001, entity.import.presence-state-mismatch-001, entity.import.presence-state-null-001, entity.import.presence-state-number-001, entity.mutate.identity-and-state-protected-001, entity.mutate.immutable-financial-field-001, entity.transition.rejected-preserves-entity-001, entity.validation.complete-result-001; Core 0.9.7 M2 permanent portable/native regressions; baseline fails, correction and mutation closure pending. Manifest retains exact vector mapping. |
 | ENTITY-ERROR-002 | Entities | SHOULD / SHOULD NOT | COVERED | entity.validation.complete-result-001 |
 | ENTITY-ERROR-003 | Entities | MAY | NOT DIRECTLY TESTABLE | Safe diagnostic context is optional. |
@@ -617,7 +617,7 @@ complete exploratory accounting.
 | ENTITY-IDENTITY-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Cross-entity uniqueness requires a registry or persistence scope absent from current operations. |
 | ENTITY-IDENTITY-006 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
 | ENTITY-IMPORT-001 | Entities | MUST / MUST NOT | COVERED | entity.import.identity-mapping-preserved-001 |
-| ENTITY-IMPORT-002 | Entities | MUST / MUST NOT | PARTIAL | entity.binding.import-malformed-001, entity.binding.import-mismatch-001, entity.binding.import-missing-001, entity.binding.import-null-001, entity.binding.unversioned-import-001, entity.binding.versioned-import-001, entity.evolution.correct.versioned-binding-001, entity.evolution.reverse.versioned-binding-001, entity.evolution.supersede.versioned-binding-001, entity.evolution.void.versioned-binding-001, entity.import.identity-mapping-preserved-001, entity.import.validation-cross-field-invalid-001, entity.import.validation-cross-field-valid-001, entity.import.validation-positive-money-invalid-001, entity.import.validation-positive-money-valid-001; Core 0.9.7 M2 permanent portable/native regressions; baseline fails, correction and mutation closure pending. Manifest retains exact vector mapping. |
+| ENTITY-IMPORT-002 | Entities | MUST / MUST NOT | PARTIAL | M6 closes own-name preservation and returned-definition reuse, with native input/output ownership and special-field vectors. M7 malformed declarations/import boundaries and failure preservation remain pending. Manifest retains exact vector mapping. |
 | ENTITY-IMPORT-003 | Entities | MUST / MUST NOT | COVERED | entity.boundary096.import-control-001, entity.boundary096.import-source-array-001, entity.boundary096.import-source-boolean-001, entity.boundary096.import-source-empty-001, entity.boundary096.import-source-null-001, entity.boundary096.import-source-number-001, entity.boundary096.import-source-object-001, entity.import.identity-mapping-preserved-001, entity.import.missing-mapping-invalid-identity-001 |
 | ENTITY-IMPORT-004 | Entities | MUST / MUST NOT | COVERED | entity.boundary096.import-standalone-mapping-001, entity.import.identity-mapping-preserved-001 |
 | ENTITY-IMPORT-005 | Entities | MUST / MUST NOT | COVERED | entity.boundary096.import-control-001, entity.import.identity-mapping-preserved-001 |
@@ -632,10 +632,10 @@ complete exploratory accounting.
 | ENTITY-LIFECYCLE-004 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Lifecycle Audit declaration requires the out-of-scope Entity/Audit integration. |
 | ENTITY-LIFECYCLE-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | State consequences are defined by concrete composing domains, not generic Entity Core. |
 | ENTITY-LIFECYCLE-006 | Entities | MUST / MUST NOT | COVERED | entity.create.initial-lifecycle-001 |
-| ENTITY-MUTABILITY-001 | Entities | MUST / MUST NOT | PARTIAL | entity.mutate.mutable-field-001; Core 0.9.7 M2 permanent portable/native regressions; baseline fails, correction and mutation closure pending. Manifest retains exact vector mapping. |
-| ENTITY-MUTABILITY-002 | Entities | MUST / MUST NOT | PARTIAL | entity.mutate.identity-and-state-protected-001, entity.mutate.immutable-financial-field-001; Core 0.9.7 M2 permanent portable/native regressions; baseline fails, correction and mutation closure pending. Manifest retains exact vector mapping. |
+| ENTITY-MUTABILITY-001 | Entities | MUST / MUST NOT | PARTIAL | M6 closes own-name preservation and returned-definition reuse, with native input/output ownership and special-field vectors. M7 malformed declarations/import boundaries and failure preservation remain pending. Manifest retains exact vector mapping. |
+| ENTITY-MUTABILITY-002 | Entities | MUST / MUST NOT | COVERED | entity.boundary097.special-field-constructor-mutate-001, entity.boundary097.special-field-ordinary-mutate-001, entity.boundary097.special-field-proto-mutate-001, entity.boundary097.special-field-prototype-mutate-001, entity.boundary097.special-state-constructor-control-001, entity.boundary097.special-state-constructor-mutate-001, entity.boundary097.special-state-proto-control-001, entity.boundary097.special-state-proto-mutate-001, entity.boundary097.special-state-prototype-control-001, entity.boundary097.special-state-prototype-mutate-001, entity.mutate.identity-and-state-protected-001, entity.mutate.immutable-financial-field-001 |
 | ENTITY-MUTABILITY-003 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Mutation Audit declaration requires the out-of-scope Entity/Audit integration. |
-| ENTITY-MUTABILITY-004 | Entities | MUST / MUST NOT | PARTIAL | entity.binding.versioned-mutate-001, entity.mutate.identity-and-state-protected-001, entity.mutate.immutable-financial-field-001, entity.validation.cross-field-combined-invalid-001, entity.validation.cross-field-retained-amount-001, entity.validation.cross-field-retained-limit-001; Core 0.9.7 M2 permanent portable/native regressions; baseline fails, correction and mutation closure pending. Manifest retains exact vector mapping. |
+| ENTITY-MUTABILITY-004 | Entities | MUST / MUST NOT | PARTIAL | M6 closes own-name preservation and returned-definition reuse, with native input/output ownership and special-field vectors. M7 malformed declarations/import boundaries and failure preservation remain pending. Manifest retains exact vector mapping. |
 | ENTITY-MUTABILITY-005 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Prior-audit attachment requires an Entity/Audit integration surface absent from current vectors. |
 | ENTITY-MUTABILITY-006 | Entities | MUST / MUST NOT | COVERED | entity.mutate.terminal-metadata-001 |
 | ENTITY-MUTABILITY-007 | Entities | MAY | COVERED | entity.mutate.terminal-metadata-001 |
@@ -958,3 +958,16 @@ AtomicInteger. D9 in the plan records the unresolved supported-value and error
 policy for that separate boundary. The approved Approval/Workflow profile does
 not silently extend to Entity data. D8 remains unresolved; M6–M7 regressions
 remain failing. These results do not establish full-domain conformance.
+
+
+M6 closes F5 and the adjacent TypeScript own-field validator lookup defect.
+Four special-field mutation controls extend the six existing special-state
+vectors; all ten pass on every runtime. Twenty-seven native TypeScript tests
+exercise actual definition/observation serialization and reuse, permitted and
+prohibited mutations, transition, bindings/revision import, original/output
+aliases, prototype preservation, and adjacent Workflow/Approval/Audit own keys.
+Five targeted mutations and the complete changed Entity file's Stryker scope
+pass. ENTITY-DEFINITION-002 and ENTITY-MUTABILITY-002 return to COVERED; broader
+mutability and import rows remain PARTIAL for M7. Native inherited-member cases
+cannot be encoded as JSON and supplement the portable vectors. D8 and D9 remain
+unresolved; no Entity native-number policy is selected.

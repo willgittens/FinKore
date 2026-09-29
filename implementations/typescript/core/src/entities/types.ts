@@ -154,7 +154,7 @@ export interface EntityDefinitionInput {
   /** Owned Workflow declarations; exposed observations cannot reconfigure an existing Entity. */
   readonly workflow?: WorkflowDefinitionInput | unknown
 
-  /** Top-level data fields declared mutable by lifecycle state. */
+  /** Own lifecycle-state entries and their top-level field permissions, preserving special names on reuse. */
   readonly mutability?: unknown
 
   /** Declared Entity validation rules for Core 0.9 release candidate conformance. */
@@ -179,7 +179,7 @@ export interface EntityDefinition {
   /** Owned Workflow declarations; exposed observations cannot reconfigure an existing Entity. */
   readonly workflow: WorkflowDefinitionInput | unknown
 
-  /** Top-level data fields declared mutable by lifecycle state. */
+  /** Own lifecycle-state entries and their top-level field permissions, preserving special names on reuse. */
   readonly mutability: Readonly<Record<WorkflowStateIdentifier, readonly string[]>>
 
   /** Declared Entity validation rules evaluated against complete Entity data. */

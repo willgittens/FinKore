@@ -2,7 +2,7 @@
 
 ## Status
 
-Milestones 2–5 are complete for their accepted contracts. Milestones 6–9
+Milestones 2–6 are complete for their accepted contracts. Milestones 7–9
 remain uncompleted. D1–D7 were explicitly accepted on 2026-09-27. M1 remains
 open for D8 (explicitly left unresolved) and D9 (the Entity native-value policy
 gap discovered during M5). No Entity numeric policy has been selected.
@@ -946,23 +946,88 @@ review. M6–M7 remain pending; D8 and D9 remain unresolved.**
 
 ## Milestone 6 — Preserve Entity declarations through observation and reuse
 
-- [ ] Fix F5 using own-member-safe retention and observation of valid declaration
+- [x] Fix F5 using own-member-safe retention and observation of valid declaration
       names. Do not reject `__proto__` merely to avoid the implementation defect.
-- [ ] Exercise create/import → definition observation → serialization/import →
+- [x] Exercise create/import → definition observation → serialization/import →
       permitted mutation, prohibited mutation, and transition, using actual
       returned definitions and Entity observations.
-- [ ] Check adjacent keyed declarations in Entity, Workflow, Approval, and Audit
+- [x] Check adjacent keyed declarations in Entity, Workflow, Approval, and Audit
       boundaries for own-member loss or inherited-member acceptance. Preserve
       earlier Audit prototype-key regressions.
-- [ ] Assert exact keys and values, field mutability, binding/revision retention,
+- [x] Assert exact keys and values, field mutability, binding/revision retention,
       failure atomicity, and unchanged prototypes for ordinary and special names.
-- [ ] Add mutation protection for unsafe assignment, dropped declarations, and
+- [x] Add mutation protection for unsafe assignment, dropped declarations, and
       inherited-member lookup. Exercise the regression in the installed npm
       consumer and update affected public documentation.
 
 Completion: a valid Entity definition remains semantically identical through
 observation and reuse, including valid special member names, without runtime
 exceptions or accidental changes to permitted mutations.
+
+### M6 implementation and verification — 2026-09-29
+
+F5 is corrected in the TypeScript core. Mutability copying uses own-property
+construction, so `__proto__` remains an ordinary declared State and survives
+definition observation and serialization/import. Permission lookup requires an
+own State entry; inherited `constructor`/`__proto__` values cannot become field
+lists or cause a raw TypeError. No valid name is forbidden or normalized.
+
+The adjacent-path review also reproduced inherited Entity validator values:
+creation accepted a positive Money field from a prototype, then structured
+copying omitted it from the returned data. The returned Entity consequently
+failed its own validator. Own-field lookup now rejects this input with
+ENTITY_VALIDATION_FAILED under ENTITY-VALIDATION-001/003/004/006. This preserves
+the existing validation rule and resulting-state invariant; it does not extend
+D9's unresolved native numeric profile.
+
+The permanent native suite covers four State names crossed with four field
+names, independent original/output declaration mutations, actual JSON
+serialization and definition/observation reuse, allowed and forbidden field
+changes, terminal-State rejection, stable Workflow binding, revision/conflict
+import, unchanged prototypes, and failure atomicity. It also checks inherited
+State/validator fields and adjacent Workflow guard facts, Approval conditions
+and facts, and Audit metadata. Six of the initial 23 tests failed before the
+retention/lookup correction; all four added validator tests failed before its
+own-field correction. All 27 pass now. Unexpected runtime errors remain
+infrastructure failures in native probes; only an explicit wrong portable
+rejection of a valid declaration is asserted as a domain mismatch.
+
+Adjacent review: Workflow/Approval key collections use Maps/Sets or safe own
+record copying, and fact lookups reject inherited members. Audit retains safe
+own-property construction and its prior prototype-key regressions. Python/Java
+map keys do not have JavaScript prototype semantics; their ten portable F5
+controls pass unchanged. No cross-domain freezing or adapter financial logic
+was introduced. Entity revision/conflict metadata is verified through the
+import envelope; this does not add revision tracking to the FinancialEntity
+instance API.
+
+| Verification | Result |
+| --- | --- |
+| Build/typing | All workspaces build and strict TypeScript passes; configured toolchains and strict Java compilation pass. |
+| Unit and coverage | 27/27 new native tests pass. Focused TypeScript core: 2019 pass, one known M7 case skipped only in that configuration; changed Entity file coverage is 100% statements/branches/functions/lines. Full runner 130/130 passes; full TypeScript core retains one M7 failure and adapters retain 78. Both Python versions retain 45 failures/three errors among 766 full-suite tests. Java native special-name cases pass 10/10. |
+| Mutation | Complete changed `entity.ts`: 98.54%, 405/411 killed, six survivors, no uncovered mutants or timeouts; unchanged 95% gate. Five targeted native probes are killed with independent passing controls. |
+| Installed packages | npm special-state/field declaration reuse, mutation/transition, and validator checks pass; Python wheel/sdist on both runtimes and JAR ownership controls pass. Assertions run by default and under `--ownership`. |
+| Conformance | 1671 total: TypeScript 1583 PASS / 87 FAIL / one infrastructure error; Python 3.12 and 3.13 each 1365 / 282 / 24; Java 1469 / 202 / zero. No unsupported outcomes. All ten special-name vectors and all original 884 vectors pass on every runtime. Remaining full-manifest failures belong to M7; no full-conformance claim. |
+| Repository checks | Tool tests, architecture, documentation links, traceability, licensing, and whitespace pass. Full release verification remains blocked by the published M7 regressions. |
+
+Survivor review: the revision/conflict presence check is redundant with unequal
+string-versus-undefined comparison; two Money shape checks are repeated by
+Money.deserialize. Empty catches yield undefined instead of false, both rejected
+by the same validation branch. The sixth changes non-normative error text.
+All survivors remain counted; no financial logic was excluded or ignored.
+
+Synchronization: four new manifest-discovered special-field vectors supplement
+six existing special-state controls. Native tests, five probes, installed npm
+consumer, JSDoc, implementation/root/conformance READMEs, developer-tool docs,
+and traceability are updated. ENTITY-DEFINITION-002 and MUTABILITY-002 return to
+COVERED; broader declaration/import/error rows retain M7 qualifications. The
+inventory is 432 requirements and 1671 vectors: 327 covered, 21 partial,
+83 not directly testable, one D8 blocking gap. Existing spec obligations already
+define the corrected behavior, so no new semantics, requirement IDs, Agentic
+operation/metadata changes, CoreDoc/AGENTS changes, release notes, or publication
+are needed. D8 and D9 remain unresolved.
+
+**M6 is complete. M7 and full release verification remain pending.**
 
 ## Milestone 7 — Portable malformed-input failures and adapter observations
 

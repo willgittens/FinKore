@@ -18,6 +18,71 @@ const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const constructionPy = 'test_construction_evaluation_regressions.ConstructionEvaluationRegressions.'
 const probes = [
 {
+  "id": "typescript-declarations097-inherited-validator",
+  "scope": "declarations",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "!isPlainRecord(data) || !Object.hasOwn(data, path)",
+  "to": "!isPlainRecord(data)",
+  "tests": [
+    "test/entities/declaration-reuse.test.ts"
+  ],
+  "target": "declaration097 validator own field constructor",
+  "control": "declaration097 adjacent own member constructor"
+},
+{
+  "id": "typescript-declarations097-unsafe-assignment",
+  "scope": "declarations",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "return Object.fromEntries(Object.entries(value).map(([state, fields]) => {\n    if (state.length === 0) throw new InvalidEntityMutationError()\n    return [state, validateFieldList(fields)]\n  }))",
+  "to": "return Object.entries(value).reduce((result, [state, fields]) => {\n    if (state.length === 0) throw new InvalidEntityMutationError()\n    result[state] = validateFieldList(fields); return result\n  }, {} as Record<string, readonly string[]>)",
+  "tests": [
+    "test/entities/declaration-reuse.test.ts"
+  ],
+  "target": "declaration097 reuse __proto__ field memo",
+  "control": "declaration097 adjacent own member constructor"
+},
+{
+  "id": "typescript-declarations097-drop-special-state",
+  "scope": "declarations",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "Object.entries(value).map(([state, fields]) => {",
+  "to": "Object.entries(value).filter(([state]) => state !== '__proto__').map(([state, fields]) => {",
+  "tests": [
+    "test/entities/declaration-reuse.test.ts"
+  ],
+  "target": "declaration097 reuse __proto__ field memo",
+  "control": "declaration097 adjacent own member constructor"
+},
+{
+  "id": "typescript-declarations097-inherited-lookup",
+  "scope": "declarations",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "if (!Object.hasOwn(definition.mutability, state)) throw new InvalidEntityMutationError()",
+  "to": "",
+  "tests": [
+    "test/entities/declaration-reuse.test.ts"
+  ],
+  "target": "declaration097 inherited state is not a declaration constructor",
+  "control": "declaration097 adjacent own member constructor"
+},
+{
+  "id": "typescript-declarations097-field-alias",
+  "scope": "declarations",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "return [state, validateFieldList(fields)]",
+  "to": "return [state, fields]",
+  "tests": [
+    "test/entities/declaration-reuse.test.ts"
+  ],
+  "target": "declaration097 reuse __proto__ field memo",
+  "control": "declaration097 adjacent own member constructor"
+},
+{
   "id": "typescript-ownership097-nonfinite",
   "scope": "native-ownership",
   "language": "typescript",
@@ -865,6 +930,7 @@ const selected = probes.filter(probe => process.argv[2] === undefined || probe.i
 if (selected.length === 0) throw new Error('No native mutation probes match the requested ID fragment')
 // Mandatory regression preflight: a red corrective baseline is not a killed mutant.
 for (const language of new Set(selected.map(probe => probe.language))) {
+  const declarationsScope = selected.filter(probe => probe.language === language).every(probe => probe.scope === 'declarations')
   const ownershipScope = selected.filter(probe => probe.language === language).every(probe => probe.scope === 'native-ownership')
   const approvalScope = selected.filter(probe => probe.language === language).every(probe => probe.scope === 'approval-contracts')
   let baseline
@@ -873,7 +939,7 @@ for (const language of new Set(selected.map(probe => probe.language))) {
     const compiled = run(process.execPath, ['docs/tools/compile-java.js'])
     if (compiled.status !== 0) throw new Error(`Java regression preflight compile failed\n${compiled.stderr}`)
     baseline = run(join(root, '.tools/bin/java'), ['-cp', [join(root, 'implementations/java/target/classes'), join(root, 'implementations/java/target/test-classes')].join(delimiter), ownershipScope ? 'org.finkore.NativeOwnershipTest' : approvalScope ? 'org.finkore.ApprovalContractsTest' : 'org.finkore.EvidenceRegressionTest'])
-  } else baseline = run(process.execPath, [join(root, 'node_modules/vitest/vitest.mjs'), 'run', '--root', 'implementations/typescript/core', ...(ownershipScope ? ['--config', join(root, 'implementations/typescript/core/vitest.ownership.config.ts')] : approvalScope ? ['--config', join(root, 'implementations/typescript/core/vitest.approvals.config.ts')] : ['test/integration/evidence-regressions.test.ts'])])
+  } else baseline = run(process.execPath, [join(root, 'node_modules/vitest/vitest.mjs'), 'run', '--root', 'implementations/typescript/core', ...(declarationsScope ? ['test/entities/declaration-reuse.test.ts'] : ownershipScope ? ['--config', join(root, 'implementations/typescript/core/vitest.ownership.config.ts')] : approvalScope ? ['--config', join(root, 'implementations/typescript/core/vitest.approvals.config.ts')] : ['test/integration/evidence-regressions.test.ts'])])
   if (baseline.status !== 0) throw new Error(`${language}: Core 0.9.7 regression baseline failed; no mutation result claimed\n${baseline.stdout}\n${baseline.stderr}`)
 }
 for (const probe of selected) {

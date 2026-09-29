@@ -8095,6 +8095,302 @@
       ],
       "reviewFinding": "F5",
       "pairedControl": "entity.boundary097.special-state-prototype-control-001"
+    },
+    {
+      "id": "entity.boundary097.special-field-ordinary-mutate-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-DEFINITION-002",
+        "ENTITY-MUTABILITY-001",
+        "ENTITY-MUTABILITY-002",
+        "ENTITY-MUTABILITY-004",
+        "ENTITY-IMPORT-002"
+      ],
+      "description": "Own State and data field names remain ordinary declarations through mutation.",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "local",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "memo"
+            ],
+            "DONE": []
+          }
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "i",
+          "state": "DRAFT",
+          "data": {
+            "memo": "old"
+          }
+        },
+        "changes": {
+          "memo": "new"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "i",
+          "state": "DRAFT",
+          "data": {
+            "memo": "new"
+          }
+        },
+        "observations": {
+          "identity": "i",
+          "state": "DRAFT"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F5"
+    },
+    {
+      "id": "entity.boundary097.special-field-proto-mutate-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-DEFINITION-002",
+        "ENTITY-MUTABILITY-001",
+        "ENTITY-MUTABILITY-002",
+        "ENTITY-MUTABILITY-004",
+        "ENTITY-IMPORT-002"
+      ],
+      "description": "Own State and data field names remain ordinary declarations through mutation.",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "local",
+          "workflow": {
+            "states": [
+              "__proto__",
+              "DONE"
+            ],
+            "initialState": "__proto__",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "__proto__",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "__proto__": [
+              "__proto__"
+            ],
+            "DONE": []
+          }
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "i",
+          "state": "__proto__",
+          "data": {
+            "__proto__": "old"
+          }
+        },
+        "changes": {
+          "__proto__": "new"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "i",
+          "state": "__proto__",
+          "data": {
+            "__proto__": "new"
+          }
+        },
+        "observations": {
+          "identity": "i",
+          "state": "__proto__"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F5"
+    },
+    {
+      "id": "entity.boundary097.special-field-constructor-mutate-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-DEFINITION-002",
+        "ENTITY-MUTABILITY-001",
+        "ENTITY-MUTABILITY-002",
+        "ENTITY-MUTABILITY-004",
+        "ENTITY-IMPORT-002"
+      ],
+      "description": "Own State and data field names remain ordinary declarations through mutation.",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "local",
+          "workflow": {
+            "states": [
+              "constructor",
+              "DONE"
+            ],
+            "initialState": "constructor",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "constructor",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "constructor": [
+              "constructor"
+            ],
+            "DONE": []
+          }
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "i",
+          "state": "constructor",
+          "data": {
+            "constructor": "old"
+          }
+        },
+        "changes": {
+          "constructor": "new"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "i",
+          "state": "constructor",
+          "data": {
+            "constructor": "new"
+          }
+        },
+        "observations": {
+          "identity": "i",
+          "state": "constructor"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F5"
+    },
+    {
+      "id": "entity.boundary097.special-field-prototype-mutate-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-DEFINITION-002",
+        "ENTITY-MUTABILITY-001",
+        "ENTITY-MUTABILITY-002",
+        "ENTITY-MUTABILITY-004",
+        "ENTITY-IMPORT-002"
+      ],
+      "description": "Own State and data field names remain ordinary declarations through mutation.",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "local",
+          "workflow": {
+            "states": [
+              "prototype",
+              "DONE"
+            ],
+            "initialState": "prototype",
+            "terminalStates": [
+              "DONE"
+            ],
+            "transitions": [
+              {
+                "source": "prototype",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "prototype": [
+              "prototype"
+            ],
+            "DONE": []
+          }
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "i",
+          "state": "prototype",
+          "data": {
+            "prototype": "old"
+          }
+        },
+        "changes": {
+          "prototype": "new"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "i",
+          "state": "prototype",
+          "data": {
+            "prototype": "new"
+          }
+        },
+        "observations": {
+          "identity": "i",
+          "state": "prototype"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "F5"
     }
   ]
 }

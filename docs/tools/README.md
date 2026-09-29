@@ -360,3 +360,25 @@ The ownership probe filter requires a passing dedicated native baseline and
 independent passing controls. It never counts infrastructure failure as a kill.
 Installed ownership assertions run by default as well as under `--ownership`;
 the scoped option stops before the pending Entity assertions.
+
+
+## Entity declaration reuse checks
+
+M6's native suite includes Entity declaration/data keys and adjacent Workflow,
+Approval, and Audit own-member controls. Its focused configuration leaves the
+single M7 malformed-import regression in ordinary full-suite discovery.
+
+```sh
+npm exec -w @finkore/typescript -- vitest run --config vitest.declarations.config.ts --coverage
+npm exec -w @finkore/typescript -- stryker run stryker.declarations.config.json
+node docs/tools/mutation-native.js declarations097
+node docs/tools/check-packages.js --ownership
+```
+
+Stryker mutates the complete changed Entity implementation with the existing
+95% threshold. Five native probes cover unsafe assignment, dropped declarations,
+inherited permission/validator lookup, and shared field arrays; each requires a
+passing baseline and independent control. The installed npm consumer exercises
+actual returned declarations/observations and special-field mutation/transition
+under both `--ownership` and the default package check. Python/Java ownership
+controls also run under that option. It does not skip M7 in full release checks.

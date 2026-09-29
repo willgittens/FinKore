@@ -9,8 +9,9 @@ unused groups never add actionables. Depth four still applies to actual roots.
 Milestone 4 also closes concrete Approval history, declaration, condition, and
 fact-comparison corrections: all 579 Approval suite vectors pass on all four
 runtimes. Milestone 5 implements the accepted native Approval/Workflow value profile and
-required embedded Workflow collections. Milestones 6–7 remain pending and full
-suites remain red. D8 redaction policy
+required embedded Workflow collections. Milestone 6 closes Entity special-name
+declaration preservation/reuse; all ten portable special-name controls pass on
+every runtime. Milestone 7 remains pending and full suites remain red. D8 redaction policy
 identity is unresolved. The 0.9.6 results below describe the tagged snapshot.
 
 For `evaluate_composition`, omit `decisions` (or supply `[]`) for no votes.

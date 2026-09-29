@@ -344,10 +344,11 @@ baseline intended to become Core 1.0.
 
 Subsequent review identified additional gaps despite a fresh passing full
 verification run. The [Core 0.9.7 corrective plan](./docs/plans/plan-09.7.md)
-has accepted D1–D7 contracts and completed Milestones 3–5: composition, concrete
+has accepted D1–D7 contracts and completed Milestones 3–6: composition, concrete
 Approval histories, conditions, fact semantics, and the accepted native
-Approval/Workflow ownership profile. All 579 Approval suite vectors pass on all
-four runtimes. Milestones 6–7 and D8 remain open; D9 records an unresolved Entity
+Approval/Workflow ownership profile, plus Entity declaration observation/reuse.
+All 579 Approval suite vectors and ten special-name Entity vectors pass on all
+four runtimes. Milestone 7 and D8 remain open; D9 records an unresolved Entity
 native numeric policy gap. Full suites still contain the published red
 regressions. The remaining corrections and final review remain prerequisites
 for Core 1.0 promotion.

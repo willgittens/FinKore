@@ -9,9 +9,17 @@ unused groups never add actionables. Depth four still applies to actual roots.
 Milestone 4 also closes concrete Approval history, declaration, condition, and
 fact-comparison corrections: all 579 Approval suite vectors pass on all four
 runtimes. Milestone 5 implements the accepted native Approval/Workflow value profile and
-required embedded Workflow collections. Milestones 6–7 remain pending and full
-suites remain red. D8 redaction policy
+required embedded Workflow collections. Milestone 6 closes Entity special-name
+declaration preservation/reuse; all ten portable special-name controls pass on
+every runtime. Milestone 7 remains pending and full suites remain red. D8 redaction policy
 identity is unresolved. The 0.9.6 results below describe the tagged snapshot.
+
+Entity definitions preserve own State and field names, including `__proto__`,
+`constructor`, and `prototype`, across observation, JSON serialization/import,
+mutation, and transition. Original or returned declaration arrays cannot change
+existing permissions. Inherited State entries grant no permission; Entity
+validators read own data fields so creation cannot validate a value omitted from
+its returned observation. Valid own names remain supported without normalization.
 
 Approval fact comparison now uses all supplied facts when selectors are omitted.
 Concrete Decision evaluation requires current facts; Requirement evaluation may

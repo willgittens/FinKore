@@ -65,6 +65,32 @@ for (const field of ['terminalStates', 'transitions']) {
   delete flow[field]
   error('FINKORE_WORKFLOW_INVALID_DEFINITION', () => WorkflowDefinition.from(flow))
 }
+// Entity declarations and their actual observations survive installed-package reuse.
+for (const state of ['DRAFT', '__proto__', 'constructor', 'prototype']) {
+  const field = state === 'DRAFT' ? 'memo' : state
+  const ownDefinition = { type: 'invoice', identityScope: 'scope', workflow: { definitionIdentity: 'flow', definitionVersionIdentity: 'v1', states: [state, 'DONE'], initialState: state, terminalStates: ['DONE'], transitions: [{ source: state, target: 'DONE' }] }, mutability: { [state]: [field], DONE: [] } }
+  const ownEntity = FinancialEntity.create(ownDefinition, 'own', { [field]: 'old', protected: 'fixed' })
+  const retained = structuredClone(ownEntity.definition)
+  const original = structuredClone(ownEntity.toJSON())
+  assert.deepEqual(Object.keys(retained.mutability), [state, 'DONE'])
+  ownDefinition.mutability[state].push('protected')
+  ownEntity.definition.mutability[state].push('protected')
+  assert.deepEqual(ownEntity.definition, retained)
+  const reconstructed = FinancialEntity.from(JSON.parse(JSON.stringify(ownEntity.definition)), JSON.parse(JSON.stringify(ownEntity.toJSON())))
+  error('FINKORE_ENTITY_IMMUTABLE', () => reconstructed.mutate({ protected: 'changed' }))
+  const changed = reconstructed.mutate({ [field]: 'new' })
+  assert.deepEqual(changed.toJSON(), { ...original, data: { [field]: 'new', protected: 'fixed' } })
+  const transitioned = FinancialEntity.from(changed.definition, changed.toJSON()).transition('DONE')
+  assert.deepEqual(transitioned.toJSON(), { ...changed.toJSON(), state: 'DONE' })
+  error('FINKORE_ENTITY_IMMUTABLE', () => transitioned.mutate({ [field]: 'blocked' }))
+  assert.deepEqual(ownEntity.toJSON(), original)
+  const inherited = { ...retained, mutability: Object.create({ [state]: [field] }) }
+  error('FINKORE_ENTITY_INVALID_MUTATION', () => FinancialEntity.create(inherited, 'own', original.data))
+}
+const ownValidator = { type: 'invoice', identityScope: 'scope', workflow: { states: ['DRAFT'], initialState: 'DRAFT', terminalStates: [], transitions: [] }, mutability: { DRAFT: ['constructor'] }, validation: [{ id: 'positive', rule: 'positive-money', path: 'constructor' }] }
+const ownMoney = { amount: '1', currency: 'EUR' }
+error('FINKORE_ENTITY_VALIDATION_FAILED', () => FinancialEntity.create(ownValidator, 'i', Object.create({ constructor: ownMoney })))
+assert.deepEqual(FinancialEntity.create(ownValidator, 'i', { constructor: ownMoney }).validate(), { valid: true, findings: [] })
 if (process.argv.includes('--ownership')) {
   console.log('Installed npm native ownership checks passed')
   process.exit(0)
@@ -145,15 +171,6 @@ assert.deepEqual(log.toJSON(), auditBefore)
 const redacted = log.redact({ policy: { id: 'retention-policy', authority: 'retention', protectedPaths: ['actor.metadata'] }, redactionEvent: evidence })
 assert.deepEqual(redacted.event.actor.metadata, { presence: 'REDACTED' })
 assert.deepEqual(log.toJSON(), { history: [...auditBefore.history, redacted.evidenceEvent] })
-// Core 0.9.7: the ordinary-name control precedes actual definition/result reuse.
-for (const state of ['DRAFT', '__proto__', 'constructor', 'prototype']) {
-  const ownDefinition = { type: 'invoice', identityScope: 'scope', workflow: { states: [state, 'DONE'], initialState: state, terminalStates: ['DONE'], transitions: [{ source: state, target: 'DONE' }] }, mutability: { [state]: ['memo'], DONE: [] } }
-  const ownEntity = FinancialEntity.create(ownDefinition, 'own', { memo: 'old' })
-  assert.equal(Object.hasOwn(ownEntity.definition.mutability, state), true)
-  const reconstructed = FinancialEntity.from(ownEntity.definition, ownEntity.toJSON())
-  assert.equal(reconstructed.mutate({ memo: 'new' }).toJSON().data.memo, 'new')
-  assert.equal(ownEntity.toJSON().data.memo, 'old')
-}
 const withdrawnBefore097 = withdrawn.toJSON()
 error('FINKORE_APPROVAL_INVALID_DECISION', () => withdrawn.record(requirement, { ...decision, subjectFacts: { changed: true } }))
 assert.deepEqual(withdrawn.toJSON(), withdrawnBefore097)
