@@ -65,10 +65,10 @@ scope.
 
 The TypeScript Stryker configuration covers every executable financial-domain
 module, including Audit redaction, timestamp handling, serialization and
-currency validation, and portable error-code carriers. It excludes type-only
-modules, re-export files, and narrowly annotated static regular-expression
-construction that Vitest imports before mutant activation; exact public
-acceptance and rejection boundary tests cover those expressions.
+currency validation, and portable error-code carriers. It excludes only type-only
+modules and re-export files. Core regular expressions are constructed inside
+validation calls so Stryker can mutate them at runtime. All core tests, including
+native integration suites, participate; no inline mutation exclusions remain.
 
 A surviving mutant is release-critical when it can change accepted input,
 exact financial output, portable error selection, ordering, identity,
@@ -406,3 +406,37 @@ Legacy Approval native probes use the current owned-copy helper and shared
 Decision-shape validator, retaining their original assertions. Run artifact-writing
 package/coverage tasks before critical probes that copy those directories.
 Scoped mutation verification does not replace M8's full release verification.
+
+### Core 0.9.7 M8 review checks
+
+`npm run mutation:critical` uses the existing `--paired` mode: each complete
+selected suite must first pass unmodified; every Python/Java probe then runs its
+named regression and independent controls. Full-suite mutation may produce
+unrelated runtime failures after a validation guard is removed; such failures
+are never mutation kills. Direct tool invocation without `--paired` remains
+available for investigation. No probe or baseline requirement is removed.
+
+`node docs/tools/mutation-native.js collections` checks 28 sparse-collection, iterator and method
+bypasses against native regressions and valid controls. The collection suite has
+300 cases; the independent invariant suite has 717. The hole probes deliberately
+drop missing positions while preserving dense controls; the other probes restore
+caller iteration, methods or selector aliases. Simply restoring `.map` could cause runtime exceptions, which are not
+counted as behavioral kills. Core Stryker now includes all native integration
+suites. Currency, decimal, event-type and timestamp regular expressions are
+mutated at validation time; previous broad lexical exclusions are removed. The internal indexed Array
+traversal helper participates in the complete mutation scope.
+The threshold remains 95%. See the plan for full-candidate results and the
+inspection of surviving, uncovered, ignored and timed-out mutations.
+
+M8 exclusion audit also removed the remaining operator-family ignores. An
+`EqualityOperator` ignore justified only `<` versus `<=` also excluded the
+non-equivalent `>=` mutation; likewise an arithmetic-family ignore covered more
+than its cited sign identity. No core mutation exclusions remain. Equivalent
+mutants stay in the report/denominator for explicit review. No threshold is lowered.
+
+The final M8 run passes all gates. Runner scalar input/context/observation
+regressions kill the previously surviving object-type-check removal: the runner
+scores 97.21% with 18 diagnostic/wrapping survivors. Core scores 96.28% with no
+ignored mutants, or 96.01% without timeout credit. The plan records every
+non-killed family and the exact verified candidate; D10 readiness disposition
+remains open.

@@ -348,9 +348,11 @@ has accepted D1–D7 contracts and completed Milestones 3–7: composition, conc
 Approval histories, conditions, fact semantics, and the accepted native
 Approval/Workflow ownership profile, Entity declaration observation/reuse, and
 malformed-input validation with preserved adapter errors. All 1719 manifest
-vectors pass on TypeScript, Python 3.12/3.13, and Java. D8 and D9 remain unresolved
-policy gaps. Full release verification and independent review in Milestone 8
-remain prerequisites for Core 1.0 promotion.
+vectors pass on TypeScript, Python 3.12/3.13, and Java. M8 corrects native collection
+traversal and expands mutation coverage; complete combined verification passes.
+D8, D9 and the new D10 Audit Event metadata profile remain unresolved policy gaps.
+M8 readiness closure awaits D10’s disposition. The local corrective release and
+separate Core 1.0 promotion gates remain uncompleted.
 
 At the 0.9.6 tag, all 884 manifest vectors pass on TypeScript, CPython 3.12/3.13, and Java,
 including all earlier corrective regressions. The completed

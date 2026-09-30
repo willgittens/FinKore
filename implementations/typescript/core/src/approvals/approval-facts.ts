@@ -1,21 +1,24 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { copyApprovalValue } from './approval-value.js'
 import { InvalidApprovalDecisionError } from './errors.js'
 
 /**
  * Rejects empty selector lists and paths with empty dot-separated segments.
+ * Captures every indexed selector position independently of caller iteration.
  * @throws {InvalidApprovalDecisionError} For malformed selector declarations.
  * @internal
  * @see APPROVAL-FACT-002
  */
 export function validateFactPaths(value: unknown): readonly string[] {
   if (!Array.isArray(value) || value.length === 0) throw new InvalidApprovalDecisionError()
-  for (const path of value) {
+  const paths = Array.from(arrayValues(value))
+  for (const path of paths) {
     if (typeof path !== 'string' || path.split('.').some(segment => segment.length === 0)) {
       throw new InvalidApprovalDecisionError()
     }
   }
-  return value as readonly string[]
+  return paths as readonly string[]
 }
 
 /**

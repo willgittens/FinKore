@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { InvalidAuditEventError } from './errors.js'
 import type { SerializedAuditChange } from './types.js'
 import { Money } from '../money/money.js'
@@ -23,7 +24,7 @@ function cloneAuditValue<T>(value: T, ancestors = new Set<object>()): T {
   if (Array.isArray(value)) {
     if (ancestors.has(value)) throw new InvalidAuditEventError()
     ancestors.add(value)
-    const result = value.map((item) => cloneAuditValue(item, ancestors))
+    const result = Array.from(arrayValues(value), (item) => cloneAuditValue(item, ancestors))
     ancestors.delete(value)
     return result as T
   }
@@ -66,7 +67,6 @@ function auditValuesEqual(left: unknown, right: unknown): boolean {
     return Array.isArray(right) ? arraysEqual(left, right) : false
   }
 
-  // Stryker disable next-line ConditionalExpression: equivalent; non-record left values still compare unequal through recordsEqual when forced into this branch.
   if (isPlainRecord(left)) {
     return isPlainRecord(right) ? recordsEqual(left, right) : false
   }
@@ -92,6 +92,8 @@ function recordsEqual(left: Readonly<Record<string, unknown>>, right: Readonly<R
  * explicitly declares `valueType: 'MONEY'`; ordinary JSON objects are never
  * inferred to be Money. Core 0.9 release candidate does not define a portable
  * path syntax, change kind catalog, duplicate-path rule, or diff engine.
+ *
+ * @remarks Change-value arrays validate every position; sparse arrays are malformed JSON values.
  *
  * @see AUDIT-CHANGE-001
  * @see AUDIT-CHANGE-002

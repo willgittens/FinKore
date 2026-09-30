@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { copyApprovalValue } from './approval-value.js'
 import { parsePortableTimestamp } from '../portable-timestamp.js'
 import { ApprovalConditionUnresolvedError, InvalidApprovalChainError, InvalidApprovalContextError } from './errors.js'
@@ -99,12 +100,12 @@ function assertUniqueMemberIds(members: readonly SerializedApprovalCompositionMe
 function validateMembers(value: unknown, groupKind: ApprovalCompositionGroupKind): readonly SerializedApprovalCompositionMember[] {
   if (!Array.isArray(value) || value.length === 0) throw new InvalidApprovalChainError()
   if (groupKind !== 'N_OF_M') {
-    const members = value.map(validateNonQuorumMember)
+    const members = Array.from(arrayValues(value), validateNonQuorumMember)
     assertUniqueMemberIds(members)
     return members
   }
 
-  const members = value.map(validateQuorumMember)
+  const members = Array.from(arrayValues(value), validateQuorumMember)
   assertUniqueMemberIds(members)
   const voterIds: string[] = []
   for (const member of members) {
@@ -143,7 +144,7 @@ function validateGroup(value: unknown): SerializedApprovalCompositionGroup {
 
 function validateGroups(value: unknown): readonly SerializedApprovalCompositionGroup[] {
   if (!Array.isArray(value)) throw new InvalidApprovalChainError()
-  const groups = value.map(validateGroup)
+  const groups = Array.from(arrayValues(value), validateGroup)
   const groupIds = groups.map((group) => group.id)
   if (new Set(groupIds).size !== groupIds.length) throw new InvalidApprovalChainError()
   return groups
@@ -152,7 +153,7 @@ function validateGroups(value: unknown): readonly SerializedApprovalCompositionG
 function validateStage(value: unknown): SerializedApprovalCompositionStage {
   if (!isPlainRecord(value)) throw new InvalidApprovalChainError()
   if (!Array.isArray(value.groups) || value.groups.length === 0) throw new InvalidApprovalChainError()
-  const groups = value.groups.map(requiredString)
+  const groups = Array.from(arrayValues(value.groups), requiredString)
   return {
     id: requiredString(value.id),
     groups,
@@ -161,7 +162,7 @@ function validateStage(value: unknown): SerializedApprovalCompositionStage {
 
 function validateStages(value: unknown): readonly SerializedApprovalCompositionStage[] {
   if (!Array.isArray(value) || value.length === 0) throw new InvalidApprovalChainError()
-  const stages = value.map(validateStage)
+  const stages = Array.from(arrayValues(value), validateStage)
   const stageIds = stages.map((stage) => stage.id)
   if (new Set(stageIds).size !== stageIds.length) throw new InvalidApprovalChainError()
   return stages
@@ -254,7 +255,7 @@ function validateDecisionOutcome(value: unknown): ApprovalDecisionOutcome {
 function validateEligibleActors(value: unknown): readonly ApprovalActorIdentifier[] | undefined {
   if (value === undefined) return undefined
   if (!Array.isArray(value)) throw new InvalidApprovalChainError()
-  return value.map(requiredString)
+  return Array.from(arrayValues(value), requiredString)
 }
 
 function validateDecisionObservation(value: unknown): SerializedApprovalCompositionDecisionObservation {
@@ -272,7 +273,7 @@ function validateDecisionObservation(value: unknown): SerializedApprovalComposit
 function validateDecisionObservations(value: unknown): readonly SerializedApprovalCompositionDecisionObservation[] {
   if (value === undefined) return []
   if (!Array.isArray(value)) throw new InvalidApprovalChainError()
-  return value.map(validateDecisionObservation)
+  return Array.from(arrayValues(value), validateDecisionObservation)
 }
 
 function hasValidEvaluationContext(value: unknown): boolean {
@@ -340,7 +341,7 @@ function validateEvaluationInput(
 ): ReadonlyMap<ApprovalRequirementIdentifier, CompositionRequirementObservation> {
   if (!isPlainRecord(input) || !Array.isArray(input.requirements)) throw new InvalidApprovalChainError()
   const rawById = new Map<ApprovalRequirementIdentifier, Readonly<Record<string, unknown>>>()
-  for (const raw of input.requirements) {
+  for (const raw of arrayValues(input.requirements)) {
     if (!isPlainRecord(raw)) throw new InvalidApprovalChainError()
     const id = requiredString(raw.id)
     if (rawById.has(id)) throw new InvalidApprovalChainError()
@@ -408,6 +409,10 @@ function validateEvaluationInput(
  * unsupported values (APPROVAL-FACT-004). Decision-history effectiveness derivation, authorization,
  * dynamic approvers, callbacks, history mutation, and adapter normalization
  * remain outside this class's current scope.
+ *
+ * @remarks Declaration and evidence collections validate every indexed position;
+ * sparse arrays are malformed. Caller-defined iteration and Array methods cannot
+ * alter declaration or eligibility evidence.
  *
  * @see APPROVAL-COMPOSITION-001
  * @see APPROVAL-COMPOSITION-002

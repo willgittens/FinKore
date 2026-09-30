@@ -53,7 +53,15 @@ Eight supplementary cases distinguish omitted and null Audit histories combined
 with invalid Actors across all four evolution kinds. One older vector's unknown
 target expectation is corrected to `WORKFLOW_INVALID_STATE` under WORKFLOW-ERROR-007;
 its ID and unchanged-input assertion are retained. See the plan for compatibility
-and mutation evidence. Complete release verification remains M8 work.
+and mutation evidence. Complete M8 verification passes for the accepted
+contracts; readiness closure still awaits D10’s disposition.
+
+M8 native review adds 300 collection cases across 32 boundaries, including
+holes, malformed containers and caller-defined iteration, plus 28 paired probes. These supplement existing malformed-member vectors because
+JSON cannot encode a missing array position. A further 717 deterministic native
+cases exercise shared composition graphs and fact comparisons. Portable vector
+identifiers/counts are unchanged. See the plan for the pending D10 Event metadata
+profile decision and the final verification status.
 
 The completed [Core 0.9.5 plan](../docs/plans/plan-09.5.md) corrects native Money
 serialization, Workflow binding and precondition presence, concrete Approval

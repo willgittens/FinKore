@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { AuditActor } from './actor.js'
 import { AuditChange } from './audit-change.js'
 import { InvalidAuditEventError } from './errors.js'
@@ -10,10 +11,6 @@ import type {
   SerializedAuditEvent,
   SerializedAuditRelationship,
 } from './types.js'
-
-// Stryker disable all: regex construction mechanics are equivalent noise; event-type acceptance/rejection behavior is covered by validation tests.
-const EVENT_TYPE = /^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*$/u
-// Stryker restore all
 
 function isPlainRecord(value: unknown): value is Readonly<Record<string, unknown>> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -33,6 +30,7 @@ function cloneJsonValue<T>(value: T): T {
 }
 
 function validateEventType(value: unknown): string {
+  const EVENT_TYPE = /^[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*$/u
   const eventType = requiredString(value)
   if (!EVENT_TYPE.test(eventType)) throw new InvalidAuditEventError()
   return eventType
@@ -94,13 +92,13 @@ function validateMetadata(value: unknown): unknown {
 function validateChanges(value: unknown): readonly SerializedAuditChange[] | undefined {
   if (value === undefined) return undefined
   if (!Array.isArray(value)) throw new InvalidAuditEventError()
-  return value.map(validateChange)
+  return Array.from(arrayValues(value), validateChange)
 }
 
 function validateRelationships(value: unknown): readonly SerializedAuditRelationship[] | undefined {
   if (value === undefined) return undefined
   if (!Array.isArray(value) || value.length === 0) throw new InvalidAuditEventError()
-  return value.map(validateRelationship)
+  return Array.from(arrayValues(value), validateRelationship)
 }
 
 /**
@@ -111,6 +109,8 @@ function validateRelationships(value: unknown): readonly SerializedAuditRelation
  * event type, entity reference, optional known actor attribution, timestamp,
  * changes, relationships, and metadata without generating IDs, event types, or
  * reading wall-clock time.
+ *
+ * @remarks Change and relationship collections validate every position; sparse arrays are malformed.
  *
  * @see AUDIT-EVENT-001
  * @see AUDIT-EVENT-002

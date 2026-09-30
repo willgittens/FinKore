@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { InvalidWorkflowDefinitionError } from './errors.js'
 import type {
   WorkflowDefinitionIdentity,
@@ -69,7 +70,7 @@ function validateStateList(value: unknown): readonly WorkflowStateIdentifier[] {
   if (!Array.isArray(value)) {
     throw new InvalidWorkflowDefinitionError()
   }
-  return value.map(validateStateIdentifier)
+  return Array.from(arrayValues(value), validateStateIdentifier)
 }
 
 function validateGuard(value: unknown): WorkflowTransitionGuard {
@@ -89,7 +90,7 @@ function retainJson(value: unknown, ancestors = new Set<object>()): unknown {
   ancestors.add(value)
   try {
     if (Array.isArray(value)) {
-      return Object.freeze(Array.from(value, (item) => retainJson(item, ancestors)))
+      return Object.freeze(Array.from(arrayValues(value), (item) => retainJson(item, ancestors)))
     }
     if (Object.getPrototypeOf(value) !== Object.prototype && Object.getPrototypeOf(value) !== null) {
       throw new InvalidWorkflowDefinitionError()
@@ -104,7 +105,7 @@ function validateGuards(value: unknown): readonly WorkflowTransitionGuard[] {
   if (!Array.isArray(value)) {
     throw new InvalidWorkflowDefinitionError()
   }
-  return value.map(validateGuard)
+  return Array.from(arrayValues(value), validateGuard)
 }
 
 function validateTransition(value: unknown): ValidatedWorkflowTransitionDefinition {
@@ -136,6 +137,8 @@ function assertUnique(values: readonly string[]): void {
  * opaque Workflow definition and version identities. This TypeScript
  * representation is immutable from callers' perspective and contains no
  * persistence, migration, authorization model, or process-engine behavior.
+ *
+ * @remarks Declaration collections validate every position; sparse arrays are malformed.
  *
  * @see WORKFLOW-STATES-001
  * @see WORKFLOW-STATES-002
@@ -236,7 +239,7 @@ export class WorkflowDefinition {
     if (!Array.isArray(input.transitions)) {
       throw new InvalidWorkflowDefinitionError()
     }
-    const transitions = input.transitions.map(validateTransition)
+    const transitions = Array.from(arrayValues(input.transitions), validateTransition)
     for (const transition of transitions) {
       if (!stateSet.has(transition.source) || !stateSet.has(transition.target)) {
         throw new InvalidWorkflowDefinitionError()

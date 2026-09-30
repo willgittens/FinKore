@@ -41,7 +41,7 @@
     "java:adapter:test": "npm run java:compile && node --test implementations/java/adapters/conformance/test/*.test.js",
     "mutation:native": "node docs/tools/mutation-native.js",
     "mutation:native:python:3.13": "FINKORE_PYTHON_PATH=.tools/bin/python3.13 node docs/tools/mutation-native.js python",
-    "mutation:critical": "node docs/tools/mutation-critical.js all",
+    "mutation:critical": "node docs/tools/mutation-critical.js all --paired",
     "architecture:check": "node docs/tools/check-architecture.js",
     "tools:bootstrap": "node docs/tools/bootstrap-toolchains.js",
     "tools:check": "node docs/tools/bootstrap-toolchains.js --check",

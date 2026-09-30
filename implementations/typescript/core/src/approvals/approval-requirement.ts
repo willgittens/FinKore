@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { InvalidApprovalDecisionError } from './errors.js'
 import type {
   ApprovalActorIdentifier,
@@ -30,7 +31,7 @@ function validateSubject(value: unknown): SerializedApprovalSubject {
 
 function validateEligibleActors(value: unknown): readonly ApprovalActorIdentifier[] {
   if (!Array.isArray(value) || value.length === 0) throw new InvalidApprovalDecisionError()
-  const actors = value.map(requiredString)
+  const actors = Array.from(arrayValues(value), requiredString)
   if (new Set(actors).size !== actors.length) throw new InvalidApprovalDecisionError()
   return actors
 }
@@ -43,6 +44,8 @@ function validateEligibleActors(value: unknown): readonly ApprovalActorIdentifie
  * release candidate behavior, and defines which Decision outcomes approve or reject it. This
  * class does not implement chains, quorum, delegation, authorization, dynamic
  * actor resolution, persistence, or audit integration.
+ *
+ * @remarks Eligibility collections validate every position; sparse arrays are malformed.
  *
  * @see APPROVAL-REQUIREMENT-001
  * @see APPROVAL-REQUIREMENT-002

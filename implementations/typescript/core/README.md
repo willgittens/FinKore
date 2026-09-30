@@ -13,8 +13,21 @@ required embedded Workflow collections. Milestone 6 closes Entity special-name
 declaration preservation/reuse; all ten portable special-name controls pass on
 every runtime. Milestone 7 closes malformed Entity/Workflow boundaries and Audit
 failure observations; all 1719 manifest vectors pass on all four runtimes.
-Final release verification/review remains M8 work. D8 redaction policy identity
-and D9 Entity native-value policy remain unresolved. The 0.9.6 results below describe the tagged snapshot.
+Complete M8 verification passes; readiness closure awaits D10’s disposition.
+D8 redaction policy identity
+and D9 Entity native-value policy remain unresolved; M8 also records D10,
+the unspecified native Audit Event metadata profile. The 0.9.6 results below describe the tagged snapshot.
+
+Milestone 8 review corrects native sparse collections: every supplied position
+in Workflow/Entity declarations, Approval evidence, Audit changes/relationships,
+Actor/Change JSON values, revision histories, redaction paths, and Money ratios
+is validated by indexed traversal, independent of caller-defined iteration or
+Array methods. Such overrides cannot hide guards or change quorum eligibility.
+Missing entries now produce the owning portable error instead of
+being skipped or causing a runtime exception. Dense valid arrays retain their
+behavior. JSON vectors cannot represent holes; native tests retain the regression
+and independent dense controls. Audit Event metadata's broader native profile
+is separately unresolved as D10; this correction does not choose it.
 
 Entity definitions require a nonempty `identityScope` and an explicit mutability
 field list for every declared State; `[]` permits no fields. Data must be an

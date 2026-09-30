@@ -28,20 +28,17 @@
     "src/approvals/errors.ts",
     "src/portable-timestamp.ts",
     "src/approvals/approval-facts.ts",
-    "src/approvals/approval-value.ts"
+    "src/approvals/approval-value.ts",
+    "src/array-values.ts"
   ],
   "testFiles": [
-    "test/integration/readiness-regressions.test.ts",
-    "test/integration/boundary-regressions.test.ts",
-    "test/integration/construction-evaluation-regressions.test.ts",
-    "test/integration/evidence-regressions.test.ts",
-    "test/money/*.test.ts",
-    "test/workflow/*.test.ts",
-    "test/audit/*.test.ts",
-    "test/entities/*.test.ts",
-    "test/approvals/*.test.ts"
+    "test/**/*.test.ts"
   ],
-  "reporters": ["clear-text", "html", "json"],
+  "reporters": [
+    "clear-text",
+    "html",
+    "json"
+  ],
   "thresholds": {
     "high": 95,
     "low": 90,

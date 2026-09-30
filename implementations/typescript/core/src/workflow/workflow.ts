@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { WorkflowDefinition } from './definition.js'
 import {
   InvalidWorkflowInstanceError,
@@ -33,7 +34,7 @@ function jsonValuesEqual(left: unknown, right: unknown): boolean {
   if (Array.isArray(left) || Array.isArray(right)) {
     return Array.isArray(left) && Array.isArray(right)
       && left.length === right.length
-      && left.every((value, index) => jsonValuesEqual(value, right[index]))
+      && Array.from(arrayValues(left)).every((value, index) => jsonValuesEqual(value, right[index]))
   }
   if (isPlainRecord(left) && isPlainRecord(right)) {
     const leftKeys = Object.keys(left)
@@ -106,6 +107,9 @@ function hasOwn(value: object, key: PropertyKey): boolean {
  * Imported instances may also carry a caller-supplied opaque Workflow Instance
  * Revision. FinKore preserves that revision exactly and does not generate,
  * increment, or interpret it as a storage lock.
+ *
+ * @remarks Fact arrays compare indexed values, including missing positions; caller
+ * iteration or Array method overrides do not decide guard outcomes.
  *
  * @see WORKFLOW-STATES-003
  * @see WORKFLOW-STATES-004

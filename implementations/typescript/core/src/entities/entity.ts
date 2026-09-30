@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { Money } from '../money/money.js'
 import { Workflow } from '../workflow/workflow.js'
 import { WorkflowDefinition } from '../workflow/definition.js'
@@ -65,7 +66,7 @@ function validateDefinition(input: unknown): EntityDefinition {
 function validateValidationRules(value: unknown): readonly EntityValidationRuleDefinition[] {
   if (value === undefined) return []
   if (!Array.isArray(value)) throw new InvalidEntityMutationError()
-  return value.map((candidate) => {
+  return Array.from(arrayValues(value), (candidate) => {
     if (!isPlainRecord(candidate)) throw new InvalidEntityMutationError()
     if (candidate.rule !== 'positive-money' && candidate.rule !== 'money-not-greater-than') throw new InvalidEntityMutationError()
     const identity = {
@@ -85,7 +86,7 @@ function requiredValidationString(value: unknown): string {
 
 function validateFieldList(value: unknown): readonly string[] {
   if (!Array.isArray(value)) throw new InvalidEntityMutationError()
-  return value.map((field) => {
+  return Array.from(arrayValues(value), (field) => {
     if (typeof field !== 'string' || field.length === 0) throw new InvalidEntityMutationError()
     return field
   })
@@ -180,7 +181,7 @@ function validateRevisionObservation(input: unknown, entity: SerializedFinancial
 function validateHistoricalRevisions(input: unknown, entity: SerializedFinancialEntity): readonly EntityRevisionObservation[] {
   if (input === undefined) return []
   if (!Array.isArray(input)) throw new InvalidEntityIdentityError()
-  return input.map((revision) => validateRevisionObservation(revision, entity, false))
+  return Array.from(arrayValues(input), (revision) => validateRevisionObservation(revision, entity, false))
 }
 
 function assertNoDuplicateRevisions(revisions: readonly EntityRevisionObservation[]): void {
@@ -298,6 +299,8 @@ function assertValidEntityData(definition: EntityDefinition, data: unknown): voi
  * permission. Versioned Workflow bindings are retained unchanged.
  * Unsupported or malformed validators fail with FINKORE_ENTITY_INVALID_MUTATION
  * before predicates run; rejected data uses FINKORE_ENTITY_VALIDATION_FAILED.
+ *
+ * @remarks Declaration and revision collections validate every position; sparse arrays are malformed.
  *
  * @see ENTITY-DEFINITION-002
  * @see ENTITY-VALIDATION-009

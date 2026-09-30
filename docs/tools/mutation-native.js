@@ -18,6 +18,370 @@ const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const constructionPy = 'test_construction_evaluation_regressions.ConstructionEvaluationRegressions.'
 const probes = [
 {
+  "id": "typescript-collections097-fact-selector-method",
+  "language": "typescript",
+  "path": "src/approvals/approval-facts.ts",
+  "scope": "collections",
+  "from": "return paths as readonly string[]",
+  "to": "return value as readonly string[]",
+  "tests": [
+    "test/integration/review-invariants.test.ts"
+  ],
+  "target": "review097 fact selectors ignore array method overrides",
+  "control": "review097 fact selectors indexed control"
+},
+{
+  "id": "typescript-collections097-guard-fact-method",
+  "language": "typescript",
+  "path": "src/workflow/workflow.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(left)).every((value, index) => jsonValuesEqual(value, right[index]))",
+  "to": "left.every((value, index) => jsonValuesEqual(value, right[index]))",
+  "tests": [
+    "test/integration/review-invariants.test.ts"
+  ],
+  "target": "review097 guard fact positions reject method override",
+  "control": "review097 guard fact positions dense control"
+},
+{
+  "id": "typescript-collections097-quorum-eligibility-method",
+  "language": "typescript",
+  "path": "src/approvals/approval-composition.ts",
+  "scope": "collections",
+  "from": "return Array.from(arrayValues(value), requiredString)",
+  "to": "return value.map(requiredString)",
+  "tests": [
+    "test/integration/review-invariants.test.ts"
+  ],
+  "target": "review097 quorum eligibility ignores array method overrides",
+  "control": "review097 quorum eligibility indexed control"
+},
+{
+  "id": "typescript-collections097-iterator-hiding",
+  "language": "typescript",
+  "path": "src/array-values.ts",
+  "scope": "collections",
+  "from": "return Array.prototype.values.call(value) as ArrayIterator<unknown>",
+  "to": "return value[Symbol.iterator]() as ArrayIterator<unknown>",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 workflow guards iterator cannot hide an invalid position",
+  "control": "collections097 workflow guards dense control"
+},
+{
+  "id": "typescript-collections097-workflow-states",
+  "language": "typescript",
+  "path": "src/workflow/definition.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value), validateStateIdentifier)",
+  "to": "value.filter(() => true).map(validateStateIdentifier)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 workflow states first hole (WORKFLOW-STATES-001)",
+  "control": "collections097 workflow states dense control"
+},
+{
+  "id": "typescript-collections097-workflow-guards",
+  "language": "typescript",
+  "path": "src/workflow/definition.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value), validateGuard)",
+  "to": "value.filter(() => true).map(validateGuard)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 workflow guards first hole (WORKFLOW-GUARD-002)",
+  "control": "collections097 workflow guards dense control"
+},
+{
+  "id": "typescript-collections097-workflow-transitions",
+  "language": "typescript",
+  "path": "src/workflow/definition.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(input.transitions), validateTransition)",
+  "to": "input.transitions.filter(() => true).map(validateTransition)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 workflow transitions first hole (WORKFLOW-TRANSITION-001)",
+  "control": "collections097 workflow transitions dense control"
+},
+{
+  "id": "typescript-collections097-entity-validators",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value), (candidate) => {",
+  "to": "value.filter(() => true).map((candidate) => {",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 entity validators first hole (ENTITY-VALIDATION-009)",
+  "control": "collections097 entity validators dense control"
+},
+{
+  "id": "typescript-collections097-entity-permissions",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value), (field) => {",
+  "to": "value.filter(() => true).map((field) => {",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 entity permissions first hole (ENTITY-MUTABILITY-008)",
+  "control": "collections097 entity permissions dense control"
+},
+{
+  "id": "typescript-collections097-entity-revisions",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(input), (revision) => validateRevisionObservation(revision, entity, false))",
+  "to": "input.filter(() => true).map((revision) => validateRevisionObservation(revision, entity, false))",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 entity revisions first hole (ENTITY-REVISION-001)",
+  "control": "collections097 entity revisions dense control"
+},
+{
+  "id": "typescript-collections097-evolution-history",
+  "language": "typescript",
+  "path": "src/entities/entity-evolution.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(relations), validateRelation)",
+  "to": "relations.filter(() => true).map(validateRelation)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 evolution history first hole (ENTITY-EVOLUTION-024)",
+  "control": "collections097 evolution history dense control"
+},
+{
+  "id": "typescript-collections097-approval-eligibility",
+  "language": "typescript",
+  "path": "src/approvals/approval-requirement.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value), requiredString)",
+  "to": "value.filter(() => true).map(requiredString)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 approval eligibility first hole (APPROVAL-REQUIREMENT-003)",
+  "control": "collections097 approval eligibility dense control"
+},
+{
+  "id": "typescript-collections097-chain-members",
+  "language": "typescript",
+  "path": "src/approvals/approval-chain.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value), requiredString)",
+  "to": "value.filter(() => true).map(requiredString)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 chain members first hole (APPROVAL-CHAIN-001)",
+  "control": "collections097 chain members dense control"
+},
+{
+  "id": "typescript-collections097-composition-members",
+  "language": "typescript",
+  "path": "src/approvals/approval-composition.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value), validateNonQuorumMember)",
+  "to": "value.filter(() => true).map(validateNonQuorumMember)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 composition members first hole (APPROVAL-COMPOSITION-004)",
+  "control": "collections097 composition members dense control"
+},
+{
+  "id": "typescript-collections097-quorum-members",
+  "language": "typescript",
+  "path": "src/approvals/approval-composition.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value), validateQuorumMember)",
+  "to": "value.filter(() => true).map(validateQuorumMember)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 quorum members first hole (APPROVAL-QUORUM-007)",
+  "control": "collections097 quorum members dense control"
+},
+{
+  "id": "typescript-collections097-composition-groups",
+  "language": "typescript",
+  "path": "src/approvals/approval-composition.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value), validateGroup)",
+  "to": "value.filter(() => true).map(validateGroup)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 composition groups first hole (APPROVAL-COMPOSITION-004)",
+  "control": "collections097 composition groups dense control"
+},
+{
+  "id": "typescript-collections097-stage-groups",
+  "language": "typescript",
+  "path": "src/approvals/approval-composition.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value.groups), requiredString)",
+  "to": "value.groups.filter(() => true).map(requiredString)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 stage groups first hole (APPROVAL-COMPOSITION-016)",
+  "control": "collections097 stage groups dense control"
+},
+{
+  "id": "typescript-collections097-composition-stages",
+  "language": "typescript",
+  "path": "src/approvals/approval-composition.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value), validateStage)",
+  "to": "value.filter(() => true).map(validateStage)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 composition stages first hole (APPROVAL-COMPOSITION-016)",
+  "control": "collections097 composition stages dense control"
+},
+{
+  "id": "typescript-collections097-quorum-evidence",
+  "language": "typescript",
+  "path": "src/approvals/approval-composition.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value), validateDecisionObservation)",
+  "to": "value.filter(() => true).map(validateDecisionObservation)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 quorum evidence first hole (APPROVAL-COMPOSITION-024)",
+  "control": "collections097 quorum evidence dense control"
+},
+{
+  "id": "typescript-collections097-approval-history-list",
+  "language": "typescript",
+  "path": "src/approvals/approval-decision-history.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(history), (decision) => ApprovalDecision.from(decision))",
+  "to": "history.filter(() => true).map((decision) => ApprovalDecision.from(decision))",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 approval history list first hole (APPROVAL-DECISION-001)",
+  "control": "collections097 approval history list dense control"
+},
+{
+  "id": "typescript-collections097-approval-history-envelope",
+  "language": "typescript",
+  "path": "src/approvals/approval-decision-history.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(history.history), (decision) => ApprovalDecision.from(decision))",
+  "to": "history.history.filter(() => true).map((decision) => ApprovalDecision.from(decision))",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 approval history envelope first hole (APPROVAL-DECISION-001)",
+  "control": "collections097 approval history envelope dense control"
+},
+{
+  "id": "typescript-collections097-approval-lifecycle",
+  "language": "typescript",
+  "path": "src/approvals/approval-decision-history.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(lifecycleInput), (event) => validateLifecycleEvent(event))",
+  "to": "lifecycleInput.filter(() => true).map((event) => validateLifecycleEvent(event))",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 approval lifecycle first hole (APPROVAL-VALIDITY-014)",
+  "control": "collections097 approval lifecycle dense control"
+},
+{
+  "id": "typescript-collections097-audit-actor-values",
+  "language": "typescript",
+  "path": "src/audit/actor.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value), (item) => cloneJsonValue(item, ancestors))",
+  "to": "value.filter(() => true).map((item) => cloneJsonValue(item, ancestors))",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 audit actor values first hole (AUDIT-ACTOR-010)",
+  "control": "collections097 audit actor values dense control"
+},
+{
+  "id": "typescript-collections097-audit-change-values",
+  "language": "typescript",
+  "path": "src/audit/audit-change.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value), (item) => cloneAuditValue(item, ancestors))",
+  "to": "value.filter(() => true).map((item) => cloneAuditValue(item, ancestors))",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 audit change values first hole (AUDIT-CHANGE-008)",
+  "control": "collections097 audit change values dense control"
+},
+{
+  "id": "typescript-collections097-audit-changes",
+  "language": "typescript",
+  "path": "src/audit/audit-event.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value), validateChange)",
+  "to": "value.filter(() => true).map(validateChange)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 audit changes first hole (AUDIT-CHANGE-001)",
+  "control": "collections097 audit changes dense control"
+},
+{
+  "id": "typescript-collections097-audit-relationships",
+  "language": "typescript",
+  "path": "src/audit/audit-event.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(value), validateRelationship)",
+  "to": "value.filter(() => true).map(validateRelationship)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 audit relationships first hole (AUDIT-RELATIONSHIP-003)",
+  "control": "collections097 audit relationships dense control"
+},
+{
+  "id": "typescript-collections097-redaction-paths",
+  "language": "typescript",
+  "path": "src/audit/audit-redaction.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(input.protectedPaths), requiredString)",
+  "to": "input.protectedPaths.filter(() => true).map(requiredString)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 redaction paths first hole (AUDIT-REDACTION-001)",
+  "control": "collections097 redaction paths dense control"
+},
+{
+  "id": "typescript-collections097-allocation-ratios",
+  "language": "typescript",
+  "path": "src/money/money.ts",
+  "scope": "collections",
+  "from": "Array.from(arrayValues(candidate.ratios), validateAllocationRatio)",
+  "to": "candidate.ratios.filter(() => true).map(validateAllocationRatio)",
+  "tests": [
+    "test/integration/native-collections.test.ts"
+  ],
+  "target": "collections097 allocation ratios first hole (MONEY-ALLOCATION-004)",
+  "control": "collections097 allocation ratios dense control"
+},
+{
   "id": "typescript-declarations097-inherited-validator",
   "scope": "declarations",
   "language": "typescript",
@@ -242,7 +606,7 @@ const probes = [
   id: 'typescript-approval097-condition-selector-alias',
   scope: 'approval-contracts', language: 'typescript',
   path: 'src/approvals/approval-condition.ts',
-  from: 'return [...facts]', to: 'return facts',
+  from: 'return [...facts]', to: 'return value as readonly ApprovalConditionFactPath[]',
   tests: ['test/approvals/approval-condition-ownership.test.ts'],
   target: 'owns condition selectors after validating the caller declaration',
   control: 'keeps unmodified condition selectors valid',

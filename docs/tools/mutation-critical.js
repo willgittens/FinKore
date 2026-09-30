@@ -776,8 +776,8 @@ const pythonMutants = [
       "workflow.presence.omitted-control-001"
     ],
     "path": "adapters/conformance/bridge.py",
-    "from": ") if portable in input_value}",
-    "to": ") if portable in input_value and (portable != \"expectedCurrentState\" or input_value[portable] is not None)}"
+    "from": ") if portable in input_value}\n    result = transition_workflow(",
+    "to": ") if portable in input_value and (portable != \"expectedCurrentState\" or input_value[portable] is not None)}\n    result = transition_workflow("
   },
   {
     "id": "python-workflow-adapter-null-revision-omitted",
@@ -787,8 +787,8 @@ const pythonMutants = [
       "workflow.presence.omitted-control-001"
     ],
     "path": "adapters/conformance/bridge.py",
-    "from": ") if portable in input_value}",
-    "to": ") if portable in input_value and (portable != \"expectedRevision\" or input_value[portable] is not None)}"
+    "from": ") if portable in input_value}\n    result = transition_workflow(",
+    "to": ") if portable in input_value and (portable != \"expectedRevision\" or input_value[portable] is not None)}\n    result = transition_workflow("
   },
   {
     "id": "python-workflow-state-null-omitted",

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { AuditEvent } from './audit-event.js'
 import { auditEventMatchesRedactionPolicy, redactAuditEvent, validateAuditRedactionPolicy } from './audit-redaction.js'
 import {
@@ -21,7 +22,6 @@ function sameEntityReference(left: SerializedAuditEntityReference, right: Serial
 }
 
 function eventRelationshipIds(event: AuditEvent): readonly string[] {
-  // Stryker disable next-line ArrayDeclaration: an invalid synthetic fallback entry is unobservable because AuditEvent validates relationship IDs before history-level reservation.
   return (event.toJSON().relationships ?? []).map((relationship) => relationship.relationshipId)
 }
 
@@ -34,6 +34,9 @@ function eventRelationshipIds(event: AuditEvent): readonly string[] {
  * against the surrounding logical history and preserved as committed event
  * content. The observable array order is this log's local append observation
  * only and does not create a distributed total ordering guarantee.
+ *
+ * @remarks History import validates every indexed Array position, independently
+ * of caller-defined iteration. Invalid members cannot be hidden from validation.
  *
  * @see AUDIT-APPEND-001
  * @see AUDIT-APPEND-002
@@ -79,7 +82,7 @@ export class AuditLog {
     const events: AuditEvent[] = []
     const ids = new Set<string>()
     const relationshipIds = new Set<string>()
-    for (const eventInput of history) {
+    for (const eventInput of arrayValues(history)) {
       const event = AuditEvent.from(eventInput)
       if (ids.has(event.eventId)) throw new DuplicateAuditEventError()
       const eventsById = new Map(events.map((committed) => [committed.eventId, committed.toJSON()] as const))
@@ -108,7 +111,6 @@ export class AuditLog {
   ): void {
     if (relationshipIds.has(relationship.relationshipId)) throw new InvalidAuditEventError()
     relationshipIds.add(relationship.relationshipId)
-    // Stryker disable next-line all: a self-target is also necessarily absent from the previously committed target map and produces the same portable error; retain the explicit check for the named Audit rule.
     if (relationship.target.eventId === sourceEvent.eventId) throw new InvalidAuditEventError()
 
     const targetEvent = targetEvents.get(relationship.target.eventId)

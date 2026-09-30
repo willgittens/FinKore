@@ -1,9 +1,22 @@
 // SPDX-License-Identifier: MPL-2.0
 import { describe, expect, it } from 'vitest'
+import { RunnerInfrastructureError } from '../src/errors/runner-errors.js'
 import { assertUniqueVectorIds, isNormalizedResult, validateVector, validateVectorFile } from '../src/validator.js'
 import { metadata, validVector } from './helpers.js'
 
 describe('vector validation', () => {
+  it.each([false, 0, 'text'])('rejects scalar fixture records: %j', (scalar) => {
+    const candidates = [
+      { ...validVector, input: scalar },
+      { ...validVector, context: scalar },
+      { ...validVector, expected: { status: 'success', value: 1, observations: scalar } },
+      { ...validVector, expected: { status: 'error', error: { code: 'FINKORE_MONEY_BAD_INPUT' }, observations: scalar } },
+    ]
+    for (const candidate of candidates) {
+      expect(() => validateVector(candidate, metadata)).toThrow(RunnerInfrastructureError)
+    }
+  })
+
   it('accepts valid success and error vectors', () => {
     expect(validateVector(validVector, metadata)).toStrictEqual(validVector)
     const error = { ...validVector, expected: { status: 'error', error: { code: 'FINKORE_MONEY_BAD_INPUT' } }, tags: ['negative'] }
@@ -111,6 +124,11 @@ describe('vector validation', () => {
 })
 
 describe('adapter result validation', () => {
+  it.each([false, 0, 'text'])('rejects scalar result observations: %j', (scalar) => {
+    expect(isNormalizedResult({ status: 'success', value: 1, observations: scalar })).toBe(false)
+    expect(isNormalizedResult({ status: 'error', error: { code: 'FINKORE_MONEY_BAD_INPUT' }, observations: scalar })).toBe(false)
+  })
+
   it.each([
     { status: 'success', value: null },
     { status: 'error', error: { code: 'FINKORE_MONEY_BAD_INPUT' } },

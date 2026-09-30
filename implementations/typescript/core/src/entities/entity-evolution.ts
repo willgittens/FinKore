@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { AuditLog } from '../audit/audit-log.js'
 import { InvalidEntityIdentityError, InvalidEntityMutationError, EntityStateConflictError } from './errors.js'
 import type {
@@ -215,6 +216,8 @@ function matchesReference(value: unknown, reference: EntityRevisionReference): b
  * Imported and resulting histories must have consistent currentness at every
  * declared step. Audit validation precedes evolution correspondence validation.
  *
+ * @remarks Imported relation collections validate every position; sparse arrays are malformed.
+ *
  * @see ENTITY-EVOLUTION-001
  * @see ENTITY-EVOLUTION-003
  * @see ENTITY-EVOLUTION-004
@@ -263,7 +266,7 @@ export class EntityEvolutionHistory {
    */
   static create(relations: readonly unknown[] = []): EntityEvolutionHistory {
     if (!Array.isArray(relations)) throw new InvalidEntityMutationError()
-    const validated = relations.map(validateRelation)
+    const validated = Array.from(arrayValues(relations), validateRelation)
     const ids = new Set<string>()
     for (const relation of validated) {
       if (ids.has(relation.relationId)) throw new InvalidEntityMutationError()

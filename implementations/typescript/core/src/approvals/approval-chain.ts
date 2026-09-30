@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { ApprovalConditionUnresolvedError, InvalidApprovalChainError } from './errors.js'
 import type {
   ApprovalChainEvaluation,
@@ -28,7 +29,7 @@ function requiredString(value: unknown): string {
 
 function validateRequirements(value: unknown): readonly ApprovalRequirementIdentifier[] {
   if (!Array.isArray(value) || value.length === 0) throw new InvalidApprovalChainError()
-  const requirements = value.map(requiredString)
+  const requirements = Array.from(arrayValues(value), requiredString)
   if (new Set(requirements).size !== requirements.length) throw new InvalidApprovalChainError()
   return requirements
 }
@@ -56,6 +57,8 @@ function validateRequirementState(value: unknown): ChainRequirementEvaluationSta
  * implement quorum, parallel voting groups, delegation, withdrawal,
  * supersession, escalation, dynamic approver resolution, authorization,
  * persistence, audit integration, or workflow integration.
+ *
+ * @remarks Requirement collections validate every position; sparse arrays are malformed.
  *
  * @see APPROVAL-CHAIN-001
  * @see APPROVAL-CHAIN-002

@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { copyApprovalValue } from './approval-value.js'
 import { validateFactComparison } from './approval-facts.js'
 import { ApprovalDecision } from './approval-decision.js'
@@ -137,6 +138,8 @@ function lifecycleCandidate(input: unknown, type: SerializedApprovalLifecycleEve
  * Decisions are never overwritten or removed. Core 0.9 release candidate lifecycle events make
  * Decisions ineffective for current evaluation without rewriting history.
  *
+ * @remarks Decision and lifecycle collections validate every position; sparse arrays are malformed.
+ *
  * @see APPROVAL-DECISION-007
  * @see APPROVAL-VALIDITY-001
  * @see APPROVAL-VALIDITY-002
@@ -179,13 +182,13 @@ export class ApprovalDecisionHistory {
    */
   static create(history: readonly unknown[] | unknown = []): ApprovalDecisionHistory {
     if (Array.isArray(history)) {
-      return new ApprovalDecisionHistory(history.map((decision) => ApprovalDecision.from(decision)))
+      return new ApprovalDecisionHistory(Array.from(arrayValues(history), (decision) => ApprovalDecision.from(decision)))
     }
     if (!isPlainRecord(history) || !Array.isArray(history.history)) throw new InvalidApprovalDecisionError()
-    const decisions = history.history.map((decision) => ApprovalDecision.from(decision))
+    const decisions = Array.from(arrayValues(history.history), (decision) => ApprovalDecision.from(decision))
     const lifecycleInput = Object.hasOwn(history, 'lifecycle') ? history.lifecycle : []
     if (!Array.isArray(lifecycleInput)) throw new InvalidApprovalDecisionError()
-    const lifecycleEvents = lifecycleInput.map((event) => validateLifecycleEvent(event))
+    const lifecycleEvents = Array.from(arrayValues(lifecycleInput), (event) => validateLifecycleEvent(event))
     const result = new ApprovalDecisionHistory(decisions)
     for (const event of lifecycleEvents) result.commitLifecycleEvent(event)
     return result

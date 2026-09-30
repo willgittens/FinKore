@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { InvalidAuditActorError } from './errors.js'
 import type { SerializedAuditActor } from './types.js'
 
@@ -23,7 +24,7 @@ function cloneJsonValue<T>(value: T, ancestors = new Set<object>()): T {
   if (Array.isArray(value)) {
     if (ancestors.has(value)) throw new InvalidAuditActorError()
     ancestors.add(value)
-    const result = value.map((item) => cloneJsonValue(item, ancestors))
+    const result = Array.from(arrayValues(value), (item) => cloneJsonValue(item, ancestors))
     ancestors.delete(value)
     return result as T
   }
@@ -48,6 +49,8 @@ function cloneJsonValue<T>(value: T, ancestors = new Set<object>()): T {
  * are preserved when supplied, but they do not replace the stable actor
  * identifier. This class does not implement authentication, authorization,
  * identity-provider lookup, delegation, or redaction policy.
+ *
+ * @remarks Metadata arrays validate every position; sparse arrays are malformed JSON values.
  *
  * @see AUDIT-ACTOR-001
  * @see AUDIT-ACTOR-002

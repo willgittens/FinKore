@@ -2,11 +2,14 @@
 
 ## Status
 
-Milestones 2–7 are complete for their accepted contracts. Milestones 8–9
-remain uncompleted. D1–D7 were explicitly accepted on 2026-09-27. M1 remains
+Milestones 2–7 are complete for their accepted contracts. M8 verification and
+review actions have passed; readiness closure remains pending D10’s disposition
+in M1. Milestone 9 remains uncompleted. D1–D7 were explicitly accepted on 2026-09-27. M1 remains
 open for D8 (explicitly left unresolved) and D9 (the Entity native-value policy
-gap discovered during M5). No Entity numeric policy has been selected.
-Implementation scope and release verification remain open.
+gap discovered during M5), plus D10 (Audit Event metadata profile found in M8).
+No Entity numeric or Event metadata policy has been selected.
+The combined candidate passes complete verification. Unspecified native policy
+and release readiness remain qualified by the open decisions.
 Release type: corrective release candidate. Core 1.0 promotion is blocked pending this work and the separate
 [Core 1.0 promotion gates](plan-10.md).
 
@@ -110,6 +113,8 @@ representation or error-selection question raised by a malformed input.
 | F7a — Undeclared relevance behavior | Requirement evaluation with changed current subject facts and omitted `relevantFactPaths` returns `PENDING` in TypeScript but `APPROVED` in Python/Java. With an explicit changed path, all return `PENDING`. | `APPROVAL-DECISION-003`/`009`, current-effectiveness invariants, and conformance conventions. Contract gap: choose and document the omitted-selector meaning without treating TypeScript as the oracle. | 1, 4 |
 | F7b — Fact addressing differs | With required fact `invoice.amount` and facts `{invoice: {amount: "10"}}`, TypeScript returns `APPLICABLE`; Python/Java report unresolved. They interpret the selector differently. | `APPROVAL-CONDITION-001`/`005`/`006` and the bounded fixture. Specify selector syntax and own-member presence rules; no general condition expression engine. | 1, 4 |
 | F7c — Native numeric fact equality | Java Decision evaluation compares `BigDecimal("1.0")` and `BigDecimal("1.00")` as different facts; the identical-scale control is effective. | Approval relevance/equality and native-to-portable value semantics require an explicit contract. This is not automatically a Money comparison defect. Preserve distinctions between numbers, strings, booleans, missing members, and null. | 1, 4, 5 |
+
+| F10 — Native collection traversal | TypeScript `.map` skipped missing array positions; caller iterators/methods could hide invalid members or change guard/quorum/fact outcomes. | Existing collection/member, comparison and ownership requirements; `native-collections.test.ts` maps 32 boundaries to owning IDs, with adjacent fact/eligibility regressions in `review-invariants.test.ts`. No new semantics or JSON hole representation. | 3–7, corrected in 8 |
 
 ## Milestone 1 — Resolve contracts and compatibility
 
@@ -1166,38 +1171,286 @@ remain Milestone 8 work; D8/D9 remain unresolved.
 
 ## Milestone 8 — Full verification and independent readiness review
 
-- [ ] Run the complete `npm run verify` on the combined candidate, including
+### Review result — 2026-09-30; D10 disposition pending
+
+The initial isolated candidate is `fa447a8711845893a4ac929d56b10782974de46b`.
+Fresh native review reproduced F10: TypeScript sparse arrays bypassed collection
+validation or raised raw runtime errors. Holes in guard lists could permit a
+transition; eligibility and mutability declarations could retain missing entries.
+Existing owning requirements already prohibit malformed members. Permanent native
+regressions and paired controls cover the affected boundaries. Final M8
+verification closes F10 for the accepted contracts; D10 remains a separate
+unspecified native profile.
+
+### F10 correction and verification tooling
+
+Native red reproduction: 69 failures and 39 passes across 108 cases. The retained
+suite places a missing position first, in the middle, and last at each of 27
+boundaries, with independent dense controls and input-preservation assertions.
+Another 125 cases require arrays at collection-only boundaries (233 total);
+Actor/Change JSON values retain their permitted alternative types. Twenty-four
+untrusted traversals now validate every position with indexed traversal;
+validated internal traversals retain their existing behavior. The complete native
+suite passes. Twenty-four paired mutations silently drop holes and are killed by
+the named regression while dense controls pass. A raw runtime exception is not
+counted as a kill. Quorum eligibility is already protected by shared value
+validation, so its regression needs no redundant traversal change/probe.
+
+Fresh deterministic review on the initial candidate ran 6,154 expanded JSON cases
+on TypeScript, Python 3.12/3.13 and Java: 30 observation leads, two code differences,
+zero raw exceptions and zero input mutations. All leads were inspected: 27 optional
+error observations, two absent Audit-redaction histories with unspecified
+cross-error ordering, and one optional absent-versus-empty revision observation.
+The latter two code differences are the omitted `history` variants of
+`audit.boundary096.authority-control-001` and `audit.redaction.unknown-path-001`.
+No invented ordering expectation or repaired input was introduced.
+
+An independent requirement-derived oracle checked 596 additional cases on every
+runtime: all 256 assignments of four Requirement outcomes to a shared graph,
+under both declaration orders (512 cases), plus 84 whole/selected fact cases
+covering null, Boolean/number/string distinctions, nested arrays/objects, own
+special keys, member order, and nanosecond Decision timestamps. All passed with
+exact results and unchanged inputs. These are retained in native tests; 49
+Workflow guard type-pairs and an alias/returned-Decision reuse sequence extend
+the permanent review suite to 646 cases. Final survivor inspection then added
+64 Audit type-pairs (710 total): the previously ignored primitive-as-object
+mutation incorrectly made Boolean false equal an empty object. Its named
+false-to-object regression fails with an exact portable-result mismatch while
+the valid false-to-string change control passes. No production or normative change was needed;
+this was a meaningful mutation-coverage gap under AUDIT-CHANGE-005/008. Existing cross-domain sequence tests
+remain included. The 64 Audit type-pairs also passed every corrected runtime through Audit append,
+including full success/error history envelopes and unchanged inputs. These finite
+cases are not exhaustive graph/value enumeration.
+
+Initial complete verification reached all conformance, coverage and package
+gates and both full Stryker suites, then correctly failed: a removed Python
+Entity validation guard caused four infrastructure errors elsewhere in the full
+mutated suite. No kill was credited. The default critical-probe command now uses
+the established `--paired` mode: complete unmodified suite baselines, every named
+regression, and all independent controls remain mandatory. Direct unfiltered
+mutation remains available. Two stale Python Workflow adapter mutation anchors
+were also made unique; 412 static target checks now cover every critical/native
+probe. No source behavior was changed to accommodate a mutant.
+
+Core Stryker now includes every integration test. Four broad lexical exclusions
+were removed: Currency, decimal, Event type and timestamp regexes are mutated
+inside validation calls. Scoped verification killed 354/357 mutants (99.16%),
+with no uncovered mutants or timeouts. Two malformed-container survivors
+prompted the additional 125 cases; the third always validates omitted metadata
+as undefined, preserving the same public result.
+The 95% threshold and complete source-file scope are unchanged. The first corrected full run scored 96.25% with no ignores, but survivor
+inspection identified the Audit primitive-as-object gap described above. That run
+was stopped before probe completion and is not the final verification result.
+A new complete run includes the added Audit regressions.
+
+M8 exclusion audit also removed the remaining operator-family ignores. An
+`EqualityOperator` ignore justified only `<` versus `<=` also excluded the
+non-equivalent `>=` mutation; likewise an arithmetic-family ignore covered more
+than its cited sign identity. No core mutation exclusions remain. Equivalent
+mutants stay in the report/denominator for explicit review. No threshold is lowered.
+
+### F10 adjacent native traversal cases
+
+The first sparse-array fix used `Array.from(input, validate)`. Review demonstrated
+that a caller-supplied iterator could hide an invalid indexed guard and permit a
+transition. The extended 300-case collection suite covers 32 boundaries: 128
+hole/dense cases, 140 malformed-container cases, and 32 iterator-override cases.
+Before the indexed traversal fix, 30 cases failed and 270 passed. All now pass.
+
+An internal `arrayValues` helper uses the native indexed Array traversal rather
+than caller iteration; owning domain validators still select every portable
+error. It is not exported from the package entry point and defines no financial
+rule. It also protects retained Approval/Workflow values, Audit history import,
+composition observations and selector capture. All other Array callbacks were
+reviewed against their callers; operations on validated internal arrays retain
+their existing implementation.
+
+Three additional tests reproduced sparse/overridden-method Workflow facts
+passing a guard and an overridden eligibility mapping changing a quorum result.
+Those entry points now also consume indexed values. Seven retained regression/
+control/reuse tests extend `review-invariants.test.ts` to 717 cases; the combined
+native review has 1,017 cases. These include an effectiveness regression preventing
+a selector Array method from accepting changed facts. Twenty-eight paired collection
+probes pass (24 hole bypasses, one iterator bypass, three method/capture bypasses);
+the full native gate now contains 145 probes. The older Condition ownership probe
+now returns the original caller selectors: removing only the local copy is
+redundant after shared selector capture, and is no longer claimed as a defect. These are existing declaration, fact, eligibility and
+non-mutation rules, not new financial policies. JSON cannot encode these native
+hooks. The previous verification was stopped and a fresh isolated full run is
+required for this final executable candidate.
+
+### Runner scalar validation mutation coverage
+
+Review of the runner report identified a meaningful survivor previously grouped
+with redundant record checks. Replacing `typeof value === 'object'` with `true`
+admits scalar fixture input/context and expected/actual observations. This is a
+runner shape-validation gap in the tests, not missing financial logic or a defect
+in the unmodified validator. Six permanent tests cover Boolean, number and string
+values at those boundaries, for success and error envelopes. Against the exact
+mutant all six fail by assertion while four valid controls pass; all 136 runner
+tests pass against the correct implementation. The previous 19-survivor runner
+classification is superseded. A complete candidate rerun includes these tests.
+
+### Mutation disposition on the corrected core
+
+The final candidate's complete core run reports 4,255 killed, 155 surviving,
+10 uncovered and 12 timed-out mutants, with zero ignored mutants: 96.28%, or
+96.01% counting only assertion/test kills. Every non-killed mutation was inspected
+against its call sites and admitted values; the final complete rerun reproduced
+every mutation status from the audited indexed candidate. Remaining survivors
+are retained in the score denominator:
+
+| Family | Survivors | Disposition |
+| --- | ---: | --- |
+| Portable error classes | 77 | Diagnostic messages, class names and optional diagnostic details; portable error codes remain protected. |
+| Money | 9 | BigInt zero has no negative-zero distinction; zero divisors are rejected earlier; multiplication/division by a sign of ±1 and equal-scale branches yield identical exact values. |
+| Workflow | 15 | Required version strings are revalidated downstream; unversioned optional getters still return undefined; admitted JSON types make the remaining equality prechecks redundant. |
+| Approvals | 32 | Delegated timestamp/value/selector validation; unused synthetic entries/internal flags; equivalent inapplicable/closed-stage paths; redundant outcome-presence checks. Differently named fact members still compare against unsupported undefined and cannot become equal. |
+| Audit | 12 | Finite/type checks on already validated JSON, omitted metadata retaining undefined, unused synthetic entries, and checks repeated by prior-target/redaction preflight validation. The primitive-as-object mutation is killed. |
+| Entities | 10 | Delegated Workflow/Money validation, private false-versus-undefined predicates consumed only as Boolean conditions, redundant currentness/data guards, and one diagnostic message. |
+
+The ten uncovered mutants are defensive branches: two Audit clone-failure catch
+mutations, one already-preflighted redaction rejection, the impossible absent
+result after successful Entity Evolution append, an Entity data guard after
+construction validation, four unsupported rounding-dispatch defaults behind
+public mode validation, and Workflow equality's fallback after admitted guard
+types. They remain uncovered and count against the score; none is an exclusion.
+
+The twelve timeouts comprise ten Money GCD/factor/zero-denominator loop mutations
+and two composition graph-queue mutations. Inspection identifies nonterminating
+paths, and these families reproduced across complete runs. They are not claimed
+as assertion kills; the score without their credit still exceeds 95%.
+
+After the scalar validation correction, the runner's remaining mutations concern
+diagnostic text/source labels and exception wrapping. The schema-read kind-label
+mutation retains `RunnerInfrastructureError`, infrastructure status and exit
+classification; it changes only its diagnostic category. No financial logic was
+added to the runner. The final report confirms 628 killed and 18 survivors
+(97.21%), with no uncovered, timed-out or ignored mutants. Its only change from
+the earlier report is the killed scalar-record validation mutation.
+
+### D10 — Audit Event metadata native value profile: unresolved
+
+AUDIT-ACTOR-010 and AUDIT-CHANGE-008 explicitly define JSON values and reject
+unsupported metadata/change values. AUDIT-EVENT-006 permits Event metadata and
+AUDIT-EVENT-008 prevents contradiction of required fields, but neither defines
+Event metadata's supported native value profile. TypeScript accepts independently
+cloned cyclic objects, Map and Date values in Event metadata; Python and Java
+reject unsupported/cyclic context with AUDIT_INVALID_EVENT. These cannot be
+encoded in a JSON conformance vector. Ownership alone does not select a shared
+accept/reject or serialization policy. No expected native rejection is invented.
+
+Proposed decision for M1: Event metadata follows the existing Audit JSON-value
+profile used for Actor metadata and Change values, with AUDIT_INVALID_EVENT for
+unsupported values/cycles at Event representation validation under AUDIT-ERROR-004.
+Preserve explicit null, valid own JSON member names, shared acyclic containers,
+and defensive copies. This deliberately rejects TypeScript native inputs that
+previously succeeded; it introduces no new error code or numeric profile.
+Alternatively retain D10 as an unresolved native-profile limit. Financial meaning
+must be settled before dependent code/spec expectations change (AGENTS.md).
+
+### Final combined verification — 2026-09-30
+
+The complete `npm run verify` exited zero on the isolated candidate based on
+`fa447a8711845893a4ac929d56b10782974de46b`, with staged Git tree
+`c635266bf2d7ca625dc5b1135e0b2749b7705bea`. This candidate includes the indexed
+collection fixes, complete core mutation scope, Audit type regressions, all
+paired probes and the final runner scalar regressions. Its tracked files were
+unchanged after verification. Earlier partial runs and the successful indexed
+candidate before the runner tests are not substituted for this final result.
+
+| Gate | Final observed result |
+| --- | --- |
+| Toolchains, builds and strict typing | Passed on Node 24.15.0, CPython 3.12/3.13, JDK 21 and Maven 3.9.x. |
+| Unit/native, adapter and tool tests | Passed: 136 runner, 3,500 TypeScript core and 210 TypeScript adapter tests; 1,229 Python tests on each supported version; all Java, subprocess-adapter and 429 developer-tool tests. |
+| Conformance | All 1,719 manifest vectors passed on TypeScript, CPython 3.12, CPython 3.13 and Java; zero failed, unsupported or infrastructure outcomes. |
+| Coverage | All configured gates passed: runner 100% lines / 96.61% branches; TypeScript core 99.74% lines / 99.42% branches; Python 94% combined statement/branch coverage; Java 93.98% lines / 84.27% branches. |
+| Installed consumers | All six passed: npm, Python wheel and sdist on both versions, and Java JAR. |
+| Runner mutation | 97.21%; 628 killed, 18 reviewed survivors, zero uncovered, timed-out or ignored mutants. |
+| TypeScript mutation | 96.28%; 4,255 killed, 155 reviewed survivors, 10 uncovered defensive branches, 12 nonterminating mutations, zero ignored mutants. Without timeout credit: 96.01%. |
+| Critical/native probes | 267/267 critical, 145/145 native and 56/56 Python 3.13 native probes killed; independent controls passed. Raw infrastructure failures receive no kill credit. |
+| Repository checks | Architecture, documentation links, traceability, licensing and whitespace passed. Traceability retains 432 requirements, 1,719 vectors and 347 covered requirements. |
+
+Fresh review was repeated against the corrected implementation sources: all
+6,154 expanded cases on every runtime reproduce the same 30 classified leads
+and two unspecified error-order differences, with no raw exceptions or input
+mutation. The 596 independent graph/fact cases and 64 Audit type-pairs pass on
+every runtime with exact results. Review implementation/adapter sources were
+compared byte-for-byte with the final candidate. Permanent native suites retain
+1,017 review cases and 28 paired collection probes; the six runner scalar tests
+retain the additional validator coverage correction.
+
+F1–F10 and the Audit/runner mutation gaps are reconciled for their accepted
+contracts. D8 and D9 remain the previously recorded limits. D10 is identified,
+not silently settled: M1 is reopened and M8 readiness closure awaits the user's
+choice to adopt the proposed profile or explicitly retain that limit. Green
+gates do not resolve it. No unqualified Core 1.0 or full native-profile readiness
+claim is made.
+
+Review is finite: the selected graph/value combinations and native collection
+hooks do not exhaust arbitrary graphs, containers, accessors, proxies or runtime
+tampering. This is a coverage limit, not a new exemption from specification
+requirements. The two unspecified cross-error orderings retain their existing
+classification without an invented expected code.
+
+Only documentation outcome/status edits follow the verified tree; executable,
+normative, dependency, fixture and test files remain byte-identical. Documentation,
+traceability, architecture, licensing and whitespace checks are repeated after
+those edits. No installed usage example changes require another consumer run.
+
+### Synchronization review
+
+Unit/native regressions, paired mutation probes, mutation-anchor tests and runner
+validation tests were added. Existing JSON vectors still define the portable
+cases; sparse arrays and overridden native Array hooks are covered by the native
+supplement in `/conformance`, without changing vector IDs or the manifest count.
+Public API JSDoc and root/package/tool READMEs describe the compatibility
+correction and pending profiles. No public package entry point or signature was
+added; the shared Array traversal helper remains internal and domain-neutral.
+
+No `/spec` or Agentic metadata change is needed for these corrections: existing
+requirements, canonical operation IDs, effects and portable errors are unchanged.
+D10 has no adopted normative expectation. CoreDoc, release notes and AGENTS.md
+need no change: financial foundations, architecture and development obligations
+are unchanged, and M9's release work has not been performed. No tag, version
+promotion, publication or remote push is part of M8.
+
+
+- [x] Run the complete `npm run verify` on the combined candidate, including
       toolchain checks, builds, strict typing, all unit/native/adapter/tool tests,
       Python 3.13 compatibility, conformance, coverage, installed consumers,
       both full configured mutation suites, critical/native probes, architecture,
       documentation/traceability, licensing, and whitespace.
-- [ ] Preserve mutation thresholds of at least 95% and meaningful mutation scope.
+- [x] Preserve mutation thresholds of at least 95% and meaningful mutation scope.
       Inspect surviving, uncovered, ignored, and timed-out mutants for critical
       behavior, not only aggregate percentages. Investigate timeout credit and
       justify equivalent exclusions explicitly; no critical mutant may survive.
-- [ ] Require every manifest vector to pass on TypeScript, Python 3.12/3.13,
+- [x] Require every manifest vector to pass on TypeScript, Python 3.12/3.13,
       and Java, with no unsupported or infrastructure outcomes for claimed scope.
       Compare normalized success values and specified observations as well as
       portable codes; native guarantees need their own tests.
-- [ ] Perform a fresh specification-led review after the fixes. Start from public
+- [x] Perform a fresh specification-led review after the fixes. Start from public
       operations and their invariants rather than merely rerunning the new
       examples: all declared evidence, proposed-result validity, ownership,
       optionality, exact values, failure priority, and later reuse.
-- [ ] Exercise a deterministic set of additional seeds, graph arrangements,
+- [x] Exercise a deterministic set of additional seeds, graph arrangements,
       malformed nested values, aliases, and operation sequences beyond M2's
       regressions. Recheck cross-language agreement against `/spec`, including
       cases where every implementation agrees on an invalid result.
-- [ ] Add each new confirmed mandatory gap to the appropriate milestone, retain
+- [x] Add each new confirmed mandatory gap to the appropriate milestone, retain
       its failing regression and valid control, and fix it before closure. A new
       financial ambiguity reopens M1; a green existing suite does not close it.
-- [ ] Run complete clean-candidate verification again after any executable,
+- [x] Run complete clean-candidate verification again after any executable,
       normative, fixture, dependency, or test change from the review. Record the
       exact candidate and actual results in this plan; distinguish earlier runs
       from the final result. Use isolated checkouts, not concurrent builds or
       mutation runs sharing generated class directories.
-- [ ] Reconcile every finding, newly discovered subcase, and affected traceability
+- [x] Reconcile every finding, newly discovered subcase, and affected traceability
       row with permanent tests and mutation protection. No unexplained mandatory
       gap or unreconciled exploratory failure family may be marked complete.
+
+Verification/review actions above are complete. Readiness closure is pending
+D10’s M1 disposition; this milestone is not marked unconditionally complete.
 
 Completion: the exact combined candidate passes the full gates and fresh review.
 Report remaining coverage limits honestly. Finite tests and review support a

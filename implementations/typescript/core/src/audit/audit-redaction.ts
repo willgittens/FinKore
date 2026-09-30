@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { InvalidAuditRedactionError } from './errors.js'
 import type {
   AuditRedactionPolicy,
@@ -83,7 +84,8 @@ function redactActor(
  * @param input - Candidate redaction policy.
  * @returns A defensive policy value with protected change paths.
  * @throws {InvalidAuditRedactionError}
- * When the policy lacks identity, authority, or protected paths.
+ * When the policy lacks identity, authority, or protected paths, or any supplied
+ * path position is malformed (including a sparse array hole).
  *
  * @see FINKORE_AUDIT_REDACTION_INVALID
  * @see AUDIT-REDACTION-001
@@ -96,7 +98,7 @@ export function validateAuditRedactionPolicy(input: unknown): AuditRedactionPoli
 
   return {
     id: requiredString(input.id),
-    protectedPaths: input.protectedPaths.map(requiredString),
+    protectedPaths: Array.from(arrayValues(input.protectedPaths), requiredString),
     authority: requiredString(input.authority),
   }
 }

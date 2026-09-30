@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { InvalidApprovalChainError, InvalidApprovalDecisionError } from './errors.js'
 
 /**
@@ -15,7 +16,7 @@ export function copyApprovalValue<T>(value: T, category: 'decision' | 'chain' = 
   if (typeof value !== 'object' || value === null || ancestors.has(value)) throw invalid()
   ancestors.add(value)
   try {
-    if (Array.isArray(value)) return Array.from(value, item => copyApprovalValue(item, category, ancestors)) as T
+    if (Array.isArray(value)) return Array.from(arrayValues(value), item => copyApprovalValue(item, category, ancestors)) as T
     if (Object.getPrototypeOf(value) !== Object.prototype && Object.getPrototypeOf(value) !== null) throw invalid()
     return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, copyApprovalValue(item, category, ancestors)])) as T
   } finally {

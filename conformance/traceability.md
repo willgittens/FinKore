@@ -994,3 +994,22 @@ Native suites validate every mutability entry and existing Entity data before an
 operation; adapters preserve primary failures without fabricated Entity state.
 See M7 in the plan for verification and mutation survivor review. This does not
 resolve D8/D9 or complete the independent release review.
+
+### Core 0.9.7 M8 native collection supplement
+
+`implementations/typescript/core/test/integration/native-collections.test.ts`
+links 32 collection boundaries to their owning requirements, with first/middle/last
+holes and dense controls (128 cases), 140 non-array container cases and 32
+iterator overrides. Workflow declarations, Entity permissions,
+validators/revisions/relations, Approval eligibility/history/composition, Audit
+changes/relationships/Actor and Change values/history/redaction paths, and Money
+allocation weights reject malformed positions with existing portable categories.
+JSON cannot encode holes; these native regressions supplement, rather than
+replace or relabel, the existing portable rows. Twenty-eight paired native probes
+prevent silently dropping holes, trusting caller iteration or allowing Array
+methods to change guard/quorum outcomes; shared Approval value validation already protects
+quorum eligibility, and its mapping now also reads indexed values.
+`review-invariants.test.ts` adds 512 shared-DAG stage truth-table cases and 84
+own-member fact comparisons, plus 49 guard type-pairs and one alias/reuse sequence, 64 Audit type-pairs and seven fact/eligibility/selector cases under AUDIT-CHANGE-005/008 and APPROVAL-COMPOSITION-011/012/013/014 and
+APPROVAL-FACT-001/002/003. D8/D9 remain open; D10 records an unresolved native
+Audit Event metadata profile, without inventing a portable expectation.

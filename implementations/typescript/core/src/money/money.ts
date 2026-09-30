@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+import { arrayValues } from '../array-values.js'
 import { Currency } from './currency.js'
 import {
   CurrencyMismatchError,
@@ -95,7 +96,6 @@ function rateApplicationRounding(options: MoneyRateApplicationOptions | undefine
 }
 
 function gcd(left: bigint, right: bigint): bigint {
-  // Stryker disable next-line EqualityOperator: bigint has no distinct negative zero, so `< 0n` and `<= 0n` are equivalent here.
   let a = left < 0n ? -left : left
   let b = right
   while (b !== 0n) {
@@ -123,11 +123,8 @@ function divideDecimals(dividend: string, divisor: string): string {
     throw new MoneyDivisionByZeroError()
   }
 
-  // Stryker disable next-line EqualityOperator: zero divisors are rejected above, so `< 0n` and `<= 0n` are equivalent here.
   const divisorMagnitude = divisorParts.integer < 0n ? -divisorParts.integer : divisorParts.integer
-  // Stryker disable next-line EqualityOperator: zero divisors are rejected above, so `< 0n` and `<= 0n` are equivalent here.
   const numeratorSign = divisorParts.integer < 0n ? -1n : 1n
-  // Stryker disable next-line ArithmeticOperator: multiplying and dividing by a sign value constrained to `1n | -1n` are equivalent.
   let numerator = dividendParts.integer * numeratorSign * 10n ** BigInt(divisorParts.scale)
   let denominator = divisorMagnitude * 10n ** BigInt(dividendParts.scale)
 
@@ -213,7 +210,6 @@ function shouldIncrement(
       if (tieComparison < divisor) return false
       return retainedMagnitude % 2n !== 0n
     }
-    // Stryker disable next-line all: validateRoundingOptions narrows all public inputs to supported modes before this internal helper is called.
     default: {
       const unsupported: never = mode
       throw new InvalidMoneyRoundingError('Invalid Money rounding mode', { mode: unsupported })
@@ -223,16 +219,13 @@ function shouldIncrement(
 
 function roundDecimal(amount: string, targetScale: number, mode: RoundingMode): string {
   const parts = decimalParts(amount)
-  // Stryker disable next-line EqualityOperator: at equal scale the reduction path also discards zero digits and returns the same decimal value.
   if (targetScale >= parts.scale) {
     return formatDecimal(scaleDecimal(parts, targetScale), targetScale)
   }
 
   const scaleDifference = parts.scale - targetScale
   const divisor = 10n ** BigInt(scaleDifference)
-  // Stryker disable next-line EqualityOperator: bigint has no distinct negative zero.
   const negative = parts.integer < 0n
-  // Stryker disable next-line EqualityOperator: bigint has no distinct negative zero.
   const magnitude = parts.integer < 0n ? -parts.integer : parts.integer
   const retainedMagnitude = magnitude / divisor
   const discardedMagnitude = magnitude % divisor
@@ -288,7 +281,7 @@ function validateAllocationRequest(input: MoneyAllocationRequest): { readonly sc
       if (!Object.hasOwn(candidate, 'ratios') || Object.hasOwn(candidate, 'parts') || !Array.isArray(candidate.ratios) || candidate.ratios.length === 0) {
         throw new InvalidMoneyAllocationError()
       }
-      return { scale, weights: candidate.ratios.map(validateAllocationRatio) }
+      return { scale, weights: Array.from(arrayValues(candidate.ratios), validateAllocationRatio) }
     }
     default:
       throw new InvalidMoneyAllocationError()
@@ -297,7 +290,6 @@ function validateAllocationRequest(input: MoneyAllocationRequest): { readonly sc
 
 function allocationUnitsAtScale(amount: string, targetScale: number): bigint {
   const parts = decimalParts(amount)
-  // Stryker disable next-line EqualityOperator: at equal scale the reduction path divides by one and returns the same integer units.
   if (targetScale > parts.scale) {
     return scaleDecimal(parts, targetScale)
   }
@@ -310,7 +302,6 @@ function allocationUnitsAtScale(amount: string, targetScale: number): bigint {
 }
 
 function allocateUnitAmounts(sourceUnits: bigint, weights: readonly bigint[]): readonly bigint[] {
-  // Stryker disable next-line EqualityOperator: bigint has no distinct negative zero.
   const negative = sourceUnits < 0n
   const absoluteUnits = negative ? -sourceUnits : sourceUnits
   const totalWeight = weights.reduce((sum, weight) => sum + weight, 0n)
@@ -610,6 +601,8 @@ export class Money {
    * results equals this value. Remainders are assigned to earliest declared
    * positions, including negative sources where the affected result magnitudes
    * increase.
+   *
+   * Sparse ratio arrays are malformed: every declared weight is validated.
    *
    * @param request - Allocation method, method-specific inputs, and explicit target scale.
    * @returns Ordered allocated Money values preserving the source total and currency.

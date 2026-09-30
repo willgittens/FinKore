@@ -1,10 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 import { InvalidCurrencyError } from './errors.js'
 
-// Stryker disable all: Vitest imports this static regex before mutant activation; exact valid and invalid boundaries are tested through both public entry points.
-const ISO_4217_ALPHABETIC_CODE = /^[A-Z]{3}$/u
-// Stryker restore all
-
 /**
  * TypeScript representation of a FinKore Money currency identifier.
  *
@@ -42,7 +38,7 @@ export class Currency {
    * @see SPEC-CURRENCY-002
    */
   static of(value: unknown): Currency {
-    if (typeof value !== 'string' || !ISO_4217_ALPHABETIC_CODE.test(value)) {
+    if (!isValidCurrencyIdentifier(value)) {
       throw new InvalidCurrencyError()
     }
     return new Currency(value)
@@ -83,5 +79,5 @@ export class Currency {
  * @see SPEC-CURRENCY-002
  */
 export function isValidCurrencyIdentifier(value: unknown): value is string {
-  return typeof value === 'string' && ISO_4217_ALPHABETIC_CODE.test(value)
+  return typeof value === 'string' && /^[A-Z]{3}$/u.test(value)
 }

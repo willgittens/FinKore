@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
 
-// Stryker disable next-line Regex: regex-token mutations overlap with explicit accepted/rejected tests at this parser boundary.
-const PORTABLE_TIMESTAMP = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,9}))?(Z|([+-])(\d{2}):(\d{2}))$/u
 
 interface ParsedPortableTimestamp {
   readonly epochSecond: bigint
@@ -55,6 +53,7 @@ function daysFromUnixEpoch(year: number, month: number, day: number): number {
  * @see SPEC-TIMESTAMP-004
  */
 export function parsePortableTimestamp(value: unknown): ParsedPortableTimestamp {
+  const PORTABLE_TIMESTAMP = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,9}))?(Z|([+-])(\d{2}):(\d{2}))$/u
   if (typeof value !== 'string') invalidTimestamp()
   const match = value.match(PORTABLE_TIMESTAMP)
   if (match === null) invalidTimestamp()
