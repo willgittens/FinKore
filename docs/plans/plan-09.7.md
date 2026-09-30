@@ -2,13 +2,13 @@
 
 ## Status
 
-Milestones 2–7 are complete for their accepted contracts. D10 was resolved on
-2026-09-30 using the proposed Audit JSON-value profile; the specification,
-implementations and regression tests are updated. M8's fresh full verification
-and independent review pass after that normative correction. Milestone 9 remains
-uncompleted. D1–D7 were accepted on 2026-09-27. M1 remains open only for D8
-(explicitly left unresolved) and D9 (the Entity native-value policy gap).
-No Entity native numeric policy has been selected.
+Milestones 2–7 are complete for their accepted contracts. D10 is resolved and
+its post-correction M8 verification passed. D8 was accepted on 2026-09-30:
+`policy.id` is optional and must be a nonempty string when supplied. Its
+specification, implementations and regressions are updated; fresh full M8
+verification and independent review pass. M1 remains open only for D9, the Entity native-value
+policy gap. No Entity native numeric policy has been selected. Milestone 9
+remains uncompleted. Earlier milestone results below retain their historical scope.
 Release type: corrective release candidate. Core 1.0 promotion is blocked pending this work and the separate
 [Core 1.0 promotion gates](plan-10.md).
 
@@ -296,7 +296,7 @@ completion authorizes its dependent regression work; it does not close M2–M9.
 
 ## Milestone 2 — Permanent regressions and broader discovery
 
-### Discovery decisions (D6–D7 accepted; D8 unresolved)
+### Discovery decisions (D6–D7 accepted; D8 subsequently resolved)
 
 The reconstructed baseline exactly reproduces 3,861 cases and 478 status/code
 differences or exceptions. Comparing complete results adds 186 leads, including
@@ -308,7 +308,7 @@ by implementation majority voting.
 | --- | --- | --- |
 | D6 — Required fixture collections and optional Actor type | Require explicit `terminalStates` and `transitions` arrays in the bounded Workflow definition, and explicit array/envelope `history` or `decisions` at Approval fixture operations that consume them; explicit null or an envelope without its required history array is malformed. Empty arrays remain valid. Document native convenience constructors/defaults separately. Approval Actor `type` stays optional, but when supplied is a nonempty string. | Resolves omitted-list and malformed Actor type differences without requiring a production serialization. Workflow failures use INVALID_DEFINITION; Approval failures use INVALID_DECISION. M4 handles Approval; M5 handles Workflow declaration boundaries. |
 | D7 — Entity representation | Require the bounded Entity definition's explicit nonempty `identityScope` and object-valued Entity `data`; absent/null/non-object data uses ENTITY_VALIDATION_FAILED. For an existing Entity, malformed/missing current State uses WORKFLOW_INVALID_INSTANCE and an undeclared nonempty State uses WORKFLOW_INVALID_STATE, preserving Workflow error priority. An empty mutation change object uses ENTITY_INVALID_MUTATION. | Adds explicit representation/error rules rather than treating an implementation as the oracle. Native composing-domain APIs need no universal data schema. M7 owns shape/error correction and M6 own-member preservation. |
-| D8 — Redaction policy identity | Do not select requiredness or malformed-value handling for `policy.id`; authority and protected targets retain their existing requirements. Classify its malformed/omitted fixture differences as a contract gap, with no new normative regression until that optional fixture member is separately settled. | The earlier 0.9.6 scope explicitly added no independent policy-ID obligation. This gap does not authorize a new authorization model or invented ID requirement. |
+| D8 — Redaction policy identity | Initially left unresolved; on 2026-09-30 the maintainer selected optional `policy.id`, with a nonempty string required when supplied. AUDIT-REDACTION-008 rejects malformed supplied values with REDACTION_INVALID, preserves history and existing priority, and keeps authority/targets required. | TypeScript/Java now accept omission; Python rejects malformed supplied IDs it previously ignored. No registry, ID requirement, normalization or authorization lookup is introduced. See the later D8 resolution and verification below. |
 
 Other discoveries are assessed against existing requirements: missing concrete
 Requirement outcome mappings (APPROVAL-REQUIREMENT-004), missing Chain rejection
@@ -1549,6 +1549,106 @@ compatibility consequences.
 
 D10 is resolved, and M8 is complete for the accepted contracts. D8/D9 remain
 open; M9 and Core 1.0 promotion have not been performed.
+
+### D8 — Optional redaction policy identity: resolved 2026-09-30
+
+The maintainer selected “Optional; validate when supplied.” New
+**AUDIT-REDACTION-008** distinguishes omission from supplied null and requires a
+nonempty string for a supplied `policy.id`. Labels are opaque and unnormalized;
+no registry, authenticated identity or production redaction encoding is added.
+History validation still precedes policy processing, and malformed supplied
+identity rejects with `FINKORE_AUDIT_REDACTION_INVALID` during policy validation
+before candidate evidence validation. Authority and protected targets remain
+required regardless of ID presence. Failure preserves history and later reuse.
+
+This is an observable release-candidate correction under
+SPEC-FREEZE-001/002/003 and SPEC-COMPATIBILITY-012/014. TypeScript and Java accept
+omission they previously rejected. Python rejects malformed supplied values it
+previously ignored. Java's native `RedactionPolicy` constructor retains null as
+its omission sentinel and now rejects an empty string; portable parsing rejects
+supplied null. The TypeScript interface makes `id` optional and its validator
+rejects supplied undefined. Existing valid supplied IDs keep their behavior.
+Canonical operation IDs and portable error codes are unchanged; `audit.redact`
+remains a conformance-local label.
+
+Red reproduction precedes the fixes: the TypeScript omission case fails while
+19 controls/negative cases pass; Java omission and empty-constructor cases fail
+while its three other cases pass; Python reports nine malformed-ID failures
+and a policy-before-evidence failure. Permanent tests assert full success
+results, portable errors, input/history preservation and actual-result reuse.
+Twenty vectors cover omission, valid opaque labels, all malformed JSON categories,
+authority/target independence and validation priority. AUDIT-REDACTION-001
+returns to COVERED and new AUDIT-REDACTION-008 is COVERED: 434 requirements,
+350 covered, and 1,758 vectors. D9 remains an explicit native policy gap.
+
+Nine paired native probes cover requiredness regressions, validation bypasses,
+null-as-omission, empty strings and native constructor validation. Success
+regressions classify portable rejection as an assertion mismatch while raw host
+exceptions remain unclassified failures; the initial required-ID probe received
+no kill credit until that distinction was explicit. All nine probes now pass
+with independent controls. Scoped redaction mutation testing reports 132 killed,
+three survivors and three uncovered defensive mutations: 95.65%, with no timeouts
+or ignored mutants. The survivors are unused synthetic Change entries and the
+redundant post-preflight match check; uncovered branches are clone-failure catches
+and the preflighted rejection. No new policy-ID branch survives.
+
+A fresh deterministic review passes 90 cases (180 operations) on each of
+TypeScript, Python 3.12/3.13 and Java. It crosses fifteen identity profiles
+(omitted, null, empty string, both Booleans, zero, nonzero number, empty array,
+object, nonempty array, whitespace, ordinary label, Unicode, `__proto__` and
+`constructor`) with six Actor-context/Change target combinations. Exact results
+retain source relationships and unrelated fields. Successful cases reuse actual
+returned history for append; rejected cases preserve inputs/history and recover
+with an omitted-ID policy using the same evidence identity. The full combined
+verification below includes the final corrected source and tests.
+
+Unit/native tests, conformance vectors and traceability, mutation-sensitive tests,
+JSDoc/native API documentation, root/package/tool READMEs, `/spec`, and the Agentic
+scope note are synchronized. CoreDoc and AGENTS.md need no change: foundational
+redaction obligations and architecture are unchanged. Release notes and tags
+remain M9 work.
+
+### Post-D8 combined verification — 2026-09-30
+
+The complete `npm run verify` exited zero on the isolated candidate based on
+`3a7b688abdcb51173d1efc648db9492fa81fc071`, with staged Git tree
+`33af2eb447112e0f8f1e18bff5f3380cc007ba21`. This candidate includes
+AUDIT-REDACTION-008, all 20 policy-ID vectors, native tests and nine paired probes.
+Its tracked files remained unchanged throughout verification. Earlier scoped
+results and the pre-D8 full result are not substituted for this run.
+
+| Gate | Final observed result |
+| --- | --- |
+| Toolchains, builds and strict typing | Passed on Node 24.15.0, CPython 3.12/3.13, JDK 21 and Maven 3.9.x. |
+| Unit/native, adapter and tool tests | Passed: 136 runner, 3,609 TypeScript core and 210 TypeScript adapter tests; 1,234 Python tests on each supported version; all Java, subprocess-adapter and 449 developer-tool tests. |
+| Conformance | All 1,758 manifest vectors passed on TypeScript, CPython 3.12, CPython 3.13 and Java; zero failed, unsupported or infrastructure outcomes. |
+| Coverage | All configured gates passed: runner 100% lines / 96.61% branches; TypeScript core 99.75% lines / 99.43% branches; Python 94% combined statement/branch coverage; Java 93.99% lines / 84.41% branches. |
+| Installed consumers | All six passed: npm, Python wheel and sdist on both versions, and Java JAR. |
+| Runner mutation | 97.21%; 628 killed, 18 reviewed diagnostic/wrapping survivors, zero uncovered, timed-out or ignored mutants. |
+| TypeScript mutation | 96.34%; 4,307 killed, 154 reviewed survivors, 10 uncovered defensive branches, 14 execution-limit/nonterminating mutations, zero ignored mutants. Without timeout credit: 96.03%. |
+| Critical/native probes | 267/267 critical, 165/165 native and 60/60 Python 3.13 native probes killed; independent controls passed. Raw infrastructure failures receive no kill credit. |
+| Repository checks | Architecture, documentation links, traceability, licensing and whitespace passed. Traceability retains 434 requirements, 1,758 vectors and 350 covered requirements. |
+
+The complete redaction mutation report reproduces every status from the scoped
+run: 132 killed, three reviewed survivors and three uncovered defensive branches.
+No policy-ID mutation survives. The full core's other non-killed families retain
+the dispositions documented above: 77 diagnostic error-class survivors, nine
+Money, fifteen Workflow, thirty-two Approvals, eleven Audit and ten Entity
+survivors. The ten uncovered defensive paths and fourteen execution-limit/loop
+mutations retain their recorded classifications and remain in the denominator;
+no timeout is claimed as an assertion kill. No critical mutant survives.
+
+The independent 90-case review described above passes on all four runtimes.
+Its implementation/adapter sources match the verified candidate byte-for-byte.
+Only documentation outcome/status edits follow the frozen tree; executable,
+normative, dependency, vector and test files are unchanged. Documentation,
+traceability, architecture, licensing and whitespace checks are repeated after
+those edits. This is a finite review of the accepted contract, not exhaustive
+proof or a decision about D9's native Entity values.
+
+D8 is resolved, and M8 passes for the accepted contracts including D8 and D10.
+D9 remains open. M9 release history, tag creation and Core 1.0 promotion have
+not been performed.
 
 ## Milestone 9 — Documentation and local corrective release
 

@@ -195,6 +195,7 @@ export class AuditLog {
    * @see AUDIT-REDACTION-002
    * @see AUDIT-REDACTION-003
    * @see AUDIT-REDACTION-006
+   * @see AUDIT-REDACTION-008
    * @see AUDIT-APPEND-001
    * @see AUDIT-ERROR-001
    * @see AUDIT-RELATIONSHIP-010

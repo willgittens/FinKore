@@ -84,11 +84,12 @@ function redactActor(
  * @param input - Candidate redaction policy.
  * @returns A defensive policy value with protected change paths.
  * @throws {InvalidAuditRedactionError}
- * When the policy lacks identity, authority, or protected paths, or any supplied
- * path position is malformed (including a sparse array hole).
+ * When supplied identity is not a nonempty string, the policy lacks authority
+ * or protected paths, or a path position is malformed (including a sparse array hole).
  *
  * @see FINKORE_AUDIT_REDACTION_INVALID
  * @see AUDIT-REDACTION-001
+ * @see AUDIT-REDACTION-008
  */
 export function validateAuditRedactionPolicy(input: unknown): AuditRedactionPolicy {
   if (!isPlainRecord(input)) throw new InvalidAuditRedactionError()
@@ -97,7 +98,7 @@ export function validateAuditRedactionPolicy(input: unknown): AuditRedactionPoli
   }
 
   return {
-    id: requiredString(input.id),
+    ...(Object.hasOwn(input, 'id') ? { id: requiredString(input.id) } : {}),
     protectedPaths: Array.from(arrayValues(input.protectedPaths), requiredString),
     authority: requiredString(input.authority),
   }

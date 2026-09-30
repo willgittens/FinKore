@@ -349,12 +349,14 @@ Approval histories, conditions, fact semantics, and the accepted native
 Approval/Workflow ownership profile, Entity declaration observation/reuse, and
 malformed-input validation with preserved adapter errors. M8 corrects native
 collection traversal and expands mutation coverage. Complete combined verification
-passes after D10, including all 1738 manifest vectors on TypeScript, Python
+passes after D8/D10, including all 1758 manifest vectors on TypeScript, Python
 3.12/3.13, and Java.
 D10 is now resolved through AUDIT-EVENT-009: Event metadata follows the existing
 Audit JSON-value profile and preserves explicit-null presence. Nineteen new
 vectors cover metadata presence, JSON values, member preservation and error priority.
-D8 and D9 remain unresolved policy gaps. The local corrective release and
+D8 now makes redaction `policy.id` optional, validating supplied values as nonempty
+strings. Twenty new vectors, native regressions and paired mutation controls
+protect this correction. D9 remains unresolved. The local corrective release and
 separate Core 1.0 promotion gates remain uncompleted.
 
 At the 0.9.6 tag, all 884 manifest vectors pass on TypeScript, CPython 3.12/3.13, and Java,

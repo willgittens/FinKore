@@ -191,6 +191,9 @@ def redact_history(history: Any, policy: Any, redaction_event: Any) -> dict[str,
     FINKORE_AUDIT_REDACTION_INVALID before any view or evidence is returned;
     history, policy, and candidate evidence remain unchanged. Authority is an
     explicit declaration, not an authenticated identity or authorization lookup.
+    Policy ``id`` may be omitted; when supplied it must be a nonempty string,
+    including rejection of explicit null, or FINKORE_AUDIT_REDACTION_INVALID is
+    raised during policy validation before evidence validation.
     Source and evidence values are validated using the native JSON boundary;
     cycles and unsupported values retain the Actor/Event portable errors. Both
     returned representations and history are independent of the caller's inputs.
@@ -198,6 +201,7 @@ def redact_history(history: Any, policy: Any, redaction_event: Any) -> dict[str,
     @see AUDIT-REDACTION-001
     @see AUDIT-REDACTION-002
     @see AUDIT-REDACTION-006
+    @see AUDIT-REDACTION-008
     """
 
     current = validate_history(history)
@@ -369,6 +373,8 @@ def _relationship_ids(history: list[dict[str, Any]]) -> set[str]:
 
 def _protected_paths(policy: Any) -> list[str]:
     if not isinstance(policy, dict):
+        raise FinKoreError(REDACTION_INVALID)
+    if "id" in policy and not _opaque(policy["id"]):
         raise FinKoreError(REDACTION_INVALID)
     if not _opaque(policy.get("authority")):
         raise FinKoreError(REDACTION_INVALID)

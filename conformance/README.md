@@ -35,13 +35,13 @@ for input/output ownership and unsupported numeric subclasses. Entity boundary c
 [Core 0.9.7 Milestone 6](../docs/plans/plan-09.7.md) closes Entity declaration
 observation/reuse, including own special names and inherited-member rejection.
 Four special-field controls extend the six special-state vectors; native tests
-cover aliases and actual definition/observation reuse. M7 closes the published malformed-input regressions. D8 and D9 remain unresolved.
+cover aliases and actual definition/observation reuse. M7 closes the published malformed-input regressions. D8 is now resolved; D9 remains unresolved.
 
 [Core 0.9.7 Milestone 2](../docs/plans/plan-09.7.md) published 699 new
 full-envelope vectors and 197 supplementary native/adapter cases, alongside the
 unchanged 884 vectors, establishing a 1,583-vector baseline. M7 now passes all 1719 manifest vectors on all four runtimes, with no failed,
-unsupported, or infrastructure outcomes. D8 and the Entity native-value policy
-D9 remain unresolved contract gaps; [traceability](traceability.md) distinguishes
+unsupported, or infrastructure outcomes. The Entity native-value policy
+D9 remains an unresolved contract gap; [traceability](traceability.md) distinguishes
 these limits from tested requirements. Supplementary tests assert exact
 domain results and input preservation where optional diagnostics have no single
 portable envelope. They do not weaken the runner's exact comparison.
@@ -308,3 +308,10 @@ New normative financial behavior is complete in an official implementation only 
 - [ ] Regression vectors are retained for discovered defects.
 
 Not every trivial rule needs every category. Critical financial behavior receives the strongest treatment.
+
+D8 policy identity is now specified by AUDIT-REDACTION-008. The separate
+`audit/policy-identity.json` supplies 20 vectors for omission, opaque valid labels,
+malformed supplied values, unchanged history, and authority/target/error-priority
+boundaries. Native tests add supplied undefined, constructor absence conventions,
+input preservation and actual-history reuse. All 125 Audit vectors pass on all
+four runtimes; the 1758-vector candidate passes fresh complete verification.

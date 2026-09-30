@@ -1,0 +1,1882 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "audit.policy097.omitted",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-REDACTION-001",
+        "AUDIT-REDACTION-003",
+        "AUDIT-REDACTION-006"
+      ],
+      "description": "Optional redaction policy identity: omitted.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "event": {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": {
+                "presence": "REDACTED"
+              },
+              "metadata": {
+                "presence": "REDACTED"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          },
+          "evidenceEvent": {
+            "eventId": "evt-redact-actor",
+            "eventType": "AUDIT_CONTENT_REDACTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "system",
+              "id": "retention-service"
+            },
+            "occurredAt": "2026-09-01T13:00:00Z"
+          }
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "eventId": "evt-redact-actor",
+              "eventType": "AUDIT_CONTENT_REDACTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "system",
+                "id": "retention-service"
+              },
+              "occurredAt": "2026-09-01T13:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.string",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-REDACTION-001",
+        "AUDIT-REDACTION-003",
+        "AUDIT-REDACTION-006"
+      ],
+      "description": "Optional redaction policy identity: string.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": "retention",
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "event": {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": {
+                "presence": "REDACTED"
+              },
+              "metadata": {
+                "presence": "REDACTED"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          },
+          "evidenceEvent": {
+            "eventId": "evt-redact-actor",
+            "eventType": "AUDIT_CONTENT_REDACTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "system",
+              "id": "retention-service"
+            },
+            "occurredAt": "2026-09-01T13:00:00Z"
+          }
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "eventId": "evt-redact-actor",
+              "eventType": "AUDIT_CONTENT_REDACTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "system",
+                "id": "retention-service"
+              },
+              "occurredAt": "2026-09-01T13:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.whitespace",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-REDACTION-001",
+        "AUDIT-REDACTION-003",
+        "AUDIT-REDACTION-006"
+      ],
+      "description": "Optional redaction policy identity: whitespace.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": " ",
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "event": {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": {
+                "presence": "REDACTED"
+              },
+              "metadata": {
+                "presence": "REDACTED"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          },
+          "evidenceEvent": {
+            "eventId": "evt-redact-actor",
+            "eventType": "AUDIT_CONTENT_REDACTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "system",
+              "id": "retention-service"
+            },
+            "occurredAt": "2026-09-01T13:00:00Z"
+          }
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "eventId": "evt-redact-actor",
+              "eventType": "AUDIT_CONTENT_REDACTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "system",
+                "id": "retention-service"
+              },
+              "occurredAt": "2026-09-01T13:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.unicode",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-REDACTION-001",
+        "AUDIT-REDACTION-003",
+        "AUDIT-REDACTION-006"
+      ],
+      "description": "Optional redaction policy identity: unicode.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": "política-保護",
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "event": {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": {
+                "presence": "REDACTED"
+              },
+              "metadata": {
+                "presence": "REDACTED"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          },
+          "evidenceEvent": {
+            "eventId": "evt-redact-actor",
+            "eventType": "AUDIT_CONTENT_REDACTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "system",
+              "id": "retention-service"
+            },
+            "occurredAt": "2026-09-01T13:00:00Z"
+          }
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "eventId": "evt-redact-actor",
+              "eventType": "AUDIT_CONTENT_REDACTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "system",
+                "id": "retention-service"
+              },
+              "occurredAt": "2026-09-01T13:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.special-name",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-REDACTION-001",
+        "AUDIT-REDACTION-003",
+        "AUDIT-REDACTION-006"
+      ],
+      "description": "Optional redaction policy identity: special-name.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": "__proto__",
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "event": {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": {
+                "presence": "REDACTED"
+              },
+              "metadata": {
+                "presence": "REDACTED"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          },
+          "evidenceEvent": {
+            "eventId": "evt-redact-actor",
+            "eventType": "AUDIT_CONTENT_REDACTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "system",
+              "id": "retention-service"
+            },
+            "occurredAt": "2026-09-01T13:00:00Z"
+          }
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            },
+            {
+              "eventId": "evt-redact-actor",
+              "eventType": "AUDIT_CONTENT_REDACTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "system",
+                "id": "retention-service"
+              },
+              "occurredAt": "2026-09-01T13:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.null",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Optional redaction policy identity: null.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": null,
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_REDACTION_INVALID"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.empty",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Optional redaction policy identity: empty.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": "",
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_REDACTION_INVALID"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.false",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Optional redaction policy identity: false.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": false,
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_REDACTION_INVALID"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.true",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Optional redaction policy identity: true.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": true,
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_REDACTION_INVALID"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.zero",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Optional redaction policy identity: zero.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": 0,
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_REDACTION_INVALID"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.number",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Optional redaction policy identity: number.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": 42,
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_REDACTION_INVALID"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.array",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Optional redaction policy identity: array.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": [],
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_REDACTION_INVALID"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.object",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Optional redaction policy identity: object.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": {},
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_REDACTION_INVALID"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.nonempty-array",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Optional redaction policy identity: nonempty-array.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": [
+            "retention"
+          ],
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_REDACTION_INVALID"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.omitted-missing-authority",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-REDACTION-001",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Optional redaction policy identity: omitted-missing-authority.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ]
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_REDACTION_INVALID"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.omitted-missing-protectedpaths",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-REDACTION-001",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Optional redaction policy identity: omitted-missing-protectedpaths.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_REDACTION_INVALID"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.supplied-missing-authority",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-REDACTION-001",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Optional redaction policy identity: supplied-missing-authority.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": "actor-context-policy",
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ]
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_REDACTION_INVALID"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.supplied-missing-protectedpaths",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-REDACTION-001",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Optional redaction policy identity: supplied-missing-protectedpaths.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": "actor-context-policy",
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_REDACTION_INVALID"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.policy-before-evidence",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Optional redaction policy identity: policy-before-evidence.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": {
+              "type": "user",
+              "id": "user-7",
+              "displayName": "Ada",
+              "metadata": {
+                "email": "ada@example.test"
+              }
+            },
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": null,
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": null,
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_REDACTION_INVALID"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-actor-context",
+              "eventType": "ENTITY_SUBMITTED",
+              "entity": {
+                "type": "expense",
+                "id": "exp-52"
+              },
+              "actor": {
+                "type": "user",
+                "id": "user-7",
+                "displayName": "Ada",
+                "metadata": {
+                  "email": "ada@example.test"
+                }
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.policy097.history-before-policy",
+      "spec": "audit/redaction",
+      "requirements": [
+        "AUDIT-REDACTION-008",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Optional redaction policy identity: history-before-policy.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-actor-context",
+            "eventType": "ENTITY_SUBMITTED",
+            "entity": {
+              "type": "expense",
+              "id": "exp-52"
+            },
+            "actor": null,
+            "occurredAt": "2026-09-01T12:00:00Z"
+          }
+        ],
+        "policy": {
+          "id": null,
+          "protectedPaths": [
+            "actor.displayName",
+            "actor.metadata"
+          ],
+          "authority": "retention-policy"
+        },
+        "redactionEvent": {
+          "eventId": "evt-redact-actor",
+          "eventType": "AUDIT_CONTENT_REDACTED",
+          "entity": {
+            "type": "expense",
+            "id": "exp-52"
+          },
+          "actor": {
+            "type": "system",
+            "id": "retention-service"
+          },
+          "occurredAt": "2026-09-01T13:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_ACTOR_INVALID"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    }
+  ]
+}

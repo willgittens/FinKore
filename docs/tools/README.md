@@ -443,3 +443,12 @@ non-killed family and the exact verified candidate. D10 is now resolved;
 metadata probes. The native gate has 156 probes (57 on the Python 3.13 repeat),
 and 423 static anchor tests cover critical/native probe declarations. All probes
 pass in the complete post-D10 verification with independent valid controls.
+
+D8 adds nine paired `policy097` probes for optional redaction policy identity.
+Run `node docs/tools/mutation-native.js policy097` for the focused gate. The native
+gate now contains 165 probes, with 60 on the Python 3.13 repeat; 432 static anchor
+tests cover all critical/native declarations. Raw host exceptions do not count
+as semantic rejection of valid input. Full post-D8 verification passes: all 267
+critical, 165 native and 60 Python 3.13 repeat probes are killed with controls
+passing. Full runner/core mutation scores remain 97.21% and 96.34%; core exceeds
+95% without timeout credit. The plan records the exact candidate and dispositions.

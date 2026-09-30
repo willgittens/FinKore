@@ -74,3 +74,54 @@ class AuditRedactionPolicyTests(unittest.TestCase):
         view['changes'][0]['after'] = {'presence': 'REDACTED'}
         self.assertEqual(result, {'event': view, 'evidenceEvent': evidence, 'history': [*history, evidence]})
         self.assertIsNone(result['event']['actor']['metadata'])
+
+    def test_policy097_optional_identity_control(self):
+        for supplied, identity in [(False, None), (True, 'retention'), (True, ' '),
+                                   (True, 'política-保護'), (True, '__proto__')]:
+            with self.subTest(supplied=supplied, identity=identity):
+                history, policy, evidence = self.inputs()
+                if supplied:
+                    policy['id'] = identity
+                before = deepcopy((history, policy, evidence))
+                try:
+                    result = redact_history(history, policy, evidence)
+                except FinKoreError as failure:
+                    self.fail('Valid policy rejected with ' + failure.code)
+                view = deepcopy(history[1])
+                view['actor']['metadata'] = {'presence': 'REDACTED'}
+                view['changes'][0]['after'] = {'presence': 'REDACTED'}
+                self.assertEqual(result, {'event': view, 'evidenceEvent': evidence, 'history': [*history, evidence]})
+                later = {**deepcopy(evidence), 'eventId': 'later'}
+                self.assertEqual(append_event(result['history'], later)['history'], [*history, evidence, later])
+                self.assertEqual((history, policy, evidence), before)
+
+    def test_policy097_malformed_identity(self):
+        for identity in [None, '', False, True, 0, 42, [], {}, ['retention']]:
+            with self.subTest(identity=identity):
+                history, policy, evidence = self.inputs()
+                policy['id'] = identity
+                before = deepcopy((history, policy, evidence))
+                with self.assertRaises(FinKoreError) as failure:
+                    redact_history(history, policy, evidence)
+                self.assertEqual(failure.exception.code, 'FINKORE_AUDIT_REDACTION_INVALID')
+                self.assertEqual((history, policy, evidence), before)
+                self.assertEqual(append_event(history, evidence)['history'], [*history, evidence])
+
+    def test_policy097_policy_before_evidence(self):
+        history, policy, evidence = self.inputs()
+        policy['id'] = None
+        evidence['actor'] = None
+        before = deepcopy((history, policy, evidence))
+        with self.assertRaises(FinKoreError) as failure:
+            redact_history(history, policy, evidence)
+        self.assertEqual(failure.exception.code, 'FINKORE_AUDIT_REDACTION_INVALID')
+        self.assertEqual((history, policy, evidence), before)
+
+    def test_policy097_supplied_identity_control(self):
+        history, policy, evidence = self.inputs()
+        policy['id'] = 'retention'
+        result = redact_history(history, policy, evidence)
+        view = deepcopy(history[1])
+        view['actor']['metadata'] = {'presence': 'REDACTED'}
+        view['changes'][0]['after'] = {'presence': 'REDACTED'}
+        self.assertEqual(result, {'event': view, 'evidenceEvent': evidence, 'history': [*history, evidence]})

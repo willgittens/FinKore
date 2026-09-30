@@ -21,6 +21,7 @@ This document defines how sensitive information may be withheld while preserving
 - **AUDIT-REDACTION-005** — Access-time masking MAY supplement redaction.
 - **AUDIT-REDACTION-007** — Access-time masking MUST NOT be represented as mutation of the committed source event.
 - **AUDIT-REDACTION-006** — A redaction action affecting committed logical history MUST produce an Audit Event identifying that the redaction occurred.
+- **AUDIT-REDACTION-008** — A redaction policy identifier is optional. In the bounded policy representation, `policy.id` MAY be omitted; when supplied, it MUST be a nonempty string. Supplied null, empty strings and non-string values MUST be rejected with `FINKORE_AUDIT_REDACTION_INVALID` during policy validation, before candidate evidence validation. An omitted identifier MUST NOT prevent otherwise valid redaction. An identifier MUST NOT substitute for required authority or protected targets, change which content is redacted, or authorize changes to committed history. Rejection MUST leave logical history unchanged under **AUDIT-ERROR-001**.
 
 ## Invariants
 
@@ -39,12 +40,31 @@ or introduce RBAC. Other policy fields retain their separately declared
 contracts. Invalid policy input cannot partially redact committed history or
 commit a redaction evidence Event.
 
+The optional identifier in **AUDIT-REDACTION-008** is an opaque label. It is not
+looked up, authenticated, normalized or used to select protected content. A
+nonempty string is preserved as supplied; whitespace or special member names
+do not acquire identifier semantics. Omission and supplied null are distinct.
+Native convenience APIs may use a documented absence sentinel; portable parsing
+must not treat supplied null as omission. Existing history validation precedes
+policy processing; this correction does not change other error priorities.
+
 Core 0.9 release candidate defines the meaning of redaction, including optional
 Actor context under **AUDIT-ACTOR-006**, without standardizing a production
 redacted-value encoding. The representation is implementation-defined and must
 preserve the distinctions and evidence required above. Conformance adapters
 normalize that representation to the conformance-only `{"presence":"REDACTED"}`
 sentinel; the sentinel is not a required production representation.
+
+## Core 0.9.7 correction note (non-normative)
+
+D8 resolves the previously unspecified policy-ID representation through new
+**AUDIT-REDACTION-008**, under SPEC-FREEZE-001/002/003 and
+SPEC-COMPATIBILITY-012/014. This is an observable compatibility correction:
+TypeScript and Java now accept omission, while Python rejects malformed supplied
+identifiers it previously ignored. Valid supplied strings retain their behavior.
+Authority, protected targets, evidence, production redaction encoding and
+portable error codes are unchanged. This introduces no authorization registry
+or new canonical operation identifier.
 
 ## Example
 

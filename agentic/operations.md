@@ -15,6 +15,11 @@ Approval operation label,
 Workflow import/create label, Entity import label, Money serialization label, or
 Audit redaction label is promoted as a canonical Agentic operation in Core 0.9 release candidate.
 
+The conformance-local `audit.redact` fixture follows AUDIT-REDACTION-008:
+`policy.id` is optional; supplied values must be nonempty strings or policy
+validation rejects with `FINKORE_AUDIT_REDACTION_INVALID`. Authority and protected
+targets remain required. This clarification does not promote a new Agentic operation.
+
 Approval conformance labels, including `approval.chain.evaluate`,
 `approval.composition.evaluate`, `approval.decision.withdraw`,
 `approval.decision.supersede`, and `approval.requirement.supersede`, remain

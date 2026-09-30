@@ -485,7 +485,7 @@ public final class Audit {
   /**
    * Policy-authorized redaction request.
    *
-   * @param id stable policy identity
+   * @param id optional nonempty policy label; null denotes omission in the native constructor
    * @param protectedPaths protected actor-context targets or Change paths
    * @param authority redaction authority
    * @see <a href="../../../../../../spec/audit/redaction.md">AUDIT-REDACTION-001</a>
@@ -496,6 +496,8 @@ public final class Audit {
      *
      * @param value candidate policy
      * @return validated policy
+     * @throws FinKoreException with {@link Audit#REDACTION_INVALID} for malformed policy,
+     *     including a supplied null, empty or non-string identifier (AUDIT-REDACTION-008)
      */
     public static RedactionPolicy fromPortable(Object value) {
       if (!(value instanceof Map<?, ?> map)) {
@@ -506,7 +508,7 @@ public final class Audit {
         throw new FinKoreException(REDACTION_INVALID);
       }
       return new RedactionPolicy(
-          requiredString(map.get("id"), REDACTION_INVALID),
+          map.containsKey("id") ? requiredString(map.get("id"), REDACTION_INVALID) : null,
           paths,
           requiredString(map.get("authority"), REDACTION_INVALID));
     }
@@ -514,11 +516,14 @@ public final class Audit {
     /**
      * Creates an immutable redaction policy.
      *
-     * @param id policy identity
+     * @param id optional nonempty label; null means omitted, unlike supplied null in portable input
      * @param protectedPaths targets to redact
      * @param authority redaction authority
+     * @throws FinKoreException with {@link Audit#REDACTION_INVALID} for an empty identifier
+     * @see <a href="../../../../../../spec/audit/redaction.md">AUDIT-REDACTION-008</a>
      */
     public RedactionPolicy {
+      if (id != null) requiredString(id, REDACTION_INVALID);
       protectedPaths = List.copyOf(protectedPaths);
     }
   }

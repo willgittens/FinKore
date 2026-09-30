@@ -58,6 +58,11 @@ public final class BoundaryRegressionTest {
       }
     }
     if (cases.isEmpty()) throw new AssertionError("No boundary vectors discovered");
+    cases.put("audit.policy097.omitted", () -> policyIdentityControl(null));
+    cases.put("audit.policy097.string-control", () -> policyIdentityControl("retention"));
+    cases.put("audit.policy097.whitespace", () -> policyIdentityControl(" "));
+    cases.put("audit.policy097.malformed", BoundaryRegressionTest::policyIdentityInvalid);
+    cases.put("audit.policy097.constructor", BoundaryRegressionTest::policyIdentityConstructor);
     cases.put("audit.metadata097.null-presence", () -> eventMetadataPresence(true));
     cases.put("audit.metadata097.omitted-control", () -> eventMetadataPresence(false));
     cases.put("audit.metadata097.explicit-constructor", BoundaryRegressionTest::eventMetadataConstructor);
@@ -250,6 +255,57 @@ public final class BoundaryRegressionTest {
   }
 
   // AUDIT-EVENT-009: import, append and later reuse preserve explicit presence.
+  private static Map<String, Object> identityPolicy() {
+    return new LinkedHashMap<>(Map.of("authority", "retention", "protectedPaths", List.of("actor.displayName")));
+  }
+
+  private static Map<String, Object> identitySource() {
+    Map<String, Object> source = event();
+    source.put("actor", Map.of("id", "alice", "displayName", "Private"));
+    return source;
+  }
+
+  private static void policyIdentityControl(String id) {
+    try {
+      Map<String, Object> policy = identityPolicy();
+      if (id != null) policy.put("id", id);
+      Object before = copy(policy);
+      equal(id, Audit.RedactionPolicy.fromPortable(policy).id());
+      Map<String, Object> source = identitySource();
+      Map<String, Object> evidence = event(); evidence.put("eventId", "redacted");
+      Map<String, Object> view = map(copy(source));
+      view.put("actor", Map.of("id", "alice", "displayName", Map.of("presence", "REDACTED")));
+      Audit.Log log = Audit.Log.create(List.of(source));
+      equal(Map.of("event", view, "evidenceEvent", evidence), log.redact(policy, evidence).toPortable());
+      equal(List.of(source, evidence), log.events());
+      Map<String, Object> later = event(); later.put("eventId", "later");
+      equal(List.of(source, evidence, later), Audit.Log.create(log.events()).append(later).events());
+      equal(before, policy);
+    } catch (FinKoreException failure) {
+      throw new AssertionError("Valid policy rejected with " + failure.code());
+    }
+  }
+
+  private static void policyIdentityInvalid() {
+    for (Object id : java.util.Arrays.asList(null, "", false, true, 0, 42, List.of(), Map.of(), List.of("retention"))) {
+      Map<String, Object> policy = identityPolicy(); policy.put("id", id);
+      Object before = copy(policy);
+      error(Audit.REDACTION_INVALID, () -> Audit.RedactionPolicy.fromPortable(policy));
+      Map<String, Object> source = identitySource();
+      Map<String, Object> evidence = event(); evidence.put("eventId", "redacted");
+      Audit.Log log = Audit.Log.create(List.of(source));
+      error(Audit.REDACTION_INVALID, () -> log.redact(policy, evidence));
+      equal(List.of(source), log.events());
+      equal(before, policy);
+      equal(List.of(source, evidence), log.append(evidence).events());
+    }
+  }
+
+  private static void policyIdentityConstructor() {
+    equal(null, new Audit.RedactionPolicy(null, List.of("actor.displayName"), "retention").id());
+    error(Audit.REDACTION_INVALID, () -> new Audit.RedactionPolicy("", List.of("actor.displayName"), "retention"));
+  }
+
   private static void eventMetadataPresence(boolean supplied) {
     Map<String, Object> candidate = event();
     if (supplied) candidate.put("metadata", null);

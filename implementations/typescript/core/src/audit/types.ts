@@ -226,8 +226,8 @@ export interface SerializedAuditRedactedValue {
  * @see AUDIT-CHANGE-006
  */
 export interface AuditRedactionPolicy {
-  /** Stable policy identifier supplied by the composing domain. */
-  readonly id: string
+  /** Optional opaque, nonempty policy label; it does not establish authority. @see AUDIT-REDACTION-008 */
+  readonly id?: string
 
   /** Change paths or reserved actor-context targets requiring redaction. */
   readonly protectedPaths: readonly string[]

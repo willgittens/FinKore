@@ -12,12 +12,17 @@ runtimes. Milestone 5 implements the accepted native Approval/Workflow value pro
 required embedded Workflow collections. Milestone 6 closes Entity special-name
 declaration preservation/reuse; all ten portable special-name controls pass on
 every runtime. Milestone 7 closes malformed Entity/Workflow boundaries and Audit
-failure observations. M8 and the D10 correction pass complete verification; all
-1738 manifest vectors pass on all four runtimes. D10 defines Event
+failure observations. M8 and the D8/D10 corrections pass complete verification; all
+1758 manifest vectors pass on all four runtimes. D10 defines Event
 metadata through AUDIT-EVENT-009: any JSON value, including explicit null, with
 preserved presence, exact independent values, and rejection of cycles or
 unsupported native values using FINKORE_AUDIT_INVALID_EVENT before actor checks.
-D8 redaction policy identity and D9 Entity native-value policy remain unresolved.
+D8 now defines optional redaction `policy.id` under AUDIT-REDACTION-008. When
+supplied it must be a nonempty string; null, empty and non-string values reject
+with FINKORE_AUDIT_REDACTION_INVALID before evidence validation. Authority and
+protected targets remain required. Twenty new vectors cover the policy-ID
+correction, with native regressions and paired mutation controls. D9 Entity
+native-value policy remains open.
 The 0.9.6 results below describe the tagged snapshot.
 
 Entity definitions require a nonempty `identityScope` and an explicit mutability

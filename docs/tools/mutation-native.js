@@ -18,6 +18,105 @@ const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const constructionPy = 'test_construction_evaluation_regressions.ConstructionEvaluationRegressions.'
 const probes = [
 {
+  "id": "typescript-policy097-required",
+  "language": "typescript",
+  "path": "src/audit/audit-redaction.ts",
+  "scope": "policy",
+  "to": "true",
+  "tests": [
+    "test/audit/policy-identity.test.ts"
+  ],
+  "target": "policy097 accepts omitted and reuses actual history",
+  "control": "policy097 accepts string and reuses actual history",
+  "from": "Object.hasOwn(input, 'id')"
+},
+{
+  "id": "typescript-policy097-null-omission",
+  "language": "typescript",
+  "path": "src/audit/audit-redaction.ts",
+  "scope": "policy",
+  "to": "input.id != null",
+  "tests": [
+    "test/audit/policy-identity.test.ts"
+  ],
+  "target": "policy097 rejects null without committing evidence",
+  "control": "policy097 accepts string and reuses actual history",
+  "from": "Object.hasOwn(input, 'id')"
+},
+{
+  "id": "typescript-policy097-unchecked",
+  "language": "typescript",
+  "path": "src/audit/audit-redaction.ts",
+  "scope": "policy",
+  "to": "{ id: input.id as string }",
+  "tests": [
+    "test/audit/policy-identity.test.ts"
+  ],
+  "target": "policy097 rejects empty without committing evidence",
+  "control": "policy097 accepts string and reuses actual history",
+  "from": "{ id: requiredString(input.id) }"
+},
+{
+  "id": "java-policy097-required",
+  "language": "java",
+  "path": "Audit.java",
+  "scope": "policy",
+  "to": "requiredString(map.get(\"id\"), REDACTION_INVALID)",
+  "target": "audit.policy097.omitted",
+  "control": "audit.policy097.string-control",
+  "from": "map.containsKey(\"id\") ? requiredString(map.get(\"id\"), REDACTION_INVALID) : null"
+},
+{
+  "id": "java-policy097-null-omission",
+  "language": "java",
+  "path": "Audit.java",
+  "scope": "policy",
+  "to": "map.get(\"id\") != null ? requiredString(map.get(\"id\"), REDACTION_INVALID) : null",
+  "target": "audit.policy097.malformed",
+  "control": "audit.policy097.string-control",
+  "from": "map.containsKey(\"id\") ? requiredString(map.get(\"id\"), REDACTION_INVALID) : null"
+},
+{
+  "id": "java-policy097-constructor-empty",
+  "language": "java",
+  "path": "Audit.java",
+  "scope": "policy",
+  "to": "if (false) requiredString(id, REDACTION_INVALID);",
+  "target": "audit.policy097.constructor",
+  "control": "audit.policy097.string-control",
+  "from": "if (id != null) requiredString(id, REDACTION_INVALID);"
+},
+{
+  "id": "python-policy097-bypass",
+  "language": "python",
+  "path": "audit.py",
+  "scope": "policy",
+  "to": "if False:",
+  "target": "test_audit_redaction_policy.AuditRedactionPolicyTests.test_policy097_malformed_identity",
+  "control": "test_audit_redaction_policy.AuditRedactionPolicyTests.test_authorized_change_only_control",
+  "from": "if \"id\" in policy and not _opaque(policy[\"id\"]):"
+},
+{
+  "id": "python-policy097-empty",
+  "language": "python",
+  "path": "audit.py",
+  "scope": "policy",
+  "to": "if \"id\" in policy and not isinstance(policy[\"id\"], str):",
+  "target": "test_audit_redaction_policy.AuditRedactionPolicyTests.test_policy097_malformed_identity",
+  "control": "test_audit_redaction_policy.AuditRedactionPolicyTests.test_authorized_change_only_control",
+  "from": "if \"id\" in policy and not _opaque(policy[\"id\"]):"
+},
+{
+  "id": "python-policy097-required",
+  "language": "python",
+  "path": "audit.py",
+  "scope": "policy",
+  "to": "if not _opaque(policy.get(\"id\")):",
+  "target": "test_audit_redaction_policy.AuditRedactionPolicyTests.test_policy097_optional_identity_control",
+  "control": "test_audit_redaction_policy.AuditRedactionPolicyTests.test_policy097_supplied_identity_control",
+  "from": "if \"id\" in policy and not _opaque(policy[\"id\"]):"
+},
+{
   "id": "typescript-metadata097-native-profile",
   "language": "typescript",
   "path": "src/audit/audit-event.ts",

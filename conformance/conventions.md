@@ -787,9 +787,13 @@ WORKFLOW_INVALID_STATE, after definition validation. ENTITY-MUTABILITY-009
 rejects an empty `changes` object with ENTITY_INVALID_MUTATION. These bounded
 representations do not standardize a production Entity envelope or data schema.
 
-The review does not select a `policy.id` redaction contract. D8 remains explicitly
-unresolved. Redaction authority and protected-target obligations retain their
-existing requirements and tests.
+D8 is now resolved by AUDIT-REDACTION-008: `policy.id` is optional; a supplied
+value must be a nonempty string. Supplied null, empty or non-string values use
+FINKORE_AUDIT_REDACTION_INVALID during policy validation before candidate
+evidence validation. Omission cannot replace authority or protected targets,
+and ID presence does not change the redacted content. Native convenience absence
+sentinels are documented separately from portable omission; explicit null is
+not omitted input. `audit.redact` remains conformance-local.
 
 M2 full-envelope vectors remain manifest-listed and are compared exactly by the
 unchanged runner. The supplementary [boundary cases](boundary097-cases.json)

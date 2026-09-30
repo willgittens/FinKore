@@ -39,7 +39,8 @@
         "./audit/readiness-regressions.json",
         "./audit/construction-evaluation-regressions.json",
         "./audit/malformed-boundary-regressions.json",
-        "./audit/event-metadata.json"
+        "./audit/event-metadata.json",
+        "./audit/policy-identity.json"
       ]
     },
     {

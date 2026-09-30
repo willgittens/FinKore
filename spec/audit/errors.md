@@ -15,7 +15,7 @@ This document defines initial portable audit failure categories.
 | `FINKORE_AUDIT_INVALID_EVENT` | Required event content or supplied non-actor context is missing, malformed, unsupported, or inconsistent. |
 | `FINKORE_AUDIT_DUPLICATE_EVENT` | The event identity has already been committed. |
 | `FINKORE_AUDIT_APPEND_ONLY_VIOLATION` | An operation would replace, modify, or remove a committed event, or change an explicitly recorded ordering relationship, outside the redaction rules. |
-| `FINKORE_AUDIT_REDACTION_INVALID` | A redaction violates policy or destroys required event meaning. |
+| `FINKORE_AUDIT_REDACTION_INVALID` | A redaction violates policy, supplies a malformed optional policy identifier, or destroys required event meaning. |
 | `FINKORE_AUDIT_ACTOR_INVALID` | Actor attribution is malformed or inconsistent. |
 
 ## Requirements
