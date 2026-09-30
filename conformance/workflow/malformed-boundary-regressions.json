@@ -1,0 +1,68 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "workflow.boundary097.null-facts-rejected-transition-001",
+      "spec": "workflow/transitions",
+      "requirements": [
+        "WORKFLOW-TRANSITION-001",
+        "WORKFLOW-ERROR-007"
+      ],
+      "description": "M7 malformed boundary: null-facts-rejected-transition-001",
+      "operation": "finkore.workflow.transition",
+      "input": {
+        "definition": {
+          "states": [
+            "DRAFT",
+            "SUBMITTED",
+            "APPROVED",
+            "REJECTED"
+          ],
+          "initialState": "DRAFT",
+          "terminalStates": [
+            "APPROVED",
+            "REJECTED"
+          ],
+          "transitions": [
+            {
+              "source": "DRAFT",
+              "target": "SUBMITTED"
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "APPROVED",
+              "guard": {
+                "fact": "approvalsSatisfied",
+                "equals": true
+              }
+            },
+            {
+              "source": "SUBMITTED",
+              "target": "REJECTED"
+            }
+          ]
+        },
+        "instance": {
+          "currentState": "SUBMITTED"
+        },
+        "target": "DRAFT",
+        "facts": null
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_TRANSITION"
+        },
+        "observations": {
+          "currentState": "SUBMITTED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    }
+  ]
+}

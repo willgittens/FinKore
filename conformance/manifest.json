@@ -27,7 +27,8 @@
         "./workflow/versioning.json",
         "./workflow/readiness-regressions.json",
         "./workflow/construction-evaluation-regressions.json",
-        "./workflow/discovery-regressions.json"
+        "./workflow/discovery-regressions.json",
+        "./workflow/malformed-boundary-regressions.json"
       ]
     },
     {
@@ -36,7 +37,8 @@
         "./audit/history.json",
         "./audit/relationships.json",
         "./audit/readiness-regressions.json",
-        "./audit/construction-evaluation-regressions.json"
+        "./audit/construction-evaluation-regressions.json",
+        "./audit/malformed-boundary-regressions.json"
       ]
     },
     {
@@ -62,7 +64,8 @@
         "./entities/readiness-regressions.json",
         "./entities/construction-evaluation-regressions.json",
         "./entities/evidence-regressions.json",
-        "./entities/discovery-regressions.json"
+        "./entities/discovery-regressions.json",
+        "./entities/malformed-boundary-regressions.json"
       ]
     }
   ]

@@ -379,7 +379,7 @@ describe('Entity Evolution history', () => {
     expect(() => history.correct({ ...base, expectedSourceState: 'DRAFT' })).toThrow(EntityStateConflictError)
     expect(() => history.correct({ ...base, expectedSourceRevision: 'rev-old' })).toThrow(EntityStateConflictError)
     expect(() => history.correct({ ...base, eligible: false })).toThrow(InvalidEntityMutationError)
-    expect(() => history.correct({ ...base, relationId: '' })).toThrow(InvalidEntityIdentityError)
+    expect(() => history.correct({ ...base, relationId: '' })).toThrow(InvalidEntityMutationError)
     expect(() => history.correct({ ...base, relatedRevision: 'inv-10' })).toThrow(InvalidEntityIdentityError)
     expect(() => history.correct({ ...base, expectedSourceCurrent: 'true' })).toThrow(InvalidEntityMutationError)
     expect(history.toJSON()).toEqual({ relations: [] })

@@ -1,0 +1,145 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "audit.boundary097.relationship-type-object-001",
+      "spec": "audit/relationships",
+      "requirements": [
+        "AUDIT-RELATIONSHIP-003",
+        "AUDIT-ERROR-004"
+      ],
+      "description": "M7 malformed boundary: relationship-type-object-001",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-original",
+            "eventType": "ENTITY_ISSUED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "event": {
+          "eventId": "evt-correction",
+          "eventType": "ENTITY_CORRECTED",
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
+          "occurredAt": "2026-09-01T11:00:00Z",
+          "relationships": [
+            {
+              "relationshipId": "rel-corrects-1",
+              "type": {},
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-original",
+              "eventType": "ENTITY_ISSUED",
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
+              "occurredAt": "2026-09-01T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "audit.boundary097.relationship-type-array-001",
+      "spec": "audit/relationships",
+      "requirements": [
+        "AUDIT-RELATIONSHIP-003",
+        "AUDIT-ERROR-004"
+      ],
+      "description": "M7 malformed boundary: relationship-type-array-001",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "evt-original",
+            "eventType": "ENTITY_ISSUED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "event": {
+          "eventId": "evt-correction",
+          "eventType": "ENTITY_CORRECTED",
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
+          "occurredAt": "2026-09-01T11:00:00Z",
+          "relationships": [
+            {
+              "relationshipId": "rel-corrects-1",
+              "type": [],
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "evt-original",
+              "eventType": "ENTITY_ISSUED",
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
+              "occurredAt": "2026-09-01T10:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    }
+  ]
+}

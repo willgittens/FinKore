@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MPL-2.0
 import { Money } from '../money/money.js'
 import { Workflow } from '../workflow/workflow.js'
-import { InvalidWorkflowTransitionError } from '../workflow/errors.js'
+import { WorkflowDefinition } from '../workflow/definition.js'
+import { InvalidWorkflowInstanceError } from '../workflow/errors.js'
 import {
   EntityValidationFailedError,
   EntityStateConflictError,
@@ -45,11 +46,18 @@ function cloneJsonValue<T>(value: T): T {
 
 function validateDefinition(input: unknown): EntityDefinition {
   if (!isPlainRecord(input)) throw new InvalidEntityIdentityError()
+  const type = requiredString(input.type)
+  const identityScope = requiredString(input.identityScope)
+  const workflow = WorkflowDefinition.from(input.workflow)
+  const mutability = validateMutability(input.mutability)
+  for (const state of workflow.states) {
+    if (!Object.hasOwn(mutability, state)) throw new InvalidEntityMutationError()
+  }
   return {
-    type: requiredString(input.type),
-    identityScope: requiredString(input.identityScope),
+    type,
+    identityScope,
     workflow: cloneJsonValue(input.workflow),
-    mutability: validateMutability(input.mutability),
+    mutability,
     validation: validateValidationRules(input.validation),
   }
 }
@@ -97,7 +105,6 @@ function validateChanges(value: unknown): Readonly<Record<string, unknown>> {
 }
 
 function mutableFieldsFor(definition: EntityDefinition, state: string): ReadonlySet<string> {
-  if (!Object.hasOwn(definition.mutability, state)) throw new InvalidEntityMutationError()
   const fields = definition.mutability[state]
   return new Set(fields)
 }
@@ -107,16 +114,16 @@ function validateSerializedEntity(definition: EntityDefinition, input: unknown):
   const type = requiredString(input.type)
   const id = requiredString(input.id)
   if (type !== definition.type) throw new InvalidEntityIdentityError()
-  const state = requiredString(input.state)
+  if (typeof input.state !== 'string' || input.state.length === 0) throw new InvalidWorkflowInstanceError()
   const workflow = Workflow.from(definition.workflow, {
-    currentState: state,
+    currentState: input.state,
     ...(Object.hasOwn(input, 'binding') ? { binding: input.binding } : {}),
   })
   const binding = workflow.versionBinding()
   return {
     type,
     id,
-    state,
+    state: workflow.currentState,
     ...(binding === undefined ? {} : { binding }),
     data: cloneJsonValue(input.data),
   }
@@ -191,7 +198,6 @@ function assertExpected(value: unknown, expected: unknown): void {
 function validateEntityImportResult(definition: EntityDefinition, input: unknown): EntityImportResult {
   if (!isPlainRecord(input) || !Object.hasOwn(input, 'entity')) throw new InvalidEntityIdentityError()
   const entity = validateSerializedEntity(definition, input.entity)
-  mutableFieldsFor(definition, entity.state)
   assertValidEntityData(definition, entity.data)
 
   const currentRevision =
@@ -238,6 +244,7 @@ function isPositiveMoney(value: unknown): boolean {
 }
 
 function validateEntityData(definition: EntityDefinition, data: unknown): EntityValidationResult {
+  if (!isPlainRecord(data)) throw new EntityValidationFailedError()
   const findings: EntityValidationFinding[] = []
   for (const rule of definition.validation) {
     const value = valueAtTopLevelPath(data, rule.path)
@@ -347,9 +354,9 @@ export class FinancialEntity {
    * @returns A new Financial Entity in the Workflow initial state.
    * @throws {InvalidEntityMutationError}
    * When validator declarations are malformed/unsupported, or mutability
-   * declarations are malformed or lack an own entry for the current State.
+   * declarations are malformed or lack an own entry for any declared State.
    * @throws {EntityValidationFailedError}
-   * When declared predicates reject the initial data.
+   * When initial data is not an object or declared predicates reject it.
    * @throws {InvalidEntityIdentityError}
    * When Entity type, identity scope, or entity identifier is missing or
    * malformed.
@@ -361,11 +368,13 @@ export class FinancialEntity {
    * @see ENTITY-IDENTITY-002
    * @see ENTITY-LIFECYCLE-001
    * @see ENTITY-LIFECYCLE-002
+   * @see ENTITY-MUTABILITY-008
+   * @see ENTITY-IDENTITY-007
+   * @see ENTITY-VALIDATION-010
    */
   static create(definitionInput: unknown, id: unknown, data: unknown): FinancialEntity {
     const definition = validateDefinition(definitionInput)
     const workflow = Workflow.create(definition.workflow)
-    mutableFieldsFor(definition, workflow.currentState)
     assertValidEntityData(definition, data)
     const binding = workflow.versionBinding()
     return new FinancialEntity(definition, {
@@ -393,26 +402,28 @@ export class FinancialEntity {
    * When Entity identity or type is missing, malformed, or conflicts with the
    * definition.
    * @throws {InvalidWorkflowStateError}
-   * When the current lifecycle state is missing or undeclared.
+   * When the nonempty current lifecycle State is undeclared.
    * @throws {InvalidWorkflowInstanceError}
-   * When a versioned observation has missing or malformed binding.
+   * When the current State is missing/malformed, or a versioned observation
+   * has missing or malformed binding.
    * @throws {WorkflowVersionMismatchError}
    * When the original binding differs from the referenced definition/version.
    * @throws {InvalidEntityMutationError}
    * When validator declarations are malformed/unsupported, or mutability
-   * declarations are malformed or lack an own entry for the current State.
+   * declarations are malformed or lack an own entry for any declared State.
    * @throws {EntityValidationFailedError}
-   * When declared predicates reject the complete Entity data.
+   * When Entity data is not an object or declared predicates reject it.
    *
    * @see FINKORE_ENTITY_INVALID_IDENTITY
    * @see FINKORE_WORKFLOW_INVALID_STATE
    * @see ENTITY-IDENTITY-001
    * @see ENTITY-LIFECYCLE-006
+   * @see ENTITY-LIFECYCLE-007
+   * @see ENTITY-VALIDATION-010
    */
   static from(definitionInput: unknown, entityInput: unknown): FinancialEntity {
     const definition = validateDefinition(definitionInput)
     const entity = validateSerializedEntity(definition, entityInput)
-    mutableFieldsFor(definition, entity.state)
     assertValidEntityData(definition, entity.data)
     return new FinancialEntity(definition, entity)
   }
@@ -448,14 +459,17 @@ export class FinancialEntity {
    * When an expected state, revision, or conflict version does not match the
    * supplied observation.
    * @throws {InvalidWorkflowInstanceError}
-   * When a versioned observation has missing or malformed binding.
+   * When the current State is missing/malformed, or a versioned observation
+   * has missing or malformed binding.
    * @throws {WorkflowVersionMismatchError}
    * When the original binding differs from the referenced definition/version.
    * @throws {InvalidEntityMutationError}
-   * When validator declarations are malformed or unsupported.
+   * When validator or mutability declarations are malformed, unsupported, or
+   * omit a declared State.
+   * @throws {InvalidWorkflowStateError}
+   * When the nonempty current State is undeclared.
    * @throws {EntityValidationFailedError}
-   * When the complete supplied Entity observation violates a declared
-   * validation rule for its current state.
+   * When supplied data is not an object or violates a declared validation rule.
    *
    * @see FINKORE_ENTITY_INVALID_IDENTITY
    * @see FINKORE_ENTITY_STATE_CONFLICT
@@ -523,13 +537,6 @@ export class FinancialEntity {
       currentState: this.value.state,
       ...(this.value.binding === undefined ? {} : { binding: this.value.binding }),
     })
-    if (
-      typeof target === 'string' &&
-      !workflow.definition.isTerminalState(workflow.currentState) &&
-      workflow.definition.transitionFrom(workflow.currentState, target) === undefined
-    ) {
-      throw new InvalidWorkflowTransitionError()
-    }
     workflow.transition(target)
     return new FinancialEntity(this.retainedDefinition, { ...this.value, state: workflow.currentState })
   }

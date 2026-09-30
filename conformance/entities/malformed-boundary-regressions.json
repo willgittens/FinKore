@@ -1,0 +1,4366 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "entity.boundary097.relationship-type-correct-first-001",
+      "spec": "entities/evolution",
+      "requirements": [
+        "AUDIT-ERROR-004",
+        "ENTITY-EVOLUTION-034",
+        "ENTITY-EVOLUTION-033"
+      ],
+      "description": "M7 malformed boundary: relationship-type-correct-first-001",
+      "operation": "finkore.entity.evolution.correct",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "ISSUED"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "ISSUED"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "ISSUED": [
+              "memo"
+            ]
+          }
+        },
+        "evolutionHistory": [],
+        "source": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "original"
+          }
+        },
+        "sourceRevision": "rev-1",
+        "related": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "99.00",
+              "currency": "EUR"
+            },
+            "memo": "corrected"
+          }
+        },
+        "relatedRevision": "rev-2",
+        "relationId": "rel-correction-1",
+        "eligible": true,
+        "expectedSourceState": "ISSUED",
+        "expectedSourceRevision": "rev-1",
+        "expectedSourceCurrent": true,
+        "auditHistory": [
+          {
+            "eventId": "evt-original",
+            "eventType": "ENTITY_ISSUED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T10:00:00Z",
+            "changes": [
+              {
+                "path": "amount",
+                "after": {
+                  "amount": "100.00",
+                  "currency": "EUR"
+                }
+              }
+            ]
+          }
+        ],
+        "auditEvent": {
+          "eventId": "evt-correction",
+          "eventType": "ENTITY_EVOLUTION_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
+          "occurredAt": "2026-09-01T11:00:00Z",
+          "metadata": {
+            "entityEvolution": {
+              "kind": "WRONG_CORRESPONDENCE",
+              "relationId": "rel-correction-1",
+              "source": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-1"
+              },
+              "related": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-2"
+              }
+            }
+          },
+          "relationships": [
+            {
+              "relationshipId": "audit-rel-correction-1-malformed",
+              "type": {},
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            },
+            {
+              "relationshipId": "audit-rel-correction-1",
+              "type": "CORRECTS",
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "source": {
+            "type": "invoice",
+            "id": "inv-10",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "original"
+            }
+          },
+          "evolutionHistory": {
+            "relations": []
+          },
+          "auditHistory": {
+            "history": [
+              {
+                "eventId": "evt-original",
+                "eventType": "ENTITY_ISSUED",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                },
+                "occurredAt": "2026-09-01T10:00:00Z",
+                "changes": [
+                  {
+                    "path": "amount",
+                    "after": {
+                      "amount": "100.00",
+                      "currency": "EUR"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "related": {
+            "type": "invoice",
+            "id": "inv-10",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "99.00",
+                "currency": "EUR"
+              },
+              "memo": "corrected"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.relationship-type-correct-last-001",
+      "spec": "entities/evolution",
+      "requirements": [
+        "AUDIT-ERROR-004",
+        "ENTITY-EVOLUTION-034",
+        "ENTITY-EVOLUTION-033"
+      ],
+      "description": "M7 malformed boundary: relationship-type-correct-last-001",
+      "operation": "finkore.entity.evolution.correct",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "ISSUED"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "ISSUED"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "ISSUED": [
+              "memo"
+            ]
+          }
+        },
+        "evolutionHistory": [],
+        "source": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "original"
+          }
+        },
+        "sourceRevision": "rev-1",
+        "related": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "99.00",
+              "currency": "EUR"
+            },
+            "memo": "corrected"
+          }
+        },
+        "relatedRevision": "rev-2",
+        "relationId": "rel-correction-1",
+        "eligible": true,
+        "expectedSourceState": "ISSUED",
+        "expectedSourceRevision": "rev-1",
+        "expectedSourceCurrent": true,
+        "auditHistory": [
+          {
+            "eventId": "evt-original",
+            "eventType": "ENTITY_ISSUED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T10:00:00Z",
+            "changes": [
+              {
+                "path": "amount",
+                "after": {
+                  "amount": "100.00",
+                  "currency": "EUR"
+                }
+              }
+            ]
+          }
+        ],
+        "auditEvent": {
+          "eventId": "evt-correction",
+          "eventType": "ENTITY_EVOLUTION_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
+          "occurredAt": "2026-09-01T11:00:00Z",
+          "metadata": {
+            "entityEvolution": {
+              "kind": "WRONG_CORRESPONDENCE",
+              "relationId": "rel-correction-1",
+              "source": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-1"
+              },
+              "related": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-2"
+              }
+            }
+          },
+          "relationships": [
+            {
+              "relationshipId": "audit-rel-correction-1",
+              "type": "CORRECTS",
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            },
+            {
+              "relationshipId": "audit-rel-correction-1-malformed",
+              "type": [],
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "source": {
+            "type": "invoice",
+            "id": "inv-10",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "original"
+            }
+          },
+          "evolutionHistory": {
+            "relations": []
+          },
+          "auditHistory": {
+            "history": [
+              {
+                "eventId": "evt-original",
+                "eventType": "ENTITY_ISSUED",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                },
+                "occurredAt": "2026-09-01T10:00:00Z",
+                "changes": [
+                  {
+                    "path": "amount",
+                    "after": {
+                      "amount": "100.00",
+                      "currency": "EUR"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "related": {
+            "type": "invoice",
+            "id": "inv-10",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "99.00",
+                "currency": "EUR"
+              },
+              "memo": "corrected"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.relationship-type-reverse-first-001",
+      "spec": "entities/evolution",
+      "requirements": [
+        "AUDIT-ERROR-004",
+        "ENTITY-EVOLUTION-034",
+        "ENTITY-EVOLUTION-033"
+      ],
+      "description": "M7 malformed boundary: relationship-type-reverse-first-001",
+      "operation": "finkore.entity.evolution.reverse",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "ISSUED"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "ISSUED"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "ISSUED": [
+              "memo"
+            ]
+          }
+        },
+        "evolutionHistory": [],
+        "source": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            }
+          }
+        },
+        "sourceRevision": "rev-1",
+        "related": {
+          "type": "invoice",
+          "id": "rev-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "-100.00",
+              "currency": "EUR"
+            }
+          }
+        },
+        "relatedRevision": "rev-1",
+        "relationId": "rel-reversal-1",
+        "eligible": true,
+        "auditHistory": [
+          {
+            "eventId": "evt-original",
+            "eventType": "ENTITY_ISSUED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "auditEvent": {
+          "eventId": "evt-reversal",
+          "eventType": "ENTITY_EVOLUTION_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
+          "occurredAt": "2026-09-01T11:00:00Z",
+          "metadata": {
+            "entityEvolution": {
+              "kind": "WRONG_CORRESPONDENCE",
+              "relationId": "rel-reversal-1",
+              "source": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-1"
+              },
+              "related": {
+                "type": "invoice",
+                "id": "rev-10",
+                "revision": "rev-1"
+              }
+            }
+          },
+          "relationships": [
+            {
+              "relationshipId": "audit-rel-reversal-1-malformed",
+              "type": {},
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            },
+            {
+              "relationshipId": "audit-rel-reversal-1",
+              "type": "REVERSES",
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "source": {
+            "type": "invoice",
+            "id": "inv-10",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              }
+            }
+          },
+          "evolutionHistory": {
+            "relations": []
+          },
+          "auditHistory": {
+            "history": [
+              {
+                "eventId": "evt-original",
+                "eventType": "ENTITY_ISSUED",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                },
+                "occurredAt": "2026-09-01T10:00:00Z"
+              }
+            ]
+          },
+          "related": {
+            "type": "invoice",
+            "id": "rev-10",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "-100.00",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.relationship-type-reverse-last-001",
+      "spec": "entities/evolution",
+      "requirements": [
+        "AUDIT-ERROR-004",
+        "ENTITY-EVOLUTION-034",
+        "ENTITY-EVOLUTION-033"
+      ],
+      "description": "M7 malformed boundary: relationship-type-reverse-last-001",
+      "operation": "finkore.entity.evolution.reverse",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "ISSUED"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "ISSUED"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "ISSUED": [
+              "memo"
+            ]
+          }
+        },
+        "evolutionHistory": [],
+        "source": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            }
+          }
+        },
+        "sourceRevision": "rev-1",
+        "related": {
+          "type": "invoice",
+          "id": "rev-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "-100.00",
+              "currency": "EUR"
+            }
+          }
+        },
+        "relatedRevision": "rev-1",
+        "relationId": "rel-reversal-1",
+        "eligible": true,
+        "auditHistory": [
+          {
+            "eventId": "evt-original",
+            "eventType": "ENTITY_ISSUED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "auditEvent": {
+          "eventId": "evt-reversal",
+          "eventType": "ENTITY_EVOLUTION_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
+          "occurredAt": "2026-09-01T11:00:00Z",
+          "metadata": {
+            "entityEvolution": {
+              "kind": "WRONG_CORRESPONDENCE",
+              "relationId": "rel-reversal-1",
+              "source": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-1"
+              },
+              "related": {
+                "type": "invoice",
+                "id": "rev-10",
+                "revision": "rev-1"
+              }
+            }
+          },
+          "relationships": [
+            {
+              "relationshipId": "audit-rel-reversal-1",
+              "type": "REVERSES",
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            },
+            {
+              "relationshipId": "audit-rel-reversal-1-malformed",
+              "type": [],
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "source": {
+            "type": "invoice",
+            "id": "inv-10",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              }
+            }
+          },
+          "evolutionHistory": {
+            "relations": []
+          },
+          "auditHistory": {
+            "history": [
+              {
+                "eventId": "evt-original",
+                "eventType": "ENTITY_ISSUED",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                },
+                "occurredAt": "2026-09-01T10:00:00Z"
+              }
+            ]
+          },
+          "related": {
+            "type": "invoice",
+            "id": "rev-10",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "-100.00",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.relationship-type-void-first-001",
+      "spec": "entities/evolution",
+      "requirements": [
+        "AUDIT-ERROR-004",
+        "ENTITY-EVOLUTION-034",
+        "ENTITY-EVOLUTION-033"
+      ],
+      "description": "M7 malformed boundary: relationship-type-void-first-001",
+      "operation": "finkore.entity.evolution.void",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "ISSUED"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "ISSUED"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "ISSUED": [
+              "memo"
+            ]
+          }
+        },
+        "evolutionHistory": [],
+        "source": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            }
+          }
+        },
+        "sourceRevision": "rev-1",
+        "relationId": "rel-void-1",
+        "eligible": true,
+        "auditHistory": [
+          {
+            "eventId": "evt-original",
+            "eventType": "ENTITY_ISSUED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "auditEvent": {
+          "eventId": "evt-void",
+          "eventType": "ENTITY_EVOLUTION_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
+          "occurredAt": "2026-09-01T11:00:00Z",
+          "metadata": {
+            "entityEvolution": {
+              "kind": "WRONG_CORRESPONDENCE",
+              "relationId": "rel-void-1",
+              "source": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-1"
+              }
+            }
+          },
+          "relationships": [
+            {
+              "relationshipId": "audit-rel-void-1-malformed",
+              "type": {},
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            },
+            {
+              "relationshipId": "audit-rel-void-1",
+              "type": "VOIDS",
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "source": {
+            "type": "invoice",
+            "id": "inv-10",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              }
+            }
+          },
+          "evolutionHistory": {
+            "relations": []
+          },
+          "auditHistory": {
+            "history": [
+              {
+                "eventId": "evt-original",
+                "eventType": "ENTITY_ISSUED",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                },
+                "occurredAt": "2026-09-01T10:00:00Z"
+              }
+            ]
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.relationship-type-void-last-001",
+      "spec": "entities/evolution",
+      "requirements": [
+        "AUDIT-ERROR-004",
+        "ENTITY-EVOLUTION-034",
+        "ENTITY-EVOLUTION-033"
+      ],
+      "description": "M7 malformed boundary: relationship-type-void-last-001",
+      "operation": "finkore.entity.evolution.void",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "ISSUED"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "ISSUED"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "ISSUED": [
+              "memo"
+            ]
+          }
+        },
+        "evolutionHistory": [],
+        "source": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            }
+          }
+        },
+        "sourceRevision": "rev-1",
+        "relationId": "rel-void-1",
+        "eligible": true,
+        "auditHistory": [
+          {
+            "eventId": "evt-original",
+            "eventType": "ENTITY_ISSUED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "auditEvent": {
+          "eventId": "evt-void",
+          "eventType": "ENTITY_EVOLUTION_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
+          "occurredAt": "2026-09-01T11:00:00Z",
+          "metadata": {
+            "entityEvolution": {
+              "kind": "WRONG_CORRESPONDENCE",
+              "relationId": "rel-void-1",
+              "source": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-1"
+              }
+            }
+          },
+          "relationships": [
+            {
+              "relationshipId": "audit-rel-void-1",
+              "type": "VOIDS",
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            },
+            {
+              "relationshipId": "audit-rel-void-1-malformed",
+              "type": [],
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "source": {
+            "type": "invoice",
+            "id": "inv-10",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              }
+            }
+          },
+          "evolutionHistory": {
+            "relations": []
+          },
+          "auditHistory": {
+            "history": [
+              {
+                "eventId": "evt-original",
+                "eventType": "ENTITY_ISSUED",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                },
+                "occurredAt": "2026-09-01T10:00:00Z"
+              }
+            ]
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.relationship-type-supersede-first-001",
+      "spec": "entities/evolution",
+      "requirements": [
+        "AUDIT-ERROR-004",
+        "ENTITY-EVOLUTION-034",
+        "ENTITY-EVOLUTION-033"
+      ],
+      "description": "M7 malformed boundary: relationship-type-supersede-first-001",
+      "operation": "finkore.entity.evolution.supersede",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "ISSUED"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "ISSUED"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "ISSUED": [
+              "memo"
+            ]
+          }
+        },
+        "evolutionHistory": [],
+        "source": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            }
+          }
+        },
+        "sourceRevision": "rev-1",
+        "successor": {
+          "type": "invoice",
+          "id": "inv-10-v2",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "99.00",
+              "currency": "EUR"
+            }
+          }
+        },
+        "successorRevision": "rev-1",
+        "supersessionScope": "tenant-a:invoice-current",
+        "relationId": "rel-supersession-1",
+        "eligible": true,
+        "expectedSourceCurrent": true,
+        "auditHistory": [
+          {
+            "eventId": "evt-original",
+            "eventType": "ENTITY_ISSUED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "auditEvent": {
+          "eventId": "evt-supersession",
+          "eventType": "ENTITY_EVOLUTION_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
+          "occurredAt": "2026-09-01T11:00:00Z",
+          "metadata": {
+            "entityEvolution": {
+              "kind": "WRONG_CORRESPONDENCE",
+              "relationId": "rel-supersession-1",
+              "source": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-1"
+              },
+              "related": {
+                "type": "invoice",
+                "id": "inv-10-v2",
+                "revision": "rev-1"
+              },
+              "supersessionScope": "tenant-a:invoice-current"
+            }
+          },
+          "relationships": [
+            {
+              "relationshipId": "audit-rel-supersession-1-malformed",
+              "type": {},
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            },
+            {
+              "relationshipId": "audit-rel-supersession-1",
+              "type": "SUPERSEDES",
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "source": {
+            "type": "invoice",
+            "id": "inv-10",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              }
+            }
+          },
+          "evolutionHistory": {
+            "relations": []
+          },
+          "auditHistory": {
+            "history": [
+              {
+                "eventId": "evt-original",
+                "eventType": "ENTITY_ISSUED",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                },
+                "occurredAt": "2026-09-01T10:00:00Z"
+              }
+            ]
+          },
+          "related": {
+            "type": "invoice",
+            "id": "inv-10-v2",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "99.00",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.relationship-type-supersede-last-001",
+      "spec": "entities/evolution",
+      "requirements": [
+        "AUDIT-ERROR-004",
+        "ENTITY-EVOLUTION-034",
+        "ENTITY-EVOLUTION-033"
+      ],
+      "description": "M7 malformed boundary: relationship-type-supersede-last-001",
+      "operation": "finkore.entity.evolution.supersede",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "ISSUED"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "ISSUED"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount"
+            ],
+            "ISSUED": [
+              "memo"
+            ]
+          }
+        },
+        "evolutionHistory": [],
+        "source": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            }
+          }
+        },
+        "sourceRevision": "rev-1",
+        "successor": {
+          "type": "invoice",
+          "id": "inv-10-v2",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "99.00",
+              "currency": "EUR"
+            }
+          }
+        },
+        "successorRevision": "rev-1",
+        "supersessionScope": "tenant-a:invoice-current",
+        "relationId": "rel-supersession-1",
+        "eligible": true,
+        "expectedSourceCurrent": true,
+        "auditHistory": [
+          {
+            "eventId": "evt-original",
+            "eventType": "ENTITY_ISSUED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T10:00:00Z"
+          }
+        ],
+        "auditEvent": {
+          "eventId": "evt-supersession",
+          "eventType": "ENTITY_EVOLUTION_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
+          "occurredAt": "2026-09-01T11:00:00Z",
+          "metadata": {
+            "entityEvolution": {
+              "kind": "WRONG_CORRESPONDENCE",
+              "relationId": "rel-supersession-1",
+              "source": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-1"
+              },
+              "related": {
+                "type": "invoice",
+                "id": "inv-10-v2",
+                "revision": "rev-1"
+              },
+              "supersessionScope": "tenant-a:invoice-current"
+            }
+          },
+          "relationships": [
+            {
+              "relationshipId": "audit-rel-supersession-1",
+              "type": "SUPERSEDES",
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            },
+            {
+              "relationshipId": "audit-rel-supersession-1-malformed",
+              "type": [],
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "source": {
+            "type": "invoice",
+            "id": "inv-10",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              }
+            }
+          },
+          "evolutionHistory": {
+            "relations": []
+          },
+          "auditHistory": {
+            "history": [
+              {
+                "eventId": "evt-original",
+                "eventType": "ENTITY_ISSUED",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                },
+                "occurredAt": "2026-09-01T10:00:00Z"
+              }
+            ]
+          },
+          "related": {
+            "type": "invoice",
+            "id": "inv-10-v2",
+            "state": "ISSUED",
+            "data": {
+              "amount": {
+                "amount": "99.00",
+                "currency": "EUR"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-00-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-00-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": null,
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-01-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-01-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": false,
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-02-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-02-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": 0,
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-03-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-03-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": "",
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-04-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-04-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": [],
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-05-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-05-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {},
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-06-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-06-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "0",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-07-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-07-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "-1",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-08-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-08-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "bad",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-09-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-09-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "1",
+              "currency": "bad"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-10-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-10-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": null,
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-11-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-11-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": [],
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-12-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-12-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": {},
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-13-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-13-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "1",
+              "currency": null
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-14-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-14-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "1",
+              "currency": []
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-15-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-15-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "1"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-mutate-16-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-mutate-16-001",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "2",
+            "currency": "EUR"
+          }
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-00-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-00-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": null,
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-01-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-01-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": false,
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-02-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-02-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": 0,
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-03-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-03-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": "",
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-04-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-04-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": [],
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-05-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-05-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {},
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-06-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-06-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "0",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-07-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-07-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "-1",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-08-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-08-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "bad",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-09-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-09-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "1",
+              "currency": "bad"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-10-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-10-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": null,
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-11-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-11-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": [],
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-12-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-12-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": {},
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-13-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-13-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "1",
+              "currency": null
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-14-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-14-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "1",
+              "currency": []
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-15-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-15-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "1"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-transition-16-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-VALIDATION-001",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "M7 malformed boundary: original-data-transition-16-001",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "reviewFinding": "M7"
+    },
+    {
+      "id": "entity.boundary097.original-data-valid-control-001",
+      "spec": "entities/mutability",
+      "requirements": [
+        "ENTITY-MUTABILITY-001"
+      ],
+      "description": "Allows a field explicitly declared mutable in the current state.",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "memo": "revised"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "revised",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "observations": {
+          "identity": "inv-42",
+          "state": "DRAFT"
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant"
+      ]
+    },
+    {
+      "id": "entity.boundary097.discovery-f8c-100",
+      "spec": "entities/lifecycle",
+      "requirements": [
+        "ENTITY-LIFECYCLE-007"
+      ],
+      "description": "F8c: finkore.entity.mutate, [\"entity\",\"state\"] empty; reject atomically. Reconstructed from original case entity.mutate.display-number-not-identity-001/[\"entity\",\"state\"]/empty.",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "displayNumber",
+              "revision",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          }
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "",
+          "data": {
+            "displayNumber": "INV-2026-0001",
+            "revision": "1",
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "displayNumber": "INV-2026-0002",
+          "revision": "2"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
+        }
+      },
+      "reviewFinding": "F8c",
+      "pairedControl": "entity.boundary097.discovery-control-011",
+      "tags": [
+        "regression",
+        "boundary",
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "boundary097-f8c"
+      ]
+    },
+    {
+      "id": "entity.boundary097.imported-relation-empty-id-001",
+      "spec": "entities/evolution",
+      "requirements": [
+        "ENTITY-EVOLUTION-023",
+        "ENTITY-EVOLUTION-024"
+      ],
+      "description": "Imported evolution relation identity must be nonempty; preserve Audit history and input on rejection. Paired control: entity.evolution.history.noncurrent-match-001.",
+      "operation": "finkore.entity.evolution.correct",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "ISSUED"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "ISSUED"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "ISSUED": [
+              "memo"
+            ]
+          }
+        },
+        "evolutionHistory": [
+          {
+            "relationId": "",
+            "kind": "VOID",
+            "source": {
+              "type": "invoice",
+              "id": "inv-10",
+              "revision": "rev-1"
+            },
+            "sourceCurrent": false,
+            "auditEventId": "event-void"
+          }
+        ],
+        "source": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "original"
+          }
+        },
+        "sourceRevision": "rev-1",
+        "related": {
+          "type": "invoice",
+          "id": "inv-10",
+          "state": "ISSUED",
+          "data": {
+            "amount": {
+              "amount": "99.00",
+              "currency": "EUR"
+            },
+            "memo": "corrected"
+          }
+        },
+        "relatedRevision": "rev-2",
+        "relationId": "rel-correction-1",
+        "eligible": true,
+        "expectedSourceState": "ISSUED",
+        "expectedSourceRevision": "rev-1",
+        "auditHistory": [
+          {
+            "eventId": "evt-original",
+            "eventType": "ENTITY_ISSUED",
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
+            "occurredAt": "2026-09-01T10:00:00Z",
+            "changes": [
+              {
+                "path": "amount",
+                "after": {
+                  "amount": "100.00",
+                  "currency": "EUR"
+                }
+              }
+            ]
+          }
+        ],
+        "auditEvent": {
+          "eventId": "evt-correction",
+          "eventType": "ENTITY_EVOLUTION_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
+          "occurredAt": "2026-09-01T11:00:00Z",
+          "metadata": {
+            "entityEvolution": {
+              "kind": "CORRECTION",
+              "relationId": "rel-correction-1",
+              "source": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-1"
+              },
+              "related": {
+                "type": "invoice",
+                "id": "inv-10",
+                "revision": "rev-2"
+              }
+            }
+          },
+          "relationships": [
+            {
+              "relationshipId": "audit-rel-correction-1",
+              "type": "CORRECTS",
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
+            }
+          ]
+        },
+        "expectedSourceCurrent": false
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "auditHistory": {
+            "history": [
+              {
+                "eventId": "evt-original",
+                "eventType": "ENTITY_ISSUED",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                },
+                "occurredAt": "2026-09-01T10:00:00Z",
+                "changes": [
+                  {
+                    "path": "amount",
+                    "after": {
+                      "amount": "100.00",
+                      "currency": "EUR"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive",
+        "invariant"
+      ],
+      "guardsAgainst": [
+        "empty-imported-relation-identity-accepted"
+      ]
+    }
+  ]
+}

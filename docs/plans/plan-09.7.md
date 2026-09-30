@@ -2,7 +2,7 @@
 
 ## Status
 
-Milestones 2–6 are complete for their accepted contracts. Milestones 7–9
+Milestones 2–7 are complete for their accepted contracts. Milestones 8–9
 remain uncompleted. D1–D7 were explicitly accepted on 2026-09-27. M1 remains
 open for D8 (explicitly left unresolved) and D9 (the Entity native-value policy
 gap discovered during M5). No Entity numeric policy has been selected.
@@ -1031,33 +1031,138 @@ are needed. D8 and D9 remain unresolved.
 
 ## Milestone 7 — Portable malformed-input failures and adapter observations
 
-- [ ] Close F8b/F8c and F9a–F9c from M2: Workflow instance/target error
+- [x] Close F8b/F8c and F9a–F9c from M2: Workflow instance/target error
       preservation; Entity scope/data/State/empty-change/evolution request
       validation; TypeScript null-facts adapter failure; Python Audit relationship
       type exceptions; and validation of existing Entity data before mutation.
       Keep each primary error and non-mutation obligation under its owning spec.
 
 
-- [ ] Fix F6b in the Python core and review adjacent mutability containers and
+- [x] Fix F6b in the Python core and review adjacent mutability containers and
       list entries at create/import, mutation, transition, and evolution boundaries
       where those declarations are consumed.
-- [ ] Fix F6c so Python failure-observation construction cannot replace the
+- [x] Fix F6c so Python failure-observation construction cannot replace the
       original core error. Validate financial input in the core; adapters only
       observe safely and preserve the established result.
-- [ ] Exercise all four Entity evolution kinds with omitted, null, wrong-type,
+- [x] Exercise all four Entity evolution kinds with omitted, null, wrong-type,
       malformed, and valid Audit histories under the settled contracts. Include
       malformed nested events and primary Audit failures combined with evolution
       correspondence failures, following existing priority.
-- [ ] Review equivalent adapter error/observation paths across domains and
+- [x] Review equivalent adapter error/observation paths across domains and
       languages. Assert exact codes and unchanged inputs; unexpected runtime
       defects remain infrastructure failures, not blanket domain-error mappings.
-- [ ] Confirm legitimate omission, empty histories, empty permitted-field sets,
+- [x] Confirm legitimate omission, empty histories, empty permitted-field sets,
       and valid controls remain supported where specified.
-- [ ] Add paired critical/native probes and synchronize vectors, adapter tests,
+- [x] Add paired critical/native probes and synchronize vectors, adapter tests,
       public documentation, and traceability for the corrected boundaries.
 
 Completion: reviewed malformed inputs produce the governing portable failure
 without fabricated observations, partial effects, or secondary adapter crashes.
+
+### M7 implementation and verification — 2026-09-30
+
+F6b/F6c, the remaining F8b/F8c boundaries, and F9a–F9c are corrected under
+D1–D7's accepted contracts. Entity definitions validate explicit identity scope,
+Workflow declarations, and every mutability entry before use. Each declared
+State requires an own field list; empty lists remain valid. Current data must
+be an object satisfying its validators before mutation, transition, import, or
+evolution. Overwriting an invalid Money field with valid proposed data cannot
+repair an invalid original observation. Empty changes use INVALID_MUTATION.
+Malformed current States use WORKFLOW_INVALID_INSTANCE; undeclared nonempty
+States and unknown transition targets retain WORKFLOW_INVALID_STATE. Transition
+edge/terminal/guard priority belongs to Workflow and is no longer preempted by
+Entity target checks.
+
+TypeScript passes missing Workflow instances together with their definitions
+to core, preserving validation order, and observes null facts safely on rejected
+transitions. Python checks Audit relationship type before set membership, so
+object/array types produce AUDIT_INVALID_EVENT rather than an unhashable-type
+exception. Failure observations inspect malformed history containers safely;
+Python/Java reconstruct valid Entity observations through core instead of
+reporting invalid input as valid state. No blanket runtime-exception conversion
+or financial validation was added to an adapter.
+
+All four evolution kinds exercise omitted, null, wrong-type, malformed nested,
+and valid Audit histories. Intrinsic Audit failures retain priority over
+correspondence failures, including malformed relationship types in first/last
+positions. Missing histories use the existing empty default; explicit null is
+invalid. Python and Java also stop accepting explicit null evolution history.
+Request relation IDs and supersession scopes use INVALID_MUTATION; imported
+relation identities retain their existing INVALID_IDENTITY category. Mutation
+review added an empty imported relation-ID regression, which kills the remaining
+meaningful string-validation mutant.
+
+The pre-fix sweep reproduced core/adapter failures across languages. Additional
+F9/native tests run against the original Python source produced two assertion
+failures and one raw TypeError: invalid original data was accepted, malformed
+Audit relationship type escaped, and omitted Audit history masked Actor priority.
+Permanent direct-core tests now discover the complete Entity/Workflow M2
+malformed matrices as well as M7 cases. Every failure case asserts its exact
+portable code and unchanged caller input; valid controls retain exact outcomes.
+
+Compatibility: previously accepted incomplete mutability definitions, non-object
+Entity data, empty changes, and explicit null evolution histories now fail.
+Python callers can omit `import_evolution_history`'s argument or pass `[]`;
+Java callers must pass an empty list instead of null. The original
+`entity.transition.rejected-preserves-entity-001` used undeclared target UNKNOWN
+but expected INVALID_TRANSITION, contradicting WORKFLOW-ERROR-007. Its expected
+code is corrected to INVALID_STATE; its ID, input, and unchanged observation are
+preserved. Older unit fixtures now declare all States, as already required by
+ENTITY-MUTABILITY-008. These are accepted-contract corrections, not a new
+financial policy or a change made merely to fit implementation output.
+
+M7 adds 47 manifest vectors and promotes one existing supplementary empty-State
+case without changing its ID. Eight new supplementary cases distinguish
+omitted/null Audit history combined with an invalid Actor. The inventory is
+1719 vectors, 189 supplementary cases, and 432 requirements: 347 COVERED,
+one PARTIAL (the separate Workflow external-fact authoring limit), 83 NOT
+DIRECTLY TESTABLE, and one BLOCKING SPEC GAP (D8). D9 remains a separate policy
+gap; this work does not choose an Entity native-number profile.
+
+| Verification | Result |
+| --- | --- |
+| Build/typing | All workspace builds and strict TypeScript pass; strict Java compilation and Python compilation pass. |
+| Unit/native/adapter | Runner 130, TypeScript core 2483 and adapter 210 tests pass. Python 3.12/3.13 each pass 1229 native tests and their adapter suites. Java native and adapter suites pass, including 771 direct evidence cases; Maven verifies 45 test methods. |
+| Conformance | All 1719 vectors pass on TypeScript, Python 3.12/3.13, and Java; zero failures, unsupported operations, or infrastructure errors. |
+| Coverage | Full TypeScript core: 99.74% lines, 99.42% branches, 100% functions. Python combined coverage is 94%; Java has 93.98% lines and 84.27% branches. Both configured coverage gates pass. |
+| Mutation | Both complete TypeScript Entity files: 98.49%, 783 killed, ten survivors, two uncovered, no timeouts; the 95% gate is unchanged. Entity critical probes 88/88 and Python Audit probes 10/10 pass with independent controls. Python 3.13 repeats 46/46 Entity and 10/10 Audit probes successfully. The complete native gate kills 117/117 probes with independent passing controls; the repaired lifecycle probe also passes under Python 3.13. |
+| Installed consumers | Default npm, Python wheel/sdist on 3.12/3.13, and JAR consumers pass. |
+| Repository checks | Tool tests, architecture, documentation links, traceability, licensing, and whitespace pass. |
+
+Survivor review: Workflow reconstruction repeats the malformed-State type
+check; conflict-version comparison already rejects undefined against a string;
+Money.deserialize repeats the Money shape checks; empty catches produce
+undefined rather than false, both rejected. Another mutant changes only
+non-normative error text. The Supersession effect collision is already rejected
+by same-step currentness validation. The two uncovered defensive throws guard
+an impossible missing appended Audit event and non-object retained Entity data,
+which construction/import now reject. Their condition mutants are redundant.
+All ten survivors and both uncovered mutants remain counted, with no exclusions
+or timeout credit. The initially surviving empty imported relation-ID check is
+now killed by its permanent regression.
+
+Mutation tooling retains the named regressions and controls while updating
+source targets for the shared own-State check, shared Python import validation,
+and explicit Audit history defaults. A legacy Approval native probe referenced
+removed `deepcopy`; it now uses the existing owned-copy helper so it tests
+lifecycle validation rather than raising NameError. That infrastructure failure
+was not counted as a kill. The older Python reused-history probe now bypasses
+the shared Decision-shape validator: bypassing only list import had become
+redundant with proposed-result validation. Its original named regression and
+control remain unchanged. Python 3.13 temporary-copy races during package and
+coverage artifact writes were retried after both writers finished.
+
+Synchronization review: native/unit and adapter tests, vectors, paired critical
+and native probes, JSDoc/docstrings, package/root/conformance READMEs, developer
+tool instructions, and traceability are updated. The old declaration-only
+Vitest exclusion is removed. Existing /spec and Agentic metadata already define
+the corrected error surfaces and semantics, so no normative requirement,
+canonical operation/error ID, CoreDoc, AGENTS.md, or architecture change is
+needed. No release notes, tag, publication, or Core 1.0 promotion are performed.
+The complete combined-candidate `npm run verify` and fresh independent review
+remain Milestone 8 work; D8/D9 remain unresolved.
+
+**M7 is complete for the accepted contracts. M8–M9 and D8/D9 remain open.**
 
 ## Milestone 8 — Full verification and independent readiness review
 

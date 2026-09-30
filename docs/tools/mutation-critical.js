@@ -33,6 +33,105 @@ if (!validTargets.has(requestedTarget)) {
 
 const pythonMutants = [
 {
+  "id": "python-malformed097-missing-state",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": " or any(state not in mutability for state in workflow.states)",
+  "to": "",
+  "expectedVector": "entity.boundary097.create-mutability-rule-absent-001",
+  "expectedPassVectors": [
+    "entity.boundary097.create-mutability-control-001"
+  ]
+},
+{
+  "id": "python-malformed097-bad-fields",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "or not isinstance(fields, list) or any(not _opaque(field) for field in fields)",
+  "to": "",
+  "expectedVector": "entity.boundary097.create-mutability-rule-null-001",
+  "expectedPassVectors": [
+    "entity.boundary097.create-mutability-control-001"
+  ]
+},
+{
+  "id": "python-malformed097-data-code",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "if not isinstance(data, dict):\n        raise FinKoreError(VALIDATION_FAILED)",
+  "to": "if not isinstance(data, dict):\n        raise FinKoreError(INVALID_IDENTITY)",
+  "expectedVector": "entity.boundary097.discovery-f8c-067",
+  "expectedPassVectors": [
+    "entity.boundary097.create-mutability-control-001"
+  ]
+},
+{
+  "id": "python-malformed097-empty-changes",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "if not isinstance(changes, dict) or not changes:",
+  "to": "if not isinstance(changes, dict):",
+  "expectedVector": "entity.boundary097.discovery-f8c-108",
+  "expectedPassVectors": [
+    "entity.mutate.mutable-field-001"
+  ]
+},
+{
+  "id": "python-malformed097-current-data",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "    _validate_entity_data(definition, entity)\n    return deepcopy(entity)",
+  "to": "    return deepcopy(entity)",
+  "expectedVector": "entity.boundary097.original-data-mutate-00-001",
+  "expectedPassVectors": [
+    "entity.boundary097.original-data-valid-control-001"
+  ]
+},
+{
+  "id": "python-malformed097-state-code",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "raise FinKoreError(\"FINKORE_WORKFLOW_INVALID_INSTANCE\")",
+  "to": "raise FinKoreError(\"FINKORE_WORKFLOW_INVALID_STATE\")",
+  "expectedVector": "entity.boundary097.discovery-f8c-100",
+  "expectedPassVectors": [
+    "entity.mutate.mutable-field-001"
+  ]
+},
+{
+  "id": "python-malformed097-null-history",
+  "suite": "entities",
+  "path": "core/src/finkore/entities.py",
+  "from": "history is _OMITTED or history == []",
+  "to": "history is _OMITTED or history is None or history == []",
+  "expectedVector": "entity.boundary097.discovery-f8c-166",
+  "expectedPassVectors": [
+    "entity.boundary097.evolution-correct-audit-control-001"
+  ]
+},
+{
+  "id": "python-malformed097-relationship-type",
+  "suite": "audit",
+  "path": "core/src/finkore/audit.py",
+  "from": "not isinstance(relationship.get(\"type\"), str) or relationship[\"type\"] not in _RELATIONSHIP_TYPES",
+  "to": "isinstance(relationship.get(\"type\"), str) and relationship[\"type\"] not in _RELATIONSHIP_TYPES",
+  "expectedVector": "audit.boundary097.relationship-type-object-001",
+  "expectedPassVectors": [
+    "audit.relationship.corrects.append-001"
+  ]
+},
+{
+  "id": "python-malformed097-primary-audit-code",
+  "suite": "entities",
+  "path": "adapters/conformance/bridge.py",
+  "from": "return {\"status\": \"error\", \"error\": {\"code\": exc.code}, \"observations\": observations}",
+  "to": "return {\"status\": \"error\", \"error\": {\"code\": \"FINKORE_ENTITY_INVALID_MUTATION\"}, \"observations\": observations}",
+  "expectedVector": "entity.boundary097.evolution-correct-audit-bad-event-001",
+  "expectedPassVectors": [
+    "entity.boundary097.evolution-correct-audit-control-001"
+  ]
+},
+{
   "id": "python-approval097-skip-proposed-history",
   "suite": "approvals",
   "path": "core/src/finkore/approvals.py",
@@ -816,8 +915,8 @@ const pythonMutants = [
     expectedPassVectors: ['entity.evolution.correct.evidence-valid-control-001'],
     suite: 'entities',
     path: 'core/src/finkore/entities.py',
-    from: '    audit_history = append_event(input_value.get("auditHistory"), input_value.get("auditEvent"))\n    relation = _relation(kind, relation_id, source, source_revision, related, related_revision, scope, input_value["auditEvent"]["eventId"])\n    if kind in ("CORRECTION", "REVERSAL"):\n        relation["sourceCurrent"] = current\n    _validate_evolution_evidence(input_value["auditEvent"], relation)',
-    to: '    relation = _relation(kind, relation_id, source, source_revision, related, related_revision, scope, input_value.get("auditEvent", {}).get("eventId"))\n    if kind in ("CORRECTION", "REVERSAL"):\n        relation["sourceCurrent"] = current\n    _validate_evolution_evidence(input_value["auditEvent"], relation)\n    audit_history = append_event(input_value.get("auditHistory"), input_value.get("auditEvent"))',
+    from: '    audit_history = append_event(input_value.get("auditHistory", []), input_value.get("auditEvent"))\n    relation = _relation(kind, relation_id, source, source_revision, related, related_revision, scope, input_value["auditEvent"]["eventId"])\n    if kind in ("CORRECTION", "REVERSAL"):\n        relation["sourceCurrent"] = current\n    _validate_evolution_evidence(input_value["auditEvent"], relation)',
+    to: '    relation = _relation(kind, relation_id, source, source_revision, related, related_revision, scope, input_value.get("auditEvent", {}).get("eventId"))\n    if kind in ("CORRECTION", "REVERSAL"):\n        relation["sourceCurrent"] = current\n    _validate_evolution_evidence(input_value["auditEvent"], relation)\n    audit_history = append_event(input_value.get("auditHistory", []), input_value.get("auditEvent"))',
   },
   {
     id: 'python-entity-correspondence-bypass',
@@ -1052,8 +1151,8 @@ const pythonMutants = [
     expectedPassVectors: ['entity.import.validation-positive-money-valid-001'],
     suite: 'entities',
     path: 'core/src/finkore/entities.py',
-    from: 'entity = validate_entity(entity_definition, import_value.get("entity"))\n    _validate_entity_data(entity_definition, entity)',
-    to: 'entity = validate_entity(entity_definition, import_value.get("entity"))',
+    from: '    _validate_entity_data(definition, entity)\n    return deepcopy(entity)',
+    to: '    return deepcopy(entity)',
   },
   {
     id: 'python-workflow-boolean-number-coercion',
@@ -1346,6 +1445,72 @@ const pythonMutants = [
 ]
 
 const javaMutants = [
+{
+  "id": "java-malformed097-missing-state",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": " || !fieldsByState.keySet().containsAll(workflow.states())",
+  "to": "",
+  "expectedVector": "entity.boundary097.create-mutability-rule-absent-001",
+  "expectedPassVectors": [
+    "entity.boundary097.create-mutability-control-001"
+  ]
+},
+{
+  "id": "java-malformed097-bad-fields",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "      stringList(entry.getValue(), INVALID_MUTATION);",
+  "to": "",
+  "expectedVector": "entity.boundary097.create-mutability-rule-null-001",
+  "expectedPassVectors": [
+    "entity.boundary097.create-mutability-control-001"
+  ]
+},
+{
+  "id": "java-malformed097-data-code",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "if (!(data instanceof Map<?, ?> dataMap)) throw new FinKoreException(VALIDATION_FAILED);",
+  "to": "if (!(data instanceof Map<?, ?> dataMap)) throw new FinKoreException(INVALID_IDENTITY);",
+  "expectedVector": "entity.boundary097.discovery-f8c-067",
+  "expectedPassVectors": [
+    "entity.boundary097.create-mutability-control-001"
+  ]
+},
+{
+  "id": "java-malformed097-empty-changes",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "if (!(changes instanceof Map<?, ?> rawChanges) || rawChanges.isEmpty()) {\n      throw",
+  "to": "if (!(changes instanceof Map<?, ?> rawChanges)) {\n      throw",
+  "expectedVector": "entity.boundary097.discovery-f8c-108",
+  "expectedPassVectors": [
+    "entity.mutate.mutable-field-001"
+  ]
+},
+{
+  "id": "java-malformed097-state-code",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "if (!opaque(value.get(\"state\"))) throw new FinKoreException(Workflow.INVALID_INSTANCE);",
+  "to": "if (!opaque(value.get(\"state\"))) throw new FinKoreException(Workflow.INVALID_STATE);",
+  "expectedVector": "entity.boundary097.discovery-f8c-100",
+  "expectedPassVectors": [
+    "entity.mutate.mutable-field-001"
+  ]
+},
+{
+  "id": "java-malformed097-null-history",
+  "suite": "entities",
+  "path": "core/src/main/java/org/finkore/Entities.java",
+  "from": "if (List.of().equals(history)) {",
+  "to": "if (history == null || List.of().equals(history)) {",
+  "expectedVector": "entity.boundary097.discovery-f8c-166",
+  "expectedPassVectors": [
+    "entity.boundary097.evolution-correct-audit-control-001"
+  ]
+},
 {
   "id": "java-approval097-skip-proposed-history",
   "suite": "approvals",
@@ -2040,8 +2205,8 @@ const javaMutants = [
     expectedPassVectors: ['entity.evolution.correct.evidence-valid-control-001'],
     suite: 'entities',
     path: 'core/src/main/java/org/finkore/Entities.java',
-    from: '    Audit.Log auditLog = Audit.Log.create(input.get("auditHistory"));\n    Map<String, Object> auditHistory = auditLog.append(input.get("auditEvent")).toPortable();\n    Map<String, Object> relation = relation(kind, relationId, source, sourceRevision, related, relatedRevision, scope, auditEventId(input.get("auditEvent")));\n    if ("CORRECTION".equals(kind) || "REVERSAL".equals(kind)) relation.put("sourceCurrent", current);\n    validateEvolutionEvidence(input.get("auditEvent"), relation);',
-    to: '    Map<String, Object> relation = relation(kind, relationId, source, sourceRevision, related, relatedRevision, scope, auditEventId(input.get("auditEvent")));\n    if ("CORRECTION".equals(kind) || "REVERSAL".equals(kind)) relation.put("sourceCurrent", current);\n    validateEvolutionEvidence(input.get("auditEvent"), relation);\n    Audit.Log auditLog = Audit.Log.create(input.get("auditHistory"));\n    Map<String, Object> auditHistory = auditLog.append(input.get("auditEvent")).toPortable();',
+    from: '    Audit.Log auditLog = Audit.Log.create(input.getOrDefault("auditHistory", List.of()));\n    Map<String, Object> auditHistory = auditLog.append(input.get("auditEvent")).toPortable();\n    Map<String, Object> relation = relation(kind, relationId, source, sourceRevision, related, relatedRevision, scope, auditEventId(input.get("auditEvent")));\n    if ("CORRECTION".equals(kind) || "REVERSAL".equals(kind)) relation.put("sourceCurrent", current);\n    validateEvolutionEvidence(input.get("auditEvent"), relation);',
+    to: '    Map<String, Object> relation = relation(kind, relationId, source, sourceRevision, related, relatedRevision, scope, auditEventId(input.get("auditEvent")));\n    if ("CORRECTION".equals(kind) || "REVERSAL".equals(kind)) relation.put("sourceCurrent", current);\n    validateEvolutionEvidence(input.get("auditEvent"), relation);\n    Audit.Log auditLog = Audit.Log.create(input.getOrDefault("auditHistory", List.of()));\n    Map<String, Object> auditHistory = auditLog.append(input.get("auditEvent")).toPortable();',
   },
   {
     id: 'java-entity-correspondence-bypass',

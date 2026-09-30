@@ -7,6 +7,8 @@ import json
 import unittest
 
 from finkore import FinKoreError
+from finkore.audit import append_event
+from finkore.workflow import WorkflowDefinition, WorkflowInstance, transition_workflow, create_workflow, import_workflow
 from finkore.approvals import (evaluate_composition, evaluate_condition, evaluate_decision,
     evaluate_requirement, record_decision, withdraw_decision, supersede_decision,
     supersede_requirement, normalize_decision_set)
@@ -20,7 +22,7 @@ FIRST = {'requirementId': 'review', 'actor': {'id': 'alice'}, 'subjectFacts': {'
 def vectors():
     manifest = json.loads((ROOT / 'conformance/manifest.json').read_text())
     return [v for s in manifest['suites'] for f in s['vectorFiles']
-            if f.endswith('/evidence-regressions.json')
+            if f.endswith(('/evidence-regressions.json', '/malformed-boundary-regressions.json', '/entities/discovery-regressions.json', '/workflow/discovery-regressions.json'))
             for v in json.loads((ROOT / 'conformance' / f).read_text())['vectors']
             if '.boundary097.' in v['id']] + [v for v in json.loads((ROOT / 'conformance/boundary097-cases.json').read_text())['cases'] if v['testBoundary'] == 'core-and-adapter']
 
@@ -39,12 +41,20 @@ def invoke(v):
         return evaluate_requirement(i['requirement'], i['decisions'], **kwargs)
     if op == 'approval.decision.record':
         return record_decision(i['requirement'], i['decision'], i['history'])
+    if op == 'finkore.audit.append':
+        return append_event(i['history'], i['event'])
+    if op == 'workflow.create':
+        return create_workflow(WorkflowDefinition.from_portable(i.get('definition'))).to_portable()
+    if op == 'workflow.import':
+        return import_workflow(WorkflowDefinition.from_portable(i.get('definition')), WorkflowInstance.from_portable(i.get('instance'))).to_portable()
+    if op == 'finkore.workflow.transition':
+        return transition_workflow(WorkflowDefinition.from_portable(i['definition']), WorkflowInstance.from_portable(i.get('instance')), i.get('target'), i.get('facts')).to_portable()
     if op == 'finkore.entity.create':
         return create_entity(i['definition'], i['id'], i.get('data'))
     if op == 'finkore.entity.mutate':
         return mutate_entity(i['definition'], i['entity'], i['changes'])
     if op == 'finkore.entity.transition':
-        return transition_entity(i['definition'], i['entity'], i['target'])
+        return transition_entity(i['definition'], i['entity'], i.get('target'))
     if op == 'entity.import':
         return import_entity(i['definition'], i['import'])
     if op.startswith('finkore.entity.evolution.'):

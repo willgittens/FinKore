@@ -41,7 +41,7 @@ public final class EvidenceRegressionTest {
     Path root = Files.exists(Path.of("conformance")) ? Path.of(".") : Path.of("../../..");
     Map<String, Object> manifest = map(Json.parse(Files.readString(root.resolve("conformance/manifest.json"))));
     for (Object suite : list(manifest.get("suites"))) for (Object file : list(map(suite).get("vectorFiles"))) {
-      if (!((String) file).endsWith("/evidence-regressions.json")) continue;
+      if (!((String) file).endsWith("/evidence-regressions.json") && !((String) file).endsWith("/malformed-boundary-regressions.json") && !((String) file).endsWith("/entities/discovery-regressions.json") && !((String) file).endsWith("/workflow/discovery-regressions.json")) continue;
       for (Object raw : list(map(Json.parse(Files.readString(root.resolve("conformance").resolve((String) file)))).get("vectors"))) {
         Map<String, Object> vector = map(raw);
         String id = (String) vector.get("id");
@@ -89,6 +89,10 @@ public final class EvidenceRegressionTest {
       case "approval.decision.record" -> Approvals.recordDecision(i.get("requirement"), i.get("decision"), i.get("history"));
       case "approval.decision.evaluate" -> Approvals.evaluateDecision(i.get("requirement"), i.get("decision"), i.getOrDefault("currentSubjectFacts", Approvals.OMITTED), i.getOrDefault("relevantFactPaths", Approvals.OMITTED), i.get("evaluatedAt"));
       case "approval.requirement.evaluate" -> Approvals.evaluateRequirement(i.get("requirement"), i.get("decisions"), i.getOrDefault("currentSubjectFacts", Approvals.OMITTED), i.getOrDefault("relevantFactPaths", Approvals.OMITTED), i.get("evaluatedAt"));
+      case "finkore.audit.append" -> Audit.Log.create(i.get("history")).append(i.get("event")).toPortable();
+      case "workflow.create" -> Workflow.create(Workflow.Definition.fromPortable(i.get("definition"))).toPortable();
+      case "workflow.import" -> Workflow.importInstance(Workflow.Definition.fromPortable(i.get("definition")), Workflow.Instance.fromPortable(i.get("instance"))).toPortable();
+      case "finkore.workflow.transition" -> Workflow.transition(Workflow.Definition.fromPortable(i.get("definition")), Workflow.Instance.fromPortable(i.get("instance")), i.get("target"), i.get("facts")).toPortable();
       case "finkore.entity.create" -> Entities.create(i.get("definition"), i.get("id"), i.get("data"));
       case "finkore.entity.mutate" -> Entities.mutate(i.get("definition"), i.get("entity"), i.get("changes"));
       case "finkore.entity.transition" -> Entities.transition(i.get("definition"), i.get("entity"), i.get("target"));

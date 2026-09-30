@@ -26,27 +26,34 @@ The Core label remains `0.9-rc` and conformance syntax remains `0.1`.
 [Core 0.9.7 Milestones 3–5](../docs/plans/plan-09.7.md) close composition and
 concrete Approval histories, conditions, fact semantics, and the accepted native
 Approval/Workflow value profile on all four runtimes:
-all 579 Approval suite vectors pass. The manifest contains 1671 vectors and 182
+all 579 Approval suite vectors pass. The manifest contains 1719 vectors and 189
 supplementary cases remain. M4 promotes six history-collision cases with their
 existing IDs and full observation envelopes and adds 31 fact/history controls.
 M5 also closes all 34 explicit Workflow collection vectors, with native tests
-for input/output ownership and unsupported numeric subclasses. Entity corrections
-remain pending; this is not a full-domain conformance claim.
+for input/output ownership and unsupported numeric subclasses. Entity boundary corrections are recorded in M6–M7 below.
 
 [Core 0.9.7 Milestone 6](../docs/plans/plan-09.7.md) closes Entity declaration
 observation/reuse, including own special names and inherited-member rejection.
 Four special-field controls extend the six special-state vectors; native tests
-cover aliases and actual definition/observation reuse. Full Entity conformance
-remains blocked by M7; D8 and D9 remain unresolved.
+cover aliases and actual definition/observation reuse. M7 closes the published malformed-input regressions. D8 and D9 remain unresolved.
 
 [Core 0.9.7 Milestone 2](../docs/plans/plan-09.7.md) published 699 new
 full-envelope vectors and 197 supplementary native/adapter cases, alongside the
-unchanged 884 vectors, establishing a 1,583-vector baseline. Failures outside
-the completed Approval scope remain pending M7; [traceability](traceability.md) stays open,
-and D8 and the newly discovered Entity native-value policy D9 remain unresolved
-contract gaps. Supplementary tests assert exact
+unchanged 884 vectors, establishing a 1,583-vector baseline. M7 now passes all 1719 manifest vectors on all four runtimes, with no failed,
+unsupported, or infrastructure outcomes. D8 and the Entity native-value policy
+D9 remain unresolved contract gaps; [traceability](traceability.md) distinguishes
+these limits from tested requirements. Supplementary tests assert exact
 domain results and input preservation where optional diagnostics have no single
 portable envelope. They do not weaken the runner's exact comparison.
+
+M7 adds 47 vectors and promotes one existing supplementary case without changing
+its ID. Cases cover invalid original Entity data despite valid proposed changes,
+nonstring Audit relationship types, and null Workflow facts on rejected transitions.
+Eight supplementary cases distinguish omitted and null Audit histories combined
+with invalid Actors across all four evolution kinds. One older vector's unknown
+target expectation is corrected to `WORKFLOW_INVALID_STATE` under WORKFLOW-ERROR-007;
+its ID and unchanged-input assertion are retained. See the plan for compatibility
+and mutation evidence. Complete release verification remains M8 work.
 
 The completed [Core 0.9.5 plan](../docs/plans/plan-09.5.md) corrects native Money
 serialization, Workflow binding and precondition presence, concrete Approval

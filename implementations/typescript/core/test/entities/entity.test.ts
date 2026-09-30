@@ -57,7 +57,7 @@ const validatedInvoiceData = {
 describe('Financial Entity cross-field validation', () => {
   const definition = {
     ...invoiceDefinition,
-    mutability: { DRAFT: ['amount', 'limit', 'memo'] },
+    mutability: { ...invoiceDefinition.mutability, DRAFT: ['amount', 'limit', 'memo'] },
     validation: [{ id: 'WITHIN_LIMIT', path: 'amount', otherPath: 'limit', rule: 'money-not-greater-than' }],
   }
   const money = (amount: string, currency = 'EUR') => ({ amount, currency })
@@ -188,7 +188,7 @@ describe('Financial Entity identity and lifecycle', () => {
     const before = entity.toJSON()
 
     expect(() => entity.transition('FINAL')).toThrow(InvalidWorkflowTransitionError)
-    expect(() => entity.transition('UNKNOWN')).toThrow(InvalidWorkflowTransitionError)
+    expect(() => entity.transition('UNKNOWN')).toThrow(InvalidWorkflowStateError)
     expect(() => entity.transition(7)).toThrow(InvalidWorkflowStateError)
 
     expect(entity.toJSON()).toEqual(before)
@@ -361,10 +361,9 @@ describe('Financial Entity mutability', () => {
     expect(entity.toJSON()).toEqual(before)
   })
 
-  it('rejects mutation when entity data is not a field record', () => {
-    const entity = FinancialEntity.create(invoiceDefinition, 'inv-42', 'not-field-data')
-
-    expect(() => entity.mutate({ memo: 'revised' })).toThrow(InvalidEntityMutationError)
+  it('rejects non-object data before an Entity can be observed or mutated', () => {
+    expect(() => FinancialEntity.create(invoiceDefinition, 'inv-42', 'not-field-data')).toThrow(EntityValidationFailedError)
+    expect(() => FinancialEntity.from(invoiceDefinition, { type: 'invoice', id: 'inv-42', state: 'DRAFT', data: 'not-field-data' })).toThrow(EntityValidationFailedError)
   })
 
   it('allows declared terminal-state metadata without making every terminal field mutable', () => {
@@ -437,7 +436,7 @@ describe('Financial Entity mutability', () => {
     ).toThrow(InvalidEntityMutationError)
     expect(() =>
       FinancialEntity.create({ ...invoiceDefinition, mutability: { DRAFT: ['memo'] } }, 'inv-42', invoiceData),
-    ).not.toThrow()
+    ).toThrow(InvalidEntityMutationError)
     expect(() =>
       FinancialEntity.from(
         { ...invoiceDefinition, mutability: { DRAFT: ['memo'] } },
@@ -612,7 +611,7 @@ describe('Financial Entity import', () => {
   it('applies declared positive-money and cross-field validators without mutating source input', () => {
     const definition = {
       ...invoiceDefinition,
-      mutability: { DRAFT: ['amount', 'limit'] },
+      mutability: { ...invoiceDefinition.mutability, DRAFT: ['amount', 'limit'] },
       validation: [
         { id: 'AMOUNT_POSITIVE', path: 'amount', rule: 'positive-money' },
         { id: 'WITHIN_LIMIT', path: 'amount', otherPath: 'limit', rule: 'money-not-greater-than' },

@@ -22,6 +22,13 @@ import java.util.Set;
  * WORKFLOW_VERSION_MISMATCH. Stateless calls never infer historical binding.
  * All bounded validator declarations are checked before predicates: malformed
  * declarations use INVALID_MUTATION; rejected financial data uses VALIDATION_FAILED.
+ * Every declared State requires an explicit field list (an empty list is valid).
+ * Data must be an object satisfying its rules before and after each operation.
+ * Malformed current States use WORKFLOW_INVALID_INSTANCE; nonempty undeclared
+ * States use WORKFLOW_INVALID_STATE.
+ * @see "ENTITY-MUTABILITY-008/009"
+ * @see "ENTITY-VALIDATION-010"
+ * @see "ENTITY-LIFECYCLE-007"
  * @see "WORKFLOW-VERSION-007/008/010"
  * @see "ENTITY-VALIDATION-009"
  * @see <a href="../../../../../../spec/entities/identity.md">ENTITY-IDENTITY-001</a>
@@ -37,7 +44,7 @@ public final class Entities {
   public static final String INVALID_MUTATION = "FINKORE_ENTITY_INVALID_MUTATION";
   /** Portable error for expected Entity state, revision, or conflict-version mismatch. */
   public static final String STATE_CONFLICT = "FINKORE_ENTITY_STATE_CONFLICT";
-  /** Portable error for failed declared Entity validation rules. */
+  /** Portable error for non-object Entity data or failed declared validation rules. */
   public static final String VALIDATION_FAILED = "FINKORE_ENTITY_VALIDATION_FAILED";
 
   private Entities() {}
@@ -48,14 +55,15 @@ public final class Entities {
    *
    * @param definition portable Entity definition
    * @param entityId caller-supplied stable Entity identity
-   * @param data initial Entity data
+   * @param data initial Entity object; non-object data uses VALIDATION_FAILED
    * @return portable Entity observation
    */
   public static Map<String, Object> create(Object definition, Object entityId, Object data) {
     Map<String, Object> entityDefinition = validateDefinition(definition);
-    if (!opaque(entityId) || !(data instanceof Map<?, ?> dataMap)) {
+    if (!opaque(entityId)) {
       throw new FinKoreException(INVALID_IDENTITY);
     }
+    if (!(data instanceof Map<?, ?> dataMap)) throw new FinKoreException(VALIDATION_FAILED);
     Workflow.Definition workflow = Workflow.Definition.fromPortable(entityDefinition.get("workflow"));
     Map<String, Object> entity = new LinkedHashMap<>();
     entity.put("type", entityDefinition.get("type"));
@@ -70,7 +78,8 @@ public final class Entities {
 
   /**
    * Applies declared mutable data changes without mutating the supplied Entity
-   * or changing its original Workflow binding.
+   * or changing its original Workflow binding. Empty changes use INVALID_MUTATION;
+   * invalid original data cannot be repaired by overwriting it.
    *
    * @param definition portable Entity definition
    * @param entity current Entity observation
@@ -80,7 +89,7 @@ public final class Entities {
   public static Map<String, Object> mutate(Object definition, Object entity, Object changes) {
     Map<String, Object> entityDefinition = validateDefinition(definition);
     Map<String, Object> current = validateEntity(entityDefinition, entity);
-    if (!(changes instanceof Map<?, ?> rawChanges)) {
+    if (!(changes instanceof Map<?, ?> rawChanges) || rawChanges.isEmpty()) {
       throw new FinKoreException(INVALID_MUTATION);
     }
     Map<String, Object> changeMap = stringObjectMap(rawChanges, INVALID_MUTATION);
@@ -116,9 +125,6 @@ public final class Entities {
     Map<String, Object> entityDefinition = validateDefinition(definition);
     Map<String, Object> current = validateEntity(entityDefinition, entity);
     Workflow.Definition workflow = Workflow.Definition.fromPortable(entityDefinition.get("workflow"));
-    if (!(target instanceof String targetState) || !workflow.states().contains(targetState)) {
-      throw new FinKoreException(Workflow.INVALID_TRANSITION);
-    }
     Workflow.Instance transitioned = Workflow.transition(
         workflow,
         workflowInstance(current),
@@ -245,7 +251,7 @@ public final class Entities {
     if (kind == null || !Set.of("CORRECTION", "REVERSAL", "VOID", "SUPERSESSION").contains(kind)) {
       throw new FinKoreException(INVALID_MUTATION);
     }
-    List<Map<String, Object>> currentRelations = relations(input.get("evolutionHistory"));
+    List<Map<String, Object>> currentRelations = relations(input.getOrDefault("evolutionHistory", List.of()));
     Map<EvolutionKey, Boolean> observed = currentness(currentRelations);
     Map<String, Object> entityDefinition = validateDefinition(definition);
     Map<String, Object> source = validateEntity(entityDefinition, input.get("source"));
@@ -281,7 +287,7 @@ public final class Entities {
     if ("REVERSAL".equals(kind) && currentRelations.stream().anyMatch(item -> "REVERSAL".equals(item.get("kind")) && sourceReference.equals(item.get("source")))) {
       throw new FinKoreException(INVALID_MUTATION);
     }
-    Audit.Log auditLog = Audit.Log.create(input.get("auditHistory"));
+    Audit.Log auditLog = Audit.Log.create(input.getOrDefault("auditHistory", List.of()));
     Map<String, Object> auditHistory = auditLog.append(input.get("auditEvent")).toPortable();
     Map<String, Object> relation = relation(kind, relationId, source, sourceRevision, related, relatedRevision, scope, auditEventId(input.get("auditEvent")));
     if ("CORRECTION".equals(kind) || "REVERSAL".equals(kind)) relation.put("sourceCurrent", current);
@@ -305,7 +311,7 @@ public final class Entities {
    * Required Void and Supersession effects may change earlier observations;
    * unexplained changes or contradictory observations fail without mutating input.
    *
-   * @param history existing relations envelope, or null for empty history
+   * @param history existing relations envelope, or an empty list for empty history; null is invalid
    * @return a defensive history envelope
    * @throws FinKoreException with INVALID_MUTATION for contradictory history,
    *     or INVALID_IDENTITY for malformed reference identities
@@ -413,7 +419,7 @@ public final class Entities {
   public static List<Map<String, Object>> validationFindingsForMutation(Object definition, Object entity, Object changes) {
     Map<String, Object> entityDefinition = validateDefinition(definition);
     Map<String, Object> current = validateEntity(entityDefinition, entity);
-    if (!(changes instanceof Map<?, ?> rawChanges)) {
+    if (!(changes instanceof Map<?, ?> rawChanges) || rawChanges.isEmpty()) {
       return List.of();
     }
     @SuppressWarnings("unchecked")
@@ -453,10 +459,14 @@ public final class Entities {
     Map<String, Object> entityDefinition = stringObjectMap(raw, INVALID_IDENTITY);
     requiredString(entityDefinition.get("type"), INVALID_IDENTITY);
     requiredString(entityDefinition.get("identityScope"), INVALID_IDENTITY);
-    Workflow.Definition.fromPortable(entityDefinition.get("workflow"));
-    Object mutability = entityDefinition.getOrDefault("mutability", Map.of());
-    if (!(mutability instanceof Map<?, ?>)) {
+    Workflow.Definition workflow = Workflow.Definition.fromPortable(entityDefinition.get("workflow"));
+    Object mutability = entityDefinition.get("mutability");
+    if (!(mutability instanceof Map<?, ?> fieldsByState) || !fieldsByState.keySet().containsAll(workflow.states())) {
       throw new FinKoreException(INVALID_MUTATION);
+    }
+    for (Map.Entry<?, ?> entry : fieldsByState.entrySet()) {
+      requiredString(entry.getKey(), INVALID_MUTATION);
+      stringList(entry.getValue(), INVALID_MUTATION);
     }
     Object validation = entityDefinition.getOrDefault("validation", List.of());
     if (!(validation instanceof List<?> rules)) {
@@ -482,9 +492,7 @@ public final class Entities {
       throw new FinKoreException(INVALID_IDENTITY);
     }
     Workflow.Definition workflow = Workflow.Definition.fromPortable(definition.get("workflow"));
-    if (!(value.get("state") instanceof String)) {
-      throw new FinKoreException(Workflow.INVALID_STATE);
-    }
+    if (!opaque(value.get("state"))) throw new FinKoreException(Workflow.INVALID_INSTANCE);
     Workflow.importInstance(workflow, workflowInstance(value));
     if (!(value.get("data") instanceof Map<?, ?>)) {
       throw new FinKoreException(VALIDATION_FAILED);
@@ -671,7 +679,7 @@ public final class Entities {
   }
 
   private static List<Map<String, Object>> relations(Object history) {
-    if (history == null || List.of().equals(history)) {
+    if (List.of().equals(history)) {
       return List.of();
     }
     if (history instanceof Map<?, ?> raw && raw.get("relations") instanceof List<?> list) {

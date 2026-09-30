@@ -85,7 +85,8 @@ public final class EntityEvolutionTest {
   }
 
   private static void historyImport(List<Map<String, Object>> vectors) {
-    equal(Map.of("relations", List.of()), Entities.importEvolutionHistory(null));
+    equal(Map.of("relations", List.of()), Entities.importEvolutionHistory(List.of()));
+    error(Entities.INVALID_MUTATION, () -> Entities.importEvolutionHistory(null));
     for (String name : List.of("valid-void-sequence", "valid-supersession-sequence", "contradiction", "same-step-contradiction", "void-effect-invalid")) {
       Map<String, Object> history = new LinkedHashMap<>(Map.of("relations", input(vectors, "entity.evolution.history." + name + "-001").get("evolutionHistory")));
       Object before = copy(history);

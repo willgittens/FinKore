@@ -16,6 +16,12 @@ It does not promote an Approval fixture label to a canonical Agentic operation.
 Imported lifecycle validation also belongs to core; failed reconstruction does
 not produce a committed-history observation.
 
+Malformed Workflow instances reach the core together with their definition, so
+core error priority is preserved. Failure observation handles explicit null facts
+without throwing. Entity observations require successful core reconstruction;
+malformed source data cannot be reported as a valid Entity. Unexpected runtime
+exceptions remain infrastructure failures.
+
 The adapter supports:
 
 - `finkore.money.add`

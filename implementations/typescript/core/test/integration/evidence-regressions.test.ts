@@ -2,7 +2,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { expect, it } from 'vitest'
-import { ApprovalComposition, ApprovalCondition, ApprovalDecision, ApprovalDecisionHistory, EntityEvolutionHistory, FinancialEntity } from '../../src/index.js'
+import { AuditLog, Workflow, ApprovalComposition, ApprovalCondition, ApprovalDecision, ApprovalDecisionHistory, EntityEvolutionHistory, FinancialEntity } from '../../src/index.js'
 
 interface Vector {
   testBoundary?: string
@@ -18,7 +18,7 @@ while (!existsSync(resolve(root, 'conformance/manifest.json'))) {
   root = parent
 }
 const manifest = JSON.parse(readFileSync(resolve(root, 'conformance/manifest.json'), 'utf8')) as { suites: { vectorFiles: string[] }[] }
-const vectors = manifest.suites.flatMap(s => s.vectorFiles).filter(file => file.endsWith('/evidence-regressions.json')).flatMap(file =>
+const vectors = manifest.suites.flatMap(s => s.vectorFiles).filter(file => file.endsWith('/evidence-regressions.json') || file.endsWith('/malformed-boundary-regressions.json') || file.endsWith('/entities/discovery-regressions.json') || file.endsWith('/workflow/discovery-regressions.json')).flatMap(file =>
   (JSON.parse(readFileSync(resolve(root, 'conformance', file), 'utf8')) as { vectors: Vector[] }).vectors,
 ).concat((JSON.parse(readFileSync(resolve(root, 'conformance/boundary097-cases.json'), 'utf8')) as { cases: Vector[] }).cases.filter(v => v.testBoundary === 'core-and-adapter')).filter(v => v.id.includes('.boundary097.'))
 if (!vectors.length) throw new Error('No Core 0.9.7 regressions discovered')
@@ -45,6 +45,10 @@ function invoke(v: Vector): unknown {
       try { return history.record(i.requirement, i.decision).toJSON() }
       catch (error) { expect(history.toJSON()).toEqual(before); throw error }
     }
+    case 'finkore.audit.append': return AuditLog.create(i.history as readonly unknown[]).append(i.event).toJSON()
+    case 'workflow.create': return Workflow.create(i.definition).toJSON()
+    case 'workflow.import': return Workflow.import(i.definition, i.instance).toJSON()
+    case 'finkore.workflow.transition': return Workflow.from(i.definition, i.instance).transition(i.target, { facts: i.facts as Readonly<Record<string, unknown>>, ...(Object.hasOwn(i, 'expectedCurrentState') ? { expectedCurrentState: i.expectedCurrentState } : {}), ...(Object.hasOwn(i, 'expectedRevision') ? { expectedRevision: i.expectedRevision } : {}) }).toJSON()
     case 'finkore.entity.create': return FinancialEntity.create(i.definition, i.id, i.data).toJSON()
     case 'entity.import': return FinancialEntity.import(i.definition, i.import)
     case 'finkore.entity.mutate': return FinancialEntity.from(i.definition, i.entity).mutate(i.changes).toJSON()

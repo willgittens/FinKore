@@ -248,12 +248,8 @@ def execute_approval_composition_evaluate(input_value: dict[str, Any]) -> dict[s
 
 
 def entity_observation(input_value: dict[str, Any]) -> dict[str, Any] | None:
-    # A rejected embedded definition cannot produce a reconstructed observation.
-    definition = input_value.get("definition")
-    WorkflowDefinition.from_portable(definition.get("workflow") if isinstance(definition, dict) else None)
-    if isinstance(input_value.get("entity"), dict):
-        return {"entity": input_value["entity"]}
-    return None
+    entity = import_entity(input_value.get("definition"), {"entity": input_value.get("entity")})["entity"]
+    return {"entity": entity}
 
 
 def evolution_observation(input_value: dict[str, Any], include_same_identity_related: bool = True) -> dict[str, Any]:
@@ -261,8 +257,8 @@ def evolution_observation(input_value: dict[str, Any], include_same_identity_rel
     audit_history = input_value.get("auditHistory", [])
     observations: dict[str, Any] = {
         "source": input_value.get("source"),
-        "evolutionHistory": {"relations": evolution_history if isinstance(evolution_history, list) else evolution_history.get("relations", [])},
-        "auditHistory": {"history": audit_history if isinstance(audit_history, list) else audit_history.get("history", [])},
+        "evolutionHistory": {"relations": evolution_history.get("relations", []) if isinstance(evolution_history, dict) else evolution_history},
+        "auditHistory": {"history": audit_history.get("history", []) if isinstance(audit_history, dict) else audit_history},
     }
     if (
         "related" in input_value
@@ -297,7 +293,7 @@ def execute_entity_import(input_value: dict[str, Any]) -> dict[str, Any]:
 def execute_entity_evolution(kind: str, input_value: dict[str, Any]) -> dict[str, Any]:
     observations = {"auditHistory": evolution_observation(input_value)["auditHistory"]}
     request = dict(input_value)
-    history = input_value.get("evolutionHistory")
+    history = input_value.get("evolutionHistory", [])
     request["evolutionHistory"] = {"relations": history} if isinstance(history, list) else history
     try:
         observations["evolutionHistory"] = import_evolution_history(request["evolutionHistory"])

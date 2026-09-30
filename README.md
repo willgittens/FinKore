@@ -344,14 +344,13 @@ baseline intended to become Core 1.0.
 
 Subsequent review identified additional gaps despite a fresh passing full
 verification run. The [Core 0.9.7 corrective plan](./docs/plans/plan-09.7.md)
-has accepted D1–D7 contracts and completed Milestones 3–6: composition, concrete
+has accepted D1–D7 contracts and completed Milestones 3–7: composition, concrete
 Approval histories, conditions, fact semantics, and the accepted native
-Approval/Workflow ownership profile, plus Entity declaration observation/reuse.
-All 579 Approval suite vectors and ten special-name Entity vectors pass on all
-four runtimes. Milestone 7 and D8 remain open; D9 records an unresolved Entity
-native numeric policy gap. Full suites still contain the published red
-regressions. The remaining corrections and final review remain prerequisites
-for Core 1.0 promotion.
+Approval/Workflow ownership profile, Entity declaration observation/reuse, and
+malformed-input validation with preserved adapter errors. All 1719 manifest
+vectors pass on TypeScript, Python 3.12/3.13, and Java. D8 and D9 remain unresolved
+policy gaps. Full release verification and independent review in Milestone 8
+remain prerequisites for Core 1.0 promotion.
 
 At the 0.9.6 tag, all 884 manifest vectors pass on TypeScript, CPython 3.12/3.13, and Java,
 including all earlier corrective regressions. The completed

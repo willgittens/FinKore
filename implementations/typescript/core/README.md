@@ -11,8 +11,25 @@ fact-comparison corrections: all 579 Approval suite vectors pass on all four
 runtimes. Milestone 5 implements the accepted native Approval/Workflow value profile and
 required embedded Workflow collections. Milestone 6 closes Entity special-name
 declaration preservation/reuse; all ten portable special-name controls pass on
-every runtime. Milestone 7 remains pending and full suites remain red. D8 redaction policy
-identity is unresolved. The 0.9.6 results below describe the tagged snapshot.
+every runtime. Milestone 7 closes malformed Entity/Workflow boundaries and Audit
+failure observations; all 1719 manifest vectors pass on all four runtimes.
+Final release verification/review remains M8 work. D8 redaction policy identity
+and D9 Entity native-value policy remain unresolved. The 0.9.6 results below describe the tagged snapshot.
+
+Entity definitions require a nonempty `identityScope` and an explicit mutability
+field list for every declared State; `[]` permits no fields. Data must be an
+object satisfying declared validation rules, including before applying changes.
+An update cannot repair an invalid original Entity by overwriting it. Empty
+changes use `FINKORE_ENTITY_INVALID_MUTATION`. Malformed current States use
+`FINKORE_WORKFLOW_INVALID_INSTANCE`; nonempty undeclared States and unknown
+transition targets use `FINKORE_WORKFLOW_INVALID_STATE`.
+
+Evolution accepts omitted histories as empty and explicit empty histories;
+explicit null remains malformed. Audit history/Event validation precedes
+Entity correspondence checks. Failed operations preserve inputs, and adapters
+retain the primary portable error without fabricating a valid Entity observation.
+These corrections tighten previously permissive inputs; they do not select D9's
+unresolved policy for arbitrary native values in Entity application data.
 
 Entity definitions preserve own State and field names, including `__proto__`,
 `constructor`, and `prototype`, across observation, JSON serialization/import,

@@ -61,6 +61,11 @@ function entityReference(entity: FinancialEntityLike, revisionInput: unknown): E
   return { type: observed.type, id: observed.id, revision }
 }
 
+function requestString(value: unknown): string {
+  if (typeof value !== 'string' || value.length === 0) throw new InvalidEntityMutationError()
+  return value
+}
+
 function relationId(value: unknown, source: EntityRevisionReference, related?: EntityRevisionReference): EntityEvolutionRelationIdentifier {
   const id = requiredString(value)
   if (id === source.id || id === source.revision || id === related?.id || id === related?.revision) {
@@ -86,7 +91,7 @@ function validateRelation(input: unknown): SerializedEntityEvolutionRelation {
   const source = validateReference(input.source)
   const related = input.related === undefined ? undefined : validateReference(input.related)
   if ((kind === 'VOID') !== (related === undefined)) throw new InvalidEntityMutationError()
-  const supersessionScope = input.supersessionScope === undefined ? undefined : requiredString(input.supersessionScope)
+  const supersessionScope = input.supersessionScope === undefined ? undefined : requestString(input.supersessionScope)
   if ((kind === 'SUPERSESSION') !== (supersessionScope !== undefined)) throw new InvalidEntityMutationError()
   const sourceCurrent = optionalBoolean(input.sourceCurrent)
   const relatedCurrent = optionalBoolean(input.relatedCurrent)
@@ -284,7 +289,9 @@ export class EntityEvolutionHistory {
    * @throws {EntityStateConflictError}
    * When expected state, revision, or currentness does not match.
    * @throws {InvalidEntityIdentityError}
-   * When source, related, revision, or relation identity is invalid.
+   * When source, related, or revision identity is invalid. Malformed request
+   * relation IDs use InvalidEntityMutationError; imported relation identities
+   * retain InvalidEntityIdentityError.
    *
    * @see FINKORE_ENTITY_INVALID_MUTATION
    * @see FINKORE_ENTITY_STATE_CONFLICT
@@ -345,7 +352,7 @@ export class EntityEvolutionHistory {
   void(request: EntityVoidRequest): EntityEvolutionResult {
     const source = entityReference(request.source, request.sourceRevision)
     this.assertRequestPreconditions(request, source)
-    const identifier = relationId(request.relationId, source)
+    const identifier = relationId(requestString(request.relationId), source)
     this.assertNewRelation(identifier)
     const evidence = validateAuditEvidence(request.audit, 'VOID', identifier, source, undefined, undefined)
     const relation: SerializedEntityEvolutionRelation = {
@@ -381,9 +388,9 @@ export class EntityEvolutionHistory {
   supersede(request: EntitySupersessionRequest): EntityEvolutionResult {
     const source = entityReference(request.source, request.sourceRevision)
     const related = entityReference(request.successor, request.successorRevision)
-    const supersessionScope = requiredString(request.supersessionScope)
+    const supersessionScope = requestString(request.supersessionScope)
     this.assertRequestPreconditions(request, source, supersessionScope)
-    const identifier = relationId(request.relationId, source, related)
+    const identifier = relationId(requestString(request.relationId), source, related)
     this.assertNewRelation(identifier)
     const evidence = validateAuditEvidence(request.audit, 'SUPERSESSION', identifier, source, related, supersessionScope)
     const relation: SerializedEntityEvolutionRelation = {
@@ -403,7 +410,7 @@ export class EntityEvolutionHistory {
     const source = entityReference(request.source, request.sourceRevision)
     const related = entityReference(request.related, request.relatedRevision)
     this.assertRequestPreconditions(request, source)
-    const identifier = relationId(request.relationId, source, related)
+    const identifier = relationId(requestString(request.relationId), source, related)
     this.assertNewRelation(identifier)
     if (kind === 'REVERSAL' && this.reversedSources.has(currentKey(source))) throw new InvalidEntityMutationError()
     const evidence = validateAuditEvidence(request.audit, kind, identifier, source, related, undefined)

@@ -799,9 +799,10 @@
       "requirements": [
         "ENTITY-LIFECYCLE-003",
         "ENTITY-ERROR-004",
-        "ENTITY-ERROR-001"
+        "ENTITY-ERROR-001",
+        "WORKFLOW-ERROR-007"
       ],
-      "description": "Retains the Workflow error and entire entity when a transition is undeclared.",
+      "description": "Retains the Workflow invalid-State error and entire Entity for an undeclared target State, following WORKFLOW-ERROR-007.",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -858,7 +859,7 @@
       "expected": {
         "status": "error",
         "error": {
-          "code": "FINKORE_WORKFLOW_INVALID_TRANSITION"
+          "code": "FINKORE_WORKFLOW_INVALID_STATE"
         },
         "observations": {
           "entity": {

@@ -96,7 +96,7 @@ function inputWorkflowTransition(input: unknown): {
   readonly expectedCurrentState?: unknown
   readonly expectedRevision?: unknown
 } {
-  if (typeof input !== 'object' || input === null || !('definition' in input) || !('instance' in input)) {
+  if (typeof input !== 'object' || input === null || !('definition' in input)) {
     return { definition: undefined, instance: undefined, target: undefined }
   }
   const candidate = input as {
@@ -128,7 +128,7 @@ function inputWorkflowTransition(input: unknown): {
 }
 
 function inputWorkflowImport(input: unknown): { readonly definition: unknown; readonly instance: unknown } {
-  if (typeof input !== 'object' || input === null || !('definition' in input) || !('instance' in input)) {
+  if (typeof input !== 'object' || input === null || !('definition' in input)) {
     return { definition: undefined, instance: undefined }
   }
   return input as { readonly definition: unknown; readonly instance: unknown }
@@ -444,7 +444,7 @@ function workflowTransitionObservations(
   const observation = workflow === undefined ? workflowInstanceObservation(input.instance) : workflowObservation(workflow)
   if (observation === undefined) return undefined
   const facts = input.facts
-  if (facts === undefined || Object.keys(facts).length === 0) return observation
+  if (facts === undefined || facts === null || Object.keys(facts).length === 0) return observation
   return { ...observation, facts }
 }
 

@@ -122,12 +122,14 @@ export class EntityStateConflictError extends FinKoreEntityError {
  * TypeScript representation of the portable
  * `FINKORE_ENTITY_VALIDATION_FAILED` domain error.
  *
+ * Used for non-object Entity data and failed declared validation rules.
  * The optional details may include safe validation findings. Human-readable
  * messages and sensitive field values are not portable Entity semantics.
  *
  * @see FINKORE_ENTITY_VALIDATION_FAILED
  * @see ENTITY-VALIDATION-004
  * @see ENTITY-VALIDATION-008
+ * @see ENTITY-VALIDATION-010
  * @see ENTITY-ERROR-001
  */
 export class EntityValidationFailedError extends FinKoreEntityError {

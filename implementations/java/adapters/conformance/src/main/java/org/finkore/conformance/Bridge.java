@@ -308,9 +308,8 @@ public final class Bridge {
         return observations;
       }
       if ("finkore.entity.transition".equals(operation)) {
-        Object definition = input.get("definition");
-        Workflow.Definition.fromPortable(definition instanceof Map<?, ?> map ? map.get("workflow") : null);
-        return entityObservation(input.get("entity"));
+        Map<String, Object> candidate = new LinkedHashMap<>(); candidate.put("entity", input.get("entity"));
+        return entityObservation(Entities.importEntity(input.get("definition"), candidate).get("entity"));
       }
       if ("entity.import".equals(operation)) {
         Object imported = input.get("import");
@@ -407,7 +406,7 @@ public final class Bridge {
     Map<String, Object> observations = new LinkedHashMap<>();
     observations.put("auditHistory", evolutionObservation(input, true).get("auditHistory"));
     Map<String, Object> request = new LinkedHashMap<>(input);
-    Object history = input.get("evolutionHistory");
+    Object history = input.getOrDefault("evolutionHistory", List.of());
     request.put("evolutionHistory", history instanceof List<?> ? Map.of("relations", history) : history);
     try {
       observations.put("evolutionHistory", Entities.importEvolutionHistory(request.get("evolutionHistory")));

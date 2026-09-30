@@ -13,7 +13,7 @@ public final class EntitiesTest {
   public static void main(String[] args) {
     createPreservesOpaqueIdentityAndInitialState();
     mutateRejectsImmutableIdentityWithoutChangingEntity();
-    transitionRejectsUnknownTargetAsInvalidTransition();
+    transitionPreservesUnknownTargetStateError();
     validationFailureReportsFindings();
     crossFieldValidationUsesExactMoneyOrdering();
     importRejectsDuplicateRevisionObservations();
@@ -37,8 +37,8 @@ public final class EntitiesTest {
     assertEquals("initial", ((Map<?, ?>) entity.get("data")).get("memo"));
   }
 
-  private static void transitionRejectsUnknownTargetAsInvalidTransition() {
-    assertError(Workflow.INVALID_TRANSITION, () -> Entities.transition(definition(), entity(), "UNKNOWN"));
+  private static void transitionPreservesUnknownTargetStateError() {
+    assertError(Workflow.INVALID_STATE, () -> Entities.transition(definition(), entity(), "UNKNOWN"));
   }
 
   private static void validationFailureReportsFindings() {
@@ -93,7 +93,7 @@ public final class EntitiesTest {
 
   private static void crossFieldValidationUsesExactMoneyOrdering() {
     Map<String, Object> definition = new LinkedHashMap<>(definitionWithValidation());
-    definition.put("mutability", Map.of("DRAFT", List.of("amount", "limit", "memo")));
+    definition.put("mutability", Map.of("DRAFT", List.of("amount", "limit", "memo"), "FINAL", List.of()));
     definition.put("validation", List.of(Map.of(
         "id", "WITHIN_LIMIT", "path", "amount", "otherPath", "limit", "rule", "money-not-greater-than")));
     for (List<String> pair : List.of(List.of("10", "20"), List.of("20.00", "20.0"), List.of("0", "0"), List.of("-2", "-1"))) {
@@ -143,7 +143,7 @@ public final class EntitiesTest {
             "initialState", "DRAFT",
             "terminalStates", List.of("FINAL"),
             "transitions", List.of(Map.of("source", "DRAFT", "target", "FINAL"))),
-        "mutability", Map.of("DRAFT", List.of("amount", "memo")),
+        "mutability", Map.of("DRAFT", List.of("amount", "memo"), "FINAL", List.of()),
         "validation", List.of(Map.of("id", "AMOUNT_POSITIVE", "path", "amount", "rule", "positive-money")));
   }
 

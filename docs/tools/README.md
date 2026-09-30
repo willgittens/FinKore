@@ -292,7 +292,7 @@ intentionally leaves financial tests red and cannot pass release verification.
 
 ## Composition milestone checks
 
-While M6–M7 regressions remain red, composition has explicit scoped checks.
+Composition retains explicit scoped checks after M7 closes the red regressions.
 The default complete-suite gates remain unchanged:
 
 ```sh
@@ -315,8 +315,7 @@ in the default complete package checks. Neither filter claims full conformance.
 ## Approval milestone checks
 
 M4 checks the full Approval vector suite, returned-history reuse, and exact fact
-comparison while M5–M7 remain pending. Default complete-suite gates still include
-all outstanding regressions:
+comparison. Default complete-suite gates include the later M5–M7 regressions:
 
 ```sh
 npm exec -w @finkore/typescript -- vitest run --config vitest.approvals.config.ts --coverage
@@ -342,8 +341,7 @@ both Python wheel/sdist versions, and the JAR; these assertions also run by defa
 ## Native ownership milestone checks
 
 M5 verifies the accepted Approval/Workflow native profile. Entity policy outside
-that profile remains explicitly unresolved (D9). Complete-suite checks still
-include all M6–M7 failures.
+that profile remains explicitly unresolved (D9). Complete-suite checks include the corrected M6–M7 regressions.
 
 ```sh
 npm exec -w @finkore/typescript -- vitest run --config vitest.ownership.config.ts --coverage
@@ -359,14 +357,14 @@ node docs/tools/check-packages.js --ownership
 The ownership probe filter requires a passing dedicated native baseline and
 independent passing controls. It never counts infrastructure failure as a kill.
 Installed ownership assertions run by default as well as under `--ownership`;
-the scoped option stops before the pending Entity assertions.
+the scoped option stops before the full Entity assertions.
 
 
 ## Entity declaration reuse checks
 
 M6's native suite includes Entity declaration/data keys and adjacent Workflow,
-Approval, and Audit own-member controls. Its focused configuration leaves the
-single M7 malformed-import regression in ordinary full-suite discovery.
+Approval, and Audit own-member controls. Its configuration runs all core tests, including the M7 malformed-import
+regression, with focused Entity file coverage.
 
 ```sh
 npm exec -w @finkore/typescript -- vitest run --config vitest.declarations.config.ts --coverage
@@ -382,3 +380,29 @@ passing baseline and independent control. The installed npm consumer exercises
 actual returned declarations/observations and special-field mutation/transition
 under both `--ownership` and the default package check. Python/Java ownership
 controls also run under that option. It does not skip M7 in full release checks.
+
+
+## Malformed-input milestone checks
+
+M7 runs the complete native and adapter suites and manifest across TypeScript,
+Python 3.12/3.13, and Java. Its TypeScript mutation configuration covers both
+complete Entity files, uses every core test, and retains the 95% threshold:
+
+```sh
+npm exec -w @finkore/typescript -- stryker run stryker.malformed.config.json
+node docs/tools/mutation-critical.js all entities --paired
+node docs/tools/mutation-critical.js python audit --paired
+node docs/tools/mutation-native.js
+```
+
+Paired probes check total mutability declarations, malformed field lists, exact
+data/State errors, empty changes, null evolution histories, original-data
+validation, and primary error preservation during adapter observations. The
+Audit relationship-type probe models acceptance of malformed values; a raw
+unhashable-value crash would be infrastructure failure, not a mutation kill.
+The earlier inherited-State and Python import probes now target their shared
+validation boundary; their named regressions and controls remain unchanged.
+Legacy Approval native probes use the current owned-copy helper and shared
+Decision-shape validator, retaining their original assertions. Run artifact-writing
+package/coverage tasks before critical probes that copy those directories.
+Scoped mutation verification does not replace M8's full release verification.

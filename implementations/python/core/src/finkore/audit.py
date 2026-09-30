@@ -328,7 +328,7 @@ def _validate_relationship_representation(event: dict[str, Any], entity: dict[st
         if relationship_id in seen:
             raise FinKoreError(INVALID_EVENT)
         seen.add(relationship_id)
-        if relationship.get("type") not in _RELATIONSHIP_TYPES:
+        if not isinstance(relationship.get("type"), str) or relationship["type"] not in _RELATIONSHIP_TYPES:
             raise FinKoreError(INVALID_EVENT)
         target = relationship.get("target")
         if not isinstance(target, dict) or not _opaque(target.get("eventId")):
