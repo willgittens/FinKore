@@ -434,9 +434,12 @@ non-equivalent `>=` mutation; likewise an arithmetic-family ignore covered more
 than its cited sign identity. No core mutation exclusions remain. Equivalent
 mutants stay in the report/denominator for explicit review. No threshold is lowered.
 
-The final M8 run passes all gates. Runner scalar input/context/observation
+The post-D10 M8 run passed all gates. Runner scalar input/context/observation
 regressions kill the previously surviving object-type-check removal: the runner
-scores 97.21% with 18 diagnostic/wrapping survivors. Core scores 96.28% with no
-ignored mutants, or 96.01% without timeout credit. The plan records every
-non-killed family and the exact verified candidate; D10 readiness disposition
-remains open.
+scores 97.21% with 18 diagnostic/wrapping survivors. Core scores 96.34% with no
+ignored mutants, or 96.03% without timeout credit. The plan records every
+non-killed family and the exact verified candidate. D10 is now resolved;
+`node docs/tools/mutation-native.js metadata097` checks eleven additional paired
+metadata probes. The native gate has 156 probes (57 on the Python 3.13 repeat),
+and 423 static anchor tests cover critical/native probe declarations. All probes
+pass in the complete post-D10 verification with independent valid controls.

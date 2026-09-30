@@ -62,6 +62,7 @@ def validate_event(event: Any, committed_events: dict[str, dict[str, Any]], comm
     actor validation. No native value is silently coerced or repaired.
 
     @see AUDIT-EVENT-001
+    @see AUDIT-EVENT-009
     @see AUDIT-RELATIONSHIP-001
     @see AUDIT-ACTOR-010
     @see AUDIT-CHANGE-008

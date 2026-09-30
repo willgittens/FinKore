@@ -26,7 +26,7 @@ The Core label remains `0.9-rc` and conformance syntax remains `0.1`.
 [Core 0.9.7 Milestones 3–5](../docs/plans/plan-09.7.md) close composition and
 concrete Approval histories, conditions, fact semantics, and the accepted native
 Approval/Workflow value profile on all four runtimes:
-all 579 Approval suite vectors pass. The manifest contains 1719 vectors and 189
+all 579 Approval suite vectors pass. The manifest contains 1738 vectors and 189
 supplementary cases remain. M4 promotes six history-collision cases with their
 existing IDs and full observation envelopes and adds 31 fact/history controls.
 M5 also closes all 34 explicit Workflow collection vectors, with native tests
@@ -54,14 +54,17 @@ with invalid Actors across all four evolution kinds. One older vector's unknown
 target expectation is corrected to `WORKFLOW_INVALID_STATE` under WORKFLOW-ERROR-007;
 its ID and unchanged-input assertion are retained. See the plan for compatibility
 and mutation evidence. Complete M8 verification passes for the accepted
-contracts; readiness closure still awaits D10’s disposition.
+contracts, including a fresh full run after D10.
 
 M8 native review adds 300 collection cases across 32 boundaries, including
 holes, malformed containers and caller-defined iteration, plus 28 paired probes. These supplement existing malformed-member vectors because
 JSON cannot encode a missing array position. A further 717 deterministic native
 cases exercise shared composition graphs and fact comparisons. Portable vector
-identifiers/counts are unchanged. See the plan for the pending D10 Event metadata
-profile decision and the final verification status.
+identifiers are unchanged. D10 is now resolved under AUDIT-EVENT-009: the separate
+`audit/event-metadata.json` adds 19 vectors for metadata presence, JSON categories,
+member preservation and error priority. Native tests cover unsupported values,
+cycles, ownership and reuse. The plan distinguishes the pre-D10 verification
+from the corrected candidate's fresh result.
 
 The completed [Core 0.9.5 plan](../docs/plans/plan-09.5.md) corrects native Money
 serialization, Workflow binding and precondition presence, concrete Approval

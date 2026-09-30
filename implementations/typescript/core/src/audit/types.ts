@@ -314,7 +314,12 @@ export interface SerializedAuditEvent {
   /** Optional domain-relevant changes preserved as event content. */
   readonly changes?: readonly SerializedAuditChange[]
 
-  /** Optional event context that must not replace required event fields. */
+  /**
+   * Optional JSON context, preserving omission versus supplied null.
+   * Cycles and unsupported native values are invalid Event content.
+   * @see AUDIT-EVENT-008
+   * @see AUDIT-EVENT-009
+   */
   readonly metadata?: unknown
 
   /** Optional Audit Relationships from this source event to target events. */

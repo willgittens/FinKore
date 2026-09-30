@@ -2,14 +2,13 @@
 
 ## Status
 
-Milestones 2–7 are complete for their accepted contracts. M8 verification and
-review actions have passed; readiness closure remains pending D10’s disposition
-in M1. Milestone 9 remains uncompleted. D1–D7 were explicitly accepted on 2026-09-27. M1 remains
-open for D8 (explicitly left unresolved) and D9 (the Entity native-value policy
-gap discovered during M5), plus D10 (Audit Event metadata profile found in M8).
-No Entity numeric or Event metadata policy has been selected.
-The combined candidate passes complete verification. Unspecified native policy
-and release readiness remain qualified by the open decisions.
+Milestones 2–7 are complete for their accepted contracts. D10 was resolved on
+2026-09-30 using the proposed Audit JSON-value profile; the specification,
+implementations and regression tests are updated. M8's fresh full verification
+and independent review pass after that normative correction. Milestone 9 remains
+uncompleted. D1–D7 were accepted on 2026-09-27. M1 remains open only for D8
+(explicitly left unresolved) and D9 (the Entity native-value policy gap).
+No Entity native numeric policy has been selected.
 Release type: corrective release candidate. Core 1.0 promotion is blocked pending this work and the separate
 [Core 1.0 promotion gates](plan-10.md).
 
@@ -1171,7 +1170,7 @@ remain Milestone 8 work; D8/D9 remain unresolved.
 
 ## Milestone 8 — Full verification and independent readiness review
 
-### Review result — 2026-09-30; D10 disposition pending
+### Initial review result — 2026-09-30; before D10 resolution
 
 The initial isolated candidate is `fa447a8711845893a4ac929d56b10782974de46b`.
 Fresh native review reproduced F10: TypeScript sparse arrays bypassed collection
@@ -1179,8 +1178,8 @@ validation or raised raw runtime errors. Holes in guard lists could permit a
 transition; eligibility and mutability declarations could retain missing entries.
 Existing owning requirements already prohibit malformed members. Permanent native
 regressions and paired controls cover the affected boundaries. Final M8
-verification closes F10 for the accepted contracts; D10 remains a separate
-unspecified native profile.
+verification closes F10 for the accepted contracts. The later D10 resolution
+and its required fresh verification are recorded below.
 
 ### F10 correction and verification tooling
 
@@ -1291,9 +1290,9 @@ mutant all six fail by assertion while four valid controls pass; all 136 runner
 tests pass against the correct implementation. The previous 19-survivor runner
 classification is superseded. A complete candidate rerun includes these tests.
 
-### Mutation disposition on the corrected core
+### Pre-D10 mutation disposition on the corrected core
 
-The final candidate's complete core run reports 4,255 killed, 155 surviving,
+The pre-D10 candidate's complete core run reports 4,255 killed, 155 surviving,
 10 uncovered and 12 timed-out mutants, with zero ignored mutants: 96.28%, or
 96.01% counting only assertion/test kills. Every non-killed mutation was inspected
 against its call sites and admitted values; the final complete rerun reproduced
@@ -1329,27 +1328,77 @@ added to the runner. The final report confirms 628 killed and 18 survivors
 (97.21%), with no uncovered, timed-out or ignored mutants. Its only change from
 the earlier report is the killed scalar-record validation mutation.
 
-### D10 — Audit Event metadata native value profile: unresolved
+### D10 — Audit Event metadata native value profile: resolved 2026-09-30
 
-AUDIT-ACTOR-010 and AUDIT-CHANGE-008 explicitly define JSON values and reject
-unsupported metadata/change values. AUDIT-EVENT-006 permits Event metadata and
-AUDIT-EVENT-008 prevents contradiction of required fields, but neither defines
-Event metadata's supported native value profile. TypeScript accepts independently
-cloned cyclic objects, Map and Date values in Event metadata; Python and Java
-reject unsupported/cyclic context with AUDIT_INVALID_EVENT. These cannot be
-encoded in a JSON conformance vector. Ownership alone does not select a shared
-accept/reject or serialization policy. No expected native rejection is invented.
+The user requested resolving D10 after the M8 review. The proposed existing
+Audit JSON-value profile is adopted through new **AUDIT-EVENT-009**; the optional
+context meaning of **AUDIT-EVENT-006** and contradiction rule **008** remain intact.
+Event metadata preserves omission versus supplied null and every JSON member,
+including special own names. Shared acyclic values and defensive observations
+remain valid. Cycles and unsupported native values use
+`FINKORE_AUDIT_INVALID_EVENT` at non-actor representation validation under
+**AUDIT-ERROR-004**, without coercion or partial history changes. Native numeric
+support follows the existing Audit profile; D9 is not resolved by this decision.
 
-Proposed decision for M1: Event metadata follows the existing Audit JSON-value
-profile used for Actor metadata and Change values, with AUDIT_INVALID_EVENT for
-unsupported values/cycles at Event representation validation under AUDIT-ERROR-004.
-Preserve explicit null, valid own JSON member names, shared acyclic containers,
-and defensive copies. This deliberately rejects TypeScript native inputs that
-previously succeeded; it introduces no new error code or numeric profile.
-Alternatively retain D10 as an unresolved native-profile limit. Financial meaning
-must be settled before dependent code/spec expectations change (AGENTS.md).
+Compatibility correction: TypeScript no longer accepts Map, Date, cycles,
+non-finite numbers, sparse arrays or other non-JSON Event context, and supplied
+`undefined` no longer means omission. Java now retains explicit-null metadata
+from portable input. Its Event record gains `hasMetadata`; the existing
+eight-argument constructor remains available with its prior null-means-omitted
+convention, while the explicit-presence constructor can represent supplied null.
+Record patterns must account for the added component. This is an observable
+release-candidate correction under SPEC-FREEZE-001/002/003 and
+SPEC-COMPATIBILITY-012/014, not an editorial claim or a new operation/error ID.
 
-### Final combined verification — 2026-09-30
+Red reproduction preceded the implementation: 75 of 84 initial TypeScript native
+cases failed; Java's null-presence case failed while its omission control passed.
+The retained TypeScript suite now has 89 cases across construction, import,
+append and redaction evidence, with exact codes, unchanged history and valid
+later reuse, including four direct-construction checks exposed by mutation review.
+Java tests cover null/omission import, append/reuse and both native
+constructors. Python's established profile needs no behavior change; an explicit
+presence/value/reuse test supplements its existing cycle/numeric/ownership tests.
+Nineteen portable vectors cover all JSON categories, special members, imported
+null metadata, contradiction and error priority. An invalid-history vector does
+not require an unspecified diagnostic history observation; native tests check
+source preservation directly.
+
+Entity Evolution's old `related: undefined` fixture is now an invalid Audit JSON
+value, so its expected error changes under the adopted priority. A separate true
+omission fixture retains the original Entity correspondence error. Neither
+expectation was weakened to accommodate accidental implementation behavior.
+
+Eleven paired D10 probes cover unsupported profiles, explicit undefined,
+non-finite values, cycle repair, sparse repair, caller iteration, aliases, own
+member loss, Java null import/observation and Python null loss. All eleven are
+killed with independent controls. An exploratory unsafe prototype-assignment
+mutation raised an unclassified exception and received no kill credit; the
+retained own-member-loss probe produces a direct value mismatch instead.
+
+Scoped Event mutation testing finishes with 183 killed, two recursive-cycle
+mutations reaching the execution limit, and no survivors, uncovered or ignored
+mutants: 100%, or 98.92% without timeout credit. The stricter copier initially
+masked two relationship-type guard deletions until serialization; direct Event
+construction regressions now kill both. All 105 Audit vectors pass on TypeScript,
+Python 3.12/3.13 and Java. The full manifest now has 1,738 vectors and 433
+requirements (348 covered). These scoped results do not replace the full run.
+
+A separate deterministic review runs 272 cases (288 adapter operations) on each
+runtime, all passing with exact full results and unchanged inputs. Starting from
+`audit.redaction.actor-context-001`, vary source Event and evidence metadata
+independently over omission plus null, false, true, 0, -1, 1.25, empty/nonempty
+strings, empty/nested arrays, empty/nested objects, and own `__proto__`/`constructor`
+members (16 profiles; 256 redaction pairs). The other 16 cases append each profile
+and reuse its actual returned history for a later append containing null metadata.
+Expected values retain context while applying only the fixture's Actor redaction.
+This finite review does not extend the native numeric profile or resolve D8/D9.
+
+Normative, conformance/traceability, Agentic, JSDoc and package documentation are
+synchronized. CoreDoc and AGENTS.md require no foundational or architectural
+change. M9 release history/tag work is not part of this correction. Full combined
+verification after D10 passes, as recorded below; the earlier result is historical.
+
+### Pre-D10 combined verification — 2026-09-30
 
 The complete `npm run verify` exited zero on the isolated candidate based on
 `fa447a8711845893a4ac929d56b10782974de46b`, with staged Git tree
@@ -1380,12 +1429,10 @@ compared byte-for-byte with the final candidate. Permanent native suites retain
 1,017 review cases and 28 paired collection probes; the six runner scalar tests
 retain the additional validator coverage correction.
 
-F1–F10 and the Audit/runner mutation gaps are reconciled for their accepted
-contracts. D8 and D9 remain the previously recorded limits. D10 is identified,
-not silently settled: M1 is reopened and M8 readiness closure awaits the user's
-choice to adopt the proposed profile or explicitly retain that limit. Green
-gates do not resolve it. No unqualified Core 1.0 or full native-profile readiness
-claim is made.
+At this pre-D10 snapshot, F1–F10 and the Audit/runner mutation gaps were
+reconciled for their accepted contracts. D10 then remained unresolved and blocked
+M8 closure; its later resolution above requires a new full verification. D8/D9
+remain open. No unqualified Core 1.0 or full native-profile readiness claim is made.
 
 Review is finite: the selected graph/value combinations and native collection
 hooks do not exhaust arbitrary graphs, containers, accessors, proxies or runtime
@@ -1408,9 +1455,9 @@ Public API JSDoc and root/package/tool READMEs describe the compatibility
 correction and pending profiles. No public package entry point or signature was
 added; the shared Array traversal helper remains internal and domain-neutral.
 
-No `/spec` or Agentic metadata change is needed for these corrections: existing
+For the pre-D10 corrections, no `/spec` or Agentic metadata change was needed: existing
 requirements, canonical operation IDs, effects and portable errors are unchanged.
-D10 has no adopted normative expectation. CoreDoc, release notes and AGENTS.md
+D10 subsequently adds AUDIT-EVENT-009 and updates Agentic metadata. CoreDoc, release notes and AGENTS.md
 need no change: financial foundations, architecture and development obligations
 are unchanged, and M9's release work has not been performed. No tag, version
 promotion, publication or remote push is part of M8.
@@ -1449,13 +1496,59 @@ promotion, publication or remote push is part of M8.
       row with permanent tests and mutation protection. No unexplained mandatory
       gap or unreconciled exploratory failure family may be marked complete.
 
-Verification/review actions above are complete. Readiness closure is pending
-D10’s M1 disposition; this milestone is not marked unconditionally complete.
+The verification/review actions above pass again after D10, as recorded next.
 
 Completion: the exact combined candidate passes the full gates and fresh review.
 Report remaining coverage limits honestly. Finite tests and review support a
 bounded readiness assessment; they do not prove that all possible defects have
 been discovered.
+
+### Post-D10 combined verification — 2026-09-30
+
+The complete `npm run verify` exited zero on the isolated candidate based on
+`b2f93fe0509c60851f9902ddfd59152e875f2de5`, with staged Git tree
+`0c08016142d0c036a3715f702b0caf0ab39a04e1`. This run includes the normative
+AUDIT-EVENT-009 correction, all metadata vectors, native regressions and eleven
+paired probes. Candidate tracked files remained unchanged throughout verification.
+
+| Gate | Final observed result |
+| --- | --- |
+| Toolchains, builds and strict typing | Passed on Node 24.15.0, CPython 3.12/3.13, JDK 21 and Maven 3.9.x. |
+| Unit/native, adapter and tool tests | Passed: 136 runner, 3,589 TypeScript core and 210 TypeScript adapter tests; 1,230 Python tests on each supported version; all Java, subprocess-adapter and 440 developer-tool tests. |
+| Conformance | All 1,738 manifest vectors passed on TypeScript, CPython 3.12, CPython 3.13 and Java; zero failed, unsupported or infrastructure outcomes. |
+| Coverage | All configured gates passed: runner 100% lines / 96.61% branches; TypeScript core 99.75% lines / 99.43% branches; Python 94% combined statement/branch coverage; Java 93.99% lines / 84.37% branches. |
+| Installed consumers | All six passed: npm, Python wheel and sdist on both versions, and Java JAR. |
+| Runner mutation | 97.21%; 628 killed, 18 reviewed survivors, zero uncovered, timed-out or ignored mutants. |
+| TypeScript mutation | 96.34%; 4,305 killed, 154 reviewed survivors, 10 uncovered defensive branches, 14 execution-limit/nonterminating mutations, zero ignored mutants. Without timeout credit: 96.03%. |
+| Critical/native probes | 267/267 critical, 156/156 native and 57/57 Python 3.13 native probes killed; independent controls passed. Raw infrastructure failures receive no kill credit. |
+| Repository checks | Architecture, documentation links, traceability, licensing and whitespace passed. Traceability retains 433 requirements, 1,738 vectors and 348 covered requirements. |
+
+Every runner mutation status matches the reviewed pre-D10 report. Every core
+mutation outside `audit-event.ts` also retains its previous status. Event now
+has 183 killed, two execution-limit mutations and no survivors or uncovered
+mutants; its former omitted-metadata survivor is killed. The remaining Audit
+survivor family therefore contains eleven mutants, while all other survivor and
+uncovered dispositions above remain applicable. The two added cycle-guard
+removals hit recursion execution limits (401/400 and 801/800); they are not
+assertion kills. No critical mutant survives, and the score exceeds 95% without
+timeout credit.
+
+The separate 272-case review described in D10 passes on every runtime, including
+exact redaction results and actual append-result reuse. Review implementation
+and adapter files are byte-identical to this candidate. The earlier M8 broad
+review remains applicable to the unchanged domain implementations; this additional
+review exercises the changed Event value and presence contract. Its finite
+coverage does not establish exhaustive correctness or select D8/D9 policy.
+
+Only documentation outcome/status edits follow the verified tree; executable,
+normative, dependency, fixture and test files remain byte-identical. Documentation,
+traceability, architecture, licensing and whitespace checks are repeated after
+those edits. The synchronization review now also includes AUDIT-EVENT-009,
+Agentic metadata and the documented Java Event record component/constructor
+compatibility consequences.
+
+D10 is resolved, and M8 is complete for the accepted contracts. D8/D9 remain
+open; M9 and Core 1.0 promotion have not been performed.
 
 ## Milestone 9 — Documentation and local corrective release
 

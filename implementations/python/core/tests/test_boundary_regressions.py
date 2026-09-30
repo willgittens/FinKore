@@ -323,6 +323,21 @@ class BoundaryRegressions(unittest.TestCase):
                 self.assertIs(cycle["self"], cycle)
                 self.assertEqual(set(cycle), {"self"})
 
+    def test_audit_event_metadata_presence_and_values(self):
+        """AUDIT-EVENT-009: every JSON category and omission survive import/reuse."""
+        candidates = [dict(EVENT)] + [dict(EVENT, metadata=value) for value in
+            (None, False, 0, "", [], {}, {"__proto__": [None, False], "constructor": {"x": 1}})]
+        for candidate in candidates:
+            with self.subTest(candidate=candidate):
+                before = deepcopy(candidate)
+                self.assertEqual(validate_event(candidate, {}, set()), before)
+                self.assertEqual(validate_history([candidate]), [before])
+                appended = append_event([], candidate)["history"]
+                self.assertEqual(appended, [before])
+                later = dict(EVENT, eventId="later")
+                self.assertEqual(append_event(appended, later)["history"], [before, later])
+                self.assertEqual(candidate, before)
+
     def test_audit_event_metadata_is_owned_json(self):
         """AUDIT-APPEND-001: retained Event context has the same JSON ownership boundary."""
         shared = {"__proto__": [None, False, 123456789012345678901]}

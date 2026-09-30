@@ -347,11 +347,14 @@ verification run. The [Core 0.9.7 corrective plan](./docs/plans/plan-09.7.md)
 has accepted D1–D7 contracts and completed Milestones 3–7: composition, concrete
 Approval histories, conditions, fact semantics, and the accepted native
 Approval/Workflow ownership profile, Entity declaration observation/reuse, and
-malformed-input validation with preserved adapter errors. All 1719 manifest
-vectors pass on TypeScript, Python 3.12/3.13, and Java. M8 corrects native collection
-traversal and expands mutation coverage; complete combined verification passes.
-D8, D9 and the new D10 Audit Event metadata profile remain unresolved policy gaps.
-M8 readiness closure awaits D10’s disposition. The local corrective release and
+malformed-input validation with preserved adapter errors. M8 corrects native
+collection traversal and expands mutation coverage. Complete combined verification
+passes after D10, including all 1738 manifest vectors on TypeScript, Python
+3.12/3.13, and Java.
+D10 is now resolved through AUDIT-EVENT-009: Event metadata follows the existing
+Audit JSON-value profile and preserves explicit-null presence. Nineteen new
+vectors cover metadata presence, JSON values, member preservation and error priority.
+D8 and D9 remain unresolved policy gaps. The local corrective release and
 separate Core 1.0 promotion gates remain uncompleted.
 
 At the 0.9.6 tag, all 884 manifest vectors pass on TypeScript, CPython 3.12/3.13, and Java,

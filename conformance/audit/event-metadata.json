@@ -1,0 +1,1058 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "audit.metadata097.omitted-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001"
+      ],
+      "description": "Event metadata contract: omitted.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "metadata-event",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.null-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001"
+      ],
+      "description": "Event metadata contract: null.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": null
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "metadata-event",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": null
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.false-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001"
+      ],
+      "description": "Event metadata contract: false.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": false
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "metadata-event",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": false
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.zero-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001"
+      ],
+      "description": "Event metadata contract: zero.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": 0
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "metadata-event",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": 0
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.empty-string-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001"
+      ],
+      "description": "Event metadata contract: empty-string.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": ""
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "metadata-event",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": ""
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.string-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001"
+      ],
+      "description": "Event metadata contract: string.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": "context"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "metadata-event",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": "context"
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.empty-array-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001"
+      ],
+      "description": "Event metadata contract: empty-array.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": []
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "metadata-event",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": []
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.empty-object-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001"
+      ],
+      "description": "Event metadata contract: empty-object.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": {}
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "metadata-event",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": {}
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.nested-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001"
+      ],
+      "description": "Event metadata contract: nested.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": [
+            null,
+            false,
+            0,
+            {
+              "nested": [
+                "x"
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "metadata-event",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": [
+                null,
+                false,
+                0,
+                {
+                  "nested": [
+                    "x"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.own-members-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001"
+      ],
+      "description": "Event metadata contract: own-members.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": {
+            "__proto__": {
+              "constructor": [
+                null,
+                1
+              ]
+            },
+            "constructor": false
+          }
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "metadata-event",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": {
+                "__proto__": {
+                  "constructor": [
+                    null,
+                    1
+                  ]
+                },
+                "constructor": false
+              }
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.import-null-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001"
+      ],
+      "description": "Event metadata contract: import-null.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "prior",
+            "eventType": "CONTEXT_RECORDED",
+            "entity": {
+              "type": "invoice",
+              "id": "invoice-1"
+            },
+            "occurredAt": "2026-09-01T12:00:00Z",
+            "metadata": null
+          }
+        ],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": null
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "history": [
+            {
+              "eventId": "prior",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": null
+            },
+            {
+              "eventId": "metadata-event",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": null
+            }
+          ]
+        }
+      },
+      "tags": [
+        "positive",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.conflict-eventid-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001",
+        "AUDIT-EVENT-008",
+        "AUDIT-ERROR-004",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Event metadata contract: conflict-eventid.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "prior",
+            "eventType": "CONTEXT_RECORDED",
+            "entity": {
+              "type": "invoice",
+              "id": "invoice-1"
+            },
+            "occurredAt": "2026-09-01T12:00:00Z",
+            "metadata": null
+          }
+        ],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": {
+            "eventId": "conflict"
+          },
+          "actor": null
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "prior",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": null
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.conflict-eventtype-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001",
+        "AUDIT-EVENT-008",
+        "AUDIT-ERROR-004",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Event metadata contract: conflict-eventtype.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "prior",
+            "eventType": "CONTEXT_RECORDED",
+            "entity": {
+              "type": "invoice",
+              "id": "invoice-1"
+            },
+            "occurredAt": "2026-09-01T12:00:00Z",
+            "metadata": null
+          }
+        ],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": {
+            "eventType": "conflict"
+          },
+          "actor": null
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "prior",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": null
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.conflict-entity-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001",
+        "AUDIT-EVENT-008",
+        "AUDIT-ERROR-004",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Event metadata contract: conflict-entity.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "prior",
+            "eventType": "CONTEXT_RECORDED",
+            "entity": {
+              "type": "invoice",
+              "id": "invoice-1"
+            },
+            "occurredAt": "2026-09-01T12:00:00Z",
+            "metadata": null
+          }
+        ],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": {
+            "entity": "conflict"
+          },
+          "actor": null
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "prior",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": null
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.conflict-actor-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001",
+        "AUDIT-EVENT-008",
+        "AUDIT-ERROR-004",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Event metadata contract: conflict-actor.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "prior",
+            "eventType": "CONTEXT_RECORDED",
+            "entity": {
+              "type": "invoice",
+              "id": "invoice-1"
+            },
+            "occurredAt": "2026-09-01T12:00:00Z",
+            "metadata": null
+          }
+        ],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": {
+            "actor": "conflict"
+          },
+          "actor": null
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "prior",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": null
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.conflict-occurredat-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001",
+        "AUDIT-EVENT-008",
+        "AUDIT-ERROR-004",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Event metadata contract: conflict-occurredat.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "prior",
+            "eventType": "CONTEXT_RECORDED",
+            "entity": {
+              "type": "invoice",
+              "id": "invoice-1"
+            },
+            "occurredAt": "2026-09-01T12:00:00Z",
+            "metadata": null
+          }
+        ],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": {
+            "occurredAt": "conflict"
+          },
+          "actor": null
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "prior",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": null
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.conflict-changes-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001",
+        "AUDIT-EVENT-008",
+        "AUDIT-ERROR-004",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Event metadata contract: conflict-changes.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "prior",
+            "eventType": "CONTEXT_RECORDED",
+            "entity": {
+              "type": "invoice",
+              "id": "invoice-1"
+            },
+            "occurredAt": "2026-09-01T12:00:00Z",
+            "metadata": null
+          }
+        ],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": {
+            "changes": "conflict"
+          },
+          "actor": null
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "prior",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": null
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.conflict-relationships-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001",
+        "AUDIT-EVENT-008",
+        "AUDIT-ERROR-004",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Event metadata contract: conflict-relationships.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "prior",
+            "eventType": "CONTEXT_RECORDED",
+            "entity": {
+              "type": "invoice",
+              "id": "invoice-1"
+            },
+            "occurredAt": "2026-09-01T12:00:00Z",
+            "metadata": null
+          }
+        ],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "metadata": {
+            "relationships": "conflict"
+          },
+          "actor": null
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
+        "observations": {
+          "history": [
+            {
+              "eventId": "prior",
+              "eventType": "CONTEXT_RECORDED",
+              "entity": {
+                "type": "invoice",
+                "id": "invoice-1"
+              },
+              "occurredAt": "2026-09-01T12:00:00Z",
+              "metadata": null
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    },
+    {
+      "id": "audit.metadata097.history-priority-001",
+      "spec": "audit/events",
+      "requirements": [
+        "AUDIT-EVENT-009",
+        "AUDIT-APPEND-001",
+        "AUDIT-EVENT-008",
+        "AUDIT-ERROR-004",
+        "AUDIT-ERROR-001"
+      ],
+      "description": "Event metadata contract: history-priority.",
+      "operation": "finkore.audit.append",
+      "input": {
+        "history": [
+          {
+            "eventId": "prior",
+            "eventType": "CONTEXT_RECORDED",
+            "entity": {
+              "type": "invoice",
+              "id": "invoice-1"
+            },
+            "occurredAt": "2026-09-01T12:00:00Z",
+            "metadata": {
+              "eventId": "conflict"
+            }
+          }
+        ],
+        "event": {
+          "eventId": "metadata-event",
+          "eventType": "CONTEXT_RECORDED",
+          "entity": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "occurredAt": "2026-09-01T12:00:00Z",
+          "actor": null
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        }
+      },
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ]
+    }
+  ]
+}

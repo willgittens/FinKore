@@ -21,12 +21,33 @@ function requiredString(value: unknown): string {
   return value
 }
 
-function cloneJsonValue<T>(value: T): T {
-  try {
-    return structuredClone(value)
-  } catch {
-    throw new InvalidAuditEventError()
+function cloneJsonValue<T>(value: T, ancestors = new Set<object>()): T {
+  if (value === null || typeof value === 'string' || typeof value === 'boolean') return value
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value)) throw new InvalidAuditEventError()
+    return value
   }
+  if (Array.isArray(value)) {
+    if (ancestors.has(value)) throw new InvalidAuditEventError()
+    ancestors.add(value)
+    const result = Array.from(arrayValues(value), (item) => cloneJsonValue(item, ancestors))
+    ancestors.delete(value)
+    return result as T
+  }
+  if (isPlainRecord(value)) {
+    const prototype = Object.getPrototypeOf(value)
+    if (prototype !== Object.prototype && prototype !== null) throw new InvalidAuditEventError()
+    if (ancestors.has(value)) throw new InvalidAuditEventError()
+    if (Reflect.ownKeys(value).some((key) => typeof key !== 'string')) throw new InvalidAuditEventError()
+    ancestors.add(value)
+    // Define own members without invoking the __proto__ setter.
+    const result = Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, cloneJsonValue(item, ancestors)]),
+    )
+    ancestors.delete(value)
+    return result as T
+  }
+  throw new InvalidAuditEventError()
 }
 
 function validateEventType(value: unknown): string {
@@ -111,6 +132,8 @@ function validateRelationships(value: unknown): readonly SerializedAuditRelation
  * reading wall-clock time.
  *
  * @remarks Change and relationship collections validate every position; sparse arrays are malformed.
+ * Metadata follows the Audit JSON-value profile, preserving omission versus null
+ * and rejecting cycles or unsupported native values without coercion.
  *
  * @see AUDIT-EVENT-001
  * @see AUDIT-EVENT-002
@@ -119,6 +142,7 @@ function validateRelationships(value: unknown): readonly SerializedAuditRelation
  * @see AUDIT-EVENT-005
  * @see AUDIT-EVENT-006
  * @see AUDIT-EVENT-007
+ * @see AUDIT-EVENT-009
  * @see AUDIT-RELATIONSHIP-001
  */
 export class AuditEvent {
@@ -142,7 +166,8 @@ export class AuditEvent {
    * @param input - Candidate serialized Audit Event.
    * @returns A validated Audit Event value.
    * @throws {InvalidAuditEventError}
-   * When required event content is missing, malformed, or inconsistent.
+   * When event content is missing, malformed, or inconsistent, or supplied metadata
+   * contains cycles or unsupported native values. Rejection does not mutate input.
    *
    * @see FINKORE_AUDIT_INVALID_EVENT
    * @see AUDIT-EVENT-001
@@ -151,6 +176,7 @@ export class AuditEvent {
    * @see AUDIT-EVENT-005
    * @see AUDIT-EVENT-007
    * @see AUDIT-EVENT-008
+   * @see AUDIT-EVENT-009
    * @see AUDIT-CHANGE-001
    * @see AUDIT-CHANGE-005
    * @see AUDIT-RELATIONSHIP-001
@@ -168,7 +194,8 @@ export class AuditEvent {
     const occurredAt = validateTimestamp(input.occurredAt)
     const changes = validateChanges(input.changes)
     const relationships = validateRelationships(input.relationships)
-    const metadata = input.metadata === undefined ? undefined : validateMetadata(input.metadata)
+    const hasMetadata = Object.hasOwn(input, 'metadata')
+    const metadata = hasMetadata ? validateMetadata(input.metadata) : undefined
     const actor = input.actor === undefined ? undefined : AuditActor.from(input.actor).toJSON()
     return new AuditEvent({
       eventId,
@@ -178,7 +205,7 @@ export class AuditEvent {
       ...(actor === undefined ? {} : { actor }),
       ...(changes === undefined ? {} : { changes }),
       ...(relationships === undefined ? {} : { relationships }),
-      ...(metadata === undefined ? {} : { metadata }),
+      ...(hasMetadata ? { metadata } : {}),
     })
   }
 

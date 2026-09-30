@@ -18,6 +18,137 @@ const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const constructionPy = 'test_construction_evaluation_regressions.ConstructionEvaluationRegressions.'
 const probes = [
 {
+  "id": "typescript-metadata097-native-profile",
+  "language": "typescript",
+  "path": "src/audit/audit-event.ts",
+  "scope": "metadata",
+  "from": "const metadata = cloneJsonValue(value)",
+  "to": "const metadata = structuredClone(value)",
+  "tests": [
+    "test/audit/event-metadata.test.ts"
+  ],
+  "target": "metadata097 rejects map at construct",
+  "control": "metadata097 JSON control preserves presence, own names and ownership"
+},
+{
+  "id": "typescript-metadata097-undefined-omission",
+  "language": "typescript",
+  "path": "src/audit/audit-event.ts",
+  "scope": "metadata",
+  "from": "const hasMetadata = Object.hasOwn(input, 'metadata')",
+  "to": "const hasMetadata = input.metadata !== undefined",
+  "tests": [
+    "test/audit/event-metadata.test.ts"
+  ],
+  "target": "metadata097 rejects undefined at construct",
+  "control": "metadata097 JSON control preserves presence, own names and ownership"
+},
+{
+  "id": "typescript-metadata097-finite-number",
+  "language": "typescript",
+  "path": "src/audit/audit-event.ts",
+  "scope": "metadata",
+  "from": "if (!Number.isFinite(value)) throw new InvalidAuditEventError()",
+  "to": "if (false) throw new InvalidAuditEventError()",
+  "tests": [
+    "test/audit/event-metadata.test.ts"
+  ],
+  "target": "metadata097 rejects nan at construct",
+  "control": "metadata097 JSON control preserves presence, own names and ownership"
+},
+{
+  "id": "typescript-metadata097-cycle-repair",
+  "language": "typescript",
+  "path": "src/audit/audit-event.ts",
+  "scope": "metadata",
+  "from": "if (Array.isArray(value)) {\n    if (ancestors.has(value)) throw new InvalidAuditEventError()",
+  "to": "if (Array.isArray(value)) {\n    if (ancestors.has(value)) return null as T",
+  "tests": [
+    "test/audit/event-metadata.test.ts"
+  ],
+  "target": "metadata097 rejects array-cycle at construct",
+  "control": "metadata097 JSON control preserves presence, own names and ownership"
+},
+{
+  "id": "typescript-metadata097-sparse-repair",
+  "language": "typescript",
+  "path": "src/audit/audit-event.ts",
+  "scope": "metadata",
+  "from": "Array.from(arrayValues(value), (item) => cloneJsonValue(item, ancestors))",
+  "to": "value.filter(() => true).map((item) => cloneJsonValue(item, ancestors))",
+  "tests": [
+    "test/audit/event-metadata.test.ts"
+  ],
+  "target": "metadata097 rejects sparse-array at construct",
+  "control": "metadata097 JSON control preserves presence, own names and ownership"
+},
+{
+  "id": "typescript-metadata097-input-alias",
+  "language": "typescript",
+  "path": "src/audit/audit-event.ts",
+  "scope": "metadata",
+  "from": "const metadata = cloneJsonValue(value)",
+  "to": "const metadata = value",
+  "tests": [
+    "test/audit/event-metadata.test.ts"
+  ],
+  "target": "metadata097 JSON control preserves presence, own names and ownership",
+  "control": "metadata097 scalar control"
+},
+{
+  "id": "typescript-metadata097-own-member-loss",
+  "language": "typescript",
+  "path": "src/audit/audit-event.ts",
+  "scope": "metadata",
+  "from": "    const result = Object.fromEntries(\n      Object.entries(value).map(([key, item]) => [key, cloneJsonValue(item, ancestors)]),\n    )",
+  "to": "    const result = Object.fromEntries(\n      Object.entries(value).filter(([key]) => key !== \"__proto__\").map(([key, item]) => [key, cloneJsonValue(item, ancestors)]),\n    )",
+  "tests": [
+    "test/audit/event-metadata.test.ts"
+  ],
+  "target": "metadata097 JSON control preserves presence, own names and ownership",
+  "control": "metadata097 scalar control"
+},
+{
+  "id": "typescript-metadata097-iterator-hiding",
+  "language": "typescript",
+  "path": "src/audit/audit-event.ts",
+  "scope": "metadata",
+  "from": "Array.from(arrayValues(value), (item) => cloneJsonValue(item, ancestors))",
+  "to": "Array.from(value, (item) => cloneJsonValue(item, ancestors))",
+  "tests": [
+    "test/audit/event-metadata.test.ts"
+  ],
+  "target": "metadata097 indexed arrays ignore a caller iterator",
+  "control": "metadata097 JSON control preserves presence, own names and ownership"
+},
+{
+  "id": "java-metadata097-null-observation",
+  "language": "java",
+  "path": "Audit.java",
+  "from": "if (hasMetadata) {\n        result.put(\"metadata\", copyJson(metadata, INVALID_EVENT));",
+  "to": "if (metadata != null) {\n        result.put(\"metadata\", copyJson(metadata, INVALID_EVENT));",
+  "target": "audit.metadata097.null-presence",
+  "control": "audit.metadata097.omitted-control"
+},
+{
+  "id": "java-metadata097-null-import",
+  "language": "java",
+  "path": "Audit.java",
+  "from": "relationships, map.containsKey(\"metadata\"), metadata);",
+  "to": "relationships, metadata != null, metadata);",
+  "target": "audit.metadata097.null-presence",
+  "control": "audit.metadata097.omitted-control"
+},
+{
+  "id": "python-metadata097-null-loss",
+  "language": "python",
+  "path": "audit.py",
+  "from": "return deepcopy(event)",
+  "to": "return deepcopy({key: value for key, value in event.items() if key != \"metadata\" or value is not None})",
+  "target": "test_boundary_regressions.BoundaryRegressions.test_audit_event_metadata_presence_and_values",
+  "control": "test_boundary_regressions.BoundaryRegressions.test_audit_event_metadata_is_owned_json"
+},
+{
   "id": "typescript-collections097-fact-selector-method",
   "language": "typescript",
   "path": "src/approvals/approval-facts.ts",

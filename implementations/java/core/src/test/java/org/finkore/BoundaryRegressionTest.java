@@ -58,6 +58,9 @@ public final class BoundaryRegressionTest {
       }
     }
     if (cases.isEmpty()) throw new AssertionError("No boundary vectors discovered");
+    cases.put("audit.metadata097.null-presence", () -> eventMetadataPresence(true));
+    cases.put("audit.metadata097.omitted-control", () -> eventMetadataPresence(false));
+    cases.put("audit.metadata097.explicit-constructor", BoundaryRegressionTest::eventMetadataConstructor);
     cases.put("money.serialization.exact-control", BoundaryRegressionTest::exactSerialization);
     cases.put("money.serialization.rounding-control", BoundaryRegressionTest::roundingControl);
     cases.put("money.serialization.unsupported-scale", () -> {
@@ -226,6 +229,39 @@ public final class BoundaryRegressionTest {
       if (versioned) expected.put("binding", binding());
       equal(expected, last);
     } finally { equal(before, first); }
+  }
+
+  private static void eventMetadataConstructor() {
+    Audit.EntityReference entity = new Audit.EntityReference("invoice", "invoice-1");
+    Audit.Event present = new Audit.Event("event-1", "ENTITY_CHANGED", entity,
+        "2026-09-01T12:00:00Z", null, null, null, true, null);
+    Map<String, Object> expected = event(); expected.put("metadata", null);
+    equal(expected, present.toPortable());
+    equal(true, present.hasMetadata());
+    equal(null, present.metadata());
+    Audit.Event legacy = new Audit.Event("event-1", "ENTITY_CHANGED", entity,
+        "2026-09-01T12:00:00Z", null, null, null, null);
+    equal(event(), legacy.toPortable());
+    equal(false, legacy.hasMetadata());
+    error(Audit.INVALID_EVENT, () -> new Audit.Event("e", "CHANGED", entity,
+        "2026-09-01T12:00:00Z", null, null, null, false, Map.of("x", 1)));
+    error(Audit.INVALID_EVENT, () -> new Audit.Event("e", "CHANGED", entity,
+        "2026-09-01T12:00:00Z", null, null, null, true, new AtomicInteger(1)));
+  }
+
+  // AUDIT-EVENT-009: import, append and later reuse preserve explicit presence.
+  private static void eventMetadataPresence(boolean supplied) {
+    Map<String, Object> candidate = event();
+    if (supplied) candidate.put("metadata", null);
+    Map<String, Object> before = new LinkedHashMap<>(candidate);
+    Audit.Event retained = Audit.Event.fromPortable(candidate);
+    equal(before, retained.toPortable());
+    equal(List.of(before), Audit.Log.create(List.of(candidate)).events());
+    Audit.Log appended = Audit.Log.create(List.of()).append(candidate);
+    equal(List.of(before), appended.events());
+    Map<String, Object> later = event(); later.put("eventId", "later");
+    equal(List.of(before, later), Audit.Log.create(appended.events()).append(later).events());
+    equal(before, candidate);
   }
 
   private static Map<String, Object> event() {

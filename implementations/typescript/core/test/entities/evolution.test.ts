@@ -772,6 +772,14 @@ describe('Entity Evolution history', () => {
         }),
       ),
     ).toThrow(InvalidEntityMutationError)
+    // Actual omission remains a correspondence error; supplied undefined is
+    // invalid Event JSON under AUDIT-EVENT-009, before correspondence checking.
+    const missingRelated: Record<string, unknown> = { ...correctionMetadata() }
+    delete missingRelated.related
+    expect(() => history.correct(correctionRequest({ audit: {
+      history: [originalAuditEvent],
+      event: auditEvent('evt-correction', 'CORRECTS', missingRelated),
+    } }))).toThrow(InvalidEntityMutationError)
     expect(() =>
       history.correct(
         correctionRequest({
@@ -781,7 +789,7 @@ describe('Entity Evolution history', () => {
           },
         }),
       ),
-    ).toThrow(InvalidEntityMutationError)
+    ).toThrow(InvalidAuditEventError)
     expect(() =>
       history.void({
         source: sourceEntity(),

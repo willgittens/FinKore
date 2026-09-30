@@ -18,8 +18,37 @@ This document defines the minimum meaning and content of an Audit Event. An Audi
 - **AUDIT-EVENT-006** — Event metadata MAY provide relevant context.
 - **AUDIT-EVENT-008** — Event metadata MUST NOT contradict required event fields.
 - **AUDIT-EVENT-007** — In Core 0.9 release candidate, an Audit Event is complete when every required Audit Event field is present and individually valid according to this document and referenced actor, timestamp, entity, change, and redaction requirements. No additional event-type-specific fields are required by Core 0.9 release candidate. Optional metadata or display text MUST NOT be required to recover the event identifier, event type, entity reference, timestamp, known actor identity, or recorded changes.
+- **AUDIT-EVENT-009** — Event metadata MAY be omitted or supplied as any JSON value, including explicit null, subject to **AUDIT-EVENT-008**. An implementation MUST preserve its presence and recursively preserve its JSON value, including every object member name. Omitted metadata and supplied null metadata MUST remain distinguishable. Cyclic containers and unsupported native values MUST be rejected with `FINKORE_AUDIT_INVALID_EVENT` during non-actor Event representation validation under **AUDIT-ERROR-004**. Shared acyclic containers are not cycles. Accepted values MUST be retained and observed independently of caller mutation under **AUDIT-APPEND-001**; rejection MUST leave logical history unchanged under **AUDIT-ERROR-001**.
 
 Audit Relationships, when present, follow [Audit Relationships](relationships.md).
+
+## Metadata value profile
+
+**AUDIT-EVENT-009** uses the existing JSON-value boundary for
+[Actor metadata](actors.md) and ordinary [Change values](changes.md), without
+introducing a numeric representation or coercion policy. Supported native numeric
+classes remain language-specific and must preserve exact, independent values.
+An implementation must not repair an unsupported value by dropping it, coercing
+it to a string or number, or replacing a cycle with null. Names such as
+`__proto__` and `constructor` are ordinary JSON members. Metadata does not change
+the existing required-field contradiction rule or validation priority.
+
+## Core 0.9.7 correction note (non-normative)
+
+D10 resolves the previously unspecified native Event metadata profile under
+**SPEC-FREEZE-001**. **AUDIT-EVENT-006** retains its optional-context meaning;
+the new **AUDIT-EVENT-009** defines the value and presence contract without
+reusing an existing requirement identifier for a new meaning.
+
+This is an observable compatibility correction, not an editorial change:
+TypeScript previously accepted some non-JSON metadata (including Map, Date and
+cycles), and Java omitted supplied null metadata when observing an Event.
+Those outcomes change. Existing valid JSON context and omission remain valid.
+The correction refines the existing `finkore.audit.append` contract in place
+under the release-candidate ambiguity process; no operation identifier or error
+code is repurposed. **SPEC-COMPATIBILITY-008**, **012**, **014** and
+**SPEC-FREEZE-002/003** require synchronized vectors, native tests, implementations,
+Agentic metadata and public documentation for this correction.
 
 ## Invariants
 

@@ -68,7 +68,7 @@ in [traceability](../conformance/traceability.md).
 | `finkore.money.applyrate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-RATE-001`–`-009` |
 | `finkore.money.allocate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ALLOCATION-001`–`-014`, `MONEY-ERROR-008` |
 | `finkore.workflow.transition` | Workflow | `yes` | `unspecified` | `yes` | `may` | may be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007`, `WORKFLOW-GUARD-001`–`-007`, `WORKFLOW-VERSION-003`, `-005`–`-012`, `WORKFLOW-CONFLICT-001`–`-008` |
-| `finkore.audit.append` | Audit | `yes` | `no` | `yes` | `required` | `none` | `AUDIT-EVENT-001`–`-005`, `-007`, `-008`, `AUDIT-ACTOR-001`–`-004`, `-007`–`-010`, `AUDIT-CHANGE-001`–`-005`, `-008`, `-009`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001`, `-004` |
+| `finkore.audit.append` | Audit | `yes` | `no` | `yes` | `required` | `none` | `AUDIT-EVENT-001`–`-005`, `-007`–`-009`, `AUDIT-ACTOR-001`–`-004`, `-007`–`-010`, `AUDIT-CHANGE-001`–`-005`, `-008`, `-009`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001`, `-004` |
 | `finkore.audit.replace` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
 | `finkore.audit.remove` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
 | `finkore.entity.create` | Entities | `yes` | `unspecified` | `yes` | `may` | `none` | `ENTITY-IDENTITY-001`, `-003`, `ENTITY-LIFECYCLE-001`, `-002`, `-006`, `ENTITY-VALIDATION-001` |
@@ -275,7 +275,10 @@ caller-supplied stable event identity, stable domain event type, entity
 reference, optional known Actor, and explicit occurrence timestamp following
 the portable timestamp profile. Supplied actor `type` and `displayName` values
 are non-empty strings; optional actor metadata may be any JSON value, including
-null, and its presence is preserved. Ordinary Audit Change values use
+null, and its presence is preserved. Event metadata follows the same JSON-value
+profile under `AUDIT-EVENT-009`, preserving omission versus supplied null and
+rejecting unsupported native values/cycles with `FINKORE_AUDIT_INVALID_EVENT`.
+Ordinary Audit Change values use
 type-sensitive recursive JSON comparison. A Change carrying Money semantics
 explicitly declares `valueType: "MONEY"`; Money is never inferred from object
 shape. Current conformance fixtures use
@@ -297,7 +300,7 @@ all existing committed event identities and meanings are preserved.
 Accepted native values cannot retain aliases that alter committed meaning.
 Cyclic or unsupported values use the context-specific
 `FINKORE_AUDIT_ACTOR_INVALID` or `FINKORE_AUDIT_INVALID_EVENT` error under
-`AUDIT-ACTOR-010` and `AUDIT-CHANGE-008`; host recursion failures are not domain
+`AUDIT-ACTOR-010`, `AUDIT-CHANGE-008` and `AUDIT-EVENT-009`; host recursion failures are not domain
 results. Native value representations do not extend the portable JSON contract.
 
 **Known operation-specific errors:** `FINKORE_AUDIT_INVALID_EVENT`,
@@ -310,7 +313,7 @@ relationships against committed history. The first failing stage determines
 the primary portable error, and failure leaves history unchanged.
 
 **Normative traceability:**
-[AUDIT-EVENT-001 through -005, -007, and -008](../spec/audit/events.md),
+[AUDIT-EVENT-001 through -005 and -007 through -009](../spec/audit/events.md),
 [AUDIT-ACTOR-001 through -004 and -007 through -010](../spec/audit/actors.md),
 [AUDIT-CHANGE-001 through -005, -008, and -009](../spec/audit/changes.md),
 [AUDIT-APPEND-001 and -003](../spec/audit/append-only.md), and

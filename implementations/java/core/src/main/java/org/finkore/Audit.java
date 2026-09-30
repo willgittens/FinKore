@@ -356,9 +356,11 @@ public final class Audit {
    * @param actor optional known Actor attribution
    * @param changes optional ordered Change observations
    * @param relationships optional ordered Audit Relationships
+   * @param hasMetadata whether context was supplied, including explicit null
    * @param metadata optional event metadata
    * @see <a href="../../../../../../spec/audit/events.md">AUDIT-EVENT-003</a>
    * @see <a href="../../../../../../spec/audit/events.md">AUDIT-EVENT-008</a>
+   * @see <a href="../../../../../../spec/audit/events.md">AUDIT-EVENT-009</a>
    */
   public record Event(
       String eventId,
@@ -368,6 +370,7 @@ public final class Audit {
       Actor actor,
       List<Change> changes,
       List<Relationship> relationships,
+      boolean hasMetadata,
       Object metadata) {
     /**
      * Creates an immutable Audit Event observation.
@@ -379,16 +382,38 @@ public final class Audit {
      * @param actor optional known Actor
      * @param changes optional Changes
      * @param relationships optional Relationships
+     * @param hasMetadata whether context was supplied, including explicit null
      * @param metadata optional metadata
      * @throws FinKoreException with {@link Audit#INVALID_EVENT} for cyclic or unsupported metadata
      */
     public Event {
       changes = changes == null ? null : List.copyOf(changes);
       relationships = relationships == null ? null : List.copyOf(relationships);
-      metadata = metadata == null ? null : copyJson(metadata, INVALID_EVENT);
+      if (!hasMetadata && metadata != null) throw new FinKoreException(INVALID_EVENT);
+      metadata = hasMetadata ? copyJson(metadata, INVALID_EVENT) : null;
     }
 
-    /** Returns Event context as an independent JSON observation. */
+    /**
+     * Creates an Event using the legacy convention that null means omitted context.
+     * Use the constructor with explicit presence or {@link #fromPortable(Object)}
+     * to represent supplied null under AUDIT-EVENT-009.
+     *
+     * @param eventId stable event identity
+     * @param eventType stable domain event type
+     * @param entity affected Entity
+     * @param occurredAt explicit occurrence timestamp
+     * @param actor optional known Actor
+     * @param changes optional Changes
+     * @param relationships optional Relationships
+     * @param metadata context; null means omitted in this overload
+     * @throws FinKoreException with {@link Audit#INVALID_EVENT} for unsupported context
+     */
+    public Event(String eventId, String eventType, EntityReference entity, String occurredAt,
+        Actor actor, List<Change> changes, List<Relationship> relationships, Object metadata) {
+      this(eventId, eventType, entity, occurredAt, actor, changes, relationships, metadata != null, metadata);
+    }
+
+    /** Returns Event context independently; {@link #hasMetadata()} distinguishes null from omission. */
     @Override
     public Object metadata() {
       return copyJson(metadata, INVALID_EVENT);
@@ -427,7 +452,7 @@ public final class Audit {
       }
       EntityReference entity = EntityReference.fromPortable(map.get("entity"));
       Actor actor = map.containsKey("actor") ? Actor.fromPortable(map.get("actor")) : null;
-      return new Event(eventId, eventType, entity, occurredAt, actor, changes, relationships, metadata);
+      return new Event(eventId, eventType, entity, occurredAt, actor, changes, relationships, map.containsKey("metadata"), metadata);
     }
 
     /**
@@ -450,7 +475,7 @@ public final class Audit {
       if (relationships != null) {
         result.put("relationships", relationships.stream().map(Relationship::toPortable).toList());
       }
-      if (metadata != null) {
+      if (hasMetadata) {
         result.put("metadata", copyJson(metadata, INVALID_EVENT));
       }
       return result;

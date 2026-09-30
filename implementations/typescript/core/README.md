@@ -12,11 +12,13 @@ runtimes. Milestone 5 implements the accepted native Approval/Workflow value pro
 required embedded Workflow collections. Milestone 6 closes Entity special-name
 declaration preservation/reuse; all ten portable special-name controls pass on
 every runtime. Milestone 7 closes malformed Entity/Workflow boundaries and Audit
-failure observations; all 1719 manifest vectors pass on all four runtimes.
-Complete M8 verification passes; readiness closure awaits D10’s disposition.
-D8 redaction policy identity
-and D9 Entity native-value policy remain unresolved; M8 also records D10,
-the unspecified native Audit Event metadata profile. The 0.9.6 results below describe the tagged snapshot.
+failure observations. M8 and the D10 correction pass complete verification; all
+1738 manifest vectors pass on all four runtimes. D10 defines Event
+metadata through AUDIT-EVENT-009: any JSON value, including explicit null, with
+preserved presence, exact independent values, and rejection of cycles or
+unsupported native values using FINKORE_AUDIT_INVALID_EVENT before actor checks.
+D8 redaction policy identity and D9 Entity native-value policy remain unresolved.
+The 0.9.6 results below describe the tagged snapshot.
 
 Milestone 8 review corrects native sparse collections: every supplied position
 in Workflow/Entity declarations, Approval evidence, Audit changes/relationships,
@@ -26,8 +28,10 @@ Array methods. Such overrides cannot hide guards or change quorum eligibility.
 Missing entries now produce the owning portable error instead of
 being skipped or causing a runtime exception. Dense valid arrays retain their
 behavior. JSON vectors cannot represent holes; native tests retain the regression
-and independent dense controls. Audit Event metadata's broader native profile
-is separately unresolved as D10; this correction does not choose it.
+and independent dense controls. D10 also applies the existing Audit JSON-value profile to Event metadata.
+Map, Date, non-finite numbers, cycles, sparse arrays, supplied undefined and
+other unsupported native context now reject. Omission and explicit null remain
+distinct; plain and null-prototype objects preserve their own JSON members.
 
 Entity definitions require a nonempty `identityScope` and an explicit mutability
 field list for every declared State; `[]` permits no fields. Data must be an
