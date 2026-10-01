@@ -339,52 +339,35 @@ See [Developer Tools](./docs/tools/README.md) for details.
 
 ## Project status
 
-FinKore Core 0.9.6 is the corrective release candidate for the frozen Core 0.9
-baseline intended to become Core 1.0.
+FinKore Core 0.9.7 is the completed local corrective release candidate for the
+frozen Core 0.9 baseline. The [corrective plan](./docs/plans/plan-09.7.md)
+records the accepted D1–D11 contracts, implementation corrections and final
+verification. All 1,775 manifest vectors pass on TypeScript, CPython 3.12/3.13
+and Java. Native ownership, operation-sequence and mutation tests supplement
+portable vectors; coverage and installed-package checks pass.
 
-Subsequent review identified additional gaps despite a fresh passing full
-verification run. The [Core 0.9.7 corrective plan](./docs/plans/plan-09.7.md)
-has accepted D1–D7 contracts and completed Milestones 3–7: composition, concrete
-Approval histories, conditions, fact semantics, and the accepted native
-Approval/Workflow ownership profile, Entity declaration observation/reuse, and
-malformed-input validation with preserved adapter errors. M8 corrects native
-collection traversal and expands mutation coverage. Complete combined verification
-passes after D8/D10, including all 1758 manifest vectors on TypeScript, Python
-3.12/3.13, and Java.
-D10 is now resolved through AUDIT-EVENT-009: Event metadata follows the existing
-Audit JSON-value profile and preserves explicit-null presence. Nineteen new
-vectors cover metadata presence, JSON values, member preservation and error priority.
-D8 now makes redaction `policy.id` optional, validating supplied values as nonempty
-strings. Twenty new vectors, native regressions and paired mutation controls
-protect this correction. D9 now specifies independently owned Entity data and
-immutable native scalars under ENTITY-VALIDATION-011. Eight portable controls and
-native rejection, exactness and ownership regressions pass fresh complete
-verification, including all 1,766 vectors on all four runtimes. The wider review
-identified D11. The accepted ENTITY-IMPORT-012 correction now requires an
-explicit historicalRevisions list on successful import, empty for omitted or
-empty supplied history; D11 passes all 1,775 vectors on all four runtimes and its native mutation checks. The local corrective release and
-separate Core 1.0 promotion gates remain uncompleted.
+The corrections cover complete Approval composition/history validation, explicit
+quorum evidence, fact selection and exact equality, owned native values,
+Workflow/Entity declarations, and portable malformed-input failures. Audit
+metadata preserves supplied presence; redaction policy identity is optional but
+validated when supplied. Entity application data uses documented immutable
+scalar profiles, and successful imports always include a historical revision
+list, empty for omitted or empty supplied history.
 
-At the 0.9.6 tag, all 884 manifest vectors pass on TypeScript, CPython 3.12/3.13, and Java,
-including all earlier corrective regressions. The completed
-[Core 0.9.6 corrective plan](./docs/plans/plan-09.6.md) closes the reviewed native
-construction, Approval evaluation/evidence, Audit authority, and Workflow/Entity
-validation boundaries. Native public API and operation-sequence tests supplement
-portable vectors; full configured mutation suites, paired critical/native probes,
-and isolated package consumers pass clean-checkout verification.
-[Traceability](./conformance/traceability.md) records the exercised scope and
-coverage limits. [Core 1.0 promotion](./docs/plans/plan-10.md) remains a separate,
-uncompleted process.
+These are observable compatibility corrections. Previously accepted malformed
+or unsupported values can now fail with their owning portable errors. Import
+results in Python/Java gain an explicit empty history field. Public API and
+native representation details are documented in each implementation README.
+Stable requirement, error, operation and vector identities are preserved.
 
-Entity imports accept valid standalone mappings and
-reject malformed supplied Source Identity; evolution precondition failures
-preserve Entities, relation history, and Audit history. Native sequences reuse
-returned versioned imports and evolution results, with coverage, targeted
-mutation, and isolated package-consumer verification.
-Fresh review also corrects revision-currentness validation and malformed
-composition Decision containers. The annotated local `core-0.9.6` tag identifies
-the completed corrective snapshot. Core 1.0 promotion still requires its separate
-stable-baseline, compatibility, artifact, and release gates.
+The annotated local `core-0.9.7` tag identifies the corrective snapshot and
+preserves all earlier corrective tags. [Traceability](./conformance/traceability.md)
+records 352 covered requirements, one partial external-fact authoring requirement
+and 83 requirements not directly testable by portable vectors. Passing the
+manifest is evidence for its bounded scope, not exhaustive correctness.
+[Core 1.0 promotion](./docs/plans/plan-10.md) remains a separate, uncompleted process.
+
+The current domain scope is:
 
 - Money
 - Workflow
@@ -409,17 +392,13 @@ The release identifiers serve different purposes:
 
 | Identifier | Current value | Meaning |
 | --- | --- | --- |
-| Corrective snapshot tag | `core-0.9.6` | Exact repository state containing the corrections. |
+| Corrective snapshot tag | `core-0.9.7` | Exact repository state containing the corrections. |
 | Core constants, package compatibility metadata, and runner Core label | `0.9-rc` | Frozen language-neutral behavioral baseline. |
 | Implementation package versions | `0.1.0` | Unpublished repository reference artifacts. |
 | Conformance syntax version | `0.1` | Manifest and vector format compatibility. |
 
-The corrective release fixes implementation defects and resolves demonstrated
-gaps in concrete Decision evaluation, complete context/history validation, and standalone
-Entity import mappings. These release-candidate corrections preserve existing
-identifiers and earlier corrections; they do not declare Core 1.0 stable. The
-release tag is local; remote publication is separate, and the packages retain
-repository-reference status.
+The release tag is local; remote publication is separate, and the packages
+retain repository-reference status. This snapshot does not declare Core 1.0 stable.
 
 See the [release notes](./docs/releases/README.md) for the concise history and the implementation READMEs for current public APIs and local package use.
 

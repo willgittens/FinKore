@@ -12,14 +12,15 @@ specification remains the source of truth. Vectors describe observable domain
 behavior; they do not prescribe APIs, classes, exceptions, storage, or
 frameworks.
 
-D9 adds eight portable Entity value controls in
-[application-values.json](entities/application-values.json), bringing the manifest
-to 1,766 vectors. Native tests supplement JSON for unsupported native values,
-exact immutable scalars, cycles and reference ownership. Full combined
-verification after D9 passes on all four runtimes; earlier pass counts below are
-historical. D11 now requires an explicit historicalRevisions list on successful import
-(ENTITY-IMPORT-012), empty when supplied history is omitted or empty. D11
-passes all 1,775 vectors on all four runtimes and its native mutation checks.
+The completed [Core 0.9.7 corrective release](../docs/plans/plan-09.7.md)
+contains 1,775 vectors; all pass on TypeScript, Python 3.12/3.13 and Java with
+no failed, unsupported or infrastructure outcomes. Native regressions supplement
+JSON for ownership, exact values, cycles, sparse collections and returned-value
+reuse. Full configured mutation and paired critical/native gates pass.
+[Traceability](traceability.md) records 436 requirements: 352 covered, one partial
+external-fact authoring requirement and 83 not directly testable by portable
+vectors. Python/Java targeted mutation probes do not establish full implementation
+mutation coverage. Earlier milestone counts below are historical.
 
 ## Scope and discovery
 
@@ -29,7 +30,7 @@ The manifest and vector-file version fields describe syntax compatibility, not
 FinKore release numbers. Release scope is determined by the manifest contents,
 referenced requirement IDs, and traceability status.
 
-The local `core-0.9.6` tag identifies the latest completed corrective snapshot.
+The local `core-0.9.7` tag identifies the latest completed corrective snapshot.
 The Core label remains `0.9-rc` and conformance syntax remains `0.1`.
 
 [Core 0.9.7 Milestones 3–5](../docs/plans/plan-09.7.md) close composition and
@@ -99,15 +100,15 @@ do not establish exhaustive correctness or complete the separate Core 1.0
 promotion process. Canonical Agentic operation promotion and unpublished
 reference-package status are unchanged.
 
-The completed [Core 0.9.6 corrective plan](../docs/plans/plan-09.6.md) expands the current
-manifest to 884 vectors. Milestones 3–8 verify Money, Workflow, Approval, Audit,
+The historical [Core 0.9.6 corrective snapshot](../docs/plans/plan-09.6.md)
+contains 884 vectors. Milestones 3–8 verify Money, Workflow, Approval, Audit,
 and Entity corrections. All vectors pass on TypeScript, Python 3.12/3.13, and
 Java, with no unsupported cases or infrastructure errors. Native tests cover
 returned-history reuse, versioned imports, source/mapping presence pairs, and
 failure preservation, supplied revision currentness, and composition Decision
 container validation. Coverage, mutation probes, and isolated consumers
-support these corrected boundaries. Current [traceability](traceability.md)
-is 334 COVERED, 0 PARTIAL, and 83 NOT DIRECTLY TESTABLE, with no blocking gaps.
+support those corrected boundaries. At that snapshot, traceability
+records 334 COVERED, 0 PARTIAL, and 83 NOT DIRECTLY TESTABLE, with no blocking gaps.
 Milestone 8 passes complete clean-candidate verification, full configured
 TypeScript mutation, all 222 portable critical probes, all 92 native probes,
 and the 47-probe Python 3.13 native repeat. These targeted Python/Java probes

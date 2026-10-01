@@ -4,10 +4,11 @@
 
 **FinKore Core 0.9 release candidate.** This is the shared,
 language-neutral behavioral candidate intended to become FinKore Core 1.0.
-It remains pre-1.0. The accepted [Core 0.9.7 contract corrections](../docs/plans/plan-09.7.md)
-resolve demonstrated ambiguity and portability defects under the release-candidate
-freeze. M2 regressions are published and intentionally fail before implementation
-corrections. D6–D7 discovery contracts are accepted; D8 remains unresolved.
+It remains pre-1.0. The completed [Core 0.9.7 corrective release](../docs/plans/plan-09.7.md)
+resolves the reviewed D1–D11 ambiguities and portability defects under the
+release-candidate freeze. The corrected implementations and permanent regressions
+pass final verification. These corrections retain stable identifiers and do not
+promote the specification to stable 1.0.
 The 0.9 domain scope is Money, Workflow, Audit, Approvals, and Entities.
 
 ## Purpose
@@ -56,11 +57,13 @@ version, and language implementation package versions. Format and package
 versions describe tooling or artifact compatibility; they do not define
 financial behavior.
 
-The `core-0.9.6` corrective snapshot retains the `0.9-rc` Core label. Its
+The `core-0.9.7` corrective snapshot retains the `0.9-rc` Core label. Its
 [concrete Decision evaluation](approvals/decisions.md),
 [complete context and lifecycle validation](approvals/validity.md), and
 [standalone Entity import mappings](entities/import.md) resolve demonstrated
-contract gaps. The earlier
+contract gaps. Its complete Approval evidence/fact semantics, native ownership,
+Audit metadata/policy presence and empty import-history contracts are recorded
+in the owning domain documents and the 0.9.7 plan. The earlier
 [Entity ownership](entities/README.md#core-095-correction-note-non-normative),
 [validator](entities/validation.md#core-095-correction-note-non-normative), and
 [revision/conflict identity](entities/revisions.md) corrections, together with

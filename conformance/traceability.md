@@ -17,17 +17,13 @@ Audit, Approvals, and Entities scope.
 | Entities | 96 | 91 | 3 | 2 | 84 | 0 | 0 | 12 | 0 | 0 |
 | **Total** | 436 | 403 | 15 | 18 | 352 | 1 | 0 | 83 | 0 | 0 |
 
-The suite contains 1775 vectors, including 20 D8 policy-identity cases and 19 D10
-Event metadata cases. D8 is resolved under AUDIT-REDACTION-008; its corrected
-candidate passed fresh full verification. D9 is accepted as ENTITY-VALIDATION-011;
-eight portable value controls and native rejection/ownership regressions are added.
-Fresh complete D9 verification passes. D11 is resolved as ENTITY-IMPORT-012:
-successful imports include an explicit
-historicalRevisions list. Nine new vectors cover omitted, empty and nonempty
-history, metadata preservation and unchanged failure observations. All 1,775
-vectors pass on all four runtimes; all 88 critical Entity probes and six D11
-native probes pass with paired controls. Coverage records exercised requirements,
-not exhaustive proof.
+The suite contains 1775 vectors. The completed Core 0.9.7 snapshot passes all
+vectors on TypeScript, Python 3.12/3.13 and Java, plus native, coverage, package
+and full configured mutation gates. D1–D11 are resolved and implemented; their
+permanent controls and exact final verification results are recorded in the
+[0.9.7 plan](../docs/plans/plan-09.7.md). Earlier milestone evidence below retains
+its historical scope. Coverage records exercised requirements, not exhaustive
+proof; WORKFLOW-GUARD-004's external-fact authoring schema remains partial.
 
 NOT DIRECTLY TESTABLE covers specification-authoring rules, optional or recommended freedoms without one mandatory runtime observation, guarantees such as absence of an assumed authorization model or unobservable intermediate state that one static input/result vector cannot prove, and adapter obligations that the current normalized vector shape cannot isolate. These guarantees remain subject to implementation unit, mutation, and architectural review. PARTIAL means current vectors exercise part of a requirement but do not yet cover a mandatory observable boundary. DEFERRED means the requirement is explicitly outside the current release candidate. BLOCKING SPEC GAP means mandatory wording exists, but the expected portable observable behavior is not sufficiently specified. UNCOVERED means a deterministic mandatory vector or native regression is feasible but not yet published.
 
@@ -830,7 +826,6 @@ combined verification gates recorded in the completed 0.9.5 plan.
 | ENTITY-REVISION-007 | Duplicate or identity-conflicting revision observations fail with portable invalid identity. | Accept one identity as both current and historical revision or return partial import state. |
 | ENTITY-IMPORT-008, ENTITY-IMPORT-010 | Failed import returns no partial import and exposes safe diagnostics. | Return partial import output after failure or leak source identity/financial values in normalized error details. |
 
-
 ## Conformance gaps
 
 The domain summaries below describe the earlier release-candidate coverage.
@@ -957,7 +952,6 @@ Native sequences consume actual returned histories, including equivalent-instant
 collisions and distinct-instant controls. Six Approval rows remain PARTIAL for
 M5 native retained-value rejection and ownership; this is not full native closure.
 
-
 M5 closes the accepted native Approval/Workflow value profile and explicit
 Workflow collection boundaries. All 579 Approval vectors and all 34
 WORKFLOW-STATES-008 vectors pass on all four runtimes. Native ownership suites
@@ -974,7 +968,6 @@ policy for that separate boundary. The approved Approval/Workflow profile does
 not silently extend to Entity data. D8 remains unresolved; M6–M7 regressions
 remain failing. These results do not establish full-domain conformance.
 
-
 M6 closes F5 and the adjacent TypeScript own-field validator lookup defect.
 Four special-field mutation controls extend the six existing special-state
 vectors; all ten pass on every runtime. Twenty-seven native TypeScript tests
@@ -986,7 +979,6 @@ pass. ENTITY-DEFINITION-002 and ENTITY-MUTABILITY-002 return to COVERED; broader
 mutability and import rows remain PARTIAL for M7. Native inherited-member cases
 cannot be encoded as JSON and supplement the portable vectors. D8 and D9 remain
 unresolved; no Entity native-number policy is selected.
-
 
 M7 closes 20 reopened Entity, Workflow, and Audit rows with portable/native
 regressions and paired critical mutations. The remaining PARTIAL Workflow guard

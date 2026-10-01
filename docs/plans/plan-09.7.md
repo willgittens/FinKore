@@ -2,21 +2,17 @@
 
 ## Status
 
-Milestones 2–7 are complete for their accepted contracts. D8, D9 and D10 are
-resolved and implemented. D9's final candidate passes complete verification,
-including the permanent inherited-fact regression added during mutation review.
-D11 is resolved and implemented under ENTITY-IMPORT-012: successful imports
-always include an explicit history list. D11 passes the scoped verification
-recorded below. Final combined release verification and Milestone 9 remain open. Milestone 9 is
-uncompleted. Earlier milestone results retain their historical scope.
-Release type: corrective release candidate. Core 1.0 promotion is blocked pending this work and the separate
-[Core 1.0 promotion gates](plan-10.md).
+**Complete — local FinKore Core 0.9.7 corrective release candidate.**
+Milestones 1–9 and the accepted D1–D11 corrections are complete. Final combined
+verification passes on the committed D11 candidate; the release changes only
+reviewed documentation. The annotated local `core-0.9.7` tag identifies the
+release commit. Earlier milestone evidence retains its historical scope.
 
-The completed [0.9.6 release](plan-09.6.md), commit
-`4041ec2838d4cbcf9333b8c6c651affe9ee10500` and local tag `core-0.9.6`, remains
-the latest corrective snapshot. Its recorded corrections remain valid historical
-work. Subsequent review reproduced additional failures outside the exercised
-boundaries of its tests. Preserve all earlier corrective regressions and tags.
+Core remains `0.9-rc`, reference-package versions remain `0.1.0`, and conformance
+syntax remains `0.1`. No remote push or package publication is included.
+[Core 1.0 promotion](plan-10.md) remains a separate, uncompleted process.
+The completed [0.9.6 release](plan-09.6.md) and all earlier corrective tags and
+regressions are preserved.
 
 This plan is non-normative. [CoreDoc](../coreDoc/core-doc.md) establishes
 foundation obligations; `/spec` defines financial behavior. Recommendations
@@ -1666,26 +1662,26 @@ not been performed.
 
 ## Milestone 9 — Documentation and local corrective release
 
-- [ ] Synchronize root/package READMEs, examples, public API docs, specification
+- [x] Synchronize root/package READMEs, examples, public API docs, specification
       status, conformance conventions/traceability, applicable Agentic metadata,
       and the Core 1.0 prerequisite. Review AGENTS.md if development rules or
       architecture actually changed.
-- [ ] Summarize accepted compatibility corrections and supported native values.
+- [x] Summarize accepted compatibility corrections and supported native values.
       Distinguish implemented behavior, passing conformance, unsupported scope,
       and behavior not yet specified. Do not retain unqualified claims beyond
       the tested boundary.
-- [ ] Add a concise maintainer release summary to
+- [x] Add a concise maintainer release summary to
       [the existing release history](../releases/README.md). Keep detailed test,
       coverage, mutation, and review results in this plan and normal development
       history, not in release notes or a new report system.
-- [ ] Review the final diff against the verified candidate. For documentation-only
+- [x] Review the final diff against the verified candidate. For documentation-only
       changes, rerun documentation/traceability, architecture/license checks,
       whitespace, and affected installed examples; otherwise return to M8's
       complete verification. Identify precisely which revision each result covers.
-- [ ] Follow the existing local release process for the final reviewed candidate
+- [x] Follow the existing local release process for the final reviewed candidate
       and annotated `core-0.9.7` tag, preserving earlier tags. Planning alone does
       not authorize creating a release tag or publishing anything.
-- [ ] Retain Core `0.9-rc`, reference-package `0.1.0`, and conformance-syntax `0.1`
+- [x] Retain Core `0.9-rc`, reference-package `0.1.0`, and conformance-syntax `0.1`
       unless an explicit compatible release decision requires otherwise. No remote
       push, registry publication, GitHub Actions, or Core 1.0 promotion is included.
 
@@ -1722,22 +1718,22 @@ required purpose/effects/non-financial-behavior header. Verification stays local
 
 Core 0.9.7 is complete only when:
 
-- [ ] Every F1–F7 subcase and additional confirmed mandatory gap has a resolved
+- [x] Every F1–F7 subcase and additional confirmed mandatory gap has a resolved
       contract, permanent regression, passing valid control, and appropriate
       mutation protection.
-- [ ] Quorum evaluation requires explicit evidence and composition validation
+- [x] Quorum evaluation requires explicit evidence and composition validation
       covers all declared groups without changing actionability or error priority.
-- [ ] Committed Approval history and bound Workflow definitions cannot change
+- [x] Committed Approval history and bound Workflow definitions cannot change
       through retained caller values; successful operations return reusable state.
-- [ ] Approval fact selection, presence, relevance, and equality have documented
+- [x] Approval fact selection, presence, relevance, and equality have documented
       portable meaning and compatible, tested native representations.
-- [ ] Valid Entity declarations survive observation/import/reuse, and reviewed
+- [x] Valid Entity declarations survive observation/import/reuse, and reviewed
       malformed inputs fail through the correct domain with no partial effect.
-- [ ] All configured verification gates pass on the final applicable candidate,
+- [x] All configured verification gates pass on the final applicable candidate,
       all critical probes are killed, and mutation survivors have been assessed.
-- [ ] Fresh review and the broader discovery inventory leave no unresolved
+- [x] Fresh review and the broader discovery inventory leave no unresolved
       mandatory defect, blocking contract decision, or unexplained discrepancy.
-- [ ] Documentation, traceability, installed artifacts, compatibility decisions,
+- [x] Documentation, traceability, installed artifacts, compatibility decisions,
       and the local release snapshot agree; earlier protections remain intact.
 
 Completion permits reassessment under the Core 1.0 plan. It does not by itself
@@ -1892,3 +1888,59 @@ tests, public API comments, README compatibility notes, conformance conventions,
 traceability and Agentic documentation. CoreDoc and AGENTS.md need no changes:
 foundation rules, architecture, portable error identities and operation IDs are
 unchanged. **D11 is complete.**
+
+### Milestone 9 completion and final verification — 2026-10-01
+
+The maintainer explicitly requested Milestone 9 execution, including its local
+release process. The final clean code candidate is commit
+`d394ec86855c9839367d48e2daa070c8d0ce6f35`, checked out independently at
+`/tmp/finkore097-release`. After `npm ci`, its complete `npm run verify` exited
+zero. Tracked candidate files remained unchanged. This is the final combined
+result including D8–D11, not the earlier D11-only subset or preliminary run.
+
+| Gate | Final observed result |
+| --- | --- |
+| Toolchain, build, strict typing, unit and adapters | Passed: runner 136; TypeScript core 3,733; TypeScript adapter 210; Python 1,242 on each supported version; all Java and subprocess-adapter tests; 483 developer-tool tests. |
+| Conformance | All 1,775 vectors pass on TypeScript, Python 3.12/3.13 and Java, including 788 Entity vectors; no failures, unsupported or infrastructure outcomes. |
+| Coverage | All configured gates pass: runner 100% lines / 96.61% branches; TypeScript core 99.69% lines / 99.44% branches; Python 94% combined; Java 94.14% lines / 84.75% branches. |
+| Installed consumers | All six pass: npm, wheel/sdist on both Python versions, and Java JAR. The six checks pass again with the final packaged READMEs. |
+| Runner mutation | 97.21%; 628 killed, 18 reviewed survivors, 0 uncovered, 0 timeouts and 0 ignored. |
+| TypeScript mutation | 96.34%; 4,350 killed, 154 reviewed survivors, 12 uncovered, 14 timeouts and 0 ignored. Without timeout credit: 96.03%. |
+| Critical/native probes | 267/267 critical, 198/198 native and 71/71 Python 3.13 native probes killed, with passing paired controls; all 465 mutation anchors pass. |
+| Repository consistency | Documentation, traceability, architecture, licensing and whitespace pass. Inventory: 436 requirements, 352 covered, one partial, 83 not directly testable. |
+
+The final mutation reports were inspected against the recorded D9 dispositions
+and current source/call sites. The D9 counts and survivor families recur: 77
+error-class diagnostics, nine Money, fifteen Workflow, thirty-two Approval,
+eleven Audit and ten Entity mutants. No portable error-code mutation survives.
+No critical mutant survives. Diagnostic/error
+message mutations and equivalent/delegated validation paths remain counted;
+uncovered defensive paths remain in the denominator. Execution-limit/loop
+mutations are not represented as assertion kills. The core score exceeds 95%
+without timeout credit. The previously recorded independent review and permanent
+regressions remain applicable; D11 adds successful empty-history normalization
+after validation, with exact native/vector, failure-preservation, reuse and
+paired mutation controls. This finite review is not exhaustive proof.
+
+Current root/package READMEs, specification/conformance status, traceability,
+release history, developer-tool guidance and the Core 1.0 prerequisite are
+synchronized. Historical milestone results remain scoped to their original
+candidates. The documented external-fact authoring limit in WORKFLOW-GUARD-004
+remains partial; two previously classified cross-error orderings retain their
+unspecified total priority. Neither is silently assigned new financial semantics.
+
+The release diff contains documentation only. Every executable, dependency,
+configuration, normative requirement, vector and test matches the verified
+candidate. The specification-index edits change non-normative release status
+only. Final documentation/traceability, architecture, licensing and whitespace
+checks pass again, and installed consumer checks pass with the final README
+content. The local process commits that reviewed documentation and places an
+annotated `core-0.9.7` tag on the exact release commit, preserving earlier tags.
+
+Completion review covered unit/native/conformance/mutation tests, installed
+examples, TypeScript JSDoc, Python/Java API docs, `/spec`, `/conformance`,
+`/agentic`, CoreDoc and AGENTS.md. Existing APIs, examples, tests and operation
+metadata already describe the accepted contracts; this milestone adds no
+behavior, requirement, error, public API, operation ID or dependency. CoreDoc
+version fields and AGENTS.md remain current. No Core 1.0 promotion, remote push,
+registry publication or GitHub Actions are included.

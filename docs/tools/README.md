@@ -340,8 +340,9 @@ both Python wheel/sdist versions, and the JAR; these assertions also run by defa
 
 ## Native ownership milestone checks
 
-M5 verifies the accepted Approval/Workflow native profile. Entity policy outside
-that profile remains explicitly unresolved (D9). Complete-suite checks include the corrected M6–M7 regressions.
+M5 verifies the accepted Approval/Workflow native profile. D9 separately defines
+Entity application values under ENTITY-VALIDATION-011. Complete-suite checks
+include the corrected M6–M7 regressions and D9 native profile tests.
 
 ```sh
 npm exec -w @finkore/typescript -- vitest run --config vitest.ownership.config.ts --coverage
@@ -358,7 +359,6 @@ The ownership probe filter requires a passing dedicated native baseline and
 independent passing controls. It never counts infrastructure failure as a kill.
 Installed ownership assertions run by default as well as under `--ownership`;
 the scoped option stops before the full Entity assertions.
-
 
 ## Entity declaration reuse checks
 
@@ -380,7 +380,6 @@ passing baseline and independent control. The installed npm consumer exercises
 actual returned declarations/observations and special-field mutation/transition
 under both `--ownership` and the default package check. Python/Java ownership
 controls also run under that option. It does not skip M7 in full release checks.
-
 
 ## Malformed-input milestone checks
 
@@ -452,3 +451,17 @@ as semantic rejection of valid input. Full post-D8 verification passes: all 267
 critical, 165 native and 60 Python 3.13 repeat probes are killed with controls
 passing. Full runner/core mutation scores remain 97.21% and 96.34%; core exceeds
 95% without timeout credit. The plan records the exact candidate and dispositions.
+
+### Core 0.9.7 final corrective snapshot
+
+The final release verification includes D8–D11. `npm run verify` runs both full
+Stryker suites, all 267 critical probes, all 198 native probes and the 71-probe
+Python 3.13 repeat. The 465 static anchor checks guard mutation targets; runtime
+probes still require passing baselines, failed exact assertions and independent
+controls. Focused D9/D11 checks use `mutation-native.js entity-value097` and
+`mutation-native.js history097`. Earlier counts in this document describe their
+milestone snapshots; final results and survivor review are in the 0.9.7 plan.
+
+The discovery classifier's former P3 empty import-history difference now reports
+a D11 defect under ENTITY-IMPORT-012. Original exploration classifications retain
+their historical scope; they do not override subsequently selected contracts.

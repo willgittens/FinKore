@@ -5,6 +5,19 @@ behavior belongs to `/spec`; detailed change history remains available in Git.
 
 ## Unreleased
 
+## FinKore Core 0.9.7 Release Candidate
+
+Corrected complete Approval composition and history validation, explicit quorum
+evidence, fact selection and exact equality, native value ownership, and
+Workflow/Entity declaration and malformed-input handling. Defined optional
+redaction policy identity, presence-preserving Audit Event metadata, supported
+Entity native values, and explicit empty history in successful Entity imports.
+These compatibility corrections reject previously accepted unsupported inputs
+and add the empty import-history field to Python/Java results. Permanent
+regressions protect earlier corrections. The annotated `core-0.9.7` tag is local;
+Core remains `0.9-rc`, package versions `0.1.0`, and conformance syntax `0.1`.
+Reference packages remain unpublished; stable 1.0 promotion is separate.
+
 ## FinKore Core 0.9.6 Release Candidate
 
 Corrected native Money and Workflow construction, concrete Approval evaluation,

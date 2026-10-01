@@ -1,35 +1,30 @@
 # FinKore Java Core
 
-The [Core 0.9.7 plan](../../../docs/plans/plan-09.7.md) has accepted D1–D7
-contracts. Milestone 3 now validates every declared composition group, including
-unused references/cycles and quorum evidence, before choosing an outcome. All
-176 composition vectors pass on TypeScript, Python 3.12/3.13, and Java. Applicable
-quorum observations require explicit eligibility and distinct outcome mappings;
-unused groups never add actionables. Depth four still applies to actual roots.
-Milestone 4 also closes concrete Approval history, declaration, condition, and
-fact-comparison corrections: all 579 Approval suite vectors pass on all four
-runtimes. Milestone 5 implements the accepted native Approval/Workflow value profile and
-required embedded Workflow collections. Milestone 6 closes Entity special-name
-declaration preservation/reuse; all ten portable special-name controls pass on
-every runtime. Milestone 7 closes malformed Entity/Workflow boundaries and Audit
-failure observations. M8 and the D8/D10 corrections pass complete verification; all
-1758 manifest vectors pass on all four runtimes. D10 defines Event
-metadata through AUDIT-EVENT-009: any JSON value, including explicit null, with
-preserved presence, exact independent values, and rejection of cycles or
-unsupported native values using FINKORE_AUDIT_INVALID_EVENT before actor checks.
-D8 now defines optional redaction `policy.id` under AUDIT-REDACTION-008. When
-supplied it must be a nonempty string; null, empty and non-string values reject
-with FINKORE_AUDIT_REDACTION_INVALID before evidence validation. Authority and
-protected targets remain required. Twenty new vectors cover the policy-ID
-correction, with native regressions and paired mutation controls. D9 now defines
-Entity application values under ENTITY-VALIDATION-011. Complete D9 verification
-passes all 1,766 vectors on all four runtimes, coverage, package checks and mutation
-gates. D11 now requires an explicit historicalRevisions list on successful import
-(ENTITY-IMPORT-012), empty when supplied history is omitted or empty. D11
-passes all 1,775 vectors on all four runtimes and its native mutation checks.
+The completed [Core 0.9.7 corrective release](../../../docs/plans/plan-09.7.md)
+implements the accepted D1–D11 contracts. All 1,775 manifest vectors pass on
+TypeScript, Python 3.12/3.13 and Java, with no failed, unsupported or infrastructure
+outcomes. Full combined verification, native regressions, mutation gates and
+installed consumers pass. The annotated local `core-0.9.7` tag identifies the
+snapshot; Core remains `0.9-rc` and package versions remain `0.1.0`. Packages are
+unpublished, and stable 1.0 promotion remains a separate process.
+
+The compatibility corrections below cover complete Approval evidence/history
+validation, fact selection and equality, independently owned native values,
+Workflow/Entity declarations, Audit metadata presence, optional redaction policy
+identity and explicit empty import history. Previously accepted malformed or
+unsupported inputs now fail portably; valid controls retain their meaning.
+Native profiles and API-specific compatibility consequences are documented below.
+Passing the manifest does not imply arbitrary native objects are supported or
+that every specification-authoring requirement is executable; see
+[traceability](../../../conformance/traceability.md) for the remaining limits.
+
+Redaction `policy.id` is optional (AUDIT-REDACTION-008). When supplied in portable
+input it must be a nonempty string; null, empty and non-string values use
+`FINKORE_AUDIT_REDACTION_INVALID` before evidence validation. Authority and
+protected targets remain required.
+
 The native `RedactionPolicy` constructor uses null for omission and rejects empty
 IDs; `fromPortable` distinguishes an omitted ID from an invalid supplied null.
-The 0.9.6 results below describe the tagged snapshot.
 
 `Audit.Event` now has a `hasMetadata` component, matching Actor presence semantics.
 `Event.fromPortable` preserves supplied null; the constructor with explicit
@@ -106,14 +101,10 @@ Portable Workflow definitions require explicit `terminalStates` and `transitions
 arrays, including inside Entities. Empty arrays remain valid. Malformed embedded
 definitions do not produce reconstructed Entity diagnostics.
 
-Core 0.9.6 status: [Completed corrective release](../../../docs/plans/plan-09.6.md).
-Money, Workflow, Approval, Audit, and Entity corrections are verified. All 884 manifest
-vectors pass on TypeScript, Python 3.12/3.13, and Java, with no unsupported cases
-or infrastructure errors. Complete clean-candidate verification passes, including
-coverage, full TypeScript mutation, all portable/native probes, and isolated
-package consumers. Fresh review and local release closure are complete.
-The annotated local `core-0.9.6` tag identifies the snapshot; remote and package
-publication remain separate, and stable 1.0 promotion remains uncompleted.
+The 0.9.7 snapshot preserves earlier corrective protections, including
+standalone Entity import mappings, revision currentness, Workflow binding and
+complete declared-validator checks. Earlier release results remain in their
+plans and Git history; current results are recorded in the 0.9.7 plan.
 
 Entity import accepts complete mapping evidence without a separate Source
 Identity, preserving its opaque values without synthesizing Source Identity.
@@ -217,7 +208,7 @@ release-candidate phase. It is not published to a Maven repository. The Maven
 artifact version identifies this implementation artifact; `FinKore.CORE_VERSION`
 identifies the FinKore Core behavioral baseline it implements.
 
-The `core-0.9.6` local repository tag identifies the corrective snapshot.
+The `core-0.9.7` local repository tag identifies the corrective snapshot.
 `FinKore.CORE_VERSION` and packaged Core compatibility metadata remain `0.9-rc`;
 the unpublished Maven artifact version remains `0.1.0`.
 

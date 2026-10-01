@@ -2,26 +2,15 @@
 
 ## Status
 
-The [Core 0.9.7 corrective plan](plan-09.7.md) is an open prerequisite for
-stable promotion. Post-0.9.6 review reproduced additional Approval, native
-ownership, Entity declaration, and malformed-input gaps despite a fresh passing
-full verification run. D1–D7 are accepted and Milestone 2 regressions are
-published. D8 remains explicitly unresolved. Implementation corrections and
-final verification must be completed before the stable milestones below proceed.
+The [Core 0.9.7 corrective prerequisite](plan-09.7.md) is complete. D1–D11
+have selected contracts, permanent regressions and implemented corrections.
+Final combined verification passes all 1,775 vectors on TypeScript, Python
+3.12/3.13 and Java, together with native tests, coverage, full configured
+mutation, paired probes and installed consumers. Earlier corrective protections
+remain intact. Finite passing checks do not waive the stable milestones below
+or turn partially exercised requirements into complete coverage.
 
-The completed [Core 0.9.6 corrective release](plan-09.6.md) resolves its reviewed
-findings and passes its expanded release gate, preserving earlier corrective
-protections including [Core 0.9.5](plan-09.5.md) and [Core 0.9.4](plan-09.4.md).
-Milestones 1–8 implement the reviewed contract,
-construction, evaluation, Audit, and Entity corrections; all 884 vectors pass
-on all four runtimes. Fresh review also corrects revision-currentness and
-composition Decision-container validation. Milestone 8 passes complete
-clean-candidate verification, full configured mutation, and all portable/native
-probes. Milestone 9 completes documentation and the local corrective release.
-The 0.9.6 work is complete as recorded; the additional 0.9.7 prerequisite remains
-open. Passing corrective-release checks do not waive the stable milestones below.
-
-The local annotated `core-0.9.6` tag identifies the latest corrective snapshot.
+The local annotated `core-0.9.7` tag identifies the latest corrective snapshot.
 No remote tag or package publication is part of this local completion. Core
 constants remain `0.9-rc`, reference-package versions remain `0.1.0`, and
 conformance syntax remains `0.1` until their respective release decisions.
