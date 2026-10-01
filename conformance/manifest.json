@@ -63,6 +63,7 @@
         "./entities/behavior.json",
         "./entities/evolution.json",
         "./entities/import.json",
+        "./entities/import-history.json",
         "./entities/readiness-regressions.json",
         "./entities/construction-evaluation-regressions.json",
         "./entities/evidence-regressions.json",

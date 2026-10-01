@@ -49,3 +49,17 @@ test('all permanent discovery cases retain specification references and resolvab
     assert.notEqual(v.reviewFinding, 'D8', 'Unresolved policy semantics cannot have a normative oracle')
   }
 })
+
+test('D11 treats omitted successful import history as a defect, not a permitted difference', () => {
+  const candidate = { id: 'history', path: ['import', 'historicalRevisions'], operationId: 'entity.import' }
+  const lead = { statusDifference: false, exception: false, mutated: false }
+  const entity = { id: 'invoice' }
+  const missing = { status: 'success', value: { entity } }
+  const empty = { status: 'success', value: { entity, historicalRevisions: [] } }
+  const result = classify(candidate, lead, [missing, empty], seed)
+  assert.equal(result.classification, 'confirmed defect')
+  assert.equal(result.family, 'D11')
+  assert.deepEqual(result.requirements, ['ENTITY-IMPORT-012'])
+  assert.throws(() => classify(candidate, lead, [empty, empty], seed), /Unclassified/)
+  assert.throws(() => classify(candidate, lead, [missing, { ...empty, value: { entity, historicalRevisions: null } }], seed), /Unclassified/)
+})

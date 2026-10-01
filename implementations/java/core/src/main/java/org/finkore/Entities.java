@@ -160,7 +160,8 @@ public final class Entities {
    *
    * @param definition portable Entity definition
    * @param importValue import request observation
-   * @return portable import result
+   * @return portable import result, always including historicalRevisions; an
+   *     empty list when supplied history is omitted or empty (ENTITY-IMPORT-012)
    * @throws FinKoreException with {@link #INVALID_IDENTITY} for invalid supplied
    *     source or mapping identity, {@link #STATE_CONFLICT} for mismatched
    *     expectations, or {@link #VALIDATION_FAILED} when native data is unsupported
@@ -223,9 +224,7 @@ public final class Entities {
     if (currentRevision != null) {
       result.put("currentRevision", currentRevision);
     }
-    if (!historical.isEmpty()) {
-      result.put("historicalRevisions", copyJson(historical, INVALID_IDENTITY));
-    }
+    result.put("historicalRevisions", copyJson(historical, INVALID_IDENTITY));
     if (mapping != null) {
       result.put("identityMapping", mapping);
     }

@@ -269,6 +269,8 @@ def import_entity(definition: Any, import_value: Any) -> dict[str, Any]:
     explicit null and malformed values use INVALID_IDENTITY.
     Supplied revision currentness must be Boolean and agree with its current or
     historical position; conflicting declarations are never silently rewritten.
+    Successful imports always include historicalRevisions, empty when supplied
+    history is omitted or empty (ENTITY-IMPORT-012).
 
     @see ENTITY-IMPORT-007
     @see ENTITY-VALIDATION-009
@@ -315,8 +317,7 @@ def import_entity(definition: Any, import_value: Any) -> dict[str, Any]:
     result: dict[str, Any] = {"entity": entity}
     if current_revision is not None:
         result["currentRevision"] = current_revision
-    if historical:
-        result["historicalRevisions"] = historical
+    result["historicalRevisions"] = historical
     if mapping is not None:
         result["identityMapping"] = mapping
     if conflict_version is not None:

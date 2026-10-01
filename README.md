@@ -360,7 +360,9 @@ protect this correction. D9 now specifies independently owned Entity data and
 immutable native scalars under ENTITY-VALIDATION-011. Eight portable controls and
 native rejection, exactness and ownership regressions pass fresh complete
 verification, including all 1,766 vectors on all four runtimes. The wider review
-identified D11, an unresolved empty import-history output shape. The local corrective release and
+identified D11. The accepted ENTITY-IMPORT-012 correction now requires an
+explicit historicalRevisions list on successful import, empty for omitted or
+empty supplied history; D11 passes all 1,775 vectors on all four runtimes and its native mutation checks. The local corrective release and
 separate Core 1.0 promotion gates remain uncompleted.
 
 At the 0.9.6 tag, all 884 manifest vectors pass on TypeScript, CPython 3.12/3.13, and Java,

@@ -41,6 +41,10 @@ includes the version binding and conflict preconditions listed below.
 `workflow.create` and `workflow.import` remain conformance-local structural
 boundary checks rather than canonical Agentic operations.
 
+The conformance-local `entity.import` result always includes `historicalRevisions`
+under ENTITY-IMPORT-012, using an empty list for omitted or empty supplied history.
+It preserves nonempty history and existing error/failure observations.
+
 `entity.import` remains conformance-local after the Agentic review. It
 observes import identity mapping, business revision history, and conflict-version
 preconditions through fixture-shaped inputs, but Core 0.9 release candidate does not define a
@@ -450,7 +454,7 @@ field (`FINKORE_ENTITY_IMMUTABLE`). Own valid State/field names, including
 `__proto__`, retain their declarations through definition observation and reuse
 under `ENTITY-DEFINITION-002`. These Core 0.9.7 corrections retain the existing
 operation IDs and result shapes. The accepted corrections pass complete
-verification; current results and the separate D11 gap are recorded in the
+verification; current verification results are recorded in the
 [Core 0.9.7 plan](../docs/plans/plan-09.7.md).
 
 D6–D7 additionally specify the bounded Entity representation: explicit nonempty

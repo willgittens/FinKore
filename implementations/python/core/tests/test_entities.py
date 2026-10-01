@@ -89,7 +89,7 @@ class EntityTests(unittest.TestCase):
             "state": "DRAFT",
             "data": {"amount": {"amount": "1.00", "currency": "EUR"}},
         }
-        self.assertEqual(import_entity(DEFINITION, {"entity": valid}), {"entity": valid})
+        self.assertEqual(import_entity(DEFINITION, {"entity": valid}), {"entity": valid, "historicalRevisions": []})
 
         invalid = deepcopy(valid)
         invalid["data"]["amount"] = {"amount": "-1", "currency": "EUR"}

@@ -1,0 +1,754 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "entity.import.history097.omitted",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-012",
+        "ENTITY-IMPORT-006"
+      ],
+      "description": "Preserve the explicit import history result contract for omitted.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "memo"
+            ],
+            "DONE": []
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          }
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          },
+          "historicalRevisions": []
+        }
+      },
+      "tags": [
+        "boundary",
+        "mutation-sensitive",
+        "positive"
+      ],
+      "guardsAgainst": [
+        "empty-history-omitted",
+        "nonempty-history-lost",
+        "input-presence-rewritten"
+      ]
+    },
+    {
+      "id": "entity.import.history097.empty",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-012",
+        "ENTITY-IMPORT-006"
+      ],
+      "description": "Preserve the explicit import history result contract for empty.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "memo"
+            ],
+            "DONE": []
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          },
+          "historicalRevisions": []
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          },
+          "historicalRevisions": []
+        }
+      },
+      "tags": [
+        "boundary",
+        "mutation-sensitive",
+        "positive"
+      ],
+      "guardsAgainst": [
+        "empty-history-omitted",
+        "nonempty-history-lost",
+        "input-presence-rewritten"
+      ]
+    },
+    {
+      "id": "entity.import.history097.omitted-metadata",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-012",
+        "ENTITY-IMPORT-006"
+      ],
+      "description": "Preserve the explicit import history result contract for omitted-metadata.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "memo"
+            ],
+            "DONE": []
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          },
+          "identityMapping": {
+            "mappingId": "mapping",
+            "sourceSystem": "legacy",
+            "sourceId": "legacy-i",
+            "entity": {
+              "type": "invoice",
+              "id": "i"
+            }
+          },
+          "currentRevision": "rev-2",
+          "conflictVersion": "token",
+          "expectedRevision": "rev-2",
+          "expectedConflictVersion": "token",
+          "expectedState": "DRAFT"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          },
+          "historicalRevisions": [],
+          "identityMapping": {
+            "mappingId": "mapping",
+            "sourceSystem": "legacy",
+            "sourceId": "legacy-i",
+            "entity": {
+              "type": "invoice",
+              "id": "i"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "i",
+            "revision": "rev-2",
+            "current": true
+          },
+          "conflictVersion": "token"
+        }
+      },
+      "tags": [
+        "boundary",
+        "mutation-sensitive",
+        "positive"
+      ],
+      "guardsAgainst": [
+        "empty-history-omitted",
+        "nonempty-history-lost",
+        "input-presence-rewritten"
+      ]
+    },
+    {
+      "id": "entity.import.history097.empty-metadata",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-012",
+        "ENTITY-IMPORT-006"
+      ],
+      "description": "Preserve the explicit import history result contract for empty-metadata.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "memo"
+            ],
+            "DONE": []
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          },
+          "historicalRevisions": [],
+          "identityMapping": {
+            "mappingId": "mapping",
+            "sourceSystem": "legacy",
+            "sourceId": "legacy-i",
+            "entity": {
+              "type": "invoice",
+              "id": "i"
+            }
+          },
+          "currentRevision": "rev-2",
+          "conflictVersion": "token",
+          "expectedRevision": "rev-2",
+          "expectedConflictVersion": "token",
+          "expectedState": "DRAFT"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          },
+          "historicalRevisions": [],
+          "identityMapping": {
+            "mappingId": "mapping",
+            "sourceSystem": "legacy",
+            "sourceId": "legacy-i",
+            "entity": {
+              "type": "invoice",
+              "id": "i"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "i",
+            "revision": "rev-2",
+            "current": true
+          },
+          "conflictVersion": "token"
+        }
+      },
+      "tags": [
+        "boundary",
+        "mutation-sensitive",
+        "positive"
+      ],
+      "guardsAgainst": [
+        "empty-history-omitted",
+        "nonempty-history-lost",
+        "input-presence-rewritten"
+      ]
+    },
+    {
+      "id": "entity.import.history097.nonempty",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-012",
+        "ENTITY-IMPORT-006"
+      ],
+      "description": "Preserve the explicit import history result contract for nonempty.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "memo"
+            ],
+            "DONE": []
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          },
+          "historicalRevisions": [
+            "rev-1"
+          ],
+          "identityMapping": {
+            "mappingId": "mapping",
+            "sourceSystem": "legacy",
+            "sourceId": "legacy-i",
+            "entity": {
+              "type": "invoice",
+              "id": "i"
+            }
+          },
+          "currentRevision": "rev-2",
+          "conflictVersion": "token",
+          "expectedRevision": "rev-2",
+          "expectedConflictVersion": "token",
+          "expectedState": "DRAFT"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          },
+          "historicalRevisions": [
+            {
+              "type": "invoice",
+              "id": "i",
+              "revision": "rev-1",
+              "current": false
+            }
+          ],
+          "identityMapping": {
+            "mappingId": "mapping",
+            "sourceSystem": "legacy",
+            "sourceId": "legacy-i",
+            "entity": {
+              "type": "invoice",
+              "id": "i"
+            }
+          },
+          "currentRevision": {
+            "type": "invoice",
+            "id": "i",
+            "revision": "rev-2",
+            "current": true
+          },
+          "conflictVersion": "token"
+        }
+      },
+      "tags": [
+        "boundary",
+        "mutation-sensitive",
+        "positive"
+      ],
+      "guardsAgainst": [
+        "empty-history-omitted",
+        "nonempty-history-lost",
+        "input-presence-rewritten"
+      ]
+    },
+    {
+      "id": "entity.import.history097.null",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-012",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009"
+      ],
+      "description": "Preserve the explicit import history result contract for null.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "memo"
+            ],
+            "DONE": []
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          },
+          "historicalRevisions": null
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          }
+        }
+      },
+      "tags": [
+        "boundary",
+        "mutation-sensitive",
+        "negative"
+      ],
+      "guardsAgainst": [
+        "empty-history-omitted",
+        "nonempty-history-lost",
+        "input-presence-rewritten"
+      ]
+    },
+    {
+      "id": "entity.import.history097.object",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-012",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-009"
+      ],
+      "description": "Preserve the explicit import history result contract for object.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "memo"
+            ],
+            "DONE": []
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          },
+          "historicalRevisions": {}
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_INVALID_IDENTITY"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          }
+        }
+      },
+      "tags": [
+        "boundary",
+        "mutation-sensitive",
+        "negative"
+      ],
+      "guardsAgainst": [
+        "empty-history-omitted",
+        "nonempty-history-lost",
+        "input-presence-rewritten"
+      ]
+    },
+    {
+      "id": "entity.import.history097.omitted-conflict",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-012",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-007"
+      ],
+      "description": "Preserve the explicit import history result contract for omitted-conflict.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "memo"
+            ],
+            "DONE": []
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          },
+          "expectedState": "DONE"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_STATE_CONFLICT"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          }
+        }
+      },
+      "tags": [
+        "boundary",
+        "mutation-sensitive",
+        "negative"
+      ],
+      "guardsAgainst": [
+        "empty-history-omitted",
+        "nonempty-history-lost",
+        "input-presence-rewritten"
+      ]
+    },
+    {
+      "id": "entity.import.history097.empty-conflict",
+      "spec": "entities/import",
+      "requirements": [
+        "ENTITY-IMPORT-012",
+        "ENTITY-IMPORT-008",
+        "ENTITY-IMPORT-007"
+      ],
+      "description": "Preserve the explicit import history result contract for empty-conflict.",
+      "operation": "entity.import",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "DONE"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "DONE"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "memo"
+            ],
+            "DONE": []
+          }
+        },
+        "import": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          },
+          "historicalRevisions": [],
+          "expectedState": "DONE"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_STATE_CONFLICT"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "i",
+            "state": "DRAFT",
+            "data": {
+              "memo": "imported"
+            }
+          }
+        }
+      },
+      "tags": [
+        "boundary",
+        "mutation-sensitive",
+        "negative"
+      ],
+      "guardsAgainst": [
+        "empty-history-omitted",
+        "nonempty-history-lost",
+        "input-presence-rewritten"
+      ]
+    }
+  ]
+}

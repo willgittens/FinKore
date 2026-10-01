@@ -114,6 +114,7 @@ public final class BoundaryRegressionTest {
     cases.put("audit.unsupported-number-subclasses", BoundaryRegressionTest::unsupportedNumberSubclasses);
     cases.put("audit.scalar-control", () -> equal(event(), Audit.Event.fromPortable(event()).toPortable()));
     cases.putAll(EntityNativeValuesTest.cases());
+    cases.putAll(EntityImportHistoryTest.cases());
     return cases;
   }
 

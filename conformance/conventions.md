@@ -416,8 +416,11 @@ categories. `entities/application-values.json` exercises supported JSON values
 through creation, import, mutation, transition and all four evolution operations.
 Native tests supplement JSON for shared references, cycles, unsupported numeric
 objects/subclasses, non-finite values, exact native decimals and observation reuse.
-The import control supplies historical revision evidence; it does not select
-D11's unresolved output representation for empty import history.
+The application-value import control supplies historical revision evidence.
+The separate `entities/import-history.json` cases exercise ENTITY-IMPORT-012: every
+successful import includes `historicalRevisions`, empty when supplied history is
+omitted or empty. This represents supplied evidence only; null and malformed
+history remain invalid, and failed observations retain input member presence.
 
 ### Entity declarations and revision identity
 

@@ -17,7 +17,9 @@ D9 adds eight portable Entity value controls in
 to 1,766 vectors. Native tests supplement JSON for unsupported native values,
 exact immutable scalars, cycles and reference ownership. Full combined
 verification after D9 passes on all four runtimes; earlier pass counts below are
-historical. D11 remains an unresolved empty import-history output shape.
+historical. D11 now requires an explicit historicalRevisions list on successful import
+(ENTITY-IMPORT-012), empty when supplied history is omitted or empty. D11
+passes all 1,775 vectors on all four runtimes and its native mutation checks.
 
 ## Scope and discovery
 
@@ -42,8 +44,7 @@ for input/output ownership and unsupported numeric subclasses. Entity boundary c
 [Core 0.9.7 Milestone 6](../docs/plans/plan-09.7.md) closes Entity declaration
 observation/reuse, including own special names and inherited-member rejection.
 Four special-field controls extend the six special-state vectors; native tests
-cover aliases and actual definition/observation reuse. M7 closes the published malformed-input regressions. D8 and D9 have implemented contracts and passing combined verification; D11
-remains a separate decision.
+cover aliases and actual definition/observation reuse. M7 closes the published malformed-input regressions. D8 and D9 have implemented contracts and passing combined verification; D11 now has an accepted result-shape contract under ENTITY-IMPORT-012.
 
 [Core 0.9.7 Milestone 2](../docs/plans/plan-09.7.md) published 699 new
 full-envelope vectors and 197 supplementary native/adapter cases, alongside the

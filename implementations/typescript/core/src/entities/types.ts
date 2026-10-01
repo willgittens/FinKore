@@ -326,7 +326,9 @@ export interface EntityImportResult {
   /** Current business revision when supplied. */
   readonly currentRevision?: EntityRevisionObservation
 
-  /** Historical business revisions preserved from the import observation. */
+  /** Supplied historical revisions; always present and empty when omitted or empty.
+   * @see ENTITY-IMPORT-012
+   */
   readonly historicalRevisions: readonly EntityRevisionObservation[]
 
   /** Explicit source identity mapping evidence when supplied. */

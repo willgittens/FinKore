@@ -79,7 +79,7 @@ public final class EntitiesTest {
         "id", "inv-import",
         "state", "DRAFT",
         "data", Map.of("amount", Map.of("amount", "1.00", "currency", "EUR")));
-    assertEquals(Map.of("entity", valid), Entities.importEntity(definitionWithValidation(), Map.of("entity", valid)));
+    assertEquals(Map.of("entity", valid, "historicalRevisions", List.of()), Entities.importEntity(definitionWithValidation(), Map.of("entity", valid)));
 
     Map<String, Object> invalid = Map.of(
         "type", "invoice",

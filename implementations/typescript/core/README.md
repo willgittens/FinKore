@@ -24,7 +24,9 @@ protected targets remain required. Twenty new vectors cover the policy-ID
 correction, with native regressions and paired mutation controls. D9 now defines
 Entity application values under ENTITY-VALIDATION-011. Complete D9 verification
 passes all 1,766 vectors on all four runtimes, coverage, package checks and mutation
-gates. D11 remains an unresolved empty import-history output shape.
+gates. D11 now requires an explicit historicalRevisions list on successful import
+(ENTITY-IMPORT-012), empty when supplied history is omitted or empty. D11
+passes all 1,775 vectors on all four runtimes and its native mutation checks.
 The 0.9.6 results below describe the tagged snapshot.
 
 Milestone 8 review corrects native sparse collections: every supplied position
@@ -551,3 +553,12 @@ review.
 Public TypeScript APIs are documented with JSDoc. Where an API implements normative FinKore behavior, its JSDoc references the relevant stable requirement IDs from `/spec`.
 
 The JSDoc is implementation guidance for TypeScript users; `/spec` remains the normative source of FinKore behavior. Future generated API documentation may be produced from these comments.
+
+### Core 0.9.7 import history correction
+
+Successful import results always include `historicalRevisions`, using `[]` when
+supplied history is omitted or empty (ENTITY-IMPORT-012). Nonempty history,
+current revision, mapping, conflict tokens and failure input presence remain
+preserved. This corrects Python/Java output shape; TypeScript behavior is
+unchanged. Exact-shape consumers of Python/Java results must allow the added
+field. The empty result records supplied history, not absence of earlier events.

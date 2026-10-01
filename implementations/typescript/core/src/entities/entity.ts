@@ -477,7 +477,8 @@ export class FinancialEntity {
    * @param importInput - Existing Entity import observation and optional
    * mapping, revision history, conflict version, and expected preconditions.
    * @returns A defensive import observation preserving supplied identity,
-   * revision, mapping, and conflict-version values.
+   * revision, mapping, and conflict-version values. Always includes historicalRevisions,
+   * empty when supplied history is omitted or empty (ENTITY-IMPORT-012).
    * @throws {InvalidEntityIdentityError}
    * When Entity, revision, mapping, or conflict-version identity is missing,
    * malformed, incomplete, or internally conflicting.

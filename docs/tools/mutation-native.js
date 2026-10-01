@@ -18,6 +18,66 @@ const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const constructionPy = 'test_construction_evaluation_regressions.ConstructionEvaluationRegressions.'
 const probes = [
 {
+  "id": "python-entity-history097-omitted",
+  "language": "python",
+  "path": "entities.py",
+  "from": "    result[\"historicalRevisions\"] = historical",
+  "to": "    if historical:\n        result[\"historicalRevisions\"] = historical",
+  "target": "test_entity_import_history.EntityImportHistoryTests.test_empty_history_contract",
+  "control": "test_entity_import_history.EntityImportHistoryTests.test_nonempty_history_control"
+},
+{
+  "id": "python-entity-history097-lost",
+  "language": "python",
+  "path": "entities.py",
+  "from": "    result[\"historicalRevisions\"] = historical",
+  "to": "    result[\"historicalRevisions\"] = []",
+  "target": "test_entity_import_history.EntityImportHistoryTests.test_nonempty_history_control",
+  "control": "test_entity_import_history.EntityImportHistoryTests.test_empty_history_contract"
+},
+{
+  "id": "java-entity-history097-omitted",
+  "language": "java",
+  "path": "Entities.java",
+  "from": "    result.put(\"historicalRevisions\", copyJson(historical, INVALID_IDENTITY));",
+  "to": "    if (!historical.isEmpty()) {\n      result.put(\"historicalRevisions\", copyJson(historical, INVALID_IDENTITY));\n    }",
+  "target": "entity.import.history097.empty",
+  "control": "entity.import.history097.nonempty"
+},
+{
+  "id": "java-entity-history097-lost",
+  "language": "java",
+  "path": "Entities.java",
+  "from": "    result.put(\"historicalRevisions\", copyJson(historical, INVALID_IDENTITY));",
+  "to": "    result.put(\"historicalRevisions\", new ArrayList<>());",
+  "target": "entity.import.history097.nonempty",
+  "control": "entity.import.history097.empty"
+},
+{
+  "id": "typescript-entity-history097-omitted",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "    historicalRevisions,",
+  "to": "    ...(historicalRevisions.length === 0 ? {} : { historicalRevisions }),",
+  "target": "Entity import history empty history contract",
+  "control": "Entity import history nonempty history control",
+  "tests": [
+    "test/entities/import-history.test.ts"
+  ]
+},
+{
+  "id": "typescript-entity-history097-lost",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "    historicalRevisions,",
+  "to": "    historicalRevisions: [],",
+  "target": "Entity import history nonempty history control",
+  "control": "Entity import history empty history contract",
+  "tests": [
+    "test/entities/import-history.test.ts"
+  ]
+},
+{
   "id": "typescript-entity-value097-own-member-and",
   "language": "typescript",
   "path": "src/entities/entity.ts",

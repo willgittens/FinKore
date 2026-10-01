@@ -5,8 +5,9 @@
 Milestones 2–7 are complete for their accepted contracts. D8, D9 and D10 are
 resolved and implemented. D9's final candidate passes complete verification,
 including the permanent inherited-fact regression added during mutation review.
-The broader review found D11, an unresolved empty import-history output shape;
-M1 and overall release closure remain open for that decision. Milestone 9 is
+D11 is resolved and implemented under ENTITY-IMPORT-012: successful imports
+always include an explicit history list. D11 passes the scoped verification
+recorded below. Final combined release verification and Milestone 9 remain open. Milestone 9 is
 uncompleted. Earlier milestone results retain their historical scope.
 Release type: corrective release candidate. Core 1.0 promotion is blocked pending this work and the separate
 [Core 1.0 promotion gates](plan-10.md).
@@ -1812,11 +1813,11 @@ unchanged. Final refreshes are documentation/API comments and informational
 inputs/expectations and operation IDs match the verified candidate. Final
 repository/documentation checks passed again.
 
-**D9 is complete.** D11 remains a separate unselected contract; M9 release history
+**D9 is complete.** At that snapshot D11 remained a separate unselected contract; M9 release history
 and local tag creation remain unrequested and unperformed. Earlier D9-open
 statements in milestone evidence describe those earlier snapshots.
 
-### D11 — Empty import-history result shape: unresolved
+### D11 — Empty import-history result shape: resolved
 
 D9's adjacent-boundary review found a separate result-shape difference. For a
 valid `entity.import` with `historicalRevisions` omitted or an empty list,
@@ -1830,7 +1831,64 @@ value profile and is not silently repaired in a core or adapter.
 Recommendation for a separate decision: normalize successful import observations
 to include `historicalRevisions: []` when supplied history is omitted or empty. Preserve
 nonempty revision observations, existing errors, input presence on failure and
-all error priorities. This recommendation is **not adopted** by the D9 approval.
+all error priorities. This recommendation was not part of D9; the maintainer explicitly accepted it
+on 2026-10-01 by requesting D11 execution.
 D9's portable import control supplies a real historical revision and tests its
 preservation; it makes no expectation for the unselected empty-result shape.
-This new gap prevents declaring the entire 0.9.7 plan closed.
+ENTITY-IMPORT-012 now selects this result shape. D11 verification passes as
+recorded below; final combined release verification and M9 remain pending.
+
+### D11 implementation and verification — 2026-10-01
+
+The accepted contract is ENTITY-IMPORT-012. Python and Java now always add the
+validated historical-revision list after all import validation succeeds.
+TypeScript already implements this result shape. No adapter or runner logic
+changes, new portable errors, or canonical operation IDs are introduced.
+
+Before the fix, Python failed four empty-history matrix assertions and Java
+failed its empty-history case; nonempty and failure controls passed. TypeScript
+passed all three new direct-core cases. Nine new portable vectors cover omitted
+and empty history both with and without mapping/current-revision/conflict
+metadata, nonempty preservation, null/object rejection and failed expectations.
+Native tests additionally reuse actual returned results and verify independent
+input/output observations. Existing Python/Java exact-output tests are updated
+to the newly selected contract.
+
+The investigation classifier no longer treats absent successful history as P3.
+It reports a D11 defect traceable to ENTITY-IMPORT-012; historical P3 counts above
+retain their original review scope. Paired mutation probes restore the former
+omission and erase supplied history on each runtime. All six probes are killed
+with passing paired controls; the two Python probes also pass on Python 3.13.
+
+D11 verification passed:
+
+- Build and strict TypeScript; runner 136 tests, TypeScript core 3,733 tests,
+  TypeScript adapter 210 tests; Python 1,242 tests on each supported version;
+  Java core and both subprocess adapters, including Python 3.13.
+- All 1,775 manifest vectors on TypeScript, Python 3.12/3.13 and Java, including
+  788 Entity vectors; zero failures, unsupported or infrastructure outcomes.
+- TypeScript core coverage 99.69% lines / 99.44% branches, Python combined
+  coverage 94%, and the Java coverage gates.
+- All 88 existing critical Entity probes with paired controls, all six D11
+  native probes and both Python 3.13 D11 probes. No D11 mutant survives.
+- All six installed consumers (npm, wheel/sdist on both Python versions, Java
+  JAR), 483 developer-tool tests, 465 mutation anchors, architecture, documentation,
+  traceability, licensing and whitespace checks.
+
+The initial combined check reached documentation validation with the new vector
+file not yet registered; registration and the requirement index were corrected
+and the documentation checks then passed. The first TypeScript mutation
+baseline used a fixture path unavailable in temporary copies; self-contained
+native cases fixed the harness, after which both mutations were killed by exact
+assertions. These setup failures are not counted as mutation kills.
+
+This is scoped D11 verification, not a new complete `npm run verify` result or
+a refreshed repository-wide Stryker score. TypeScript executable behavior and
+the runner are unchanged. Final combined release verification still precedes
+Milestone 9 release history/tag creation; neither release action is performed.
+
+Completion review updated the specification, vectors, native/unit and mutation
+tests, public API comments, README compatibility notes, conformance conventions,
+traceability and Agentic documentation. CoreDoc and AGENTS.md need no changes:
+foundation rules, architecture, portable error identities and operation IDs are
+unchanged. **D11 is complete.**
