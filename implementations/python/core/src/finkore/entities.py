@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from math import isfinite
 from decimal import Decimal
 from typing import Any
 
@@ -127,6 +128,35 @@ def validate_definition(definition: Any) -> dict[str, Any]:
     return deepcopy(definition)
 
 
+def _copy_entity_value(value: Any, code: str = VALIDATION_FAILED, ancestors: set[int] | None = None) -> Any:
+    # ENTITY-VALIDATION-011: exact immutable scalars and independently owned containers.
+    if value is None or type(value) in (str, bool, int):
+        return value
+    if type(value) is float and isfinite(value):
+        return value
+    if type(value) is Decimal and value.is_finite():
+        return value
+    if not isinstance(value, (list, dict)):
+        raise FinKoreError(code)
+    if ancestors is None:
+        ancestors = set()
+    identity = id(value)
+    if identity in ancestors:
+        raise FinKoreError(code)
+    ancestors.add(identity)
+    try:
+        if isinstance(value, list):
+            return [_copy_entity_value(item, code, ancestors) for item in value]
+        result = {}
+        for key, item in value.items():
+            if type(key) is not str:
+                raise FinKoreError(code)
+            result[key] = _copy_entity_value(item, code, ancestors)
+        return result
+    finally:
+        ancestors.remove(identity)
+
+
 def validate_entity(definition: dict[str, Any], entity: Any) -> dict[str, Any]:
     """Validate an Entity and its explicitly retained Workflow binding.
 
@@ -137,7 +167,8 @@ def validate_entity(definition: dict[str, Any], entity: Any) -> dict[str, Any]:
     nonempty States use FINKORE_WORKFLOW_INVALID_STATE. Data must be an object
     satisfying all declared rules, including before any proposed mutation.
     See WORKFLOW-VERSION-007/008/010, ENTITY-LIFECYCLE-007,
-    ENTITY-VALIDATION-010 and ENTITY-IMPORT-002.
+    ENTITY-VALIDATION-010/011 and ENTITY-IMPORT-002. Unsupported native data
+    raises FINKORE_ENTITY_VALIDATION_FAILED without invoking custom copy hooks.
     """
 
     if not isinstance(entity, dict) or entity.get("type") != definition["type"] or not _opaque(entity.get("id")):
@@ -148,8 +179,9 @@ def validate_entity(definition: dict[str, Any], entity: Any) -> dict[str, Any]:
     import_workflow(workflow, _workflow_instance(entity))
     if not isinstance(entity.get("data"), dict):
         raise FinKoreError(VALIDATION_FAILED)
-    _validate_entity_data(definition, entity)
-    return deepcopy(entity)
+    owned = {**entity, "data": _copy_entity_value(entity["data"])}
+    _validate_entity_data(definition, owned)
+    return deepcopy(owned)
 
 
 def _workflow_instance(entity: dict[str, Any]) -> WorkflowInstance:
@@ -163,7 +195,8 @@ def create_entity(definition: Any, entity_id: Any, data: Any) -> dict[str, Any]:
 
     Returns owned data without mutating inputs. See ENTITY-LIFECYCLE-001/002
     and WORKFLOW-VERSION-007/008; validator errors follow validate_definition.
-    Non-object data raises FINKORE_ENTITY_VALIDATION_FAILED.
+    Non-object or unsupported native data raises FINKORE_ENTITY_VALIDATION_FAILED
+    under ENTITY-VALIDATION-010/011; immutable exact numbers are preserved.
     """
 
     entity_definition = validate_definition(definition)
@@ -173,7 +206,7 @@ def create_entity(definition: Any, entity_id: Any, data: Any) -> dict[str, Any]:
         raise FinKoreError(VALIDATION_FAILED)
     workflow = WorkflowDefinition.from_portable(entity_definition["workflow"])
     instance = create_workflow(workflow)
-    entity = {"type": entity_definition["type"], "id": entity_id, "state": instance.current_state, "data": deepcopy(data)}
+    entity = {"type": entity_definition["type"], "id": entity_id, "state": instance.current_state, "data": _copy_entity_value(data)}
     if instance.binding is not None:
         entity["binding"] = instance.binding
     _validate_entity_data(entity_definition, entity)
@@ -185,7 +218,9 @@ def mutate_entity(definition: Any, entity: Any, changes: Any) -> dict[str, Any]:
 
     Validate the original data and binding before applying changes; empty changes
     raise FINKORE_ENTITY_INVALID_MUTATION (ENTITY-MUTABILITY-009). Failure
-    leaves the source unchanged. See ENTITY-MUTABILITY-002/004 and
+    leaves the source unchanged. Unsupported proposed values raise
+    FINKORE_ENTITY_INVALID_MUTATION (ENTITY-VALIDATION-011).
+    See ENTITY-MUTABILITY-002/004 and
     WORKFLOW-VERSION-008/010.
     """
 
@@ -199,7 +234,7 @@ def mutate_entity(definition: Any, entity: Any, changes: Any) -> dict[str, Any]:
     if any(path not in mutable for path in changes):
         raise FinKoreError(IMMUTABLE)
     result = deepcopy(current)
-    result["data"] = {**result["data"], **deepcopy(changes)}
+    result["data"] = {**result["data"], **_copy_entity_value(changes, INVALID_MUTATION)}
     _validate_entity_data(entity_definition, result)
     return result
 

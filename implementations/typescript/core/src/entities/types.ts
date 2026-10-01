@@ -219,7 +219,9 @@ export interface SerializedFinancialEntity {
   /** Exactly one current lifecycle state. */
   readonly state: WorkflowStateIdentifier
 
-  /** Composing-domain data carried without validation-rule interpretation. */
+  /** Composing-domain application data following the supported native value profile.
+   * @see ENTITY-VALIDATION-011
+   */
   readonly data: unknown
 }
 

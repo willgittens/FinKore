@@ -241,7 +241,7 @@ describe('Financial Entity identity and lifecycle', () => {
 
   it('rejects uncloneable entity data before creating an observable entity', () => {
     expect(() => FinancialEntity.create(invoiceDefinition, 'inv-42', { uncloneable: () => undefined })).toThrow(
-      'Entity data must be observable as portable structured data',
+      expect.objectContaining({ code: 'FINKORE_ENTITY_VALIDATION_FAILED' }),
     )
   })
 
@@ -553,7 +553,7 @@ describe('Financial Entity validation', () => {
     expect(entity.mutate({ nullValue: null }).validate()).toEqual({ valid: true, findings: [] })
     expect(entity.mutate({ zeroValue: 0 }).validate()).toEqual({ valid: true, findings: [] })
 
-    expect(() => entity.mutate({ amount: undefined })).toThrow(EntityValidationFailedError)
+    expect(() => entity.mutate({ amount: undefined })).toThrow(InvalidEntityMutationError)
     expect(() => entity.mutate({ amount: null })).toThrow(EntityValidationFailedError)
     expect(() => entity.mutate({ amount: false })).toThrow(EntityValidationFailedError)
     expect(() => entity.mutate({ amount: 0 })).toThrow(EntityValidationFailedError)

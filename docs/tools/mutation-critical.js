@@ -80,8 +80,8 @@ const pythonMutants = [
   "id": "python-malformed097-current-data",
   "suite": "entities",
   "path": "core/src/finkore/entities.py",
-  "from": "    _validate_entity_data(definition, entity)\n    return deepcopy(entity)",
-  "to": "    return deepcopy(entity)",
+  "from": "    _validate_entity_data(definition, owned)\n    return deepcopy(owned)",
+  "to": "    return deepcopy(owned)",
   "expectedVector": "entity.boundary097.original-data-mutate-00-001",
   "expectedPassVectors": [
     "entity.boundary097.original-data-valid-control-001"
@@ -1151,8 +1151,8 @@ const pythonMutants = [
     expectedPassVectors: ['entity.import.validation-positive-money-valid-001'],
     suite: 'entities',
     path: 'core/src/finkore/entities.py',
-    from: '    _validate_entity_data(definition, entity)\n    return deepcopy(entity)',
-    to: '    return deepcopy(entity)',
+    from: '    _validate_entity_data(definition, owned)\n    return deepcopy(owned)',
+    to: '    return deepcopy(owned)',
   },
   {
     id: 'python-workflow-boolean-number-coercion',
@@ -1241,7 +1241,7 @@ const pythonMutants = [
     expectedVector: 'entity.validation.cross-field-paired-increase-001',
     suite: 'entities',
     path: 'core/src/finkore/entities.py',
-    from: 'result["data"] = {**result["data"], **deepcopy(changes)}',
+    from: 'result["data"] = {**result["data"], **_copy_entity_value(changes, INVALID_MUTATION)}',
     to: 'for path, value in changes.items():\n        result["data"][path] = deepcopy(value)\n        _validate_entity_data(entity_definition, result)',
   },
   {
@@ -2513,8 +2513,8 @@ const javaMutants = [
     expectedVector: 'entity.validation.cross-field-retained-limit-valid-001',
     suite: 'entities',
     path: 'core/src/main/java/org/finkore/Entities.java',
-    from: 'resultData.putAll(copyMap(changeMap, INVALID_MUTATION));\n    validateEntityData(entityDefinition, result);',
-    to: 'resultData.putAll(copyMap(changeMap, INVALID_MUTATION));\n    validateEntityData(entityDefinition, Map.of("data", changeMap));',
+    from: 'resultData.putAll(copyEntityMap(changeMap, INVALID_MUTATION));\n    validateEntityData(entityDefinition, result);',
+    to: 'resultData.putAll(copyEntityMap(changeMap, INVALID_MUTATION));\n    validateEntityData(entityDefinition, Map.of("data", changeMap));',
   },
   {
     id: 'java-entity-cross-field-validation-bypass',
@@ -2540,8 +2540,8 @@ const javaMutants = [
     expectedVector: 'entity.validation.cross-field-combined-invalid-001',
     suite: 'entities',
     path: 'core/src/main/java/org/finkore/Entities.java',
-    from: 'resultData.putAll(copyMap(changeMap, INVALID_MUTATION));\n    validateEntityData(entityDefinition, result);',
-    to: 'resultData.putAll(copyMap(changeMap, INVALID_MUTATION));\n    validateEntityData(entityDefinition, current);',
+    from: 'resultData.putAll(copyEntityMap(changeMap, INVALID_MUTATION));\n    validateEntityData(entityDefinition, result);',
+    to: 'resultData.putAll(copyEntityMap(changeMap, INVALID_MUTATION));\n    validateEntityData(entityDefinition, current);',
   },
   {
     id: 'java-entity-validates-intermediate-result',
@@ -2549,7 +2549,7 @@ const javaMutants = [
     expectedVector: 'entity.validation.cross-field-paired-increase-001',
     suite: 'entities',
     path: 'core/src/main/java/org/finkore/Entities.java',
-    from: 'resultData.putAll(copyMap(changeMap, INVALID_MUTATION));',
+    from: 'resultData.putAll(copyEntityMap(changeMap, INVALID_MUTATION));',
     to: 'for (Map.Entry<String, Object> entry : changeMap.entrySet()) {\n      resultData.put(entry.getKey(), entry.getValue());\n      validateEntityData(entityDefinition, result);\n    }',
   },
   {

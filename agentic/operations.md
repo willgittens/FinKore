@@ -449,7 +449,9 @@ Entity create, mutate, transition, and evolution without adding an operation ID.
 field (`FINKORE_ENTITY_IMMUTABLE`). Own valid State/field names, including
 `__proto__`, retain their declarations through definition observation and reuse
 under `ENTITY-DEFINITION-002`. These Core 0.9.7 corrections retain the existing
-operation IDs and result shapes; implementation verification remains pending.
+operation IDs and result shapes. The accepted corrections pass complete
+verification; current results and the separate D11 gap are recorded in the
+[Core 0.9.7 plan](../docs/plans/plan-09.7.md).
 
 D6–D7 additionally specify the bounded Entity representation: explicit nonempty
 identity scope (`ENTITY-IDENTITY-007`), object-valued data with VALIDATION_FAILED
@@ -458,6 +460,15 @@ errors for current-State shape (`ENTITY-LIFECYCLE-007`), and INVALID_MUTATION fo
 empty change objects (`ENTITY-MUTABILITY-009`). Existing Workflow priority and
 non-mutation guarantees apply. These are staged compatibility corrections;
 M2 regression publication does not claim implementation conformance.
+
+Entity application data additionally follows [ENTITY-VALIDATION-011](../spec/entities/validation.md):
+owned containers and documented supported immutable scalars, exact values and all
+JSON member names preserved across creation, import, mutation, transition and
+evolution. Unsupported initial/imported/current data uses
+`FINKORE_ENTITY_VALIDATION_FAILED`; unsupported proposed mutation values use
+`FINKORE_ENTITY_INVALID_MUTATION` after existing mutability checks. Cycles,
+non-finite values and unsupported native objects reject without partial Entity,
+evolution or Audit effects. Existing validation priorities and operation IDs remain.
 
 ## `finkore.entity.create`
 

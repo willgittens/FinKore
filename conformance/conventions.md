@@ -408,6 +408,17 @@ invalid even when unrelated, withdrawn, superseded, expired, ineffective, or
 placed after an approving Decision. Native record tests also reuse these
 malformed histories and verify unchanged Decisions and lifecycle evidence.
 
+### Entity application values
+
+[ENTITY-VALIDATION-011](../spec/entities/validation.md) governs the supported
+native value profile, independent ownership, exact values and owning error
+categories. `entities/application-values.json` exercises supported JSON values
+through creation, import, mutation, transition and all four evolution operations.
+Native tests supplement JSON for shared references, cycles, unsupported numeric
+objects/subclasses, non-finite values, exact native decimals and observation reuse.
+The import control supplies historical revision evidence; it does not select
+D11's unresolved output representation for empty import history.
+
 ### Entity declarations and revision identity
 
 Under **ENTITY-VALIDATION-009**, the bounded fixture rejects an unknown rule,

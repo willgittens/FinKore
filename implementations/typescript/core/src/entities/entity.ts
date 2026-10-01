@@ -45,6 +45,23 @@ function cloneJsonValue<T>(value: T): T {
   }
 }
 
+// ENTITY-VALIDATION-011: copy application data without coercion or native copy hooks.
+function copyEntityValue(value: unknown, proposed = false, ancestors = new Set<object>()): unknown {
+  const invalid = (): never => { throw proposed ? new InvalidEntityMutationError() : new EntityValidationFailedError() }
+  if (value === null || typeof value === 'string' || typeof value === 'boolean') return value
+  if (typeof value === 'number') return Number.isFinite(value) ? value : invalid()
+  if (typeof value !== 'object' || ancestors.has(value)) return invalid()
+  ancestors.add(value)
+  try {
+    if (Array.isArray(value)) return Array.from(arrayValues(value), (item) => copyEntityValue(item, proposed, ancestors))
+    if (Object.getPrototypeOf(value) !== Object.prototype && Object.getPrototypeOf(value) !== null) return invalid()
+    if (Object.getOwnPropertySymbols(value).length !== 0) return invalid()
+    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, copyEntityValue(item, proposed, ancestors)]))
+  } finally {
+    ancestors.delete(value)
+  }
+}
+
 function validateDefinition(input: unknown): EntityDefinition {
   if (!isPlainRecord(input)) throw new InvalidEntityIdentityError()
   const type = requiredString(input.type)
@@ -126,7 +143,7 @@ function validateSerializedEntity(definition: EntityDefinition, input: unknown):
     id,
     state: workflow.currentState,
     ...(binding === undefined ? {} : { binding }),
-    data: cloneJsonValue(input.data),
+    data: copyEntityValue(input.data),
   }
 }
 
@@ -359,7 +376,8 @@ export class FinancialEntity {
    * When validator declarations are malformed/unsupported, or mutability
    * declarations are malformed or lack an own entry for any declared State.
    * @throws {EntityValidationFailedError}
-   * When initial data is not an object or declared predicates reject it.
+   * When initial data is not an object, contains unsupported native values,
+   * or declared predicates reject it (ENTITY-VALIDATION-011).
    * @throws {InvalidEntityIdentityError}
    * When Entity type, identity scope, or entity identifier is missing or
    * malformed.
@@ -373,19 +391,22 @@ export class FinancialEntity {
    * @see ENTITY-LIFECYCLE-002
    * @see ENTITY-MUTABILITY-008
    * @see ENTITY-IDENTITY-007
+   * @see ENTITY-VALIDATION-011
    * @see ENTITY-VALIDATION-010
    */
   static create(definitionInput: unknown, id: unknown, data: unknown): FinancialEntity {
     const definition = validateDefinition(definitionInput)
     const workflow = Workflow.create(definition.workflow)
     assertValidEntityData(definition, data)
+    const entityId = requiredString(id)
+    const ownedData = copyEntityValue(data)
     const binding = workflow.versionBinding()
     return new FinancialEntity(definition, {
       type: definition.type,
-      id: requiredString(id),
+      id: entityId,
       state: workflow.currentState,
       ...(binding === undefined ? {} : { binding }),
-      data: cloneJsonValue(data),
+      data: ownedData,
     })
   }
 
@@ -415,13 +436,15 @@ export class FinancialEntity {
    * When validator declarations are malformed/unsupported, or mutability
    * declarations are malformed or lack an own entry for any declared State.
    * @throws {EntityValidationFailedError}
-   * When Entity data is not an object or declared predicates reject it.
+   * When Entity data is not an object, contains unsupported native values,
+   * or declared predicates reject it (ENTITY-VALIDATION-011).
    *
    * @see FINKORE_ENTITY_INVALID_IDENTITY
    * @see FINKORE_WORKFLOW_INVALID_STATE
    * @see ENTITY-IDENTITY-001
    * @see ENTITY-LIFECYCLE-006
    * @see ENTITY-LIFECYCLE-007
+   * @see ENTITY-VALIDATION-011
    * @see ENTITY-VALIDATION-010
    */
   static from(definitionInput: unknown, entityInput: unknown): FinancialEntity {
@@ -472,7 +495,8 @@ export class FinancialEntity {
    * @throws {InvalidWorkflowStateError}
    * When the nonempty current State is undeclared.
    * @throws {EntityValidationFailedError}
-   * When supplied data is not an object or violates a declared validation rule.
+   * When supplied data is not an object, contains unsupported native values,
+   * or violates a declared validation rule (ENTITY-VALIDATION-011).
    *
    * @see FINKORE_ENTITY_INVALID_IDENTITY
    * @see FINKORE_ENTITY_STATE_CONFLICT
@@ -565,7 +589,8 @@ export class FinancialEntity {
    * @throws {ImmutableEntityError}
    * When any targeted field is not declared mutable in the current state.
    * @throws {InvalidEntityMutationError}
-   * When the mutation request shape is not recognized by Core 0.9 release candidate Entity behavior.
+   * When changes are malformed or contain unsupported native values after
+   * field permissions pass (ENTITY-VALIDATION-011).
    * @throws {EntityValidationFailedError}
    * When one or more declared Entity validation rules fail for the complete
    * proposed result.
@@ -596,7 +621,8 @@ export class FinancialEntity {
       }
     }
 
-    const data = cloneJsonValue({ ...this.value.data, ...changes })
+    const ownedChanges = copyEntityValue(changes, true) as Readonly<Record<string, unknown>>
+    const data = copyEntityValue({ ...this.value.data, ...ownedChanges })
     assertValidEntityData(this.retainedDefinition, data)
     return new FinancialEntity(this.retainedDefinition, { ...this.value, data })
   }

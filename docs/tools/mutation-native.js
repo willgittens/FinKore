@@ -18,6 +18,279 @@ const boundaryPy = 'test_boundary_regressions.BoundaryRegressions.'
 const constructionPy = 'test_construction_evaluation_regressions.ConstructionEvaluationRegressions.'
 const probes = [
 {
+  "id": "typescript-entity-value097-own-member-and",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "if (!isPlainRecord(data) || !Object.hasOwn(data, path)) return undefined",
+  "to": "if (!isPlainRecord(data) && !Object.hasOwn(data, path)) return undefined",
+  "tests": [
+    "test/entities/native-values.test.ts"
+  ],
+  "target": "entity-value097 never validates inherited application facts",
+  "control": "entity-value097 scalar control"
+},
+{
+  "id": "typescript-entity-value097-finite",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "Number.isFinite(value) ? value : invalid()",
+  "to": "value",
+  "target": "entity-value097 rejects nan at create",
+  "control": "entity-value097 scalar control",
+  "tests": [
+    "test/entities/native-values.test.ts"
+  ]
+},
+{
+  "id": "typescript-entity-value097-profile",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "data: copyEntityValue(input.data)",
+  "to": "data: structuredClone(input.data)",
+  "target": "entity-value097 rejects map at from",
+  "control": "entity-value097 scalar control",
+  "tests": [
+    "test/entities/native-values.test.ts"
+  ]
+},
+{
+  "id": "typescript-entity-value097-proposed-error",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "new InvalidEntityMutationError() : new EntityValidationFailedError()",
+  "to": "new EntityValidationFailedError() : new EntityValidationFailedError()",
+  "target": "entity-value097 rejects boxed-number at proposed",
+  "control": "entity-value097 scalar control",
+  "tests": [
+    "test/entities/native-values.test.ts"
+  ]
+},
+{
+  "id": "typescript-entity-value097-initial-error",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "new InvalidEntityMutationError() : new EntityValidationFailedError()",
+  "to": "new InvalidEntityMutationError() : new InvalidEntityMutationError()",
+  "target": "entity-value097 rejects undefined at create",
+  "control": "entity-value097 scalar control",
+  "tests": [
+    "test/entities/native-values.test.ts"
+  ]
+},
+{
+  "id": "typescript-entity-value097-cycle-repair",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "if (typeof value !== 'object' || ancestors.has(value)) return invalid()",
+  "to": "if (ancestors.has(value as object)) return null\n  if (typeof value !== 'object') return invalid()",
+  "target": "entity-value097 rejects array-cycle at create",
+  "control": "entity-value097 scalar control",
+  "tests": [
+    "test/entities/native-values.test.ts"
+  ]
+},
+{
+  "id": "typescript-entity-value097-input-alias",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "data: ownedData",
+  "to": "data",
+  "target": "entity-value097 owns shared data and exact observations across reuse",
+  "control": "entity-value097 scalar control",
+  "tests": [
+    "test/entities/native-values.test.ts"
+  ]
+},
+{
+  "id": "typescript-entity-value097-own-members",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "Object.fromEntries(Object.entries(value).map(([key, item]) => [key, copyEntityValue(item, proposed, ancestors)]))",
+  "to": "Object.assign({}, ...Object.entries(value).map(([key, item]) => ({ [key]: copyEntityValue(item, proposed, ancestors) })))",
+  "target": "entity-value097 owns shared data and exact observations across reuse",
+  "control": "entity-value097 scalar control",
+  "tests": [
+    "test/entities/native-values.test.ts"
+  ]
+},
+{
+  "id": "typescript-entity-value097-iterator",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "Array.from(arrayValues(value), (item) => copyEntityValue(item, proposed, ancestors))",
+  "to": "Array.from(value, (item) => copyEntityValue(item, proposed, ancestors))",
+  "target": "entity-value097 indexes arrays without trusting caller iteration",
+  "control": "entity-value097 scalar control",
+  "tests": [
+    "test/entities/native-values.test.ts"
+  ]
+},
+{
+  "id": "typescript-entity-value097-shared-child",
+  "language": "typescript",
+  "path": "src/entities/entity.ts",
+  "from": "ancestors.delete(value)",
+  "to": "void value",
+  "target": "entity-value097 owns shared data and exact observations across reuse",
+  "control": "entity-value097 scalar control",
+  "tests": [
+    "test/entities/native-values.test.ts"
+  ]
+},
+{
+  "id": "python-entity-value097-numeric-subclass",
+  "language": "python",
+  "path": "entities.py",
+  "from": "type(value) in (str, bool, int)",
+  "to": "isinstance(value, (str, bool, int))",
+  "target": "test_entity_native_values.EntityNativeValues.test_entity_value097_rejects_unsupported",
+  "control": "test_entity_native_values.EntityNativeValues.test_entity_value097_scalar_control"
+},
+{
+  "id": "python-entity-value097-finite",
+  "language": "python",
+  "path": "entities.py",
+  "from": "type(value) is float and isfinite(value)",
+  "to": "type(value) is float",
+  "target": "test_entity_native_values.EntityNativeValues.test_entity_value097_rejects_unsupported",
+  "control": "test_entity_native_values.EntityNativeValues.test_entity_value097_scalar_control"
+},
+{
+  "id": "python-entity-value097-decimal-finite",
+  "language": "python",
+  "path": "entities.py",
+  "from": "type(value) is Decimal and value.is_finite()",
+  "to": "type(value) is Decimal",
+  "target": "test_entity_native_values.EntityNativeValues.test_entity_value097_rejects_unsupported",
+  "control": "test_entity_native_values.EntityNativeValues.test_entity_value097_scalar_control"
+},
+{
+  "id": "python-entity-value097-decimal-exact",
+  "language": "python",
+  "path": "entities.py",
+  "from": "if type(value) is Decimal and value.is_finite():\n        return value",
+  "to": "if type(value) is Decimal and value.is_finite():\n        return float(value)",
+  "target": "test_entity_native_values.EntityNativeValues.test_entity_value097_exact_owned_control",
+  "control": "test_entity_native_values.EntityNativeValues.test_entity_value097_scalar_control"
+},
+{
+  "id": "python-entity-value097-cycle-repair",
+  "language": "python",
+  "path": "entities.py",
+  "from": "if identity in ancestors:\n        raise FinKoreError(code)",
+  "to": "if identity in ancestors:\n        return None",
+  "target": "test_entity_native_values.EntityNativeValues.test_entity_value097_rejects_unsupported",
+  "control": "test_entity_native_values.EntityNativeValues.test_entity_value097_scalar_control"
+},
+{
+  "id": "python-entity-value097-proposed-error",
+  "language": "python",
+  "path": "entities.py",
+  "from": "_copy_entity_value(changes, INVALID_MUTATION)",
+  "to": "_copy_entity_value(changes, VALIDATION_FAILED)",
+  "target": "test_entity_native_values.EntityNativeValues.test_entity_value097_rejects_unsupported",
+  "control": "test_entity_native_values.EntityNativeValues.test_entity_value097_scalar_control"
+},
+{
+  "id": "python-entity-value097-current-bypass",
+  "language": "python",
+  "path": "entities.py",
+  "from": "\"data\": _copy_entity_value(entity[\"data\"])",
+  "to": "\"data\": entity[\"data\"]",
+  "target": "test_entity_native_values.EntityNativeValues.test_entity_value097_evolution",
+  "control": "test_entity_native_values.EntityNativeValues.test_entity_value097_scalar_control"
+},
+{
+  "id": "python-entity-value097-input-alias",
+  "language": "python",
+  "path": "entities.py",
+  "from": "\"data\": _copy_entity_value(data)",
+  "to": "\"data\": data",
+  "target": "test_entity_native_values.EntityNativeValues.test_entity_value097_exact_owned_control",
+  "control": "test_entity_native_values.EntityNativeValues.test_entity_value097_scalar_control"
+},
+{
+  "id": "python-entity-value097-shared-child",
+  "language": "python",
+  "path": "entities.py",
+  "from": "ancestors.remove(identity)",
+  "to": "pass",
+  "target": "test_entity_native_values.EntityNativeValues.test_entity_value097_exact_owned_control",
+  "control": "test_entity_native_values.EntityNativeValues.test_entity_value097_scalar_control"
+},
+{
+  "id": "java-entity-value097-mutable-number",
+  "language": "java",
+  "path": "Entities.java",
+  "from": "Class<?> kind = value.getClass();",
+  "to": "if (value instanceof java.util.concurrent.atomic.AtomicInteger) return value;\n      Class<?> kind = value.getClass();",
+  "target": "entity.value097.atomic-integer.create",
+  "control": "entity.value097.scalar-control"
+},
+{
+  "id": "java-entity-value097-numeric-subclass",
+  "language": "java",
+  "path": "Entities.java",
+  "from": "kind == BigInteger.class || kind == BigDecimal.class",
+  "to": "value instanceof BigInteger || value instanceof BigDecimal",
+  "target": "entity.value097.decimal-subclass.create",
+  "control": "entity.value097.scalar-control"
+},
+{
+  "id": "java-entity-value097-finite",
+  "language": "java",
+  "path": "Entities.java",
+  "from": "kind == Double.class && Double.isFinite((Double) value)",
+  "to": "kind == Double.class",
+  "target": "entity.value097.double-nan.create",
+  "control": "entity.value097.scalar-control"
+},
+{
+  "id": "java-entity-value097-decimal-exact",
+  "language": "java",
+  "path": "Entities.java",
+  "from": "Class<?> kind = value.getClass();",
+  "to": "if (value instanceof BigDecimal decimal) return decimal.doubleValue();\n      Class<?> kind = value.getClass();",
+  "target": "entity.value097.exact-control",
+  "control": "entity.value097.scalar-control"
+},
+{
+  "id": "java-entity-value097-cycle-repair",
+  "language": "java",
+  "path": "Entities.java",
+  "from": "if (!ancestors.add(value)) throw new FinKoreException(code);",
+  "to": "if (!ancestors.add(value)) return null;",
+  "target": "entity.value097.list-cycle.create",
+  "control": "entity.value097.scalar-control"
+},
+{
+  "id": "java-entity-value097-proposed-error",
+  "language": "java",
+  "path": "Entities.java",
+  "from": "copyEntityMap(changeMap, INVALID_MUTATION)",
+  "to": "copyEntityMap(changeMap, VALIDATION_FAILED)",
+  "target": "entity.value097.atomic-integer.proposed",
+  "control": "entity.value097.scalar-control"
+},
+{
+  "id": "java-entity-value097-current-bypass",
+  "language": "java",
+  "path": "Entities.java",
+  "from": "value.put(\"data\", copyEntityValue(value.get(\"data\"), VALIDATION_FAILED));",
+  "to": "// current data unchecked",
+  "target": "entity.value097.atomic-integer.import",
+  "control": "entity.value097.scalar-control"
+},
+{
+  "id": "java-entity-value097-shared-child",
+  "language": "java",
+  "path": "Entities.java",
+  "from": "ancestors.remove(value);",
+  "to": "// shared children rejected",
+  "target": "entity.value097.exact-control",
+  "control": "entity.value097.scalar-control"
+},
+{
   "id": "typescript-policy097-required",
   "language": "typescript",
   "path": "src/audit/audit-redaction.ts",
@@ -619,9 +892,10 @@ const probes = [
   "from": "!isPlainRecord(data) || !Object.hasOwn(data, path)",
   "to": "!isPlainRecord(data)",
   "tests": [
-    "test/entities/declaration-reuse.test.ts"
+    "test/entities/declaration-reuse.test.ts",
+    "test/entities/native-values.test.ts"
   ],
-  "target": "declaration097 validator own field constructor",
+  "target": "entity-value097 never validates inherited application facts",
   "control": "declaration097 adjacent own member constructor"
 },
 {

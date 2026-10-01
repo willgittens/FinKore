@@ -2,6 +2,9 @@
 package org.finkore;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -24,8 +27,13 @@ import java.util.Set;
  * declarations use INVALID_MUTATION; rejected financial data uses VALIDATION_FAILED.
  * Every declared State requires an explicit field list (an empty list is valid).
  * Data must be an object satisfying its rules before and after each operation.
+ * Application data owns its containers and accepts only immutable standard numeric
+ * classes, preserving BigInteger/BigDecimal exactly. Unsupported values, numeric
+ * subclasses, non-finite numbers and cycles use VALIDATION_FAILED for initial or
+ * current data, and INVALID_MUTATION for proposed values after mutability checks.
  * Malformed current States use WORKFLOW_INVALID_INSTANCE; nonempty undeclared
  * States use WORKFLOW_INVALID_STATE.
+ * @see "ENTITY-VALIDATION-011"
  * @see "ENTITY-MUTABILITY-008/009"
  * @see "ENTITY-VALIDATION-010"
  * @see "ENTITY-LIFECYCLE-007"
@@ -44,7 +52,7 @@ public final class Entities {
   public static final String INVALID_MUTATION = "FINKORE_ENTITY_INVALID_MUTATION";
   /** Portable error for expected Entity state, revision, or conflict-version mismatch. */
   public static final String STATE_CONFLICT = "FINKORE_ENTITY_STATE_CONFLICT";
-  /** Portable error for non-object Entity data or failed declared validation rules. */
+  /** Portable error for non-object/unsupported native Entity data or failed declared rules. */
   public static final String VALIDATION_FAILED = "FINKORE_ENTITY_VALIDATION_FAILED";
 
   private Entities() {}
@@ -55,7 +63,7 @@ public final class Entities {
    *
    * @param definition portable Entity definition
    * @param entityId caller-supplied stable Entity identity
-   * @param data initial Entity object; non-object data uses VALIDATION_FAILED
+   * @param data initial Entity object; non-object/unsupported native data uses VALIDATION_FAILED
    * @return portable Entity observation
    */
   public static Map<String, Object> create(Object definition, Object entityId, Object data) {
@@ -71,7 +79,7 @@ public final class Entities {
     Workflow.Instance instance = Workflow.create(workflow);
     entity.put("state", instance.currentState());
     if (instance.binding() != null) entity.put("binding", instance.binding());
-    entity.put("data", stringObjectMap(dataMap, VALIDATION_FAILED));
+    entity.put("data", copyEntityValue(dataMap, VALIDATION_FAILED));
     validateEntityData(entityDefinition, entity);
     return copyMap(entity, INVALID_IDENTITY);
   }
@@ -79,7 +87,8 @@ public final class Entities {
   /**
    * Applies declared mutable data changes without mutating the supplied Entity
    * or changing its original Workflow binding. Empty changes use INVALID_MUTATION;
-   * invalid original data cannot be repaired by overwriting it.
+   * invalid original data cannot be repaired by overwriting it. Unsupported proposed
+   * native values use INVALID_MUTATION after field permissions pass (ENTITY-VALIDATION-011).
    *
    * @param definition portable Entity definition
    * @param entity current Entity observation
@@ -92,7 +101,7 @@ public final class Entities {
     if (!(changes instanceof Map<?, ?> rawChanges) || rawChanges.isEmpty()) {
       throw new FinKoreException(INVALID_MUTATION);
     }
-    Map<String, Object> changeMap = stringObjectMap(rawChanges, INVALID_MUTATION);
+    Map<String, Object> changeMap = shallowMap(rawChanges, INVALID_MUTATION);
     for (String path : changeMap.keySet()) {
       if (Set.of("type", "id", "state").contains(path)) {
         throw new FinKoreException(IMMUTABLE);
@@ -107,7 +116,7 @@ public final class Entities {
     Map<String, Object> result = copyMap(current, INVALID_IDENTITY);
     @SuppressWarnings("unchecked")
     Map<String, Object> resultData = (Map<String, Object>) result.get("data");
-    resultData.putAll(copyMap(changeMap, INVALID_MUTATION));
+    resultData.putAll(copyEntityMap(changeMap, INVALID_MUTATION));
     validateEntityData(entityDefinition, result);
     return result;
   }
@@ -154,8 +163,8 @@ public final class Entities {
    * @return portable import result
    * @throws FinKoreException with {@link #INVALID_IDENTITY} for invalid supplied
    *     source or mapping identity, {@link #STATE_CONFLICT} for mismatched
-   *     expectations, or {@link #VALIDATION_FAILED} when a declared validator
-   *     rejects the complete imported Entity
+   *     expectations, or {@link #VALIDATION_FAILED} when native data is unsupported
+   *     or a declared validator rejects the complete imported Entity
    * @see <a href="../../../../../../spec/entities/import.md">ENTITY-IMPORT-002</a>
    * @see <a href="../../../../../../spec/entities/import.md">ENTITY-IMPORT-008</a>
    * @see <a href="../../../../../../spec/entities/import.md">ENTITY-IMPORT-011</a>
@@ -166,7 +175,7 @@ public final class Entities {
     if (!(importValue instanceof Map<?, ?> rawImport)) {
       throw new FinKoreException(INVALID_IDENTITY);
     }
-    Map<String, Object> input = stringObjectMap(rawImport, INVALID_IDENTITY);
+    Map<String, Object> input = shallowMap(rawImport, INVALID_IDENTITY);
     Map<String, Object> entity = validateEntity(entityDefinition, input.get("entity"));
     Map<String, Object> mapping = null;
     if (input.containsKey("sourceIdentity")) {
@@ -413,7 +422,9 @@ public final class Entities {
    * @param entity current Entity observation
    * @param changes proposed changes
    * @return findings in declaration order, or an empty list for a non-map change request
-   * @throws FinKoreException when the definition or current Entity is invalid
+   * @throws FinKoreException when the definition/current Entity is invalid, or
+   *     with INVALID_MUTATION when proposed native values are unsupported
+   * @see "ENTITY-VALIDATION-011"
    * @see "ENTITY-VALIDATION-003"
    */
   public static List<Map<String, Object>> validationFindingsForMutation(Object definition, Object entity, Object changes) {
@@ -424,7 +435,7 @@ public final class Entities {
     }
     @SuppressWarnings("unchecked")
     Map<String, Object> data = (Map<String, Object>) current.get("data");
-    data.putAll(stringObjectMap(rawChanges, INVALID_MUTATION));
+    data.putAll(copyEntityMap(rawChanges, INVALID_MUTATION));
     return validationFindings(entityDefinition, current);
   }
 
@@ -487,7 +498,7 @@ public final class Entities {
     if (!(entity instanceof Map<?, ?> raw)) {
       throw new FinKoreException(INVALID_IDENTITY);
     }
-    Map<String, Object> value = stringObjectMap(raw, INVALID_IDENTITY);
+    Map<String, Object> value = shallowMap(raw, INVALID_IDENTITY);
     if (!definition.get("type").equals(value.get("type")) || !opaque(value.get("id"))) {
       throw new FinKoreException(INVALID_IDENTITY);
     }
@@ -497,6 +508,7 @@ public final class Entities {
     if (!(value.get("data") instanceof Map<?, ?>)) {
       throw new FinKoreException(VALIDATION_FAILED);
     }
+    value.put("data", copyEntityValue(value.get("data"), VALIDATION_FAILED));
     Map<String, Object> result = copyMap(value, INVALID_IDENTITY);
     validateEntityData(definition, result);
     return result;
@@ -776,6 +788,57 @@ public final class Entities {
       result.add(stringObjectMap(map, code));
     }
     return result;
+  }
+
+  // Delay application-data traversal until its owning validation stage.
+  private static Map<String, Object> shallowMap(Map<?, ?> value, String code) {
+    Map<String, Object> result = new LinkedHashMap<>();
+    for (Map.Entry<?, ?> entry : value.entrySet()) {
+      if (!(entry.getKey() instanceof String key)) throw new FinKoreException(code);
+      result.put(key, entry.getValue());
+    }
+    return result;
+  }
+
+  @SuppressWarnings("unchecked")
+  private static Map<String, Object> copyEntityMap(Map<?, ?> value, String code) {
+    return (Map<String, Object>) copyEntityValue(value, code);
+  }
+
+  private static Object copyEntityValue(Object value, String code) {
+    return copyEntityValue(value, code, Collections.newSetFromMap(new IdentityHashMap<>()));
+  }
+
+  // ENTITY-VALIDATION-011: no arbitrary Number conversion or retained mutable aliases.
+  private static Object copyEntityValue(Object value, String code, Set<Object> ancestors) {
+    if (value == null || value instanceof String || value instanceof Boolean) return value;
+    if (value instanceof Number) {
+      Class<?> kind = value.getClass();
+      if (kind == Byte.class || kind == Short.class || kind == Integer.class || kind == Long.class
+          || kind == BigInteger.class || kind == BigDecimal.class
+          || (kind == Float.class && Float.isFinite((Float) value))
+          || (kind == Double.class && Double.isFinite((Double) value))) return value;
+      throw new FinKoreException(code);
+    }
+    if (!ancestors.add(value)) throw new FinKoreException(code);
+    try {
+      if (value instanceof List<?> list) {
+        List<Object> result = new ArrayList<>();
+        for (Object item : list) result.add(copyEntityValue(item, code, ancestors));
+        return result;
+      }
+      if (value instanceof Map<?, ?> map) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+          if (!(entry.getKey() instanceof String key)) throw new FinKoreException(code);
+          result.put(key, copyEntityValue(entry.getValue(), code, ancestors));
+        }
+        return result;
+      }
+      throw new FinKoreException(code);
+    } finally {
+      ancestors.remove(value);
+    }
   }
 
   private static Object copyJson(Object value, String code) {

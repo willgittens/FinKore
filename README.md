@@ -356,7 +356,11 @@ Audit JSON-value profile and preserves explicit-null presence. Nineteen new
 vectors cover metadata presence, JSON values, member preservation and error priority.
 D8 now makes redaction `policy.id` optional, validating supplied values as nonempty
 strings. Twenty new vectors, native regressions and paired mutation controls
-protect this correction. D9 remains unresolved. The local corrective release and
+protect this correction. D9 now specifies independently owned Entity data and
+immutable native scalars under ENTITY-VALIDATION-011. Eight portable controls and
+native rejection, exactness and ownership regressions pass fresh complete
+verification, including all 1,766 vectors on all four runtimes. The wider review
+identified D11, an unresolved empty import-history output shape. The local corrective release and
 separate Core 1.0 promotion gates remain uncompleted.
 
 At the 0.9.6 tag, all 884 manifest vectors pass on TypeScript, CPython 3.12/3.13, and Java,

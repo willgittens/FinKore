@@ -25,6 +25,40 @@ This document defines validation of financial entity state and proposed domain o
 - **ENTITY-VALIDATION-009** — An unsupported or malformed Entity validator declaration MUST be rejected with `FINKORE_ENTITY_INVALID_MUTATION` before evaluating declared predicates against Entity data. It MUST NOT be silently skipped. A supported, well-formed rule that rejects data continues to use `FINKORE_ENTITY_VALIDATION_FAILED` under **ENTITY-VALIDATION-004**. Rejection MUST preserve existing Entity observations.
 
 - **ENTITY-VALIDATION-010** — The bounded Entity representation MUST supply object-valued data at creation and at every boundary consuming an existing Entity observation, including import and evolution. Omission, null, or non-object data MUST use `FINKORE_ENTITY_VALIDATION_FAILED`, even when no business validator is declared. This requirement defines the bounded fixture shape, not a universal composing-domain data schema. Failure MUST preserve prior observations and MUST NOT expose a partial result.
+- **ENTITY-VALIDATION-011** — An implementation accepting native Entity application data MUST document its supported value profile, capture independently owned containers, and retain only supported immutable scalar values. Supported values MUST preserve their exact meaning, including all JSON object member names, through construction, observation, import, mutation, transition and evolution. Caller mutation of inputs or returned observations MUST NOT rewrite another retained Entity observation. Mutable or unsupported numeric objects, unsupported numeric subclasses, non-finite values, other unsupported objects and cyclic containers MUST be rejected without coercion, rounding, invoking custom copy hooks or partial effects. Shared acyclic containers MUST remain valid. Unsupported initial, imported or current Entity data MUST use `FINKORE_ENTITY_VALIDATION_FAILED`; unsupported proposed mutation values MUST use `FINKORE_ENTITY_INVALID_MUTATION`. Existing definition, identity, Workflow, current-data and mutability validation priorities MUST be preserved. A rejected operation MUST leave Entity, revision, evolution and Audit observations unchanged.
+
+## Native application-data profile
+
+**ENTITY-VALIDATION-011** extends the retained-value discipline of
+APPROVAL-FACT-004 to Entity application data. The bounded profile consists of
+null, strings, Booleans, supported finite numbers, arrays/lists and string-key
+objects/maps. Entity data itself remains object-valued under
+**ENTITY-VALIDATION-010**. Containers are copied independently; accepted immutable
+numbers retain exact values without converting exact decimals through binary
+floating point. Numeric strings remain strings; Money is not inferred from shape.
+TypeScript accepts dense indexed arrays and plain or null-prototype records,
+with string-key own enumerable members; symbol-key records and missing array
+positions are unsupported. Python accepts lists and string-key dictionaries;
+Java accepts lists and string-key maps. Container copying does not invoke
+custom copy hooks.
+
+The reference native numeric sets are finite primitive TypeScript `number`;
+exact Python built-in `int`, finite built-in `float` and finite `Decimal`; and
+exact Java classes `Byte`, `Short`, `Integer`, `Long`, `BigInteger`, `BigDecimal`,
+finite `Float` and finite `Double`. Numeric subclasses, mutable Number objects
+such as `AtomicInteger`/`AtomicLong`, TypeScript bigint/boxed numbers and other
+native objects are unsupported. This does not add a persistence encoding,
+extend Workflow guard comparison, or alter Money arithmetic/rounding rules.
+
+## Core 0.9.7 correction note (non-normative)
+
+D9 adopts this profile under SPEC-FREEZE-001/002/003 and
+SPEC-COMPATIBILITY-012/014. It is an observable compatibility correction:
+previously accepted unsupported native data now fails with the owning Entity
+error, and Java can no longer retain mutable numeric aliases. Supported immutable
+exact numbers remain accepted. The rule applies to source and related/successor
+Entity data in evolution, without changing Audit evidence's separate value
+profile or inventing a total ordering for otherwise unspecified competing errors.
 
 ## Invariants
 

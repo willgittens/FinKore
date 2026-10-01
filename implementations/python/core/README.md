@@ -21,8 +21,10 @@ D8 now defines optional redaction `policy.id` under AUDIT-REDACTION-008. When
 supplied it must be a nonempty string; null, empty and non-string values reject
 with FINKORE_AUDIT_REDACTION_INVALID before evidence validation. Authority and
 protected targets remain required. Twenty new vectors cover the policy-ID
-correction, with native regressions and paired mutation controls. D9 Entity
-native-value policy remains open.
+correction, with native regressions and paired mutation controls. D9 now defines
+Entity application values under ENTITY-VALIDATION-011. Complete D9 verification
+passes all 1,766 vectors on all four runtimes, coverage, package checks and mutation
+gates. D11 remains an unresolved empty import-history output shape.
 The 0.9.6 results below describe the tagged snapshot.
 
 Entity definitions require a nonempty `identityScope` and an explicit mutability
@@ -38,8 +40,18 @@ history; explicitly passing `None` is rejected. Evolution accepts omitted histor
 explicit null remains malformed. Audit history/Event validation precedes
 Entity correspondence checks. Failed operations preserve inputs, and adapters
 retain the primary portable error without fabricating a valid Entity observation.
-These corrections tighten previously permissive inputs; they do not select D9's
-unresolved policy for arbitrary native values in Entity application data.
+D9 extends owned immutable-value capture to Entity application data. Unsupported
+initial, imported or current data uses `FINKORE_ENTITY_VALIDATION_FAILED`;
+unsupported proposed mutation values use `FINKORE_ENTITY_INVALID_MUTATION` after
+existing field-permission checks. Non-finite values, cycles and unsupported
+objects reject without partial Entity, evolution or Audit effects. Shared acyclic
+containers remain valid; supported exact values and every JSON member name survive
+observation, import, mutation, transition and evolution. This corrects previously
+permissive inputs; callers must replace unsupported native values explicitly.
+
+Entity native profile: null, strings, Booleans and exact built-in `int`, finite built-in `float`, and finite exact `Decimal`
+values; numeric subclasses and custom objects are unsupported. Lists and
+string-key dictionaries are copied without invoking custom copy hooks.
 
 For `evaluate_composition`, omit `decisions` (or supply `[]`) for no votes.
 Explicit `None` now raises `FINKORE_APPROVAL_INVALID_CHAIN`; callers that used
@@ -65,8 +77,8 @@ swapped distinct mappings remain valid. Supplied Actor type must be nonempty,
 and Chain rejection outcome must be `REJECTED`. Recording validates the proposed
 history before returning, so a new Decision cannot make a retained lifecycle
 reference ambiguous. Native unsupported-value rejection and ownership are verified for the accepted
-Approval/Workflow profile. Broader Entity native numeric policy is an explicit
-new gap (D9 in the plan); these checks do not claim full Entity closure.
+Approval/Workflow profile. Separate D9 tests now exercise the Entity profile
+described above; full combined verification passes.
 
 Native ownership profile: exact built-in int/finite float and finite immutable Decimal for Approval;
 Workflow guards retain their rejection of Decimal. Numeric subclasses are rejected. Lists and string-key dictionaries are independently

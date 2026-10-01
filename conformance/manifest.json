@@ -67,7 +67,8 @@
         "./entities/construction-evaluation-regressions.json",
         "./entities/evidence-regressions.json",
         "./entities/discovery-regressions.json",
-        "./entities/malformed-boundary-regressions.json"
+        "./entities/malformed-boundary-regressions.json",
+        "./entities/application-values.json"
       ]
     }
   ]

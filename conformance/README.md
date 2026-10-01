@@ -12,6 +12,13 @@ specification remains the source of truth. Vectors describe observable domain
 behavior; they do not prescribe APIs, classes, exceptions, storage, or
 frameworks.
 
+D9 adds eight portable Entity value controls in
+[application-values.json](entities/application-values.json), bringing the manifest
+to 1,766 vectors. Native tests supplement JSON for unsupported native values,
+exact immutable scalars, cycles and reference ownership. Full combined
+verification after D9 passes on all four runtimes; earlier pass counts below are
+historical. D11 remains an unresolved empty import-history output shape.
+
 ## Scope and discovery
 
 [manifest.json](manifest.json) is the only normative discovery entry point. A runner MUST load only the listed vector files, resolve paths relative to the manifest, reject duplicate vector IDs, and reject unsupported format versions. Filesystem traversal order carries no meaning.
@@ -35,13 +42,14 @@ for input/output ownership and unsupported numeric subclasses. Entity boundary c
 [Core 0.9.7 Milestone 6](../docs/plans/plan-09.7.md) closes Entity declaration
 observation/reuse, including own special names and inherited-member rejection.
 Four special-field controls extend the six special-state vectors; native tests
-cover aliases and actual definition/observation reuse. M7 closes the published malformed-input regressions. D8 is now resolved; D9 remains unresolved.
+cover aliases and actual definition/observation reuse. M7 closes the published malformed-input regressions. D8 and D9 have implemented contracts and passing combined verification; D11
+remains a separate decision.
 
 [Core 0.9.7 Milestone 2](../docs/plans/plan-09.7.md) published 699 new
 full-envelope vectors and 197 supplementary native/adapter cases, alongside the
 unchanged 884 vectors, establishing a 1,583-vector baseline. M7 now passes all 1719 manifest vectors on all four runtimes, with no failed,
-unsupported, or infrastructure outcomes. The Entity native-value policy
-D9 remains an unresolved contract gap; [traceability](traceability.md) distinguishes
+unsupported, or infrastructure outcomes. The D9 Entity native-value policy is now
+defined in ENTITY-VALIDATION-011; [traceability](traceability.md) distinguishes
 these limits from tested requirements. Supplementary tests assert exact
 domain results and input preservation where optional diagnostics have no single
 portable envelope. They do not weaken the runner's exact comparison.

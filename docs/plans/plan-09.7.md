@@ -2,13 +2,12 @@
 
 ## Status
 
-Milestones 2–7 are complete for their accepted contracts. D10 is resolved and
-its post-correction M8 verification passed. D8 was accepted on 2026-09-30:
-`policy.id` is optional and must be a nonempty string when supplied. Its
-specification, implementations and regressions are updated; fresh full M8
-verification and independent review pass. M1 remains open only for D9, the Entity native-value
-policy gap. No Entity native numeric policy has been selected. Milestone 9
-remains uncompleted. Earlier milestone results below retain their historical scope.
+Milestones 2–7 are complete for their accepted contracts. D8, D9 and D10 are
+resolved and implemented. D9's final candidate passes complete verification,
+including the permanent inherited-fact regression added during mutation review.
+The broader review found D11, an unresolved empty import-history output shape;
+M1 and overall release closure remain open for that decision. Milestone 9 is
+uncompleted. Earlier milestone results retain their historical scope.
 Release type: corrective release candidate. Core 1.0 promotion is blocked pending this work and the separate
 [Core 1.0 promotion gates](plan-10.md).
 
@@ -838,7 +837,7 @@ Completion: supported retained values preserve their captured meaning; rejected
 native values fail portably and atomically. Caller aliases cannot rewrite
 Approval history or a bound Workflow definition.
 
-### D9 — Entity application-data native numbers: unresolved
+### D9 — Entity application-data native numbers: resolved
 
 The M5 adjacent-path review reproduced a Java Entity data alias: create an
 Entity with a nested `AtomicInteger(1)` as `memo`, change the original number
@@ -847,14 +846,28 @@ Entity mutation. Entity declaration ownership is already specified, but the
 accepted APPROVAL-FACT-004 / WORKFLOW-GUARD-007 native numeric profile expressly
 does not define arbitrary Entity application data. The allowed native number
 set and error category for create/import/current data versus proposed mutations
-remain unspecified at that boundary.
+were unspecified at that boundary.
 
 A clarification was requested to extend the immutable-number profile with
 ENTITY_VALIDATION_FAILED for create/import/current data and
 ENTITY_INVALID_MUTATION for proposed changes, preserving existing priority.
-No answer has selected that extension. No normative expectation, broad copier
-change, or native rejection policy is invented here. D9 remains open for M1
-resolution and prevents a claim of complete Entity ownership closure.
+The maintainer accepted both recommendations on 2026-09-30. The extension is
+specified as ENTITY-VALIDATION-011: owned JSON-shaped containers and supported
+immutable scalars, exact immutable native numbers, no numeric subclasses,
+non-finite values, unsupported objects or cycles, and no custom copy hooks.
+Shared acyclic children remain valid. Current/initial/imported data uses
+FINKORE_ENTITY_VALIDATION_FAILED; proposed values use
+FINKORE_ENTITY_INVALID_MUTATION after existing mutability checks. Existing
+identity, Workflow and declaration priorities remain intact. Evolution applies
+the same validation to source and related/successor Entity data and preserves
+all prior Entity, revision, evolution and Audit observations on failure.
+
+This is an observable corrective contract change under SPEC-FREEZE-001/002/003
+and SPEC-COMPATIBILITY-012/014. Previously accepted unsupported native values
+now reject; Java mutable Number aliases no longer enter Entity data. Audit
+retains its own native profile. It introduces no persistence encoding, Money
+inference, rounding policy, or total priority among otherwise unspecified
+competing errors. Completed implementation verification is recorded at the end of this plan.
 
 ### M5 implementation and verification — 2026-09-29
 
@@ -1728,3 +1741,96 @@ Core 0.9.7 is complete only when:
 
 Completion permits reassessment under the Core 1.0 plan. It does not by itself
 declare stable 1.0 or guarantee that unrelated work cannot expose further gaps.
+
+
+### D9 implementation and verification — 2026-09-30–2026-10-01
+
+Both recommendations were explicitly accepted. ENTITY-VALIDATION-011 records
+the selected native profile and portable error categories. TypeScript, Python
+and Java now copy Entity application data at the owning validation boundary.
+Java delays traversal of imported/current data until identity and Workflow
+validation finish. Proposed values are checked after existing mutability checks.
+The generic declaration/Audit copiers are not changed by this correction.
+
+Before implementation, the TypeScript regressions produced 115 failures out of
+120 cases; Python produced 82 failing subtests across five methods; Java's ten
+AtomicInteger/AtomicLong boundary cases all failed. After implementation, the
+native boundary regressions pass, including exact Decimal/BigDecimal values,
+shared acyclic children, cycles, numeric subclasses, special member names,
+input/output ownership, evolution source/related observations and failure reuse.
+Eight new manifest controls cover creation, import, mutation, transition and all
+four evolution operations. The inventory is now 435 requirements, 351 covered,
+and 1,766 vectors. Paired native mutation probes cover native profile rejection,
+exactness, independent ownership, wrong errors and lost special member names.
+
+The final isolated candidate is based on
+`018337be5c5bb5dc349643e3e272db2662c478bf`, with staged tree
+`f23de532892568efdd1a8d548c3177ee061a971d` in `/tmp/finkore-d9-final`.
+Its complete `npm run verify` exited zero. Earlier interrupted runs do not
+supply this result; the final run includes all permanent corrections and tests.
+
+| Gate | Final D9 result |
+| --- | --- |
+| Build, strict typing and unit tests | Passed: runner 136; TypeScript core 3,730; TypeScript adapter 210; Python 1,239 on each version; developer tools 476. Java core and both subprocess adapter suites passed. |
+| Conformance | All 1,766 vectors passed on TypeScript, Python 3.12/3.13 and Java, including all 779 Entity vectors; no failed, unsupported or infrastructure outcomes. |
+| Coverage | All configured gates passed: runner 100% lines / 96.61% branches; TypeScript core 99.69% lines / 99.44% branches; Python 94% combined; Java 94.09% lines / 84.71% branches. |
+| Installed consumers | All six passed: npm, Python wheel and sdist on both Python versions, and Java JAR. |
+| Runner mutation | 97.21%; 628 killed, 18 reviewed survivors, no uncovered, timed-out or ignored mutants; every status matches D8. |
+| TypeScript mutation | 96.34%; 4,350 killed, 154 reviewed survivors, 12 uncovered defensive mutations, 14 execution-limit/nonterminating mutations, no ignored mutants. Without timeout credit: 96.03%. |
+| Critical/native probes | 267/267 critical, 192/192 native and 69/69 Python 3.13 native probes killed, with paired controls passing. All 459 mutation anchor checks pass. |
+| Repository checks | Architecture, documentation links, traceability, licensing and whitespace passed. |
+
+Mutation review found that rejecting custom-prototype application data early
+made an older own-member predicate regression ineffective. Two guard mutations
+then survived. A new permanent plain-object case supplies inherited Money facts
+through Object.prototype, verifies rejection and an own-member valid control,
+and restores the prototype afterward. The existing native declaration probe
+now targets that case with its original ID and control; a duplicate added probe
+was removed. Both mutants now fail that case with
+passing scalar controls, including in the complete rerun. No D9 value-profile
+mutation survives. The only newly uncovered mutations are the old generic
+structured-clone catch and its diagnostic string, now bypassed by native-value
+rejection. They do not define supported application-data behavior and remain
+in the score denominator. Earlier non-killed families retain their reviewed
+classifications; no timeout or raw host exception is claimed as an assertion kill.
+
+The separate finite review exercised 128 additional JSON value combinations
+through eight boundaries on each runtime, plus 35 native magnitude, exact-decimal,
+signed-zero, non-finite and unsupported-number-conversion observations. It also
+caught the initial TypeScript create ordering regression: invalid identity must
+retain priority over newly rejected native values. A permanent combined-error
+case failed before the ordering fix and passes afterward. These results exercise
+the chosen contract; they are not exhaustive proof. The review separately
+reproduced D11 on all four runtimes, without adopting an expected output shape.
+
+Completion review updated unit/native tests, conformance vectors, mutation
+probes, API comments, READMEs, `/spec`, `/conformance`, and `/agentic`. CoreDoc,
+AGENTS.md and architectural rules need no changes: foundation obligations and
+dependency directions are unchanged. Runner and adapter financial behavior is
+unchanged. Final refreshes are documentation/API comments and informational
+`guardsAgainst` metadata only; executable logic, normative requirements, test
+inputs/expectations and operation IDs match the verified candidate. Final
+repository/documentation checks passed again.
+
+**D9 is complete.** D11 remains a separate unselected contract; M9 release history
+and local tag creation remain unrequested and unperformed. Earlier D9-open
+statements in milestone evidence describe those earlier snapshots.
+
+### D11 — Empty import-history result shape: unresolved
+
+D9's adjacent-boundary review found a separate result-shape difference. For a
+valid `entity.import` with `historicalRevisions` omitted or an empty list,
+TypeScript returns `historicalRevisions: []`; Python and Java omit that output
+member. ENTITY-IMPORT-006 preserves supplied revisions but does not explicitly
+select an empty output representation; the bounded fixture convention also
+leaves it unspecified. No financial facts differ, but exact normalized results
+cannot agree without a selected output contract. This is outside D9's native
+value profile and is not silently repaired in a core or adapter.
+
+Recommendation for a separate decision: normalize successful import observations
+to include `historicalRevisions: []` when supplied history is omitted or empty. Preserve
+nonempty revision observations, existing errors, input presence on failure and
+all error priorities. This recommendation is **not adopted** by the D9 approval.
+D9's portable import control supplies a real historical revision and tests its
+preservation; it makes no expectation for the unselected empty-result shape.
+This new gap prevents declaring the entire 0.9.7 plan closed.
