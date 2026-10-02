@@ -65,7 +65,7 @@ service happened to implement them first.
 
 ## Current scope
 
-FinKore Core 0.9 is a pre-1.0 release candidate covering:
+The FinKore Core 1.0 normative baseline covers:
 
 | Domain | Defined behavior |
 | --- | --- |
@@ -136,8 +136,11 @@ See [Developer Tools](./docs/tools/README.md) for individual commands.
 
 ## Status and evidence
 
-The current contract remains pre-1.0. Known limitations and gaps are recorded
-in the specification, [traceability](./conformance/traceability.md), and Agentic
+CoreDoc and the specification now identify the stable 1.0 normative baseline,
+with the accepted candidate's financial behavior preserved. Conformance and
+Agentic artifacts still carry their candidate labels pending final alignment;
+stable release publication remains pending. Known limitations and gaps are
+recorded in the specification, [traceability](./conformance/traceability.md), and Agentic
 contract. [Release notes](./docs/releases/README.md) summarize published history;
 detailed development and implementation history remains in Git.
 

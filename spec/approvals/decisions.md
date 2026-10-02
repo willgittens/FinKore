@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 0.9 release candidate.**
+**FinKore Core 1.0 stable.**
 
 ## Purpose
 
@@ -69,12 +69,12 @@ logical history but MUST NOT satisfy the Requirement for current evaluation.
 The observable Requirement state is therefore `PENDING` unless another
 effective Decision satisfies or rejects the Requirement.
 
-Core 0.9 release candidate current-effectiveness also considers lifecycle evidence defined by
+Core 1.0 current-effectiveness also considers lifecycle evidence defined by
 [Approval Validity](validity.md), including withdrawal, expiration, and
 supersession. Those lifecycle events change current effectiveness without
 rewriting the committed Decision.
 
-Core 0.9 release candidate does not require a specific binding mechanism such as revision
+Core 1.0 does not require a specific binding mechanism such as revision
 numbers, database versions, hashes, immutable snapshots, or stable fact
 references. A composing domain MAY use any mechanism that preserves the
 observable guarantee that the Decision can be associated with the relevant

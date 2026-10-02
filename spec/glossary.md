@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 0.9 release candidate.**
+**FinKore Core 1.0 stable.**
 
 ## Terms
 

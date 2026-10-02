@@ -11,6 +11,12 @@ current execution evidence.
 
 ## Unreleased
 
+Promoted CoreDoc and all 47 specification documents to the stable Core 1.0
+normative baseline without changing financial behavior, requirement identities,
+portable errors, canonical operation contracts, or serialization rules. CoreDoc
+rule-evolution metadata is preserved. No consumer behavior migration is required.
+Conformance and Agentic alignment and final release publication remain pending.
+
 Retired SPEC-FREEZE-001, SPEC-FREEZE-002, SPEC-FREEZE-003, and SPEC-FREEZE-004
 from the active specification; their temporary Core 0.9 release-candidate
 applicability has ended. Their original definitions remain in Git history and

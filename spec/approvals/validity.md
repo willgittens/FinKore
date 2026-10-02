@@ -2,11 +2,11 @@
 
 ## Status
 
-**FinKore Core 0.9 release candidate.**
+**FinKore Core 1.0 stable.**
 
 ## Purpose
 
-This document defines Core 0.9 release candidate current-effectiveness semantics for Approval
+This document defines Core 1.0 current-effectiveness semantics for Approval
 Decisions. It extends the fact-effectiveness model with explicit
 withdrawal, expiration, and supersession evidence while preserving append-only
 Approval history.

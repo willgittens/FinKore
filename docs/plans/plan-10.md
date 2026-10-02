@@ -18,9 +18,11 @@ promotion milestones, now numbered 5–9. This plan is temporary working materia
 and must itself be removed from the final 1.0 tree. Completed plans will not be
 relocated to another archive directory or retained as release dependencies.
 
-Milestones 1–4 are complete; milestones 5–9 remain uncompleted. This document is
-non-normative and does not declare Core 1.0 stable. In this filename, `10` means
-version 1.0, not version 0.10.
+Milestones 1–5 are complete; milestones 6–9 remain uncompleted. CoreDoc and
+the specification identify the stable 1.0 normative baseline; conformance,
+Agentic, and publication gates remain pending. This document is non-normative
+and does not publish a release. In this filename, `10` means version 1.0,
+not version 0.10.
 
 ## Objective
 
@@ -245,22 +247,38 @@ Promote the reviewed 0.9 candidate without adding new behavior.
 
 - [x] Confirm that every 0.9 candidate blocker is resolved, including the
       specification questions and repository-transition acceptance gates.
-- [ ] Change CoreDoc status and version to FinKore Core 1.0.
-- [ ] Change specification status from release candidate to stable 1.0.
-- [ ] Confirm the exact documents and domains included in the baseline.
-- [ ] Confirm that every normative requirement has a stable identifier.
-- [ ] Confirm that every portable error code has stable meaning.
-- [ ] Confirm that every canonical operation ID has a stable contract.
-- [ ] Confirm that every portable serialization shape has an explicit
+- [x] Change CoreDoc status and version to FinKore Core 1.0.
+- [x] Change specification status from release candidate to stable 1.0.
+- [x] Confirm the exact documents and domains included in the baseline.
+- [x] Confirm that every normative requirement has a stable identifier.
+- [x] Confirm that every portable error code has stable meaning.
+- [x] Confirm that every canonical operation ID has a stable contract.
+- [x] Confirm that every portable serialization shape has an explicit
       compatibility expectation.
-- [ ] Confirm that deferred topics remain visibly outside the baseline.
-- [ ] Make no normative change unless it fixes a newly demonstrated blocker;
+- [x] Confirm that deferred topics remain visibly outside the baseline.
+- [x] Make no normative change unless it fixes a newly demonstrated blocker;
       return to release-candidate review if one is required.
 
 ### Completion criteria
 
 - The 1.0 normative text is identical in behavior to the accepted 0.9 candidate.
 - No open question implies missing mandatory 1.0 behavior.
+
+Completed 2026-10-03. CoreDoc and all 47 specification documents identify the
+stable 1.0 normative baseline. The specification index enumerates the exact
+document set and explains the existing serialization compatibility protections.
+Comparison against the accepted candidate preserved all 436 requirement
+definitions after normalizing only the Core version label, the 31 portable error
+meanings, all 20 canonical operation contracts, and CoreDoc rule-evolution
+metadata. Conformance and Agentic artifacts are unchanged. Open Questions remain
+future scope; WORKFLOW-GUARD-004's partial external-fact authoring coverage remains
+explicit, with no uncovered requirement or blocking specification gap.
+
+`npm ci --no-audit` and `npm run verify` passed on Node 24.15.0, including all
+28 maintenance-tool tests. The publication checker reports no CoreDoc or
+specification status failures; remaining artifact alignment and final-tree
+publication gates belong to milestones 6–8. No financial execution, dependency
+advisory review, or release publication is claimed.
 
 ## Milestone 6 — Final conformance artifacts
 

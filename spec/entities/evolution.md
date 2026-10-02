@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 0.9 release candidate.**
+**FinKore Core 1.0 stable.**
 
 ## Purpose
 
@@ -18,7 +18,7 @@ authorization, or legal cancellation policy.
 
 An **Entity Revision** is a stable, opaque identifier for a declared observation
 or version of a continuing Financial Entity's data or lifecycle State. A
-Revision is not the stable Entity identity. Core 0.9 release candidate refines current,
+Revision is not the stable Entity identity. Core 1.0 refines current,
 historical, import, and conflict-version distinctions in
 [Entity Revisions](revisions.md) and [Entity Import](import.md).
 
@@ -43,7 +43,7 @@ A **Supersession** records that a successor Entity or Revision replaces a
 predecessor for current use within a declared supersession scope without
 changing the predecessor's stable identity or historical facts.
 
-**Replacement** and **Amendment** do not have portable Core 0.9 release candidate
+**Replacement** and **Amendment** do not have portable Core 1.0
 semantics. A composing domain may use those terms only when it defines their
 meaning and maps them to the portable evolution concepts it relies on.
 
@@ -58,7 +58,7 @@ No request member defined by this document is nullable. Omission of the source
 Entity reference, evolution kind, or a related value required by the chosen
 evolution kind is invalid.
 
-Portable Entity evolution is audit-required in Core 0.9 release candidate. The composing domain
+Portable Entity evolution is audit-required in Core 1.0. The composing domain
 or caller supplies every Entity Evolution Relation identifier, Audit Event
 identifier, and Audit Relationship identifier. A FinKore implementation MUST
 NOT generate those identifiers, derive them from mutable financial facts, or
@@ -77,7 +77,7 @@ created. If required Audit evidence is missing or rejected by Audit semantics,
 the Entity evolution request fails with the primary Audit error and no Entity
 evolution result becomes observable.
 
-Core 0.9 release candidate does not require one serialized envelope or API
+Core 1.0 does not require one serialized envelope or API
 shape. Conformance vectors may use fixture vocabulary to observe the same
 portable semantics.
 
@@ -155,7 +155,7 @@ introduced by this clarification.
 - **ENTITY-EVOLUTION-002** - When a composing domain uses Entity Revisions, each Revision identity MUST identify a particular declared Entity observation or version, MUST be stable within its revision scope, and MUST remain distinct from stable Entity identity.
 - **ENTITY-EVOLUTION-003** - When a composing domain uses Evolution Relations, each relation identity MUST identify the relationship itself, MUST be stable within its relation scope, and MUST NOT be treated as the identity of the source or related Entity.
 - **ENTITY-EVOLUTION-004** - Correction, Reversal, Void, and Supersession MUST be treated as distinct evolution concepts; an implementation MUST NOT silently treat one successful or failed evolution kind as another.
-- **ENTITY-EVOLUTION-005** - Replacement and Amendment MUST NOT be treated as portable Core 0.9 release candidate evolution operations unless a composing specification explicitly defines their meaning and maps them to one or more portable evolution concepts.
+- **ENTITY-EVOLUTION-005** - Replacement and Amendment MUST NOT be treated as portable Core 1.0 evolution operations unless a composing specification explicitly defines their meaning and maps them to one or more portable evolution concepts.
 - **ENTITY-EVOLUTION-006** - Workflow State names, terminal-state status, or display labels such as final, approved, posted, void, reversed, corrected, or superseded MUST NOT by themselves establish evolution eligibility or financial finality. Eligibility and consequences MUST be declared by the composing domain or lifecycle policy.
 - **ENTITY-EVOLUTION-007** - An evolution request MUST identify one source Financial Entity, exactly one supported evolution kind, and every related Entity, Revision, or Evolution Relation required by that kind.
 - **ENTITY-EVOLUTION-008** - A Correction MUST preserve the source Entity's stable identity and original financial facts while producing or identifying a corrected related Entity or Revision carrying the corrected financial facts.
@@ -220,7 +220,7 @@ These examples are illustrative and non-normative.
 ## Errors
 
 Entity evolution reuses the existing Entity portable error catalog in
-[Entity Errors](errors.md). Core 0.9 release candidate does not introduce a dedicated evolution
+[Entity Errors](errors.md). Core 1.0 does not introduce a dedicated evolution
 error code.
 
 ## Open Questions

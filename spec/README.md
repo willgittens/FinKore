@@ -2,8 +2,9 @@
 
 ## Status
 
-**FinKore Core 0.9 release candidate.** This is the shared, language-neutral
-behavioral candidate intended to become FinKore Core 1.0. It remains pre-1.0.
+**FinKore Core 1.0 stable.** This is the shared, language-neutral
+normative baseline. Stability applies to the defined observable contract and
+the compatibility policy in [Conventions](conventions.md#compatibility-policy).
 The domain scope is Money, Workflow, Audit, Approvals, and Entities.
 
 ## Purpose
@@ -44,7 +45,7 @@ direction rather than a normative requirement.
 
 ## Version Identity (Non-Normative)
 
-`FinKore Core 0.9 release candidate` identifies the current language-neutral
+`FinKore Core 1.0` identifies the current language-neutral
 behavioral baseline. It is distinct from the `finkoreConformance` manifest
 format version, the `finkoreVectorFile` vector-file format version, and versions
 assigned by consumer-owned tools or implementations. Format and tool versions
@@ -63,9 +64,33 @@ behavior.
 
 Later domain specifications can compose these areas. The rules for explicit refinements are defined by **SPEC-TERMINOLOGY-001** in [Conventions](conventions.md).
 
+### 1.0 document baseline (Non-Normative)
+
+The foundation is [CoreDoc](../docs/coreDoc/core-doc.md). The specification
+baseline comprises the following 47 documents, including this index and each
+domain index. Links identify the complete document set; they do not extend the
+normative scope of any document.
+
+| Area | Documents |
+| --- | --- |
+| Shared | This index, [Conventions](conventions.md), [Glossary](glossary.md) |
+| Money | [Index](money/README.md), [Representation](money/representation.md), [Currency](money/currency.md), [Arithmetic](money/arithmetic.md), [Comparison](money/comparison.md), [Rounding](money/rounding.md), [Rates](money/rates.md), [Allocation](money/allocation.md), [Serialization](money/serialization.md), [Errors](money/errors.md) |
+| Workflow | [Index](workflow/README.md), [States](workflow/states.md), [Transitions](workflow/transitions.md), [Guards](workflow/guards.md), [Terminal states](workflow/terminal-states.md), [Versioning](workflow/versioning.md), [Import](workflow/import.md), [Conflicts](workflow/conflicts.md), [Errors](workflow/errors.md) |
+| Audit | [Index](audit/README.md), [Actors](audit/actors.md), [Events](audit/events.md), [Changes](audit/changes.md), [Append-only history](audit/append-only.md), [Redaction](audit/redaction.md), [Relationships](audit/relationships.md), [Errors](audit/errors.md) |
+| Approvals | [Index](approvals/README.md), [Requirements](approvals/requirements.md), [Conditions](approvals/conditions.md), [Decisions](approvals/decisions.md), [Validity](approvals/validity.md), [Chains](approvals/chains.md), [Composition](approvals/composition.md), [Errors](approvals/errors.md) |
+| Financial Entities | [Index](entities/README.md), [Identity](entities/identity.md), [Lifecycle](entities/lifecycle.md), [Mutability](entities/mutability.md), [Validation](entities/validation.md), [Evolution](entities/evolution.md), [Revisions](entities/revisions.md), [Import](entities/import.md), [Errors](entities/errors.md) |
+
+Compatibility covers stable requirement meanings, portable error meanings,
+canonical operation contracts, and normative serializations under
+**SPEC-COMPATIBILITY-001** through **SPEC-COMPATIBILITY-014**. For every normative
+portable shape, that includes member names, requiredness, nullability, value
+encodings, and result categories. Illustrative JSON and conformance-local
+observations do not become production serialization requirements. Manifest and
+vector-file syntax retain their separate format versions.
+
 ## Scope Discipline (Non-Normative)
 
-FinKore Core deliberately begins with reusable primitives rather than concrete invoice, expense, purchase-order, payment, reimbursement, or journal-entry models. Applications may compose the primitives for those domains, but Core 0.9 release candidate does not claim to standardize them.
+FinKore Core deliberately begins with reusable primitives rather than concrete invoice, expense, purchase-order, payment, reimbursement, or journal-entry models. Applications may compose the primitives for those domains, but Core 1.0 does not claim to standardize them.
 
 Possible later specifications may explore journal entries, debit and credit, general ledgers, reconciliation, fiscal periods, cost centers, purchase orders, invoice matching, payments, concrete correction posting rules, ledger reversals, and tax primitives. These are not current capabilities or commitments. A topic should enter scope only when its semantics can be defined clearly, tested across implementations, and justified by a real financial software problem.
 
