@@ -47,8 +47,10 @@ Those outcomes change. Existing valid JSON context and omission remain valid.
 The correction refines the existing `finkore.audit.append` contract in place
 under the release-candidate ambiguity process; no operation identifier or error
 code is repurposed. **SPEC-COMPATIBILITY-008**, **012**, **014** and
-**SPEC-FREEZE-002/003** require synchronized vectors, native tests, implementations,
-Agentic metadata and public documentation for this correction.
+**SPEC-FREEZE-002/003** require synchronized repository artifacts, applicable
+Agentic metadata and public documentation, plus documented consumer migration
+impact. Historical native implementation evidence remains in the completed
+0.9.7 plan and is not a current repository gate.
 
 ## Invariants
 

@@ -32,8 +32,11 @@ not treat them as private extensions. Metadata explicitly named by the schema is
 optional but is not semantically extensible; a future syntax extension requires
 schema publication and format-version compatibility assessment.
 
-The repository command `npm run conformance:check` performs only these artifact
-checks plus global vector-ID uniqueness. It does not invoke financial operations.
+The repository command `npm run conformance:check` performs these schema and
+discovery checks plus global vector-ID uniqueness, declared portable-error
+validation, and manifest/supplementary paired-control reference validation. It
+does not invoke financial operations. The supplementary namespace is read only
+for metadata integrity and is not added to manifest discovery or vector counts.
 
 The separate `boundary097-cases.json` file is retained historical review data.
 It is not manifest-listed, does not use the published vector-file schema, and is

@@ -120,12 +120,10 @@ without rewriting its predecessor's supersession. Requirement identifiers do
 not need to resolve through a registry absent from the input. Operation-specific
 request kind remains distinct from committed history's discriminator.
 
-Milestone 2 provides permanent regressions. Milestone 5 synchronizes core,
-adapter, public API, and package behavior, including exact-instant lifecycle
-references and preservation of their timestamp spelling. Milestones 8–9 complete
-the Core 0.9.6 verification, fresh review, and local release gate. Existing IDs
-retain their meaning; new obligations
-have new IDs.
+The completed 0.9.6 plan records permanent regressions, implementation and API
+migration, exact-instant lifecycle-reference handling, complete snapshot
+verification, fresh review, and its local release gate as historical evidence.
+Existing IDs retain their meaning; new obligations have new IDs.
 
 ## Example
 

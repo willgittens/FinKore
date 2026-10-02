@@ -19,6 +19,7 @@
     "docs:check": "node docs/tools/check-doc-links.js && node docs/tools/check-traceability.js",
     "license:check": "node docs/tools/check-license.js",
     "tools:test": "node --test --test-isolation=none docs/tools/test/*.test.js",
+    "dependencies:audit": "npm audit",
     "check": "npm run node:check && npm run architecture:check && npm run conformance:check && npm run agentic:check && npm run tools:test && npm run docs:check && npm run license:check && git diff --check",
     "verify": "npm run check"
   }

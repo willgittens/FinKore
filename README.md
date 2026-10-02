@@ -109,15 +109,26 @@ The maintained Node tooling checks the published artifacts themselves. Node
 `>=24.11.0 <25` is required.
 
 ```bash
-npm ci
+npm ci --no-audit
 npm run verify
 ```
 
 This validates schemas and vectors, checks requirement and Agentic traceability,
 enforces repository architecture, runs tool tests, checks documentation links
-and licenses, and audits the small maintenance dependency set. It does **not**
-execute a financial implementation or establish that any external
-implementation conforms.
+and licenses. After the locked dependency is installed, `npm run verify` is
+local and makes no advisory-service request. It does **not** execute a financial
+implementation or establish that any external implementation conforms.
+
+Dependency vulnerability review is a separate, network-enabled maintenance
+step:
+
+```bash
+npm run dependencies:audit
+```
+
+Its result covers the locked maintenance dependency graph against the advisory
+data returned at that time; it is not a financial-behavior or artifact-validity
+check. Installation may require registry access when the package cache is cold.
 
 See [Developer Tools](./docs/tools/README.md) for individual commands.
 

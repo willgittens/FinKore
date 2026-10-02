@@ -33,8 +33,9 @@ An Approval Decision outcome is `APPROVED` or `REJECTED`. `PENDING` describes an
 
 The accepted D1–D4 decisions in the [0.9.7 plan](../../docs/plans/plan-09.7.md)
 resolve differing concrete evaluation and native-value behavior. These are
-corrective normative additions under SPEC-FREEZE-001, staged for implementation
-and verification in that plan; they are not claims of current conformance.
+corrective normative additions under SPEC-FREEZE-001. Implementation and
+verification results recorded in that completed plan are historical and are not
+claims of current conformance.
 
 - **APPROVAL-FACT-001** — When concrete Decision or Requirement evaluation is supplied current subject facts, omission of a relevance selector MUST compare the complete supplied fact value against the Decision's retained fact value. An explicitly supplied nonempty selector list MUST narrow comparison to the selected facts. Null, empty, or malformed selector declarations MUST fail with `FINKORE_APPROVAL_INVALID_DECISION`, even when another validity condition would make the Decision ineffective. Implementations MUST NOT synthesize current facts from historical facts. Concrete single-Decision evaluation MUST reject absent current facts with `FINKORE_APPROVAL_INVALID_DECISION`. Requirement evaluation MAY omit both current facts and selectors to evaluate history without claiming current-fact validation; supplied selectors without current facts MUST use `FINKORE_APPROVAL_INVALID_DECISION`. Explicit null current facts MUST remain a supplied value, not omission.
 - **APPROVAL-FACT-002** — An Approval fact selector MUST identify a nonempty sequence of nonempty object-member names. Selection MUST traverse only own object members and MUST NOT traverse arrays, inherited members, or implicit conversions. A selected fact MUST be present in both historical and current facts to match; absence on both sides MUST NOT count as equality. Explicit null at a selected leaf MUST count as present. Missing intermediate members or a non-object intermediate value MUST make the selected fact unavailable. The bounded dot-separated encoding is defined in conformance conventions; no wildcard, fallback to a literal dotted key, escaping, expression, or array-index language is implied.
@@ -59,10 +60,10 @@ composition-only total error priority to concrete Approval operations.
 
 Separately documented native facts-only helpers retain the limited scope allowed
 by APPROVAL-DECISION-009. They cannot replace concrete validation or be used by
-an adapter to bypass these comparison rules. Native APIs must distinguish
-omission from explicitly supplied null at the concrete boundary; the old use of
-null/None as an optional selector default needs an explicit migration path in
-the implementation milestone.
+a consumer binding to bypass these comparison rules. Consumer APIs must
+distinguish omission from explicitly supplied null at the concrete boundary.
+Migration work for removed repository implementations is historical and remains
+recorded in the 0.9.7 plan.
 
 ## Invariants
 
@@ -146,11 +147,10 @@ result categories and identifiers are retained. A native facts-only helper
 retains its documented scope and signature.
 
 This is an observable corrective contract change under SPEC-FREEZE-001 and
-SPEC-COMPATIBILITY-012/014, not an editorial clarification. Milestone 2 adds
-permanent tests; Milestone 5 synchronizes implementations, adapters, public API
-documentation, and package consumers for this corrective contract. Milestones
-8–9 complete combined verification, fresh review, and local release closure for
-Core 0.9.6. No canonical Agentic operation is added or repurposed.
+SPEC-COMPATIBILITY-012/014, not an editorial clarification. The completed 0.9.6
+plan records its regressions, implementation migration, combined verification,
+fresh review, and release closure as historical evidence. No canonical Agentic
+operation is added or repurposed.
 
 ## Non-Goals
 

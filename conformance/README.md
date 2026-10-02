@@ -185,7 +185,7 @@ separate [Core 1.0 plan](../docs/plans/plan-10.md) is not complete.
 From a clean checkout with Node `>=24.11.0 <25`:
 
 ```bash
-npm ci
+npm ci --no-audit
 npm run conformance:check
 npm run traceability:check
 npm run agentic:check
@@ -193,4 +193,6 @@ npm run agentic:check
 
 Use `npm run verify` for the complete repository-maintenance suite. These
 commands validate published artifacts and their relationships; they do not run
-an implementation.
+an implementation or query a vulnerability advisory service. Use
+`npm run dependencies:audit` separately for a fresh network-backed review of
+the locked maintenance dependency graph.

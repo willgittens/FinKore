@@ -51,9 +51,10 @@ policy processing; this correction does not change other error priorities.
 Core 0.9 release candidate defines the meaning of redaction, including optional
 Actor context under **AUDIT-ACTOR-006**, without standardizing a production
 redacted-value encoding. The representation is implementation-defined and must
-preserve the distinctions and evidence required above. Conformance adapters
-normalize that representation to the conformance-only `{"presence":"REDACTED"}`
-sentinel; the sentinel is not a required production representation.
+preserve the distinctions and evidence required above. A consumer-owned
+conformance binding normalizes that representation to the conformance-only
+`{"presence":"REDACTED"}` sentinel; the sentinel is not a required production
+representation.
 
 ## Core 0.9.7 correction note (non-normative)
 

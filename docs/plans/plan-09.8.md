@@ -2,9 +2,9 @@
 
 ## Status
 
-**Transition and Milestones 4–6 implemented — audit follow-up milestones 7–8 pending; unreleased.**
+**Transition and Milestones 4–7 implemented — audit follow-up milestone 8 pending; unreleased.**
 
-Updated on 2026-10-02. This replaces the previous 0.9.8 corrective implementation
+Updated on 2026-10-03. This replaces the previous 0.9.8 corrective implementation
 plan. Transition milestones 1–3 are implemented: FinKore is
 the financial source of truth for its defined scope, with no maintained language
 implementation or Conformance Runner. This status does not declare a release.
@@ -385,25 +385,63 @@ a 0.9.8 release declaration.
 
 ## Milestone 7 — Synchronize current documentation and governance
 
-- [ ] Correct README, AGENTS.md, developer-tool guidance, and release gates to
+### Milestone 7 implementation — 2026-10-03
+
+Local artifact verification and dependency vulnerability review are now
+separate gates. A locked install uses `npm ci --no-audit`, `npm run verify`
+performs the deterministic repository checks without an advisory-service query,
+and `npm run dependencies:audit` performs the separately reported network-backed
+dependency review. The developer-tool guide now documents the supported Node
+range, an existing repository-local runtime path, official archive checksum
+verification, the ignored `.tools/` layout, and the exact local commands.
+
+`SPEC-FREEZE-002` now governs artifacts this repository owns: specification,
+conformance or traceability, applicable Agentic metadata, public documentation,
+and affected maintenance validation/tests. An observable correction must also
+document compatibility and consumer migration impact, but consumer-owned code
+and execution evidence are not a same-commit repository prerequisite. This is a
+normative governance-scope correction prompted by the transition's demonstrated
+ownership contradiction. It preserves the requirement ID and MUST modality,
+changes no portable financial behavior or error, and remains `NOT DIRECTLY
+TESTABLE`; its traceability rationale and contribution guidance are updated.
+
+Active Agentic and specification correction notes now label former native,
+adapter, package, and execution results as historical evidence instead of
+current gates or pending repository implementation work. Root and domain
+introductions, consumer guidance, the Core 1.0 plan, CoreDoc relationship text,
+and agent instructions were rechecked against the current ownership model.
+CoreDoc already states the correct layer relationship, so none of its text or
+governance metadata changed.
+
+- [x] Correct README, AGENTS.md, developer-tool guidance, and release gates to
       distinguish deterministic local verification from network dependency audit.
       Describe the actual dependency-check step and result scope; do not make
       financial expectations or local artifact checks network-dependent.
-- [ ] Provide the missing supported-Node setup/bootstrap guidance or replace
+- [x] Provide the missing supported-Node setup/bootstrap guidance or replace
       the nonexistent workflow reference with an accurate prerequisite.
-- [ ] Review SPEC-FREEZE-002 and related contribution rules for the new ownership
+- [x] Review SPEC-FREEZE-002 and related contribution rules for the new ownership
       model. Keep coordinated specification/vector/Agentic/documentation updates
       mandatory while distinguishing consumer migration obligations from changes
       this repository can deliver. Follow compatibility policy for any normative edit.
-- [ ] Remove current-tense claims of maintained implementation verification
+- [x] Remove current-tense claims of maintained implementation verification
       from active Agentic/specification guidance. Preserve dated historical
       results and stable references without presenting them as current gates.
-- [ ] Recheck root/domain introductions, consumer guidance, the 1.0 plan,
+- [x] Recheck root/domain introductions, consumer guidance, the 1.0 plan,
       CoreDoc relationship text, and AGENTS.md against the completed follow-ups.
       Do not change CoreDoc normative version fields for editorial corrections.
 
 **Completion:** current instructions can be followed from a clean checkout and
 accurately describe maintained responsibilities and the checks actually run.
+
+Implemented on 2026-10-03. The maintained surface remains specification,
+conformance artifacts, the Agentic Contract, and domain-neutral maintenance
+tools. No implementation, runner, adapter API, language package, or hosted
+workflow was added. A clean locked install, complete local verification, and
+separate network-backed dependency audit pass on Node 24.15.0. The 2026-10-03
+advisory query reports zero known vulnerabilities in the six-package locked
+maintenance graph. These checks validate repository artifacts and maintenance
+dependencies; they do not execute financial behavior or establish consumer
+conformance.
 
 ## Milestone 8 — Fresh audit and release readiness
 

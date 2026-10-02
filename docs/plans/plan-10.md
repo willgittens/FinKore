@@ -155,9 +155,11 @@ Present a concise stable release of the language-neutral contract.
       persistence layer, authorization system, implementation library, or
       complete ledger standard.
 - [ ] Verify documentation links and CoreDoc requirement references.
-- [ ] Run schema, vector, traceability, Agentic, architecture, tool-test,
-      documentation, license, and dependency checks.
-- [ ] Run the complete local `npm run verify` command from a clean checkout.
+- [ ] Run the complete local `npm run verify` command after a clean locked
+      dependency install; this covers schema, vector, traceability, Agentic,
+      architecture, tool-test, documentation, and license checks.
+- [ ] Run `npm run dependencies:audit` as a separate network-backed release
+      check and record the advisory-query date and result scope.
 - [ ] Confirm the release contains no generated reports, credentials, local
       toolchains, or stale implementation/package instructions.
 - [ ] Create the 1.0 version tag according to the maintainer's release process.
@@ -208,9 +210,13 @@ FinKore Core 1.0 is complete only when:
 - [ ] canonical Agentic operations are consistent with `/spec` and covered by
       the published conformance corpus;
 - [ ] all local artifact, traceability, Agentic, architecture, tool-test,
-      documentation, license, and dependency checks pass from a clean checkout;
+      documentation, and license checks pass after a clean locked dependency
+      install;
+- [ ] the separate network-backed dependency audit passes with its advisory
+      query date and result scope recorded;
 - [ ] current-facing documentation contains no maintained implementation,
-      runner, adapter API, package installation, or registry-publication claim;
+      runner, adapter API, financial implementation package installation, or
+      registry-publication claim;
 - [ ] historical execution results are clearly historical;
 - [ ] no new financial domain was inserted after the 0.9 freeze;
 - [ ] the concise 1.0 release note and version tag are ready;

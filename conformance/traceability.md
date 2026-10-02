@@ -340,7 +340,7 @@ complete exploratory accounting.
 | SPEC-EXAMPLE-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Surrounding specification completeness requires documentation review. |
 | SPEC-EXAMPLE-003 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Language-example labeling is a documentation convention. |
 | SPEC-FREEZE-001 | Shared | MAY | NOT DIRECTLY TESTABLE | Accepting a post-freeze correction is a maintainer governance decision. |
-| SPEC-FREEZE-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Same-change artifact synchronization is verified across the repository. |
+| SPEC-FREEZE-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Same-change repository-artifact synchronization and documented consumer impact are maintainer review obligations; consumer-owned implementation changes are outside this repository's gate. |
 | SPEC-FREEZE-003 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Stable-ID preservation is a release-history review obligation. |
 | SPEC-FREEZE-004 | Shared | MAY | NOT DIRECTLY TESTABLE | Permitting a non-normative edit is a maintainer governance decision. |
 | SPEC-IDENTIFIER-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Domain vectors cover concrete identifiers; no generic identifier operation exists. |

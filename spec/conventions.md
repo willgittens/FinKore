@@ -78,7 +78,7 @@ IDs, and normative serialization shapes are frozen under the compatibility
 policy above.
 
 - **SPEC-FREEZE-001** — After the Core 0.9 release-candidate freeze, a normative change MAY be accepted only to correct a demonstrated contradiction, ambiguity, or portability defect.
-- **SPEC-FREEZE-002** — An accepted normative correction MUST update the affected specification, conformance vectors or traceability, implementations, tests, Agentic metadata when applicable, and public documentation in the same change.
+- **SPEC-FREEZE-002** — An accepted normative correction MUST update the affected specification, conformance vectors or traceability, Agentic metadata when applicable, public documentation, and affected repository-maintenance validation or tests in the same change. When observable behavior changes, the correction MUST document compatibility and consumer migration impact. Consumer-owned implementation changes and execution evidence are outside this repository's same-change gate.
 - **SPEC-FREEZE-003** — A release-candidate correction MUST preserve existing stable identifiers unless the compatibility policy requires a new identifier or documented supersession path.
 - **SPEC-FREEZE-004** — Non-normative editorial changes MAY be made when they do not change observable required behavior, portable error mapping, serialization shape, operation contract, mutation semantics, or failure atomicity.
 

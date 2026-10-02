@@ -14,12 +14,55 @@ financial-domain behavior.
 | `check-traceability.js` | Cross-check specification requirements, modalities, permitted coverage classifications, per-domain/total inventories, COVERED/PARTIAL evidence, vector metadata, and Agentic references. | `npm run traceability:check`, `npm run docs:check` |
 | `check-license.js` | Validate license metadata, source headers, and repository license text. | `npm run license:check` |
 
+## Supported Node setup
+
+The maintained tools require Node `>=24.11.0 <25`; npm installs the locked
+maintenance dependency and invokes the repository scripts. Check the active
+runtime first:
+
+```bash
+node --version
+npm --version
+```
+
+If a compatible repository-local runtime already exists at
+`.tools/node/bin/node`, place it first on `PATH` for the current shell:
+
+```bash
+export PATH="$PWD/.tools/node/bin:$PATH"
+npm run node:check
+```
+
+If no compatible runtime exists, download an official Node 24 archive whose
+version satisfies the declared range, verify it against the publisher's
+`SHASUMS256.txt`, and extract or link it so that `.tools/node/bin/node` and its
+bundled npm are present. The ignored `.tools/` directory is local bootstrap
+state and must not be committed. The repository does not require Python, Java,
+Maven, or language-package toolchains.
+
+## Verification and dependency review
+
 Run the local checks after installing the locked Node dependency:
 
 ```bash
-npm ci
+npm ci --no-audit
 npm run check
 ```
+
+The install may require registry access when the npm cache is cold. The
+`--no-audit` option keeps vulnerability lookup separate from installation.
+Once dependencies are present, `npm run check` and its `npm run verify` alias
+are deterministic local checks and do not contact an advisory service.
+
+Run the network-backed dependency review separately when required:
+
+```bash
+npm run dependencies:audit
+```
+
+Report its date and whether it used fresh registry advisory data. An optional
+`npm audit --offline` result is limited to advisory data already available in
+the local npm cache and must not be described as a fresh network audit.
 
 `npm run conformance:check` validates the published acceptance artifacts as
 data. It does not execute their financial operations, test an implementation,

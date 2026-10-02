@@ -93,12 +93,12 @@ is supplied. Neither explicit null nor malformed Source Identity is omission.
 
 This is a corrective normative addition under SPEC-FREEZE-001 and
 SPEC-COMPATIBILITY-012/014, not an editorial change or a claim of compatibility
-for TypeScript's former pair-required behavior. Milestone 2 adds permanent
-vectors and native regressions. Milestone 7 synchronizes implementations
-and public API documentation, including valid returned-observation reuse.
-Milestones 8–9 complete combined verification, fresh review, and local corrective
-release closure, satisfying the synchronization required by SPEC-FREEZE-002.
-No canonical import operation is introduced.
+for TypeScript's former pair-required behavior. The completed 0.9.6 plan records
+the vectors, native regressions, implementation and API migration, returned-
+observation reuse, combined verification, fresh review, and local corrective
+release closure as historical evidence. Current synchronization follows the
+repository-owned scope in SPEC-FREEZE-002. No canonical import operation is
+introduced.
 
 ## Core 0.9.3 correction note (non-normative)
 

@@ -268,15 +268,18 @@ are not repository-maintained verification gates.
 For a meaningful repository change, run:
 
 ```text
-npm ci
+npm ci --no-audit
 npm run verify
 ```
 
 The verification suite checks artifact schemas, conformance vectors,
 traceability, Agentic consistency, repository architecture, tool tests,
-documentation links, licenses, and dependency audit status. Report failures
-honestly. Passing these checks does not prove that an external implementation
-conforms or that financial behavior is exhaustively tested.
+documentation links, and licenses. It is local after dependency installation
+and does not query a vulnerability advisory service. Run
+`npm run dependencies:audit` separately when a fresh network-backed dependency
+review is required, and report its time and scope independently. Passing either
+check does not prove that an external implementation conforms or that financial
+behavior is exhaustively tested.
 
 ## Change discipline
 
@@ -296,7 +299,8 @@ Did it affect portable errors or stable identifiers?
 Did it affect Agentic operations, effects, or safety metadata?
 Did it require repository-tool or tool-test changes?
 Did it leave any current-facing documentation stale?
-Did all applicable local verification checks pass?
+Did all applicable local verification checks and separately required dependency
+reviews pass?
 ```
 
 ## When requirements are unclear
