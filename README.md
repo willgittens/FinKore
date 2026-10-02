@@ -84,6 +84,8 @@ and other concrete accounting domains remain outside the current Core scope.
 
 Start with the artifacts that match your task:
 
+The [documentation index](./learn/index.html) also links to these resources.
+
 1. Read [CoreDoc](./docs/coreDoc/core-doc.md) for foundation-level obligations.
 2. Read [specification conventions](./spec/conventions.md), the
    [glossary](./spec/glossary.md), and the relevant domain specification.
@@ -134,16 +136,10 @@ See [Developer Tools](./docs/tools/README.md) for individual commands.
 
 ## Status and evidence
 
-The current contract remains pre-1.0. FinKore 1.0 promotion is a separate,
-unfinished process described in the [Core 1.0 plan](./docs/plans/plan-10.md).
-Known limitations and gaps remain visible in the specification, traceability
-inventory, and Agentic contract.
-
-Earlier repository versions contained maintained TypeScript, Python, and Java
-implementations plus a Conformance Runner. Their recorded results remain useful
-historical evidence in [release notes](./docs/releases/README.md) and completed
-plans, but they are not claims about the current repository and are not part of
-the current supported surface.
+The current contract remains pre-1.0. Known limitations and gaps are recorded
+in the specification, [traceability](./conformance/traceability.md), and Agentic
+contract. [Release notes](./docs/releases/README.md) summarize published history;
+detailed development and implementation history remains in Git.
 
 Passing repository-maintenance checks proves that the published artifacts are
 internally well-formed within their stated bounds. It does not prove exhaustive

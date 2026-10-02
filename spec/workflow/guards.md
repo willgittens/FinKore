@@ -18,12 +18,12 @@ This document defines Transition Guards: domain predicates that control whether 
 - **WORKFLOW-GUARD-006** — Guard evaluation order MUST NOT change the logical result when all guards evaluate the same supplied facts.
 - **WORKFLOW-GUARD-007** — An implementation retaining native comparison values in a declared guard MUST document its supported value set, capture independently owned containers, and retain only supported immutable scalar values. Unsupported or mutable numeric objects, including unsupported subclasses of supported numeric classes, MUST fail definition construction/import with `FINKORE_WORKFLOW_INVALID_DEFINITION` before they can alter retained semantics. Supported exact numeric values MUST be preserved without conversion through binary floating point or arbitrary numeric string coercion. Failure MUST leave existing instances and their bindings unchanged, and MUST follow WORKFLOW-ERROR-007's definition-first priority.
 
-This 0.9.7 correction makes the native value boundary explicit while preserving
-WORKFLOW-VERSION-003/009's ownership guarantee and WORKFLOW-GUARD-004's
-determinism. The reference guard remains a top-level own-member comparison;
-Approval's nested selectors do not change it. Native supported-value profiles
-and test representation are recorded in conformance conventions; no universal
-serializer or new production guard language is required.
+WORKFLOW-GUARD-007 preserves WORKFLOW-VERSION-003/009's ownership guarantee
+and WORKFLOW-GUARD-004's determinism. The conformance guard is a top-level
+own-member comparison; Approval's nested selectors do not change it.
+[Conformance conventions](../../conformance/conventions.md#declarative-fixtures)
+define that fixture. Implementations document their native supported-value
+profiles; no universal serializer or production guard language is required.
 
 ## Invariants
 

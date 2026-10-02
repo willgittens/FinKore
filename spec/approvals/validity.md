@@ -33,7 +33,7 @@ Approval history.
 
 ## Invariants
 
-This 0.9.7 corrective addition explicitly covers the proposed result, whereas
+APPROVAL-VALIDITY-015 covers the proposed result, whereas
 APPROVAL-VALIDITY-014 validates supplied evidence before reuse. Successful
 recording preserves earlier Decisions and lifecycle events and appends exactly
 the accepted Decision, yielding history reusable by subsequent operations.
@@ -87,10 +87,7 @@ when there is no prior withdrawal. These failures use
 `FINKORE_APPROVAL_INVALID_DECISION` and preserve both histories under
 **APPROVAL-VALIDITY-012** and **APPROVAL-ERROR-006**.
 
-These 0.9.4 clarifications apply existing validity and history obligations;
-they introduce no new lifecycle kind, eligibility policy, or portable error.
-
-## Core 0.9.6 boundary review (non-normative)
+## Context and lifecycle validation
 
 The following existing obligations do not depend on a new evaluation policy:
 
@@ -106,11 +103,9 @@ The following existing obligations do not depend on a new evaluation policy:
   reuse that history; invalid evidence uses `FINKORE_APPROVAL_INVALID_DECISION`
   and leaves both histories unchanged.
 
-The two Milestone 1 proposals were accepted for the Milestone 2 regression
-baseline. APPROVAL-VALIDITY-013 defines the considered-set/context boundary;
+APPROVAL-VALIDITY-013 defines the considered-set/context boundary;
 APPROVAL-VALIDITY-014 defines imported lifecycle relationship validation.
-These are corrective normative additions, not retroactive claims that every
-boundary was previously specified. The bounded fixture declares local lifecycle
+The bounded fixture declares local lifecycle
 order through its array; Decision references use Requirement identity, Actor
 identity, and decision instant. Timestamp equality retains SPEC-TIMESTAMP-005.
 
@@ -119,11 +114,6 @@ or general graph/cycle policy is introduced. A successor can later be withdrawn
 without rewriting its predecessor's supersession. Requirement identifiers do
 not need to resolve through a registry absent from the input. Operation-specific
 request kind remains distinct from committed history's discriminator.
-
-The completed 0.9.6 plan records permanent regressions, implementation and API
-migration, exact-instant lifecycle-reference handling, complete snapshot
-verification, fresh review, and its local release gate as historical evidence.
-Existing IDs retain their meaning; new obligations have new IDs.
 
 ## Example
 

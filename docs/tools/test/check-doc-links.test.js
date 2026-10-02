@@ -9,7 +9,7 @@ import { runDocumentationCli } from '../check-doc-links.js'
 
 function fixture() {
   const root = mkdtempSync(join(tmpdir(), 'finkore-doc-links-'))
-  for (const directory of ['spec', 'conformance', 'agentic', 'docs']) {
+  for (const directory of ['spec', 'conformance', 'agentic', 'docs', 'learn']) {
     cpSync(resolve(directory), join(root, directory), { recursive: true })
   }
   for (const file of ['AGENTS.md', 'CONTRIBUTING.md', 'LICENSE', 'LICENSING.md', 'NOTICE.md', 'README.md', 'THIRD_PARTY_LICENSES.md', 'TRADEMARKS.md']) {

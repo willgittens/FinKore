@@ -12,7 +12,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum disconnected eligibleactors absent. Paired control: approval.boundary097.quorum-disconnected-control-001.",
+      "description": "Quorum disconnected eligibleactors absent. Paired control: approval.boundary097.quorum-disconnected-control-001.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -138,7 +138,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum disconnected approvedoutcome absent. Paired control: approval.boundary097.quorum-disconnected-control-001.",
+      "description": "Quorum disconnected approvedoutcome absent. Paired control: approval.boundary097.quorum-disconnected-control-001.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -268,7 +268,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum disconnected rejectedoutcome absent. Paired control: approval.boundary097.quorum-disconnected-control-001.",
+      "description": "Quorum disconnected rejectedoutcome absent. Paired control: approval.boundary097.quorum-disconnected-control-001.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -398,7 +398,7 @@
         "APPROVAL-ERROR-008",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F4: disconnected first self cycle. Paired control: approval.boundary097.disconnected-first-valid-001.",
+      "description": "Disconnected first self cycle. Paired control: approval.boundary097.disconnected-first-valid-001.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -460,7 +460,7 @@
         "APPROVAL-ERROR-008",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F4: disconnected first mutual cycle. Paired control: approval.boundary097.disconnected-first-valid-001.",
+      "description": "Disconnected first mutual cycle. Paired control: approval.boundary097.disconnected-first-valid-001.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -533,7 +533,7 @@
         "APPROVAL-ERROR-008",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F4: disconnected first missing child. Paired control: approval.boundary097.disconnected-first-valid-001.",
+      "description": "Disconnected first missing child. Paired control: approval.boundary097.disconnected-first-valid-001.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -595,7 +595,7 @@
         "APPROVAL-ERROR-008",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F4: disconnected last self cycle. Paired control: approval.boundary097.disconnected-last-valid-001.",
+      "description": "Disconnected last self cycle. Paired control: approval.boundary097.disconnected-last-valid-001.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -657,7 +657,7 @@
         "APPROVAL-ERROR-008",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F4: disconnected last mutual cycle. Paired control: approval.boundary097.disconnected-last-valid-001.",
+      "description": "Disconnected last mutual cycle. Paired control: approval.boundary097.disconnected-last-valid-001.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -730,7 +730,7 @@
         "APPROVAL-ERROR-008",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F4: disconnected last missing child. Paired control: approval.boundary097.disconnected-last-valid-001.",
+      "description": "Disconnected last missing child. Paired control: approval.boundary097.disconnected-last-valid-001.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -892,7 +892,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.first-unused-opposing",
@@ -1040,7 +1040,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.first-unused-missing-eligibility",
@@ -1167,7 +1167,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.first-unused-unresolved",
@@ -1295,7 +1295,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.first-unused-context",
@@ -1423,7 +1423,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.first-unused-structure",
@@ -1562,7 +1562,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.last-unused-valid",
@@ -1675,7 +1675,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.last-unused-opposing",
@@ -1823,7 +1823,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.last-unused-missing-eligibility",
@@ -1950,7 +1950,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.last-unused-unresolved",
@@ -2078,7 +2078,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.last-unused-context",
@@ -2206,7 +2206,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.last-unused-structure",
@@ -2345,7 +2345,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.unused-depth-eight-control",
@@ -2546,7 +2546,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.inapplicable-invalid-eligibleactors",
@@ -2658,7 +2658,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.inapplicable-invalid-approvedoutcome",
@@ -2768,7 +2768,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.inapplicable-invalid-rejectedoutcome",
@@ -2878,7 +2878,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.swapped-mapping-control",
@@ -2975,7 +2975,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.first-cross-member-applicability-before-context",
@@ -3108,7 +3108,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.last-cross-member-applicability-before-context",
@@ -3241,7 +3241,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.inapplicable-context-not-required",
@@ -3355,7 +3355,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.first-pending-unused-control",
@@ -3470,7 +3470,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.first-pending-unused-missing-evidence",
@@ -3597,7 +3597,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.last-pending-unused-control",
@@ -3712,7 +3712,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.last-pending-unused-missing-evidence",
@@ -3839,7 +3839,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.first-rejected-unused-control",
@@ -3952,7 +3952,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.first-rejected-unused-missing-evidence",
@@ -4079,7 +4079,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.last-rejected-unused-control",
@@ -4192,7 +4192,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.last-rejected-unused-missing-evidence",
@@ -4319,7 +4319,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.first-not-applicable-unused-control",
@@ -4432,7 +4432,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.first-not-applicable-unused-missing-evidence",
@@ -4559,7 +4559,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.last-not-applicable-unused-control",
@@ -4672,7 +4672,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.last-not-applicable-unused-missing-evidence",
@@ -4799,7 +4799,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.empty-votes-missing-eligibleactors",
@@ -4892,7 +4892,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.empty-votes-missing-approvedoutcome",
@@ -4989,7 +4989,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.empty-votes-missing-rejectedoutcome",
@@ -5086,7 +5086,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.decisions-null",
@@ -5184,7 +5184,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.decisions-empty",
@@ -5283,7 +5283,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.composition097.decisions-omitted",
@@ -5378,7 +5378,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     }
   ]
 }

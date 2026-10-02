@@ -34,15 +34,19 @@ Each manifest-listed JSON file is an object containing `finkoreVectorFile` and a
 - `reviewFinding`, `pairedControl`, and `reason`: optional non-normative review
   metadata. These fields do not alter the required financial observation.
 
+Review findings and defect names describe the exercised boundary in words;
+consumers do not need a development-plan label to interpret them. A
+`pairedControl` retains its stable case identifier even when that identifier
+contains a historical version or review label. These identifiers are not prose
+to renumber or repurpose.
+
 Manifest-listed vector syntax is closed in format version `0.1`. The declared
 JSON Schema uses `additionalProperties: false`, so a consumer MUST reject an
 unknown vector-file, vector, expected-result, or error member during mandatory
 schema validation. The optional review fields listed above are defined members,
 not extensions. Adding a new syntax member requires a compatible published
 schema and the format-version assessment described above; private metadata must
-remain outside manifest-listed files. This corrects earlier prose that said
-unknown vector members could be ignored. It does not change the schema or any
-previously valid vector.
+remain outside manifest-listed files.
 
 `expected.status` is either `success` or `error`. Success uses `value`; failure uses `error.code`. Either may include `observations` for post-operation state. A vector MUST NOT contain both `value` and `error`. Error messages are never compared. Exact object member order is irrelevant; array order is significant unless a specific operation says otherwise.
 
@@ -86,14 +90,6 @@ reach `"15.5"` for an unscaled result. Exact `15.500` rounded to scale 2 reaches
 numeric value. Negative values follow the same rule: `-2.50` reaches `"-2.5"`,
 while exact zero reaches `"0"` regardless of a native negative-zero spelling.
 
-This Core 0.9.8 correction changes 16 normalized unscaled Money result strings
-in the published vectors. It is behaviorally incompatible at the conformance
-observation boundary under SPEC-COMPATIBILITY-012/014, even though it does not
-change any Money numeric result or production serialization freedom. The
-`finkoreVectorFile` version remains `0.1`: syntax, defined members, and exact
-comparison are unchanged; the corrected operation-specific binding contract
-now supplies the previously missing presentation rule. Consumers pinning older
-vector contents must treat the manifest revision as changed.
 The `finkore.money.allocate` fixture supplies `value`, `allocation`, and
 `scale`. `allocation.method` is `EQUAL` with `parts` or `RATIO` with `ratios`.
 Scale, parts, and ratio entries are JSON numbers with integer mathematical
@@ -249,10 +245,9 @@ Audit ordering requirements are verified through append-only history and review 
 For Money, `money.deserialize` and `money.serialize` remain
 conformance-local representation boundary checks. They exercise normative Money
 serialization but are not separate public Agentic operations. Rate application
-and Allocation are promoted to
-`finkore.money.applyrate` and `finkore.money.allocate` after Agentic review.
-For Workflow, `workflow.import` remains conformance-local after the
-Agentic review. Versioned Workflow fixtures may include definition identity,
+and Allocation use canonical
+`finkore.money.applyrate` and `finkore.money.allocate` identifiers.
+For Workflow, `workflow.import` remains conformance-local. Versioned Workflow fixtures may include definition identity,
 definition version identity, instance binding, Workflow Instance Revision,
 Expected Current State, and Expected Workflow Instance Revision. These fixture
 members observe specification behavior only; they do not define storage schemas,
@@ -344,14 +339,14 @@ Approval semantics or introduce a public Agentic operation. Fixtures omitting
 the flag retain their existing result shape.
 
 For Entities, Entity create, mutate, transition, and evolution
-operations are promoted to canonical `finkore.entity.*` operation identifiers.
+operations use canonical `finkore.entity.*` operation identifiers.
 They observe identity, lifecycle, mutability, validation, correction, reversal,
 void, supersession, revision, relation, currentness, and Audit evidence
 semantics defined by the Entity specifications.
 
 The existing evolution fixture supplies `evolutionHistory` as an array of
 declared relation observations, including an empty array for no prior relations.
-The normalized result represents history as `{ "relations": [...] }`. An
+The normalized result represents history as `{ "relations": [...] }`. A
 consumer binding may translate that container into its implementation's accepted history API and
 normalize it back; it must not reject every nonempty input, invent relations,
 derive currentness, or implement duplicate policies itself. A follow-on fixture
@@ -408,284 +403,6 @@ historical Entity Revision identity, Entity Conflict Version separation, and
 expected-state/revision/conflict-version preconditions without defining a
 registry, storage lock, or concrete migration format.
 
-## Historical boundary review records
-
-The Core 0.9.5–0.9.7 sections below preserve implementation-specific decisions
-and evidence from repository snapshots that contained maintained language
-implementations. They are historical records, not current package, API, adapter,
-or verification instructions. The current portable fixture contract above,
-[Portable Conformance Operation Contracts](operations.md), and the
-consumer-owned evaluation contract below govern present use.
-
-## Core 0.9.5 boundary review (historical)
-
-These fixture interpretations implement the linked specification obligations;
-they do not define a production envelope. The completed
-[Core 0.9.5 plan](../docs/plans/plan-09.5.md) corrects these boundaries, with
-passing permanent regressions, native API sequences, and paired mutation probes.
-
-### Money serialization and native Audit values
-
-`money.serialize` remains a conformance-local operation. Existing vectors
-without a requested presentation scale do not test a native serializer's scale
-argument. Native Python and Java tests must exercise exact extension/reduction,
-lossy reduction of either sign, zero, trailing zeros, malformed/unsupported
-scales, and an explicit-rounding control under
-[Money Serialization](../spec/money/serialization.md). TypeScript's public
-serializer need not gain a new scale argument to make tests uniform.
-
-JSON cannot encode shared references, cycles, or Java numeric classes. Native
-Audit tests therefore supplement Actor/Change vectors at construction, history
-import, append, observation, and redaction boundaries. The Java implementation
-rejects mutable or unsupported `Number` implementations, including
-`AtomicInteger` and `AtomicLong`, with the context-specific actor/event error.
-Accepted immutable `Byte`, `Short`, `Integer`, `Long`, `BigInteger`,
-`BigDecimal`, and finite `Float`/`Double` values retain their exact accepted
-JSON numeric meaning; support does not authorize conversion through `double`
-or arbitrary subclass `toString()`. Custom subclasses are not implicitly
-supported. This Java native boundary does not require that
-other languages implement Java types. Cycles use the existing actor/event
-errors; acyclic shared structures remain valid. See
-[Actors](../spec/audit/actors.md) and [Changes](../spec/audit/changes.md).
-
-### Workflow presence and ownership
-
-Workflow `expectedCurrentState` and `expectedRevision` are optional fixture members.
-Adapters preserve presence, including explicit null. The core applies
-[Workflow Conflicts](../spec/workflow/conflicts.md): null expected State uses
-`FINKORE_WORKFLOW_INVALID_STATE`; null expected revision uses
-`FINKORE_WORKFLOW_STATE_CONFLICT`. Tests pair omission, null, malformed,
-matching, and mismatching values, preserving the existing error priority.
-Native optional arguments need a representation that distinguishes omission
-from explicit null. Native binding tests also mutate constructor inputs and
-returned observations after create/import/transition; isolated JSON cannot
-exercise those aliases.
-
-The reference Python API expresses omission by leaving the corresponding
-keyword argument out. Java provides a four-argument transition overload and
-`Workflow.OMITTED` for independently omitted preconditions in the six-argument
-overload. Explicit native null remains supplied input. These are API
-representations, not additions to the portable fixture or operation identifier.
-Workflow invalid-instance fixtures omit normalized error observations; native
-tests independently check unchanged source observations. Failures on valid
-instances retain State, binding, revision, and supplied guard facts in fixture
-observations where applicable.
-
-### Concrete Approval association
-
-The portable concrete Requirement, Decision, facts, eligibility, and history
-rules from this review are now part of the current
-[Approval fixture contract](operations.md#approval-fixture-definitions). This
-historical subsection records that the former native suites also exercised
-malformed retained histories and unchanged Decision/lifecycle evidence; those
-old execution results are not current conformance evidence.
-
-### Entity application values
-
-[ENTITY-VALIDATION-011](../spec/entities/validation.md) governs the supported
-native value profile, independent ownership, exact values and owning error
-categories. `entities/application-values.json` exercises supported JSON values
-through creation, import, mutation, transition and all four evolution operations.
-Native tests supplement JSON for shared references, cycles, unsupported numeric
-objects/subclasses, non-finite values, exact native decimals and observation reuse.
-The application-value import control supplies historical revision evidence.
-The separate `entities/import-history.json` cases exercise ENTITY-IMPORT-012: every
-successful import includes `historicalRevisions`, empty when supplied history is
-omitted or empty. This represents supplied evidence only; null and malformed
-history remain invalid, and failed observations retain input member presence.
-
-### Entity declarations and revision identity
-
-Under **ENTITY-VALIDATION-009**, the bounded fixture rejects an unknown rule,
-malformed validator list/entry, missing or empty string `id`/`path`, or missing
-or empty `otherPath` for `money-not-greater-than`, with
-`FINKORE_ENTITY_INVALID_MUTATION`. A supported predicate rejecting data uses
-`FINKORE_ENTITY_VALIDATION_FAILED`. Omitted validation and an empty list are
-valid; no general validator language is introduced.
-
-The bounded import fixture rejects equal current-revision/conflict tokens with
-`FINKORE_ENTITY_INVALID_IDENTITY` under **ENTITY-REVISION-002**/**007**. It has
-no shared-meaning declaration switch. This is not global lexical uniqueness;
-the composing-specification exception remains in [Entity Revisions](../spec/entities/revisions.md).
-Native retained-definition checks apply **ENTITY-DEFINITION-002**, including
-unversioned Entity instances.
-
-An imported revision object may omit its `current` marker; its enclosing
-`currentRevision` or `historicalRevisions` field declares its role. A supplied
-marker must be Boolean and agree with that role. A contradictory or malformed
-marker is invalid revision input under **ENTITY-REVISION-007** and
-**ENTITY-IMPORT-009**; import must not silently rewrite it. Failure preserves
-the supplied observation under **ENTITY-IMPORT-008**.
-
-### Entity version binding and import preconditions
-
-The current version-binding, import-presence, and precondition meanings are now
-in [Entity fixture definitions](operations.md#entity-fixture-definitions). The
-historical implementation review additionally required native create →
-transition and import → transition sequences to reuse actual outputs, with
-unversioned and malformed/mismatched controls. Those package/API instructions
-apply only to the removed implementations.
-
-## Core 0.9.6 boundary review (historical)
-
-The [Milestone 2 regressions](../docs/plans/plan-09.6.md) exercise native construction,
-Approval evaluation/history, redaction authority, Workflow priority, and Entity
-presence boundaries. Existing vectors remain evidence only for their exercised
-inputs. Four accepted contract decisions are now normative in their owning
-specification documents. The expanded suites are intentionally red until the
-implementation corrections land; fixture publication is not conformance.
-
-- Native Python Money construction accepts its declared exact `Decimal` type;
-  finite exponent forms, signed zero, trailing zeros, and retained scale are
-  valid controls. NaN/infinities and unsupported native amount types use
-  `FINKORE_MONEY_INVALID_AMOUNT`; invalid currency uses
-  `FINKORE_MONEY_INVALID_CURRENCY`. These constructor tests belong in native
-  suites, alongside portable `money.deserialize` and serializer checks.
-  Malformed Rate `kind` containers are JSON-testable and use
-  `FINKORE_MONEY_INVALID_AMOUNT` under MONEY-RATE-007. Neither hashing errors nor
-  adapter coercion satisfy that error contract.
-- Native Workflow definitions are validated before an invalid domain definition
-  is exposed. Exercise direct construction followed by create/import/transition,
-  including valid controls and owned nested declarations. Portable combined
-  failures exercise WORKFLOW-ERROR-007: invalid definition, invalid instance,
-  version mismatch, invalid State, conflict, terminal State, invalid Transition,
-  then guard rejection. A malformed observed revision precedes version mismatch;
-  a malformed expected revision has the separate conflict meaning.
-- Applicable non-quorum composition observations supply explicit valid State;
-  an omitted State cannot become `PENDING`. Quorum state instead derives from
-  member-specific effective Decision evidence under APPROVAL-QUORUM-010; no
-  redundant concrete Requirement or State declaration is added. An empty valid
-  effective-vote set is a valid pending control. Null/malformed applicability
-  remains unresolved, not false or inapplicable. Required timestamp validation
-  uses the complete portable profile and APPROVAL-ERROR-010 category priority,
-  including otherwise decisive alternatives and later stages.
-- `audit.redact` represents authority as a nonempty string `policy.authority`.
-  Missing, null, empty, or wrong-type authority uses
-  `FINKORE_AUDIT_REDACTION_INVALID`, without a partial redaction or evidence
-  append. This is declaration validation, not an authorization service. This
-  review adds no independent policy-ID, policy-lookup, or protected-path rule.
-- Evolution `expectedSourceState` and `expectedSourceRevision` preserve supplied
-  presence. Against a valid source, explicit null/malformed or mismatching
-  expectations use `FINKORE_ENTITY_STATE_CONFLICT`; omitted members skip their
-  checks. Native overloads need presence-aware tests as well as JSON fixtures.
-- Entity import's supplied `sourceIdentity` is an object with nonempty string
-  `sourceSystem` and `sourceId`. Null and wrong types are malformed even with a
-  complete `identityMapping`; they use `FINKORE_ENTITY_INVALID_IDENTITY` and
-  return no partial import. Under ENTITY-IMPORT-011, omitted Source Identity
-  permits complete standalone mapping, which is preserved without synthesizing
-  Source Identity. Omitting both remains valid.
-
-The concrete `approval.decision.evaluate` fixture supplies `requirement`,
-`decision`, and `currentSubjectFacts`, with optional `relevantFactPaths` and
-`evaluatedAt` when expiration applies.
-APPROVAL-DECISION-009 defines its validation and effectiveness boundary. Native
-facts-only helpers remain separately tested and are not evidence of concrete
-Requirement validation. The fixture remains conformance-local, with its existing
-EFFECTIVE/INEFFECTIVE results and portable Approval errors.
-
-APPROVAL-VALIDITY-013 defines which Decisions require expiration context before
-aggregation. APPROVAL-VALIDITY-014 defines committed history validation in the
-supplied lifecycle array's local order. The fixture's `type` discriminators and
-Decision target/successor references carry those meanings; a redundant request
-`type` does not replace an operation-specific request. Neither fixture infers a
-Requirement registry, global ordering, or missing subject facts.
-
-The manifest lists each domain's `construction-evaluation-regressions.json`.
-Optional `reviewFinding` and `pairedControl` metadata link review labels and
-independently passing control vector IDs; evaluation tools ignore them. Requirements
-and exact expected results still define each test, with no new fixture DSL.
-Native arrays with holes, cycles, or unsupported objects are not JSON null
-fixtures. Structural input failures are core domain errors; unexpected runtime
-defects remain infrastructure failures and must not be broadly remapped.
-
-## Core 0.9.7 accepted correction fixtures (historical)
-
-These conventions encode the accepted [Milestone 1 decisions](../docs/plans/plan-09.7.md).
-The owning specifications define behavior; M2 adds permanent regressions and
-M3–M7 synchronize implementations. The existing 884 passing vectors do not
-establish these newly reviewed boundaries.
-
-### Approval relevance, selectors, and equality
-
-The current facts-presence, selector grammar, traversal, and equality contract
-is consolidated in [Approval fixture definitions](operations.md#approval-fixture-definitions).
-
-Native numeric tests supplement JSON vectors. Shared JSON vectors use values
-whose numeric meaning survives each adapter's supported parse/serialization
-boundary; arbitrary-precision decimal and large-integer equality is tested
-natively rather than passed through a lossy JavaScript JSON number. This does
-not make JSON numbers a serialization for exact decimal domain values under
-SPEC-DECIMAL-002 or allow converting strings into numbers.
-
-### Condition declaration and evidence
-
-The current condition declaration, required-fact, and result rules are in
-[Approval fixture definitions](operations.md#approval-fixture-definitions).
-The historical implementations treated the declaration as data and never as
-executable code.
-
-### Quorum evidence and disconnected declarations
-
-The current quorum membership, applicability, evidence, depth, and result-shape
-contract is consolidated in [Approval fixture definitions](operations.md#approval-fixture-definitions)
-and [Approval operations](operations.md#approval-operations). Historical adapter
-presence handling is no longer needed to interpret the portable cases.
-
-### Proposed Approval history
-
-The current proposed-history and lifecycle-envelope contract is in
-[Approval fixture definitions](operations.md#approval-fixture-definitions) and
-[Approval operations](operations.md#approval-operations).
-
-Record error diagnostics retain the existing `observations.history` Decision
-array convention. Native tests separately assert that the lifecycle collection
-also remains unchanged. For an omitted input history, diagnostics may show an
-empty history; the operation still rejects the missing required collection.
-This diagnostic projection does not imply successful history import.
-
-### Supported native retained values
-
-APPROVAL-FACT-004 and WORKFLOW-GUARD-007 require validation in owning cores.
-The reference correction profiles use null, strings, Booleans, finite supported
-numbers, arrays/lists, and objects/maps with string own member names. Containers
-are captured independently; acyclic shared children are valid, cycles and
-unsupported scalar objects are rejected. This profile governs Approval facts
-and retained Workflow comparison values, not arbitrary application objects or
-new persistence serialization.
-
-| Reference runtime | Supported numeric values and exact comparison interpretation |
-| --- | --- |
-| TypeScript | Finite primitive `number`, interpreted by its ECMAScript decimal round-trip spelling. No boxed number, bigint, NaN, infinity, or custom numeric object is implicitly supported. Integers already rounded by the caller cannot be recovered. |
-| Python | Built-in `int` and finite built-in `float`; Approval also retains immutable finite `Decimal`. Workflow guards retain their existing rejection of Decimal. Boolean stays a separate category. For Approval comparison, integers/Decimals retain exact value and floats use their decimal round-trip spelling. Numeric subclasses and other numeric objects are unsupported. Decimal context must not round equality. |
-| Java | Exact classes `Byte`, `Short`, `Integer`, `Long`, `BigInteger`, `BigDecimal`, and finite `Float`/`Double`. Integral/decimal values retain exact value; float/double use their standard decimal round-trip spelling. No conversion of exact values through double; no arbitrary `Number.toString()` coercion. `AtomicInteger`, `AtomicLong`, other Number classes, and BigInteger/BigDecimal subclasses are rejected. |
-
-The comparison interpretation above governs Approval facts; it does not extend
-Workflow guard equality or its supported Python numeric set.
-Round-trip spelling assigns the supported native binary scalar its documented
-JSON numeric meaning; subsequent equality compares that decimal value exactly.
-It is not a way to repair an unsupported value or round an exact decimal.
-Representations outside the common JSON range remain native-only test inputs.
-Numeric strings remain strings. Native collection APIs are language-specific;
-neither mutable container aliases nor returned observations may change captured
-facts or bound guard meaning.
-
-Unsupported concrete Approval facts use `FINKORE_APPROVAL_INVALID_DECISION`;
-composition evidence uses `FINKORE_APPROVAL_INVALID_CHAIN` in its evidence
-category. Unsupported retained guard values use
-`FINKORE_WORKFLOW_INVALID_DEFINITION`, with existing Workflow error priority.
-Native tests must include supported immutable controls and mutate original and
-returned containers separately. Existing facts-only helpers remain documented
-as such. Concrete APIs/bridges need omission-aware arguments: migrating Python
-`None`/Java null selector defaults must not erase explicit portable null.
-
-### Entity mutability and failure observation
-
-The current mutability, evolution-history, Audit-history, and failure-observation
-contract is in [Entity fixture definitions](operations.md#entity-fixture-definitions)
-and [Entity operations](operations.md#entity-operations). Historical native
-tests additionally exercised owned special-name maps and unchanged runtime
-objects that JSON vectors cannot alias.
-
 ## Consumer-owned evaluation contract
 
 A consumer-owned implementation binding and evaluation tool perform:
@@ -734,51 +451,3 @@ Optional issue metadata is informational and repository-specific. It MUST NOT af
 ## Specification gaps
 
 A vector must not settle an open question. If the specification does not define an observable result, document the gap and wait for a normative rule. Tests are evidence for the specification, never an accidental second specification.
-
-Core 0.9.6 Approval lifecycle reference regressions compare `decidedAt` by exact
-portable instant, including equivalent offsets and nanosecond distinctions.
-Two committed Decisions with the same Requirement, Actor, and instant make a
-reference ambiguous even when their timestamp spellings differ. Successful
-history observations preserve those spellings; rejected history reconstruction
-does not claim that malformed input became a committed core observation.
-
-## Current discovery and boundary constraints
-
-The following constraints remain part of the current fixture contract. The
-[0.9.7 plan](../docs/plans/plan-09.7.md) records their historical origin but is
-not required to interpret them.
-WORKFLOW-STATES-008 requires explicit array-valued `terminalStates` and
-`transitions` in the bounded definition, including embedded Entity Workflows.
-Empty arrays remain valid. Native convenience defaults are separate from
-portable parsing and cannot repair missing fixture members.
-
-APPROVAL-DECISION-010 requires explicit `history` or `decisions` at concrete
-operations consuming those collections. An array or an envelope with an explicit
-`history` array is valid; an absent member, null, or missing envelope array is
-invalid Decision input. This does not change composition's separate collection
-and INVALID_CHAIN rules. APPROVAL-DECISION-011 keeps Actor `type` optional;
-a supplied type is a nonempty string at concrete Decision/lifecycle boundaries.
-
-ENTITY-IDENTITY-007 requires explicit nonempty `definition.identityScope`.
-ENTITY-VALIDATION-010 requires object-valued `data` on creation and existing
-Entity observations; missing/null/non-object data uses ENTITY_VALIDATION_FAILED.
-ENTITY-LIFECYCLE-007 preserves Workflow errors: malformed/missing/empty current
-`state` uses WORKFLOW_INVALID_INSTANCE, undeclared nonempty State uses
-WORKFLOW_INVALID_STATE, after definition validation. ENTITY-MUTABILITY-009
-rejects an empty `changes` object with ENTITY_INVALID_MUTATION. These bounded
-representations do not standardize a production Entity envelope or data schema.
-
-D8 is now resolved by AUDIT-REDACTION-008: `policy.id` is optional; a supplied
-value must be a nonempty string. Supplied null, empty or non-string values use
-FINKORE_AUDIT_REDACTION_INVALID during policy validation before candidate
-evidence validation. Omission cannot replace authority or protected targets,
-and ID presence does not change the redacted content. Native convenience absence
-sentinels are documented separately from portable omission; explicit null is
-not omitted input. `audit.redact` remains conformance-local.
-
-M2 full-envelope vectors remain manifest-listed and retain their exact expected
-observations. The supplementary [boundary cases](boundary097-cases.json) retain
-historical native/binding review data whose optional diagnostic envelope was not
-specified. The file is not part of manifest discovery or the vector-file schema.
-`reviewFinding`, `pairedControl`, and `reason` are non-normative review metadata;
-they do not affect financial evaluation.

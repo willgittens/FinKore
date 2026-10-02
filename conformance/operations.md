@@ -3,9 +3,8 @@
 ## Status and scope
 
 This document is the current fixture contract for every operation label in the
-FinKore manifest. It lets a consumer bind portable vectors without consulting a
-removed adapter or a historical implementation. These are logical test
-boundaries, not production APIs, transport messages, or a repository-owned
+FinKore manifest. It defines how consumers bind portable vectors. These are
+logical test boundaries, not production APIs, transport messages, or a repository-owned
 runner protocol.
 
 Canonical `finkore.*` operations also have Agentic descriptors. Other labels are
@@ -58,16 +57,6 @@ observations. The exact comparator performs no Money normalization.
 | `finkore.money.applyrate` | required `value`, `rate`; optional complete `rounding` | canonical exact Money when rounding is omitted, otherwise exactly `rounding.scale` digits | Omitted rounding means exact application, not a default. Malformed Rate or rounding input uses the owning Money error; source remains unchanged when requested. |
 | `finkore.money.allocate` | required `value`, `allocation`, integer `scale` | ordered Money array, every amount rendered at exactly `scale` | `allocation` is exactly one `EQUAL`/`parts` or `RATIO`/`ratios` request. Invalid shape/range or precision loss uses the Allocation/rounding-required error; source remains unchanged when requested. |
 
-Examples of binding normalization:
-
-| Actual exact native result | Operation context | Normalized observation |
-| --- | --- | --- |
-| `15.50`, `15.5`, or coefficient `1550` with scale 2 | unrounded addition | `{"amount":"15.5","currency":"EUR"}` |
-| `-2.500` | unrounded subtraction | `{"amount":"-2.5","currency":"EUR"}` |
-| negative zero | unrounded operation | `{"amount":"0","currency":"EUR"}` |
-| `15.5` | round with target scale 2 | `{"amount":"15.50","currency":"EUR"}` |
-| `15.5001` | unrounded operation | `{"amount":"15.5001","currency":"EUR"}`; it must not normalize to `15.5` |
-
 ## Workflow operations
 
 A portable definition supplies declared States, exactly one initial State,
@@ -82,6 +71,12 @@ validation under WORKFLOW-ERROR-007.
 | `workflow.import` | required `definition`, `instance` | observed `{currentState}`, optional supplied `revision`, and required retained `binding` when versioned | Import does not replay a transition. Missing/null/malformed instance data and binding use the owning Workflow errors. |
 | `finkore.workflow.transition` | required `definition`, `instance`, `target`; optional `facts`, `expectedCurrentState`, `expectedRevision`, and fixture-specific `availableDefinitions` | resulting `{currentState}` with retained binding/revision when applicable | Omitted preconditions perform no check; explicit null is supplied input. Requested observations cover unchanged State, binding, revision, and facts after failure. |
 
+Explicit null `expectedCurrentState` uses `FINKORE_WORKFLOW_INVALID_STATE`;
+explicit null `expectedRevision` uses `FINKORE_WORKFLOW_STATE_CONFLICT`.
+Malformed observed revisions are instance errors, preceding version mismatch.
+Invalid-instance cases omit normalized error observations when no valid instance
+can be observed; consumers still need evidence that failed calls preserve inputs.
+
 The guard fixture and version-sequence fixture remain defined in
 [Declarative fixtures](conventions.md#declarative-fixtures). Bindings translate
 them; they do not evaluate guard truth or select definition versions themselves.
@@ -90,8 +85,9 @@ them; they do not evaluate guard truth or select definition versions themselves.
 
 Audit history is a declared ordered array of committed logical Events. Append
 may return `{history}`; replace/remove are deliberately rejected append-only
-attempts. Relationship and redaction fixture details remain in
+attempts. Change value declarations and absence/redaction sentinels are defined in
 [Conformance Vector Conventions](conventions.md#declarative-fixtures).
+Relationships follow [Audit Relationships](../spec/audit/relationships.md).
 
 | Operation | Valid request members | Success value | Omission, null, error, and post-state interpretation |
 | --- | --- | --- | --- |
@@ -99,6 +95,16 @@ attempts. Relationship and redaction fixture details remain in
 | `finkore.audit.replace` | required `history`, `eventId`, `replacement` | none in current contract; the request is rejected | Uses `FINKORE_AUDIT_APPEND_ONLY_VIOLATION` and observes unchanged history. |
 | `finkore.audit.remove` | required `history`, `eventId` | none in current contract; the request is rejected | Uses `FINKORE_AUDIT_APPEND_ONLY_VIOLATION` and observes unchanged history. |
 | `audit.redact` | required `history`, `policy`, `redactionEvent` | `{event,evidenceEvent}` | Policy presence/null rules, candidate validation, protected representation, and unchanged history follow Audit Redaction and its documented priority. |
+
+Redaction uses a nonempty string `policy.authority` and declared protected
+targets. Missing, null, empty, or wrong-type authority uses
+`FINKORE_AUDIT_REDACTION_INVALID`; it is a declaration, not an authorization
+service. Under **AUDIT-REDACTION-008**, `policy.id` is optional and, when supplied,
+is a nonempty string. Null, empty, or non-string identifiers fail during policy
+validation before candidate evidence validation. Identifier presence cannot
+replace authority or targets and does not select redacted content.
+[Audit Redaction](../spec/audit/redaction.md) governs validation priority,
+unchanged history on failure, and the implementation-defined production encoding.
 
 ## Approval fixture definitions
 
@@ -109,6 +115,9 @@ declarations use `FINKORE_APPROVAL_INVALID_DECISION`; a valid rule excluding an
 Actor uses `FINKORE_APPROVAL_INELIGIBLE_ACTOR`. Composition's quorum observation
 is different: an explicit empty eligible-Actor list is valid evidence that no
 declared voter qualifies.
+
+A concrete Actor supplies a nonempty identity; its optional `type`, when supplied,
+is a nonempty string under APPROVAL-DECISION-011. Null is not omission.
 
 A concrete Decision supplies Requirement identity, Actor, supported outcome,
 decision time, and explicit `subjectFacts`. The facts value may be null, scalar,
@@ -143,6 +152,20 @@ inapplicable member needs no eligibility/mapping evidence, although supplied
 optional evidence must still be valid. Bindings do not calculate applicability,
 eligibility, effectiveness, group outcomes, actionability, or error priority.
 
+Lifecycle Decision references use Requirement identity, Actor identity, and
+the exact `decidedAt` instant. Equivalent offsets identify the same instant;
+nanosecond distinctions remain significant. Two matching Decisions make a
+reference ambiguous even if their timestamp spellings differ. Successful
+history observations preserve supplied spellings. Committed lifecycle array
+order, supported discriminators, and target/successor relationships follow
+APPROVAL-VALIDITY-014; the fixture infers no registry or timestamp-based order.
+
+Record failure diagnostics use `observations.history` for the Decision array.
+For missing input history, diagnostics may show an empty list while the
+operation still rejects the missing collection. This projection does not
+establish valid history import or prove lifecycle preservation; consumers need
+additional evidence that both histories remain unchanged.
+
 ## Approval operations
 
 | Operation | Valid request members | Success value | Omission, null, error, and post-state interpretation |
@@ -158,6 +181,13 @@ eligibility, effectiveness, group outcomes, actionability, or error priority.
 | `approval.composition.evaluate` | required `composition`, `requirements`; Decision/context evidence when required | `{outcome,actionableRequirements}` | Omitted Decision collection retains its documented empty-list convenience; explicit null is malformed. Structure, applicability, required context, then evidence/state priority applies. |
 
 ## Entity fixture definitions
+
+Every bounded Entity definition supplies a nonempty `identityScope` under
+ENTITY-IDENTITY-007. Data is object-valued under ENTITY-VALIDATION-010; missing,
+null, or non-object data uses `FINKORE_ENTITY_VALIDATION_FAILED`. Missing,
+malformed, or empty current State uses `FINKORE_WORKFLOW_INVALID_INSTANCE`;
+a nonempty undeclared State uses `FINKORE_WORKFLOW_INVALID_STATE`, after
+definition validation under ENTITY-LIFECYCLE-007.
 
 A versioned Entity observation carries Workflow `binding` inside `entity`,
 `source`, `related`, or `successor`. Bindings translate but never synthesize it
@@ -175,6 +205,40 @@ default; null or malformed history is not omission. Evolution bindings preserve
 and return actual relation/Audit histories and do not implement currentness,
 duplicate, correspondence, or precedence rules themselves.
 
+Validator declarations follow ENTITY-VALIDATION-009: unsupported rules, malformed
+lists/entries, missing or empty string `id`/`path`, and missing or empty
+`otherPath` for `money-not-greater-than` use `FINKORE_ENTITY_INVALID_MUTATION`
+before predicate evaluation. Omitted validation and an empty list are valid.
+The two supported predicates, `positive-money` and `money-not-greater-than`,
+are defined in [Declarative fixtures](conventions.md#declarative-fixtures).
+
+An import's supplied `sourceIdentity` has nonempty string `sourceSystem` and
+`sourceId`. Null or malformed Source Identity fails with
+`FINKORE_ENTITY_INVALID_IDENTITY` even when complete mapping is supplied.
+ENTITY-IMPORT-011 permits complete standalone mapping when Source Identity is
+omitted, without synthesizing a Source Identity; omitting both remains valid.
+Successful imports always include `historicalRevisions`, using an empty list
+for omitted or empty supplied history under ENTITY-IMPORT-012. This describes
+supplied evidence only; null or malformed history remains invalid and failure
+observations preserve original member presence.
+
+An imported revision may omit `current`; its enclosing `currentRevision` or
+`historicalRevisions` field declares its role. A supplied marker is Boolean
+and agrees with that role. Contradictory/malformed markers use
+`FINKORE_ENTITY_INVALID_IDENTITY` under ENTITY-REVISION-007/ENTITY-IMPORT-009
+without rewriting the supplied observation. Equal business-revision and
+conflict-version tokens are invalid in this bounded fixture, which has no
+shared-meaning declaration switch. This does not require global lexical
+uniqueness; the composing-specification exception remains in
+[Entity Revisions](../spec/entities/revisions.md).
+
+Evolution's optional `expectedSourceState` and `expectedSourceRevision` preserve
+presence: omission skips the check; supplied null, malformed, or mismatching
+expectations against a valid source use `FINKORE_ENTITY_STATE_CONFLICT`.
+Evolution history ordering, currentness, Audit correspondence, combined-error
+examples, and preservation follow the
+[Entity conventions](conventions.md#semantic-operation-catalog).
+
 ## Entity operations
 
 | Operation | Valid request members | Success value | Omission, null, error, and post-state interpretation |
@@ -187,11 +251,3 @@ duplicate, correspondence, or precedence rules themselves.
 | `finkore.entity.evolution.void` | required definition, source/revision, relation identity, eligibility, evolution/Audit evidence; optional expected source State/revision | non-current source, relation, evolution history, Audit Event/history | Void nullifies currentness without deleting source facts/history. |
 | `finkore.entity.evolution.supersede` | required definition, source/successor and revisions, relation identity, eligibility, evolution/Audit evidence, explicit `supersessionScope`; expected-source preconditions when supplied | source, successor as `related`, relation, evolution history, Audit Event/history | Supersession currentness is scoped; missing required scope/relation/Audit evidence is not repaired. |
 | `entity.import` | required `definition`, `import` envelope containing the Entity observation and any supplied mapping/revision/conflict evidence | `{entity,historicalRevisions}` plus supplied/derived current revision, conflict version, and identity mapping where applicable | Import preserves current State, stable identity, binding, revisions, and presence distinctions. It does not create or replay lifecycle operations. |
-
-## Review disposition
-
-All 35 manifest operation labels have a current request, success observation,
-omission/null rule, error ownership, and requested-post-state interpretation in
-this document and the linked current conventions. No review gap required
-inventing financial behavior. Historical runtime type profiles, package APIs,
-old adapter mechanics, and execution results remain historical evidence only.

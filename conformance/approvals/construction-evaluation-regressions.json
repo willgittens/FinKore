@@ -9,7 +9,7 @@
         "APPROVAL-COMPOSITION-013",
         "APPROVAL-COMPOSITION-014"
       ],
-      "description": "state all of control; Core 0.9.6 finding 1.",
+      "description": "State all of control.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -62,9 +62,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1"
+      "reviewFinding": "composition-state-evidence"
     },
     {
       "id": "approval.boundary096.state-all-of-absent-001",
@@ -74,7 +74,7 @@
         "APPROVAL-COMPOSITION-024",
         "APPROVAL-ERROR-010"
       ],
-      "description": "state all of absent; Core 0.9.6 finding 1.",
+      "description": "State all of absent.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -123,9 +123,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.state-all-of-control-001"
     },
     {
@@ -136,7 +136,7 @@
         "APPROVAL-COMPOSITION-024",
         "APPROVAL-ERROR-010"
       ],
-      "description": "state all of null; Core 0.9.6 finding 1.",
+      "description": "State all of null.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -186,9 +186,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.state-all-of-control-001"
     },
     {
@@ -199,7 +199,7 @@
         "APPROVAL-COMPOSITION-024",
         "APPROVAL-ERROR-010"
       ],
-      "description": "state all of empty; Core 0.9.6 finding 1.",
+      "description": "State all of empty.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -249,9 +249,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.state-all-of-control-001"
     },
     {
@@ -262,7 +262,7 @@
         "APPROVAL-COMPOSITION-024",
         "APPROVAL-ERROR-010"
       ],
-      "description": "state all of number; Core 0.9.6 finding 1.",
+      "description": "State all of number.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -312,9 +312,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.state-all-of-control-001"
     },
     {
@@ -325,7 +325,7 @@
         "APPROVAL-COMPOSITION-024",
         "APPROVAL-ERROR-010"
       ],
-      "description": "state all of boolean; Core 0.9.6 finding 1.",
+      "description": "State all of boolean.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -375,9 +375,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.state-all-of-control-001"
     },
     {
@@ -388,7 +388,7 @@
         "APPROVAL-COMPOSITION-024",
         "APPROVAL-ERROR-010"
       ],
-      "description": "state all of array; Core 0.9.6 finding 1.",
+      "description": "State all of array.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -438,9 +438,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.state-all-of-control-001"
     },
     {
@@ -451,7 +451,7 @@
         "APPROVAL-COMPOSITION-024",
         "APPROVAL-ERROR-010"
       ],
-      "description": "state all of object; Core 0.9.6 finding 1.",
+      "description": "State all of object.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -501,9 +501,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.state-all-of-control-001"
     },
     {
@@ -514,7 +514,7 @@
         "APPROVAL-COMPOSITION-013",
         "APPROVAL-COMPOSITION-014"
       ],
-      "description": "state any of control; Core 0.9.6 finding 1.",
+      "description": "State any of control.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -565,9 +565,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1"
+      "reviewFinding": "composition-state-evidence"
     },
     {
       "id": "approval.boundary096.state-any-of-absent-001",
@@ -577,7 +577,7 @@
         "APPROVAL-COMPOSITION-024",
         "APPROVAL-ERROR-010"
       ],
-      "description": "state any of absent; Core 0.9.6 finding 1.",
+      "description": "State any of absent.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -626,9 +626,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.state-any-of-control-001"
     },
     {
@@ -639,7 +639,7 @@
         "APPROVAL-COMPOSITION-024",
         "APPROVAL-ERROR-010"
       ],
-      "description": "state any of null; Core 0.9.6 finding 1.",
+      "description": "State any of null.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -689,9 +689,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.state-any-of-control-001"
     },
     {
@@ -702,7 +702,7 @@
         "APPROVAL-COMPOSITION-024",
         "APPROVAL-ERROR-010"
       ],
-      "description": "state any of empty; Core 0.9.6 finding 1.",
+      "description": "State any of empty.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -752,9 +752,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.state-any-of-control-001"
     },
     {
@@ -765,7 +765,7 @@
         "APPROVAL-COMPOSITION-024",
         "APPROVAL-ERROR-010"
       ],
-      "description": "state any of number; Core 0.9.6 finding 1.",
+      "description": "State any of number.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -815,9 +815,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.state-any-of-control-001"
     },
     {
@@ -828,7 +828,7 @@
         "APPROVAL-COMPOSITION-024",
         "APPROVAL-ERROR-010"
       ],
-      "description": "state any of boolean; Core 0.9.6 finding 1.",
+      "description": "State any of boolean.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -878,9 +878,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.state-any-of-control-001"
     },
     {
@@ -891,7 +891,7 @@
         "APPROVAL-COMPOSITION-024",
         "APPROVAL-ERROR-010"
       ],
-      "description": "state any of array; Core 0.9.6 finding 1.",
+      "description": "State any of array.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -941,9 +941,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.state-any-of-control-001"
     },
     {
@@ -954,7 +954,7 @@
         "APPROVAL-COMPOSITION-024",
         "APPROVAL-ERROR-010"
       ],
-      "description": "state any of object; Core 0.9.6 finding 1.",
+      "description": "State any of object.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1004,9 +1004,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.state-any-of-control-001"
     },
     {
@@ -1016,7 +1016,7 @@
         "APPROVAL-COMPOSITION-010",
         "SPEC-TIMESTAMP-004"
       ],
-      "description": "context control; Core 0.9.6 finding 5.",
+      "description": "Context control.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1071,9 +1071,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-5-validation-bypass"
+        "composition-required-context-bypass"
       ],
-      "reviewFinding": "5"
+      "reviewFinding": "composition-required-context"
     },
     {
       "id": "approval.boundary096.context-absent-001",
@@ -1085,7 +1085,7 @@
         "SPEC-TIMESTAMP-003",
         "SPEC-TIMESTAMP-004"
       ],
-      "description": "context absent; Core 0.9.6 finding 5.",
+      "description": "Context absent.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1137,9 +1137,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-5-validation-bypass"
+        "composition-required-context-bypass"
       ],
-      "reviewFinding": "5",
+      "reviewFinding": "composition-required-context",
       "pairedControl": "approval.boundary096.context-control-001"
     },
     {
@@ -1152,7 +1152,7 @@
         "SPEC-TIMESTAMP-003",
         "SPEC-TIMESTAMP-004"
       ],
-      "description": "context null; Core 0.9.6 finding 5.",
+      "description": "Context null.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1206,9 +1206,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-5-validation-bypass"
+        "composition-required-context-bypass"
       ],
-      "reviewFinding": "5",
+      "reviewFinding": "composition-required-context",
       "pairedControl": "approval.boundary096.context-control-001"
     },
     {
@@ -1221,7 +1221,7 @@
         "SPEC-TIMESTAMP-003",
         "SPEC-TIMESTAMP-004"
       ],
-      "description": "context empty; Core 0.9.6 finding 5.",
+      "description": "Context empty.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1275,9 +1275,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-5-validation-bypass"
+        "composition-required-context-bypass"
       ],
-      "reviewFinding": "5",
+      "reviewFinding": "composition-required-context",
       "pairedControl": "approval.boundary096.context-control-001"
     },
     {
@@ -1290,7 +1290,7 @@
         "SPEC-TIMESTAMP-003",
         "SPEC-TIMESTAMP-004"
       ],
-      "description": "context number; Core 0.9.6 finding 5.",
+      "description": "Context number.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1344,9 +1344,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-5-validation-bypass"
+        "composition-required-context-bypass"
       ],
-      "reviewFinding": "5",
+      "reviewFinding": "composition-required-context",
       "pairedControl": "approval.boundary096.context-control-001"
     },
     {
@@ -1359,7 +1359,7 @@
         "SPEC-TIMESTAMP-003",
         "SPEC-TIMESTAMP-004"
       ],
-      "description": "context boolean; Core 0.9.6 finding 5.",
+      "description": "Context boolean.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1413,9 +1413,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-5-validation-bypass"
+        "composition-required-context-bypass"
       ],
-      "reviewFinding": "5",
+      "reviewFinding": "composition-required-context",
       "pairedControl": "approval.boundary096.context-control-001"
     },
     {
@@ -1428,7 +1428,7 @@
         "SPEC-TIMESTAMP-003",
         "SPEC-TIMESTAMP-004"
       ],
-      "description": "context array; Core 0.9.6 finding 5.",
+      "description": "Context array.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1482,9 +1482,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-5-validation-bypass"
+        "composition-required-context-bypass"
       ],
-      "reviewFinding": "5",
+      "reviewFinding": "composition-required-context",
       "pairedControl": "approval.boundary096.context-control-001"
     },
     {
@@ -1497,7 +1497,7 @@
         "SPEC-TIMESTAMP-003",
         "SPEC-TIMESTAMP-004"
       ],
-      "description": "context object; Core 0.9.6 finding 5.",
+      "description": "Context object.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1551,9 +1551,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-5-validation-bypass"
+        "composition-required-context-bypass"
       ],
-      "reviewFinding": "5",
+      "reviewFinding": "composition-required-context",
       "pairedControl": "approval.boundary096.context-control-001"
     },
     {
@@ -1566,7 +1566,7 @@
         "SPEC-TIMESTAMP-003",
         "SPEC-TIMESTAMP-004"
       ],
-      "description": "context invalid; Core 0.9.6 finding 5.",
+      "description": "Context invalid.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1620,9 +1620,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-5-validation-bypass"
+        "composition-required-context-bypass"
       ],
-      "reviewFinding": "5",
+      "reviewFinding": "composition-required-context",
       "pairedControl": "approval.boundary096.context-control-001"
     },
     {
@@ -1635,7 +1635,7 @@
         "SPEC-TIMESTAMP-003",
         "SPEC-TIMESTAMP-004"
       ],
-      "description": "context calendar; Core 0.9.6 finding 5.",
+      "description": "Context calendar.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1689,9 +1689,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-5-validation-bypass"
+        "composition-required-context-bypass"
       ],
-      "reviewFinding": "5",
+      "reviewFinding": "composition-required-context",
       "pairedControl": "approval.boundary096.context-control-001"
     },
     {
@@ -1704,7 +1704,7 @@
         "SPEC-TIMESTAMP-003",
         "SPEC-TIMESTAMP-004"
       ],
-      "description": "context offset; Core 0.9.6 finding 5.",
+      "description": "Context offset.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1758,9 +1758,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-5-validation-bypass"
+        "composition-required-context-bypass"
       ],
-      "reviewFinding": "5",
+      "reviewFinding": "composition-required-context",
       "pairedControl": "approval.boundary096.context-control-001"
     },
     {
@@ -1773,7 +1773,7 @@
         "SPEC-TIMESTAMP-003",
         "SPEC-TIMESTAMP-004"
       ],
-      "description": "context precision; Core 0.9.6 finding 5.",
+      "description": "Context precision.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1827,9 +1827,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-5-validation-bypass"
+        "composition-required-context-bypass"
       ],
-      "reviewFinding": "5",
+      "reviewFinding": "composition-required-context",
       "pairedControl": "approval.boundary096.context-control-001"
     },
     {
@@ -1838,7 +1838,7 @@
       "requirements": [
         "APPROVAL-ERROR-010"
       ],
-      "description": "context priority before state; Core 0.9.6 finding 5.",
+      "description": "Context priority before state.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1891,9 +1891,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-5-validation-bypass"
+        "composition-required-context-bypass"
       ],
-      "reviewFinding": "5",
+      "reviewFinding": "composition-required-context",
       "pairedControl": "approval.boundary096.context-control-001"
     },
     {
@@ -1902,7 +1902,7 @@
       "requirements": [
         "APPROVAL-ERROR-010"
       ],
-      "description": "context priority after applicability; Core 0.9.6 finding 5.",
+      "description": "Context priority after applicability.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1956,9 +1956,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-5-validation-bypass"
+        "composition-required-context-bypass"
       ],
-      "reviewFinding": "5",
+      "reviewFinding": "composition-required-context",
       "pairedControl": "approval.boundary096.context-control-001"
     },
     {
@@ -1967,7 +1967,7 @@
       "requirements": [
         "APPROVAL-ERROR-010"
       ],
-      "description": "context priority after structure; Core 0.9.6 finding 5.",
+      "description": "Context priority after structure.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2021,9 +2021,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-5-validation-bypass"
+        "composition-required-context-bypass"
       ],
-      "reviewFinding": "5",
+      "reviewFinding": "composition-required-context",
       "pairedControl": "approval.boundary096.context-control-001"
     },
     {
@@ -2032,7 +2032,7 @@
       "requirements": [
         "APPROVAL-COMPOSITION-024"
       ],
-      "description": "later stage control; Core 0.9.6 finding 1.",
+      "description": "Later stage control.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2104,9 +2104,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1"
+      "reviewFinding": "composition-state-evidence"
     },
     {
       "id": "approval.boundary096.later-stage-missing-state-001",
@@ -2115,7 +2115,7 @@
         "APPROVAL-COMPOSITION-010",
         "APPROVAL-COMPOSITION-024"
       ],
-      "description": "later stage missing state; Core 0.9.6 finding 1.",
+      "description": "Later stage missing state.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2183,9 +2183,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.later-stage-control-001"
     },
     {
@@ -2194,7 +2194,7 @@
       "requirements": [
         "APPROVAL-COMPOSITION-024"
       ],
-      "description": "nested control; Core 0.9.6 finding 1.",
+      "description": "Nested control.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2256,9 +2256,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1"
+      "reviewFinding": "composition-state-evidence"
     },
     {
       "id": "approval.boundary096.nested-missing-state-001",
@@ -2267,7 +2267,7 @@
         "APPROVAL-COMPOSITION-010",
         "APPROVAL-COMPOSITION-024"
       ],
-      "description": "nested missing state; Core 0.9.6 finding 1.",
+      "description": "Nested missing state.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2327,9 +2327,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.nested-control-001"
     },
     {
@@ -2339,7 +2339,7 @@
         "APPROVAL-COMPOSITION-009",
         "APPROVAL-ERROR-010"
       ],
-      "description": "applicability absent; Core 0.9.6 finding 9b.",
+      "description": "Applicability absent.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2388,9 +2388,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-9b-validation-bypass"
+        "composition-applicability-validation-bypass"
       ],
-      "reviewFinding": "9b",
+      "reviewFinding": "composition-applicability-validation",
       "pairedControl": "approval.boundary096.state-any-of-control-001"
     },
     {
@@ -2400,7 +2400,7 @@
         "APPROVAL-COMPOSITION-009",
         "APPROVAL-ERROR-010"
       ],
-      "description": "applicability null; Core 0.9.6 finding 9b.",
+      "description": "Applicability null.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2450,9 +2450,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-9b-validation-bypass"
+        "composition-applicability-validation-bypass"
       ],
-      "reviewFinding": "9b",
+      "reviewFinding": "composition-applicability-validation",
       "pairedControl": "approval.boundary096.state-any-of-control-001"
     },
     {
@@ -2462,7 +2462,7 @@
         "APPROVAL-COMPOSITION-009",
         "APPROVAL-ERROR-010"
       ],
-      "description": "applicability empty; Core 0.9.6 finding 9b.",
+      "description": "Applicability empty.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2512,9 +2512,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-9b-validation-bypass"
+        "composition-applicability-validation-bypass"
       ],
-      "reviewFinding": "9b",
+      "reviewFinding": "composition-applicability-validation",
       "pairedControl": "approval.boundary096.state-any-of-control-001"
     },
     {
@@ -2524,7 +2524,7 @@
         "APPROVAL-COMPOSITION-009",
         "APPROVAL-ERROR-010"
       ],
-      "description": "applicability number; Core 0.9.6 finding 9b.",
+      "description": "Applicability number.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2574,9 +2574,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-9b-validation-bypass"
+        "composition-applicability-validation-bypass"
       ],
-      "reviewFinding": "9b",
+      "reviewFinding": "composition-applicability-validation",
       "pairedControl": "approval.boundary096.state-any-of-control-001"
     },
     {
@@ -2586,7 +2586,7 @@
         "APPROVAL-COMPOSITION-009",
         "APPROVAL-ERROR-010"
       ],
-      "description": "applicability boolean; Core 0.9.6 finding 9b.",
+      "description": "Applicability boolean.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2636,9 +2636,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-9b-validation-bypass"
+        "composition-applicability-validation-bypass"
       ],
-      "reviewFinding": "9b",
+      "reviewFinding": "composition-applicability-validation",
       "pairedControl": "approval.boundary096.state-any-of-control-001"
     },
     {
@@ -2648,7 +2648,7 @@
         "APPROVAL-COMPOSITION-009",
         "APPROVAL-ERROR-010"
       ],
-      "description": "applicability array; Core 0.9.6 finding 9b.",
+      "description": "Applicability array.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2698,9 +2698,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-9b-validation-bypass"
+        "composition-applicability-validation-bypass"
       ],
-      "reviewFinding": "9b",
+      "reviewFinding": "composition-applicability-validation",
       "pairedControl": "approval.boundary096.state-any-of-control-001"
     },
     {
@@ -2710,7 +2710,7 @@
         "APPROVAL-COMPOSITION-009",
         "APPROVAL-ERROR-010"
       ],
-      "description": "applicability object; Core 0.9.6 finding 9b.",
+      "description": "Applicability object.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2760,9 +2760,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-9b-validation-bypass"
+        "composition-applicability-validation-bypass"
       ],
-      "reviewFinding": "9b",
+      "reviewFinding": "composition-applicability-validation",
       "pairedControl": "approval.boundary096.state-any-of-control-001"
     },
     {
@@ -2772,7 +2772,7 @@
         "APPROVAL-CHAIN-005",
         "APPROVAL-CHAIN-006"
       ],
-      "description": "chain control; Core 0.9.6 finding 9b.",
+      "description": "Chain control.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -2799,9 +2799,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-9b-validation-bypass"
+        "composition-applicability-validation-bypass"
       ],
-      "reviewFinding": "9b"
+      "reviewFinding": "composition-applicability-validation"
     },
     {
       "id": "approval.boundary096.chain-state-absent-001",
@@ -2810,7 +2810,7 @@
         "APPROVAL-CHAIN-005",
         "APPROVAL-CHAIN-008"
       ],
-      "description": "chain state absent; Core 0.9.6 finding 9b.",
+      "description": "Chain state absent.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -2838,9 +2838,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-9b-validation-bypass"
+        "composition-applicability-validation-bypass"
       ],
-      "reviewFinding": "9b",
+      "reviewFinding": "composition-applicability-validation",
       "pairedControl": "approval.boundary096.chain-control-001"
     },
     {
@@ -2850,7 +2850,7 @@
         "APPROVAL-CHAIN-005",
         "APPROVAL-CHAIN-008"
       ],
-      "description": "chain state null; Core 0.9.6 finding 9b.",
+      "description": "Chain state null.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -2879,9 +2879,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-9b-validation-bypass"
+        "composition-applicability-validation-bypass"
       ],
-      "reviewFinding": "9b",
+      "reviewFinding": "composition-applicability-validation",
       "pairedControl": "approval.boundary096.chain-control-001"
     },
     {
@@ -2891,7 +2891,7 @@
         "APPROVAL-CHAIN-005",
         "APPROVAL-CHAIN-008"
       ],
-      "description": "chain state empty; Core 0.9.6 finding 9b.",
+      "description": "Chain state empty.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -2920,9 +2920,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-9b-validation-bypass"
+        "composition-applicability-validation-bypass"
       ],
-      "reviewFinding": "9b",
+      "reviewFinding": "composition-applicability-validation",
       "pairedControl": "approval.boundary096.chain-control-001"
     },
     {
@@ -2932,7 +2932,7 @@
         "APPROVAL-CHAIN-005",
         "APPROVAL-CHAIN-008"
       ],
-      "description": "chain state number; Core 0.9.6 finding 9b.",
+      "description": "Chain state number.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -2961,9 +2961,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-9b-validation-bypass"
+        "composition-applicability-validation-bypass"
       ],
-      "reviewFinding": "9b",
+      "reviewFinding": "composition-applicability-validation",
       "pairedControl": "approval.boundary096.chain-control-001"
     },
     {
@@ -2973,7 +2973,7 @@
         "APPROVAL-CHAIN-005",
         "APPROVAL-CHAIN-008"
       ],
-      "description": "chain state boolean; Core 0.9.6 finding 9b.",
+      "description": "Chain state boolean.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -3002,9 +3002,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-9b-validation-bypass"
+        "composition-applicability-validation-bypass"
       ],
-      "reviewFinding": "9b",
+      "reviewFinding": "composition-applicability-validation",
       "pairedControl": "approval.boundary096.chain-control-001"
     },
     {
@@ -3014,7 +3014,7 @@
         "APPROVAL-CHAIN-005",
         "APPROVAL-CHAIN-008"
       ],
-      "description": "chain state array; Core 0.9.6 finding 9b.",
+      "description": "Chain state array.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -3043,9 +3043,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-9b-validation-bypass"
+        "composition-applicability-validation-bypass"
       ],
-      "reviewFinding": "9b",
+      "reviewFinding": "composition-applicability-validation",
       "pairedControl": "approval.boundary096.chain-control-001"
     },
     {
@@ -3055,7 +3055,7 @@
         "APPROVAL-CHAIN-005",
         "APPROVAL-CHAIN-008"
       ],
-      "description": "chain state object; Core 0.9.6 finding 9b.",
+      "description": "Chain state object.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -3084,9 +3084,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-9b-validation-bypass"
+        "composition-applicability-validation-bypass"
       ],
-      "reviewFinding": "9b",
+      "reviewFinding": "composition-applicability-validation",
       "pairedControl": "approval.boundary096.chain-control-001"
     },
     {
@@ -3095,7 +3095,7 @@
       "requirements": [
         "APPROVAL-DECISION-009"
       ],
-      "description": "decision control; Core 0.9.6 finding 6a.",
+      "description": "Decision control.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3139,9 +3139,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6a-validation-bypass"
+        "concrete-decision-validation-bypass"
       ],
-      "reviewFinding": "6a"
+      "reviewFinding": "concrete-decision-validation"
     },
     {
       "id": "approval.boundary096.decision-subject-absent-001",
@@ -3150,7 +3150,7 @@
         "APPROVAL-REQUIREMENT-002",
         "APPROVAL-DECISION-009"
       ],
-      "description": "decision subject absent; Core 0.9.6 finding 6a.",
+      "description": "Decision subject absent.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3192,9 +3192,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6a-validation-bypass"
+        "concrete-decision-validation-bypass"
       ],
-      "reviewFinding": "6a",
+      "reviewFinding": "concrete-decision-validation",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -3204,7 +3204,7 @@
         "APPROVAL-REQUIREMENT-002",
         "APPROVAL-DECISION-009"
       ],
-      "description": "decision subject null; Core 0.9.6 finding 6a.",
+      "description": "Decision subject null.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3247,9 +3247,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6a-validation-bypass"
+        "concrete-decision-validation-bypass"
       ],
-      "reviewFinding": "6a",
+      "reviewFinding": "concrete-decision-validation",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -3259,7 +3259,7 @@
         "APPROVAL-REQUIREMENT-002",
         "APPROVAL-DECISION-009"
       ],
-      "description": "decision subject empty; Core 0.9.6 finding 6a.",
+      "description": "Decision subject empty.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3302,9 +3302,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6a-validation-bypass"
+        "concrete-decision-validation-bypass"
       ],
-      "reviewFinding": "6a",
+      "reviewFinding": "concrete-decision-validation",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -3314,7 +3314,7 @@
         "APPROVAL-REQUIREMENT-002",
         "APPROVAL-DECISION-009"
       ],
-      "description": "decision subject number; Core 0.9.6 finding 6a.",
+      "description": "Decision subject number.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3357,9 +3357,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6a-validation-bypass"
+        "concrete-decision-validation-bypass"
       ],
-      "reviewFinding": "6a",
+      "reviewFinding": "concrete-decision-validation",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -3369,7 +3369,7 @@
         "APPROVAL-REQUIREMENT-002",
         "APPROVAL-DECISION-009"
       ],
-      "description": "decision subject boolean; Core 0.9.6 finding 6a.",
+      "description": "Decision subject boolean.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3412,9 +3412,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6a-validation-bypass"
+        "concrete-decision-validation-bypass"
       ],
-      "reviewFinding": "6a",
+      "reviewFinding": "concrete-decision-validation",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -3424,7 +3424,7 @@
         "APPROVAL-REQUIREMENT-002",
         "APPROVAL-DECISION-009"
       ],
-      "description": "decision subject array; Core 0.9.6 finding 6a.",
+      "description": "Decision subject array.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3467,9 +3467,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6a-validation-bypass"
+        "concrete-decision-validation-bypass"
       ],
-      "reviewFinding": "6a",
+      "reviewFinding": "concrete-decision-validation",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -3479,7 +3479,7 @@
         "APPROVAL-REQUIREMENT-002",
         "APPROVAL-DECISION-009"
       ],
-      "description": "decision subject object; Core 0.9.6 finding 6a.",
+      "description": "Decision subject object.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3522,9 +3522,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6a-validation-bypass"
+        "concrete-decision-validation-bypass"
       ],
-      "reviewFinding": "6a",
+      "reviewFinding": "concrete-decision-validation",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -3534,7 +3534,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-DECISION-004"
       ],
-      "description": "decision association; Core 0.9.6 finding 6a.",
+      "description": "Decision association.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3580,9 +3580,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6a-validation-bypass"
+        "concrete-decision-validation-bypass"
       ],
-      "reviewFinding": "6a",
+      "reviewFinding": "concrete-decision-validation",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -3592,7 +3592,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-DECISION-004"
       ],
-      "description": "decision eligibility; Core 0.9.6 finding 6a.",
+      "description": "Decision eligibility.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3636,9 +3636,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6a-validation-bypass"
+        "concrete-decision-validation-bypass"
       ],
-      "reviewFinding": "6a",
+      "reviewFinding": "concrete-decision-validation",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -3648,7 +3648,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-DECISION-004"
       ],
-      "description": "decision ineligible; Core 0.9.6 finding 6a.",
+      "description": "Decision ineligible.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3694,9 +3694,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6a-validation-bypass"
+        "concrete-decision-validation-bypass"
       ],
-      "reviewFinding": "6a",
+      "reviewFinding": "concrete-decision-validation",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -3707,7 +3707,7 @@
         "APPROVAL-VALIDITY-009",
         "SPEC-TIMESTAMP-005"
       ],
-      "description": "decision expiry before; Core 0.9.6 finding 6b.",
+      "description": "Decision expiry before.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3753,9 +3753,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6b-validation-bypass"
+        "concrete-decision-expiration-bypass"
       ],
-      "reviewFinding": "6b",
+      "reviewFinding": "concrete-decision-expiration",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -3766,7 +3766,7 @@
         "APPROVAL-VALIDITY-009",
         "SPEC-TIMESTAMP-005"
       ],
-      "description": "decision expiry equal; Core 0.9.6 finding 6b.",
+      "description": "Decision expiry equal.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3812,9 +3812,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6b-validation-bypass"
+        "concrete-decision-expiration-bypass"
       ],
-      "reviewFinding": "6b",
+      "reviewFinding": "concrete-decision-expiration",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -3825,7 +3825,7 @@
         "APPROVAL-VALIDITY-009",
         "SPEC-TIMESTAMP-005"
       ],
-      "description": "decision expiry after; Core 0.9.6 finding 6b.",
+      "description": "Decision expiry after.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3871,9 +3871,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6b-validation-bypass"
+        "concrete-decision-expiration-bypass"
       ],
-      "reviewFinding": "6b",
+      "reviewFinding": "concrete-decision-expiration",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -3884,7 +3884,7 @@
         "APPROVAL-VALIDITY-009",
         "SPEC-TIMESTAMP-005"
       ],
-      "description": "decision expiry offset; Core 0.9.6 finding 6b.",
+      "description": "Decision expiry offset.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3930,9 +3930,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6b-validation-bypass"
+        "concrete-decision-expiration-bypass"
       ],
-      "reviewFinding": "6b",
+      "reviewFinding": "concrete-decision-expiration",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -3943,7 +3943,7 @@
         "APPROVAL-VALIDITY-007",
         "APPROVAL-ERROR-007"
       ],
-      "description": "decision expiry absent; Core 0.9.6 finding 6b.",
+      "description": "Decision expiry absent.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3990,9 +3990,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6b-validation-bypass"
+        "concrete-decision-expiration-bypass"
       ],
-      "reviewFinding": "6b",
+      "reviewFinding": "concrete-decision-expiration",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -4003,7 +4003,7 @@
         "APPROVAL-VALIDITY-007",
         "APPROVAL-ERROR-007"
       ],
-      "description": "decision expiry null; Core 0.9.6 finding 6b.",
+      "description": "Decision expiry null.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -4051,9 +4051,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6b-validation-bypass"
+        "concrete-decision-expiration-bypass"
       ],
-      "reviewFinding": "6b",
+      "reviewFinding": "concrete-decision-expiration",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -4064,7 +4064,7 @@
         "APPROVAL-VALIDITY-007",
         "APPROVAL-ERROR-007"
       ],
-      "description": "decision expiry malformed; Core 0.9.6 finding 6b.",
+      "description": "Decision expiry malformed.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -4112,9 +4112,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-6b-validation-bypass"
+        "concrete-decision-expiration-bypass"
       ],
-      "reviewFinding": "6b",
+      "reviewFinding": "concrete-decision-expiration",
       "pairedControl": "approval.boundary096.decision-control-001"
     },
     {
@@ -4124,7 +4124,7 @@
         "APPROVAL-VALIDITY-004",
         "APPROVAL-VALIDITY-014"
       ],
-      "description": "history control; Core 0.9.6 finding 7a.",
+      "description": "History control.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -4197,9 +4197,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7a-validation-bypass"
+        "lifecycle-kind-validation-bypass"
       ],
-      "reviewFinding": "7a"
+      "reviewFinding": "lifecycle-kind-validation"
     },
     {
       "id": "approval.boundary096.history-evaluate-unknown-kind-001",
@@ -4209,7 +4209,7 @@
         "APPROVAL-VALIDITY-012",
         "APPROVAL-ERROR-006"
       ],
-      "description": "history evaluate unknown kind; Core 0.9.6 finding 7a.",
+      "description": "History evaluate unknown kind.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -4284,9 +4284,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7a-validation-bypass"
+        "lifecycle-kind-validation-bypass"
       ],
-      "reviewFinding": "7a",
+      "reviewFinding": "lifecycle-kind-validation",
       "pairedControl": "approval.boundary096.history-control-001"
     },
     {
@@ -4297,7 +4297,7 @@
         "APPROVAL-VALIDITY-012",
         "APPROVAL-ERROR-006"
       ],
-      "description": "history record unknown kind; Core 0.9.6 finding 7a.",
+      "description": "History record unknown kind.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -4377,9 +4377,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7a-validation-bypass"
+        "lifecycle-kind-validation-bypass"
       ],
-      "reviewFinding": "7a",
+      "reviewFinding": "lifecycle-kind-validation",
       "pairedControl": "approval.boundary096.record-history-control-001"
     },
     {
@@ -4390,7 +4390,7 @@
         "APPROVAL-VALIDITY-012",
         "APPROVAL-ERROR-006"
       ],
-      "description": "history evaluate null kind; Core 0.9.6 finding 7a.",
+      "description": "History evaluate null kind.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -4465,9 +4465,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7a-validation-bypass"
+        "lifecycle-kind-validation-bypass"
       ],
-      "reviewFinding": "7a",
+      "reviewFinding": "lifecycle-kind-validation",
       "pairedControl": "approval.boundary096.history-control-001"
     },
     {
@@ -4478,7 +4478,7 @@
         "APPROVAL-VALIDITY-012",
         "APPROVAL-ERROR-006"
       ],
-      "description": "history record null kind; Core 0.9.6 finding 7a.",
+      "description": "History record null kind.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -4558,9 +4558,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7a-validation-bypass"
+        "lifecycle-kind-validation-bypass"
       ],
-      "reviewFinding": "7a",
+      "reviewFinding": "lifecycle-kind-validation",
       "pairedControl": "approval.boundary096.record-history-control-001"
     },
     {
@@ -4571,7 +4571,7 @@
         "APPROVAL-VALIDITY-012",
         "APPROVAL-ERROR-006"
       ],
-      "description": "history evaluate missing kind; Core 0.9.6 finding 7a.",
+      "description": "History evaluate missing kind.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -4645,9 +4645,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7a-validation-bypass"
+        "lifecycle-kind-validation-bypass"
       ],
-      "reviewFinding": "7a",
+      "reviewFinding": "lifecycle-kind-validation",
       "pairedControl": "approval.boundary096.history-control-001"
     },
     {
@@ -4658,7 +4658,7 @@
         "APPROVAL-VALIDITY-012",
         "APPROVAL-ERROR-006"
       ],
-      "description": "history record missing kind; Core 0.9.6 finding 7a.",
+      "description": "History record missing kind.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -4737,9 +4737,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7a-validation-bypass"
+        "lifecycle-kind-validation-bypass"
       ],
-      "reviewFinding": "7a",
+      "reviewFinding": "lifecycle-kind-validation",
       "pairedControl": "approval.boundary096.record-history-control-001"
     },
     {
@@ -4750,7 +4750,7 @@
         "APPROVAL-VALIDITY-012",
         "APPROVAL-ERROR-006"
       ],
-      "description": "history evaluate missing target; Core 0.9.6 finding 7b.",
+      "description": "History evaluate missing target.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -4825,9 +4825,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b",
+      "reviewFinding": "lifecycle-reference-validation",
       "pairedControl": "approval.boundary096.history-control-001"
     },
     {
@@ -4838,7 +4838,7 @@
         "APPROVAL-VALIDITY-012",
         "APPROVAL-ERROR-006"
       ],
-      "description": "history record missing target; Core 0.9.6 finding 7b.",
+      "description": "History record missing target.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -4918,9 +4918,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b",
+      "reviewFinding": "lifecycle-reference-validation",
       "pairedControl": "approval.boundary096.record-history-control-001"
     },
     {
@@ -4931,7 +4931,7 @@
         "APPROVAL-VALIDITY-012",
         "APPROVAL-ERROR-006"
       ],
-      "description": "history evaluate ambiguous target; Core 0.9.6 finding 7b.",
+      "description": "History evaluate ambiguous target.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -5017,9 +5017,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b",
+      "reviewFinding": "lifecycle-reference-validation",
       "pairedControl": "approval.boundary096.history-control-001"
     },
     {
@@ -5030,7 +5030,7 @@
         "APPROVAL-VALIDITY-012",
         "APPROVAL-ERROR-006"
       ],
-      "description": "history record ambiguous target; Core 0.9.6 finding 7b.",
+      "description": "History record ambiguous target.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -5121,9 +5121,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b",
+      "reviewFinding": "lifecycle-reference-validation",
       "pairedControl": "approval.boundary096.record-history-control-001"
     },
     {
@@ -5134,7 +5134,7 @@
         "APPROVAL-VALIDITY-012",
         "APPROVAL-ERROR-006"
       ],
-      "description": "history evaluate invalid time; Core 0.9.6 finding 7a.",
+      "description": "History evaluate invalid time.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -5209,9 +5209,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7a-validation-bypass"
+        "lifecycle-kind-validation-bypass"
       ],
-      "reviewFinding": "7a",
+      "reviewFinding": "lifecycle-kind-validation",
       "pairedControl": "approval.boundary096.history-control-001"
     },
     {
@@ -5222,7 +5222,7 @@
         "APPROVAL-VALIDITY-012",
         "APPROVAL-ERROR-006"
       ],
-      "description": "history record invalid time; Core 0.9.6 finding 7a.",
+      "description": "History record invalid time.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -5302,9 +5302,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7a-validation-bypass"
+        "lifecycle-kind-validation-bypass"
       ],
-      "reviewFinding": "7a",
+      "reviewFinding": "lifecycle-kind-validation",
       "pairedControl": "approval.boundary096.record-history-control-001"
     },
     {
@@ -5315,7 +5315,7 @@
         "APPROVAL-VALIDITY-012",
         "APPROVAL-ERROR-006"
       ],
-      "description": "history evaluate duplicate withdrawal; Core 0.9.6 finding 7b.",
+      "description": "History evaluate duplicate withdrawal.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -5402,9 +5402,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b",
+      "reviewFinding": "lifecycle-reference-validation",
       "pairedControl": "approval.boundary096.history-control-001"
     },
     {
@@ -5415,7 +5415,7 @@
         "APPROVAL-VALIDITY-012",
         "APPROVAL-ERROR-006"
       ],
-      "description": "history record duplicate withdrawal; Core 0.9.6 finding 7b.",
+      "description": "History record duplicate withdrawal.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -5507,9 +5507,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b",
+      "reviewFinding": "lifecycle-reference-validation",
       "pairedControl": "approval.boundary096.record-history-control-001"
     },
     {
@@ -5519,7 +5519,7 @@
         "APPROVAL-VALIDITY-001",
         "APPROVAL-VALIDITY-014"
       ],
-      "description": "record history control; Core 0.9.6 finding 7b.",
+      "description": "Record history control.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -5647,9 +5647,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b"
+      "reviewFinding": "lifecycle-reference-validation"
     },
     {
       "id": "approval.boundary096.supersession-valid-001",
@@ -5658,7 +5658,7 @@
         "APPROVAL-VALIDITY-010",
         "APPROVAL-VALIDITY-014"
       ],
-      "description": "supersession valid; Core 0.9.6 finding 7b.",
+      "description": "Supersession valid.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -5736,9 +5736,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b"
+      "reviewFinding": "lifecycle-reference-validation"
     },
     {
       "id": "approval.boundary096.supersession-self-001",
@@ -5747,7 +5747,7 @@
         "APPROVAL-VALIDITY-010",
         "APPROVAL-VALIDITY-014"
       ],
-      "description": "supersession self; Core 0.9.6 finding 7b.",
+      "description": "Supersession self.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -5827,9 +5827,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b",
+      "reviewFinding": "lifecycle-reference-validation",
       "pairedControl": "approval.boundary096.supersession-valid-001"
     },
     {
@@ -5839,7 +5839,7 @@
         "APPROVAL-VALIDITY-010",
         "APPROVAL-VALIDITY-014"
       ],
-      "description": "supersession missing successor; Core 0.9.6 finding 7b.",
+      "description": "Supersession missing successor.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -5919,9 +5919,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b",
+      "reviewFinding": "lifecycle-reference-validation",
       "pairedControl": "approval.boundary096.supersession-valid-001"
     },
     {
@@ -5931,7 +5931,7 @@
         "APPROVAL-VALIDITY-010",
         "APPROVAL-VALIDITY-014"
       ],
-      "description": "supersession repeat; Core 0.9.6 finding 7b.",
+      "description": "Supersession repeat.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -6028,9 +6028,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b",
+      "reviewFinding": "lifecycle-reference-validation",
       "pairedControl": "approval.boundary096.supersession-valid-001"
     },
     {
@@ -6040,7 +6040,7 @@
         "APPROVAL-VALIDITY-010",
         "APPROVAL-VALIDITY-014"
       ],
-      "description": "supersession withdrawn target; Core 0.9.6 finding 7b.",
+      "description": "Supersession withdrawn target.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -6132,9 +6132,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b",
+      "reviewFinding": "lifecycle-reference-validation",
       "pairedControl": "approval.boundary096.supersession-valid-001"
     },
     {
@@ -6144,7 +6144,7 @@
         "APPROVAL-VALIDITY-010",
         "APPROVAL-VALIDITY-014"
       ],
-      "description": "supersession successor withdrawn; Core 0.9.6 finding 7b.",
+      "description": "Supersession successor withdrawn.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -6234,9 +6234,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b",
+      "reviewFinding": "lifecycle-reference-validation",
       "pairedControl": "approval.boundary096.supersession-valid-001"
     },
     {
@@ -6246,7 +6246,7 @@
         "APPROVAL-VALIDITY-011",
         "APPROVAL-VALIDITY-014"
       ],
-      "description": "requirement supersession valid; Core 0.9.6 finding 7b.",
+      "description": "Requirement supersession valid.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -6305,9 +6305,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b"
+      "reviewFinding": "lifecycle-reference-validation"
     },
     {
       "id": "approval.boundary096.requirement-supersession-self-001",
@@ -6316,7 +6316,7 @@
         "APPROVAL-VALIDITY-011",
         "APPROVAL-VALIDITY-014"
       ],
-      "description": "requirement supersession self; Core 0.9.6 finding 7b.",
+      "description": "Requirement supersession self.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -6377,9 +6377,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b",
+      "reviewFinding": "lifecycle-reference-validation",
       "pairedControl": "approval.boundary096.requirement-supersession-valid-001"
     },
     {
@@ -6389,7 +6389,7 @@
         "APPROVAL-VALIDITY-011",
         "APPROVAL-VALIDITY-014"
       ],
-      "description": "requirement supersession repeat; Core 0.9.6 finding 7b.",
+      "description": "Requirement supersession repeat.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -6459,9 +6459,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7b",
+      "reviewFinding": "lifecycle-reference-validation",
       "pairedControl": "approval.boundary096.requirement-supersession-valid-001"
     },
     {
@@ -6472,7 +6472,7 @@
         "APPROVAL-VALIDITY-013",
         "APPROVAL-VALIDITY-012"
       ],
-      "description": "complete context reject first; Core 0.9.6 finding 8.",
+      "description": "Complete context reject first.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -6532,9 +6532,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-8-validation-bypass"
+        "complete-expiration-context-bypass"
       ],
-      "reviewFinding": "8",
+      "reviewFinding": "complete-expiration-context",
       "pairedControl": "approval.boundary096.complete-context-control-001"
     },
     {
@@ -6545,7 +6545,7 @@
         "APPROVAL-VALIDITY-013",
         "APPROVAL-VALIDITY-012"
       ],
-      "description": "complete context reject last; Core 0.9.6 finding 8.",
+      "description": "Complete context reject last.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -6605,9 +6605,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-8-validation-bypass"
+        "complete-expiration-context-bypass"
       ],
-      "reviewFinding": "8",
+      "reviewFinding": "complete-expiration-context",
       "pairedControl": "approval.boundary096.complete-context-control-001"
     },
     {
@@ -6618,7 +6618,7 @@
         "APPROVAL-VALIDITY-013",
         "APPROVAL-VALIDITY-012"
       ],
-      "description": "complete context stale; Core 0.9.6 finding 8.",
+      "description": "Complete context stale.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -6678,9 +6678,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-8-validation-bypass"
+        "complete-expiration-context-bypass"
       ],
-      "reviewFinding": "8",
+      "reviewFinding": "complete-expiration-context",
       "pairedControl": "approval.boundary096.complete-context-control-001"
     },
     {
@@ -6689,7 +6689,7 @@
       "requirements": [
         "APPROVAL-VALIDITY-013"
       ],
-      "description": "complete context control; Core 0.9.6 finding 8.",
+      "description": "Complete context control.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -6748,9 +6748,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-8-validation-bypass"
+        "complete-expiration-context-bypass"
       ],
-      "reviewFinding": "8"
+      "reviewFinding": "complete-expiration-context"
     },
     {
       "id": "approval.boundary096.excluded-context-unrelated-001",
@@ -6758,7 +6758,7 @@
       "requirements": [
         "APPROVAL-VALIDITY-013"
       ],
-      "description": "excluded context unrelated; Core 0.9.6 finding 8.",
+      "description": "Excluded context unrelated.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -6808,9 +6808,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-8-validation-bypass"
+        "complete-expiration-context-bypass"
       ],
-      "reviewFinding": "8",
+      "reviewFinding": "complete-expiration-context",
       "pairedControl": "approval.boundary096.complete-context-control-001"
     },
     {
@@ -6819,7 +6819,7 @@
       "requirements": [
         "APPROVAL-VALIDITY-013"
       ],
-      "description": "excluded context withdrawn; Core 0.9.6 finding 8.",
+      "description": "Excluded context withdrawn.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -6882,9 +6882,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-8-validation-bypass"
+        "complete-expiration-context-bypass"
       ],
-      "reviewFinding": "8",
+      "reviewFinding": "complete-expiration-context",
       "pairedControl": "approval.boundary096.complete-context-control-001"
     },
     {
@@ -6893,7 +6893,7 @@
       "requirements": [
         "APPROVAL-VALIDITY-013"
       ],
-      "description": "excluded context superseded; Core 0.9.6 finding 8.",
+      "description": "Excluded context superseded.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -6972,9 +6972,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-8-validation-bypass"
+        "complete-expiration-context-bypass"
       ],
-      "reviewFinding": "8",
+      "reviewFinding": "complete-expiration-context",
       "pairedControl": "approval.boundary096.complete-context-control-001"
     },
     {
@@ -6983,7 +6983,7 @@
       "requirements": [
         "APPROVAL-VALIDITY-013"
       ],
-      "description": "excluded context requirement superseded; Core 0.9.6 finding 8.",
+      "description": "Excluded context requirement superseded.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -7043,9 +7043,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-8-validation-bypass"
+        "complete-expiration-context-bypass"
       ],
-      "reviewFinding": "8",
+      "reviewFinding": "complete-expiration-context",
       "pairedControl": "approval.boundary096.complete-context-control-001"
     },
     {
@@ -7055,7 +7055,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-COMPOSITION-010"
       ],
-      "description": "quorum control; Core 0.9.6 finding 1.",
+      "description": "Quorum control.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -7148,9 +7148,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1"
+      "reviewFinding": "composition-state-evidence"
     },
     {
       "id": "approval.boundary096.quorum-empty-control-001",
@@ -7159,7 +7159,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-COMPOSITION-010"
       ],
-      "description": "quorum empty control; Core 0.9.6 finding 1.",
+      "description": "Quorum empty control.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -7239,9 +7239,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1"
+      "reviewFinding": "composition-state-evidence"
     },
     {
       "id": "approval.boundary096.quorum-false-control-001",
@@ -7250,7 +7250,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-COMPOSITION-010"
       ],
-      "description": "quorum false control; Core 0.9.6 finding 1.",
+      "description": "Quorum false control.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -7345,9 +7345,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1"
+      "reviewFinding": "composition-state-evidence"
     },
     {
       "id": "approval.boundary096.quorum-missing-effectiveness-001",
@@ -7357,7 +7357,7 @@
         "APPROVAL-COMPOSITION-024",
         "APPROVAL-ERROR-010"
       ],
-      "description": "quorum missing effectiveness; Core 0.9.6 finding 1.",
+      "description": "Quorum missing effectiveness.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -7470,9 +7470,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-1-validation-bypass"
+        "composition-state-evidence-bypass"
       ],
-      "reviewFinding": "1",
+      "reviewFinding": "composition-state-evidence",
       "pairedControl": "approval.boundary096.quorum-control-001"
     },
     {
@@ -7545,9 +7545,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7a-validation-bypass"
+        "lifecycle-kind-validation-bypass"
       ],
-      "reviewFinding": "7a"
+      "reviewFinding": "lifecycle-kind-validation"
     },
     {
       "id": "approval.boundary096.record-history-offset-control-001",
@@ -7685,9 +7685,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7a"
+      "reviewFinding": "lifecycle-kind-validation"
     },
     {
       "id": "approval.boundary096.history-offset-ambiguous-001",
@@ -7789,9 +7789,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7a",
+      "reviewFinding": "lifecycle-kind-validation",
       "pairedControl": "approval.boundary096.record-history-offset-control-001"
     },
     {
@@ -7882,9 +7882,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7b-validation-bypass"
+        "lifecycle-reference-validation-bypass"
       ],
-      "reviewFinding": "7a",
+      "reviewFinding": "lifecycle-kind-validation",
       "pairedControl": "approval.boundary096.history-offset-control-001"
     },
     {
@@ -7968,9 +7968,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-7a-validation-bypass"
+        "lifecycle-kind-validation-bypass"
       ],
-      "reviewFinding": "7a"
+      "reviewFinding": "lifecycle-kind-validation"
     },
     {
       "id": "approval.boundary096.decision-container-empty-control-001",
@@ -8039,7 +8039,7 @@
       "guardsAgainst": [
         "malformed-decision-container-discarded"
       ],
-      "reviewFinding": "fresh-review-decision-container"
+      "reviewFinding": "composition-decision-container"
     },
     {
       "id": "approval.boundary096.decision-container-object-001",
@@ -8105,7 +8105,7 @@
       "guardsAgainst": [
         "malformed-decision-container-discarded"
       ],
-      "reviewFinding": "fresh-review-decision-container"
+      "reviewFinding": "composition-decision-container"
     },
     {
       "id": "approval.boundary096.decision-container-string-001",
@@ -8171,7 +8171,7 @@
       "guardsAgainst": [
         "malformed-decision-container-discarded"
       ],
-      "reviewFinding": "fresh-review-decision-container"
+      "reviewFinding": "composition-decision-container"
     },
     {
       "id": "approval.boundary096.decision-container-number-001",
@@ -8237,7 +8237,7 @@
       "guardsAgainst": [
         "malformed-decision-container-discarded"
       ],
-      "reviewFinding": "fresh-review-decision-container"
+      "reviewFinding": "composition-decision-container"
     },
     {
       "id": "approval.boundary096.decision-container-boolean-001",
@@ -8303,7 +8303,7 @@
       "guardsAgainst": [
         "malformed-decision-container-discarded"
       ],
-      "reviewFinding": "fresh-review-decision-container"
+      "reviewFinding": "composition-decision-container"
     }
   ]
 }

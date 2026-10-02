@@ -226,7 +226,7 @@ verification is claimed.
 
 Traceability now reopens affected requirement rows and distinguishes native
 constructor/sequence boundaries from existing JSON mappings. See the current
-[coverage inventory](../../conformance/traceability.md#core-096-reassessment).
+[coverage inventory](../../conformance/traceability.md#inventory-and-coverage).
 Historical 0.9.5 completion is preserved as evidence of that release only.
 
 Historical Milestone 1 validation passed `npm run docs:check` and

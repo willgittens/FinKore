@@ -10,7 +10,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability control.",
+      "description": "Create mutability control.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -81,7 +81,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b"
+      "reviewFinding": "entity-mutability-declarations"
     },
     {
       "id": "entity.boundary097.create-mutability-container-absent-001",
@@ -92,7 +92,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability container absent.",
+      "description": "Create mutability container absent.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -144,7 +144,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -156,7 +156,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability container null.",
+      "description": "Create mutability container null.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -209,7 +209,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -221,7 +221,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability container object.",
+      "description": "Create mutability container object.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -274,7 +274,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -286,7 +286,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability container array.",
+      "description": "Create mutability container array.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -339,7 +339,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -351,7 +351,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability container false.",
+      "description": "Create mutability container false.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -404,7 +404,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -416,7 +416,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability container zero.",
+      "description": "Create mutability container zero.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -469,7 +469,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -481,7 +481,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability container empty.",
+      "description": "Create mutability container empty.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -534,7 +534,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -546,7 +546,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability rule absent.",
+      "description": "Create mutability rule absent.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -603,7 +603,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -615,7 +615,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability rule null.",
+      "description": "Create mutability rule null.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -673,7 +673,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -685,7 +685,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability rule object.",
+      "description": "Create mutability rule object.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -743,7 +743,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -755,7 +755,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability rule false.",
+      "description": "Create mutability rule false.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -813,7 +813,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -825,7 +825,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability rule zero.",
+      "description": "Create mutability rule zero.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -883,7 +883,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -895,7 +895,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability rule empty.",
+      "description": "Create mutability rule empty.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -953,7 +953,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -965,7 +965,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability entry null.",
+      "description": "Create mutability entry null.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -1025,7 +1025,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -1037,7 +1037,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability entry false.",
+      "description": "Create mutability entry false.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -1097,7 +1097,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -1109,7 +1109,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability entry zero.",
+      "description": "Create mutability entry zero.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -1169,7 +1169,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -1181,7 +1181,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: create mutability entry empty.",
+      "description": "Create mutability entry empty.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -1241,7 +1241,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.create-mutability-control-001"
     },
     {
@@ -1253,7 +1253,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: mutate mutability control.",
+      "description": "Mutate mutability control.",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -1326,7 +1326,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b"
+      "reviewFinding": "entity-mutability-declarations"
     },
     {
       "id": "entity.boundary097.mutate-mutability-container-absent-001",
@@ -1337,7 +1337,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: mutate mutability container absent.",
+      "description": "Mutate mutability container absent.",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -1388,7 +1388,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.mutate-mutability-control-001"
     },
     {
@@ -1400,7 +1400,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: mutate mutability container object.",
+      "description": "Mutate mutability container object.",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -1452,7 +1452,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.mutate-mutability-control-001"
     },
     {
@@ -1464,7 +1464,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: mutate mutability rule absent.",
+      "description": "Mutate mutability rule absent.",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -1520,7 +1520,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.mutate-mutability-control-001"
     },
     {
@@ -1532,7 +1532,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: transition mutability control.",
+      "description": "Transition mutability control.",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -1611,7 +1611,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b"
+      "reviewFinding": "entity-mutability-declarations"
     },
     {
       "id": "entity.boundary097.transition-mutability-container-absent-001",
@@ -1622,7 +1622,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: transition mutability container absent.",
+      "description": "Transition mutability container absent.",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -1679,7 +1679,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.transition-mutability-control-001"
     },
     {
@@ -1691,7 +1691,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: transition mutability container object.",
+      "description": "Transition mutability container object.",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -1749,7 +1749,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.transition-mutability-control-001"
     },
     {
@@ -1761,7 +1761,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: transition mutability rule absent.",
+      "description": "Transition mutability rule absent.",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -1823,7 +1823,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.transition-mutability-control-001"
     },
     {
@@ -1835,7 +1835,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: transition mutability rule null.",
+      "description": "Transition mutability rule null.",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -1898,7 +1898,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.transition-mutability-control-001"
     },
     {
@@ -1910,7 +1910,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: transition mutability rule object.",
+      "description": "Transition mutability rule object.",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -1973,7 +1973,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.transition-mutability-control-001"
     },
     {
@@ -1985,7 +1985,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: transition mutability rule false.",
+      "description": "Transition mutability rule false.",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -2048,7 +2048,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.transition-mutability-control-001"
     },
     {
@@ -2060,7 +2060,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: transition mutability rule zero.",
+      "description": "Transition mutability rule zero.",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -2123,7 +2123,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.transition-mutability-control-001"
     },
     {
@@ -2135,7 +2135,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: transition mutability rule empty.",
+      "description": "Transition mutability rule empty.",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -2198,7 +2198,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.transition-mutability-control-001"
     },
     {
@@ -2210,7 +2210,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: transition mutability entry null.",
+      "description": "Transition mutability entry null.",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -2275,7 +2275,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.transition-mutability-control-001"
     },
     {
@@ -2287,7 +2287,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: transition mutability entry false.",
+      "description": "Transition mutability entry false.",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -2352,7 +2352,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.transition-mutability-control-001"
     },
     {
@@ -2364,7 +2364,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: transition mutability entry zero.",
+      "description": "Transition mutability entry zero.",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -2429,7 +2429,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.transition-mutability-control-001"
     },
     {
@@ -2441,7 +2441,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: transition mutability entry empty.",
+      "description": "Transition mutability entry empty.",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -2506,7 +2506,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.transition-mutability-control-001"
     },
     {
@@ -2518,7 +2518,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability control.",
+      "description": "Import mutability control.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -2651,7 +2651,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b"
+      "reviewFinding": "entity-mutability-declarations"
     },
     {
       "id": "entity.boundary097.import-mutability-container-absent-001",
@@ -2662,7 +2662,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability container absent.",
+      "description": "Import mutability container absent.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -2762,7 +2762,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -2774,7 +2774,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability container null.",
+      "description": "Import mutability container null.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -2875,7 +2875,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -2887,7 +2887,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability container object.",
+      "description": "Import mutability container object.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -2988,7 +2988,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -3000,7 +3000,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability container array.",
+      "description": "Import mutability container array.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -3101,7 +3101,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -3113,7 +3113,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability container false.",
+      "description": "Import mutability container false.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -3214,7 +3214,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -3226,7 +3226,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability container zero.",
+      "description": "Import mutability container zero.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -3327,7 +3327,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -3339,7 +3339,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability container empty.",
+      "description": "Import mutability container empty.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -3440,7 +3440,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -3452,7 +3452,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability rule null.",
+      "description": "Import mutability rule null.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -3561,7 +3561,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -3573,7 +3573,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability rule object.",
+      "description": "Import mutability rule object.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -3682,7 +3682,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -3694,7 +3694,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability rule false.",
+      "description": "Import mutability rule false.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -3803,7 +3803,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -3815,7 +3815,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability rule zero.",
+      "description": "Import mutability rule zero.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -3924,7 +3924,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -3936,7 +3936,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability rule empty.",
+      "description": "Import mutability rule empty.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -4045,7 +4045,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -4057,7 +4057,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability entry null.",
+      "description": "Import mutability entry null.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -4168,7 +4168,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -4180,7 +4180,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability entry false.",
+      "description": "Import mutability entry false.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -4291,7 +4291,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -4303,7 +4303,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability entry zero.",
+      "description": "Import mutability entry zero.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -4414,7 +4414,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -4426,7 +4426,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "Core 0.9.7 F6b: import mutability entry empty.",
+      "description": "Import mutability entry empty.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -4537,7 +4537,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6b",
+      "reviewFinding": "entity-mutability-declarations",
       "pairedControl": "entity.boundary097.import-mutability-control-001"
     },
     {
@@ -4551,7 +4551,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution correct audit control.",
+      "description": "Evolution correct audit control.",
       "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
@@ -4882,7 +4882,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c"
+      "reviewFinding": "evolution-audit-history-validation"
     },
     {
       "id": "entity.boundary097.evolution-correct-audit-array-001",
@@ -4895,7 +4895,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution correct audit array.",
+      "description": "Evolution correct audit array.",
       "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
@@ -5041,7 +5041,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c",
+      "reviewFinding": "evolution-audit-history-validation",
       "pairedControl": "entity.boundary097.evolution-correct-audit-control-001"
     },
     {
@@ -5055,7 +5055,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution correct audit bad event.",
+      "description": "Evolution correct audit bad event.",
       "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
@@ -5205,7 +5205,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c",
+      "reviewFinding": "evolution-audit-history-validation",
       "pairedControl": "entity.boundary097.evolution-correct-audit-control-001"
     },
     {
@@ -5219,7 +5219,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution correct audit bad event last.",
+      "description": "Evolution correct audit bad event last.",
       "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
@@ -5405,7 +5405,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c",
+      "reviewFinding": "evolution-audit-history-validation",
       "pairedControl": "entity.boundary097.evolution-correct-audit-control-001"
     },
     {
@@ -5419,7 +5419,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution reverse audit control.",
+      "description": "Evolution reverse audit control.",
       "operation": "finkore.entity.evolution.reverse",
       "input": {
         "definition": {
@@ -5725,7 +5725,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c"
+      "reviewFinding": "evolution-audit-history-validation"
     },
     {
       "id": "entity.boundary097.evolution-reverse-audit-array-001",
@@ -5738,7 +5738,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution reverse audit array.",
+      "description": "Evolution reverse audit array.",
       "operation": "finkore.entity.evolution.reverse",
       "input": {
         "definition": {
@@ -5876,7 +5876,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c",
+      "reviewFinding": "evolution-audit-history-validation",
       "pairedControl": "entity.boundary097.evolution-reverse-audit-control-001"
     },
     {
@@ -5890,7 +5890,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution reverse audit bad event.",
+      "description": "Evolution reverse audit bad event.",
       "operation": "finkore.entity.evolution.reverse",
       "input": {
         "definition": {
@@ -6032,7 +6032,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c",
+      "reviewFinding": "evolution-audit-history-validation",
       "pairedControl": "entity.boundary097.evolution-reverse-audit-control-001"
     },
     {
@@ -6046,7 +6046,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution reverse audit bad event last.",
+      "description": "Evolution reverse audit bad event last.",
       "operation": "finkore.entity.evolution.reverse",
       "input": {
         "definition": {
@@ -6206,7 +6206,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c",
+      "reviewFinding": "evolution-audit-history-validation",
       "pairedControl": "entity.boundary097.evolution-reverse-audit-control-001"
     },
     {
@@ -6220,7 +6220,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution void audit control.",
+      "description": "Evolution void audit control.",
       "operation": "finkore.entity.evolution.void",
       "input": {
         "definition": {
@@ -6465,7 +6465,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c"
+      "reviewFinding": "evolution-audit-history-validation"
     },
     {
       "id": "entity.boundary097.evolution-void-audit-array-001",
@@ -6478,7 +6478,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution void audit array.",
+      "description": "Evolution void audit array.",
       "operation": "finkore.entity.evolution.void",
       "input": {
         "definition": {
@@ -6588,7 +6588,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c",
+      "reviewFinding": "evolution-audit-history-validation",
       "pairedControl": "entity.boundary097.evolution-void-audit-control-001"
     },
     {
@@ -6602,7 +6602,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution void audit bad event.",
+      "description": "Evolution void audit bad event.",
       "operation": "finkore.entity.evolution.void",
       "input": {
         "definition": {
@@ -6716,7 +6716,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c",
+      "reviewFinding": "evolution-audit-history-validation",
       "pairedControl": "entity.boundary097.evolution-void-audit-control-001"
     },
     {
@@ -6730,7 +6730,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution void audit bad event last.",
+      "description": "Evolution void audit bad event last.",
       "operation": "finkore.entity.evolution.void",
       "input": {
         "definition": {
@@ -6862,7 +6862,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c",
+      "reviewFinding": "evolution-audit-history-validation",
       "pairedControl": "entity.boundary097.evolution-void-audit-control-001"
     },
     {
@@ -6876,7 +6876,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution supersede audit control.",
+      "description": "Evolution supersede audit control.",
       "operation": "finkore.entity.evolution.supersede",
       "input": {
         "definition": {
@@ -7189,7 +7189,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c"
+      "reviewFinding": "evolution-audit-history-validation"
     },
     {
       "id": "entity.boundary097.evolution-supersede-audit-array-001",
@@ -7202,7 +7202,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution supersede audit array.",
+      "description": "Evolution supersede audit array.",
       "operation": "finkore.entity.evolution.supersede",
       "input": {
         "definition": {
@@ -7343,7 +7343,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c",
+      "reviewFinding": "evolution-audit-history-validation",
       "pairedControl": "entity.boundary097.evolution-supersede-audit-control-001"
     },
     {
@@ -7357,7 +7357,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution supersede audit bad event.",
+      "description": "Evolution supersede audit bad event.",
       "operation": "finkore.entity.evolution.supersede",
       "input": {
         "definition": {
@@ -7502,7 +7502,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c",
+      "reviewFinding": "evolution-audit-history-validation",
       "pairedControl": "entity.boundary097.evolution-supersede-audit-control-001"
     },
     {
@@ -7516,7 +7516,7 @@
         "ENTITY-ERROR-004",
         "AUDIT-ERROR-004"
       ],
-      "description": "Core 0.9.7 F6c: evolution supersede audit bad event last.",
+      "description": "Evolution supersede audit bad event last.",
       "operation": "finkore.entity.evolution.supersede",
       "input": {
         "definition": {
@@ -7679,7 +7679,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6c",
+      "reviewFinding": "evolution-audit-history-validation",
       "pairedControl": "entity.boundary097.evolution-supersede-audit-control-001"
     },
     {
@@ -7692,7 +7692,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-IMPORT-002"
       ],
-      "description": "Core 0.9.7 F5: special state proto control.",
+      "description": "Special state proto control.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -7743,7 +7743,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F5"
+      "reviewFinding": "entity-special-member-preservation"
     },
     {
       "id": "entity.boundary097.special-state-proto-mutate-001",
@@ -7755,7 +7755,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-IMPORT-002"
       ],
-      "description": "Core 0.9.7 F5: special state proto mutate.",
+      "description": "Special state proto mutate.",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -7817,7 +7817,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F5",
+      "reviewFinding": "entity-special-member-preservation",
       "pairedControl": "entity.boundary097.special-state-proto-control-001"
     },
     {
@@ -7830,7 +7830,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-IMPORT-002"
       ],
-      "description": "Core 0.9.7 F5: special state constructor control.",
+      "description": "Special state constructor control.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -7881,7 +7881,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F5"
+      "reviewFinding": "entity-special-member-preservation"
     },
     {
       "id": "entity.boundary097.special-state-constructor-mutate-001",
@@ -7893,7 +7893,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-IMPORT-002"
       ],
-      "description": "Core 0.9.7 F5: special state constructor mutate.",
+      "description": "Special state constructor mutate.",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -7955,7 +7955,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F5",
+      "reviewFinding": "entity-special-member-preservation",
       "pairedControl": "entity.boundary097.special-state-constructor-control-001"
     },
     {
@@ -7968,7 +7968,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-IMPORT-002"
       ],
-      "description": "Core 0.9.7 F5: special state prototype control.",
+      "description": "Special state prototype control.",
       "operation": "finkore.entity.create",
       "input": {
         "definition": {
@@ -8019,7 +8019,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F5"
+      "reviewFinding": "entity-special-member-preservation"
     },
     {
       "id": "entity.boundary097.special-state-prototype-mutate-001",
@@ -8031,7 +8031,7 @@
         "ENTITY-MUTABILITY-004",
         "ENTITY-IMPORT-002"
       ],
-      "description": "Core 0.9.7 F5: special state prototype mutate.",
+      "description": "Special state prototype mutate.",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -8093,7 +8093,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F5",
+      "reviewFinding": "entity-special-member-preservation",
       "pairedControl": "entity.boundary097.special-state-prototype-control-001"
     },
     {
@@ -8168,7 +8168,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F5"
+      "reviewFinding": "entity-special-member-preservation"
     },
     {
       "id": "entity.boundary097.special-field-proto-mutate-001",
@@ -8242,7 +8242,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F5"
+      "reviewFinding": "entity-special-member-preservation"
     },
     {
       "id": "entity.boundary097.special-field-constructor-mutate-001",
@@ -8316,7 +8316,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F5"
+      "reviewFinding": "entity-special-member-preservation"
     },
     {
       "id": "entity.boundary097.special-field-prototype-mutate-001",
@@ -8390,7 +8390,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F5"
+      "reviewFinding": "entity-special-member-preservation"
     }
   ]
 }

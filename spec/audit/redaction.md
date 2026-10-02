@@ -46,7 +46,7 @@ nonempty string is preserved as supplied; whitespace or special member names
 do not acquire identifier semantics. Omission and supplied null are distinct.
 Native convenience APIs may use a documented absence sentinel; portable parsing
 must not treat supplied null as omission. Existing history validation precedes
-policy processing; this correction does not change other error priorities.
+policy processing under the existing error priorities.
 
 Core 0.9 release candidate defines the meaning of redaction, including optional
 Actor context under **AUDIT-ACTOR-006**, without standardizing a production
@@ -55,17 +55,6 @@ preserve the distinctions and evidence required above. A consumer-owned
 conformance binding normalizes that representation to the conformance-only
 `{"presence":"REDACTED"}` sentinel; the sentinel is not a required production
 representation.
-
-## Core 0.9.7 correction note (non-normative)
-
-D8 resolves the previously unspecified policy-ID representation through new
-**AUDIT-REDACTION-008**. Under SPEC-COMPATIBILITY-012/014, this is an observable
-compatibility correction:
-TypeScript and Java now accept omission, while Python rejects malformed supplied
-identifiers it previously ignored. Valid supplied strings retain their behavior.
-Authority, protected targets, evidence, production redaction encoding and
-portable error codes are unchanged. This introduces no authorization registry
-or new canonical operation identifier.
 
 ## Example
 

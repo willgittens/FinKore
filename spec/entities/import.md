@@ -44,16 +44,6 @@ the imported observation.
 
 - **ENTITY-IMPORT-012** - Every successful bounded Entity Import result MUST include `historicalRevisions` as a list. When supplied history is omitted or an empty list, the result MUST contain `historicalRevisions: []`. Nonempty supplied revisions MUST remain preserved under ENTITY-IMPORT-006. This output normalization MUST NOT synthesize current revisions, identity mapping, or conflict versions, alter input member presence, accept null or malformed history, change error priorities, or expose a partial result on failure. Empty history describes the supplied observation, not proof that no earlier revisions exist.
 
-## Core 0.9.7 empty-history decision (non-normative)
-
-D11 adopts an explicit empty list for successful import observations, an
-observable compatibility correction under SPEC-COMPATIBILITY-012/014. Python
-and Java previously omitted that result member; TypeScript already returned it.
-Consumers comparing
-exact object shapes will observe the added field in Python and Java. Input
-optionality, nonempty history, portable errors and failure observations remain
-unchanged. No canonical Agentic operation is introduced.
-
 ## Invariants
 
 Import observes existing Entity continuity. It preserves the stable FinKore
@@ -85,31 +75,12 @@ import under **ENTITY-IMPORT-008**. Malformed observed identity/revision input
 remains subject to **ENTITY-IMPORT-009**. This clarification does not introduce
 a total priority among unrelated Entity failures.
 
-## Core 0.9.6 contract decision (non-normative)
+## Standalone mapping
 
-The standalone-mapping proposal was accepted for the Milestone 2 regression
-baseline. ENTITY-IMPORT-011 resolves the previously unspecified result while
-preserving ENTITY-IMPORT-003's requirement for mapping whenever Source Identity
-is supplied. Neither explicit null nor malformed Source Identity is omission.
-
-This is a corrective normative addition under
-SPEC-COMPATIBILITY-012/014, not an editorial change or a claim of compatibility
-for TypeScript's former pair-required behavior. The completed 0.9.6 plan records
-the vectors, native regressions, implementation and API migration, returned-
-observation reuse, combined verification, fresh review, and local corrective
-release closure as historical evidence. Current synchronization follows
-[contributor guidance](../../CONTRIBUTING.md). No canonical import operation is
-introduced.
-
-## Core 0.9.3 correction note (non-normative)
-
-The clarification to **ENTITY-IMPORT-002** closes a demonstrated portability
-defect: one implementation skipped declared Entity validators during import.
-It does not add a new validator, change valid import input, or alter error
-precedence. Imports that satisfied their declared validation rules remain
-valid; imports that violated those already-applicable rules were never
-conforming. The correction is therefore compatible under
-**SPEC-COMPATIBILITY-011** and **SPEC-COMPATIBILITY-013**.
+Under **ENTITY-IMPORT-011**, complete valid mapping is accepted when Source
+Identity is omitted, without synthesizing a separate Source Identity. Mapping
+remains required when Source Identity is supplied under **ENTITY-IMPORT-003**.
+Explicit null or malformed Source Identity is not omission.
 
 ## Non-Goals
 

@@ -33,16 +33,14 @@ This domain defines approval requirements and decisions independently of any par
   order. Coexisting validation failures follow structure, applicability, required
   context, then state/effectiveness priority. Opposing effective Decisions from
   one declared quorum voter are invalid evidence; each member's state uses only
-  its matching voter/Requirement evidence. The scoped Agentic contract and
-  conformance cases cover this composition surface. Historical implementation
-  and mutation results are recorded in the completed release plans.
+  its matching voter/Requirement evidence. Composition fixture labels remain
+  conformance-local; they are not canonical Agentic operations.
 - [Conditional Approval Requirements](conditions.md) must use explicit domain facts.
 - [Approval Validity](validity.md) must derive current effectiveness from append-only history, explicit evaluation context, relevant subject facts or revisions, and lifecycle evidence such as withdrawal, expiration, or supersession.
 
-The Core 0.9.8 correction makes sequential Chain actionability explicit, rejects
-caller-asserted effectiveness at concrete Decision/history boundaries, and
-validates eligibility across all supplied Decisions for the evaluated
-Requirement. Approval Composition retains its separate lightweight
+Sequential Chain actionability follows the first non-approved Requirement.
+Concrete Decision/history boundaries reject caller-asserted effectiveness and
+validate eligibility across all supplied Decisions for the evaluated Requirement. Approval Composition retains its separate lightweight
 current-effectiveness observation contract.
 
 ## Invariants

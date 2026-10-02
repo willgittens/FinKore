@@ -33,24 +33,6 @@ it to a string or number, or replacing a cycle with null. Names such as
 `__proto__` and `constructor` are ordinary JSON members. Metadata does not change
 the existing required-field contradiction rule or validation priority.
 
-## Core 0.9.7 correction note (non-normative)
-
-D10 resolves the previously unspecified native Event metadata profile.
-**AUDIT-EVENT-006** retains its optional-context meaning;
-the new **AUDIT-EVENT-009** defines the value and presence contract without
-reusing an existing requirement identifier for a new meaning.
-
-This is an observable compatibility correction, not an editorial change:
-TypeScript previously accepted some non-JSON metadata (including Map, Date and
-cycles), and Java omitted supplied null metadata when observing an Event.
-Those outcomes change. Existing valid JSON context and omission remain valid.
-The correction refines the existing `finkore.audit.append` contract in place;
-no operation identifier or error code is repurposed. **SPEC-COMPATIBILITY-008**,
-**012**, and **014** govern the observable compatibility impact. Coordinated
-artifact updates and consumer migration documentation follow
-[contributor guidance](../../CONTRIBUTING.md). Historical native implementation
-evidence remains in the completed 0.9.7 plan and is not a current repository gate.
-
 ## Invariants
 
 Within one audit history, event identifiers must be unique and committed events must follow [append-only](append-only.md) behavior.

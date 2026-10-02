@@ -57,8 +57,7 @@ This scoped interpretation does not require global string uniqueness across
 typed or separately scoped identifiers. A composing specification may still
 explicitly define one immutable value as carrying both meanings. Even then,
 independent observation and precondition checks remain required by
-**ENTITY-REVISION-006**. The [0.9.5 decision](../../docs/plans/plan-09.5.md)
-resolves an ambiguity; prior implementation agreement was not its authority.
+**ENTITY-REVISION-006**.
 
 ## Non-Goals
 

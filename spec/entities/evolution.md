@@ -223,17 +223,6 @@ Entity evolution reuses the existing Entity portable error catalog in
 [Entity Errors](errors.md). Core 0.9 release candidate does not introduce a dedicated evolution
 error code.
 
-## Core 0.9.4 correction note (non-normative)
-
-`ENTITY-EVOLUTION-034` and `ENTITY-EVOLUTION-035` resolve demonstrated ambiguities
-in combined-error priority and contradictory-history handling. They add
-observable requirements rather than editorial wording. Existing requirement
-IDs and error categories remain unchanged. These corrections may change errors
-or reject histories accepted by 0.9.3 implementations; 0.9.3 behavior is not a
-compatibility guarantee for the formerly unspecified cases. Regression coverage,
-implementation corrections, and complete release verification are recorded in
-the completed [0.9.4 plan](../../docs/plans/plan-09.4.md).
-
 ## Open Questions
 
 - Should a future specification version define a common serialized envelope for Evolution
@@ -245,5 +234,4 @@ the completed [0.9.4 plan](../../docs/plans/plan-09.4.md).
 
 This document does not define ledger reversal entries, tax treatment,
 replacement/amendment semantics, persistence conflict resolution, authorization,
-approval invalidation, or Audit Event relationship serialization. Later
-Entity/Audit and Approval milestones define their own integration behavior.
+approval invalidation, or Audit Event relationship serialization.

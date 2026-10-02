@@ -8,7 +8,7 @@
         "AUDIT-RELATIONSHIP-003",
         "AUDIT-ERROR-004"
       ],
-      "description": "M7 malformed boundary: relationship-type-object-001",
+      "description": "Malformed input: relationship-type-object-001",
       "operation": "finkore.audit.append",
       "input": {
         "history": [
@@ -69,7 +69,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "audit.boundary097.relationship-type-array-001",
@@ -78,7 +78,7 @@
         "AUDIT-RELATIONSHIP-003",
         "AUDIT-ERROR-004"
       ],
-      "description": "M7 malformed boundary: relationship-type-array-001",
+      "description": "Malformed input: relationship-type-array-001",
       "operation": "finkore.audit.append",
       "input": {
         "history": [
@@ -139,7 +139,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     }
   ]
 }

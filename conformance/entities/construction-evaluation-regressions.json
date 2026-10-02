@@ -8,7 +8,7 @@
         "ENTITY-IMPORT-003",
         "ENTITY-IMPORT-005"
       ],
-      "description": "import control; Core 0.9.6 finding 10b.",
+      "description": "Import control.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -142,9 +142,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10b-validation-bypass"
+        "import-source-identity-validation-bypass"
       ],
-      "reviewFinding": "10b"
+      "reviewFinding": "import-source-identity-validation"
     },
     {
       "id": "entity.boundary096.import-source-null-001",
@@ -154,7 +154,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-IMPORT-008"
       ],
-      "description": "import source null; Core 0.9.6 finding 10b.",
+      "description": "Import source null.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -265,9 +265,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-10b-validation-bypass"
+        "import-source-identity-validation-bypass"
       ],
-      "reviewFinding": "10b",
+      "reviewFinding": "import-source-identity-validation",
       "pairedControl": "entity.boundary096.import-control-001"
     },
     {
@@ -278,7 +278,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-IMPORT-008"
       ],
-      "description": "import source empty; Core 0.9.6 finding 10b.",
+      "description": "Import source empty.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -389,9 +389,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-10b-validation-bypass"
+        "import-source-identity-validation-bypass"
       ],
-      "reviewFinding": "10b",
+      "reviewFinding": "import-source-identity-validation",
       "pairedControl": "entity.boundary096.import-control-001"
     },
     {
@@ -402,7 +402,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-IMPORT-008"
       ],
-      "description": "import source number; Core 0.9.6 finding 10b.",
+      "description": "Import source number.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -513,9 +513,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-10b-validation-bypass"
+        "import-source-identity-validation-bypass"
       ],
-      "reviewFinding": "10b",
+      "reviewFinding": "import-source-identity-validation",
       "pairedControl": "entity.boundary096.import-control-001"
     },
     {
@@ -526,7 +526,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-IMPORT-008"
       ],
-      "description": "import source boolean; Core 0.9.6 finding 10b.",
+      "description": "Import source boolean.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -637,9 +637,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-10b-validation-bypass"
+        "import-source-identity-validation-bypass"
       ],
-      "reviewFinding": "10b",
+      "reviewFinding": "import-source-identity-validation",
       "pairedControl": "entity.boundary096.import-control-001"
     },
     {
@@ -650,7 +650,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-IMPORT-008"
       ],
-      "description": "import source array; Core 0.9.6 finding 10b.",
+      "description": "Import source array.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -761,9 +761,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-10b-validation-bypass"
+        "import-source-identity-validation-bypass"
       ],
-      "reviewFinding": "10b",
+      "reviewFinding": "import-source-identity-validation",
       "pairedControl": "entity.boundary096.import-control-001"
     },
     {
@@ -774,7 +774,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-IMPORT-008"
       ],
-      "description": "import source object; Core 0.9.6 finding 10b.",
+      "description": "Import source object.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -885,9 +885,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-10b-validation-bypass"
+        "import-source-identity-validation-bypass"
       ],
-      "reviewFinding": "10b",
+      "reviewFinding": "import-source-identity-validation",
       "pairedControl": "entity.boundary096.import-control-001"
     },
     {
@@ -897,7 +897,7 @@
         "ENTITY-IMPORT-011",
         "ENTITY-IMPORT-004"
       ],
-      "description": "import standalone mapping; Core 0.9.6 finding 10b.",
+      "description": "Import standalone mapping.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -1027,9 +1027,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10b-validation-bypass"
+        "import-source-identity-validation-bypass"
       ],
-      "reviewFinding": "10b",
+      "reviewFinding": "import-source-identity-validation",
       "pairedControl": "entity.boundary096.import-control-001"
     },
     {
@@ -1038,7 +1038,7 @@
       "requirements": [
         "ENTITY-IMPORT-011"
       ],
-      "description": "import no source control; Core 0.9.6 finding 10b.",
+      "description": "Import no source control.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -1150,9 +1150,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10b-validation-bypass"
+        "import-source-identity-validation-bypass"
       ],
-      "reviewFinding": "10b"
+      "reviewFinding": "import-source-identity-validation"
     },
     {
       "id": "entity.boundary096.evolution-correct-control-001",
@@ -1161,7 +1161,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-025"
       ],
-      "description": "evolution correct control; Core 0.9.6 finding 9c.",
+      "description": "Evolution correct control.",
       "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
@@ -1494,9 +1494,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c"
+      "reviewFinding": "evolution-source-preconditions"
     },
     {
       "id": "entity.boundary096.evolution-correct-expectedsourcestate-null-001",
@@ -1506,7 +1506,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution correct expectedsourcestate null; Core 0.9.6 finding 9c.",
+      "description": "Evolution correct expectedsourcestate null.",
       "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
@@ -1692,9 +1692,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-correct-control-001"
     },
     {
@@ -1705,7 +1705,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution correct expectedsourcestate object; Core 0.9.6 finding 9c.",
+      "description": "Evolution correct expectedsourcestate object.",
       "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
@@ -1891,9 +1891,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-correct-control-001"
     },
     {
@@ -1904,7 +1904,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution correct expectedsourcestate mismatch; Core 0.9.6 finding 9c.",
+      "description": "Evolution correct expectedsourcestate mismatch.",
       "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
@@ -2090,9 +2090,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-correct-control-001"
     },
     {
@@ -2103,7 +2103,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution correct expectedsourcerevision null; Core 0.9.6 finding 9c.",
+      "description": "Evolution correct expectedsourcerevision null.",
       "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
@@ -2289,9 +2289,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-correct-control-001"
     },
     {
@@ -2302,7 +2302,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution correct expectedsourcerevision object; Core 0.9.6 finding 9c.",
+      "description": "Evolution correct expectedsourcerevision object.",
       "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
@@ -2488,9 +2488,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-correct-control-001"
     },
     {
@@ -2501,7 +2501,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution correct expectedsourcerevision mismatch; Core 0.9.6 finding 9c.",
+      "description": "Evolution correct expectedsourcerevision mismatch.",
       "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
@@ -2687,9 +2687,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-correct-control-001"
     },
     {
@@ -2699,7 +2699,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-025"
       ],
-      "description": "evolution reverse control; Core 0.9.6 finding 9c.",
+      "description": "Evolution reverse control.",
       "operation": "finkore.entity.evolution.reverse",
       "input": {
         "definition": {
@@ -3007,9 +3007,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c"
+      "reviewFinding": "evolution-source-preconditions"
     },
     {
       "id": "entity.boundary096.evolution-reverse-expectedsourcestate-null-001",
@@ -3019,7 +3019,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution reverse expectedsourcestate null; Core 0.9.6 finding 9c.",
+      "description": "Evolution reverse expectedsourcestate null.",
       "operation": "finkore.entity.evolution.reverse",
       "input": {
         "definition": {
@@ -3180,9 +3180,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-reverse-control-001"
     },
     {
@@ -3193,7 +3193,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution reverse expectedsourcestate object; Core 0.9.6 finding 9c.",
+      "description": "Evolution reverse expectedsourcestate object.",
       "operation": "finkore.entity.evolution.reverse",
       "input": {
         "definition": {
@@ -3354,9 +3354,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-reverse-control-001"
     },
     {
@@ -3367,7 +3367,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution reverse expectedsourcestate mismatch; Core 0.9.6 finding 9c.",
+      "description": "Evolution reverse expectedsourcestate mismatch.",
       "operation": "finkore.entity.evolution.reverse",
       "input": {
         "definition": {
@@ -3528,9 +3528,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-reverse-control-001"
     },
     {
@@ -3541,7 +3541,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution reverse expectedsourcerevision null; Core 0.9.6 finding 9c.",
+      "description": "Evolution reverse expectedsourcerevision null.",
       "operation": "finkore.entity.evolution.reverse",
       "input": {
         "definition": {
@@ -3702,9 +3702,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-reverse-control-001"
     },
     {
@@ -3715,7 +3715,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution reverse expectedsourcerevision object; Core 0.9.6 finding 9c.",
+      "description": "Evolution reverse expectedsourcerevision object.",
       "operation": "finkore.entity.evolution.reverse",
       "input": {
         "definition": {
@@ -3876,9 +3876,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-reverse-control-001"
     },
     {
@@ -3889,7 +3889,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution reverse expectedsourcerevision mismatch; Core 0.9.6 finding 9c.",
+      "description": "Evolution reverse expectedsourcerevision mismatch.",
       "operation": "finkore.entity.evolution.reverse",
       "input": {
         "definition": {
@@ -4050,9 +4050,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-reverse-control-001"
     },
     {
@@ -4062,7 +4062,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-025"
       ],
-      "description": "evolution void control; Core 0.9.6 finding 9c.",
+      "description": "Evolution void control.",
       "operation": "finkore.entity.evolution.void",
       "input": {
         "definition": {
@@ -4309,9 +4309,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c"
+      "reviewFinding": "evolution-source-preconditions"
     },
     {
       "id": "entity.boundary096.evolution-void-expectedsourcestate-null-001",
@@ -4321,7 +4321,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution void expectedsourcestate null; Core 0.9.6 finding 9c.",
+      "description": "Evolution void expectedsourcestate null.",
       "operation": "finkore.entity.evolution.void",
       "input": {
         "definition": {
@@ -4454,9 +4454,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-void-control-001"
     },
     {
@@ -4467,7 +4467,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution void expectedsourcestate object; Core 0.9.6 finding 9c.",
+      "description": "Evolution void expectedsourcestate object.",
       "operation": "finkore.entity.evolution.void",
       "input": {
         "definition": {
@@ -4600,9 +4600,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-void-control-001"
     },
     {
@@ -4613,7 +4613,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution void expectedsourcestate mismatch; Core 0.9.6 finding 9c.",
+      "description": "Evolution void expectedsourcestate mismatch.",
       "operation": "finkore.entity.evolution.void",
       "input": {
         "definition": {
@@ -4746,9 +4746,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-void-control-001"
     },
     {
@@ -4759,7 +4759,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution void expectedsourcerevision null; Core 0.9.6 finding 9c.",
+      "description": "Evolution void expectedsourcerevision null.",
       "operation": "finkore.entity.evolution.void",
       "input": {
         "definition": {
@@ -4892,9 +4892,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-void-control-001"
     },
     {
@@ -4905,7 +4905,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution void expectedsourcerevision object; Core 0.9.6 finding 9c.",
+      "description": "Evolution void expectedsourcerevision object.",
       "operation": "finkore.entity.evolution.void",
       "input": {
         "definition": {
@@ -5038,9 +5038,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-void-control-001"
     },
     {
@@ -5051,7 +5051,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution void expectedsourcerevision mismatch; Core 0.9.6 finding 9c.",
+      "description": "Evolution void expectedsourcerevision mismatch.",
       "operation": "finkore.entity.evolution.void",
       "input": {
         "definition": {
@@ -5184,9 +5184,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-void-control-001"
     },
     {
@@ -5196,7 +5196,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-025"
       ],
-      "description": "evolution supersede control; Core 0.9.6 finding 9c.",
+      "description": "Evolution supersede control.",
       "operation": "finkore.entity.evolution.supersede",
       "input": {
         "definition": {
@@ -5511,9 +5511,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c"
+      "reviewFinding": "evolution-source-preconditions"
     },
     {
       "id": "entity.boundary096.evolution-supersede-expectedsourcestate-null-001",
@@ -5523,7 +5523,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution supersede expectedsourcestate null; Core 0.9.6 finding 9c.",
+      "description": "Evolution supersede expectedsourcestate null.",
       "operation": "finkore.entity.evolution.supersede",
       "input": {
         "definition": {
@@ -5687,9 +5687,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-supersede-control-001"
     },
     {
@@ -5700,7 +5700,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution supersede expectedsourcestate object; Core 0.9.6 finding 9c.",
+      "description": "Evolution supersede expectedsourcestate object.",
       "operation": "finkore.entity.evolution.supersede",
       "input": {
         "definition": {
@@ -5864,9 +5864,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-supersede-control-001"
     },
     {
@@ -5877,7 +5877,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution supersede expectedsourcestate mismatch; Core 0.9.6 finding 9c.",
+      "description": "Evolution supersede expectedsourcestate mismatch.",
       "operation": "finkore.entity.evolution.supersede",
       "input": {
         "definition": {
@@ -6041,9 +6041,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-supersede-control-001"
     },
     {
@@ -6054,7 +6054,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution supersede expectedsourcerevision null; Core 0.9.6 finding 9c.",
+      "description": "Evolution supersede expectedsourcerevision null.",
       "operation": "finkore.entity.evolution.supersede",
       "input": {
         "definition": {
@@ -6218,9 +6218,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-supersede-control-001"
     },
     {
@@ -6231,7 +6231,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution supersede expectedsourcerevision object; Core 0.9.6 finding 9c.",
+      "description": "Evolution supersede expectedsourcerevision object.",
       "operation": "finkore.entity.evolution.supersede",
       "input": {
         "definition": {
@@ -6395,9 +6395,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-supersede-control-001"
     },
     {
@@ -6408,7 +6408,7 @@
         "ENTITY-EVOLUTION-023",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "evolution supersede expectedsourcerevision mismatch; Core 0.9.6 finding 9c.",
+      "description": "Evolution supersede expectedsourcerevision mismatch.",
       "operation": "finkore.entity.evolution.supersede",
       "input": {
         "definition": {
@@ -6572,9 +6572,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-9c-validation-bypass"
+        "evolution-source-preconditions-bypass"
       ],
-      "reviewFinding": "9c",
+      "reviewFinding": "evolution-source-preconditions",
       "pairedControl": "entity.boundary096.evolution-supersede-control-001"
     },
     {
@@ -6586,7 +6586,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -6724,7 +6724,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     },
     {
       "id": "entity.boundary096.import-revision-current-opposite-001",
@@ -6735,7 +6735,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -6852,7 +6852,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     },
     {
       "id": "entity.boundary096.import-revision-current-null-001",
@@ -6863,7 +6863,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -6980,7 +6980,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     },
     {
       "id": "entity.boundary096.import-revision-current-zero-001",
@@ -6991,7 +6991,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -7108,7 +7108,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     },
     {
       "id": "entity.boundary096.import-revision-current-one-001",
@@ -7119,7 +7119,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -7236,7 +7236,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     },
     {
       "id": "entity.boundary096.import-revision-current-string-001",
@@ -7247,7 +7247,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -7364,7 +7364,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     },
     {
       "id": "entity.boundary096.import-revision-current-array-001",
@@ -7375,7 +7375,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -7492,7 +7492,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     },
     {
       "id": "entity.boundary096.import-revision-current-object-001",
@@ -7503,7 +7503,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching current Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -7620,7 +7620,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     },
     {
       "id": "entity.boundary096.import-revision-historical-matching-001",
@@ -7631,7 +7631,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -7769,7 +7769,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     },
     {
       "id": "entity.boundary096.import-revision-historical-opposite-001",
@@ -7780,7 +7780,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -7897,7 +7897,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     },
     {
       "id": "entity.boundary096.import-revision-historical-null-001",
@@ -7908,7 +7908,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -8025,7 +8025,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     },
     {
       "id": "entity.boundary096.import-revision-historical-zero-001",
@@ -8036,7 +8036,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -8153,7 +8153,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     },
     {
       "id": "entity.boundary096.import-revision-historical-one-001",
@@ -8164,7 +8164,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -8281,7 +8281,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     },
     {
       "id": "entity.boundary096.import-revision-historical-string-001",
@@ -8292,7 +8292,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -8409,7 +8409,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     },
     {
       "id": "entity.boundary096.import-revision-historical-array-001",
@@ -8420,7 +8420,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -8537,7 +8537,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     },
     {
       "id": "entity.boundary096.import-revision-historical-object-001",
@@ -8548,7 +8548,7 @@
         "ENTITY-IMPORT-009",
         "ENTITY-REVISION-007"
       ],
-      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import (fresh 0.9.6 review).",
+      "description": "Preserve a matching historical Revision currentness declaration; reject conflicting or malformed supplied currentness without partial import.",
       "operation": "entity.import",
       "input": {
         "definition": {
@@ -8665,7 +8665,7 @@
         "revision-currentness-silently-rewritten",
         "revision-boolean-number-coercion"
       ],
-      "reviewFinding": "fresh-review-revision-currentness"
+      "reviewFinding": "import-revision-currentness"
     }
   ]
 }

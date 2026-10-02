@@ -25,17 +25,11 @@ An Approval Decision outcome is `APPROVED` or `REJECTED`. `PENDING` describes an
 
 - **APPROVAL-DECISION-009** — A concrete single-Decision effectiveness evaluation MUST validate the supplied concrete Requirement, Decision structure, Requirement association, and Actor eligibility before returning effectiveness. Malformed declarations or a mismatched association MUST use `FINKORE_APPROVAL_INVALID_DECISION`; a valid eligibility declaration excluding the Actor MUST use `FINKORE_APPROVAL_INELIGIBLE_ACTOR`. It MUST evaluate caller-declared relevant facts and any expiration under Approval Validity using explicit required context. Expired or fact-stale valid evidence MUST return `INEFFECTIVE`; otherwise it MUST return `EFFECTIVE`. Without supplied lifecycle history this observation MUST NOT claim lifecycle-aware effectiveness. A separately documented facts-only helper MAY remain available, but MUST NOT be used as the complete concrete evaluation.
 
-## Core 0.9.7 fact comparison correction
+## Evidence and fact comparison
 
 - **APPROVAL-DECISION-010** — A bounded concrete Approval fixture operation consuming a Decision history or Decision collection MUST receive an explicit array or supported history envelope containing an explicit history array. Omission, null, or a malformed envelope MUST use `FINKORE_APPROVAL_INVALID_DECISION`. An empty array remains valid evidence of no Decisions. Native convenience constructors MAY provide documented empty defaults; fixture translation MUST NOT use them to repair missing evidence.
 - **APPROVAL-DECISION-011** — A concrete Approval Actor's optional type, when supplied, MUST be a nonempty string. Null, empty, or non-string type values MUST use `FINKORE_APPROVAL_INVALID_DECISION` at Decision and lifecycle boundaries. Omission MUST remain valid and MUST NOT synthesize a type.
 - **APPROVAL-DECISION-012** — Before concrete Requirement evaluation returns an outcome, Actor eligibility MUST be validated for every structurally valid supplied Decision that identifies the evaluated Requirement, including a Decision excluded from current effectiveness by withdrawal, Decision supersession, Requirement supersession, expiration, stale facts or revision, or another decisive Decision. A valid eligibility declaration excluding the Actor MUST use `FINKORE_APPROVAL_INELIGIBLE_ACTOR`. A supplied Decision identifying another Requirement MUST still receive complete structural validation, but MUST NOT be tested against the evaluated Requirement's eligibility rule and MUST NOT affect its outcome. Evaluation MUST NOT invent an absent Requirement registry or eligibility rule for that unrelated Decision.
-
-The accepted D1–D4 decisions in the [0.9.7 plan](../../docs/plans/plan-09.7.md)
-resolve differing concrete evaluation and native-value behavior. These are
-corrective normative additions. Implementation and
-verification results recorded in that completed plan are historical and are not
-claims of current conformance.
 
 - **APPROVAL-FACT-001** — When concrete Decision or Requirement evaluation is supplied current subject facts, omission of a relevance selector MUST compare the complete supplied fact value against the Decision's retained fact value. An explicitly supplied nonempty selector list MUST narrow comparison to the selected facts. Null, empty, or malformed selector declarations MUST fail with `FINKORE_APPROVAL_INVALID_DECISION`, even when another validity condition would make the Decision ineffective. Implementations MUST NOT synthesize current facts from historical facts. Concrete single-Decision evaluation MUST reject absent current facts with `FINKORE_APPROVAL_INVALID_DECISION`. Requirement evaluation MAY omit both current facts and selectors to evaluate history without claiming current-fact validation; supplied selectors without current facts MUST use `FINKORE_APPROVAL_INVALID_DECISION`. Explicit null current facts MUST remain a supplied value, not omission.
 - **APPROVAL-FACT-002** — An Approval fact selector MUST identify a nonempty sequence of nonempty object-member names. Selection MUST traverse only own object members and MUST NOT traverse arrays, inherited members, or implicit conversions. A selected fact MUST be present in both historical and current facts to match; absence on both sides MUST NOT count as equality. Explicit null at a selected leaf MUST count as present. Missing intermediate members or a non-object intermediate value MUST make the selected fact unavailable. The bounded dot-separated encoding is defined in conformance conventions; no wildcard, fallback to a literal dotted key, escaping, expression, or array-index language is implied.
@@ -62,8 +56,6 @@ Separately documented native facts-only helpers retain the limited scope allowed
 by APPROVAL-DECISION-009. They cannot replace concrete validation or be used by
 a consumer binding to bypass these comparison rules. Consumer APIs must
 distinguish omission from explicitly supplied null at the concrete boundary.
-Migration work for removed repository implementations is historical and remains
-recorded in the 0.9.7 plan.
 
 ## Invariants
 
@@ -136,21 +128,13 @@ For example, a manager approves an invoice for `9,000 EUR`. If its amount change
 
 Invalid decisions must use an applicable [Approval Error](errors.md).
 
-## Core 0.9.6 evaluation scope decision (non-normative)
+## Concrete evaluation scope
 
-The Milestone 1 proposal was accepted when Milestone 2 was requested.
-APPROVAL-DECISION-009 establishes the concrete boundary for the conformance-local
-`approval.decision.evaluate` fixture. Its previous facts-only catalog wording is
-superseded by this documented corrective contract path. The supplied Requirement
-is required; `evaluatedAt` is required only when expiration applies. Existing
-result categories and identifiers are retained. A native facts-only helper
-retains its documented scope and signature.
-
-This is an observable corrective contract change under
-SPEC-COMPATIBILITY-012/014, not an editorial clarification. The completed 0.9.6
-plan records its regressions, implementation migration, combined verification,
-fresh review, and release closure as historical evidence. No canonical Agentic
-operation is added or repurposed.
+**APPROVAL-DECISION-009** governs the conformance-local
+`approval.decision.evaluate` fixture. The supplied Requirement is required;
+`evaluatedAt` is required only when expiration applies. Its result is
+`EFFECTIVE` or `INEFFECTIVE`. A separately documented native facts-only helper
+retains its limited scope and cannot substitute for concrete evaluation.
 
 ## Non-Goals
 

@@ -2,7 +2,7 @@
 
 ## Status
 
-**Included in FinKore Core 0.9 release candidate; introduced in Draft 0.2.**
+**FinKore Core 0.9 release candidate.**
 
 ## Purpose
 

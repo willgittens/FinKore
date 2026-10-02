@@ -24,7 +24,7 @@ and reporting.
 - [`operations.md`](operations.md) — current request, result, omission/null,
   error, and post-state contract for all manifest operation labels.
 - [`traceability.md`](traceability.md) — requirement coverage, known limits,
-  mutation intent, and historical evidence.
+  mutation intent, and coverage limitations.
 - [`consumer-guide.md`](consumer-guide.md) — discovery, execution outcomes,
   reporting, and claim guidance.
 
@@ -168,17 +168,11 @@ Consumer implementations should use mutation testing or an equivalent
 defect-resistance method appropriate to their language. Such results are
 consumer evidence, not results produced by this repository.
 
-## Historical evidence
+## Contract status
 
-Earlier repository snapshots included maintained TypeScript, Python, and Java
-implementations, a Conformance Runner, package consumers, coverage checks, and
-mutation suites. Their results remain in [release notes](../docs/releases/README.md),
-completed plans, and the explicitly historical sections of
-[traceability](traceability.md). They describe those snapshots only and are not
-current execution claims.
-
-The Core label remains `0.9-rc`; the conformance syntax remains `0.1`. The
-separate [Core 1.0 plan](../docs/plans/plan-10.md) is not complete.
+The Core label remains `0.9-rc`; conformance syntax remains `0.1`. Stable 1.0
+promotion is not complete. See [release notes](../docs/releases/README.md) for
+concise release history.
 
 ## Repository validation
 

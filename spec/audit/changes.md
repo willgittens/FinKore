@@ -69,13 +69,9 @@ The following JSON is illustrative and non-normative; it does not prescribe seri
 - Should domain paths use a standardized portable syntax?
 - How should large or structured values be summarized without losing evidentiary meaning?
 
-## Core 0.9.3 correction note (non-normative)
+## Comparison declaration
 
-**AUDIT-CHANGE-008** specifies the ordinary JSON comparison already required
-to apply **AUDIT-CHANGE-005** portably. **AUDIT-CHANGE-009** adds an opt-in
-Money declaration because treating every Money-shaped object as Money would
-silently reinterpret existing ordinary JSON. Omission of `valueType` preserves
-ordinary JSON semantics, so the optional declaration follows
-**SPEC-COMPATIBILITY-010**. The dedicated declaration and invalid-event mapping
-resolve the comparison ambiguity; no portable error
-code or operation identifier changes.
+**AUDIT-CHANGE-008** defines ordinary JSON comparison for
+**AUDIT-CHANGE-005**. **AUDIT-CHANGE-009** provides an opt-in Money declaration;
+omitting `valueType` preserves ordinary JSON semantics under
+**SPEC-COMPATIBILITY-010**. A Money-shaped object alone does not declare Money.

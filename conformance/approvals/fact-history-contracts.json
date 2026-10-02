@@ -11,7 +11,7 @@
         "APPROVAL-ERROR-005",
         "APPROVAL-ERROR-006"
       ],
-      "description": "Core 0.9.7 F3: record withdrawal same.",
+      "description": "Record withdrawal same.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -100,9 +100,9 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F3",
+      "reviewFinding": "proposed-history-reference-validity",
       "pairedControl": "approval.boundary097.record-withdrawal-distinct-001",
-      "reason": "No implementation returns the required domain result; preserve the specification-derived assertion independently of unspecified diagnostics."
+      "reason": "Assert the specification-derived domain result independently of unspecified diagnostics."
     },
     {
       "id": "approval.boundary097.record-withdrawal-offset-001",
@@ -114,7 +114,7 @@
         "APPROVAL-ERROR-005",
         "APPROVAL-ERROR-006"
       ],
-      "description": "Core 0.9.7 F3: record withdrawal offset.",
+      "description": "Record withdrawal offset.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -203,9 +203,9 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F3",
+      "reviewFinding": "proposed-history-reference-validity",
       "pairedControl": "approval.boundary097.record-withdrawal-distinct-001",
-      "reason": "No implementation returns the required domain result; preserve the specification-derived assertion independently of unspecified diagnostics."
+      "reason": "Assert the specification-derived domain result independently of unspecified diagnostics."
     },
     {
       "id": "approval.boundary097.record-supersession-target-same-001",
@@ -217,7 +217,7 @@
         "APPROVAL-ERROR-005",
         "APPROVAL-ERROR-006"
       ],
-      "description": "Core 0.9.7 F3: record supersession target same.",
+      "description": "Record supersession target same.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -337,9 +337,9 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F3",
+      "reviewFinding": "proposed-history-reference-validity",
       "pairedControl": "approval.boundary097.record-supersession-target-distinct-001",
-      "reason": "No implementation returns the required domain result; preserve the specification-derived assertion independently of unspecified diagnostics."
+      "reason": "Assert the specification-derived domain result independently of unspecified diagnostics."
     },
     {
       "id": "approval.boundary097.record-supersession-target-offset-001",
@@ -351,7 +351,7 @@
         "APPROVAL-ERROR-005",
         "APPROVAL-ERROR-006"
       ],
-      "description": "Core 0.9.7 F3: record supersession target offset.",
+      "description": "Record supersession target offset.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -471,9 +471,9 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F3",
+      "reviewFinding": "proposed-history-reference-validity",
       "pairedControl": "approval.boundary097.record-supersession-target-distinct-001",
-      "reason": "No implementation returns the required domain result; preserve the specification-derived assertion independently of unspecified diagnostics."
+      "reason": "Assert the specification-derived domain result independently of unspecified diagnostics."
     },
     {
       "id": "approval.boundary097.record-supersession-successor-same-001",
@@ -485,7 +485,7 @@
         "APPROVAL-ERROR-005",
         "APPROVAL-ERROR-006"
       ],
-      "description": "Core 0.9.7 F3: record supersession successor same.",
+      "description": "Record supersession successor same.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -605,9 +605,9 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F3",
+      "reviewFinding": "proposed-history-reference-validity",
       "pairedControl": "approval.boundary097.record-supersession-successor-distinct-001",
-      "reason": "No implementation returns the required domain result; preserve the specification-derived assertion independently of unspecified diagnostics."
+      "reason": "Assert the specification-derived domain result independently of unspecified diagnostics."
     },
     {
       "id": "approval.boundary097.record-supersession-successor-offset-001",
@@ -619,7 +619,7 @@
         "APPROVAL-ERROR-005",
         "APPROVAL-ERROR-006"
       ],
-      "description": "Core 0.9.7 F3: record supersession successor offset.",
+      "description": "Record supersession successor offset.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -739,9 +739,9 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F3",
+      "reviewFinding": "proposed-history-reference-validity",
       "pairedControl": "approval.boundary097.record-supersession-successor-distinct-001",
-      "reason": "No implementation returns the required domain result; preserve the specification-derived assertion independently of unspecified diagnostics."
+      "reason": "Assert the specification-derived domain result independently of unspecified diagnostics."
     },
     {
       "id": "approval.facts097.expired-control",

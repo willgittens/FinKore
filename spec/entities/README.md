@@ -30,15 +30,12 @@ expected-state/revision/conflict-version observations without partial import.
 
 A Financial Entity's identity must remain stable throughout its lifecycle. Its current State and data must reflect only successful domain operations.
 
-## Core 0.9.5 correction note (non-normative)
+## Declaration ownership
 
-The accepted [contract decision](../../docs/plans/plan-09.5.md) adds
-**ENTITY-DEFINITION-002** for the previously ambiguous unversioned ownership
-boundary. It does not define migration or dynamic reconfiguration. Native alias
-tests recorded by the completed 0.9.5 plan are historical evidence for this
-guarantee; the current repository does not rerun them. The rule does not require
-stateless APIs to retain declarations across unrelated calls; it governs
-declarations retained for an existing Entity instance.
+**ENTITY-DEFINITION-002** governs declarations retained for an existing Entity
+instance, including unversioned Workflows. It does not require stateless APIs to
+retain declarations across unrelated calls or define migration or dynamic
+reconfiguration.
 
 ## Non-Goals
 

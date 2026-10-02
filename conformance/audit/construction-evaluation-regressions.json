@@ -9,7 +9,7 @@
         "AUDIT-REDACTION-003",
         "AUDIT-REDACTION-006"
       ],
-      "description": "authority control; Core 0.9.6 finding 4.",
+      "description": "Authority control.",
       "operation": "audit.redact",
       "input": {
         "history": [
@@ -132,9 +132,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-4-validation-bypass"
+        "redaction-authority-validation-bypass"
       ],
-      "reviewFinding": "4"
+      "reviewFinding": "redaction-authority-validation"
     },
     {
       "id": "audit.boundary096.authority-absent-001",
@@ -143,7 +143,7 @@
         "AUDIT-REDACTION-001",
         "AUDIT-ERROR-001"
       ],
-      "description": "authority absent; Core 0.9.6 finding 4.",
+      "description": "Authority absent.",
       "operation": "audit.redact",
       "input": {
         "history": [
@@ -221,9 +221,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-4-validation-bypass"
+        "redaction-authority-validation-bypass"
       ],
-      "reviewFinding": "4",
+      "reviewFinding": "redaction-authority-validation",
       "pairedControl": "audit.boundary096.authority-control-001"
     },
     {
@@ -233,7 +233,7 @@
         "AUDIT-REDACTION-001",
         "AUDIT-ERROR-001"
       ],
-      "description": "authority null; Core 0.9.6 finding 4.",
+      "description": "Authority null.",
       "operation": "audit.redact",
       "input": {
         "history": [
@@ -312,9 +312,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-4-validation-bypass"
+        "redaction-authority-validation-bypass"
       ],
-      "reviewFinding": "4",
+      "reviewFinding": "redaction-authority-validation",
       "pairedControl": "audit.boundary096.authority-control-001"
     },
     {
@@ -324,7 +324,7 @@
         "AUDIT-REDACTION-001",
         "AUDIT-ERROR-001"
       ],
-      "description": "authority empty; Core 0.9.6 finding 4.",
+      "description": "Authority empty.",
       "operation": "audit.redact",
       "input": {
         "history": [
@@ -403,9 +403,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-4-validation-bypass"
+        "redaction-authority-validation-bypass"
       ],
-      "reviewFinding": "4",
+      "reviewFinding": "redaction-authority-validation",
       "pairedControl": "audit.boundary096.authority-control-001"
     },
     {
@@ -415,7 +415,7 @@
         "AUDIT-REDACTION-001",
         "AUDIT-ERROR-001"
       ],
-      "description": "authority number; Core 0.9.6 finding 4.",
+      "description": "Authority number.",
       "operation": "audit.redact",
       "input": {
         "history": [
@@ -494,9 +494,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-4-validation-bypass"
+        "redaction-authority-validation-bypass"
       ],
-      "reviewFinding": "4",
+      "reviewFinding": "redaction-authority-validation",
       "pairedControl": "audit.boundary096.authority-control-001"
     },
     {
@@ -506,7 +506,7 @@
         "AUDIT-REDACTION-001",
         "AUDIT-ERROR-001"
       ],
-      "description": "authority boolean; Core 0.9.6 finding 4.",
+      "description": "Authority boolean.",
       "operation": "audit.redact",
       "input": {
         "history": [
@@ -585,9 +585,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-4-validation-bypass"
+        "redaction-authority-validation-bypass"
       ],
-      "reviewFinding": "4",
+      "reviewFinding": "redaction-authority-validation",
       "pairedControl": "audit.boundary096.authority-control-001"
     },
     {
@@ -597,7 +597,7 @@
         "AUDIT-REDACTION-001",
         "AUDIT-ERROR-001"
       ],
-      "description": "authority array; Core 0.9.6 finding 4.",
+      "description": "Authority array.",
       "operation": "audit.redact",
       "input": {
         "history": [
@@ -676,9 +676,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-4-validation-bypass"
+        "redaction-authority-validation-bypass"
       ],
-      "reviewFinding": "4",
+      "reviewFinding": "redaction-authority-validation",
       "pairedControl": "audit.boundary096.authority-control-001"
     },
     {
@@ -688,7 +688,7 @@
         "AUDIT-REDACTION-001",
         "AUDIT-ERROR-001"
       ],
-      "description": "authority object; Core 0.9.6 finding 4.",
+      "description": "Authority object.",
       "operation": "audit.redact",
       "input": {
         "history": [
@@ -767,9 +767,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-4-validation-bypass"
+        "redaction-authority-validation-bypass"
       ],
-      "reviewFinding": "4",
+      "reviewFinding": "redaction-authority-validation",
       "pairedControl": "audit.boundary096.authority-control-001"
     }
   ]

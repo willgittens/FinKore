@@ -7,10 +7,9 @@ current specification and conformance vectors. Other conformance
 operation labels remain conformance-local vocabulary until their stable agent-facing
 contract, effects, and inputs are reviewed.
 
-The Core 0.9 release-candidate review checked every promoted operation in this
-registry for stable purpose, input semantics, success output, preconditions,
-postconditions, portable errors, effects, and requirement references. Each
-promoted operation is also used by manifest-listed conformance vectors. No
+Every promoted operation has a purpose, input semantics, success output,
+preconditions, postconditions, portable errors, effects, and requirement
+references. Each is used by manifest-listed conformance vectors. No
 Approval operation label,
 Workflow import/create label, Entity import label, Money serialization label, or
 Audit redaction label is promoted as a canonical Agentic operation in Core 0.9 release candidate.
@@ -23,14 +22,13 @@ targets remain required. This clarification does not promote a new Agentic opera
 Approval conformance labels, including `approval.chain.evaluate`,
 `approval.composition.evaluate`, `approval.decision.withdraw`,
 `approval.decision.supersede`, and `approval.requirement.supersede`, remain
-conformance-local after the Core 0.9 release candidate Agentic review. They observe Approval
+conformance-local. They observe Approval
 evaluation and lifecycle behavior through test fixtures; they are not promoted
 to canonical Agentic operations because public Approval operation contracts still
 need a stable agent-facing input model, diagnostics policy, and security review
 separate from conformance fixtures.
 
-The conformance-local Approval contracts now make three corrected boundaries
-explicit. Sequential Chain outcome/actionability follows the first non-approved
+Sequential Chain outcome/actionability follows the first non-approved
 Requirement under `APPROVAL-CHAIN-010`; concrete Decision/history input rejects
 a caller-supplied `effective` member under `APPROVAL-VALIDITY-016`; and concrete
 Requirement evaluation applies the evaluated Requirement's eligibility rule to
@@ -45,7 +43,7 @@ timestamp profile in [Agentic Contract Conventions](conventions.md#portable-time
 Workflow definition/version identity, immutable instance binding, version
 mismatch, import, and expected-state/revision conflict semantics are specified
 in `/spec` and covered by published vectors. The canonical
-`finkore.workflow.transition` operation now
+`finkore.workflow.transition` operation
 includes the version binding and conflict preconditions listed below.
 `workflow.create` and `workflow.import` remain conformance-local structural
 boundary checks rather than canonical Agentic operations.
@@ -54,7 +52,7 @@ The conformance-local `entity.import` result always includes `historicalRevision
 under ENTITY-IMPORT-012, using an empty list for omitted or empty supplied history.
 It preserves nonempty history and existing error/failure observations.
 
-`entity.import` remains conformance-local after the Agentic review. It
+`entity.import` remains conformance-local. It
 observes import identity mapping, business revision history, and conflict-version
 preconditions through fixture-shaped inputs, but Core 0.9 release candidate does not define a
 public migration/import operation contract, identity registry, persistence
@@ -66,10 +64,8 @@ to the consuming application unless a concrete FinKore rule says otherwise.
 Accounting finality remains unspecified while ledger posting and financial
 commitment are outside Core.
 
-The completed [0.9.5 corrective plan](../docs/plans/plan-09.5.md) resolves the
-reviewed boundary defects in the existing operation surface. Canonical operation
-IDs and promotion boundaries are unchanged. Registry inclusion does not itself
-establish conformance; exercised requirements and coverage limits are recorded
+Registry inclusion does not itself establish conformance. Exercised requirements
+and coverage limits are recorded
 in [traceability](../conformance/traceability.md).
 
 ## Registry
@@ -403,12 +399,10 @@ Retained versioned definition semantics include nested guards, transitions, and
 state declarations. Mutating caller-owned inputs or returned observations must
 not change the retained version's behavior (`WORKFLOW-VERSION-003` and `-009`).
 This local ownership guarantee does not require a definition registry.
-The accepted Core 0.9.7 correction in `WORKFLOW-GUARD-007` requires documented
+`WORKFLOW-GUARD-007` requires documented
 native comparison-value support and rejection of mutable/unsupported numeric
 objects and subclasses with `FINKORE_WORKFLOW_INVALID_DEFINITION` before
-retention. Supported exact values retain their meaning. Implementation and
-regression results from the former maintained implementations are historical
-evidence in the [0.9.7 plan](../docs/plans/plan-09.7.md), not a current gate.
+retention. Supported exact values retain their meaning.
 The bounded definition also requires explicit terminal-State and Transition
 collections under `WORKFLOW-STATES-008`; omission uses INVALID_DEFINITION.
 Every State identifier is nonempty under `WORKFLOW-STATES-009`; empty definition
@@ -465,26 +459,22 @@ declarations under [ENTITY-DEFINITION-002](../spec/entities/README.md), includin
 unversioned Workflows. Unsupported/malformed validators fail with
 `FINKORE_ENTITY_INVALID_MUTATION` under
 [ENTITY-VALIDATION-009](../spec/entities/validation.md); a supported rule rejecting
-data retains `FINKORE_ENTITY_VALIDATION_FAILED`. These corrections apply to
+data retains `FINKORE_ENTITY_VALIDATION_FAILED`. These rules apply to
 Entity create, mutate, transition, and evolution without adding an operation ID.
 
 `ENTITY-MUTABILITY-008` distinguishes malformed mutability declarations
 (`FINKORE_ENTITY_INVALID_MUTATION`) from a valid rule protecting a requested
 field (`FINKORE_ENTITY_IMMUTABLE`). Own valid State/field names, including
 `__proto__`, retain their declarations through definition observation and reuse
-under `ENTITY-DEFINITION-002`. These Core 0.9.7 corrections retain the existing
-operation IDs and result shapes. The
-[Core 0.9.7 plan](../docs/plans/plan-09.7.md) records them as passing that
-snapshot's complete verification; those results are not rerun by the current
-repository.
+under `ENTITY-DEFINITION-002`.
 
-D6–D7 additionally specify the bounded Entity representation: explicit nonempty
+The bounded Entity representation requires explicit nonempty
 identity scope (`ENTITY-IDENTITY-007`), object-valued data with VALIDATION_FAILED
 for missing/malformed data (`ENTITY-VALIDATION-010`), Workflow instance/State
 errors for current-State shape (`ENTITY-LIFECYCLE-007`), and INVALID_MUTATION for
 empty change objects (`ENTITY-MUTABILITY-009`). Existing Workflow priority and
-non-mutation guarantees apply. These are accepted compatibility corrections;
-vector publication does not claim consumer implementation conformance.
+non-mutation guarantees apply. Vector publication does not claim consumer
+implementation conformance.
 
 Entity application data additionally follows [ENTITY-VALIDATION-011](../spec/entities/validation.md):
 owned containers and documented supported immutable scalars, exact values and all

@@ -8,7 +8,7 @@
         "WORKFLOW-TRANSITION-001",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "M7 malformed boundary: null-facts-rejected-transition-001",
+      "description": "Malformed input: null-facts-rejected-transition-001",
       "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
@@ -62,7 +62,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     }
   ]
 }

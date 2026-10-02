@@ -38,274 +38,39 @@ mandatory wording exists, but the expected portable observable behavior is not
 sufficiently specified. UNCOVERED means a deterministic mandatory portable case
 is feasible but not yet published.
 
-### Retained-evidence review
+## Coverage limitations and consumer evidence
 
-Removal of the maintained implementations and runner did not remove any of the
-1,775 portable vectors or their requirement mappings. The Milestone 4
-corrections add 15 portable vectors, bringing the current total to 1,790. The
-transition does change what the repository can currently demonstrate:
+Every classification in the mapping below describes the published artifacts.
+Artifact validation cannot promote a coverage row or prove implementation
+conformance. Consumers supply additional evidence for boundaries that isolated
+JSON vectors cannot observe:
 
-- the 356 `COVERED` rows have published portable cases but no repository-owned
-  execution result;
-- `WORKFLOW-GUARD-004` remains `PARTIAL` because external-fact authoring lacks
-  a portable definition schema;
-- all 79 current `NOT DIRECTLY TESTABLE` rows retain their written rationale and need
-  consumer-owned evidence where their obligations apply;
-- `WORKFLOW-VERSION-003`, `APPROVAL-FACT-004`, and `WORKFLOW-GUARD-007`
-  previously cited native ownership suites that are no longer maintained;
-- `boundary097-cases.json` remains supplementary historical review data, not a
-  manifest-listed vector file or current executed evidence.
+- Architecture and composing-domain obligations: registries, authorization,
+  policy declarations, storage, cross-domain integration, and identity non-reuse.
+- Native ownership: mutate original inputs and returned observations separately;
+  verify retained definitions, guard values, Approval facts, Entity data, and
+  Audit history retain their meaning. Exercise actual output reuse across
+  construction, import, mutation, transition, and subsequent evaluation.
+- Native values: supported immutable numeric controls, exact large integers and
+  decimals, unsupported numeric objects/subclasses, non-finite values, cycles,
+  shared acyclic containers, and sparse collections where the language permits
+  them. Native boundaries follow their owning specification and error priority.
+- Money presentation: where a serializer exposes a scale argument, exercise
+  exact extension/reduction, trailing zeros, zero, lossy reduction of either
+  sign, invalid scales, and explicit-rounding controls. Portable serialization
+  vectors alone do not test such an API argument.
+- Authoring, optional diagnostics, and safe disclosure: review obligations that
+  do not yield one mandatory portable operation result.
 
-No coverage row is promoted by artifact validation, and no historical PASS or
-mutation result is carried forward as a current result.
+**WORKFLOW-GUARD-004 remains PARTIAL.** Local guard evaluation has portable
+cases, but the external-fact dependency declaration has no portable
+guard-definition schema. Native ownership tests do not establish that authoring
+contract. This is a coverage limitation, not permission for nondeterminism.
 
-### Milestone 4 gap disposition
-
-Sequential Chain actionability, concrete `effective` input, historical Actor
-eligibility, and empty Workflow State identifiers were blocking specification
-gaps before their owning contracts were accepted. `APPROVAL-CHAIN-010`,
-`APPROVAL-VALIDITY-016`, `APPROVAL-DECISION-012`, and `WORKFLOW-STATES-009`
-now define their portable outcomes and are `COVERED` by the correction vectors.
-The zero-blocker inventory therefore reflects resolution rather than omission.
-`WORKFLOW-GUARD-004` remains `PARTIAL`: its external-fact authoring limitation
-is a coverage limitation, not permitted result variation or a resolved contract.
-
-### Milestone 5 portability disposition
-
-Money lexical scale is presentation rather than financial value under
-MONEY-REPRESENTATION-005 and MONEY-SERIALIZATION-008. The current binding
-contract therefore canonicalizes 16 unscaled Money result observations while
-preserving exact target scale for rounding, allocation, and explicitly rounded
-Rate application. This changes conformance-observation strings, not numeric
-Money results, and is recorded as behaviorally incompatible at that boundary.
-All 35 operation labels now have current request/result, omission/null, error,
-and post-state documentation in `conformance/operations.md`. Approval selector,
-eligibility, quorum, history, and Entity binding/import fixture definitions no
-longer depend on sections labeled historical. Format `0.1` remains schema-closed;
-unknown vector members are rejected rather than treated as extensions.
-
-## Historical implementation evidence
-
-All execution, package, coverage, and mutation results below describe completed
-historical snapshots. Their plans and release records preserve that evidence;
-the results are not rerun or asserted by the current repository checks.
-
-The Core 0.9.2
-Money and Approval regressions, including nested Boolean/numeric fact changes
-and unchanged-fact controls, pass in TypeScript, Python, and Java. Clean-checkout
-release verification passes. The corrections and release steps are tracked in the
-[Core 0.9.2 plan](../docs/plans/plan-09.2.md).
-
-The `entity.validation.cross-field-*` regressions strengthen
-`ENTITY-VALIDATION-003`: paired increases and decreases must use the complete
-proposed result, and invalid combined or single-field updates must preserve
-the original Entity. Their declared amount/limit predicate is a conformance
-fixture, not a new universal financial rule. Audit redaction observations use
-conformance-only markers; `/spec/audit/redaction.md` leaves production redacted
-representations implementation-defined.
-
-The Core 0.9.3 contract review resolved Entity import, Workflow guard, and
-Audit comparison/nullability ambiguities. Its permanent regressions remain in
-the manifest; existing mappings are not exhaustive boundary evidence.
-
-The Core 0.9.4 review reopened 37 requirements and added two Entity obligations.
-The completed [0.9.4 corrective plan](../docs/plans/plan-09.4.md) resolves those
-findings. `ENTITY-EVOLUTION-034` and `ENTITY-EVOLUTION-035` have explicit
-combined-error and history-consistency coverage. All 542 vectors pass on
-TypeScript, Python 3.12/3.13, and Java. Complete clean-checkout verification
-includes coverage, isolated package consumers, full runner and TypeScript
-mutation suites, and 133 Python/Java critical probes. Thirteen added native
-public-API probes each require a named regression failure and a passing paired
-control. These results close the identified defects, not the separate 1.0
-promotion process.
-
-Native Entity tests additionally verify direct-core execution, complete
-cross-field validation, explicit successor effects, defensive history import,
-and opaque reference component separation. These supplement the portable
-currentness and correspondence vectors without adding financial policy.
-
-Native readiness tests in TypeScript, Python, and Java cover lifecycle → record
-→ evaluate sequences, evolution output reuse, failure atomicity, and original
-or exposed nested Workflow aliases. They supplement the JSON vectors for
-`WORKFLOW-VERSION-003` and `WORKFLOW-VERSION-009`; an isolated JSON request
-cannot reproduce shared native references. These native regressions and their
-mutation gates now pass. COVERED records exercised requirements, not exhaustive
-boundary coverage or completion of the separate 1.0 promotion process.
-
-## Core 0.9.5 reassessment
-
-The [Milestones 1 and 2 review](../docs/plans/plan-09.5.md) resolves the three
-Entity gaps and adds 85 manifest-discovered regressions and controls. The two
-new requirements are ENTITY-DEFINITION-002 and ENTITY-VALIDATION-009; the scoped
-equal-token interpretation retains ENTITY-REVISION-002/007. Earlier release
-results and closure notes are historical evidence, not closure of these defects.
-
-Native tests in TypeScript `test/integration/boundary-regressions.test.ts` and
-`test/entities/boundaries.test.ts`,
-Python `tests/test_boundary_regressions.py` (both runtimes), and Java
-`BoundaryRegressionTest` call owning cores directly and exercise actual output
-reuse. JSON vectors cannot encode native cycles, mutable Number values, binding
-aliases, or Entity definition aliases. The serializer scale argument is also
-tested natively; adapters do not gain a rounding or formatting shortcut.
-
-Milestone 3 closes the six Money rows reopened for serialization:
-MONEY-SERIALIZATION-008, MONEY-ROUNDING-001/006, and MONEY-ERROR-005/006/007.
-Python and Java native loss, invalid-scale, safe-formatting, and unchanged-value
-tests now pass, including Python direct-constructor scales and Decimal context.
-All 102 Money vectors pass on all four runtimes. Thirteen new native probes and
-15 existing Money conformance probes are killed with their required controls;
-Python's seven serializer probes also pass on CPython 3.13. This is scoped
-boundary closure, not a whole-core mutation score or release gate.
-
-Milestone 4 adds eight Workflow priority vectors and closes WORKFLOW-CONFLICT-001
-through -007 and WORKFLOW-ERROR-006. All 103 Workflow vectors and native binding
-ownership tests pass on the required runtimes. Native and conformance mutation
-probes protect input/output aliases, supplied null in cores and adapters, target
-State priority, and version mismatch. Ten Workflow rows remained PARTIAL until
-Milestone 7 closed their Entity binding/import integration paths and error
-observations; direct Workflow success alone did not close Entity reuse.
-
-Milestone 5 adds 23 Approval vectors and closes the eight reopened Approval
-requirements. All 162 Approval vectors pass in TypeScript, Python 3.12/3.13,
-and Java. Concrete Requirements require subject identity and valid eligibility;
-all concrete Decisions require explicit facts, including imported history.
-Native record/evaluate and lifecycle failure tests supplement the vectors.
-Targeted mutations protect association presence, valid null facts, eligibility,
-history validation, and retained lifecycle evidence. Composition and chain
-observations keep their separate contracts.
-
-Milestone 6 closes the five reopened Audit requirements. Python and Java native
-cycle rejection, exact numeric ownership, defensive observations, and redaction
-checks pass alongside all 76 Audit vectors on all four runtimes. Native mutation
-probes protect cycle/error boundaries, shared acyclic values, unsupported Java
-numbers/subclasses, and original/exposed aliases. Raw recursion and stack errors
-remain infrastructure failures rather than mutation kills. JSON vectors cannot
-encode these native values; no additional portable financial behavior is defined.
-
-Milestone 7 adds nine Entity vectors and closes the remaining 29 Entity/Workflow
-rows. All 667 manifest vectors pass on all four runtimes. Native sequences cover
-create/from/import/mutate/transition/evolution binding retention, invalid binding
-rejection without changed sources or histories, and retained TypeScript
-Workflow/guard/mutability/validator ownership. Revision and conflict preconditions
-remain independent; malformed declarations fail before predicates. Targeted
-mutation gates protect binding loss, declaration skipping, null-precondition
-bypass, equal-token conflation, aliases, and prior currentness protections.
-ENTITY-DEFINITION-002 is now NOT DIRECTLY TESTABLE by isolated JSON, with passing
-native ownership tests and mutation probes; the other 28 rows return to COVERED.
-No BLOCKING SPEC GAP remains from this review. COVERED records this exercised
-scope. Milestone 8 passes complete clean-checkout verification, including full
-mutation suites, native API probes, and isolated package consumers. Corrective
-release closure is complete in Milestone 9; the local `core-0.9.5` tag identifies
-the verified snapshot.
-
-## Core 0.9.6 reassessment
-
-[Milestones 1–8](../docs/plans/plan-09.6.md) have accepted the four contract
-decisions and added 217 permanent vectors plus native construction and sequence
-tests. The inventory retains every original identifier and now contains 417
-requirements and 884 vectors: **334 COVERED**, **0 PARTIAL**, **83 NOT DIRECTLY
-TESTABLE**, and **0 BLOCKING SPEC GAP**. All reopened boundaries are verified,
-including Entity import/evolution presence, failure atomicity, and returned
-versioned-observation reuse. Complete clean-candidate verification and fresh
-review pass; Milestone 9 completes the local corrective release, identified by
-the annotated `core-0.9.6` tag. Remote and package publication remain separate.
-
-| Exercised boundary | Permanent regression surface | Correction milestone |
-| --- | --- | --- |
-| Money construction → arithmetic/serialization | Python direct Decimal construction, finite controls, malformed Rate kinds in native and portable tests; verified coverage, mutation probes and installed consumers. | 3 complete |
-| Workflow definition → create/import/transition | Native construction and ownership, complete instance validation before version mismatch; all 135 vectors pass on four runtimes with coverage, mutation and installed consumers. | 4 complete |
-| Composition and chain evaluation | State presence, quorum evidence controls, applicability, required timestamp profile, priority, later stages and nested alternatives. | 5 complete |
-| Concrete Decision evaluation | APPROVAL-DECISION-009: Requirement subject/eligibility/association and exact expiration; native facts-only controls stay separate. | 5 complete |
-| Complete context evaluation | APPROVAL-VALIDITY-013: reordered rejection, stale evidence, and unrelated/withdrawn/superseded controls. | 5 complete |
-| Returned history → record/lifecycle/evaluation | APPROVAL-VALIDITY-014: committed kinds, unique targets/successors, repeat/conflicting history, unchanged source histories. | 5 complete |
-| Audit redaction | Missing/malformed authority rejected in core; valid actor/Change redactions, unchanged inputs on failure, and independently owned returned observations; coverage, mutation, and installed consumers pass. | 6 complete |
-| Entity evolution | Four kinds with omitted/null/malformed/mismatching expectations; actual returned evolution/Audit history reused with original versioned bindings. | 7 complete |
-| Entity import | Malformed Source Identity despite mapping; ENTITY-IMPORT-011 standalone-mapping acceptance and preservation. | 7 complete |
-| Fresh revision/evidence review | Supplied current/historical markers retain their Boolean role; malformed composition Decision containers fail without discarding evidence. All-runtime native/portable regressions, paired mutation controls, and installed consumers pass. | 8 complete |
-
-At the Milestone 2 baseline, every original 667 vector and all 22 paired controls passed on TypeScript,
-CPython 3.12/3.13, and Java. That expanded manifest was red: TypeScript had 44 FAIL;
-Python had 51 FAIL and 14 INFRASTRUCTURE_ERROR on each version; Java had 54 FAIL
-and 14 INFRASTRUCTURE_ERROR. Runtime exceptions are recorded as defects, not
-accepted portable errors. The plan maps each finding to its permanent cases,
-native public entry points, and future mutation checks.
-
-Milestone 3 closes the nine reopened Money rows: 111/111 Money vectors and 53
-focused native tests pass on each Python version; 11 portable and 17 native
-Money mutation probes are killed on each, with independent controls passing.
-Money branch-enabled coverage is 96%, and installed wheel/sdist consumers pass
-on Python 3.12/3.13. No exclusion or financial behavior was added to improve
-these checks. At Milestone 3 the full Python manifest had 781 PASS, 51 FAIL, and
-12 INFRASTRUCTURE_ERROR on each version, with every original vector still passing.
-
-Milestone 4 closes the 14 reopened Workflow rows. It adds 14 portable instance
-structure/priority cases and native constructor checks without changing existing
-expectations. All 135 Workflow vectors pass on four runtimes. The full manifest
-now has 826 PASS/32 FAIL on TypeScript; 797 PASS/49 FAIL/12 INFRASTRUCTURE_ERROR
-on each Python version; and 792 PASS/52 FAIL/14 INFRASTRUCTURE_ERROR on Java.
-All original 667 vectors still pass; remaining failures belong to Milestones 5–7.
-Native and portable mutations, scoped coverage, and installed consumers are
-recorded with their limits in the plan.
-Milestone 5 closes 30 Approval rows and six shared timestamp rows. All 272
-Approval vectors pass on four runtimes. Five added lifecycle-reference vectors
-exercise equivalent offsets, nanosecond distinctions, ambiguous references,
-self-supersession, and preservation of timestamp spelling. Native sequence tests,
-scoped coverage, mutation checks, and installed consumers verify the concrete
-Decision and history boundaries. The complete 863-vector suite retains only
-known Audit and Entity defects, so these results do not establish whole-core
-conformance. Verification details and remaining limits are in the plan.
-
-Milestone 6 closes AUDIT-REDACTION-001, AUDIT-REDACTION-006, and AUDIT-ERROR-001.
-All 84 Audit vectors pass on all four runtimes. Python 3.12/3.13 each pass 27
-focused native Audit tests, nine portable critical probes, and eight native
-probes. The cross-language native Audit gate passes 21 probes. Branch-enabled
-Python Audit coverage is 87%; installed wheel/sdist consumers verify authority,
-redaction preservation, and failure atomicity on both Python versions. The
-manifest remains 863 vectors; Python now has 858 PASS, one Entity FAIL, and four
-Entity INFRASTRUCTURE_ERROR results on each version. Complete gates remain red
-until Milestone 7 fixes the remaining Entity boundaries.
-
-Milestone 7 closes the nine remaining Entity rows. All 249 Entity vectors and
-all 863 manifest vectors pass on TypeScript, Python 3.12/3.13, and Java. Native
-presence matrices and versioned import → mutation → transition → evolution
-sequences retain identity, mapping, revisions, conflict tokens, original binding,
-and both histories on failure. Scoped coverage, portable/native mutations, and
-isolated consumers support these boundaries. Coverage records exercised
-requirements; it does not complete Milestone 8 combined verification/fresh review
-or Milestone 9 release closure.
-
-Milestone 8 fresh review adds 21 vectors (884 total): supplied revision-currentness
-markers must agree with their declared current/historical role, and malformed
-composition Decision containers must not be discarded. Python revision validation
-and Java composition validation are corrected under existing requirements.
-Complete clean-candidate `npm run verify` passes after `npm ci`: strict builds,
-native/unit/adapter tests, all 884 vectors on four runtimes, configured coverage,
-installed package consumers, and repository/tool checks. Full runner/core Stryker
-scores are 97.06%/96.69%; every survivor and uncovered mutant is reviewed in the
-plan. Core's 16 timeouts are separate from named behavioral probe kills; its
-score without timeout credit is 96.31%. No critical financial mutant survives.
-All 222 portable critical and 92 native probes pass, with all 47 Python native
-probes repeated on 3.13. These targeted Python/Java probes do not establish full
-implementation mutation coverage. Milestone 7 counts above remain historical;
-finite tests support the exercised boundaries, not exhaustive correctness.
-
-## Core 0.9.7 reassessment
-
-[Milestone 1](../docs/plans/plan-09.7.md) accepted D1–D5, classified F1–F7,
-and initially marked eight new obligations UNCOVERED. M2 now publishes their
-portable/native/adapter regressions, so affected rows remain PARTIAL pending
-implementation and mutation closure. Native ownership and actual-output reuse
-have direct public-API tests as well as JSON vectors. Prior vector references
-remain listed; the manifest and supplementary case metadata map new cases.
-
-At M2, the maintainer also accepted D6–D7's seven discovery requirements. D8 policy
-identity was explicitly unresolved and reopened AUDIT-REDACTION-001 as a
-BLOCKING SPEC GAP (subsequently closed by AUDIT-REDACTION-008). All original 884
-expectations were unchanged. At that stage, the
-1,583 vectors and supplementary tests intentionally fail on the defective
-baseline; earlier release closure notes describe tagged snapshots, not current
-conformance. M3–M9 remain pending. See the plan's M2 result for verification and
-complete exploratory accounting.
+Deferred financial domains and integration policies remain outside the baseline;
+see the [specification scope](../spec/README.md#scope-discipline-non-normative)
+and each domain's Open Questions and Non-Goals. Removing historical execution
+evidence does not resolve these boundaries.
 
 ## Requirement mapping
 
@@ -450,7 +215,7 @@ complete exploratory accounting.
 | WORKFLOW-GUARD-001 | Workflow | MUST / MUST NOT | COVERED | workflow.create.empty-competing-list-regression-001, workflow.create.empty-fact-regression-001, workflow.create.missing-equals-regression-001, workflow.create.nonempty-competing-list-regression-001, workflow.create.null-equals-regression-001, workflow.create.null-fact-regression-001, workflow.create.null-guard-regression-001, workflow.create.null-guards-regression-001, workflow.create.numeric-fact-regression-001, workflow.create.valid-regression-001, workflow.guard.array-equal-pass-001, workflow.guard.array-order-rejected-001, workflow.guard.boolean-expected-number-actual-rejected-001, workflow.guard.empty-competing-list-regression-001, workflow.guard.empty-fact-regression-001, workflow.guard.explicit-null-pass-001, workflow.guard.missing-equals-regression-001, workflow.guard.missing-fact-not-null-001, workflow.guard.multiple-pass-001, workflow.guard.multiple-rejection-preserves-context-001, workflow.guard.multiple-structured-pass-001, workflow.guard.nested-boolean-number-rejected-001, workflow.guard.nonempty-competing-list-regression-001, workflow.guard.null-equals-regression-001, workflow.guard.null-fact-regression-001, workflow.guard.null-guard-regression-001, workflow.guard.null-guards-regression-001, workflow.guard.number-expected-boolean-actual-rejected-001, workflow.guard.numeric-fact-regression-001, workflow.guard.object-member-order-pass-001, workflow.guard.pass-001, workflow.guard.valid-regression-001 |
 | WORKFLOW-GUARD-002 | Workflow | MUST / MUST NOT | COVERED | workflow.create.empty-competing-list-regression-001, workflow.create.empty-fact-regression-001, workflow.create.missing-equals-regression-001, workflow.create.nonempty-competing-list-regression-001, workflow.create.null-equals-regression-001, workflow.create.null-fact-regression-001, workflow.create.null-guard-regression-001, workflow.create.null-guards-regression-001, workflow.create.numeric-fact-regression-001, workflow.create.valid-regression-001, workflow.guard.array-equal-pass-001, workflow.guard.array-order-rejected-001, workflow.guard.boolean-expected-number-actual-rejected-001, workflow.guard.empty-competing-list-regression-001, workflow.guard.empty-fact-regression-001, workflow.guard.explicit-null-pass-001, workflow.guard.missing-equals-regression-001, workflow.guard.missing-fact-not-null-001, workflow.guard.multiple-order-invariant-001, workflow.guard.multiple-pass-001, workflow.guard.multiple-rejection-preserves-context-001, workflow.guard.multiple-structured-pass-001, workflow.guard.nested-boolean-number-rejected-001, workflow.guard.nonempty-competing-list-regression-001, workflow.guard.null-equals-regression-001, workflow.guard.null-fact-regression-001, workflow.guard.null-guard-regression-001, workflow.guard.null-guards-regression-001, workflow.guard.number-expected-boolean-actual-rejected-001, workflow.guard.numeric-fact-regression-001, workflow.guard.object-member-order-pass-001, workflow.guard.pass-001, workflow.guard.reject-001, workflow.guard.valid-regression-001 |
 | WORKFLOW-GUARD-003 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.array-order-rejected-001, workflow.guard.boolean-expected-number-actual-rejected-001, workflow.guard.missing-fact-not-null-001, workflow.guard.multiple-order-invariant-001, workflow.guard.multiple-rejection-preserves-context-001, workflow.guard.nested-boolean-number-rejected-001, workflow.guard.number-expected-boolean-actual-rejected-001, workflow.guard.reject-001 |
-| WORKFLOW-GUARD-004 | Workflow | MUST / MUST NOT | PARTIAL | Portable vectors exercise local guard evaluation, but the external-fact dependency declaration still needs a guard-definition schema not present in this release. The removed native ownership tests were historical evidence only and did not close this authoring limit. |
+| WORKFLOW-GUARD-004 | Workflow | MUST / MUST NOT | PARTIAL | Portable vectors exercise local guard evaluation, but the external-fact dependency declaration still needs a guard-definition schema not present in this release. Native ownership evidence cannot close this authoring limitation. |
 | WORKFLOW-GUARD-005 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Authorization-model independence is an architectural guarantee outside the fact-equality fixture. |
 | WORKFLOW-GUARD-006 | Workflow | MUST / MUST NOT | COVERED | workflow.guard.multiple-order-invariant-001, workflow.guard.multiple-rejection-preserves-context-001, workflow.guard.multiple-structured-pass-001 |
 | WORKFLOW-IMPORT-001 | Workflow | MUST / MUST NOT | COVERED | workflow.import.current-state-preserved-001, workflow.import.missing-current-state-invalid-instance-001 |
@@ -479,7 +244,7 @@ complete exploratory accounting.
 | WORKFLOW-TRANSITION-007 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | No intermediate state is exposed by the atomic operation boundary for a vector to observe. |
 | WORKFLOW-VERSION-001 | Workflow | MUST / MUST NOT | COVERED | workflow.create.version-missing-invalid-001, workflow.create.versioned-binding-001 |
 | WORKFLOW-VERSION-002 | Workflow | MUST / MUST NOT | COVERED | workflow.create.versioned-binding-001 |
-| WORKFLOW-VERSION-003 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | An isolated JSON request cannot prove identity non-reuse across publications or retained caller aliases. Historical native suites exercised local ownership, but no such executable evidence is maintained now. Cross-publication identity reuse still requires a consumer registry or history. |
+| WORKFLOW-VERSION-003 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | An isolated JSON request cannot prove identity non-reuse across publications or retained caller aliases. Consumers must verify retained ownership with native tests. Cross-publication identity reuse still requires a consumer registry or history. |
 | WORKFLOW-VERSION-004 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Cross-concept identity distinction is a composing-domain modeling constraint. |
 | WORKFLOW-VERSION-005 | Workflow | MUST / MUST NOT | COVERED | workflow.create.versioned-binding-001, workflow.version.sequence-empty-001, workflow.version.sequence-fraction-001, workflow.version.sequence-leading-zero-001, workflow.version.sequence-multi-digit-001, workflow.version.sequence-null-selector-001, workflow.version.sequence-numeric-selector-001, workflow.version.sequence-one-001, workflow.version.sequence-opaque-001, workflow.version.sequence-signed-001, workflow.version.sequence-unicode-001, workflow.version.sequence-zero-001 |
 | WORKFLOW-VERSION-006 | Workflow | MUST / MUST NOT | COVERED | workflow.create.default-version-sequence-zero-invalid-001, workflow.version.sequence-empty-001, workflow.version.sequence-fraction-001, workflow.version.sequence-leading-zero-001, workflow.version.sequence-multi-digit-001, workflow.version.sequence-null-selector-001, workflow.version.sequence-numeric-selector-001, workflow.version.sequence-one-001, workflow.version.sequence-opaque-001, workflow.version.sequence-signed-001, workflow.version.sequence-unicode-001, workflow.version.sequence-zero-001 |
@@ -637,7 +402,7 @@ complete exploratory accounting.
 | APPROVAL-VALIDITY-012 | Approvals | MUST / MUST NOT | COVERED | approval.boundary096.complete-context-reject-first-001, approval.boundary096.complete-context-reject-last-001, approval.boundary096.complete-context-stale-001, approval.boundary096.history-evaluate-ambiguous-target-001, approval.boundary096.history-evaluate-duplicate-withdrawal-001, approval.boundary096.history-evaluate-invalid-time-001, approval.boundary096.history-evaluate-missing-kind-001, approval.boundary096.history-evaluate-missing-target-001, approval.boundary096.history-evaluate-null-kind-001, approval.boundary096.history-evaluate-unknown-kind-001, approval.boundary096.history-offset-ambiguous-001, approval.boundary096.history-record-ambiguous-target-001, approval.boundary096.history-record-duplicate-withdrawal-001, approval.boundary096.history-record-invalid-time-001, approval.boundary096.history-record-missing-kind-001, approval.boundary096.history-record-missing-target-001, approval.boundary096.history-record-null-kind-001, approval.boundary096.history-record-unknown-kind-001, approval.lifecycle.requirement.request-type-conflicting-001, approval.lifecycle.requirement.request-type-matching-001, approval.lifecycle.requirement.request-type-null-001, approval.lifecycle.requirement.request-type-object-001, approval.lifecycle.requirement.request-type-omitted-001, approval.lifecycle.requirement.request-type-unknown-001, approval.lifecycle.supersede.request-type-conflicting-001, approval.lifecycle.supersede.request-type-matching-001, approval.lifecycle.supersede.request-type-null-001, approval.lifecycle.supersede.request-type-object-001, approval.lifecycle.supersede.request-type-omitted-001, approval.lifecycle.supersede.request-type-unknown-001, approval.lifecycle.withdraw.request-type-conflicting-001, approval.lifecycle.withdraw.request-type-matching-001, approval.lifecycle.withdraw.request-type-null-001, approval.lifecycle.withdraw.request-type-object-001, approval.lifecycle.withdraw.request-type-omitted-001, approval.lifecycle.withdraw.request-type-unknown-001, approval.validity.withdraw-duplicate-invalid-001, approval.withdraw.target-ambiguous-001, approval.withdraw.target-missing-001, approval.withdraw.target-superseded-001, approval.withdraw.target-unique-001 |
 | ENTITY-AUDIT-001 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Audit policy declaration belongs to a composing domain; no generic declaration operation exists. |
 | ENTITY-AUDIT-002 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Event production is conditional on composing-domain policy and needs an Entity/Audit integration operation. |
-| ENTITY-DEFINITION-001 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Declaring fields, lifecycle, and invariants is a composing-domain obligation; retained-instance ownership is separately tested under ENTITY-DEFINITION-002. |
+| ENTITY-DEFINITION-001 | Entities | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Declaring fields, lifecycle, and invariants is a composing-domain obligation; retained-instance ownership requires consumer evidence under ENTITY-DEFINITION-002. |
 | ENTITY-DEFINITION-002 | Entities | MUST / MUST NOT | COVERED | entity.boundary097.special-field-constructor-mutate-001, entity.boundary097.special-field-ordinary-mutate-001, entity.boundary097.special-field-proto-mutate-001, entity.boundary097.special-field-prototype-mutate-001, entity.boundary097.special-state-constructor-control-001, entity.boundary097.special-state-constructor-mutate-001, entity.boundary097.special-state-proto-control-001, entity.boundary097.special-state-proto-mutate-001, entity.boundary097.special-state-prototype-control-001, entity.boundary097.special-state-prototype-mutate-001 |
 | ENTITY-ERROR-001 | Entities | MUST / MUST NOT | COVERED | entity.boundary097.create-mutability-container-absent-001, entity.boundary097.create-mutability-container-array-001, entity.boundary097.create-mutability-container-empty-001, entity.boundary097.create-mutability-container-false-001, entity.boundary097.create-mutability-container-null-001, entity.boundary097.create-mutability-container-object-001, entity.boundary097.create-mutability-container-zero-001, entity.boundary097.create-mutability-control-001, entity.boundary097.create-mutability-entry-empty-001, entity.boundary097.create-mutability-entry-false-001, entity.boundary097.create-mutability-entry-null-001, entity.boundary097.create-mutability-entry-zero-001, entity.boundary097.create-mutability-rule-absent-001, entity.boundary097.create-mutability-rule-empty-001, entity.boundary097.create-mutability-rule-false-001, entity.boundary097.create-mutability-rule-null-001, entity.boundary097.create-mutability-rule-object-001, entity.boundary097.create-mutability-rule-zero-001, entity.boundary097.import-mutability-container-absent-001, entity.boundary097.import-mutability-container-array-001, entity.boundary097.import-mutability-container-empty-001, entity.boundary097.import-mutability-container-false-001, entity.boundary097.import-mutability-container-null-001, entity.boundary097.import-mutability-container-object-001, entity.boundary097.import-mutability-container-zero-001, entity.boundary097.import-mutability-control-001, entity.boundary097.import-mutability-entry-empty-001, entity.boundary097.import-mutability-entry-false-001, entity.boundary097.import-mutability-entry-null-001, entity.boundary097.import-mutability-entry-zero-001, entity.boundary097.import-mutability-rule-empty-001, entity.boundary097.import-mutability-rule-false-001, entity.boundary097.import-mutability-rule-null-001, entity.boundary097.import-mutability-rule-object-001, entity.boundary097.import-mutability-rule-zero-001, entity.boundary097.mutate-mutability-container-absent-001, entity.boundary097.mutate-mutability-container-object-001, entity.boundary097.mutate-mutability-control-001, entity.boundary097.mutate-mutability-rule-absent-001, entity.boundary097.original-data-mutate-00-001, entity.boundary097.original-data-mutate-01-001, entity.boundary097.original-data-mutate-02-001, entity.boundary097.original-data-mutate-03-001, entity.boundary097.original-data-mutate-04-001, entity.boundary097.original-data-mutate-05-001, entity.boundary097.original-data-mutate-06-001, entity.boundary097.original-data-mutate-07-001, entity.boundary097.original-data-mutate-08-001, entity.boundary097.original-data-mutate-09-001, entity.boundary097.original-data-mutate-10-001, entity.boundary097.original-data-mutate-11-001, entity.boundary097.original-data-mutate-12-001, entity.boundary097.original-data-mutate-13-001, entity.boundary097.original-data-mutate-14-001, entity.boundary097.original-data-mutate-15-001, entity.boundary097.original-data-mutate-16-001, entity.boundary097.original-data-transition-00-001, entity.boundary097.original-data-transition-01-001, entity.boundary097.original-data-transition-02-001, entity.boundary097.original-data-transition-03-001, entity.boundary097.original-data-transition-04-001, entity.boundary097.original-data-transition-05-001, entity.boundary097.original-data-transition-06-001, entity.boundary097.original-data-transition-07-001, entity.boundary097.original-data-transition-08-001, entity.boundary097.original-data-transition-09-001, entity.boundary097.original-data-transition-10-001, entity.boundary097.original-data-transition-11-001, entity.boundary097.original-data-transition-12-001, entity.boundary097.original-data-transition-13-001, entity.boundary097.original-data-transition-14-001, entity.boundary097.original-data-transition-15-001, entity.boundary097.original-data-transition-16-001, entity.boundary097.transition-mutability-container-absent-001, entity.boundary097.transition-mutability-container-object-001, entity.boundary097.transition-mutability-control-001, entity.boundary097.transition-mutability-entry-empty-001, entity.boundary097.transition-mutability-entry-false-001, entity.boundary097.transition-mutability-entry-null-001, entity.boundary097.transition-mutability-entry-zero-001, entity.boundary097.transition-mutability-rule-absent-001, entity.boundary097.transition-mutability-rule-empty-001, entity.boundary097.transition-mutability-rule-false-001, entity.boundary097.transition-mutability-rule-null-001, entity.boundary097.transition-mutability-rule-object-001, entity.boundary097.transition-mutability-rule-zero-001, entity.declaration.empty-path-create-001, entity.declaration.invalid-after-failing-rule-001, entity.declaration.missing-id-create-001, entity.declaration.missing-other-path-create-001, entity.declaration.null-entry-create-001, entity.declaration.null-list-create-001, entity.declaration.unknown-create-001, entity.import.presence-conflict-version-mismatch-001, entity.import.presence-conflict-version-null-001, entity.import.presence-conflict-version-number-001, entity.import.presence-revision-mismatch-001, entity.import.presence-revision-null-001, entity.import.presence-revision-number-001, entity.import.presence-state-mismatch-001, entity.import.presence-state-null-001, entity.import.presence-state-number-001, entity.mutate.identity-and-state-protected-001, entity.mutate.immutable-financial-field-001, entity.transition.rejected-preserves-entity-001, entity.validation.complete-result-001 |
 | ENTITY-ERROR-002 | Entities | SHOULD / SHOULD NOT | COVERED | entity.validation.complete-result-001 |
@@ -731,10 +496,10 @@ complete exploratory accounting.
 | APPROVAL-FACT-001 | Approvals | MUST / MUST NOT | COVERED | approval.boundary097.decision-current-null-001, approval.boundary097.decision-equality-array-order-001, approval.boundary097.decision-equality-missing-null-001, approval.boundary097.decision-equality-money-strings-001, approval.boundary097.decision-equality-nested-type-001, approval.boundary097.decision-equality-null-001, approval.boundary097.decision-equality-number-boolean-001, approval.boundary097.decision-equality-numeric-string-001, approval.boundary097.decision-equality-object-order-001, approval.boundary097.decision-equality-signed-zero-001, approval.boundary097.decision-facts-control-001, approval.boundary097.decision-selected-changed-001, approval.boundary097.decision-selected-missing-both-001, approval.boundary097.decision-selected-unrelated-change-001, approval.boundary097.decision-selectors-empty-001, approval.boundary097.decision-selectors-empty-member-001, approval.boundary097.decision-selectors-false-001, approval.boundary097.decision-selectors-null-001, approval.boundary097.decision-selectors-null-member-001, approval.boundary097.decision-selectors-object-001, approval.boundary097.decision-selectors-zero-001, approval.boundary097.decision-whole-changed-001, approval.boundary097.decision-whole-equal-001, approval.boundary097.requirement-current-null-001, approval.boundary097.requirement-equality-array-order-001, approval.boundary097.requirement-equality-missing-null-001, approval.boundary097.requirement-equality-money-strings-001, approval.boundary097.requirement-equality-nested-type-001, approval.boundary097.requirement-equality-null-001, approval.boundary097.requirement-equality-number-boolean-001, approval.boundary097.requirement-equality-numeric-string-001, approval.boundary097.requirement-equality-object-order-001, approval.boundary097.requirement-equality-signed-zero-001, approval.boundary097.requirement-facts-control-001, approval.boundary097.requirement-selected-changed-001, approval.boundary097.requirement-selected-missing-both-001, approval.boundary097.requirement-selected-unrelated-change-001, approval.boundary097.requirement-selectors-empty-001, approval.boundary097.requirement-selectors-empty-member-001, approval.boundary097.requirement-selectors-false-001, approval.boundary097.requirement-selectors-null-001, approval.boundary097.requirement-selectors-null-member-001, approval.boundary097.requirement-selectors-object-001, approval.boundary097.requirement-selectors-zero-001, approval.boundary097.requirement-whole-changed-001, approval.boundary097.requirement-whole-equal-001, approval.facts097.array-index, approval.facts097.empty-control, approval.facts097.empty-selectors-empty, approval.facts097.empty-selectors-null, approval.facts097.empty-selectors-trailing, approval.facts097.expired-control, approval.facts097.expired-decision-control, approval.facts097.expired-decision-empty, approval.facts097.expired-decision-missing-current, approval.facts097.expired-decision-null, approval.facts097.expired-decision-trailing, approval.facts097.expired-selectors-empty, approval.facts097.expired-selectors-null, approval.facts097.expired-selectors-trailing, approval.facts097.negative-zero, approval.facts097.nested-type, approval.facts097.own-null, approval.facts097.stale-approved-first, approval.facts097.stale-approved-last, approval.facts097.stale-rejected-first, approval.facts097.stale-rejected-last, approval.facts097.superseded-control, approval.facts097.superseded-selectors-empty, approval.facts097.superseded-selectors-null, approval.facts097.superseded-selectors-trailing, approval.facts097.swapped-approved, approval.facts097.swapped-rejected, approval.facts097.withdrawn-control, approval.facts097.withdrawn-selectors-empty, approval.facts097.withdrawn-selectors-null, approval.facts097.withdrawn-selectors-trailing |
 | APPROVAL-FACT-002 | Approvals | MUST / MUST NOT | COVERED | approval.boundary097.condition-evaluation-absent-001, approval.boundary097.condition-evaluation-array-001, approval.boundary097.condition-evaluation-empty-001, approval.boundary097.condition-evaluation-false-001, approval.boundary097.condition-evaluation-null-001, approval.boundary097.condition-evaluation-object-001, approval.boundary097.condition-evaluation-zero-001, approval.boundary097.condition-facts-absent-001, approval.boundary097.condition-facts-array-intermediate-001, approval.boundary097.condition-facts-false-001, approval.boundary097.condition-facts-literal-dot-001, approval.boundary097.condition-facts-missing-leaf-001, approval.boundary097.condition-facts-nested-001, approval.boundary097.condition-facts-nested-false-001, approval.boundary097.condition-facts-nested-null-001, approval.boundary097.condition-facts-nested-zero-001, approval.boundary097.condition-facts-null-001, approval.boundary097.condition-facts-null-intermediate-001, approval.boundary097.condition-flat-control-001, approval.boundary097.condition-id-absent-001, approval.boundary097.condition-id-array-001, approval.boundary097.condition-id-empty-001, approval.boundary097.condition-id-false-001, approval.boundary097.condition-id-null-001, approval.boundary097.condition-id-object-001, approval.boundary097.condition-id-zero-001, approval.boundary097.condition-path-duplicate-001, approval.boundary097.condition-path-empty-member-001, approval.boundary097.condition-path-null-member-001, approval.boundary097.condition-requiredfacts-absent-001, approval.boundary097.condition-requiredfacts-array-001, approval.boundary097.condition-requiredfacts-empty-001, approval.boundary097.condition-requiredfacts-false-001, approval.boundary097.condition-requiredfacts-null-001, approval.boundary097.condition-requiredfacts-object-001, approval.boundary097.condition-requiredfacts-zero-001, approval.boundary097.decision-current-null-001, approval.boundary097.decision-equality-array-order-001, approval.boundary097.decision-equality-missing-null-001, approval.boundary097.decision-equality-money-strings-001, approval.boundary097.decision-equality-nested-type-001, approval.boundary097.decision-equality-null-001, approval.boundary097.decision-equality-number-boolean-001, approval.boundary097.decision-equality-numeric-string-001, approval.boundary097.decision-equality-object-order-001, approval.boundary097.decision-equality-signed-zero-001, approval.boundary097.decision-facts-control-001, approval.boundary097.decision-selected-changed-001, approval.boundary097.decision-selected-missing-both-001, approval.boundary097.decision-selected-unrelated-change-001, approval.boundary097.decision-selectors-empty-001, approval.boundary097.decision-selectors-empty-member-001, approval.boundary097.decision-selectors-false-001, approval.boundary097.decision-selectors-null-001, approval.boundary097.decision-selectors-null-member-001, approval.boundary097.decision-selectors-object-001, approval.boundary097.decision-selectors-zero-001, approval.boundary097.decision-whole-changed-001, approval.boundary097.decision-whole-equal-001, approval.boundary097.requirement-current-null-001, approval.boundary097.requirement-equality-array-order-001, approval.boundary097.requirement-equality-missing-null-001, approval.boundary097.requirement-equality-money-strings-001, approval.boundary097.requirement-equality-nested-type-001, approval.boundary097.requirement-equality-null-001, approval.boundary097.requirement-equality-number-boolean-001, approval.boundary097.requirement-equality-numeric-string-001, approval.boundary097.requirement-equality-object-order-001, approval.boundary097.requirement-equality-signed-zero-001, approval.boundary097.requirement-facts-control-001, approval.boundary097.requirement-selected-changed-001, approval.boundary097.requirement-selected-missing-both-001, approval.boundary097.requirement-selected-unrelated-change-001, approval.boundary097.requirement-selectors-empty-001, approval.boundary097.requirement-selectors-empty-member-001, approval.boundary097.requirement-selectors-false-001, approval.boundary097.requirement-selectors-null-001, approval.boundary097.requirement-selectors-null-member-001, approval.boundary097.requirement-selectors-object-001, approval.boundary097.requirement-selectors-zero-001, approval.boundary097.requirement-whole-changed-001, approval.boundary097.requirement-whole-equal-001, approval.facts097.array-index, approval.facts097.empty-control, approval.facts097.empty-selectors-empty, approval.facts097.empty-selectors-null, approval.facts097.empty-selectors-trailing, approval.facts097.expired-control, approval.facts097.expired-decision-control, approval.facts097.expired-decision-empty, approval.facts097.expired-decision-missing-current, approval.facts097.expired-decision-null, approval.facts097.expired-decision-trailing, approval.facts097.expired-selectors-empty, approval.facts097.expired-selectors-null, approval.facts097.expired-selectors-trailing, approval.facts097.negative-zero, approval.facts097.nested-type, approval.facts097.own-null, approval.facts097.stale-approved-first, approval.facts097.stale-approved-last, approval.facts097.stale-rejected-first, approval.facts097.stale-rejected-last, approval.facts097.superseded-control, approval.facts097.superseded-selectors-empty, approval.facts097.superseded-selectors-null, approval.facts097.superseded-selectors-trailing, approval.facts097.withdrawn-control, approval.facts097.withdrawn-selectors-empty, approval.facts097.withdrawn-selectors-null, approval.facts097.withdrawn-selectors-trailing |
 | APPROVAL-FACT-003 | Approvals | MUST / MUST NOT | COVERED | approval.boundary097.decision-current-null-001, approval.boundary097.decision-equality-array-order-001, approval.boundary097.decision-equality-missing-null-001, approval.boundary097.decision-equality-money-strings-001, approval.boundary097.decision-equality-nested-type-001, approval.boundary097.decision-equality-null-001, approval.boundary097.decision-equality-number-boolean-001, approval.boundary097.decision-equality-numeric-string-001, approval.boundary097.decision-equality-object-order-001, approval.boundary097.decision-equality-signed-zero-001, approval.boundary097.decision-facts-control-001, approval.boundary097.decision-selected-changed-001, approval.boundary097.decision-selected-missing-both-001, approval.boundary097.decision-selected-unrelated-change-001, approval.boundary097.decision-selectors-empty-001, approval.boundary097.decision-selectors-empty-member-001, approval.boundary097.decision-selectors-false-001, approval.boundary097.decision-selectors-null-001, approval.boundary097.decision-selectors-null-member-001, approval.boundary097.decision-selectors-object-001, approval.boundary097.decision-selectors-zero-001, approval.boundary097.decision-whole-changed-001, approval.boundary097.decision-whole-equal-001, approval.boundary097.requirement-current-null-001, approval.boundary097.requirement-equality-array-order-001, approval.boundary097.requirement-equality-missing-null-001, approval.boundary097.requirement-equality-money-strings-001, approval.boundary097.requirement-equality-nested-type-001, approval.boundary097.requirement-equality-null-001, approval.boundary097.requirement-equality-number-boolean-001, approval.boundary097.requirement-equality-numeric-string-001, approval.boundary097.requirement-equality-object-order-001, approval.boundary097.requirement-equality-signed-zero-001, approval.boundary097.requirement-facts-control-001, approval.boundary097.requirement-selected-changed-001, approval.boundary097.requirement-selected-missing-both-001, approval.boundary097.requirement-selected-unrelated-change-001, approval.boundary097.requirement-selectors-empty-001, approval.boundary097.requirement-selectors-empty-member-001, approval.boundary097.requirement-selectors-false-001, approval.boundary097.requirement-selectors-null-001, approval.boundary097.requirement-selectors-null-member-001, approval.boundary097.requirement-selectors-object-001, approval.boundary097.requirement-selectors-zero-001, approval.boundary097.requirement-whole-changed-001, approval.boundary097.requirement-whole-equal-001, approval.facts097.array-index, approval.facts097.empty-control, approval.facts097.empty-selectors-empty, approval.facts097.empty-selectors-null, approval.facts097.empty-selectors-trailing, approval.facts097.expired-control, approval.facts097.expired-decision-control, approval.facts097.expired-decision-empty, approval.facts097.expired-decision-missing-current, approval.facts097.expired-decision-null, approval.facts097.expired-decision-trailing, approval.facts097.expired-selectors-empty, approval.facts097.expired-selectors-null, approval.facts097.expired-selectors-trailing, approval.facts097.negative-zero, approval.facts097.nested-type, approval.facts097.own-null, approval.facts097.stale-approved-first, approval.facts097.stale-approved-last, approval.facts097.stale-rejected-first, approval.facts097.stale-rejected-last, approval.facts097.superseded-control, approval.facts097.superseded-selectors-empty, approval.facts097.superseded-selectors-null, approval.facts097.superseded-selectors-trailing, approval.facts097.withdrawn-control, approval.facts097.withdrawn-selectors-empty, approval.facts097.withdrawn-selectors-null, approval.facts097.withdrawn-selectors-trailing |
-| APPROVAL-FACT-004 | Approvals | MUST / MUST NOT | NOT DIRECTLY TESTABLE | A static JSON input cannot encode mutable numeric subclasses or shared caller/output aliases. Historical native suites exercised this boundary, but the current repository retains no executable ownership evidence; consumers must verify supported native values, independent observations, and unchanged committed history. |
+| APPROVAL-FACT-004 | Approvals | MUST / MUST NOT | NOT DIRECTLY TESTABLE | A static JSON input cannot encode mutable numeric subclasses or shared caller/output aliases. Consumers must verify supported native values, independent observations, and unchanged committed history. |
 | APPROVAL-CONDITION-007 | Approvals | MUST / MUST NOT | COVERED | approval.boundary097.condition-evaluation-absent-001, approval.boundary097.condition-evaluation-array-001, approval.boundary097.condition-evaluation-empty-001, approval.boundary097.condition-evaluation-false-001, approval.boundary097.condition-evaluation-null-001, approval.boundary097.condition-evaluation-object-001, approval.boundary097.condition-evaluation-zero-001, approval.boundary097.condition-facts-absent-001, approval.boundary097.condition-facts-array-intermediate-001, approval.boundary097.condition-facts-false-001, approval.boundary097.condition-facts-literal-dot-001, approval.boundary097.condition-facts-missing-leaf-001, approval.boundary097.condition-facts-nested-001, approval.boundary097.condition-facts-nested-false-001, approval.boundary097.condition-facts-nested-null-001, approval.boundary097.condition-facts-nested-zero-001, approval.boundary097.condition-facts-null-001, approval.boundary097.condition-facts-null-intermediate-001, approval.boundary097.condition-flat-control-001, approval.boundary097.condition-id-absent-001, approval.boundary097.condition-id-array-001, approval.boundary097.condition-id-empty-001, approval.boundary097.condition-id-false-001, approval.boundary097.condition-id-null-001, approval.boundary097.condition-id-object-001, approval.boundary097.condition-id-zero-001, approval.boundary097.condition-path-duplicate-001, approval.boundary097.condition-path-empty-member-001, approval.boundary097.condition-path-null-member-001, approval.boundary097.condition-requiredfacts-absent-001, approval.boundary097.condition-requiredfacts-array-001, approval.boundary097.condition-requiredfacts-empty-001, approval.boundary097.condition-requiredfacts-false-001, approval.boundary097.condition-requiredfacts-null-001, approval.boundary097.condition-requiredfacts-object-001, approval.boundary097.condition-requiredfacts-zero-001 |
 | APPROVAL-VALIDITY-015 | Approvals | MUST / MUST NOT | COVERED | approval.boundary097.record-supersession-successor-distinct-001, approval.boundary097.record-supersession-successor-offset-001, approval.boundary097.record-supersession-successor-same-001, approval.boundary097.record-supersession-target-distinct-001, approval.boundary097.record-supersession-target-offset-001, approval.boundary097.record-supersession-target-same-001, approval.boundary097.record-unreferenced-equal-tuples-control-001, approval.boundary097.record-withdrawal-distinct-001, approval.boundary097.record-withdrawal-offset-001, approval.boundary097.record-withdrawal-same-001 |
-| WORKFLOW-GUARD-007 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | A static JSON input cannot encode mutable numeric subclasses or retain aliases across construction and observation. Historical native suites exercised this boundary, but the current repository retains no executable ownership evidence; consumers must verify rejection before retention, stable bindings, and later transitions. |
+| WORKFLOW-GUARD-007 | Workflow | MUST / MUST NOT | NOT DIRECTLY TESTABLE | A static JSON input cannot encode mutable numeric subclasses or retain aliases across construction and observation. Consumers must verify rejection before retention, stable bindings, and later transitions. |
 | ENTITY-MUTABILITY-008 | Entities | MUST / MUST NOT | COVERED | entity.boundary097.create-mutability-container-absent-001, entity.boundary097.create-mutability-container-array-001, entity.boundary097.create-mutability-container-empty-001, entity.boundary097.create-mutability-container-false-001, entity.boundary097.create-mutability-container-null-001, entity.boundary097.create-mutability-container-object-001, entity.boundary097.create-mutability-container-zero-001, entity.boundary097.create-mutability-control-001, entity.boundary097.create-mutability-entry-empty-001, entity.boundary097.create-mutability-entry-false-001, entity.boundary097.create-mutability-entry-null-001, entity.boundary097.create-mutability-entry-zero-001, entity.boundary097.create-mutability-rule-absent-001, entity.boundary097.create-mutability-rule-empty-001, entity.boundary097.create-mutability-rule-false-001, entity.boundary097.create-mutability-rule-null-001, entity.boundary097.create-mutability-rule-object-001, entity.boundary097.create-mutability-rule-zero-001, entity.boundary097.discovery-f6b-054, entity.boundary097.discovery-f6b-055, entity.boundary097.discovery-f6b-056, entity.boundary097.discovery-f6b-057, entity.boundary097.discovery-f6b-058, entity.boundary097.discovery-f6b-059, entity.boundary097.discovery-f6b-060, entity.boundary097.discovery-f6b-061, entity.boundary097.discovery-f6b-062, entity.boundary097.discovery-f6b-063, entity.boundary097.discovery-f6b-064, entity.boundary097.discovery-f6b-065, entity.boundary097.discovery-f6b-066, entity.boundary097.discovery-f6b-082, entity.boundary097.discovery-f6b-083, entity.boundary097.discovery-f6b-089, entity.boundary097.discovery-f6b-090, entity.boundary097.discovery-f6b-091, entity.boundary097.discovery-f6b-092, entity.boundary097.discovery-f6b-093, entity.boundary097.discovery-f6b-094, entity.boundary097.discovery-f6b-118, entity.boundary097.discovery-f6b-119, entity.boundary097.discovery-f6b-120, entity.boundary097.discovery-f6b-121, entity.boundary097.discovery-f6b-122, entity.boundary097.discovery-f6b-123, entity.boundary097.discovery-f6b-124, entity.boundary097.discovery-f6b-125, entity.boundary097.discovery-f6b-126, entity.boundary097.discovery-f6b-127, entity.boundary097.discovery-f6b-128, entity.boundary097.discovery-f6b-129, entity.boundary097.discovery-f6b-130, entity.boundary097.discovery-f6b-153, entity.boundary097.discovery-f6b-154, entity.boundary097.discovery-f6b-155, entity.boundary097.discovery-f6b-156, entity.boundary097.discovery-f6b-157, entity.boundary097.discovery-f6b-158, entity.boundary097.discovery-f6b-159, entity.boundary097.discovery-f6b-160, entity.boundary097.discovery-f6b-161, entity.boundary097.discovery-f6b-162, entity.boundary097.discovery-f6b-163, entity.boundary097.discovery-f6b-164, entity.boundary097.discovery-f6b-165, entity.boundary097.discovery-f6b-216, entity.boundary097.discovery-f6b-217, entity.boundary097.discovery-f6b-218, entity.boundary097.discovery-f6b-219, entity.boundary097.discovery-f6b-220, entity.boundary097.discovery-f6b-221, entity.boundary097.discovery-f6b-222, entity.boundary097.discovery-f6b-223, entity.boundary097.discovery-f6b-224, entity.boundary097.discovery-f6b-225, entity.boundary097.discovery-f6b-226, entity.boundary097.discovery-f6b-227, entity.boundary097.discovery-f6b-228, entity.boundary097.discovery-f6b-279, entity.boundary097.discovery-f6b-280, entity.boundary097.discovery-f6b-281, entity.boundary097.discovery-f6b-282, entity.boundary097.discovery-f6b-283, entity.boundary097.discovery-f6b-284, entity.boundary097.discovery-f6b-285, entity.boundary097.discovery-f6b-286, entity.boundary097.discovery-f6b-287, entity.boundary097.discovery-f6b-288, entity.boundary097.discovery-f6b-289, entity.boundary097.discovery-f6b-290, entity.boundary097.discovery-f6b-291, entity.boundary097.discovery-f6b-329, entity.boundary097.discovery-f6b-330, entity.boundary097.discovery-f6b-331, entity.boundary097.discovery-f6b-332, entity.boundary097.discovery-f6b-333, entity.boundary097.discovery-f6b-334, entity.boundary097.discovery-f6b-335, entity.boundary097.discovery-f6b-336, entity.boundary097.discovery-f6b-337, entity.boundary097.discovery-f6b-338, entity.boundary097.discovery-f6b-339, entity.boundary097.discovery-f6b-340, entity.boundary097.discovery-f6b-341, entity.boundary097.discovery-f6b-399, entity.boundary097.discovery-f6b-400, entity.boundary097.discovery-f6b-401, entity.boundary097.discovery-f6b-402, entity.boundary097.discovery-f6b-403, entity.boundary097.discovery-f6b-404, entity.boundary097.discovery-f6b-405, entity.boundary097.discovery-f6b-406, entity.boundary097.discovery-f6b-407, entity.boundary097.discovery-f6b-408, entity.boundary097.discovery-f6b-409, entity.boundary097.discovery-f6b-410, entity.boundary097.discovery-f6b-411, entity.boundary097.discovery-f6b-412, entity.boundary097.discovery-f6b-413, entity.boundary097.discovery-f6b-414, entity.boundary097.discovery-f6b-415, entity.boundary097.discovery-f6b-416, entity.boundary097.discovery-f6b-485, entity.boundary097.discovery-f6b-486, entity.boundary097.discovery-f6b-487, entity.boundary097.discovery-f6b-488, entity.boundary097.discovery-f6b-489, entity.boundary097.discovery-f6b-490, entity.boundary097.discovery-f6b-491, entity.boundary097.discovery-f6b-492, entity.boundary097.discovery-f6b-493, entity.boundary097.discovery-f6b-494, entity.boundary097.discovery-f6b-495, entity.boundary097.discovery-f6b-496, entity.boundary097.discovery-f6b-516, entity.boundary097.discovery-f6b-517, entity.boundary097.discovery-f6b-518, entity.boundary097.discovery-f6b-519, entity.boundary097.discovery-f6b-520, entity.boundary097.discovery-f6b-521, entity.boundary097.discovery-f6b-544, entity.boundary097.discovery-f6b-545, entity.boundary097.discovery-f6b-546, entity.boundary097.discovery-f6b-547, entity.boundary097.discovery-f6b-548, entity.boundary097.discovery-f6b-549, entity.boundary097.discovery-f6b-550, entity.boundary097.discovery-f6b-551, entity.boundary097.discovery-f6b-552, entity.boundary097.discovery-f6b-553, entity.boundary097.discovery-f6b-554, entity.boundary097.discovery-f6b-555, entity.boundary097.import-mutability-container-absent-001, entity.boundary097.import-mutability-container-array-001, entity.boundary097.import-mutability-container-empty-001, entity.boundary097.import-mutability-container-false-001, entity.boundary097.import-mutability-container-null-001, entity.boundary097.import-mutability-container-object-001, entity.boundary097.import-mutability-container-zero-001, entity.boundary097.import-mutability-control-001, entity.boundary097.import-mutability-entry-empty-001, entity.boundary097.import-mutability-entry-false-001, entity.boundary097.import-mutability-entry-null-001, entity.boundary097.import-mutability-entry-zero-001, entity.boundary097.import-mutability-rule-empty-001, entity.boundary097.import-mutability-rule-false-001, entity.boundary097.import-mutability-rule-null-001, entity.boundary097.import-mutability-rule-object-001, entity.boundary097.import-mutability-rule-zero-001, entity.boundary097.mutate-mutability-container-absent-001, entity.boundary097.mutate-mutability-container-object-001, entity.boundary097.mutate-mutability-control-001, entity.boundary097.mutate-mutability-rule-absent-001, entity.boundary097.transition-mutability-container-absent-001, entity.boundary097.transition-mutability-container-object-001, entity.boundary097.transition-mutability-control-001, entity.boundary097.transition-mutability-entry-empty-001, entity.boundary097.transition-mutability-entry-false-001, entity.boundary097.transition-mutability-entry-null-001, entity.boundary097.transition-mutability-entry-zero-001, entity.boundary097.transition-mutability-rule-absent-001, entity.boundary097.transition-mutability-rule-empty-001, entity.boundary097.transition-mutability-rule-false-001, entity.boundary097.transition-mutability-rule-null-001, entity.boundary097.transition-mutability-rule-object-001, entity.boundary097.transition-mutability-rule-zero-001 |
 | WORKFLOW-STATES-008 | Workflow | MUST / MUST NOT | COVERED | entity.boundary097.discovery-f8b-052, entity.boundary097.discovery-f8b-053, entity.boundary097.discovery-f8b-080, entity.boundary097.discovery-f8b-081, entity.boundary097.discovery-f8b-116, entity.boundary097.discovery-f8b-117, entity.boundary097.discovery-f8b-151, entity.boundary097.discovery-f8b-152, entity.boundary097.discovery-f8b-214, entity.boundary097.discovery-f8b-215, entity.boundary097.discovery-f8b-277, entity.boundary097.discovery-f8b-278, entity.boundary097.discovery-f8b-327, entity.boundary097.discovery-f8b-328, entity.boundary097.discovery-f8b-397, entity.boundary097.discovery-f8b-398, workflow.boundary097.discovery-control-003, workflow.boundary097.discovery-control-004, workflow.boundary097.discovery-control-005, workflow.boundary097.discovery-control-020, workflow.boundary097.discovery-control-021, workflow.boundary097.discovery-control-023, workflow.boundary097.discovery-f8b-017, workflow.boundary097.discovery-f8b-018, workflow.boundary097.discovery-f8b-019, workflow.boundary097.discovery-f8b-020, workflow.boundary097.discovery-f8b-022, workflow.boundary097.discovery-f8b-023, workflow.boundary097.discovery-f8b-432, workflow.boundary097.discovery-f8b-433, workflow.boundary097.discovery-f8b-434, workflow.boundary097.discovery-f8b-435, workflow.boundary097.discovery-f8b-438, workflow.boundary097.discovery-f8b-439 |
 | APPROVAL-DECISION-010 | Approvals | MUST / MUST NOT | COVERED | approval.boundary097.discovery-control-009, approval.boundary097.discovery-control-028, approval.boundary097.discovery-f8a-003, approval.boundary097.discovery-f8a-004, approval.boundary097.discovery-f8a-005, approval.boundary097.discovery-f8a-014, approval.boundary097.discovery-f8a-015, approval.boundary097.discovery-f8a-016, approval.boundary097.discovery-f8a-042, approval.boundary097.discovery-f8a-043, approval.boundary097.discovery-f8a-044, approval.boundary097.discovery-f8a-469, approval.boundary097.discovery-f8a-470, approval.boundary097.discovery-f8a-471 |
@@ -748,77 +513,12 @@ complete exploratory accounting.
 | APPROVAL-VALIDITY-016 | Approvals | MUST / MUST NOT | COVERED | approval.validity.concrete-effective-false-invalid-001, approval.validity.concrete-effective-true-invalid-001, approval.validity.record-effective-invalid-001 |
 | WORKFLOW-STATES-009 | Workflow | MUST / MUST NOT | COVERED | workflow.state.empty-current-state-001, workflow.state.empty-definition-identifier-001, workflow.state.empty-expected-current-state-001, workflow.state.empty-target-state-001 |
 
-## Audit Draft 0.1 traceability closure notes
-
-| Requirement | Final classification | Justification |
-| --- | --- | --- |
-| AUDIT-ACTOR-002 | COVERED | audit.actor.opaque-identity-001 |
-| AUDIT-ACTOR-003 | COVERED | audit.actor.display-name-not-identity-001 |
-| AUDIT-ACTOR-004 | COVERED | audit.event.unknown-actor-omitted-001 |
-| AUDIT-ACTOR-006 | COVERED | audit.redaction.actor-context-001, audit.redaction.actor-metadata-null-001, audit.redaction.actor-metadata-omitted-001 |
-| AUDIT-ACTOR-008 | COVERED | audit.actor.identity-preserved-in-history-001 |
-| AUDIT-ACTOR-009 | COVERED | audit.actor.empty-display-name-001, audit.actor.empty-id-001, audit.actor.invalid-display-name-precedes-duplicate-001, audit.actor.invalid-history-display-name-precedence-001, audit.actor.invalid-type-001, audit.actor.malformed-representation-001, audit.actor.missing-id-001, audit.actor.null-display-name-001, audit.actor.null-type-001, audit.actor.numeric-display-name-001, audit.actor.precedence-duplicate-001, audit.actor.precedence-invalid-event-001 |
-| AUDIT-APPEND-002 | NOT DIRECTLY TESTABLE | Draft 0.1 requires preservation of explicitly recorded ordering relationships, but no portable representation of such relationships exists in current Audit Event or history vectors. Append order remains observable under `AUDIT-APPEND-001`; distributed or causal ordering is outside Draft 0.1. |
-| AUDIT-ERROR-002 | NOT DIRECTLY TESTABLE | Current normalized conformance errors compare portable error codes and post-state only; messages are never compared and safe diagnostic details are optional. The TypeScript adapter omits implementation messages/details, but the current vector shape cannot independently prove absence of protected details. |
-| AUDIT-ERROR-004 | COVERED | audit.actor.invalid-display-name-precedes-duplicate-001, audit.actor.invalid-history-display-name-precedence-001, audit.actor.precedence-duplicate-001, audit.actor.precedence-invalid-event-001, audit.actor.precedence-invalid-history-001, audit.actor.precedence-relationship-001 |
-| AUDIT-EVENT-003 | COVERED | audit.event.implementation-type-rejected-001 |
-| AUDIT-EVENT-007 | COVERED | audit.event.append-complete-001, audit.event.missing-entity-id-001, audit.event.missing-timestamp-001 |
-| AUDIT-REDACTION-007 | COVERED | audit.redaction.actor-context-001, audit.redaction.actor-metadata-null-001, audit.redaction.preserve-evidence-001 |
-
-## Approvals Draft 0.1 traceability closure notes
-
-| Requirement | Final classification | Justification |
-| --- | --- | --- |
-| APPROVAL-REQUIREMENT-001 | COVERED | approval.requirement.missing-identity-001 |
-| APPROVAL-REQUIREMENT-002 | COVERED | approval.association.evaluate-applicability-without-subject-001, approval.association.evaluate-empty-subject-001, approval.association.evaluate-null-subject-001, approval.association.evaluate-state-without-subject-001, approval.association.evaluate-subject-missing-id-001, approval.association.evaluate-subject-missing-type-001, approval.association.record-applicability-without-subject-001, approval.association.record-empty-subject-001, approval.association.record-null-subject-001, approval.association.record-state-without-subject-001, approval.association.record-subject-missing-id-001, approval.association.record-subject-missing-type-001, approval.boundary096.decision-subject-absent-001, approval.boundary096.decision-subject-array-001, approval.boundary096.decision-subject-boolean-001, approval.boundary096.decision-subject-empty-001, approval.boundary096.decision-subject-null-001, approval.boundary096.decision-subject-number-001, approval.boundary096.decision-subject-object-001, approval.requirement.missing-subject-001 |
-| APPROVAL-REQUIREMENT-003 | COVERED | approval.association.evaluate-duplicate-eligibility-001, approval.association.evaluate-empty-eligibility-001, approval.association.evaluate-malformed-eligibility-001, approval.association.evaluate-null-eligibility-001, approval.association.evaluate-state-without-eligibility-001, approval.association.record-duplicate-eligibility-001, approval.association.record-empty-eligibility-001, approval.association.record-malformed-eligibility-001, approval.association.record-null-eligibility-001, approval.association.record-state-without-eligibility-001, approval.requirement.missing-eligibility-001 |
-| APPROVAL-REQUIREMENT-006 | COVERED | approval.decision.ineligible-actor-001 |
-| APPROVAL-CHAIN-001 | COVERED | approval.chain.empty-requirements-invalid-001 |
-| APPROVAL-CHAIN-002 | COVERED | approval.chain.missing-mode-invalid-001 |
-| APPROVAL-CHAIN-003 | COVERED | approval.chain.pending-001, approval.chain.unordered-not-sequential-001 |
-| APPROVAL-CHAIN-008 | COVERED | approval.boundary096.chain-state-absent-001, approval.boundary096.chain-state-array-001, approval.boundary096.chain-state-boolean-001, approval.boundary096.chain-state-empty-001, approval.boundary096.chain-state-null-001, approval.boundary096.chain-state-number-001, approval.boundary096.chain-state-object-001, approval.chain.deterministic-declared-order-001 |
-| APPROVAL-DECISION-006 | COVERED | approval.decision.timestamp-ambiguous-001, shared.timestamp.invalid-decision-precision-001 |
-| APPROVAL-DECISION-003 | COVERED | approval.decision.boolean-number-fact-change-001, approval.decision.relevant-path-unchanged-unrelated-fact-changed-001, approval.decision.subject-facts-array-order-changed-001, approval.decision.subject-facts-array-to-object-001, approval.decision.subject-facts-changed-001, approval.decision.subject-facts-nested-shape-changed-001, approval.decision.subject-facts-object-key-changed-001, approval.decision.subject-facts-object-key-order-001, approval.decision.subject-facts-object-to-array-001, approval.decision.subject-facts-unchanged-001, approval.validity.array-number-boolean-fact-change-001, approval.validity.boolean-number-fact-change-001, approval.validity.false-zero-fact-change-001, approval.validity.nested-number-boolean-fact-change-001, approval.validity.structured-facts-unchanged-001 |
-| APPROVAL-DECISION-007 | COVERED | approval.association.record-empty-object-control-001, approval.association.record-null-control-001, approval.association.record-scalar-control-001, approval.association.record-structured-control-001, approval.decision.append-history-001, approval.validity.array-number-boolean-fact-change-001, approval.validity.boolean-number-fact-change-001, approval.validity.false-zero-fact-change-001, approval.validity.nested-number-boolean-fact-change-001, approval.validity.structured-facts-unchanged-001 |
-| APPROVAL-DECISION-008 | NOT DIRECTLY TESTABLE | The requirement is conditional: it applies only when a composing domain requires an Audit Event for an Approval Decision. Standalone Approvals Draft 0.1 intentionally has no Audit coupling, and no current Approval operation emits Audit Events. |
-| APPROVAL-ERROR-001 | COVERED | approval.association.evaluate-applicability-without-subject-001, approval.association.evaluate-duplicate-eligibility-001, approval.association.evaluate-empty-eligibility-001, approval.association.evaluate-empty-subject-001, approval.association.evaluate-malformed-eligibility-001, approval.association.evaluate-null-eligibility-001, approval.association.evaluate-null-subject-001, approval.association.evaluate-state-without-eligibility-001, approval.association.evaluate-state-without-subject-001, approval.association.evaluate-subject-missing-id-001, approval.association.evaluate-subject-missing-type-001, approval.association.record-applicability-without-subject-001, approval.association.record-duplicate-eligibility-001, approval.association.record-empty-eligibility-001, approval.association.record-empty-subject-001, approval.association.record-malformed-eligibility-001, approval.association.record-missing-facts-001, approval.association.record-null-eligibility-001, approval.association.record-null-subject-001, approval.association.record-state-without-eligibility-001, approval.association.record-state-without-subject-001, approval.association.record-subject-missing-id-001, approval.association.record-subject-missing-type-001, approval.decision.ineligible-actor-001, approval.decision.timestamp-ambiguous-001, shared.timestamp.invalid-decision-precision-001 |
-| APPROVAL-ERROR-003 | COVERED | approval.requirement.pending-001, approval.requirement.rejected-001 |
-| APPROVAL-ERROR-004 | NOT DIRECTLY TESTABLE | Current normalized conformance errors compare portable codes and post-state only; messages/details are intentionally outside vector comparison. The TypeScript adapter omits Approval diagnostic details, but absence of restricted disclosure cannot be isolated by the current vector shape. |
-| APPROVAL-ERROR-005 | COVERED | approval.association.history-after-valid-001, approval.association.history-before-valid-001, approval.association.history-expired-001, approval.association.history-ineffective-001, approval.association.history-malformed-outcome-001, approval.association.history-missing-actor-001, approval.association.history-missing-decided-at-001, approval.association.history-missing-outcome-001, approval.association.history-missing-requirement-id-001, approval.association.history-missing-subject-facts-001, approval.association.history-only-001, approval.association.history-unrelated-001, approval.association.history-withdrawn-001, approval.association.record-missing-facts-001, approval.decision.ineligible-actor-001, approval.decision.timestamp-ambiguous-001, shared.timestamp.invalid-decision-precision-001 |
-
-## Entities Draft 0.1 traceability closure notes
-
-| Requirement | Final classification | Justification |
-| --- | --- | --- |
-| ENTITY-AUDIT-001 | NOT DIRECTLY TESTABLE | This is a composing-domain obligation to identify which Entity Mutations and Transitions require Audit Events. The generic Entity conformance operations do not include an audit policy declaration surface, and Draft 0.1 does not define an Entity/Audit integration operation to observe that declaration independently. |
-| ENTITY-AUDIT-002 | NOT DIRECTLY TESTABLE | This obligation is conditional on the audit policy identified by `ENTITY-AUDIT-001`. Because current Entity operations intentionally do not integrate Audit, no portable Entity operation can independently observe event production without adding the out-of-scope integration. |
-| ENTITY-DEFINITION-001 | NOT DIRECTLY TESTABLE | The requirement is a composing-domain definition responsibility: fields, lifecycle, and invariants must be defined by the domain using Entity primitives. Current vectors observe the lifecycle, mutability, and validation fixtures supplied to Entity operations, but there is no standalone portable definition-validation operation in Draft 0.1. |
-| ENTITY-IDENTITY-003 | COVERED | entity.create.opaque-identity-preserved-001 |
-| ENTITY-IDENTITY-004 | COVERED | entity.mutate.display-number-not-identity-001 |
-| ENTITY-IDENTITY-005 | NOT DIRECTLY TESTABLE | Uniqueness across distinct entities in the same scope requires a composing-domain registry, repository, or persistence boundary. Draft 0.1 Entity conformance operates on one supplied Entity observation at a time and cannot prove cross-entity uniqueness independently. |
-| ENTITY-IDENTITY-006 | COVERED | entity.import.identity-mapping-preserved-001 |
-| ENTITY-IMPORT-001 to ENTITY-IMPORT-006 | COVERED | Import vectors observe stable FinKore identity preservation, source identity mapping evidence, current and historical business revision preservation, and distinct conflict-version preservation. |
-| ENTITY-IMPORT-007 to ENTITY-IMPORT-009 | COVERED | Import vectors reject stale expected state, stale expected business revision, stale expected conflict version, and missing mapping evidence with the required portable Entity errors and no partial import result. |
-| ENTITY-IMPORT-010 | COVERED | entity.import.missing-mapping-invalid-identity-001 |
-| ENTITY-LIFECYCLE-004 | NOT DIRECTLY TESTABLE | This is the lifecycle-specific form of the Entity/Audit declaration obligation. Current Entity lifecycle operations intentionally do not couple to Audit and cannot observe audit declaration or event production. |
-| ENTITY-LIFECYCLE-005 | NOT DIRECTLY TESTABLE | Domain consequences of each state belong to composing domains. Generic Entity conformance can observe the current state and transition boundary, but it cannot prove concrete invoice, expense, or payment consequences absent a concrete domain specification. |
-| ENTITY-LIFECYCLE-006 | COVERED | entity.create.initial-lifecycle-001 |
-| ENTITY-MUTABILITY-003 | NOT DIRECTLY TESTABLE | This is the mutation-specific form of the Entity/Audit declaration obligation. Testing it would require the out-of-scope Entity/Audit integration surface. |
-| ENTITY-MUTABILITY-005 | NOT DIRECTLY TESTABLE | Preservation of prior audit history after a field becomes immutable requires an attached audit history or Entity/Audit integration operation. Current Entity conformance has no such portable observation. |
-| ENTITY-ERROR-002 | COVERED | entity.validation.complete-result-001 |
-| ENTITY-ERROR-003 | NOT DIRECTLY TESTABLE | Safe diagnostic context is optional. Conformance can verify portable codes and safe findings when present, but cannot require optional diagnostics without turning a MAY into mandatory behavior. |
-| ENTITY-VALIDATION-005 | COVERED | entity.validation.complete-result-001 |
-| ENTITY-VALIDATION-007 | NOT DIRECTLY TESTABLE | This is a composing-domain recommendation about distinguishing always-required rules from transition or target-state rules. Draft 0.1 has no generic state-dependent validation policy language to execute portably. |
-| ENTITY-VALIDATION-008 | COVERED | entity.validation.complete-result-001 |
-| ENTITY-REVISION-001 to ENTITY-REVISION-006 | COVERED | `entity.import.identity-mapping-preserved-001` and the expected-revision/conflict-version contrast vectors observe opaque caller-supplied business revisions, stable Entity identity qualification, historical revision preservation, and separation from conflict-version tokens. |
-| ENTITY-REVISION-007 | COVERED | entity.boundary096.import-revision-current-array-001, entity.boundary096.import-revision-current-matching-001, entity.boundary096.import-revision-current-null-001, entity.boundary096.import-revision-current-object-001, entity.boundary096.import-revision-current-one-001, entity.boundary096.import-revision-current-opposite-001, entity.boundary096.import-revision-current-string-001, entity.boundary096.import-revision-current-zero-001, entity.boundary096.import-revision-historical-array-001, entity.boundary096.import-revision-historical-matching-001, entity.boundary096.import-revision-historical-null-001, entity.boundary096.import-revision-historical-object-001, entity.boundary096.import-revision-historical-one-001, entity.boundary096.import-revision-historical-opposite-001, entity.boundary096.import-revision-historical-string-001, entity.boundary096.import-revision-historical-zero-001, entity.import.duplicate-revision-invalid-identity-001, entity.import.equal-revision-conflict-token-001 |
-
 ## Critical financial requirements
 
-Core 0.9.5 native boundaries additionally require serializer-loss, binding-alias,
-mutable-number, cycle-rejection, and Entity-definition-ownership mutation probes.
-The permanent regressions and all paired probes pass the correction and
-combined verification gates recorded in the completed 0.9.5 plan.
+Use these defect examples when assessing consumer implementations through
+mutation testing or an equivalent defect-resistance method. Pair rejection
+cases with valid controls and check unchanged state on failure. These are
+test-design obligations and examples, not repository-owned execution results.
 
 | Requirement | Critical behavior | Mutation that should be killed |
 | --- | --- | --- |
@@ -892,53 +592,6 @@ combined verification gates recorded in the completed 0.9.5 plan.
 | ENTITY-REVISION-007 | Duplicate or identity-conflicting revision observations fail with portable invalid identity. | Accept one identity as both current and historical revision or return partial import state. |
 | ENTITY-IMPORT-008, ENTITY-IMPORT-010 | Failed import returns no partial import and exposes safe diagnostics. | Return partial import output after failure or leak source identity/financial values in normalized error details. |
 
-## Historical conformance gap assessments
-
-The domain summaries below describe earlier release-candidate implementation
-coverage. They are preserved as history and are not current execution claims.
-The requirement table above is the current portable-vector inventory.
-
-- Money: allocation normative semantics and portable invalid-allocation error semantics are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance in Core 0.9 release candidate. Precision/overflow limits, capability reporting, private or non-fiat currency namespaces, and currency-recommended/minor-unit scale guidance remain outside the current Money scope.
-- Workflow: Workflow definition identity, version identity, immutable instance binding, older-version observation, version-mismatch semantics, import of existing state/version observations, and expected-state/revision conflict preconditions are specified, vector-covered, implemented by the TypeScript reference implementation, and passing through the conformance adapter. Version identity reuse, Entity/storage separation, safe diagnostic disclosure, and non-locking/non-concurrency guarantees are not directly testable through one portable vector and remain subject to implementation, architecture, and review checks. External fact capture, definition migration, state mapping across versions, transition identifiers, storage locking, and distributed concurrency remain open.
-- Audit: Audit Relationships are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Standardized reason, source, correlation, causation, and trace-context metadata remain outside Core 0.9 release candidate; generic Audit Event metadata remains available only as non-standardized context under `AUDIT-EVENT-006`. Unknown-Actor interchange, domain paths, structured summaries, production redaction encoding, ingestion time, generic related links, relationship redaction policy, and causal sequencing remain open.
-- Approvals: Approval Validity withdrawal, expiration, supersession, explicit current-effectiveness context, and lifecycle failure atomicity are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Approval Composition requirements define explicit quorum membership, fixed thresholds with nonempty unreachable-quorum rejection, entirely inapplicable group treatment, stage aggregation and structure, bounded group depth, complete validation, staged actionability, deterministic error precedence, opposing effective votes, and member-specific evidence. These requirements are manifest-vector-covered, implemented through the TypeScript core and adapter, and mutation-hardened with zero classified critical survivors. A portable condition expression/operator model remains outside Core 0.9 release candidate; existing condition behavior remains the explicit required-fact/result boundary only. Rich condition syntax, delegation, escalation, approval-definition migration, dynamic approver resolution, and unrestricted dependency graphs remain open for future specification versions.
-- Entities: Entity Evolution terminology, correction, reversal, void, supersession, currentness, failure atomicity, mandatory Audit evidence, and portable error mapping are specified, vector-covered, implemented by the TypeScript reference implementation, and passing conformance. Entity Revision and Import business revision identity, source identity mapping, conflict-version separation, and expected-state/revision/conflict-version preconditions are specified and vector-covered. Concrete fields, composing-domain lifecycle policy, full validation catalog, cross-entity identity registries, concurrency, cancellation, adjustment, replacement, amendment, concrete migration formats, and concrete ledger posting behavior remain outside Core 0.9 release candidate. The current TypeScript reference implementation covers the conformance-local Entity identity, lifecycle, mutability, validation, evolution, and import vectors. Remaining Entity requirements classified as not directly testable are composing-domain, optional diagnostic, or registry obligations without a standalone portable Entity operation.
-
-### Draft 0.3 Approval review gaps
-
-`APPROVAL-QUORUM-009` and `APPROVAL-QUORUM-010` close the identified
-opposing-vote ambiguity and preserve member-specific counting, pending capacity,
-and actionability. That Draft 0.3 review identified no blocking specification
-gaps in its Approval slice. The 0.9.4 review subsequently expanded
-effectiveness-evidence coverage and resolved two Entity evolution specification
-gaps. Their permanent regressions, implementation corrections, and mutation
-protection pass the corrective release gate.
-
-All 37 directly testable Draft 0.3 composition/quorum/error requirements have
-manifest-listed vectors and pass against the TypeScript reference implementation
-through the conformance adapter. Focused mutation hardening recorded zero
-critical survivors for the Advanced Approvals composition surface. Closed Draft
-0.1/0.2 coverage classifications and vector references are unchanged.
-
-### Draft 0.3 Workflow versioning review gaps
-
-All 26 directly testable Draft 0.3 Workflow version/import/conflict/error
-requirements have manifest-listed vectors and pass against the TypeScript
-reference implementation through the conformance adapter. The scoped Workflow
-inventory has 0 UNCOVERED and 0 BLOCKING SPEC GAP rows. The 9 Workflow rows
-classified as NOT DIRECTLY TESTABLE are the Draft 0.1
-Workflow authoring or non-observable requirements plus `WORKFLOW-VERSION-003`,
-`WORKFLOW-VERSION-004`, `WORKFLOW-VERSION-012`, and `WORKFLOW-CONFLICT-008`;
-none hides a feasible deterministic vector for the closed Workflow 0.3 slice.
-Focused mutation hardening recorded zero critical survivors for the Workflow
-definition/version identity, import, instance binding/mismatch, and
-expected-state/revision conflict surface. Canonical Agentic metadata for these
-Draft 0.3 Workflow refinements is aligned; the canonical
-`finkore.workflow.transition` descriptor includes version binding and
-expected-state/revision preconditions, while `workflow.import` remains
-conformance-local. Closed Draft 0.1/0.2 coverage classifications and vector
-references are unchanged.
-
 ## Current verification readiness
 
 **PUBLISHED ARTIFACT VALIDATION ACTIVE; NO IMPLEMENTATION EXECUTION**
@@ -948,170 +601,3 @@ operation catalog, traceability index, Agentic metadata, documentation links,
 licenses, and repository boundaries are checked locally. The current repository
 does not contain an implementation, runner, or adapter and therefore makes no
 current PASS, cross-language agreement, coverage, package, or mutation claim.
-
-### Historical readiness records
-
-The records below describe earlier repository snapshots only. Completed plans
-and release notes retain their exact milestone context; none of these results is
-rerun or asserted by current repository validation. Core 1.0 promotion remains
-outstanding.
-
-The manifest, schema, operation catalog, exact comparison rules, normalized
-errors, deterministic context, and valid requirement references were sufficient
-for the runner maintained in the Core 0.9.5 snapshot. Its Milestones 3–7 correct the reviewed serializer,
-binding, association, native value ownership, and Entity definition/import
-boundaries. All 667 vectors now pass on TypeScript, Python 3.12/3.13, and Java,
-with native sequence/ownership tests and mutation protection. Milestone 8 passes
-the complete clean-checkout verification, including all 176 portable critical
-and 50 native mutation probes, the Python 3.13 native repeat, and isolated package
-consumers. These checks establish the exercised boundaries; corrective release
-closure is complete in the [0.9.5 plan](../docs/plans/plan-09.5.md). The annotated
-`core-0.9.5` tag identifies the local snapshot; remote and package publication
-remain separate.
-The separate [Core 1.0 plan](../docs/plans/plan-10.md) still requires its stable
-baseline, compatibility, artifact, and release work.
-
-## Not Directly Testable Review
-
-The earlier Milestone 3 review examined `NOT DIRECTLY TESTABLE` requirements;
-the 0.9.4 review corrects the local Workflow ownership rationale.
-Each current classification is justified by at least one of these reasons:
-
-- **Architecture boundary:** the obligation belongs to a composing domain,
-  storage boundary, registry, authorization layer, or cross-domain integration
-  that Core 0.9 release candidate intentionally does not define as a portable operation.
-- **Authoring rule:** the obligation constrains specification authors or domain
-  definitions rather than one executable runtime behavior.
-- **Native ownership boundary:** isolated JSON input/result vectors cannot
-  mutate retained caller aliases. Consumers need native public-API evidence for
-  local definition ownership where applicable; FinKore no longer maintains
-  those tests. NOT DIRECTLY TESTABLE is not an exemption from that evidence.
-- **Non-observable or optional obligation:** the rule concerns optional
-  diagnostics, safe disclosure, or evidence that cannot be made mandatory
-  without changing a `MAY` or out-of-scope obligation into a required portable
-  behavior.
-
-The 0.9.4 review preserves requirement IDs, vector IDs, and existing mappings.
-Coverage classifications and inventory counts now reflect the demonstrated
-missing boundaries and the accepted Entity specification corrections.
-
-## Historical Core 0.9.7 discovery status
-
-M2 adds permanent baseline regressions and native ownership/result-reuse tests.
-Affected rows remain PARTIAL until fixes and mutation verification pass. The
-maintainer accepted D6–D7 on 2026-09-27; D8 stays a BLOCKING SPEC GAP. See the
-[plan](../docs/plans/plan-09.7.md) for complete discrepancy classification, paired
-controls, baseline failures, and boundary inventory. No implementation is newly
-claimed conformant.
-
-M3 closes the F1/F4 composition rows above. All 176 composition vectors pass
-through native APIs and real adapters on TypeScript, CPython 3.12/3.13, and Java;
-inputs remain unchanged. Whole-declaration checks include disconnected cycles,
-missing children, unused quorum conflicts, empty/null evidence, and both
-requirement/declaration orders. Shared-child depth and an unused depth-eight
-control preserve the actual-root bound. Critical probes require independent
-passing controls and reject infrastructure failures as kills. Native retained-value restrictions and the remaining domains retain
-their M5–M7 qualifications; D8 is still unresolved.
-
-M4 closes 19 further Approval rows for declarations, own-member selectors,
-whole-fact and exact structural/numeric comparison, conditions, and proposed
-history validation. All 579 Approval suite vectors pass on all four runtimes.
-Native sequences consume actual returned histories, including equivalent-instant
-collisions and distinct-instant controls. Six Approval rows remain PARTIAL for
-M5 native retained-value rejection and ownership; this is not full native closure.
-
-M5 closes the accepted native Approval/Workflow value profile and explicit
-Workflow collection boundaries. All 579 Approval vectors and all 34
-WORKFLOW-STATES-008 vectors pass on all four runtimes. Native ownership suites
-in TypeScript `native-ownership.test.ts`, Python `test_native_ownership.py`, and
-Java `NativeOwnershipTest` supplement the manifest; static JSON vectors cannot
-encode the numeric subclasses or caller/output aliases they exercise. FACT-004,
-GUARD-007, and VERSION-003 use NOT DIRECTLY TESTABLE for that vector limitation,
-not to waive native testing. The Workflow external-fact authoring and registry
-limits remain separate. No vector or requirement ID changed.
-
-M5 also reproduced a broader Java Entity application-data alias with
-AtomicInteger. D9 in the plan records the unresolved supported-value and error
-policy for that separate boundary. The approved Approval/Workflow profile does
-not silently extend to Entity data. D8 remains unresolved; M6–M7 regressions
-remain failing. These results do not establish full-domain conformance.
-
-M6 closes F5 and the adjacent TypeScript own-field validator lookup defect.
-Four special-field mutation controls extend the six existing special-state
-vectors; all ten pass on every runtime. Twenty-seven native TypeScript tests
-exercise actual definition/observation serialization and reuse, permitted and
-prohibited mutations, transition, bindings/revision import, original/output
-aliases, prototype preservation, and adjacent Workflow/Approval/Audit own keys.
-Five targeted mutations and the complete changed Entity file's Stryker scope
-pass. ENTITY-DEFINITION-002 and ENTITY-MUTABILITY-002 return to COVERED; broader
-mutability and import rows remain PARTIAL for M7. Native inherited-member cases
-cannot be encoded as JSON and supplement the portable vectors. D8 and D9 remain
-unresolved; no Entity native-number policy is selected.
-
-M7 closes 20 reopened Entity, Workflow, and Audit rows with portable/native
-regressions and paired critical mutations. The remaining PARTIAL Workflow guard
-row concerns external-fact authoring, outside these accepted corrections. The
-manifest now has 1719 vectors; 189 supplementary cases retain exact code and
-unchanged-input checks where diagnostics are optional. One existing empty-State
-case is promoted with its ID retained. Forty-seven new vectors cover malformed
-Audit relationship types, rejected Workflow transitions with null facts, and
-invalid original Entity data despite a valid proposed replacement, and empty
-imported relation identities. Eight new
-supplementary cases distinguish omitted/null Audit histories with invalid Actors
-for all four evolution kinds. Intrinsic Audit failures retain priority over
-correspondence checks.
-
-The earlier `entity.transition.rejected-preserves-entity-001` used unknown target
-`UNKNOWN` but expected INVALID_TRANSITION. Its expectation now follows
-WORKFLOW-ERROR-007 (INVALID_STATE); its ID, input and non-mutation observation are
-retained. Earlier notes about unchanged original expectations describe M2–M6.
-Native suites validate every mutability entry and existing Entity data before any
-operation; adapters preserve primary failures without fabricated Entity state.
-See M7 in the plan for verification and mutation survivor review. This does not
-resolve D8/D9 or complete the independent release review.
-
-### Core 0.9.7 M8 native collection supplement
-
-`implementations/typescript/core/test/integration/native-collections.test.ts`
-links 32 collection boundaries to their owning requirements, with first/middle/last
-holes and dense controls (128 cases), 140 non-array container cases and 32
-iterator overrides. Workflow declarations, Entity permissions,
-validators/revisions/relations, Approval eligibility/history/composition, Audit
-changes/relationships/Actor and Change values/history/redaction paths, and Money
-allocation weights reject malformed positions with existing portable categories.
-JSON cannot encode holes; these native regressions supplement, rather than
-replace or relabel, the existing portable rows. Twenty-eight paired native probes
-prevent silently dropping holes, trusting caller iteration or allowing Array
-methods to change guard/quorum outcomes; shared Approval value validation already protects
-quorum eligibility, and its mapping now also reads indexed values.
-`review-invariants.test.ts` adds 512 shared-DAG stage truth-table cases and 84
-own-member fact comparisons, plus 49 guard type-pairs and one alias/reuse sequence, 64 Audit type-pairs and seven fact/eligibility/selector cases under AUDIT-CHANGE-005/008 and APPROVAL-COMPOSITION-011/012/013/014 and
-APPROVAL-FACT-001/002/003. D9 remains open. D10 is resolved through
-AUDIT-EVENT-009, with 19 portable vectors and native metadata tests across
-TypeScript, Python and Java; eleven paired probes protect its compatibility
-corrections without extending Entity's unspecified native profile.
-
-### Core 0.9.7 D8 policy identity correction
-
-AUDIT-REDACTION-008 resolves the seven original D8 discovery differences without
-changing protected-content or authority rules. Twenty portable vectors and native
-regressions preserve omission, reject malformed supplied IDs, retain exact
-redaction/evidence/history results and verify later reuse. Nine paired probes
-protect optionality and validation. AUDIT-REDACTION-001 returns to COVERED; no
-BLOCKING SPEC GAP row remains in the portable inventory. D9's separate Entity
-native-number policy gap is still open and must not be inferred resolved from
-that inventory count. Full post-D8 verification and independent review pass.
-
-## Historical D9 Entity application values
-
-ENTITY-VALIDATION-011 resolves the separate native-value gap recorded above.
-Native tests are TypeScript `test/entities/native-values.test.ts`, Python
-`test_entity_native_values.py` and Java `EntityNativeValuesTest`.
-Eight portable controls exercise creation, import, mutation, transition and all
-four evolution operations. Native regressions supplement these for exact native
-scalars, rejected unsupported values, cycles, shared acyclic containers, independent
-observations, error priority and unchanged inputs. Prior D9-open statements above
-record the earlier milestone scope. Complete D9 verification passes all 1,766
-vectors on all four runtimes, along with native tests and paired mutation gates.
-D11 is resolved under ENTITY-IMPORT-012; current counts and its scoped
-verification are recorded at the top of this document and in the plan.

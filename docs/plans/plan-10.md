@@ -25,7 +25,7 @@ promotion milestones, now numbered 5–9. This plan is temporary working materia
 and must itself be removed from the final 1.0 tree. Completed plans will not be
 relocated to another archive directory or retained as release dependencies.
 
-Milestone 1 is complete; milestones 2–9 remain uncompleted. This document is
+Milestones 1–2 are complete; milestones 3–9 remain uncompleted. This document is
 non-normative and does not declare Core 1.0 stable. In this filename, `10` means
 version 1.0, not version 0.10.
 
@@ -136,39 +136,46 @@ for inclusion when released; no release or stable promotion is declared.
 
 ## Milestone 2 — Publish a self-contained current contract
 
-- [ ] Rewrite specification introductions, version-named correction sections,
+- [x] Rewrite specification introductions, version-named correction sections,
       and Agentic notes around present behavior. Retain operative clauses,
       examples, error priority, ownership guarantees, and accepted boundaries;
       remove milestone narratives, proposal acceptance stories, and D/F labels
       that require a plan to interpret them.
-- [ ] Keep one current explanation for each fixture convention in
+- [x] Keep one current explanation for each fixture convention in
       `conformance/operations.md` or `conformance/conventions.md`, with clear
       cross-references. Remove historical native type tables, old adapter/API
       migration instructions, and implementation execution reports.
-- [ ] Reduce traceability to the current inventory, requirement-to-vector
+- [x] Reduce traceability to the current inventory, requirement-to-vector
       mapping, present coverage rationales/limitations, and useful defect-sensitivity
       guidance. Remove historical reassessments, closure reports, and runtime
       totals; rewrite still-applicable rationales in current terms.
-- [ ] Remove plan links and textual dependencies from README, `/spec`,
+- [x] Remove plan links and textual dependencies from README, `/spec`,
       `/conformance`, `/agentic`, and consumer guidance. Link current rules or
       concise release history as appropriate; do not replace old plan links with
       another archive or Git permalinks to the same plans.
-- [ ] Review vector descriptions and optional metadata for unexplained review
+- [x] Review vector descriptions and optional metadata for unexplained review
       labels. Preserve useful regression intent, requirement mappings, and
       paired controls. Keep stable vector IDs even when they contain an old
       version number; those identifiers are not disposable prose.
-- [ ] Preserve CoreDoc `Introduced`, `Last updated`, and `Last updated on`
+- [x] Preserve CoreDoc `Introduced`, `Last updated`, and `Last updated on`
       metadata and licensing records required by existing governance. Editorial
       cleanup must not falsify the normative evolution of a rule.
-- [ ] Reduce the Learn prototype to an accurate working documentation index or
+- [x] Reduce the Learn prototype to an accurate working documentation index or
       remove it from the released tree. Verify retained project/download links;
       remove unsupported controls, ambiguous version labels, and placeholder
       prose. This does not require a new documentation site or deployment.
-- [ ] Preserve deferred topics and WORKFLOW-GUARD-004's explicit coverage
+- [x] Preserve deferred topics and WORKFLOW-GUARD-004's explicit coverage
       limitation. Removing history must not imply those boundaries are solved.
 
 **Completion:** consumers can interpret the released contract and all 35 fixture
 operation labels without development plans or obsolete implementation evidence.
+
+Completed 2026-10-03. Current contract prose and fixture guidance are independent
+of development plans; traceability retains the inventory, mappings, limitations,
+and defect-sensitive examples. Explanatory metadata was updated in 1,019 vectors,
+preserving all 1,790 IDs, financial inputs/results, requirements, operations,
+tags, and paired controls. All 436 requirement definitions and CoreDoc metadata
+are unchanged. Learn is a local documentation index with 20 checked links.
 
 ## Milestone 3 — Remove obsolete artifacts and completed plans
 

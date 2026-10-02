@@ -250,8 +250,10 @@ govern concrete Approval operations. Workflow and Audit/evolution retain their
 separate existing priority. No total priority for unrelated Entity failures is
 invented.
 
-The [traceability index](../../conformance/traceability.md#core-097-reassessment)
-reopens existing affected rows as PARTIAL and marks new mandatory rows UNCOVERED.
+At this milestone the traceability index reopened affected rows as PARTIAL and
+marked new mandatory rows UNCOVERED. The
+[current index](../../conformance/traceability.md#inventory-and-coverage)
+records the present classifications.
 Native-only ownership rows remain explicitly incomplete until native sequences
 and mutations pass; an old COVERED or NOT DIRECTLY TESTABLE status is not closure.
 There are no remaining BLOCKING SPEC GAP rows for the accepted D1–D5 decisions.

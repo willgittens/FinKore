@@ -12,7 +12,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum control.",
+      "description": "Quorum control.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -96,7 +96,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.boundary097.quorum-eligibleactors-absent-001",
@@ -109,7 +109,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum eligibleactors absent.",
+      "description": "Quorum eligibleactors absent.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -207,7 +207,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -221,7 +221,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum eligibleactors null.",
+      "description": "Quorum eligibleactors null.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -320,7 +320,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -334,7 +334,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum eligibleactors object.",
+      "description": "Quorum eligibleactors object.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -433,7 +433,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -447,7 +447,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum eligibleactors false.",
+      "description": "Quorum eligibleactors false.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -546,7 +546,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -560,7 +560,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum eligibleactors zero.",
+      "description": "Quorum eligibleactors zero.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -659,7 +659,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -673,7 +673,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum eligibleactors empty.",
+      "description": "Quorum eligibleactors empty.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -772,7 +772,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -786,7 +786,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum approvedoutcome absent.",
+      "description": "Quorum approvedoutcome absent.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -888,7 +888,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -902,7 +902,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum approvedoutcome null.",
+      "description": "Quorum approvedoutcome null.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1005,7 +1005,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -1019,7 +1019,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum approvedoutcome object.",
+      "description": "Quorum approvedoutcome object.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1122,7 +1122,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -1136,7 +1136,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum approvedoutcome array.",
+      "description": "Quorum approvedoutcome array.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1239,7 +1239,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -1253,7 +1253,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum approvedoutcome false.",
+      "description": "Quorum approvedoutcome false.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1356,7 +1356,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -1370,7 +1370,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum approvedoutcome zero.",
+      "description": "Quorum approvedoutcome zero.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1473,7 +1473,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -1487,7 +1487,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum approvedoutcome empty.",
+      "description": "Quorum approvedoutcome empty.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1590,7 +1590,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -1604,7 +1604,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum rejectedoutcome absent.",
+      "description": "Quorum rejectedoutcome absent.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1706,7 +1706,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -1720,7 +1720,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum rejectedoutcome null.",
+      "description": "Quorum rejectedoutcome null.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1823,7 +1823,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -1837,7 +1837,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum rejectedoutcome object.",
+      "description": "Quorum rejectedoutcome object.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -1940,7 +1940,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -1954,7 +1954,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum rejectedoutcome array.",
+      "description": "Quorum rejectedoutcome array.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2057,7 +2057,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -2071,7 +2071,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum rejectedoutcome false.",
+      "description": "Quorum rejectedoutcome false.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2174,7 +2174,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -2188,7 +2188,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum rejectedoutcome zero.",
+      "description": "Quorum rejectedoutcome zero.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2291,7 +2291,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -2305,7 +2305,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum rejectedoutcome empty.",
+      "description": "Quorum rejectedoutcome empty.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2408,7 +2408,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -2422,7 +2422,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum alternative control.",
+      "description": "Quorum alternative control.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2538,7 +2538,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.boundary097.quorum-alternative-eligibleactors-absent-001",
@@ -2551,7 +2551,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum alternative eligibleactors absent.",
+      "description": "Quorum alternative eligibleactors absent.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2681,7 +2681,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-alternative-control-001"
     },
     {
@@ -2695,7 +2695,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum alternative approvedoutcome absent.",
+      "description": "Quorum alternative approvedoutcome absent.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2829,7 +2829,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-alternative-control-001"
     },
     {
@@ -2843,7 +2843,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum alternative rejectedoutcome absent.",
+      "description": "Quorum alternative rejectedoutcome absent.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -2977,7 +2977,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-alternative-control-001"
     },
     {
@@ -2991,7 +2991,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum later stage control.",
+      "description": "Quorum later stage control.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -3104,7 +3104,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.boundary097.quorum-later-stage-eligibleactors-absent-001",
@@ -3117,7 +3117,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum later stage eligibleactors absent.",
+      "description": "Quorum later stage eligibleactors absent.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -3244,7 +3244,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-later-stage-control-001"
     },
     {
@@ -3258,7 +3258,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum later stage approvedoutcome absent.",
+      "description": "Quorum later stage approvedoutcome absent.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -3389,7 +3389,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-later-stage-control-001"
     },
     {
@@ -3403,7 +3403,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum later stage rejectedoutcome absent.",
+      "description": "Quorum later stage rejectedoutcome absent.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -3534,7 +3534,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-later-stage-control-001"
     },
     {
@@ -3548,7 +3548,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum disconnected control.",
+      "description": "Quorum disconnected control.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -3648,7 +3648,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1"
+      "reviewFinding": "quorum-evidence-validation"
     },
     {
       "id": "approval.boundary097.quorum-empty-eligibility-001",
@@ -3661,7 +3661,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum empty eligibility.",
+      "description": "Quorum empty eligibility.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -3743,7 +3743,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -3757,7 +3757,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum empty votes.",
+      "description": "Quorum empty votes.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -3829,7 +3829,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -3843,7 +3843,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum inapplicable.",
+      "description": "Quorum inapplicable.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -3920,7 +3920,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -3934,7 +3934,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum both mappings absent.",
+      "description": "Quorum both mappings absent.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -4035,7 +4035,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -4049,7 +4049,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum context before evidence.",
+      "description": "Quorum context before evidence.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -4148,7 +4148,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -4162,7 +4162,7 @@
         "APPROVAL-QUORUM-010",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F1: quorum applicability before evidence.",
+      "description": "Quorum applicability before evidence.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -4260,7 +4260,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F1",
+      "reviewFinding": "quorum-evidence-validation",
       "pairedControl": "approval.boundary097.quorum-control-001"
     },
     {
@@ -4274,7 +4274,7 @@
         "APPROVAL-ERROR-008",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F4: disconnected first valid.",
+      "description": "Disconnected first valid.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -4327,7 +4327,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F4"
+      "reviewFinding": "complete-composition-structure"
     },
     {
       "id": "approval.boundary097.disconnected-first-missing-requirement-001",
@@ -4340,7 +4340,7 @@
         "APPROVAL-ERROR-008",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F4: disconnected first missing requirement.",
+      "description": "Disconnected first missing requirement.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -4390,7 +4390,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F4",
+      "reviewFinding": "complete-composition-structure",
       "pairedControl": "approval.boundary097.disconnected-first-valid-001"
     },
     {
@@ -4404,7 +4404,7 @@
         "APPROVAL-ERROR-008",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F4: disconnected last valid.",
+      "description": "Disconnected last valid.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -4457,7 +4457,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F4"
+      "reviewFinding": "complete-composition-structure"
     },
     {
       "id": "approval.boundary097.disconnected-last-missing-requirement-001",
@@ -4470,7 +4470,7 @@
         "APPROVAL-ERROR-008",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F4: disconnected last missing requirement.",
+      "description": "Disconnected last missing requirement.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -4520,7 +4520,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F4",
+      "reviewFinding": "complete-composition-structure",
       "pairedControl": "approval.boundary097.disconnected-last-valid-001"
     },
     {
@@ -4534,7 +4534,7 @@
         "APPROVAL-ERROR-008",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F4: shared child depth 4 root.",
+      "description": "Shared child depth 4 root.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -4614,7 +4614,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F4"
+      "reviewFinding": "complete-composition-structure"
     },
     {
       "id": "approval.boundary097.shared-child-depth-4-staged-001",
@@ -4627,7 +4627,7 @@
         "APPROVAL-ERROR-008",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F4: shared child depth 4 staged.",
+      "description": "Shared child depth 4 staged.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -4714,7 +4714,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F4"
+      "reviewFinding": "complete-composition-structure"
     },
     {
       "id": "approval.boundary097.shared-child-depth-5-root-001",
@@ -4727,7 +4727,7 @@
         "APPROVAL-ERROR-008",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F4: shared child depth 5 root.",
+      "description": "Shared child depth 5 root.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -4815,7 +4815,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F4",
+      "reviewFinding": "complete-composition-structure",
       "pairedControl": "approval.boundary097.shared-child-depth-4-root-001"
     },
     {
@@ -4829,7 +4829,7 @@
         "APPROVAL-ERROR-008",
         "APPROVAL-ERROR-010"
       ],
-      "description": "Core 0.9.7 F4: shared child depth 5 staged.",
+      "description": "Shared child depth 5 staged.",
       "operation": "approval.composition.evaluate",
       "input": {
         "composition": {
@@ -4924,7 +4924,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F4",
+      "reviewFinding": "complete-composition-structure",
       "pairedControl": "approval.boundary097.shared-child-depth-4-staged-001"
     },
     {
@@ -4937,7 +4937,7 @@
         "APPROVAL-ERROR-005",
         "APPROVAL-ERROR-006"
       ],
-      "description": "Core 0.9.7 F3: record withdrawal distinct.",
+      "description": "Record withdrawal distinct.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -5048,7 +5048,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F3"
+      "reviewFinding": "proposed-history-reference-validity"
     },
     {
       "id": "approval.boundary097.record-supersession-target-distinct-001",
@@ -5060,7 +5060,7 @@
         "APPROVAL-ERROR-005",
         "APPROVAL-ERROR-006"
       ],
-      "description": "Core 0.9.7 F3: record supersession target distinct.",
+      "description": "Record supersession target distinct.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -5207,7 +5207,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F3"
+      "reviewFinding": "proposed-history-reference-validity"
     },
     {
       "id": "approval.boundary097.record-supersession-successor-distinct-001",
@@ -5219,7 +5219,7 @@
         "APPROVAL-ERROR-005",
         "APPROVAL-ERROR-006"
       ],
-      "description": "Core 0.9.7 F3: record supersession successor distinct.",
+      "description": "Record supersession successor distinct.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -5366,7 +5366,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F3"
+      "reviewFinding": "proposed-history-reference-validity"
     },
     {
       "id": "approval.boundary097.record-unreferenced-equal-tuples-control-001",
@@ -5378,7 +5378,7 @@
         "APPROVAL-ERROR-005",
         "APPROVAL-ERROR-006"
       ],
-      "description": "Core 0.9.7 F3: record unreferenced equal tuples control.",
+      "description": "Record unreferenced equal tuples control.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -5459,7 +5459,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F3"
+      "reviewFinding": "proposed-history-reference-validity"
     },
     {
       "id": "approval.boundary097.condition-flat-control-001",
@@ -5471,7 +5471,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition flat control.",
+      "description": "Condition flat control.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -5498,7 +5498,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a"
+      "reviewFinding": "condition-declaration-validation"
     },
     {
       "id": "approval.boundary097.condition-requiredfacts-absent-001",
@@ -5510,7 +5510,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition requiredfacts absent.",
+      "description": "Condition requiredfacts absent.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -5536,7 +5536,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -5549,7 +5549,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition requiredfacts null.",
+      "description": "Condition requiredfacts null.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -5576,7 +5576,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -5589,7 +5589,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition requiredfacts object.",
+      "description": "Condition requiredfacts object.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -5616,7 +5616,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -5629,7 +5629,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition requiredfacts array.",
+      "description": "Condition requiredfacts array.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -5656,7 +5656,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -5669,7 +5669,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition requiredfacts false.",
+      "description": "Condition requiredfacts false.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -5696,7 +5696,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -5709,7 +5709,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition requiredfacts zero.",
+      "description": "Condition requiredfacts zero.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -5736,7 +5736,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -5749,7 +5749,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition requiredfacts empty.",
+      "description": "Condition requiredfacts empty.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -5776,7 +5776,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -5789,7 +5789,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition id absent.",
+      "description": "Condition id absent.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -5817,7 +5817,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -5830,7 +5830,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition id null.",
+      "description": "Condition id null.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -5859,7 +5859,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -5872,7 +5872,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition id object.",
+      "description": "Condition id object.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -5901,7 +5901,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -5914,7 +5914,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition id array.",
+      "description": "Condition id array.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -5943,7 +5943,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -5956,7 +5956,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition id false.",
+      "description": "Condition id false.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -5985,7 +5985,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -5998,7 +5998,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition id zero.",
+      "description": "Condition id zero.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6027,7 +6027,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6040,7 +6040,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition id empty.",
+      "description": "Condition id empty.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6069,7 +6069,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6082,7 +6082,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition evaluation absent.",
+      "description": "Condition evaluation absent.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6110,7 +6110,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6123,7 +6123,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition evaluation null.",
+      "description": "Condition evaluation null.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6152,7 +6152,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6165,7 +6165,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition evaluation object.",
+      "description": "Condition evaluation object.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6194,7 +6194,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6207,7 +6207,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition evaluation array.",
+      "description": "Condition evaluation array.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6236,7 +6236,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6249,7 +6249,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition evaluation false.",
+      "description": "Condition evaluation false.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6278,7 +6278,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6291,7 +6291,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition evaluation zero.",
+      "description": "Condition evaluation zero.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6320,7 +6320,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6333,7 +6333,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition evaluation empty.",
+      "description": "Condition evaluation empty.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6362,7 +6362,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6375,7 +6375,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition path empty member.",
+      "description": "Condition path empty member.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6404,7 +6404,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6417,7 +6417,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition path null member.",
+      "description": "Condition path null member.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6446,7 +6446,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6459,7 +6459,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F6a: condition path duplicate.",
+      "description": "Condition path duplicate.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6489,7 +6489,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F6a",
+      "reviewFinding": "condition-declaration-validation",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6502,7 +6502,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F7b: condition facts nested.",
+      "description": "Condition facts nested.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6529,7 +6529,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7b",
+      "reviewFinding": "condition-fact-selection",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6542,7 +6542,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F7b: condition facts nested null.",
+      "description": "Condition facts nested null.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6569,7 +6569,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7b",
+      "reviewFinding": "condition-fact-selection",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6582,7 +6582,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F7b: condition facts nested false.",
+      "description": "Condition facts nested false.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6609,7 +6609,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7b",
+      "reviewFinding": "condition-fact-selection",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6622,7 +6622,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F7b: condition facts nested zero.",
+      "description": "Condition facts nested zero.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6649,7 +6649,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7b",
+      "reviewFinding": "condition-fact-selection",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6662,7 +6662,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F7b: condition facts literal dot.",
+      "description": "Condition facts literal dot.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6689,7 +6689,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7b",
+      "reviewFinding": "condition-fact-selection",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6702,7 +6702,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F7b: condition facts missing leaf.",
+      "description": "Condition facts missing leaf.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6729,7 +6729,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7b",
+      "reviewFinding": "condition-fact-selection",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6742,7 +6742,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F7b: condition facts null intermediate.",
+      "description": "Condition facts null intermediate.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6769,7 +6769,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7b",
+      "reviewFinding": "condition-fact-selection",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6782,7 +6782,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F7b: condition facts array intermediate.",
+      "description": "Condition facts array intermediate.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6813,7 +6813,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7b",
+      "reviewFinding": "condition-fact-selection",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6826,7 +6826,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F7b: condition facts absent.",
+      "description": "Condition facts absent.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6850,7 +6850,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7b",
+      "reviewFinding": "condition-fact-selection",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6863,7 +6863,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F7b: condition facts null.",
+      "description": "Condition facts null.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6888,7 +6888,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7b",
+      "reviewFinding": "condition-fact-selection",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6901,7 +6901,7 @@
         "APPROVAL-CONDITION-006",
         "APPROVAL-FACT-002"
       ],
-      "description": "Core 0.9.7 F7b: condition facts false.",
+      "description": "Condition facts false.",
       "operation": "approval.condition.evaluate",
       "input": {
         "condition": {
@@ -6926,7 +6926,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7b",
+      "reviewFinding": "condition-fact-selection",
       "pairedControl": "approval.boundary097.condition-flat-control-001"
     },
     {
@@ -6940,7 +6940,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: decision facts control.",
+      "description": "Decision facts control.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -6989,7 +6989,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a"
+      "reviewFinding": "approval-fact-selection"
     },
     {
       "id": "approval.boundary097.decision-whole-equal-001",
@@ -7002,7 +7002,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: decision whole equal.",
+      "description": "Decision whole equal.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7048,7 +7048,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7062,7 +7062,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: decision whole changed.",
+      "description": "Decision whole changed.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7108,7 +7108,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7122,7 +7122,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: decision selected unrelated change.",
+      "description": "Decision selected unrelated change.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7171,7 +7171,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7185,7 +7185,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: decision selected changed.",
+      "description": "Decision selected changed.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7234,7 +7234,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7248,7 +7248,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: decision selected missing both.",
+      "description": "Decision selected missing both.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7297,7 +7297,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7311,7 +7311,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: decision current null.",
+      "description": "Decision current null.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7352,7 +7352,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7366,7 +7366,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: decision selectors null.",
+      "description": "Decision selectors null.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7415,7 +7415,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7429,7 +7429,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: decision selectors object.",
+      "description": "Decision selectors object.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7478,7 +7478,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7492,7 +7492,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: decision selectors false.",
+      "description": "Decision selectors false.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7541,7 +7541,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7555,7 +7555,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: decision selectors zero.",
+      "description": "Decision selectors zero.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7604,7 +7604,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7618,7 +7618,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: decision selectors empty.",
+      "description": "Decision selectors empty.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7667,7 +7667,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7681,7 +7681,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: decision selectors empty member.",
+      "description": "Decision selectors empty member.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7732,7 +7732,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7746,7 +7746,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: decision selectors null member.",
+      "description": "Decision selectors null member.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7797,7 +7797,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7811,7 +7811,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: decision equality null.",
+      "description": "Decision equality null.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7847,7 +7847,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7861,7 +7861,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: decision equality number boolean.",
+      "description": "Decision equality number boolean.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7897,7 +7897,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7911,7 +7911,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: decision equality numeric string.",
+      "description": "Decision equality numeric string.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -7947,7 +7947,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -7961,7 +7961,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: decision equality object order.",
+      "description": "Decision equality object order.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -8009,7 +8009,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -8023,7 +8023,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: decision equality array order.",
+      "description": "Decision equality array order.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -8065,7 +8065,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -8079,7 +8079,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: decision equality missing null.",
+      "description": "Decision equality missing null.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -8117,7 +8117,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -8131,7 +8131,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: decision equality money strings.",
+      "description": "Decision equality money strings.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -8173,7 +8173,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -8187,7 +8187,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: decision equality nested type.",
+      "description": "Decision equality nested type.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -8231,7 +8231,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -8245,7 +8245,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: decision equality signed zero.",
+      "description": "Decision equality signed zero.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -8281,7 +8281,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.decision-facts-control-001"
     },
     {
@@ -8295,7 +8295,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: requirement facts control.",
+      "description": "Requirement facts control.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -8346,7 +8346,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a"
+      "reviewFinding": "approval-fact-selection"
     },
     {
       "id": "approval.boundary097.requirement-whole-equal-001",
@@ -8359,7 +8359,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: requirement whole equal.",
+      "description": "Requirement whole equal.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -8407,7 +8407,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -8421,7 +8421,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: requirement whole changed.",
+      "description": "Requirement whole changed.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -8469,7 +8469,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -8483,7 +8483,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: requirement selected unrelated change.",
+      "description": "Requirement selected unrelated change.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -8534,7 +8534,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -8548,7 +8548,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: requirement selected changed.",
+      "description": "Requirement selected changed.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -8599,7 +8599,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -8613,7 +8613,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: requirement selected missing both.",
+      "description": "Requirement selected missing both.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -8664,7 +8664,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -8678,7 +8678,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: requirement current null.",
+      "description": "Requirement current null.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -8721,7 +8721,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -8735,7 +8735,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: requirement selectors null.",
+      "description": "Requirement selectors null.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -8786,7 +8786,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -8800,7 +8800,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: requirement selectors object.",
+      "description": "Requirement selectors object.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -8851,7 +8851,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -8865,7 +8865,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: requirement selectors false.",
+      "description": "Requirement selectors false.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -8916,7 +8916,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -8930,7 +8930,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: requirement selectors zero.",
+      "description": "Requirement selectors zero.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -8981,7 +8981,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -8995,7 +8995,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: requirement selectors empty.",
+      "description": "Requirement selectors empty.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -9046,7 +9046,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -9060,7 +9060,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: requirement selectors empty member.",
+      "description": "Requirement selectors empty member.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -9113,7 +9113,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -9127,7 +9127,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7a: requirement selectors null member.",
+      "description": "Requirement selectors null member.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -9180,7 +9180,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7a",
+      "reviewFinding": "approval-fact-selection",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -9194,7 +9194,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: requirement equality null.",
+      "description": "Requirement equality null.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -9232,7 +9232,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -9246,7 +9246,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: requirement equality number boolean.",
+      "description": "Requirement equality number boolean.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -9284,7 +9284,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -9298,7 +9298,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: requirement equality numeric string.",
+      "description": "Requirement equality numeric string.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -9336,7 +9336,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -9350,7 +9350,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: requirement equality object order.",
+      "description": "Requirement equality object order.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -9400,7 +9400,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -9414,7 +9414,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: requirement equality array order.",
+      "description": "Requirement equality array order.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -9458,7 +9458,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -9472,7 +9472,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: requirement equality missing null.",
+      "description": "Requirement equality missing null.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -9512,7 +9512,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -9526,7 +9526,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: requirement equality money strings.",
+      "description": "Requirement equality money strings.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -9570,7 +9570,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -9584,7 +9584,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: requirement equality nested type.",
+      "description": "Requirement equality nested type.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -9630,7 +9630,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     },
     {
@@ -9644,7 +9644,7 @@
         "APPROVAL-DECISION-009",
         "APPROVAL-VALIDITY-003"
       ],
-      "description": "Core 0.9.7 F7c: requirement equality signed zero.",
+      "description": "Requirement equality signed zero.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -9682,7 +9682,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "F7c",
+      "reviewFinding": "approval-exact-fact-equality",
       "pairedControl": "approval.boundary097.requirement-facts-control-001"
     }
   ]

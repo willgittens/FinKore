@@ -7,7 +7,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "Unchanged shared.timestamp.expiration-subnanosecond-before-001 control for the 0.9.7 discovery regressions.",
+      "description": "Valid control for shared.timestamp.expiration-subnanosecond-before-001.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -43,7 +43,7 @@
         "status": "success",
         "value": "APPROVED"
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "tags": [
         "regression",
         "boundary",
@@ -51,7 +51,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -60,7 +60,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "F8a: approval.requirement.evaluate, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from original case shared.timestamp.expiration-subnanosecond-before-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "description": "Approval.requirement.evaluate, [\"requirement\",\"approvedOutcome\"] omit; reject atomically.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -97,7 +97,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-001",
       "tags": [
         "regression",
@@ -106,7 +106,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -115,7 +115,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "F8a: approval.requirement.evaluate, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically. Reconstructed from original case shared.timestamp.expiration-subnanosecond-before-001/[\"requirement\",\"rejectedOutcome\"]/omit.",
+      "description": "Approval.requirement.evaluate, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -152,7 +152,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-001",
       "tags": [
         "regression",
@@ -161,7 +161,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -170,7 +170,7 @@
       "requirements": [
         "APPROVAL-DECISION-010"
       ],
-      "description": "F8a: approval.requirement.evaluate, [\"decisions\"] null; reject atomically. Reconstructed from original case shared.timestamp.expiration-subnanosecond-before-001/[\"decisions\"]/null.",
+      "description": "Approval.requirement.evaluate, [\"decisions\"] null; reject atomically.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -194,7 +194,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-001",
       "tags": [
         "regression",
@@ -203,7 +203,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -212,7 +212,7 @@
       "requirements": [
         "APPROVAL-DECISION-010"
       ],
-      "description": "F8a: approval.requirement.evaluate, [\"decisions\"] object; reject atomically. Reconstructed from original case shared.timestamp.expiration-subnanosecond-before-001/[\"decisions\"]/object.",
+      "description": "Approval.requirement.evaluate, [\"decisions\"] object; reject atomically.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -236,7 +236,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-001",
       "tags": [
         "regression",
@@ -245,7 +245,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -254,7 +254,7 @@
       "requirements": [
         "APPROVAL-DECISION-010"
       ],
-      "description": "F8a: approval.requirement.evaluate, [\"decisions\"] omit; reject atomically. Reconstructed from original case shared.timestamp.expiration-subnanosecond-before-001/[\"decisions\"]/omit.",
+      "description": "Approval.requirement.evaluate, [\"decisions\"] omit; reject atomically.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -277,7 +277,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-001",
       "tags": [
         "regression",
@@ -286,7 +286,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -295,7 +295,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "Unchanged approval.decision.append-history-001 control for the 0.9.7 discovery regressions.",
+      "description": "Valid control for approval.decision.append-history-001.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -368,7 +368,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "tags": [
         "regression",
         "boundary",
@@ -376,7 +376,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -385,7 +385,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "F8a: approval.decision.record, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "description": "Approval.decision.record, [\"requirement\",\"approvedOutcome\"] omit; reject atomically.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -448,7 +448,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-002",
       "tags": [
         "regression",
@@ -457,7 +457,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -466,7 +466,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "F8a: approval.decision.record, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"requirement\",\"rejectedOutcome\"]/omit.",
+      "description": "Approval.decision.record, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -529,7 +529,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-002",
       "tags": [
         "regression",
@@ -538,7 +538,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -547,7 +547,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.record, [\"decision\",\"actor\",\"type\"] null; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"decision\",\"actor\",\"type\"]/null.",
+      "description": "Approval.decision.record, [\"decision\",\"actor\",\"type\"] null; reject atomically.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -611,7 +611,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-002",
       "tags": [
         "regression",
@@ -620,7 +620,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -629,7 +629,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.record, [\"decision\",\"actor\",\"type\"] object; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"decision\",\"actor\",\"type\"]/object.",
+      "description": "Approval.decision.record, [\"decision\",\"actor\",\"type\"] object; reject atomically.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -693,7 +693,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-002",
       "tags": [
         "regression",
@@ -702,7 +702,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -711,7 +711,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.record, [\"decision\",\"actor\",\"type\"] array; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"decision\",\"actor\",\"type\"]/array.",
+      "description": "Approval.decision.record, [\"decision\",\"actor\",\"type\"] array; reject atomically.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -775,7 +775,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-002",
       "tags": [
         "regression",
@@ -784,7 +784,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -793,7 +793,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.record, [\"decision\",\"actor\",\"type\"] false; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"decision\",\"actor\",\"type\"]/false.",
+      "description": "Approval.decision.record, [\"decision\",\"actor\",\"type\"] false; reject atomically.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -857,7 +857,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-002",
       "tags": [
         "regression",
@@ -866,7 +866,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -875,7 +875,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.record, [\"decision\",\"actor\",\"type\"] zero; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"decision\",\"actor\",\"type\"]/zero.",
+      "description": "Approval.decision.record, [\"decision\",\"actor\",\"type\"] zero; reject atomically.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -939,7 +939,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-002",
       "tags": [
         "regression",
@@ -948,7 +948,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -957,7 +957,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.record, [\"decision\",\"actor\",\"type\"] empty; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"decision\",\"actor\",\"type\"]/empty.",
+      "description": "Approval.decision.record, [\"decision\",\"actor\",\"type\"] empty; reject atomically.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -1021,7 +1021,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-002",
       "tags": [
         "regression",
@@ -1030,7 +1030,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1039,7 +1039,7 @@
       "requirements": [
         "APPROVAL-DECISION-010"
       ],
-      "description": "F8a: approval.decision.record, [\"history\"] null; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"history\"]/null.",
+      "description": "Approval.decision.record, [\"history\"] null; reject atomically.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -1074,7 +1074,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-002",
       "tags": [
         "regression",
@@ -1083,7 +1083,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1092,7 +1092,7 @@
       "requirements": [
         "APPROVAL-DECISION-010"
       ],
-      "description": "F8a: approval.decision.record, [\"history\"] object; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"history\"]/object.",
+      "description": "Approval.decision.record, [\"history\"] object; reject atomically.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -1127,7 +1127,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-002",
       "tags": [
         "regression",
@@ -1136,7 +1136,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1145,7 +1145,7 @@
       "requirements": [
         "APPROVAL-DECISION-010"
       ],
-      "description": "F8a: approval.decision.record, [\"history\"] omit; reject atomically. Reconstructed from original case approval.decision.append-history-001/[\"history\"]/omit.",
+      "description": "Approval.decision.record, [\"history\"] omit; reject atomically.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -1182,7 +1182,7 @@
           "history": []
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-002",
       "tags": [
         "regression",
@@ -1191,7 +1191,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1200,7 +1200,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "Unchanged approval.decision.subject-facts-unchanged-001 control for the 0.9.7 discovery regressions.",
+      "description": "Valid control for approval.decision.subject-facts-unchanged-001.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -1247,7 +1247,7 @@
         "status": "success",
         "value": "EFFECTIVE"
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "tags": [
         "regression",
         "boundary",
@@ -1255,7 +1255,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1264,7 +1264,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "F8a: approval.decision.evaluate, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "description": "Approval.decision.evaluate, [\"requirement\",\"approvedOutcome\"] omit; reject atomically.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -1312,7 +1312,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-006",
       "tags": [
         "regression",
@@ -1321,7 +1321,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1330,7 +1330,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "F8a: approval.decision.evaluate, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"requirement\",\"rejectedOutcome\"]/omit.",
+      "description": "Approval.decision.evaluate, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -1378,7 +1378,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-006",
       "tags": [
         "regression",
@@ -1387,7 +1387,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1396,7 +1396,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] null; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"decision\",\"actor\",\"type\"]/null.",
+      "description": "Approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] null; reject atomically.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -1445,7 +1445,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-006",
       "tags": [
         "regression",
@@ -1454,7 +1454,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1463,7 +1463,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] object; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"decision\",\"actor\",\"type\"]/object.",
+      "description": "Approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] object; reject atomically.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -1512,7 +1512,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-006",
       "tags": [
         "regression",
@@ -1521,7 +1521,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1530,7 +1530,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] array; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"decision\",\"actor\",\"type\"]/array.",
+      "description": "Approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] array; reject atomically.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -1579,7 +1579,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-006",
       "tags": [
         "regression",
@@ -1588,7 +1588,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1597,7 +1597,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] false; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"decision\",\"actor\",\"type\"]/false.",
+      "description": "Approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] false; reject atomically.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -1646,7 +1646,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-006",
       "tags": [
         "regression",
@@ -1655,7 +1655,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1664,7 +1664,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] zero; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"decision\",\"actor\",\"type\"]/zero.",
+      "description": "Approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] zero; reject atomically.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -1713,7 +1713,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-006",
       "tags": [
         "regression",
@@ -1722,7 +1722,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1731,7 +1731,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] empty; reject atomically. Reconstructed from original case approval.decision.subject-facts-unchanged-001/[\"decision\",\"actor\",\"type\"]/empty.",
+      "description": "Approval.decision.evaluate, [\"decision\",\"actor\",\"type\"] empty; reject atomically.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -1780,7 +1780,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-006",
       "tags": [
         "regression",
@@ -1789,7 +1789,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1798,7 +1798,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "Unchanged approval.chain.all-approved-001 control for the 0.9.7 discovery regressions.",
+      "description": "Valid control for approval.chain.all-approved-001.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -1818,7 +1818,7 @@
         "status": "success",
         "value": "APPROVED"
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "tags": [
         "regression",
         "boundary",
@@ -1826,7 +1826,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1835,7 +1835,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] null; reject atomically. Reconstructed from original case approval.chain.all-approved-001/[\"chain\",\"rejectionOutcome\"]/null.",
+      "description": "Approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] null; reject atomically.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -1857,7 +1857,7 @@
           "code": "FINKORE_APPROVAL_INVALID_CHAIN"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-007",
       "tags": [
         "regression",
@@ -1866,7 +1866,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1875,7 +1875,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] object; reject atomically. Reconstructed from original case approval.chain.all-approved-001/[\"chain\",\"rejectionOutcome\"]/object.",
+      "description": "Approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] object; reject atomically.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -1897,7 +1897,7 @@
           "code": "FINKORE_APPROVAL_INVALID_CHAIN"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-007",
       "tags": [
         "regression",
@@ -1906,7 +1906,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1915,7 +1915,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] array; reject atomically. Reconstructed from original case approval.chain.all-approved-001/[\"chain\",\"rejectionOutcome\"]/array.",
+      "description": "Approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] array; reject atomically.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -1937,7 +1937,7 @@
           "code": "FINKORE_APPROVAL_INVALID_CHAIN"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-007",
       "tags": [
         "regression",
@@ -1946,7 +1946,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1955,7 +1955,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] false; reject atomically. Reconstructed from original case approval.chain.all-approved-001/[\"chain\",\"rejectionOutcome\"]/false.",
+      "description": "Approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] false; reject atomically.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -1977,7 +1977,7 @@
           "code": "FINKORE_APPROVAL_INVALID_CHAIN"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-007",
       "tags": [
         "regression",
@@ -1986,7 +1986,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -1995,7 +1995,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] zero; reject atomically. Reconstructed from original case approval.chain.all-approved-001/[\"chain\",\"rejectionOutcome\"]/zero.",
+      "description": "Approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] zero; reject atomically.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -2017,7 +2017,7 @@
           "code": "FINKORE_APPROVAL_INVALID_CHAIN"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-007",
       "tags": [
         "regression",
@@ -2026,7 +2026,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -2035,7 +2035,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] empty; reject atomically. Reconstructed from original case approval.chain.all-approved-001/[\"chain\",\"rejectionOutcome\"]/empty.",
+      "description": "Approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] empty; reject atomically.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -2057,7 +2057,7 @@
           "code": "FINKORE_APPROVAL_INVALID_CHAIN"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-007",
       "tags": [
         "regression",
@@ -2066,7 +2066,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -2075,7 +2075,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] omit; reject atomically. Reconstructed from original case approval.chain.all-approved-001/[\"chain\",\"rejectionOutcome\"]/omit.",
+      "description": "Approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] omit; reject atomically.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -2096,7 +2096,7 @@
           "code": "FINKORE_APPROVAL_INVALID_CHAIN"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-007",
       "tags": [
         "regression",
@@ -2105,7 +2105,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -2114,7 +2114,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "Unchanged approval.validity.withdraw-preserves-history-001 control for the 0.9.7 discovery regressions.",
+      "description": "Valid control for approval.validity.withdraw-preserves-history-001.",
       "operation": "approval.decision.withdraw",
       "input": {
         "requirement": {
@@ -2198,7 +2198,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "tags": [
         "regression",
         "boundary",
@@ -2206,7 +2206,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -2215,7 +2215,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "F8a: approval.decision.withdraw, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from original case approval.validity.withdraw-preserves-history-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "description": "Approval.decision.withdraw, [\"requirement\",\"approvedOutcome\"] omit; reject atomically.",
       "operation": "approval.decision.withdraw",
       "input": {
         "requirement": {
@@ -2286,7 +2286,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-008",
       "tags": [
         "regression",
@@ -2295,7 +2295,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -2304,7 +2304,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "F8a: approval.decision.withdraw, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically. Reconstructed from original case approval.validity.withdraw-preserves-history-001/[\"requirement\",\"rejectedOutcome\"]/omit.",
+      "description": "Approval.decision.withdraw, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically.",
       "operation": "approval.decision.withdraw",
       "input": {
         "requirement": {
@@ -2375,7 +2375,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-008",
       "tags": [
         "regression",
@@ -2384,7 +2384,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -2393,7 +2393,7 @@
       "requirements": [
         "APPROVAL-DECISION-010"
       ],
-      "description": "Unchanged approval.validity.requirement-supersession-preserves-history-001 control for the 0.9.7 discovery regressions.",
+      "description": "Valid control for approval.validity.requirement-supersession-preserves-history-001.",
       "operation": "approval.requirement.supersede",
       "input": {
         "history": [
@@ -2451,7 +2451,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "tags": [
         "regression",
         "boundary",
@@ -2459,7 +2459,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -2468,7 +2468,7 @@
       "requirements": [
         "APPROVAL-DECISION-010"
       ],
-      "description": "F8a: approval.requirement.supersede, [\"history\"] null; reject atomically. Reconstructed from original case approval.validity.requirement-supersession-preserves-history-001/[\"history\"]/null.",
+      "description": "Approval.requirement.supersede, [\"history\"] null; reject atomically.",
       "operation": "approval.requirement.supersede",
       "input": {
         "history": null,
@@ -2488,7 +2488,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-009",
       "tags": [
         "regression",
@@ -2497,7 +2497,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -2506,7 +2506,7 @@
       "requirements": [
         "APPROVAL-DECISION-010"
       ],
-      "description": "F8a: approval.requirement.supersede, [\"history\"] object; reject atomically. Reconstructed from original case approval.validity.requirement-supersession-preserves-history-001/[\"history\"]/object.",
+      "description": "Approval.requirement.supersede, [\"history\"] object; reject atomically.",
       "operation": "approval.requirement.supersede",
       "input": {
         "history": {},
@@ -2526,7 +2526,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-009",
       "tags": [
         "regression",
@@ -2535,7 +2535,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -2544,7 +2544,7 @@
       "requirements": [
         "APPROVAL-DECISION-010"
       ],
-      "description": "F8a: approval.requirement.supersede, [\"history\"] omit; reject atomically. Reconstructed from original case approval.validity.requirement-supersession-preserves-history-001/[\"history\"]/omit.",
+      "description": "Approval.requirement.supersede, [\"history\"] omit; reject atomically.",
       "operation": "approval.requirement.supersede",
       "input": {
         "supersession": {
@@ -2566,7 +2566,7 @@
           "history": []
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-009",
       "tags": [
         "regression",
@@ -2575,7 +2575,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -2584,7 +2584,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "Unchanged approval.boundary096.history-nanosecond-distinct-control-001 control for the 0.9.7 discovery regressions.",
+      "description": "Valid control for approval.boundary096.history-nanosecond-distinct-control-001.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -2650,7 +2650,7 @@
         "status": "success",
         "value": "APPROVED"
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "tags": [
         "regression",
         "boundary",
@@ -2658,7 +2658,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -2667,7 +2667,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "F8a: approval.requirement.evaluate, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from expanded case approval.boundary096.history-nanosecond-distinct-control-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "description": "Approval.requirement.evaluate, [\"requirement\",\"approvedOutcome\"] omit; reject atomically.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -2734,7 +2734,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-018",
       "tags": [
         "regression",
@@ -2743,7 +2743,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -2752,7 +2752,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "Unchanged approval.boundary096.record-history-offset-control-001 control for the 0.9.7 discovery regressions.",
+      "description": "Valid control for approval.boundary096.record-history-offset-control-001.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -2873,7 +2873,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "tags": [
         "regression",
         "boundary",
@@ -2881,7 +2881,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -2890,7 +2890,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "F8a: approval.decision.record, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from expanded case approval.boundary096.record-history-offset-control-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "description": "Approval.decision.record, [\"requirement\",\"approvedOutcome\"] omit; reject atomically.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
@@ -2988,7 +2988,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-019",
       "tags": [
         "regression",
@@ -2997,7 +2997,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3006,7 +3006,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "Unchanged approval.boundary096.decision-expiry-offset-001 control for the 0.9.7 discovery regressions.",
+      "description": "Valid control for approval.boundary096.decision-expiry-offset-001.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3045,7 +3045,7 @@
         "status": "success",
         "value": "INEFFECTIVE"
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "tags": [
         "regression",
         "boundary",
@@ -3053,7 +3053,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3062,7 +3062,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "F8a: approval.decision.evaluate, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from expanded case approval.boundary096.decision-expiry-offset-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "description": "Approval.decision.evaluate, [\"requirement\",\"approvedOutcome\"] omit; reject atomically.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3102,7 +3102,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-024",
       "tags": [
         "regression",
@@ -3111,7 +3111,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3120,7 +3120,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "F8a: approval.decision.evaluate, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically. Reconstructed from expanded case approval.boundary096.decision-expiry-offset-001/[\"requirement\",\"rejectedOutcome\"]/omit.",
+      "description": "Approval.decision.evaluate, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically.",
       "operation": "approval.decision.evaluate",
       "input": {
         "requirement": {
@@ -3160,7 +3160,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-024",
       "tags": [
         "regression",
@@ -3169,7 +3169,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3178,7 +3178,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "Unchanged approval.boundary096.chain-control-001 control for the 0.9.7 discovery regressions.",
+      "description": "Valid control for approval.boundary096.chain-control-001.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -3198,7 +3198,7 @@
         "status": "success",
         "value": "PENDING"
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "tags": [
         "regression",
         "boundary",
@@ -3206,7 +3206,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3215,7 +3215,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] null; reject atomically. Reconstructed from expanded case approval.boundary096.chain-control-001/[\"chain\",\"rejectionOutcome\"]/null.",
+      "description": "Approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] null; reject atomically.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -3237,7 +3237,7 @@
           "code": "FINKORE_APPROVAL_INVALID_CHAIN"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-025",
       "tags": [
         "regression",
@@ -3246,7 +3246,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3255,7 +3255,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] object; reject atomically. Reconstructed from expanded case approval.boundary096.chain-control-001/[\"chain\",\"rejectionOutcome\"]/object.",
+      "description": "Approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] object; reject atomically.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -3277,7 +3277,7 @@
           "code": "FINKORE_APPROVAL_INVALID_CHAIN"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-025",
       "tags": [
         "regression",
@@ -3286,7 +3286,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3295,7 +3295,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] array; reject atomically. Reconstructed from expanded case approval.boundary096.chain-control-001/[\"chain\",\"rejectionOutcome\"]/array.",
+      "description": "Approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] array; reject atomically.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -3317,7 +3317,7 @@
           "code": "FINKORE_APPROVAL_INVALID_CHAIN"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-025",
       "tags": [
         "regression",
@@ -3326,7 +3326,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3335,7 +3335,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] false; reject atomically. Reconstructed from expanded case approval.boundary096.chain-control-001/[\"chain\",\"rejectionOutcome\"]/false.",
+      "description": "Approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] false; reject atomically.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -3357,7 +3357,7 @@
           "code": "FINKORE_APPROVAL_INVALID_CHAIN"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-025",
       "tags": [
         "regression",
@@ -3366,7 +3366,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3375,7 +3375,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] zero; reject atomically. Reconstructed from expanded case approval.boundary096.chain-control-001/[\"chain\",\"rejectionOutcome\"]/zero.",
+      "description": "Approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] zero; reject atomically.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -3397,7 +3397,7 @@
           "code": "FINKORE_APPROVAL_INVALID_CHAIN"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-025",
       "tags": [
         "regression",
@@ -3406,7 +3406,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3415,7 +3415,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] empty; reject atomically. Reconstructed from expanded case approval.boundary096.chain-control-001/[\"chain\",\"rejectionOutcome\"]/empty.",
+      "description": "Approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] empty; reject atomically.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -3437,7 +3437,7 @@
           "code": "FINKORE_APPROVAL_INVALID_CHAIN"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-025",
       "tags": [
         "regression",
@@ -3446,7 +3446,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3455,7 +3455,7 @@
       "requirements": [
         "APPROVAL-CHAIN-007"
       ],
-      "description": "F8a: approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] omit; reject atomically. Reconstructed from expanded case approval.boundary096.chain-control-001/[\"chain\",\"rejectionOutcome\"]/omit.",
+      "description": "Approval.chain.evaluate, [\"chain\",\"rejectionOutcome\"] omit; reject atomically.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
@@ -3476,7 +3476,7 @@
           "code": "FINKORE_APPROVAL_INVALID_CHAIN"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-025",
       "tags": [
         "regression",
@@ -3485,7 +3485,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3494,7 +3494,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "Unchanged approval.withdraw.target-unique-001 control for the 0.9.7 discovery regressions.",
+      "description": "Valid control for approval.withdraw.target-unique-001.",
       "operation": "approval.decision.withdraw",
       "input": {
         "requirement": {
@@ -3581,7 +3581,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "tags": [
         "regression",
         "boundary",
@@ -3589,7 +3589,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3598,7 +3598,7 @@
       "requirements": [
         "APPROVAL-REQUIREMENT-004"
       ],
-      "description": "F8a: approval.decision.withdraw, [\"requirement\",\"approvedOutcome\"] omit; reject atomically. Reconstructed from expanded case approval.withdraw.target-unique-001/[\"requirement\",\"approvedOutcome\"]/omit.",
+      "description": "Approval.decision.withdraw, [\"requirement\",\"approvedOutcome\"] omit; reject atomically.",
       "operation": "approval.decision.withdraw",
       "input": {
         "requirement": {
@@ -3672,7 +3672,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-026",
       "tags": [
         "regression",
@@ -3681,7 +3681,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3690,7 +3690,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] null; reject atomically. Reconstructed from expanded case approval.withdraw.target-unique-001/[\"history\",\"history\",0,\"actor\",\"type\"]/null.",
+      "description": "Approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] null; reject atomically.",
       "operation": "approval.decision.withdraw",
       "input": {
         "requirement": {
@@ -3745,7 +3745,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-026",
       "tags": [
         "regression",
@@ -3754,7 +3754,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3763,7 +3763,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] object; reject atomically. Reconstructed from expanded case approval.withdraw.target-unique-001/[\"history\",\"history\",0,\"actor\",\"type\"]/object.",
+      "description": "Approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] object; reject atomically.",
       "operation": "approval.decision.withdraw",
       "input": {
         "requirement": {
@@ -3818,7 +3818,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-026",
       "tags": [
         "regression",
@@ -3827,7 +3827,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3836,7 +3836,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] array; reject atomically. Reconstructed from expanded case approval.withdraw.target-unique-001/[\"history\",\"history\",0,\"actor\",\"type\"]/array.",
+      "description": "Approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] array; reject atomically.",
       "operation": "approval.decision.withdraw",
       "input": {
         "requirement": {
@@ -3891,7 +3891,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-026",
       "tags": [
         "regression",
@@ -3900,7 +3900,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3909,7 +3909,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] false; reject atomically. Reconstructed from expanded case approval.withdraw.target-unique-001/[\"history\",\"history\",0,\"actor\",\"type\"]/false.",
+      "description": "Approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] false; reject atomically.",
       "operation": "approval.decision.withdraw",
       "input": {
         "requirement": {
@@ -3964,7 +3964,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-026",
       "tags": [
         "regression",
@@ -3973,7 +3973,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -3982,7 +3982,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] zero; reject atomically. Reconstructed from expanded case approval.withdraw.target-unique-001/[\"history\",\"history\",0,\"actor\",\"type\"]/zero.",
+      "description": "Approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] zero; reject atomically.",
       "operation": "approval.decision.withdraw",
       "input": {
         "requirement": {
@@ -4037,7 +4037,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-026",
       "tags": [
         "regression",
@@ -4046,7 +4046,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -4055,7 +4055,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] empty; reject atomically. Reconstructed from expanded case approval.withdraw.target-unique-001/[\"history\",\"history\",0,\"actor\",\"type\"]/empty.",
+      "description": "Approval.decision.withdraw, [\"history\",\"history\",0,\"actor\",\"type\"] empty; reject atomically.",
       "operation": "approval.decision.withdraw",
       "input": {
         "requirement": {
@@ -4110,7 +4110,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-026",
       "tags": [
         "regression",
@@ -4119,7 +4119,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -4128,7 +4128,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "Unchanged approval.lifecycle.supersede.request-type-object-001 control for the 0.9.7 discovery regressions.",
+      "description": "Valid control for approval.lifecycle.supersede.request-type-object-001.",
       "operation": "approval.decision.supersede",
       "input": {
         "history": [
@@ -4227,7 +4227,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "tags": [
         "regression",
         "boundary",
@@ -4235,7 +4235,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -4244,7 +4244,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] null; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/null.",
+      "description": "Approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] null; reject atomically.",
       "operation": "approval.decision.supersede",
       "input": {
         "history": [
@@ -4298,7 +4298,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-027",
       "tags": [
         "regression",
@@ -4307,7 +4307,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -4316,7 +4316,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] object; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/object.",
+      "description": "Approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] object; reject atomically.",
       "operation": "approval.decision.supersede",
       "input": {
         "history": [
@@ -4370,7 +4370,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-027",
       "tags": [
         "regression",
@@ -4379,7 +4379,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -4388,7 +4388,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] array; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/array.",
+      "description": "Approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] array; reject atomically.",
       "operation": "approval.decision.supersede",
       "input": {
         "history": [
@@ -4442,7 +4442,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-027",
       "tags": [
         "regression",
@@ -4451,7 +4451,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -4460,7 +4460,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] false; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/false.",
+      "description": "Approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] false; reject atomically.",
       "operation": "approval.decision.supersede",
       "input": {
         "history": [
@@ -4514,7 +4514,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-027",
       "tags": [
         "regression",
@@ -4523,7 +4523,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -4532,7 +4532,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] zero; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/zero.",
+      "description": "Approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] zero; reject atomically.",
       "operation": "approval.decision.supersede",
       "input": {
         "history": [
@@ -4586,7 +4586,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-027",
       "tags": [
         "regression",
@@ -4595,7 +4595,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -4604,7 +4604,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] empty; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/empty.",
+      "description": "Approval.decision.supersede, [\"history\",0,\"actor\",\"type\"] empty; reject atomically.",
       "operation": "approval.decision.supersede",
       "input": {
         "history": [
@@ -4658,7 +4658,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-027",
       "tags": [
         "regression",
@@ -4667,7 +4667,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -4676,7 +4676,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] null; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",1,\"actor\",\"type\"]/null.",
+      "description": "Approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] null; reject atomically.",
       "operation": "approval.decision.supersede",
       "input": {
         "history": [
@@ -4730,7 +4730,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-027",
       "tags": [
         "regression",
@@ -4739,7 +4739,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -4748,7 +4748,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] object; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",1,\"actor\",\"type\"]/object.",
+      "description": "Approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] object; reject atomically.",
       "operation": "approval.decision.supersede",
       "input": {
         "history": [
@@ -4802,7 +4802,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-027",
       "tags": [
         "regression",
@@ -4811,7 +4811,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -4820,7 +4820,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] array; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",1,\"actor\",\"type\"]/array.",
+      "description": "Approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] array; reject atomically.",
       "operation": "approval.decision.supersede",
       "input": {
         "history": [
@@ -4874,7 +4874,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-027",
       "tags": [
         "regression",
@@ -4883,7 +4883,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -4892,7 +4892,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] false; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",1,\"actor\",\"type\"]/false.",
+      "description": "Approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] false; reject atomically.",
       "operation": "approval.decision.supersede",
       "input": {
         "history": [
@@ -4946,7 +4946,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-027",
       "tags": [
         "regression",
@@ -4955,7 +4955,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -4964,7 +4964,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] zero; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",1,\"actor\",\"type\"]/zero.",
+      "description": "Approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] zero; reject atomically.",
       "operation": "approval.decision.supersede",
       "input": {
         "history": [
@@ -5018,7 +5018,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-027",
       "tags": [
         "regression",
@@ -5027,7 +5027,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -5036,7 +5036,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] empty; reject atomically. Reconstructed from expanded case approval.lifecycle.supersede.request-type-object-001/[\"history\",1,\"actor\",\"type\"]/empty.",
+      "description": "Approval.decision.supersede, [\"history\",1,\"actor\",\"type\"] empty; reject atomically.",
       "operation": "approval.decision.supersede",
       "input": {
         "history": [
@@ -5090,7 +5090,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-027",
       "tags": [
         "regression",
@@ -5099,7 +5099,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -5108,7 +5108,7 @@
       "requirements": [
         "APPROVAL-DECISION-010"
       ],
-      "description": "Unchanged approval.lifecycle.requirement.request-type-object-001 control for the 0.9.7 discovery regressions.",
+      "description": "Valid control for approval.lifecycle.requirement.request-type-object-001.",
       "operation": "approval.requirement.supersede",
       "input": {
         "history": [
@@ -5167,7 +5167,7 @@
           ]
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "tags": [
         "regression",
         "boundary",
@@ -5175,7 +5175,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -5184,7 +5184,7 @@
       "requirements": [
         "APPROVAL-DECISION-010"
       ],
-      "description": "F8a: approval.requirement.supersede, [\"history\"] null; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\"]/null.",
+      "description": "Approval.requirement.supersede, [\"history\"] null; reject atomically.",
       "operation": "approval.requirement.supersede",
       "input": {
         "history": null,
@@ -5205,7 +5205,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-028",
       "tags": [
         "regression",
@@ -5214,7 +5214,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -5223,7 +5223,7 @@
       "requirements": [
         "APPROVAL-DECISION-010"
       ],
-      "description": "F8a: approval.requirement.supersede, [\"history\"] object; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\"]/object.",
+      "description": "Approval.requirement.supersede, [\"history\"] object; reject atomically.",
       "operation": "approval.requirement.supersede",
       "input": {
         "history": {},
@@ -5244,7 +5244,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-028",
       "tags": [
         "regression",
@@ -5253,7 +5253,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -5262,7 +5262,7 @@
       "requirements": [
         "APPROVAL-DECISION-010"
       ],
-      "description": "F8a: approval.requirement.supersede, [\"history\"] omit; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\"]/omit.",
+      "description": "Approval.requirement.supersede, [\"history\"] omit; reject atomically.",
       "operation": "approval.requirement.supersede",
       "input": {
         "supersession": {
@@ -5285,7 +5285,7 @@
           "history": []
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-028",
       "tags": [
         "regression",
@@ -5294,7 +5294,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -5303,7 +5303,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] null; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/null.",
+      "description": "Approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] null; reject atomically.",
       "operation": "approval.requirement.supersede",
       "input": {
         "history": [
@@ -5337,7 +5337,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-028",
       "tags": [
         "regression",
@@ -5346,7 +5346,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -5355,7 +5355,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] object; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/object.",
+      "description": "Approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] object; reject atomically.",
       "operation": "approval.requirement.supersede",
       "input": {
         "history": [
@@ -5389,7 +5389,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-028",
       "tags": [
         "regression",
@@ -5398,7 +5398,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -5407,7 +5407,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] array; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/array.",
+      "description": "Approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] array; reject atomically.",
       "operation": "approval.requirement.supersede",
       "input": {
         "history": [
@@ -5441,7 +5441,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-028",
       "tags": [
         "regression",
@@ -5450,7 +5450,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -5459,7 +5459,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] false; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/false.",
+      "description": "Approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] false; reject atomically.",
       "operation": "approval.requirement.supersede",
       "input": {
         "history": [
@@ -5493,7 +5493,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-028",
       "tags": [
         "regression",
@@ -5502,7 +5502,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -5511,7 +5511,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] zero; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/zero.",
+      "description": "Approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] zero; reject atomically.",
       "operation": "approval.requirement.supersede",
       "input": {
         "history": [
@@ -5545,7 +5545,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-028",
       "tags": [
         "regression",
@@ -5554,7 +5554,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     },
     {
@@ -5563,7 +5563,7 @@
       "requirements": [
         "APPROVAL-DECISION-011"
       ],
-      "description": "F8a: approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] empty; reject atomically. Reconstructed from expanded case approval.lifecycle.requirement.request-type-object-001/[\"history\",0,\"actor\",\"type\"]/empty.",
+      "description": "Approval.requirement.supersede, [\"history\",0,\"actor\",\"type\"] empty; reject atomically.",
       "operation": "approval.requirement.supersede",
       "input": {
         "history": [
@@ -5597,7 +5597,7 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         }
       },
-      "reviewFinding": "F8a",
+      "reviewFinding": "concrete-approval-required-evidence",
       "pairedControl": "approval.boundary097.discovery-control-028",
       "tags": [
         "regression",
@@ -5606,7 +5606,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8a"
+        "concrete-approval-required-evidence-bypass"
       ]
     }
   ]

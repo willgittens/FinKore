@@ -64,7 +64,7 @@ applicability alone does not produce `FINKORE_APPROVAL_INVALID_CHAIN`.
 
 ## Invariants
 
-The 0.9.7 corrections retain existing error categories: malformed condition or
+Malformed condition or
 selector declarations and unsupported concrete fact values use
 `FINKORE_APPROVAL_INVALID_DECISION`; unavailable facts for a valid condition use
 `FINKORE_APPROVAL_CONDITION_UNRESOLVED`. A record that would invalidate retained

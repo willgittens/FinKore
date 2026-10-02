@@ -18,12 +18,12 @@ This document defines domain conditions that determine whether an approval requi
 - **APPROVAL-CONDITION-006** — If required facts are absent, evaluation MUST fail or remain unresolved; it MUST NOT silently treat the requirement as not applicable.
 - **APPROVAL-CONDITION-007** — Before accepting an external applicability result, evaluation MUST validate its condition declaration and required-fact selectors. Missing or malformed required declarations MUST fail with `FINKORE_APPROVAL_INVALID_DECISION`; they MUST NOT become a condition with no required facts. A well-formed declaration whose required facts are unavailable MUST use `FINKORE_APPROVAL_CONDITION_UNRESOLVED`. Required fact selection MUST follow APPROVAL-FACT-002, including own-member traversal and the distinction between absent and explicit null. Declaration validation and evaluation MUST NOT mutate supplied facts or Approval history.
 
-The [bounded fixture](../../conformance/conventions.md) requires condition
+The [bounded fixture](../../conformance/operations.md#approval-fixture-definitions) requires condition
 identity, an explicit nonempty required-fact list, and an evaluation-owner label.
 An explicit result cannot bypass malformed declarations or unavailable facts.
 With a valid declaration and complete facts, the supplied `APPLICABLE` or
 `NOT_APPLICABLE` result is returned unchanged. Missing/malformed result evidence
-is unresolved. This correction defines no condition expression engine or general
+is unresolved. This boundary defines no condition expression engine or general
 priority among unrelated concrete Approval errors.
 
 ## Invariants

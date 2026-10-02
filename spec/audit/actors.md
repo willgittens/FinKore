@@ -51,16 +51,11 @@ use the same actor error, without coercion to a string or lossy number.
 When non-actor content is also invalid, **AUDIT-ERROR-004** still selects the
 non-actor error first.
 
-## Core 0.9.3 correction note (non-normative)
+## Metadata presence
 
-**AUDIT-ACTOR-010** makes the previously missing metadata nullability boundary
-explicit as required by **SPEC-NULLABILITY-001**. It preserves the existing
-meaning of supplied actor context and redaction, and does not relax the
-non-empty-string rules for `id`, `type`, or `displayName`. Accepting explicit
-null metadata and preserving its presence corrects a portability ambiguity;
-the optional member is compatible under **SPEC-COMPATIBILITY-010**. Rejecting
-explicit null for the optional string members is a clarification of the
-existing "if supplied" rule, not a new valid-input restriction.
+**AUDIT-ACTOR-010** permits explicit null metadata and preserves its presence.
+This does not relax the nonempty-string rules for supplied `id`, `type`, or
+`displayName`; explicit null is invalid for those string members.
 
 ## Example
 

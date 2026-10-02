@@ -81,12 +81,13 @@ The numeric JSON form is not portable because its host may apply binary floating
 
 Malformed data fails as defined by **MONEY-ERROR-001** or **MONEY-ERROR-002** in [Money Errors](errors.md), as applicable.
 
-## Resolved Boundary
+## Presentation scale
 
-Core 0.9 does not require portable serialization to preserve presentation
+Portable serialization does not need to preserve presentation
 scale. This is an explicit reading of **MONEY-REPRESENTATION-005** and
 **MONEY-SERIALIZATION-008**, not a new rounding permission. Removing or adding
 only insignificant zeros preserves value; discarding a non-zero digit still
-requires an explicit rounding rule. The Core 0.9.8 conformance correction uses
-a deterministic presentation observation so exact comparison does not turn one
-valid lexical spelling into an accidental production requirement.
+requires an explicit rounding rule. The
+[conformance observation convention](../../conformance/conventions.md#canonical-values)
+uses deterministic presentation for exact comparison without requiring one
+production spelling.

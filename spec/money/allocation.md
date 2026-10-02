@@ -2,7 +2,7 @@
 
 ## Status
 
-**Included in FinKore Core 0.9 release candidate; introduced in Draft 0.2.**
+**FinKore Core 0.9 release candidate.**
 
 ## Purpose
 
@@ -116,21 +116,17 @@ operation fails with `FINKORE_MONEY_ROUNDING_REQUIRED` under
 **MONEY-ERROR-005**. Failed allocation leaves the source Money operand
 unchanged under **MONEY-ERROR-007**.
 
-## Compatibility Correction
+## Portable integer boundary
 
-Core 0.9.1 retains the published JSON-number request shape and existing member
-names. It defines the previously missing inclusive ranges so a JSON number is
-not accepted by an arbitrary-precision implementation when the same value
-cannot be represented or processed by another supported implementation. Values
-inside the ranges keep their existing meaning; values outside them use the
-existing `FINKORE_MONEY_INVALID_ALLOCATION` category. This portability correction
-is an observable contract change under **SPEC-COMPATIBILITY-012/014**; it does
-not introduce a new serialization encoding or operation identifier.
+The JSON-number request uses the inclusive ranges in **MONEY-ALLOCATION-014**
+so accepted integers can be represented across consumer implementations.
+Out-of-range values use `FINKORE_MONEY_INVALID_ALLOCATION`. This does not
+introduce another serialization encoding or operation identifier.
 
 Workflow definition versions use positive base-10 integer strings only for the
 optional Default Workflow Version Sequence; other versions and revisions are
 opaque strings. Approval quorum thresholds are bounded by the finite declared
-voter set. Those values therefore do not reuse the allocation ratio domain.
+voter set. Those values do not reuse the allocation ratio domain.
 
 ## Non-Goals
 

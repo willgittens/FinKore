@@ -50,15 +50,9 @@ such as `AtomicInteger`/`AtomicLong`, TypeScript bigint/boxed numbers and other
 native objects are unsupported. This does not add a persistence encoding,
 extend Workflow guard comparison, or alter Money arithmetic/rounding rules.
 
-## Core 0.9.7 correction note (non-normative)
-
-D9 adopts this profile. Under SPEC-COMPATIBILITY-012/014, it is an observable
-compatibility correction:
-previously accepted unsupported native data now fails with the owning Entity
-error, and Java can no longer retain mutable numeric aliases. Supported immutable
-exact numbers remain accepted. The rule applies to source and related/successor
-Entity data in evolution, without changing Audit evidence's separate value
-profile or inventing a total ordering for otherwise unspecified competing errors.
+The application-data profile applies to source and related/successor Entity
+data in evolution. Audit evidence has its own value profile; this does not
+define a total ordering for otherwise unspecified competing errors.
 
 ## Invariants
 
@@ -103,11 +97,10 @@ constraint or a standardized validation language.
 - Applying half of a multi-field mutation before reporting another field invalid.
 - Using localized prose as the only machine-readable violation identity.
 
-## Core 0.9.5 correction note (non-normative)
+## Validator declarations
 
-The accepted [contract decision](../../docs/plans/plan-09.5.md) adds
-**ENTITY-VALIDATION-009** to distinguish declaration failure from a supported
-predicate rejecting data. The bounded fixture continues to support only
+**ENTITY-VALIDATION-009** distinguishes declaration failure from a supported
+predicate rejecting data. The bounded fixture supports only
 `positive-money` and `money-not-greater-than`, with nonempty string
 `id`/`path` and the latter's nonempty `otherPath`. Omitted validation and an
 empty list remain valid. No general validation DSL or universal positive-Money

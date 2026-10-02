@@ -7,7 +7,7 @@
       "requirements": [
         "WORKFLOW-IMPORT-005"
       ],
-      "description": "import control; Core 0.9.6 finding 10a.",
+      "description": "Import control.",
       "operation": "workflow.import",
       "input": {
         "definition": {
@@ -55,9 +55,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a"
+      "reviewFinding": "workflow-instance-validation"
     },
     {
       "id": "workflow.boundary096.import-mismatch-control-001",
@@ -66,7 +66,7 @@
         "WORKFLOW-ERROR-004",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "import mismatch control; Core 0.9.6 finding 10a.",
+      "description": "Import mismatch control.",
       "operation": "workflow.import",
       "input": {
         "definition": {
@@ -109,9 +109,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.import-control-001"
     },
     {
@@ -121,7 +121,7 @@
         "WORKFLOW-ERROR-005",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "import revision null before mismatch; Core 0.9.6 finding 10a.",
+      "description": "Import revision null before mismatch.",
       "operation": "workflow.import",
       "input": {
         "definition": {
@@ -164,9 +164,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.import-control-001"
     },
     {
@@ -176,7 +176,7 @@
         "WORKFLOW-ERROR-005",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "import revision empty before mismatch; Core 0.9.6 finding 10a.",
+      "description": "Import revision empty before mismatch.",
       "operation": "workflow.import",
       "input": {
         "definition": {
@@ -219,9 +219,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.import-control-001"
     },
     {
@@ -231,7 +231,7 @@
         "WORKFLOW-ERROR-005",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "import revision number before mismatch; Core 0.9.6 finding 10a.",
+      "description": "Import revision number before mismatch.",
       "operation": "workflow.import",
       "input": {
         "definition": {
@@ -274,9 +274,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.import-control-001"
     },
     {
@@ -286,7 +286,7 @@
         "WORKFLOW-ERROR-005",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "import revision boolean before mismatch; Core 0.9.6 finding 10a.",
+      "description": "Import revision boolean before mismatch.",
       "operation": "workflow.import",
       "input": {
         "definition": {
@@ -329,9 +329,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.import-control-001"
     },
     {
@@ -341,7 +341,7 @@
         "WORKFLOW-ERROR-005",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "import revision array before mismatch; Core 0.9.6 finding 10a.",
+      "description": "Import revision array before mismatch.",
       "operation": "workflow.import",
       "input": {
         "definition": {
@@ -384,9 +384,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.import-control-001"
     },
     {
@@ -396,7 +396,7 @@
         "WORKFLOW-ERROR-005",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "import revision object before mismatch; Core 0.9.6 finding 10a.",
+      "description": "Import revision object before mismatch.",
       "operation": "workflow.import",
       "input": {
         "definition": {
@@ -439,9 +439,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.import-control-001"
     },
     {
@@ -451,7 +451,7 @@
         "WORKFLOW-STATES-004",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "import definition before instance; Core 0.9.6 finding 3.",
+      "description": "Import definition before instance.",
       "operation": "workflow.import",
       "input": {
         "definition": {
@@ -494,9 +494,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-3-validation-bypass"
+        "workflow-definition-error-priority-bypass"
       ],
-      "reviewFinding": "3",
+      "reviewFinding": "workflow-definition-error-priority",
       "pairedControl": "workflow.boundary096.import-control-001"
     },
     {
@@ -505,7 +505,7 @@
       "requirements": [
         "WORKFLOW-TRANSITION-005"
       ],
-      "description": "transition control; Core 0.9.6 finding 10a.",
+      "description": "Transition control.",
       "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
@@ -554,9 +554,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a"
+      "reviewFinding": "workflow-instance-validation"
     },
     {
       "id": "workflow.boundary096.transition-mismatch-control-001",
@@ -565,7 +565,7 @@
         "WORKFLOW-ERROR-004",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "transition mismatch control; Core 0.9.6 finding 10a.",
+      "description": "Transition mismatch control.",
       "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
@@ -618,9 +618,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.transition-control-001"
     },
     {
@@ -630,7 +630,7 @@
         "WORKFLOW-ERROR-005",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "transition revision null before mismatch; Core 0.9.6 finding 10a.",
+      "description": "Transition revision null before mismatch.",
       "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
@@ -674,9 +674,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.transition-control-001"
     },
     {
@@ -686,7 +686,7 @@
         "WORKFLOW-ERROR-005",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "transition revision empty before mismatch; Core 0.9.6 finding 10a.",
+      "description": "Transition revision empty before mismatch.",
       "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
@@ -730,9 +730,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.transition-control-001"
     },
     {
@@ -742,7 +742,7 @@
         "WORKFLOW-ERROR-005",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "transition revision number before mismatch; Core 0.9.6 finding 10a.",
+      "description": "Transition revision number before mismatch.",
       "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
@@ -786,9 +786,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.transition-control-001"
     },
     {
@@ -798,7 +798,7 @@
         "WORKFLOW-ERROR-005",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "transition revision boolean before mismatch; Core 0.9.6 finding 10a.",
+      "description": "Transition revision boolean before mismatch.",
       "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
@@ -842,9 +842,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.transition-control-001"
     },
     {
@@ -854,7 +854,7 @@
         "WORKFLOW-ERROR-005",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "transition revision array before mismatch; Core 0.9.6 finding 10a.",
+      "description": "Transition revision array before mismatch.",
       "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
@@ -898,9 +898,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.transition-control-001"
     },
     {
@@ -910,7 +910,7 @@
         "WORKFLOW-ERROR-005",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "transition revision object before mismatch; Core 0.9.6 finding 10a.",
+      "description": "Transition revision object before mismatch.",
       "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
@@ -954,9 +954,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.transition-control-001"
     },
     {
@@ -966,7 +966,7 @@
         "WORKFLOW-STATES-004",
         "WORKFLOW-ERROR-007"
       ],
-      "description": "transition definition before instance; Core 0.9.6 finding 3.",
+      "description": "Transition definition before instance.",
       "operation": "finkore.workflow.transition",
       "input": {
         "definition": {
@@ -1010,9 +1010,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-3-validation-bypass"
+        "workflow-definition-error-priority-bypass"
       ],
-      "reviewFinding": "3",
+      "reviewFinding": "workflow-definition-error-priority",
       "pairedControl": "workflow.boundary096.transition-control-001"
     },
     {
@@ -1066,9 +1066,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.import-mismatch-control-001"
     },
     {
@@ -1122,9 +1122,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.import-mismatch-control-001"
     },
     {
@@ -1178,9 +1178,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.import-mismatch-control-001"
     },
     {
@@ -1234,9 +1234,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.import-mismatch-control-001"
     },
     {
@@ -1294,9 +1294,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.import-mismatch-control-001"
     },
     {
@@ -1350,9 +1350,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.import-mismatch-control-001"
     },
     {
@@ -1408,9 +1408,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.transition-mismatch-control-001"
     },
     {
@@ -1466,9 +1466,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.transition-mismatch-control-001"
     },
     {
@@ -1524,9 +1524,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.transition-mismatch-control-001"
     },
     {
@@ -1582,9 +1582,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.transition-mismatch-control-001"
     },
     {
@@ -1644,9 +1644,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.transition-mismatch-control-001"
     },
     {
@@ -1702,9 +1702,9 @@
         "invariant"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.transition-mismatch-control-001"
     },
     {
@@ -1752,9 +1752,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.import-control-001"
     },
     {
@@ -1803,9 +1803,9 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary096-10a-validation-bypass"
+        "workflow-instance-validation-bypass"
       ],
-      "reviewFinding": "10a",
+      "reviewFinding": "workflow-instance-validation",
       "pairedControl": "workflow.boundary096.transition-control-001"
     }
   ]

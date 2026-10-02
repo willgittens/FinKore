@@ -9,7 +9,7 @@
         "ENTITY-EVOLUTION-034",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "M7 malformed boundary: relationship-type-correct-first-001",
+      "description": "Malformed input: relationship-type-correct-first-001",
       "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
@@ -203,7 +203,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.relationship-type-correct-last-001",
@@ -213,7 +213,7 @@
         "ENTITY-EVOLUTION-034",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "M7 malformed boundary: relationship-type-correct-last-001",
+      "description": "Malformed input: relationship-type-correct-last-001",
       "operation": "finkore.entity.evolution.correct",
       "input": {
         "definition": {
@@ -407,7 +407,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.relationship-type-reverse-first-001",
@@ -417,7 +417,7 @@
         "ENTITY-EVOLUTION-034",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "M7 malformed boundary: relationship-type-reverse-first-001",
+      "description": "Malformed input: relationship-type-reverse-first-001",
       "operation": "finkore.entity.evolution.reverse",
       "input": {
         "definition": {
@@ -585,7 +585,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.relationship-type-reverse-last-001",
@@ -595,7 +595,7 @@
         "ENTITY-EVOLUTION-034",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "M7 malformed boundary: relationship-type-reverse-last-001",
+      "description": "Malformed input: relationship-type-reverse-last-001",
       "operation": "finkore.entity.evolution.reverse",
       "input": {
         "definition": {
@@ -763,7 +763,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.relationship-type-void-first-001",
@@ -773,7 +773,7 @@
         "ENTITY-EVOLUTION-034",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "M7 malformed boundary: relationship-type-void-first-001",
+      "description": "Malformed input: relationship-type-void-first-001",
       "operation": "finkore.entity.evolution.void",
       "input": {
         "definition": {
@@ -913,7 +913,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.relationship-type-void-last-001",
@@ -923,7 +923,7 @@
         "ENTITY-EVOLUTION-034",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "M7 malformed boundary: relationship-type-void-last-001",
+      "description": "Malformed input: relationship-type-void-last-001",
       "operation": "finkore.entity.evolution.void",
       "input": {
         "definition": {
@@ -1063,7 +1063,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.relationship-type-supersede-first-001",
@@ -1073,7 +1073,7 @@
         "ENTITY-EVOLUTION-034",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "M7 malformed boundary: relationship-type-supersede-first-001",
+      "description": "Malformed input: relationship-type-supersede-first-001",
       "operation": "finkore.entity.evolution.supersede",
       "input": {
         "definition": {
@@ -1244,7 +1244,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.relationship-type-supersede-last-001",
@@ -1254,7 +1254,7 @@
         "ENTITY-EVOLUTION-034",
         "ENTITY-EVOLUTION-033"
       ],
-      "description": "M7 malformed boundary: relationship-type-supersede-last-001",
+      "description": "Malformed input: relationship-type-supersede-last-001",
       "operation": "finkore.entity.evolution.supersede",
       "input": {
         "definition": {
@@ -1425,7 +1425,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-00-001",
@@ -1435,7 +1435,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-00-001",
+      "description": "Malformed input: original-data-mutate-00-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -1502,7 +1502,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-01-001",
@@ -1512,7 +1512,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-01-001",
+      "description": "Malformed input: original-data-mutate-01-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -1579,7 +1579,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-02-001",
@@ -1589,7 +1589,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-02-001",
+      "description": "Malformed input: original-data-mutate-02-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -1656,7 +1656,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-03-001",
@@ -1666,7 +1666,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-03-001",
+      "description": "Malformed input: original-data-mutate-03-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -1733,7 +1733,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-04-001",
@@ -1743,7 +1743,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-04-001",
+      "description": "Malformed input: original-data-mutate-04-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -1810,7 +1810,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-05-001",
@@ -1820,7 +1820,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-05-001",
+      "description": "Malformed input: original-data-mutate-05-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -1887,7 +1887,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-06-001",
@@ -1897,7 +1897,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-06-001",
+      "description": "Malformed input: original-data-mutate-06-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -1967,7 +1967,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-07-001",
@@ -1977,7 +1977,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-07-001",
+      "description": "Malformed input: original-data-mutate-07-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -2047,7 +2047,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-08-001",
@@ -2057,7 +2057,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-08-001",
+      "description": "Malformed input: original-data-mutate-08-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -2127,7 +2127,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-09-001",
@@ -2137,7 +2137,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-09-001",
+      "description": "Malformed input: original-data-mutate-09-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -2207,7 +2207,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-10-001",
@@ -2217,7 +2217,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-10-001",
+      "description": "Malformed input: original-data-mutate-10-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -2287,7 +2287,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-11-001",
@@ -2297,7 +2297,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-11-001",
+      "description": "Malformed input: original-data-mutate-11-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -2367,7 +2367,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-12-001",
@@ -2377,7 +2377,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-12-001",
+      "description": "Malformed input: original-data-mutate-12-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -2447,7 +2447,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-13-001",
@@ -2457,7 +2457,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-13-001",
+      "description": "Malformed input: original-data-mutate-13-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -2527,7 +2527,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-14-001",
@@ -2537,7 +2537,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-14-001",
+      "description": "Malformed input: original-data-mutate-14-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -2607,7 +2607,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-15-001",
@@ -2617,7 +2617,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-15-001",
+      "description": "Malformed input: original-data-mutate-15-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -2686,7 +2686,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-mutate-16-001",
@@ -2696,7 +2696,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-mutate-16-001",
+      "description": "Malformed input: original-data-mutate-16-001",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -2765,7 +2765,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-00-001",
@@ -2775,7 +2775,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-00-001",
+      "description": "Malformed input: original-data-transition-00-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -2837,7 +2837,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-01-001",
@@ -2847,7 +2847,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-01-001",
+      "description": "Malformed input: original-data-transition-01-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -2909,7 +2909,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-02-001",
@@ -2919,7 +2919,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-02-001",
+      "description": "Malformed input: original-data-transition-02-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -2981,7 +2981,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-03-001",
@@ -2991,7 +2991,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-03-001",
+      "description": "Malformed input: original-data-transition-03-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -3053,7 +3053,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-04-001",
@@ -3063,7 +3063,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-04-001",
+      "description": "Malformed input: original-data-transition-04-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -3125,7 +3125,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-05-001",
@@ -3135,7 +3135,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-05-001",
+      "description": "Malformed input: original-data-transition-05-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -3197,7 +3197,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-06-001",
@@ -3207,7 +3207,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-06-001",
+      "description": "Malformed input: original-data-transition-06-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -3272,7 +3272,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-07-001",
@@ -3282,7 +3282,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-07-001",
+      "description": "Malformed input: original-data-transition-07-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -3347,7 +3347,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-08-001",
@@ -3357,7 +3357,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-08-001",
+      "description": "Malformed input: original-data-transition-08-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -3422,7 +3422,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-09-001",
@@ -3432,7 +3432,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-09-001",
+      "description": "Malformed input: original-data-transition-09-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -3497,7 +3497,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-10-001",
@@ -3507,7 +3507,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-10-001",
+      "description": "Malformed input: original-data-transition-10-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -3572,7 +3572,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-11-001",
@@ -3582,7 +3582,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-11-001",
+      "description": "Malformed input: original-data-transition-11-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -3647,7 +3647,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-12-001",
@@ -3657,7 +3657,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-12-001",
+      "description": "Malformed input: original-data-transition-12-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -3722,7 +3722,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-13-001",
@@ -3732,7 +3732,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-13-001",
+      "description": "Malformed input: original-data-transition-13-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -3797,7 +3797,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-14-001",
@@ -3807,7 +3807,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-14-001",
+      "description": "Malformed input: original-data-transition-14-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -3872,7 +3872,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-15-001",
@@ -3882,7 +3882,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-15-001",
+      "description": "Malformed input: original-data-transition-15-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -3946,7 +3946,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-transition-16-001",
@@ -3956,7 +3956,7 @@
         "ENTITY-VALIDATION-004",
         "ENTITY-ERROR-001"
       ],
-      "description": "M7 malformed boundary: original-data-transition-16-001",
+      "description": "Malformed input: original-data-transition-16-001",
       "operation": "finkore.entity.transition",
       "input": {
         "definition": {
@@ -4020,7 +4020,7 @@
         "regression",
         "mutation-sensitive"
       ],
-      "reviewFinding": "M7"
+      "reviewFinding": "malformed-input-atomicity"
     },
     {
       "id": "entity.boundary097.original-data-valid-control-001",
@@ -4115,7 +4115,7 @@
       "requirements": [
         "ENTITY-LIFECYCLE-007"
       ],
-      "description": "F8c: finkore.entity.mutate, [\"entity\",\"state\"] empty; reject atomically. Reconstructed from original case entity.mutate.display-number-not-identity-001/[\"entity\",\"state\"]/empty.",
+      "description": "Finkore.entity.mutate, [\"entity\",\"state\"] empty; reject atomically.",
       "operation": "finkore.entity.mutate",
       "input": {
         "definition": {
@@ -4170,7 +4170,7 @@
           "code": "FINKORE_WORKFLOW_INVALID_INSTANCE"
         }
       },
-      "reviewFinding": "F8c",
+      "reviewFinding": "entity-required-representation",
       "pairedControl": "entity.boundary097.discovery-control-011",
       "tags": [
         "regression",
@@ -4179,7 +4179,7 @@
         "mutation-sensitive"
       ],
       "guardsAgainst": [
-        "boundary097-f8c"
+        "entity-required-representation-bypass"
       ]
     },
     {
