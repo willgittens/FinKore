@@ -12,12 +12,14 @@
   },
   "scripts": {
     "conformance:check": "node docs/tools/validate-conformance.js",
+    "agentic:check": "node docs/tools/check-agentic.js",
+    "architecture:check": "node docs/tools/check-architecture.js",
     "node:check": "node docs/tools/check-node-version.js",
     "traceability:check": "node docs/tools/check-traceability.js",
     "docs:check": "node docs/tools/check-doc-links.js && node docs/tools/check-traceability.js",
     "license:check": "node docs/tools/check-license.js",
-    "tools:test": "node --test docs/tools/test/*.test.js",
-    "check": "npm run node:check && npm run conformance:check && npm run tools:test && npm run docs:check && npm run license:check && git diff --check",
+    "tools:test": "node --test --test-isolation=none docs/tools/test/*.test.js",
+    "check": "npm run node:check && npm run architecture:check && npm run conformance:check && npm run agentic:check && npm run tools:test && npm run docs:check && npm run license:check && git diff --check",
     "verify": "npm run check"
   }
 }

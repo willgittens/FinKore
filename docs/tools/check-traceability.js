@@ -5,7 +5,7 @@
  * This developer tool reads repository metadata without changing it and does
  * not define financial behavior.
  */
-import { readFileSync, readdirSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { extname, join, resolve } from 'node:path'
 
 const root = process.cwd()
@@ -40,6 +40,7 @@ function collectVectors() {
   const manifest = readJson(resolve(root, 'conformance/manifest.json'))
   const vectors = new Map()
   const requirements = new Map()
+  const operations = new Map()
 
   for (const suite of manifest.suites) {
     for (const relativePath of suite.vectorFiles) {
@@ -47,6 +48,12 @@ function collectVectors() {
       for (const vector of readJson(file).vectors) {
         if (vectors.has(vector.id)) errors.push(`duplicate vector ID ${vector.id} in ${file}`)
         vectors.set(vector.id, { file, requirements: new Set(vector.requirements) })
+        const specificationTopic = vector.spec === 'shared/conventions' ? 'conventions' : vector.spec
+        const specificationPath = resolve(root, 'spec', `${specificationTopic}.md`)
+        if (!existsSync(specificationPath)) errors.push(`${vector.id} references missing specification topic ${vector.spec}`)
+        const operationVectors = operations.get(vector.operation) ?? []
+        operationVectors.push(vector.id)
+        operations.set(vector.operation, operationVectors)
         for (const requirement of vector.requirements) {
           const references = requirements.get(requirement) ?? []
           references.push(vector.id)
@@ -55,7 +62,25 @@ function collectVectors() {
       }
     }
   }
-  return { vectors, requirements }
+  return { vectors, requirements, operations }
+}
+
+function collectConformanceOperations() {
+  const text = readFileSync(resolve(root, 'conformance/conventions.md'), 'utf8')
+  const catalog = text.match(/## Semantic operation catalog\n(?<body>[\s\S]*?)(?=\n## )/)?.groups?.body
+  if (catalog === undefined) {
+    errors.push('conformance/conventions.md contains no Semantic operation catalog section')
+    return new Set()
+  }
+  const operations = new Set()
+  for (const line of catalog.split('\n').filter((candidate) => candidate.startsWith('| `'))) {
+    for (const match of line.matchAll(/`([a-z]+(?:\.[a-z]+)+)`/g)) {
+      if (operations.has(match[1])) errors.push(`duplicate conformance operation: ${match[1]}`)
+      operations.add(match[1])
+    }
+  }
+  if (operations.size === 0) errors.push('conformance/conventions.md contains no semantic operation catalog')
+  return operations
 }
 
 function collectTraceabilityRows() {
@@ -126,7 +151,8 @@ function checkInventorySummary(text, rows, vectorCount) {
 }
 
 const specificationRequirements = collectSpecificationRequirements()
-const { vectors, requirements: vectorRequirements } = collectVectors()
+const { vectors, requirements: vectorRequirements, operations: vectorOperations } = collectVectors()
+const conformanceOperations = collectConformanceOperations()
 const { rows, text: traceabilityText } = collectTraceabilityRows()
 
 for (const id of specificationRequirements.keys()) {
@@ -139,6 +165,14 @@ for (const [id, vectorIds] of vectorRequirements) {
   if (!specificationRequirements.has(id)) {
     errors.push(`vectors ${vectorIds.join(', ')} reference unknown requirement ${id}`)
   }
+}
+for (const [operation, vectorIds] of vectorOperations) {
+  if (!conformanceOperations.has(operation)) {
+    errors.push(`vectors ${vectorIds.join(', ')} reference operation absent from the conformance catalog: ${operation}`)
+  }
+}
+for (const operation of conformanceOperations) {
+  if (!vectorOperations.has(operation)) errors.push(`conformance operation has no manifest-listed vector: ${operation}`)
 }
 
 for (const [id, row] of rows) {
@@ -169,5 +203,5 @@ if (errors.length > 0) {
   process.exitCode = 1
 } else {
   const covered = [...rows.values()].filter((row) => row.coverage === 'COVERED').length
-  console.log(`Traceability check passed: ${rows.size} requirements, ${vectors.size} vectors, ${covered} covered.`)
+  console.log(`Traceability check passed: ${rows.size} requirements, ${vectors.size} vectors, ${vectorOperations.size} operations, ${covered} covered.`)
 }

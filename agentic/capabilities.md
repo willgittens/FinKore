@@ -23,7 +23,9 @@ capabilities.
 > conformance.
 
 The Agentic Contract describes capabilities. The
-[Conformance Suite](../conformance/README.md) proves observable behavior. An
+[Conformance Suite](../conformance/README.md) supplies portable acceptance
+cases; executing them against an implementation provides evidence about
+observable behavior. Artifact validation alone is not conformance. An
 implementation advertising `finkore.money.add` should be verified against the
 applicable vectors and requirements before a client relies on a conformance
 claim. The same principle applies to promoted operations such as

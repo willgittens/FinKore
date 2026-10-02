@@ -6,25 +6,32 @@
 
 > In financial software, a passing test suite is useful only if it reliably rejects broken behavior.
 
-This directory is the language-independent executable evidence for FinKore Core
+This directory publishes language-independent acceptance cases for FinKore Core
 0.9 release candidate: Money, Workflow, Audit, Approvals, and Entities. The
 specification remains the source of truth. Vectors describe observable domain
 behavior; they do not prescribe APIs, classes, exceptions, storage, or
 frameworks.
 
-The completed [Core 0.9.7 corrective release](../docs/plans/plan-09.7.md)
-contains 1,775 vectors; all pass on TypeScript, Python 3.12/3.13 and Java with
-no failed, unsupported or infrastructure outcomes. Native regressions supplement
-JSON for ownership, exact values, cycles, sparse collections and returned-value
-reuse. Full configured mutation and paired critical/native gates pass.
-[Traceability](traceability.md) records 436 requirements: 352 covered, one partial
-external-fact authoring requirement and 83 not directly testable by portable
-vectors. Python/Java targeted mutation probes do not establish full implementation
-mutation coverage. Earlier milestone counts below are historical.
+The current manifest contains 1,775 vectors. Repository verification validates
+their schema, identifiers, requirement mappings, specification topics, operation
+catalog, and Agentic alignment. FinKore no longer maintains an implementation or
+runner, so these checks do not execute financial behavior and do not establish
+that any current implementation passes the vectors. See the
+[consumer guide](consumer-guide.md) for consumer-owned execution and claim
+requirements.
+
+[Traceability](traceability.md) records 436 requirements: 352 with portable
+vector coverage, one partial external-fact authoring requirement, and 83 not
+directly testable by portable vectors. Historical implementation results remain
+recorded in completed plans and release history; they are not current execution
+evidence.
 
 ## Scope and discovery
 
-[manifest.json](manifest.json) is the only normative discovery entry point. A runner MUST load only the listed vector files, resolve paths relative to the manifest, reject duplicate vector IDs, and reject unsupported format versions. Filesystem traversal order carries no meaning.
+[manifest.json](manifest.json) is the only normative discovery entry point. A
+consumer-owned conformance tool MUST load only the listed vector files, resolve
+paths relative to the manifest, reject duplicate vector IDs, and reject
+unsupported format versions. Filesystem traversal order carries no meaning.
 
 The manifest and vector-file version fields describe syntax compatibility, not
 FinKore release numbers. Release scope is determined by the manifest contents,
@@ -129,10 +136,12 @@ The initial suites are grouped by specification behavior:
 - Approvals: requirements, decisions, validity lifecycle events, explicit expiration context, conditions, chains, subject facts, and bounded composition groups/stages/quorums.
 - Entities: identity, lifecycle, declared mutability, validation, evolution, import mapping, business revision observations, and conflict preconditions.
 
-See [conventions.md](conventions.md) for the vector format and runner contract.
+See [conventions.md](conventions.md) for the vector format and comparison rules.
 See [traceability.md](traceability.md) for the current requirement coverage, known specification gaps, mutation design, and readiness assessment.
-See the [language-neutral implementation guide](../docs/implementation-guide.md)
-for consumer-owned implementation and verification guidance.
+See the [consumer guide](consumer-guide.md) for discovery, execution outcomes,
+reporting, and consumer-owned conformance claims, and the
+[language-neutral implementation guide](../docs/implementation-guide.md) for
+implementation guidance.
 
 ## Conformance Claim Model
 
@@ -150,7 +159,7 @@ format. The claim MUST identify at least:
 - manifest path or release manifest identity;
 - `finkoreConformance` version;
 - all suites included in the run;
-- the implementation and adapter under test.
+- the implementation and consumer-owned evaluation tool under test.
 
 A domain-scoped claim is allowed when an implementation intentionally implements
 only named domains. The claim MUST name the domain suites it covers, use the
@@ -170,15 +179,14 @@ claim, but they MUST NOT be hidden when publishing the complete run report.
 
 Advertising an Agentic operation or capability is not evidence of conformance.
 Agentic metadata may describe a contract, but conformance is demonstrated only
-by passing the relevant manifest-listed vectors through a faithful runner and
-adapter.
+by passing the relevant manifest-listed vectors through a faithful
+consumer-owned tool and implementation binding.
 
-The reference runner report includes the Core release, manifest path,
+A consumer report should include the Core release, manifest identity,
 `finkoreConformance` version, declared suites and vector files, applied filters,
-suite counts, requirement counts, critical failures, and individual vector
-results. That information is intended to make a claim reproducible locally from
-the repository without checksums, attestations, hosted CI, provenance reports, or
-profile machinery.
+outcome counts, and individual vector results. That information makes a claim
+reproducible without requiring a FinKore-maintained runner API. Repository
+schema validation alone is not a conformance report.
 
 ## Specification-first TDD
 
@@ -322,6 +330,7 @@ Not every trivial rule needs every category. Critical financial behavior receive
 D8 policy identity is now specified by AUDIT-REDACTION-008. The separate
 `audit/policy-identity.json` supplies 20 vectors for omission, opaque valid labels,
 malformed supplied values, unchanged history, and authority/target/error-priority
-boundaries. Native tests add supplied undefined, constructor absence conventions,
-input preservation and actual-history reuse. All 125 Audit vectors pass on all
-four runtimes; the 1758-vector candidate passes fresh complete verification.
+boundaries. Historical Core 0.9.7 native tests added supplied undefined,
+constructor absence conventions, input preservation and actual-history reuse;
+that snapshot recorded all 125 Audit vectors and the 1,758-vector candidate as
+passing. Those results are not current repository execution evidence.

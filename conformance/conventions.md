@@ -8,8 +8,9 @@ release numbers. Release scope is discovered from manifest-listed files,
 requirement IDs, and traceability, not from bumping a format field.
 
 A format version MUST be bumped only when manifest syntax, vector-file syntax, or
-the meaning of a defined format member changes in a way that an older runner
-cannot faithfully validate. A runner MUST reject versions it does not support.
+the meaning of a defined format member changes in a way that an older consumer
+tool cannot faithfully validate. A consumer tool MUST reject versions it does
+not support.
 Core compatibility rules for normative behavior, portable serializations, and
 regression vectors are defined in the
 [Specification compatibility policy](../spec/conventions.md#compatibility-policy).
@@ -19,7 +20,9 @@ regression vectors are defined in the
 Each manifest-listed JSON file is an object containing `finkoreVectorFile` and a non-empty `vectors` array. Each vector has:
 
 - `id`: stable, globally unique, domain-prefixed identifier.
-- `spec`: repository-relative specification topic without a Markdown line number.
+- `spec`: specification topic without a Markdown line number. Domain topics map
+  below `spec/`; the shared `shared/conventions` topic maps to
+  `spec/conventions.md`.
 - `requirements`: non-empty array of stable normative requirement IDs.
 - `description`: concise reason the behavior is observable.
 - `operation`: language-neutral operation identifier from the catalog below.
@@ -41,19 +44,20 @@ The normalized observation belongs only to conformance infrastructure. Productio
 
 Money is represented as `{"amount":"plain base-10 decimal","currency":"ISO code"}`.
 Implementations perform Money operations and comparisons under `/spec`; the
-adapter exposes the resulting normative Money serialization or other agreed
-observation. The runner then compares that normalized observation exactly. It
+consumer binding exposes the resulting normative Money serialization or other
+agreed observation. The evaluation tool then compares that normalized
+observation exactly. It
 does not recognize Money-shaped objects, remove trailing zeros, compare decimal
 strings numerically, or apply currency rules.
 
 Trailing fractional zeros MAY be present in vector input. Numeric equality is
 observed through a domain operation such as `finkore.money.compare`, whose
-normalized result is `EQUAL`; it is not created by special runner comparison.
+normalized result is `EQUAL`; it is not created by special comparison logic.
 For an operation that returns Money, the expected decimal string records the
 operation's agreed observable representation. When the operation defines a
-target scale, the expected amount has exactly that scale, and each adapter must
-expose that result before the runner's exact comparison. This keeps decimal and
-scale semantics in the implementation core rather than in the runner.
+target scale, the expected amount has exactly that scale, and each consumer
+binding must expose that result before exact comparison. This keeps decimal and
+scale semantics in the implementation rather than in evaluation tooling.
 The `finkore.money.allocate` fixture supplies `value`, `allocation`, and
 `scale`. `allocation.method` is `EQUAL` with `parts` or `RATIO` with `ratios`.
 Scale, parts, and ratio entries are JSON numbers with integer mathematical
@@ -543,7 +547,7 @@ Requirement registry, global ordering, or missing subject facts.
 
 The manifest lists each domain's `construction-evaluation-regressions.json`.
 Optional `reviewFinding` and `pairedControl` metadata link review labels and
-independently passing control vector IDs; the runner ignores them. Requirements
+independently passing control vector IDs; evaluation tools ignore them. Requirements
 and exact expected results still define each test, with no new fixture DSL.
 Native arrays with holes, cycles, or unsupported objects are not JSON null
 fixtures. Structural input failures are core domain errors; unexpected runtime
@@ -727,9 +731,9 @@ claiming a malformed history was successfully imported. Native tests establish
 unchanged Entity/revision/currentness/relation/Audit state; invalid histories
 need not be fabricated into valid normalized observations.
 
-## Runner contract
+## Consumer-owned evaluation contract
 
-A language adapter performs:
+A consumer-owned implementation binding and evaluation tool perform:
 
 ```text
 load manifest and vector file
@@ -747,7 +751,10 @@ normalize only observable result, error code, and requested post-state
 compare exactly with expected
 ```
 
-A runner must isolate vectors so one vector cannot depend on another. It must treat absent and explicit null as different, compare monetary values without floating-point tolerance, verify every requested post-operation observation, and fail on an unexpected success or error.
+The tool must isolate vectors so one vector cannot depend on another. It must
+treat absent and explicit null as different, compare monetary values without
+floating-point tolerance, verify every requested post-operation observation,
+and fail on an unexpected success or error.
 
 Illustrative pseudocode:
 
@@ -755,12 +762,13 @@ Illustrative pseudocode:
 for file in manifest.vectorFiles:
     suite = parseAndValidate(file)
     for vector in suite.vectors:
-        adapter.reset()
-        actual = adapter.execute(vector.operation, vector.input, vector.context)
+        binding.resetIfNeeded()
+        actual = binding.execute(vector.operation, vector.input, vector.context)
         assertExact(normalize(actual), vector.expected)
 ```
 
-The adapter bridges syntax. The vector observes behavior defined by `/spec`.
+The binding bridges syntax. FinKore does not prescribe this pseudocode as an API.
+The vector observes behavior defined by `/spec`.
 
 ## Classification and regression metadata
 
@@ -811,11 +819,9 @@ and ID presence does not change the redacted content. Native convenience absence
 sentinels are documented separately from portable omission; explicit null is
 not omitted input. `audit.redact` remains conformance-local.
 
-M2 full-envelope vectors remain manifest-listed and are compared exactly by the
-unchanged runner. The supplementary [boundary cases](boundary097-cases.json)
-cover native behavior and adapter results whose optional diagnostic envelope is
-not specified. Their tests compare complete success values or exact portable
-error codes and independently snapshot supplied input. They do not make optional
-diagnostics mandatory or infer domain results from implementation agreement.
-`reviewFinding` and `pairedControl` are non-normative review metadata, now also
-recognized by the vector schema; they do not affect runner execution.
+M2 full-envelope vectors remain manifest-listed and retain their exact expected
+observations. The supplementary [boundary cases](boundary097-cases.json) retain
+historical native/binding review data whose optional diagnostic envelope was not
+specified. The file is not part of manifest discovery or the vector-file schema.
+`reviewFinding`, `pairedControl`, and `reason` are non-normative review metadata;
+they do not affect financial evaluation.

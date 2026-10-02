@@ -4,8 +4,7 @@
  *
  * This developer tool reads repository artifacts without changing them. It
  * validates syntax, declared paths, the published JSON Schema, and globally
- * unique vector identifiers. It does not execute vectors or define financial
- * behavior.
+ * unique vector identifiers. It does not define or execute financial behavior.
  */
 import { readFileSync } from 'node:fs'
 import { dirname, relative, resolve, sep } from 'node:path'

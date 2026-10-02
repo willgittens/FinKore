@@ -72,21 +72,21 @@ active tooling does not depend on removed packages.
 
 ## Milestone 2 — Align verification with the new scope
 
-- [ ] Keep schema validation, stable-ID checks, requirement traceability,
+- [x] Keep schema validation, stable-ID checks, requirement traceability,
       Agentic contract consistency, documentation links, and license checks.
-- [ ] Adapt architecture checks to enforce the new repository boundaries.
+- [x] Adapt architecture checks to enforce the new repository boundaries.
       Retain appropriate tests for artifact-validation tools; remove gates that
       only build, execute, or test deleted implementations and runner code.
-- [ ] Make local verification work without financial implementations, a runner,
+- [x] Make local verification work without financial implementations, a runner,
       or adapters. Validate vectors as published data against their schemas.
-- [ ] Document vector inputs, expected outputs, errors, and requirement mappings
+- [x] Document vector inputs, expected outputs, errors, and requirement mappings
       so consumers can use their own conformance tools without a FinKore runner API.
-- [ ] Distinguish vector/schema validation from executed financial conformance.
+- [x] Distinguish vector/schema validation from executed financial conformance.
       Without an implementation under test, do not report financial vectors as
       passed or claim cross-language agreement.
-- [ ] Review traceability entries that rely on removed native or runner tests. Preserve
+- [x] Review traceability entries that rely on removed native or runner tests. Preserve
       portable vectors; identify any remaining coverage gaps explicitly.
-- [ ] Keep verification local and deterministic. Do not add GitHub Actions.
+- [x] Keep verification local and deterministic. Do not add GitHub Actions.
 
 **Completion:** the retained specification and tooling have reproducible local
 checks, and conformance claims accurately describe the evidence available.
