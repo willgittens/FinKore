@@ -2,7 +2,7 @@
 
 ## Status
 
-**Transition and Milestones 4–7 implemented — audit follow-up milestone 8 pending; unreleased.**
+**All transition and audit follow-up milestones implemented — 0.9.8 plan complete; unreleased.**
 
 Updated on 2026-10-03. This replaces the previous 0.9.8 corrective implementation
 plan. Transition milestones 1–3 are implemented: FinKore is
@@ -12,8 +12,9 @@ Earlier releases remain historical snapshots of the project as it existed at
 those versions.
 
 The post-transition audit found contract, validation, and documentation gaps.
-Milestones 4–8 below are required follow-up work; passing existing local checks
-does not close them or declare the full 0.9.8 plan complete.
+Milestones 4–8 below disposition those findings and are now implemented. Their
+bounded artifact and maintenance results close this plan but do not publish a
+0.9.8 release or establish external implementation conformance.
 
 This document is non-normative. [CoreDoc](../coreDoc/core-doc.md) establishes
 foundation obligations and [/spec](../../spec/README.md) defines precise
@@ -445,30 +446,79 @@ conformance.
 
 ## Milestone 8 — Fresh audit and release readiness
 
-- [ ] Run a fresh locked install and `npm run verify` after M4–M7. Record the
+### Milestone 8 final audit — 2026-10-03
+
+The fresh audit confirms the final candidate contains 440 unique normative
+requirements, 31 declared portable errors, 1,790 manifest-listed vectors in 42
+files and six suites, 189 supplementary historical cases, 35 documented
+conformance operation labels, and 20 canonical Agentic operations. All 14
+fenced JSON examples in `/spec` parse. Across the combined 1,979 manifest and
+supplementary cases, 95 groups share an identical operation/input/context
+request and none has conflicting expected envelopes.
+Requirement and case identifiers are unique; every vector requirement, topic,
+operation, expected portable error, and paired-control reference resolves in
+its declared namespace, and all 440 specification requirements have one
+traceability row.
+
+Traceability contains 356 `COVERED`, one `PARTIAL`, and 83 `NOT DIRECTLY
+TESTABLE` requirements, with no `UNCOVERED`, `DEFERRED`, or `BLOCKING SPEC GAP`
+rows. `WORKFLOW-GUARD-004` remains the explicit partial external-fact authoring
+limitation: portable cases cover local guard evaluation, while declaring and
+capturing an external fact dependency belongs to consumer/composing-domain
+evidence. It does not leave an undefined portable outcome.
+
+The 20 Agentic descriptors were reviewed semantically against their referenced
+specifications as well as statically validated. Money operations remain exact,
+deterministic, and non-mutating; Audit append and append-only rejection effects
+match the Audit contract; Workflow transition retains explicit context,
+priority, and failure atomicity; and Entity creation, mutation, transition, and
+evolution retain their conditional/required Audit and Approval relationships.
+No descriptor overrides `/spec`, invents an executable service, or requires a
+financial-behavior change.
+
+| Finding | Final disposition |
+| --- | --- |
+| A1 | Resolved in Milestone 4 by `APPROVAL-CHAIN-010`, `APPROVAL-VALIDITY-016`, `APPROVAL-DECISION-012`, and `WORKFLOW-STATES-009`, with 15 manifest vectors and aligned errors, traceability, and Agentic notes. |
+| A2 | Resolved in Milestone 5 by the presentation-only Money observation rule. Exact numeric semantics and explicit target scales remain unchanged; the fresh identical-request audit found no conflicting envelopes. |
+| A3 | Resolved in Milestone 4. The six affected definitions and traceability rows consistently use `MUST / MUST NOT`. |
+| A4 | Resolved in Milestone 5. `conformance/operations.md` documents all 35 catalogued labels without relying on a removed adapter or historical implementation. |
+| A5 | Resolved in Milestone 6. Declared portable errors and both supported paired-control namespaces are validated with positive and negative regression coverage. |
+| A6 | Resolved in Milestone 6 and semantically re-reviewed here. Required descriptor fields and effect vocabularies are enforced for all 20 canonical operations. |
+| A7 | Resolved in Milestone 6. Inventory/domain/modality/classification/PARTIAL evidence, CoreDoc prefixes and IDs, ranges, and local Markdown fragments are validated with adversarial tests. |
+| A8 | Resolved in Milestone 7. Current guidance separates local verification from network audit, documents Node bootstrap, scopes `SPEC-FREEZE-002` to repository ownership, and labels removed implementation evidence as historical. |
+
+- [x] Run a fresh locked install and `npm run verify` after M4–M7. Record the
       supported runtime and actual bounded results; earlier counts are baseline
       observations, not acceptance targets.
-- [ ] Repeat whole-corpus identifier, error, topic, operation, paired-control,
+- [x] Repeat whole-corpus identifier, error, topic, operation, paired-control,
       traceability, and normative-example checks. Review any identical requests
       with differing expectations and any newly changed contract boundaries.
-- [ ] Repeat targeted negative controls for all reproduced validator omissions
+- [x] Repeat targeted negative controls for all reproduced validator omissions
       and review descriptor semantics against `/spec`; static validity alone
       cannot establish semantic correctness.
-- [ ] Confirm that A1–A8 are resolved or explicitly scoped out with a rationale
+- [x] Confirm that A1–A8 are resolved or explicitly scoped out with a rationale
       consistent with the release's advertised guarantees. Unresolved mandatory
       financial behavior remains a blocker for stable promotion.
-- [ ] Keep all release status and conformance claims accurate: artifact checks
+- [x] Keep all release status and conformance claims accurate: artifact checks
       do not establish financial execution, external implementation conformance,
       exhaustive coverage, or production readiness.
-- [ ] Update this plan's final status and the 1.0 prerequisite only after the
+- [x] Update this plan's final status and the 1.0 prerequisite only after the
       follow-up gates pass. Keep release history concise; add no separate audit,
       closure, alignment, checksum, or provenance report.
 
 **Completion:** the post-transition findings are dispositioned, current artifacts
 and guidance agree, and the final candidate passes its documented local gates.
-Execute M4 → M5 → M6 → M7 → M8, with independent tooling work allowed while
-financial decisions are pending. This audit does not approve a financial policy,
-publish a release, or promote Core 1.0.
+
+Completed on 2026-10-03 using Node 24.15.0 and npm 11.12.1. A fresh
+`npm ci --no-audit` and `npm run verify` pass with all 22 maintenance-tool tests,
+199 checked CoreDoc-to-spec references, and the bounded counts above. The
+separate network-backed `npm run dependencies:audit` reports zero known
+vulnerabilities in the six-package locked maintenance graph. Replayed negative
+controls reject every A5–A7 mutation with the intended diagnostic rather than a
+crash. No release note or tag was created because 0.9.8 remains unreleased.
+
+Milestones were executed M4 → M5 → M6 → M7 → M8. The final audit added no
+financial policy, published no release, and did not promote Core 1.0.
 
 Add a concise summary to [release notes](../releases/README.md) when this work
 is released. Do not record planned removal as a completed release or carry
