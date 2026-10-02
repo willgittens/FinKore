@@ -14,7 +14,11 @@ that is absent from `/spec`.
 ## Discovery and validation
 
 Use [manifest.json](manifest.json) as the only discovery entry point for the
-portable suite:
+FinKore Core 1.0 portable suite. Its association with Core 1.0 is documented in
+the [conformance index](README.md#scope-and-discovery); the manifest and
+vector-file format versions remain `0.1`.
+
+For artifact validation:
 
 1. Require the supported `finkoreConformance` format version.
 2. Resolve `vectorSchema` and every `vectorFiles` entry relative to the

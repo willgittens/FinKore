@@ -18,9 +18,9 @@ promotion milestones, now numbered 5–9. This plan is temporary working materia
 and must itself be removed from the final 1.0 tree. Completed plans will not be
 relocated to another archive directory or retained as release dependencies.
 
-Milestones 1–5 are complete; milestones 6–9 remain uncompleted. CoreDoc and
-the specification identify the stable 1.0 normative baseline; conformance,
-Agentic, and publication gates remain pending. This document is non-normative
+Milestones 1–6 are complete; milestones 7–9 remain uncompleted. CoreDoc, the
+specification, and conformance artifacts identify the stable 1.0 baseline;
+Agentic and publication gates remain pending. This document is non-normative
 and does not publish a release. In this filename, `10` means version 1.0,
 not version 0.10.
 
@@ -286,21 +286,21 @@ Publish a coherent, portable acceptance corpus for the exact 1.0 contract.
 
 ### Tasks
 
-- [ ] Identify the manifest as the FinKore Core 1.0 conformance baseline without
+- [x] Identify the manifest as the FinKore Core 1.0 conformance baseline without
       conflating Core version with manifest or vector-schema syntax versions.
-- [ ] Validate the manifest and every referenced vector file against the
+- [x] Validate the manifest and every referenced vector file against the
       published schemas.
-- [ ] Confirm uniqueness and stability of vector IDs.
-- [ ] Confirm that every vector references valid normative requirement IDs.
-- [ ] Confirm that every operation label is canonical or explicitly documented
+- [x] Confirm uniqueness and stability of vector IDs.
+- [x] Confirm that every vector references valid normative requirement IDs.
+- [x] Confirm that every operation label is canonical or explicitly documented
       as conformance-local.
-- [ ] Confirm that traceability has no uncovered testable requirement or
+- [x] Confirm that traceability has no uncovered testable requirement or
       blocking specification gap.
-- [ ] Review positive, negative, boundary, non-mutation, ordering, and
+- [x] Review positive, negative, boundary, non-mutation, ordering, and
       mutation-sensitive cases for the stable scope.
-- [ ] Verify that fixtures do not prescribe a production API, language model,
+- [x] Verify that fixtures do not prescribe a production API, language model,
       runner protocol, or financial behavior absent from `/spec`.
-- [ ] Verify claim wording distinguishes artifact validity from external
+- [x] Verify claim wording distinguishes artifact validity from external
       implementation conformance.
 
 ### Completion criteria
@@ -309,6 +309,27 @@ Publish a coherent, portable acceptance corpus for the exact 1.0 contract.
 - All artifacts validate and trace to normative requirements.
 - Known coverage limits and non-testable requirements are explicit.
 - Conformance artifacts do not become a second specification.
+
+Completed 2026-10-03. Conformance guidance identifies the existing manifest as
+the Core 1.0 baseline. The manifest, schema, and all 42 vector files are
+byte-for-byte unchanged: six suites, 1,790 stable vectors, format versions `0.1`,
+20 canonical operations, and 15 documented conformance-local labels. Manifest
+format checks and vector JSON Schema validation pass. Every vector file is
+manifest-listed; all 812 paired-control references resolve within that corpus.
+
+Reviewed positive, negative, boundary, ordering, failure-preservation, and
+mutation-sensitive cases across the shared and five domain suites against their
+owning requirements. No financial behavior or expected observation changed.
+Traceability retains 356 covered, one partial, and 79 not directly testable
+requirements, with no uncovered requirement or blocking specification gap.
+Consumer guidance preserves exact comparison, explicit context, fixture/API
+separation, and the requirement for consumer-owned execution evidence.
+
+`npm ci --no-audit` and `npm run verify` passed on Node 24.15.0, including all
+28 maintenance-tool tests. The publication checker reports no conformance,
+specification, or CoreDoc diagnostics; Agentic alignment and final publication
+remain pending. No implementation conformance, financial execution, or fresh
+dependency advisory review is claimed.
 
 ## Milestone 7 — Final Agentic Contract
 

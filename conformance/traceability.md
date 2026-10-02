@@ -2,8 +2,8 @@
 
 This is the canonical human-readable requirement-to-vector index. Manifest-listed
 vectors remain the primary machine-readable mapping through each vector's
-`requirements` field. The counts and mappings cover the current Money, Workflow,
-Audit, Approvals, and Entities scope.
+`requirements` field. The counts and mappings cover the FinKore Core 1.0 shared
+conventions, Money, Workflow, Audit, Approvals, and Entities scope.
 
 ## Inventory and coverage
 
@@ -33,7 +33,7 @@ state that static JSON input/result vectors cannot prove. Consumers need
 additional architecture, native API, property, or review evidence where those
 obligations apply. PARTIAL means current vectors exercise part of a requirement
 but do not cover a mandatory observable boundary. DEFERRED means the requirement
-is explicitly outside the current release candidate. BLOCKING SPEC GAP means
+is explicitly outside the current Core baseline. BLOCKING SPEC GAP means
 mandatory wording exists, but the expected portable observable behavior is not
 sufficiently specified. UNCOVERED means a deterministic mandatory portable case
 is feasible but not yet published.

@@ -3,8 +3,9 @@
 > FinKore cases are designed not only to demonstrate correct behavior, but to
 > make plausible financial defects fail.
 
-This directory publishes language-independent acceptance artifacts for FinKore
-Core 0.9 release candidate. The specification remains the source of truth.
+This directory publishes language-independent acceptance artifacts for the
+**FinKore Core 1.0 stable** normative baseline. The specification remains the
+source of truth.
 Vectors describe observable inputs, results, portable errors, and post-state;
 they do not prescribe APIs, classes, exceptions, storage, frameworks, or an
 execution protocol.
@@ -46,12 +47,17 @@ A consumer-owned tool must load only files listed by `manifest.json`, resolve
 paths relative to the manifest, reject unsupported syntax versions, and reject
 duplicate vector IDs. Filesystem traversal order carries no meaning.
 
-`finkoreConformance` and `finkoreVectorFile` version the artifact formats, not
-the FinKore Core release. Release scope is identified by the manifest contents,
-referenced requirement IDs, traceability status, and the release record.
+[`manifest.json`](manifest.json) identifies the complete FinKore Core 1.0
+conformance baseline: six suites, 42 vector files, and 1,790 vectors. Its Core
+association is documented here; the manifest syntax has no Core-version field.
+`finkoreConformance` and `finkoreVectorFile` remain `0.1` and version the artifact
+formats, not the FinKore Core release. A claim identifies the exact release or
+commit and manifest as well as the format version. Referenced requirement IDs
+and [traceability](traceability.md) describe the covered scope and its limits.
 
 The suites cover:
 
+- shared portable timestamp syntax, precision, offset equality, and ordering;
 - Money representation, serialization, arithmetic, comparison, currency,
   rounding, Rates, and Allocation;
 - Workflow states, transitions, guards, terminal states, definition binding,
@@ -169,9 +175,13 @@ consumer evidence, not results produced by this repository.
 
 ## Contract status
 
-The Core label remains `0.9-rc`; conformance syntax remains `0.1`. Stable 1.0
-promotion is not complete. See [release notes](../docs/releases/README.md) for
-concise release history.
+The corpus targets the stable Core 1.0 specification without changing the
+accepted candidate's vector IDs, inputs, expected observations, or requirement
+mappings. Manifest and vector-file syntax remain `0.1`; no consumer format or
+financial behavior migration is required for this alignment. Artifact validity
+does not establish external implementation conformance. See
+[release notes](../docs/releases/README.md) for publication status and concise
+release history.
 
 ## Repository validation
 

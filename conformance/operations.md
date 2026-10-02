@@ -2,10 +2,11 @@
 
 ## Status and scope
 
-This document is the current fixture contract for every operation label in the
-FinKore manifest. It defines how consumers bind portable vectors. These are
-logical test boundaries, not production APIs, transport messages, or a repository-owned
-runner protocol.
+This document is the fixture contract for all 35 operation labels in the
+FinKore Core 1.0 [manifest](manifest.json): 20 canonical `finkore.*` operations
+and 15 conformance-local labels. It defines how consumers bind portable vectors.
+These are logical test boundaries, not production APIs, transport messages, or a
+repository-owned runner protocol.
 
 Canonical `finkore.*` operations also have Agentic descriptors. Other labels are
 conformance-local. In every case `/spec` remains authoritative; this document
