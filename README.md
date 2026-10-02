@@ -87,7 +87,8 @@ Start with the artifacts that match your task:
 1. Read [CoreDoc](./docs/coreDoc/core-doc.md) for foundation-level obligations.
 2. Read [specification conventions](./spec/conventions.md), the
    [glossary](./spec/glossary.md), and the relevant domain specification.
-3. Use [conformance conventions](./conformance/conventions.md) and
+3. Use [conformance conventions](./conformance/conventions.md), the current
+   [operation contracts](./conformance/operations.md), and
    [traceability](./conformance/traceability.md) to interpret the acceptance
    cases.
 4. Read the [Agentic operation registry](./agentic/operations.md) when consuming

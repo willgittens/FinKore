@@ -26,6 +26,12 @@ portable suite:
 5. Reject duplicate suite IDs, duplicate paths within a suite, and duplicate
    vector IDs across the complete manifest.
 
+Format `0.1` is closed by the published schema: unknown members at the file,
+vector, expected-result, or error level are validation failures. Consumers must
+not treat them as private extensions. Metadata explicitly named by the schema is
+optional but is not semantically extensible; a future syntax extension requires
+schema publication and format-version compatibility assessment.
+
 The repository command `npm run conformance:check` performs only these artifact
 checks plus global vector-ID uniqueness. It does not invoke financial operations.
 
@@ -48,8 +54,9 @@ Each manifest-listed vector declares:
 Canonical `finkore.*` operations are defined by the
 [Agentic operation registry](../agentic/operations.md). Other operation labels
 are conformance-local fixture boundaries documented in
-[Conformance Vector Conventions](conventions.md); their presence does not promote
-them to public Agentic capabilities.
+[Conformance Vector Conventions](conventions.md) and the current
+[operation contracts](operations.md); their presence does not promote them to
+public Agentic capabilities.
 
 Consumers may map these logical requests to any idiomatic API. That mapping must
 not add financial rules, repair invalid input, infer missing policy, or replace a
@@ -85,6 +92,12 @@ expected envelope using the rules in [conventions.md](conventions.md). Object
 member order is insignificant; array order is significant unless the governing
 operation states otherwise. Money and other domain values are not specially
 reinterpreted by the comparison layer.
+
+Money bindings apply the presentation-only observation rule before comparison:
+unscaled results use canonical plain-decimal spelling, while explicit target
+scales remain exact. This normalization is derived from the actual result and
+operation input, never from `expected`; see the
+[Money operation contract](operations.md#money-operations).
 
 ## Execution outcomes
 

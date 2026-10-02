@@ -24,7 +24,7 @@
       "expected": {
         "status": "success",
         "value": {
-          "amount": "15.00000",
+          "amount": "15",
           "currency": "USD"
         },
         "observations": {

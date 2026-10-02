@@ -34,7 +34,15 @@ Each manifest-listed JSON file is an object containing `finkoreVectorFile` and a
 - `reviewFinding`, `pairedControl`, and `reason`: optional non-normative review
   metadata. These fields do not alter the required financial observation.
 
-Unknown vector members MAY be ignored. They MUST NOT alter the meaning of defined members.
+Manifest-listed vector syntax is closed in format version `0.1`. The declared
+JSON Schema uses `additionalProperties: false`, so a consumer MUST reject an
+unknown vector-file, vector, expected-result, or error member during mandatory
+schema validation. The optional review fields listed above are defined members,
+not extensions. Adding a new syntax member requires a compatible published
+schema and the format-version assessment described above; private metadata must
+remain outside manifest-listed files. This corrects earlier prose that said
+unknown vector members could be ignored. It does not change the schema or any
+previously valid vector.
 
 `expected.status` is either `success` or `error`. Success uses `value`; failure uses `error.code`. Either may include `observations` for post-operation state. A vector MUST NOT contain both `value` and `error`. Error messages are never compared. Exact object member order is irrelevant; array order is significant unless a specific operation says otherwise.
 
@@ -43,21 +51,49 @@ The normalized observation belongs only to conformance infrastructure. Productio
 ## Canonical values
 
 Money is represented as `{"amount":"plain base-10 decimal","currency":"ISO code"}`.
-Implementations perform Money operations and comparisons under `/spec`; the
-consumer binding exposes the resulting normative Money serialization or other
-agreed observation. The evaluation tool then compares that normalized
-observation exactly. It
+Implementations perform Money operations and comparisons under `/spec`. For
+Money operation results without an explicit target scale, the consumer binding
+exposes a canonical conformance amount observation: plain notation, no leading
+plus or redundant integer zeros, no trailing fractional zeros, no decimal point
+when the fractional part is empty, and `"0"` for numeric zero. The binding must
+derive this spelling from the actual exact result. It must not read, copy, or
+otherwise substitute `expected.value`.
+
+When `finkore.money.round` or `finkore.money.allocate` supplies an explicit
+target `scale`, each result amount instead has exactly that many fractional
+digits. `finkore.money.applyrate` follows that rule when its explicit
+`rounding.scale` is present and uses the canonical observation otherwise.
+Requested operand post-state observations use the corresponding input amount's
+fractional digit count, so unchanged-value evidence does not require a native
+implementation to retain lexical scale. Extending with zeros or removing only
+trailing zeros is presentation normalization; changing a non-zero digit is a
+different numeric value and must fail exact comparison.
+
+The evaluation tool compares the binding's normalized observation exactly. It
 does not recognize Money-shaped objects, remove trailing zeros, compare decimal
-strings numerically, or apply currency rules.
+strings numerically, or apply currency, rounding, or allocation rules. This
+keeps financial behavior in the implementation and presentation normalization
+in the binding while leaving the comparison layer domain-neutral.
 
 Trailing fractional zeros MAY be present in vector input. Numeric equality is
 observed through a domain operation such as `finkore.money.compare`, whose
 normalized result is `EQUAL`; it is not created by special comparison logic.
 For an operation that returns Money, the expected decimal string records the
-operation's agreed observable representation. When the operation defines a
-target scale, the expected amount has exactly that scale, and each consumer
-binding must expose that result before exact comparison. This keeps decimal and
-scale semantics in the implementation rather than in evaluation tooling.
+canonical or explicit-target-scale observation defined above. Equivalent native
+values such as decimal `15.50`, `15.5`, or an exact coefficient/scale pair all
+reach `"15.5"` for an unscaled result. Exact `15.500` rounded to scale 2 reaches
+`"15.50"`. `"15.5"` and `"15.5001"` never converge because the latter changes
+numeric value. Negative values follow the same rule: `-2.50` reaches `"-2.5"`,
+while exact zero reaches `"0"` regardless of a native negative-zero spelling.
+
+This Core 0.9.8 correction changes 16 normalized unscaled Money result strings
+in the published vectors. It is behaviorally incompatible at the conformance
+observation boundary under SPEC-COMPATIBILITY-012/014, even though it does not
+change any Money numeric result or production serialization freedom. The
+`finkoreVectorFile` version remains `0.1`: syntax, defined members, and exact
+comparison are unchanged; the corrected operation-specific binding contract
+now supplies the previously missing presentation rule. Consumers pinning older
+vector contents must treat the manifest revision as changed.
 The `finkore.money.allocate` fixture supplies `value`, `allocation`, and
 `scale`. `allocation.method` is `EQUAL` with `parts` or `RATIO` with `ratios`.
 Scale, parts, and ratio entries are JSON numbers with integer mathematical
@@ -162,6 +198,9 @@ exact domain names supplied by the vector.
 ## Semantic operation catalog
 
 These identifiers name observable behavior, not implementation methods.
+Their complete current fixture shapes, omission/null rules, results, errors,
+and requested post-state interpretations are defined in
+[Portable Conformance Operation Contracts](operations.md).
 
 | Operation | Logical observation |
 | --- | --- |
@@ -374,8 +413,9 @@ registry, storage lock, or concrete migration format.
 The Core 0.9.5–0.9.7 sections below preserve implementation-specific decisions
 and evidence from repository snapshots that contained maintained language
 implementations. They are historical records, not current package, API, adapter,
-or verification instructions. The current portable fixture contract above and
-the consumer-owned evaluation contract below govern present use.
+or verification instructions. The current portable fixture contract above,
+[Portable Conformance Operation Contracts](operations.md), and the
+consumer-owned evaluation contract below govern present use.
 
 ## Core 0.9.5 boundary review (historical)
 
@@ -433,29 +473,12 @@ observations where applicable.
 
 ### Concrete Approval association
 
-The concrete Requirement fixture supplies `subject` with nonempty string
-`type` and `id`, and `eligibleActors` as a nonempty list of distinct nonempty
-Actor identifiers. Missing, empty, null, or malformed declarations are invalid;
-they are not a valid rule that happened to reject an Actor. The existing
-missing-subject and missing-eligibility vectors select
-`FINKORE_APPROVAL_INVALID_DECISION`. A valid rule excluding the deciding Actor
-uses `FINKORE_APPROVAL_INELIGIBLE_ACTOR` at record time.
-
-Concrete Decisions supply `subjectFacts` as an explicit JSON value, including
-null. Omission is invalid association under
-[Approval Decisions](../spec/approvals/decisions.md). Neither adapters nor cores
-may insert current facts or `{}` to fill that omission. Native APIs may use
-another explicit association supported by the composing domain. Valid null,
-empty-object, scalar, and structured fact controls prevent a universal fact
-schema from being inferred. Chain/composition fixtures consume observations;
-their `state`, `applicability`, and `effective` members do not authorize using
-an incomplete concrete Requirement or Decision at record/evaluation boundaries.
-
-Record and Requirement evaluation validate every supplied concrete historical
-Decision before determining current effectiveness. Incomplete evidence remains
-invalid even when unrelated, withdrawn, superseded, expired, ineffective, or
-placed after an approving Decision. Native record tests also reuse these
-malformed histories and verify unchanged Decisions and lifecycle evidence.
+The portable concrete Requirement, Decision, facts, eligibility, and history
+rules from this review are now part of the current
+[Approval fixture contract](operations.md#approval-fixture-definitions). This
+historical subsection records that the former native suites also exercised
+malformed retained histories and unchanged Decision/lifecycle evidence; those
+old execution results are not current conformance evidence.
 
 ### Entity application values
 
@@ -496,33 +519,12 @@ the supplied observation under **ENTITY-IMPORT-008**.
 
 ### Entity version binding and import preconditions
 
-The versioned Entity fixture retains `binding` inside the Entity observation,
-alongside `type`, `id`, `state`, and `data`. It uses the existing Workflow
-binding shape: `{ "definitionIdentity": "invoice-workflow",
-"definitionVersionIdentity": "1" }`. Creation obtains the initial binding
-from the declared Workflow. Every subsequent existing-Entity fixture, including
-`entity.import`'s `entity` member and evolution's source/related/successor,
-supplies the retained binding explicitly. Successful observations preserve it.
-Adapters translate this representation; they never fill a missing binding from
-the currently supplied definition. Missing/malformed bindings and mismatches
-use the Workflow errors in [Entity Lifecycle](../spec/entities/lifecycle.md).
-Unversioned Entity fixtures retain their existing shape.
-
-This closes a fixture documentation omission without changing manifest/vector
-syntax `0.1` or defining a canonical import operation. It is not an ignorable
-optional field on versioned observations: losing it loses the historical
-binding. There was no conforming binding-free versioned observation under
-**WORKFLOW-VERSION-007**. Native create → transition → observe/reconstruct or
-import → transition sequences must reuse actual output, including bindings,
-and have unversioned, malformed-binding, and mismatched-version controls.
-
-Entity import's `expectedState`, `expectedRevision`, and
-`expectedConflictVersion` retain supplied-member presence. With otherwise valid
-observations, null, malformed, mismatching, or absent-observation expectations
-fail with `FINKORE_ENTITY_STATE_CONFLICT` under
-[Entity Import](../spec/entities/import.md). Omission performs no check.
-Malformed observed identities remain invalid identity, not a precondition
-match. No total ordering of unrelated Entity errors is added by these fixtures.
+The current version-binding, import-presence, and precondition meanings are now
+in [Entity fixture definitions](operations.md#entity-fixture-definitions). The
+historical implementation review additionally required native create →
+transition and import → transition sequences to reuse actual outputs, with
+unversioned and malformed/mismatched controls. Those package/API instructions
+apply only to the removed implementations.
 
 ## Core 0.9.6 boundary review (historical)
 
@@ -605,43 +607,8 @@ establish these newly reviewed boundaries.
 
 ### Approval relevance, selectors, and equality
 
-Under APPROVAL-FACT-001 through APPROVAL-FACT-004, concrete
-`approval.decision.evaluate` requires `currentSubjectFacts` as a present JSON
-value, including explicit null. `approval.requirement.evaluate` retains optional
-current facts: omission together with omitted selectors evaluates history without
-claiming current-fact comparison. Neither core nor adapter fills omitted current
-facts from a historical Decision. Historical `subjectFacts` remains required.
-
-When current facts are supplied, omitted `relevantFactPaths` compares the entire
-value. A supplied list must be nonempty and contain valid selector strings;
-null, an empty list, a wrong-type list/member, or malformed selector yields
-`FINKORE_APPROVAL_INVALID_DECISION`. Supplied selectors without current facts
-have that same error. Duplicate relevance paths merely repeat the same comparison
-and do not disable validation. Explicit null current facts are compared as null.
-
-Both `relevantFactPaths` and condition `requiredFacts` use dot-separated object
-member paths. A path and every segment must be nonempty: `invoice.amount` is
-valid; `""`, `.amount`, `invoice.`, and `invoice..amount` are malformed.
-Member names are case-sensitive and are not trimmed or normalized. Each step
-uses only an own member of an object. Numeric-looking segments may address
-object keys; they never index arrays. Other characters have literal member-name
-meaning, not wildcard, bracket, or expression syntax. There is no escaping or
-fallback to a literal dotted key: `invoice.amount` does not select the top-level
-key `"invoice.amount"`. Such a key remains part of whole-value comparison.
-Own `__proto__`, `constructor`, and `prototype` members are ordinary facts;
-inherited members do not supply evidence.
-
-A missing selected leaf, a missing intermediate member, or traversal through
-null/scalar/array is unavailable. Required condition facts then yield
-`FINKORE_APPROVAL_CONDITION_UNRESOLVED`; selected Decision facts do not match,
-even when absent on both sides. Present null, false, zero, and empty string
-leaves are available. Equality of selected leaves or complete values is recursive:
-object member order is immaterial, arrays preserve length/order, types remain
-distinct, and exact accepted numbers compare independently of decimal scale.
-For example, numeric 1 and native decimal 1.00 compare equal; `"1"`, true, and
-1 do not. A Money-shaped object remains an ordinary object, so amount strings
-`"1.0"` and `"1.00"` differ. Missing object members differ from null members.
-Signed numeric zero compares equal. No Money rounding or tolerance is involved.
+The current facts-presence, selector grammar, traversal, and equality contract
+is consolidated in [Approval fixture definitions](operations.md#approval-fixture-definitions).
 
 Native numeric tests supplement JSON vectors. Shared JSON vectors use values
 whose numeric meaning survives each adapter's supported parse/serialization
@@ -652,62 +619,23 @@ SPEC-DECIMAL-002 or allow converting strings into numbers.
 
 ### Condition declaration and evidence
 
-Under APPROVAL-CONDITION-007, `condition` is an object with nonempty string `id`
-and `evaluation`, and `requiredFacts` is an explicit nonempty array of distinct
-valid selectors. `evaluation` identifies the composing evaluation boundary; it
-is not executable code. Missing/null/wrong-type declarations, empty required
-lists, duplicate required selectors, and malformed paths use
-`FINKORE_APPROVAL_INVALID_DECISION` before any external result is accepted.
-The `facts` member is an object. Omitted facts leave required facts unavailable
-(`FINKORE_APPROVAL_CONDITION_UNRESOLVED`); a supplied null or non-object facts
-container is malformed (`FINKORE_APPROVAL_INVALID_DECISION`). Missing required
-members of a valid object remain unresolved. With complete facts, `result` must
-be exactly `APPLICABLE` or `NOT_APPLICABLE`, otherwise it is unresolved. No
-declaration or result substitutes for actual required fact presence.
+The current condition declaration, required-fact, and result rules are in
+[Approval fixture definitions](operations.md#approval-fixture-definitions).
+The historical implementations treated the declaration as data and never as
+executable code.
 
 ### Quorum evidence and disconnected declarations
 
-Each applicable quorum Requirement observation supplies `eligibleActors` as an
-array of nonempty Actor identifier strings and explicit `approvedOutcome` and
-`rejectedOutcome` mappings to distinct supported Decision outcomes. An empty
-eligibility list is valid evidence that no Actor qualifies; it is not omitted
-evidence, and repetition cannot create votes. The mappings are not filled with
-defaults. Missing, null, or malformed required evidence uses
-`FINKORE_APPROVAL_INVALID_CHAIN` in APPROVAL-ERROR-010 category 4, even for an
-empty Decision list. A valid list excluding the voter yields no vote; it does
-not make the definition malformed. A pending member and unreachable threshold
-retain APPROVAL-QUORUM-006/010 outcomes.
-
-An explicitly `NOT_APPLICABLE` member requires no eligibility/mapping evidence
-or vote. Optional evidence, when supplied, must still have valid shape. Every
-Requirement referenced by any declared group requires applicability evidence;
-unused groups do not escape validation or become actionable. Quorum observations
-do not require a concrete `subject` or redundant `state`. Non-quorum applicable
-observations retain their required State. Decision `effective` remains a required
-Boolean; `decisions: []` is a valid no-vote control. Composition omission retains
-its empty-list convenience; explicitly supplied null is malformed evidence and
-uses `FINKORE_APPROVAL_INVALID_CHAIN`. Adapters preserve that distinction.
-
-Disconnected cycles and unresolved children are invalid structure (category 1),
-not missing observation evidence (category 4). A valid unused group is permitted.
-Root/stage-to-child depth remains four, checked on every evaluated path; a shared
-child reached through different depths cannot hide the deeper path. Whole-graph
-cycle validation does not create artificial evaluation roots for unused groups.
-Success retains the existing exact `{outcome, actionableRequirements}` shape,
-with actionability restricted to the existing reachable pending branches/order.
+The current quorum membership, applicability, evidence, depth, and result-shape
+contract is consolidated in [Approval fixture definitions](operations.md#approval-fixture-definitions)
+and [Approval operations](operations.md#approval-operations). Historical adapter
+presence handling is no longer needed to interpret the portable cases.
 
 ### Proposed Approval history
 
-APPROVAL-VALIDITY-015 checks the proposed appended Decision array against all
-retained lifecycle events before returning record success. A collision with any
-retained withdrawal target or supersession target/successor yields
-`FINKORE_APPROVAL_INVALID_DECISION`, with both histories unchanged. Reference
-tuples are Requirement identifier, Actor identifier, and exact decision instant.
-Equivalent offset spellings collide; nanosecond-distinct instants do not.
-Equal tuples unreferenced by lifecycle evidence are not banned. A successful
-record returns all earlier history and lifecycle evidence plus the new Decision,
-preserving timestamps and local order. Tests use actual returned envelopes in
-subsequent record/lifecycle/evaluation calls without repairing them.
+The current proposed-history and lifecycle-envelope contract is in
+[Approval fixture definitions](operations.md#approval-fixture-definitions) and
+[Approval operations](operations.md#approval-operations).
 
 Record error diagnostics retain the existing `observations.history` Decision
 array convention. Native tests separately assert that the lifecycle collection
@@ -752,27 +680,11 @@ as such. Concrete APIs/bridges need omission-aware arguments: migrating Python
 
 ### Entity mutability and failure observation
 
-Under ENTITY-MUTABILITY-008 the bounded `definition.mutability` is a required
-object whose own nonempty State names map to arrays of nonempty field names.
-Each declared lifecycle State has an explicit entry; an empty array means no
-fields may change. Missing/null/wrong-type containers, absent required entries,
-and malformed field lists/members use `FINKORE_ENTITY_INVALID_MUTATION`.
-A valid empty permission list instead produces `FINKORE_ENTITY_IMMUTABLE` when
-a protected field is targeted. This distinguishes a malformed declaration from
-valid immutable data. Own special names survive construction, observation,
-serialization/import, and subsequent operations under ENTITY-DEFINITION-002.
-
-For evolution, omitted `auditHistory` retains the existing empty-history fixture
-default; `[]` or `{history: []}` explicitly supplies empty history. A null or
-wrong-type supplied history is malformed, not omission. AUDIT-ERROR-004 validates
-history before candidate evidence, and ENTITY-EVOLUTION-034 preserves its primary
-Audit error before correspondence checks. Empty history does not waive required
-relationship-target resolution. A valid control needs corresponding Audit
-evidence with resolvable targets. A failure adapter preserves the core error and
-observes unchanged supplied inputs without calling object methods on null or
-claiming a malformed history was successfully imported. Native tests establish
-unchanged Entity/revision/currentness/relation/Audit state; invalid histories
-need not be fabricated into valid normalized observations.
+The current mutability, evolution-history, Audit-history, and failure-observation
+contract is in [Entity fixture definitions](operations.md#entity-fixture-definitions)
+and [Entity operations](operations.md#entity-operations). Historical native
+tests additionally exercised owned special-name maps and unchanged runtime
+objects that JSON vectors cannot alias.
 
 ## Consumer-owned evaluation contract
 
@@ -830,9 +742,11 @@ reference ambiguous even when their timestamp spellings differ. Successful
 history observations preserve those spellings; rejected history reconstruction
 does not claim that malformed input became a committed core observation.
 
-## Core 0.9.7 discovery corrections
+## Current discovery and boundary constraints
 
-The maintainer accepted D6–D7 in the [plan](../docs/plans/plan-09.7.md).
+The following constraints remain part of the current fixture contract. The
+[0.9.7 plan](../docs/plans/plan-09.7.md) records their historical origin but is
+not required to interpret them.
 WORKFLOW-STATES-008 requires explicit array-valued `terminalStates` and
 `transitions` in the bounded definition, including embedded Entity Workflows.
 Empty arrays remain valid. Native convenience defaults are separate from

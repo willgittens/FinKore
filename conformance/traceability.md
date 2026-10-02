@@ -70,6 +70,20 @@ The zero-blocker inventory therefore reflects resolution rather than omission.
 `WORKFLOW-GUARD-004` remains `PARTIAL`: its external-fact authoring limitation
 is a coverage limitation, not permitted result variation or a resolved contract.
 
+### Milestone 5 portability disposition
+
+Money lexical scale is presentation rather than financial value under
+MONEY-REPRESENTATION-005 and MONEY-SERIALIZATION-008. The current binding
+contract therefore canonicalizes 16 unscaled Money result observations while
+preserving exact target scale for rounding, allocation, and explicitly rounded
+Rate application. This changes conformance-observation strings, not numeric
+Money results, and is recorded as behaviorally incompatible at that boundary.
+All 35 operation labels now have current request/result, omission/null, error,
+and post-state documentation in `conformance/operations.md`. Approval selector,
+eligibility, quorum, history, and Entity binding/import fixture definitions no
+longer depend on sections labeled historical. Format `0.1` remains schema-closed;
+unknown vector members are rejected rather than treated as extensions.
+
 ## Historical implementation evidence
 
 All execution, package, coverage, and mutation results below describe completed

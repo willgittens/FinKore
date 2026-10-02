@@ -21,6 +21,8 @@ and reporting.
 - Domain vector directories — manifest-listed portable acceptance cases.
 - [`conventions.md`](conventions.md) — fixture interpretation, exact comparison,
   operation labels, and consumer-owned evaluation obligations.
+- [`operations.md`](operations.md) — current request, result, omission/null,
+  error, and post-state contract for all manifest operation labels.
 - [`traceability.md`](traceability.md) — requirement coverage, known limits,
   mutation intent, and historical evidence.
 - [`consumer-guide.md`](consumer-guide.md) — discovery, execution outcomes,

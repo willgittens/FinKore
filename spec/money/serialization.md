@@ -23,6 +23,14 @@ This document defines the normative portable JSON representation of Money. It sp
 
 Serialization followed by deserialization preserves numeric amount and currency as required by **MONEY-SERIALIZATION-008**.
 
+Portable serialization does not assign financial meaning to lexical scale.
+`"10"`, `"10.0"`, and `"10.00"` are distinct valid JSON strings representing
+the same exact amount, and an implementation may emit any of them unless a
+separate presentation request applies. A consumer that needs a unique test or
+display spelling must apply an explicitly documented presentation
+normalization without changing the numeric amount. Such normalization is not
+rounding and is not a storage-scale requirement.
+
 An optional native serialization scale is a presentation request, not an
 implicit rounding policy. Extending scale or removing only trailing zeros is
 consistent with **MONEY-SERIALIZATION-008**. Discarding a non-zero remainder
@@ -42,13 +50,21 @@ repair a malformed scale. Native APIs document their supported scale range and
 representation of no scale request; this introduces no universal upper bound
 and does not import Allocation's bounded scale profile into serialization.
 
-## Normative Example
+## Normative Examples
 
-This example uses the normative member names and value encodings. It does not imply that presentation scale is significant.
+These examples use the normative member names and value encodings. They have
+the same Money meaning; neither spelling is preferred by this specification.
 
 ```json
 {
   "amount": "1299.90",
+  "currency": "EUR"
+}
+```
+
+```json
+{
+  "amount": "1299.9",
   "currency": "EUR"
 }
 ```
@@ -65,6 +81,12 @@ The numeric JSON form is not portable because its host may apply binary floating
 
 Malformed data fails as defined by **MONEY-ERROR-001** or **MONEY-ERROR-002** in [Money Errors](errors.md), as applicable.
 
-## Open Questions
+## Resolved Boundary
 
-- Must portable serialization preserve presentation scale as well as numeric value?
+Core 0.9 does not require portable serialization to preserve presentation
+scale. This is an explicit reading of **MONEY-REPRESENTATION-005** and
+**MONEY-SERIALIZATION-008**, not a new rounding permission. Removing or adding
+only insignificant zeros preserves value; discarding a non-zero digit still
+requires an explicit rounding rule. The Core 0.9.8 conformance correction uses
+a deterministic presentation observation so exact comparison does not turn one
+valid lexical spelling into an accidental production requirement.

@@ -24,7 +24,7 @@
       "expected": {
         "status": "success",
         "value": {
-          "amount": "15.50",
+          "amount": "15.5",
           "currency": "EUR"
         },
         "observations": {
@@ -110,7 +110,7 @@
       "expected": {
         "status": "success",
         "value": {
-          "amount": "-2.50",
+          "amount": "-2.5",
           "currency": "EUR"
         },
         "observations": {
@@ -748,7 +748,7 @@
       "expected": {
         "status": "success",
         "value": {
-          "amount": "123456789012345678901234567890123456789012345678901234567891.00",
+          "amount": "123456789012345678901234567890123456789012345678901234567891",
           "currency": "EUR"
         },
         "observations": {
@@ -799,7 +799,7 @@
       "expected": {
         "status": "success",
         "value": {
-          "amount": "0.000000000000000000000000000000000000000000000000000000000010",
+          "amount": "0.00000000000000000000000000000000000000000000000000000000001",
           "currency": "CHF"
         },
         "observations": {
@@ -850,7 +850,7 @@
       "expected": {
         "status": "success",
         "value": {
-          "amount": "-98765432109876543210987654321111111111011111111101.00",
+          "amount": "-98765432109876543210987654321111111111011111111101",
           "currency": "USD"
         },
         "observations": {

@@ -24,7 +24,7 @@
       "expected": {
         "status": "success",
         "value": {
-          "amount": "1299.90",
+          "amount": "1299.9",
           "currency": "EUR"
         }
       },
@@ -294,7 +294,7 @@
       "expected": {
         "status": "success",
         "value": {
-          "amount": "15.50",
+          "amount": "15.5",
           "currency": "EUR"
         }
       },
@@ -317,7 +317,7 @@
         "MONEY-SERIALIZATION-004",
         "MONEY-SERIALIZATION-008"
       ],
-      "description": "Serialization preserves numeric amount, trailing-zero representation, and currency through the portable boundary.",
+      "description": "Serialization preserves exact numeric amount and currency while the binding emits the canonical unscaled conformance observation.",
       "operation": "money.serialize",
       "input": {
         "value": {
@@ -328,7 +328,7 @@
       "expected": {
         "status": "success",
         "value": {
-          "amount": "-15.50",
+          "amount": "-15.5",
           "currency": "EUR"
         }
       },
@@ -360,7 +360,7 @@
       "expected": {
         "status": "success",
         "value": {
-          "amount": "1299.90",
+          "amount": "1299.9",
           "currency": "EUR"
         }
       },

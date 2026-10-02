@@ -2,7 +2,7 @@
 
 ## Status
 
-**Transition and Milestone 4 implemented — audit follow-up milestones 5–8 pending; unreleased.**
+**Transition and Milestones 4–5 implemented — audit follow-up milestones 6–8 pending; unreleased.**
 
 Updated on 2026-10-02. This replaces the previous 0.9.8 corrective implementation
 plan. Transition milestones 1–3 are implemented: FinKore is
@@ -255,27 +255,60 @@ execution or a 0.9.8 release declaration.
 
 ## Milestone 5 — Make portable acceptance independent of historical implementations
 
-- [ ] Resolve A2 by specifying how consumer bindings obtain the requested Money
+### Accepted Milestone 5 dispositions — 2026-10-02
+
+A2 is resolved without imposing production scale preservation. For Money
+operation results without an explicit target scale, a consumer binding renders
+the actual exact result as a canonical plain decimal: redundant leading integer
+zeros and trailing fractional zeros are removed, an empty fractional part loses
+its decimal point, and numeric zero is `"0"`. Explicit round/allocation scales
+and explicitly rounded Rate scales remain exact. Requested unchanged-operand
+observations use the input amount's fractional digit count. The comparison layer
+remains domain-neutral and compares the resulting envelope exactly; it neither
+normalizes Money nor reads `expected` to manufacture an actual result.
+
+This correction changes 16 normalized unscaled Money result strings while
+preserving every numeric amount and currency. It is behaviorally incompatible
+at the conformance-observation boundary under SPEC-COMPATIBILITY-012/014, but it
+does not change production Money semantics or serialization freedom. Vector
+syntax and the meaning of generic `expected` comparison remain unchanged, so
+`finkoreVectorFile` stays at `0.1`.
+
+A4 is resolved by the current `conformance/operations.md` contract. It covers
+all 35 manifest operation labels and consolidates the Approval subject,
+eligibility, selector, condition, quorum, and history fixtures plus versioned
+Entity binding/import conventions. Historical runtime type profiles, native API
+instructions, adapter behavior, and execution results remain labeled historical.
+The review found no unresolved financial outcome requiring an invented rule.
+
+Format `0.1` is schema-closed. Mandatory schema validation rejects unknown
+members because `additionalProperties` is false. The earlier permission to
+ignore them contradicted the published schema and is withdrawn; existing review
+metadata remains allowed because it is explicitly declared. This is a
+documentation correction for previously invalid files, not a schema loosening
+or a format-version change.
+
+- [x] Resolve A2 by specifying how consumer bindings obtain the requested Money
       observation for unrounded arithmetic and serialization, including trailing
       zeros, zero, and negative values. Distinguish presentation normalization
       from changes to the numeric value. Preserve explicit target-scale rules
       for rounding and allocation.
-- [ ] Do not impose a production scale-preservation rule merely to match old
+- [x] Do not impose a production scale-preservation rule merely to match old
       implementation outputs. If a normative financial change is necessary,
       settle it in `/spec` with compatibility review before changing vectors.
       Do not introduce approximate comparison or financial logic in tooling.
-- [ ] Include portable documentation examples showing equivalent valid native
+- [x] Include portable documentation examples showing equivalent valid native
       representations reaching the same defined observation and genuinely
       different values remaining distinguishable. Keep the comparison layer
       domain-neutral and the binding independent of expected-result substitution.
-- [ ] Move still-current fixture definitions identified in A4 into clearly
+- [x] Move still-current fixture definitions identified in A4 into clearly
       current conformance sections. Keep historical native class/type profiles,
       test results, migration notes, and API advice explicitly historical.
-- [ ] Review all 35 operation labels for sufficient input, output, omission,
+- [x] Review all 35 operation labels for sufficient input, output, omission,
       null, error, and requested-post-state interpretation without consulting a
       removed adapter or historical implementation. Document gaps instead of
       reverse-engineering financial rules from expected results.
-- [ ] Reconcile the unknown-vector-member permission in conventions with the
+- [x] Reconcile the unknown-vector-member permission in conventions with the
       schema's `additionalProperties: false` and mandatory schema-validation
       instructions. State the supported extension/validation policy and assess
       format compatibility; do not silently loosen the schema.
@@ -283,6 +316,13 @@ execution or a 0.9.8 release declaration.
 **Completion:** consumers can interpret every published fixture using the
 current contract, without inheriting an undocumented language implementation
 choice or mistaking a historical convention for optional guidance.
+
+Implemented on 2026-10-02. The manifest remains at 1,790 vectors and 35
+operation labels; Milestone 5 changes observation spelling and documentation,
+not discovery count. A clean `npm ci`, the complete local verification suite,
+the dedicated Money-observation audit, and the 35-label documentation audit all
+pass; the offline dependency audit reports zero known vulnerabilities. These are
+artifact checks, not implementation execution or a 0.9.8 release declaration.
 
 ## Milestone 6 — Harden maintenance validation and regression tests
 

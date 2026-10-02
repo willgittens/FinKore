@@ -16,6 +16,7 @@ Runner, adapter library, or executable implementation API.
 3. Read the relevant domain specification under `spec/money/`,
    `spec/workflow/`, `spec/audit/`, `spec/approvals/`, or `spec/entities/`.
 4. Read [Conformance Conventions](../conformance/conventions.md), the
+   [Operation Contracts](../conformance/operations.md), the
    [Consumer Guide](../conformance/consumer-guide.md), and
    [Traceability](../conformance/traceability.md).
 5. Read [Agentic Operations](../agentic/operations.md) when implementing a

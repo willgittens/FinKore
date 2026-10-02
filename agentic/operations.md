@@ -104,6 +104,13 @@ correction, reversal, void, and supersession observations, but no operation is
 labeled irreversible because Core still does not define accounting finality,
 ledger posting, or transport idempotency.
 
+Money operation success descriptions below define exact numeric Money values,
+not a required trailing-zero spelling. Consumer-owned conformance bindings use
+the presentation-only observation rule in
+[Portable Conformance Operation Contracts](../conformance/operations.md#money-operations);
+that rule does not change Agentic input/output meaning or require production
+APIs to preserve lexical scale.
+
 ## `finkore.money.add`
 
 **Purpose:** Add two Money values with compatible currencies.
@@ -219,7 +226,7 @@ validation errors may also apply; this list is not exhaustive.
 
 **Purpose:** Round Money to an explicit target scale with an explicit mode.
 
-**Input:** `money` in normative Money serialization, a non-negative `scale`,
+**Input:** `value` in normative Money serialization, a non-negative `scale`,
 and a supported `mode` defined by [Money Rounding](../spec/money/rounding.md).
 
 **Preconditions:** Money is valid; scale and mode are supplied and supported.
