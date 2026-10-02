@@ -1,6 +1,9 @@
 # Contributing to FinKore
 
-FinKore is specification-first. Contributions should begin with the portable financial behavior being proposed, then connect that behavior to specification requirements, conformance vectors, and implementation changes.
+FinKore is specification-first. Contributions should begin with the portable
+financial behavior being proposed, then connect that behavior to specification
+requirements, conformance vectors, traceability, and Agentic metadata where
+applicable. Consumer implementation work remains outside this repository.
 
 ## Licensing of Contributions
 

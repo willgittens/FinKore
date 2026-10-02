@@ -3,6 +3,12 @@
 This is the complete release history kept in the working tree. Precise financial
 behavior belongs to `/spec`; detailed change history remains available in Git.
 
+Entries before the 0.9.8 repository transition describe historical snapshots
+that included maintained implementations, a Conformance Runner, package
+artifacts, and their verification results. Those records are preserved as
+history and are not claims about the current repository's supported surface or
+current execution evidence.
+
 ## Unreleased
 
 ## FinKore Core 0.9.7 Release Candidate

@@ -18,30 +18,19 @@ depending on a programming language, framework, or transport.
 ## Architectural position
 
 ```text
-                FinKore
-                   │
-        ┌──────────┴──────────┐
-        │                     │
-      Spec               Conformance
-        │                     │
-        └──────────┬──────────┘
-                   │
-              Agentic Contract
-                   │
-            Operation Metadata
-                   │
-       ┌───────────┼───────────┐
-       ▼           ▼           ▼
-   TypeScript     Java       Future
-       │
-       ▼
-  MCP / Tools / Agents
+Specification ──► Conformance artifacts
+      │
+      └─────────► Agentic Contract
+                         │
+                         ▼
+             Consumer-owned implementations,
+                tools, transports, and agents
 ```
 
 - [`/spec`](../spec/README.md) defines normative domain behavior and remains the
   source of truth.
-- [`/conformance`](../conformance/README.md) verifies portable observable domain
-  behavior.
+- [`/conformance`](../conformance/README.md) publishes portable acceptance cases
+  for observable domain behavior.
 - `/agentic` describes machine-discoverable operational semantics.
 - `/agentic` MUST NOT redefine financial domain behavior already defined by
   `/spec`; descriptors reference specification requirement IDs instead.
@@ -64,7 +53,7 @@ FinKore separates four dimensions:
    tool or transport.
 
 The Core Agentic Contract defines Discoverable, Understandable, and Governable
-semantics. Executable agent or transport adapters remain outside the current
+semantics. Executable integrations and transports remain outside the current
 scope.
 
 For current FinKore Core work, an operation is **Agentic Ready** when it is

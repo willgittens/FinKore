@@ -1,194 +1,133 @@
-# FinKore Language-Neutral Implementation Guide
+# Implementing FinKore
 
-## Purpose
+FinKore defines observable financial behavior without prescribing a language,
+package layout, public API, framework, or persistence model. Consumer-owned
+implementations should be idiomatic in their environment while preserving the
+portable contract.
 
-This guide is the entry point for future FinKore implementation authors. It
-explains how to implement FinKore behavior without treating the TypeScript
-reference implementation, conformance fixtures, or this guide as a second
-specification.
+This repository does not provide a reference implementation, Conformance
+Runner, adapter library, or executable implementation API.
 
-The source of truth for financial behavior is `/spec`. CoreDoc records
-foundation-level obligations, `/conformance` verifies portable observations,
-`/agentic` names canonical operation semantics, and language implementations are
-evidence that the same behavior can be realized idiomatically.
-
-## Reading Order
+## Reading order
 
 1. Read [CoreDoc](coreDoc/core-doc.md) for foundation-level obligations.
 2. Read [Specification Conventions](../spec/conventions.md) and the
    [Glossary](../spec/glossary.md).
 3. Read the relevant domain specification under `spec/money/`,
    `spec/workflow/`, `spec/audit/`, `spec/approvals/`, or `spec/entities/`.
-4. Read [Conformance Conventions](../conformance/conventions.md) and
+4. Read [Conformance Conventions](../conformance/conventions.md), the
+   [Consumer Guide](../conformance/consumer-guide.md), and
    [Traceability](../conformance/traceability.md).
 5. Read [Agentic Operations](../agentic/operations.md) when implementing a
    canonical `finkore.*` operation.
-6. Use [Developer Tools](tools/README.md) for local toolchains and verification.
 
-## Architecture Boundaries
+## Authority and boundaries
 
-An implementation may use any idiomatic architecture that preserves FinKore
-observable semantics. Packages, modules, classes, records, services, exceptions,
-builders, storage, dependency injection, and public method names are
-language-specific choices.
+`/spec` defines financial behavior. `/conformance` supplies portable acceptance
+inputs and expected observations. `/agentic` names canonical operation
+semantics. None of those artifacts prescribes an implementation architecture.
 
-The implementation must keep these boundaries clear:
+An implementation may choose its own classes, records, services, exceptions,
+result types, decimal library, mutability mechanisms, storage, dependency
+injection, and public method names. It must not choose different observable
+financial semantics.
 
-- Domain behavior comes from `/spec`, not from TypeScript source.
-- Conformance fixtures are adapter inputs, not production API schemas.
-- The runner validates, dispatches, and compares; it does not contain Money,
-  Workflow, Audit, Approval, or Entity rules.
-- An adapter translates between conformance operation labels and the
-  implementation's public or internal API.
-- Agentic operation identifiers name canonical operation semantics; they do not
-  require an agent framework or a transport.
+Conformance fixture shapes are test-boundary data, not production API schemas.
+A consumer-owned binding may translate between fixture operation labels and an
+idiomatic API, but that binding must not implement Money, Workflow, Audit,
+Approval, or Entity rules. An execution harness may validate, dispatch, compare,
+and report; it must remain domain-neutral.
 
-## Normative and Idiomatic Choices
+## Recommended workflow
 
-Normative choices are observable financial obligations: exact Money arithmetic,
-currency compatibility, explicit rounding, failure atomicity, append-only Audit
-history, Approval effectiveness, Entity identity preservation, portable error
-codes, and similar rules defined in `/spec`.
+For each domain slice:
 
-Idiomatic choices are language design decisions: package layout, class names,
-exception hierarchy, return types, decimal library, visibility, mutability
-mechanisms, build tools, and how public documentation is generated.
+1. Identify the owning normative requirements and portable errors.
+2. Locate the related cases through `conformance/manifest.json` and
+   `conformance/traceability.md`.
+3. Confirm the cases fail or are unsupported before implementing the behavior.
+4. Implement the smallest behavior that satisfies the specification.
+5. Add language-native tests for API ergonomics and invariants.
+6. Execute the portable cases through consumer-owned tooling.
+7. Add mutation testing or an equivalent defect-resistance check for critical
+   financial behavior.
+8. Document the public API, portable errors, mutation effects, and requirement
+   references.
 
-When a language default conflicts with FinKore semantics, FinKore wins at the
-portable boundary. Examples include binary floating-point arithmetic,
-scale-sensitive decimal equality, host timezone defaults, locale-sensitive
-formatting, map iteration order, and case folding of opaque identifiers.
+Do not infer missing semantics from a fixture, historical implementation, or
+language default. Report a specification gap instead.
 
-## Value Semantics
+## Value semantics
 
-Implement Money with exact base-10 semantics. Parse portable decimal values from
-strings and reject JSON numbers where the specification requires decimal
-strings. Do not use binary floating point for Money arithmetic.
+Money requires exact base-10 semantics. Parse portable decimals from strings
+where the specification requires them; do not substitute binary floating-point
+arithmetic. Currency compatibility and rounding policy must remain explicit.
 
-Preserve identifier opacity. Identifiers do not encode state, tenancy, sequence,
-permission, timestamp, revision, or storage facts unless a future specification
-explicitly says so.
+Identifiers are opaque unless the specification explicitly assigns internal
+meaning. Do not derive tenancy, sequence, state, permission, timestamp, or
+revision semantics from identifier spelling.
 
-Preserve absent, null, and redacted distinctions where they are observable. A
-missing field is not the same thing as JSON `null`, and redaction is not deletion
-or nullification unless a specification defines that result.
-
-Preserve declared order when the domain makes order observable. Do not let
-object member order, hash iteration order, filesystem order, or database return
-order define financial meaning.
+Preserve observable distinctions between absent, null, empty, and redacted
+values. Preserve declared order where the contract makes order significant; do
+not let hash iteration, filesystem order, database incidental order, or locale
+define financial meaning.
 
 ## Errors
 
-Portable error codes are the cross-language contract. Class names, exception
-hierarchies, human-readable messages, stack traces, HTTP statuses, and transport
-errors are not portable domain behavior.
+Portable error codes are the cross-language contract. Exception classes,
+messages, stack traces, HTTP statuses, and wrapper types are consumer choices.
+Expose the specified portable code for a domain failure and preserve any
+required post-state observation.
 
-An implementation may throw exceptions, return result objects, use checked
-errors, or use another idiomatic mechanism. The implementation and adapter must
-still expose the correct portable code for a domain failure and preserve any
-required post-state observations.
+Optional diagnostics must not change the portable meaning and should not reveal
+sensitive information by default.
 
-Optional diagnostic details must not change the meaning of the portable code and
-must not disclose sensitive information by default.
+## Effects and atomicity
 
-## Effects and Atomicity
+Where the specification requires non-mutation or failure atomicity, rejected
+operations must leave all specified observations unchanged. Validation before
+commit, immutable construction, defensive copies, or transactions are possible
+implementation techniques; FinKore does not select among them.
 
-Failed operations must not create partial observable state where the
-specification requires non-mutation or failure atomicity. For mutable APIs, use
-validation-before-commit, defensive copies, immutable values, or transactional
-construction so that rejected operations leave the required observations
-unchanged.
+Pure value operations should produce equivalent immutable observations.
+State-changing domains must expose the specified success and failure
+postconditions.
 
-Pure value operations, such as Money arithmetic, should return new observable
-values or equivalent immutable results. State-changing domains, such as
-Workflow, Audit, Approval lifecycle, and Entity operations, must make the
-specified success and failure postconditions observable.
+## Deterministic context
 
-## Deterministic Context
+Conformance-observable behavior must not depend on wall-clock time, host
+timezone, locale, network calls, external FX providers, filesystem order,
+database incidental order, uncontrolled randomness, or process identity.
 
-Do not depend on wall-clock time, host timezone, locale, network calls,
-external FX providers, filesystem traversal order, database incidental order,
-unseeded randomness, or process identity for conformance-observable behavior.
+Pass time, facts, policy, and expected state explicitly when the specification
+makes them relevant. Serialize timestamps as unambiguous instants where
+required.
 
-When time, policy, facts, or current state matter, pass them explicitly through
-the operation or adapter boundary. Serialized timestamps must identify
-unambiguous instants where the relevant specification requires timestamps.
+## Reliability
 
-## Conformance Workflow
+Portable acceptance cases are a baseline, not exhaustive proof. Add
+language-native tests for integration boundaries and use mutation testing or an
+equivalent technique for financially critical logic. Important defect classes
+include removed currency checks, arithmetic substitutions, rounding-mode
+changes, guard bypass, mutable audit history, approval-effectiveness bypass,
+Entity identity changes, partial state after failure, and changed portable
+error codes.
 
-Use [conformance/manifest.json](../conformance/manifest.json) as the only vector
-discovery entry point. Consumers provide their own tooling to execute the
-language implementation and compare its normalized observations with the
-published acceptance cases.
+Public API documentation should explain domain purpose, semantically important
+parameters, results, portable errors, mutation behavior, and relevant FinKore
+requirement IDs. The documentation format is language-specific; the observable
+contract is not.
 
-Recommended implementation sequence:
+## Reporting a specification gap
 
-1. Select one domain slice and read its specifications.
-2. Identify the requirement IDs in [Traceability](../conformance/traceability.md).
-3. Run the related vectors and confirm they fail or are unsupported before the
-   implementation exists.
-4. Implement the smallest behavior that satisfies the specification.
-5. Add language unit tests for API ergonomics and invariants.
-6. Run the conformance vectors through the adapter.
-7. Add mutation or equivalent defect-resistance tests for critical behavior.
-8. Update public API documentation and examples.
+If the specification does not define an observable result, record:
 
-## Mutation and Reliability
-
-Official or reference implementations are expected to use mutation testing or a
-language-appropriate equivalent for critical financial behavior. The target
-mutation score is at least 95%, but critical mutants matter more than the
-aggregate score.
-
-Critical defects include currency check removal, binary floating-point shortcuts,
-rounding-mode substitution, guard bypass, append-only history mutation,
-approval-effectiveness bypass, Entity immutability bypass, and portable error
-code changes.
-
-## Public API Documentation
-
-Every intentional public API symbol should have meaningful language-native
-documentation. The documentation should explain domain purpose, parameters whose
-meaning matters, return behavior, portable errors, mutation behavior, and
-relevant requirement IDs.
-
-For TypeScript this means JSDoc. Python might use docstrings and generated API
-documentation. Java might use Javadoc. The documentation format is idiomatic;
-the requirement to document public semantics is shared.
-
-## Non-Normative API Sketches
-
-The following sketches are illustrative only. They are not FinKore production
-API requirements.
-
-```python
-amount = Money.from_portable({"amount": "10.20", "currency": "EUR"})
-result = amount.add(Money.from_portable({"amount": "5.30", "currency": "EUR"}))
-assert result.to_portable() == {"amount": "15.50", "currency": "EUR"}
-```
-
-```java
-Money amount = Money.fromPortable(Map.of("amount", "10.20", "currency", "EUR"));
-Money result = amount.add(Money.fromPortable(Map.of("amount", "5.30", "currency", "EUR")));
-assert result.toPortable().equals(Map.of("amount", "15.50", "currency", "EUR"));
-```
-
-The only normative representation shown here is the Money JSON value defined by
-[Money Serialization](../spec/money/serialization.md). The method names,
-classes, assertions, and container types are examples.
-
-## Reporting a Specification Gap
-
-If the specification does not define an observable result, do not copy
-TypeScript behavior, local test behavior, or a language default as the answer.
-Record the gap with:
-
-- the exact artifact and requirement IDs reviewed;
+- the exact artifacts and requirement IDs reviewed;
 - the operation or value boundary affected;
 - at least two plausible interpretations;
 - the financial, control, security, or privacy impact;
-- the proposed classification: clarification, normative change,
-  contradiction, portability blocker, or deferred topic.
+- whether the issue is a clarification, normative change, contradiction,
+  portability blocker, or deferred topic.
 
-Then wait for an accepted specification-first decision before changing
-conformance expectations or implementation behavior.
+Wait for a specification-first decision before changing portable expectations
+or consumer behavior.

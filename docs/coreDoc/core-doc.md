@@ -13,7 +13,7 @@ compliance, and financial-systems review.
 
 The FinKore Core release version identifies the shared language-neutral
 behavioral baseline. It is distinct from conformance manifest/vector-file format
-versions, the conformance runner package version, and language package versions.
+versions and from versions assigned by consumer-owned tools or implementations.
 
 ## Scope
 
@@ -682,21 +682,22 @@ snapshotting and retention regime for external facts.
 
     CoreDoc
       -> Domain specifications
-      -> Conformance requirements
-      -> Implementations
+      -> Conformance artifacts
+      -> Consumer implementations and verification
 
 The CoreDoc supplies foundation-level financial obligations. Domain
-specifications define precise scope and behaviour; conformance verifies observable
-requirements; implementations realise that behaviour. A lower layer may refine a
-CoreDoc rule but shall not silently contradict it.
+specifications define precise scope and behaviour; conformance artifacts make
+observable requirements concrete; consumer implementations realise and verify
+that behaviour. A lower layer may refine a CoreDoc rule but shall not silently
+contradict it.
 
 When labels differ, `/spec` remains authoritative for precise domain behavior,
 and this CoreDoc remains authoritative for foundation-level rules and their
-normative evolution. `/conformance` is executable evidence for observable
-requirements; it is not a second specification. `/agentic` describes
+normative evolution. `/conformance` publishes portable acceptance evidence for
+observable requirements; it is not a second specification. `/agentic` describes
 machine-understandable operation semantics and must reference, not replace,
-`/spec`. Language implementations, including TypeScript, are implementation
-evidence and regression oracles, not sources of financial semantics.
+`/spec`. Consumer implementations and their execution results may provide
+additional evidence, but they are not sources of financial semantics.
 
 ## Evolution of CoreDoc
 

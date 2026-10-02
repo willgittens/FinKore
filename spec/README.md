@@ -5,15 +5,17 @@
 **FinKore Core 0.9 release candidate.** This is the shared,
 language-neutral behavioral candidate intended to become FinKore Core 1.0.
 It remains pre-1.0. The completed [Core 0.9.7 corrective release](../docs/plans/plan-09.7.md)
-resolves the reviewed D1–D11 ambiguities and portability defects under the
-release-candidate freeze. The corrected implementations and permanent regressions
-pass final verification. These corrections retain stable identifiers and do not
-promote the specification to stable 1.0.
+records the reviewed D1–D11 ambiguity and portability corrections under the
+release-candidate freeze. Its implementation and execution results are
+historical evidence, not current repository capabilities. The corrections
+retain stable identifiers and do not promote the specification to stable 1.0.
 The 0.9 domain scope is Money, Workflow, Audit, Approvals, and Entities.
 
 ## Purpose
 
-FinKore is a specification-first, language-agnostic standard for recurring financial domain behavior. The specification is the source of truth; implementations exist to realize and verify that behavior.
+FinKore is a specification-first, language-agnostic standard for recurring
+financial domain behavior. The specification is the source of truth; consumers
+may implement and verify that behavior in their own environments.
 
 Implementations can expose different APIs and use different languages, frameworks, or persistence models. Conformance concerns observable behavior and invariants, not syntax or internal structure. The specification is intended to preserve the same financial semantics across those implementation choices.
 
@@ -26,36 +28,33 @@ Specification
    ↓
 Examples
    ↓
-Conformance Tests
+Conformance Artifacts
    ↓
-Reference Implementation
-   ↓
-Other Implementations
+Consumer Implementations and Verification
 ```
 
 Specifications are intended to remain small and composable. New concepts should address domain problems rather than proposed classes, APIs, or framework abstractions.
 
 ## Implementation Direction (Non-Normative)
 
-TypeScript is the reference implementation and remains runtime-independent where
-practical. Python and Java provide independent implementations of the current
-manifest scope. These implementations are evidence, not specification authority,
-and their public APIs do not need to match one another. Future implementations
-may use any idiomatic design that preserves the behavior required here and
-verified by the conformance suite.
+This repository does not maintain a financial implementation, Conformance
+Runner, adapter API, or language package. Consumers may use any idiomatic design
+and execution tooling that preserve the behavior required here. Published
+conformance artifacts express portable acceptance inputs and observations; they
+do not prescribe a production API or implementation architecture.
 
-The repository is organized around `spec/`, `conformance/`, `agentic/`, the
-conformance runner, and language implementation areas. This layout is project
+The repository is organized around `spec/`, `conformance/`, `agentic/`, and
+domain-neutral maintenance tools under `docs/tools/`. This layout is project
 direction rather than a normative requirement.
 
 ## Version Identity (Non-Normative)
 
 `FinKore Core 0.9 release candidate` identifies the current language-neutral
-behavioral baseline. It is distinct from the `finkoreConformance` manifest format version, the
-`finkoreVectorFile` vector-file format version, the conformance runner package
-version, and language implementation package versions. Format and package
-versions describe tooling or artifact compatibility; they do not define
-financial behavior.
+behavioral baseline. It is distinct from the `finkoreConformance` manifest
+format version, the `finkoreVectorFile` vector-file format version, and versions
+assigned by consumer-owned tools or implementations. Format and tool versions
+describe artifact or integration compatibility; they do not define financial
+behavior.
 
 The `core-0.9.7` corrective snapshot retains the `0.9-rc` Core label. Its
 [concrete Decision evaluation](approvals/decisions.md),

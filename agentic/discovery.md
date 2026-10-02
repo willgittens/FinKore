@@ -1,8 +1,8 @@
 # Capability Discovery
 
 A machine client should be able to obtain a collection of available operation
-descriptors. Discovery is conceptual and transport-neutral. A future adapter
-could expose it through MCP, OpenAPI, HTTP, a local API, a CLI, or a tool runtime
+descriptors. Discovery is conceptual and transport-neutral. A consumer
+integration could expose it through MCP, OpenAPI, HTTP, a local API, a CLI, or a tool runtime
 without changing operation semantics. Discovery is documentation-first: the
 registry aligns canonical operation descriptors, but no executable discovery
 endpoint or machine-readable operations manifest is currently defined.

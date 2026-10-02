@@ -32,5 +32,5 @@ For example, `FINKORE_MONEY_CURRENCY_MISMATCH` is a deterministic domain failure
 for unchanged operands. The client must change the inputs or choose another
 specified operation; repetition does not authorize implicit currency conversion.
 
-Transient network, rate-limit, process, and service errors belong to adapters or
-transports and are not FinKore portable domain errors.
+Transient network, rate-limit, process, and service errors belong to consumer
+integrations or transports and are not FinKore portable domain errors.

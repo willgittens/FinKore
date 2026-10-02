@@ -2,444 +2,163 @@
 
 > **Financial CRUD isn't ordinary CRUD.**
 
-FinKore is **not a SaaS, ERP, accounting application, payment platform, ORM, or generic framework**.
+FinKore is an open-source, language-agnostic specification for predictable,
+auditable, and portable financial domain behavior. It gives recurring rules for
+Money, Workflow, Audit, Approvals, and Financial Entities stable names, precise
+semantics, and portable acceptance cases.
 
-It is an open-source technical foundation for defining how common financial behavior should work.
+FinKore is specification-first:
 
-FinKore turns recurring financial rules into:
+```text
+Specification
+      ↓
+Conformance artifacts
+      ↓
+Agentic Contract
+      ↓
+Consumer-owned implementations and integrations
+```
 
-- explicit specifications;
-- language-independent conformance tests;
-- reusable implementations.
+The specification is the source of truth. Conformance vectors and Agentic
+metadata make the contract easier to verify and consume; they do not redefine
+it.
 
-So engineering teams do not have to rediscover the same financial foundations every time they build a new product, service, or platform.
+## What this repository publishes
 
-Your product remains yours.
+- [`spec/`](./spec/README.md) — normative financial behavior, invariants,
+  terminology, serialization rules, and portable errors.
+- [`conformance/`](./conformance/README.md) — language-independent acceptance
+  cases, schemas, conventions, and requirement traceability.
+- [`agentic/`](./agentic/README.md) — canonical `finkore.*` operation semantics,
+  effects, preconditions, postconditions, and portable errors.
+- [`docs/coreDoc/`](./docs/coreDoc/core-doc.md) — foundation-level financial
+  principles that the domain specifications refine.
+- [`docs/tools/`](./docs/tools/README.md) — repository-maintenance checks for
+  artifact validity, traceability, architecture, documentation, and licensing.
 
-Your workflows remain yours.
+This repository does **not** maintain a financial implementation, a Conformance
+Runner, a runner adapter API, or installable language packages. Consumers choose
+their own language, architecture, API, and execution tooling. The
+[consumer guide](./conformance/consumer-guide.md) explains how to discover and
+use the portable cases without prescribing those choices.
 
-Your business rules remain yours.
+## Why FinKore exists
 
-FinKore provides the layer beneath them: inspectable and testable behavior for money, workflows, approvals, audit history, and financial entities.
+Ordinary application operations become financially significant when exact
+decimal values, currencies, historical facts, approvals, lifecycle rules, and
+failure atomicity matter. A harmless-looking local decision can otherwise
+change meaning across services or languages.
 
----
-
-## The problem FinKore exists to solve
-
-CRUD is easy.
-
-Financial CRUD is not.
-
-A monetary amount looks like a number until currency, precision, allocation, and rounding begin to matter.
-
-An approval looks like a status until the facts that justified it change.
-
-An audit trail looks like a list until someone needs to reconstruct exactly what happened.
-
-These rules usually begin as small pieces of application code.
-
-Then the product grows.
-
-Exceptions accumulate.
-
-Historical assumptions spread across services, tests, documentation, and developer knowledge.
-
-Eventually, a harmless-looking change can alter financially significant behavior without anyone noticing until a customer, finance team, or auditor does.
-
-FinKore gives those rules a deliberate home before they become hidden system behavior.
-
----
-
-## The idea is simple
-
-Your application may be unique.
-
-The foundational financial problems beneath it usually are not.
-
-FinKore separates the rules that make your product distinctive from the
-foundational behavior that should not be reinvented each time.
+FinKore separates product policy from portable financial foundations:
 
 | Your application decides | FinKore makes explicit |
 | --- | --- |
-| Which business policies, thresholds, and permissions apply | How declared financial rules behave and fail |
-| Which workflows and approval requirements the product needs | How state, decisions, and history remain valid and traceable |
-| How data is stored, presented, and integrated | Which outcomes must remain consistent across implementations |
+| Business policies, thresholds, permissions, and user experience | How declared financial rules behave and fail |
+| Storage, transport, framework, and API design | Observable values, errors, invariants, and mutation effects |
+| Which domains and operations to implement | Stable requirement and operation identifiers for the selected scope |
 
-You keep control of the product. FinKore gives its financially significant
-behavior a shared, testable foundation.
+For example, the Money specification makes allocation remainder behavior
+deterministic; Workflow declares terminal-state failures and unchanged state;
+Approvals binds decisions to relevant facts; Audit preserves committed logical
+history. Those outcomes should not depend on a framework default or whichever
+service happened to implement them first.
 
----
+## Current scope
 
-## One rule, one meaning
+FinKore Core 0.9 is a pre-1.0 release candidate covering:
 
-The value becomes clearer at the boundaries where ordinary application logic
-often becomes ambiguous.
-
-### Allocation without a missing cent
-
-Splitting `10.00 USD` equally into three parts cannot produce three identical
-amounts at a scale of two. FinKore makes the remainder rule deterministic:
-
-```text
-10.00 USD ÷ 3
-→ [3.34 USD, 3.33 USD, 3.33 USD]
-```
-
-The result order is declared, every part keeps the source currency, and the
-exact sum remains `10.00 USD`.
-
-### An approval belongs to the facts that were approved
-
-A manager approves an invoice for `9,000 EUR`. The invoice is later changed to
-`90,000 EUR`, and amount is relevant to that approval requirement.
-
-```text
-Approval for 9,000 EUR + current amount of 90,000 EUR
-→ previous decision remains in history
-→ previous decision does not satisfy the current requirement
-```
-
-The history is preserved, but the old decision is not silently reused for
-materially different facts.
-
-### A terminal state is actually terminal
-
-If a workflow explicitly declares `APPROVED` as terminal, a later request to
-transition that instance back to `DRAFT` must fail.
-
-```text
-APPROVED → DRAFT
-→ FINKORE_WORKFLOW_TERMINAL_STATE
-→ current state remains APPROVED
-```
-
-The failure is explicit, portable, and non-mutating. A state name alone is not
-enough: terminal behavior must be declared by the workflow definition.
-
-### History keeps the uncomfortable parts
-
-Suppose a committed audit event records a rejected decision and a later event
-records an approval. The later outcome does not permit the earlier event to be
-edited or deleted.
-
-```text
-[rejected event] + [later approved event]
-→ both remain in committed history
-```
-
-FinKore treats that history as evidence, not as a mutable summary of the latest
-result.
-
-These are financial domain decisions.
-
-They should not be accidental side effects of a framework or whichever service implemented them first.
-
-FinKore specifies each outcome, provides portable tests for it, and verifies
-that every implementation preserves the same meaning.
-
-These scenarios are only a small illustration of FinKore Core 0.9.5.
-
-Across Money, Workflow, Audit, Approvals, Financial Entities, and shared
-conventions, the 0.9.5 snapshot's 667-vector suite maps vectors to 330 requirements.
-Every vector passed on TypeScript, Python 3.12/3.13, and Java, with zero failed,
-unsupported, or infrastructure outcomes. Native tests and mutation probes also
-protect lifecycle sequences, Entity history reuse, Workflow ownership, and
-Audit JSON preservation. Complete clean-checkout verification covers builds,
-coverage, mutation protection, and isolated package consumers.
-
-Passing this finite manifest does not establish exhaustive boundary coverage
-or complete the separate Core 1.0 promotion process. See
-[current traceability](./conformance/traceability.md) and the
-[Core 0.9.5 plan](./docs/plans/plan-09.5.md).
-
----
-
-## What teams gain
-
-### Less repeated domain work
-
-Start from shared financial rules instead of redesigning foundational behavior for every product or service.
-
-### Safer change
-
-Conformance vectors and mutation-sensitive tests make important invariants visible and help plausible defects fail early.
-
-### Consistent meaning across systems
-
-TypeScript, Python, and Java can expose idiomatic APIs while producing the same observable financial outcomes.
-
-### Decisions that can be explained
-
-Stable requirements and portable errors connect behavior directly to the rule that requires it.
-
-### Control without lock-in
-
-FinKore is open, language-independent at the specification level, and does not impose a hosted platform, application architecture, or proprietary data model.
-
-The goal is not to pretend financial domains are simple.
-
-The goal is to make their foundational rules explicit, testable, and explainable.
-
----
-
-## How FinKore works
-
-FinKore separates financial meaning from implementation technology:
-
-```text
-Financial rule
-      ↓
-Specification with stable requirements
-      ↓
-Language-independent conformance vectors
-      ↓
-Idiomatic TypeScript, Python, and Java implementations
-```
-
-The [specification](./spec/README.md) is the source of truth.
-
-Implementations may feel natural in their language, but no package independently defines what FinKore means.
-
-Consumers use their own domain-neutral conformance tooling to check an
-implementation against the same observable outcomes.
-
-This makes financial behavior portable across languages and more resilient to changes in frameworks, services, and architecture.
-
----
-
-## What FinKore Core covers
-
-The current Core 0.9.5 release-candidate snapshot defines:
-
-| Domain | What becomes explicit |
+| Domain | Defined behavior |
 | --- | --- |
-| Money | Exact decimal values, currency compatibility, arithmetic, comparison, rates, allocation, rounding, and serialization |
-| Workflow | States, allowed transitions, guards, terminal behavior, version binding, and conflict preconditions |
-| Audit | Actors, events, changes, append-only history, relationships, redaction evidence, and portable failures |
+| Money | Exact decimal representation, currency compatibility, arithmetic, comparison, rates, allocation, rounding, and serialization |
+| Workflow | States, transitions, guards, terminal behavior, definition binding, imports, and conflict preconditions |
+| Audit | Actors, events, changes, append-only history, relationships, redaction, and portable failures |
 | Approvals | Requirements, conditions, decisions, validity, lifecycle history, chains, and bounded composition |
 | Financial Entities | Identity, lifecycle, mutability, validation, revisions, imports, and evidence-backed evolution |
 
-These domains are building blocks.
+The project does not define an ERP, accounting application, payment platform,
+ledger, persistence layer, authorization system, user interface, hosted service,
+or agent runtime. Ledger posting, tax, FX sourcing, reconciliation, settlement,
+and other concrete accounting domains remain outside the current Core scope.
 
-Your application still decides:
+## Using the contract
 
-- which approval policy applies;
-- what an invoice means;
-- who may perform an action;
-- how data is stored;
-- how its unique business processes work.
+Start with the artifacts that match your task:
 
-FinKore provides the foundation underneath those decisions.
+1. Read [CoreDoc](./docs/coreDoc/core-doc.md) for foundation-level obligations.
+2. Read [specification conventions](./spec/conventions.md), the
+   [glossary](./spec/glossary.md), and the relevant domain specification.
+3. Use [conformance conventions](./conformance/conventions.md) and
+   [traceability](./conformance/traceability.md) to interpret the acceptance
+   cases.
+4. Read the [Agentic operation registry](./agentic/operations.md) when consuming
+   a canonical `finkore.*` operation.
+5. Follow the [implementation guide](./docs/implementation-guide.md) and
+   [consumer guide](./conformance/consumer-guide.md) in your own codebase.
 
----
+Conformance vectors are acceptance inputs and expected observations. They are
+not production API schemas and do not prescribe a class model, exception model,
+transport, command line, or test framework. A consumer-owned harness should load
+[`conformance/manifest.json`](./conformance/manifest.json), validate referenced
+files against the published schemas, dispatch canonical operation labels into
+the consumer implementation, and compare normalized observations.
 
-## Not another framework
+## Repository verification
 
-FinKore does **not** want to own your application.
-
-It does not provide:
-
-- a hosted platform;
-- a proprietary data model;
-- an application shell;
-- an ERP;
-- an accounting UI;
-- a payment processor;
-- a persistence layer;
-- a generic workflow product.
-
-It also does not replace financial or regulatory domain expertise.
-
-Instead, FinKore focuses on a smaller but critical layer:
-
-> **the rules that should remain correct regardless of language, framework, service boundary, or application architecture.**
-
----
-
-## Built for multiple languages
-
-FinKore separates specification from implementation.
-
-That means the same financial rule can be expressed through idiomatic APIs in different languages while preserving the same observable behavior.
-
-Current reference implementations include:
-
-- TypeScript
-- Python
-- Java
-
-The implementation language can change.
-
-The rule should not.
-
----
-
-## Machine-understandable financial behavior
-
-FinKore also publishes an [Agentic Contract](./agentic/README.md) describing canonical operations, effects, constraints, and portable errors in a machine-understandable form.
-
-Agents and integrations follow the same financial rules as every other client.
-
-There is no bypass mode.
-
----
-
-## Who FinKore is for
-
-FinKore is designed for technical leaders and engineers responsible for software that handles:
-
-- money;
-- invoices;
-- expenses;
-- approvals;
-- auditability;
-- financial entities;
-- financial workflows.
-
-It becomes particularly useful when:
-
-- the same calculation behaves differently in two parts of a product;
-- a team is rebuilding rules it has already implemented elsewhere;
-- an approval or historical decision must be reproducible;
-- important behavior depends on knowledge held by a few developers;
-- a refactor must preserve rules accumulated over years;
-- multiple languages or services need to agree on the same outcomes.
-
-FinKore sits beneath product-specific logic.
-
----
-
-## Evaluate FinKore
-
-You do not need to adopt the entire project to evaluate the ideas behind it.
-
-Start with the part that matches your question:
-
-- **Understand the principles:** read the [FinKore CoreDoc](./docs/coreDoc/core-doc.md).
-- **Review precise behavior:** explore the [FinKore Specification](./spec/README.md).
-- **Inspect executable examples:** browse the [conformance vectors](./conformance/README.md).
-- **Build an implementation:** start with the [language-neutral implementation guide](./docs/implementation-guide.md).
-- **Check coverage and known gaps:** review [Conformance Traceability](./conformance/traceability.md).
-
-To run the complete release verification from a clean checkout:
+The maintained Node tooling checks the published artifacts themselves. Node
+`>=24.11.0 <25` is required.
 
 ```bash
 npm ci
 npm run verify
 ```
 
-The verification suite builds all implementations, runs unit and conformance tests, checks coverage and architecture boundaries, builds local consumer artifacts, and exercises mutation-sensitive financial behavior.
+This validates schemas and vectors, checks requirement and Agentic traceability,
+enforces repository architecture, runs tool tests, checks documentation links
+and licenses, and audits the small maintenance dependency set. It does **not**
+execute a financial implementation or establish that any external
+implementation conforms.
 
-It can bootstrap the required Python, Java, and Maven toolchains locally.
+See [Developer Tools](./docs/tools/README.md) for individual commands.
 
-Node `>=24.11.0 <25` is required.
+## Status and evidence
 
-See [Developer Tools](./docs/tools/README.md) for details.
+The current contract remains pre-1.0. FinKore 1.0 promotion is a separate,
+unfinished process described in the [Core 1.0 plan](./docs/plans/plan-10.md).
+Known limitations and gaps remain visible in the specification, traceability
+inventory, and Agentic contract.
 
----
+Earlier repository versions contained maintained TypeScript, Python, and Java
+implementations plus a Conformance Runner. Their recorded results remain useful
+historical evidence in [release notes](./docs/releases/README.md) and completed
+plans, but they are not claims about the current repository and are not part of
+the current supported surface.
 
-## Project status
+Passing repository-maintenance checks proves that the published artifacts are
+internally well-formed within their stated bounds. It does not prove exhaustive
+financial correctness, external implementation conformance, production
+readiness, or regulatory suitability.
 
-FinKore Core 0.9.7 is the completed local corrective release candidate for the
-frozen Core 0.9 baseline. The [corrective plan](./docs/plans/plan-09.7.md)
-records the accepted D1–D11 contracts, implementation corrections and final
-verification. All 1,775 manifest vectors pass on TypeScript, CPython 3.12/3.13
-and Java. Native ownership, operation-sequence and mutation tests supplement
-portable vectors; coverage and installed-package checks pass.
+## Agentic readiness
 
-The corrections cover complete Approval composition/history validation, explicit
-quorum evidence, fact selection and exact equality, owned native values,
-Workflow/Entity declarations, and portable malformed-input failures. Audit
-metadata preserves supplied presence; redaction policy identity is optional but
-validated when supplied. Entity application data uses documented immutable
-scalar profiles, and successful imports always include a historical revision
-list, empty for omitted or empty supplied history.
-
-These are observable compatibility corrections. Previously accepted malformed
-or unsupported values can now fail with their owning portable errors. Import
-results in Python/Java gain an explicit empty history field. Public API and
-native representation details are documented in each implementation README.
-Stable requirement, error, operation and vector identities are preserved.
-
-The annotated local `core-0.9.7` tag identifies the corrective snapshot and
-preserves all earlier corrective tags. [Traceability](./conformance/traceability.md)
-records 352 covered requirements, one partial external-fact authoring requirement
-and 83 requirements not directly testable by portable vectors. Passing the
-manifest is evidence for its bounded scope, not exhaustive correctness.
-[Core 1.0 promotion](./docs/plans/plan-10.md) remains a separate, uncompleted process.
-
-The current domain scope is:
-
-- Money
-- Workflow
-- Audit
-- Approvals
-- Financial Entities
-
-The project is still pre-1.0.
-
-Production use is not yet recommended, and the reference packages are not published to npm, PyPI, or Maven Central.
-
-Current limitations include areas such as:
-
-- authorization;
-- persistence;
-- dynamic approver resolution;
-- unrestricted approval graphs;
-- distributed audit ordering;
-- concrete accounting domains such as ledgers, tax, reconciliation, and FX policy.
-
-The release identifiers serve different purposes:
-
-| Identifier | Current value | Meaning |
-| --- | --- | --- |
-| Corrective snapshot tag | `core-0.9.7` | Exact repository state containing the corrections. |
-| Core constants, package compatibility metadata, and runner Core label | `0.9-rc` | Frozen language-neutral behavioral baseline. |
-| Implementation package versions | `0.1.0` | Unpublished repository reference artifacts. |
-| Conformance syntax version | `0.1` | Manifest and vector format compatibility. |
-
-The release tag is local; remote publication is separate, and the packages
-retain repository-reference status. This snapshot does not declare Core 1.0 stable.
-
-See the [release notes](./docs/releases/README.md) for the concise history and the implementation READMEs for current public APIs and local package use.
-
----
-
-## Documentation
-
-- [Specification conventions](./spec/conventions.md) — normative language, compatibility, identifiers, portable values, and errors.
-- [Language-neutral implementation guide](./docs/implementation-guide.md) — implementation order, boundaries, value semantics, and gap handling.
-- [Licensing](./LICENSING.md) — community licensing, third-party notices, and commercial-use guidance.
-
----
+The [Agentic Contract](./agentic/README.md) makes operations discoverable,
+understandable, governable, and conformance-traceable. It does not provide an MCP
+server, agent framework, transport, authorization layer, or execution bypass.
+Agents and other machine clients remain subject to the same financial rules as
+every other consumer.
 
 ## Contributing
 
-FinKore is developed in the open.
+Contributions should begin with portable financial behavior, not an API shape.
+Connect normative changes to stable requirement IDs, conformance cases,
+traceability, and Agentic metadata where applicable. Do not infer new financial
+semantics from an implementation or fixture when the specification is silent.
 
-Contributions can begin with:
-
-- a real financial use case;
-- an edge case;
-- a specification proposal;
-- a conformance vector;
-- an implementation;
-- clearer documentation.
-
-Start with the behavior that needs to be portable:
-
-> An approval should no longer be assumed valid after the amount used to determine the requirement changes.
-
-That gives the rule a chance to become explicit before it becomes an API.
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) and [Contributor Licensing](./docs/governance/contributor-licensing.md).
-
----
+See [CONTRIBUTING.md](./CONTRIBUTING.md) and
+[Contributor Licensing](./docs/governance/contributor-licensing.md).
 
 ## License
 
-FinKore is licensed under the Mozilla Public License 2.0 (`MPL-2.0`) and may be used in commercial and proprietary systems subject to the license terms.
-
-See [LICENSE](./LICENSE) and [LICENSING.md](./LICENSING.md).
-
-The license text controls.
+FinKore is licensed under the Mozilla Public License 2.0 (`MPL-2.0`) and may be
+used in commercial and proprietary systems subject to the license terms. See
+[LICENSE](./LICENSE) and [LICENSING.md](./LICENSING.md). The license text
+controls.

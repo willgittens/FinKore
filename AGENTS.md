@@ -1,1098 +1,310 @@
 # FinKore — Codex Agent Instructions
 
-## Project Overview
+## Project overview
 
-FinKore is an open-source, language-agnostic specification for building predictable, auditable, and portable financial domain logic.
+FinKore is an open-source, language-agnostic specification for predictable,
+auditable, and portable financial domain behavior.
 
 Core idea:
 
 > CRUD is easy. Financial CRUD isn't.
 
-FinKore is **specification-first**.
-
-The FinKore specification is the source of truth. TypeScript, Java, and future implementations are implementations of the specification, not the definition of FinKore itself.
-
-The project is designed around four major layers:
+FinKore is specification-first:
 
 ```text
 Specification
       ↓
-Conformance
+Conformance artifacts
       ↓
 Agentic Contract
       ↓
-Implementations
+Consumer-owned implementations and integrations
 ```
 
-The repository also contains a Conformance Runner used to execute language-independent test vectors against implementations.
+The repository publishes the contract and maintenance tooling. It does not
+maintain a financial implementation, a Conformance Runner, a runner adapter API,
+or installable language packages. Do not recreate those removed surfaces or
+move financial behavior into repository tooling unless an accepted plan
+explicitly changes the project scope.
 
----
+## Repository responsibilities
 
-# Repository Responsibilities
+### `/spec`
 
-## `/spec`
+Canonical financial behavior. It defines normative requirements, invariants,
+portable errors, domain terminology, and observable semantics.
 
-Canonical financial behavior.
+Normative keywords include MUST, MUST NOT, SHOULD, SHOULD NOT, and MAY. The
+specification defines behavior, not implementation architecture. If behavior is
+ambiguous, identify the specification gap instead of choosing semantics from a
+fixture, historical implementation, language default, or imagined API.
 
-Defines:
+### `/conformance`
 
-- normative requirements;
-- invariants;
-- portable error semantics;
-- domain terminology;
-- financial behavior.
+Language-independent acceptance artifacts derived from `/spec`:
 
-Normative keywords include:
-
-- MUST
-- MUST NOT
-- SHOULD
-- SHOULD NOT
-- MAY
-
-The specification defines **behavior**, not implementation architecture.
-
-The implementation MUST NOT invent financial behavior that does not exist in `/spec`.
-
-If behavior is ambiguous, stop and identify the specification gap rather than silently choosing semantics.
-
----
-
-## `/conformance`
-
-Defines how FinKore behavior is verified.
-
-Contains:
-
-- language-independent test vectors;
+- the discovery manifest;
+- JSON schemas;
+- vector files;
+- conventions and consumer guidance;
 - requirement traceability;
-- conformance conventions;
-- mutation-sensitive cases;
-- regression vectors;
-- boundary tests.
+- mutation-sensitive and boundary cases.
 
-Conformance vectors are derived from `/spec`.
+Conformance artifacts do not become a second specification. The repository
+validates their structure and traceability but does not execute them against a
+financial implementation. Consumers own implementation dispatch, normalized
+observation, comparison, and reporting.
 
-They MUST NOT become a second specification.
+Do not add a runner contract, command-line protocol, transport envelope, or
+language-specific adapter API to make the fixtures executable here.
 
-If a test vector expects behavior that is not defined by `/spec`, report the inconsistency instead of changing implementation behavior to satisfy an invented rule.
+### `/agentic`
 
----
-
-## `/agentic`
-
-Defines the FinKore Agentic Contract.
-
-Purpose:
-
-> Agent-ready by contract, not by convention.
-
-It provides machine-understandable operation semantics such as:
-
-- canonical operation identifiers;
-- discoverability;
-- input/output semantics;
-- portable errors;
-- operation effects;
-- preconditions;
-- postconditions;
-- state mutation characteristics.
-
-Canonical operation identifiers use:
+The Agentic Contract describes canonical operation semantics for machine
+clients. Operation identifiers use:
 
 ```text
 finkore.<domain>.<operation>
 ```
 
-Examples:
+Do not invent aliases for existing operations. Agentic metadata may describe
+inputs, outputs, errors, effects, preconditions, postconditions, and safety
+properties, but it must not override `/spec` or imply an executable server,
+agent framework, transport, or authorization bypass.
+
+### `/docs/coreDoc`
+
+CoreDoc states foundation-level financial obligations. `/spec` refines those
+obligations and must not silently contradict them. CoreDoc fields such as
+`Introduced`, `Last updated`, and `Last updated on` are normative governance
+metadata; do not alter them during editorial scope cleanup.
+
+### `/docs/tools`
+
+Repository-maintenance tools validate published artifacts, traceability,
+architecture, documentation, and licensing. They must remain domain-neutral and
+must not calculate financial outcomes or implement a FinKore operation.
+
+Each executable tool must begin with a comment explaining its purpose, effects,
+and that it does not define financial behavior. Verification runs locally; do
+not add GitHub Actions.
+
+## Source-of-truth order
+
+When working on financial behavior, consult artifacts in this order:
+
+1. `docs/coreDoc/core-doc.md` for foundation-level obligations.
+2. `/spec` for precise normative behavior.
+3. `/conformance` for portable acceptance cases and traceability.
+4. `/agentic` for canonical operation semantics where applicable.
+5. Historical plans and release notes for context only.
+
+Current normative text wins over historical implementation behavior. A vector
+that expects undefined behavior exposes an inconsistency; it does not authorize
+inventing a rule.
+
+## Development workflow
+
+For new or changed financial behavior, use this sequence:
 
 ```text
-finkore.money.add
-finkore.money.subtract
-finkore.money.compare
-finkore.money.round
-finkore.workflow.transition
-```
-
-Do NOT invent alternate operation IDs.
-
-The Agentic Contract does not override `/spec`.
-
-Agents, humans, backend services, and integrations are governed by the same domain rules.
-
-There is no special AI bypass or agent execution mode.
-
----
-
-## `/runner`
-
-Reference TypeScript Conformance Runner.
-
-The runner:
-
-- loads conformance vectors;
-- validates them;
-- dispatches canonical FinKore operation IDs;
-- calls an implementation adapter;
-- compares normalized results;
-- reports PASS / FAIL / UNSUPPORTED / INFRASTRUCTURE_ERROR.
-
-The runner MUST remain completely domain-neutral.
-
-It MUST NOT contain financial logic.
-
-Examples of forbidden runner logic:
-
-```ts
-if (left.currency !== right.currency) {
-  // financial behavior does not belong here
-}
-```
-
-```ts
-if (state === 'draft') {
-  // workflow behavior does not belong here
-}
-```
-
-The runner verifies behavior. It does not define or implement behavior.
-
-Current runner quality baseline:
-
-- strict TypeScript passes;
-- tests are heavily mutation-tested;
-- critical runner mutants must not survive.
-
----
-
-## `/implementations`
-
-Contains language-specific FinKore implementations.
-
-Expected structure:
-
-```text
-implementations/
-├── typescript/
-│   ├── core/
-│   └── adapters/
-│       └── conformance/
-│
-└── future-language/
-```
-
-The TypeScript implementation is a reference implementation, not the canonical FinKore definition.
-
----
-
-# TypeScript Architecture
-
-Current TypeScript implementation:
-
-```text
-implementations/typescript/
-├── core/
-└── adapters/
-    └── conformance/
-```
-
-## `core`
-
-Implements FinKore financial domain behavior.
-
-It MAY depend on normal language/runtime libraries required to implement the specification.
-
-It MUST NOT depend on:
-
-- `/runner`;
-- `/conformance`;
-- `/agentic`;
-- MCP;
-- OpenAI tools;
-- agent frameworks;
-- React;
-- Vue;
-- persistence infrastructure;
-- HTTP frameworks.
-
-Dependency direction:
-
-```text
-Runner
-  ↓
-Conformance Adapter
-  ↓
-TypeScript Core
-```
-
-Never reverse this dependency.
-
----
-
-# Node Toolchain
-
-Before running Node-based commands or tests, verify whether `node` is available on the machine environment.
-
-If `node` is not found in the machine environment:
-
-1. Look for a repository-local Node toolchain under `/.tools`.
-2. If `/.tools` exists and contains Node, run all Node-based commands and tests using that Node binary.
-3. If `/.tools` does not exist, or Node cannot be found there, download Node into `/.tools` and run all Node-based commands and tests from that downloaded toolchain.
-
-Do not skip required tests merely because the machine environment does not already provide Node.
-
----
-
-# Python and Java Toolchains
-
-Before running Python- or Java-based commands or tests, verify whether the required runtime is available on the machine environment.
-
-If the required Python or Java toolchain is not found in the machine environment:
-
-1. Look for repository-local toolchains under `/.tools`.
-2. If `/.tools` exists and contains the required toolchain, run all related commands and tests using the binaries under `/.tools/bin`.
-3. If `/.tools` does not exist, or the required toolchain cannot be found there, run `npm run tools:bootstrap` to download the Python and Java toolchains into `/.tools`.
-4. Run `npm run tools:check` before relying on the downloaded toolchain.
-
-The repository toolchain requires CPython 3.12 as the Python floor, CPython 3.13 as the Python compatibility check, JDK 21 for Java work, and Maven 3.9.x for Java package tasks.
-
-Do not skip required Python or Java tests merely because the machine environment does not already provide those tools.
-
----
-
-## `adapters/conformance`
-
-Translates between:
-
-```text
-canonical FinKore operation IDs
-        ↓
-TypeScript implementation API
-        ↓
-normalized Conformance Runner results
-```
-
-The adapter MAY know about:
-
-- runner adapter contracts;
-- canonical operation IDs;
-- TypeScript core APIs.
-
-The adapter MUST NOT implement financial rules.
-
-Example:
-
-Correct:
-
-```ts
-const result = Money.from(left).add(Money.from(right))
-return normalize(result)
-```
-
-Incorrect:
-
-```ts
-if (left.currency !== right.currency) {
-  return {
-    status: 'error',
-    error: { code: 'FINKORE_MONEY_CURRENCY_MISMATCH' }
-  }
-}
-```
-
-Currency compatibility belongs in the core implementation.
-
----
-
-# Development Methodology
-
-FinKore uses strict specification-driven TDD.
-
-For new financial behavior, use this sequence:
-
-```text
-Domain Problem
+Domain problem
       ↓
-Specification
+CoreDoc alignment
       ↓
-Normative Requirement
+Specification and stable requirement ID
       ↓
-Conformance Vector
+Conformance case and traceability
       ↓
-Failing Test
+Agentic metadata when applicable
       ↓
-Minimum Implementation
+Artifact validation and adversarial review
       ↓
-Passing Test
-      ↓
-Mutation Testing
-      ↓
-Refactor
+Consumer-owned implementation and execution
 ```
 
-Do NOT start by inventing a class or API.
+Before changing behavior:
 
-Start from existing specification behavior.
+1. Read the owning specification documents.
+2. Identify existing requirement and portable error IDs.
+3. Read related vectors and traceability entries.
+4. Read Agentic metadata for affected canonical operations.
+5. Confirm that the desired behavior is already defined or update the
+   specification first.
+6. Add positive, negative, boundary, invariant, and mutation-sensitive cases as
+   appropriate.
+7. Update all affected documentation and metadata in the same change.
+8. Run the repository verification suite.
 
-Before implementing a feature:
+Do not start from a proposed class, method, package, runner feature, or
+framework abstraction.
 
-1. Read the relevant `/spec` files.
-2. Identify requirement IDs.
-3. Read related `/conformance` vectors.
-4. Read canonical operation metadata under `/agentic` when applicable.
-5. Write or verify failing tests.
-6. Implement the smallest correct behavior.
-7. Run unit tests.
-8. Run real conformance vectors.
-9. Run mutation testing.
-10. Refactor only after correctness is established.
+## Conformance artifact rules
 
----
+Use `conformance/manifest.json` as the only vector discovery entry point. Keep
+schema and format versions separate from the FinKore Core version.
 
-# Testing Standards
+Every vector must:
 
-FinKore is intended for financial and accounting software.
+- have a stable, unique vector ID;
+- reference valid normative requirement IDs;
+- use canonical operation labels or the documented conformance-local label;
+- express portable input and expected observation data;
+- remain deterministic and language-independent;
+- avoid prescribing a production API or internal architecture.
 
-Reliability is a primary engineering requirement.
+Do not silently change expected results to match historical implementation
+behavior. If the specification and a vector disagree, investigate and repair
+the correct layer.
 
-A passing test suite is not sufficient if plausible defects can survive.
+Fixture metadata may retain historical labels such as `adapter` where they are
+part of the published format or case history. Do not interpret those labels as
+a maintained adapter API.
 
-Core testing strategy:
+## Financial testing principles
 
-- TDD;
-- exact assertions;
-- boundary testing;
-- negative testing;
-- invariant testing;
-- regression testing;
-- language-independent conformance vectors;
-- mutation testing.
+Conformance cases should make plausible defects fail, not merely demonstrate a
+happy path.
 
-Core philosophy:
+### Exactness
 
-> FinKore tests are designed not only to demonstrate that a correct implementation works, but to demonstrate that plausible incorrect implementations fail.
+Never encode approximate binary floating-point comparison for Money. Monetary
+values use exact FinKore decimal semantics.
 
----
+### Determinism
 
-# Mutation Testing
+Portable behavior must not depend on wall-clock time, host timezone, locale,
+network calls, external FX providers, filesystem order, or uncontrolled
+randomness. Inject explicit context when time, facts, policy, or state matters.
 
-Mutation testing is mandatory for meaningful financial behavior.
+### Failure atomicity
 
-Target:
+Where a failed operation is non-mutating, expected observations must cover the
+unchanged state as well as the portable error.
+
+### Mutation sensitivity
+
+Critical cases must detect defects such as removed currency checks, changed
+arithmetic operators, altered rounding modes, bypassed workflow guards,
+mutable audit history, invalid approval reuse, Entity identity changes, and
+portable error substitutions. Consumers may use mutation testing or an
+equivalent defect-resistance method; the repository publishes cases and
+traceability, not language-specific mutation runs.
+
+## Stable identifiers and portable errors
+
+Do not casually rename requirement IDs, vector IDs, portable error codes, or
+canonical operation IDs. Search all references before changing a stable
+identifier and document the compatibility impact.
+
+Portable error codes are language-independent. Exception types, messages,
+stack traces, HTTP statuses, and result-wrapper designs are consumer choices.
+Do not create a portable error that `/spec` does not define.
+
+## Money and rounding
+
+Before changing Money behavior, inspect `spec/money/` and
+`conformance/money/`.
+
+Money uses exact decimal semantics. Currency compatibility is explicit.
+Rounding is explicit when required, and calculation scale is not automatically
+the currency minor-unit scale. Portable modes are defined in
+`spec/money/rounding.md`; in particular, `DOWN` and `FLOOR` are not
+interchangeable for negative values.
+
+Do not infer private/non-fiat currency namespace semantics beyond the current
+specification.
+
+## Scope discipline and deferred topics
+
+Do not implement or specify a future domain merely because it appears useful.
+Deferred areas include private currency namespaces, concrete ledger posting,
+tax, FX sourcing, reconciliation, payment settlement, workflow migration and
+distributed coordination, distributed audit total ordering, unrestricted
+approval graphs, dynamic approver resolution, delegation, escalation, and
+concrete correction/reversal accounting effects.
+
+If a requested artifact requires resolving a deferred issue, report the gap.
+
+## Documentation synchronization
+
+Tests and documentation are part of the contract. For each meaningful change,
+review whether it requires updates to:
+
+- CoreDoc;
+- `/spec`;
+- conformance schemas, vectors, conventions, and traceability;
+- Agentic operation metadata;
+- the root or package-level README files;
+- `docs/implementation-guide.md` and consumer guidance;
+- repository tools and their tests;
+- `AGENTS.md`;
+- the current release plan.
+
+Documentation must describe the repository that exists now. Historical plans
+and release notes may describe removed implementations and past execution
+results, but current-facing documentation must label those claims as historical
+and must not present old install commands, API examples, support tables, or test
+counts as current capability.
+
+Release summaries belong only in `docs/releases/README.md`. Keep them concise.
+Do not create closure reports, alignment records, checksums, provenance reports,
+or review-evidence documents. Do not record planned or unreleased work as a
+completed release.
+
+## Node toolchain and local verification
+
+The maintained toolchain requires Node `>=24.11.0 <25`.
+
+Before running Node commands, check the machine environment. If a suitable
+`node` is unavailable, look under the repository-local `.tools` directory and
+use its Node binary. If neither exists, bootstrap the supported Node toolchain
+under `.tools` according to `docs/tools/README.md`.
+
+Python, Java, Maven, language-package builds, native unit tests, implementation
+coverage, financial conformance execution, and implementation mutation testing
+are not repository-maintained verification gates.
+
+For a meaningful repository change, run:
 
 ```text
-Mutation score >= 95%
+npm ci
+npm run verify
 ```
 
-However, the aggregate score is secondary to critical mutants.
+The verification suite checks artifact schemas, conformance vectors,
+traceability, Agentic consistency, repository architecture, tool tests,
+documentation links, licenses, and dependency audit status. Report failures
+honestly. Passing these checks does not prove that an external implementation
+conforms or that financial behavior is exhaustively tested.
 
-Critical financial mutants MUST NOT survive.
+## Change discipline
 
-Examples:
+Keep changes scoped. Do not refactor unrelated artifacts, broaden a milestone,
+weaken mutation-sensitive cases, or change normative behavior during editorial
+cleanup. Preserve architectural boundaries and stable identifiers.
 
-- currency mismatch validation removed;
-- arithmetic operator changed;
-- rounding mode changed;
-- workflow transition validation bypassed;
-- immutable-state protection removed;
-- approval validity check removed;
-- audit history mutation allowed;
-- portable error code changed.
+If code and specification disagree, investigate rather than assuming either is
+correct. Correct incompleteness is better than false financial precision.
 
-A 99% mutation score with one critical surviving mutant is unacceptable.
-
-Do NOT game mutation scores by:
-
-- excluding meaningful business logic;
-- adding meaningless assertions;
-- testing implementation details instead of behavior;
-- broadly ignoring difficult mutants.
-
-Equivalent mutants may be ignored only with an explicit justification.
-
----
-
-# Financial Testing Rules
-
-## Exactness
-
-Never use approximate floating-point assertions for Money.
-
-Forbidden:
-
-```ts
-expect(Math.abs(actual - expected)).toBeLessThan(0.001)
-```
-
-Financial values must be compared using exact FinKore semantics.
-
----
-
-## Determinism
-
-Tests MUST NOT depend on:
-
-- wall-clock time;
-- host timezone;
-- machine locale;
-- network calls;
-- external FX providers;
-- filesystem enumeration order;
-- uncontrolled randomness.
-
-Explicit context must be injected when time or state matters.
-
----
-
-## Failure Must Not Create Partial State
-
-Where `/spec` defines a failed operation as non-mutating, test the invariant explicitly.
-
-Do not only test the returned error.
-
-Also verify that observable state remains unchanged.
-
----
-
-# TypeScript Standards
-
-Use strict TypeScript.
-
-Prefer:
-
-```json
-{
-  "strict": true,
-  "noUncheckedIndexedAccess": true,
-  "exactOptionalPropertyTypes": true
-}
-```
-
-Avoid `any`.
-
-Use `unknown` at untrusted boundaries.
-
-Do not model conformance payloads as financial-domain types inside the runner.
-
-Keep implementation APIs idiomatic TypeScript while preserving FinKore observable behavior.
-
----
-
-# Public API Design
-
-Keep APIs small.
-
-Avoid premature abstractions.
-
-Do not introduce:
-
-- builders without clear need;
-- generic utility layers;
-- framework abstractions;
-- extension systems for hypothetical future behavior.
-
-Prefer domain-oriented modules.
-
-Example:
+Before completing significant work, explicitly evaluate:
 
 ```text
-src/
-├── money/
-├── workflow/
-├── audit/
-├── approvals/
-└── entities/
+Did this change affect CoreDoc or normative requirements?
+Did it require new or updated conformance cases and traceability?
+Did it affect portable errors or stable identifiers?
+Did it affect Agentic operations, effects, or safety metadata?
+Did it require repository-tool or tool-test changes?
+Did it leave any current-facing documentation stale?
+Did all applicable local verification checks pass?
 ```
 
-Avoid generic dumping grounds such as:
+## When requirements are unclear
 
-```text
-utils/
-helpers/
-common/
-```
-
-unless a genuinely shared abstraction emerges from multiple domains.
-
----
-
-# JSDoc Policy
-
-All intentional public TypeScript API symbols MUST have meaningful JSDoc.
-
-This includes:
-
-- exported classes;
-- exported functions;
-- public methods;
-- public static methods;
-- exported interfaces;
-- exported types when useful;
-- exported enums/constants;
-- portable error classes.
-
-JSDoc should explain:
-
-- domain purpose;
-- relevant financial semantics;
-- parameters where semantics matter;
-- return behavior;
-- portable errors;
-- mutation behavior;
-- relevant FinKore requirement IDs.
-
-Use standard JSDoc tags:
-
-```text
-@param
-@returns
-@throws
-@example
-@remarks
-@see
-@internal
-```
-
-Use `@see` for stable FinKore requirement IDs.
-
-Example:
-
-```ts
-/**
- * Adds another Money value using FinKore exact decimal semantics.
- *
- * Both operands must use compatible currencies.
- * Neither operand is mutated.
- *
- * @param other - Money value to add.
- * @returns A new Money value containing the result.
- *
- * @throws {CurrencyMismatchError}
- * When the operands use incompatible currencies.
- *
- * @see MONEY-ARITHMETIC-001
- * @see MONEY-ARITHMETIC-002
- * @see MONEY-ARITHMETIC-003
- */
-add(other: Money): Money {
-  // ...
-}
-```
-
-Do NOT copy entire specification sections into JSDoc.
-
-Documentation responsibilities:
-
-```text
-/spec
-  normative financial behavior
-
-JSDoc
-  TypeScript API semantics and usage
-
-README
-  project/package introduction
-```
-
-Internal helpers need JSDoc only when they contain non-obvious financial semantics or important architectural decisions.
-
-Avoid comments that merely restate code.
-
----
-
-# Portable Errors
-
-FinKore portable error codes are language-independent.
-
-Example:
-
-```text
-FINKORE_MONEY_CURRENCY_MISMATCH
-```
-
-TypeScript error classes are implementation-specific.
-
-Consumers requiring portable semantics should rely on the error code, not the TypeScript class name.
-
-Do not create portable behavior based on:
-
-- exception class names;
-- human-readable error messages;
-- stack traces.
-
-If `/spec` does not define an error code for a condition, do not invent one in the implementation.
-
----
-
-# Money Rules
-
-Money is foundational.
-
-Before changing Money behavior, always inspect:
-
-```text
-spec/money/
-conformance/money/
-```
-
-Important principles already established include:
-
-- Money has amount and currency.
-- Monetary behavior uses exact decimal semantics.
-- Unsafe binary floating-point behavior is unacceptable.
-- Currency compatibility is explicit.
-- Rounding is explicit when required.
-- Supported portable rounding modes are defined by the specification.
-- Calculation scale is not automatically the same thing as currency minor units.
-- Canonical serialization is locale-independent.
-- Non-ISO/private currency namespace behavior remains intentionally limited/deferred according to the current spec.
-
-Do not use JavaScript `number` as an unsafe shortcut for financial arithmetic.
-
----
-
-# Rounding
-
-Do not invent rounding defaults.
-
-Where rounding is required, follow `/spec/money/rounding.md`.
-
-Portable modes currently include the modes defined there, such as:
-
-```text
-HALF_UP
-HALF_EVEN
-DOWN
-UP
-FLOOR
-CEILING
-```
-
-Negative-value boundary cases matter.
-
-For example, `DOWN` and `FLOOR` are not interchangeable.
-
-Always test boundary values and mutation-sensitive cases.
-
----
-
-# Agentic Readiness
-
-FinKore is:
-
-> Agent-ready by contract, not by convention.
-
-Do not add AI-specific shortcuts to core APIs.
-
-The Agentic Contract is meant to make operations:
-
-- Discoverable;
-- Understandable;
-- Governable;
-- Conformance-traceable.
-
-Executable MCP/OpenAI/agent adapters are separate future integrations.
-
-Agentic behavior MUST NOT bypass FinKore financial semantics.
-
----
-
-# Current Scope Discipline
-
-Do not implement future domains merely because they appear useful.
-
-Only implement behavior that is part of the active milestone.
-
-Potential future concepts include:
-
-- Workflow;
-- Audit;
-- Approvals;
-- Financial Entities;
-- Corrections;
-- Reversals;
-- Journal Entries;
-- Ledger;
-- Reconciliation;
-- Purchase Orders;
-- Payments;
-- Tax;
-- FX.
-
-A future concept appearing in README/spec discussion does not imply it belongs in the current implementation task.
-
----
-
-# Deferred Topics
-
-Some topics are intentionally deferred.
-
-Examples include areas such as:
-
-- private/non-fiat currency namespace design;
-- approval delegation, escalation, dynamic approver resolution, and quorum extensions beyond the implemented bounded composition model;
-- workflow migration, concurrency, and distributed version coordination beyond the implemented definition/version binding and expected-precondition model;
-- concrete correction/reversal accounting effects beyond the implemented Entity Evolution relation semantics;
-- post-finalization metadata policy;
-- distributed audit total ordering.
-
-Do not resolve deferred architectural questions inside implementation code.
-
-If they become necessary, stop and surface the specification gap.
-
----
-
-# Backward Compatibility
-
-Stable identifiers are important.
-
-Do not casually rename:
-
-- requirement IDs;
-- portable error codes;
-- canonical operation IDs;
-- conformance vector IDs.
-
-These identifiers are intended for long-term traceability.
-
-If a rename is unavoidable, explain why and assess all references before changing it.
-
----
-
-# Change Discipline
-
-When implementing a task:
-
-1. Keep changes scoped.
-2. Do not refactor unrelated code.
-3. Do not broaden the milestone.
-4. Do not silently change spec behavior.
-5. Do not update test expectations simply to make implementation pass.
-6. Never weaken mutation-sensitive tests without explicit justification.
-7. Preserve architectural boundaries.
-
-If code and spec disagree, investigate the disagreement.
-
-Do not assume the implementation is correct.
-
----
-
-# Test and Documentation Synchronization
-
-Tests and documentation are part of the implementation and MUST evolve together with code.
-
-Whenever a change affects observable behavior, public API, portable errors, architecture, supported operations, or implementation status, update the relevant artifacts in the same change.
-
-At minimum, review whether the change requires updates to:
-
-```text
-unit tests
-conformance vectors
-mutation-sensitive tests
-JSDoc
-package README files
-root README
-/spec
-/conformance
-/agentic
-AGENTS.md
-```
-
-Do not consider a code change complete if affected tests or documentation are stale.
-
----
-
-## Public API Changes
-
-When adding, removing, renaming, or changing a public API:
-
-```text
-[ ] update or add unit tests
-[ ] update conformance coverage where behavior is normative
-[ ] update mutation-sensitive tests where behavior is critical
-[ ] update JSDoc
-[ ] update examples that use the API
-[ ] update the implementation README when usage or supported capabilities changed
-```
-
-Every intentional public API added by a change MUST have meaningful JSDoc before the task is considered complete.
-
----
-
-## Behavioral Changes
-
-When observable financial behavior changes:
-
-```text
-[ ] verify the behavior is already defined by /spec
-[ ] update the specification if the intended normative behavior itself changed
-[ ] update conformance vectors
-[ ] update implementation tests
-[ ] update mutation-sensitive tests
-[ ] update JSDoc describing the affected behavior
-[ ] update README documentation if the change affects users or project status
-[ ] update Agentic metadata if operation semantics, effects, inputs, outputs, or errors changed
-```
-
-Do not change test expectations merely to accommodate implementation behavior that conflicts with the specification.
-
-If implementation behavior and the specification disagree, the discrepancy MUST be investigated before changing tests.
-
----
-
-## Error Changes
-
-When adding or changing portable error behavior:
-
-```text
-[ ] update the canonical specification
-[ ] update conformance vectors
-[ ] update implementation tests
-[ ] update mutation-sensitive tests when the error is financially critical
-[ ] update JSDoc @throws and portable error references
-[ ] update README examples if users may encounter the error
-[ ] update Agentic operation metadata when the portable error surface changes
-```
-
-Portable errors MUST remain traceable across specification, conformance, implementation, JSDoc, and Agentic metadata where applicable.
-
----
-
-## Architecture Changes
-
-When package boundaries, adapters, public entry points, operation dispatch, or dependency directions change:
-
-```text
-[ ] update architecture tests where applicable
-[ ] update relevant README architecture sections
-[ ] update diagrams or examples that describe the old structure
-[ ] update AGENTS.md if development rules or architectural responsibilities changed
-[ ] verify that architectural boundaries remain enforced
-```
-
-Documentation must not describe an architecture that no longer exists.
-
----
-
-## Supported Capability Changes
-
-When a previously unsupported FinKore capability becomes implemented, or an implementation status changes:
-
-```text
-[ ] update unit tests
-[ ] execute relevant conformance vectors
-[ ] update implementation README status
-[ ] update examples if applicable
-[ ] update conformance adapter operation support
-[ ] verify canonical Agentic operation IDs remain aligned
-[ ] update any public capability/status tables
-```
-
-Do not leave README sections claiming a feature is unsupported after it has been implemented.
-
-Do not claim full domain conformance while required vectors remain unsupported.
-
----
-
-## Documentation Freshness Rule
-
-Documentation MUST describe the code and project state that exist now.
-
-Do not document planned functionality as implemented functionality.
-
-Do not leave stale:
-
-- usage examples;
-- API names;
-- supported operation lists;
-- implementation status;
-- error references;
-- package paths;
-- architecture diagrams;
-- conformance claims.
-
-If a meaningful implementation milestone changes current capabilities, review the relevant README files before completing the task.
-
----
-
-## JSDoc Freshness Rule
-
-JSDoc is part of the public API contract for language-specific implementations.
-
-When code behavior changes, JSDoc MUST be reviewed even if the function signature does not change.
-
-Examples include:
-
-- new portable error conditions;
-- changed mutation semantics;
-- new validation behavior;
-- changed serialization semantics;
-- changed preconditions;
-- changed return guarantees.
-
-Do not leave comments that describe previous behavior.
-
----
-
-## Test Freshness Rule
-
-Tests MUST represent the current normative behavior.
-
-When a bug is found:
-
-1. reproduce it with a failing test or conformance vector;
-2. confirm the test fails against the defective behavior;
-3. fix the implementation;
-4. retain the regression test permanently where appropriate;
-5. update JSDoc/README if the bug revealed previously incorrect documentation.
-
-Do not delete a regression test simply because the implementation has been fixed.
-
----
-
-## Completion Rule
-
-Before completing any significant task, explicitly evaluate:
-
-```text
-Did this change require updates to unit tests?
-Did this change require updates to conformance vectors?
-Did this change require updates to mutation-sensitive tests?
-Did this change require updates to JSDoc?
-Did this change require updates to README documentation?
-Did this change require updates to /spec?
-Did this change require updates to /conformance?
-Did this change require updates to /agentic?
-Did this change require updates to AGENTS.md?
-```
-
-If yes, make those updates before considering the task complete.
-
-A code-only change is incomplete when it leaves affected tests or documentation behind.
-
----
-
-# Verification Required Before Completing Code Tasks
-
-For meaningful TypeScript implementation changes, run the relevant available checks:
-
-```text
-build
-strict TypeScript
-unit tests
-coverage
-conformance
-mutation testing
-```
-
-Report failures honestly.
-
-Do not describe a subset implementation as fully conformant.
-
-Distinguish:
-
-```text
-implemented
-passing conformance
-unsupported
-not yet specified
-```
-
----
-
-# Definition of Done for New Financial Behavior
-
-A new normative financial behavior is not complete until, where applicable:
-
-```text
-[ ] Domain behavior exists in /spec
-[ ] Stable requirement ID exists
-[ ] Conformance vector exists
-[ ] Positive behavior is tested
-[ ] Negative behavior is tested
-[ ] Boundary behavior is tested
-[ ] Relevant invariants are tested
-[ ] Mutation-sensitive tests exist
-[ ] TypeScript implementation passes
-[ ] Conformance passes
-[ ] Critical mutants are killed
-[ ] Public API has JSDoc
-[ ] Relevant requirement IDs are referenced from JSDoc
-[ ] Relevant README documentation is current
-[ ] Agentic operation metadata is current where applicable
-[ ] No architectural boundary was violated
-```
-
-Not every trivial rule needs every test category, but critical financial behavior should receive the strongest treatment.
-
----
-
-# CoreDoc and Release Governance
-
-Read [CoreDoc](docs/coreDoc/core-doc.md) for foundation-level financial obligations;
-`/spec` refines the precise domain behavior and must not silently contradict it.
-
-CoreDoc records each rule's introduction and latest normative update through its
-`Introduced`, `Last updated`, and `Last updated on` fields. Do not create separate
-alignment records, closure reports, checksums, provenance reports, or review
-evidence for CoreDoc changes.
-
-[Release notes](docs/releases/README.md) are a concise maintainer-owned history.
-Keep all release summaries in that single file and do not turn them into test,
-coverage, mutation, compatibility, or external-review reports. Git and merge
-requests retain detailed development history.
-
-Developer tools live under `docs/tools`. Each executable tool MUST begin with a
-comment explaining its purpose, effects, and that it does not define financial
-behavior. Verification runs locally; do not add GitHub Actions.
-
-This simplified governance does not resolve financial ambiguity or waive
-conformance, mutation, traceability, or other implementation quality gates.
-
----
-
-# When Requirements Are Unclear
-
-Never guess financial semantics.
-
-When encountering ambiguity:
-
-1. Search `/spec`.
-2. Search `/conformance`.
-3. Search `/agentic`.
-4. Check requirement traceability.
-5. If behavior remains undefined, report a specification gap.
-
-Prefer:
+Search `/spec`, `/conformance`, `/agentic`, CoreDoc, and traceability. If the
+observable result is still undefined, state:
 
 > This behavior is not currently defined by FinKore Core.
 
-Prefer that kind of explicit gap statement over inventing behavior.
-
-Correct incompleteness is better than false financial precision.
-
----
-
-# Coding Style Principle
-
-Prefer code that makes financial rules explicit.
-
-Avoid cleverness.
-
-Avoid magic.
-
-Avoid hidden normalization.
-
-Avoid silent correction of invalid values unless the specification explicitly requires normalization.
-
-The implementation should make it easy for another engineer to answer:
-
-```text
-Why is this allowed?
-Why is this rejected?
-Which FinKore requirement governs this?
-Which test proves it?
-Which documentation describes it?
-```
-
-That traceability is a core FinKore engineering value.
+Describe the artifacts reviewed, plausible interpretations, and financial or
+control impact. Do not fill the gap with an implementation guess.

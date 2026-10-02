@@ -921,18 +921,14 @@ current PASS, cross-language agreement, coverage, package, or mutation claim.
 
 ### Historical readiness records
 
-The current 0.9.7 reassessment and requirement mapping take precedence over
-historical coverage claims. D1–D7 are accepted and M2 regressions published; M5–M9 remain open,
-and Core 1.0 promotion remains blocked. The following records the completed
-0.9.6 snapshot: Milestones 1–8 implement its accepted contracts and reviewed corrections;
-all 884 vectors pass across four runtimes. Full combined verification and fresh
-review pass. Milestone 9 completes the local corrective release. Core 1.0
-promotion remains outstanding, as do remote and package publication. The
-following paragraph records the completed 0.9.5 snapshot only.
+The records below describe earlier repository snapshots only. Completed plans
+and release notes retain their exact milestone context; none of these results is
+rerun or asserted by current repository validation. Core 1.0 promotion remains
+outstanding.
 
 The manifest, schema, operation catalog, exact comparison rules, normalized
-errors, deterministic context, and valid requirement references are sufficient
-for the current runner. Core 0.9.5 Milestones 3–7 correct the reviewed serializer,
+errors, deterministic context, and valid requirement references were sufficient
+for the runner maintained in the Core 0.9.5 snapshot. Its Milestones 3–7 correct the reviewed serializer,
 binding, association, native value ownership, and Entity definition/import
 boundaries. All 667 vectors now pass on TypeScript, Python 3.12/3.13, and Java,
 with native sequence/ownership tests and mutation protection. Milestone 8 passes

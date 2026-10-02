@@ -13,12 +13,12 @@ declared immutable by a composing Financial Entity policy remains immutable.
 > autonomous execution path.
 
 The same normative semantics apply to human-driven applications, backend
-services, batch jobs, integrations, agents, and autonomous systems. Tool or
-transport adapters MUST preserve the operation's preconditions, postconditions,
+services, batch jobs, integrations, agents, and autonomous systems. Consumer
+bindings and transports MUST preserve the operation's preconditions, postconditions,
 portable errors, and failure atomicity.
 
 Workflow version binding and expected-state/revision preconditions are
-ordinary domain preconditions. An adapter for `finkore.workflow.transition` MUST
+ordinary domain preconditions. A binding for `finkore.workflow.transition` MUST
 not ignore a version mismatch or state conflict because the requester is an
 agent. Approval composition and lifecycle conformance fixtures do not create an
 agent-facing Approval bypass or standalone authorization mechanism.
@@ -36,7 +36,7 @@ consuming application may require human confirmation, authorization, Approval,
 or other governance before invoking an operation, but those policies do not
 weaken the operation's FinKore preconditions or portable errors.
 
-An adapter may add stricter access controls, but it MUST NOT reinterpret a
+An integration may add stricter access controls, but it MUST NOT reinterpret a
 rejected domain operation as successful or replace its primary portable domain
 error merely because the requester is autonomous.
 

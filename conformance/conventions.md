@@ -63,14 +63,15 @@ The `finkore.money.allocate` fixture supplies `value`, `allocation`, and
 Scale, parts, and ratio entries are JSON numbers with integer mathematical
 values. Scale and parts use the inclusive ranges defined by
 MONEY-ALLOCATION-014, and ratio entries use its inclusive exact JSON integer
-range. Adapters pass these values to their core implementation without applying
+range. Consumer bindings pass these values to their implementation without
+applying
 range or allocation rules.
-Conformance-only sentinels use `{"presence":"ABSENT"}` and `{"presence":"REDACTED"}` when absence and policy-authorized concealment must be observed distinctly from JSON `null`. Adapters translate their own representations to these sentinels; production APIs are not required to expose them.
+Conformance-only sentinels use `{"presence":"ABSENT"}` and `{"presence":"REDACTED"}` when absence and policy-authorized concealment must be observed distinctly from JSON `null`. Consumer bindings translate their own representations to these sentinels; production APIs are not required to expose them.
 
 ## Declarative fixtures
 
 Workflow guard expressions and entity validation rules in these vectors are
-small adapter fixtures, not additions to the FinKore business specification or
+small conformance fixtures, not additions to the FinKore business specification or
 a general expression DSL. The Workflow fixture
 `{"fact":"x","equals":value}` selects one own, top-level member of the
 explicitly supplied `facts` object. `fact` must be a non-empty string and
@@ -101,13 +102,14 @@ equal rejects the transition with `FINKORE_WORKFLOW_GUARD_REJECTED`. Values are
 not coerced, and an object that resembles Money or another domain type remains
 an ordinary JSON object in this fixture.
 
-Native public-API tests supplement these JSON fixtures by attempting to mutate
+Consumer-native public API tests should supplement these JSON fixtures by
+attempting to mutate
 construction inputs and returned definition observations, including nested guard
 objects and arrays. They cover creation and import, accepted and rejected facts,
 and unversioned controls. The same retained predicate must continue to evaluate
 under the original binding; either immutable observations or defensive copies
 satisfy this ownership check. Unsupported native comparison values require
-native tests because they cannot be represented in a JSON vector.
+consumer-native tests because they cannot be represented in a JSON vector.
 
 Versioned Workflow fixtures identify the definition family with
 `definitionIdentity` and its version with `definitionVersionIdentity`. When
@@ -123,7 +125,7 @@ be valid default-sequence positions. This encoding observes
 registry or production request format.
 
 The entity validator named `positive-money` accepts an exact Money amount
-greater than zero. These fixtures let every adapter exercise guard/validation
+greater than zero. These fixtures let every consumer binding exercise guard/validation
 ordering and atomicity under the same deterministic predicate.
 
 Audit Change fixtures reflect the production declaration in
@@ -132,7 +134,7 @@ carry Money semantics. Without that declaration, even an object containing
 `amount` and `currency` is compared as ordinary JSON under
 **AUDIT-CHANGE-008**. The conformance-only `{"presence":"ABSENT"}` sentinel
 continues to observe domain absence and is not a production type declaration.
-Malformed declared Money values produce `FINKORE_AUDIT_INVALID_EVENT`; adapters
+Malformed declared Money values produce `FINKORE_AUDIT_INVALID_EVENT`; bindings
 must not repair them or infer Money semantics.
 
 The Entity fixture `{"id":"WITHIN_LIMIT","rule":"money-not-greater-than",
@@ -145,8 +147,8 @@ predicate produces `FINKORE_ENTITY_VALIDATION_FAILED`, with any observed finding
 identifying its declared `id` and `path`. The predicate uses exact Money
 comparison and does not impose positivity or currency conversion. It is a
 declared test constraint for **ENTITY-VALIDATION-003**, not a required rule for
-all financial entities. Core implementations evaluate the predicate; adapters
-only translate fixtures and observations.
+all financial entities. Consumer implementations evaluate the predicate;
+bindings only translate fixtures and observations.
 
 
 Timestamps use the portable FinKore RFC 3339 profile in
@@ -196,11 +198,13 @@ These identifiers name observable behavior, not implementation methods.
 | `finkore.entity.evolution.supersede` | Record a Supersession relation with required Audit evidence. |
 | `entity.import` | Validate and observe an existing Entity with optional source identity mapping, business revision history, and conflict-version preconditions. |
 
-Logical fixtures in `input` are intentionally small declarative models. An adapter constructs any idiomatic implementation objects required to realize them. The fixtures do not define a production interchange format.
+Logical fixtures in `input` are intentionally small declarative models. A
+consumer binding constructs any idiomatic implementation objects required to
+realize them. The fixtures do not define a production interchange format.
 
 Identifiers beginning with `finkore.` are canonical operations in the
 [Agentic Contract](../agentic/operations.md). Remaining catalog entries are
-conformance-local adapter operations until their stable public contracts are
+conformance-local operations until their stable public contracts are
 reviewed; vector use alone does not make them advertised FinKore capabilities.
 Audit ordering requirements are verified through append-only history and review of explicitly recorded relationships; Core 0.9 release candidate does not define `audit.order` as an executable conformance operation or as an Agentic operation. Audit Relationships are observed through ordinary `finkore.audit.append` and `audit.redact` fixtures, not a separate relationship operation.
 For Money, `money.deserialize` and `money.serialize` remain
@@ -227,7 +231,7 @@ effective vote. Invalid evidence produces `FINKORE_APPROVAL_INVALID_CHAIN` in
 category 4 of **APPROVAL-ERROR-010**, after higher-priority structure,
 applicability, and required-context failures. Validation includes supplied
 evidence in otherwise decisive branches and later stages. The fixture consumes
-current-effectiveness observations; adapters do not derive them or repair them.
+current-effectiveness observations; bindings do not derive them or repair them.
 
 For Approvals, `approval.chain.evaluate`, `approval.decision.withdraw`,
 `approval.decision.supersede`, and `approval.requirement.supersede` remain
@@ -240,7 +244,7 @@ Approval history inputs may use the existing Decision array or the
 `{ "history": [...], "lifecycle": [...] }` envelope. The array represents
 Decision history with no lifecycle events. Recording another Decision preserves
 all supplied committed Decisions and lifecycle events; an output omits the
-lifecycle member only when there are no lifecycle events. Adapters translate
+lifecycle member only when there are no lifecycle events. Consumer bindings translate
 containers without discarding evidence. Tests that withdraw or supersede, record,
 and then evaluate must pass real operation outputs between public APIs as well
 as exercise reconstructed-history conformance vectors.
@@ -262,7 +266,7 @@ history. An accepted withdrawal must also be observed through subsequent
 effectiveness evaluation; a success envelope alone is insufficient evidence.
 
 An `approval.requirement.evaluate` fixture with an array of `decisions` may
-set `input.observeHistory` to `true`. On successful evaluation the adapter
+set `input.observeHistory` to `true`. On successful evaluation the binding
 returns `observations.history` containing the committed decisions after the
 operation, alongside the normal requirement-state value. This optional
 conformance observation verifies history preservation; it does not change
@@ -278,7 +282,7 @@ semantics defined by the Entity specifications.
 The existing evolution fixture supplies `evolutionHistory` as an array of
 declared relation observations, including an empty array for no prior relations.
 The normalized result represents history as `{ "relations": [...] }`. An
-adapter may translate that container into its core's accepted history API and
+consumer binding may translate that container into its implementation's accepted history API and
 normalize it back; it must not reject every nonempty input, invent relations,
 derive currentness, or implement duplicate policies itself. A follow-on fixture
 uses the returned relation array. Native API sequence tests use each documented
@@ -309,7 +313,7 @@ would be rejected when consumed by a subsequent operation.
 Under **ENTITY-EVOLUTION-035**, contradictory observations return
 `FINKORE_ENTITY_INVALID_MUTATION`, whether or not `expectedSourceCurrent` is
 present. A mismatch against consistent observed currentness instead returns
-`FINKORE_ENTITY_STATE_CONFLICT` under **ENTITY-EVOLUTION-025**. The adapter
+`FINKORE_ENTITY_STATE_CONFLICT` under **ENTITY-EVOLUTION-025**. The binding
 translates these observations; consistency and currentness are core behavior.
 No fixture introduces a timestamp-based winner or an implicit restoration
 operation. For example, Supersession A → B followed by B → C in one scope is
@@ -334,7 +338,15 @@ historical Entity Revision identity, Entity Conflict Version separation, and
 expected-state/revision/conflict-version preconditions without defining a
 registry, storage lock, or concrete migration format.
 
-## Core 0.9.5 boundary review
+## Historical boundary review records
+
+The Core 0.9.5–0.9.7 sections below preserve implementation-specific decisions
+and evidence from repository snapshots that contained maintained language
+implementations. They are historical records, not current package, API, adapter,
+or verification instructions. The current portable fixture contract above and
+the consumer-owned evaluation contract below govern present use.
+
+## Core 0.9.5 boundary review (historical)
 
 These fixture interpretations implement the linked specification obligations;
 they do not define a production envelope. The completed
@@ -481,7 +493,7 @@ fail with `FINKORE_ENTITY_STATE_CONFLICT` under
 Malformed observed identities remain invalid identity, not a precondition
 match. No total ordering of unrelated Entity errors is added by these fixtures.
 
-## Core 0.9.6 boundary review
+## Core 0.9.6 boundary review (historical)
 
 The [Milestone 2 regressions](../docs/plans/plan-09.6.md) exercise native construction,
 Approval evaluation/history, redaction authority, Workflow priority, and Entity
@@ -553,7 +565,7 @@ Native arrays with holes, cycles, or unsupported objects are not JSON null
 fixtures. Structural input failures are core domain errors; unexpected runtime
 defects remain infrastructure failures and must not be broadly remapped.
 
-## Core 0.9.7 accepted correction fixtures
+## Core 0.9.7 accepted correction fixtures (historical)
 
 These conventions encode the accepted [Milestone 1 decisions](../docs/plans/plan-09.7.md).
 The owning specifications define behavior; M2 adds permanent regressions and

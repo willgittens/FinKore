@@ -4,7 +4,7 @@
 
 This registry includes only operation boundaries clearly supported by both the
 current specification and conformance vectors. Other conformance
-operation labels remain runner-adapter vocabulary until their stable agent-facing
+operation labels remain conformance-local vocabulary until their stable agent-facing
 contract, effects, and inputs are reviewed.
 
 The Core 0.9 release-candidate review checked every promoted operation in this
@@ -34,9 +34,9 @@ Timestamp fields used by these Approval fixtures, including `decidedAt`,
 timestamp profile in [Agentic Contract Conventions](conventions.md#portable-timestamps).
 
 Workflow definition/version identity, immutable instance binding, version
-mismatch, import, and expected-state/revision conflict semantics are
-specified in `/spec`, implemented by the TypeScript reference implementation,
-and vector-covered. The canonical `finkore.workflow.transition` operation now
+mismatch, import, and expected-state/revision conflict semantics are specified
+in `/spec` and covered by published vectors. The canonical
+`finkore.workflow.transition` operation now
 includes the version binding and conflict preconditions listed below.
 `workflow.create` and `workflow.import` remain conformance-local structural
 boundary checks rather than canonical Agentic operations.
@@ -579,13 +579,13 @@ Intrinsic Audit validation precedes evolution correspondence under
 correspondence fails, return `FINKORE_ENTITY_INVALID_MUTATION`. This specifies
 validation priority, not permission to commit Audit history early. Malformed
 supplied Audit history, including explicit null, retains
-`FINKORE_AUDIT_INVALID_EVENT`; adapter failure observations cannot replace that
+`FINKORE_AUDIT_INVALID_EVENT`; consumer binding failure observations cannot replace that
 code or manufacture a successfully imported history.
 
 For optional expected source State and Revision, explicit null remains supplied
 input and fails with `FINKORE_ENTITY_STATE_CONFLICT` against a valid observation
-under `ENTITY-EVOLUTION-025`. Omission skips that check. Native overloads and
-adapters preserve presence; a null-handling runtime exception is not a portable
+under `ENTITY-EVOLUTION-025`. Omission skips that check. Consumer bindings must
+preserve presence; a null-handling runtime exception is not a portable
 domain failure. Malformed observed identities retain their own domain error,
 and this does not add priority between unrelated Entity failures.
 
@@ -599,8 +599,8 @@ an arbitrary last-record-wins rule is introduced. The
 defines the exact Entity/Revision/scope and historical-step distinctions.
 
 Conformance evolution history arrays are translated according to the
-[fixture conventions](../conformance/conventions.md). Native production
-history containers may differ; adapters do not define currentness or duplicate
+[fixture conventions](../conformance/conventions.md). Consumer production
+history containers may differ; bindings do not define currentness or duplicate
 policy.
 
 ## `finkore.entity.evolution.correct`

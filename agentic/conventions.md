@@ -19,12 +19,12 @@ An operation ID:
 
 - MUST be globally unique within FinKore;
 - MUST NOT be reused for a different operation contract;
-- MUST remain independent of TypeScript methods, Java classes, package names,
+- MUST remain independent of language methods, classes, package names,
   framework routes, HTTP URLs, and tool-provider naming;
 - MUST map to one clear semantic operation;
 - SHOULD remain stable across language implementations and API refactors; and
-- SHOULD be reusable by conformance vectors, runner adapters, discovery data,
-  future tool adapters, and reference implementations.
+- SHOULD be reusable by conformance vectors, discovery data, consumer-owned
+  bindings, tools, and implementations.
 
 Versions are not encoded in operation IDs. Operation identifiers are intended
 to remain stable. Compatibility rules for canonical operation identifiers are
@@ -76,13 +76,13 @@ serialization.
 - A **domain representation** has the meaning assigned by `/spec`.
 - An **Agentic Contract representation** explains inputs and outputs to a
   machine client and reuses a normative domain serialization when one exists.
-- A **runner normalization representation** belongs to conformance
-  infrastructure and may contain test-only fixtures or observations.
+- A **conformance observation representation** belongs to consumer-owned
+  verification tooling and may contain test-only fixtures or observations.
 
 These layers MUST NOT be treated as interchangeable merely because examples look
 similar. In particular, Money operation metadata reuses the normative
 [Money serialization](../spec/money/serialization.md); production APIs are not
-required to return the conformance runner's normalized envelope.
+required to return a conformance tool's normalized observation shape.
 
 ## Portable timestamps
 

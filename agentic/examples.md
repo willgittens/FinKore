@@ -1,7 +1,7 @@
 # Agent Reasoning Examples
 
 These examples are conceptual and non-normative. They demonstrate decisions a
-client can derive from the contract; they do not implement an agent or adapter.
+client can derive from the contract; they do not implement an agent or integration.
 
 ## Predictable Money failure
 
@@ -62,4 +62,3 @@ composing Financial Entity domain declares successful lifecycle transitions
 auditable, a successful retry must also produce the required Audit Event. Generic
 Workflow metadata alone does not claim that every transition produces audit.
 ```
-

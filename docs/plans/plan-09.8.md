@@ -2,16 +2,15 @@
 
 ## Status
 
-**Draft — transition to a language-independent specification project.**
+**Implemented — unreleased transition to a language-independent specification
+project.**
 
 Updated on 2026-10-02. This replaces the previous 0.9.8 corrective implementation
-plan. The confirmed direction is for FinKore to be the financial source of
-truth for its defined scope, removing all maintained language implementations
-and the Conformance Runner. Additional changes to this plan may follow.
-
-The work below is planned, not completed. Replacing this document does not
-remove code, change financial behavior, or declare a release. Earlier releases
-remain historical snapshots of the project as it existed at those versions.
+plan. The transition milestones are implemented in the working tree: FinKore is
+the financial source of truth for its defined scope, with no maintained language
+implementation or Conformance Runner. This status does not declare a release.
+Earlier releases remain historical snapshots of the project as it existed at
+those versions.
 
 This document is non-normative. [CoreDoc](../coreDoc/core-doc.md) establishes
 foundation obligations and [/spec](../../spec/README.md) defines precise
@@ -93,22 +92,22 @@ checks, and conformance claims accurately describe the evidence available.
 
 ## Milestone 3 — Update project documentation and development rules
 
-- [ ] Update the root README to describe FinKore as the financial source of truth
+- [x] Update the root README to describe FinKore as the financial source of truth
       for its defined scope, publishing specifications, conformance vectors,
       and the Agentic Contract, with internal artifact-validation tools.
-- [ ] Remove active installation instructions, API examples, support tables,
+- [x] Remove active installation instructions, API examples, support tables,
       and capability claims for the removed implementation and runner packages.
-- [ ] Update conformance, Agentic, and developer-tool documentation for
+- [x] Update conformance, Agentic, and developer-tool documentation for
       consumer-owned implementations and conformance execution. Remove active
       runner CLI and adapter API instructions.
-- [ ] Update AGENTS.md to reflect the new repository responsibilities,
+- [x] Update AGENTS.md to reflect the new repository responsibilities,
       toolchain needs, development workflow, and applicable quality gates.
-- [ ] Review CoreDoc and specification introductions for references that imply
+- [x] Review CoreDoc and specification introductions for references that imply
       FinKore ships implementations or a runner. Make editorial scope corrections without
       changing foundation rules or their normative version fields.
-- [ ] Revise the [1.0 plan](plan-10.md) so stable release no longer requires
+- [x] Revise the [1.0 plan](plan-10.md) so stable release no longer requires
       maintained language packages, a runner, native tests, or package publication.
-- [ ] Preserve historical release descriptions as historical evidence. Repair
+- [x] Preserve historical release descriptions as historical evidence. Repair
       links to removed files without presenting old results as current validation.
 
 **Completion:** current documentation consistently describes the new scope and
@@ -142,16 +141,16 @@ that the conformance representation cannot express.
 
 ## Acceptance for this first change
 
-- [ ] All maintained financial implementations, the runner, and their dedicated
+- [x] All maintained financial implementations, the runner, and their dedicated
       support artifacts are removed.
-- [ ] Specification, conformance, and Agentic contracts remain authoritative
+- [x] Specification, conformance, and Agentic contracts remain authoritative
       and language-independent.
-- [ ] Retained tooling validates published artifacts without implementing finance
+- [x] Retained tooling validates published artifacts without implementing finance
       or executing consumer implementations.
-- [ ] Portable acceptance cases remain usable without a maintained runner API.
-- [ ] Local checks pass with no dependency on removed implementation or runner packages.
-- [ ] Documentation, development instructions, and the 1.0 plan reflect the new scope.
-- [ ] Unresolved financial questions and coverage limitations remain explicit.
+- [x] Portable acceptance cases remain usable without a maintained runner API.
+- [x] Local checks pass with no dependency on removed implementation or runner packages.
+- [x] Documentation, development instructions, and the 1.0 plan reflect the new scope.
+- [x] Unresolved financial questions and coverage limitations remain explicit.
 
 Add a concise summary to [release notes](../releases/README.md) when this work
 is released. Do not record planned removal as a completed release or carry

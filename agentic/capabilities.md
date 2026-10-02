@@ -6,7 +6,7 @@ A capability states that an implementation exposes a named FinKore Operation.
 Its descriptor makes the operation Discoverable, Understandable, and Governable.
 Invocation bindings are implementation-specific and outside the current scope.
 
-An adapter MAY expose only a subset of the registry. A Money-only implementation,
+An implementation or integration MAY expose only a subset of the registry. A Money-only implementation,
 for example, may expose Money operations such as `finkore.money.add`,
 `finkore.money.divide`, `finkore.money.round`, and
 `finkore.money.allocate` without exposing `finkore.workflow.transition` or
@@ -14,7 +14,7 @@ for example, may expose Money operations such as `finkore.money.add`,
 describe what is available; clients MUST NOT assume that every FinKore
 implementation supports every registered operation. Conformance-local operation
 labels such as `approval.composition.evaluate`, `workflow.import`, and
-`entity.import` are test-adapter vocabulary, not advertised FinKore Agentic
+`entity.import` are conformance-local vocabulary, not advertised FinKore Agentic
 capabilities.
 
 ## Capability and conformance
