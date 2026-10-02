@@ -28,10 +28,10 @@ Approval history.
 
 - **APPROVAL-VALIDITY-013** — Before returning a concrete Requirement evaluation outcome, an implementation MUST validate required expiration context for every currently considered Decision, independently of Decision order or a decisive outcome. For this purpose, a currently considered Decision identifies the evaluated Requirement and is not excluded by committed withdrawal, Decision supersession, or Requirement supersession. Fact/revision staleness MUST NOT waive required expiration context for these Decisions. Unrelated or lifecycle-excluded Decisions MUST NOT require an evaluation instant solely because they have an expiration. All supplied Decision and lifecycle structure MUST still be validated, including excluded evidence. Missing or malformed required context MUST use `FINKORE_APPROVAL_INVALID_CONTEXT`. This rule does not define a total priority among unrelated concrete Approval failures.
 - **APPROVAL-VALIDITY-014** — Before record, lifecycle mutation, or current-effectiveness evaluation reuses supplied committed lifecycle history, the implementation MUST validate supported discriminators, required field structure, and relationships in the history's declared local event order against committed Decisions and earlier lifecycle events. Decision withdrawal targets and Decision supersession targets/successors MUST resolve uniquely; supersession target and successor MUST be distinct. A withdrawal or Decision supersession target MUST NOT already be withdrawn or superseded. Requirement supersession target and successor identifiers MUST be distinct, and a Requirement MUST NOT be superseded twice. Invalid evidence MUST use `FINKORE_APPROVAL_INVALID_DECISION` without changing either history. Requirement references MUST remain opaque; this rule MUST NOT require an absent Requirement registry or infer event order from timestamps.
+- **APPROVAL-VALIDITY-015** — Before successfully recording a Decision, an implementation MUST validate retained lifecycle relationships against the complete proposed resulting Decision history under APPROVAL-VALIDITY-014. The new Decision MUST NOT make a retained withdrawal target or Decision supersession target or successor ambiguous or otherwise invalidate a required historical relationship. Such a record request MUST fail with `FINKORE_APPROVAL_INVALID_DECISION` and MUST preserve both input histories without exposing a partial append. Equal Decision reference tuples alone MUST NOT be rejected by this rule when they invalidate no retained relationship.
+- **APPROVAL-VALIDITY-016** — A concrete Decision or Decision-history input MUST NOT accept a caller-supplied `effective` member as current-effectiveness evidence. Current effectiveness MUST be derived under APPROVAL-VALIDITY-001 from the governing Decision, lifecycle, fact or revision, eligibility, expiration, and explicit-context evidence. Any supplied `effective` member at a concrete boundary, including Boolean `true` or `false`, MUST use `FINKORE_APPROVAL_INVALID_DECISION` and MUST leave committed Decision and lifecycle history unchanged. This prohibition does not apply to Approval Composition's separately documented lightweight current-effectiveness observation fixture.
 
 ## Invariants
-
-- **APPROVAL-VALIDITY-015** — Before successfully recording a Decision, an implementation MUST validate retained lifecycle relationships against the complete proposed resulting Decision history under APPROVAL-VALIDITY-014. The new Decision MUST NOT make a retained withdrawal target or Decision supersession target or successor ambiguous or otherwise invalidate a required historical relationship. Such a record request MUST fail with `FINKORE_APPROVAL_INVALID_DECISION` and MUST preserve both input histories without exposing a partial append. Equal Decision reference tuples alone MUST NOT be rejected by this rule when they invalidate no retained relationship.
 
 This 0.9.7 corrective addition explicitly covers the proposed result, whereas
 APPROVAL-VALIDITY-014 validates supplied evidence before reuse. Successful
@@ -46,6 +46,11 @@ can be historically committed and still be ineffective for current evaluation
 because relevant facts changed, the subject revision changed, the Decision was
 withdrawn, the Decision expired, the Decision was superseded, or the Requirement
 it addressed was superseded.
+
+Accordingly, concrete history cannot use an asserted `effective` flag to bypass
+or preempt eligibility, lifecycle, fact/revision, expiration, or context
+evaluation. Composition accepts such a Boolean only because its lightweight
+fixture consumes an already-derived observation rather than concrete history.
 
 Expiration is deterministic. If any currently considered Decision has an
 expiration instant, the evaluation context must include an explicit evaluation

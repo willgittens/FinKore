@@ -93,6 +93,14 @@ composition-only priority in **APPROVAL-ERROR-010** remains unchanged, as do
 `FINKORE_APPROVAL_INVALID_CONTEXT` for required evaluation context and
 `FINKORE_APPROVAL_INVALID_CHAIN` for malformed composition observations.
 
+A caller-supplied concrete Decision `effective` member is malformed evidence
+under **APPROVAL-VALIDITY-016** and uses
+`FINKORE_APPROVAL_INVALID_DECISION`. For a structurally valid Decision tied to
+the evaluated Requirement, an Actor excluded by its valid eligibility rule uses
+`FINKORE_APPROVAL_INELIGIBLE_ACTOR` even when lifecycle, expiration, or stale
+facts would otherwise make the Decision ineffective. Unrelated Decisions are
+not judged by the evaluated Requirement's eligibility rule.
+
 A failed Approval operation must leave existing committed Approval Decisions and lifecycle events unchanged.
 
 ## Open Questions

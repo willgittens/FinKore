@@ -11,13 +11,13 @@ Audit, Approvals, and Entities scope.
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Shared | 51 | 41 | 5 | 5 | 10 | 0 | 0 | 41 | 0 | 0 |
 | Money | 74 | 69 | 1 | 4 | 69 | 0 | 0 | 5 | 0 | 0 |
-| Workflow | 59 | 57 | 1 | 1 | 49 | 1 | 0 | 9 | 0 | 0 |
+| Workflow | 60 | 58 | 1 | 1 | 50 | 1 | 0 | 9 | 0 | 0 |
 | Audit | 59 | 51 | 4 | 4 | 49 | 0 | 0 | 10 | 0 | 0 |
-| Approvals | 97 | 94 | 1 | 2 | 91 | 0 | 0 | 6 | 0 | 0 |
+| Approvals | 100 | 97 | 1 | 2 | 94 | 0 | 0 | 6 | 0 | 0 |
 | Entities | 96 | 91 | 3 | 2 | 84 | 0 | 0 | 12 | 0 | 0 |
-| **Total** | 436 | 403 | 15 | 18 | 352 | 1 | 0 | 83 | 0 | 0 |
+| **Total** | 440 | 407 | 15 | 18 | 356 | 1 | 0 | 83 | 0 | 0 |
 
-The suite contains 1775 vectors. They are schema-valid, manifest-listed cases
+The suite contains 1790 vectors. They are schema-valid, manifest-listed cases
 covering 35 operation identifiers. The repository currently validates artifact structure,
 stable identifiers, specification topics, requirement mappings, and Agentic
 alignment. It does not contain an implementation or execute financial behavior.
@@ -40,11 +40,12 @@ is feasible but not yet published.
 
 ### Retained-evidence review
 
-Removal of the maintained implementations and runner does not remove any of the
-1,775 portable vectors or their requirement mappings. It does change what the
-repository can currently demonstrate:
+Removal of the maintained implementations and runner did not remove any of the
+1,775 portable vectors or their requirement mappings. The Milestone 4
+corrections add 15 portable vectors, bringing the current total to 1,790. The
+transition does change what the repository can currently demonstrate:
 
-- the 352 `COVERED` rows have published portable cases but no repository-owned
+- the 356 `COVERED` rows have published portable cases but no repository-owned
   execution result;
 - `WORKFLOW-GUARD-004` remains `PARTIAL` because external-fact authoring lacks
   a portable definition schema;
@@ -57,6 +58,17 @@ repository can currently demonstrate:
 
 No coverage row is promoted by artifact validation, and no historical PASS or
 mutation result is carried forward as a current result.
+
+### Milestone 4 gap disposition
+
+Sequential Chain actionability, concrete `effective` input, historical Actor
+eligibility, and empty Workflow State identifiers were blocking specification
+gaps before their owning contracts were accepted. `APPROVAL-CHAIN-010`,
+`APPROVAL-VALIDITY-016`, `APPROVAL-DECISION-012`, and `WORKFLOW-STATES-009`
+now define their portable outcomes and are `COVERED` by the correction vectors.
+The zero-blocker inventory therefore reflects resolution rather than omission.
+`WORKFLOW-GUARD-004` remains `PARTIAL`: its external-fact authoring limitation
+is a coverage limitation, not permitted result variation or a resolved contract.
 
 ## Historical implementation evidence
 
@@ -535,6 +547,7 @@ complete exploratory accounting.
 | APPROVAL-CHAIN-007 | Approvals | MUST / MUST NOT | COVERED | approval.boundary097.discovery-control-007, approval.boundary097.discovery-control-025, approval.boundary097.discovery-f8a-033, approval.boundary097.discovery-f8a-034, approval.boundary097.discovery-f8a-035, approval.boundary097.discovery-f8a-036, approval.boundary097.discovery-f8a-037, approval.boundary097.discovery-f8a-038, approval.boundary097.discovery-f8a-039, approval.boundary097.discovery-f8a-443, approval.boundary097.discovery-f8a-444, approval.boundary097.discovery-f8a-445, approval.boundary097.discovery-f8a-446, approval.boundary097.discovery-f8a-447, approval.boundary097.discovery-f8a-448, approval.boundary097.discovery-f8a-449, approval.chain.rejected-001 |
 | APPROVAL-CHAIN-008 | Approvals | MUST / MUST NOT | COVERED | approval.boundary096.chain-state-absent-001, approval.boundary096.chain-state-array-001, approval.boundary096.chain-state-boolean-001, approval.boundary096.chain-state-empty-001, approval.boundary096.chain-state-null-001, approval.boundary096.chain-state-number-001, approval.boundary096.chain-state-object-001, approval.chain.deterministic-declared-order-001 |
 | APPROVAL-CHAIN-009 | Approvals | MUST / MUST NOT | COVERED | approval.chain.duplicate-requirement-invalid-001 |
+| APPROVAL-CHAIN-010 | Approvals | MUST / MUST NOT | COVERED | approval.chain.sequential-inactive-state-malformed-001, approval.chain.sequential-pending-before-later-rejection-001, approval.chain.sequential-reached-rejection-001 |
 | APPROVAL-COMPOSITION-001 | Approvals | MUST / MUST NOT | COVERED | approval.composition.all-of-pending-001, approval.composition.structure-empty-stage-kind-invalid-001 |
 | APPROVAL-COMPOSITION-002 | Approvals | MUST / MUST NOT | COVERED | approval.composition.all-of-pending-001, approval.composition.structure-invalid-duplicates-001 |
 | APPROVAL-COMPOSITION-003 | Approvals | MUST / MUST NOT | COVERED | approval.composition.all-of-pending-001, approval.composition.structure-empty-stage-kind-invalid-001 |
@@ -721,6 +734,9 @@ complete exploratory accounting.
 | ENTITY-VALIDATION-011 | Entities | MUST / MUST NOT | COVERED | entity.value097.create-control-001, entity.value097.import-control-001, entity.value097.mutate-control-001, entity.value097.transition-control-001, entity.value097.correct-control-001, entity.value097.reverse-control-001, entity.value097.void-control-001, entity.value097.supersede-control-001 |
 | ENTITY-LIFECYCLE-007 | Entities | MUST / MUST NOT | COVERED | entity.boundary097.discovery-f8c-100 |
 | ENTITY-MUTABILITY-009 | Entities | MUST / MUST NOT | COVERED | entity.boundary097.discovery-f8c-108, entity.boundary097.discovery-f8c-536 |
+| APPROVAL-DECISION-012 | Approvals | MUST / MUST NOT | COVERED | approval.eligibility.current-history-ineligible-001, approval.eligibility.expired-history-ineligible-001, approval.eligibility.stale-history-ineligible-001, approval.eligibility.unrelated-history-not-misclassified-001, approval.eligibility.withdrawn-history-ineligible-001 |
+| APPROVAL-VALIDITY-016 | Approvals | MUST / MUST NOT | COVERED | approval.validity.concrete-effective-false-invalid-001, approval.validity.concrete-effective-true-invalid-001, approval.validity.record-effective-invalid-001 |
+| WORKFLOW-STATES-009 | Workflow | MUST / MUST NOT | COVERED | workflow.state.empty-current-state-001, workflow.state.empty-definition-identifier-001, workflow.state.empty-expected-current-state-001, workflow.state.empty-target-state-001 |
 
 ## Audit Draft 0.1 traceability closure notes
 
@@ -825,6 +841,7 @@ combined verification gates recorded in the completed 0.9.5 plan.
 | WORKFLOW-CONFLICT-001, WORKFLOW-CONFLICT-004 | Omitted expected-state/revision preconditions do not imply defaults. | Treat omission as initial/latest state or storage revision, or reject because a caller omitted an optional precondition. |
 | WORKFLOW-CONFLICT-003, WORKFLOW-CONFLICT-005, WORKFLOW-CONFLICT-007, WORKFLOW-ERROR-006 | Expected-state or expected-revision conflicts fail with the portable conflict code and preserve state, binding, and revision. | Ignore stale expected values, accept missing observed revision as matched, return invalid-transition/terminal/guard codes first, or mutate state/binding/revision on conflict. |
 | WORKFLOW-ERROR-007 | Error precedence is deterministic across versioning, import, conflict, terminal, transition, and guard failures. | Let branch order choose error code, report terminal/transition/guard before structural or conflict failures, or invert terminal precedence over invalid transition. |
+| WORKFLOW-STATES-009 | Every portable State identifier is nonempty, with boundary-specific portable errors and failure non-mutation. | Accept an empty identifier, collapse definition/instance/State errors, or mutate state after an empty target or precondition. |
 | AUDIT-APPEND-001 | Append-only committed history. | Replace or remove a committed event. |
 | AUDIT-ACTOR-009, AUDIT-ERROR-004 | Supplied actor shape and append error precedence are portable and failure-atomic. | Accept a missing actor identity, collapse it into invalid event, or select duplicate/relationship failure before an earlier validation stage. |
 | AUDIT-REDACTION-002, AUDIT-REDACTION-003, AUDIT-REDACTION-006 | Redacted representation remains distinguishable, preserves event meaning, and records evidence. | Expose protected values, collapse redaction to null or absence, change event identity, or omit evidence. |
@@ -835,6 +852,9 @@ combined verification gates recorded in the completed 0.9.5 plan.
 | APPROVAL-VALIDITY-004, APPROVAL-VALIDITY-005, APPROVAL-VALIDITY-012 | Withdrawal affects only current effectiveness and rejected lifecycle requests preserve history. | Count withdrawn Decisions, erase withdrawn Decisions, accept duplicate withdrawals, or append partial lifecycle evidence on failure. |
 | APPROVAL-VALIDITY-007, APPROVAL-VALIDITY-009 | Expiration uses explicit injected instants and an exclusive boundary. | Use host time, ignore equivalent offsets, or treat the expiration boundary as still effective. |
 | APPROVAL-VALIDITY-010, APPROVAL-VALIDITY-011 | Supersession preserves history while removing current effectiveness from superseded Decisions or Requirements. | Count superseded Decisions, transfer Decisions to successor Requirements, or rewrite historical observations. |
+| APPROVAL-VALIDITY-016 | Concrete Decision/history boundaries derive effectiveness and reject a supplied `effective` member. | Trust, ignore, or use a caller-supplied Boolean to bypass evidence evaluation. |
+| APPROVAL-DECISION-012 | Eligibility validation covers every Decision for the evaluated Requirement without applying that rule to unrelated Requirements. | Skip withdrawn, expired, superseded, stale, or otherwise non-decisive history, or reject unrelated history under the wrong eligibility rule. |
+| APPROVAL-CHAIN-010 | Sequential outcome and actionability follow the first non-approved Requirement while all supplied states remain validated. | Let a later rejection bypass a pending predecessor, expose a rejected Requirement as active, or skip malformed inactive evidence. |
 | APPROVAL-COMPOSITION-013, APPROVAL-COMPOSITION-014 | All-of and any-of group outcomes follow declared member states and do not collapse pending members into approval or rejection. | Treat any rejected any-of member as group rejection, or treat any approved all-of member as group approval. |
 | APPROVAL-COMPOSITION-016, APPROVAL-COMPOSITION-019 | Ordered stages expose only the first non-approved stage as actionable. | Allow later-stage action before earlier approval or report actionable requirements from later stages. |
 | APPROVAL-COMPOSITION-021, APPROVAL-QUORUM-004 | Composition and quorum reuse current-effectiveness and never count ineffective Decisions. | Count withdrawn, expired, superseded, stale, ineligible, or rejected Decisions toward group approval. |

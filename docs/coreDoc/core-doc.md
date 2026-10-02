@@ -204,7 +204,7 @@ This rule does not prescribe universal states or which events require a lifecycl
 
 **Relevant FinKore domains**
 
-[Workflow states](../../spec/workflow/states.md) — WORKFLOW-STATES-002, -004, and -007; [Transitions](../../spec/workflow/transitions.md) — WORKFLOW-TRANSITION-001 to -005; [Terminal states](../../spec/workflow/terminal-states.md) — WORKFLOW-TERMINAL-001 to -004; [Entity lifecycle](../../spec/entities/lifecycle.md) — ENTITY-LIFECYCLE-001 to -006.
+[Workflow states](../../spec/workflow/states.md) — WORKFLOW-STATES-002, -004, -007, and -009; [Transitions](../../spec/workflow/transitions.md) — WORKFLOW-TRANSITION-001 to -005; [Terminal states](../../spec/workflow/terminal-states.md) — WORKFLOW-TERMINAL-001 to -004; [Entity lifecycle](../../spec/entities/lifecycle.md) — ENTITY-LIFECYCLE-001 to -006.
 
 ### CORE-002.2 — Validation is complete, fact-based, and non-mutating
 
@@ -476,7 +476,7 @@ maker-checker separation, delegated approval, or conflict-of-interest policy.
 
 **Relevant FinKore domains**
 
-[Approval requirements](../../spec/approvals/requirements.md) — APPROVAL-REQUIREMENT-001 to -007; [Approval decisions](../../spec/approvals/decisions.md) — APPROVAL-DECISION-004.
+[Approval requirements](../../spec/approvals/requirements.md) — APPROVAL-REQUIREMENT-001 to -007; [Approval decisions](../../spec/approvals/decisions.md) — APPROVAL-DECISION-004 and -012.
 
 ### CORE-004.2 — Missing facts do not create an approval exemption
 
@@ -541,7 +541,7 @@ policy.
 
 **Relevant FinKore domains**
 
-[Approval decisions](../../spec/approvals/decisions.md) — APPROVAL-DECISION-001 to -008; [Approval conditions](../../spec/approvals/conditions.md) — APPROVAL-CONDITION-003; [Approval validity](../../spec/approvals/validity.md) — APPROVAL-VALIDITY-001 to -012.
+[Approval decisions](../../spec/approvals/decisions.md) — APPROVAL-DECISION-001 to -008 and -012; [Approval conditions](../../spec/approvals/conditions.md) — APPROVAL-CONDITION-003; [Approval validity](../../spec/approvals/validity.md) — APPROVAL-VALIDITY-001 to -016.
 
 ### CORE-004.4 — Chain status follows declared requirements and decisions
 
@@ -572,7 +572,7 @@ This rule does not define a universal sequence, rejection policy, or quorum.
 
 **Relevant FinKore domains**
 
-[Approval chains](../../spec/approvals/chains.md) — APPROVAL-CHAIN-001 to -009; [Approval requirements](../../spec/approvals/requirements.md) — APPROVAL-REQUIREMENT-005.
+[Approval chains](../../spec/approvals/chains.md) — APPROVAL-CHAIN-001 to -010; [Approval requirements](../../spec/approvals/requirements.md) — APPROVAL-REQUIREMENT-005.
 
 ## CORE-005 — Identifiable and Determinable Financial Meaning
 

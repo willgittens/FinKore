@@ -39,6 +39,12 @@ This domain defines approval requirements and decisions independently of any par
 - [Conditional Approval Requirements](conditions.md) must use explicit domain facts.
 - [Approval Validity](validity.md) must derive current effectiveness from append-only history, explicit evaluation context, relevant subject facts or revisions, and lifecycle evidence such as withdrawal, expiration, or supersession.
 
+The Core 0.9.8 correction makes sequential Chain actionability explicit, rejects
+caller-asserted effectiveness at concrete Decision/history boundaries, and
+validates eligibility across all supplied Decisions for the evaluated
+Requirement. Approval Composition retains its separate lightweight
+current-effectiveness observation contract.
+
 ## Invariants
 
 An Approval outcome must be derivable from the applicable Approval Requirements and effective Approval Decisions.

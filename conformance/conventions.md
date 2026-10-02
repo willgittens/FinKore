@@ -221,6 +221,37 @@ persistence locks, or a canonical import operation contract. The canonical
 `finkore.workflow.transition` operation includes version binding and
 expected-state/revision conflict preconditions.
 
+Every portable Workflow State identifier in a definition, instance, requested
+target, or expected-current-State precondition is a nonempty string under
+**WORKFLOW-STATES-009**. Empty definition positions use
+`FINKORE_WORKFLOW_INVALID_DEFINITION`; an empty instance current State uses
+`FINKORE_WORKFLOW_INVALID_INSTANCE`; and an empty target or expected State uses
+`FINKORE_WORKFLOW_INVALID_STATE`. Nonempty identifiers remain opaque and
+case-sensitive.
+
+For `approval.chain.evaluate`, every declared Requirement has an explicit
+`APPROVED`, `PENDING`, or `REJECTED` state observation and every supplied state
+is validated before an outcome is returned. An unordered Chain returns its
+aggregate state. A sequential Chain returns
+`{"state":"APPROVED|PENDING|REJECTED","activeRequirements":[...]}`. Its first
+non-approved Requirement in declared order determines current outcome: pending
+makes that Requirement the single active entry; reached rejection uses the
+declared rejection outcome with an empty active list; complete approval also has
+an empty active list. A later rejection cannot bypass a pending predecessor.
+This is separate from parallel groups within an Approval Composition stage.
+
+Concrete Decision and history fixtures do not accept an `effective` member.
+They derive effectiveness from the complete evidence required by Approval
+Validity; any supplied member uses `FINKORE_APPROVAL_INVALID_DECISION` whether
+its value is true, false, or malformed. Composition's explicit Boolean
+`effective` observation remains a separate lightweight fixture. During concrete
+Requirement evaluation, every structurally valid Decision identifying the
+evaluated Requirement is checked against that Requirement's eligibility rule
+even when lifecycle, expiration, or stale facts exclude it from current effect.
+A Decision for another Requirement is structurally validated but is not checked
+against the evaluated Requirement's eligibility rule and cannot affect its
+outcome.
+
 For Approval Composition, `approval.composition.evaluate` uses a conformance-local logical fixture. `composition` declares exactly one `rootGroup` or ordered `stages`, plus declared `groups` with `ALL_OF`, `ANY_OF`, or `N_OF_M` kind. `requirements` supplies explicit applicability and, for non-quorum members, current state observations. Quorum vectors use explicit voter members and `decisions` entries to observe current-effective voter evidence; an `effective: false` decision is retained history that does not count toward current approval. The normalized success value is `{ "outcome": "APPROVED" | "PENDING" | "REJECTED", "actionableRequirements": [...] }`.
 
 Every supplied composition Decision observation requires `effective` as a JSON

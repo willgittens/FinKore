@@ -29,6 +29,15 @@ to canonical Agentic operations because public Approval operation contracts stil
 need a stable agent-facing input model, diagnostics policy, and security review
 separate from conformance fixtures.
 
+The conformance-local Approval contracts now make three corrected boundaries
+explicit. Sequential Chain outcome/actionability follows the first non-approved
+Requirement under `APPROVAL-CHAIN-010`; concrete Decision/history input rejects
+a caller-supplied `effective` member under `APPROVAL-VALIDITY-016`; and concrete
+Requirement evaluation applies the evaluated Requirement's eligibility rule to
+all of its supplied Decisions, but not to Decisions for another Requirement,
+under `APPROVAL-DECISION-012`. These clarifications do not promote an Approval
+operation to the canonical registry.
+
 Timestamp fields used by these Approval fixtures, including `decidedAt`,
 `expiresAt`, `recordedAt`, and `evaluatedAt`, follow the portable
 timestamp profile in [Agentic Contract Conventions](conventions.md#portable-timestamps).
@@ -76,7 +85,7 @@ in [traceability](../conformance/traceability.md).
 | `finkore.money.round` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ROUNDING-001`–`-004`, `-008`, `-009` |
 | `finkore.money.applyrate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-RATE-001`–`-009` |
 | `finkore.money.allocate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ALLOCATION-001`–`-014`, `MONEY-ERROR-008` |
-| `finkore.workflow.transition` | Workflow | `yes` | `unspecified` | `yes` | `may` | may be blocked by an approval-dependent guard | `WORKFLOW-TRANSITION-001`–`-007`, `WORKFLOW-GUARD-001`–`-007`, `WORKFLOW-VERSION-003`, `-005`–`-012`, `WORKFLOW-CONFLICT-001`–`-008` |
+| `finkore.workflow.transition` | Workflow | `yes` | `unspecified` | `yes` | `may` | may be blocked by an approval-dependent guard | `WORKFLOW-STATES-009`, `WORKFLOW-TRANSITION-001`–`-007`, `WORKFLOW-GUARD-001`–`-007`, `WORKFLOW-VERSION-003`, `-005`–`-012`, `WORKFLOW-CONFLICT-001`–`-008` |
 | `finkore.audit.append` | Audit | `yes` | `no` | `yes` | `required` | `none` | `AUDIT-EVENT-001`–`-005`, `-007`–`-009`, `AUDIT-ACTOR-001`–`-004`, `-007`–`-010`, `AUDIT-CHANGE-001`–`-005`, `-008`, `-009`, `AUDIT-APPEND-001`, `-003`, `AUDIT-ERROR-001`, `-004` |
 | `finkore.audit.replace` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
 | `finkore.audit.remove` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
@@ -394,6 +403,9 @@ retention. Supported exact values retain their meaning. Implementation and
 regression verification remains tracked in the [0.9.7 plan](../docs/plans/plan-09.7.md).
 The bounded definition also requires explicit terminal-State and Transition
 collections under `WORKFLOW-STATES-008`; omission uses INVALID_DEFINITION.
+Every State identifier is nonempty under `WORKFLOW-STATES-009`; empty definition
+positions, instance current State, and target or expected State inputs retain
+their specified definition/instance/State error categories and precedence.
 The same ownership guarantee applies to the instance binding itself at native
 construction, import, transition, and observation (`WORKFLOW-VERSION-008`).
 Explicit null preconditions are supplied input: null expected State is invalid
@@ -433,7 +445,7 @@ binding, and expected-precondition checks have passed.
 [WORKFLOW-TRANSITION-001 through -007](../spec/workflow/transitions.md),
 [WORKFLOW-GUARD-001 through -007](../spec/workflow/guards.md),
 [WORKFLOW-TERMINAL-001 through -004](../spec/workflow/terminal-states.md),
-[WORKFLOW-STATES-004 and -007](../spec/workflow/states.md), and
+[WORKFLOW-STATES-004, -007, and -009](../spec/workflow/states.md), and
 [WORKFLOW-ERROR-001 through -007](../spec/workflow/errors.md),
 [WORKFLOW-VERSION-003 and -005 through -012](../spec/workflow/versioning.md), and
 [WORKFLOW-CONFLICT-001 through -008](../spec/workflow/conflicts.md).

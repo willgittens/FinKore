@@ -28,7 +28,8 @@
         "./workflow/readiness-regressions.json",
         "./workflow/construction-evaluation-regressions.json",
         "./workflow/discovery-regressions.json",
-        "./workflow/malformed-boundary-regressions.json"
+        "./workflow/malformed-boundary-regressions.json",
+        "./workflow/corrections-098.json"
       ]
     },
     {
@@ -54,7 +55,8 @@
         "./approvals/evidence-regressions.json",
         "./approvals/discovery-regressions.json",
         "./approvals/composition-validation.json",
-        "./approvals/fact-history-contracts.json"
+        "./approvals/fact-history-contracts.json",
+        "./approvals/corrections-098.json"
       ]
     },
     {

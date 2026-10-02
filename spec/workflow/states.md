@@ -18,6 +18,7 @@ This document defines named lifecycle conditions and workflow initialization.
 - **WORKFLOW-STATES-006** — A definition SHOULD document the domain meaning of every state.
 - **WORKFLOW-STATES-007** — A Workflow instance MUST have exactly one current State.
 - **WORKFLOW-STATES-008** — The bounded portable Workflow definition MUST explicitly supply its terminal-State and Transition collections, including when either collection is empty. Omission, null, or a non-array collection MUST use `FINKORE_WORKFLOW_INVALID_DEFINITION`. Native convenience constructors MAY supply documented empty defaults, but portable parsing MUST preserve the distinction between omission and an explicit empty collection.
+- **WORKFLOW-STATES-009** — Every portable Workflow State identifier MUST be a nonempty string, including identifiers in the declared State collection, initial and terminal State declarations, Transition endpoints, a Workflow instance's current State, a requested target State, and an expected-current-State precondition. An empty identifier in a definition MUST use `FINKORE_WORKFLOW_INVALID_DEFINITION`; an empty current State in an instance MUST use `FINKORE_WORKFLOW_INVALID_INSTANCE`; and an empty requested target or expected-current-State precondition MUST use `FINKORE_WORKFLOW_INVALID_STATE`. Existing error priority and failure non-mutation requirements continue to apply. Nonempty State identifiers remain opaque and case-sensitive.
 
 ## Invariants
 

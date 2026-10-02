@@ -2,15 +2,18 @@
 
 ## Status
 
-**Implemented — unreleased transition to a language-independent specification
-project.**
+**Transition and Milestone 4 implemented — audit follow-up milestones 5–8 pending; unreleased.**
 
 Updated on 2026-10-02. This replaces the previous 0.9.8 corrective implementation
-plan. The transition milestones are implemented in the working tree: FinKore is
+plan. Transition milestones 1–3 are implemented: FinKore is
 the financial source of truth for its defined scope, with no maintained language
 implementation or Conformance Runner. This status does not declare a release.
 Earlier releases remain historical snapshots of the project as it existed at
 those versions.
+
+The post-transition audit found contract, validation, and documentation gaps.
+Milestones 4–8 below are required follow-up work; passing existing local checks
+does not close them or declare the full 0.9.8 plan complete.
 
 This document is non-normative. [CoreDoc](../coreDoc/core-doc.md) establishes
 foundation obligations and [/spec](../../spec/README.md) defines precise
@@ -151,6 +154,212 @@ that the conformance representation cannot express.
 - [x] Local checks pass with no dependency on removed implementation or runner packages.
 - [x] Documentation, development instructions, and the 1.0 plan reflect the new scope.
 - [x] Unresolved financial questions and coverage limitations remain explicit.
+
+## Post-transition audit — 2026-10-02
+
+Reviewed baseline: `4204a28` (`0.9.8 Update project documentation and development
+rules`), with a clean working tree before this plan update. The audit covered
+repository boundaries and package wiring, CoreDoc/specification authority,
+portable artifact discovery and metadata, Agentic descriptors, traceability,
+consumer guidance, historical/current documentation boundaries, and maintenance
+tools and their tests. It did not execute a financial implementation or claim
+exhaustive financial correctness.
+
+On Node 24.15.0, a fresh locked dependency install and `npm run verify` passed:
+6 suites, 40 vector files, 1,775 vectors, 35 conformance operation labels,
+20 canonical Agentic operations, 436 requirements, and 11 tool tests. The install
+reported zero dependency vulnerabilities. The first sandboxed install failed
+on registry DNS; a network-enabled retry completed successfully. Dependency
+auditing during installation is separate from the local `verify` script.
+
+Independent metadata inspection found no unknown expected error codes among the
+31 catalogued codes, no unresolved specification requirement references, no
+dangling references among 812 vectors with `pairedControl` metadata when the
+explicit supplementary case set is included, no conflicting expected envelopes
+for identical operation/input/context requests, and no invalid fenced JSON
+examples in `/spec`. These checks establish bounded artifact consistency only.
+
+Temporary-copy probes confirmed that missing specification topics and unknown
+conformance-local operation labels are rejected. They also reproduced the
+validation omissions below. Source artifacts were not mutated by these probes;
+follow-up regression tests must reconstruct them without `/tmp` dependencies.
+
+### Findings
+
+A-labels are planning references, not normative requirement identifiers.
+
+| Finding | Evidence and consequence | Follow-up |
+| --- | --- | --- |
+| A1 — P1, unresolved financial decisions are outside the active coverage classification | The four questions above remain unresolved in the owning Approval/Workflow documents. `conformance/traceability.md` reports zero blocking specification gaps while the 1.0 plan treats these questions as blockers. Removal of implementations did not decide these semantics. | M4 |
+| A2 — P1, Money observation contract can overconstrain conforming implementations | `money.add.same-currency.basic-001` requires `"15.50"`; `money.deserialize.positive-001` requires `"1299.90"`. MONEY-ARITHMETIC-007 requires exact numeric results, and Money serialization explicitly does not require lexical trailing-zero preservation. The conventions require exact string comparison and refer to an “agreed observable representation” without specifying the unrounded-operation observation scale. A valid `"15.5"` or `"1299.9"` result has no fully defined route to that envelope. | M5 |
+| A3 — P2, normative-language and traceability classification disagree | `spec/conventions.md` makes uppercase normative keywords the criterion for normative text, but SPEC-COMPATIBILITY-005, -009, -010, -011, -012 and APPROVAL-COMPOSITION-017 have no such keyword and are indexed as MUST / MUST NOT. Clarify whether these are binding definitions or obligations; do not silently weaken compatibility or parallel-stage semantics. | M4 |
+| A4 — P2, important current fixture definitions are labeled historical | `conformance/conventions.md` labels its 0.9.5–0.9.7 boundary sections historical while retaining current concrete subject/eligibility shapes, dot-separated fact-selector encoding, quorum evidence, and Entity binding/import conventions there. APPROVAL-FACT-002 and the Approval Requirements document rely on these conventions. Consumers need a current, self-contained fixture contract separated from obsolete native API and implementation instructions. | M5 |
+| A5 — P2, artifact-reference validation is incomplete | Replacing a vector error with `FINKORE_MONEY_INVENTED` passes the checks, including the full verification script in a temporary copy. A nonexistent `pairedControl` also passes artifact/Agentic/traceability/documentation checks. Existing published values are valid; the defect is failure to reject future broken references. | M6 |
+| A6 — P2, Agentic validation checks identity but not descriptor completeness or effect values | An empty `finkore.money.add` descriptor retaining its heading passes full verification. Changing its registry state-mutation value from `no` to `banana` also passes. The descriptor minimum in `agentic/conventions.md` and allowed values in `agentic/effects.md` are not enforced. | M6 |
+| A7 — P2, traceability and reference checkers can give false assurance | Changing the Money inventory count from 74 to 999 or replacing the PARTIAL row's evidence with `missing.vector-001` passes the metadata checks. An unknown requirement prefix in CoreDoc passes full verification because the checker skips unfamiliar prefixes. A nonexistent Markdown fragment passes documentation checks, which currently validate file paths only. | M6 |
+| A8 — P2, active maintenance and release instructions overstate or retain removed responsibilities | README and AGENTS.md say verification audits dependencies, but `verify` only runs local checks. AGENTS.md directs missing-Node users to bootstrap instructions absent from `docs/tools/README.md`. SPEC-FREEZE-002 still requires updating implementations and tests in the same normative correction, without distinguishing consumer-owned repositories. Agentic Entity notes still call 0.9.7 execution “current verification,” and some current specification prose still directs native API migration work to old implementation milestones. | M7 |
+
+## Milestone 4 — Resolve financial and normative-authoring gaps
+
+### Accepted Milestone 4 dispositions — 2026-10-02
+
+Before these dispositions, all four A1 questions were `BLOCKING SPEC GAP`
+boundaries: each admitted more than one portable outcome and could not honestly
+coexist with a zero-blocker inventory. The following interpretations are
+accepted for the 0.9 release-candidate correction. They refine existing CoreDoc
+obligations without adding a domain or portable error code.
+
+| Boundary | Selected interpretation and rationale | Error and compatibility impact |
+| --- | --- | --- |
+| Sequential Approval Chain rejection and actionability | A sequential chain is governed by its first non-approved Requirement in declared order. A pending Requirement is the only active Requirement; a later rejection cannot determine the current outcome before every predecessor is approved. Once reached, a rejection determines the chain's declared rejection outcome and leaves no Requirement active. This follows CORE-004.4's non-activation rule and remains distinct from same-stage parallel Composition. All supplied state observations are still validated before an outcome is returned. | Valid mixed-state inputs that were previously ambiguous now have one result. `FINKORE_APPROVAL_INVALID_CHAIN` remains the error for malformed chain/state evidence. This is a corrective normative choice under SPEC-FREEZE-001 and a behavioral clarification with compatibility impact under SPEC-COMPATIBILITY-012/014. |
+| Supplied concrete `effective` member | Concrete Decision and history operations derive current effectiveness from committed Decisions, lifecycle evidence, relevant facts/revision, eligibility, expiration, and explicit context. A caller-supplied `effective` member at that boundary is invalid even when Boolean and even when it agrees with the derived result; it cannot override or short-circuit derivation. Composition's explicitly documented Boolean effectiveness observation remains a separate lightweight fixture contract. | Concrete input containing the member uses `FINKORE_APPROVAL_INVALID_DECISION` and preserves history. Consumers that previously ignored or trusted it must remove it and supply the governing evidence. This closes a control-bypass ambiguity and is behaviorally incompatible under SPEC-COMPATIBILITY-012/014. |
+| Historical Actor eligibility | Requirement evaluation validates Actor eligibility for every structurally valid supplied Decision that identifies the evaluated Requirement, including Decisions later excluded by withdrawal, Decision/Requirement supersession, expiration, stale facts/revision, or decisive ordering. A valid eligibility rule excluding that Actor uses `FINKORE_APPROVAL_INELIGIBLE_ACTOR`. A Decision identifying another Requirement is structurally validated but is not tested against the evaluated Requirement's eligibility rule and cannot affect its outcome; no absent Requirement registry is invented. | Some previously ignored ineligible historical evidence now fails with the existing ineligible-Actor code. Unrelated evidence remains non-contributing rather than being judged by the wrong rule. This is a corrective normative choice under SPEC-FREEZE-001 with compatibility impact under SPEC-COMPATIBILITY-012/014. |
+| Empty Workflow State identifiers | Every portable Workflow State identifier must be a nonempty string wherever it occurs. Empty declaration members, initial/terminal identifiers, or Transition endpoints invalidate the definition; an empty current State invalidates the instance; an empty requested target or expected-current-State precondition is an invalid State value. Nonempty identifiers remain opaque and case-sensitive. | Definition positions use `FINKORE_WORKFLOW_INVALID_DEFINITION`, current-instance input uses `FINKORE_WORKFLOW_INVALID_INSTANCE`, and target/precondition input uses `FINKORE_WORKFLOW_INVALID_STATE`, with existing error priority and non-mutation. Rejecting previously ambiguous empty identifiers is behaviorally incompatible under SPEC-COMPATIBILITY-012/014. |
+
+A3 is resolved as an authoring correction: SPEC-COMPATIBILITY-005, -009, -010,
+-011, and -012 and APPROVAL-COMPOSITION-017 retain their existing intended
+semantics but receive explicit uppercase normative keywords so their text and
+traceability modalities agree. This wording change does not itself alter an
+observable result. WORKFLOW-GUARD-004's independent external-fact authoring
+limitation remains `PARTIAL`.
+
+- [x] Resolve A1's four questions individually against CoreDoc and the owning
+      requirements: sequential Chain rejection/actionability, concrete
+      `effective` input handling, historical Actor eligibility validation, and
+      empty Workflow State identifiers. Record the selected interpretation,
+      rationale, error behavior, and compatibility impact here before writing
+      dependent expected outcomes. Prior recommendations are not acceptance.
+- [x] Update affected requirements, portable vectors, traceability, and Agentic
+      descriptions together. Preserve stable identifiers and failure atomicity;
+      distinguish Chain sequencing from staged Composition behavior.
+- [x] Classify known unresolved mandatory boundaries in the active traceability
+      inventory while they remain open. Explain which are blocking gaps versus
+      coverage limitations or explicitly permitted variation. Zero blockers must
+      reflect resolution, not omission from the inventory.
+- [x] Resolve A3's six modality inconsistencies using the existing normative
+      language policy. Preserve intended compatibility definitions and financial
+      semantics; assess any normative effect before changing wording or modality.
+- [x] Retain WORKFLOW-GUARD-004's independent external-fact authoring limitation
+      unless a separately accepted contract resolves it.
+
+**Completion:** each financial question has an explicit disposition and owning
+contract, and normative text and traceability agree about what is mandatory.
+
+Implemented on 2026-10-02. The correction adds four normative requirements and
+15 manifest-listed vectors. Local verification passes with 440 requirements,
+1,790 vectors, 35 conformance operation labels, 20 canonical Agentic
+operations, and 356 covered requirements; `WORKFLOW-GUARD-004` remains the one
+partial requirement. Dependency installation and the offline audit report zero
+known vulnerabilities. This is artifact validation, not implementation
+execution or a 0.9.8 release declaration.
+
+## Milestone 5 — Make portable acceptance independent of historical implementations
+
+- [ ] Resolve A2 by specifying how consumer bindings obtain the requested Money
+      observation for unrounded arithmetic and serialization, including trailing
+      zeros, zero, and negative values. Distinguish presentation normalization
+      from changes to the numeric value. Preserve explicit target-scale rules
+      for rounding and allocation.
+- [ ] Do not impose a production scale-preservation rule merely to match old
+      implementation outputs. If a normative financial change is necessary,
+      settle it in `/spec` with compatibility review before changing vectors.
+      Do not introduce approximate comparison or financial logic in tooling.
+- [ ] Include portable documentation examples showing equivalent valid native
+      representations reaching the same defined observation and genuinely
+      different values remaining distinguishable. Keep the comparison layer
+      domain-neutral and the binding independent of expected-result substitution.
+- [ ] Move still-current fixture definitions identified in A4 into clearly
+      current conformance sections. Keep historical native class/type profiles,
+      test results, migration notes, and API advice explicitly historical.
+- [ ] Review all 35 operation labels for sufficient input, output, omission,
+      null, error, and requested-post-state interpretation without consulting a
+      removed adapter or historical implementation. Document gaps instead of
+      reverse-engineering financial rules from expected results.
+- [ ] Reconcile the unknown-vector-member permission in conventions with the
+      schema's `additionalProperties: false` and mandatory schema-validation
+      instructions. State the supported extension/validation policy and assess
+      format compatibility; do not silently loosen the schema.
+
+**Completion:** consumers can interpret every published fixture using the
+current contract, without inheriting an undocumented language implementation
+choice or mistaking a historical convention for optional guidance.
+
+## Milestone 6 — Harden maintenance validation and regression tests
+
+- [ ] Validate every `expected.error.code` against actual portable error
+      declarations, not merely a naming pattern or any incidental mention.
+      Preserve owning-domain and intentionally non-exhaustive error semantics.
+- [ ] Validate `pairedControl` references against explicitly supported manifest
+      and supplementary namespaces. Supplementary historical controls remain
+      historical evidence, not executed or manifest-listed conformance cases.
+- [ ] Validate required Agentic descriptor content and allowed effect values,
+      supporting the existing Markdown field variants without demanding a new
+      registry format, server, runner, or executable financial model.
+- [ ] Check per-domain and overall traceability totals, permitted classifications,
+      modality consistency, and vector references in PARTIAL evidence as well as
+      COVERED rows. Keep human rationales where evidence is not a vector list.
+- [ ] Reject unknown CoreDoc requirement prefixes and validate referenced IDs
+      against definitions. Preserve valid CoreDoc rule IDs and range notation.
+- [ ] Check local Markdown fragments in addition to file existence, or narrow
+      documented checker guarantees explicitly if fragment validation is deferred.
+- [ ] Add permanent positive and negative tool tests for A5–A7, including CLI
+      failure exit status and valid controls. The current 11 tests do not cover
+      traceability and documentation checker behavior.
+- [ ] Re-run adversarial copies restoring each reproduced omission; require
+      the relevant regression to fail for the intended reason. Tool crashes and
+      infrastructure failures are not evidence of correct validation.
+
+**Completion:** the documented automated guarantees have regression coverage,
+and each reproduced metadata defect is rejected without executing finance.
+
+## Milestone 7 — Synchronize current documentation and governance
+
+- [ ] Correct README, AGENTS.md, developer-tool guidance, and release gates to
+      distinguish deterministic local verification from network dependency audit.
+      Describe the actual dependency-check step and result scope; do not make
+      financial expectations or local artifact checks network-dependent.
+- [ ] Provide the missing supported-Node setup/bootstrap guidance or replace
+      the nonexistent workflow reference with an accurate prerequisite.
+- [ ] Review SPEC-FREEZE-002 and related contribution rules for the new ownership
+      model. Keep coordinated specification/vector/Agentic/documentation updates
+      mandatory while distinguishing consumer migration obligations from changes
+      this repository can deliver. Follow compatibility policy for any normative edit.
+- [ ] Remove current-tense claims of maintained implementation verification
+      from active Agentic/specification guidance. Preserve dated historical
+      results and stable references without presenting them as current gates.
+- [ ] Recheck root/domain introductions, consumer guidance, the 1.0 plan,
+      CoreDoc relationship text, and AGENTS.md against the completed follow-ups.
+      Do not change CoreDoc normative version fields for editorial corrections.
+
+**Completion:** current instructions can be followed from a clean checkout and
+accurately describe maintained responsibilities and the checks actually run.
+
+## Milestone 8 — Fresh audit and release readiness
+
+- [ ] Run a fresh locked install and `npm run verify` after M4–M7. Record the
+      supported runtime and actual bounded results; earlier counts are baseline
+      observations, not acceptance targets.
+- [ ] Repeat whole-corpus identifier, error, topic, operation, paired-control,
+      traceability, and normative-example checks. Review any identical requests
+      with differing expectations and any newly changed contract boundaries.
+- [ ] Repeat targeted negative controls for all reproduced validator omissions
+      and review descriptor semantics against `/spec`; static validity alone
+      cannot establish semantic correctness.
+- [ ] Confirm that A1–A8 are resolved or explicitly scoped out with a rationale
+      consistent with the release's advertised guarantees. Unresolved mandatory
+      financial behavior remains a blocker for stable promotion.
+- [ ] Keep all release status and conformance claims accurate: artifact checks
+      do not establish financial execution, external implementation conformance,
+      exhaustive coverage, or production readiness.
+- [ ] Update this plan's final status and the 1.0 prerequisite only after the
+      follow-up gates pass. Keep release history concise; add no separate audit,
+      closure, alignment, checksum, or provenance report.
+
+**Completion:** the post-transition findings are dispositioned, current artifacts
+and guidance agree, and the final candidate passes its documented local gates.
+Execute M4 → M5 → M6 → M7 → M8, with independent tooling work allowed while
+financial decisions are pending. This audit does not approve a financial policy,
+publish a release, or promote Core 1.0.
 
 Add a concise summary to [release notes](../releases/README.md) when this work
 is released. Do not record planned removal as a completed release or carry

@@ -26,12 +26,12 @@ and reporting.
 - [`consumer-guide.md`](consumer-guide.md) — discovery, execution outcomes,
   reporting, and claim guidance.
 
-The current manifest contains 1,775 vectors. Repository verification checks
+The current manifest contains 1,790 vectors. Repository verification checks
 their schemas, identifiers, requirement references, specification topics,
 operation catalog, and Agentic alignment. These checks do not execute financial
 behavior and do not establish that any implementation passes the vectors.
 
-Traceability currently records 436 requirements: 352 with portable vector
+Traceability currently records 440 requirements: 356 with portable vector
 coverage, one partial external-fact authoring requirement, and 83 not directly
 testable by portable vectors. Coverage means an acceptance case exists; it is
 not a current execution result and is not proof of exhaustive correctness.

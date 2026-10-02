@@ -35,6 +35,11 @@ This document defines initial portable workflow failure categories.
 
 A failed Workflow operation must leave current State unchanged.
 
+Under **WORKFLOW-STATES-009**, an empty identifier in definition structure is
+an invalid definition, an empty observed current State is an invalid instance,
+and an empty requested or expected State value is an invalid State. These
+categories follow the priority in **WORKFLOW-ERROR-007**.
+
 ## Non-Goals
 
 This document does not define transport status codes, implementation-specific exception hierarchies, migration errors, storage-lock errors, retry policies, or distributed concurrency-conflict errors. FinKore does not select a winner between concurrent Transition Requests.

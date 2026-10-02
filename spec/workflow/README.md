@@ -17,6 +17,7 @@ This domain defines lifecycle behavior through declared [states](states.md), [tr
 - A versioned Workflow instance must remain bound to its declared Workflow Definition Version and must not silently switch to a newer definition.
 - Workflow Import must preserve a declared existing current State and version binding instead of inferring a new instance from the initial State.
 - Expected-current-state and expected-revision preconditions must reject stale Transition Requests without changing State.
+- Every portable State identifier must be a nonempty, opaque, case-sensitive string; empty values use the boundary-specific definition, instance, or State error without mutation.
 
 ## Example
 

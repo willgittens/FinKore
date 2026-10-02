@@ -22,10 +22,16 @@ all-of, quorum, staged, and nested group semantics are defined by
 - **APPROVAL-CHAIN-007** — Every Approval Chain definition MUST state how an effective rejection determines its outcome.
 - **APPROVAL-CHAIN-008** — Evaluation MUST be deterministic from the chain definition, applicable requirements, and effective decisions.
 - **APPROVAL-CHAIN-009** — An Approval Chain MUST NOT declare the same Approval Requirement identifier more than once.
+- **APPROVAL-CHAIN-010** — A sequential Approval Chain MUST determine its current outcome and actionability from the first non-approved applicable Approval Requirement in declared order. If that Requirement is `PENDING`, the chain MUST be `PENDING`, that Requirement alone MUST be active, and a later `REJECTED` observation MUST NOT determine the current outcome. If that Requirement is `REJECTED`, the chain MUST use its declared rejection outcome and MUST report no active Requirement. When every applicable Requirement is approved, the chain MUST be `APPROVED` and MUST report no active Requirement. Evaluation MUST validate every supplied Requirement state observation before returning an outcome, including observations for requirements that are not yet active.
 
 ## Invariants
 
 An Approval Chain outcome must be consistent with its sequencing declaration and effective required Approval Decisions.
+
+Sequential actionability is not staged Composition. A later Requirement may
+have retained historical evidence, but it is not active and cannot determine the
+current sequential Chain outcome until every predecessor is approved. This does
+not permit malformed later state evidence to escape validation.
 
 Approval Chain evaluation is an outcome evaluation over declared Approval
 Requirements. A state-map representation MAY be used to evaluate which
