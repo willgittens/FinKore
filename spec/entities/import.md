@@ -46,9 +46,10 @@ the imported observation.
 
 ## Core 0.9.7 empty-history decision (non-normative)
 
-D11 adopts an explicit empty list for successful import observations under
-SPEC-FREEZE-001/002/003 and SPEC-COMPATIBILITY-012/014. Python and Java previously
-omitted that result member; TypeScript already returned it. Consumers comparing
+D11 adopts an explicit empty list for successful import observations, an
+observable compatibility correction under SPEC-COMPATIBILITY-012/014. Python
+and Java previously omitted that result member; TypeScript already returned it.
+Consumers comparing
 exact object shapes will observe the added field in Python and Java. Input
 optionality, nonempty history, portable errors and failure observations remain
 unchanged. No canonical Agentic operation is introduced.
@@ -91,13 +92,13 @@ baseline. ENTITY-IMPORT-011 resolves the previously unspecified result while
 preserving ENTITY-IMPORT-003's requirement for mapping whenever Source Identity
 is supplied. Neither explicit null nor malformed Source Identity is omission.
 
-This is a corrective normative addition under SPEC-FREEZE-001 and
+This is a corrective normative addition under
 SPEC-COMPATIBILITY-012/014, not an editorial change or a claim of compatibility
 for TypeScript's former pair-required behavior. The completed 0.9.6 plan records
 the vectors, native regressions, implementation and API migration, returned-
 observation reuse, combined verification, fresh review, and local corrective
-release closure as historical evidence. Current synchronization follows the
-repository-owned scope in SPEC-FREEZE-002. No canonical import operation is
+release closure as historical evidence. Current synchronization follows
+[contributor guidance](../../CONTRIBUTING.md). No canonical import operation is
 introduced.
 
 ## Core 0.9.3 correction note (non-normative)

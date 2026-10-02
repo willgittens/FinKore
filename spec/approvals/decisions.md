@@ -33,7 +33,7 @@ An Approval Decision outcome is `APPROVED` or `REJECTED`. `PENDING` describes an
 
 The accepted D1–D4 decisions in the [0.9.7 plan](../../docs/plans/plan-09.7.md)
 resolve differing concrete evaluation and native-value behavior. These are
-corrective normative additions under SPEC-FREEZE-001. Implementation and
+corrective normative additions. Implementation and
 verification results recorded in that completed plan are historical and are not
 claims of current conformance.
 
@@ -146,7 +146,7 @@ is required; `evaluatedAt` is required only when expiration applies. Existing
 result categories and identifiers are retained. A native facts-only helper
 retains its documented scope and signature.
 
-This is an observable corrective contract change under SPEC-FREEZE-001 and
+This is an observable corrective contract change under
 SPEC-COMPATIBILITY-012/014, not an editorial clarification. The completed 0.9.6
 plan records its regressions, implementation migration, combined verification,
 fresh review, and release closure as historical evidence. No canonical Agentic

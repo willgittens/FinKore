@@ -25,9 +25,9 @@ promotion milestones, now numbered 5–9. This plan is temporary working materia
 and must itself be removed from the final 1.0 tree. Completed plans will not be
 relocated to another archive directory or retained as release dependencies.
 
-The milestones below are uncompleted. This document is non-normative and does
-not declare Core 1.0 stable. In this filename, `10` means version 1.0, not
-version 0.10.
+Milestone 1 is complete; milestones 2–9 remain uncompleted. This document is
+non-normative and does not declare Core 1.0 stable. In this filename, `10` means
+version 1.0, not version 0.10.
 
 ## Objective
 
@@ -105,28 +105,34 @@ correctness.
 
 ## Milestone 1 — Separate lasting contract rules from temporary governance
 
-- [ ] Remove the Release-Candidate Freeze section and SPEC-FREEZE-001 through
+- [x] Remove the Release-Candidate Freeze section and SPEC-FREEZE-001 through
       -004 from the active 1.0 specification. Explicitly retire their
       release-candidate applicability; do not rename or reuse them as new rules.
-- [ ] Preserve original definitions in Git history and record the sunset
+- [x] Preserve original definitions in Git history and record the sunset
       concisely in the existing release notes when released. Do not create a
       retired-rule report, copied archive, or separate provenance inventory.
-- [ ] Preserve lasting compatibility, stable-identifier, portable-value,
+- [x] Preserve lasting compatibility, stable-identifier, portable-value,
       normative-language, and conformance obligations. SPEC-COMPATIBILITY-* and
       other identifiers are not obsolete merely because their names use `SPEC`.
-- [ ] Put contribution and coordinated-update procedures in CONTRIBUTING.md
+- [x] Put contribution and coordinated-update procedures in CONTRIBUTING.md
       and AGENTS.md as appropriate. Keep consumer-facing compatibility promises
       in the contract without duplicating normative definitions.
-- [ ] Replace active freeze references with the enduring governing requirement
+- [x] Replace active freeze references with the enduring governing requirement
       where needed, or remove purely historical explanations. Remove the four
       retired rules from active traceability and recompute inventory totals.
-- [ ] Review the exact requirement diff: every continuing financial obligation,
+- [x] Review the exact requirement diff: every continuing financial obligation,
       portable error, and operation keeps its identifier and meaning. Retirement
       of temporary rules must not hide deletion of other requirements.
 
 **Completion:** the active specification states the lasting contract without
 release-candidate workflow rules; retired identifiers remain historically
 traceable and unavailable for reuse.
+
+Completed 2026-10-03. Only the four temporary requirements were retired; all
+436 continuing requirement definitions are unchanged. Active traceability now
+records 356 covered, one partial, and 79 not directly testable requirements.
+The sunset note is staged under [Unreleased](../releases/README.md#unreleased)
+for inclusion when released; no release or stable promotion is declared.
 
 ## Milestone 2 — Publish a self-contained current contract
 

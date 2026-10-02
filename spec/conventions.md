@@ -35,10 +35,9 @@ Normative clauses selected for conformance traceability use a domain-prefixed id
 
 This policy defines the portable compatibility surface for FinKore Core. Before
 1.0, FinKore remains experimental, but published identifiers and observable
-portable semantics are still managed deliberately. FinKore Core 0.9 is the
-release-candidate freeze for the Core 1.0 compatibility surface. After 1.0, an
-incompatible observable change to this compatibility surface requires a new
-major Core version.
+portable semantics are still managed deliberately. After 1.0, an incompatible
+observable change to this compatibility surface requires a new major Core
+version.
 
 The compatibility surface is limited to:
 
@@ -69,18 +68,6 @@ stack traces, localized messages, or test-runner normalization envelopes.
 - **SPEC-COMPATIBILITY-012** — A release MUST classify as behaviorally incompatible any change that alters whether an existing valid input succeeds, whether an existing invalid input fails, the normalized portable result, the primary portable error code, required input shape, required output shape, mutation semantics, or failure atomicity.
 - **SPEC-COMPATIBILITY-013** — A regression vector MAY be added without changing the Core version when it exercises existing normative behavior and does not require changing the specification's observable semantics.
 - **SPEC-COMPATIBILITY-014** — A regression vector that requires new normative behavior, a changed portable result, or a changed portable error mapping MUST be treated as a specification change rather than a version-neutral regression.
-
-## Release-Candidate Freeze
-
-FinKore Core 0.9 freezes the behavioral candidate intended to become FinKore
-Core 1.0. Existing requirement IDs, portable error codes, canonical operation
-IDs, and normative serialization shapes are frozen under the compatibility
-policy above.
-
-- **SPEC-FREEZE-001** — After the Core 0.9 release-candidate freeze, a normative change MAY be accepted only to correct a demonstrated contradiction, ambiguity, or portability defect.
-- **SPEC-FREEZE-002** — An accepted normative correction MUST update the affected specification, conformance vectors or traceability, Agentic metadata when applicable, public documentation, and affected repository-maintenance validation or tests in the same change. When observable behavior changes, the correction MUST document compatibility and consumer migration impact. Consumer-owned implementation changes and execution evidence are outside this repository's same-change gate.
-- **SPEC-FREEZE-003** — A release-candidate correction MUST preserve existing stable identifiers unless the compatibility policy requires a new identifier or documented supersession path.
-- **SPEC-FREEZE-004** — Non-normative editorial changes MAY be made when they do not change observable required behavior, portable error mapping, serialization shape, operation contract, mutation semantics, or failure atomicity.
 
 ## Naming and Terminology
 

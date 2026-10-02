@@ -77,5 +77,5 @@ Money declaration because treating every Money-shaped object as Money would
 silently reinterpret existing ordinary JSON. Omission of `valueType` preserves
 ordinary JSON semantics, so the optional declaration follows
 **SPEC-COMPATIBILITY-010**. The dedicated declaration and invalid-event mapping
-correct a demonstrated ambiguity under **SPEC-FREEZE-001**; no portable error
+resolve the comparison ambiguity; no portable error
 code or operation identifier changes.

@@ -123,9 +123,9 @@ names. It defines the previously missing inclusive ranges so a JSON number is
 not accepted by an arbitrary-precision implementation when the same value
 cannot be represented or processed by another supported implementation. Values
 inside the ranges keep their existing meaning; values outside them use the
-existing `FINKORE_MONEY_INVALID_ALLOCATION` category. This is the demonstrated
-portability correction permitted by **SPEC-FREEZE-001** and does not introduce
-a new serialization encoding or operation identifier.
+existing `FINKORE_MONEY_INVALID_ALLOCATION` category. This portability correction
+is an observable contract change under **SPEC-COMPATIBILITY-012/014**; it does
+not introduce a new serialization encoding or operation identifier.
 
 Workflow definition versions use positive base-10 integer strings only for the
 optional Default Workflow Version Sequence; other versions and revisions are

@@ -11,6 +11,14 @@ current execution evidence.
 
 ## Unreleased
 
+Retired SPEC-FREEZE-001, SPEC-FREEZE-002, SPEC-FREEZE-003, and SPEC-FREEZE-004
+from the active specification; their temporary Core 0.9 release-candidate
+applicability has ended. Their original definitions remain in Git history and
+their identifiers remain unavailable for reuse under SPEC-REQUIREMENT-004.
+Lasting compatibility and financial obligations are unchanged; coordinated
+artifact updates follow contributor guidance. This does not declare Core 1.0
+stable or publish a release.
+
 ## FinKore Core 0.9.7 Release Candidate
 
 Corrected complete Approval composition and history validation, explicit quorum

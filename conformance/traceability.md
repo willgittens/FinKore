@@ -9,13 +9,13 @@ Audit, Approvals, and Entities scope.
 
 | Domain | Requirements | MUST / MUST NOT | SHOULD / SHOULD NOT | MAY | Covered | Partial | Uncovered | Not directly testable | Deferred | Blocking spec gap |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Shared | 51 | 41 | 5 | 5 | 10 | 0 | 0 | 41 | 0 | 0 |
+| Shared | 47 | 39 | 5 | 3 | 10 | 0 | 0 | 37 | 0 | 0 |
 | Money | 74 | 69 | 1 | 4 | 69 | 0 | 0 | 5 | 0 | 0 |
 | Workflow | 60 | 58 | 1 | 1 | 50 | 1 | 0 | 9 | 0 | 0 |
 | Audit | 59 | 51 | 4 | 4 | 49 | 0 | 0 | 10 | 0 | 0 |
 | Approvals | 100 | 97 | 1 | 2 | 94 | 0 | 0 | 6 | 0 | 0 |
 | Entities | 96 | 91 | 3 | 2 | 84 | 0 | 0 | 12 | 0 | 0 |
-| **Total** | 440 | 407 | 15 | 18 | 356 | 1 | 0 | 83 | 0 | 0 |
+| **Total** | 436 | 405 | 15 | 16 | 356 | 1 | 0 | 79 | 0 | 0 |
 
 The suite contains 1790 vectors. They are schema-valid, manifest-listed cases
 covering 35 operation identifiers. The repository currently validates artifact structure,
@@ -49,7 +49,7 @@ transition does change what the repository can currently demonstrate:
   execution result;
 - `WORKFLOW-GUARD-004` remains `PARTIAL` because external-fact authoring lacks
   a portable definition schema;
-- all 83 `NOT DIRECTLY TESTABLE` rows retain their written rationale and need
+- all 79 current `NOT DIRECTLY TESTABLE` rows retain their written rationale and need
   consumer-owned evidence where their obligations apply;
 - `WORKFLOW-VERSION-003`, `APPROVAL-FACT-004`, and `WORKFLOW-GUARD-007`
   previously cited native ownership suites that are no longer maintained;
@@ -339,10 +339,6 @@ complete exploratory accounting.
 | SPEC-EXAMPLE-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Normative example syntax is a documentation lint concern, not runtime behavior. |
 | SPEC-EXAMPLE-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Surrounding specification completeness requires documentation review. |
 | SPEC-EXAMPLE-003 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Language-example labeling is a documentation convention. |
-| SPEC-FREEZE-001 | Shared | MAY | NOT DIRECTLY TESTABLE | Accepting a post-freeze correction is a maintainer governance decision. |
-| SPEC-FREEZE-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Same-change repository-artifact synchronization and documented consumer impact are maintainer review obligations; consumer-owned implementation changes are outside this repository's gate. |
-| SPEC-FREEZE-003 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Stable-ID preservation is a release-history review obligation. |
-| SPEC-FREEZE-004 | Shared | MAY | NOT DIRECTLY TESTABLE | Permitting a non-normative edit is a maintainer governance decision. |
 | SPEC-IDENTIFIER-001 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Domain vectors cover concrete identifiers; no generic identifier operation exists. |
 | SPEC-IDENTIFIER-002 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Absence of all inferred facts cannot be proven by one generic vector. |
 | SPEC-IDENTIFIER-003 | Shared | MUST / MUST NOT | NOT DIRECTLY TESTABLE | Stability over resource lifetime requires longitudinal observation. |

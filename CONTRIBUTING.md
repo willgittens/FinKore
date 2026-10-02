@@ -25,6 +25,24 @@ Run `npm run dependencies:audit` as a separate network-backed dependency review
 when the release or maintenance task requires one. Neither artifact validation
 nor dependency review is financial conformance execution.
 
+## Compatibility and coordinated review
+
+Use the [specification compatibility policy](spec/conventions.md#compatibility-policy)
+to classify changes and preserve published identifiers, portable errors,
+operation contracts, and serializations. Retired requirement identifiers remain
+unavailable for reuse; consult Git history and the
+[release notes](docs/releases/README.md) before assigning an identifier.
+
+For a retirement, review the exact requirement diff, remove obsolete active
+references and traceability rows, and recompute inventory totals. Preserve all
+continuing obligations and keep original definitions in Git history. Record the
+sunset and compatibility impact concisely under Unreleased in the existing
+release notes, then include that note in the release entry when released.
+
+Editorial changes follow SPEC-COMPATIBILITY-011. A changed observable result
+needs specification-first review and coordinated artifact updates as described
+above, even when discovered while adding a regression case.
+
 ## Licensing of Contributions
 
 FinKore community source code is licensed under the Mozilla Public License 2.0 (`MPL-2.0`). By submitting a contribution to an MPL-2.0-covered portion of FinKore, you agree that the contribution is submitted under the licensing terms applicable to that portion of the repository, unless explicitly agreed otherwise in writing.

@@ -36,8 +36,8 @@ namespace but are not manifest-discovered vectors. These checks do not execute
 financial behavior and do not establish that any implementation passes the
 vectors.
 
-Traceability currently records 440 requirements: 356 with portable vector
-coverage, one partial external-fact authoring requirement, and 83 not directly
+Traceability currently records 436 requirements: 356 with portable vector
+coverage, one partial external-fact authoring requirement, and 79 not directly
 testable by portable vectors. Coverage means an acceptance case exists; it is
 not a current execution result and is not proof of exhaustive correctness.
 

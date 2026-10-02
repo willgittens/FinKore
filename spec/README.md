@@ -5,9 +5,9 @@
 **FinKore Core 0.9 release candidate.** This is the shared,
 language-neutral behavioral candidate intended to become FinKore Core 1.0.
 It remains pre-1.0. The completed [Core 0.9.7 corrective release](../docs/plans/plan-09.7.md)
-records the reviewed D1–D11 ambiguity and portability corrections under the
-release-candidate freeze. Its implementation and execution results are
-historical evidence, not current repository capabilities. The corrections
+records the reviewed D1–D11 ambiguity and portability corrections. Its
+implementation and execution results are historical evidence, not current
+repository capabilities. The corrections
 retain stable identifiers and do not promote the specification to stable 1.0.
 The 0.9 domain scope is Money, Workflow, Audit, Approvals, and Entities.
 

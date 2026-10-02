@@ -52,8 +52,8 @@ extend Workflow guard comparison, or alter Money arithmetic/rounding rules.
 
 ## Core 0.9.7 correction note (non-normative)
 
-D9 adopts this profile under SPEC-FREEZE-001/002/003 and
-SPEC-COMPATIBILITY-012/014. It is an observable compatibility correction:
+D9 adopts this profile. Under SPEC-COMPATIBILITY-012/014, it is an observable
+compatibility correction:
 previously accepted unsupported native data now fails with the owning Entity
 error, and Java can no longer retain mutable numeric aliases. Supported immutable
 exact numbers remain accepted. The rule applies to source and related/successor

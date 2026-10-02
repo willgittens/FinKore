@@ -197,6 +197,19 @@ Do not casually rename requirement IDs, vector IDs, portable error codes, or
 canonical operation IDs. Search all references before changing a stable
 identifier and document the compatibility impact.
 
+Use the compatibility policy in `spec/conventions.md` to classify changes.
+For changed observable behavior, document consumer migration impact and update
+the affected specification, conformance artifacts, Agentic metadata, public
+documentation, and repository-tool checks in the same change. Consumer-owned
+implementation changes and execution evidence are outside that gate.
+
+Never reuse a retired requirement identifier. Before assigning an identifier,
+check Git history and `docs/releases/README.md` as well as the active inventory.
+When retiring a requirement, review the exact requirement diff, preserve all
+continuing obligations, remove obsolete active references and traceability
+rows, and recompute totals. Keep original definitions in Git history and record
+the sunset under Unreleased in the existing release notes until released.
+
 Portable error codes are language-independent. Exception types, messages,
 stack traces, HTTP statuses, and result-wrapper designs are consumer choices.
 Do not create a portable error that `/spec` does not define.

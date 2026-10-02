@@ -59,8 +59,8 @@ representation.
 ## Core 0.9.7 correction note (non-normative)
 
 D8 resolves the previously unspecified policy-ID representation through new
-**AUDIT-REDACTION-008**, under SPEC-FREEZE-001/002/003 and
-SPEC-COMPATIBILITY-012/014. This is an observable compatibility correction:
+**AUDIT-REDACTION-008**. Under SPEC-COMPATIBILITY-012/014, this is an observable
+compatibility correction:
 TypeScript and Java now accept omission, while Python rejects malformed supplied
 identifiers it previously ignored. Valid supplied strings retain their behavior.
 Authority, protected targets, evidence, production redaction encoding and
