@@ -110,7 +110,7 @@ function githubSlug(value) {
     .replace(/\s+/g, '-')
 }
 
-function markdownAnchors(path) {
+export function markdownAnchors(path) {
   const text = readFileSync(path, 'utf8')
   const anchors = new Set()
   const counts = new Map()

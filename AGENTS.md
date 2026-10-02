@@ -272,6 +272,13 @@ remove the final plan before stable publication. Published contract documents
 and verification must not depend on planning files. Concise release summaries
 remain in `docs/releases/README.md`.
 
+Stable publication requires the separate `npm run release:check` gate described
+in `docs/tools/README.md`, after ordinary local verification. Exercise it on a
+disposable proposed-release tree during preparation and repeat it on the actual
+final tree after removing the last working plan, before tagging. Development
+verification does not waive publication checks. Do not promote the working
+contract merely to make this stricter gate pass during earlier milestones.
+
 ## Node toolchain and local verification
 
 The maintained toolchain requires Node `>=24.11.0 <25`.

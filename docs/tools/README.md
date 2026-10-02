@@ -13,6 +13,7 @@ financial-domain behavior.
 | `check-doc-links.js` | Validate local Markdown paths and fragments plus known CoreDoc requirement prefixes, IDs, abbreviations, and ranges. | `npm run docs:check` |
 | `check-traceability.js` | Cross-check specification requirements, modalities, permitted coverage classifications, per-domain/total inventories, COVERED/PARTIAL evidence, vector metadata, and Agentic references. | `npm run traceability:check`, `npm run docs:check` |
 | `check-license.js` | Validate license metadata, source headers, and repository license text. | `npm run license:check` |
+| `check-release-content.js` | Inspect a proposed stable publication tree for obsolete artifacts, coherent Core status, and static HTML content and links. | `npm run release:check` |
 
 ## Supported Node setup
 
@@ -83,3 +84,50 @@ descriptors, invalid effect values, incorrect traceability totals/modalities,
 unsupported classifications, invalid PARTIAL evidence, unknown CoreDoc prefixes
 or IDs, and missing Markdown fragments. A rejected adversarial fixture must fail
 with the intended diagnostic; a crash is not a passing validator result.
+
+## Stable publication gate
+
+Run the separate publication check on a proposed release tree:
+
+```bash
+npm run release:check -- /absolute/path/to/proposed-release
+```
+
+With no path, it checks the current checkout. This is a required stable-release
+gate, separate from `npm run verify`: development verification remains usable
+while an active working plan and candidate status exist. The publication gate
+rejects planning files or copied planning content, references to removed plans
+or case supplements, retired freeze rules, and stale Core status in current
+prose, including inline scope wording. It reads text and paths without financial
+execution, mutation, or network access.
+
+README, CoreDoc, each specification document, conformance and Agentic READMEs,
+and any retained Learn index must explicitly declare `FinKore Core 1.0 stable`
+(or `FinKore Core 1.0 is stable`). CoreDoc's version and status fields must agree.
+Historical release versions and CoreDoc evolution metadata remain historical;
+schema syntax, maintenance-package versions, and stable vector IDs are not Core
+status. The only removed-rule exceptions are one concise retirement paragraph
+in release history and the designated adversarial JSON fixture under tool tests.
+Test and validator source files themselves are scanned.
+
+The retained Learn profile is a static local documentation index. The gate
+checks local HTML destinations, Markdown and HTML fragments, placeholders,
+duplicate anchors, and unsupported interactive controls. Remote links, scripts,
+and forms require a separately reviewed profile before publication. Review the
+rendered index for readable layout and keyboard navigation as well; these
+static checks do not execute a browser or establish general HTML correctness.
+
+The scan omits only root checkout state (`.git`, `.tools`, `node_modules`,
+`.npm-cache`, `coverage`, `dist`, and `reports`). Do not include that state in a
+release artifact. Symlinks and opaque compressed archives are rejected because
+their publication contents are not inspected. Renamed planning copies are
+detected through plan filenames and document/milestone headings; maintainers
+must also review the proposed file list for other copied development reports.
+
+Exercise the gate on a disposable proposed-release copy during preparation.
+Promote only reviewed status and scope text there; preserve requirement meaning,
+vector contents, format versions, and CoreDoc evolution metadata. A passing copy
+does not promote the checkout. Before tagging, install locked dependencies,
+run `npm run verify`, run the separately required `npm run dependencies:audit`,
+and run `npm run release:check` on the actual final tree after removing the last
+working plan. Record only concise release history in the existing release notes.

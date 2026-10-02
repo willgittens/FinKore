@@ -18,7 +18,7 @@ promotion milestones, now numbered 5–9. This plan is temporary working materia
 and must itself be removed from the final 1.0 tree. Completed plans will not be
 relocated to another archive directory or retained as release dependencies.
 
-Milestones 1–3 are complete; milestones 4–9 remain uncompleted. This document is
+Milestones 1–4 are complete; milestones 5–9 remain uncompleted. This document is
 non-normative and does not declare Core 1.0 stable. In this filename, `10` means
 version 1.0, not version 0.10.
 
@@ -203,30 +203,39 @@ unchanged. Validation and its tests now use only manifest-listed controls.
 
 ## Milestone 4 — Enforce the final publication boundary
 
-- [ ] Add a focused local release-content check under `docs/tools` and document
+- [x] Add a focused local release-content check under `docs/tools` and document
       it in existing tool/contributor guidance. It inspects the proposed release
       tree without evaluating finance or introducing a runner.
-- [ ] Require no `docs/plans` directory, copied planning archive, active plan
+- [x] Require no `docs/plans` directory, copied planning archive, active plan
       references, historical case supplement, or active freeze definitions or
       references in the final tree. Permit only the concise retirement note in
       release history and explicit negative-test fixtures for those removed surfaces.
-- [ ] Require coherent stable status across README, CoreDoc, specifications,
+- [x] Require coherent stable status across README, CoreDoc, specifications,
       conformance, and Agentic documents, including inline scope wording. Keep
       schema syntax `0.1`, private maintenance-package versions, stable vector
       IDs, release history, and CoreDoc evolution metadata distinct from the
       Core version. Do not perform a blanket numeric replacement.
-- [ ] Add positive controls and negative tests that reintroduce an old plan,
+- [x] Add positive controls and negative tests that reintroduce an old plan,
       reference, release-candidate status, or supplementary-file dependency.
       Require intended diagnostics, not crashes or infrastructure failures.
-- [ ] Include retained Learn HTML links and public content in release review.
+- [x] Include retained Learn HTML links and public content in release review.
       A Markdown-only checker does not establish that HTML or UI controls work.
-- [ ] Keep ordinary development verification usable while this plan exists;
+- [x] Keep ordinary development verification usable while this plan exists;
       make the stricter publication check an explicit release gate. Exercise it
       against a disposable proposed-release tree, then repeat it on the actual
       final tree after the last plan is removed.
 
 **Completion:** the requested clean 1.0 surface has enforceable acceptance
 criteria. Passing development verification cannot waive publication checks.
+
+Completed 2026-10-03. `npm run release:check -- /path/to/tree` enforces the
+publication boundary independently of development verification. Positive controls
+and adversarial fixtures cover removed artifacts, copied plans, inline status,
+metadata exceptions, and static HTML links/content. A disposable proposed-release
+tree passed with all 20 Learn links; the development tree remains correctly
+rejected for its active plan and candidate status. Milestone 8 must repeat the
+gate on the actual final tree before tagging. No financial contract, CoreDoc
+evolution metadata, vector, or working-tree release status was promoted here.
 
 ## Milestone 5 — Final normative baseline
 

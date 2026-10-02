@@ -53,6 +53,14 @@ procedures are in existing contributor and tool guidance. Published artifacts
 and verification must not require plans. Keep concise release summaries in
 `docs/releases/README.md`; detailed development history remains in Git.
 
+Stable publication also requires `npm run release:check` after normal local
+verification. During preparation, use `npm run release:check -- /path/to/tree`
+on a disposable proposed-release copy. After final status updates and removal
+of the last working plan, repeat it on the actual final tree before tagging.
+Passing development verification does not waive this gate or the separate
+release dependency audit. See [publication checks](docs/tools/README.md#stable-publication-gate)
+for status conventions, permitted historical metadata, and Learn review.
+
 ## Licensing of Contributions
 
 FinKore community source code is licensed under the Mozilla Public License 2.0 (`MPL-2.0`). By submitting a contribution to an MPL-2.0-covered portion of FinKore, you agree that the contribution is submitted under the licensing terms applicable to that portion of the repository, unless explicitly agreed otherwise in writing.

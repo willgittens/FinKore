@@ -1,0 +1,176 @@
+{
+  "purpose": "Explicit adversarial publication fixtures; none is published contract content.",
+  "cases": [
+    {
+      "name": "completed plan",
+      "path": "docs/plans/plan-09.8.md",
+      "content": "# FinKore transition plan\n",
+      "diagnostic": "planning artifact is forbidden"
+    },
+    {
+      "name": "renamed planning copy",
+      "path": "docs/history/notes.txt",
+      "content": "# FinKore Core 1.0 Plan\n\n## Milestone 1 — Review\n",
+      "diagnostic": "copied planning content is forbidden"
+    },
+    {
+      "name": "archived plan filename",
+      "path": "archive/plan-09.7.md",
+      "content": "Archived text\n",
+      "diagnostic": "planning artifact is forbidden"
+    },
+    {
+      "name": "active Markdown reference",
+      "path": "spec/money/extra.md",
+      "content": "FinKore Core 1.0 stable. See [the plan](../../docs/plans/plan-10.md).\n",
+      "diagnostic": "active planning reference is forbidden"
+    },
+    {
+      "name": "historical case file",
+      "path": "conformance/boundary097-cases.json",
+      "content": "{\"cases\":[]}",
+      "diagnostic": "historical case supplement is forbidden"
+    },
+    {
+      "name": "tool dependency",
+      "path": "docs/tools/obsolete.js",
+      "content": "readJson('conformance/boundary097-cases.json')\n",
+      "diagnostic": "historical supplement reference or dependency is forbidden"
+    },
+    {
+      "name": "retained special reader",
+      "path": "docs/tools/obsolete.js",
+      "content": "function readSupplementaryCases(root) {}\n",
+      "diagnostic": "historical supplement reference or dependency is forbidden"
+    },
+    {
+      "name": "freeze rule",
+      "path": "spec/extra.md",
+      "content": "FinKore Core 1.0 stable.\n- **SPEC-FREEZE-001** — Changes MUST be reviewed.\n",
+      "diagnostic": "retired freeze definition or reference is forbidden"
+    },
+    {
+      "name": "freeze reference",
+      "path": "agentic/extra.md",
+      "content": "Follow SPEC-FREEZE-002.\n",
+      "diagnostic": "retired freeze definition or reference is forbidden"
+    },
+    {
+      "name": "inline candidate wording",
+      "path": "spec/extra.md",
+      "content": "FinKore Core 1.0 stable.\nThe release-candidate contract has this scope.\n",
+      "diagnostic": "stale or contradictory Core status"
+    },
+    {
+      "name": "inline old Core version",
+      "path": "conformance/extra.md",
+      "content": "Core 0.9 defines the current input.\n",
+      "diagnostic": "stale or contradictory Core status"
+    },
+    {
+      "name": "stale Agentic status",
+      "path": "agentic/README.md",
+      "content": "FinKore Core 1.0 stable. Still pre-1.0.\n",
+      "diagnostic": "stale or contradictory Core status"
+    },
+    {
+      "name": "status hidden by typography",
+      "path": "learn/extra.html",
+      "content": "<p>FinKore Core 1.0 stable.</p><p>Release <em>candidate</em> contract</p>",
+      "diagnostic": "stale or contradictory Core status"
+    },
+    {
+      "name": "placeholder HTML",
+      "path": "learn/extra.html",
+      "content": "<p>This section should grow.</p>",
+      "diagnostic": "unfinished or ambiguous HTML content"
+    },
+    {
+      "name": "unwired search",
+      "path": "learn/extra.html",
+      "content": "<input type='search'>",
+      "diagnostic": "interactive HTML is outside"
+    },
+    {
+      "name": "old prototype version",
+      "path": "learn/extra.html",
+      "content": "<footer>Version 0.1.0</footer>",
+      "diagnostic": "unfinished or ambiguous HTML content"
+    },
+    {
+      "name": "stale project destination",
+      "path": "learn/extra.html",
+      "content": "<a href='https://github.com/willgittens/FinFlow'>Project</a>",
+      "diagnostic": "HTML link must name a local destination"
+    },
+    {
+      "name": "missing HTML destination",
+      "path": "learn/extra.html",
+      "content": "<a href='../missing.md'>Missing</a>",
+      "diagnostic": "broken or escaping HTML link"
+    },
+    {
+      "name": "missing Markdown anchor",
+      "path": "learn/extra.html",
+      "content": "<a href='../spec/README.md#missing'>Missing</a>",
+      "diagnostic": "missing HTML link fragment"
+    },
+    {
+      "name": "missing HTML anchor",
+      "path": "learn/extra.html",
+      "content": "<a href='index.html#missing'>Missing</a>",
+      "diagnostic": "missing HTML link fragment"
+    },
+    {
+      "name": "escaping link",
+      "path": "learn/extra.html",
+      "content": "<a href='../../outside.md'>Outside</a>",
+      "diagnostic": "broken or escaping HTML link"
+    },
+    {
+      "name": "encoded escaping link",
+      "path": "learn/extra.html",
+      "content": "<a href='&#46;&#46;/%2e%2e/outside.md'>Outside</a>",
+      "diagnostic": "broken or escaping HTML link"
+    },
+    {
+      "name": "malformed link encoding",
+      "path": "learn/extra.html",
+      "content": "<a href='%GG'>Bad</a>",
+      "diagnostic": "malformed HTML link"
+    },
+    {
+      "name": "dummy HTML link",
+      "path": "learn/extra.html",
+      "content": "<a href=#>Search</a>",
+      "diagnostic": "HTML link must name a local destination"
+    },
+    {
+      "name": "archive container",
+      "path": "history.zip",
+      "content": "opaque archive",
+      "diagnostic": "opaque archives cannot be reviewed"
+    },
+    {
+      "name": "contradictory stable declaration",
+      "path": "spec/extra.md",
+      "content": "FinKore Core 1.0 stable. It is not yet stable.",
+      "diagnostic": "stale or contradictory Core status"
+    },
+    {
+      "name": "unversioned draft status",
+      "path": "spec/extra.md",
+      "content": "FinKore Core 1.0 stable.\n**Status:** Draft\n",
+      "diagnostic": "stale or contradictory Core status"
+    },
+    {
+      "name": "duplicate HTML anchor",
+      "path": "learn/extra.html",
+      "content": "<h1 id=\"same\">One</h1><h2 id=\"same\">Two</h2>",
+      "diagnostic": "duplicate HTML anchor"
+    }
+  ],
+  "emptyPlanDirectory": "docs/plans",
+  "retirement": "Retired SPEC-FREEZE-001, SPEC-FREEZE-002, SPEC-FREEZE-003, and SPEC-FREEZE-004; applicability has ended. Definitions remain in Git history and identifiers remain unavailable for reuse.",
+  "badRetirement": "Retired SPEC-FREEZE-001 — callers MUST obey it."
+}
