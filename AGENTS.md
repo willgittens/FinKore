@@ -24,8 +24,8 @@ Consumer-owned implementations and integrations
 The repository publishes the contract and maintenance tooling. It does not
 maintain a financial implementation, a Conformance Runner, a runner adapter API,
 or installable language packages. Do not recreate those removed surfaces or
-move financial behavior into repository tooling unless an accepted plan
-explicitly changes the project scope.
+move financial behavior into repository tooling unless an explicitly accepted
+change expands the project scope.
 
 ## Repository responsibilities
 
@@ -97,7 +97,7 @@ When working on financial behavior, consult artifacts in this order:
 2. `/spec` for precise normative behavior.
 3. `/conformance` for portable acceptance cases and traceability.
 4. `/agentic` for canonical operation semantics where applicable.
-5. Historical plans and release notes for context only.
+5. Git history and release notes for historical context only.
 
 Current normative text wins over historical implementation behavior. A vector
 that expects undefined behavior exposes an inconsistency; it does not authorize
@@ -252,9 +252,9 @@ review whether it requires updates to:
 - `docs/implementation-guide.md` and consumer guidance;
 - repository tools and their tests;
 - `AGENTS.md`;
-- the current release plan.
+- any active working plan, when present during development.
 
-Documentation must describe the repository that exists now. Historical plans
+Documentation must describe the repository that exists now. Git history
 and release notes may describe removed implementations and past execution
 results, but current-facing documentation must label those claims as historical
 and must not present old install commands, API examples, support tables, or test
@@ -264,6 +264,13 @@ Release summaries belong only in `docs/releases/README.md`. Keep them concise.
 Do not create closure reports, alignment records, checksums, provenance reports,
 or review-evidence documents. Do not record planned or unreleased work as a
 completed release.
+
+Completed and superseded plans belong in ordinary Git history, not the released
+tree or a copied archive. An active working plan may remain during development;
+move enduring contributor and release procedures into existing guidance and
+remove the final plan before stable publication. Published contract documents
+and verification must not depend on planning files. Concise release summaries
+remain in `docs/releases/README.md`.
 
 ## Node toolchain and local verification
 

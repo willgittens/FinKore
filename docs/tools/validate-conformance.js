@@ -6,14 +6,13 @@
  * validates syntax, declared paths, the published JSON Schema, and globally
  * unique vector identifiers. It does not define or execute financial behavior.
  */
-import { existsSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { dirname, join, relative, resolve, sep } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import Ajv2020 from 'ajv/dist/2020.js'
 
 const SUITE_ID = /^[a-z][a-z0-9-]*$/
 const PORTABLE_ERROR = /^FINKORE_[A-Z]+(?:_[A-Z]+)+$/
-const SUPPLEMENTARY_CASES = 'boundary097-cases.json'
 
 export class ArtifactValidationError extends Error {
   constructor(message, path, cause) {
@@ -120,16 +119,6 @@ function collectPortableErrorCodes(repositoryRoot) {
   return codes
 }
 
-function readSupplementaryCases(conformanceRoot) {
-  const path = join(conformanceRoot, SUPPLEMENTARY_CASES)
-  if (!existsSync(path)) return { path, cases: [] }
-  const value = readJson(path, 'supplementary boundary cases')
-  if (!isRecord(value) || !Array.isArray(value.cases)) {
-    throw new ArtifactValidationError('Supplementary boundary case file must contain a cases array', path)
-  }
-  return { path, cases: value.cases }
-}
-
 function validateExpectedError(candidate, label, portableErrors, path) {
   const code = candidate?.expected?.error?.code
   if (code !== undefined && !portableErrors.has(code)) {
@@ -180,29 +169,10 @@ export function validateConformance(manifestPath = 'conformance/manifest.json', 
   }
 
   const portableErrors = collectPortableErrorCodes(resolvedRepositoryRoot)
-  const supplementary = readSupplementaryCases(conformanceRoot)
-  const supplementaryIds = new Set()
-  for (const [index, candidate] of supplementary.cases.entries()) {
-    if (!isRecord(candidate) || typeof candidate.id !== 'string' || candidate.id.length === 0) {
-      throw new ArtifactValidationError(`Supplementary case at index ${index} has no valid id`, supplementary.path)
-    }
-    if (vectorIds.has(candidate.id) || supplementaryIds.has(candidate.id)) {
-      throw new ArtifactValidationError(`Duplicate manifest/supplementary case id: ${candidate.id}`, supplementary.path)
-    }
-    supplementaryIds.add(candidate.id)
-    validateExpectedError(candidate, `Supplementary case ${candidate.id}`, portableErrors, supplementary.path)
-  }
-
-  const supportedControlIds = new Set([...vectorIds, ...supplementaryIds])
   for (const { vector, path } of vectors) {
     validateExpectedError(vector, `Vector ${vector.id}`, portableErrors, path)
-    if (vector.pairedControl !== undefined && !supportedControlIds.has(vector.pairedControl)) {
+    if (vector.pairedControl !== undefined && !vectorIds.has(vector.pairedControl)) {
       throw new ArtifactValidationError(`Vector ${vector.id} references unknown pairedControl: ${vector.pairedControl}`, path)
-    }
-  }
-  for (const candidate of supplementary.cases) {
-    if (candidate.pairedControl !== undefined && !supportedControlIds.has(candidate.pairedControl)) {
-      throw new ArtifactValidationError(`Supplementary case ${candidate.id} references unknown pairedControl: ${candidate.pairedControl}`, supplementary.path)
     }
   }
 

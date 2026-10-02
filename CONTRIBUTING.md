@@ -43,6 +43,16 @@ Editorial changes follow SPEC-COMPATIBILITY-011. A changed observable result
 needs specification-first review and coordinated artifact updates as described
 above, even when discovered while adding a regression case.
 
+## Working plans and published guidance
+
+Working plans are temporary development material. Preserve their reviewed state
+in ordinary Git history before removing completed or superseded plans. Do not
+copy them to an archive or release attachment. Only an active execution plan may
+remain during development; remove it before stable publication once enduring
+procedures are in existing contributor and tool guidance. Published artifacts
+and verification must not require plans. Keep concise release summaries in
+`docs/releases/README.md`; detailed development history remains in Git.
+
 ## Licensing of Contributions
 
 FinKore community source code is licensed under the Mozilla Public License 2.0 (`MPL-2.0`). By submitting a contribution to an MPL-2.0-covered portion of FinKore, you agree that the contribution is submitted under the licensing terms applicable to that portion of the repository, unless explicitly agreed otherwise in writing.

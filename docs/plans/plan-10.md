@@ -2,30 +2,23 @@
 
 ## Status
 
-The [Core 0.9.8 transition](plan-09.8.md) defines FinKore as a
-language-independent contract repository. It removes maintained financial
-implementations, the Conformance Runner, adapter APIs, and language-package
-publication from the supported surface. Core 1.0 promotion therefore evaluates
-the specification, conformance artifacts, Agentic Contract, and repository
-maintenance tooling—not consumer implementations.
+FinKore is a language-independent contract repository. Core 1.0 promotion
+evaluates the specification, conformance artifacts, Agentic Contract, and
+repository maintenance tooling. Maintained financial implementations, the
+Conformance Runner, adapter APIs, and language-package publication are outside
+the supported surface.
 
-The completed [Core 0.9.7 corrective plan](plan-09.7.md) and earlier plans retain
-historical implementation and execution evidence for their repository states.
-Those results are not current 1.0 gates and do not imply that the present
-repository executes financial behavior.
-
-The [Core 0.9.8 transition and follow-up plan](plan-09.8.md) is complete and its
-post-transition findings are dispositioned within that plan's scope. The
-2026-10-03 publication audit below identifies additional cleanup required for
-1.0. Completion of the transition does not satisfy those new gates, change
-CoreDoc or specification status, publish a release, or promote the contract.
+The repository transition and its follow-up findings are complete. Historical
+implementation and execution evidence remains in Git and does not establish
+current conformance or satisfy the 1.0 gates. The 2026-10-03 publication audit
+below identifies the additional cleanup required before stable promotion.
 
 **Publication cleanup pending.** New milestones 1–4 precede the former stable
 promotion milestones, now numbered 5–9. This plan is temporary working material
 and must itself be removed from the final 1.0 tree. Completed plans will not be
 relocated to another archive directory or retained as release dependencies.
 
-Milestones 1–2 are complete; milestones 3–9 remain uncompleted. This document is
+Milestones 1–3 are complete; milestones 4–9 remain uncompleted. This document is
 non-normative and does not declare Core 1.0 stable. In this filename, `10` means
 version 1.0, not version 0.10.
 
@@ -76,10 +69,9 @@ implements every accounting domain or ships executable domain software.
 
 ## Publication audit — 2026-10-03
 
-Reviewed the working tree based on `0de7082`, including the existing uncommitted
-milestone-8 completion updates to the 0.9.8 and 1.0 plans. Those updates are
-preserved; this audit adds publication requirements rather than reopening the
-accepted financial decisions from that work.
+Reviewed the working tree based on `0de7082`, including the then-uncommitted
+transition completion updates now preserved in Git. This audit adds publication
+requirements rather than reopening the accepted financial decisions.
 
 Fresh `npm ci --no-audit` and `npm run verify` pass on Node 24.15.0: 1,790
 manifest vectors in 42 files and six suites, 440 requirements, 35 conformance
@@ -179,30 +171,35 @@ are unchanged. Learn is a local documentation index with 20 checked links.
 
 ## Milestone 3 — Remove obsolete artifacts and completed plans
 
-- [ ] Remove `conformance/boundary097-cases.json` and its special reader,
+- [x] Remove `conformance/boundary097-cases.json` and its special reader,
       supplementary-control namespace, dedicated tests, and current guidance.
       Keep error-code and paired-control validation for manifest-listed vectors.
-- [ ] Confirm that no active control depends on that file at execution time.
+- [x] Confirm that no active control depends on that file at execution time.
       Resolve any new dependency through existing portable controls or
       specification-backed manifest cases; do not discard regression protection
       or promote historical expectations wholesale.
-- [ ] Preserve the 1,790 active vector IDs, inputs, expected financial outcomes,
+- [x] Preserve the 1,790 active vector IDs, inputs, expected financial outcomes,
       canonical operations, and portable errors during cleanup. Any behavioral
       discrepancy needs a separate specification-first review.
-- [ ] Remove completed/superseded `docs/plans` files, including the completed
-      0.9.8 plan, after their reviewed state is preserved in ordinary Git history.
+- [x] Remove completed/superseded `docs/plans` files after their reviewed state
+      is preserved in ordinary Git history.
       Remove references from the surviving working plan as well as public docs.
       Do not relocate plans into an archive directory or release attachments.
-- [ ] Keep only this active execution plan temporarily. Milestone 8 removes it
+- [x] Keep only this active execution plan temporarily. Milestone 8 removes it
       after enduring release instructions are in existing contributor/tool
       guidance; the final 1.0 tree contains no planning files or directory.
-- [ ] Update AGENTS.md and contributor guidance so they do not require old
+- [x] Update AGENTS.md and contributor guidance so they do not require old
       plans in the released tree. Preserve Git history and concise release notes
       without copying detailed review reports into them.
 
 **Completion:** validation is independent of the historical supplement,
 completed plans are removed, and this working plan is the sole temporary
 planning exception until final release preparation.
+
+Completed 2026-10-03. Removed the 189-case historical supplement and ten completed
+plans whose reviewed contents are preserved in Git at `f17786a`. All 812 active
+paired-control references resolve within the manifest; all 1,790 vectors remain
+unchanged. Validation and its tests now use only manifest-listed controls.
 
 ## Milestone 4 — Enforce the final publication boundary
 
@@ -237,9 +234,8 @@ Promote the reviewed 0.9 candidate without adding new behavior.
 
 ### Tasks
 
-- [x] Confirm that every 0.9 candidate blocker is resolved, including every
-      specification question and applicable gate in the
-      [0.9.8 transition plan](plan-09.8.md).
+- [x] Confirm that every 0.9 candidate blocker is resolved, including the
+      specification questions and repository-transition acceptance gates.
 - [ ] Change CoreDoc status and version to FinKore Core 1.0.
 - [ ] Change specification status from release candidate to stable 1.0.
 - [ ] Confirm the exact documents and domains included in the baseline.

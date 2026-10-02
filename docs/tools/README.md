@@ -6,7 +6,7 @@ financial-domain behavior.
 
 | Tool | Purpose | Package command |
 | --- | --- | --- |
-| `validate-conformance.js` | Validate the manifest, declared paths, vector JSON Schema, vector files, global vector ID uniqueness, declared portable error codes, and manifest/supplementary paired-control references. | `npm run conformance:check` |
+| `validate-conformance.js` | Validate the manifest, declared paths, vector JSON Schema, vector files, global vector ID uniqueness, declared portable error codes, and paired-control references among manifest-listed vectors. | `npm run conformance:check` |
 | `check-agentic.js` | Cross-check canonical operations, required descriptor content, allowed registry effect values, specification requirements, portable errors, and manifest vector use. | `npm run agentic:check` |
 | `check-architecture.js` | Enforce specification-only repository boundaries and local-only verification. | `npm run architecture:check` |
 | `check-node-version.js` | Validate the Node runtime used by repository-local tools. | `npm run node:check` |
@@ -68,11 +68,9 @@ the local npm cache and must not be described as a fresh network audit.
 data. It does not execute their financial operations, test an implementation,
 or establish that any vector has passed.
 
-`conformance/boundary097-cases.json` supplies the only supported supplementary
-paired-control namespace. The validator reads its case identifiers, portable
-error references, and paired-control links for metadata integrity only. It does
-not schema-validate those historical cases as current vectors, add them to
-manifest counts, or execute them.
+The manifest is the only vector discovery entry point. Paired-control references
+must resolve to manifest-listed vectors, including controls in other declared
+files. Unlisted files neither contribute vector counts nor supply controls.
 
 `npm run check` is deterministic and local. It validates repository structure,
 published artifact syntax, stable identifiers, requirement traceability,

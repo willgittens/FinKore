@@ -102,7 +102,7 @@ test('rejects duplicate vector identifiers across declared files', () => {
   assert.throws(() => validateConformance(manifestPath, root), /Duplicate vector id/)
 })
 
-test('accepts declared portable errors and rejects invented vector or supplementary errors', () => {
+test('accepts declared portable errors and rejects invented vector errors', () => {
   const declared = { id: 'example.error-001', expected: { status: 'error', error: { code: 'FINKORE_EXAMPLE_INVALID' } } }
   const { manifestPath, root } = fixture([["./suite/vectors.json", [declared]]])
   assert.equal(validateConformance(manifestPath, root).vectorCount, 1)
@@ -110,31 +110,35 @@ test('accepts declared portable errors and rejects invented vector or supplement
   declared.expected.error.code = 'FINKORE_EXAMPLE_INVENTED'
   writeFileSync(join(root, 'suite/vectors.json'), JSON.stringify({ finkoreVectorFile: '0.1', vectors: [declared] }))
   assert.throws(() => validateConformance(manifestPath, root), /undeclared portable error/)
-
-  declared.expected.error.code = 'FINKORE_EXAMPLE_INVALID'
-  writeFileSync(join(root, 'suite/vectors.json'), JSON.stringify({ finkoreVectorFile: '0.1', vectors: [declared] }))
-  writeFileSync(join(root, 'boundary097-cases.json'), JSON.stringify({
-    cases: [{ id: 'example.supplementary-001', expected: { status: 'error', error: { code: 'FINKORE_EXAMPLE_INVENTED' } } }],
-  }))
-  assert.throws(() => validateConformance(manifestPath, root), /Supplementary case.*undeclared portable error/)
 })
 
-test('validates paired controls in manifest and supplementary namespaces', () => {
+test('validates paired controls only among manifest-listed vectors', () => {
   const vectors = [
-    { id: 'example.control-001' },
     { id: 'example.case-001', pairedControl: 'example.control-001' },
-    { id: 'example.case-002', pairedControl: 'example.supplementary-001' },
+    { id: 'example.case-002', pairedControl: 'example.case-001' },
   ]
-  const { manifestPath, root } = fixture([["./suite/vectors.json", vectors]])
-  writeFileSync(join(root, 'boundary097-cases.json'), JSON.stringify({
-    purpose: 'Historical controls only.',
-    cases: [{ id: 'example.supplementary-001', pairedControl: 'example.control-001' }],
+  const { manifestPath, root } = fixture([
+    ['./suite/vectors.json', vectors],
+    ['./suite/controls.json', ['example.control-001']],
+  ])
+  writeFileSync(join(root, 'unlisted.json'), JSON.stringify({
+    finkoreVectorFile: '0.1',
+    vectors: [{ id: 'example.unlisted-001' }],
   }))
+  writeFileSync(join(root, 'unlisted-invalid.json'), 'not JSON')
   assert.equal(validateConformance(manifestPath, root).vectorCount, 3)
 
-  vectors[2].pairedControl = 'example.missing-001'
-  writeFileSync(join(root, 'suite/vectors.json'), JSON.stringify({ finkoreVectorFile: '0.1', vectors }))
-  assert.throws(() => validateConformance(manifestPath, root), /unknown pairedControl/)
+  for (const control of ['example.unlisted-001', 'example.missing-001']) {
+    vectors[1].pairedControl = control
+    writeFileSync(join(root, 'suite/vectors.json'), JSON.stringify({ finkoreVectorFile: '0.1', vectors }))
+    const messages = []
+    const status = runConformanceCli(manifestPath, root, {
+      log: (message) => messages.push(message),
+      error: (message) => messages.push(message),
+    })
+    assert.equal(status, 1)
+    assert.equal(messages.join('\n'), `Vector example.case-002 references unknown pairedControl: ${control}`)
+  }
 })
 
 test('conformance CLI exits unsuccessfully for an undeclared portable error', () => {

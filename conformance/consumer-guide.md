@@ -34,14 +34,10 @@ schema publication and format-version compatibility assessment.
 
 The repository command `npm run conformance:check` performs these schema and
 discovery checks plus global vector-ID uniqueness, declared portable-error
-validation, and manifest/supplementary paired-control reference validation. It
-does not invoke financial operations. The supplementary namespace is read only
-for metadata integrity and is not added to manifest discovery or vector counts.
-
-The separate `boundary097-cases.json` file is retained historical review data.
-It is not manifest-listed, does not use the published vector-file schema, and is
-not part of a portable conformance claim unless a consumer deliberately adopts
-and documents an additional evaluation contract for it.
+validation, and paired-control reference validation against manifest-listed
+vectors. A `pairedControl` must identify a vector discovered through the same
+manifest; files outside that discovery do not supply controls. These checks do
+not invoke financial operations.
 
 ## Vector request
 

@@ -53,7 +53,7 @@
         "pairedControl": {
           "type": "string",
           "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$",
-          "description": "Existing vector or supplementary case checked as an independent control."
+          "description": "Existing manifest-listed vector checked as an independent control."
         },
         "guardsAgainst": {
           "type": "array",
