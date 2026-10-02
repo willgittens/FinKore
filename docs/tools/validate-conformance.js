@@ -6,12 +6,14 @@
  * validates syntax, declared paths, the published JSON Schema, and globally
  * unique vector identifiers. It does not define or execute financial behavior.
  */
-import { readFileSync } from 'node:fs'
-import { dirname, relative, resolve, sep } from 'node:path'
+import { existsSync, readFileSync } from 'node:fs'
+import { dirname, join, relative, resolve, sep } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import Ajv2020 from 'ajv/dist/2020.js'
 
 const SUITE_ID = /^[a-z][a-z0-9-]*$/
+const PORTABLE_ERROR = /^FINKORE_[A-Z]+(?:_[A-Z]+)+$/
+const SUPPLEMENTARY_CASES = 'boundary097-cases.json'
 
 export class ArtifactValidationError extends Error {
   constructor(message, path, cause) {
@@ -90,9 +92,55 @@ function schemaFailure(validate, path) {
   return new ArtifactValidationError(`Vector file does not satisfy its declared schema: ${details}`, path)
 }
 
-export function validateConformance(manifestPath = 'conformance/manifest.json') {
+function collectPortableErrorCodes(repositoryRoot) {
+  const conventionsPath = join(repositoryRoot, 'spec', 'conventions.md')
+  let text
+  try {
+    text = readFileSync(conventionsPath, 'utf8')
+  } catch (error) {
+    throw new ArtifactValidationError(`Cannot read the consolidated portable error catalog: ${conventionsPath}`, conventionsPath, error)
+  }
+  const section = text.match(/## Error Codes\n(?<body>[\s\S]*?)(?=\n## |$)/)?.groups?.body
+  if (section === undefined) {
+    throw new ArtifactValidationError('Specification conventions contain no Error Codes section', conventionsPath)
+  }
+  const codes = new Set()
+  for (const line of section.split('\n')) {
+    const match = line.match(/^\|[^|]*\|\s*`(FINKORE_[A-Z0-9_]+)`\s*\|/)
+    if (match === null) continue
+    if (!PORTABLE_ERROR.test(match[1])) {
+      throw new ArtifactValidationError(`Malformed portable error declaration: ${match[1]}`, conventionsPath)
+    }
+    if (codes.has(match[1])) {
+      throw new ArtifactValidationError(`Duplicate portable error declaration: ${match[1]}`, conventionsPath)
+    }
+    codes.add(match[1])
+  }
+  if (codes.size === 0) throw new ArtifactValidationError('Portable error catalog declares no codes', conventionsPath)
+  return codes
+}
+
+function readSupplementaryCases(conformanceRoot) {
+  const path = join(conformanceRoot, SUPPLEMENTARY_CASES)
+  if (!existsSync(path)) return { path, cases: [] }
+  const value = readJson(path, 'supplementary boundary cases')
+  if (!isRecord(value) || !Array.isArray(value.cases)) {
+    throw new ArtifactValidationError('Supplementary boundary case file must contain a cases array', path)
+  }
+  return { path, cases: value.cases }
+}
+
+function validateExpectedError(candidate, label, portableErrors, path) {
+  const code = candidate?.expected?.error?.code
+  if (code !== undefined && !portableErrors.has(code)) {
+    throw new ArtifactValidationError(`${label} references undeclared portable error: ${code}`, path)
+  }
+}
+
+export function validateConformance(manifestPath = 'conformance/manifest.json', repositoryRoot) {
   const absoluteManifest = resolve(manifestPath)
   const conformanceRoot = dirname(absoluteManifest)
+  const resolvedRepositoryRoot = resolve(repositoryRoot ?? join(conformanceRoot, '..'))
   const manifest = validateManifest(readJson(absoluteManifest, 'manifest'), absoluteManifest)
   const schemaPath = resolveWithin(conformanceRoot, manifest.vectorSchema, 'Vector schema path')
   const schema = readJson(schemaPath, 'vector schema')
@@ -111,6 +159,7 @@ export function validateConformance(manifestPath = 'conformance/manifest.json') 
   }
 
   const vectorIds = new Set()
+  const vectors = []
   let vectorCount = 0
   let vectorFileCount = 0
   for (const suite of manifest.suites) {
@@ -124,8 +173,36 @@ export function validateConformance(manifestPath = 'conformance/manifest.json') 
           throw new ArtifactValidationError(`Duplicate vector id: ${vector.id}`, vectorPath)
         }
         vectorIds.add(vector.id)
+        vectors.push({ vector, path: vectorPath })
         vectorCount += 1
       }
+    }
+  }
+
+  const portableErrors = collectPortableErrorCodes(resolvedRepositoryRoot)
+  const supplementary = readSupplementaryCases(conformanceRoot)
+  const supplementaryIds = new Set()
+  for (const [index, candidate] of supplementary.cases.entries()) {
+    if (!isRecord(candidate) || typeof candidate.id !== 'string' || candidate.id.length === 0) {
+      throw new ArtifactValidationError(`Supplementary case at index ${index} has no valid id`, supplementary.path)
+    }
+    if (vectorIds.has(candidate.id) || supplementaryIds.has(candidate.id)) {
+      throw new ArtifactValidationError(`Duplicate manifest/supplementary case id: ${candidate.id}`, supplementary.path)
+    }
+    supplementaryIds.add(candidate.id)
+    validateExpectedError(candidate, `Supplementary case ${candidate.id}`, portableErrors, supplementary.path)
+  }
+
+  const supportedControlIds = new Set([...vectorIds, ...supplementaryIds])
+  for (const { vector, path } of vectors) {
+    validateExpectedError(vector, `Vector ${vector.id}`, portableErrors, path)
+    if (vector.pairedControl !== undefined && !supportedControlIds.has(vector.pairedControl)) {
+      throw new ArtifactValidationError(`Vector ${vector.id} references unknown pairedControl: ${vector.pairedControl}`, path)
+    }
+  }
+  for (const candidate of supplementary.cases) {
+    if (candidate.pairedControl !== undefined && !supportedControlIds.has(candidate.pairedControl)) {
+      throw new ArtifactValidationError(`Supplementary case ${candidate.id} references unknown pairedControl: ${candidate.pairedControl}`, supplementary.path)
     }
   }
 
@@ -141,12 +218,17 @@ function isDirectExecution() {
   return process.argv[1] !== undefined && import.meta.url === pathToFileURL(resolve(process.argv[1])).href
 }
 
-if (isDirectExecution()) {
+export function runConformanceCli(manifestPath, repositoryRoot, output = console) {
   try {
-    const result = validateConformance(process.argv[2])
-    console.log(`Conformance artifacts passed: ${result.suiteCount} suites, ${result.vectorFileCount} files, ${result.vectorCount} vectors.`)
+    const result = validateConformance(manifestPath, repositoryRoot)
+    output.log(`Conformance artifacts passed: ${result.suiteCount} suites, ${result.vectorFileCount} files, ${result.vectorCount} vectors.`)
+    return 0
   } catch (error) {
-    console.error(error instanceof Error ? error.message : String(error))
-    process.exitCode = 1
+    output.error(error instanceof Error ? error.message : String(error))
+    return 1
   }
+}
+
+if (isDirectExecution()) {
+  process.exitCode = runConformanceCli(process.argv[2], process.argv[3])
 }

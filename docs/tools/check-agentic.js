@@ -14,6 +14,10 @@ const REQUIREMENT_ID = /\b[A-Z][A-Z0-9-]+-[0-9]{3}\b/g
 const ERROR_CODE = /\bFINKORE_[A-Z0-9_]+\b/g
 const REGISTRY_OPERATION = /^\| `(finkore\.[a-z]+(?:\.[a-z]+)+)` \|/gm
 const DESCRIPTOR_OPERATION = /^## `(finkore\.[a-z]+(?:\.[a-z]+)+)`$/gm
+const REGISTRY_ROW = /^\| `(finkore\.[a-z]+(?:\.[a-z]+)+)` \| ([^|]+) \| `([^`]+)` \| `([^`]+)` \| `([^`]+)` \| `([^`]+)` \| ([^|]+) \| ([^|]+) \|$/gm
+const STATE_MUTATION_VALUES = new Set(['yes', 'no'])
+const TRI_STATE_VALUES = new Set(['yes', 'no', 'unspecified'])
+const AUDIT_VALUES = new Set(['none', 'may', 'required', 'unspecified'])
 
 function filesUnder(directory, extension) {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -41,6 +45,57 @@ function readJson(path) {
   return JSON.parse(readFileSync(path, 'utf8'))
 }
 
+function descriptorBlocks(text) {
+  const headings = [...text.matchAll(DESCRIPTOR_OPERATION)]
+  return new Map(headings.map((heading, index) => [
+    heading[1],
+    text.slice(heading.index + heading[0].length, headings[index + 1]?.index ?? text.length),
+  ]))
+}
+
+function fieldBody(block, labels) {
+  const escaped = labels.map((label) => label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')
+  const match = block.match(new RegExp(`^\\*\\*(?:${escaped}):\\*\\*\\s*(?<body>[\\s\\S]*?)(?=^\\*\\*[^*]+:\\*\\*|\\s*$)`, 'm'))
+  return match?.groups?.body.trim()
+}
+
+function validateDescriptor(operation, block, errors) {
+  const fields = [
+    [['Purpose'], 'purpose'],
+    [['Input', 'Input semantics'], 'input semantics'],
+    [['Preconditions'], 'preconditions'],
+    [['Success', 'Success postcondition'], 'success/postconditions'],
+    [['Known operation-specific error', 'Known operation-specific errors', 'Portable errors', 'Exhaustive portable errors'], 'portable errors and exhaustiveness'],
+    [['Normative traceability'], 'normative traceability'],
+  ]
+  for (const [labels, description] of fields) {
+    const body = fieldBody(block, labels)
+    if (body === undefined || body.length === 0) errors.push(`Agentic descriptor ${operation} lacks non-empty ${description}`)
+  }
+  const traceability = fieldBody(block, ['Normative traceability']) ?? ''
+  if (!REQUIREMENT_ID.test(traceability)) errors.push(`Agentic descriptor ${operation} has no normative requirement reference`)
+  REQUIREMENT_ID.lastIndex = 0
+}
+
+function validateRegistryRows(text, registryOperations, errors) {
+  const rows = new Map()
+  for (const match of text.matchAll(REGISTRY_ROW)) {
+    const [operation, domain, stateMutation, financialMutation, deterministic, auditProduction, approvalRelation, requirements] = match.slice(1).map((value) => value.trim())
+    rows.set(operation, { domain, stateMutation, financialMutation, deterministic, auditProduction, approvalRelation, requirements })
+    if (domain.length === 0) errors.push(`Agentic registry operation has no domain: ${operation}`)
+    if (!STATE_MUTATION_VALUES.has(stateMutation)) errors.push(`Agentic registry operation ${operation} has invalid State mutation value: ${stateMutation}`)
+    if (!TRI_STATE_VALUES.has(financialMutation)) errors.push(`Agentic registry operation ${operation} has invalid Financial-state mutation value: ${financialMutation}`)
+    if (!TRI_STATE_VALUES.has(deterministic)) errors.push(`Agentic registry operation ${operation} has invalid Determinism value: ${deterministic}`)
+    if (!AUDIT_VALUES.has(auditProduction)) errors.push(`Agentic registry operation ${operation} has invalid Audit production value: ${auditProduction}`)
+    if (approvalRelation.length === 0) errors.push(`Agentic registry operation has no Approval relation: ${operation}`)
+    if (!REQUIREMENT_ID.test(requirements)) errors.push(`Agentic registry operation has no requirement reference: ${operation}`)
+    REQUIREMENT_ID.lastIndex = 0
+  }
+  for (const operation of registryOperations) {
+    if (!rows.has(operation)) errors.push(`Agentic registry row has unsupported structure: ${operation}`)
+  }
+}
+
 export function validateAgenticConsistency(repositoryRoot = process.cwd()) {
   const root = resolve(repositoryRoot)
   const errors = []
@@ -56,12 +111,16 @@ export function validateAgenticConsistency(repositoryRoot = process.cwd()) {
   const operationsText = readFileSync(operationsPath, 'utf8')
   const registryOperations = unique(matches(operationsText, REGISTRY_OPERATION), 'Agentic registry operation', errors)
   const descriptorOperations = unique(matches(operationsText, DESCRIPTOR_OPERATION), 'Agentic descriptor operation', errors)
+  const descriptors = descriptorBlocks(operationsText)
+
+  validateRegistryRows(operationsText, registryOperations, errors)
 
   for (const operation of registryOperations) {
     if (!descriptorOperations.has(operation)) errors.push(`Agentic registry operation lacks a descriptor: ${operation}`)
   }
   for (const operation of descriptorOperations) {
     if (!registryOperations.has(operation)) errors.push(`Agentic descriptor is absent from the registry: ${operation}`)
+    validateDescriptor(operation, descriptors.get(operation) ?? '', errors)
   }
   for (const requirement of new Set(matches(agenticText, REQUIREMENT_ID))) {
     if (!requirementIds.has(requirement)) errors.push(`Agentic Contract references unknown requirement: ${requirement}`)
@@ -98,12 +157,17 @@ function isDirectExecution() {
   return process.argv[1] !== undefined && import.meta.url === pathToFileURL(resolve(process.argv[1])).href
 }
 
-if (isDirectExecution()) {
+export function runAgenticCli(repositoryRoot = process.cwd(), output = console) {
   try {
-    const result = validateAgenticConsistency()
-    console.log(`Agentic consistency passed: ${result.operationCount} canonical operations, ${result.requirementReferenceCount} requirement references, ${result.portableErrorReferenceCount} portable errors.`)
+    const result = validateAgenticConsistency(repositoryRoot)
+    output.log(`Agentic consistency passed: ${result.operationCount} canonical operations, ${result.requirementReferenceCount} requirement references, ${result.portableErrorReferenceCount} portable errors.`)
+    return 0
   } catch (error) {
-    console.error(error instanceof Error ? error.message : String(error))
-    process.exitCode = 1
+    output.error(error instanceof Error ? error.message : String(error))
+    return 1
   }
+}
+
+if (isDirectExecution()) {
+  process.exitCode = runAgenticCli()
 }

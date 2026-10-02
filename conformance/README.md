@@ -29,9 +29,12 @@ and reporting.
   reporting, and claim guidance.
 
 The current manifest contains 1,790 vectors. Repository verification checks
-their schemas, identifiers, requirement references, specification topics,
-operation catalog, and Agentic alignment. These checks do not execute financial
-behavior and do not establish that any implementation passes the vectors.
+their schemas, identifiers, declared portable error references, paired controls,
+requirement references, specification topics, operation catalog, and Agentic
+alignment. Supplementary historical controls are checked as a separate metadata
+namespace but are not manifest-discovered vectors. These checks do not execute
+financial behavior and do not establish that any implementation passes the
+vectors.
 
 Traceability currently records 440 requirements: 356 with portable vector
 coverage, one partial external-fact authoring requirement, and 83 not directly

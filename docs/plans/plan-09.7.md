@@ -191,8 +191,9 @@ evolution; the Approval labels remain conformance-local.
 | D4 | APPROVAL-FACT-004 and WORKFLOW-GUARD-007: owned containers and documented immutable numeric support, rejecting mutable/unsupported classes and subclasses before retention. Concrete Approval uses INVALID_DECISION, composition uses INVALID_CHAIN in evidence category 4, and Workflow definitions use INVALID_DEFINITION before later Workflow errors. Conventions document the TypeScript/Python/Java value profiles and exact number interpretation. Previously accepted AtomicInteger/custom subclass inputs are deliberately rejected; supported exact immutable values remain supported. These are native API compatibility corrections, not a new universal serializer or a new Money limit. |
 | D5 | Missing/malformed required quorum eligibility and outcome evidence uses INVALID_CHAIN in composition evidence category 4. An empty valid eligibility list supplies explicit negative evidence; no vote is inferred. Malformed condition declarations use INVALID_DECISION; valid declarations with unavailable facts use CONDITION_UNRESOLVED. ENTITY-MUTABILITY-008 uses INVALID_MUTATION for malformed declarations and preserves IMMUTABLE for a valid protecting rule. Primary Audit errors survive evolution failure observation. Condition shape/error and mutability mapping are explicit corrective additions; quorum/Audit categories retain their prior domain meaning. |
 
-The complete fixture optionality, value profiles, selector syntax, and success
-envelopes are in [conformance conventions](../../conformance/conventions.md#core-097-accepted-correction-fixtures).
+The current portable fixture optionality, selector syntax, and success envelopes
+are in the [Approval operation contract](../../conformance/operations.md#approval-fixture-definitions);
+the historical runtime value profiles remain in conformance conventions.
 Normative additions are in their owning specs, not this decision table.
 
 ### Finding disposition, expected observations, and owners
@@ -493,7 +494,8 @@ The defective baseline was archived into an isolated `/tmp` checkout from
 new conformance/spec metadata and regression tests. Implementation and adapter
 sources were not replaced or fixed. The working tree's implementation sources
 also still match that commit. Reconstruction uses the original manifest before
-these overlays; instructions are in [developer tools](../tools/README.md#core-097-discovery-and-red-regressions).
+these overlays; the snapshot-specific reconstruction instructions were removed
+with the maintained implementations and runner.
 No working changes were reset.
 
 | Baseline configuration | Full vectors PASS / FAIL / INFRASTRUCTURE_ERROR | Direct native suite PASS / unsuccessful | Supplementary adapter cases PASS / unsuccessful |

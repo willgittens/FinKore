@@ -2,7 +2,7 @@
 
 ## Status
 
-**Transition and Milestones 4–5 implemented — audit follow-up milestones 6–8 pending; unreleased.**
+**Transition and Milestones 4–6 implemented — audit follow-up milestones 7–8 pending; unreleased.**
 
 Updated on 2026-10-02. This replaces the previous 0.9.8 corrective implementation
 plan. Transition milestones 1–3 are implemented: FinKore is
@@ -326,31 +326,62 @@ artifact checks, not implementation execution or a 0.9.8 release declaration.
 
 ## Milestone 6 — Harden maintenance validation and regression tests
 
-- [ ] Validate every `expected.error.code` against actual portable error
+### Milestone 6 implementation — 2026-10-02
+
+The conformance validator now resolves every expected portable error through
+the consolidated specification error catalog. It also treats manifest vectors
+and `boundary097-cases.json` as the two explicit identifier namespaces for
+paired controls while continuing to exclude the supplementary historical cases
+from manifest discovery, vector counts, schema conformance, and execution.
+
+Agentic checking now enforces the documented descriptor minimum and registry
+effect vocabularies. Traceability checking derives domain and modality from the
+owning specification requirements, verifies every inventory column at both the
+domain and total levels, constrains coverage classifications, and validates
+vector evidence for both `COVERED` and `PARTIAL` rows. Documentation checking
+now rejects unknown CoreDoc requirement prefixes, absent requirement IDs,
+invalid ranges, and nonexistent local Markdown fragments.
+
+- [x] Validate every `expected.error.code` against actual portable error
       declarations, not merely a naming pattern or any incidental mention.
       Preserve owning-domain and intentionally non-exhaustive error semantics.
-- [ ] Validate `pairedControl` references against explicitly supported manifest
+- [x] Validate `pairedControl` references against explicitly supported manifest
       and supplementary namespaces. Supplementary historical controls remain
       historical evidence, not executed or manifest-listed conformance cases.
-- [ ] Validate required Agentic descriptor content and allowed effect values,
+- [x] Validate required Agentic descriptor content and allowed effect values,
       supporting the existing Markdown field variants without demanding a new
       registry format, server, runner, or executable financial model.
-- [ ] Check per-domain and overall traceability totals, permitted classifications,
+- [x] Check per-domain and overall traceability totals, permitted classifications,
       modality consistency, and vector references in PARTIAL evidence as well as
       COVERED rows. Keep human rationales where evidence is not a vector list.
-- [ ] Reject unknown CoreDoc requirement prefixes and validate referenced IDs
+- [x] Reject unknown CoreDoc requirement prefixes and validate referenced IDs
       against definitions. Preserve valid CoreDoc rule IDs and range notation.
-- [ ] Check local Markdown fragments in addition to file existence, or narrow
+- [x] Check local Markdown fragments in addition to file existence, or narrow
       documented checker guarantees explicitly if fragment validation is deferred.
-- [ ] Add permanent positive and negative tool tests for A5–A7, including CLI
-      failure exit status and valid controls. The current 11 tests do not cover
-      traceability and documentation checker behavior.
-- [ ] Re-run adversarial copies restoring each reproduced omission; require
+- [x] Add permanent positive and negative tool tests for A5–A7, including CLI
+      failure exit status and valid controls. The audited baseline's 11 tests did
+      not cover traceability and documentation checker behavior.
+- [x] Re-run adversarial copies restoring each reproduced omission; require
       the relevant regression to fail for the intended reason. Tool crashes and
       infrastructure failures are not evidence of correct validation.
 
 **Completion:** the documented automated guarantees have regression coverage,
 and each reproduced metadata defect is rejected without executing finance.
+
+Implemented on 2026-10-02. The permanent suite now contains 22 tool tests. Its
+temporary-copy adversarial cases restore every A5–A7 omission: undeclared errors,
+dangling paired controls, incomplete descriptors, invalid effect values, false
+inventory totals and modalities, unsupported classifications, invalid PARTIAL
+evidence, unknown CoreDoc prefixes or IDs, and missing Markdown fragments. Each
+case returns a failure result with its intended diagnostic; valid controls pass.
+The artifact inventory remains 440 requirements, 1,790 vectors, 35 conformance
+operation labels, and 20 canonical Agentic operations. This milestone changes
+maintenance validation only, not CoreDoc, normative financial requirements,
+portable errors, stable identifiers, or operation semantics. A clean locked
+install and the complete local verification suite pass on Node 24.15.0; the
+separate offline dependency audit reports zero known vulnerabilities. These are
+artifact and maintenance-tool checks, not financial implementation execution or
+a 0.9.8 release declaration.
 
 ## Milestone 7 — Synchronize current documentation and governance
 

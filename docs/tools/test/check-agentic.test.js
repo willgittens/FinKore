@@ -5,9 +5,9 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import test from 'node:test'
-import { validateAgenticConsistency } from '../check-agentic.js'
+import { runAgenticCli, validateAgenticConsistency } from '../check-agentic.js'
 
-function fixture({ registry = true, descriptor = true, vectorOperation = 'finkore.example.run', errorCode = 'FINKORE_EXAMPLE_INVALID' } = {}) {
+function fixture({ registry = true, descriptor = true, descriptorContent = true, stateMutation = 'no', vectorOperation = 'finkore.example.run', errorCode = 'FINKORE_EXAMPLE_INVALID' } = {}) {
   const root = mkdtempSync(join(tmpdir(), 'finkore-agentic-'))
   mkdirSync(join(root, 'spec/example'), { recursive: true })
   mkdirSync(join(root, 'agentic'))
@@ -15,10 +15,14 @@ function fixture({ registry = true, descriptor = true, vectorOperation = 'finkor
   writeFileSync(join(root, 'spec/example/behavior.md'), `**EXAMPLE-BEHAVIOR-001** — Required behavior.\n\`${errorCode}\`\n`)
   writeFileSync(join(root, 'agentic/operations.md'), [
     '# Operations',
-    registry ? '| `finkore.example.run` | Example |' : '',
+    registry ? `| \`finkore.example.run\` | Example | \`${stateMutation}\` | \`no\` | \`yes\` | \`none\` | none | \`EXAMPLE-BEHAVIOR-001\` |` : '',
     descriptor ? '## `finkore.example.run`' : '',
-    '**EXAMPLE-BEHAVIOR-001**',
-    `\`${errorCode}\``,
+    descriptor && descriptorContent ? '**Purpose:** Run the example.' : '',
+    descriptor && descriptorContent ? '**Input:** One example value.' : '',
+    descriptor && descriptorContent ? '**Preconditions:** The value is valid.' : '',
+    descriptor && descriptorContent ? '**Success:** Returns the example result.' : '',
+    descriptor && descriptorContent ? `**Known operation-specific error:** \`${errorCode}\`; this list is not exhaustive.` : '',
+    descriptor && descriptorContent ? '**Normative traceability:** `EXAMPLE-BEHAVIOR-001`.' : '',
   ].join('\n'))
   writeFileSync(join(root, 'conformance/manifest.json'), JSON.stringify({
     suites: [{ id: 'example', vectorFiles: ['./example/vectors.json'] }],
@@ -43,4 +47,17 @@ test('rejects Agentic portable errors absent from the specification', () => {
   const root = fixture()
   writeFileSync(join(root, 'agentic/errors.md'), '`FINKORE_EXAMPLE_INVENTED`')
   assert.throws(() => validateAgenticConsistency(root), /unknown portable error/)
+})
+
+test('rejects incomplete descriptors and invalid registry effect values', () => {
+  assert.throws(() => validateAgenticConsistency(fixture({ descriptorContent: false })), /lacks non-empty purpose/)
+  assert.throws(() => validateAgenticConsistency(fixture({ stateMutation: 'banana' })), /invalid State mutation value: banana/)
+})
+
+test('Agentic CLI exits unsuccessfully for an invalid descriptor', () => {
+  const root = fixture({ descriptorContent: false })
+  const messages = []
+  const status = runAgenticCli(root, { log: (message) => messages.push(message), error: (message) => messages.push(message) })
+  assert.equal(status, 1)
+  assert.match(messages.join('\n'), /lacks non-empty purpose/)
 })
