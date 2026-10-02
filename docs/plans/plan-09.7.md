@@ -425,7 +425,7 @@ represent native omission.
 
 #### Complete exploratory accounting
 
-[explore-boundaries.js](../tools/explore-boundaries.js) reconstructs the original
+The historical `docs/tools/explore-boundaries.js` tool reconstructs the original
 matrix on the old manifest: 3,861 cases across 33 operations, exactly 478
 status/code differences or exceptions. Comparing complete normalized results
 finds 664 leads in total. The expanded matrix adds 5,980 cases across the same
@@ -436,7 +436,7 @@ Both runs execute TypeScript, CPython 3.12, CPython 3.13, and Java with independ
 JSON-round-tripped requests, preserved explicit context, and input snapshots.
 No input mutation was observed. This finite sample is not exhaustive.
 
-[classify-boundaries.js](../tools/classify-boundaries.js) accounts for every
+The historical `docs/tools/classify-boundaries.js` tool accounts for every
 lead by deterministic case ID and fails on an unclassified family. The reasons
 below are contract-based; implementation agreement is not an oracle. Repeated
 variants and operations within a family are duplicate exposures of its stated

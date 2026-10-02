@@ -19,9 +19,8 @@ evidence that the same behavior can be realized idiomatically.
    [Glossary](../spec/glossary.md).
 3. Read the relevant domain specification under `spec/money/`,
    `spec/workflow/`, `spec/audit/`, `spec/approvals/`, or `spec/entities/`.
-4. Read [Conformance Conventions](../conformance/conventions.md),
-   [Traceability](../conformance/traceability.md), and the
-   [Adapter Onboarding Guide](conformance-adapter-onboarding.md).
+4. Read [Conformance Conventions](../conformance/conventions.md) and
+   [Traceability](../conformance/traceability.md).
 5. Read [Agentic Operations](../agentic/operations.md) when implementing a
    canonical `finkore.*` operation.
 6. Use [Developer Tools](tools/README.md) for local toolchains and verification.
@@ -118,9 +117,9 @@ unambiguous instants where the relevant specification requires timestamps.
 ## Conformance Workflow
 
 Use [conformance/manifest.json](../conformance/manifest.json) as the only vector
-discovery entry point. Run the language implementation through an adapter that
-implements the normalized conformance contract described in
-[Conformance Adapter Onboarding](conformance-adapter-onboarding.md).
+discovery entry point. Consumers provide their own tooling to execute the
+language implementation and compare its normalized observations with the
+published acceptance cases.
 
 Recommended implementation sequence:
 

@@ -200,7 +200,8 @@ The [specification](./spec/README.md) is the source of truth.
 
 Implementations may feel natural in their language, but no package independently defines what FinKore means.
 
-A domain-neutral [Conformance Runner](./runner/README.md) checks each implementation against the same observable outcomes.
+Consumers use their own domain-neutral conformance tooling to check an
+implementation against the same observable outcomes.
 
 This makes financial behavior portable across languages and more resilient to changes in frameworks, services, and architecture.
 
@@ -317,7 +318,7 @@ Start with the part that matches your question:
 - **Understand the principles:** read the [FinKore CoreDoc](./docs/coreDoc/core-doc.md).
 - **Review precise behavior:** explore the [FinKore Specification](./spec/README.md).
 - **Inspect executable examples:** browse the [conformance vectors](./conformance/README.md).
-- **Explore an implementation:** see the [TypeScript](./implementations/typescript/core/README.md), [Python](./implementations/python/core/README.md), or [Java](./implementations/java/core/README.md) reference implementation.
+- **Build an implementation:** start with the [language-neutral implementation guide](./docs/implementation-guide.md).
 - **Check coverage and known gaps:** review [Conformance Traceability](./conformance/traceability.md).
 
 To run the complete release verification from a clean checkout:
@@ -408,7 +409,6 @@ See the [release notes](./docs/releases/README.md) for the concise history and t
 
 - [Specification conventions](./spec/conventions.md) — normative language, compatibility, identifiers, portable values, and errors.
 - [Language-neutral implementation guide](./docs/implementation-guide.md) — implementation order, boundaries, value semantics, and gap handling.
-- [Conformance adapter onboarding](./docs/conformance-adapter-onboarding.md) — adapter integration, normalization, reporting, and verification.
 - [Licensing](./LICENSING.md) — community licensing, third-party notices, and commercial-use guidance.
 
 ---

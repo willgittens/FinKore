@@ -45,6 +45,11 @@
           "minLength": 1,
           "description": "Non-normative review label; requirements remain the normative mapping."
         },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Non-normative rationale for retaining or classifying the acceptance case."
+        },
         "pairedControl": {
           "type": "string",
           "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$",

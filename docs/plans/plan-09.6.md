@@ -279,12 +279,12 @@ not weaken expectations or describe this milestone as release verification.
 
 ### Milestone 2 boundary inventory and results
 
-The permanent native suites are
-[TypeScript](../../implementations/typescript/core/test/integration/construction-evaluation-regressions.test.ts),
-[Python](../../implementations/python/core/tests/test_construction_evaluation_regressions.py), and
-[Java](../../implementations/java/core/src/test/java/org/finkore/ConstructionEvaluationRegressionTest.java).
-They call public cores directly. The
-[TypeScript adapter test](../../implementations/typescript/adapters/conformance/test/construction-evaluation-regressions.test.ts)
+The permanent native suites were at the historical TypeScript path
+`implementations/typescript/core/test/integration/construction-evaluation-regressions.test.ts`,
+Python path `implementations/python/core/tests/test_construction_evaluation_regressions.py`, and
+Java path `implementations/java/core/src/test/java/org/finkore/ConstructionEvaluationRegressionTest.java`.
+They called public cores directly. The historical TypeScript adapter test at
+`implementations/typescript/adapters/conformance/test/construction-evaluation-regressions.test.ts`
 and real runner executions on all runtimes exercise representation translation
 separately. Every new JSON file is in the normal manifest; native tests are in
 normal Vitest, unittest, Java entry-point, and Maven test discovery. Nothing is

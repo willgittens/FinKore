@@ -303,9 +303,9 @@ The existing manifest-listed `readiness-regressions.json` files now include
 tests execute those cases directly against owning cores, independently of
 adapter dispatch, and add non-JSON inputs and actual operation sequences:
 
-- [TypeScript boundary regressions](../../implementations/typescript/core/test/integration/boundary-regressions.test.ts).
-- [Python boundary regressions](../../implementations/python/core/tests/test_boundary_regressions.py), on CPython 3.12 and 3.13.
-- [Java boundary regressions](../../implementations/java/core/src/test/java/org/finkore/BoundaryRegressionTest.java), registered in the Java test tool and Maven coverage suite.
+- TypeScript boundary regressions at the historical path `implementations/typescript/core/test/integration/boundary-regressions.test.ts`.
+- Python boundary regressions at the historical path `implementations/python/core/tests/test_boundary_regressions.py`, on CPython 3.12 and 3.13.
+- Java boundary regressions at the historical path `implementations/java/core/src/test/java/org/finkore/BoundaryRegressionTest.java`, registered in the Java test tool and Maven coverage suite.
 
 The following prefixes identify permanent vector or native test families;
 native Python names refer to methods in `BoundaryRegressions`. Every finding

@@ -131,8 +131,8 @@ The initial suites are grouped by specification behavior:
 
 See [conventions.md](conventions.md) for the vector format and runner contract.
 See [traceability.md](traceability.md) for the current requirement coverage, known specification gaps, mutation design, and readiness assessment.
-See the [Conformance Adapter Onboarding Guide](../docs/conformance-adapter-onboarding.md)
-for integration steps.
+See the [language-neutral implementation guide](../docs/implementation-guide.md)
+for consumer-owned implementation and verification guidance.
 
 ## Conformance Claim Model
 

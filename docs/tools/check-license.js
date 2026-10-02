@@ -69,20 +69,9 @@ if (!licenseText.startsWith('Mozilla Public License Version 2.0\n')) {
   errors.push('LICENSE must contain the official MPL-2.0 text')
 }
 
-for (const path of [
-  'package.json',
-  'runner/package.json',
-  'implementations/typescript/core/package.json',
-  'implementations/typescript/adapters/conformance/package.json',
-]) {
-  checkPackage(path)
-}
+checkPackage('package.json')
 
 checkLockPackage('package-lock.json', '')
-checkLockPackage('package-lock.json', 'runner')
-checkLockPackage('package-lock.json', 'implementations/typescript/core')
-checkLockPackage('package-lock.json', 'implementations/typescript/adapters/conformance')
-checkLockPackage('runner/package-lock.json', '')
 
 for (const path of repositoryFiles().filter((file) => /\.(?:ts|js)$/.test(file))) {
   if (path.includes('/dist/')) {

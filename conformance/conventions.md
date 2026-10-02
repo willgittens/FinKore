@@ -28,6 +28,8 @@ Each manifest-listed JSON file is an object containing `finkoreVectorFile` and a
 - `expected`: the normalized observation.
 - `tags`: one or more of `positive`, `negative`, `boundary`, `invariant`, `regression`, and `mutation-sensitive`.
 - `guardsAgainst`: optional informational list of plausible defect names.
+- `reviewFinding`, `pairedControl`, and `reason`: optional non-normative review
+  metadata. These fields do not alter the required financial observation.
 
 Unknown vector members MAY be ignored. They MUST NOT alter the meaning of defined members.
 

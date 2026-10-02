@@ -2,6 +2,15 @@
 
 ## Status
 
+The [Core 0.9.8 transition plan](plan-09.8.md) replaces the previous corrective
+implementation plan with a language-independent project scope and removal of
+all maintained financial implementations and the Conformance Runner. That
+transition is not yet complete. The implementation-release and runner milestones
+and gates below are superseded planning material pending revision under 0.9.8;
+they are not requirements to retain or publish language packages or a runner.
+Unresolved specification questions remain blockers
+for stable promotion.
+
 The [Core 0.9.7 corrective prerequisite](plan-09.7.md) is complete. D1–D11
 have selected contracts, permanent regressions and implemented corrections.
 Final combined verification passes all 1,775 vectors on TypeScript, Python
@@ -40,10 +49,11 @@ it does not mean that FinKore implements every accounting domain.
   imports, and bounded evolution with required Audit evidence.
 - Canonical Agentic operation contracts explicitly promoted before the 0.9
   freeze.
-- Language-independent conformance vectors and a domain-neutral runner contract.
+- Language-independent conformance vectors, schemas, and interpretation conventions.
 
 ## Explicit 1.0 exclusions
 
+- Maintained financial implementations, a Conformance Runner, and a runner adapter API.
 - Double-entry ledger and journal posting.
 - Accounting periods and closing policy.
 - Reconciliation, payments, settlement, tax, FX sourcing, and jurisdictional
@@ -63,7 +73,7 @@ Promote the reviewed 0.9 candidate without adding new behavior.
 ### Tasks
 
 - [ ] Confirm that every 0.9 release blocker is resolved, including every
-      finding and release gate in the [0.9.7 corrective plan](plan-09.7.md),
+      specification question and applicable gate in the [0.9.8 transition plan](plan-09.8.md),
       while preserving all earlier corrective releases' protections.
 - [ ] Change CoreDoc status and version to FinKore Core 1.0.
 - [ ] Change specification status from experimental or release candidate to

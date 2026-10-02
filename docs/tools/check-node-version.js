@@ -10,12 +10,7 @@ import { resolve } from 'node:path'
 
 const repositoryRoot = process.cwd()
 const supportedEngine = '>=24.11.0 <25'
-const packageFiles = [
-  'package.json',
-  'runner/package.json',
-  'implementations/typescript/core/package.json',
-  'implementations/typescript/adapters/conformance/package.json',
-]
+const packageFiles = ['package.json']
 
 const [major, minor, patch] = process.versions.node.split('.').map(Number)
 if (major !== 24 || minor < 11 || [major, minor, patch].some((part) => !Number.isInteger(part))) {
