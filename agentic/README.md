@@ -2,7 +2,13 @@
 
 ## Status
 
-**Documentation contract for FinKore Core 0.9 release candidate**
+**Documentation contract for FinKore Core 1.0 stable.**
+
+The stable registry contains 20 canonical operations with the accepted
+candidate's identifiers and observable contracts preserved. Compatibility is
+governed by the [specification policy](../spec/conventions.md#compatibility-policy).
+The 15 other manifest operation labels remain conformance-local; publication
+of their vectors does not promote them to Agentic capabilities.
 
 > Agent-ready by contract, not by convention.
 
@@ -64,7 +70,7 @@ expected-state/revision conflict preconditions. Approval composition and
 lifecycle fixtures, Workflow import, and Entity import remain conformance-local
 until stable public operation contracts exist.
 
-For Core 0.9 release candidate, effect values use the dimensions defined in
+For Core 1.0, effect values use the dimensions defined in
 [Effects](effects.md). Idempotency is explicitly unspecified and is not a
 metadata dimension. Autonomous-execution policy belongs to the consuming
 application unless a concrete FinKore rule says otherwise. Accounting finality

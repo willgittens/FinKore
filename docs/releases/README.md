@@ -17,7 +17,9 @@ portable errors, canonical operation contracts, or serialization rules. CoreDoc
 rule-evolution metadata is preserved. No consumer behavior migration is required.
 Aligned the conformance guidance and manifest association with Core 1.0; all
 1,790 vectors, their expected observations, and format versions remain unchanged.
-Agentic alignment and final release publication remain pending.
+Aligned the Agentic Contract with Core 1.0, preserving all 20 canonical operation
+IDs and contracts; clarified effect-value and Audit redaction boundary wording.
+Final release publication remains pending.
 
 Retired SPEC-FREEZE-001, SPEC-FREEZE-002, SPEC-FREEZE-003, and SPEC-FREEZE-004
 from the active specification; their temporary Core 0.9 release-candidate

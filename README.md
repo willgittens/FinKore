@@ -136,12 +136,12 @@ See [Developer Tools](./docs/tools/README.md) for individual commands.
 
 ## Status and evidence
 
-CoreDoc, the specification, and conformance artifacts now identify the stable
-1.0 normative baseline, with the accepted candidate's financial behavior and
-acceptance cases preserved. Agentic artifacts still carry their candidate labels
-pending final alignment; stable release publication remains pending. Known limitations and gaps are
-recorded in the specification, [traceability](./conformance/traceability.md), and Agentic
-contract. [Release notes](./docs/releases/README.md) summarize published history;
+CoreDoc, the specification, conformance artifacts, and Agentic Contract identify
+the FinKore Core 1.0 stable baseline, with the accepted candidate's financial
+behavior, acceptance cases, and canonical operation contracts preserved. Final
+release publication remains pending. Known limitations and gaps are recorded in
+the specification, [traceability](./conformance/traceability.md), and Agentic
+Contract. [Release notes](./docs/releases/README.md) summarize published history;
 detailed development and implementation history remains in Git.
 
 Passing repository-maintenance checks proves that the published artifacts are

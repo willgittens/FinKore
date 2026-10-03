@@ -12,7 +12,7 @@ preconditions, postconditions, portable errors, effects, and requirement
 references. Each is used by manifest-listed conformance vectors. No
 Approval operation label,
 Workflow import/create label, Entity import label, Money serialization label, or
-Audit redaction label is promoted as a canonical Agentic operation in Core 0.9 release candidate.
+Audit redaction label is promoted as a canonical Agentic operation in Core 1.0.
 
 The conformance-local `audit.redact` fixture follows AUDIT-REDACTION-008:
 `policy.id` is optional; supplied values must be nonempty strings or policy
@@ -54,11 +54,11 @@ It preserves nonempty history and existing error/failure observations.
 
 `entity.import` remains conformance-local. It
 observes import identity mapping, business revision history, and conflict-version
-preconditions through fixture-shaped inputs, but Core 0.9 release candidate does not define a
+preconditions through fixture-shaped inputs, but Core 1.0 does not define a
 public migration/import operation contract, identity registry, persistence
 schema, or source-system authority model.
 
-The registry intentionally does not include idempotency metadata for Core 0.9 release candidate.
+The registry intentionally does not include idempotency metadata for Core 1.0.
 Transport retry policy, idempotency keys, and autonomous-execution policy belong
 to the consuming application unless a concrete FinKore rule says otherwise.
 Accounting finality remains unspecified while ledger posting and financial
@@ -95,7 +95,7 @@ in [traceability](../conformance/traceability.md).
 
 `Unspecified` is deliberate. A generic Workflow may not be attached to a
 Financial Entity, an Entity may carry non-financial or composing-domain facts,
-and a guard may declare dependence on external facts. Core 0.9 release candidate includes
+and a guard may declare dependence on external facts. Core 1.0 includes
 correction, reversal, void, and supersession observations, but no operation is
 labeled irreversible because Core still does not define accounting finality,
 ledger posting, or transport idempotency.
@@ -326,7 +326,7 @@ results. Native value representations do not extend the portable JSON contract.
 
 **Known operation-specific errors:** `FINKORE_AUDIT_INVALID_EVENT`,
 `FINKORE_AUDIT_ACTOR_INVALID`, and `FINKORE_AUDIT_DUPLICATE_EVENT`. This
-Stage 1 operation does not perform redaction.
+operation does not perform redaction.
 
 **Error precedence:** Validate supplied history first, then the candidate's
 non-actor representation, supplied actor, duplicate event identity, and finally
@@ -350,8 +350,10 @@ replacement payload is intentionally not interpreted by the Agentic layer.
 **Preconditions:** None that permit replacement; committed logical Audit history
 is append-only.
 
-**Success postcondition:** None. Core 0.9 release candidate defines no successful replacement of
-committed Audit Events outside future redaction policy semantics.
+**Success postcondition:** None. Core 1.0 defines no successful replacement of
+committed Audit Events through this operation. Policy-authorized redacted
+representations follow [Audit Redaction](../spec/audit/redaction.md) and preserve
+logical history under `AUDIT-APPEND-001`.
 
 **Failure postcondition:** The supplied logical history remains unchanged.
 
@@ -369,8 +371,10 @@ identifier is not interpreted as permission to erase committed logical history.
 **Preconditions:** None that permit removal; committed logical Audit history is
 append-only.
 
-**Success postcondition:** None. Core 0.9 release candidate defines no successful removal of
-committed Audit Events outside future redaction policy semantics.
+**Success postcondition:** None. Core 1.0 defines no successful removal of
+committed Audit Events through this operation. Policy-authorized redacted
+representations follow [Audit Redaction](../spec/audit/redaction.md) and preserve
+logical history under `AUDIT-APPEND-001`.
 
 **Failure postcondition:** The supplied logical history remains unchanged.
 

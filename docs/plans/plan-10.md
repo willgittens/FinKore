@@ -18,10 +18,10 @@ promotion milestones, now numbered 5–9. This plan is temporary working materia
 and must itself be removed from the final 1.0 tree. Completed plans will not be
 relocated to another archive directory or retained as release dependencies.
 
-Milestones 1–6 are complete; milestones 7–9 remain uncompleted. CoreDoc, the
-specification, and conformance artifacts identify the stable 1.0 baseline;
-Agentic and publication gates remain pending. This document is non-normative
-and does not publish a release. In this filename, `10` means version 1.0,
+Milestones 1–7 are complete; milestones 8–9 remain uncompleted. CoreDoc, the
+specification, conformance artifacts, and Agentic Contract identify the stable
+1.0 baseline; final publication gates remain pending. This document is
+non-normative and does not publish a release. In this filename, `10` means version 1.0,
 not version 0.10.
 
 ## Objective
@@ -338,22 +338,39 @@ execution product.
 
 ### Tasks
 
-- [ ] Confirm every promoted `finkore.*` operation ID is stable and unique.
-- [ ] Verify purpose, inputs, outputs, preconditions, postconditions, effects,
+- [x] Confirm every promoted `finkore.*` operation ID is stable and unique.
+- [x] Verify purpose, inputs, outputs, preconditions, postconditions, effects,
       portable errors, and requirement references for each promoted operation.
-- [ ] Confirm every promoted operation is covered by manifest-listed vectors.
-- [ ] Keep unreviewed fixture operation labels explicitly conformance-local.
-- [ ] Confirm Agentic metadata does not redefine financial behavior or create an
+- [x] Confirm every promoted operation is covered by manifest-listed vectors.
+- [x] Keep unreviewed fixture operation labels explicitly conformance-local.
+- [x] Confirm Agentic metadata does not redefine financial behavior or create an
       agent-specific bypass.
-- [ ] Preserve the boundary between Discoverable, Understandable, Governable,
+- [x] Preserve the boundary between Discoverable, Understandable, Governable,
       and consumer-owned Executable integrations.
-- [ ] Keep transport, authorization, retry, idempotency, MCP, and autonomous
+- [x] Keep transport, authorization, retry, idempotency, MCP, and autonomous
       execution policy outside Core unless already specified.
 
 ### Completion criteria
 
 - The operation registry is internally consistent and traceable.
 - Agentic readiness claims require no maintained implementation or runtime.
+
+Completed 2026-10-03. The Agentic Contract identifies the stable Core 1.0
+baseline with all 20 canonical operation IDs, registry effect values, and
+observable contracts preserved. All operation descriptors have manifest-listed
+vectors; all 52 linked requirement lists and ranges resolve to their owning
+specification documents. The 15 conformance-local labels remain outside the
+canonical registry. Clarified the effects prose to match its existing value
+table and the Audit rejection descriptors to distinguish their rejection from
+the existing policy-authorized redacted representations. No specification,
+portable error, vector, operation ID, or executable surface changed.
+
+`npm ci --no-audit` and `npm run verify` passed on Node 24.15.0, including all
+28 maintenance-tool tests and Agentic consistency checks for 20 operations,
+75 requirement references, and 24 portable errors. The publication checker
+reports no Agentic, specification, conformance, or CoreDoc diagnostics. Final
+publication remains pending; no implementation execution or fresh dependency
+advisory review is claimed.
 
 ## Milestone 8 — Documentation and release
 
