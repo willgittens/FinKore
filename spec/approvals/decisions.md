@@ -80,6 +80,16 @@ references. A composing domain MAY use any mechanism that preserves the
 observable guarantee that the Decision can be associated with the relevant
 subject state or facts used when it was made.
 
+That freedom does not permit association to be discarded at a storage,
+transport, import, history-reuse, evaluation, withdrawal, or supersession
+boundary. When an individual Decision representation does not encode the
+approval context and subject identity, the enclosing history must be immutably
+scoped to exactly one approval context and subject. Relabeling that history for
+a different context or subject cannot make its Decisions relevant there. Equal
+Requirement identifiers and equal subject facts are not proof that two
+contexts or subjects are the same. Core 1.0 does not otherwise prescribe how a
+consumer represents or persists this enclosing scope.
+
 ## Example
 
 Absence of subject association violates **APPROVAL-DECISION-002** at record
@@ -121,6 +131,8 @@ For example, a manager approves an invoice for `9,000 EUR`. If its amount change
 ## Invalid Examples
 
 - Treating a decision as effective for materially changed subject facts solely because its Approval Requirement identifier still matches.
+- Reusing a Decision history under another approval context or subject because
+  its Requirement identifiers and recorded facts happen to match.
 - A `PENDING` decision.
 - Editing a rejection into an approval without preserving the rejection.
 

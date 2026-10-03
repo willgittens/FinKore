@@ -119,6 +119,25 @@ function collectConformanceOperations() {
   return operations
 }
 
+function checkCaseApplicabilityReferences(vectors) {
+  const file = resolve(root, 'conformance/consumer-guide.md')
+  const text = readFileSync(file, 'utf8')
+  const section = text.match(/## Case applicability\n(?<body>[\s\S]*?)(?=\n## )/)?.groups?.body
+  if (section === undefined) {
+    errors.push('conformance/consumer-guide.md contains no Case applicability section')
+    return
+  }
+  const references = new Set()
+  for (const line of section.split('\n')) {
+    const id = line.match(/^\| `([a-z][a-z0-9]*(?:[.-][a-z0-9]+)+-\d{3})` \|/)?.[1]
+    if (id === undefined) continue
+    if (references.has(id)) errors.push(`duplicate case-applicability vector ${id}`)
+    references.add(id)
+    if (!vectors.has(id)) errors.push(`case applicability references unknown vector ${id}`)
+  }
+  if (references.size === 0) errors.push('Case applicability contains no vector references')
+}
+
 function collectTraceabilityRows() {
   const text = readFileSync(resolve(root, 'conformance/traceability.md'), 'utf8')
   const mapping = text.match(/## Requirement mapping\n(?<body>[\s\S]*?)(?=\n## )/)?.groups?.body
@@ -236,6 +255,8 @@ export function validateTraceability(repositoryRoot = process.cwd()) {
   const { vectors, requirements: vectorRequirements, operations: vectorOperations } = collectVectors()
   const conformanceOperations = collectConformanceOperations()
   const { rows, text: traceabilityText } = collectTraceabilityRows()
+
+  checkCaseApplicabilityReferences(vectors)
 
   for (const id of specificationRequirements.keys()) {
     if (!rows.has(id)) errors.push(`specification requirement ${id} is missing from traceability`)

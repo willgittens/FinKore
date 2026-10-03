@@ -117,6 +117,31 @@ exceptions are infrastructure failures, not substitutes for expected portable
 errors. Each case must run with isolated deterministic state; explicit vector
 context replaces wall clocks, locale, network data, and uncontrolled randomness.
 
+## Case applicability
+
+Applicability follows the owning requirement's normative modality; it is not a
+runtime outcome. Before selecting cases, a claim must declare each implemented
+optional choice and each justified exception to a `SHOULD` or `SHOULD NOT`,
+including the affected requirement, rationale, and implementation scope. A case
+excluded by one of those declarations is listed separately with its vector ID
+and reason. It is not executed, counted as `PASS`, relabeled `UNSUPPORTED`, or
+removed by an undisclosed filter. A failure after selection remains a failure.
+
+Mandatory behavior cannot be excluded by an optional-feature declaration or a
+recommendation exception. Optional acceptance also cannot weaken the mandatory
+meaning of accepted values. The following table is the complete conditional
+case inventory for format `0.1`; all other manifest-listed cases are applicable
+when their suite and operation are in the claim's declared scope.
+
+| Vector ID | Applicability condition | Mandatory behavior retained independently |
+| --- | --- | --- |
+| `money.deserialize.unknown-members-001` | Applies only when the implementation declares that its Money deserializer accepts unknown members under `MONEY-SERIALIZATION-006`. A strict parser excludes it before execution; FinKore defines no portable error for that strict-parser choice. | Accepted extensions must preserve Money amount and currency under `MONEY-SERIALIZATION-007` and `MONEY-SERIALIZATION-008`; known-member cases remain applicable. |
+| `entity.validation.complete-result-001` | Its `findings` observation applies when the claim declares no justified exception to `ENTITY-ERROR-002` and `ENTITY-VALIDATION-005`. An exception must identify both the diagnostic detail omitted and its rationale. | `entity.validation.failure-atomicity-required-001` independently requires the portable validation error and unchanged complete Entity. |
+
+The table is claim guidance, not vector syntax. It does not change
+`finkoreConformance` or `finkoreVectorFile` format `0.1`, add a runner protocol,
+or authorize private applicability members in vector files.
+
 ## Requirement mapping
 
 Every vector lists one or more stable requirement IDs. The
@@ -138,9 +163,26 @@ A claim requires actual execution against a named implementation. Record:
 - the `finkoreConformance` format version;
 - the implementation and consumer-owned evaluation tool;
 - every included suite and any filters;
+- optional-feature declarations, justified recommendation exceptions, and the
+  vector IDs excluded by those declarations;
 - PASS, FAIL, UNSUPPORTED, and INFRASTRUCTURE_ERROR totals;
 - individual vector IDs and normalized outcomes sufficient to reproduce
   failures.
 
 Schema validation proves only that the published artifacts are structurally
 consistent. It must never be reported as executed financial conformance.
+
+For Approval histories whose individual records do not encode approval context
+and subject identity, the claim must also identify consumer-owned evidence that
+the enclosing history is immutably scoped to one context and subject through
+record, import, reuse, evaluation, withdrawal, and supersession. Portable JSON
+cases can compare recorded facts and Requirement associations, but cannot prove
+that byte-identical history was not relabeled outside the fixture boundary.
+
+For failure atomicity at a language-native boundary, compare complete retained
+state before and after the rejected call and then reuse the retained value in a
+subsequent valid operation where practical. If a malformed native input cannot
+be represented as a valid committed JSON observation, retain it without
+normalizing or manufacturing a valid state and record native evidence that the
+call did not mutate it. Such evidence supplements rather than replaces every
+portable `expected.observations` comparison.

@@ -94,6 +94,18 @@ Pure value operations should produce equivalent immutable observations.
 State-changing domains must expose the specified success and failure
 postconditions.
 
+Compare complete state for meaningful rejected mutations, including identifiers,
+State, data, version bindings, revisions, and every related history named by the
+operation. At native malformed-input boundaries where a valid committed JSON
+observation would be invented, verify that the original object graph is
+unchanged and, where practical, reusable after the failure.
+
+Approval histories need an immutable association with their owning approval
+context and subject even when individual Core 1.0 records do not encode that
+scope. Preserve the association through storage, import, evaluation, record,
+withdrawal, and supersession; matching Requirement IDs or subject facts do not
+authorize relabeling a history for another context or subject.
+
 ## Deterministic context
 
 Conformance-observable behavior must not depend on wall-clock time, host

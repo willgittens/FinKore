@@ -86,6 +86,14 @@ instead describes an Actor failing a valid eligibility rule. Valid historical
 Decisions can be ineffective for the currently evaluated Requirement without
 being structurally invalid.
 
+The same invalid-Decision category applies when a consumer detects that a
+Decision history is being imported, evaluated, or used for lifecycle mutation
+outside the approval context or subject to which that history was immutably
+bound. The failed operation leaves both Decision and lifecycle histories
+unchanged under **APPROVAL-ERROR-005** and **APPROVAL-ERROR-006**. This
+clarification adds no portable context-reference member and requires no global
+subject registry.
+
 This explains the existing invalid-Decision category and missing-subject/
 missing-eligibility conformance outcomes; it adds no portable error. It does
 not impose a new total ordering of unrelated concrete Approval errors. The

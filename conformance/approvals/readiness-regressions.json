@@ -2380,7 +2380,8 @@
           "code": "FINKORE_APPROVAL_INVALID_DECISION"
         },
         "observations": {
-          "history": []
+          "history": [],
+          "lifecycle": []
         }
       },
       "tags": [
@@ -2506,7 +2507,8 @@
               },
               "decidedAt": "2026-09-01T12:00:00Z"
             }
-          ]
+          ],
+          "lifecycle": []
         }
       },
       "tags": [

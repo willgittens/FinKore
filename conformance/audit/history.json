@@ -1022,8 +1022,7 @@
       "id": "audit.change.before-after-001",
       "spec": "audit/changes",
       "requirements": [
-        "AUDIT-CHANGE-001",
-        "AUDIT-CHANGE-002"
+        "AUDIT-CHANGE-001"
       ],
       "description": "Preserves the direction of a recorded prior-to-resulting change.",
       "operation": "finkore.audit.append",

@@ -1380,6 +1380,19 @@
         "status": "error",
         "error": {
           "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "displayNumber": "INV-2026-0001",
+              "revision": "1",
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
         }
       },
       "tags": [
@@ -1444,6 +1457,19 @@
         "status": "error",
         "error": {
           "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "displayNumber": "INV-2026-0001",
+              "revision": "1",
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
         }
       },
       "tags": [
@@ -1512,6 +1538,19 @@
         "status": "error",
         "error": {
           "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "displayNumber": "INV-2026-0001",
+              "revision": "1",
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
         }
       },
       "tags": [
@@ -1671,6 +1710,21 @@
         "status": "error",
         "error": {
           "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
         }
       },
       "tags": [
@@ -1741,6 +1795,21 @@
         "status": "error",
         "error": {
           "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
         }
       },
       "tags": [
@@ -1815,6 +1884,21 @@
         "status": "error",
         "error": {
           "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
         }
       },
       "tags": [
@@ -1890,6 +1974,21 @@
         "status": "error",
         "error": {
           "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
         }
       },
       "tags": [
@@ -1965,6 +2064,21 @@
         "status": "error",
         "error": {
           "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
         }
       },
       "tags": [
@@ -2040,6 +2154,21 @@
         "status": "error",
         "error": {
           "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
         }
       },
       "tags": [
@@ -2115,6 +2244,21 @@
         "status": "error",
         "error": {
           "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
         }
       },
       "tags": [
@@ -2190,6 +2334,21 @@
         "status": "error",
         "error": {
           "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
         }
       },
       "tags": [
@@ -2267,6 +2426,21 @@
         "status": "error",
         "error": {
           "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
         }
       },
       "tags": [
@@ -2344,6 +2518,21 @@
         "status": "error",
         "error": {
           "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
         }
       },
       "tags": [
@@ -2421,6 +2610,21 @@
         "status": "error",
         "error": {
           "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
         }
       },
       "tags": [
@@ -2498,6 +2702,21 @@
         "status": "error",
         "error": {
           "code": "FINKORE_ENTITY_INVALID_MUTATION"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
         }
       },
       "tags": [

@@ -132,8 +132,12 @@ A complete Core claim must identify:
 - the consumer-owned evaluation tool and binding;
 - filters, if any, and full result counts.
 
-A complete claim passes every applicable manifest-listed vector. `UNSUPPORTED`
-is not passing. A domain-scoped claim may cover only named domain suites, but it
+A complete claim passes every applicable manifest-listed vector. Applicability
+is declared before case selection according to optional `MAY` choices and
+justified `SHOULD` exceptions in the
+[consumer guide](consumer-guide.md#case-applicability); excluded vector IDs and
+reasons remain visible and are not passing results. `UNSUPPORTED` is not
+passing. A domain-scoped claim may cover only named domain suites, but it
 must pass every applicable vector in those suites and must not be described as
 complete Core conformance. A selected-vector or selected-tag run is a useful
 development report only when its filters are disclosed.

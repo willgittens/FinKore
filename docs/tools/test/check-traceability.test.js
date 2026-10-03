@@ -30,6 +30,14 @@ function mutateTraceability(root, update) {
   writeFileSync(path, after)
 }
 
+function mutateConsumerGuide(root, update) {
+  const path = join(root, 'conformance/consumer-guide.md')
+  const before = readFileSync(path, 'utf8')
+  const after = update(before)
+  assert.notEqual(after, before)
+  writeFileSync(path, after)
+}
+
 test('accepts current traceability totals, modalities, classifications, and evidence', () => {
   const result = run(fixture())
   assert.equal(result.status, 0, result.stderr)
@@ -71,4 +79,24 @@ test('CLI rejects unsupported classifications and bad PARTIAL vector evidence', 
   const evidence = run(evidenceRoot)
   assert.equal(evidence.status, 1)
   assert.match(evidence.stderr, /WORKFLOW-GUARD-004 references unknown vector missing.vector-001/)
+})
+
+test('CLI validates case-applicability vector references and uniqueness', () => {
+  const unknownRoot = fixture()
+  mutateConsumerGuide(unknownRoot, (text) => text.replace(
+    '`money.deserialize.unknown-members-001` | Applies only',
+    '`money.deserialize.missing-case-001` | Applies only',
+  ))
+  const unknown = run(unknownRoot)
+  assert.equal(unknown.status, 1)
+  assert.match(unknown.stderr, /case applicability references unknown vector money\.deserialize\.missing-case-001/)
+
+  const duplicateRoot = fixture()
+  mutateConsumerGuide(duplicateRoot, (text) => text.replace(
+    '| `entity.validation.complete-result-001` | Its `findings` observation',
+    '| `money.deserialize.unknown-members-001` | Its `findings` observation',
+  ))
+  const duplicate = run(duplicateRoot)
+  assert.equal(duplicate.status, 1)
+  assert.match(duplicate.stderr, /duplicate case-applicability vector money\.deserialize\.unknown-members-001/)
 })

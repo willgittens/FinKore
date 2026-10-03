@@ -129,6 +129,16 @@ no lifecycle Events. Operations requiring history do not accept omission/null or
 an envelope missing its history array merely because a native convenience API
 has an empty default.
 
+These bounded history shapes do not encode an approval-context or subject
+identifier for the history as a whole. A consumer binding must therefore scope
+each history immutably to exactly one approval context and subject and retain
+that association across record, import, reuse, evaluation, withdrawal, and
+supersession. It must reject detected cross-context or cross-subject reuse with
+`FINKORE_APPROVAL_INVALID_DECISION` while preserving both arrays. Equal
+Requirement identifiers and equal facts do not establish the missing identity.
+Because two differently scoped histories can otherwise have identical JSON,
+that protection requires consumer-owned evidence in addition to portable cases.
+
 `relevantFactPaths` and condition `requiredFacts` are dot-separated object-own
 member paths. The list, when supplied, is nonempty and each path and segment is
 nonempty. Paths are case-sensitive, do not trim, do not index arrays, and have no

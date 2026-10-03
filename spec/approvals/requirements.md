@@ -34,6 +34,13 @@ The bounded conformance representation is described in
 [Conformance Conventions](../../conformance/conventions.md); it does not
 standardize every composing domain's subject or eligibility representation.
 
+The approval context in **APPROVAL-REQUIREMENT-001** is the boundary within
+which a Requirement identifier is stable. A consumer that stores or transports
+Requirements in a larger namespace must retain which approval context and
+subject own the Requirement; equal Requirement identifiers in different
+contexts do not establish identity. This is an existing association obligation,
+not a requirement for a global registry or one prescribed identifier shape.
+
 ## Example
 
 The following JSON is illustrative and non-normative; eligibility is not limited to roles and these member names are not a portable serialization.

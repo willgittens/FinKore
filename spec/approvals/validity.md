@@ -63,6 +63,14 @@ Lifecycle events are relationships over existing Approval evidence. They do not
 delete historical Decisions, create new Decisions, or define authorization
 policy.
 
+Lifecycle relationships and current-effectiveness evaluation operate within
+the approval context and subject association that owns the Decision history.
+An externally scoped history container is sufficient when individual Core 1.0
+records do not carry that scope, but the container's association must remain
+unchanged through import and reuse. A caller-supplied label cannot rebind a
+history to another context or subject. A detected mismatch is invalid Decision
+evidence and preserves both Decision and lifecycle histories.
+
 Recording another Decision preserves the committed lifecycle evidence used by
 **APPROVAL-VALIDITY-001**, including withdrawals and Decision or Requirement
 supersessions. Returning the Decision list while dropping that evidence can

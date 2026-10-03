@@ -704,6 +704,108 @@
       ]
     },
     {
+      "id": "entity.validation.failure-atomicity-required-001",
+      "spec": "entities/validation",
+      "requirements": [
+        "ENTITY-VALIDATION-002",
+        "ENTITY-VALIDATION-004",
+        "ENTITY-VALIDATION-006",
+        "ENTITY-ERROR-001"
+      ],
+      "description": "Requires the portable validation error and complete unchanged Entity independently of recommended diagnostic findings.",
+      "operation": "finkore.entity.mutate",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": [
+              "DRAFT",
+              "FINAL"
+            ],
+            "initialState": "DRAFT",
+            "terminalStates": [
+              "FINAL"
+            ],
+            "transitions": [
+              {
+                "source": "DRAFT",
+                "target": "FINAL"
+              }
+            ]
+          },
+          "mutability": {
+            "DRAFT": [
+              "amount",
+              "memo"
+            ],
+            "FINAL": [
+              "deliveryStatus"
+            ]
+          },
+          "validation": [
+            {
+              "id": "AMOUNT_POSITIVE",
+              "path": "amount",
+              "rule": "positive-money"
+            }
+          ]
+        },
+        "entity": {
+          "type": "invoice",
+          "id": "inv-42",
+          "state": "DRAFT",
+          "data": {
+            "amount": {
+              "amount": "100.00",
+              "currency": "EUR"
+            },
+            "memo": "initial",
+            "deliveryStatus": "NEW"
+          }
+        },
+        "changes": {
+          "amount": {
+            "amount": "-1.00",
+            "currency": "EUR"
+          },
+          "memo": "should-not-stick"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_ENTITY_VALIDATION_FAILED"
+        },
+        "observations": {
+          "entity": {
+            "type": "invoice",
+            "id": "inv-42",
+            "state": "DRAFT",
+            "data": {
+              "amount": {
+                "amount": "100.00",
+                "currency": "EUR"
+              },
+              "memo": "initial",
+              "deliveryStatus": "NEW"
+            }
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "recommended-diagnostics-treated-as-mandatory",
+        "mutation-before-validation",
+        "partial-multi-field-mutation"
+      ]
+    },
+    {
       "id": "entity.transition.success-identity-stable-001",
       "spec": "entities/lifecycle",
       "requirements": [
