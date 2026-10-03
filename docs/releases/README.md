@@ -9,25 +9,30 @@ artifacts, and their verification results. Those records are preserved as
 history and are not claims about the current repository's supported surface or
 current execution evidence.
 
-## Unreleased
+## FinKore Core 1.0 — 2026-10-03
 
-Promoted CoreDoc and all 47 specification documents to the stable Core 1.0
-normative baseline without changing financial behavior, requirement identities,
-portable errors, canonical operation contracts, or serialization rules. CoreDoc
-rule-evolution metadata is preserved. No consumer behavior migration is required.
-Aligned the conformance guidance and manifest association with Core 1.0; all
-1,790 vectors, their expected observations, and format versions remain unchanged.
-Aligned the Agentic Contract with Core 1.0, preserving all 20 canonical operation
-IDs and contracts; clarified effect-value and Audit redaction boundary wording.
-Final release publication remains pending.
+First stable language-neutral baseline for Money, Workflow, Audit, Approvals,
+and Financial Entities, with 436 requirements, 1,790 conformance vectors, and
+20 canonical Agentic operations. The accepted candidate's financial behavior is
+preserved; no consumer behavior migration is required. Compatibility protects
+requirement identities, portable errors, operation contracts, and normative
+serializations. Manifest and vector-file formats remain `0.1`. Implementations,
+runners, transports, ledger posting, and other deferred domains remain outside
+the release.
+
+Locked installation and local verification pass on Node 24.15.0, including
+28 maintenance-tool tests and the final publication gate. A fresh npm registry
+advisory query on 2026-10-03 reported zero vulnerabilities in the locked
+maintenance dependency graph. These checks validate repository artifacts, not
+financial execution or external implementation conformance. The stable tree
+contains no working plans; detailed development history remains in Git.
 
 Retired SPEC-FREEZE-001, SPEC-FREEZE-002, SPEC-FREEZE-003, and SPEC-FREEZE-004
 from the active specification; their temporary Core 0.9 release-candidate
 applicability has ended. Their original definitions remain in Git history and
 their identifiers remain unavailable for reuse under SPEC-REQUIREMENT-004.
 Lasting compatibility and financial obligations are unchanged; coordinated
-artifact updates follow contributor guidance. This does not declare Core 1.0
-stable or publish a release.
+artifact updates follow contributor guidance.
 
 ## FinKore Core 0.9.7 Release Candidate
 

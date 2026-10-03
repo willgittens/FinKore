@@ -43,6 +43,20 @@ Editorial changes follow SPEC-COMPATIBILITY-011. A changed observable result
 needs specification-first review and coordinated artifact updates as described
 above, even when discovered while adding a regression case.
 
+For the stable Core contract, patch releases contain compatible clarifications,
+tooling fixes, documentation corrections, and defects that do not redefine the
+contract. Minor releases add backward-compatible behavior or independent
+domains. Incompatible changes to existing requirements, errors, operations, or
+serializations require a new major Core release. Manifest and vector syntax
+versions remain separate from Core versions.
+
+New financial behavior follows specification-first review, portable acceptance
+cases, traceability, and Agentic metadata where applicable. Review positive,
+negative, boundary, failure-atomicity, and mutation-sensitive cases alongside
+local artifact verification. Ledger posting, Payments, Tax, Reconciliation, and
+other deferred domains need an explicitly accepted scope before development;
+they do not enter stable maintenance work implicitly.
+
 ## Working plans and published guidance
 
 Working plans are temporary development material. Preserve their reviewed state
@@ -60,6 +74,29 @@ of the last working plan, repeat it on the actual final tree before tagging.
 Passing development verification does not waive this gate or the separate
 release dependency audit. See [publication checks](docs/tools/README.md#stable-publication-gate)
 for status conventions, permitted historical metadata, and Learn review.
+
+## Stable release procedure
+
+Finish the normative, conformance, Agentic, and documentation reviews before
+tagging. Preserve stable identifiers and CoreDoc evolution metadata, retain
+explicit coverage limitations, and resolve any blocking specification gap.
+Review the proposed tracked file list for credentials, generated reports, local
+toolchains, copied development material, and obsolete implementation or package
+instructions. Check the Learn index's rendered layout and keyboard navigation.
+
+After removing temporary plans, run a clean locked dependency install,
+`npm run verify`, the separate network-backed `npm run dependencies:audit`, and
+`npm run release:check` on the actual final tree. Record the advisory-query date
+and dependency scope with the concise release summary in
+`docs/releases/README.md`. Failed gates block tagging; artifact checks do not
+establish consumer implementation conformance.
+
+Commit the reviewed release tree, then create an annotated `core-<Core version>`
+tag on that commit (`core-1.0` for the first stable baseline). Confirm the tag
+targets the verified commit and that the working tree is clean. Distribute only
+tracked release content, excluding local checkout state. Remote tag publication
+is a separate maintainer action; a local tag does not imply a remote release.
+Core publication does not publish implementation packages or a runner.
 
 ## Licensing of Contributions
 

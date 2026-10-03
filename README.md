@@ -138,8 +138,8 @@ See [Developer Tools](./docs/tools/README.md) for individual commands.
 
 CoreDoc, the specification, conformance artifacts, and Agentic Contract identify
 the FinKore Core 1.0 stable baseline, with the accepted candidate's financial
-behavior, acceptance cases, and canonical operation contracts preserved. Final
-release publication remains pending. Known limitations and gaps are recorded in
+behavior, acceptance cases, and canonical operation contracts preserved.
+Known limitations and gaps are recorded in
 the specification, [traceability](./conformance/traceability.md), and Agentic
 Contract. [Release notes](./docs/releases/README.md) summarize published history;
 detailed development and implementation history remains in Git.
