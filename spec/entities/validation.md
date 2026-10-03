@@ -58,6 +58,15 @@ define a total ordering for otherwise unspecified competing errors.
 
 A successful operation must leave the Financial Entity valid for its resulting State. A failed operation must leave the Financial Entity unchanged.
 
+For an Entity lifecycle Transition, the complete proposed result includes the
+target State even when the data is unchanged. Rules declared for that target
+State are evaluated only after the referenced Workflow accepts the Transition
+Request and its Guards. A supported target-State rule that rejects the proposed
+Entity uses **ENTITY-VALIDATION-004** and leaves the original observation
+unchanged under **ENTITY-VALIDATION-006**. This ordering does not replace an
+earlier primary Workflow error and does not define the outcome for malformed
+Entity guard-context containers.
+
 The applicable rules in **ENTITY-VALIDATION-001** also govern Entity
 observations supplied as the source, related Entity, or successor of an
 [evolution operation](evolution.md). Preserving source facts does not waive
@@ -102,10 +111,13 @@ constraint or a standardized validation language.
 **ENTITY-VALIDATION-009** distinguishes declaration failure from a supported
 predicate rejecting data. The bounded fixture supports only
 `positive-money` and `money-not-greater-than`, with nonempty string
-`id`/`path` and the latter's nonempty `otherPath`. Omitted validation and an
-empty list remain valid. No general validation DSL or universal positive-Money
-business rule is introduced, and no total priority over unrelated domain
-failures is specified.
+`id`/`path` and the latter's nonempty `otherPath`. A fixture rule may also name a
+nonempty list of distinct declared States in `states`; omission applies the rule
+in every State. Null, empty, duplicate, non-string, or undeclared State selectors
+are malformed declarations under **ENTITY-VALIDATION-009**. Omitted validation
+and an empty list remain valid. No general validation DSL or universal
+positive-Money business rule is introduced, and no total priority over
+unrelated domain failures is specified.
 
 ## Open Questions
 

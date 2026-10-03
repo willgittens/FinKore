@@ -72,6 +72,11 @@ relation. Entity mutations and evolution may invalidate approval-relevant
 subject facts or revisions, but Approval history remains governed by the
 Approval specifications.
 
+An Entity transition passes only explicitly supplied object-valued facts to its
+referenced Workflow guards. Those facts are request context rather than a State
+effect and are preserved on rejection. After Workflow acceptance, target-State
+Entity validation occurs before the State change becomes observable.
+
 ## Irreversibility and idempotency
 
 Mutation does not establish irreversibility. Core defines Entity

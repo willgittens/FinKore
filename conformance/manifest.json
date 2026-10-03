@@ -13,6 +13,7 @@
       "vectorFiles": [
         "./money/representation.json",
         "./money/arithmetic.json",
+        "./money/rounded-division.json",
         "./money/comparison.json",
         "./money/rounding.json",
         "./money/rates.json",
@@ -69,6 +70,7 @@
         "./entities/readiness-regressions.json",
         "./entities/construction-evaluation-regressions.json",
         "./entities/evidence-regressions.json",
+        "./entities/guard-validation.json",
         "./entities/discovery-regressions.json",
         "./entities/malformed-boundary-regressions.json",
         "./entities/application-values.json"

@@ -1,6 +1,6 @@
 # Financial contract remediation plan
 
-**Status:** Active working plan; Milestones 0, 1, and 2 are complete and Milestone 3 has not started.
+**Status:** Active working plan; Milestones 0, 1, 2, and 3 are complete and Milestone 4 has not started.
 **Prepared:** 2026-10-03.
 **Baseline:** FinKore Core 1.0 stable, reviewed at commit `6534c76`.
 **Proposed releases:** Compatible work in Core 1.1; incompatible behavior and
@@ -626,22 +626,23 @@ proposed Entity must also satisfy the rules applicable to its target State.
 The exact context binding remains a specification decision, not an implementation
 choice established by this plan.
 
-- [ ] **F3.1** Determine which context semantics follow from existing Workflow
+- [x] **F3.1** Determine which context semantics follow from existing Workflow
   requirements and whether any new required inputs need 2.0 classification.
   Preserve successful existing unguarded requests and existing error mappings.
-- [ ] **F3.2** Describe fact supply, omission versus null, guard interpretation,
+- [x] **F3.2** Describe fact supply, omission versus null, guard interpretation,
   and failure effects in the owning specification and both operation catalogs.
   Reuse the declared Workflow guard meaning; do not create a second evaluator.
-- [ ] **F3.3** Add passing, failing, missing-fact, and malformed-context cases
-  under the accepted semantics. Pair Workflow and Entity cases with equivalent
-  guards and facts to detect composition bypass.
-- [ ] **F3.4** Observe unchanged Entity identity, type, data, State, and retained
+- [x] **F3.3** Add passing, failing, and missing-fact cases under the accepted
+  semantics, and retain malformed supplied context as explicitly undefined
+  pending the accepted 2.0 boundary. Pair Workflow and Entity cases with
+  equivalent guards and facts to detect composition bypass.
+- [x] **F3.4** Observe unchanged Entity identity, type, data, State, and retained
   Workflow binding on rejection, plus unchanged guard facts where applicable.
-- [ ] **F3.5** Describe target-State validation and its applicable
+- [x] **F3.5** Describe target-State validation and its applicable
   `FINKORE_ENTITY_VALIDATION_FAILED` outcome while preserving primary Workflow
   and other domain errors. Include native consumer guidance where a bounded
   fixture cannot express the state-dependent validator.
-- [ ] **F3.6** Align Agentic preconditions, postconditions, errors, effects, and
+- [x] **F3.6** Align Agentic preconditions, postconditions, errors, effects, and
   relevant safety metadata. Approval observations remain declared inputs rather
   than authorization bypasses or proof of unspecified underlying checks.
 
@@ -883,29 +884,85 @@ domain-declared policy identifying scale and mode when the quotient cannot be
 represented exactly. An exactly representable quotient remains exact under
 MONEY-ARITHMETIC-007. Currency minor-unit scale is never an implicit policy.
 
-- [ ] **F8.1** Reconcile the arithmetic, rounding, Agentic, and fixture descriptions
+- [x] **F8.1** Reconcile the arithmetic, rounding, Agentic, and fixture descriptions
   of policy supply. Identify genuinely undefined policy precedence or malformed
   policy handling; specify and classify new behavior before creating expectations.
-- [ ] **F8.2** Describe policy omission, supplied null, complete policy, and
+- [x] **F8.2** Describe policy omission, supplied null, complete policy, and
   domain-declared policy without changing existing no-policy calls. Clarify
   simultaneous policy sources only if the accepted boundary supports them.
-- [ ] **F8.3** Add recurring positive and negative quotient cases. Include mode
+- [x] **F8.3** Add recurring positive and negative quotient cases. Include mode
   distinctions such as negative `DOWN` versus `FLOOR`, multiple explicit scales,
   missing policy, invalid policy, and division by zero under defined priorities.
-- [ ] **F8.4** Preserve existing exact cases, including very long terminating
+- [x] **F8.4** Preserve existing exact cases, including very long terminating
   quotients. Add an exact quotient finer than a supplied policy's scale to guard
   against silently introducing rounded division of exactly representable results.
-- [ ] **F8.5** Keep midpoint tests in the explicit rounding operation. For example,
+- [x] **F8.5** Keep midpoint tests in the explicit rounding operation. For example,
   `1 / 8` is exactly `0.125`; expecting division itself to return `0.13` would
   contradict the current exactness rule. Nonterminating division does not supply
   an exact finite midpoint tie at a decimal rounding boundary.
-- [ ] **F8.6** Verify unchanged operands, currency preservation, output scale
+- [x] **F8.6** Verify unchanged operands, currency preservation, output scale
   interpretation, portable errors, and matching Agentic effects. If a desired
   rounded-exact division feature is proposed, classify it separately for 2.0.
 
 **Completion:** The operation describes a faithful explicit policy boundary,
 successful nonterminating calculations have acceptance cases, and exact
 quotients retain their defined value without defaults or precision caps.
+
+### M3 implementation record
+
+Milestone 3 completed the compatible F3 and F8 operation work. CoreDoc remains
+aligned and unchanged. The specification adds the three identifiers reserved
+in M1: **ENTITY-LIFECYCLE-008**, **MONEY-ARITHMETIC-010**, and
+**MONEY-ARITHMETIC-011**. It adds no portable error, canonical operation,
+runner or adapter boundary, implementation package, or conformance-format
+member. Existing calls retain their prior meaning when the new optional inputs
+are omitted.
+
+For F3, `finkore.entity.transition` now accepts optional object-valued request
+facts and passes that exact object to the referenced Workflow guard evaluator.
+Omission supplies no facts; Entity data, Approval evidence, authorization,
+time, and ambient state do not manufacture facts, and supplied facts do not
+create a guard on an unguarded transition. Guard failure retains
+`FINKORE_WORKFLOW_GUARD_REJECTED`. After Workflow acceptance, the proposed
+target-State Entity is checked by the applicable Entity validators and failure
+retains `FINKORE_ENTITY_VALIDATION_FAILED`. Both failures preserve the complete
+Entity, binding, and supplied facts. Seven new Entity vectors cover pass,
+rejection, missing facts, unguarded no-effect behavior, target validation, and
+guard-before-validation priority. Non-object supplied facts remain undefined by
+the current contract and intentionally have no expectation; M1 reserved that
+malformed-context rule, error, and operation supersession work for Core 2.0.
+
+For F8, `finkore.money.divide` now accepts one optional complete request policy
+with non-negative integer `scale` and a supported `mode`. A valid policy rounds
+only a nonterminating quotient; omission preserves the existing
+rounding-required behavior, and an exactly representable quotient remains exact
+even when finer than the supplied scale. Explicit null, incomplete or malformed
+policies, negative or non-integer scales, and unsupported modes use
+`FINKORE_MONEY_INVALID_ROUNDING` for a non-zero scalar. Zero is checked first
+and retains `FINKORE_MONEY_DIVISION_BY_ZERO`. Ten new Money vectors cover two
+positive recurring quotients, negative `DOWN` versus `FLOOR`, invalid policy
+forms, zero-error priority, exact-result preservation, unchanged operands,
+currency, and explicit result scale. The generic boundary defines no precedence
+between simultaneous request and domain policy sources and performs no ambient
+or currency-minor-unit lookup.
+
+Traceability now inventories 439 requirements and 1,808 vectors: 355 are
+`COVERED`, five are `PARTIAL`, and 79 are `NOT DIRECTLY TESTABLE`. The new
+atomic rejection observations also make **WORKFLOW-TRANSITION-007** directly
+covered. Agentic operation, discovery, effects, and safety metadata; conformance
+operation and consumer guidance; implementation guidance; the manifest; and
+the domain-neutral traceability test all match the published artifacts.
+
+Final M3 verification used Node `v24.15.0` and npm `11.12.1`. The first
+sandboxed `npm ci --no-audit` attempt could not resolve `registry.npmjs.org`;
+the approved network retry installed the five locked maintenance packages with
+the advisory lookup disabled. The first `npm run verify` identified one stale
+Money inventory value in the traceability validator's negative test; after that
+fixture was updated, verification passed: six suites, 44 files, 1,808 vectors,
+35 conformance operation labels, 20 canonical operations, eight developer
+tools, 29 tool tests, documentation links, traceability, licenses,
+architecture, and whitespace checks. No dependency advisory review or stable
+publication gate was requested or run, and M4 publication work has not started.
 
 ## Shared artifact and review tasks
 

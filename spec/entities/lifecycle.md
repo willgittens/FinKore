@@ -17,10 +17,35 @@ This document defines how a Financial Entity progresses through declared domain 
 - **ENTITY-LIFECYCLE-005** — A composing domain MUST define the domain consequences of each state.
 - **ENTITY-LIFECYCLE-006** — A Financial Entity MUST have exactly one current lifecycle State.
 - **ENTITY-LIFECYCLE-007** — In the bounded Entity representation, an existing observation's missing, null, empty, or non-string current State MUST use `FINKORE_WORKFLOW_INVALID_INSTANCE`. A nonempty string identifying an undeclared State MUST use `FINKORE_WORKFLOW_INVALID_STATE`. Consuming Entity operations MUST preserve Workflow validation priority under **WORKFLOW-ERROR-007**, including definition validation before instance validation, and MUST preserve existing observations on failure.
+- **ENTITY-LIFECYCLE-008** — When a bounded Entity Transition Request supplies object-valued guard facts, the Entity transition MUST pass that exact value to the referenced Workflow Transition Guard evaluation. Omission MUST represent no supplied facts. The operation MUST NOT derive guard facts implicitly from Entity data, Approval history, authorization services, wall-clock state, or other ambient state. Supplied facts MUST NOT create a Guard where the referenced Workflow declares none, and failed guard evaluation MUST preserve the complete Entity and supplied facts.
 
 ## Invariants
 
 A Financial Entity must have exactly one current lifecycle State. A Rejected Transition must leave both current State and entity data unchanged.
+
+## Guard facts and resulting-State validation
+
+**ENTITY-LIFECYCLE-008** composes the existing Workflow guard contract rather
+than defining a second evaluator. An omitted fact selected by a declared Guard
+causes the existing `FINKORE_WORKFLOW_GUARD_REJECTED` result. A valid supplied
+object is compared under the referenced Workflow's rules and is request context,
+not Entity data to persist. A supplied object has no effect on an unguarded
+Transition.
+
+The current Core contract defines the valid supplied shape as an object and
+distinguishes omission from supplied values. It does not yet define the portable
+outcome for explicit null, arrays, scalars, or another non-object facts value at
+the Entity boundary. Such a value must not be repaired, treated as omission, or
+assigned an invented existing Workflow error by a conformance claim.
+
+After the referenced Workflow has accepted the Transition Request, including
+its guard evaluation, the complete proposed Entity at the target State remains
+subject to [Entity Validation](validation.md). A target-State validation failure
+uses `FINKORE_ENTITY_VALIDATION_FAILED` and leaves identity, type, data, State,
+Workflow binding, and supplied facts unchanged. An earlier primary Workflow
+failure is preserved under **ENTITY-ERROR-004**; target-State validation does not
+replace invalid-State, terminal-State, invalid-Transition, or guard-rejection
+results.
 
 ## Examples
 

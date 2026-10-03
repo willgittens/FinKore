@@ -1,0 +1,178 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "money.divide.rounded-third-half-up-001",
+      "spec": "money/arithmetic",
+      "requirements": ["MONEY-ARITHMETIC-005", "MONEY-ARITHMETIC-008", "MONEY-ARITHMETIC-009", "MONEY-ARITHMETIC-010", "MONEY-ROUNDING-001", "MONEY-ROUNDING-003", "MONEY-ROUNDING-004", "MONEY-ROUNDING-008"],
+      "description": "Rounds a nonterminating one-third quotient to the explicit scale with HALF_UP.",
+      "operation": "finkore.money.divide",
+      "input": {
+        "value": {"amount": "1", "currency": "EUR"},
+        "scalar": "3",
+        "rounding": {"scale": 2, "mode": "HALF_UP"}
+      },
+      "expected": {
+        "status": "success",
+        "value": {"amount": "0.33", "currency": "EUR"},
+        "observations": {"operand": {"amount": "1", "currency": "EUR"}}
+      },
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["division-rounding-policy-ignored", "implicit-currency-scale"]
+    },
+    {
+      "id": "money.divide.rounded-two-thirds-half-even-001",
+      "spec": "money/arithmetic",
+      "requirements": ["MONEY-ARITHMETIC-005", "MONEY-ARITHMETIC-008", "MONEY-ARITHMETIC-009", "MONEY-ARITHMETIC-010", "MONEY-ROUNDING-001", "MONEY-ROUNDING-003", "MONEY-ROUNDING-004", "MONEY-ROUNDING-008"],
+      "description": "Rounds a nonterminating two-thirds quotient to four places with HALF_EVEN.",
+      "operation": "finkore.money.divide",
+      "input": {
+        "value": {"amount": "2", "currency": "CHF"},
+        "scalar": "3",
+        "rounding": {"scale": 4, "mode": "HALF_EVEN"}
+      },
+      "expected": {
+        "status": "success",
+        "value": {"amount": "0.6667", "currency": "CHF"},
+        "observations": {"operand": {"amount": "2", "currency": "CHF"}}
+      },
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["division-rounding-mode-substitution", "division-target-scale-substitution"]
+    },
+    {
+      "id": "money.divide.negative-down-001",
+      "spec": "money/arithmetic",
+      "requirements": ["MONEY-ARITHMETIC-005", "MONEY-ARITHMETIC-010", "MONEY-ROUNDING-003", "MONEY-ROUNDING-008"],
+      "description": "Rounds a negative nonterminating quotient toward zero with DOWN.",
+      "operation": "finkore.money.divide",
+      "input": {
+        "value": {"amount": "-1", "currency": "USD"},
+        "scalar": "3",
+        "rounding": {"scale": 2, "mode": "DOWN"}
+      },
+      "expected": {
+        "status": "success",
+        "value": {"amount": "-0.33", "currency": "USD"},
+        "observations": {"operand": {"amount": "-1", "currency": "USD"}}
+      },
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "pairedControl": "money.divide.negative-floor-001",
+      "guardsAgainst": ["negative-down-changed-to-floor"]
+    },
+    {
+      "id": "money.divide.negative-floor-001",
+      "spec": "money/arithmetic",
+      "requirements": ["MONEY-ARITHMETIC-005", "MONEY-ARITHMETIC-010", "MONEY-ROUNDING-003", "MONEY-ROUNDING-008"],
+      "description": "Rounds a negative nonterminating quotient toward negative infinity with FLOOR.",
+      "operation": "finkore.money.divide",
+      "input": {
+        "value": {"amount": "-1", "currency": "USD"},
+        "scalar": "3",
+        "rounding": {"scale": 2, "mode": "FLOOR"}
+      },
+      "expected": {
+        "status": "success",
+        "value": {"amount": "-0.34", "currency": "USD"},
+        "observations": {"operand": {"amount": "-1", "currency": "USD"}}
+      },
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "pairedControl": "money.divide.negative-down-001",
+      "guardsAgainst": ["negative-floor-changed-to-down"]
+    },
+    {
+      "id": "money.divide.rounding-null-001",
+      "spec": "money/arithmetic",
+      "requirements": ["MONEY-ARITHMETIC-010", "MONEY-ARITHMETIC-011", "MONEY-ERROR-006", "MONEY-ERROR-007"],
+      "description": "Rejects explicit null as an invalid division rounding policy.",
+      "operation": "finkore.money.divide",
+      "input": {"value": {"amount": "1", "currency": "EUR"}, "scalar": "4", "rounding": null},
+      "expected": {
+        "status": "error",
+        "error": {"code": "FINKORE_MONEY_INVALID_ROUNDING"},
+        "observations": {"operand": {"amount": "1", "currency": "EUR"}}
+      },
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["null-rounding-treated-as-omission", "exact-quotient-policy-validation-skipped"]
+    },
+    {
+      "id": "money.divide.rounding-incomplete-001",
+      "spec": "money/arithmetic",
+      "requirements": ["MONEY-ARITHMETIC-010", "MONEY-ARITHMETIC-011", "MONEY-ERROR-006", "MONEY-ERROR-007", "MONEY-ROUNDING-001"],
+      "description": "Rejects a division rounding policy without a mode even for an exact quotient.",
+      "operation": "finkore.money.divide",
+      "input": {"value": {"amount": "1", "currency": "EUR"}, "scalar": "4", "rounding": {"scale": 2}},
+      "expected": {
+        "status": "error",
+        "error": {"code": "FINKORE_MONEY_INVALID_ROUNDING"},
+        "observations": {"operand": {"amount": "1", "currency": "EUR"}}
+      },
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["incomplete-rounding-policy-accepted", "exact-quotient-policy-validation-skipped"]
+    },
+    {
+      "id": "money.divide.rounding-unsupported-mode-001",
+      "spec": "money/arithmetic",
+      "requirements": ["MONEY-ARITHMETIC-010", "MONEY-ARITHMETIC-011", "MONEY-ERROR-006", "MONEY-ERROR-007", "MONEY-ROUNDING-001"],
+      "description": "Rejects an unsupported division rounding mode even for an exact quotient.",
+      "operation": "finkore.money.divide",
+      "input": {"value": {"amount": "1", "currency": "EUR"}, "scalar": "4", "rounding": {"scale": 2, "mode": "HALF_ODD"}},
+      "expected": {
+        "status": "error",
+        "error": {"code": "FINKORE_MONEY_INVALID_ROUNDING"},
+        "observations": {"operand": {"amount": "1", "currency": "EUR"}}
+      },
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["unsupported-rounding-mode-substituted", "exact-quotient-policy-validation-skipped"]
+    },
+    {
+      "id": "money.divide.rounding-negative-scale-001",
+      "spec": "money/arithmetic",
+      "requirements": ["MONEY-ARITHMETIC-010", "MONEY-ARITHMETIC-011", "MONEY-ERROR-006", "MONEY-ERROR-007", "MONEY-ROUNDING-001"],
+      "description": "Rejects a negative division rounding scale even for an exact quotient.",
+      "operation": "finkore.money.divide",
+      "input": {"value": {"amount": "1", "currency": "EUR"}, "scalar": "4", "rounding": {"scale": -1, "mode": "HALF_UP"}},
+      "expected": {
+        "status": "error",
+        "error": {"code": "FINKORE_MONEY_INVALID_ROUNDING"},
+        "observations": {"operand": {"amount": "1", "currency": "EUR"}}
+      },
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["negative-rounding-scale-accepted", "exact-quotient-policy-validation-skipped"]
+    },
+    {
+      "id": "money.divide.zero-before-invalid-rounding-001",
+      "spec": "money/arithmetic",
+      "requirements": ["MONEY-ARITHMETIC-006", "MONEY-ARITHMETIC-011", "MONEY-ERROR-004", "MONEY-ERROR-007"],
+      "description": "Reports division by zero before examining an invalid explicit rounding policy.",
+      "operation": "finkore.money.divide",
+      "input": {"value": {"amount": "1", "currency": "EUR"}, "scalar": "0", "rounding": null},
+      "expected": {
+        "status": "error",
+        "error": {"code": "FINKORE_MONEY_DIVISION_BY_ZERO"},
+        "observations": {"operand": {"amount": "1", "currency": "EUR"}}
+      },
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "pairedControl": "money.divide.rounding-null-001",
+      "guardsAgainst": ["rounding-validation-before-zero-check", "portable-error-substitution"]
+    },
+    {
+      "id": "money.divide.exact-finer-than-policy-001",
+      "spec": "money/arithmetic",
+      "requirements": ["MONEY-ARITHMETIC-005", "MONEY-ARITHMETIC-007", "MONEY-ARITHMETIC-009", "MONEY-ARITHMETIC-011"],
+      "description": "Keeps an exact finite quotient even when its scale is finer than a valid supplied policy.",
+      "operation": "finkore.money.divide",
+      "input": {
+        "value": {"amount": "1", "currency": "GBP"},
+        "scalar": "8",
+        "rounding": {"scale": 2, "mode": "HALF_UP"}
+      },
+      "expected": {
+        "status": "success",
+        "value": {"amount": "0.125", "currency": "GBP"},
+        "observations": {"operand": {"amount": "1", "currency": "GBP"}}
+      },
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["exact-quotient-rounded-by-optional-policy", "implicit-precision-reduction"]
+    }
+  ]
+}

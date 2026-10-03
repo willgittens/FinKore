@@ -70,6 +70,10 @@ When `finkore.money.round` or `finkore.money.allocate` supplies an explicit
 target `scale`, each result amount instead has exactly that many fractional
 digits. `finkore.money.applyrate` follows that rule when its explicit
 `rounding.scale` is present and uses the canonical observation otherwise.
+`finkore.money.divide` uses exactly `rounding.scale` fractional digits only when
+the valid policy reduces a nonterminating quotient; an exactly representable
+quotient remains exact and uses the canonical unscaled observation even when a
+policy was supplied.
 Requested operand post-state observations use the corresponding input amount's
 fractional digit count, so unchanged-value evidence does not require a native
 implementation to retain lexical scale. Extending with zeros or removing only
@@ -163,6 +167,17 @@ The entity validator named `positive-money` accepts an exact Money amount
 greater than zero. These fixtures let every consumer binding exercise guard/validation
 ordering and atomicity under the same deterministic predicate.
 
+An Entity validator's optional `states` member is a nonempty array of distinct,
+nonempty States declared by the Entity's Workflow. It limits that rule to the
+named current or proposed State; omission applies the rule in every State. A
+null, empty, duplicate, non-string, or undeclared selector makes the validator
+declaration invalid. Entity transition applies the same guard fixture as
+`finkore.workflow.transition`: optional object-valued `facts` are forwarded
+unchanged, omission supplies no facts, and Entity data or ambient sources are
+never substituted. Format `0.1` publishes no expected result for a supplied
+non-object Entity guard-facts container because the current Core has no accurate
+portable error for it.
+
 Audit Change fixtures reflect the production declaration in
 **AUDIT-CHANGE-009** by using `"valueType":"MONEY"` when `before` and `after`
 carry Money semantics. Without that declaration, even an object containing
@@ -229,7 +244,7 @@ and requested post-state interpretations are defined in
 | `approval.composition.evaluate` | Derive bounded composition outcome and actionable Requirement identifiers from declared groups, stages, applicability, current-effective evidence, and explicit evaluation context. |
 | `finkore.entity.create` | Create under the supplied composing-domain definition. |
 | `finkore.entity.mutate` | Apply a declared mutation under supplied mutability and validation rules. |
-| `finkore.entity.transition` | Apply a lifecycle transition under the referenced workflow. |
+| `finkore.entity.transition` | Apply a lifecycle transition under the referenced Workflow using supplied guard facts, then validate the complete target-State Entity. |
 | `finkore.entity.evolution.correct` | Record a Correction relation with required Audit evidence. |
 | `finkore.entity.evolution.reverse` | Record a Reversal relation with required Audit evidence. |
 | `finkore.entity.evolution.void` | Record a Void relation with required Audit evidence. |

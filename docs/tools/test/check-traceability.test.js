@@ -46,10 +46,10 @@ test('accepts current traceability totals, modalities, classifications, and evid
 
 test('CLI rejects incorrect per-domain totals and modality classifications', () => {
   const totalRoot = fixture()
-  mutateTraceability(totalRoot, (text) => text.replace('| Money | 74 |', '| Money | 999 |'))
+  mutateTraceability(totalRoot, (text) => text.replace('| Money | 76 |', '| Money | 999 |'))
   const total = run(totalRoot)
   assert.equal(total.status, 1)
-  assert.match(total.stderr, /inventory Money requirements total must equal 74/)
+  assert.match(total.stderr, /inventory Money requirements total must equal 76/)
 
   const modalityRoot = fixture()
   mutateTraceability(modalityRoot, (text) => text.replace(

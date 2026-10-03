@@ -76,7 +76,7 @@ in [traceability](../conformance/traceability.md).
 | `finkore.money.subtract` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ARITHMETIC-001`, `-002`, `-007`, `-009` |
 | `finkore.money.negate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ARITHMETIC-003`, `-009` |
 | `finkore.money.multiply` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ARITHMETIC-004`, `-007`, `-009` |
-| `finkore.money.divide` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ARITHMETIC-005`–`-009`, `MONEY-ROUNDING-006` |
+| `finkore.money.divide` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ARITHMETIC-005`–`-011`, `MONEY-ROUNDING-001`, `-003`, `-004`, `-006`, `-008` |
 | `finkore.money.compare` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-COMPARISON-001`–`-004`, `-006` |
 | `finkore.money.round` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-ROUNDING-001`–`-004`, `-008`, `-009` |
 | `finkore.money.applyrate` | Money | `no` | `no` | `yes` | `none` | `none` | `MONEY-RATE-001`–`-009` |
@@ -87,7 +87,7 @@ in [traceability](../conformance/traceability.md).
 | `finkore.audit.remove` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
 | `finkore.entity.create` | Entities | `yes` | `unspecified` | `yes` | `may` | `none` | `ENTITY-IDENTITY-001`, `-003`, `ENTITY-LIFECYCLE-001`, `-002`, `-006`, `ENTITY-VALIDATION-001` |
 | `finkore.entity.mutate` | Entities | `yes` | `unspecified` | `yes` | `may` | may invalidate approval-relevant facts | `ENTITY-MUTABILITY-001`, `-002`, `-004`, `-006`, `-007`, `-008`, `ENTITY-VALIDATION-002`–`-006`, `ENTITY-ERROR-001` |
-| `finkore.entity.transition` | Entities | `yes` | `unspecified` | `yes` | `may` | may be governed by composing-domain approval policy | `ENTITY-LIFECYCLE-003`, `ENTITY-IDENTITY-002`, `ENTITY-ERROR-001`, `-004` |
+| `finkore.entity.transition` | Entities | `yes` | `unspecified` | `yes` | `may` | may be governed by composing-domain approval policy supplied as guard facts | `ENTITY-LIFECYCLE-003`, `-008`, `ENTITY-IDENTITY-002`, `ENTITY-VALIDATION-001`, `-002`, `-004`, `-006`, `ENTITY-ERROR-001`, `-004`, `WORKFLOW-GUARD-001`–`-003`, `WORKFLOW-TRANSITION-004` |
 | `finkore.entity.evolution.correct` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`–`-010`, `-015`, `-022`–`-027`, `-029`–`-035`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
 | `finkore.entity.evolution.reverse` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`, `-011`–`-015`, `-022`–`-027`, `-029`–`-035`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
 | `finkore.entity.evolution.void` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-016`–`-018`, `-022`–`-027`, `-029`–`-035`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
@@ -182,23 +182,27 @@ list is not exhaustive.
 
 **Purpose:** Divide Money by a non-zero exact decimal scalar.
 
-**Input:** `value` using normative Money serialization and `scalar` as an exact
-decimal scalar accepted by the Money arithmetic specification.
+**Input:** `value` using normative Money serialization, `scalar` as an exact
+decimal scalar accepted by the Money arithmetic specification, and optional
+complete `rounding` with non-negative integer `scale` and a supported `mode`.
 
-**Preconditions:** Money and scalar inputs are valid. The scalar is not zero. If
-the quotient does not terminate exactly, an explicit rounding policy is required
-by the Money specification.
+**Preconditions:** Money and scalar inputs are valid. Zero division is rejected
+before optional policy validation. For a nonzero scalar, supplied rounding is
+complete and valid. If the quotient does not terminate exactly, an explicit
+rounding policy is required by the Money specification.
 
-**Success:** Returns Money whose exact amount is `value / scalar`, preserving the
-input currency when the quotient is exact. The input Money does not change.
+**Success:** Returns Money whose amount is the exact quotient when it has a
+finite decimal representation, even if a coarser valid policy was supplied.
+Otherwise it returns the quotient rounded to the explicit scale and mode.
+Currency is preserved and the input Money does not change.
 
-**Known operation-specific errors:** `FINKORE_MONEY_DIVISION_BY_ZERO` and
-`FINKORE_MONEY_ROUNDING_REQUIRED`. Money validation errors may also apply; this
-list is not exhaustive.
+**Known operation-specific errors:** `FINKORE_MONEY_DIVISION_BY_ZERO`,
+`FINKORE_MONEY_ROUNDING_REQUIRED`, and `FINKORE_MONEY_INVALID_ROUNDING`. Money
+validation errors may also apply; this list is not exhaustive.
 
-**Normative traceability:** [MONEY-ARITHMETIC-005 through -009](../spec/money/arithmetic.md),
-[MONEY-ROUNDING-006](../spec/money/rounding.md), and
-[MONEY-ERROR-004, -005, -007](../spec/money/errors.md).
+**Normative traceability:** [MONEY-ARITHMETIC-005 through -011](../spec/money/arithmetic.md),
+[MONEY-ROUNDING-001, -003, -004, -006, and -008](../spec/money/rounding.md), and
+[MONEY-ERROR-004 through -007](../spec/money/errors.md).
 
 ## `finkore.money.compare`
 
@@ -551,29 +555,42 @@ type, and lifecycle state with the accepted data changes.
 **Purpose:** Apply a declared Entity lifecycle transition through the referenced
 Workflow.
 
-**Input semantics:** Entity definition, existing Entity observation, and target
-State.
+**Input semantics:** Entity definition, existing Entity observation, target
+State, and optional object-valued guard `facts` passed unchanged to the
+referenced Workflow.
 For versioned lifecycles, the observation includes its original Workflow
 binding. It is never inferred from a later supplied definition.
 
-**Preconditions:** The Entity and referenced Workflow are valid, and the target
-transition is permitted by the Workflow from the current Entity state.
+**Preconditions:** The Entity and referenced Workflow are valid, the target
+transition is permitted from the current Entity State, all declared guards pass
+against the explicitly supplied facts, and the complete proposed Entity
+satisfies validation applicable to the target State. Facts are never inferred
+from Entity data, Approval history, authorization services, time, or ambient
+state. The current contract has no portable outcome for a supplied non-object
+facts container.
 
 **Success postcondition:** Returns a new Entity observation preserving identity,
 type, and data at the target State.
 The Workflow binding is also preserved under `WORKFLOW-VERSION-008`.
+Supplied facts are request context and are not persisted as Entity data.
 
-**Failure postcondition:** The original Entity observation remains unchanged.
+**Failure postcondition:** The original Entity observation remains unchanged;
+guard rejection also preserves the supplied facts.
 
 **Known operation-specific errors:** Workflow transition errors such as
-`FINKORE_WORKFLOW_INVALID_TRANSITION` are preserved as primary portable errors.
+`FINKORE_WORKFLOW_INVALID_TRANSITION` and `FINKORE_WORKFLOW_GUARD_REJECTED` are
+preserved as primary portable errors. Target-State Entity validation uses
+`FINKORE_ENTITY_VALIDATION_FAILED` only after the Workflow request succeeds.
 Missing/malformed required binding uses `FINKORE_WORKFLOW_INVALID_INSTANCE`;
 a different definition identity/version uses `FINKORE_WORKFLOW_VERSION_MISMATCH`.
 Entity identity or mutation errors may apply when the supplied Entity or
 definition is malformed.
 
-**Normative traceability:** [ENTITY-LIFECYCLE-003](../spec/entities/lifecycle.md),
-[ENTITY-IDENTITY-002](../spec/entities/identity.md), and
+**Normative traceability:** [ENTITY-LIFECYCLE-003 and -008](../spec/entities/lifecycle.md),
+[ENTITY-IDENTITY-002](../spec/entities/identity.md),
+[ENTITY-VALIDATION-001, -002, -004, and -006](../spec/entities/validation.md),
+[WORKFLOW-GUARD-001 through -003](../spec/workflow/guards.md),
+[WORKFLOW-TRANSITION-004](../spec/workflow/transitions.md), and
 [ENTITY-ERROR-001, -004](../spec/entities/errors.md).
 
 ## Shared Entity evolution obligations

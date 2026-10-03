@@ -26,6 +26,12 @@ This document governs deliberate precision reduction of monetary amounts.
 
 Rounding at explicit domain boundaries avoids unintended cumulative precision loss.
 
+When a valid explicit policy is supplied to `finkore.money.divide`, the policy
+is applied only to a quotient without an exact finite decimal representation
+under **MONEY-ARITHMETIC-010** and **MONEY-ARITHMETIC-011**. Exact finite
+quotients remain exact; deliberate rounding of such a value uses the separate
+rounding operation.
+
 ## Portable Rounding Modes
 
 For these definitions, the two **nearest candidates** are the adjacent values representable at the target scale. A **tie** occurs when the exact value is equally distant from them.
@@ -75,4 +81,3 @@ Missing and invalid rounding-policy failures are defined by **MONEY-ERROR-005** 
 ## Open Questions
 
 - Should currency metadata provide a recommended scale without making it mandatory?
-

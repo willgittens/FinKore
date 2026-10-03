@@ -40,6 +40,12 @@ An integration may add stricter access controls, but it MUST NOT reinterpret a
 rejected domain operation as successful or replace its primary portable domain
 error merely because the requester is autonomous.
 
+An agent invoking `finkore.entity.transition` must supply guard facts explicitly
+when the declared Workflow needs them. It must not manufacture them from Entity
+data, Approval history, permissions, wall-clock state, or model inference. A
+successful guard result is not authorization and does not waive target-State
+Entity validation.
+
 ## Preconditions and postconditions
 
 A precondition is a constraint that must hold before execution can succeed. It

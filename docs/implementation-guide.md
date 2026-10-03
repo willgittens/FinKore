@@ -116,6 +116,17 @@ Pass time, facts, policy, and expected state explicitly when the specification
 makes them relevant. Serialize timestamps as unambiguous instants where
 required.
 
+An Entity transition forwards explicitly supplied object-valued guard facts to
+its referenced Workflow; do not source them from Entity data, Approval history,
+authorization infrastructure, or ambient state. After Workflow acceptance,
+validate the complete Entity under rules applicable to the target State before
+committing the State change.
+
+Money division may receive one complete explicit rounding policy. Validate a
+supplied policy for every nonzero divisor, use it only for nonterminating exact
+quotients, and preserve an exactly representable quotient even when it is finer
+than the policy scale. Zero division retains its own primary error.
+
 ## Reliability
 
 Portable acceptance cases are a baseline, not exhaustive proof. Add

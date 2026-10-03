@@ -20,7 +20,7 @@ Illustrative, non-normative discovery data:
     {
       "id": "finkore.money.divide",
       "domain": "money",
-      "summary": "Divides Money by a non-zero exact decimal scalar."
+      "summary": "Divides Money by an exact decimal scalar with optional explicit rounding."
     },
     {
       "id": "finkore.money.round",

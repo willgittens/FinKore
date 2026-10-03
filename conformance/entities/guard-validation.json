@@ -1,0 +1,237 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "entity.transition.guard-facts-pass-001",
+      "spec": "entities/lifecycle",
+      "requirements": ["ENTITY-LIFECYCLE-003", "ENTITY-LIFECYCLE-008", "WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-TRANSITION-004", "WORKFLOW-TRANSITION-005", "WORKFLOW-VERSION-008"],
+      "description": "Passes explicitly supplied object facts unchanged to the referenced Workflow guard and commits the target State.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": ["DRAFT", "FINAL"],
+            "initialState": "DRAFT",
+            "terminalStates": ["FINAL"],
+            "definitionIdentity": "invoice-guard-flow",
+            "definitionVersionIdentity": "1",
+            "transitions": [{"source": "DRAFT", "target": "FINAL", "guard": {"fact": "approvalSatisfied", "equals": true}}]
+          },
+          "mutability": {"DRAFT": [], "FINAL": []},
+          "validation": []
+        },
+        "entity": {"type": "invoice", "id": "inv-guard", "state": "DRAFT", "data": {"amount": {"amount": "10", "currency": "EUR"}}, "binding": {"definitionIdentity": "invoice-guard-flow", "definitionVersionIdentity": "1"}},
+        "target": "FINAL",
+        "facts": {"approvalSatisfied": true}
+      },
+      "expected": {
+        "status": "success",
+        "value": {"type": "invoice", "id": "inv-guard", "state": "FINAL", "data": {"amount": {"amount": "10", "currency": "EUR"}}, "binding": {"definitionIdentity": "invoice-guard-flow", "definitionVersionIdentity": "1"}},
+        "observations": {"facts": {"approvalSatisfied": true}}
+      },
+      "tags": ["positive", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["entity-transition-skips-workflow-guard", "entity-facts-derived-from-entity-data"],
+      "pairedControl": "workflow.guard.pass-001"
+    },
+    {
+      "id": "entity.transition.guard-facts-reject-001",
+      "spec": "entities/lifecycle",
+      "requirements": ["ENTITY-LIFECYCLE-008", "ENTITY-ERROR-001", "ENTITY-ERROR-004", "WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-GUARD-003", "WORKFLOW-TRANSITION-004", "WORKFLOW-TRANSITION-006", "WORKFLOW-TRANSITION-007", "WORKFLOW-VERSION-008"],
+      "description": "Preserves the complete Entity and supplied facts when the referenced Workflow guard rejects them.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": ["DRAFT", "FINAL"],
+            "initialState": "DRAFT",
+            "terminalStates": ["FINAL"],
+            "definitionIdentity": "invoice-guard-flow",
+            "definitionVersionIdentity": "1",
+            "transitions": [{"source": "DRAFT", "target": "FINAL", "guard": {"fact": "approvalSatisfied", "equals": true}}]
+          },
+          "mutability": {"DRAFT": [], "FINAL": []},
+          "validation": []
+        },
+        "entity": {"type": "invoice", "id": "inv-guard", "state": "DRAFT", "data": {"amount": {"amount": "10", "currency": "EUR"}}, "binding": {"definitionIdentity": "invoice-guard-flow", "definitionVersionIdentity": "1"}},
+        "target": "FINAL",
+        "facts": {"approvalSatisfied": false}
+      },
+      "expected": {
+        "status": "error",
+        "error": {"code": "FINKORE_WORKFLOW_GUARD_REJECTED"},
+        "observations": {
+          "entity": {"type": "invoice", "id": "inv-guard", "state": "DRAFT", "data": {"amount": {"amount": "10", "currency": "EUR"}}, "binding": {"definitionIdentity": "invoice-guard-flow", "definitionVersionIdentity": "1"}},
+          "facts": {"approvalSatisfied": false}
+        }
+      },
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["entity-transition-skips-workflow-guard", "failed-entity-guard-mutates-entity", "entity-guard-error-replaced"],
+      "pairedControl": "entity.transition.guard-facts-pass-001"
+    },
+    {
+      "id": "entity.transition.guard-facts-missing-001",
+      "spec": "entities/lifecycle",
+      "requirements": ["ENTITY-LIFECYCLE-008", "ENTITY-ERROR-001", "ENTITY-ERROR-004", "WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-GUARD-003", "WORKFLOW-TRANSITION-004", "WORKFLOW-TRANSITION-006"],
+      "description": "Treats omitted Entity transition facts as no supplied facts and preserves the Entity when the selected guard fact is missing.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": ["DRAFT", "FINAL"],
+            "initialState": "DRAFT",
+            "terminalStates": ["FINAL"],
+            "transitions": [{"source": "DRAFT", "target": "FINAL", "guard": {"fact": "approvalSatisfied", "equals": true}}]
+          },
+          "mutability": {"DRAFT": [], "FINAL": []},
+          "validation": []
+        },
+        "entity": {"type": "invoice", "id": "inv-guard", "state": "DRAFT", "data": {"amount": {"amount": "10", "currency": "EUR"}}},
+        "target": "FINAL"
+      },
+      "expected": {
+        "status": "error",
+        "error": {"code": "FINKORE_WORKFLOW_GUARD_REJECTED"},
+        "observations": {"entity": {"type": "invoice", "id": "inv-guard", "state": "DRAFT", "data": {"amount": {"amount": "10", "currency": "EUR"}}}}
+      },
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["entity-guard-facts-sourced-from-entity-data", "omitted-facts-treated-as-pass"],
+      "pairedControl": "entity.transition.guard-facts-pass-001"
+    },
+    {
+      "id": "entity.transition.unguarded-facts-no-effect-001",
+      "spec": "entities/lifecycle",
+      "requirements": ["ENTITY-LIFECYCLE-003", "ENTITY-LIFECYCLE-008", "WORKFLOW-TRANSITION-005"],
+      "description": "Does not create a guard when an unguarded Entity transition receives explicit facts.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {"states": ["DRAFT", "FINAL"], "initialState": "DRAFT", "terminalStates": ["FINAL"], "transitions": [{"source": "DRAFT", "target": "FINAL"}]},
+          "mutability": {"DRAFT": [], "FINAL": []},
+          "validation": []
+        },
+        "entity": {"type": "invoice", "id": "inv-unguarded", "state": "DRAFT", "data": {"amount": {"amount": "10", "currency": "EUR"}}},
+        "target": "FINAL",
+        "facts": {"approvalSatisfied": false}
+      },
+      "expected": {
+        "status": "success",
+        "value": {"type": "invoice", "id": "inv-unguarded", "state": "FINAL", "data": {"amount": {"amount": "10", "currency": "EUR"}}},
+        "observations": {"facts": {"approvalSatisfied": false}}
+      },
+      "tags": ["positive", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["supplied-facts-create-implicit-guard"]
+    },
+    {
+      "id": "entity.transition.target-validation-pass-001",
+      "spec": "entities/validation",
+      "requirements": ["ENTITY-LIFECYCLE-003", "ENTITY-LIFECYCLE-008", "ENTITY-VALIDATION-001", "ENTITY-VALIDATION-002", "WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-TRANSITION-005", "WORKFLOW-VERSION-008"],
+      "description": "Validates and accepts the complete Entity under a rule declared for the target State after its Workflow guard passes.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": ["DRAFT", "FINAL"],
+            "initialState": "DRAFT",
+            "terminalStates": ["FINAL"],
+            "definitionIdentity": "invoice-validation-flow",
+            "definitionVersionIdentity": "1",
+            "transitions": [{"source": "DRAFT", "target": "FINAL", "guard": {"fact": "approvalSatisfied", "equals": true}}]
+          },
+          "mutability": {"DRAFT": [], "FINAL": []},
+          "validation": [{"id": "AMOUNT_POSITIVE_AT_FINAL", "path": "amount", "rule": "positive-money", "states": ["FINAL"]}]
+        },
+        "entity": {"type": "invoice", "id": "inv-target-valid", "state": "DRAFT", "data": {"amount": {"amount": "10", "currency": "EUR"}}, "binding": {"definitionIdentity": "invoice-validation-flow", "definitionVersionIdentity": "1"}},
+        "target": "FINAL",
+        "facts": {"approvalSatisfied": true}
+      },
+      "expected": {
+        "status": "success",
+        "value": {"type": "invoice", "id": "inv-target-valid", "state": "FINAL", "data": {"amount": {"amount": "10", "currency": "EUR"}}, "binding": {"definitionIdentity": "invoice-validation-flow", "definitionVersionIdentity": "1"}},
+        "observations": {"facts": {"approvalSatisfied": true}}
+      },
+      "tags": ["positive", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["target-state-validation-skipped", "target-rule-applied-to-source-state"]
+    },
+    {
+      "id": "entity.transition.target-validation-fail-001",
+      "spec": "entities/validation",
+      "requirements": ["ENTITY-LIFECYCLE-003", "ENTITY-LIFECYCLE-008", "ENTITY-VALIDATION-001", "ENTITY-VALIDATION-002", "ENTITY-VALIDATION-004", "ENTITY-VALIDATION-006", "ENTITY-ERROR-001", "WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-TRANSITION-007", "WORKFLOW-VERSION-008"],
+      "description": "Rejects an Entity that becomes invalid under a target-State rule after its Workflow guard passes and preserves Entity and facts.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": ["DRAFT", "FINAL"],
+            "initialState": "DRAFT",
+            "terminalStates": ["FINAL"],
+            "definitionIdentity": "invoice-validation-flow",
+            "definitionVersionIdentity": "1",
+            "transitions": [{"source": "DRAFT", "target": "FINAL", "guard": {"fact": "approvalSatisfied", "equals": true}}]
+          },
+          "mutability": {"DRAFT": [], "FINAL": []},
+          "validation": [{"id": "AMOUNT_POSITIVE_AT_FINAL", "path": "amount", "rule": "positive-money", "states": ["FINAL"]}]
+        },
+        "entity": {"type": "invoice", "id": "inv-target-invalid", "state": "DRAFT", "data": {"amount": {"amount": "-1", "currency": "EUR"}}, "binding": {"definitionIdentity": "invoice-validation-flow", "definitionVersionIdentity": "1"}},
+        "target": "FINAL",
+        "facts": {"approvalSatisfied": true}
+      },
+      "expected": {
+        "status": "error",
+        "error": {"code": "FINKORE_ENTITY_VALIDATION_FAILED"},
+        "observations": {
+          "entity": {"type": "invoice", "id": "inv-target-invalid", "state": "DRAFT", "data": {"amount": {"amount": "-1", "currency": "EUR"}}, "binding": {"definitionIdentity": "invoice-validation-flow", "definitionVersionIdentity": "1"}},
+          "facts": {"approvalSatisfied": true}
+        }
+      },
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["target-state-validation-skipped", "target-validation-partially-changes-state"],
+      "pairedControl": "entity.transition.target-validation-pass-001"
+    },
+    {
+      "id": "entity.transition.guard-before-target-validation-001",
+      "spec": "entities/validation",
+      "requirements": ["ENTITY-LIFECYCLE-008", "ENTITY-ERROR-001", "ENTITY-ERROR-004", "WORKFLOW-GUARD-001", "WORKFLOW-GUARD-002", "WORKFLOW-GUARD-003", "WORKFLOW-TRANSITION-004", "WORKFLOW-TRANSITION-006", "WORKFLOW-TRANSITION-007"],
+      "description": "Preserves the Workflow guard-rejection code before target-State Entity validation when both would otherwise reject.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {
+          "type": "invoice",
+          "identityScope": "tenant-a",
+          "workflow": {
+            "states": ["DRAFT", "FINAL"],
+            "initialState": "DRAFT",
+            "terminalStates": ["FINAL"],
+            "transitions": [{"source": "DRAFT", "target": "FINAL", "guard": {"fact": "approvalSatisfied", "equals": true}}]
+          },
+          "mutability": {"DRAFT": [], "FINAL": []},
+          "validation": [{"id": "AMOUNT_POSITIVE_AT_FINAL", "path": "amount", "rule": "positive-money", "states": ["FINAL"]}]
+        },
+        "entity": {"type": "invoice", "id": "inv-priority", "state": "DRAFT", "data": {"amount": {"amount": "-1", "currency": "EUR"}}},
+        "target": "FINAL",
+        "facts": {"approvalSatisfied": false}
+      },
+      "expected": {
+        "status": "error",
+        "error": {"code": "FINKORE_WORKFLOW_GUARD_REJECTED"},
+        "observations": {
+          "entity": {"type": "invoice", "id": "inv-priority", "state": "DRAFT", "data": {"amount": {"amount": "-1", "currency": "EUR"}}},
+          "facts": {"approvalSatisfied": false}
+        }
+      },
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["target-validation-replaces-workflow-error", "guard-evaluated-after-target-validation"]
+    }
+  ]
+}

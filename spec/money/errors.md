@@ -37,6 +37,12 @@ Implementations can provide additional structured details in accordance with [co
 
 A failed operation leaves the observable value of every Money operand unchanged, as required by **MONEY-ERROR-007**.
 
+For division, **MONEY-ARITHMETIC-011** makes the zero-divisor category primary
+before optional rounding-policy validation. For a non-zero divisor, explicit
+null, incomplete policy structure, negative or non-integer scale, and an
+unsupported mode are invalid rounding under **MONEY-ERROR-006**. These failures
+return no Money result and leave the operand unchanged.
+
 ## Non-Goals
 
 This is not a complete catalog and does not define exception, response, or localization formats.

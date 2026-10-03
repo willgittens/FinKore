@@ -186,3 +186,10 @@ be represented as a valid committed JSON observation, retain it without
 normalizing or manufacturing a valid state and record native evidence that the
 call did not mutate it. Such evidence supplements rather than replaces every
 portable `expected.observations` comparison.
+
+Entity transition bindings pass a supplied object-valued `facts` request to the
+referenced Workflow without deriving facts from Entity data, Approval history,
+authorization, time, or other ambient state. Omission remains omission. The
+current Core does not define a portable result for explicit null or another
+non-object facts container at this Entity boundary, so a claim must report that
+gap rather than repair the input or substitute an existing Workflow error.
