@@ -9,6 +9,30 @@ artifacts, and their verification results. Those records are preserved as
 history and are not claims about the current repository's supported surface or
 current execution evidence.
 
+## FinKore Core 1.1 — 2026-10-03
+
+Compatible minor release completing explicit rounded Money division and Entity
+guard-fact/target-State validation, with stronger Approval subject-binding
+guidance, conformance-case applicability, and failure-atomicity observations.
+The contract contains 439 requirements, 1,808 vectors in 44 files, and 20
+canonical Agentic operations. Three requirement IDs and 18 vectors are added;
+no published requirement, vector, portable error, or operation identifier is
+renamed or retired.
+
+Consumers claiming the complete release must include the added cases, honor the
+two declared conditional-case rules, support the optional Entity facts and
+Money division policy inputs, and compare the completed post-state observations.
+Omission preserves earlier operation meanings. Existing domain records require
+no rewrite, no Agentic operation is superseded, and conformance formats remain
+`0.1`. Stronger Approval identity, redaction targeting, standalone conflict
+aggregation, and malformed Entity-context outcomes remain outside this release.
+
+Locked installation and local verification pass on Node 24.15.0, including 30
+maintenance-tool tests and the plan-free publication gate. A fresh npm registry
+advisory query on 2026-10-03 reported zero vulnerabilities in the five-package
+locked maintenance dependency graph. These checks validate repository artifacts,
+not financial execution or external implementation conformance.
+
 ## FinKore Core 1.0 — 2026-10-03
 
 First stable language-neutral baseline for Money, Workflow, Audit, Approvals,

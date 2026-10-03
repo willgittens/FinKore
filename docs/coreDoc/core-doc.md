@@ -1,8 +1,8 @@
 # FinKore CoreDoc
 
-**CoreDoc version:** FinKore Core 1.0
+**CoreDoc version:** FinKore Core 1.1
 **Document date:** 2026-10-03
-**Status:** FinKore Core 1.0 stable
+**Status:** FinKore Core 1.1 stable
 
 ## Purpose
 
@@ -21,7 +21,7 @@ The CoreDoc governs financial meaning, evidence, control behaviour, and history.
 It does not prescribe software design, storage, interfaces, programming
 languages, or conformance mechanics.
 
-FinKore Core 1.0 does not define posting, double-entry
+FinKore Core 1.1 does not define posting, double-entry
 ledgers, accounting dates or closed periods, tax, exchange-rate sourcing,
 reconciliation, settlement, accruals, depreciation, revenue recognition,
 statutory retention periods, or segregation-of-duties policy. This CoreDoc
@@ -129,7 +129,7 @@ currency identifier. A mismatch is a rejected domain outcome, not zero or equal.
 
 **Boundaries**
 
-FinKore Core 1.0 does not specify rate source, rate date, or
+FinKore Core 1.1 does not specify rate source, rate date, or
 foreign-exchange accounting.
 
 **Relevant FinKore domains**

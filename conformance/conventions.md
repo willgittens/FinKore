@@ -2,7 +2,7 @@
 
 ## Versions
 
-The [manifest](manifest.json) discovers the FinKore Core 1.0 conformance baseline
+The [manifest](manifest.json) discovers the FinKore Core 1.1 conformance baseline
 identified in the [conformance index](README.md#scope-and-discovery).
 
 `finkoreConformance` versions the manifest syntax and `finkoreVectorFile`
@@ -259,7 +259,7 @@ Identifiers beginning with `finkore.` are canonical operations in the
 [Agentic Contract](../agentic/operations.md). Remaining catalog entries are
 conformance-local operations until their stable public contracts are
 reviewed; vector use alone does not make them advertised FinKore capabilities.
-Audit ordering requirements are verified through append-only history and review of explicitly recorded relationships; Core 1.0 does not define `audit.order` as an executable conformance operation or as an Agentic operation. Audit Relationships are observed through ordinary `finkore.audit.append` and `audit.redact` fixtures, not a separate relationship operation.
+Audit ordering requirements are verified through append-only history and review of explicitly recorded relationships; Core 1.1 does not define `audit.order` as an executable conformance operation or as an Agentic operation. Audit Relationships are observed through ordinary `finkore.audit.append` and `audit.redact` fixtures, not a separate relationship operation.
 For Money, `money.deserialize` and `money.serialize` remain
 conformance-local representation boundary checks. They exercise normative Money
 serialization but are not separate public Agentic operations. Rate application

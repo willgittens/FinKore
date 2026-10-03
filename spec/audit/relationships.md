@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 1.0 stable.**
+**FinKore Core 1.1 stable.**
 
 ## Purpose
 
@@ -94,7 +94,7 @@ The following JSON is illustrative and non-normative.
 
 ## Invalid Examples
 
-- A relationship with type `RELATED_TO` in Core 1.0.
+- A relationship with type `RELATED_TO` in Core 1.1.
 - A relationship whose target event identity is not present in the logical
   history.
 - A relationship whose target Entity reference differs from the target Audit
@@ -110,7 +110,7 @@ target-Entity-mismatched Audit Relationships fail as invalid event content with
 committed relationship by changing committed event content remains an
 append-only violation.
 
-Core 1.0 does not introduce a dedicated Audit Relationship portable error
+Core 1.1 does not introduce a dedicated Audit Relationship portable error
 code.
 
 ## Open Questions

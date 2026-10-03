@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 1.0 stable.**
+**FinKore Core 1.1 stable.**
 
 ## Purpose
 
@@ -12,12 +12,12 @@ This document defines the minimum meaning and content of an Audit Event. An Audi
 
 - **AUDIT-EVENT-001** — Every committed Audit Event MUST have a stable event identifier, event type, entity reference, and timestamp.
 - **AUDIT-EVENT-002** — It MUST identify an Actor when the responsible Actor is known; otherwise Actor attribution MAY be omitted or explicitly represented as unknown.
-- **AUDIT-EVENT-003** — The event type MUST be a stable, producer-supplied domain event identifier. In Core 1.0 it MUST be a non-empty ASCII token matching `[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*`. FinKore does not define a closed global event-type catalog in Core 1.0. Implementations MUST NOT derive event type automatically from TypeScript method names, class names, repository methods, HTTP endpoints, database operations, framework callbacks, or other implementation mechanism names.
+- **AUDIT-EVENT-003** — The event type MUST be a stable, producer-supplied domain event identifier. In Core 1.1 it MUST be a non-empty ASCII token matching `[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*`. FinKore does not define a closed global event-type catalog in Core 1.1. Implementations MUST NOT derive event type automatically from TypeScript method names, class names, repository methods, HTTP endpoints, database operations, framework callbacks, or other implementation mechanism names.
 - **AUDIT-EVENT-004** — The entity reference MUST identify the affected entity type and stable entity identifier.
 - **AUDIT-EVENT-005** — The timestamp MUST identify an unambiguous instant when the recorded occurrence took effect and, when serialized, MUST follow [Timestamp conventions](../conventions.md#portable-values).
 - **AUDIT-EVENT-006** — Event metadata MAY provide relevant context.
 - **AUDIT-EVENT-008** — Event metadata MUST NOT contradict required event fields.
-- **AUDIT-EVENT-007** — In Core 1.0, an Audit Event is complete when every required Audit Event field is present and individually valid according to this document and referenced actor, timestamp, entity, change, and redaction requirements. No additional event-type-specific fields are required by Core 1.0. Optional metadata or display text MUST NOT be required to recover the event identifier, event type, entity reference, timestamp, known actor identity, or recorded changes.
+- **AUDIT-EVENT-007** — In Core 1.1, an Audit Event is complete when every required Audit Event field is present and individually valid according to this document and referenced actor, timestamp, entity, change, and redaction requirements. No additional event-type-specific fields are required by Core 1.1. Optional metadata or display text MUST NOT be required to recover the event identifier, event type, entity reference, timestamp, known actor identity, or recorded changes.
 - **AUDIT-EVENT-009** — Event metadata MAY be omitted or supplied as any JSON value, including explicit null, subject to **AUDIT-EVENT-008**. An implementation MUST preserve its presence and recursively preserve its JSON value, including every object member name. Omitted metadata and supplied null metadata MUST remain distinguishable. Cyclic containers and unsupported native values MUST be rejected with `FINKORE_AUDIT_INVALID_EVENT` during non-actor Event representation validation under **AUDIT-ERROR-004**. Shared acyclic containers are not cycles. Accepted values MUST be retained and observed independently of caller mutation under **AUDIT-APPEND-001**; rejection MUST leave logical history unchanged under **AUDIT-ERROR-001**.
 
 Audit Relationships, when present, follow [Audit Relationships](relationships.md).

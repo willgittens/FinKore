@@ -101,7 +101,7 @@ observation would be invented, verify that the original object graph is
 unchanged and, where practical, reusable after the failure.
 
 Approval histories need an immutable association with their owning approval
-context and subject even when individual Core 1.0 records do not encode that
+context and subject even when individual Core 1.1 records do not encode that
 scope. Preserve the association through storage, import, evaluation, record,
 withdrawal, and supersession; matching Requirement IDs or subject facts do not
 authorize relabeling a history for another context or subject.

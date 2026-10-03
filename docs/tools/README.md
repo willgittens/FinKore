@@ -101,9 +101,13 @@ or case supplements, retired freeze rules, and stale Core status in current
 prose, including inline scope wording. It reads text and paths without financial
 execution, mutation, or network access.
 
-README, CoreDoc, each specification document, conformance and Agentic READMEs,
-and any retained Learn index must explicitly declare `FinKore Core 1.0 stable`
-(or `FinKore Core 1.0 is stable`). CoreDoc's version and status fields must agree.
+The publication checker exports the deliberately selected target
+`TARGET_CORE_VERSION`, currently `1.1`; maintainers must review and update that
+value for a later Core release. README, CoreDoc, each specification document,
+conformance and Agentic READMEs, and any retained Learn index must explicitly
+declare `FinKore Core 1.1 stable` (or `FinKore Core 1.1 is stable`). CoreDoc's
+version and status fields must agree. Matching every document to an arbitrary
+different version does not satisfy the selected release target.
 Historical release versions and CoreDoc evolution metadata remain historical;
 schema syntax, maintenance-package versions, and stable vector IDs are not Core
 status. The only removed-rule exceptions are one concise retirement paragraph

@@ -2,7 +2,7 @@
 
 This is the canonical human-readable requirement-to-vector index. Manifest-listed
 vectors remain the primary machine-readable mapping through each vector's
-`requirements` field. The counts and mappings cover the FinKore Core 1.0 shared
+`requirements` field. The counts and mappings cover the FinKore Core 1.1 shared
 conventions, Money, Workflow, Audit, Approvals, and Entities scope.
 
 ## Inventory and coverage

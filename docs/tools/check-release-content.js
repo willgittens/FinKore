@@ -14,11 +14,19 @@ const LOCAL_STATE = new Set(['.git', '.tools', 'node_modules', '.npm-cache', 'co
 const NEGATIVE_FIXTURE = 'docs/tools/test/fixtures/release-content-negative.json'
 const REQUIRED = ['README.md', 'docs/coreDoc/core-doc.md', 'spec/README.md', 'conformance/README.md', 'agentic/README.md']
 const DOMAINS = ['money', 'workflow', 'audit', 'approvals', 'entities']
+export const TARGET_CORE_VERSION = '1.1'
 const PLAN_REFERENCE = /docs[/\\]plans\b|\bplan-\d+(?:\.\d+)*\b/i
 const SUPPLEMENT_REFERENCE = /boundary097-cases\.json|readSupplementary[C]ases|SUPPLEMENTARY[_]CASES|manifest\/supplementary/i
 const FREEZE_REFERENCE = /SPEC-FREEZE-\d+|release[\s-]+candidate\s+freeze/i
-const STABLE = /\bFinKore Core 1\.0 (?:is )?stable\b/i
-const STALE_STATUS = /release[\s-]+candidate|\b\d+\.\d+-rc\b|\bpre[\s-]?1\.0\b|\bCore (?!1\.0\b)\d+\.\d+|\bDraft \d+\.\d+|\bremains experimental\b|\bpromotion (?:is )?(?:not complete|outstanding)\b|\bnot (?:yet )?stable\b|\bstatus:\s*(?:draft|experimental)\b|\bintended to become\b/i
+const escapedTarget = TARGET_CORE_VERSION.replace('.', '\\.')
+const STABLE = new RegExp(`\\bFinKore Core ${escapedTarget} (?:is )?stable\\b`, 'i')
+const STALE_STATUS = /release[\s-]+candidate|\b\d+\.\d+-rc\b|\bpre[\s-]?1\.0\b|\bDraft \d+\.\d+|\bremains experimental\b|\bpromotion (?:is )?(?:not complete|outstanding)\b|\bnot (?:yet )?stable\b|\bstatus:\s*(?:draft|experimental)\b|\bintended to become\b/i
+
+function hasStaleCoreStatus(text) {
+  if (STALE_STATUS.test(text)) return true
+  return [...text.matchAll(/\bCore (\d+\.\d+)\b/gi)]
+    .some((match) => match[1] !== TARGET_CORE_VERSION)
+}
 
 function plain(text) {
   return text.replace(/<[^>]*>/g, ' ').replace(/[*`_]/g, '').replace(/\s+/g, ' ').trim()
@@ -145,13 +153,14 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
     const current = path.startsWith('docs/coreDoc/') ? text.split('\n').filter((line) =>
       !/^\*\*(?:Introduced|Last updated|Last updated on):\*\*/.test(line)).join('\n') : text
     const normalized = plain(decodeEntities(current))
-    if (STALE_STATUS.test(normalized)) errors.push(`${path}: stale or contradictory Core status in current content`)
+    if (hasStaleCoreStatus(normalized)) errors.push(`${path}: stale or contradictory Core status in current content`)
     if ((REQUIRED.includes(path) || path.startsWith('spec/') || path === 'learn/index.html') && !STABLE.test(normalized)) {
-      errors.push(`${path}: missing explicit FinKore Core 1.0 stable declaration`)
+      errors.push(`${path}: missing explicit FinKore Core ${TARGET_CORE_VERSION} stable declaration`)
     }
     if (path === 'docs/coreDoc/core-doc.md') {
-      if (!/^\*\*CoreDoc version:\*\* FinKore Core 1\.0\b/m.test(text) ||
-          !/^\*\*Status:\*\* .*\b(?:stable|Stable)\b/m.test(text)) errors.push(`${path}: CoreDoc version/status fields must declare the stable baseline`)
+      const version = new RegExp(`^\\*\\*CoreDoc version:\\*\\* FinKore Core ${escapedTarget}\\b`, 'm')
+      const status = new RegExp(`^\\*\\*Status:\\*\\* FinKore Core ${escapedTarget} (?:is )?stable\\b`, 'mi')
+      if (!version.test(text) || !status.test(text)) errors.push(`${path}: CoreDoc version/status fields must declare the stable ${TARGET_CORE_VERSION} baseline`)
     }
     if (/\.html?$/i.test(path)) htmlLinkCount += checkHtml(root, path, text, errors)
   }
@@ -162,7 +171,7 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
 export function runReleaseContentCli(repositoryRoot = process.cwd(), output = console) {
   try {
     const result = validateReleaseContent(repositoryRoot)
-    output.log(`Release content check passed: ${result.fileCount} text files, ${result.htmlLinkCount} local HTML links. Financial behavior was not executed.`)
+    output.log(`FinKore Core ${TARGET_CORE_VERSION} release content check passed: ${result.fileCount} text files, ${result.htmlLinkCount} local HTML links. Financial behavior was not executed.`)
     return 0
   } catch (error) {
     output.error(error instanceof Error ? error.message : String(error))

@@ -65,7 +65,7 @@ service happened to implement them first.
 
 ## Current scope
 
-The FinKore Core 1.0 normative baseline covers:
+The FinKore Core 1.1 normative baseline covers:
 
 | Domain | Defined behavior |
 | --- | --- |
@@ -137,8 +137,8 @@ See [Developer Tools](./docs/tools/README.md) for individual commands.
 ## Status and evidence
 
 CoreDoc, the specification, conformance artifacts, and Agentic Contract identify
-the FinKore Core 1.0 stable baseline, with the accepted candidate's financial
-behavior, acceptance cases, and canonical operation contracts preserved.
+the FinKore Core 1.1 stable baseline, including its compatible financial
+behavior additions, acceptance cases, and canonical operation contracts.
 Known limitations and gaps are recorded in
 the specification, [traceability](./conformance/traceability.md), and Agentic
 Contract. [Release notes](./docs/releases/README.md) summarize published history;

@@ -74,6 +74,9 @@ of the last working plan, repeat it on the actual final tree before tagging.
 Passing development verification does not waive this gate or the separate
 release dependency audit. See [publication checks](docs/tools/README.md#stable-publication-gate)
 for status conventions, permitted historical metadata, and Learn review.
+The publication checker has one explicitly selected Core target version;
+review and update that target with its tests for each release rather than
+accepting whichever version strings happen to agree across a tree.
 
 ## Stable release procedure
 
@@ -92,7 +95,7 @@ and dependency scope with the concise release summary in
 establish consumer implementation conformance.
 
 Commit the reviewed release tree, then create an annotated `core-<Core version>`
-tag on that commit (`core-1.0` for the first stable baseline). Confirm the tag
+tag on that commit (`core-1.1` for this compatible minor release). Confirm the tag
 targets the verified commit and that the working tree is clean. Distribute only
 tracked release content, excluding local checkout state. Remote tag publication
 is a separate maintainer action; a local tag does not imply a remote release.

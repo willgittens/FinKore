@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 1.0 stable.**
+**FinKore Core 1.1 stable.**
 
 ## Purpose
 
@@ -69,12 +69,12 @@ logical history but MUST NOT satisfy the Requirement for current evaluation.
 The observable Requirement state is therefore `PENDING` unless another
 effective Decision satisfies or rejects the Requirement.
 
-Core 1.0 current-effectiveness also considers lifecycle evidence defined by
+Core 1.1 current-effectiveness also considers lifecycle evidence defined by
 [Approval Validity](validity.md), including withdrawal, expiration, and
 supersession. Those lifecycle events change current effectiveness without
 rewriting the committed Decision.
 
-Core 1.0 does not require a specific binding mechanism such as revision
+Core 1.1 does not require a specific binding mechanism such as revision
 numbers, database versions, hashes, immutable snapshots, or stable fact
 references. A composing domain MAY use any mechanism that preserves the
 observable guarantee that the Decision can be associated with the relevant
@@ -87,7 +87,7 @@ approval context and subject identity, the enclosing history must be immutably
 scoped to exactly one approval context and subject. Relabeling that history for
 a different context or subject cannot make its Decisions relevant there. Equal
 Requirement identifiers and equal subject facts are not proof that two
-contexts or subjects are the same. Core 1.0 does not otherwise prescribe how a
+contexts or subjects are the same. Core 1.1 does not otherwise prescribe how a
 consumer represents or persists this enclosing scope.
 
 ## Example

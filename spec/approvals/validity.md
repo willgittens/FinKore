@@ -2,11 +2,11 @@
 
 ## Status
 
-**FinKore Core 1.0 stable.**
+**FinKore Core 1.1 stable.**
 
 ## Purpose
 
-This document defines Core 1.0 current-effectiveness semantics for Approval
+This document defines Core 1.1 current-effectiveness semantics for Approval
 Decisions. It extends the fact-effectiveness model with explicit
 withdrawal, expiration, and supersession evidence while preserving append-only
 Approval history.
@@ -65,7 +65,7 @@ policy.
 
 Lifecycle relationships and current-effectiveness evaluation operate within
 the approval context and subject association that owns the Decision history.
-An externally scoped history container is sufficient when individual Core 1.0
+An externally scoped history container is sufficient when individual Core 1.1
 records do not carry that scope, but the container's association must remain
 unchanged through import and reuse. A caller-supplied label cannot rebind a
 history to another context or subject. A detected mismatch is invalid Decision

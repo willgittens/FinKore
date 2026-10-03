@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 1.0 stable.**
+**FinKore Core 1.1 stable.**
 
 ## Purpose
 

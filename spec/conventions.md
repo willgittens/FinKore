@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 1.0 stable.**
+**FinKore Core 1.1 stable.**
 
 ## Purpose
 
@@ -33,7 +33,7 @@ Normative clauses selected for conformance traceability use a domain-prefixed id
 
 ## Compatibility Policy
 
-This policy defines the portable compatibility surface for FinKore Core 1.0
+This policy defines the portable compatibility surface for FinKore Core 1.1
 and subsequent releases. An incompatible observable change to this stable
 compatibility surface requires a new major Core version.
 

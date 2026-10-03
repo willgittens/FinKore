@@ -14,7 +14,7 @@ that is absent from `/spec`.
 ## Discovery and validation
 
 Use [manifest.json](manifest.json) as the only discovery entry point for the
-FinKore Core 1.0 portable suite. Its association with Core 1.0 is documented in
+FinKore Core 1.1 portable suite. Its association with Core 1.1 is documented in
 the [conformance index](README.md#scope-and-discovery); the manifest and
 vector-file format versions remain `0.1`.
 
@@ -141,6 +141,38 @@ when their suite and operation are in the claim's declared scope.
 The table is claim guidance, not vector syntax. It does not change
 `finkoreConformance` or `finkoreVectorFile` format `0.1`, add a runner protocol,
 or authorize private applicability members in vector files.
+
+## Core 1.1 migration
+
+Core 1.1 is a compatible minor release. It adds three normative requirement
+identifiers and 18 manifest-listed vectors, bringing the corpus to 439
+requirements and 1,808 vectors. It does not rename or retire a requirement,
+portable error, vector, or canonical operation, and the manifest and vector-file
+formats remain `0.1`. Existing stored domain records require no rewrite.
+
+Consumers making a complete Core claim should:
+
+- include the new vectors and disclose the two conditional cases through the
+  applicability process above;
+- pass explicitly supplied object-valued Entity transition facts to Workflow
+  guards, validate the complete proposed Entity at its target State, and retain
+  the documented undefined boundary for non-object facts rather than inventing
+  an error;
+- support the optional complete `rounding` policy on `finkore.money.divide`,
+  including invalid-policy and zero-divisor priority, while preserving exact
+  finite quotients and every omitted-policy call;
+- compare all newly requested failure observations, including unchanged Entity
+  and Approval histories, instead of treating the portable error alone as proof
+  of atomicity; and
+- retain Approval histories whose records do not encode scope under one immutable
+  consumer-owned context and subject, with the evidence described below.
+
+The Entity facts member and Money division policy are optional additions:
+omission preserves the earlier operation meanings. No Agentic operation is
+superseded. Approval records gain no new scoped-reference or Decision-identity
+shape in this release; retained historical records keep their exact content and
+scope binding. Stronger record identity and malformed Entity-context behavior
+remain future major-version work.
 
 ## Requirement mapping
 

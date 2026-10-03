@@ -8,7 +8,7 @@ import test from 'node:test'
 import { runReleaseContentCli, validateReleaseContent } from '../check-release-content.js'
 
 const negative = JSON.parse(readFileSync(new URL('./fixtures/release-content-negative.json', import.meta.url), 'utf8'))
-const stable = '# Contract\n\nFinKore Core 1.0 stable.\n'
+const stable = '# Contract\n\nFinKore Core 1.1 stable.\n'
 function put(root, path, content) {
   mkdirSync(dirname(join(root, path)), { recursive: true })
   writeFileSync(join(root, path), content)
@@ -18,13 +18,13 @@ function fixture(t) {
   t.after(() => rmSync(root, { recursive: true, force: true }))
   for (const path of ['README.md', 'spec/README.md', 'conformance/README.md', 'agentic/README.md',
     ...['money', 'workflow', 'audit', 'approvals', 'entities'].map((d) => `spec/${d}/README.md`)]) put(root, path, stable)
-  put(root, 'docs/coreDoc/core-doc.md', `${stable}\n**CoreDoc version:** FinKore Core 1.0\n**Status:** FinKore Core 1.0 stable\n**Introduced:** Draft 0.4\n**Last updated:** Draft 0.9\n**Last updated on:** 2026-09-20\n`)
+  put(root, 'docs/coreDoc/core-doc.md', `${stable}\n**CoreDoc version:** FinKore Core 1.1\n**Status:** FinKore Core 1.1 stable\n**Introduced:** Draft 0.4\n**Last updated:** Draft 0.9\n**Last updated on:** 2026-09-20\n`)
   put(root, 'docs/releases/README.md', `# Release history\n\n${negative.retirement}\n\n## Core 0.9 release candidate\n\nHistorical scope only.\n`)
   put(root, 'package.json', JSON.stringify({ private: true, version: '0.1.0' }))
   put(root, 'conformance/manifest.json', JSON.stringify({ finkoreConformance: '0.1' }))
   put(root, 'conformance/vector.schema.json', JSON.stringify({ finkoreVectorFile: '0.1' }))
   put(root, 'conformance/example.json', JSON.stringify({ vectors: [{ id: 'entity.boundary097.control-001' }] }))
-  put(root, 'learn/index.html', '<h1 id="start">FinKore Core 1.0 stable</h1><a href="#start">Start</a><a href="../spec/README.md#contract">Spec</a><a href=../README.md>Home</a>')
+  put(root, 'learn/index.html', '<h1 id="start">FinKore Core 1.1 stable</h1><a href="#start">Start</a><a href="../spec/README.md#contract">Spec</a><a href=../README.md>Home</a>')
   return root
 }
 function run(root) {
@@ -66,11 +66,30 @@ test('rejects even an empty planning directory and missing stable publication do
 
 test('does not accept a version marker without stable status or incoherent CoreDoc fields', (t) => {
   const root = fixture(t)
-  put(root, 'spec/README.md', '# Specification\nFinKore Core 1.0\n')
-  assert.match(run(root).error, /missing explicit FinKore Core 1.0 stable declaration/)
+  put(root, 'spec/README.md', '# Specification\nFinKore Core 1.1\n')
+  assert.match(run(root).error, /missing explicit FinKore Core 1.1 stable declaration/)
   put(root, 'spec/README.md', stable)
   put(root, 'docs/coreDoc/core-doc.md', stable)
   assert.match(run(root).error, /CoreDoc version\/status fields/)
+})
+
+test('rejects stale, candidate, and arbitrary matching Core versions', (t) => {
+  const staleRoot = fixture(t)
+  put(staleRoot, 'spec/README.md', '# Specification\n\nFinKore Core 1.0 stable.\n')
+  assert.match(run(staleRoot).error, /stale or contradictory Core status/)
+
+  const candidateRoot = fixture(t)
+  put(candidateRoot, 'spec/README.md', '# Specification\n\nFinKore Core 1.1 release candidate.\n')
+  assert.match(run(candidateRoot).error, /stale or contradictory Core status/)
+
+  const arbitraryRoot = fixture(t)
+  for (const path of ['README.md', 'spec/README.md', 'conformance/README.md', 'agentic/README.md',
+    ...['money', 'workflow', 'audit', 'approvals', 'entities'].map((d) => `spec/${d}/README.md`)]) {
+    put(arbitraryRoot, path, '# Contract\n\nFinKore Core 9.9 stable.\n')
+  }
+  put(arbitraryRoot, 'docs/coreDoc/core-doc.md', '# CoreDoc\n\nFinKore Core 9.9 stable.\n\n**CoreDoc version:** FinKore Core 9.9\n**Status:** FinKore Core 9.9 stable\n')
+  assert.match(run(arbitraryRoot).error, /stale or contradictory Core status/)
+  assert.match(run(arbitraryRoot).error, /missing explicit FinKore Core 1.1 stable declaration/)
 })
 
 test('limits retired-rule exceptions to the concise release note and designated negative fixture data', (t) => {

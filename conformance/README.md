@@ -4,7 +4,7 @@
 > make plausible financial defects fail.
 
 This directory publishes language-independent acceptance artifacts for the
-**FinKore Core 1.0 stable** normative baseline. The specification remains the
+**FinKore Core 1.1 stable** normative baseline. The specification remains the
 source of truth.
 Vectors describe observable inputs, results, portable errors, and post-state;
 they do not prescribe APIs, classes, exceptions, storage, frameworks, or an
@@ -47,11 +47,10 @@ A consumer-owned tool must load only files listed by `manifest.json`, resolve
 paths relative to the manifest, reject unsupported syntax versions, and reject
 duplicate vector IDs. Filesystem traversal order carries no meaning.
 
-[`manifest.json`](manifest.json) is the sole discovery entry point. The released
-FinKore Core 1.0 baseline contained six suites, 42 vector files, and 1,790
-vectors; this working manifest also contains the later compatible additions
-reported above. Core association is documented here because the manifest syntax
-has no Core-version field.
+[`manifest.json`](manifest.json) is the sole discovery entry point for the
+FinKore Core 1.1 baseline: six suites, 44 vector files, and 1,808 vectors. Core
+association is documented here because the manifest syntax has no Core-version
+field.
 `finkoreConformance` and `finkoreVectorFile` remain `0.1` and version the artifact
 formats, not the FinKore Core release. A claim identifies the exact release or
 commit and manifest as well as the format version. Referenced requirement IDs
@@ -181,11 +180,11 @@ consumer evidence, not results produced by this repository.
 
 ## Contract status
 
-The corpus targets the stable Core 1.0 specification without changing the
-accepted candidate's vector IDs, inputs, expected observations, or requirement
-mappings. Manifest and vector-file syntax remain `0.1`; no consumer format or
-financial behavior migration is required for this alignment. Artifact validity
-does not establish external implementation conformance. See
+The corpus targets the stable Core 1.1 specification. This release preserves
+published vector meanings while adding compatible cases and completing required
+post-state observations. Manifest and vector-file syntax remain `0.1`; consumer
+migration is described in the [consumer guide](consumer-guide.md#core-11-migration).
+Artifact validity does not establish external implementation conformance. See
 [release notes](../docs/releases/README.md) for publication status and concise
 release history.
 
