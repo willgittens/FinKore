@@ -9,10 +9,10 @@ artifacts, and their verification results. Those records are preserved as
 history and are not claims about the current repository's supported surface or
 current execution evidence.
 
-## Unreleased
+## FinKore Core 2.0.1 — 2026-10-04
 
-This change is classified as a patch-compatible correction targeting Core
-2.0.1. It clarifies the existing Core 2.0 Approval history boundary: one
+This patch-compatible Core 2.0.1 correction clarifies the existing Core 2.0
+Approval history boundary: one
 immutable approval context and exact subject may contain Decisions for several
 Requirement identities. Every member is structurally validated; exact
 Requirement identity selects eligibility, effectiveness, and outcome evidence.
@@ -38,6 +38,17 @@ and invalid-precision errors. The Entity malformed-context priority case now
 uses a valid rejecting target-State predicate, so its unchanged
 `FINKORE_WORKFLOW_INVALID_CONTEXT` result isolates context validation rather
 than a malformed validator declaration.
+
+The contract contains 447 requirements, 1,822 vectors in 47 files, and 20
+canonical Agentic operations. Conformance manifest and vector-file formats
+remain `0.1`; the private maintenance package remains `0.1.0`.
+
+Locked installation and local verification pass on Node 24.15.0, including 31
+maintenance-tool tests and both the disposable-tree and final-tree publication
+gates. A fresh npm registry advisory query on 2026-10-04 reported zero
+vulnerabilities in the five-package locked maintenance dependency graph. These
+checks validate repository artifacts, not financial execution or external
+implementation conformance.
 
 ## FinKore Core 2.0 — 2026-10-04
 

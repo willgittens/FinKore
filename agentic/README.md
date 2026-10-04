@@ -2,7 +2,7 @@
 
 ## Status
 
-**Documentation contract for FinKore Core 2.0 stable.**
+**Documentation contract for FinKore Core 2.0.1 stable.**
 
 The stable registry contains 20 canonical operations with published identifiers
 preserved and the Core 2.0 contract documented. Compatibility is

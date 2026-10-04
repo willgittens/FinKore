@@ -1,8 +1,8 @@
 # FinKore CoreDoc
 
-**CoreDoc version:** FinKore Core 2.0
+**CoreDoc version:** FinKore Core 2.0.1
 **Document date:** 2026-10-04
-**Status:** FinKore Core 2.0 stable
+**Status:** FinKore Core 2.0.1 stable
 
 ## Purpose
 

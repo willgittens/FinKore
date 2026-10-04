@@ -2,7 +2,7 @@
 
 ## Versions
 
-The [manifest](manifest.json) discovers the FinKore Core 2.0 conformance baseline
+The [manifest](manifest.json) discovers the FinKore Core 2.0.1 conformance baseline
 identified in the [conformance index](README.md#scope-and-discovery).
 
 `finkoreConformance` versions the manifest syntax and `finkoreVectorFile`

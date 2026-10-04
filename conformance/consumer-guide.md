@@ -14,7 +14,7 @@ that is absent from `/spec`.
 ## Discovery and validation
 
 Use [manifest.json](manifest.json) as the only discovery entry point for the
-**FinKore Core 2.0 stable** suite. Its scope is documented in the
+**FinKore Core 2.0.1 stable** suite. Its scope is documented in the
 [conformance index](README.md#scope-and-discovery); the manifest and vector-file
 format versions remain `0.1`.
 
@@ -245,7 +245,7 @@ repair such input or treat it as omission.
 
 ## Core 2.0 migration
 
-The **FinKore Core 2.0 stable** contract is behaviorally incompatible with the
+The original **FinKore Core 2.0** contract is behaviorally incompatible with the
 previous stable contract.
 Consumers migrating retained Approval data must assign scoped Requirement and
 Decision identities through an explicit, reviewable mapping while preserving
