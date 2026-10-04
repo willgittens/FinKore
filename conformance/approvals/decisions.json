@@ -92,7 +92,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-requirement-missing-subject-001"
         },
         "decisions": []
       },

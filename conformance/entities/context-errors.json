@@ -88,14 +88,15 @@
       "description": "Rejects malformed context before target-State Entity validation and preserves data, State, and facts.",
       "operation": "finkore.entity.transition",
       "input": {
-        "definition": {"type": "invoice", "identityScope": "tenant-a", "workflow": {"states": ["DRAFT", "FINAL"], "initialState": "DRAFT", "terminalStates": ["FINAL"], "transitions": [{"source": "DRAFT", "target": "FINAL"}]}, "mutability": {"DRAFT": [], "FINAL": []}, "validation": [{"id": "positive", "rule": "positive-money", "field": "amount", "states": ["FINAL"]}]},
+        "definition": {"type": "invoice", "identityScope": "tenant-a", "workflow": {"states": ["DRAFT", "FINAL"], "initialState": "DRAFT", "terminalStates": ["FINAL"], "transitions": [{"source": "DRAFT", "target": "FINAL"}]}, "mutability": {"DRAFT": [], "FINAL": []}, "validation": [{"id": "positive", "rule": "positive-money", "path": "amount", "states": ["FINAL"]}]},
         "entity": {"type": "invoice", "id": "inv-context", "state": "DRAFT", "data": {"amount": {"amount": "0", "currency": "EUR"}}},
         "target": "FINAL",
         "facts": true
       },
       "expected": {"status": "error", "error": {"code": "FINKORE_WORKFLOW_INVALID_CONTEXT"}, "observations": {"entity": {"type": "invoice", "id": "inv-context", "state": "DRAFT", "data": {"amount": {"amount": "0", "currency": "EUR"}}}, "facts": true}},
       "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
-      "guardsAgainst": ["target-validation-overrides-invalid-context", "invalid-context-partially-transitions-entity"]
+      "guardsAgainst": ["target-validation-overrides-invalid-context", "invalid-context-partially-transitions-entity"],
+      "pairedControl": "entity.transition.target-validation-fail-001"
     }
   ]
 }

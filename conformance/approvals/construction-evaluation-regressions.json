@@ -3169,7 +3169,8 @@
             "alice"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-boundary096-decision-subject-absent-001"
         },
         "decision": {
           "requirementId": "review",

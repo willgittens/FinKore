@@ -150,14 +150,14 @@ requirements and 1,808 vectors. It does not rename or retire a requirement,
 portable error, vector, or canonical operation, and the manifest and vector-file
 formats remain `0.1`. Existing stored domain records require no rewrite.
 
-Consumers making a complete Core claim should:
+Consumers making a complete claim to that earlier release should:
 
 - include the new vectors and disclose the two conditional cases through the
   applicability process above;
 - pass explicitly supplied object-valued Entity transition facts to Workflow
-  guards, validate the complete proposed Entity at its target State, and retain
-  the documented undefined boundary for non-object facts rather than inventing
-  an error;
+  guards and validate the complete proposed Entity at its target State. For a
+  claim to that earlier compatible release, non-object facts retained its then
+  undefined boundary; Core 2.0 supersedes that boundary as described below;
 - support the optional complete `rounding` policy on `finkore.money.divide`,
   including invalid-policy and zero-divisor priority, while preserving exact
   finite quotients and every omitted-policy call;
@@ -167,12 +167,13 @@ Consumers making a complete Core claim should:
 - retain Approval histories whose records do not encode scope under one immutable
   consumer-owned context and subject, with the evidence described below.
 
-The Entity facts member and Money division policy are optional additions:
-omission preserves the earlier operation meanings. No Agentic operation is
-superseded. Approval records gain no new scoped-reference or Decision-identity
-shape in this release; retained historical records keep their exact content and
-scope binding. Stronger record identity and malformed Entity-context behavior
-remain future major-version work.
+At that earlier compatible-release boundary, the Entity facts member and Money
+division policy were optional additions: omission preserved the earlier
+operation meanings, no Agentic operation was superseded, Approval records gained
+no scoped-reference or Decision-identity shape, and stronger record identity and
+malformed Entity-context behavior remained future major-version work. Core 2.0
+has since introduced those incompatible changes through the migration contract
+below; this historical description does not override the current specification.
 
 ## Requirement mapping
 

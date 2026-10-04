@@ -6443,7 +6443,8 @@
             "alice"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-association-record-null-subject-001"
         },
         "decision": {
           "requirementId": "review",
@@ -6503,7 +6504,8 @@
             "alice"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-association-evaluate-null-subject-001"
         },
         "decisions": [
           {
@@ -7350,7 +7352,8 @@
           ],
           "approvedOutcome": "APPROVED",
           "rejectedOutcome": "REJECTED",
-          "state": "APPROVED"
+          "state": "APPROVED",
+          "contextId": "ctx-approval-association-record-state-without-subject-001"
         },
         "decision": {
           "requirementId": "review",
@@ -7407,7 +7410,8 @@
           ],
           "approvedOutcome": "APPROVED",
           "rejectedOutcome": "REJECTED",
-          "state": "APPROVED"
+          "state": "APPROVED",
+          "contextId": "ctx-approval-association-evaluate-state-without-subject-001"
         },
         "decisions": [
           {
@@ -7462,7 +7466,8 @@
           ],
           "approvedOutcome": "APPROVED",
           "rejectedOutcome": "REJECTED",
-          "applicability": true
+          "applicability": true,
+          "contextId": "ctx-approval-association-record-applicability-without-subject-001"
         },
         "decision": {
           "requirementId": "review",
@@ -7519,7 +7524,8 @@
           ],
           "approvedOutcome": "APPROVED",
           "rejectedOutcome": "REJECTED",
-          "applicability": true
+          "applicability": true,
+          "contextId": "ctx-approval-association-evaluate-applicability-without-subject-001"
         },
         "decisions": [
           {
@@ -7722,7 +7728,16 @@
             "actor": {
               "id": "alice"
             },
-            "decidedAt": "2026-09-01T12:00:00Z"
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "decisionId": "decision-2",
+            "requirementRef": {
+              "contextId": "ctx-approval-association-history-missing-requirement-id-001",
+              "requirementId": "review",
+              "subject": {
+                "type": "invoice",
+                "id": "invoice-1"
+              }
+            }
           }
         ]
       },
@@ -7788,7 +7803,16 @@
             "requirementId": "review",
             "subjectFacts": null,
             "outcome": "APPROVED",
-            "decidedAt": "2026-09-01T12:00:00Z"
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "decisionId": "decision-2",
+            "requirementRef": {
+              "contextId": "ctx-approval-association-history-missing-actor-001",
+              "requirementId": "review",
+              "subject": {
+                "type": "invoice",
+                "id": "invoice-1"
+              }
+            }
           }
         ]
       },
@@ -7856,7 +7880,16 @@
             "actor": {
               "id": "alice"
             },
-            "decidedAt": "2026-09-01T12:00:00Z"
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "decisionId": "decision-2",
+            "requirementRef": {
+              "contextId": "ctx-approval-association-history-missing-outcome-001",
+              "requirementId": "review",
+              "subject": {
+                "type": "invoice",
+                "id": "invoice-1"
+              }
+            }
           }
         ]
       },
@@ -7924,6 +7957,15 @@
             "outcome": "APPROVED",
             "actor": {
               "id": "alice"
+            },
+            "decisionId": "decision-2",
+            "requirementRef": {
+              "contextId": "ctx-approval-association-history-missing-decided-at-001",
+              "requirementId": "review",
+              "subject": {
+                "type": "invoice",
+                "id": "invoice-1"
+              }
             }
           }
         ]
