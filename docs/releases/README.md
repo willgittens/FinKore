@@ -11,15 +11,16 @@ current execution evidence.
 
 ## Unreleased
 
-Clarifies the existing Core 2.0 Approval history boundary as a patch-compatible
-correction, provisionally Core 2.0.1. One immutable approval context and exact
-subject may contain Decisions for several Requirement identities. Every member
-is structurally validated; exact Requirement identity selects eligibility,
-effectiveness, and outcome evidence. Foreign-context or foreign-subject evidence
-remains `FINKORE_APPROVAL_INVALID_DECISION`, and unrelated same-scope evidence
-does not acquire the evaluated Requirement's eligibility or expiration-context
-rules. Required input shape, success results, portable errors, history
-preservation, and failure atomicity are unchanged.
+This change is classified as a patch-compatible correction targeting Core
+2.0.1. It clarifies the existing Core 2.0 Approval history boundary: one
+immutable approval context and exact subject may contain Decisions for several
+Requirement identities. Every member is structurally validated; exact
+Requirement identity selects eligibility, effectiveness, and outcome evidence.
+Foreign-context or foreign-subject evidence remains
+`FINKORE_APPROVAL_INVALID_DECISION`, and unrelated same-scope evidence does not
+acquire the evaluated Requirement's eligibility or expiration-context rules.
+Required input shape, success results, portable errors, history preservation,
+and failure atomicity are unchanged.
 
 Consumers need no history rewrite or evidence relabeling. They must preserve one
 context-and-subject scope through record, evaluation, lifecycle mutation, and
@@ -30,6 +31,13 @@ Conformance cases and consumer guidance now distinguish valid same-scope
 unrelated Requirements from foreign context or subject evidence, exercise
 cross-Requirement Decision-ID uniqueness and scoped lifecycle failures, and
 retain complete history observations on the new negative controls.
+
+Five shared Approval timestamp cases now include their already-required scoped
+Requirement and Decision identities while preserving the nanosecond outcomes
+and invalid-precision errors. The Entity malformed-context priority case now
+uses a valid rejecting target-State predicate, so its unchanged
+`FINKORE_WORKFLOW_INVALID_CONTEXT` result isolates context validation rather
+than a malformed validator declaration.
 
 ## FinKore Core 2.0 — 2026-10-04
 

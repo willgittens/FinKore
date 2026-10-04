@@ -605,23 +605,23 @@ plan.
 
 ## M4 Review the integrated contract
 
-- [ ] **M4.1 Review financial semantics adversarially.** Read the final diff in
+- [x] **M4.1 Review financial semantics adversarially.** Read the final diff in
   source-of-truth order. Derive each changed expected result from a requirement.
   Check one-nanosecond expiration boundaries, equivalent offsets, excessive
   precision, complete scope matching, unrelated evidence, retained lifecycle
   structure, Entity priority, and failure atomicity. Do not treat a schema pass
   as proof of those conclusions.
-- [ ] **M4.2 Assess defect resistance.** Confirm the cases would distinguish
+- [x] **M4.2 Assess defect resistance.** Confirm the cases would distinguish
   missing identity validation, timestamp truncation, matching only bare IDs or
   facts, filtering foreign scope before validation, applying eligibility to
   unrelated Requirements, skipping excluded structure, and evaluating target
   validation before malformed context. Use case reasoning here; actual financial
   execution and implementation mutation testing remain consumer-owned.
-- [ ] **M4.3 Run local verification.** Use supported Node, run
+- [x] **M4.3 Run local verification.** Use supported Node, run
   `npm ci --no-audit` and `npm run verify`, and resolve applicable failures.
   Verify links and whitespace in newly added files as well as tracked diffs.
   Repeat checks after relevant changes.
-- [ ] **M4.4 Confirm the release classification.** Reassess the integrated diff,
+- [x] **M4.4 Confirm the release classification.** Reassess the integrated diff,
   including any new issue found in M0/M4. Finalize patch, minor, or major treatment
   and migration wording. Keep unresolved behavior disclosed rather than assigning
   unsupported expectations. Any unresolved high-priority contract contradiction
@@ -630,6 +630,79 @@ plan.
 **M4 exit:** B1 and B2 resolution conditions and C1's intended priority are met,
 applicable local verification passes, and reviewers can account for the changed
 financial observations. Check results remain limited to repository artifacts.
+
+### M4 completion record — completed 2026-10-04
+
+The integrated review read CoreDoc, the changed Approval specifications, every
+changed conformance case and traceability row, the Agentic scope note, and the
+implementation, consumer, and release guidance in source-of-truth order.
+CoreDoc governance metadata and foundation rules are unchanged. The result
+aligns with complete validation, rejected-action atomicity, Approval attribution
+and retained history, stable scoped identity, material presence distinctions,
+and deterministic explicit context under **CORE-002.2**, **CORE-002.3**,
+**CORE-004.1** through **CORE-004.4**, and **CORE-005.1** through
+**CORE-005.3**.
+
+The changed observations derive as follows:
+
+| Boundary | Reviewed derivation |
+| --- | --- |
+| One nanosecond before expiration | The Decision is not expired under **APPROVAL-VALIDITY-009** and remains `APPROVED`; exact nine-digit comparison follows **SPEC-TIMESTAMP-004/005**. |
+| Equivalent-offset instant and one nanosecond after | Equality is expired and the later instant remains expired, so no effective approval remains and the Requirement is `PENDING`. |
+| Ten-digit evaluation instant | Excess portable precision is invalid context under **SPEC-TIMESTAMP-004**, **APPROVAL-VALIDITY-008**, and **APPROVAL-ERROR-007**. |
+| Ten-digit candidate Decision instant | The candidate is invalid under **APPROVAL-DECISION-006**; **APPROVAL-ERROR-005** preserves the complete retained scoped history. |
+| Same-scope other Requirement | **APPROVAL-DECISION-012/013** require complete structure, exclude the member from the evaluated Requirement's eligibility and outcome, and yield `PENDING` where no matching effective Decision exists. |
+| Unrelated expiration and eligibility | **APPROVAL-VALIDITY-013** does not demand an instant solely for the unrelated expiration, and **APPROVAL-DECISION-012** does not apply the evaluated Requirement's eligibility rule to that Actor. |
+| Foreign context or subject | The evidence is invalid under **APPROVAL-DECISION-013**, not filterable unrelated evidence; failed operations preserve the requested histories. |
+| Requirement supersession | Same-scope lifecycle references remain valid, predecessor approval does not transfer under **APPROVAL-VALIDITY-011**, and foreign-scope references fail under **APPROVAL-VALIDITY-014/017**. |
+| Entity malformed context plus rejecting target rule | The well-formed `positive-money` rule would reject zero EUR under valid context, but scalar `facts` returns `FINKORE_WORKFLOW_INVALID_CONTEXT` first under **WORKFLOW-ERROR-008** and **ENTITY-LIFECYCLE-009**, preserving Entity and facts. |
+
+The adversarial case review confirms the published cases distinguish the
+plausible mutations named by M4.2:
+
+- removing required Requirement/Decision identity fails the repaired timestamp
+  and stronger-contract controls;
+- reducing timestamps to milliseconds or microseconds changes the before/equal/
+  after nanosecond outcomes, while lexical comparison fails the equivalent-
+  offset control;
+- matching only bare Requirement IDs or equal facts accepts the foreign-context
+  and foreign-subject cases that must fail;
+- filtering before scope and structure validation turns foreign or malformed
+  evidence into false `PENDING` or decisive success;
+- applying the evaluated eligibility rule to another Requirement turns the
+  valid unrelated-Actor case into `FINKORE_APPROVAL_INELIGIBLE_ACTOR`;
+- skipping expired, stale, withdrawn, superseded, earlier, later, or unrelated
+  malformed evidence defeats existing complete-validation controls;
+- collapsing Decision identity by tuple or Requirement accepts the cross-
+  Requirement duplicate while breaking distinct equal-tuple lifecycle cases;
+  and
+- running target-State validation before malformed guard context changes C1 to
+  `FINKORE_ENTITY_VALIDATION_FAILED`, while ignoring the target rule makes its
+  paired valid-context failure pass incorrectly.
+
+The final compatibility classification is patch-compatible Core 2.0.1. The M1
+fixture repairs supply fields already required by Core 2.0 and preserve their
+results, errors, and failure observations. M2 resolves the internal collection-
+evaluation wording in favor of the already-published unrelated-evidence rule
+while retaining foreign-scope rejection. M3 changes invalid fixture associations
+to supported same-scope inputs and adds regression coverage; it does not change
+artifact syntax or an operation contract. Required input/output shape, success
+and failure conditions for supported inputs, portable errors, mutation effects,
+and atomicity are unchanged. No requirement, vector, portable-error, or canonical
+operation identifier is retired or reused, and consumers need no stored-history
+rewrite or relabeling. Current Core status remains unchanged until M5 performs
+the separate publication preparation.
+
+The read-only adversarial audit passed for timestamp precision, scoped identity,
+history population, eligibility, expiration context, lifecycle relationships,
+failure atomicity, and Entity priority. Verification used Node `v24.15.0`;
+`npm ci --no-audit` installed the five locked maintenance dependencies and
+`npm run verify` passed 30 tool tests, 47 manifest files, 1,822 vectors, 447
+requirement references, 20 canonical Agentic operations, documentation links,
+architecture, licensing, and whitespace. These checks validate repository
+artifacts only; consumer-owned financial execution and mutation testing remain
+outside the repository. The stable-publication and network-backed dependency
+gates remain reserved for M5.
 
 ## M5 Prepare stable publication
 
