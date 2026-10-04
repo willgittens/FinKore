@@ -14,7 +14,7 @@ that is absent from `/spec`.
 ## Discovery and validation
 
 Use [manifest.json](manifest.json) as the only discovery entry point for the
-**FinKore Core 2.0.1 stable** suite. Its scope is documented in the
+**FinKore Core 2.0.2 stable** suite. Its scope is documented in the
 [conformance index](README.md#scope-and-discovery); the manifest and vector-file
 format versions remain `0.1`.
 

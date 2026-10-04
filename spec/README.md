@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 2.0.1 stable.** This is the shared, language-neutral
+**FinKore Core 2.0.2 stable.** This is the shared, language-neutral
 normative baseline. Stability applies to the defined observable contract and
 the compatibility policy in [Conventions](conventions.md#compatibility-policy).
 The domain scope is Money, Workflow, Audit, Approvals, and Entities.
@@ -45,7 +45,7 @@ direction rather than a normative requirement.
 
 ## Version Identity (Non-Normative)
 
-`FinKore Core 2.0.1` identifies the current language-neutral
+`FinKore Core 2.0.2` identifies the current language-neutral
 behavioral baseline. It is distinct from the `finkoreConformance` manifest
 format version, the `finkoreVectorFile` vector-file format version, and versions
 assigned by consumer-owned tools or implementations. Format and tool versions

@@ -3,7 +3,7 @@
 > FinKore cases are designed not only to demonstrate correct behavior, but to
 > make plausible financial defects fail.
 
-This directory contains the **FinKore Core 2.0.1 stable** conformance baseline.
+This directory contains the **FinKore Core 2.0.2 stable** conformance baseline.
 The specification remains the source of truth.
 Vectors describe observable inputs, results, portable errors, and post-state;
 they do not prescribe APIs, classes, exceptions, storage, frameworks, or an
@@ -47,9 +47,9 @@ paths relative to the manifest, reject unsupported syntax versions, and reject
 duplicate vector IDs. Filesystem traversal order carries no meaning.
 
 [`manifest.json`](manifest.json) is the sole discovery entry point for the
-Core 2.0.1 baseline: six suites, 47 vector files, and 1,822 vectors.
+Core 2.0.2 baseline: six suites, 47 vector files, and 1,822 vectors.
 Core association is documented here because the manifest syntax has no
-Core-version field. Use the `core-2.0.1` tag for this published manifest.
+Core-version field. Use the `core-2.0.2` tag for this published manifest.
 `finkoreConformance` and `finkoreVectorFile` remain `0.1` and version the artifact
 formats, not the FinKore Core release. A claim identifies the exact release or
 commit and manifest as well as the format version. Referenced requirement IDs
@@ -179,7 +179,7 @@ consumer evidence, not results produced by this repository.
 
 ## Contract status
 
-The corpus targets the **FinKore Core 2.0.1 stable** specification. Manifest and
+The corpus targets the **FinKore Core 2.0.2 stable** specification. Manifest and
 vector-file syntax remain `0.1`; consumer migration is described in the
 [consumer guide](consumer-guide.md#core-20-migration).
 Artifact validity does not establish external implementation conformance. See

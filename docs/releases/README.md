@@ -9,6 +9,29 @@ artifacts, and their verification results. Those records are preserved as
 history and are not claims about the current repository's supported surface or
 current execution evidence.
 
+## FinKore Core 2.0.2 — 2026-10-04
+
+Compatible conformance corrections preserve committed Decision identities in
+eleven rejected Approval record and withdrawal cases and use the documented
+`DECISION_SUPERSEDED` lifecycle kind in the equal-instant supersession case.
+Identity and failure-preservation traceability is explicit, including unchanged
+lifecycle observations for the rejected withdrawals. Existing normative
+behavior, portable errors, stable identifiers, and artifact syntax are unchanged;
+consumers require no history rewrite.
+
+Consumers claiming Core 2.0.2 conformance must use the corrected expected
+observations. The contract still contains 447 requirements, 1,822 vectors in
+47 files, and 20 canonical Agentic operations. Conformance formats remain `0.1`
+and the private maintenance package remains `0.1.0`.
+
+Locked installation and local verification pass on Node 24.15.0, including all
+31 maintenance-tool tests. The Learn index was reviewed in Chrome at desktop
+and mobile sizes, including keyboard navigation and visible focus. A fresh npm
+registry advisory query on 2026-10-04 reported zero vulnerabilities in the
+five-package locked maintenance dependency graph. These checks validate
+repository artifacts, not financial execution or external implementation
+conformance.
+
 ## FinKore Core 2.0.1 — 2026-10-04
 
 This patch-compatible Core 2.0.1 correction clarifies the existing Core 2.0

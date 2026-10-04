@@ -193,7 +193,7 @@
     {
       "id": "approval.validity.selective-supersession-offset-instants-001",
       "spec": "approvals/validity",
-      "requirements": ["APPROVAL-DECISION-014", "APPROVAL-VALIDITY-017"],
+      "requirements": ["APPROVAL-DECISION-014", "APPROVAL-VALIDITY-010", "APPROVAL-VALIDITY-014", "APPROVAL-VALIDITY-017"],
       "description": "Supersedes one identified Decision with another despite offset-equivalent occurrence instants.",
       "operation": "approval.decision.supersede",
       "input": {
@@ -206,9 +206,9 @@
       "expected": {"status": "success", "value": {"history": [
         {"decisionId": "decision-old", "requirementId": "finance-review", "requirementRef": {"contextId": "ctx-inv-42", "requirementId": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}}, "subjectFacts": {}, "outcome": "APPROVED", "actor": {"id": "alice"}, "decidedAt": "2026-09-01T12:00:00Z"},
         {"decisionId": "decision-new", "requirementId": "finance-review", "requirementRef": {"contextId": "ctx-inv-42", "requirementId": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}}, "subjectFacts": {}, "outcome": "REJECTED", "actor": {"id": "alice"}, "decidedAt": "2026-09-01T14:00:00+02:00"}
-      ], "lifecycle": [{"type": "SUPERSEDED", "decisionRef": {"contextId": "ctx-inv-42", "decisionId": "decision-old"}, "successorDecisionRef": {"contextId": "ctx-inv-42", "decisionId": "decision-new"}, "actor": {"id": "controller"}, "recordedAt": "2026-09-02T12:00:00Z"}]}},
+      ], "lifecycle": [{"type": "DECISION_SUPERSEDED", "decisionRef": {"contextId": "ctx-inv-42", "decisionId": "decision-old"}, "successorDecisionRef": {"contextId": "ctx-inv-42", "decisionId": "decision-new"}, "actor": {"id": "controller"}, "recordedAt": "2026-09-02T12:00:00Z"}]}},
       "tags": ["positive", "boundary", "invariant", "mutation-sensitive"],
-      "guardsAgainst": ["timestamp-used-as-decision-identity", "supersession-targets-first-tuple"]
+      "guardsAgainst": ["timestamp-used-as-decision-identity", "supersession-targets-first-tuple", "decision-supersession-emits-unsupported-kind"]
     },
     {
       "id": "approval.validity.foreign-context-withdrawal-reference-001",

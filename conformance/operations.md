@@ -3,7 +3,7 @@
 ## Status and scope
 
 This document is the fixture contract for all 35 operation labels in the
-**FinKore Core 2.0.1 stable** [manifest](manifest.json): 20 canonical `finkore.*`
+**FinKore Core 2.0.2 stable** [manifest](manifest.json): 20 canonical `finkore.*`
 operations and 15 conformance-local labels. It defines how consumers bind
 portable vectors.
 These are logical test boundaries, not production APIs, transport messages, or a

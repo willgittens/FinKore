@@ -453,6 +453,8 @@
       "id": "approval.boundary097.discovery-f8a-006",
       "spec": "approvals/decisions",
       "requirements": [
+        "APPROVAL-DECISION-014",
+        "APPROVAL-ERROR-005",
         "APPROVAL-REQUIREMENT-004"
       ],
       "description": "Approval.decision.record, [\"requirement\",\"approvedOutcome\"] omit; reject atomically.",
@@ -533,7 +535,7 @@
                 "type": "user"
               },
               "decidedAt": "2026-09-01T10:00:00Z",
-              "decisionId": "decision-observed",
+              "decisionId": "decision-1",
               "requirementRef": {
                 "contextId": "ctx-approval-boundary097-discovery-f8a-006",
                 "requirementId": "finance-review",
@@ -552,16 +554,20 @@
         "regression",
         "boundary",
         "negative",
-        "mutation-sensitive"
+        "mutation-sensitive",
+        "invariant"
       ],
       "guardsAgainst": [
-        "concrete-approval-required-evidence-bypass"
+        "concrete-approval-required-evidence-bypass",
+        "failed-approval-rewrites-decision-identity"
       ]
     },
     {
       "id": "approval.boundary097.discovery-f8a-007",
       "spec": "approvals/decisions",
       "requirements": [
+        "APPROVAL-DECISION-014",
+        "APPROVAL-ERROR-005",
         "APPROVAL-REQUIREMENT-004"
       ],
       "description": "Approval.decision.record, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically.",
@@ -642,7 +648,7 @@
                 "type": "user"
               },
               "decidedAt": "2026-09-01T10:00:00Z",
-              "decisionId": "decision-observed",
+              "decisionId": "decision-1",
               "requirementRef": {
                 "contextId": "ctx-approval-boundary097-discovery-f8a-007",
                 "requirementId": "finance-review",
@@ -661,17 +667,21 @@
         "regression",
         "boundary",
         "negative",
-        "mutation-sensitive"
+        "mutation-sensitive",
+        "invariant"
       ],
       "guardsAgainst": [
-        "concrete-approval-required-evidence-bypass"
+        "concrete-approval-required-evidence-bypass",
+        "failed-approval-rewrites-decision-identity"
       ]
     },
     {
       "id": "approval.boundary097.discovery-f8a-008",
       "spec": "approvals/decisions",
       "requirements": [
-        "APPROVAL-DECISION-011"
+        "APPROVAL-DECISION-011",
+        "APPROVAL-DECISION-014",
+        "APPROVAL-ERROR-005"
       ],
       "description": "Approval.decision.record, [\"decision\",\"actor\",\"type\"] null; reject atomically.",
       "operation": "approval.decision.record",
@@ -752,7 +762,7 @@
                 "type": "user"
               },
               "decidedAt": "2026-09-01T10:00:00Z",
-              "decisionId": "decision-observed",
+              "decisionId": "decision-1",
               "requirementRef": {
                 "contextId": "ctx-approval-boundary097-discovery-f8a-008",
                 "requirementId": "finance-review",
@@ -771,17 +781,21 @@
         "regression",
         "boundary",
         "negative",
-        "mutation-sensitive"
+        "mutation-sensitive",
+        "invariant"
       ],
       "guardsAgainst": [
-        "concrete-approval-required-evidence-bypass"
+        "concrete-approval-required-evidence-bypass",
+        "failed-approval-rewrites-decision-identity"
       ]
     },
     {
       "id": "approval.boundary097.discovery-f8a-009",
       "spec": "approvals/decisions",
       "requirements": [
-        "APPROVAL-DECISION-011"
+        "APPROVAL-DECISION-011",
+        "APPROVAL-DECISION-014",
+        "APPROVAL-ERROR-005"
       ],
       "description": "Approval.decision.record, [\"decision\",\"actor\",\"type\"] object; reject atomically.",
       "operation": "approval.decision.record",
@@ -862,7 +876,7 @@
                 "type": "user"
               },
               "decidedAt": "2026-09-01T10:00:00Z",
-              "decisionId": "decision-observed",
+              "decisionId": "decision-1",
               "requirementRef": {
                 "contextId": "ctx-approval-boundary097-discovery-f8a-009",
                 "requirementId": "finance-review",
@@ -881,17 +895,21 @@
         "regression",
         "boundary",
         "negative",
-        "mutation-sensitive"
+        "mutation-sensitive",
+        "invariant"
       ],
       "guardsAgainst": [
-        "concrete-approval-required-evidence-bypass"
+        "concrete-approval-required-evidence-bypass",
+        "failed-approval-rewrites-decision-identity"
       ]
     },
     {
       "id": "approval.boundary097.discovery-f8a-010",
       "spec": "approvals/decisions",
       "requirements": [
-        "APPROVAL-DECISION-011"
+        "APPROVAL-DECISION-011",
+        "APPROVAL-DECISION-014",
+        "APPROVAL-ERROR-005"
       ],
       "description": "Approval.decision.record, [\"decision\",\"actor\",\"type\"] array; reject atomically.",
       "operation": "approval.decision.record",
@@ -972,7 +990,7 @@
                 "type": "user"
               },
               "decidedAt": "2026-09-01T10:00:00Z",
-              "decisionId": "decision-observed",
+              "decisionId": "decision-1",
               "requirementRef": {
                 "contextId": "ctx-approval-boundary097-discovery-f8a-010",
                 "requirementId": "finance-review",
@@ -991,17 +1009,21 @@
         "regression",
         "boundary",
         "negative",
-        "mutation-sensitive"
+        "mutation-sensitive",
+        "invariant"
       ],
       "guardsAgainst": [
-        "concrete-approval-required-evidence-bypass"
+        "concrete-approval-required-evidence-bypass",
+        "failed-approval-rewrites-decision-identity"
       ]
     },
     {
       "id": "approval.boundary097.discovery-f8a-011",
       "spec": "approvals/decisions",
       "requirements": [
-        "APPROVAL-DECISION-011"
+        "APPROVAL-DECISION-011",
+        "APPROVAL-DECISION-014",
+        "APPROVAL-ERROR-005"
       ],
       "description": "Approval.decision.record, [\"decision\",\"actor\",\"type\"] false; reject atomically.",
       "operation": "approval.decision.record",
@@ -1082,7 +1104,7 @@
                 "type": "user"
               },
               "decidedAt": "2026-09-01T10:00:00Z",
-              "decisionId": "decision-observed",
+              "decisionId": "decision-1",
               "requirementRef": {
                 "contextId": "ctx-approval-boundary097-discovery-f8a-011",
                 "requirementId": "finance-review",
@@ -1101,17 +1123,21 @@
         "regression",
         "boundary",
         "negative",
-        "mutation-sensitive"
+        "mutation-sensitive",
+        "invariant"
       ],
       "guardsAgainst": [
-        "concrete-approval-required-evidence-bypass"
+        "concrete-approval-required-evidence-bypass",
+        "failed-approval-rewrites-decision-identity"
       ]
     },
     {
       "id": "approval.boundary097.discovery-f8a-012",
       "spec": "approvals/decisions",
       "requirements": [
-        "APPROVAL-DECISION-011"
+        "APPROVAL-DECISION-011",
+        "APPROVAL-DECISION-014",
+        "APPROVAL-ERROR-005"
       ],
       "description": "Approval.decision.record, [\"decision\",\"actor\",\"type\"] zero; reject atomically.",
       "operation": "approval.decision.record",
@@ -1192,7 +1218,7 @@
                 "type": "user"
               },
               "decidedAt": "2026-09-01T10:00:00Z",
-              "decisionId": "decision-observed",
+              "decisionId": "decision-1",
               "requirementRef": {
                 "contextId": "ctx-approval-boundary097-discovery-f8a-012",
                 "requirementId": "finance-review",
@@ -1211,17 +1237,21 @@
         "regression",
         "boundary",
         "negative",
-        "mutation-sensitive"
+        "mutation-sensitive",
+        "invariant"
       ],
       "guardsAgainst": [
-        "concrete-approval-required-evidence-bypass"
+        "concrete-approval-required-evidence-bypass",
+        "failed-approval-rewrites-decision-identity"
       ]
     },
     {
       "id": "approval.boundary097.discovery-f8a-013",
       "spec": "approvals/decisions",
       "requirements": [
-        "APPROVAL-DECISION-011"
+        "APPROVAL-DECISION-011",
+        "APPROVAL-DECISION-014",
+        "APPROVAL-ERROR-005"
       ],
       "description": "Approval.decision.record, [\"decision\",\"actor\",\"type\"] empty; reject atomically.",
       "operation": "approval.decision.record",
@@ -1302,7 +1332,7 @@
                 "type": "user"
               },
               "decidedAt": "2026-09-01T10:00:00Z",
-              "decisionId": "decision-observed",
+              "decisionId": "decision-1",
               "requirementRef": {
                 "contextId": "ctx-approval-boundary097-discovery-f8a-013",
                 "requirementId": "finance-review",
@@ -1321,10 +1351,12 @@
         "regression",
         "boundary",
         "negative",
-        "mutation-sensitive"
+        "mutation-sensitive",
+        "invariant"
       ],
       "guardsAgainst": [
-        "concrete-approval-required-evidence-bypass"
+        "concrete-approval-required-evidence-bypass",
+        "failed-approval-rewrites-decision-identity"
       ]
     },
     {
@@ -2644,7 +2676,11 @@
       "id": "approval.boundary097.discovery-f8a-040",
       "spec": "approvals/decisions",
       "requirements": [
-        "APPROVAL-REQUIREMENT-004"
+        "APPROVAL-DECISION-014",
+        "APPROVAL-ERROR-005",
+        "APPROVAL-ERROR-006",
+        "APPROVAL-REQUIREMENT-004",
+        "APPROVAL-VALIDITY-012"
       ],
       "description": "Approval.decision.withdraw, [\"requirement\",\"approvedOutcome\"] omit; reject atomically.",
       "operation": "approval.decision.withdraw",
@@ -2722,7 +2758,7 @@
                 "type": "user"
               },
               "decidedAt": "2026-09-01T12:00:00Z",
-              "decisionId": "decision-observed",
+              "decisionId": "decision-1",
               "requirementRef": {
                 "contextId": "ctx-approval-boundary097-discovery-f8a-040",
                 "requirementId": "finance-review",
@@ -2732,7 +2768,8 @@
                 }
               }
             }
-          ]
+          ],
+          "lifecycle": []
         }
       },
       "reviewFinding": "concrete-approval-required-evidence",
@@ -2741,17 +2778,23 @@
         "regression",
         "boundary",
         "negative",
-        "mutation-sensitive"
+        "mutation-sensitive",
+        "invariant"
       ],
       "guardsAgainst": [
-        "concrete-approval-required-evidence-bypass"
+        "concrete-approval-required-evidence-bypass",
+        "failed-approval-rewrites-decision-identity"
       ]
     },
     {
       "id": "approval.boundary097.discovery-f8a-041",
       "spec": "approvals/decisions",
       "requirements": [
-        "APPROVAL-REQUIREMENT-004"
+        "APPROVAL-DECISION-014",
+        "APPROVAL-ERROR-005",
+        "APPROVAL-ERROR-006",
+        "APPROVAL-REQUIREMENT-004",
+        "APPROVAL-VALIDITY-012"
       ],
       "description": "Approval.decision.withdraw, [\"requirement\",\"rejectedOutcome\"] omit; reject atomically.",
       "operation": "approval.decision.withdraw",
@@ -2829,7 +2872,7 @@
                 "type": "user"
               },
               "decidedAt": "2026-09-01T12:00:00Z",
-              "decisionId": "decision-observed",
+              "decisionId": "decision-1",
               "requirementRef": {
                 "contextId": "ctx-approval-boundary097-discovery-f8a-041",
                 "requirementId": "finance-review",
@@ -2839,7 +2882,8 @@
                 }
               }
             }
-          ]
+          ],
+          "lifecycle": []
         }
       },
       "reviewFinding": "concrete-approval-required-evidence",
@@ -2848,10 +2892,12 @@
         "regression",
         "boundary",
         "negative",
-        "mutation-sensitive"
+        "mutation-sensitive",
+        "invariant"
       ],
       "guardsAgainst": [
-        "concrete-approval-required-evidence-bypass"
+        "concrete-approval-required-evidence-bypass",
+        "failed-approval-rewrites-decision-identity"
       ]
     },
     {
@@ -4332,7 +4378,11 @@
       "id": "approval.boundary097.discovery-f8a-450",
       "spec": "approvals/decisions",
       "requirements": [
-        "APPROVAL-REQUIREMENT-004"
+        "APPROVAL-DECISION-014",
+        "APPROVAL-ERROR-005",
+        "APPROVAL-ERROR-006",
+        "APPROVAL-REQUIREMENT-004",
+        "APPROVAL-VALIDITY-012"
       ],
       "description": "Approval.decision.withdraw, [\"requirement\",\"approvedOutcome\"] omit; reject atomically.",
       "operation": "approval.decision.withdraw",
@@ -4413,7 +4463,7 @@
                 "type": "user"
               },
               "decidedAt": "2026-09-01T12:00:00Z",
-              "decisionId": "decision-observed",
+              "decisionId": "decision-1",
               "requirementRef": {
                 "contextId": "ctx-approval-boundary097-discovery-f8a-450",
                 "requirementId": "finance-review",
@@ -4423,7 +4473,8 @@
                 }
               }
             }
-          ]
+          ],
+          "lifecycle": []
         }
       },
       "reviewFinding": "concrete-approval-required-evidence",
@@ -4432,10 +4483,12 @@
         "regression",
         "boundary",
         "negative",
-        "mutation-sensitive"
+        "mutation-sensitive",
+        "invariant"
       ],
       "guardsAgainst": [
-        "concrete-approval-required-evidence-bypass"
+        "concrete-approval-required-evidence-bypass",
+        "failed-approval-rewrites-decision-identity"
       ]
     },
     {

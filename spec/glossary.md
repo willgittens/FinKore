@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 2.0.1 stable.**
+**FinKore Core 2.0.2 stable.**
 
 ## Terms
 
