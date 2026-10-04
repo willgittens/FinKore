@@ -11,8 +11,13 @@ correction, reversal, void, and supersession. These operations preserve stable
 Entity identity and historical financial facts while allowing a composing domain
 to represent later domain outcomes without rewriting the original Entity.
 
-This document does not define invoices, ledger postings, persistence,
-authorization, or legal cancellation policy.
+## Reading path (Non-Normative)
+
+Start with the four evolution concepts below. The [portable model](#portable-model)
+explains the request and evidence, and the [requirements](#requirements) are
+grouped by operation and shared guarantees. [Examples](#examples) illustrate
+the distinctions; concrete accounting effects remain the composing domain's
+responsibility.
 
 ## Terminology
 
@@ -151,6 +156,8 @@ introduced by this clarification.
 
 ## Requirements
 
+### Identity and declared meaning
+
 - **ENTITY-EVOLUTION-001** - Recording Entity evolution MUST NOT change the stable identity of any continuing Financial Entity.
 - **ENTITY-EVOLUTION-002** - When a composing domain uses Entity Revisions, each Revision identity MUST identify a particular declared Entity observation or version, MUST be stable within its revision scope, and MUST remain distinct from stable Entity identity.
 - **ENTITY-EVOLUTION-003** - When a composing domain uses Evolution Relations, each relation identity MUST identify the relationship itself, MUST be stable within its relation scope, and MUST NOT be treated as the identity of the source or related Entity.
@@ -158,6 +165,8 @@ introduced by this clarification.
 - **ENTITY-EVOLUTION-005** - Replacement and Amendment MUST NOT be treated as portable Core 2.0 evolution operations unless a composing specification explicitly defines their meaning and maps them to one or more portable evolution concepts.
 - **ENTITY-EVOLUTION-006** - Workflow State names, terminal-state status, or display labels such as final, approved, posted, void, reversed, corrected, or superseded MUST NOT by themselves establish evolution eligibility or financial finality. Eligibility and consequences MUST be declared by the composing domain or lifecycle policy.
 - **ENTITY-EVOLUTION-007** - An evolution request MUST identify one source Financial Entity, exactly one supported evolution kind, and every related Entity, Revision, or Evolution Relation required by that kind.
+### Correction and reversal
+
 - **ENTITY-EVOLUTION-008** - A Correction MUST preserve the source Entity's stable identity and original financial facts while producing or identifying a corrected related Entity or Revision carrying the corrected financial facts.
 - **ENTITY-EVOLUTION-009** - A Correction MUST NOT mutate source financial facts in place when the composing domain or lifecycle policy declares those facts no longer directly mutable.
 - **ENTITY-EVOLUTION-010** - A Correction request MUST be rejected when the source Entity is not eligible for correction under the composing domain or lifecycle policy.
@@ -166,12 +175,18 @@ introduced by this clarification.
 - **ENTITY-EVOLUTION-013** - When a Correction or Reversal creates or references a related Financial Entity, that related Entity MUST have a stable identity supplied or preserved according to the Entity identity requirements; the implementation MUST NOT infer that identity from mutable source facts.
 - **ENTITY-EVOLUTION-014** - A Correction or Reversal request that would duplicate an existing Evolution Relation identity or violate the composing domain's declared duplicate policy MUST be rejected without creating another relation.
 - **ENTITY-EVOLUTION-015** - Original financial facts relevant to a corrected or reversed source Entity MUST remain observable after the successful Correction or Reversal.
+### Void
+
 - **ENTITY-EVOLUTION-016** - A Void MUST represent source nullification without deleting the source Entity.
 - **ENTITY-EVOLUTION-017** - A Void MUST NOT remove source identity, source financial facts, or prior evolution and audit evidence.
 - **ENTITY-EVOLUTION-018** - A Void request MUST be rejected when the source Entity is not eligible to be voided under the composing domain or lifecycle policy.
+### Supersession
+
 - **ENTITY-EVOLUTION-019** - A Supersession MUST relate a predecessor Entity or Revision to a successor Entity or Revision without changing either stable Entity identity.
 - **ENTITY-EVOLUTION-020** - Within the composing domain's declared supersession scope, a successfully superseded predecessor MUST NOT be represented as the current Entity or Revision after supersession succeeds.
 - **ENTITY-EVOLUTION-021** - A Supersession MUST preserve predecessor financial facts and history; it MUST NOT rewrite the predecessor to match the successor.
+### Observable results and failures
+
 - **ENTITY-EVOLUTION-022** - A successful evolution operation MUST leave an observable evolution history or relationship observation that identifies the evolution kind, source Entity identity, related Entity or Revision identity when applicable, and Evolution Relation identity when supplied.
 - **ENTITY-EVOLUTION-023** - A rejected evolution request MUST leave source Entity identity, related Entity identity, current lifecycle State, data, Revision identity or currentness, and existing Evolution Relations unchanged.
 - **ENTITY-EVOLUTION-024** - A missing, malformed, unsupported, or otherwise invalid evolution request MUST fail with `FINKORE_ENTITY_INVALID_MUTATION` unless a more specific primary domain error applies, and MUST NOT return a successful evolution result.
@@ -179,12 +194,16 @@ introduced by this clarification.
 - **ENTITY-EVOLUTION-026** - An evolution request with a missing, malformed, unstable, or conflicting source or related Entity identity MUST fail with `FINKORE_ENTITY_INVALID_IDENTITY`.
 - **ENTITY-EVOLUTION-027** - A Workflow, Money, Approval, or Audit failure encountered as the primary failure while evaluating an Entity evolution request MUST retain its domain-specific portable error code.
 - **ENTITY-EVOLUTION-028** - Evolution error diagnostics, when supplied, MUST remain safe diagnostic context and MUST NOT expose sensitive original or related financial values unnecessarily.
+### Audit evidence and atomicity
+
 - **ENTITY-EVOLUTION-029** - Every successful portable Entity evolution operation MUST produce corresponding Audit evidence in the same observable result.
 - **ENTITY-EVOLUTION-030** - Entity Evolution Relation identifiers, Audit Event identifiers, and Audit Relationship identifiers MUST be supplied by the composing domain or caller; an implementation MUST NOT generate, normalize, or infer them from Entity identity, Revision identity, state, time, display labels, or mutable financial facts.
 - **ENTITY-EVOLUTION-031** - Audit evidence for Entity evolution MUST identify the evolution kind, source Entity identity, source Revision identity, related Entity or Revision identity when applicable, Evolution Relation identity, and supersession scope when applicable without exposing unrelated sensitive financial values.
 - **ENTITY-EVOLUTION-032** - Audit evidence for Entity evolution MUST include an Audit Relationship whose relationship type corresponds to the evolution kind and whose target satisfies the Audit Relationship requirements.
 - **ENTITY-EVOLUTION-033** - Entity evolution and required Audit evidence MUST be atomic for portable observation: an Audit failure MUST prevent the evolution relation, currentness change, and success result from becoming observable.
 - **ENTITY-EVOLUTION-034** - When validating required evolution Audit evidence, an implementation MUST apply Audit validation in the order defined by `AUDIT-ERROR-004` before selecting an evolution-correspondence error. A failing Audit validation MUST retain its primary Audit error even when correspondence also fails. If Audit validation succeeds but required evolution correspondence fails, the request MUST fail with `FINKORE_ENTITY_INVALID_MUTATION`. Either failure MUST NOT produce a partial evolution or Audit result.
+### Currentness consistency
+
 - **ENTITY-EVOLUTION-035** - An implementation MUST reject an evolution request whose supplied or resulting evolution history contains unresolved contradictory currentness observations as defined in the Portable Model with `FINKORE_ENTITY_INVALID_MUTATION`, without selecting an arbitrary winner or changing any supplied Entity, Revision, currentness, evolution-history, or Audit-history observation. It MUST validate supplied-history consistency independently of whether an expected-currentness precondition is supplied and before comparing that expectation with observed currentness. It MUST NOT reject a consistent history solely because declared evolution effects change currentness between historical steps.
 
 ## Invariants

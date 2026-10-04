@@ -6,42 +6,46 @@
 
 ## Purpose
 
-This domain defines approval requirements and decisions independently of any particular authorization system.
+Approvals describes required business decisions and the evidence that makes
+them effective for a particular subject and set of facts.
 
 [Authorization](../glossary.md) answers, “May this Actor perform this operation?” Approval answers, “Has the required business decision been granted?” Authorization to perform an operation must not be treated as evidence that an Approval Requirement is satisfied.
+
+## Documents
+
+Start with requirements and conditions, then decisions and validity. Read chains
+for sequential or unordered combinations, and composition for groups, quorum,
+and stages.
+
+| Document | What you will learn |
+| --- | --- |
+| [Requirements](requirements.md) | The subject, eligible decision-makers, and required outcome |
+| [Conditions](conditions.md) | Whether a Requirement applies to the supplied facts |
+| [Decisions](decisions.md) | Recorded outcomes, scoped identity, and fact association |
+| [Validity](validity.md) | Whether a historical Decision remains effective now |
+| [Chains](chains.md) | Combining Requirements sequentially or without ordering |
+| [Composition](composition.md) | All-of, any-of, quorum, and staged evaluation with limited nesting |
+| [Errors](errors.md) | Portable failure codes and composition validation priority |
+
+Composition fixture labels are conformance-local; they are not canonical
+Agentic operations.
 
 ## Requirements
 
 - Approval behavior must be based on declared [Approval Requirements](requirements.md).
 - An [Approval Decision](decisions.md) must identify its Approval Requirement, outcome, Actor, time, and association with the relevant subject state or facts.
 - An [Approval Chain](chains.md) must define how its Approval Requirements combine and must declare sequencing only when sequencing applies.
-- [Approval Composition](composition.md) defines bounded any-of, all-of, quorum,
-  staged, and nested group evaluation for Core 2.0. Quorum members reference
-  Requirements with explicit distinct voter identities; quorum groups may be
-  nested beneath any-of/all-of groups but cannot contain child groups as votes.
-  The declared quorum threshold stays fixed when applicability changes; a
-  nonempty applicable quorum is rejected when that threshold is unreachable.
-  Entirely inapplicable child groups are omitted from parent evaluation; an
-  entirely inapplicable composition is approved because no approval is required.
-  Applicable groups within a stage combine with all-of semantics; a valid stage
-  with no applicable groups does not block progression. Stage lists and each
-  stage's declared groups must be nonempty; each stage root starts at depth one
-  within the four-group nesting limit. Complete structure and required-evidence
-  validation includes later stages and alternative branches before any outcome.
-  Pending staged compositions report unique pending applicable Requirements
-  through pending groups in their first pending stage, in recursive declared
-  order. Coexisting validation failures follow structure, applicability, required
-  context, then state/effectiveness priority. Opposing effective Decisions from
-  one declared quorum voter are invalid evidence; each member's state uses only
-  its matching voter/Requirement evidence. Composition fixture labels remain
-  conformance-local; they are not canonical Agentic operations.
+- [Approval Composition](composition.md) combines Requirements through bounded
+  all-of, any-of, quorum, staged, and nested groups. Its detailed rules cover
+  applicability, voter evidence, thresholds, actionability, and complete validation.
 - [Conditional Approval Requirements](conditions.md) must use explicit domain facts.
 - [Approval Validity](validity.md) must derive current effectiveness from append-only history, explicit evaluation context, relevant subject facts or revisions, and lifecycle evidence such as withdrawal, expiration, or supersession.
 
 Sequential Chain actionability follows the first non-approved Requirement.
 Concrete Decision/history boundaries reject caller-asserted effectiveness and
-validate eligibility across all supplied Decisions for the evaluated Requirement. Approval Composition retains its separate lightweight
-current-effectiveness observation contract.
+validate eligibility across all supplied Decisions for the evaluated Requirement.
+Approval Composition retains its separate lightweight current-effectiveness
+observation contract.
 
 ## Invariants
 

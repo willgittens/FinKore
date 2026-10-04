@@ -33,7 +33,27 @@ establishes none of them.
 is a recommendation that may be departed from with documented justification.
 **MAY** expresses permission.
 
+## Reading guide
+
+The five principles below describe the financial obligations that the domain
+specifications refine. Start with the principle relevant to your question:
+
+| Principle | Question it addresses |
+| --- | --- |
+| [Monetary integrity](#monetary-integrity) | How do amounts retain their value and currency through calculation? |
+| [Controlled financial state](#controlled-financial-state) | Which changes are permitted, and what happens when a change is rejected? |
+| [Financial history and evolution](#financial-history-and-evolution) | How are original facts preserved when later actions change their effect? |
+| [Approval integrity](#approval-integrity) | What was approved, by whom, and does that approval still apply? |
+| [Identifiable and determinable financial meaning](#identifiable-and-determinable-financial-meaning) | Can a reviewer identify the subject, distinguish conditions, and reproduce the outcome? |
+
+Each rule gives its obligation, explains **why this matters**, then describes
+its **interpretation** and **boundaries**. **Relevant FinKore domains** links to
+the precise specification clauses. The `CORE-*` identifiers provide stable
+references; the dates record each rule's normative evolution.
+
 # Core Principles and Financial Rules
+
+<a id="monetary-integrity"></a>
 
 ## CORE-001 — Monetary Integrity
 
@@ -166,6 +186,8 @@ for an allocation ratio.
 **Relevant FinKore domains**
 
 [Money allocation](../../spec/money/allocation.md) — MONEY-ALLOCATION-001 to -013.
+
+<a id="controlled-financial-state"></a>
 
 ## CORE-002 — Controlled Financial State
 
@@ -300,6 +322,8 @@ terminal state, and does not select a domain's field policy.
 **Relevant FinKore domains**
 
 [Entity mutability](../../spec/entities/mutability.md) — ENTITY-MUTABILITY-001 to -007.
+
+<a id="financial-history-and-evolution"></a>
 
 ## CORE-003 — Financial History and Evolution
 
@@ -437,6 +461,8 @@ or access-control policy.
 
 [Audit redaction](../../spec/audit/redaction.md) — AUDIT-REDACTION-001 to -007; [Audit append-only history](../../spec/audit/append-only.md) — AUDIT-APPEND-001 and -004; [Audit actors](../../spec/audit/actors.md) — AUDIT-ACTOR-006.
 
+<a id="approval-integrity"></a>
+
 ## CORE-004 — Approval Integrity
 
 **Introduced:** Draft 0.4
@@ -573,6 +599,8 @@ This rule does not define a universal sequence, rejection policy, or quorum.
 **Relevant FinKore domains**
 
 [Approval chains](../../spec/approvals/chains.md) — APPROVAL-CHAIN-001 to -010; [Approval requirements](../../spec/approvals/requirements.md) — APPROVAL-REQUIREMENT-005.
+
+<a id="identifiable-and-determinable-financial-meaning"></a>
 
 ## CORE-005 — Identifiable and Determinable Financial Meaning
 

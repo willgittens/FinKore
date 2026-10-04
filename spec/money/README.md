@@ -10,19 +10,24 @@ This domain defines exact monetary values and their fundamental behavior. A Mone
 
 ## Requirements
 
-The canonical Money requirements are defined by [Representation](representation.md), [Arithmetic](arithmetic.md), [Comparison](comparison.md), [Rounding](rounding.md), [Rates](rates.md), [Allocation](allocation.md), [Currency](currency.md), [Serialization](serialization.md), and [Errors](errors.md).
+The documents below define the canonical Money requirements. Start with
+representation and currency, then read the operations you need. Calculation
+scale and a currency's customary minor-unit scale are separate concepts;
+[rounding](rounding.md) explains when precision reduction is permitted.
 
 ## Documents
 
-- [Representation](representation.md)
-- [Arithmetic](arithmetic.md)
-- [Comparison](comparison.md)
-- [Rounding](rounding.md)
-- [Rates](rates.md)
-- [Allocation](allocation.md)
-- [Currency](currency.md)
-- [Serialization](serialization.md)
-- [Errors](errors.md)
+| Document | What you will learn |
+| --- | --- |
+| [Representation](representation.md) | What an exact monetary amount and its scale mean |
+| [Currency](currency.md) | Which currencies are valid and compatible |
+| [Arithmetic](arithmetic.md) | Addition, subtraction, multiplication, division, and exact results |
+| [Comparison](comparison.md) | Equality and ordering within a currency |
+| [Rounding](rounding.md) | Explicit target scales and portable rounding modes |
+| [Rates](rates.md) | Applying exact scalar and percentage rates |
+| [Allocation](allocation.md) | Splitting an amount while preserving its total |
+| [Serialization](serialization.md) | Preserving Money in portable data |
+| [Errors](errors.md) | Portable failure codes and their conditions |
 
 ## Invariants
 

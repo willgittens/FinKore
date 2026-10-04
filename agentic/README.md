@@ -1,5 +1,10 @@
 # FinKore Agentic Contract
 
+The Agentic Contract describes operations for agents and other machine clients:
+what each operation needs, what it returns, how it can fail, and what state it
+can change. Stable identifiers such as `finkore.money.add` name behavior
+independently of language, framework, or transport.
+
 ## Status
 
 **Documentation contract for FinKore Core 2.0.2 stable.**
@@ -10,16 +15,13 @@ governed by the [specification policy](../spec/conventions.md#compatibility-poli
 The 15 other manifest operation labels remain conformance-local; publication
 of their vectors does not promote them to Agentic capabilities.
 
-> Agent-ready by contract, not by convention.
+## Start here
 
-FinKore's Agentic Contract describes portable operational semantics for agents,
-autonomous systems, tool runtimes, and other machine clients. It lets a client
-discover a capability, understand its contract, and govern its use without
-depending on a programming language, framework, or transport.
-
-> FinKore does not make financial operations safer by trusting agents. It makes
-> agent behavior safer by exposing the same explicit domain constraints that
-> govern every other client.
+Read [Conventions](conventions.md) for operation identifiers and descriptors,
+then find the operation you need in the [registry](operations.md).
+[Effects](effects.md) explains the state and evidence implications;
+[Safety](safety.md) explains preconditions and policy boundaries. Clients use
+the same financial rules regardless of whether an agent invokes them.
 
 ## Architectural position
 
@@ -41,9 +43,8 @@ Specification ──► Conformance artifacts
 - `/agentic` MUST NOT redefine financial domain behavior already defined by
   `/spec`; descriptors reference specification requirement IDs instead.
 
-The contract is documentation-first. It defines no MCP server, tool definition,
-HTTP or JSON-RPC API, agent SDK integration, runtime adapter, authorization
-middleware, or reference implementation.
+This is a documentation contract. Consumers supply executable tools, transports,
+and authorization infrastructure.
 
 ## Agentic readiness
 
@@ -62,13 +63,11 @@ The Core Agentic Contract defines Discoverable, Understandable, and Governable
 semantics. Executable integrations and transports remain outside the current
 scope.
 
-For current FinKore Core work, an operation is **Agentic Ready** when it is
-Discoverable, Understandable, Governable, and Conformance-traceable. Direct
-execution through an agent framework is not required. The canonical
-`finkore.workflow.transition` descriptor includes version binding and
-expected-state/revision conflict preconditions. Approval composition and
-lifecycle fixtures, Workflow import, and Entity import remain conformance-local
-until stable public operation contracts exist.
+An operation is **Agentic Ready** when it is Discoverable, Understandable,
+Governable, and Conformance-traceable. The registry provides these semantics;
+the checklist below helps contributors review a descriptor. Approval composition
+and lifecycle fixtures, Workflow import, and Entity import remain
+conformance-local until stable public operation contracts exist.
 
 For Core 2.0, effect values use the dimensions defined in
 [Effects](effects.md). Idempotency is explicitly unspecified and is not a
@@ -79,14 +78,16 @@ outside Core.
 
 ## Documents
 
-- [Conventions](conventions.md)
-- [Capabilities](capabilities.md)
-- [Operation registry](operations.md)
-- [Effects](effects.md)
-- [Safety](safety.md)
-- [Discovery](discovery.md)
-- [Portable errors](errors.md)
-- [Examples](examples.md)
+| Document | What you will learn |
+| --- | --- |
+| [Conventions](conventions.md) | Operation IDs, descriptors, and representation layers |
+| [Capabilities](capabilities.md) | How a consumer advertises supported operations |
+| [Operation registry](operations.md) | Each canonical operation's complete contract |
+| [Effects](effects.md) | State changes and financial, audit, and approval implications |
+| [Safety](safety.md) | Preconditions, postconditions, and policy boundaries |
+| [Discovery](discovery.md) | Finding supported capabilities |
+| [Portable errors](errors.md) | Interpreting failures consistently across clients |
+| [Examples](examples.md) | Illustrative descriptors and discovery data |
 
 ## Readiness checklist
 

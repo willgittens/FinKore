@@ -7,41 +7,6 @@ auditable, and portable financial domain behavior. It gives recurring rules for
 Money, Workflow, Audit, Approvals, and Financial Entities stable names, precise
 semantics, and portable acceptance cases.
 
-FinKore is specification-first:
-
-```text
-Specification
-      ↓
-Conformance artifacts
-      ↓
-Agentic Contract
-      ↓
-Consumer-owned implementations and integrations
-```
-
-The specification is the source of truth. Conformance vectors and Agentic
-metadata make the contract easier to verify and consume; they do not redefine
-it.
-
-## What this repository publishes
-
-- [`spec/`](./spec/README.md) — normative financial behavior, invariants,
-  terminology, serialization rules, and portable errors.
-- [`conformance/`](./conformance/README.md) — language-independent acceptance
-  cases, schemas, conventions, and requirement traceability.
-- [`agentic/`](./agentic/README.md) — canonical `finkore.*` operation semantics,
-  effects, preconditions, postconditions, and portable errors.
-- [`docs/coreDoc/`](./docs/coreDoc/core-doc.md) — foundation-level financial
-  principles that the domain specifications refine.
-- [`docs/tools/`](./docs/tools/README.md) — repository-maintenance checks for
-  artifact validity, traceability, architecture, documentation, and licensing.
-
-This repository does **not** maintain a financial implementation, a Conformance
-Runner, a runner adapter API, or installable language packages. Consumers choose
-their own language, architecture, API, and execution tooling. The
-[consumer guide](./conformance/consumer-guide.md) explains how to discover and
-use the portable cases without prescribing those choices.
-
 ## Why FinKore exists
 
 Ordinary application operations become financially significant when exact
@@ -63,17 +28,34 @@ Approvals binds decisions to relevant facts; Audit preserves committed logical
 history. Those outcomes should not depend on a framework default or whichever
 service happened to implement them first.
 
+## Start reading
+
+Start with [CoreDoc](./docs/coreDoc/core-doc.md) for the financial principles and
+why they matter, then choose a domain from the table below. Each domain overview
+links to its detailed rules. You can read one domain at a time.
+
+In the specifications, **normative** means part of the contract: uppercase
+**MUST** and **MUST NOT** mark obligations, **SHOULD** and **SHOULD NOT** mark
+recommendations, and **MAY** marks permission. CoreDoc also uses **SHALL** and
+**SHALL NOT** for obligations. Requirement IDs such as `MONEY-ARITHMETIC-001`
+let you trace a rule to its acceptance cases. Examples explain the rules;
+their authority is described in [Conventions](./spec/conventions.md#normative-language).
+
+Keep the [glossary](./spec/glossary.md) nearby for unfamiliar terms. The
+[specification index](./spec/README.md) and
+[documentation index](./learn/index.html) provide the full reading map.
+
 ## Current scope
 
 The FinKore Core 2.0.2 stable normative baseline covers:
 
 | Domain | Defined behavior |
 | --- | --- |
-| Money | Exact decimal representation, currency compatibility, arithmetic, comparison, rates, allocation, rounding, and serialization |
-| Workflow | States, transitions, guards, terminal behavior, definition binding, imports, and conflict preconditions |
-| Audit | Actors, events, changes, append-only history, relationships, redaction, and portable failures |
-| Approvals | Requirements, conditions, decisions, validity, lifecycle history, chains, and bounded composition |
-| Financial Entities | Identity, lifecycle, mutability, validation, revisions, imports, and evidence-backed evolution |
+| [Money](./spec/money/README.md) | Exact amounts and currencies; arithmetic, comparison, rates, allocation, rounding, and serialization |
+| [Workflow](./spec/workflow/README.md) | Lifecycle states and permitted transitions; guards, terminal behavior, definition versions, imports, and conflict checks |
+| [Audit](./spec/audit/README.md) | Attributable, append-only history; events, changes, relationships, redaction, and portable failures |
+| [Approvals](./spec/approvals/README.md) | Required business decisions; conditions, validity, lifecycle history, chains, and bounded composition |
+| [Financial Entities](./spec/entities/README.md) | Stable identity over time; lifecycle, mutability, validation, revisions, imports, and evidence-backed evolution |
 
 The project does not define an ERP, accounting application, payment platform,
 ledger, persistence layer, authorization system, user interface, hosted service,
@@ -82,28 +64,23 @@ and other concrete accounting domains remain outside the current Core scope.
 
 ## Using the contract
 
-Start with the artifacts that match your task:
+This repository publishes the contract and maintenance tools. You supply the
+financial implementation and choose its language, API, storage, and execution
+tooling; there are no installable language packages, financial implementation,
+Conformance Runner, or adapter API here.
 
-The [documentation index](./learn/index.html) also links to these resources.
+| When you want to… | Read |
+| --- | --- |
+| Build an implementation | [Implementation guide](./docs/implementation-guide.md) |
+| Check behavior against portable acceptance cases | [Conformance artifacts](./conformance/README.md) and [consumer guide](./conformance/consumer-guide.md) |
+| Find cases for a requirement and understand coverage limits | [Requirement traceability](./conformance/traceability.md) |
+| Expose operations to agents or other machine clients | [Agentic Contract](./agentic/README.md) |
 
-1. Read [CoreDoc](./docs/coreDoc/core-doc.md) for foundation-level obligations.
-2. Read [specification conventions](./spec/conventions.md), the
-   [glossary](./spec/glossary.md), and the relevant domain specification.
-3. Use [conformance conventions](./conformance/conventions.md), the current
-   [operation contracts](./conformance/operations.md), and
-   [traceability](./conformance/traceability.md) to interpret the acceptance
-   cases.
-4. Read the [Agentic operation registry](./agentic/operations.md) when consuming
-   a canonical `finkore.*` operation.
-5. Follow the [implementation guide](./docs/implementation-guide.md) and
-   [consumer guide](./conformance/consumer-guide.md) in your own codebase.
-
-Conformance vectors are acceptance inputs and expected observations. They are
-not production API schemas and do not prescribe a class model, exception model,
-transport, command line, or test framework. A consumer-owned harness should load
-[`conformance/manifest.json`](./conformance/manifest.json), validate referenced
-files against the published schemas, dispatch canonical operation labels into
-the consumer implementation, and compare normalized observations.
+CoreDoc supplies the foundation; `/spec` defines precise domain behavior.
+Conformance vectors are test inputs and expected observations, and Agentic
+metadata describes canonical `finkore.*` operations. Both derive from the
+specification. The Agentic Contract covers discovery and operation semantics;
+you supply executable tools and transports, subject to the same financial rules.
 
 ## Repository verification
 
@@ -115,47 +92,22 @@ npm ci --no-audit
 npm run verify
 ```
 
-This validates schemas and vectors, checks requirement and Agentic traceability,
-enforces repository architecture, runs tool tests, checks documentation links
-and licenses. After the locked dependency is installed, `npm run verify` is
-local and makes no advisory-service request. It does **not** execute a financial
-implementation or establish that any external implementation conforms.
+This validates artifact schemas, vectors, traceability, Agentic consistency,
+repository architecture, tool tests, documentation links, and licenses. After
+dependency installation, verification runs locally. It checks the published
+artifacts; external implementation conformance requires consumer-owned execution.
 
-Dependency vulnerability review is a separate, network-enabled maintenance
-step:
-
-```bash
-npm run dependencies:audit
-```
-
-Its result covers the locked maintenance dependency graph against the advisory
-data returned at that time; it is not a financial-behavior or artifact-validity
-check. Installation may require registry access when the package cache is cold.
-
-See [Developer Tools](./docs/tools/README.md) for individual commands.
+See [Developer Tools](./docs/tools/README.md) for setup, individual commands,
+publication checks, and the separate network-backed `npm run dependencies:audit`.
 
 ## Status and evidence
 
-CoreDoc, the specification, conformance artifacts, and Agentic Contract identify
-the FinKore Core 2.0.2 stable baseline, including its financial
-behavior additions, acceptance cases, and canonical operation contracts.
-Known limitations and gaps are recorded in
-the specification, [traceability](./conformance/traceability.md), and Agentic
-Contract. [Release notes](./docs/releases/README.md) summarize published history;
-detailed development and implementation history remains in Git.
-
-Passing repository-maintenance checks proves that the published artifacts are
-internally well-formed within their stated bounds. It does not prove exhaustive
-financial correctness, external implementation conformance, production
-readiness, or regulatory suitability.
-
-## Agentic readiness
-
-The [Agentic Contract](./agentic/README.md) makes operations discoverable,
-understandable, governable, and conformance-traceable. It does not provide an MCP
-server, agent framework, transport, authorization layer, or execution bypass.
-Agents and other machine clients remain subject to the same financial rules as
-every other consumer.
+Known limits are recorded alongside the specification rules, in
+[traceability](./conformance/traceability.md), and in the Agentic Contract.
+Acceptance cases and repository checks provide bounded evidence; they do not
+establish exhaustive financial correctness, production readiness, or regulatory
+suitability. [Release notes](./docs/releases/README.md) summarize published
+history; detailed development history remains in Git.
 
 ## Contributing
 

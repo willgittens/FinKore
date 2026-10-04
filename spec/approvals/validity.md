@@ -10,20 +10,38 @@ This document defines current-effectiveness semantics for Approval Decisions.
 Core 2.0 uses explicit withdrawal, expiration, and supersession evidence plus
 scoped identity references while preserving append-only Approval history.
 
+## Reading path (Non-Normative)
+
+A committed Decision can remain in history while no longer being effective.
+Read the requirements by topic below, then [lifecycle operation scope](#lifecycle-operation-scope)
+for how record, withdrawal, supersession, and evaluation use that history.
+[Context and lifecycle validation](#context-and-lifecycle-validation) explains
+which evidence is checked before an outcome is returned.
+
 ## Requirements
+
+### History and current facts
 
 - **APPROVAL-VALIDITY-001** — Current Approval effectiveness MUST be derived from committed Approval Decisions, committed lifecycle events, current subject facts or subject revision context when supplied, and an explicit evaluation context.
 - **APPROVAL-VALIDITY-002** — A historical Approval Decision MUST remain in logical history even when it is no longer currently effective.
 - **APPROVAL-VALIDITY-003** — A Decision that no longer matches caller-declared relevant subject facts or subject revision context MUST NOT satisfy or reject a Requirement for current evaluation.
+### Withdrawal
+
 - **APPROVAL-VALIDITY-004** — A lifecycle event that withdraws a Decision MUST make only the identified Decision ineffective for current evaluation and MUST NOT remove or rewrite the withdrawn Decision.
 - **APPROVAL-VALIDITY-005** — Withdrawal requests MUST identify exactly one committed Decision and MUST be rejected when the target is missing, ambiguous, already withdrawn, or already superseded.
 - **APPROVAL-VALIDITY-006** — Withdrawal does not define authorization, delegation, or RBAC; when an implementation validates the withdrawal Actor against the affected Requirement, eligibility MUST be evaluated using the Requirement's declared eligibility boundary.
+### Expiration
+
 - **APPROVAL-VALIDITY-007** — A Decision with an expiration instant MUST be evaluated only with an explicit evaluation instant; implementations MUST NOT use wall-clock time, host timezone, or ambient locale to decide expiration.
 - **APPROVAL-VALIDITY-008** — Expiration instants and evaluation instants MUST identify unambiguous instants using the portable timestamp convention.
 - **APPROVAL-VALIDITY-009** — A Decision is expired when the evaluation instant is equal to or later than the Decision's expiration instant. Equivalent offsets MUST compare by instant, not by lexical representation.
+### Supersession and failure atomicity
+
 - **APPROVAL-VALIDITY-010** — A lifecycle event that supersedes a Decision MUST make the superseded Decision ineffective for current evaluation while preserving both historical Decisions and the supersession observation.
 - **APPROVAL-VALIDITY-011** — A lifecycle event that supersedes a Requirement MUST make Decisions for the superseded Requirement ineffective for current evaluation of that superseded Requirement; it MUST NOT make those Decisions satisfy the successor Requirement.
 - **APPROVAL-VALIDITY-012** — Failed lifecycle operations and failed current-effectiveness evaluations MUST leave committed Decisions and lifecycle events unchanged.
+
+### Complete validation and scoped references
 
 - **APPROVAL-VALIDITY-013** — Before returning a concrete Requirement evaluation outcome, an implementation MUST validate required expiration context for every currently considered Decision, independently of Decision order or a decisive outcome. For this purpose, a currently considered Decision identifies the evaluated Requirement and is not excluded by committed withdrawal, Decision supersession, or Requirement supersession. Fact/revision staleness MUST NOT waive required expiration context for these Decisions. A structurally valid Decision for another Requirement in the same context and subject scope, or a lifecycle-excluded Decision, MUST NOT require an evaluation instant solely because it has an expiration. A foreign-context or foreign-subject Decision is invalid scoped evidence under **APPROVAL-DECISION-013**, not unrelated evidence that can be excluded. All supplied Decision and lifecycle structure MUST still be validated, including excluded evidence. Missing or malformed required context MUST use `FINKORE_APPROVAL_INVALID_CONTEXT`. This rule does not define a total priority among unrelated concrete Approval failures.
 - **APPROVAL-VALIDITY-014** — Before record, lifecycle mutation, or current-effectiveness evaluation reuses supplied committed lifecycle history, the implementation MUST validate supported discriminators, required field structure, the single context-and-subject scope defined by **APPROVAL-DECISION-013**, and relationships in the history's declared local event order against committed Decisions and earlier lifecycle events. Decision withdrawal targets and Decision supersession targets/successors MUST resolve uniquely within that scope; supersession target and successor MUST be distinct. A withdrawal or Decision supersession target MUST NOT already be withdrawn or superseded. Requirement supersession target and successor references MUST remain in that same context and exact subject, their Requirement identifiers MUST be distinct, and a Requirement MUST NOT be superseded twice. Invalid evidence MUST use `FINKORE_APPROVAL_INVALID_DECISION` without changing either history. Requirement references MUST remain opaque; this rule MUST NOT require an absent Requirement registry or infer event order from timestamps.

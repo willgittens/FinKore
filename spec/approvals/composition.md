@@ -6,11 +6,18 @@
 
 ## Purpose
 
-This document defines bounded Core 2.0 Approval composition for reusable groups,
-quorum decisions, ordered stages, and limited nesting. It extends
-[Approval Chains](chains.md) without defining delegation, escalation,
-authorization, task routing, notifications, persistence, or an unrestricted graph
-engine.
+Approval Composition combines Requirements into groups, quorum decisions, and
+ordered stages, with limited nesting. It extends [Approval Chains](chains.md).
+
+## Reading path (Non-Normative)
+
+Start with the group kinds below, then the [requirements](#requirements).
+For detailed evaluation, follow [quorum evidence](#quorum-member-evidence),
+[thresholds](#threshold-validation-and-evaluation),
+[inapplicable groups](#entirely-inapplicable-groups), and
+[stages](#stage-outcomes). [Complete validation](#complete-validation) explains
+why a decisive outcome does not bypass checks on the rest of the definition.
+[Examples](#examples) illustrate how the parts fit together.
 
 ## Terminology
 
@@ -20,9 +27,11 @@ Requirements, Approval Groups, and optionally ordered Approval Stages.
 An Approval Group is a bounded set of members combined by one of these group
 kinds:
 
-- `ALL_OF`
-- `ANY_OF`
-- `N_OF_M`
+| Kind | Meaning when members apply |
+| --- | --- |
+| `ALL_OF` | Every applicable member's approval is needed |
+| `ANY_OF` | At least one applicable member's approval is needed |
+| `N_OF_M` | At least `N` distinct declared voters' effective approvals are needed |
 
 A group member is either a declared Approval Requirement reference or a declared
 child Approval Group reference, subject to the quorum-specific restriction below.
@@ -37,6 +46,8 @@ itself contain child groups as voting members.
 
 ## Requirements
 
+### Definition and nesting
+
 - **APPROVAL-COMPOSITION-001** — An Approval Composition MUST declare exactly one root Approval Group or one nonempty ordered list of Approval Stages. Each Stage MUST declare one or more root Approval Group references, and each reference MUST resolve to exactly one declared Approval Group.
 - **APPROVAL-COMPOSITION-002** — Every Approval Group MUST have a stable identifier that is unique within the Approval Composition.
 - **APPROVAL-COMPOSITION-003** — Every Approval Group MUST declare exactly one group kind: `ALL_OF`, `ANY_OF`, or `N_OF_M`.
@@ -44,23 +55,33 @@ itself contain child groups as voting members.
 - **APPROVAL-COMPOSITION-005** — An Approval Group MUST NOT contain the same member identifier more than once within that group.
 - **APPROVAL-COMPOSITION-006** — An Approval Group MUST NOT create a cycle through child group references.
 - **APPROVAL-COMPOSITION-007** — Nested Approval Group evaluation MUST be bounded to a maximum depth of four groups on every root-to-child path. The standalone root group, or each group directly referenced by a Stage, MUST count as depth one; each child group MUST increase depth by one. Stage and stage-list containers MUST NOT count as group levels.
+### Evaluation inputs and applicability
+
 - **APPROVAL-COMPOSITION-008** — Composition evaluation MUST be deterministic from the composition definition, declared member order, current-effective Approval Requirement or Decision observations, and explicit evaluation context.
 - **APPROVAL-COMPOSITION-009** — A declared Requirement member with unresolved applicability MUST fail composition evaluation with `FINKORE_APPROVAL_CONDITION_UNRESOLVED`; it MUST NOT be treated as approved, rejected, pending, or not applicable.
 - **APPROVAL-COMPOSITION-010** — A required member with missing or malformed current state or effectiveness evidence MUST fail composition evaluation with `FINKORE_APPROVAL_INVALID_CHAIN`; it MUST NOT be silently inferred. Missing or malformed required evaluation context instead MUST use `FINKORE_APPROVAL_INVALID_CONTEXT` as defined by Approval Validity. When failures coexist, the returned code MUST follow APPROVAL-ERROR-010.
 - **APPROVAL-COMPOSITION-011** — A member explicitly evaluated as not applicable MUST be omitted from its containing group's outcome evaluation and MUST NOT contribute an approval, rejection, or pending blocker. This includes a child Approval Group with no applicable members after explicit applicability evaluation; the omission MUST propagate through nested groups.
 - **APPROVAL-COMPOSITION-012** — A structurally valid Approval Group with no applicable members after explicit applicability evaluation MUST evaluate as `APPROVED`, meaning it imposes no current approval obligation. When it is a child group, its containing group MUST treat it as not applicable under APPROVAL-COMPOSITION-011, not as an approving member.
+### Group outcomes
+
 - **APPROVAL-COMPOSITION-013** — An `ALL_OF` group with at least one applicable member MUST evaluate as `APPROVED` only when every applicable member is approved; it MUST evaluate as `REJECTED` when any applicable member is rejected; otherwise it MUST evaluate as `PENDING`.
 - **APPROVAL-COMPOSITION-014** — An `ANY_OF` group with at least one applicable member MUST evaluate as `APPROVED` when at least one applicable member is approved; it MUST evaluate as `REJECTED` only when every applicable member is rejected; otherwise it MUST evaluate as `PENDING`.
 - **APPROVAL-COMPOSITION-015** — A `PENDING` member or voter MUST NOT be interpreted as an abstention, rejection, or approval.
+### Stage ordering and actionability
+
 - **APPROVAL-COMPOSITION-016** — An ordered Approval Stage list MUST evaluate stages in declared order and MUST NOT make a later stage actionable before every earlier stage is approved.
 - **APPROVAL-COMPOSITION-017** — Groups declared within the same Approval Stage MUST be parallel for composition purposes. Their order MUST determine deterministic observation order only and MUST NOT establish prerequisite ordering.
 - **APPROVAL-COMPOSITION-018** — A staged composition MUST evaluate as `APPROVED` only when every stage is approved, `REJECTED` when the first non-approved stage is rejected, and `PENDING` when the first non-approved stage is pending.
 - **APPROVAL-COMPOSITION-019** — A pending staged composition MUST report all and only the pending, applicable Requirements reachable through exclusively pending groups in its first pending stage. It MUST visit that stage's root groups in declared order and recursively visit each pending group's members in declared order, reporting each Requirement identifier once at its first eligible occurrence. It MUST exclude later stages and approved, rejected, or entirely inapplicable group branches. An approved or rejected composition MUST report no actionable Requirements.
+### Evidence and complete validation
+
 - **APPROVAL-COMPOSITION-020** — Composition state observations MUST NOT be treated as proof of which Approval Decision satisfied a Requirement or which subject facts were bound to that Decision.
 - **APPROVAL-COMPOSITION-021** — Composition evaluation MUST reuse Core 2.0 current-effectiveness semantics for withdrawn, expired, superseded, stale-fact, stale-revision, and ineligible Decisions.
 - **APPROVAL-COMPOSITION-022** — A structurally valid Approval Composition with no applicable Approval Requirements after explicit applicability evaluation MUST return `APPROVED`, meaning no approval is currently required. That outcome MUST NOT create or imply an approving Decision; it MUST remain distinguishable from evidence that a voter approved.
 - **APPROVAL-COMPOSITION-023** — An Approval Stage MUST omit entirely inapplicable groups from its outcome evaluation. With at least one applicable group, the stage MUST evaluate as `APPROVED` when every applicable group is approved, `REJECTED` when any applicable group is rejected, and `PENDING` otherwise. A structurally valid stage with no applicable groups MUST evaluate as `APPROVED`, meaning it imposes no current approval obligation and does not itself block progression to a later stage.
 - **APPROVAL-COMPOSITION-024** — Composition evaluation MUST validate the entire composition definition, applicability of every declared Requirement member, and all required current-state and effectiveness evidence before returning an outcome. This MUST include later stages and all alternative branches, even when their outcome would not change the aggregate result. An otherwise decisive approval, rejection, pending state, or no-obligation result MUST NOT suppress a required validation failure. Validation of a later stage MUST NOT make it actionable.
+### Quorum rules
+
 - **APPROVAL-QUORUM-001** — An `N_OF_M` group MUST declare a positive integer threshold `N`, and `N` MUST be less than or equal to the number of distinct declared voting members `M`, counted before applicability evaluation. Evaluation MUST NOT lower or otherwise change `N` when fewer members apply.
 - **APPROVAL-QUORUM-002** — A quorum approval count MUST include only distinct declared voter identities from currently effective approving Decisions that identify the member's referenced Requirement and declared voter Actor; each deciding Actor MUST also be eligible for that Requirement.
 - **APPROVAL-QUORUM-003** — A voter identity MUST contribute at most one approval to the same quorum group, even if multiple effective approving Decisions by that voter are present.

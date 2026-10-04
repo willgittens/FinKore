@@ -1,18 +1,22 @@
 # FinKore Conformance Artifacts
 
-> FinKore cases are designed not only to demonstrate correct behavior, but to
-> make plausible financial defects fail.
+This directory contains portable acceptance cases for **FinKore Core 2.0.2 stable**.
+Each case, called a **vector**, describes an input and the expected observable
+result: a value or portable error, plus post-operation state where required.
+Cases include boundaries and plausible defects as well as successful operations.
 
-This directory contains the **FinKore Core 2.0.2 stable** conformance baseline.
-The specification remains the source of truth.
-Vectors describe observable inputs, results, portable errors, and post-state;
-they do not prescribe APIs, classes, exceptions, storage, frameworks, or an
-execution protocol.
+Use these cases to evaluate your own implementation. You supply the invocation,
+result normalization, comparison, and reporting. Repository checks validate the
+published artifacts; financial conformance requires execution against an
+implementation. The specification remains authoritative for behavior.
 
-The repository does not contain a financial implementation, Conformance Runner,
-or adapter API. Its local checks validate the artifacts themselves. Consumers
-own implementation bindings, execution, normalized observation, comparison,
-and reporting.
+## Start here
+
+Read the [consumer guide](consumer-guide.md) for discovery and evaluation, then
+the [operation contracts](operations.md) for the operations you need.
+[Conventions](conventions.md) explains fixture details and exact comparison.
+Use [traceability](traceability.md) to find cases for a requirement and understand
+where additional consumer evidence is needed.
 
 ## Published artifacts
 
@@ -27,13 +31,6 @@ and reporting.
   mutation intent, and coverage limitations.
 - [`consumer-guide.md`](consumer-guide.md) — discovery, execution outcomes,
   reporting, and claim guidance.
-
-The published manifest contains 47 vector files and 1,822 vectors. Repository
-verification checks their schemas, identifiers, declared portable error
-references, paired controls, requirement references, specification topics,
-operation catalog, and Agentic alignment. Paired controls must resolve to
-manifest-listed vector IDs. These checks do not execute financial behavior and
-do not establish that any implementation passes the vectors.
 
 Traceability currently records 447 requirements: 363 covered by portable
 vectors, five partially covered, and 79 not directly testable by portable
@@ -54,6 +51,9 @@ Core-version field. Use the `core-2.0.2` tag for this published manifest.
 formats, not the FinKore Core release. A claim identifies the exact release or
 commit and manifest as well as the format version. Referenced requirement IDs
 and [traceability](traceability.md) describe the covered scope and its limits.
+
+For retained data from an earlier Core release, follow the
+[Core 2.0 migration guidance](consumer-guide.md#core-20-migration).
 
 The suites cover:
 
@@ -118,32 +118,18 @@ See [Conformance Conventions](conventions.md) for the detailed portable contract
 
 ## Claim model
 
-A conformance claim concerns observable behavior against an identified Core
-release and manifest. It says nothing by itself about production API shape,
-storage design, framework integration, package maturity, mutation score, or
-Agentic capability advertising.
+A complete Core claim passes every applicable manifest-listed vector against a
+named implementation. A domain-scoped claim covers named suites and passes all
+applicable vectors in them; it must not be described as complete Core conformance.
+Report the exact Core release, manifest, format version, implementation,
+evaluation tooling and binding, included suites, filters, and full result counts.
 
-A complete Core claim must identify:
-
-- the FinKore Core release;
-- the manifest identity and `finkoreConformance` format version;
-- all suites included;
-- the implementation under test;
-- the consumer-owned evaluation tool and binding;
-- filters, if any, and full result counts.
-
-A complete claim passes every applicable manifest-listed vector. Applicability
-is declared before case selection according to optional `MAY` choices and
-justified `SHOULD` exceptions in the
-[consumer guide](consumer-guide.md#case-applicability); excluded vector IDs and
-reasons remain visible and are not passing results. `UNSUPPORTED` is not
-passing. A domain-scoped claim may cover only named domain suites, but it
-must pass every applicable vector in those suites and must not be described as
-complete Core conformance. A selected-vector or selected-tag run is a useful
-development report only when its filters are disclosed.
-
-Artifact validation alone is not a conformance claim. Advertising an Agentic
-operation is not a conformance claim.
+Declare optional choices and justified recommendation exceptions before case
+selection. Excluded cases and their reasons remain visible; `UNSUPPORTED` is not
+passing. Follow the consumer guide's [case applicability](consumer-guide.md#case-applicability)
+and [claim guidance](consumer-guide.md#making-a-conformance-claim) for the full
+reporting obligations. A filtered development run, artifact validation, or
+Agentic capability advertisement does not establish complete Core conformance.
 
 ## Test design and determinism
 
@@ -177,15 +163,6 @@ Consumer implementations should use mutation testing or an equivalent
 defect-resistance method appropriate to their language. Such results are
 consumer evidence, not results produced by this repository.
 
-## Contract status
-
-The corpus targets the **FinKore Core 2.0.2 stable** specification. Manifest and
-vector-file syntax remain `0.1`; consumer migration is described in the
-[consumer guide](consumer-guide.md#core-20-migration).
-Artifact validity does not establish external implementation conformance. See
-[release notes](../docs/releases/README.md) for publication status and concise
-release history.
-
 ## Repository validation
 
 From a clean checkout with Node `>=24.11.0 <25`:
@@ -198,7 +175,7 @@ npm run agentic:check
 ```
 
 Use `npm run verify` for the complete repository-maintenance suite. These
-commands validate published artifacts and their relationships; they do not run
-an implementation or query a vulnerability advisory service. Use
-`npm run dependencies:audit` separately for a fresh network-backed review of
-the locked maintenance dependency graph.
+commands validate published artifacts and their relationships locally. See
+[Developer Tools](../docs/tools/README.md) for validation details and the separate
+dependency review, and [release notes](../docs/releases/README.md) for published
+history.

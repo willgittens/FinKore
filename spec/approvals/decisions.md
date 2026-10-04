@@ -6,7 +6,17 @@
 
 ## Purpose
 
-This document defines recorded approval outcomes.
+An Approval Decision records who approved or rejected a Requirement, when, and
+against which subject facts. The record remains in history even when it no
+longer contributes to a current outcome.
+
+## Reading path (Non-Normative)
+
+Read the [requirements](#requirements) for the Decision record, then
+[scoped history](#scoped-history-population) for its context and subject
+association. [Fact comparison](#fact-comparison) explains whether the recorded
+facts still match. The [example](#example) connects those rules to an invoice
+approval; [Validity](validity.md) covers withdrawal, expiration, and supersession.
 
 ## Terminology
 
@@ -67,6 +77,8 @@ rule, current-fact or revision comparison, expiration-context test, and outcome
 contribution. The portable errors already assigned to those checks remain in
 force; this validation split does not create a total priority among otherwise
 unrelated failures.
+
+### Fact comparison
 
 - **APPROVAL-FACT-001** — When concrete Decision or Requirement evaluation is supplied current subject facts, omission of a relevance selector MUST compare the complete supplied fact value against the Decision's retained fact value. An explicitly supplied nonempty selector list MUST narrow comparison to the selected facts. Null, empty, or malformed selector declarations MUST fail with `FINKORE_APPROVAL_INVALID_DECISION`, even when another validity condition would make the Decision ineffective. Implementations MUST NOT synthesize current facts from historical facts. Concrete single-Decision evaluation MUST reject absent current facts with `FINKORE_APPROVAL_INVALID_DECISION`. Requirement evaluation MAY omit both current facts and selectors to evaluate history without claiming current-fact validation; supplied selectors without current facts MUST use `FINKORE_APPROVAL_INVALID_DECISION`. Explicit null current facts MUST remain a supplied value, not omission.
 - **APPROVAL-FACT-002** — An Approval fact selector MUST identify a nonempty sequence of nonempty object-member names. Selection MUST traverse only own object members and MUST NOT traverse arrays, inherited members, or implicit conversions. A selected fact MUST be present in both historical and current facts to match; absence on both sides MUST NOT count as equality. Explicit null at a selected leaf MUST count as present. Missing intermediate members or a non-object intermediate value MUST make the selected fact unavailable. The bounded dot-separated encoding is defined in conformance conventions; no wildcard, fallback to a literal dotted key, escaping, expression, or array-index language is implied.

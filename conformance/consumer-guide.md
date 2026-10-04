@@ -2,14 +2,22 @@
 
 ## Purpose
 
-FinKore publishes language-independent acceptance cases. It does not publish a
-runner API, implementation adapter contract, or financial evaluation engine.
-Consumers own the code that invokes their implementation, normalizes observable
-results, and compares those results with the vectors.
+Use the published acceptance cases to evaluate your own implementation. This
+guide explains how to discover cases, translate their requests, compare results,
+and report the scope of a conformance claim. You supply the execution code.
 
 The specification remains authoritative. A vector makes an expected observation
 concrete and links it to normative requirements; it does not create behavior
 that is absent from `/spec`.
+
+## Reading path
+
+For a first evaluation, read [discovery](#discovery-and-validation),
+[requests](#vector-request), [expected observations](#expected-observation), and
+[execution outcomes](#execution-outcomes). Before making a claim, review
+[case applicability](#case-applicability), [requirement mapping](#requirement-mapping),
+and [reporting obligations](#making-a-conformance-claim). Existing implementations
+should also review [Core 2.0 migration](#core-20-migration).
 
 ## Discovery and validation
 
@@ -142,39 +150,6 @@ The table is claim guidance, not vector syntax. It does not change
 `finkoreConformance` or `finkoreVectorFile` format `0.1`, add a runner protocol,
 or authorize private applicability members in vector files.
 
-## Previous compatible-release migration
-
-The previous compatible minor release added three normative requirement
-identifiers and 18 manifest-listed vectors, bringing the corpus to 439
-requirements and 1,808 vectors. It does not rename or retire a requirement,
-portable error, vector, or canonical operation, and the manifest and vector-file
-formats remain `0.1`. Existing stored domain records require no rewrite.
-
-Consumers making a complete claim to that earlier release should:
-
-- include the new vectors and disclose the two conditional cases through the
-  applicability process above;
-- pass explicitly supplied object-valued Entity transition facts to Workflow
-  guards and validate the complete proposed Entity at its target State. For a
-  claim to that earlier compatible release, non-object facts retained its then
-  undefined boundary; Core 2.0 supersedes that boundary as described below;
-- support the optional complete `rounding` policy on `finkore.money.divide`,
-  including invalid-policy and zero-divisor priority, while preserving exact
-  finite quotients and every omitted-policy call;
-- compare all newly requested failure observations, including unchanged Entity
-  and Approval histories, instead of treating the portable error alone as proof
-  of atomicity; and
-- retain Approval histories whose records do not encode scope under one immutable
-  consumer-owned context and subject, with the evidence described below.
-
-At that earlier compatible-release boundary, the Entity facts member and Money
-division policy were optional additions: omission preserved the earlier
-operation meanings, no Agentic operation was superseded, Approval records gained
-no scoped-reference or Decision-identity shape, and stronger record identity and
-malformed Entity-context behavior remained future major-version work. Core 2.0
-has since introduced those incompatible changes through the migration contract
-below; this historical description does not override the current specification.
-
 ## Requirement mapping
 
 Every vector lists one or more stable requirement IDs. The
@@ -270,3 +245,36 @@ documented Core 2.0 supersession path: supplied non-object `facts` now has the
 portable invalid-context result. No operation alias is introduced. The
 conformance and vector-file syntax versions remain `0.1`; consumers must bind
 claims to the exact Core release or commit as well as those format versions.
+
+## Previous compatible-release migration
+
+The previous compatible minor release added three normative requirement
+identifiers and 18 manifest-listed vectors, bringing the corpus to 439
+requirements and 1,808 vectors. It does not rename or retire a requirement,
+portable error, vector, or canonical operation, and the manifest and vector-file
+formats remain `0.1`. Existing stored domain records require no rewrite.
+
+Consumers making a complete claim to that earlier release should:
+
+- include the new vectors and disclose the two conditional cases through the
+  applicability process above;
+- pass explicitly supplied object-valued Entity transition facts to Workflow
+  guards and validate the complete proposed Entity at its target State. For a
+  claim to that earlier compatible release, non-object facts retained its then
+  undefined boundary; Core 2.0 supersedes that boundary as described below;
+- support the optional complete `rounding` policy on `finkore.money.divide`,
+  including invalid-policy and zero-divisor priority, while preserving exact
+  finite quotients and every omitted-policy call;
+- compare all newly requested failure observations, including unchanged Entity
+  and Approval histories, instead of treating the portable error alone as proof
+  of atomicity; and
+- retain Approval histories whose records do not encode scope under one immutable
+  consumer-owned context and subject, with the evidence described below.
+
+At that earlier compatible-release boundary, the Entity facts member and Money
+division policy were optional additions: omission preserved the earlier
+operation meanings, no Agentic operation was superseded, Approval records gained
+no scoped-reference or Decision-identity shape, and stronger record identity and
+malformed Entity-context behavior remained future major-version work. Core 2.0
+has since introduced those incompatible changes through the migration contract
+below; this historical description does not override the current specification.

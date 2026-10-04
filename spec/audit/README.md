@@ -6,7 +6,10 @@
 
 ## Purpose
 
-This domain defines audit history as logical records of financially relevant occurrences, not application logging. A Business Event is the occurrence itself; an Audit Event records that occurrence. The two may carry related information but must not be assumed to be identical.
+Audit history records financially relevant occurrences so a reviewer can
+understand what happened, when, and who was responsible. A Business Event is the
+occurrence itself; an Audit Event records it. The two may carry related
+information but must not be assumed to be identical.
 
 ## Requirements
 
@@ -17,13 +20,19 @@ This domain defines audit history as logical records of financially relevant occ
 
 ## Documents
 
-- [Events](events.md)
-- [Changes](changes.md)
-- [Actors](actors.md)
-- [Redaction](redaction.md)
-- [Relationships](relationships.md)
-- [Append-Only History](append-only.md)
-- [Errors](errors.md)
+Start with events, actors, and changes to understand the evidence in one
+record. Continue with append-only history before reading relationships and
+redaction.
+
+| Document | What you will learn |
+| --- | --- |
+| [Events](events.md) | Essential evidence of an occurrence |
+| [Actors](actors.md) | Attribution, including unknown or absent actors |
+| [Changes](changes.md) | Differences between prior and resulting values |
+| [Append-Only History](append-only.md) | Preservation of committed logical history |
+| [Relationships](relationships.md) | Evidence linking related events |
+| [Redaction](redaction.md) | Withholding protected content while preserving evidence |
+| [Errors](errors.md) | Portable failure codes and their priority |
 
 ## Invariants
 

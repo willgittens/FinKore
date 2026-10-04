@@ -5,8 +5,10 @@ package layout, public API, framework, or persistence model. Consumer-owned
 implementations should be idiomatic in their environment while preserving the
 portable contract.
 
-This repository does not provide a reference implementation, Conformance
-Runner, adapter library, or executable implementation API.
+Start with one domain slice and its normative requirements. The shared guidance
+below covers values, errors, atomicity, and deterministic context;
+[domain details](#domain-details) highlights specific boundaries for Approvals,
+Entities, Audit, and Money.
 
 ## Reading order
 
@@ -100,6 +102,23 @@ operation. At native malformed-input boundaries where a valid committed JSON
 observation would be invented, verify that the original object graph is
 unchanged and, where practical, reusable after the failure.
 
+## Deterministic context
+
+Conformance-observable behavior must not depend on wall-clock time, host
+timezone, locale, network calls, external FX providers, filesystem order,
+database incidental order, uncontrolled randomness, or process identity.
+
+Pass time, facts, policy, and expected state explicitly when the specification
+makes them relevant. Serialize timestamps as unambiguous instants where
+required.
+
+## Domain details
+
+These notes highlight implementation boundaries that are easy to miss. Read
+them alongside the owning specifications for the domains you implement.
+
+### Approval history and scoped identity
+
 Approval histories need an immutable association with their owning approval
 context and subject even when individual legacy Core 1.x records do not encode that
 scope. Preserve the association through storage, import, evaluation, record,
@@ -119,15 +138,10 @@ evidence is invalid rather than unrelated. Migration from Core 1.x must preserve
 original fields and use an explicit source-record mapping; do not guess when a
 legacy tuple matches more than one Decision or relabel retained evidence.
 
-## Deterministic context
+See [Approval Decisions](../spec/approvals/decisions.md) and
+[Approval Validity](../spec/approvals/validity.md).
 
-Conformance-observable behavior must not depend on wall-clock time, host
-timezone, locale, network calls, external FX providers, filesystem order,
-database incidental order, uncontrolled randomness, or process identity.
-
-Pass time, facts, policy, and expected state explicitly when the specification
-makes them relevant. Serialize timestamps as unambiguous instants where
-required.
+### Entity transition facts
 
 An Entity transition forwards explicitly supplied object-valued guard facts to
 its referenced Workflow; do not source them from Entity data, Approval history,
@@ -140,6 +154,10 @@ In Core 2.0, reject supplied null, array, or scalar guard facts with
 Transition and before guard rejection. Preserve the Entity, binding, revision,
 data, and supplied context on failure.
 
+See [Entity Lifecycle](../spec/entities/lifecycle.md).
+
+### Audit redaction evidence
+
 For Audit redaction in Core 2.0, select one committed source by its explicit
 `sourceEventId` and validate that every protected target belongs to it. Append a
 separate evidence Event whose `metadata.redactionEvidence` matches the source,
@@ -147,10 +165,16 @@ authority, ordered targets, and optional policy identifier without copying a
 protected value. Do not add a `REDACTS` relationship or mutate the committed
 source Event.
 
+See [Audit Redaction](../spec/audit/redaction.md).
+
+### Money division and rounding
+
 Money division may receive one complete explicit rounding policy. Validate a
 supplied policy for every nonzero divisor, use it only for nonterminating exact
 quotients, and preserve an exactly representable quotient even when it is finer
 than the policy scale. Zero division retains its own primary error.
+
+See [Money Arithmetic](../spec/money/arithmetic.md#explicit-policy-for-division).
 
 ## Reliability
 

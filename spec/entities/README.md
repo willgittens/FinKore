@@ -6,7 +6,25 @@
 
 ## Purpose
 
-This domain defines common behavior for identifiable, lifecycle-managed, auditable Financial Entities without defining any concrete financial domain.
+Financial Entities combines stable identity, lifecycle rules, permitted changes,
+and audit obligations. It describes what a continuing financial subject preserves
+over time. A composing domain supplies the concrete fields and business rules.
+
+## Documents
+
+Start with identity, lifecycle, mutability, and validation. Continue with
+revisions, import, and evolution when retaining or changing existing records.
+
+| Document | What you will learn |
+| --- | --- |
+| [Identity](identity.md) | Stable identity throughout a subject's lifecycle |
+| [Lifecycle](lifecycle.md) | How an Entity follows its Workflow |
+| [Mutability](mutability.md) | Which fields may change in each state |
+| [Validation](validation.md) | Checking the complete proposed Entity |
+| [Revisions](revisions.md) | Business revisions and their distinction from conflict tokens |
+| [Import](import.md) | Preserving existing identity, revisions, and explicit source mappings |
+| [Evolution](evolution.md) | Correction, reversal, void, and supersession with preserved evidence |
+| [Errors](errors.md) | Portable failure codes and unchanged state after rejection |
 
 ## Requirements
 
