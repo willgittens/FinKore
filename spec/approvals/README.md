@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 1.1 stable.**
+**FinKore Core 2.0 stable.**
 
 ## Purpose
 
@@ -16,7 +16,7 @@ This domain defines approval requirements and decisions independently of any par
 - An [Approval Decision](decisions.md) must identify its Approval Requirement, outcome, Actor, time, and association with the relevant subject state or facts.
 - An [Approval Chain](chains.md) must define how its Approval Requirements combine and must declare sequencing only when sequencing applies.
 - [Approval Composition](composition.md) defines bounded any-of, all-of, quorum,
-  staged, and nested group evaluation for Core 1.1. Quorum members reference
+  staged, and nested group evaluation for Core 2.0. Quorum members reference
   Requirements with explicit distinct voter identities; quorum groups may be
   nested beneath any-of/all-of groups but cannot contain child groups as votes.
   The declared quorum threshold stays fixed when applicability changes; a

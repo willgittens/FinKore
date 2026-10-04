@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 1.1 stable.**
+**FinKore Core 2.0 stable.**
 
 ## Purpose
 
@@ -37,7 +37,7 @@ Process A requests: SUBMITTED → APPROVED
 Process B requests: SUBMITTED → REJECTED
 ```
 
-Core 1.1 defines whether each request is valid from `SUBMITTED`; it does not determine which concurrent request wins. That decision belongs to the application, persistence layer, or a future concurrency specification.
+Core 2.0 defines whether each request is valid from `SUBMITTED`; it does not determine which concurrent request wins. That decision belongs to the application, persistence layer, or a future concurrency specification.
 
 Given `DRAFT → SUBMITTED`, requesting that transition from `DRAFT` succeeds if all guards pass.
 

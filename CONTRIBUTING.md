@@ -95,8 +95,8 @@ and dependency scope with the concise release summary in
 establish consumer implementation conformance.
 
 Commit the reviewed release tree, then create an annotated `core-<Core version>`
-tag on that commit (`core-1.1` for this compatible minor release). Confirm the tag
-targets the verified commit and that the working tree is clean. Distribute only
+tag on that commit (for example, `core-2.0`). Confirm the tag targets the
+verified commit and that the working tree is clean. Distribute only
 tracked release content, excluding local checkout state. Remote tag publication
 is a separate maintainer action; a local tag does not imply a remote release.
 Core publication does not publish implementation packages or a runner.

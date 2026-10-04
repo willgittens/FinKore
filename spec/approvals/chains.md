@@ -2,12 +2,12 @@
 
 ## Status
 
-**FinKore Core 1.1 stable.**
+**FinKore Core 2.0 stable.**
 
 ## Purpose
 
-This document defines the Core 1.1 all-required Approval Chain model. The term
-Approval Chain does not by itself imply sequencing. Core 1.1 bounded any-of,
+This document defines the Core 2.0 all-required Approval Chain model. The term
+Approval Chain does not by itself imply sequencing. Core 2.0 bounded any-of,
 all-of, quorum, staged, and nested group semantics are defined by
 [Approval Composition](composition.md).
 
@@ -47,7 +47,7 @@ approval regardless of Decision order. The Chain does not re-aggregate the
 Decision set, and the distinct quorum conflict rule remains confined to bounded
 Approval Composition.
 
-Core 1.1 does not define Approval Chain identity. A Decision binds to its
+Core 2.0 does not define Approval Chain identity. A Decision binds to its
 Approval Requirement and relevant subject state or facts, not to a Chain
 identifier. Approval Composition adds group identity for composition
 definitions; that group identity still does not replace Decision-to-Requirement
@@ -74,6 +74,6 @@ The arrow denotes a sequential chain. `AND` denotes an unordered all-required ch
 
 ## Non-Goals
 
-Core 1.1 chains do not define delegation, unrestricted dependency
+Core 2.0 chains do not define delegation, unrestricted dependency
 graphs, or migration between Approval Chain definitions. Non-all-required
 bounded composition is defined separately by Approval Composition.

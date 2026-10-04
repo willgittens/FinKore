@@ -2,14 +2,10 @@
 
 ## Status
 
-**FinKore Core 1.1 stable.** This is the shared, language-neutral
+**FinKore Core 2.0 stable.** This is the shared, language-neutral
 normative baseline. Stability applies to the defined observable contract and
 the compatibility policy in [Conventions](conventions.md#compatibility-policy).
 The domain scope is Money, Workflow, Audit, Approvals, and Entities.
-
-The working tree additionally contains explicitly labeled, unreleased Core 2.0
-requirements under the active remediation plan. Those additions are not a
-stable Core 2.0 publication; the `core-1.1` tag remains the released baseline.
 
 ## Purpose
 
@@ -49,7 +45,7 @@ direction rather than a normative requirement.
 
 ## Version Identity (Non-Normative)
 
-`FinKore Core 1.1` identifies the current language-neutral
+`FinKore Core 2.0` identifies the current language-neutral
 behavioral baseline. It is distinct from the `finkoreConformance` manifest
 format version, the `finkoreVectorFile` vector-file format version, and versions
 assigned by consumer-owned tools or implementations. Format and tool versions
@@ -68,7 +64,7 @@ behavior.
 
 Later domain specifications can compose these areas. The rules for explicit refinements are defined by **SPEC-TERMINOLOGY-001** in [Conventions](conventions.md).
 
-### 1.1 document baseline (Non-Normative)
+### 2.0 document baseline (Non-Normative)
 
 The foundation is [CoreDoc](../docs/coreDoc/core-doc.md). The specification
 baseline comprises the following 47 documents, including this index and each
@@ -94,7 +90,7 @@ vector-file syntax retain their separate format versions.
 
 ## Scope Discipline (Non-Normative)
 
-FinKore Core deliberately begins with reusable primitives rather than concrete invoice, expense, purchase-order, payment, reimbursement, or journal-entry models. Applications may compose the primitives for those domains, but Core 1.1 does not claim to standardize them.
+FinKore Core deliberately begins with reusable primitives rather than concrete invoice, expense, purchase-order, payment, reimbursement, or journal-entry models. Applications may compose the primitives for those domains, but Core 2.0 does not claim to standardize them.
 
 Possible later specifications may explore journal entries, debit and credit, general ledgers, reconciliation, fiscal periods, cost centers, purchase orders, invoice matching, payments, concrete correction posting rules, ledger reversals, and tax primitives. These are not current capabilities or commitments. A topic should enter scope only when its semantics can be defined clearly, tested across implementations, and justified by a real financial software problem.
 

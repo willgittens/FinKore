@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 1.1 stable.**
+**FinKore Core 2.0 stable.**
 
 ## Purpose
 
@@ -17,9 +17,9 @@ A Financial Entity follows the canonical [identity](identity.md), [lifecycle](li
 - **ENTITY-DEFINITION-001** — A composing domain MUST define its fields, lifecycle, and financially relevant invariants.
 - **ENTITY-DEFINITION-002** — An existing Financial Entity MUST retain stable owned declarations for its lifecycle, mutability, and validation rules, including nested Workflow guards and declaration containers, whether the Workflow is versioned or unversioned. Mutating original constructor/import inputs or returned definition observations MUST NOT change the behavior of that existing Entity. Immutable representations and defensive copies MAY realize this guarantee.
 
-Core 1.1 Entity Evolution defines portable correction, reversal, void, and supersession relations. Evolution preserves stable Entity identity and historical financial facts, uses explicit Entity Revision and Evolution Relation identities, requires caller-supplied Audit evidence, and rejects invalid or duplicate evolution without creating partial Entity, evolution, or Audit observations.
+Core 2.0 Entity Evolution defines portable correction, reversal, void, and supersession relations. Evolution preserves stable Entity identity and historical financial facts, uses explicit Entity Revision and Evolution Relation identities, requires caller-supplied Audit evidence, and rejects invalid or duplicate evolution without creating partial Entity, evolution, or Audit observations.
 
-Core 1.1 Entity Revision and Import refines business revision observations and
+Core 2.0 Entity Revision and Import refines business revision observations and
 defines a bounded import boundary. Import preserves stable FinKore Entity
 identity, records explicit source identity mapping when external identity is
 present, preserves current and historical Entity Revision identity, keeps Entity
@@ -39,6 +39,6 @@ reconfiguration.
 
 ## Non-Goals
 
-Core 1.1 does not define any concrete financial entity type,
+Core 2.0 does not define any concrete financial entity type,
 storage model, financial ownership model, global identity registry, deduplication service,
 authorization model, API, or user interface.

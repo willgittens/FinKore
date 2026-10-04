@@ -3,10 +3,8 @@
 > FinKore cases are designed not only to demonstrate correct behavior, but to
 > make plausible financial defects fail.
 
-This directory contains the **FinKore Core 1.1 stable** baseline plus the
-unreleased Core 2.0 contract work tracked by the active remediation plan. The
-working manifest is therefore a development artifact until Core 2.0 publication;
-the specification remains the source of truth.
+This directory contains the **FinKore Core 2.0 stable** conformance baseline.
+The specification remains the source of truth.
 Vectors describe observable inputs, results, portable errors, and post-state;
 they do not prescribe APIs, classes, exceptions, storage, frameworks, or an
 execution protocol.
@@ -30,7 +28,7 @@ and reporting.
 - [`consumer-guide.md`](consumer-guide.md) — discovery, execution outcomes,
   reporting, and claim guidance.
 
-The current development manifest contains 47 vector files and 1,818 vectors. Repository
+The published manifest contains 47 vector files and 1,818 vectors. Repository
 verification checks their schemas, identifiers, declared portable error
 references, paired controls, requirement references, specification topics,
 operation catalog, and Agentic alignment. Paired controls must resolve to
@@ -49,10 +47,9 @@ paths relative to the manifest, reject unsupported syntax versions, and reject
 duplicate vector IDs. Filesystem traversal order carries no meaning.
 
 [`manifest.json`](manifest.json) is the sole discovery entry point for the
-current development baseline: six suites, 47 vector files, and 1,818 vectors.
+Core 2.0 baseline: six suites, 47 vector files, and 1,818 vectors.
 Core association is documented here because the manifest syntax has no
-Core-version field. Use the `core-1.1` tag for the published Core 1.1 manifest;
-do not report this unreleased working manifest as a stable Core 2.0 release.
+Core-version field. Use the `core-2.0` tag for this published manifest.
 `finkoreConformance` and `finkoreVectorFile` remain `0.1` and version the artifact
 formats, not the FinKore Core release. A claim identifies the exact release or
 commit and manifest as well as the format version. Referenced requirement IDs
@@ -182,10 +179,9 @@ consumer evidence, not results produced by this repository.
 
 ## Contract status
 
-The corpus targets the stable Core 1.1 specification. This release preserves
-published vector meanings while adding compatible cases and completing required
-post-state observations. Manifest and vector-file syntax remain `0.1`; consumer
-migration is described in the [consumer guide](consumer-guide.md#core-11-migration).
+The corpus targets the **FinKore Core 2.0 stable** specification. Manifest and
+vector-file syntax remain `0.1`; consumer migration is described in the
+[consumer guide](consumer-guide.md#core-20-migration).
 Artifact validity does not establish external implementation conformance. See
 [release notes](../docs/releases/README.md) for publication status and concise
 release history.

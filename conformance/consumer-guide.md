@@ -14,9 +14,9 @@ that is absent from `/spec`.
 ## Discovery and validation
 
 Use [manifest.json](manifest.json) as the only discovery entry point for the
-current development suite. Its released Core 1.1 and unreleased Core 2.0 scope
-is documented in the [conformance index](README.md#scope-and-discovery); the
-manifest and vector-file format versions remain `0.1`.
+**FinKore Core 2.0 stable** suite. Its scope is documented in the
+[conformance index](README.md#scope-and-discovery); the manifest and vector-file
+format versions remain `0.1`.
 
 For artifact validation:
 
@@ -142,9 +142,9 @@ The table is claim guidance, not vector syntax. It does not change
 `finkoreConformance` or `finkoreVectorFile` format `0.1`, add a runner protocol,
 or authorize private applicability members in vector files.
 
-## Core 1.1 migration
+## Previous compatible-release migration
 
-Core 1.1 is a compatible minor release. It adds three normative requirement
+The previous compatible minor release added three normative requirement
 identifiers and 18 manifest-listed vectors, bringing the corpus to 439
 requirements and 1,808 vectors. It does not rename or retire a requirement,
 portable error, vector, or canonical operation, and the manifest and vector-file
@@ -234,7 +234,8 @@ repair such input or treat it as omission.
 
 ## Core 2.0 migration
 
-The unreleased stronger contract is behaviorally incompatible with Core 1.1.
+The **FinKore Core 2.0 stable** contract is behaviorally incompatible with the
+previous stable contract.
 Consumers migrating retained Approval data must assign scoped Requirement and
 Decision identities through an explicit, reviewable mapping while preserving
 every original Decision field and timestamp. Equal tuples remain separate when
@@ -257,5 +258,4 @@ The existing canonical `finkore.entity.transition` identifier follows its
 documented Core 2.0 supersession path: supplied non-object `facts` now has the
 portable invalid-context result. No operation alias is introduced. The
 conformance and vector-file syntax versions remain `0.1`; consumers must bind
-claims to the exact Core release or development commit as well as those format
-versions.
+claims to the exact Core release or commit as well as those format versions.

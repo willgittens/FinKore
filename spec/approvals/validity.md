@@ -2,14 +2,13 @@
 
 ## Status
 
-**FinKore Core 1.1 stable.**
+**FinKore Core 2.0 stable.**
 
 ## Purpose
 
 This document defines current-effectiveness semantics for Approval Decisions.
-Core 1.1 introduced explicit withdrawal, expiration, and supersession evidence;
-the stronger Core 2.0 boundary adds scoped identity references while preserving
-append-only Approval history.
+Core 2.0 uses explicit withdrawal, expiration, and supersession evidence plus
+scoped identity references while preserving append-only Approval history.
 
 ## Requirements
 
@@ -69,11 +68,12 @@ policy.
 
 Lifecycle relationships and current-effectiveness evaluation operate within
 the approval context and subject association that owns the Decision history.
-An externally scoped history container is sufficient when individual Core 1.1
-records do not carry that scope, but the container's association must remain
-unchanged through import and reuse. A caller-supplied label cannot rebind a
-history to another context or subject. A detected mismatch is invalid Decision
-evidence and preserves both Decision and lifecycle histories.
+Legacy Core 1.x history whose individual records do not carry scope must remain
+bound to one immutable external context and subject through import and explicit
+migration. Core 2.0 records carry scoped Requirement and Decision identities; a
+caller-supplied label cannot rebind either legacy or migrated history. A
+detected mismatch is invalid Decision evidence and preserves both Decision and
+lifecycle histories.
 
 Recording another Decision preserves the committed lifecycle evidence used by
 **APPROVAL-VALIDITY-001**, including withdrawals and Decision or Requirement

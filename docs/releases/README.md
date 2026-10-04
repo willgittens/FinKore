@@ -9,9 +9,32 @@ artifacts, and their verification results. Those records are preserved as
 history and are not claims about the current repository's supported surface or
 current execution evidence.
 
-## Unreleased
+## FinKore Core 2.0 — 2026-10-04
 
-Core 2.0 development retires thirteen Core 1.x Approval vectors whose outcomes
+Incompatible major release completing the financial-contract remediation with
+order-independent rejection precedence for standalone Approval Requirements,
+scoped Requirement and Decision identities, explicit Audit redaction source and
+evidence linkage, and a defined malformed Entity guard-context failure. The
+existing `finkore.entity.transition` operation follows its documented major-
+version supersession path; no alias, runner, transport, implementation, or
+package surface is added.
+
+The contract contains 447 requirements, 1,818 vectors in 47 files, and 20
+canonical Agentic operations. It adds `APPROVAL-REQUIREMENT-008`,
+`APPROVAL-DECISION-013`, `APPROVAL-DECISION-014`, `APPROVAL-VALIDITY-017`,
+`AUDIT-REDACTION-009`, `AUDIT-REDACTION-010`, `ENTITY-LIFECYCLE-009`, and
+`WORKFLOW-ERROR-008`, plus the portable
+`FINKORE_WORKFLOW_INVALID_CONTEXT` error. Conformance manifest and vector-file
+formats remain `0.1`; the private maintenance package remains `0.1.0`.
+
+Consumers migrating retained Approval data must provide an explicit, reviewable
+mapping to scoped identities without rewriting or merging historical Decisions.
+Ambiguous legacy lifecycle references require consumer resolution. Redaction
+requests now select exactly one committed source Event and supply matching
+evidence metadata. Supplied null, array, or scalar Entity transition facts now
+fail with the new invalid-context error at the documented priority.
+
+This release retires thirteen Core 1.x Approval vectors whose outcomes
 depended on Actor/timestamp tuple addressing:
 `approval.boundary096.history-evaluate-ambiguous-target-001`,
 `approval.boundary096.history-record-ambiguous-target-001`,
@@ -29,6 +52,13 @@ depended on Actor/timestamp tuple addressing:
 definitions remain in Git history and their identifiers are not
 reusable. Scoped Decision-ID cases replace their coverage without rewriting
 retained Approval evidence.
+
+Locked installation and local verification pass on Node 24.15.0, including 30
+maintenance-tool tests and both the disposable-tree and final-tree publication
+gates. A fresh npm registry advisory query on 2026-10-04 reported zero
+vulnerabilities in the five-package locked maintenance dependency graph. These
+checks validate repository artifacts, not financial execution or external
+implementation conformance.
 
 ## FinKore Core 1.1 — 2026-10-03
 

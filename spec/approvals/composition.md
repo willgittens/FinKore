@@ -2,11 +2,11 @@
 
 ## Status
 
-**FinKore Core 1.1 stable.**
+**FinKore Core 2.0 stable.**
 
 ## Purpose
 
-This document defines bounded Core 1.1 Approval composition for reusable groups,
+This document defines bounded Core 2.0 Approval composition for reusable groups,
 quorum decisions, ordered stages, and limited nesting. It extends
 [Approval Chains](chains.md) without defining delegation, escalation,
 authorization, task routing, notifications, persistence, or an unrestricted graph
@@ -57,7 +57,7 @@ itself contain child groups as voting members.
 - **APPROVAL-COMPOSITION-018** — A staged composition MUST evaluate as `APPROVED` only when every stage is approved, `REJECTED` when the first non-approved stage is rejected, and `PENDING` when the first non-approved stage is pending.
 - **APPROVAL-COMPOSITION-019** — A pending staged composition MUST report all and only the pending, applicable Requirements reachable through exclusively pending groups in its first pending stage. It MUST visit that stage's root groups in declared order and recursively visit each pending group's members in declared order, reporting each Requirement identifier once at its first eligible occurrence. It MUST exclude later stages and approved, rejected, or entirely inapplicable group branches. An approved or rejected composition MUST report no actionable Requirements.
 - **APPROVAL-COMPOSITION-020** — Composition state observations MUST NOT be treated as proof of which Approval Decision satisfied a Requirement or which subject facts were bound to that Decision.
-- **APPROVAL-COMPOSITION-021** — Composition evaluation MUST reuse Core 1.1 current-effectiveness semantics for withdrawn, expired, superseded, stale-fact, stale-revision, and ineligible Decisions.
+- **APPROVAL-COMPOSITION-021** — Composition evaluation MUST reuse Core 2.0 current-effectiveness semantics for withdrawn, expired, superseded, stale-fact, stale-revision, and ineligible Decisions.
 - **APPROVAL-COMPOSITION-022** — A structurally valid Approval Composition with no applicable Approval Requirements after explicit applicability evaluation MUST return `APPROVED`, meaning no approval is currently required. That outcome MUST NOT create or imply an approving Decision; it MUST remain distinguishable from evidence that a voter approved.
 - **APPROVAL-COMPOSITION-023** — An Approval Stage MUST omit entirely inapplicable groups from its outcome evaluation. With at least one applicable group, the stage MUST evaluate as `APPROVED` when every applicable group is approved, `REJECTED` when any applicable group is rejected, and `PENDING` otherwise. A structurally valid stage with no applicable groups MUST evaluate as `APPROVED`, meaning it imposes no current approval obligation and does not itself block progression to a later stage.
 - **APPROVAL-COMPOSITION-024** — Composition evaluation MUST validate the entire composition definition, applicability of every declared Requirement member, and all required current-state and effectiveness evidence before returning an outcome. This MUST include later stages and all alternative branches, even when their outcome would not change the aggregate result. An otherwise decisive approval, rejection, pending state, or no-obligation result MUST NOT suppress a required validation failure. Validation of a later stage MUST NOT make it actionable.
@@ -92,7 +92,7 @@ conflict, but remains in history. Duplicate effective approvals supply one vote;
 duplicate effective rejections produce one rejected member, not extra votes.
 No Decision is implicitly withdrawn, superseded, or selected by its timestamp.
 
-This rule governs Core 1.1 quorum evaluation; it does not redefine a standalone
+This rule governs Core 2.0 quorum evaluation; it does not redefine a standalone
 Requirement or Approval Chain evaluator.
 
 ## Threshold Validation and Evaluation

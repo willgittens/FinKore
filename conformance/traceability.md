@@ -2,9 +2,8 @@
 
 This is the canonical human-readable requirement-to-vector index. Manifest-listed
 vectors remain the primary machine-readable mapping through each vector's
-`requirements` field. The counts and mappings cover the current development
-tree: the FinKore Core 1.1 baseline plus unreleased Core 2.0 requirements in
-Workflow, Audit, Approvals, and Entities.
+`requirements` field. The counts and mappings cover the **FinKore Core 2.0
+stable** contract across all domains.
 
 ## Inventory and coverage
 

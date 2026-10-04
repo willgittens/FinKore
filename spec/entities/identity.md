@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 1.1 stable.**
+**FinKore Core 2.0 stable.**
 
 ## Purpose
 
@@ -18,7 +18,7 @@ This document defines stable domain identity and continuity for a Financial Enti
 - **ENTITY-IDENTITY-006** — Import or migration MUST preserve identity or record an explicit identity mapping.
 - **ENTITY-IDENTITY-007** — The bounded Entity definition MUST explicitly supply a nonempty string identity scope. Omission, null, or a malformed scope MUST use `FINKORE_ENTITY_INVALID_IDENTITY`. This fixture requirement MUST NOT be interpreted as a global identity registry or a production serialization format.
 
-Core 1.1 refines import mapping in [Entity Import](import.md). That refinement
+Core 2.0 refines import mapping in [Entity Import](import.md). That refinement
 does not create a global registry or permit Source Identity to replace stable
 FinKore Entity identity.
 

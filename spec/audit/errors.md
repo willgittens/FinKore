@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 1.1 stable.**
+**FinKore Core 2.0 stable.**
 
 ## Purpose
 
@@ -26,7 +26,7 @@ This document defines initial portable audit failure categories.
 - **AUDIT-ERROR-004** — Audit append validation MUST first validate supplied history in declared order, applying non-actor event representation, supplied actor attribution, duplicate event identity, and history-dependent relationship validation to each observation before proceeding to the next. It MUST then select a primary candidate error in this order: invalid non-actor candidate representation, including relationship representation; invalid supplied actor attribution; duplicate event identity; then relationship inconsistency against committed history. A malformed history or non-actor event representation MUST use `FINKORE_AUDIT_INVALID_EVENT`; malformed actor attribution MUST use `FINKORE_AUDIT_ACTOR_INVALID`; and duplicate event identity MUST use `FINKORE_AUDIT_DUPLICATE_EVENT`. A failure at any stage MUST stop validation before later stages determine the primary error and MUST leave committed logical history unchanged.
 
 Audit Relationship error mapping is defined by **AUDIT-RELATIONSHIP-013** in
-[Audit Relationships](relationships.md). Core 1.1 does not introduce a
+[Audit Relationships](relationships.md). Core 2.0 does not introduce a
 dedicated Audit Relationship portable error code.
 
 The precedence in **AUDIT-ERROR-004** separates representation validation from
@@ -42,4 +42,4 @@ A failed append must leave committed logical history unchanged.
 
 ## Non-Goals
 
-This is not a complete error catalog and does not define transport behavior or errors for concurrency and ordering mechanisms outside Core 1.1.
+This is not a complete error catalog and does not define transport behavior or errors for concurrency and ordering mechanisms outside Core 2.0.
