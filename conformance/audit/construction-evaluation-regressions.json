@@ -50,8 +50,20 @@
             "type": "system",
             "id": "retention-service"
           },
-          "occurredAt": "2026-09-01T13:00:00Z"
-        }
+          "occurredAt": "2026-09-01T13:00:00Z",
+          "metadata": {
+            "redactionEvidence": {
+              "sourceEventId": "evt-actor-context",
+              "authority": "retention-policy",
+              "protectedTargets": [
+                "actor.displayName",
+                "actor.metadata"
+              ],
+              "policyId": "actor-context-policy"
+            }
+          }
+        },
+        "sourceEventId": "evt-actor-context"
       },
       "expected": {
         "status": "success",
@@ -86,7 +98,18 @@
               "type": "system",
               "id": "retention-service"
             },
-            "occurredAt": "2026-09-01T13:00:00Z"
+            "occurredAt": "2026-09-01T13:00:00Z",
+            "metadata": {
+              "redactionEvidence": {
+                "sourceEventId": "evt-actor-context",
+                "authority": "retention-policy",
+                "protectedTargets": [
+                  "actor.displayName",
+                  "actor.metadata"
+                ],
+                "policyId": "actor-context-policy"
+              }
+            }
           }
         },
         "observations": {
@@ -119,7 +142,18 @@
                 "type": "system",
                 "id": "retention-service"
               },
-              "occurredAt": "2026-09-01T13:00:00Z"
+              "occurredAt": "2026-09-01T13:00:00Z",
+              "metadata": {
+                "redactionEvidence": {
+                  "sourceEventId": "evt-actor-context",
+                  "authority": "retention-policy",
+                  "protectedTargets": [
+                    "actor.displayName",
+                    "actor.metadata"
+                  ],
+                  "policyId": "actor-context-policy"
+                }
+              }
             }
           ]
         }
@@ -183,8 +217,19 @@
             "type": "system",
             "id": "retention-service"
           },
-          "occurredAt": "2026-09-01T13:00:00Z"
-        }
+          "occurredAt": "2026-09-01T13:00:00Z",
+          "metadata": {
+            "redactionEvidence": {
+              "sourceEventId": "evt-actor-context",
+              "protectedTargets": [
+                "actor.displayName",
+                "actor.metadata"
+              ],
+              "policyId": "actor-context-policy"
+            }
+          }
+        },
+        "sourceEventId": "evt-actor-context"
       },
       "expected": {
         "status": "error",
@@ -274,8 +319,20 @@
             "type": "system",
             "id": "retention-service"
           },
-          "occurredAt": "2026-09-01T13:00:00Z"
-        }
+          "occurredAt": "2026-09-01T13:00:00Z",
+          "metadata": {
+            "redactionEvidence": {
+              "sourceEventId": "evt-actor-context",
+              "authority": null,
+              "protectedTargets": [
+                "actor.displayName",
+                "actor.metadata"
+              ],
+              "policyId": "actor-context-policy"
+            }
+          }
+        },
+        "sourceEventId": "evt-actor-context"
       },
       "expected": {
         "status": "error",
@@ -365,8 +422,20 @@
             "type": "system",
             "id": "retention-service"
           },
-          "occurredAt": "2026-09-01T13:00:00Z"
-        }
+          "occurredAt": "2026-09-01T13:00:00Z",
+          "metadata": {
+            "redactionEvidence": {
+              "sourceEventId": "evt-actor-context",
+              "authority": "",
+              "protectedTargets": [
+                "actor.displayName",
+                "actor.metadata"
+              ],
+              "policyId": "actor-context-policy"
+            }
+          }
+        },
+        "sourceEventId": "evt-actor-context"
       },
       "expected": {
         "status": "error",
@@ -456,8 +525,20 @@
             "type": "system",
             "id": "retention-service"
           },
-          "occurredAt": "2026-09-01T13:00:00Z"
-        }
+          "occurredAt": "2026-09-01T13:00:00Z",
+          "metadata": {
+            "redactionEvidence": {
+              "sourceEventId": "evt-actor-context",
+              "authority": 7,
+              "protectedTargets": [
+                "actor.displayName",
+                "actor.metadata"
+              ],
+              "policyId": "actor-context-policy"
+            }
+          }
+        },
+        "sourceEventId": "evt-actor-context"
       },
       "expected": {
         "status": "error",
@@ -547,8 +628,20 @@
             "type": "system",
             "id": "retention-service"
           },
-          "occurredAt": "2026-09-01T13:00:00Z"
-        }
+          "occurredAt": "2026-09-01T13:00:00Z",
+          "metadata": {
+            "redactionEvidence": {
+              "sourceEventId": "evt-actor-context",
+              "authority": false,
+              "protectedTargets": [
+                "actor.displayName",
+                "actor.metadata"
+              ],
+              "policyId": "actor-context-policy"
+            }
+          }
+        },
+        "sourceEventId": "evt-actor-context"
       },
       "expected": {
         "status": "error",
@@ -638,8 +731,20 @@
             "type": "system",
             "id": "retention-service"
           },
-          "occurredAt": "2026-09-01T13:00:00Z"
-        }
+          "occurredAt": "2026-09-01T13:00:00Z",
+          "metadata": {
+            "redactionEvidence": {
+              "sourceEventId": "evt-actor-context",
+              "authority": [],
+              "protectedTargets": [
+                "actor.displayName",
+                "actor.metadata"
+              ],
+              "policyId": "actor-context-policy"
+            }
+          }
+        },
+        "sourceEventId": "evt-actor-context"
       },
       "expected": {
         "status": "error",
@@ -729,8 +834,20 @@
             "type": "system",
             "id": "retention-service"
           },
-          "occurredAt": "2026-09-01T13:00:00Z"
-        }
+          "occurredAt": "2026-09-01T13:00:00Z",
+          "metadata": {
+            "redactionEvidence": {
+              "sourceEventId": "evt-actor-context",
+              "authority": {},
+              "protectedTargets": [
+                "actor.displayName",
+                "actor.metadata"
+              ],
+              "policyId": "actor-context-policy"
+            }
+          }
+        },
+        "sourceEventId": "evt-actor-context"
       },
       "expected": {
         "status": "error",

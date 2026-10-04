@@ -6,10 +6,10 @@
 
 ## Purpose
 
-This document defines Core 1.1 current-effectiveness semantics for Approval
-Decisions. It extends the fact-effectiveness model with explicit
-withdrawal, expiration, and supersession evidence while preserving append-only
-Approval history.
+This document defines current-effectiveness semantics for Approval Decisions.
+Core 1.1 introduced explicit withdrawal, expiration, and supersession evidence;
+the stronger Core 2.0 boundary adds scoped identity references while preserving
+append-only Approval history.
 
 ## Requirements
 
@@ -30,6 +30,7 @@ Approval history.
 - **APPROVAL-VALIDITY-014** — Before record, lifecycle mutation, or current-effectiveness evaluation reuses supplied committed lifecycle history, the implementation MUST validate supported discriminators, required field structure, and relationships in the history's declared local event order against committed Decisions and earlier lifecycle events. Decision withdrawal targets and Decision supersession targets/successors MUST resolve uniquely; supersession target and successor MUST be distinct. A withdrawal or Decision supersession target MUST NOT already be withdrawn or superseded. Requirement supersession target and successor identifiers MUST be distinct, and a Requirement MUST NOT be superseded twice. Invalid evidence MUST use `FINKORE_APPROVAL_INVALID_DECISION` without changing either history. Requirement references MUST remain opaque; this rule MUST NOT require an absent Requirement registry or infer event order from timestamps.
 - **APPROVAL-VALIDITY-015** — Before successfully recording a Decision, an implementation MUST validate retained lifecycle relationships against the complete proposed resulting Decision history under APPROVAL-VALIDITY-014. The new Decision MUST NOT make a retained withdrawal target or Decision supersession target or successor ambiguous or otherwise invalidate a required historical relationship. Such a record request MUST fail with `FINKORE_APPROVAL_INVALID_DECISION` and MUST preserve both input histories without exposing a partial append. Equal Decision reference tuples alone MUST NOT be rejected by this rule when they invalidate no retained relationship.
 - **APPROVAL-VALIDITY-016** — A concrete Decision or Decision-history input MUST NOT accept a caller-supplied `effective` member as current-effectiveness evidence. Current effectiveness MUST be derived under APPROVAL-VALIDITY-001 from the governing Decision, lifecycle, fact or revision, eligibility, expiration, and explicit-context evidence. Any supplied `effective` member at a concrete boundary, including Boolean `true` or `false`, MUST use `FINKORE_APPROVAL_INVALID_DECISION` and MUST leave committed Decision and lifecycle history unchanged. This prohibition does not apply to Approval Composition's separately documented lightweight current-effectiveness observation fixture.
+- **APPROVAL-VALIDITY-017** — In the stronger bounded lifecycle contract, a Decision withdrawal or supersession reference MUST identify a committed Decision by a `decisionRef` containing its nonempty `contextId` and `decisionId`; Decision supersession MUST separately identify the successor by `successorDecisionRef`. Requirement supersession MUST use scoped `requirementRef` and `successorRequirementRef` values containing context, Requirement identity, and exact subject reference. References MUST resolve within their declared context and subject, and target and successor MUST be distinct. A missing, malformed, foreign-context, unresolved, duplicate-identity, already withdrawn, or already superseded reference MUST use `FINKORE_APPROVAL_INVALID_DECISION` and preserve both histories. Lifecycle identity MUST NOT fall back to Actor/timestamp tuples or first-match selection.
 
 ## Invariants
 
@@ -37,9 +38,12 @@ APPROVAL-VALIDITY-015 covers the proposed result, whereas
 APPROVAL-VALIDITY-014 validates supplied evidence before reuse. Successful
 recording preserves earlier Decisions and lifecycle events and appends exactly
 the accepted Decision, yielding history reusable by subsequent operations.
-Reference equality uses SPEC-TIMESTAMP-005's exact instant, including equivalent
-offset spellings, while retained timestamps keep their spelling under
-SPEC-TIMESTAMP-006. There is no global Decision uniqueness rule or new registry.
+Under the Core 1.x tuple contract, reference equality used
+SPEC-TIMESTAMP-005's exact instant, including equivalent offset spellings. The
+stronger bounded contract instead uses scoped identities under
+**APPROVAL-VALIDITY-017** while retained timestamps keep their spelling under
+SPEC-TIMESTAMP-006. Decision identity remains context-scoped; there is no global
+Decision uniqueness rule or new registry.
 
 Current-effectiveness is an observation over append-only evidence. A Decision
 can be historically committed and still be ineffective for current evaluation
@@ -88,10 +92,11 @@ a production request envelope. The handling of redundant fixture members is
 documented in the [conformance conventions](../../conformance/conventions.md).
 
 The target checks in **APPROVAL-VALIDITY-005** apply to the complete committed
-Decision and lifecycle observations. Finding the first matching Decision is
-insufficient when the supplied target identifies more than one. Prior
-supersession is an independent reason a withdrawal target is invalid, even
-when there is no prior withdrawal. These failures use
+Decision and lifecycle observations. Under the stronger contract, finding a
+matching Actor/timestamp tuple or the first apparent match cannot resolve a
+`decisionRef`; the scoped Decision identity must resolve exactly once. Prior
+supersession is an independent reason a withdrawal target is invalid, even when
+there is no prior withdrawal. These failures use
 `FINKORE_APPROVAL_INVALID_DECISION` and preserve both histories under
 **APPROVAL-VALIDITY-012** and **APPROVAL-ERROR-006**.
 
@@ -113,9 +118,10 @@ The following existing obligations do not depend on a new evaluation policy:
 
 APPROVAL-VALIDITY-013 defines the considered-set/context boundary;
 APPROVAL-VALIDITY-014 defines imported lifecycle relationship validation.
-The bounded fixture declares local lifecycle
-order through its array; Decision references use Requirement identity, Actor
-identity, and decision instant. Timestamp equality retains SPEC-TIMESTAMP-005.
+The bounded fixture declares local lifecycle order through its array. Core 1.x
+tuple references remain historical input requiring migration; the stronger
+contract uses the scoped references in **APPROVAL-VALIDITY-017** and does not
+accept both forms side by side.
 
 No same-Requirement successor restriction, successor-effectiveness condition,
 or general graph/cycle policy is introduced. A successor can later be withdrawn
@@ -131,7 +137,13 @@ The following JSON is illustrative and non-normative:
 {
   "history": [
     {
+      "decisionId": "decision-17",
       "requirementId": "finance-review",
+      "requirementRef": {
+        "contextId": "invoice-42-approval",
+        "requirementId": "finance-review",
+        "subject": { "type": "invoice", "id": "invoice-42" }
+      },
       "subjectFacts": { "revision": "3", "amount": "9000.00" },
       "outcome": "APPROVED",
       "actor": { "type": "user", "id": "user-7" },
@@ -142,10 +154,9 @@ The following JSON is illustrative and non-normative:
   "lifecycle": [
     {
       "type": "WITHDRAWN",
-      "target": {
-        "requirementId": "finance-review",
-        "actorId": "user-7",
-        "decidedAt": "2026-09-01T12:00:00Z"
+      "decisionRef": {
+        "contextId": "invoice-42-approval",
+        "decisionId": "decision-17"
       },
       "actor": { "type": "user", "id": "user-7" },
       "recordedAt": "2026-09-02T12:00:00Z"

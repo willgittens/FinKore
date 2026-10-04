@@ -22,6 +22,8 @@ This document defines how sensitive information may be withheld while preserving
 - **AUDIT-REDACTION-007** — Access-time masking MUST NOT be represented as mutation of the committed source event.
 - **AUDIT-REDACTION-006** — A redaction action affecting committed logical history MUST produce an Audit Event identifying that the redaction occurred.
 - **AUDIT-REDACTION-008** — A redaction policy identifier is optional. In the bounded policy representation, `policy.id` MAY be omitted; when supplied, it MUST be a nonempty string. Supplied null, empty strings and non-string values MUST be rejected with `FINKORE_AUDIT_REDACTION_INVALID` during policy validation, before candidate evidence validation. An omitted identifier MUST NOT prevent otherwise valid redaction. An identifier MUST NOT substitute for required authority or protected targets, change which content is redacted, or authorize changes to committed history. Rejection MUST leave logical history unchanged under **AUDIT-ERROR-001**.
+- **AUDIT-REDACTION-009** — A bounded redaction request MUST supply a top-level, nonempty string `sourceEventId` that selects exactly one already committed Audit Event in the supplied logical history. Every protected target declared by the policy MUST resolve within that selected Event. An omitted, null, empty, non-string, unknown, or ambiguous `sourceEventId`, or a protected target absent from the selected Event, MUST fail with `FINKORE_AUDIT_REDACTION_INVALID`. The request MUST NOT select, combine, or redact content from another Event, and failure MUST leave the complete logical history unchanged.
+- **AUDIT-REDACTION-010** — The candidate redaction evidence Event MUST contain an object-valued `metadata.redactionEvidence` with the selected `sourceEventId`, the policy `authority`, and the exact ordered `protectedTargets` supplied by the policy. It MUST also contain `policyId` exactly when the policy supplies `id`, with the same value. The candidate Event's Entity reference MUST match the selected source Event's Entity reference, and the evidence MUST NOT contain a protected source value. Missing, malformed, partial, additional, or mismatched linkage MUST fail with `FINKORE_AUDIT_REDACTION_INVALID` after intrinsic candidate Event validation. Existing invalid-Event, invalid-Actor, duplicate-event, and Audit Relationship failures retain their existing portable codes and precedence. Rejection MUST leave logical history unchanged.
 
 ## Invariants
 
@@ -47,6 +49,22 @@ do not acquire identifier semantics. Omission and supplied null are distinct.
 Native convenience APIs may use a documented absence sentinel; portable parsing
 must not treat supplied null as omission. Existing history validation precedes
 policy processing under the existing error priorities.
+
+Core 2.0 redaction is single-source and explicit. Validation proceeds through
+supplied history, policy, source selection and protected-target resolution,
+intrinsic candidate evidence validation, then evidence-linkage validation.
+The selected source remains committed and unchanged; successful observation
+returns its protected representation and appends one independently valid
+evidence Event. A repeated authorized request may append another evidence Event
+with a new event identifier. Reusing an already committed evidence identifier
+remains `FINKORE_AUDIT_DUPLICATE_EVENT`.
+
+Redaction linkage is carried by `metadata.redactionEvidence`; it does not add a
+`REDACTS` Audit Relationship type. If a candidate evidence Event separately
+carries an Audit Relationship, the closed relationship catalog and all existing
+relationship validation still apply. `protectedTargets` preserves the policy's
+ordered target declarations exactly; it does not expose the corresponding
+protected values.
 
 Core 1.1 defines the meaning of redaction, including optional
 Actor context under **AUDIT-ACTOR-006**, without standardizing a production

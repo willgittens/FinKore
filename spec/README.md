@@ -7,6 +7,10 @@ normative baseline. Stability applies to the defined observable contract and
 the compatibility policy in [Conventions](conventions.md#compatibility-policy).
 The domain scope is Money, Workflow, Audit, Approvals, and Entities.
 
+The working tree additionally contains explicitly labeled, unreleased Core 2.0
+requirements under the active remediation plan. Those additions are not a
+stable Core 2.0 publication; the `core-1.1` tag remains the released baseline.
+
 ## Purpose
 
 FinKore is a specification-first, language-agnostic standard for recurring

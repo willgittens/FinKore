@@ -94,6 +94,14 @@ unchanged under **APPROVAL-ERROR-005** and **APPROVAL-ERROR-006**. This
 clarification adds no portable context-reference member and requires no global
 subject registry.
 
+The stronger bounded reference requirements in **APPROVAL-DECISION-013**,
+**APPROVAL-DECISION-014**, and **APPROVAL-VALIDITY-017** also use
+`FINKORE_APPROVAL_INVALID_DECISION` for missing or malformed scoped references,
+cross-context or cross-subject association, duplicate Decision identity, and
+unresolved lifecycle identity. These conditions remain structural Decision
+evidence failures and preserve both histories; they do not create a registry or
+an authorization failure category.
+
 This explains the existing invalid-Decision category and missing-subject/
 missing-eligibility conformance outcomes; it adds no portable error. It does
 not impose a new total ordering of unrelated concrete Approval errors. The

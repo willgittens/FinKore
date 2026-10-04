@@ -17,6 +17,7 @@ This document defines a need for an Approval Decision from an eligible Actor or 
 - **APPROVAL-REQUIREMENT-005** — An applicable Approval Requirement with no effective Approval Decision MUST have the `PENDING` State.
 - **APPROVAL-REQUIREMENT-006** — Eligibility MUST be evaluated independently from the Actor's technical ability to submit a request.
 - **APPROVAL-REQUIREMENT-007** — A requirement MAY be conditional as defined by [Conditions](conditions.md).
+- **APPROVAL-REQUIREMENT-008** — After all required Decision structure, scoped association, eligibility, lifecycle, relevant-fact or revision, expiration, and explicit-context validation succeeds, an applicable standalone Approval Requirement MUST derive its State from the complete effective Decision set: one or more effective `REJECTED` Decisions MUST yield `REJECTED`; otherwise one or more effective `APPROVED` Decisions MUST yield `APPROVED`; otherwise the Requirement MUST yield `PENDING`. Decision order, Actor equality, decision-timestamp order, and repeated matching outcomes MUST NOT change this aggregation. A later timestamp MUST NOT imply withdrawal or supersession.
 
 ## Invariants
 
@@ -33,6 +34,17 @@ governed by their own contracts; they need not repeat a concrete Requirement.
 The bounded conformance representation is described in
 [Conformance Conventions](../../conformance/conventions.md); it does not
 standardize every composing domain's subject or eligibility representation.
+
+Rejection precedence in **APPROVAL-REQUIREMENT-008** is a conservative control
+result over valid current evidence, not an evidence-conflict error. Opposing
+effective Decisions are individually valid and remain in history. Selecting the
+first or last Decision, choosing the latest timestamp, or letting approval win
+would make array order or undeclared lifecycle behavior financially decisive.
+A composing domain may define a distinct higher-level aggregation, but the
+standalone Requirement operation has one portable result for one effective set.
+This rule does not alter the quorum-specific opposing-vote validation in
+Approval Composition and creates no total priority among unrelated Approval
+validation errors.
 
 The approval context in **APPROVAL-REQUIREMENT-001** is the boundary within
 which a Requirement identifier is stable. A consumer that stores or transports

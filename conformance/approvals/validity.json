@@ -22,7 +22,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-withdraw-preserves-history-001"
         },
         "history": [
           {
@@ -39,20 +40,28 @@
               "type": "user",
               "id": "user-7"
             },
-            "decidedAt": "2026-09-01T12:00:00Z"
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-withdraw-preserves-history-001",
+              "requirementId": "finance-review",
+              "subject": {
+                "type": "invoice",
+                "id": "inv-42"
+              }
+            }
           }
         ],
         "withdrawal": {
-          "target": {
-            "requirementId": "finance-review",
-            "actorId": "user-7",
-            "decidedAt": "2026-09-01T12:00:00Z"
-          },
           "actor": {
             "type": "user",
             "id": "user-7"
           },
-          "recordedAt": "2026-09-02T12:00:00Z"
+          "recordedAt": "2026-09-02T12:00:00Z",
+          "decisionRef": {
+            "contextId": "ctx-approval-validity-withdraw-preserves-history-001",
+            "decisionId": "decision-1"
+          }
         }
       },
       "expected": {
@@ -73,22 +82,30 @@
                 "type": "user",
                 "id": "user-7"
               },
-              "decidedAt": "2026-09-01T12:00:00Z"
+              "decidedAt": "2026-09-01T12:00:00Z",
+              "decisionId": "decision-1",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-withdraw-preserves-history-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "invoice",
+                  "id": "inv-42"
+                }
+              }
             }
           ],
           "lifecycle": [
             {
               "type": "WITHDRAWN",
-              "target": {
-                "requirementId": "finance-review",
-                "actorId": "user-7",
-                "decidedAt": "2026-09-01T12:00:00Z"
-              },
               "actor": {
                 "type": "user",
                 "id": "user-7"
               },
-              "recordedAt": "2026-09-02T12:00:00Z"
+              "recordedAt": "2026-09-02T12:00:00Z",
+              "decisionRef": {
+                "contextId": "ctx-approval-validity-withdraw-preserves-history-001",
+                "decisionId": "decision-1"
+              }
             }
           ]
         }
@@ -123,7 +140,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-withdrawn-not-counted-001"
         },
         "decisions": {
           "history": [
@@ -137,22 +155,30 @@
                 "type": "user",
                 "id": "user-7"
               },
-              "decidedAt": "2026-09-01T12:00:00Z"
+              "decidedAt": "2026-09-01T12:00:00Z",
+              "decisionId": "decision-1",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-withdrawn-not-counted-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "invoice",
+                  "id": "inv-42"
+                }
+              }
             }
           ],
           "lifecycle": [
             {
               "type": "WITHDRAWN",
-              "target": {
-                "requirementId": "finance-review",
-                "actorId": "user-7",
-                "decidedAt": "2026-09-01T12:00:00Z"
-              },
               "actor": {
                 "type": "user",
                 "id": "user-7"
               },
-              "recordedAt": "2026-09-02T12:00:00Z"
+              "recordedAt": "2026-09-02T12:00:00Z",
+              "decisionRef": {
+                "contextId": "ctx-approval-validity-withdrawn-not-counted-001",
+                "decisionId": "decision-1"
+              }
             }
           ]
         }
@@ -190,7 +216,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-withdraw-duplicate-invalid-001"
         },
         "history": {
           "history": [
@@ -204,36 +231,43 @@
                 "type": "user",
                 "id": "user-7"
               },
-              "decidedAt": "2026-09-01T12:00:00Z"
+              "decidedAt": "2026-09-01T12:00:00Z",
+              "decisionId": "decision-1",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-withdraw-duplicate-invalid-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "invoice",
+                  "id": "inv-42"
+                }
+              }
             }
           ],
           "lifecycle": [
             {
               "type": "WITHDRAWN",
-              "target": {
-                "requirementId": "finance-review",
-                "actorId": "user-7",
-                "decidedAt": "2026-09-01T12:00:00Z"
-              },
               "actor": {
                 "type": "user",
                 "id": "user-7"
               },
-              "recordedAt": "2026-09-02T12:00:00Z"
+              "recordedAt": "2026-09-02T12:00:00Z",
+              "decisionRef": {
+                "contextId": "ctx-approval-validity-withdraw-duplicate-invalid-001",
+                "decisionId": "decision-1"
+              }
             }
           ]
         },
         "withdrawal": {
-          "target": {
-            "requirementId": "finance-review",
-            "actorId": "user-7",
-            "decidedAt": "2026-09-01T12:00:00Z"
-          },
           "actor": {
             "type": "user",
             "id": "user-7"
           },
-          "recordedAt": "2026-09-03T12:00:00Z"
+          "recordedAt": "2026-09-03T12:00:00Z",
+          "decisionRef": {
+            "contextId": "ctx-approval-validity-withdraw-duplicate-invalid-001",
+            "decisionId": "decision-1"
+          }
         }
       },
       "expected": {
@@ -253,22 +287,30 @@
                 "type": "user",
                 "id": "user-7"
               },
-              "decidedAt": "2026-09-01T12:00:00Z"
+              "decidedAt": "2026-09-01T12:00:00Z",
+              "decisionId": "decision-1",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-withdraw-duplicate-invalid-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "invoice",
+                  "id": "inv-42"
+                }
+              }
             }
           ],
           "lifecycle": [
             {
               "type": "WITHDRAWN",
-              "target": {
-                "requirementId": "finance-review",
-                "actorId": "user-7",
-                "decidedAt": "2026-09-01T12:00:00Z"
-              },
               "actor": {
                 "type": "user",
                 "id": "user-7"
               },
-              "recordedAt": "2026-09-02T12:00:00Z"
+              "recordedAt": "2026-09-02T12:00:00Z",
+              "decisionRef": {
+                "contextId": "ctx-approval-validity-withdraw-duplicate-invalid-001",
+                "decisionId": "decision-1"
+              }
             }
           ]
         }
@@ -304,7 +346,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-expiration-before-boundary-001"
         },
         "decisions": [
           {
@@ -318,7 +361,16 @@
               "id": "user-7"
             },
             "decidedAt": "2026-09-01T12:00:00Z",
-            "expiresAt": "2026-09-02T12:00:00Z"
+            "expiresAt": "2026-09-02T12:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-expiration-before-boundary-001",
+              "requirementId": "finance-review",
+              "subject": {
+                "type": "invoice",
+                "id": "inv-42"
+              }
+            }
           }
         ],
         "evaluatedAt": "2026-09-02T11:59:59Z"
@@ -355,7 +407,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-expiration-at-boundary-001"
         },
         "decisions": [
           {
@@ -369,7 +422,16 @@
               "id": "user-7"
             },
             "decidedAt": "2026-09-01T12:00:00Z",
-            "expiresAt": "2026-09-02T12:00:00Z"
+            "expiresAt": "2026-09-02T12:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-expiration-at-boundary-001",
+              "requirementId": "finance-review",
+              "subject": {
+                "type": "invoice",
+                "id": "inv-42"
+              }
+            }
           }
         ],
         "evaluatedAt": "2026-09-02T12:00:00Z"
@@ -407,7 +469,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-expiration-equivalent-offset-001"
         },
         "decisions": [
           {
@@ -421,7 +484,16 @@
               "id": "user-7"
             },
             "decidedAt": "2026-09-01T12:00:00Z",
-            "expiresAt": "2026-09-02T12:00:00Z"
+            "expiresAt": "2026-09-02T12:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-expiration-equivalent-offset-001",
+              "requirementId": "finance-review",
+              "subject": {
+                "type": "invoice",
+                "id": "inv-42"
+              }
+            }
           }
         ],
         "evaluatedAt": "2026-09-02T14:00:00+02:00"
@@ -459,7 +531,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-expiration-missing-context-001"
         },
         "decisions": [
           {
@@ -473,7 +546,16 @@
               "id": "user-7"
             },
             "decidedAt": "2026-09-01T12:00:00Z",
-            "expiresAt": "2026-09-02T12:00:00Z"
+            "expiresAt": "2026-09-02T12:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-expiration-missing-context-001",
+              "requirementId": "finance-review",
+              "subject": {
+                "type": "invoice",
+                "id": "inv-42"
+              }
+            }
           }
         ]
       },
@@ -511,7 +593,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-decision-superseded-not-counted-001"
         },
         "decisions": {
           "history": [
@@ -525,7 +608,16 @@
                 "type": "user",
                 "id": "user-7"
               },
-              "decidedAt": "2026-09-01T12:00:00Z"
+              "decidedAt": "2026-09-01T12:00:00Z",
+              "decisionId": "decision-1",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-decision-superseded-not-counted-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "invoice",
+                  "id": "inv-42"
+                }
+              }
             },
             {
               "requirementId": "finance-review",
@@ -537,27 +629,34 @@
                 "type": "user",
                 "id": "user-7"
               },
-              "decidedAt": "2026-09-02T12:00:00Z"
+              "decidedAt": "2026-09-02T12:00:00Z",
+              "decisionId": "decision-2",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-decision-superseded-not-counted-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "invoice",
+                  "id": "inv-42"
+                }
+              }
             }
           ],
           "lifecycle": [
             {
               "type": "DECISION_SUPERSEDED",
-              "target": {
-                "requirementId": "finance-review",
-                "actorId": "user-7",
-                "decidedAt": "2026-09-01T12:00:00Z"
-              },
-              "successor": {
-                "requirementId": "finance-review",
-                "actorId": "user-7",
-                "decidedAt": "2026-09-02T12:00:00Z"
-              },
               "actor": {
                 "type": "user",
                 "id": "user-7"
               },
-              "recordedAt": "2026-09-02T12:30:00Z"
+              "recordedAt": "2026-09-02T12:30:00Z",
+              "decisionRef": {
+                "contextId": "ctx-approval-validity-decision-superseded-not-counted-001",
+                "decisionId": "decision-1"
+              },
+              "successorDecisionRef": {
+                "contextId": "ctx-approval-validity-decision-superseded-not-counted-001",
+                "decisionId": "decision-2"
+              }
             }
           ]
         },
@@ -601,7 +700,16 @@
               "type": "user",
               "id": "user-7"
             },
-            "decidedAt": "2026-09-01T12:00:00Z"
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-decision-supersession-preserves-history-001",
+              "requirementId": "finance-review",
+              "subject": {
+                "type": "approval-subject",
+                "id": "subject-approval-validity-decision-supersession-preserves-history-001"
+              }
+            }
           },
           {
             "requirementId": "finance-review",
@@ -613,25 +721,32 @@
               "type": "user",
               "id": "user-7"
             },
-            "decidedAt": "2026-09-02T12:00:00Z"
+            "decidedAt": "2026-09-02T12:00:00Z",
+            "decisionId": "decision-2",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-decision-supersession-preserves-history-001",
+              "requirementId": "finance-review",
+              "subject": {
+                "type": "approval-subject",
+                "id": "subject-approval-validity-decision-supersession-preserves-history-001"
+              }
+            }
           }
         ],
         "supersession": {
-          "target": {
-            "requirementId": "finance-review",
-            "actorId": "user-7",
-            "decidedAt": "2026-09-01T12:00:00Z"
-          },
-          "successor": {
-            "requirementId": "finance-review",
-            "actorId": "user-7",
-            "decidedAt": "2026-09-02T12:00:00Z"
-          },
           "actor": {
             "type": "user",
             "id": "user-7"
           },
-          "recordedAt": "2026-09-02T12:30:00Z"
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "decisionRef": {
+            "contextId": "ctx-approval-validity-decision-supersession-preserves-history-001",
+            "decisionId": "decision-1"
+          },
+          "successorDecisionRef": {
+            "contextId": "ctx-approval-validity-decision-supersession-preserves-history-001",
+            "decisionId": "decision-2"
+          }
         }
       },
       "expected": {
@@ -648,7 +763,16 @@
                 "type": "user",
                 "id": "user-7"
               },
-              "decidedAt": "2026-09-01T12:00:00Z"
+              "decidedAt": "2026-09-01T12:00:00Z",
+              "decisionId": "decision-1",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-decision-supersession-preserves-history-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "approval-subject",
+                  "id": "subject-approval-validity-decision-supersession-preserves-history-001"
+                }
+              }
             },
             {
               "requirementId": "finance-review",
@@ -660,27 +784,34 @@
                 "type": "user",
                 "id": "user-7"
               },
-              "decidedAt": "2026-09-02T12:00:00Z"
+              "decidedAt": "2026-09-02T12:00:00Z",
+              "decisionId": "decision-2",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-decision-supersession-preserves-history-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "approval-subject",
+                  "id": "subject-approval-validity-decision-supersession-preserves-history-001"
+                }
+              }
             }
           ],
           "lifecycle": [
             {
               "type": "DECISION_SUPERSEDED",
-              "target": {
-                "requirementId": "finance-review",
-                "actorId": "user-7",
-                "decidedAt": "2026-09-01T12:00:00Z"
-              },
-              "successor": {
-                "requirementId": "finance-review",
-                "actorId": "user-7",
-                "decidedAt": "2026-09-02T12:00:00Z"
-              },
               "actor": {
                 "type": "user",
                 "id": "user-7"
               },
-              "recordedAt": "2026-09-02T12:30:00Z"
+              "recordedAt": "2026-09-02T12:30:00Z",
+              "decisionRef": {
+                "contextId": "ctx-approval-validity-decision-supersession-preserves-history-001",
+                "decisionId": "decision-1"
+              },
+              "successorDecisionRef": {
+                "contextId": "ctx-approval-validity-decision-supersession-preserves-history-001",
+                "decisionId": "decision-2"
+              }
             }
           ]
         }
@@ -713,7 +844,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-requirement-superseded-not-transferred-001"
         },
         "decisions": {
           "history": [
@@ -727,19 +859,42 @@
                 "type": "user",
                 "id": "user-7"
               },
-              "decidedAt": "2026-09-01T12:00:00Z"
+              "decidedAt": "2026-09-01T12:00:00Z",
+              "decisionId": "decision-1",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-requirement-superseded-not-transferred-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "approval-subject",
+                  "id": "subject-approval-validity-requirement-superseded-not-transferred-001"
+                }
+              }
             }
           ],
           "lifecycle": [
             {
               "type": "REQUIREMENT_SUPERSEDED",
-              "targetRequirementId": "finance-review",
-              "successorRequirementId": "controller-review",
               "actor": {
                 "type": "user",
                 "id": "user-7"
               },
-              "recordedAt": "2026-09-02T12:30:00Z"
+              "recordedAt": "2026-09-02T12:30:00Z",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-requirement-superseded-not-transferred-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "approval-subject",
+                  "id": "subject-approval-validity-requirement-superseded-not-transferred-001"
+                }
+              },
+              "successorRequirementRef": {
+                "contextId": "ctx-approval-validity-requirement-superseded-not-transferred-001",
+                "requirementId": "controller-review",
+                "subject": {
+                  "type": "invoice",
+                  "id": "inv-42"
+                }
+              }
             }
           ]
         }
@@ -761,9 +916,10 @@
       "spec": "approvals/validity",
       "requirements": [
         "APPROVAL-VALIDITY-002",
-        "APPROVAL-VALIDITY-011"
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-017"
       ],
-      "description": "Requirement supersession appends lifecycle evidence without altering Decision history.",
+      "description": "Requirement supersession appends scoped lifecycle evidence without altering Decision history.",
       "operation": "approval.requirement.supersede",
       "input": {
         "history": [
@@ -777,17 +933,40 @@
               "type": "user",
               "id": "user-7"
             },
-            "decidedAt": "2026-09-01T12:00:00Z"
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-requirement-supersession-preserves-history-001",
+              "requirementId": "finance-review",
+              "subject": {
+                "type": "approval-subject",
+                "id": "subject-approval-validity-requirement-supersession-preserves-history-001"
+              }
+            }
           }
         ],
         "supersession": {
-          "targetRequirementId": "finance-review",
-          "successorRequirementId": "controller-review",
           "actor": {
             "type": "user",
             "id": "user-7"
           },
-          "recordedAt": "2026-09-02T12:30:00Z"
+          "recordedAt": "2026-09-02T12:30:00Z",
+          "requirementRef": {
+            "contextId": "ctx-approval-validity-requirement-supersession-preserves-history-001",
+            "requirementId": "finance-review",
+            "subject": {
+              "type": "approval-subject",
+              "id": "subject-approval-validity-requirement-supersession-preserves-history-001"
+            }
+          },
+          "successorRequirementRef": {
+            "contextId": "ctx-approval-validity-requirement-supersession-preserves-history-001",
+            "requirementId": "controller-review",
+            "subject": {
+              "type": "approval-subject",
+              "id": "subject-approval-validity-requirement-supersession-preserves-history-001"
+            }
+          }
         }
       },
       "expected": {
@@ -804,19 +983,42 @@
                 "type": "user",
                 "id": "user-7"
               },
-              "decidedAt": "2026-09-01T12:00:00Z"
+              "decidedAt": "2026-09-01T12:00:00Z",
+              "decisionId": "decision-1",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-requirement-supersession-preserves-history-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "approval-subject",
+                  "id": "subject-approval-validity-requirement-supersession-preserves-history-001"
+                }
+              }
             }
           ],
           "lifecycle": [
             {
               "type": "REQUIREMENT_SUPERSEDED",
-              "targetRequirementId": "finance-review",
-              "successorRequirementId": "controller-review",
               "actor": {
                 "type": "user",
                 "id": "user-7"
               },
-              "recordedAt": "2026-09-02T12:30:00Z"
+              "recordedAt": "2026-09-02T12:30:00Z",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-requirement-supersession-preserves-history-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "approval-subject",
+                  "id": "subject-approval-validity-requirement-supersession-preserves-history-001"
+                }
+              },
+              "successorRequirementRef": {
+                "contextId": "ctx-approval-validity-requirement-supersession-preserves-history-001",
+                "requirementId": "controller-review",
+                "subject": {
+                  "type": "approval-subject",
+                  "id": "subject-approval-validity-requirement-supersession-preserves-history-001"
+                }
+              }
             }
           ]
         }
@@ -849,7 +1051,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-stale-revision-not-effective-001"
         },
         "decisions": [
           {
@@ -866,7 +1069,16 @@
               "type": "user",
               "id": "user-7"
             },
-            "decidedAt": "2026-09-01T12:00:00Z"
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-stale-revision-not-effective-001",
+              "requirementId": "finance-review",
+              "subject": {
+                "type": "invoice",
+                "id": "inv-42"
+              }
+            }
           }
         ],
         "currentSubjectFacts": {
@@ -912,7 +1124,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-unchanged-relevant-facts-effective-001"
         },
         "decisions": [
           {
@@ -930,7 +1143,16 @@
               "type": "user",
               "id": "user-7"
             },
-            "decidedAt": "2026-09-01T12:00:00Z"
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-unchanged-relevant-facts-effective-001",
+              "requirementId": "finance-review",
+              "subject": {
+                "type": "invoice",
+                "id": "inv-42"
+              }
+            }
           }
         ],
         "currentSubjectFacts": {
@@ -981,7 +1203,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-boolean-number-fact-change-001"
         },
         "decisions": [
           {
@@ -994,7 +1217,16 @@
               "type": "user",
               "id": "user-7"
             },
-            "decidedAt": "2026-09-01T12:00:00Z"
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-boolean-number-fact-change-001",
+              "requirementId": "finance-review",
+              "subject": {
+                "type": "invoice",
+                "id": "inv-42"
+              }
+            }
           }
         ],
         "currentSubjectFacts": {
@@ -1020,7 +1252,16 @@
                 "type": "user",
                 "id": "user-7"
               },
-              "decidedAt": "2026-09-01T12:00:00Z"
+              "decidedAt": "2026-09-01T12:00:00Z",
+              "decisionId": "decision-1",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-boolean-number-fact-change-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "invoice",
+                  "id": "inv-42"
+                }
+              }
             }
           ]
         }
@@ -1060,7 +1301,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-false-zero-fact-change-001"
         },
         "decisions": [
           {
@@ -1073,7 +1315,16 @@
               "type": "user",
               "id": "user-7"
             },
-            "decidedAt": "2026-09-01T12:00:00Z"
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-false-zero-fact-change-001",
+              "requirementId": "finance-review",
+              "subject": {
+                "type": "invoice",
+                "id": "inv-42"
+              }
+            }
           }
         ],
         "currentSubjectFacts": {
@@ -1099,7 +1350,16 @@
                 "type": "user",
                 "id": "user-7"
               },
-              "decidedAt": "2026-09-01T12:00:00Z"
+              "decidedAt": "2026-09-01T12:00:00Z",
+              "decisionId": "decision-1",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-false-zero-fact-change-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "invoice",
+                  "id": "inv-42"
+                }
+              }
             }
           ]
         }
@@ -1139,7 +1399,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-nested-number-boolean-fact-change-001"
         },
         "decisions": [
           {
@@ -1156,7 +1417,16 @@
               "type": "user",
               "id": "user-7"
             },
-            "decidedAt": "2026-09-01T12:00:00Z"
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-nested-number-boolean-fact-change-001",
+              "requirementId": "finance-review",
+              "subject": {
+                "type": "invoice",
+                "id": "inv-42"
+              }
+            }
           }
         ],
         "currentSubjectFacts": {
@@ -1190,7 +1460,16 @@
                 "type": "user",
                 "id": "user-7"
               },
-              "decidedAt": "2026-09-01T12:00:00Z"
+              "decidedAt": "2026-09-01T12:00:00Z",
+              "decisionId": "decision-1",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-nested-number-boolean-fact-change-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "invoice",
+                  "id": "inv-42"
+                }
+              }
             }
           ]
         }
@@ -1230,7 +1509,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-array-number-boolean-fact-change-001"
         },
         "decisions": [
           {
@@ -1247,7 +1527,16 @@
               "type": "user",
               "id": "user-7"
             },
-            "decidedAt": "2026-09-01T12:00:00Z"
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-array-number-boolean-fact-change-001",
+              "requirementId": "finance-review",
+              "subject": {
+                "type": "invoice",
+                "id": "inv-42"
+              }
+            }
           }
         ],
         "currentSubjectFacts": {
@@ -1281,7 +1570,16 @@
                 "type": "user",
                 "id": "user-7"
               },
-              "decidedAt": "2026-09-01T12:00:00Z"
+              "decidedAt": "2026-09-01T12:00:00Z",
+              "decisionId": "decision-1",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-array-number-boolean-fact-change-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "invoice",
+                  "id": "inv-42"
+                }
+              }
             }
           ]
         }
@@ -1321,7 +1619,8 @@
             "user-7"
           ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-structured-facts-unchanged-001"
         },
         "decisions": [
           {
@@ -1347,7 +1646,16 @@
               "type": "user",
               "id": "user-7"
             },
-            "decidedAt": "2026-09-01T12:00:00Z"
+            "decidedAt": "2026-09-01T12:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-structured-facts-unchanged-001",
+              "requirementId": "finance-review",
+              "subject": {
+                "type": "invoice",
+                "id": "inv-42"
+              }
+            }
           }
         ],
         "currentSubjectFacts": {
@@ -1399,7 +1707,16 @@
                 "type": "user",
                 "id": "user-7"
               },
-              "decidedAt": "2026-09-01T12:00:00Z"
+              "decidedAt": "2026-09-01T12:00:00Z",
+              "decisionId": "decision-1",
+              "requirementRef": {
+                "contextId": "ctx-approval-validity-structured-facts-unchanged-001",
+                "requirementId": "finance-review",
+                "subject": {
+                  "type": "invoice",
+                  "id": "inv-42"
+                }
+              }
             }
           ]
         }

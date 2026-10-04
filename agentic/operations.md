@@ -14,10 +14,10 @@ Approval operation label,
 Workflow import/create label, Entity import label, Money serialization label, or
 Audit redaction label is promoted as a canonical Agentic operation in Core 1.1.
 
-The conformance-local `audit.redact` fixture follows AUDIT-REDACTION-008:
-`policy.id` is optional; supplied values must be nonempty strings or policy
-validation rejects with `FINKORE_AUDIT_REDACTION_INVALID`. Authority and protected
-targets remain required. This clarification does not promote a new Agentic operation.
+The conformance-local `audit.redact` fixture follows AUDIT-REDACTION-008 through
+-010: `policy.id` is optional, while authority, protected targets, explicit
+single-source selection, and matching evidence linkage are required. This does
+not promote a new Agentic operation.
 
 Approval conformance labels, including `approval.chain.evaluate`,
 `approval.composition.evaluate`, `approval.decision.withdraw`,
@@ -35,6 +35,12 @@ Requirement evaluation applies the evaluated Requirement's eligibility rule to
 all of its supplied Decisions, but not to Decisions for another Requirement,
 under `APPROVAL-DECISION-012`. These clarifications do not promote an Approval
 operation to the canonical registry.
+
+The stronger Core 2.0 conformance boundary adds scoped Requirement references,
+stable Decision identities, rejection precedence for standalone Requirements,
+and identity-based lifecycle references. These remain Approval specification
+and conformance semantics; they do not promote the local Approval labels or
+create an agent-facing registry.
 
 Timestamp fields used by these Approval fixtures, including `decidedAt`,
 `expiresAt`, `recordedAt`, and `evaluatedAt`, follow the portable
@@ -87,7 +93,7 @@ in [traceability](../conformance/traceability.md).
 | `finkore.audit.remove` | Audit | `no` | `no` | `yes` | `none` | `none` | `AUDIT-APPEND-001` |
 | `finkore.entity.create` | Entities | `yes` | `unspecified` | `yes` | `may` | `none` | `ENTITY-IDENTITY-001`, `-003`, `ENTITY-LIFECYCLE-001`, `-002`, `-006`, `ENTITY-VALIDATION-001` |
 | `finkore.entity.mutate` | Entities | `yes` | `unspecified` | `yes` | `may` | may invalidate approval-relevant facts | `ENTITY-MUTABILITY-001`, `-002`, `-004`, `-006`, `-007`, `-008`, `ENTITY-VALIDATION-002`–`-006`, `ENTITY-ERROR-001` |
-| `finkore.entity.transition` | Entities | `yes` | `unspecified` | `yes` | `may` | may be governed by composing-domain approval policy supplied as guard facts | `ENTITY-LIFECYCLE-003`, `-008`, `ENTITY-IDENTITY-002`, `ENTITY-VALIDATION-001`, `-002`, `-004`, `-006`, `ENTITY-ERROR-001`, `-004`, `WORKFLOW-GUARD-001`–`-003`, `WORKFLOW-TRANSITION-004` |
+| `finkore.entity.transition` | Entities | `yes` | `unspecified` | `yes` | `may` | may be governed by composing-domain approval policy supplied as guard facts | `ENTITY-LIFECYCLE-003`, `-008`, `-009`, `ENTITY-IDENTITY-002`, `ENTITY-VALIDATION-001`, `-002`, `-004`, `-006`, `ENTITY-ERROR-001`, `-004`, `WORKFLOW-GUARD-001`–`-003`, `WORKFLOW-TRANSITION-004`, `WORKFLOW-ERROR-008` |
 | `finkore.entity.evolution.correct` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`–`-010`, `-015`, `-022`–`-027`, `-029`–`-035`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
 | `finkore.entity.evolution.reverse` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-001`, `-011`–`-015`, `-022`–`-027`, `-029`–`-035`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
 | `finkore.entity.evolution.void` | Entities | `yes` | `unspecified` | `yes` | `required` | may invalidate approval-relevant facts or revisions | `ENTITY-EVOLUTION-016`–`-018`, `-022`–`-027`, `-029`–`-035`, `ENTITY-VALIDATION-001`, `-004`, `-006` |
@@ -552,6 +558,13 @@ type, and lifecycle state with the accepted data changes.
 
 ## `finkore.entity.transition`
 
+**Core 2.0 supersession:** Core 2.0 supersedes the Core 1.x contract for this
+same canonical operation identifier by assigning a defined portable failure to
+supplied non-object `facts`. This documented major-version path satisfies
+**SPEC-COMPATIBILITY-007**; it does not create an alias. A consumer claiming
+Core 2.0 must implement the contract below, while a Core 1.x claim retains the
+published 1.x contract.
+
 **Purpose:** Apply a declared Entity lifecycle transition through the referenced
 Workflow.
 
@@ -560,14 +573,17 @@ State, and optional object-valued guard `facts` passed unchanged to the
 referenced Workflow.
 For versioned lifecycles, the observation includes its original Workflow
 binding. It is never inferred from a later supplied definition.
+Omission means no supplied facts. Explicit null, arrays, strings, numbers, and
+Booleans are supplied malformed context rather than omission.
 
 **Preconditions:** The Entity and referenced Workflow are valid, the target
 transition is permitted from the current Entity State, all declared guards pass
 against the explicitly supplied facts, and the complete proposed Entity
 satisfies validation applicable to the target State. Facts are never inferred
 from Entity data, Approval history, authorization services, time, or ambient
-state. The current contract has no portable outcome for a supplied non-object
-facts container.
+state. In Core 2.0, supplied non-object `facts` fails with
+`FINKORE_WORKFLOW_INVALID_CONTEXT` after all earlier Workflow checks through
+invalid Transition and before guard rejection.
 
 **Success postcondition:** Returns a new Entity observation preserving identity,
 type, and data at the target State.
@@ -575,7 +591,8 @@ The Workflow binding is also preserved under `WORKFLOW-VERSION-008`.
 Supplied facts are request context and are not persisted as Entity data.
 
 **Failure postcondition:** The original Entity observation remains unchanged;
-guard rejection also preserves the supplied facts.
+invalid context and guard rejection also preserve the supplied facts, Entity
+data, State, binding, and revision.
 
 **Known operation-specific errors:** Workflow transition errors such as
 `FINKORE_WORKFLOW_INVALID_TRANSITION` and `FINKORE_WORKFLOW_GUARD_REJECTED` are
@@ -583,14 +600,17 @@ preserved as primary portable errors. Target-State Entity validation uses
 `FINKORE_ENTITY_VALIDATION_FAILED` only after the Workflow request succeeds.
 Missing/malformed required binding uses `FINKORE_WORKFLOW_INVALID_INSTANCE`;
 a different definition identity/version uses `FINKORE_WORKFLOW_VERSION_MISMATCH`.
+Supplied non-object facts uses `FINKORE_WORKFLOW_INVALID_CONTEXT` only after a
+valid declared Transition has passed the earlier Workflow priority checks.
 Entity identity or mutation errors may apply when the supplied Entity or
 definition is malformed.
 
-**Normative traceability:** [ENTITY-LIFECYCLE-003 and -008](../spec/entities/lifecycle.md),
+**Normative traceability:** [ENTITY-LIFECYCLE-003, -008, and -009](../spec/entities/lifecycle.md),
 [ENTITY-IDENTITY-002](../spec/entities/identity.md),
 [ENTITY-VALIDATION-001, -002, -004, and -006](../spec/entities/validation.md),
 [WORKFLOW-GUARD-001 through -003](../spec/workflow/guards.md),
-[WORKFLOW-TRANSITION-004](../spec/workflow/transitions.md), and
+[WORKFLOW-TRANSITION-004](../spec/workflow/transitions.md),
+[WORKFLOW-ERROR-008](../spec/workflow/errors.md), and
 [ENTITY-ERROR-001, -004](../spec/entities/errors.md).
 
 ## Shared Entity evolution obligations

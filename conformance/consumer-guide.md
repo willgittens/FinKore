@@ -14,9 +14,9 @@ that is absent from `/spec`.
 ## Discovery and validation
 
 Use [manifest.json](manifest.json) as the only discovery entry point for the
-FinKore Core 1.1 portable suite. Its association with Core 1.1 is documented in
-the [conformance index](README.md#scope-and-discovery); the manifest and
-vector-file format versions remain `0.1`.
+current development suite. Its released Core 1.1 and unreleased Core 2.0 scope
+is documented in the [conformance index](README.md#scope-and-discovery); the
+manifest and vector-file format versions remain `0.1`.
 
 For artifact validation:
 
@@ -211,6 +211,12 @@ record, import, reuse, evaluation, withdrawal, and supersession. Portable JSON
 cases can compare recorded facts and Requirement associations, but cannot prove
 that byte-identical history was not relabeled outside the fixture boundary.
 
+For the Core 2.0 boundary, each Requirement and Decision carries that scope
+explicitly. Claims must compare `contextId`, the exact scoped
+`requirementRef`, and `decisionId`, and must resolve lifecycle evidence only by
+the scoped identity references. This replaces, rather than coexists with, the
+Core 1.x tuple-reference representation.
+
 For failure atomicity at a language-native boundary, compare complete retained
 state before and after the rejected call and then reuse the retained value in a
 subsequent valid operation where practical. If a malformed native input cannot
@@ -222,6 +228,34 @@ portable `expected.observations` comparison.
 Entity transition bindings pass a supplied object-valued `facts` request to the
 referenced Workflow without deriving facts from Entity data, Approval history,
 authorization, time, or other ambient state. Omission remains omission. The
-current Core does not define a portable result for explicit null or another
-non-object facts container at this Entity boundary, so a claim must report that
-gap rather than repair the input or substitute an existing Workflow error.
+Core 2.0 contract rejects explicit null, arrays, and scalar values with
+`FINKORE_WORKFLOW_INVALID_CONTEXT` at the documented priority; bindings must not
+repair such input or treat it as omission.
+
+## Core 2.0 migration
+
+The unreleased stronger contract is behaviorally incompatible with Core 1.1.
+Consumers migrating retained Approval data must assign scoped Requirement and
+Decision identities through an explicit, reviewable mapping while preserving
+every original Decision field and timestamp. Equal tuples remain separate when
+their records are separate. An ambiguous legacy lifecycle tuple must not be
+resolved by selecting the first record, fabricating a timestamp, merging
+Decisions, or deleting history; it requires explicit consumer resolution.
+
+Standalone Requirement evaluation must inspect the complete validated effective
+set: rejection takes precedence, then approval, then pending. Stored Decisions
+are not rewritten merely because an earlier consumer used order or timestamp
+precedence.
+
+Audit redaction requests must add `sourceEventId` and candidate evidence
+metadata linking that source, policy authority, exact protected targets, and an
+optional supplied policy identifier. Existing committed Events stay unchanged.
+Repeated redaction uses a new evidence Event identity. `audit.redact` remains a
+conformance-local label.
+
+The existing canonical `finkore.entity.transition` identifier follows its
+documented Core 2.0 supersession path: supplied non-object `facts` now has the
+portable invalid-context result. No operation alias is introduced. The
+conformance and vector-file syntax versions remain `0.1`; consumers must bind
+claims to the exact Core release or development commit as well as those format
+versions.

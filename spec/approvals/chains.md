@@ -40,6 +40,13 @@ that representation does not replace Approval Decision history and MUST NOT be
 used as proof of which Decision satisfied a Requirement or which subject facts
 were bound to that Decision.
 
+When a standalone Requirement state supplied to a Chain is derived from concrete
+Decision history under Core 2.0, **APPROVAL-REQUIREMENT-008** determines that
+state before the Chain combines it: effective rejection takes precedence over
+approval regardless of Decision order. The Chain does not re-aggregate the
+Decision set, and the distinct quorum conflict rule remains confined to bounded
+Approval Composition.
+
 Core 1.1 does not define Approval Chain identity. A Decision binds to its
 Approval Requirement and relevant subject state or facts, not to a Chain
 identifier. Approval Composition adds group identity for composition

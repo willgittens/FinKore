@@ -16,6 +16,12 @@ Portable error-code compatibility is governed by the
 Codes are stable domain-failure categories, not exception class names or
 localized messages.
 
+Core 2.0 adds `FINKORE_WORKFLOW_INVALID_CONTEXT` for a supplied non-object
+`facts` value at `finkore.entity.transition`. It follows the Workflow priority
+through invalid Transition and precedes guard rejection. This is the documented
+major-version supersession of the Core 1.x operation contract, not an alias or
+a transport error.
+
 The following shape is illustrative and non-normative:
 
 ```json

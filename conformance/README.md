@@ -3,9 +3,10 @@
 > FinKore cases are designed not only to demonstrate correct behavior, but to
 > make plausible financial defects fail.
 
-This directory publishes language-independent acceptance artifacts for the
-**FinKore Core 1.1 stable** normative baseline. The specification remains the
-source of truth.
+This directory contains the **FinKore Core 1.1 stable** baseline plus the
+unreleased Core 2.0 contract work tracked by the active remediation plan. The
+working manifest is therefore a development artifact until Core 2.0 publication;
+the specification remains the source of truth.
 Vectors describe observable inputs, results, portable errors, and post-state;
 they do not prescribe APIs, classes, exceptions, storage, frameworks, or an
 execution protocol.
@@ -29,14 +30,14 @@ and reporting.
 - [`consumer-guide.md`](consumer-guide.md) — discovery, execution outcomes,
   reporting, and claim guidance.
 
-The current manifest contains 44 vector files and 1,808 vectors. Repository
+The current development manifest contains 47 vector files and 1,818 vectors. Repository
 verification checks their schemas, identifiers, declared portable error
 references, paired controls, requirement references, specification topics,
 operation catalog, and Agentic alignment. Paired controls must resolve to
 manifest-listed vector IDs. These checks do not execute financial behavior and
 do not establish that any implementation passes the vectors.
 
-Traceability currently records 439 requirements: 355 covered by portable
+Traceability currently records 447 requirements: 363 covered by portable
 vectors, five partially covered, and 79 not directly testable by portable
 vectors. Coverage means an acceptance case exists; it is not a current execution
 result and is not proof of exhaustive correctness.
@@ -48,9 +49,10 @@ paths relative to the manifest, reject unsupported syntax versions, and reject
 duplicate vector IDs. Filesystem traversal order carries no meaning.
 
 [`manifest.json`](manifest.json) is the sole discovery entry point for the
-FinKore Core 1.1 baseline: six suites, 44 vector files, and 1,808 vectors. Core
-association is documented here because the manifest syntax has no Core-version
-field.
+current development baseline: six suites, 47 vector files, and 1,818 vectors.
+Core association is documented here because the manifest syntax has no
+Core-version field. Use the `core-1.1` tag for the published Core 1.1 manifest;
+do not report this unreleased working manifest as a stable Core 2.0 release.
 `finkoreConformance` and `finkoreVectorFile` remain `0.1` and version the artifact
 formats, not the FinKore Core release. A claim identifies the exact release or
 commit and manifest as well as the format version. Referenced requirement IDs

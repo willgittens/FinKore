@@ -45,6 +45,9 @@ when the declared Workflow needs them. It must not manufacture them from Entity
 data, Approval history, permissions, wall-clock state, or model inference. A
 successful guard result is not authorization and does not waive target-State
 Entity validation.
+For a Core 2.0 claim, supplied facts must be an object. Null, array, and scalar
+values are invalid context and must not be reinterpreted as omission, converted
+to an object, or used to bypass a Guard.
 
 ## Preconditions and postconditions
 

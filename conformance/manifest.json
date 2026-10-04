@@ -42,7 +42,8 @@
         "./audit/construction-evaluation-regressions.json",
         "./audit/malformed-boundary-regressions.json",
         "./audit/event-metadata.json",
-        "./audit/policy-identity.json"
+        "./audit/policy-identity.json",
+        "./audit/source-evidence.json"
       ]
     },
     {
@@ -57,6 +58,7 @@
         "./approvals/discovery-regressions.json",
         "./approvals/composition-validation.json",
         "./approvals/fact-history-contracts.json",
+        "./approvals/stronger-contract.json",
         "./approvals/corrections-098.json"
       ]
     },
@@ -71,6 +73,7 @@
         "./entities/construction-evaluation-regressions.json",
         "./entities/evidence-regressions.json",
         "./entities/guard-validation.json",
+        "./entities/context-errors.json",
         "./entities/discovery-regressions.json",
         "./entities/malformed-boundary-regressions.json",
         "./entities/application-values.json"

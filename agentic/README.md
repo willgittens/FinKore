@@ -10,6 +10,10 @@ governed by the [specification policy](../spec/conventions.md#compatibility-poli
 The 15 other manifest operation labels remain conformance-local; publication
 of their vectors does not promote them to Agentic capabilities.
 
+The working tree includes the unreleased Core 2.0 supersession text for
+`finkore.entity.transition`. The registry size and identifiers are unchanged;
+this development text is not a stable Core 2.0 publication.
+
 > Agent-ready by contract, not by convention.
 
 FinKore's Agentic Contract describes portable operational semantics for agents,

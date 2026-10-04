@@ -1,6 +1,6 @@
 # Financial contract remediation plan
 
-**Status:** Active working plan; Milestones 0, 1, 2, 3, and 4 are complete and Milestone 5 has not started.
+**Status:** Active working plan; Milestones 0 through 5 are complete and Milestone 6 has not started.
 **Prepared:** 2026-10-03.
 **Baseline:** FinKore Core 1.0 stable, reviewed at commit `6534c76`.
 **Proposed releases:** Compatible work in Core 1.1; incompatible behavior and
@@ -549,22 +549,22 @@ conflict error. It does not change the quorum rule that opposing effective
 outcomes for one voter are invalid evidence. Requirement applicability and
 Chain rejection policies retain their separate roles.
 
-- [ ] **F1.1** Review rejection precedence against explicit conflict failure and
+- [x] **F1.1** Review rejection precedence against explicit conflict failure and
   declared domain aggregation alternatives. Document the selected rule, its
   financial/control rationale, and why alternatives were declined in the
   owning document's explanatory text.
-- [ ] **F1.2** Classify the rule as a normative behavior change; identify any
+- [x] **F1.2** Classify the rule as a normative behavior change; identify any
   affected existing requirement meanings and assign distinct IDs where needed.
-- [ ] **F1.3** Define interaction with current facts, eligibility, expiration,
+- [x] **F1.3** Define interaction with current facts, eligibility, expiration,
   withdrawal, Decision supersession, and Requirement supersession. Preserve
   existing context/structure validation before decisive outcomes; do not invent
   a total priority among unrelated concrete Approval errors.
-- [ ] **F1.4** Add both Decision orders, same and different eligible Actors,
+- [x] **F1.4** Add both Decision orders, same and different eligible Actors,
   repeated matching outcomes, no effective evidence, and lifecycle-excluded
   opposing evidence. Include quorum controls preserving its different rule.
-- [ ] **F1.5** Update traceability, relevant fixture contracts, Chain examples,
+- [x] **F1.5** Update traceability, relevant fixture contracts, Chain examples,
   and Agentic metadata only where canonical operation semantics are affected.
-- [ ] **F1.6** Document migration: consumers that previously selected approval
+- [x] **F1.6** Document migration: consumers that previously selected approval
   or used timestamp precedence must change evaluation. Preserve historical
   Decisions; the release does not authorize rewriting past financial actions.
 
@@ -596,10 +596,10 @@ container label must not silently rebind imported Decisions.
   observe the binding, state the limitation in traceability and describe
   consumer-owned evidence. Do not claim a test distinguishes two records whose
   encoded association data are identical.
-- [ ] **F2.4** If needed, define required context/subject information for 2.0 at
+- [x] **F2.4** If needed, define required context/subject information for 2.0 at
   the semantic and bounded-representation levels. Choose member names only
   after specification review; no global Requirement registry is required.
-- [ ] **F2.5** Add same Requirement ID and matching facts across different
+- [x] **F2.5** Add same Requirement ID and matching facts across different
   subjects, different subject types, and different approval contexts. Include
   a same-subject valid control and checks preserving the exact scoped reference.
 - [x] **F2.6** State the error category for invalid association in the owning
@@ -664,29 +664,29 @@ identifies its source and declared policy authority/basis without repeating
 protected values. Multiple-event redaction would need a separately defined
 scope and is outside this proposal.
 
-- [ ] **F4.1** Review this bounded targeting/evidence proposal and classify its
+- [x] **F4.1** Review this bounded targeting/evidence proposal and classify its
   required inputs, success observation, and evidence obligations. Current
   selection and minimum evidence do not already establish all these rules.
-- [ ] **F4.2** Define missing/unknown target handling, unsupported protected
+- [x] **F4.2** Define missing/unknown target handling, unsupported protected
   content, and linkage validation. Decide repeated-redaction behavior explicitly
   while preserving duplicate Audit Event identity rules; do not assume transport
   idempotency or guess a new error-priority order.
-- [ ] **F4.3** Define minimum semantic evidence and a bounded representation.
+- [x] **F4.3** Define minimum semantic evidence and a bounded representation.
   Keep policy IDs optional where required by existing contracts until any
   replacement is explicitly versioned. Authority remains required; an ID alone
   cannot authorize or select content.
-- [ ] **F4.4** Preserve the closed relationship catalog. Do not add a `REDACTS`
+- [x] **F4.4** Preserve the closed relationship catalog. Do not add a `REDACTS`
   relationship implicitly or expand generic Event provenance requirements.
   If the bounded design cannot be expressed within the accepted scope, resolve
   that scope decision before claiming this finding complete.
-- [ ] **F4.5** Add two matching source Events, selection of each separately,
+- [x] **F4.5** Add two matching source Events, selection of each separately,
   unrelated-event preservation, invalid target, missing authority, malformed
   evidence linkage, and duplicate evidence identity cases.
-- [ ] **F4.6** Check preserved Event identity, type, subject, time, Actor identity,
+- [x] **F4.6** Check preserved Event identity, type, subject, time, Actor identity,
   supplied Actor type, and ordering relationships. Committed source Events remain
   unchanged; successful evidence append and redacted representations follow
   the accepted contract, and failure appends no partial evidence.
-- [ ] **F4.7** Update the conformance-local boundary, traceability, and consumer
+- [x] **F4.7** Update the conformance-local boundary, traceability, and consumer
   guidance. The local `audit.redact` label does not become a canonical Agentic
   operation merely because its fixtures change.
 
@@ -707,29 +707,29 @@ that identity within its scope. Actor and timestamp retain their evidentiary
 meaning; equality of occurrence instants does not itself define Decision identity.
 Exact timestamp precision and supplied lexical spelling remain preserved.
 
-- [ ] **F5.1** Document the current permitted-duplicate consequence in 1.1,
+- [x] **F5.1** Document the current permitted-duplicate consequence in 1.1,
   including why whole-Requirement supersession is broader than withdrawing one
   Decision. Retain the existing equal-tuple success control and ambiguous-target
   rejection under the current contract.
-- [ ] **F5.2** Specify 2.0 identity scope, uniqueness, immutability, retention,
+- [x] **F5.2** Specify 2.0 identity scope, uniqueness, immutability, retention,
   and reference resolution together with F2. Duplicate tuple values with distinct
   identities should remain representable; this proposal does not reject those
   historical Decisions merely to avoid an addressing problem.
-- [ ] **F5.3** Define record/import behavior for duplicate identities, missing
+- [x] **F5.3** Define record/import behavior for duplicate identities, missing
   identities, foreign-context references, and missing lifecycle targets. Specify
   primary portable errors before fixtures; avoid a global identity registry.
-- [ ] **F5.4** Update withdrawal and Decision-supersession references, retained
+- [x] **F5.4** Update withdrawal and Decision-supersession references, retained
   relationship validation, and any affected operation contracts. Review each
   materially changed requirement and preserve continuing history obligations.
-- [ ] **F5.5** Define consumer migration using an explicit mapping from retained
+- [x] **F5.5** Define consumer migration using an explicit mapping from retained
   source records to scoped identities. Preserve original Decisions and timestamps.
   Do not resolve ambiguous legacy tuple references by selecting the first record
   or fabricating a unique timestamp. Unresolvable mappings require explicit
   consumer resolution and cannot be reported as faithful automatic migration.
-- [ ] **F5.6** Add equal tuples with distinct identities, duplicate identity
+- [x] **F5.6** Add equal tuples with distinct identities, duplicate identity
   rejection, selective withdrawal, selective supersession, offset-equivalent
   instants, nanosecond-distinct instants, history reuse, and migration controls.
-- [ ] **F5.7** Document whether older and newer reference representations coexist
+- [x] **F5.7** Document whether older and newer reference representations coexist
   or use a supersession path. Avoid optional-ID claims of compatibility if
   ignoring the ID changes reference resolution.
 
@@ -970,26 +970,26 @@ Apply these tasks to each implementation change, keeping the affected layers in
 one reviewable change. Large findings may use several coherent changes rather
 than one repository-wide rewrite.
 
-- [ ] **A1** Check CoreDoc alignment. Change foundation text only if genuinely
+- [x] **A1** Check CoreDoc alignment. Change foundation text only if genuinely
   necessary; preserve governance metadata during editorial changes.
-- [ ] **A2** Search all references before assigning, superseding, or retiring any
+- [x] **A2** Search all references before assigning, superseding, or retiring any
   stable identifier. Preserve continuing obligations and historical identity;
   record retirements concisely under Unreleased in existing release notes.
-- [ ] **A3** Add positive, negative, boundary, invariant, and mutation-sensitive
+- [x] **A3** Add positive, negative, boundary, invariant, and mutation-sensitive
   cases appropriate to each rule. Each expected result cites valid requirements;
   discover files only through the manifest.
-- [ ] **A4** Update conformance conventions, operation contracts, traceability,
+- [x] **A4** Update conformance conventions, operation contracts, traceability,
   actual counts, and applicability guidance. Never let fixtures define new rules.
-- [ ] **A5** Update canonical Agentic descriptors and registry entries where
+- [x] **A5** Update canonical Agentic descriptors and registry entries where
   inputs, results, errors, effects, preconditions, or safety claims are affected.
   Keep conformance-local labels local and do not create aliases.
-- [ ] **A6** Update READMEs, implementation guidance, consumer guidance, static
+- [x] **A6** Update READMEs, implementation guidance, consumer guidance, static
   documentation, and AGENTS instructions only where their content changes.
-- [ ] **A7** Review interactions: opposing Decisions in a foreign subject context;
+- [x] **A7** Review interactions: opposing Decisions in a foreign subject context;
   duplicate timestamps during withdrawal; approval facts used by an Entity guard;
   missing guard context plus target-State failure; and redaction failure after
   candidate evidence preparation. Do not invent undefined error priorities.
-- [ ] **A8** Review plausible defects against the cases: approval-first shortcuts,
+- [x] **A8** Review plausible defects against the cases: approval-first shortcuts,
   identity comparison using facts, skipped Entity guards, arbitrary redaction
   selection, first-match lifecycle addressing, hidden case exclusions, partial
   mutation before errors, and implicit Money rounding.
@@ -1083,7 +1083,74 @@ reported zero vulnerabilities in that locked maintenance graph. The final
 The active plan and financial review were absent from the verified release
 commit and tag. They were restored only afterward on the development branch so
 M5 and M6 work can continue without placing development material in Core 1.1.
-M5 has not started.
+M5 has now completed on the development branch; the Core 1.1 tag remains
+unchanged.
+
+### M5 implementation record
+
+Milestone 5 completed the stronger, unreleased Core 2.0 contract without
+promoting repository status or changing the published `core-1.1` tag. CoreDoc
+required no change: its foundation obligations already require attributable,
+append-only Approval and Audit evidence and predictable rejected-action effects.
+
+Eight new normative requirements close the remaining behavior gaps:
+`APPROVAL-REQUIREMENT-008`, `APPROVAL-DECISION-013`,
+`APPROVAL-DECISION-014`, `APPROVAL-VALIDITY-017`,
+`AUDIT-REDACTION-009`, `AUDIT-REDACTION-010`,
+`ENTITY-LIFECYCLE-009`, and `WORKFLOW-ERROR-008`. The new Workflow failure
+category is `FINKORE_WORKFLOW_INVALID_CONTEXT`. Searches of the active tree,
+release notes, and Git history confirmed that none of these identifiers had a
+prior normative assignment.
+
+Standalone Requirement evaluation now validates the complete applicable
+evidence set before applying order-independent rejection precedence. Detached
+Approval records carry explicit context/subject references and stable Decision
+identities; lifecycle evidence uses scoped identity references rather than
+Actor/timestamp tuples. Retained Core 1.x Decisions and timestamps are preserved
+during migration through an explicit source-record mapping. Ambiguous mappings
+require consumer resolution and cannot be repaired by first match, fabricated
+timestamps, merge, or deletion.
+
+Redaction now selects exactly one committed source Event and appends candidate
+evidence with exact non-disclosing source, authority, target, and optional policy
+linkage. The closed Audit Relationship catalog remains unchanged and repeated
+redaction requires a new evidence Event identity. `audit.redact` remains a
+conformance-local label.
+
+The existing `finkore.entity.transition` identifier follows a documented Core
+2.0 supersession path: supplied null, array, or scalar `facts` now yields
+`FINKORE_WORKFLOW_INVALID_CONTEXT` after the earlier Workflow checks through
+invalid Transition and before guard rejection. Failure preserves Entity,
+binding, revision, data, and the supplied context. No alias, runner contract,
+transport, registry, or repository-owned financial implementation was added.
+
+The bounded Approval fixture corpus was migrated to explicit `contextId`,
+`requirementRef`, and `decisionId` data. Thirteen Core 1.x vectors whose meaning
+depended specifically on tuple addressing were retired rather than silently
+assigned new outcomes; their identifiers are recorded under Unreleased and
+remain unavailable. Three new manifest files add Approval, Audit, and Entity
+cases. The development manifest now contains 1,818 vectors in 47 files, with
+447 requirements: 363 covered, five partial, and 79 not directly testable.
+Conformance formats remain `0.1`, there are still 35 local operation labels and
+20 canonical Agentic operations, and the stronger Approval and redaction labels
+remain conformance-local.
+
+Adversarial review checked approval-first, first/latest-Decision, fact-as-
+identity, equal-tuple collapse, first-match lifecycle, arbitrary redaction
+selection, partial evidence append, malformed-context coercion, Guard-priority,
+and target-validation-priority defects. It also checked that every successful
+scoped lifecycle reference resolves and that all redaction fixtures supply an
+explicit selector and evidence linkage.
+
+Node `v24.15.0` and npm `11.12.1` satisfy the supported toolchain. The first
+sandboxed `npm ci --no-audit` attempt failed because DNS access to
+`registry.npmjs.org` was unavailable; the approved retry installed the five
+locked maintenance packages with advisory lookup disabled. After traceability
+was synchronized and the tuple-dependent retirement audit completed,
+`npm run verify` passed all 30 maintenance-tool tests plus architecture,
+conformance, Agentic, documentation, traceability, license, and whitespace
+checks. No fresh dependency advisory review or stable publication gate was
+requested; those remain Milestone 6 release work.
 
 ### Verification commands and evidence limits
 

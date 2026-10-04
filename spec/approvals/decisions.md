@@ -30,6 +30,8 @@ An Approval Decision outcome is `APPROVED` or `REJECTED`. `PENDING` describes an
 - **APPROVAL-DECISION-010** — A bounded concrete Approval fixture operation consuming a Decision history or Decision collection MUST receive an explicit array or supported history envelope containing an explicit history array. Omission, null, or a malformed envelope MUST use `FINKORE_APPROVAL_INVALID_DECISION`. An empty array remains valid evidence of no Decisions. Native convenience constructors MAY provide documented empty defaults; fixture translation MUST NOT use them to repair missing evidence.
 - **APPROVAL-DECISION-011** — A concrete Approval Actor's optional type, when supplied, MUST be a nonempty string. Null, empty, or non-string type values MUST use `FINKORE_APPROVAL_INVALID_DECISION` at Decision and lifecycle boundaries. Omission MUST remain valid and MUST NOT synthesize a type.
 - **APPROVAL-DECISION-012** — Before concrete Requirement evaluation returns an outcome, Actor eligibility MUST be validated for every structurally valid supplied Decision that identifies the evaluated Requirement, including a Decision excluded from current effectiveness by withdrawal, Decision supersession, Requirement supersession, expiration, stale facts or revision, or another decisive Decision. A valid eligibility declaration excluding the Actor MUST use `FINKORE_APPROVAL_INELIGIBLE_ACTOR`. A supplied Decision identifying another Requirement MUST still receive complete structural validation, but MUST NOT be tested against the evaluated Requirement's eligibility rule and MUST NOT affect its outcome. Evaluation MUST NOT invent an absent Requirement registry or eligibility rule for that unrelated Decision.
+- **APPROVAL-DECISION-013** — At the bounded detached-record boundary, every concrete Requirement MUST supply a nonempty opaque approval `contextId` together with its identity and exact subject reference, and every Decision MUST supply a `requirementRef` containing that `contextId`, the nonempty opaque Requirement identity, and the exact bounded subject reference. The Decision reference MUST match the Requirement context, identity, and subject at record and evaluation boundaries. Equal facts MUST NOT repair a context, Requirement, subject-type, or subject-identity mismatch. Missing, malformed, or mismatched scoped association MUST use `FINKORE_APPROVAL_INVALID_DECISION` and MUST preserve supplied Decision and lifecycle histories. Context identity is supplied and governed by the composing domain; FinKore requires no global registry.
+- **APPROVAL-DECISION-014** — Every bounded concrete Decision MUST have a nonempty opaque `decisionId` that is unique within its `requirementRef.contextId`. The identity MUST remain stable and immutable after commitment, including after withdrawal or supersession, and MUST NOT be inferred from Requirement identity, Actor, outcome, timestamp, facts, or their combination. Equal Requirement, Actor, and timestamp values with distinct Decision identities MUST remain representable. A missing, malformed, duplicate, or changed Decision identity MUST use `FINKORE_APPROVAL_INVALID_DECISION` without changing committed histories.
 
 - **APPROVAL-FACT-001** — When concrete Decision or Requirement evaluation is supplied current subject facts, omission of a relevance selector MUST compare the complete supplied fact value against the Decision's retained fact value. An explicitly supplied nonempty selector list MUST narrow comparison to the selected facts. Null, empty, or malformed selector declarations MUST fail with `FINKORE_APPROVAL_INVALID_DECISION`, even when another validity condition would make the Decision ineffective. Implementations MUST NOT synthesize current facts from historical facts. Concrete single-Decision evaluation MUST reject absent current facts with `FINKORE_APPROVAL_INVALID_DECISION`. Requirement evaluation MAY omit both current facts and selectors to evaluate history without claiming current-fact validation; supplied selectors without current facts MUST use `FINKORE_APPROVAL_INVALID_DECISION`. Explicit null current facts MUST remain a supplied value, not omission.
 - **APPROVAL-FACT-002** — An Approval fact selector MUST identify a nonempty sequence of nonempty object-member names. Selection MUST traverse only own object members and MUST NOT traverse arrays, inherited members, or implicit conversions. A selected fact MUST be present in both historical and current facts to match; absence on both sides MUST NOT count as equality. Explicit null at a selected leaf MUST count as present. Missing intermediate members or a non-object intermediate value MUST make the selected fact unavailable. The bounded dot-separated encoding is defined in conformance conventions; no wildcard, fallback to a literal dotted key, escaping, expression, or array-index language is implied.
@@ -90,6 +92,13 @@ Requirement identifiers and equal subject facts are not proof that two
 contexts or subjects are the same. Core 1.1 does not otherwise prescribe how a
 consumer represents or persists this enclosing scope.
 
+The stronger bounded detached-record contract in **APPROVAL-DECISION-013** and
+**APPROVAL-DECISION-014** makes that scope and Decision identity observable.
+It supplements rather than rewrites the original Decision evidence: retained
+outcome, Actor, timestamps, facts, and array order keep their exact meaning.
+Identity comparison never substitutes for fact-currentness or eligibility
+evaluation, and matching facts never establish subject identity.
+
 ## Example
 
 Absence of subject association violates **APPROVAL-DECISION-002** at record
@@ -118,7 +127,13 @@ The following JSON is illustrative and non-normative; it does not prescribe seri
 
 ```json
 {
+  "decisionId": "decision-17",
   "requirementId": "finance-review",
+  "requirementRef": {
+    "contextId": "invoice-42-approval",
+    "requirementId": "finance-review",
+    "subject": { "type": "invoice", "id": "invoice-42" }
+  },
   "subjectStateRef": "invoice-42/revision-3",
   "outcome": "APPROVED",
   "actor": { "type": "user", "id": "user-7" },

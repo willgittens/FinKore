@@ -76,6 +76,9 @@ An Entity transition passes only explicitly supplied object-valued facts to its
 referenced Workflow guards. Those facts are request context rather than a State
 effect and are preserved on rejection. After Workflow acceptance, target-State
 Entity validation occurs before the State change becomes observable.
+In the Core 2.0 contract, a supplied non-object facts value is invalid context;
+that failure preserves the Entity, Workflow binding, revision, data, and the
+supplied request value.
 
 ## Irreversibility and idempotency
 

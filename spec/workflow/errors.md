@@ -20,6 +20,7 @@ This document defines initial portable workflow failure categories.
 | `FINKORE_WORKFLOW_TERMINAL_STATE` | A Transition Request was made from a terminal State. |
 | `FINKORE_WORKFLOW_VERSION_MISMATCH` | A versioned Workflow operation supplied a definition identity or version identity that does not match the instance binding. |
 | `FINKORE_WORKFLOW_STATE_CONFLICT` | A Transition Request expected a different current State or Workflow Instance Revision than the observed instance has. |
+| `FINKORE_WORKFLOW_INVALID_CONTEXT` | Supplied Workflow Transition evaluation context is malformed. |
 
 ## Requirements
 
@@ -30,6 +31,7 @@ This document defines initial portable workflow failure categories.
 - **WORKFLOW-ERROR-005** — A malformed Workflow instance observation, including a missing current State, missing required version binding, duplicate binding, or malformed Workflow Instance Revision, MUST fail with `FINKORE_WORKFLOW_INVALID_INSTANCE`. An undeclared State value in an otherwise well-formed observation MUST remain `FINKORE_WORKFLOW_INVALID_STATE`.
 - **WORKFLOW-ERROR-006** — An expected-current-state or expected-revision precondition mismatch MUST fail with `FINKORE_WORKFLOW_STATE_CONFLICT`. It MUST NOT be reported as invalid state, invalid transition, guard rejection, terminal-state failure, or version mismatch.
 - **WORKFLOW-ERROR-007** — When more than one Workflow failure category applies to the same operation, the primary portable error code MUST be selected in this order: invalid definition, invalid instance observation, version mismatch, invalid State value, expected-state or expected-revision conflict, terminal State, invalid Transition, then guard rejection. This ordering preserves `WORKFLOW-ERROR-001` terminal-state precedence over invalid Transition after earlier structural, binding, State, and conflict preconditions have passed.
+- **WORKFLOW-ERROR-008** — When a bounded Entity Transition Request supplies `facts`, the value MUST be an object. Explicit null, arrays, strings, numbers, and Booleans MUST fail with `FINKORE_WORKFLOW_INVALID_CONTEXT`; omission remains distinct and means that no facts were supplied. Invalid context is evaluated only after **WORKFLOW-ERROR-007** has established a valid declared Transition through invalid-Transition priority and before a declared Guard can reject. Therefore invalid definition, invalid instance, version mismatch, invalid State, state conflict, terminal State, and invalid Transition remain primary when simultaneously applicable; invalid context is primary over guard rejection. Failure MUST preserve the Workflow instance, Entity observation, binding, revision, data, and supplied facts.
 
 ## Invariants
 
@@ -39,6 +41,14 @@ Under **WORKFLOW-STATES-009**, an empty identifier in definition structure is
 an invalid definition, an empty observed current State is an invalid instance,
 and an empty requested or expected State value is an invalid State. These
 categories follow the priority in **WORKFLOW-ERROR-007**.
+
+The extended Core 2.0 priority is invalid definition, invalid instance
+observation, version mismatch, invalid State value, expected-state or
+expected-revision conflict, terminal State, invalid Transition, invalid supplied
+context, then guard rejection. Context validation does not create a Guard on an
+unguarded Transition; a malformed supplied context is nevertheless rejected at
+the Entity operation boundary once the requested Transition has passed the
+earlier checks.
 
 ## Non-Goals
 

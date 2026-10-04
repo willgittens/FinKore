@@ -106,6 +106,13 @@ scope. Preserve the association through storage, import, evaluation, record,
 withdrawal, and supersession; matching Requirement IDs or subject facts do not
 authorize relabeling a history for another context or subject.
 
+For Core 2.0, persist the Requirement `contextId`, each Decision's exact
+`requirementRef`, and its stable `decisionId`. Enforce Decision-ID uniqueness
+within context and resolve withdrawal or supersession only through scoped
+identity references. Migration from Core 1.x must preserve original fields and
+use an explicit source-record mapping; do not guess when a legacy tuple matches
+more than one Decision.
+
 ## Deterministic context
 
 Conformance-observable behavior must not depend on wall-clock time, host
@@ -121,6 +128,18 @@ its referenced Workflow; do not source them from Entity data, Approval history,
 authorization infrastructure, or ambient state. After Workflow acceptance,
 validate the complete Entity under rules applicable to the target State before
 committing the State change.
+
+In Core 2.0, reject supplied null, array, or scalar guard facts with
+`FINKORE_WORKFLOW_INVALID_CONTEXT` after earlier Workflow errors through invalid
+Transition and before guard rejection. Preserve the Entity, binding, revision,
+data, and supplied context on failure.
+
+For Audit redaction in Core 2.0, select one committed source by its explicit
+`sourceEventId` and validate that every protected target belongs to it. Append a
+separate evidence Event whose `metadata.redactionEvidence` matches the source,
+authority, ordered targets, and optional policy identifier without copying a
+protected value. Do not add a `REDACTS` relationship or mutate the committed
+source Event.
 
 Money division may receive one complete explicit rounding policy. Validate a
 supplied policy for every nonzero divisor, use it only for nonterminating exact

@@ -19,14 +19,20 @@
           {
             "eventId": "evt-original",
             "eventType": "ENTITY_ISSUED",
-            "entity": { "type": "invoice", "id": "inv-10" },
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
             "occurredAt": "2026-09-01T10:00:00Z"
           }
         ],
         "event": {
           "eventId": "evt-correction",
           "eventType": "ENTITY_CORRECTED",
-          "entity": { "type": "invoice", "id": "inv-10" },
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
           "occurredAt": "2026-09-01T11:00:00Z",
           "relationships": [
             {
@@ -34,7 +40,10 @@
               "type": "CORRECTS",
               "target": {
                 "eventId": "evt-original",
-                "entity": { "type": "invoice", "id": "inv-10" }
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
               }
             }
           ]
@@ -47,13 +56,19 @@
             {
               "eventId": "evt-original",
               "eventType": "ENTITY_ISSUED",
-              "entity": { "type": "invoice", "id": "inv-10" },
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
               "occurredAt": "2026-09-01T10:00:00Z"
             },
             {
               "eventId": "evt-correction",
               "eventType": "ENTITY_CORRECTED",
-              "entity": { "type": "invoice", "id": "inv-10" },
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
               "occurredAt": "2026-09-01T11:00:00Z",
               "relationships": [
                 {
@@ -61,7 +76,10 @@
                   "type": "CORRECTS",
                   "target": {
                     "eventId": "evt-original",
-                    "entity": { "type": "invoice", "id": "inv-10" }
+                    "entity": {
+                      "type": "invoice",
+                      "id": "inv-10"
+                    }
                   }
                 }
               ]
@@ -69,8 +87,15 @@
           ]
         }
       },
-      "tags": ["positive", "mutation-sensitive"],
-      "guardsAgainst": ["relationship-dropped", "relationship-identity-rewritten", "target-entity-ignored"]
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "relationship-dropped",
+        "relationship-identity-rewritten",
+        "target-entity-ignored"
+      ]
     },
     {
       "id": "audit.relationship.all-types-order-001",
@@ -87,30 +112,54 @@
           {
             "eventId": "evt-source",
             "eventType": "ENTITY_ISSUED",
-            "entity": { "type": "invoice", "id": "inv-10" },
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
             "occurredAt": "2026-09-01T10:00:00Z"
           }
         ],
         "event": {
           "eventId": "evt-relationship-bundle",
           "eventType": "ENTITY_EVOLUTION_RECORDED",
-          "entity": { "type": "invoice", "id": "inv-10" },
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
           "occurredAt": "2026-09-01T11:00:00Z",
           "relationships": [
             {
               "relationshipId": "z-rel",
               "type": "SUPERSEDES",
-              "target": { "eventId": "evt-source", "entity": { "type": "invoice", "id": "inv-10" } }
+              "target": {
+                "eventId": "evt-source",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
             },
             {
               "relationshipId": "a-rel",
               "type": "REVERSES",
-              "target": { "eventId": "evt-source", "entity": { "type": "invoice", "id": "inv-10" } }
+              "target": {
+                "eventId": "evt-source",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
             },
             {
               "relationshipId": "m-rel",
               "type": "VOIDS",
-              "target": { "eventId": "evt-source", "entity": { "type": "invoice", "id": "inv-10" } }
+              "target": {
+                "eventId": "evt-source",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
             }
           ]
         }
@@ -122,37 +171,69 @@
             {
               "eventId": "evt-source",
               "eventType": "ENTITY_ISSUED",
-              "entity": { "type": "invoice", "id": "inv-10" },
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
               "occurredAt": "2026-09-01T10:00:00Z"
             },
             {
               "eventId": "evt-relationship-bundle",
               "eventType": "ENTITY_EVOLUTION_RECORDED",
-              "entity": { "type": "invoice", "id": "inv-10" },
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
               "occurredAt": "2026-09-01T11:00:00Z",
               "relationships": [
                 {
                   "relationshipId": "z-rel",
                   "type": "SUPERSEDES",
-                  "target": { "eventId": "evt-source", "entity": { "type": "invoice", "id": "inv-10" } }
+                  "target": {
+                    "eventId": "evt-source",
+                    "entity": {
+                      "type": "invoice",
+                      "id": "inv-10"
+                    }
+                  }
                 },
                 {
                   "relationshipId": "a-rel",
                   "type": "REVERSES",
-                  "target": { "eventId": "evt-source", "entity": { "type": "invoice", "id": "inv-10" } }
+                  "target": {
+                    "eventId": "evt-source",
+                    "entity": {
+                      "type": "invoice",
+                      "id": "inv-10"
+                    }
+                  }
                 },
                 {
                   "relationshipId": "m-rel",
                   "type": "VOIDS",
-                  "target": { "eventId": "evt-source", "entity": { "type": "invoice", "id": "inv-10" } }
+                  "target": {
+                    "eventId": "evt-source",
+                    "entity": {
+                      "type": "invoice",
+                      "id": "inv-10"
+                    }
+                  }
                 }
               ]
             }
           ]
         }
       },
-      "tags": ["positive", "boundary", "mutation-sensitive"],
-      "guardsAgainst": ["relationship-type-rejected", "relationships-sorted-by-identity", "invented-relationship-ordering"]
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "relationship-type-rejected",
+        "relationships-sorted-by-identity",
+        "invented-relationship-ordering"
+      ]
     },
     {
       "id": "audit.relationship.invalid-type-001",
@@ -169,40 +250,63 @@
           {
             "eventId": "evt-original",
             "eventType": "ENTITY_ISSUED",
-            "entity": { "type": "invoice", "id": "inv-10" },
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
             "occurredAt": "2026-09-01T10:00:00Z"
           }
         ],
         "event": {
           "eventId": "evt-related",
           "eventType": "ENTITY_EVOLUTION_RECORDED",
-          "entity": { "type": "invoice", "id": "inv-10" },
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
           "occurredAt": "2026-09-01T11:00:00Z",
           "relationships": [
             {
               "relationshipId": "rel-unsupported",
               "type": "RELATED_TO",
-              "target": { "eventId": "evt-original", "entity": { "type": "invoice", "id": "inv-10" } }
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
             }
           ]
         }
       },
       "expected": {
         "status": "error",
-        "error": { "code": "FINKORE_AUDIT_INVALID_EVENT" },
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
         "observations": {
           "history": [
             {
               "eventId": "evt-original",
               "eventType": "ENTITY_ISSUED",
-              "entity": { "type": "invoice", "id": "inv-10" },
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
               "occurredAt": "2026-09-01T10:00:00Z"
             }
           ]
         }
       },
-      "tags": ["negative", "mutation-sensitive"],
-      "guardsAgainst": ["unsupported-relationship-type-normalized", "failed-append-mutates-history"]
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unsupported-relationship-type-normalized",
+        "failed-append-mutates-history"
+      ]
     },
     {
       "id": "audit.relationship.unknown-target-001",
@@ -219,40 +323,63 @@
           {
             "eventId": "evt-original",
             "eventType": "ENTITY_ISSUED",
-            "entity": { "type": "invoice", "id": "inv-10" },
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
             "occurredAt": "2026-09-01T10:00:00Z"
           }
         ],
         "event": {
           "eventId": "evt-correction",
           "eventType": "ENTITY_CORRECTED",
-          "entity": { "type": "invoice", "id": "inv-10" },
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
           "occurredAt": "2026-09-01T11:00:00Z",
           "relationships": [
             {
               "relationshipId": "rel-unknown-target",
               "type": "CORRECTS",
-              "target": { "eventId": "evt-missing", "entity": { "type": "invoice", "id": "inv-10" } }
+              "target": {
+                "eventId": "evt-missing",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
             }
           ]
         }
       },
       "expected": {
         "status": "error",
-        "error": { "code": "FINKORE_AUDIT_INVALID_EVENT" },
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
         "observations": {
           "history": [
             {
               "eventId": "evt-original",
               "eventType": "ENTITY_ISSUED",
-              "entity": { "type": "invoice", "id": "inv-10" },
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
               "occurredAt": "2026-09-01T10:00:00Z"
             }
           ]
         }
       },
-      "tags": ["negative", "mutation-sensitive"],
-      "guardsAgainst": ["unknown-target-accepted", "failed-append-mutates-history"]
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unknown-target-accepted",
+        "failed-append-mutates-history"
+      ]
     },
     {
       "id": "audit.relationship.import-unknown-target-001",
@@ -268,13 +395,22 @@
           {
             "eventId": "evt-correction",
             "eventType": "ENTITY_CORRECTED",
-            "entity": { "type": "invoice", "id": "inv-10" },
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
             "occurredAt": "2026-09-01T11:00:00Z",
             "relationships": [
               {
                 "relationshipId": "rel-import-missing",
                 "type": "CORRECTS",
-                "target": { "eventId": "evt-missing", "entity": { "type": "invoice", "id": "inv-10" } }
+                "target": {
+                  "eventId": "evt-missing",
+                  "entity": {
+                    "type": "invoice",
+                    "id": "inv-10"
+                  }
+                }
               }
             ]
           }
@@ -282,16 +418,25 @@
         "event": {
           "eventId": "evt-later",
           "eventType": "ENTITY_NOTE_RECORDED",
-          "entity": { "type": "invoice", "id": "inv-10" },
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
           "occurredAt": "2026-09-01T12:00:00Z"
         }
       },
       "expected": {
         "status": "error",
-        "error": { "code": "FINKORE_AUDIT_INVALID_EVENT" }
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        }
       },
-      "tags": ["negative"],
-      "guardsAgainst": ["imported-unknown-target-accepted"]
+      "tags": [
+        "negative"
+      ],
+      "guardsAgainst": [
+        "imported-unknown-target-accepted"
+      ]
     },
     {
       "id": "audit.relationship.self-target-001",
@@ -308,40 +453,63 @@
           {
             "eventId": "evt-original",
             "eventType": "ENTITY_ISSUED",
-            "entity": { "type": "invoice", "id": "inv-10" },
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
             "occurredAt": "2026-09-01T10:00:00Z"
           }
         ],
         "event": {
           "eventId": "evt-self",
           "eventType": "ENTITY_EVOLUTION_RECORDED",
-          "entity": { "type": "invoice", "id": "inv-10" },
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
           "occurredAt": "2026-09-01T11:00:00Z",
           "relationships": [
             {
               "relationshipId": "rel-self",
               "type": "CORRECTS",
-              "target": { "eventId": "evt-self", "entity": { "type": "invoice", "id": "inv-10" } }
+              "target": {
+                "eventId": "evt-self",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
             }
           ]
         }
       },
       "expected": {
         "status": "error",
-        "error": { "code": "FINKORE_AUDIT_INVALID_EVENT" },
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
         "observations": {
           "history": [
             {
               "eventId": "evt-original",
               "eventType": "ENTITY_ISSUED",
-              "entity": { "type": "invoice", "id": "inv-10" },
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
               "occurredAt": "2026-09-01T10:00:00Z"
             }
           ]
         }
       },
-      "tags": ["negative", "mutation-sensitive"],
-      "guardsAgainst": ["self-target-accepted", "failed-append-mutates-history"]
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "self-target-accepted",
+        "failed-append-mutates-history"
+      ]
     },
     {
       "id": "audit.relationship.target-entity-mismatch-001",
@@ -358,40 +526,63 @@
           {
             "eventId": "evt-original",
             "eventType": "ENTITY_ISSUED",
-            "entity": { "type": "invoice", "id": "inv-10" },
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
             "occurredAt": "2026-09-01T10:00:00Z"
           }
         ],
         "event": {
           "eventId": "evt-correction",
           "eventType": "ENTITY_CORRECTED",
-          "entity": { "type": "invoice", "id": "inv-10" },
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
           "occurredAt": "2026-09-01T11:00:00Z",
           "relationships": [
             {
               "relationshipId": "rel-wrong-entity",
               "type": "CORRECTS",
-              "target": { "eventId": "evt-original", "entity": { "type": "invoice", "id": "inv-other" } }
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-other"
+                }
+              }
             }
           ]
         }
       },
       "expected": {
         "status": "error",
-        "error": { "code": "FINKORE_AUDIT_INVALID_EVENT" },
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
         "observations": {
           "history": [
             {
               "eventId": "evt-original",
               "eventType": "ENTITY_ISSUED",
-              "entity": { "type": "invoice", "id": "inv-10" },
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
               "occurredAt": "2026-09-01T10:00:00Z"
             }
           ]
         }
       },
-      "tags": ["negative", "mutation-sensitive"],
-      "guardsAgainst": ["target-entity-mismatch-accepted", "failed-append-mutates-history"]
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "target-entity-mismatch-accepted",
+        "failed-append-mutates-history"
+      ]
     },
     {
       "id": "audit.relationship.duplicate-identity-001",
@@ -408,19 +599,31 @@
           {
             "eventId": "evt-original",
             "eventType": "ENTITY_ISSUED",
-            "entity": { "type": "invoice", "id": "inv-10" },
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
             "occurredAt": "2026-09-01T10:00:00Z"
           },
           {
             "eventId": "evt-correction",
             "eventType": "ENTITY_CORRECTED",
-            "entity": { "type": "invoice", "id": "inv-10" },
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
             "occurredAt": "2026-09-01T11:00:00Z",
             "relationships": [
               {
                 "relationshipId": "rel-evolution-1",
                 "type": "CORRECTS",
-                "target": { "eventId": "evt-original", "entity": { "type": "invoice", "id": "inv-10" } }
+                "target": {
+                  "eventId": "evt-original",
+                  "entity": {
+                    "type": "invoice",
+                    "id": "inv-10"
+                  }
+                }
               }
             ]
           }
@@ -428,46 +631,75 @@
         "event": {
           "eventId": "evt-reversal",
           "eventType": "ENTITY_REVERSED",
-          "entity": { "type": "invoice", "id": "inv-10" },
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
           "occurredAt": "2026-09-01T12:00:00Z",
           "relationships": [
             {
               "relationshipId": "rel-evolution-1",
               "type": "REVERSES",
-              "target": { "eventId": "evt-original", "entity": { "type": "invoice", "id": "inv-10" } }
+              "target": {
+                "eventId": "evt-original",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
             }
           ]
         }
       },
       "expected": {
         "status": "error",
-        "error": { "code": "FINKORE_AUDIT_INVALID_EVENT" },
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
         "observations": {
           "history": [
             {
               "eventId": "evt-original",
               "eventType": "ENTITY_ISSUED",
-              "entity": { "type": "invoice", "id": "inv-10" },
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
               "occurredAt": "2026-09-01T10:00:00Z"
             },
             {
               "eventId": "evt-correction",
               "eventType": "ENTITY_CORRECTED",
-              "entity": { "type": "invoice", "id": "inv-10" },
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
               "occurredAt": "2026-09-01T11:00:00Z",
               "relationships": [
                 {
                   "relationshipId": "rel-evolution-1",
                   "type": "CORRECTS",
-                  "target": { "eventId": "evt-original", "entity": { "type": "invoice", "id": "inv-10" } }
+                  "target": {
+                    "eventId": "evt-original",
+                    "entity": {
+                      "type": "invoice",
+                      "id": "inv-10"
+                    }
+                  }
                 }
               ]
             }
           ]
         }
       },
-      "tags": ["negative", "mutation-sensitive"],
-      "guardsAgainst": ["duplicate-relationship-identity-accepted", "failed-append-mutates-history"]
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "duplicate-relationship-identity-accepted",
+        "failed-append-mutates-history"
+      ]
     },
     {
       "id": "audit.relationship.redaction-preserves-001",
@@ -484,48 +716,88 @@
           {
             "eventId": "evt-original",
             "eventType": "ENTITY_ISSUED",
-            "entity": { "type": "invoice", "id": "inv-10" },
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
             "occurredAt": "2026-09-01T10:00:00Z"
           },
           {
             "eventId": "evt-correction",
             "eventType": "ENTITY_CORRECTED",
-            "entity": { "type": "invoice", "id": "inv-10" },
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
             "occurredAt": "2026-09-01T11:00:00Z",
             "relationships": [
               {
                 "relationshipId": "rel-corrects-1",
                 "type": "CORRECTS",
-                "target": { "eventId": "evt-original", "entity": { "type": "invoice", "id": "inv-10" } }
+                "target": {
+                  "eventId": "evt-original",
+                  "entity": {
+                    "type": "invoice",
+                    "id": "inv-10"
+                  }
+                }
               }
             ],
             "changes": [
               {
                 "path": "amount",
-                "before": { "amount": "100.00", "currency": "USD" },
-                "after": { "amount": "99.00", "currency": "USD" }
+                "before": {
+                  "amount": "100.00",
+                  "currency": "USD"
+                },
+                "after": {
+                  "amount": "99.00",
+                  "currency": "USD"
+                }
               }
             ]
           }
         ],
         "policy": {
           "id": "amount-redaction-v1",
-          "protectedPaths": ["amount"],
+          "protectedPaths": [
+            "amount"
+          ],
           "authority": "retention-policy"
         },
         "redactionEvent": {
           "eventId": "evt-redaction",
           "eventType": "AUDIT_CONTENT_REDACTED",
-          "entity": { "type": "invoice", "id": "inv-10" },
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
           "occurredAt": "2026-09-01T12:00:00Z",
           "relationships": [
             {
               "relationshipId": "rel-redaction-evidence",
               "type": "CORRECTS",
-              "target": { "eventId": "evt-correction", "entity": { "type": "invoice", "id": "inv-10" } }
+              "target": {
+                "eventId": "evt-correction",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
             }
-          ]
-        }
+          ],
+          "metadata": {
+            "redactionEvidence": {
+              "sourceEventId": "evt-correction",
+              "authority": "retention-policy",
+              "protectedTargets": [
+                "amount"
+              ],
+              "policyId": "amount-redaction-v1"
+            }
+          }
+        },
+        "sourceEventId": "evt-correction"
       },
       "expected": {
         "status": "success",
@@ -533,35 +805,67 @@
           "event": {
             "eventId": "evt-correction",
             "eventType": "ENTITY_CORRECTED",
-            "entity": { "type": "invoice", "id": "inv-10" },
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
             "occurredAt": "2026-09-01T11:00:00Z",
             "relationships": [
               {
                 "relationshipId": "rel-corrects-1",
                 "type": "CORRECTS",
-                "target": { "eventId": "evt-original", "entity": { "type": "invoice", "id": "inv-10" } }
+                "target": {
+                  "eventId": "evt-original",
+                  "entity": {
+                    "type": "invoice",
+                    "id": "inv-10"
+                  }
+                }
               }
             ],
             "changes": [
               {
                 "path": "amount",
-                "before": { "presence": "REDACTED" },
-                "after": { "presence": "REDACTED" }
+                "before": {
+                  "presence": "REDACTED"
+                },
+                "after": {
+                  "presence": "REDACTED"
+                }
               }
             ]
           },
           "evidenceEvent": {
             "eventId": "evt-redaction",
             "eventType": "AUDIT_CONTENT_REDACTED",
-            "entity": { "type": "invoice", "id": "inv-10" },
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
             "occurredAt": "2026-09-01T12:00:00Z",
             "relationships": [
               {
                 "relationshipId": "rel-redaction-evidence",
                 "type": "CORRECTS",
-                "target": { "eventId": "evt-correction", "entity": { "type": "invoice", "id": "inv-10" } }
+                "target": {
+                  "eventId": "evt-correction",
+                  "entity": {
+                    "type": "invoice",
+                    "id": "inv-10"
+                  }
+                }
               }
-            ]
+            ],
+            "metadata": {
+              "redactionEvidence": {
+                "sourceEventId": "evt-correction",
+                "authority": "retention-policy",
+                "protectedTargets": [
+                  "amount"
+                ],
+                "policyId": "amount-redaction-v1"
+              }
+            }
           }
         },
         "observations": {
@@ -569,47 +873,91 @@
             {
               "eventId": "evt-original",
               "eventType": "ENTITY_ISSUED",
-              "entity": { "type": "invoice", "id": "inv-10" },
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
               "occurredAt": "2026-09-01T10:00:00Z"
             },
             {
               "eventId": "evt-correction",
               "eventType": "ENTITY_CORRECTED",
-              "entity": { "type": "invoice", "id": "inv-10" },
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
               "occurredAt": "2026-09-01T11:00:00Z",
               "relationships": [
                 {
                   "relationshipId": "rel-corrects-1",
                   "type": "CORRECTS",
-                  "target": { "eventId": "evt-original", "entity": { "type": "invoice", "id": "inv-10" } }
+                  "target": {
+                    "eventId": "evt-original",
+                    "entity": {
+                      "type": "invoice",
+                      "id": "inv-10"
+                    }
+                  }
                 }
               ],
               "changes": [
                 {
                   "path": "amount",
-                  "before": { "amount": "100.00", "currency": "USD" },
-                  "after": { "amount": "99.00", "currency": "USD" }
+                  "before": {
+                    "amount": "100.00",
+                    "currency": "USD"
+                  },
+                  "after": {
+                    "amount": "99.00",
+                    "currency": "USD"
+                  }
                 }
               ]
             },
             {
               "eventId": "evt-redaction",
               "eventType": "AUDIT_CONTENT_REDACTED",
-              "entity": { "type": "invoice", "id": "inv-10" },
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
               "occurredAt": "2026-09-01T12:00:00Z",
               "relationships": [
                 {
                   "relationshipId": "rel-redaction-evidence",
                   "type": "CORRECTS",
-                  "target": { "eventId": "evt-correction", "entity": { "type": "invoice", "id": "inv-10" } }
+                  "target": {
+                    "eventId": "evt-correction",
+                    "entity": {
+                      "type": "invoice",
+                      "id": "inv-10"
+                    }
+                  }
                 }
-              ]
+              ],
+              "metadata": {
+                "redactionEvidence": {
+                  "sourceEventId": "evt-correction",
+                  "authority": "retention-policy",
+                  "protectedTargets": [
+                    "amount"
+                  ],
+                  "policyId": "amount-redaction-v1"
+                }
+              }
             }
           ]
         }
       },
-      "tags": ["positive", "mutation-sensitive"],
-      "guardsAgainst": ["relationship-redacted-away", "evidence-relationship-not-validated", "committed-history-rewritten-during-redaction"]
+      "tags": [
+        "positive",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "relationship-redacted-away",
+        "evidence-relationship-not-validated",
+        "committed-history-rewritten-during-redaction"
+      ]
     },
     {
       "id": "audit.relationship.redaction-invalid-evidence-001",
@@ -626,59 +974,107 @@
           {
             "eventId": "evt-original",
             "eventType": "ENTITY_ISSUED",
-            "entity": { "type": "invoice", "id": "inv-10" },
+            "entity": {
+              "type": "invoice",
+              "id": "inv-10"
+            },
             "occurredAt": "2026-09-01T10:00:00Z",
             "changes": [
               {
                 "path": "amount",
-                "before": { "amount": "100.00", "currency": "USD" },
-                "after": { "amount": "99.00", "currency": "USD" }
+                "before": {
+                  "amount": "100.00",
+                  "currency": "USD"
+                },
+                "after": {
+                  "amount": "99.00",
+                  "currency": "USD"
+                }
               }
             ]
           }
         ],
         "policy": {
           "id": "amount-redaction-v1",
-          "protectedPaths": ["amount"],
+          "protectedPaths": [
+            "amount"
+          ],
           "authority": "retention-policy"
         },
         "redactionEvent": {
           "eventId": "evt-redaction",
           "eventType": "AUDIT_CONTENT_REDACTED",
-          "entity": { "type": "invoice", "id": "inv-10" },
+          "entity": {
+            "type": "invoice",
+            "id": "inv-10"
+          },
           "occurredAt": "2026-09-01T12:00:00Z",
           "relationships": [
             {
               "relationshipId": "rel-redaction-bad-target",
               "type": "CORRECTS",
-              "target": { "eventId": "evt-missing", "entity": { "type": "invoice", "id": "inv-10" } }
+              "target": {
+                "eventId": "evt-missing",
+                "entity": {
+                  "type": "invoice",
+                  "id": "inv-10"
+                }
+              }
             }
-          ]
-        }
+          ],
+          "metadata": {
+            "redactionEvidence": {
+              "sourceEventId": "evt-original",
+              "authority": "retention-policy",
+              "protectedTargets": [
+                "amount"
+              ],
+              "policyId": "amount-redaction-v1"
+            }
+          }
+        },
+        "sourceEventId": "evt-original"
       },
       "expected": {
         "status": "error",
-        "error": { "code": "FINKORE_AUDIT_INVALID_EVENT" },
+        "error": {
+          "code": "FINKORE_AUDIT_INVALID_EVENT"
+        },
         "observations": {
           "history": [
             {
               "eventId": "evt-original",
               "eventType": "ENTITY_ISSUED",
-              "entity": { "type": "invoice", "id": "inv-10" },
+              "entity": {
+                "type": "invoice",
+                "id": "inv-10"
+              },
               "occurredAt": "2026-09-01T10:00:00Z",
               "changes": [
                 {
                   "path": "amount",
-                  "before": { "amount": "100.00", "currency": "USD" },
-                  "after": { "amount": "99.00", "currency": "USD" }
+                  "before": {
+                    "amount": "100.00",
+                    "currency": "USD"
+                  },
+                  "after": {
+                    "amount": "99.00",
+                    "currency": "USD"
+                  }
                 }
               ]
             }
           ]
         }
       },
-      "tags": ["negative", "mutation-sensitive"],
-      "guardsAgainst": ["invalid-evidence-relationship-accepted", "failed-redaction-mutates-history"]
+      "tags": [
+        "negative",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "invalid-evidence-relationship-accepted",
+        "failed-redaction-mutates-history"
+      ]
     }
   ]
 }

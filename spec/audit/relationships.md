@@ -62,6 +62,11 @@ NOT be treated as a portable causality, priority, or global ordering rule.
 - **AUDIT-RELATIONSHIP-013** - An invalid, missing, malformed, unsupported, duplicate, unknown-target, self-targeting, or target-Entity-mismatched Audit Relationship MUST fail with `FINKORE_AUDIT_INVALID_EVENT` unless the primary failure is an existing append-only, duplicate-event, redaction, or actor failure.
 - **AUDIT-RELATIONSHIP-014** - Audit Relationships MUST NOT create a global ordering, distributed causality guarantee, or event-sourced reconstruction requirement beyond the explicit relationship content they record.
 
+Core 2.0 redaction linkage does not extend the closed relationship-type set.
+In particular, `REDACTS` is not a permitted relationship type; redaction
+evidence identifies its selected source through the metadata defined by
+**AUDIT-REDACTION-010**.
+
 ## Invariants
 
 Committed Audit Relationships are part of append-only logical Audit history.

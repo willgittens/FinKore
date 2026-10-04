@@ -174,9 +174,11 @@ null, empty, duplicate, non-string, or undeclared selector makes the validator
 declaration invalid. Entity transition applies the same guard fixture as
 `finkore.workflow.transition`: optional object-valued `facts` are forwarded
 unchanged, omission supplies no facts, and Entity data or ambient sources are
-never substituted. Format `0.1` publishes no expected result for a supplied
-non-object Entity guard-facts container because the current Core has no accurate
-portable error for it.
+never substituted. Under the Core 2.0 operation contract, supplied null, array,
+or scalar `facts` uses `FINKORE_WORKFLOW_INVALID_CONTEXT` after the earlier
+Workflow checks through invalid Transition and before guard rejection. Format
+`0.1` is unchanged; the new expectation is a Core semantic change, not a vector
+file syntax change.
 
 Audit Change fixtures reflect the production declaration in
 **AUDIT-CHANGE-009** by using `"valueType":"MONEY"` when `before` and `after`

@@ -1,0 +1,124 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "audit.redaction.explicit-source-first-001",
+      "spec": "audit/redaction",
+      "requirements": ["AUDIT-REDACTION-009", "AUDIT-REDACTION-010", "AUDIT-REDACTION-003", "AUDIT-REDACTION-007"],
+      "description": "Selects the first of two Events containing the same protected path, preserves the unrelated Event, and appends linked evidence.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {"eventId": "evt-a", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "a"}, "actor": {"type": "user", "id": "alice"}, "occurredAt": "2026-09-01T12:00:00Z", "changes": [{"path": "bankAccount", "before": "A1", "after": "A2"}]},
+          {"eventId": "evt-b", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "b"}, "actor": {"type": "user", "id": "bob"}, "occurredAt": "2026-09-01T13:00:00Z", "changes": [{"path": "bankAccount", "before": "B1", "after": "B2"}]}
+        ],
+        "sourceEventId": "evt-a",
+        "policy": {"id": "policy-1", "authority": "retention-policy", "protectedPaths": ["bankAccount"]},
+        "redactionEvent": {"eventId": "evt-redact-a", "eventType": "AUDIT_CONTENT_REDACTED", "entity": {"type": "account", "id": "a"}, "actor": {"type": "system", "id": "retention"}, "occurredAt": "2026-09-02T12:00:00Z", "metadata": {"redactionEvidence": {"sourceEventId": "evt-a", "authority": "retention-policy", "protectedTargets": ["bankAccount"], "policyId": "policy-1"}}}
+      },
+      "expected": {"status": "success", "value": {
+        "event": {"eventId": "evt-a", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "a"}, "actor": {"type": "user", "id": "alice"}, "occurredAt": "2026-09-01T12:00:00Z", "changes": [{"path": "bankAccount", "before": {"presence": "REDACTED"}, "after": {"presence": "REDACTED"}}]},
+        "evidenceEvent": {"eventId": "evt-redact-a", "eventType": "AUDIT_CONTENT_REDACTED", "entity": {"type": "account", "id": "a"}, "actor": {"type": "system", "id": "retention"}, "occurredAt": "2026-09-02T12:00:00Z", "metadata": {"redactionEvidence": {"sourceEventId": "evt-a", "authority": "retention-policy", "protectedTargets": ["bankAccount"], "policyId": "policy-1"}}}
+      }, "observations": {"history": [
+        {"eventId": "evt-a", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "a"}, "actor": {"type": "user", "id": "alice"}, "occurredAt": "2026-09-01T12:00:00Z", "changes": [{"path": "bankAccount", "before": "A1", "after": "A2"}]},
+        {"eventId": "evt-b", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "b"}, "actor": {"type": "user", "id": "bob"}, "occurredAt": "2026-09-01T13:00:00Z", "changes": [{"path": "bankAccount", "before": "B1", "after": "B2"}]},
+        {"eventId": "evt-redact-a", "eventType": "AUDIT_CONTENT_REDACTED", "entity": {"type": "account", "id": "a"}, "actor": {"type": "system", "id": "retention"}, "occurredAt": "2026-09-02T12:00:00Z", "metadata": {"redactionEvidence": {"sourceEventId": "evt-a", "authority": "retention-policy", "protectedTargets": ["bankAccount"], "policyId": "policy-1"}}}
+      ]}},
+      "tags": ["positive", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["matching-path-selects-arbitrary-event", "redaction-mutates-source-history", "unrelated-event-redacted"]
+    },
+    {
+      "id": "audit.redaction.explicit-source-second-001",
+      "spec": "audit/redaction",
+      "requirements": ["AUDIT-REDACTION-009", "AUDIT-REDACTION-010"],
+      "description": "Selects the second matching Event by identity rather than path order.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {"eventId": "evt-a", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "a"}, "occurredAt": "2026-09-01T12:00:00Z", "changes": [{"path": "bankAccount", "before": "A1", "after": "A2"}]},
+          {"eventId": "evt-b", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "b"}, "occurredAt": "2026-09-01T13:00:00Z", "changes": [{"path": "bankAccount", "before": "B1", "after": "B2"}]}
+        ],
+        "sourceEventId": "evt-b",
+        "policy": {"authority": "retention-policy", "protectedPaths": ["bankAccount"]},
+        "redactionEvent": {"eventId": "evt-redact-b", "eventType": "AUDIT_CONTENT_REDACTED", "entity": {"type": "account", "id": "b"}, "occurredAt": "2026-09-02T12:00:00Z", "metadata": {"redactionEvidence": {"sourceEventId": "evt-b", "authority": "retention-policy", "protectedTargets": ["bankAccount"]}}}
+      },
+      "expected": {"status": "success", "value": {
+        "event": {"eventId": "evt-b", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "b"}, "occurredAt": "2026-09-01T13:00:00Z", "changes": [{"path": "bankAccount", "before": {"presence": "REDACTED"}, "after": {"presence": "REDACTED"}}]},
+        "evidenceEvent": {"eventId": "evt-redact-b", "eventType": "AUDIT_CONTENT_REDACTED", "entity": {"type": "account", "id": "b"}, "occurredAt": "2026-09-02T12:00:00Z", "metadata": {"redactionEvidence": {"sourceEventId": "evt-b", "authority": "retention-policy", "protectedTargets": ["bankAccount"]}}}
+      }},
+      "pairedControl": "audit.redaction.explicit-source-first-001",
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["first-matching-event-always-selected", "optional-policy-id-required"]
+    },
+    {
+      "id": "audit.redaction.unknown-source-001",
+      "spec": "audit/redaction",
+      "requirements": ["AUDIT-REDACTION-009", "AUDIT-ERROR-001"],
+      "description": "Rejects an unknown explicit source without redacting or appending evidence.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [{"eventId": "evt-a", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "a"}, "occurredAt": "2026-09-01T12:00:00Z", "changes": [{"path": "bankAccount", "before": "A1", "after": "A2"}]}],
+        "sourceEventId": "evt-missing",
+        "policy": {"authority": "retention-policy", "protectedPaths": ["bankAccount"]},
+        "redactionEvent": {"eventId": "evt-redact", "eventType": "AUDIT_CONTENT_REDACTED", "entity": {"type": "account", "id": "a"}, "occurredAt": "2026-09-02T12:00:00Z", "metadata": {"redactionEvidence": {"sourceEventId": "evt-missing", "authority": "retention-policy", "protectedTargets": ["bankAccount"]}}}
+      },
+      "expected": {"status": "error", "error": {"code": "FINKORE_AUDIT_REDACTION_INVALID"}, "observations": {"history": [{"eventId": "evt-a", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "a"}, "occurredAt": "2026-09-01T12:00:00Z", "changes": [{"path": "bankAccount", "before": "A1", "after": "A2"}]}]}},
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["unknown-source-falls-back-to-path-search", "failed-redaction-appends-evidence"]
+    },
+    {
+      "id": "audit.redaction.evidence-link-mismatch-001",
+      "spec": "audit/redaction",
+      "requirements": ["AUDIT-REDACTION-010", "AUDIT-ERROR-001"],
+      "description": "Rejects an intrinsically valid evidence Event whose semantic source linkage mismatches the request.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [{"eventId": "evt-a", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "a"}, "occurredAt": "2026-09-01T12:00:00Z", "changes": [{"path": "bankAccount", "before": "A1", "after": "A2"}]}],
+        "sourceEventId": "evt-a",
+        "policy": {"id": "policy-1", "authority": "retention-policy", "protectedPaths": ["bankAccount"]},
+        "redactionEvent": {"eventId": "evt-redact", "eventType": "AUDIT_CONTENT_REDACTED", "entity": {"type": "account", "id": "a"}, "occurredAt": "2026-09-02T12:00:00Z", "metadata": {"redactionEvidence": {"sourceEventId": "evt-other", "authority": "retention-policy", "protectedTargets": ["bankAccount"], "policyId": "policy-1"}}}
+      },
+      "expected": {"status": "error", "error": {"code": "FINKORE_AUDIT_REDACTION_INVALID"}, "observations": {"history": [{"eventId": "evt-a", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "a"}, "occurredAt": "2026-09-01T12:00:00Z", "changes": [{"path": "bankAccount", "before": "A1", "after": "A2"}]}]}},
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["evidence-linkage-not-validated", "partial-evidence-append"]
+    },
+    {
+      "id": "audit.redaction.duplicate-evidence-priority-001",
+      "spec": "audit/redaction",
+      "requirements": ["AUDIT-REDACTION-010", "AUDIT-ERROR-004"],
+      "description": "Preserves the intrinsic duplicate-event error before semantic evidence-linkage validation.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [{"eventId": "evt-a", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "a"}, "occurredAt": "2026-09-01T12:00:00Z", "changes": [{"path": "bankAccount", "before": "A1", "after": "A2"}]}],
+        "sourceEventId": "evt-a",
+        "policy": {"authority": "retention-policy", "protectedPaths": ["bankAccount"]},
+        "redactionEvent": {"eventId": "evt-a", "eventType": "AUDIT_CONTENT_REDACTED", "entity": {"type": "account", "id": "wrong"}, "occurredAt": "2026-09-02T12:00:00Z", "metadata": {"redactionEvidence": {"sourceEventId": "evt-wrong", "authority": "retention-policy", "protectedTargets": ["bankAccount"]}}}
+      },
+      "expected": {"status": "error", "error": {"code": "FINKORE_AUDIT_DUPLICATE_EVENT"}, "observations": {"history": [{"eventId": "evt-a", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "a"}, "occurredAt": "2026-09-01T12:00:00Z", "changes": [{"path": "bankAccount", "before": "A1", "after": "A2"}]}]}},
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["linkage-error-overrides-duplicate-event", "duplicate-evidence-committed"]
+    },
+    {
+      "id": "audit.redaction.repeat-new-evidence-001",
+      "spec": "audit/redaction",
+      "requirements": ["AUDIT-REDACTION-009", "AUDIT-REDACTION-010"],
+      "description": "Allows a repeated authorized redaction request when it appends a new evidence Event identity.",
+      "operation": "audit.redact",
+      "input": {
+        "history": [
+          {"eventId": "evt-a", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "a"}, "occurredAt": "2026-09-01T12:00:00Z", "changes": [{"path": "bankAccount", "before": "A1", "after": "A2"}]},
+          {"eventId": "evt-redact-1", "eventType": "AUDIT_CONTENT_REDACTED", "entity": {"type": "account", "id": "a"}, "occurredAt": "2026-09-02T12:00:00Z", "metadata": {"redactionEvidence": {"sourceEventId": "evt-a", "authority": "retention-policy", "protectedTargets": ["bankAccount"]}}}
+        ],
+        "sourceEventId": "evt-a",
+        "policy": {"authority": "retention-policy", "protectedPaths": ["bankAccount"]},
+        "redactionEvent": {"eventId": "evt-redact-2", "eventType": "AUDIT_CONTENT_REDACTED", "entity": {"type": "account", "id": "a"}, "occurredAt": "2026-09-03T12:00:00Z", "metadata": {"redactionEvidence": {"sourceEventId": "evt-a", "authority": "retention-policy", "protectedTargets": ["bankAccount"]}}}
+      },
+      "expected": {"status": "success", "value": {
+        "event": {"eventId": "evt-a", "eventType": "ACCOUNT_CHANGED", "entity": {"type": "account", "id": "a"}, "occurredAt": "2026-09-01T12:00:00Z", "changes": [{"path": "bankAccount", "before": {"presence": "REDACTED"}, "after": {"presence": "REDACTED"}}]},
+        "evidenceEvent": {"eventId": "evt-redact-2", "eventType": "AUDIT_CONTENT_REDACTED", "entity": {"type": "account", "id": "a"}, "occurredAt": "2026-09-03T12:00:00Z", "metadata": {"redactionEvidence": {"sourceEventId": "evt-a", "authority": "retention-policy", "protectedTargets": ["bankAccount"]}}}
+      }},
+      "tags": ["positive", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["repeated-redaction-treated-as-transport-retry", "evidence-id-reused"]
+    }
+  ]
+}

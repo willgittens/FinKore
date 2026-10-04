@@ -4,13 +4,18 @@
     {
       "id": "approval.chain.sequential-pending-before-later-rejection-001",
       "spec": "approvals/chains",
-      "requirements": ["APPROVAL-CHAIN-010"],
+      "requirements": [
+        "APPROVAL-CHAIN-010"
+      ],
       "description": "A later rejected Requirement does not determine a sequential Chain while its pending predecessor is the only active Requirement.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
           "mode": "SEQUENTIAL",
-          "requirements": ["manager", "finance"],
+          "requirements": [
+            "manager",
+            "finance"
+          ],
           "rejectionOutcome": "REJECTED"
         },
         "states": {
@@ -22,22 +27,35 @@
         "status": "success",
         "value": {
           "state": "PENDING",
-          "activeRequirements": ["manager"]
+          "activeRequirements": [
+            "manager"
+          ]
         }
       },
-      "tags": ["boundary", "regression", "mutation-sensitive"],
-      "guardsAgainst": ["later-rejection-bypasses-sequential-predecessor"]
+      "tags": [
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "later-rejection-bypasses-sequential-predecessor"
+      ]
     },
     {
       "id": "approval.chain.sequential-reached-rejection-001",
       "spec": "approvals/chains",
-      "requirements": ["APPROVAL-CHAIN-010"],
+      "requirements": [
+        "APPROVAL-CHAIN-010"
+      ],
       "description": "A rejection determines the declared sequential Chain outcome after every predecessor is approved.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
           "mode": "SEQUENTIAL",
-          "requirements": ["manager", "finance"],
+          "requirements": [
+            "manager",
+            "finance"
+          ],
           "rejectionOutcome": "REJECTED"
         },
         "states": {
@@ -52,19 +70,31 @@
           "activeRequirements": []
         }
       },
-      "tags": ["negative", "boundary", "regression", "mutation-sensitive"],
-      "guardsAgainst": ["reached-rejection-left-pending"]
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "reached-rejection-left-pending"
+      ]
     },
     {
       "id": "approval.chain.sequential-inactive-state-malformed-001",
       "spec": "approvals/chains",
-      "requirements": ["APPROVAL-CHAIN-010"],
+      "requirements": [
+        "APPROVAL-CHAIN-010"
+      ],
       "description": "A malformed later state remains invalid evidence even while an earlier sequential Requirement is pending.",
       "operation": "approval.chain.evaluate",
       "input": {
         "chain": {
           "mode": "SEQUENTIAL",
-          "requirements": ["manager", "finance"],
+          "requirements": [
+            "manager",
+            "finance"
+          ],
           "rejectionOutcome": "REJECTED"
         },
         "states": {
@@ -74,291 +104,569 @@
       },
       "expected": {
         "status": "error",
-        "error": {"code": "FINKORE_APPROVAL_INVALID_CHAIN"}
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_CHAIN"
+        }
       },
-      "tags": ["negative", "invariant", "regression", "mutation-sensitive"],
-      "guardsAgainst": ["inactive-state-skips-validation"]
+      "tags": [
+        "negative",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "inactive-state-skips-validation"
+      ]
     },
     {
       "id": "approval.validity.concrete-effective-true-invalid-001",
       "spec": "approvals/validity",
-      "requirements": ["APPROVAL-VALIDITY-016"],
+      "requirements": [
+        "APPROVAL-VALIDITY-016"
+      ],
       "description": "Concrete Decision history rejects a caller-asserted true effectiveness value instead of trusting or ignoring it.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
           "id": "review",
-          "subject": {"type": "invoice", "id": "invoice-1"},
-          "eligibleActors": ["alice"],
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-concrete-effective-true-invalid-001"
         },
         "decisions": [
           {
             "requirementId": "review",
-            "subjectFacts": {"revision": "r1"},
-            "actor": {"id": "alice"},
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "actor": {
+              "id": "alice"
+            },
             "outcome": "APPROVED",
             "decidedAt": "2026-09-01T10:00:00Z",
-            "effective": true
+            "effective": true,
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-concrete-effective-true-invalid-001",
+              "requirementId": "review",
+              "subject": {
+                "type": "invoice",
+                "id": "invoice-1"
+              }
+            }
           }
         ],
-        "currentSubjectFacts": {"revision": "r1"},
-        "relevantFactPaths": ["revision"]
+        "currentSubjectFacts": {
+          "revision": "r1"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ]
       },
       "expected": {
         "status": "error",
-        "error": {"code": "FINKORE_APPROVAL_INVALID_DECISION"}
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
       },
-      "tags": ["negative", "invariant", "regression", "mutation-sensitive"],
-      "guardsAgainst": ["caller-effective-true-bypasses-derivation"]
+      "tags": [
+        "negative",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "caller-effective-true-bypasses-derivation"
+      ]
     },
     {
       "id": "approval.validity.concrete-effective-false-invalid-001",
       "spec": "approvals/validity",
-      "requirements": ["APPROVAL-VALIDITY-016"],
+      "requirements": [
+        "APPROVAL-VALIDITY-016"
+      ],
       "description": "Concrete Decision history rejects a caller-asserted false effectiveness value instead of discarding otherwise effective evidence.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
           "id": "review",
-          "subject": {"type": "invoice", "id": "invoice-1"},
-          "eligibleActors": ["alice"],
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-concrete-effective-false-invalid-001"
         },
         "decisions": [
           {
             "requirementId": "review",
-            "subjectFacts": {"revision": "r1"},
-            "actor": {"id": "alice"},
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "actor": {
+              "id": "alice"
+            },
             "outcome": "APPROVED",
             "decidedAt": "2026-09-01T10:00:00Z",
-            "effective": false
+            "effective": false,
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-validity-concrete-effective-false-invalid-001",
+              "requirementId": "review",
+              "subject": {
+                "type": "invoice",
+                "id": "invoice-1"
+              }
+            }
           }
         ],
-        "currentSubjectFacts": {"revision": "r1"},
-        "relevantFactPaths": ["revision"]
+        "currentSubjectFacts": {
+          "revision": "r1"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ]
       },
       "expected": {
         "status": "error",
-        "error": {"code": "FINKORE_APPROVAL_INVALID_DECISION"}
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        }
       },
-      "tags": ["negative", "invariant", "regression", "mutation-sensitive"],
-      "guardsAgainst": ["caller-effective-false-discards-evidence"]
+      "tags": [
+        "negative",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "caller-effective-false-discards-evidence"
+      ]
     },
     {
       "id": "approval.validity.record-effective-invalid-001",
       "spec": "approvals/validity",
-      "requirements": ["APPROVAL-VALIDITY-016"],
+      "requirements": [
+        "APPROVAL-VALIDITY-016"
+      ],
       "description": "Decision recording rejects caller-asserted effectiveness and preserves the existing history.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {
           "id": "review",
-          "subject": {"type": "invoice", "id": "invoice-1"},
-          "eligibleActors": ["alice"],
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-validity-record-effective-invalid-001"
         },
         "decision": {
           "requirementId": "review",
-          "subjectFacts": {"revision": "r1"},
-          "actor": {"id": "alice"},
+          "subjectFacts": {
+            "revision": "r1"
+          },
+          "actor": {
+            "id": "alice"
+          },
           "outcome": "APPROVED",
           "decidedAt": "2026-09-01T10:00:00Z",
-          "effective": true
+          "effective": true,
+          "decisionId": "decision-1",
+          "requirementRef": {
+            "contextId": "ctx-approval-validity-record-effective-invalid-001",
+            "requirementId": "review",
+            "subject": {
+              "type": "invoice",
+              "id": "invoice-1"
+            }
+          }
         },
         "history": []
       },
       "expected": {
         "status": "error",
-        "error": {"code": "FINKORE_APPROVAL_INVALID_DECISION"},
-        "observations": {"history": []}
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": []
+        }
       },
-      "tags": ["negative", "invariant", "regression", "mutation-sensitive"],
-      "guardsAgainst": ["record-trusts-caller-effectiveness", "failed-record-mutates-history"]
+      "tags": [
+        "negative",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "record-trusts-caller-effectiveness",
+        "failed-record-mutates-history"
+      ]
     },
     {
       "id": "approval.eligibility.current-history-ineligible-001",
       "spec": "approvals/decisions",
-      "requirements": ["APPROVAL-DECISION-012"],
+      "requirements": [
+        "APPROVAL-DECISION-012"
+      ],
       "description": "Requirement evaluation rejects a current Decision by an Actor excluded by the evaluated Requirement's eligibility rule.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
           "id": "review",
-          "subject": {"type": "invoice", "id": "invoice-1"},
-          "eligibleActors": ["alice"],
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-eligibility-current-history-ineligible-001"
         },
         "decisions": [
           {
             "requirementId": "review",
-            "subjectFacts": {"revision": "r1"},
-            "actor": {"id": "bob"},
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "actor": {
+              "id": "bob"
+            },
             "outcome": "APPROVED",
-            "decidedAt": "2026-09-01T10:00:00Z"
+            "decidedAt": "2026-09-01T10:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-eligibility-current-history-ineligible-001",
+              "requirementId": "review",
+              "subject": {
+                "type": "invoice",
+                "id": "invoice-1"
+              }
+            }
           }
         ],
-        "currentSubjectFacts": {"revision": "r1"},
-        "relevantFactPaths": ["revision"]
+        "currentSubjectFacts": {
+          "revision": "r1"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ]
       },
       "expected": {
         "status": "error",
-        "error": {"code": "FINKORE_APPROVAL_INELIGIBLE_ACTOR"}
+        "error": {
+          "code": "FINKORE_APPROVAL_INELIGIBLE_ACTOR"
+        }
       },
-      "tags": ["negative", "regression", "mutation-sensitive"],
-      "guardsAgainst": ["history-eligibility-check-removed"]
+      "tags": [
+        "negative",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "history-eligibility-check-removed"
+      ]
     },
     {
       "id": "approval.eligibility.withdrawn-history-ineligible-001",
       "spec": "approvals/decisions",
-      "requirements": ["APPROVAL-DECISION-012"],
+      "requirements": [
+        "APPROVAL-DECISION-012"
+      ],
       "description": "Withdrawal does not hide an ineligible Actor on a Decision tied to the evaluated Requirement.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
           "id": "review",
-          "subject": {"type": "invoice", "id": "invoice-1"},
-          "eligibleActors": ["alice"],
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-eligibility-withdrawn-history-ineligible-001"
         },
         "decisions": {
           "history": [
             {
               "requirementId": "review",
-              "subjectFacts": {"revision": "r1"},
-              "actor": {"id": "bob"},
+              "subjectFacts": {
+                "revision": "r1"
+              },
+              "actor": {
+                "id": "bob"
+              },
               "outcome": "APPROVED",
-              "decidedAt": "2026-09-01T10:00:00Z"
+              "decidedAt": "2026-09-01T10:00:00Z",
+              "decisionId": "decision-1",
+              "requirementRef": {
+                "contextId": "ctx-approval-eligibility-withdrawn-history-ineligible-001",
+                "requirementId": "review",
+                "subject": {
+                  "type": "invoice",
+                  "id": "invoice-1"
+                }
+              }
             }
           ],
           "lifecycle": [
             {
               "type": "WITHDRAWN",
-              "target": {
-                "requirementId": "review",
-                "actorId": "bob",
-                "decidedAt": "2026-09-01T10:00:00Z"
+              "actor": {
+                "id": "alice"
               },
-              "actor": {"id": "alice"},
-              "recordedAt": "2026-09-02T10:00:00Z"
+              "recordedAt": "2026-09-02T10:00:00Z",
+              "decisionRef": {
+                "contextId": "ctx-approval-eligibility-withdrawn-history-ineligible-001",
+                "decisionId": "decision-1"
+              }
             }
           ]
         },
-        "currentSubjectFacts": {"revision": "r1"},
-        "relevantFactPaths": ["revision"]
+        "currentSubjectFacts": {
+          "revision": "r1"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ]
       },
       "expected": {
         "status": "error",
-        "error": {"code": "FINKORE_APPROVAL_INELIGIBLE_ACTOR"}
+        "error": {
+          "code": "FINKORE_APPROVAL_INELIGIBLE_ACTOR"
+        }
       },
-      "tags": ["negative", "invariant", "regression", "mutation-sensitive"],
-      "guardsAgainst": ["withdrawal-hides-ineligible-history"]
+      "tags": [
+        "negative",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "withdrawal-hides-ineligible-history"
+      ]
     },
     {
       "id": "approval.eligibility.expired-history-ineligible-001",
       "spec": "approvals/decisions",
-      "requirements": ["APPROVAL-DECISION-012"],
+      "requirements": [
+        "APPROVAL-DECISION-012"
+      ],
       "description": "Expiration does not hide an ineligible Actor on a Decision tied to the evaluated Requirement.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
           "id": "review",
-          "subject": {"type": "invoice", "id": "invoice-1"},
-          "eligibleActors": ["alice"],
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-eligibility-expired-history-ineligible-001"
         },
         "decisions": [
           {
             "requirementId": "review",
-            "subjectFacts": {"revision": "r1"},
-            "actor": {"id": "bob"},
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "actor": {
+              "id": "bob"
+            },
             "outcome": "APPROVED",
             "decidedAt": "2026-09-01T10:00:00Z",
-            "expiresAt": "2026-09-02T10:00:00Z"
+            "expiresAt": "2026-09-02T10:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-eligibility-expired-history-ineligible-001",
+              "requirementId": "review",
+              "subject": {
+                "type": "invoice",
+                "id": "invoice-1"
+              }
+            }
           }
         ],
-        "currentSubjectFacts": {"revision": "r1"},
-        "relevantFactPaths": ["revision"],
+        "currentSubjectFacts": {
+          "revision": "r1"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ],
         "evaluatedAt": "2026-09-03T10:00:00Z"
       },
       "expected": {
         "status": "error",
-        "error": {"code": "FINKORE_APPROVAL_INELIGIBLE_ACTOR"}
+        "error": {
+          "code": "FINKORE_APPROVAL_INELIGIBLE_ACTOR"
+        }
       },
-      "tags": ["negative", "boundary", "regression", "mutation-sensitive"],
-      "guardsAgainst": ["expiration-hides-ineligible-history"]
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "expiration-hides-ineligible-history"
+      ]
     },
     {
       "id": "approval.eligibility.stale-history-ineligible-001",
       "spec": "approvals/decisions",
-      "requirements": ["APPROVAL-DECISION-012"],
+      "requirements": [
+        "APPROVAL-DECISION-012"
+      ],
       "description": "Stale facts do not hide an ineligible Actor on a Decision tied to the evaluated Requirement.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
           "id": "review",
-          "subject": {"type": "invoice", "id": "invoice-1"},
-          "eligibleActors": ["alice"],
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-eligibility-stale-history-ineligible-001"
         },
         "decisions": [
           {
             "requirementId": "review",
-            "subjectFacts": {"revision": "r1"},
-            "actor": {"id": "bob"},
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "actor": {
+              "id": "bob"
+            },
             "outcome": "APPROVED",
-            "decidedAt": "2026-09-01T10:00:00Z"
+            "decidedAt": "2026-09-01T10:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-eligibility-stale-history-ineligible-001",
+              "requirementId": "review",
+              "subject": {
+                "type": "invoice",
+                "id": "invoice-1"
+              }
+            }
           }
         ],
-        "currentSubjectFacts": {"revision": "r2"},
-        "relevantFactPaths": ["revision"]
+        "currentSubjectFacts": {
+          "revision": "r2"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ]
       },
       "expected": {
         "status": "error",
-        "error": {"code": "FINKORE_APPROVAL_INELIGIBLE_ACTOR"}
+        "error": {
+          "code": "FINKORE_APPROVAL_INELIGIBLE_ACTOR"
+        }
       },
-      "tags": ["negative", "boundary", "regression", "mutation-sensitive"],
-      "guardsAgainst": ["stale-facts-hide-ineligible-history"]
+      "tags": [
+        "negative",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "stale-facts-hide-ineligible-history"
+      ]
     },
     {
       "id": "approval.eligibility.unrelated-history-not-misclassified-001",
       "spec": "approvals/decisions",
-      "requirements": ["APPROVAL-DECISION-012"],
+      "requirements": [
+        "APPROVAL-DECISION-012"
+      ],
       "description": "A structurally valid Decision for another Requirement is not tested against the evaluated Requirement's eligibility rule and does not affect its outcome.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
           "id": "review",
-          "subject": {"type": "invoice", "id": "invoice-1"},
-          "eligibleActors": ["alice"],
+          "subject": {
+            "type": "invoice",
+            "id": "invoice-1"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
           "approvedOutcome": "APPROVED",
-          "rejectedOutcome": "REJECTED"
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-eligibility-unrelated-history-not-misclassified-001"
         },
         "decisions": [
           {
             "requirementId": "other-review",
-            "subjectFacts": {"revision": "r1"},
-            "actor": {"id": "bob"},
+            "subjectFacts": {
+              "revision": "r1"
+            },
+            "actor": {
+              "id": "bob"
+            },
             "outcome": "APPROVED",
-            "decidedAt": "2026-09-01T10:00:00Z"
+            "decidedAt": "2026-09-01T10:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-eligibility-unrelated-history-not-misclassified-001",
+              "requirementId": "other-review",
+              "subject": {
+                "type": "approval-subject",
+                "id": "subject-approval-eligibility-unrelated-history-not-misclassified-001"
+              }
+            }
           }
         ],
-        "currentSubjectFacts": {"revision": "r1"},
-        "relevantFactPaths": ["revision"]
+        "currentSubjectFacts": {
+          "revision": "r1"
+        },
+        "relevantFactPaths": [
+          "revision"
+        ]
       },
       "expected": {
         "status": "success",
         "value": "PENDING"
       },
-      "tags": ["positive", "boundary", "regression", "mutation-sensitive"],
-      "guardsAgainst": ["unrelated-history-uses-wrong-eligibility"]
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unrelated-history-uses-wrong-eligibility"
+      ]
     }
   ]
 }

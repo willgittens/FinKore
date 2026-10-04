@@ -1,0 +1,101 @@
+{
+  "finkoreVectorFile": "0.1",
+  "vectors": [
+    {
+      "id": "entity.transition.invalid-context-null-001",
+      "spec": "entities/lifecycle",
+      "requirements": ["ENTITY-LIFECYCLE-009", "WORKFLOW-ERROR-008"],
+      "description": "Rejects explicit null facts as malformed supplied context and preserves the complete Entity and supplied value.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {"type": "invoice", "identityScope": "tenant-a", "workflow": {"states": ["DRAFT", "FINAL"], "initialState": "DRAFT", "terminalStates": ["FINAL"], "definitionIdentity": "context-flow", "definitionVersionIdentity": "1", "transitions": [{"source": "DRAFT", "target": "FINAL", "guard": {"fact": "approved", "equals": true}}]}, "mutability": {"DRAFT": [], "FINAL": []}, "validation": []},
+        "entity": {"type": "invoice", "id": "inv-context", "state": "DRAFT", "data": {"amount": {"amount": "10", "currency": "EUR"}}, "binding": {"definitionIdentity": "context-flow", "definitionVersionIdentity": "1"}},
+        "target": "FINAL",
+        "facts": null
+      },
+      "expected": {"status": "error", "error": {"code": "FINKORE_WORKFLOW_INVALID_CONTEXT"}, "observations": {"entity": {"type": "invoice", "id": "inv-context", "state": "DRAFT", "data": {"amount": {"amount": "10", "currency": "EUR"}}, "binding": {"definitionIdentity": "context-flow", "definitionVersionIdentity": "1"}}, "facts": null}},
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["null-context-treated-as-omission", "invalid-context-mutates-entity"]
+    },
+    {
+      "id": "entity.transition.invalid-context-array-001",
+      "spec": "entities/lifecycle",
+      "requirements": ["ENTITY-LIFECYCLE-009", "WORKFLOW-ERROR-008"],
+      "description": "Rejects an array facts value instead of treating it as an object-valued guard context.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {"type": "invoice", "identityScope": "tenant-a", "workflow": {"states": ["DRAFT", "FINAL"], "initialState": "DRAFT", "terminalStates": ["FINAL"], "transitions": [{"source": "DRAFT", "target": "FINAL", "guard": {"fact": "approved", "equals": true}}]}, "mutability": {"DRAFT": [], "FINAL": []}, "validation": []},
+        "entity": {"type": "invoice", "id": "inv-context", "state": "DRAFT", "data": {}},
+        "target": "FINAL",
+        "facts": [true]
+      },
+      "expected": {"status": "error", "error": {"code": "FINKORE_WORKFLOW_INVALID_CONTEXT"}, "observations": {"entity": {"type": "invoice", "id": "inv-context", "state": "DRAFT", "data": {}}, "facts": [true]}},
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["array-context-accepted"]
+    },
+    {
+      "id": "entity.transition.invalid-context-scalars-001",
+      "spec": "entities/lifecycle",
+      "requirements": ["ENTITY-LIFECYCLE-009", "WORKFLOW-ERROR-008"],
+      "description": "Rejects a scalar facts value without coercion; bindings repeat this case for string, number, and Boolean values.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {"type": "invoice", "identityScope": "tenant-a", "workflow": {"states": ["DRAFT", "FINAL"], "initialState": "DRAFT", "terminalStates": ["FINAL"], "transitions": [{"source": "DRAFT", "target": "FINAL"}]}, "mutability": {"DRAFT": [], "FINAL": []}, "validation": []},
+        "entity": {"type": "invoice", "id": "inv-context", "state": "DRAFT", "data": {}},
+        "target": "FINAL",
+        "facts": "approved"
+      },
+      "expected": {"status": "error", "error": {"code": "FINKORE_WORKFLOW_INVALID_CONTEXT"}, "observations": {"entity": {"type": "invoice", "id": "inv-context", "state": "DRAFT", "data": {}}, "facts": "approved"}},
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["scalar-context-coerced", "unguarded-transition-skips-context-validation"]
+    },
+    {
+      "id": "entity.transition.invalid-transition-before-context-001",
+      "spec": "workflow/errors",
+      "requirements": ["ENTITY-LIFECYCLE-009", "WORKFLOW-ERROR-007", "WORKFLOW-ERROR-008"],
+      "description": "Preserves invalid-Transition priority when the same request also supplies malformed facts.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {"type": "invoice", "identityScope": "tenant-a", "workflow": {"states": ["DRAFT", "FINAL", "ARCHIVED"], "initialState": "DRAFT", "terminalStates": ["FINAL"], "transitions": [{"source": "DRAFT", "target": "FINAL"}]}, "mutability": {"DRAFT": [], "FINAL": [], "ARCHIVED": []}, "validation": []},
+        "entity": {"type": "invoice", "id": "inv-context", "state": "DRAFT", "data": {}},
+        "target": "ARCHIVED",
+        "facts": false
+      },
+      "expected": {"status": "error", "error": {"code": "FINKORE_WORKFLOW_INVALID_TRANSITION"}, "observations": {"entity": {"type": "invoice", "id": "inv-context", "state": "DRAFT", "data": {}}, "facts": false}},
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["context-error-overrides-invalid-transition"]
+    },
+    {
+      "id": "entity.transition.invalid-context-before-guard-001",
+      "spec": "workflow/errors",
+      "requirements": ["ENTITY-LIFECYCLE-009", "WORKFLOW-ERROR-008", "WORKFLOW-GUARD-003"],
+      "description": "Reports malformed context before a declared Guard can reject a missing or unequal fact.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {"type": "invoice", "identityScope": "tenant-a", "workflow": {"states": ["DRAFT", "FINAL"], "initialState": "DRAFT", "terminalStates": ["FINAL"], "transitions": [{"source": "DRAFT", "target": "FINAL", "guard": {"fact": "approved", "equals": true}}]}, "mutability": {"DRAFT": [], "FINAL": []}, "validation": []},
+        "entity": {"type": "invoice", "id": "inv-context", "state": "DRAFT", "data": {}},
+        "target": "FINAL",
+        "facts": 0
+      },
+      "expected": {"status": "error", "error": {"code": "FINKORE_WORKFLOW_INVALID_CONTEXT"}, "observations": {"entity": {"type": "invoice", "id": "inv-context", "state": "DRAFT", "data": {}}, "facts": 0}},
+      "tags": ["negative", "boundary", "mutation-sensitive"],
+      "guardsAgainst": ["guard-rejection-overrides-invalid-context"]
+    },
+    {
+      "id": "entity.transition.invalid-context-before-target-validation-001",
+      "spec": "entities/lifecycle",
+      "requirements": ["ENTITY-LIFECYCLE-009", "WORKFLOW-ERROR-008", "ENTITY-ERROR-004"],
+      "description": "Rejects malformed context before target-State Entity validation and preserves data, State, and facts.",
+      "operation": "finkore.entity.transition",
+      "input": {
+        "definition": {"type": "invoice", "identityScope": "tenant-a", "workflow": {"states": ["DRAFT", "FINAL"], "initialState": "DRAFT", "terminalStates": ["FINAL"], "transitions": [{"source": "DRAFT", "target": "FINAL"}]}, "mutability": {"DRAFT": [], "FINAL": []}, "validation": [{"id": "positive", "rule": "positive-money", "field": "amount", "states": ["FINAL"]}]},
+        "entity": {"type": "invoice", "id": "inv-context", "state": "DRAFT", "data": {"amount": {"amount": "0", "currency": "EUR"}}},
+        "target": "FINAL",
+        "facts": true
+      },
+      "expected": {"status": "error", "error": {"code": "FINKORE_WORKFLOW_INVALID_CONTEXT"}, "observations": {"entity": {"type": "invoice", "id": "inv-context", "state": "DRAFT", "data": {"amount": {"amount": "0", "currency": "EUR"}}}, "facts": true}},
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["target-validation-overrides-invalid-context", "invalid-context-partially-transitions-entity"]
+    }
+  ]
+}

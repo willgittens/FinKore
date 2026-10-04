@@ -9,6 +9,27 @@ artifacts, and their verification results. Those records are preserved as
 history and are not claims about the current repository's supported surface or
 current execution evidence.
 
+## Unreleased
+
+Core 2.0 development retires thirteen Core 1.x Approval vectors whose outcomes
+depended on Actor/timestamp tuple addressing:
+`approval.boundary096.history-evaluate-ambiguous-target-001`,
+`approval.boundary096.history-record-ambiguous-target-001`,
+`approval.boundary096.history-offset-control-001`,
+`approval.boundary096.record-history-offset-control-001`,
+`approval.boundary096.history-offset-ambiguous-001`,
+`approval.boundary096.supersession-offset-self-001`,
+`approval.withdraw.target-ambiguous-001`,
+`approval.boundary097.record-withdrawal-same-001`,
+`approval.boundary097.record-withdrawal-offset-001`,
+`approval.boundary097.record-supersession-target-same-001`,
+`approval.boundary097.record-supersession-target-offset-001`,
+`approval.boundary097.record-supersession-successor-same-001`, and
+`approval.boundary097.record-supersession-successor-offset-001`. Their
+definitions remain in Git history and their identifiers are not
+reusable. Scoped Decision-ID cases replace their coverage without rewriting
+retained Approval evidence.
+
 ## FinKore Core 1.1 — 2026-10-03
 
 Compatible minor release completing explicit rounded Money division and Entity

@@ -18,6 +18,7 @@ This document defines how a Financial Entity progresses through declared domain 
 - **ENTITY-LIFECYCLE-006** — A Financial Entity MUST have exactly one current lifecycle State.
 - **ENTITY-LIFECYCLE-007** — In the bounded Entity representation, an existing observation's missing, null, empty, or non-string current State MUST use `FINKORE_WORKFLOW_INVALID_INSTANCE`. A nonempty string identifying an undeclared State MUST use `FINKORE_WORKFLOW_INVALID_STATE`. Consuming Entity operations MUST preserve Workflow validation priority under **WORKFLOW-ERROR-007**, including definition validation before instance validation, and MUST preserve existing observations on failure.
 - **ENTITY-LIFECYCLE-008** — When a bounded Entity Transition Request supplies object-valued guard facts, the Entity transition MUST pass that exact value to the referenced Workflow Transition Guard evaluation. Omission MUST represent no supplied facts. The operation MUST NOT derive guard facts implicitly from Entity data, Approval history, authorization services, wall-clock state, or other ambient state. Supplied facts MUST NOT create a Guard where the referenced Workflow declares none, and failed guard evaluation MUST preserve the complete Entity and supplied facts.
+- **ENTITY-LIFECYCLE-009** — In Core 2.0, a supplied Entity Transition `facts` value MUST be an object. A supplied null, array, string, number, or Boolean MUST fail with `FINKORE_WORKFLOW_INVALID_CONTEXT` according to **WORKFLOW-ERROR-008**. Omission continues to mean that no facts were supplied. The error and preservation semantics are part of the Core 2.0 contract for the existing canonical `finkore.entity.transition` operation; no alias or replacement operation is introduced.
 
 ## Invariants
 
@@ -32,11 +33,11 @@ object is compared under the referenced Workflow's rules and is request context,
 not Entity data to persist. A supplied object has no effect on an unguarded
 Transition.
 
-The current Core contract defines the valid supplied shape as an object and
-distinguishes omission from supplied values. It does not yet define the portable
-outcome for explicit null, arrays, scalars, or another non-object facts value at
-the Entity boundary. Such a value must not be repaired, treated as omission, or
-assigned an invented existing Workflow error by a conformance claim.
+Core 2.0 closes the former malformed-context gap: supplied non-object `facts`
+is `FINKORE_WORKFLOW_INVALID_CONTEXT`. It must not be repaired or treated as
+omission. The priority in **WORKFLOW-ERROR-008** preserves every earlier
+definition, instance, version, State, conflict, terminal, and Transition error,
+and places invalid context before guard rejection.
 
 After the referenced Workflow has accepted the Transition Request, including
 its guard evaluation, the complete proposed Entity at the target State remains

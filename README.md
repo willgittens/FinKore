@@ -65,6 +65,10 @@ service happened to implement them first.
 
 ## Current scope
 
+The working branch also contains unreleased Core 2.0 contract work tracked by
+the active remediation plan. It is not a stable publication; use the
+`core-1.1` tag for the released 1.1 tree.
+
 The FinKore Core 1.1 normative baseline covers:
 
 | Domain | Defined behavior |

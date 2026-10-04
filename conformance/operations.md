@@ -2,9 +2,10 @@
 
 ## Status and scope
 
-This document is the fixture contract for all 35 operation labels in the
-FinKore Core 1.1 [manifest](manifest.json): 20 canonical `finkore.*` operations
-and 15 conformance-local labels. It defines how consumers bind portable vectors.
+This document is the fixture contract for all 35 operation labels in the current
+development [manifest](manifest.json): 20 canonical `finkore.*` operations and
+15 conformance-local labels. It includes unreleased Core 2.0 cases atop the
+published Core 1.1 baseline and defines how consumers bind portable vectors.
 These are logical test boundaries, not production APIs, transport messages, or a
 repository-owned runner protocol.
 
@@ -95,7 +96,7 @@ Relationships follow [Audit Relationships](../spec/audit/relationships.md).
 | `finkore.audit.append` | required `history`, `event` | `{history}` containing prior Events followed by the accepted Event | Invalid Actor/Event, duplicate identity, or relationship evidence uses the owning Audit error. Failure observations preserve supplied committed history. |
 | `finkore.audit.replace` | required `history`, `eventId`, `replacement` | none in current contract; the request is rejected | Uses `FINKORE_AUDIT_APPEND_ONLY_VIOLATION` and observes unchanged history. |
 | `finkore.audit.remove` | required `history`, `eventId` | none in current contract; the request is rejected | Uses `FINKORE_AUDIT_APPEND_ONLY_VIOLATION` and observes unchanged history. |
-| `audit.redact` | required `history`, `policy`, `redactionEvent` | `{event,evidenceEvent}` | Policy presence/null rules, candidate validation, protected representation, and unchanged history follow Audit Redaction and its documented priority. |
+| `audit.redact` | required `history`, `sourceEventId`, `policy`, `redactionEvent` | `{event,evidenceEvent}` | Selects one committed source Event. Policy, source/target, intrinsic candidate, and evidence-linkage validation plus unchanged history follow Audit Redaction and its documented priority. |
 
 Redaction uses a nonempty string `policy.authority` and declared protected
 targets. Missing, null, empty, or wrong-type authority uses
@@ -104,12 +105,18 @@ service. Under **AUDIT-REDACTION-008**, `policy.id` is optional and, when suppli
 is a nonempty string. Null, empty, or non-string identifiers fail during policy
 validation before candidate evidence validation. Identifier presence cannot
 replace authority or targets and does not select redacted content.
+The top-level `sourceEventId` selects exactly one committed Event. The candidate
+`redactionEvent.metadata.redactionEvidence` repeats that identifier, authority,
+and the exact ordered `protectedPaths` list as `protectedTargets`; it repeats
+`policy.id` as `policyId` exactly when supplied. The evidence Event's Entity
+matches the source. This metadata linkage is not a `REDACTS` relationship and
+must not contain protected values.
 [Audit Redaction](../spec/audit/redaction.md) governs validation priority,
 unchanged history on failure, and the implementation-defined production encoding.
 
 ## Approval fixture definitions
 
-A concrete Requirement supplies nonempty `id`, a `subject` with nonempty string
+A concrete Requirement supplies nonempty `contextId`, nonempty `id`, a `subject` with nonempty string
 `type` and `id`, a nonempty list of distinct nonempty `eligibleActors`, and
 explicit distinct approved/rejected outcome mappings. Missing or malformed
 declarations use `FINKORE_APPROVAL_INVALID_DECISION`; a valid rule excluding an
@@ -120,24 +127,24 @@ declared voter qualifies.
 A concrete Actor supplies a nonempty identity; its optional `type`, when supplied,
 is a nonempty string under APPROVAL-DECISION-011. Null is not omission.
 
-A concrete Decision supplies Requirement identity, Actor, supported outcome,
-decision time, and explicit `subjectFacts`. The facts value may be null, scalar,
-array, or object; omission is invalid. Concrete Decision/history fixtures reject
-an `effective` member. History is either a Decision array or
+A concrete Decision supplies a nonempty `decisionId`, exact `requirementRef`
+containing `contextId`, Requirement `id`, and subject, plus its retained
+Requirement identity, Actor, supported outcome, decision time, and explicit
+`subjectFacts`. The reference must equal the evaluated Requirement's scoped
+identity. Decision identity is unique within its context and is not inferred
+from Actor or time. The facts value may be null, scalar, array, or object;
+omission is invalid. Concrete Decision/history fixtures reject an `effective`
+member. History is either a Decision array or
 `{"history":[...],"lifecycle":[...]}`; where lifecycle is absent, the array means
 no lifecycle Events. Operations requiring history do not accept omission/null or
 an envelope missing its history array merely because a native convenience API
 has an empty default.
 
-These bounded history shapes do not encode an approval-context or subject
-identifier for the history as a whole. A consumer binding must therefore scope
-each history immutably to exactly one approval context and subject and retain
-that association across record, import, reuse, evaluation, withdrawal, and
-supersession. It must reject detected cross-context or cross-subject reuse with
-`FINKORE_APPROVAL_INVALID_DECISION` while preserving both arrays. Equal
-Requirement identifiers and equal facts do not establish the missing identity.
-Because two differently scoped histories can otherwise have identical JSON,
-that protection requires consumer-owned evidence in addition to portable cases.
+The scoped reference is retained across record, import, reuse, evaluation,
+withdrawal, and supersession. A consumer rejects cross-context or cross-subject
+reuse with `FINKORE_APPROVAL_INVALID_DECISION` while preserving both arrays.
+Equal Requirement identifiers and equal facts do not establish identity, and
+no global Requirement or Decision registry is implied.
 
 `relevantFactPaths` and condition `requiredFacts` are dot-separated object-own
 member paths. The list, when supplied, is nonempty and each path and segment is
@@ -163,13 +170,21 @@ inapplicable member needs no eligibility/mapping evidence, although supplied
 optional evidence must still be valid. Bindings do not calculate applicability,
 eligibility, effectiveness, group outcomes, actionability, or error priority.
 
-Lifecycle Decision references use Requirement identity, Actor identity, and
-the exact `decidedAt` instant. Equivalent offsets identify the same instant;
-nanosecond distinctions remain significant. Two matching Decisions make a
-reference ambiguous even if their timestamp spellings differ. Successful
-history observations preserve supplied spellings. Committed lifecycle array
-order, supported discriminators, and target/successor relationships follow
-APPROVAL-VALIDITY-014; the fixture infers no registry or timestamp-based order.
+Lifecycle Decision references use `decisionRef` containing `contextId` and
+`decisionId`; Decision supersession additionally uses `successorDecisionRef`.
+Requirement supersession uses scoped `requirementRef` and
+`successorRequirementRef`. Actor identity and exact `decidedAt` values remain
+evidence but do not resolve references. Successful history observations
+preserve supplied timestamp spellings. Committed lifecycle array order,
+supported discriminators, and target/successor relationships follow
+APPROVAL-VALIDITY-014 and -017; the fixture infers no registry or
+timestamp-based order.
+
+The Core 1.x tuple reference and Core 2.0 scoped-identity reference do not
+coexist in one bounded history. Migration requires an explicit mapping from
+each retained source Decision to a scoped identity. A consumer must not resolve
+an ambiguous legacy tuple by first match, timestamp fabrication, merge, or
+deletion; unresolved mappings require explicit consumer resolution.
 
 Record failure diagnostics use `observations.history` for the Decision array.
 For missing input history, diagnostics may show an empty list while the
