@@ -130,11 +130,18 @@ is a nonempty string under APPROVAL-DECISION-011. Null is not omission.
 A concrete Decision supplies a nonempty `decisionId`, exact `requirementRef`
 containing `contextId`, Requirement `id`, and subject, plus its retained
 Requirement identity, Actor, supported outcome, decision time, and explicit
-`subjectFacts`. The reference must equal the evaluated Requirement's scoped
-identity. Decision identity is unique within its context and is not inferred
-from Actor or time. The facts value may be null, scalar, array, or object;
-omission is invalid. Concrete Decision/history fixtures reject an `effective`
-member. History is either a Decision array or
+`subjectFacts`. Its reference Requirement identity matches its retained
+Requirement identity. A record candidate and a single-Decision evaluation must
+match the supplied Requirement's complete scoped identity. A Requirement
+evaluation collection may contain several Requirement identities only when
+every member has the same `contextId` and exact subject as the evaluated
+Requirement; exact Requirement identity selects the members that contribute
+eligibility, effectiveness, and outcome. Other same-scope Requirements remain
+structurally validated unrelated evidence. Decision identity is unique within
+its context, including across Requirement identities, and is not inferred from
+Actor or time. The facts value may be null, scalar, array, or object; omission
+is invalid. Concrete Decision/history fixtures reject an `effective` member.
+History is either a Decision array or
 `{"history":[...],"lifecycle":[...]}`; where lifecycle is absent, the array means
 no lifecycle Events. Operations requiring history do not accept omission/null or
 an envelope missing its history array merely because a native convenience API
@@ -143,8 +150,10 @@ has an empty default.
 The scoped reference is retained across record, import, reuse, evaluation,
 withdrawal, and supersession. A consumer rejects cross-context or cross-subject
 reuse with `FINKORE_APPROVAL_INVALID_DECISION` while preserving both arrays.
-Equal Requirement identifiers and equal facts do not establish identity, and
-no global Requirement or Decision registry is implied.
+Selection cannot filter out malformed or foreign-scope evidence before complete
+Decision and lifecycle validation. Equal Requirement identifiers and equal facts
+do not establish context or subject identity, and no global Requirement or
+Decision registry is implied.
 
 `relevantFactPaths` and condition `requiredFacts` are dot-separated object-own
 member paths. The list, when supplied, is nonempty and each path and segment is
@@ -178,7 +187,9 @@ evidence but do not resolve references. Successful history observations
 preserve supplied timestamp spellings. Committed lifecycle array order,
 supported discriminators, and target/successor relationships follow
 APPROVAL-VALIDITY-014 and -017; the fixture infers no registry or
-timestamp-based order.
+timestamp-based order. Requirement-supersession references share one context
+and exact subject. Decision supersession may relate Decisions for different
+Requirements in that scope, but does not transfer approval between them.
 
 The Core 1.x tuple reference and Core 2.0 scoped-identity reference do not
 coexist in one bounded history. Migration requires an explicit mapping from
@@ -196,9 +207,9 @@ additional evidence that both histories remain unchanged.
 
 | Operation | Valid request members | Success value | Omission, null, error, and post-state interpretation |
 | --- | --- | --- | --- |
-| `approval.requirement.evaluate` | required `requirement`, explicit `decisions`; optional `currentSubjectFacts`, `relevantFactPaths`, `evaluatedAt`, `observeHistory` | `PENDING`, `APPROVED`, or `REJECTED` | Omitted current facts and selectors make no current-fact comparison. Selectors without current facts are invalid. Expiration requires explicit context when the specification says so. `observeHistory:true` requests unchanged committed history. |
+| `approval.requirement.evaluate` | required `requirement`, explicit `decisions`; optional `currentSubjectFacts`, `relevantFactPaths`, `evaluatedAt`, `observeHistory` | `PENDING`, `APPROVED`, or `REJECTED` | Every member shares the Requirement's context and exact subject and is structurally validated. Exact Requirement identity selects eligibility, current effectiveness, and outcome evidence; same-scope other Requirements are unrelated. Omitted current facts and selectors make no current-fact comparison. Selectors without current facts are invalid. Expiration requires explicit context only for the currently considered exact-Requirement set. `observeHistory:true` requests unchanged committed history. |
 | `approval.requirement.supersede` | required `history`, `supersession` | `{history,lifecycle}` | Appends Requirement-supersession evidence without rewriting Decisions; invalid or duplicate relationships preserve both histories. |
-| `approval.decision.record` | required `requirement`, `decision`, `history` | `{history}` or `{history,lifecycle}` with the accepted Decision appended | Complete proposed history is validated. Missing history is invalid even when diagnostic observations project an empty list. Failure preserves supplied histories. |
+| `approval.decision.record` | required `requirement`, `decision`, `history` | `{history}` or `{history,lifecycle}` with the accepted Decision appended | The candidate exactly matches the supplied Requirement. Complete proposed history is validated and may retain other Requirement identities in the same context-and-subject scope. Missing history is invalid even when diagnostic observations project an empty list. Failure preserves supplied histories. |
 | `approval.decision.evaluate` | required `requirement`, `decision`, `currentSubjectFacts`; optional `relevantFactPaths`, `evaluatedAt` | `EFFECTIVE` or `INEFFECTIVE` | This concrete facts/expiration boundary makes no lifecycle claim without history. Current facts are required here even though they are optional on Requirement evaluation. |
 | `approval.decision.withdraw` | required `requirement`, `history`, `withdrawal` | `{history,lifecycle}` | Operation identity fixes lifecycle kind; a redundant request `type` has no effect. Target must resolve uniquely and remain current. |
 | `approval.decision.supersede` | required `history`, `supersession` | `{history,lifecycle}` | Operation identity fixes Decision-supersession kind. Target/successor relationships and committed local event order are validated. |

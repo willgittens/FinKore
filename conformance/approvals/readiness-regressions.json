@@ -440,8 +440,8 @@
                 "contextId": "ctx-approval-record-preserves-requirement-superseded-001",
                 "requirementId": "controller-review",
                 "subject": {
-                  "type": "approval-subject",
-                  "id": "subject-approval-record-preserves-requirement-superseded-001"
+                  "type": "invoice",
+                  "id": "inv-42"
                 }
               }
             }
@@ -536,8 +536,8 @@
                 "contextId": "ctx-approval-record-preserves-requirement-superseded-001",
                 "requirementId": "controller-review",
                 "subject": {
-                  "type": "approval-subject",
-                  "id": "subject-approval-record-preserves-requirement-superseded-001"
+                  "type": "invoice",
+                  "id": "inv-42"
                 }
               }
             }
@@ -546,11 +546,14 @@
       },
       "id": "approval.record.preserves-requirement-superseded-001",
       "requirements": [
+        "APPROVAL-DECISION-013",
         "APPROVAL-VALIDITY-001",
         "APPROVAL-VALIDITY-002",
         "APPROVAL-VALIDITY-004",
         "APPROVAL-VALIDITY-010",
-        "APPROVAL-VALIDITY-011"
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-014",
+        "APPROVAL-VALIDITY-017"
       ],
       "description": "Recording unrelated revision 4 preserves requirement-superseded evidence exactly.",
       "tags": [
@@ -6238,6 +6241,8 @@
       "requirements": [
         "APPROVAL-DECISION-001",
         "APPROVAL-DECISION-002",
+        "APPROVAL-DECISION-012",
+        "APPROVAL-DECISION-013",
         "APPROVAL-ERROR-005"
       ],
       "description": "Structural association validation includes unrelated incomplete history; no entries are dropped.",
@@ -6289,8 +6294,8 @@
               "contextId": "ctx-approval-association-history-unrelated-001",
               "requirementId": "other",
               "subject": {
-                "type": "approval-subject",
-                "id": "subject-approval-association-history-unrelated-001"
+                "type": "invoice",
+                "id": "invoice-1"
               }
             }
           }
@@ -6310,7 +6315,8 @@
       ],
       "guardsAgainst": [
         "approval-association-history-unrelated"
-      ]
+      ],
+      "pairedControl": "approval.eligibility.unrelated-history-not-misclassified-001"
     },
     {
       "id": "approval.association.record-empty-subject-001",

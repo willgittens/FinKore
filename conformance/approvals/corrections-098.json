@@ -607,7 +607,8 @@
       "id": "approval.eligibility.unrelated-history-not-misclassified-001",
       "spec": "approvals/decisions",
       "requirements": [
-        "APPROVAL-DECISION-012"
+        "APPROVAL-DECISION-012",
+        "APPROVAL-DECISION-013"
       ],
       "description": "A structurally valid Decision for another Requirement is not tested against the evaluated Requirement's eligibility rule and does not affect its outcome.",
       "operation": "approval.requirement.evaluate",
@@ -641,8 +642,8 @@
               "contextId": "ctx-approval-eligibility-unrelated-history-not-misclassified-001",
               "requirementId": "other-review",
               "subject": {
-                "type": "approval-subject",
-                "id": "subject-approval-eligibility-unrelated-history-not-misclassified-001"
+                "type": "invoice",
+                "id": "invoice-1"
               }
             }
           }

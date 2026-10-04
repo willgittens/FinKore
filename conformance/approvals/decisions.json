@@ -291,7 +291,9 @@
       "id": "approval.requirement.wrong-association-001",
       "spec": "approvals/decisions",
       "requirements": [
-        "APPROVAL-DECISION-001"
+        "APPROVAL-DECISION-001",
+        "APPROVAL-DECISION-012",
+        "APPROVAL-DECISION-013"
       ],
       "description": "A decision for another requirement does not satisfy this requirement.",
       "operation": "approval.requirement.evaluate",
@@ -330,8 +332,8 @@
               "contextId": "ctx-approval-requirement-wrong-association-001",
               "requirementId": "manager-review",
               "subject": {
-                "type": "approval-subject",
-                "id": "subject-approval-requirement-wrong-association-001"
+                "type": "invoice",
+                "id": "inv-42"
               }
             }
           }

@@ -334,6 +334,15 @@ containers without discarding evidence. Tests that withdraw or supersede, record
 and then evaluate must pass real operation outputs between public APIs as well
 as exercise reconstructed-history conformance vectors.
 
+One Approval history has one `contextId` and exact subject scope but may contain
+Decisions for several Requirement identities. Every Decision and lifecycle
+member is validated before exact Requirement identity selects eligibility,
+current-effectiveness, and outcome evidence. Same-scope members for another
+Requirement are unrelated evidence; a foreign context or subject is invalid.
+Decision identity is unique throughout the context, including across
+Requirements. Bindings must not split, merge, filter, or relabel supplied
+history to change those observations.
+
 For the operation-specific withdrawal and supersession fixtures, the operation
 identifier determines the requested lifecycle kind. A redundant `type` member
 inside `withdrawal` or `supersession` has no effect, whether omitted, matching,

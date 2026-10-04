@@ -218,6 +218,16 @@ explicitly. Claims must compare `contextId`, the exact scoped
 the scoped identity references. This replaces, rather than coexists with, the
 Core 1.x tuple-reference representation.
 
+A Core 2.0 Decision history is owned by one `contextId` and exact subject, not
+by one Requirement identity. It may therefore retain several Requirements in
+that scope. Claims must validate every Decision and lifecycle member before
+using exact Requirement identity to select eligibility, effectiveness, and
+outcome evidence. Same-scope Decisions for another Requirement are unrelated;
+foreign-context or foreign-subject Decisions are invalid. Decision identities
+remain unique throughout the context, including across Requirements. Consumers
+must preserve these associations rather than split, merge, or relabel history
+to make a case pass.
+
 For failure atomicity at a language-native boundary, compare complete retained
 state before and after the rejected call and then reuse the retained value in a
 subsequent valid operation where practical. If a malformed native input cannot

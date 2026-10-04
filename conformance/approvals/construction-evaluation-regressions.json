@@ -6654,8 +6654,10 @@
       "id": "approval.boundary096.requirement-supersession-valid-001",
       "spec": "approvals/validity",
       "requirements": [
+        "APPROVAL-DECISION-013",
         "APPROVAL-VALIDITY-011",
-        "APPROVAL-VALIDITY-014"
+        "APPROVAL-VALIDITY-014",
+        "APPROVAL-VALIDITY-017"
       ],
       "description": "Requirement supersession valid.",
       "operation": "approval.requirement.evaluate",
@@ -6715,8 +6717,8 @@
                 "contextId": "ctx-approval-boundary096-requirement-supersession-valid-001",
                 "requirementId": "successor",
                 "subject": {
-                  "type": "approval-subject",
-                  "id": "subject-approval-boundary096-requirement-supersession-valid-001"
+                  "type": "invoice",
+                  "id": "invoice-1"
                 }
               }
             }
@@ -7329,9 +7331,11 @@
       "id": "approval.boundary096.excluded-context-unrelated-001",
       "spec": "approvals/validity",
       "requirements": [
+        "APPROVAL-DECISION-012",
+        "APPROVAL-DECISION-013",
         "APPROVAL-VALIDITY-013"
       ],
-      "description": "Excluded context unrelated.",
+      "description": "An expiring Decision for another Requirement in the same history scope does not require an evaluation instant.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {
@@ -7365,8 +7369,8 @@
                 "contextId": "ctx-approval-boundary096-excluded-context-unrelated-001",
                 "requirementId": "other",
                 "subject": {
-                  "type": "approval-subject",
-                  "id": "subject-approval-boundary096-excluded-context-unrelated-001"
+                  "type": "invoice",
+                  "id": "invoice-1"
                 }
               }
             }
@@ -7590,7 +7594,10 @@
       "id": "approval.boundary096.excluded-context-requirement-superseded-001",
       "spec": "approvals/validity",
       "requirements": [
-        "APPROVAL-VALIDITY-013"
+        "APPROVAL-DECISION-013",
+        "APPROVAL-VALIDITY-013",
+        "APPROVAL-VALIDITY-014",
+        "APPROVAL-VALIDITY-017"
       ],
       "description": "Excluded context requirement superseded.",
       "operation": "approval.requirement.evaluate",
@@ -7651,8 +7658,8 @@
                 "contextId": "ctx-approval-boundary096-excluded-context-requirement-superseded-001",
                 "requirementId": "successor",
                 "subject": {
-                  "type": "approval-subject",
-                  "id": "subject-approval-boundary096-excluded-context-requirement-superseded-001"
+                  "type": "invoice",
+                  "id": "invoice-1"
                 }
               }
             }

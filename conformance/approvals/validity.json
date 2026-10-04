@@ -829,7 +829,10 @@
       "id": "approval.validity.requirement-superseded-not-transferred-001",
       "spec": "approvals/validity",
       "requirements": [
-        "APPROVAL-VALIDITY-011"
+        "APPROVAL-DECISION-013",
+        "APPROVAL-VALIDITY-011",
+        "APPROVAL-VALIDITY-014",
+        "APPROVAL-VALIDITY-017"
       ],
       "description": "A Decision for a superseded Requirement does not satisfy the successor Requirement.",
       "operation": "approval.requirement.evaluate",
@@ -865,8 +868,8 @@
                 "contextId": "ctx-approval-validity-requirement-superseded-not-transferred-001",
                 "requirementId": "finance-review",
                 "subject": {
-                  "type": "approval-subject",
-                  "id": "subject-approval-validity-requirement-superseded-not-transferred-001"
+                  "type": "invoice",
+                  "id": "inv-42"
                 }
               }
             }
@@ -883,8 +886,8 @@
                 "contextId": "ctx-approval-validity-requirement-superseded-not-transferred-001",
                 "requirementId": "finance-review",
                 "subject": {
-                  "type": "approval-subject",
-                  "id": "subject-approval-validity-requirement-superseded-not-transferred-001"
+                  "type": "invoice",
+                  "id": "inv-42"
                 }
               },
               "successorRequirementRef": {

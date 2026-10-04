@@ -33,8 +33,13 @@ Requirement under `APPROVAL-CHAIN-010`; concrete Decision/history input rejects
 a caller-supplied `effective` member under `APPROVAL-VALIDITY-016`; and concrete
 Requirement evaluation applies the evaluated Requirement's eligibility rule to
 all of its supplied Decisions, but not to Decisions for another Requirement,
-under `APPROVAL-DECISION-012`. These clarifications do not promote an Approval
-operation to the canonical registry.
+under `APPROVAL-DECISION-012`. The conformance-local collection boundary keeps
+one context-and-exact-subject history, validates every member, and uses exact
+Requirement identity only to select eligibility, effectiveness, and outcome
+evidence. Foreign-context or foreign-subject evidence is invalid, while another
+Requirement in that scope is unrelated. These clarifications do not promote an
+Approval operation to the canonical registry or define an agent-facing request
+model.
 
 The stronger Core 2.0 conformance boundary adds scoped Requirement references,
 stable Decision identities, rejection precedence for standalone Requirements,

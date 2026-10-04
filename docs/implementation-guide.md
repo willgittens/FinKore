@@ -108,10 +108,16 @@ authorize relabeling a history for another context or subject.
 
 For Core 2.0, persist the Requirement `contextId`, each Decision's exact
 `requirementRef`, and its stable `decisionId`. Enforce Decision-ID uniqueness
-within context and resolve withdrawal or supersession only through scoped
-identity references. Migration from Core 1.x must preserve original fields and
-use an explicit source-record mapping; do not guess when a legacy tuple matches
-more than one Decision.
+within context, including across Requirements, and resolve withdrawal or
+supersession only through scoped identity references. One history may contain
+several Requirement identities when every member remains in the same context
+and exact subject. Validate every Decision and lifecycle member before selecting
+the exact Requirement identity for eligibility, current-effectiveness, and
+outcome evaluation; do not apply that Requirement's eligibility or expiration-
+context demand to an unrelated same-scope Decision. Foreign context or subject
+evidence is invalid rather than unrelated. Migration from Core 1.x must preserve
+original fields and use an explicit source-record mapping; do not guess when a
+legacy tuple matches more than one Decision or relabel retained evidence.
 
 ## Deterministic context
 

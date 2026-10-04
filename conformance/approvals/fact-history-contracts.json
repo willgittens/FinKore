@@ -631,9 +631,12 @@
       "id": "approval.facts097.superseded-control",
       "spec": "approvals/decisions",
       "requirements": [
+        "APPROVAL-DECISION-013",
         "APPROVAL-FACT-001",
         "APPROVAL-FACT-002",
-        "APPROVAL-FACT-003"
+        "APPROVAL-FACT-003",
+        "APPROVAL-VALIDITY-014",
+        "APPROVAL-VALIDITY-017"
       ],
       "description": "Approval fact/history contract: superseded-control.",
       "operation": "approval.requirement.evaluate",
@@ -696,8 +699,8 @@
                 "contextId": "ctx-approval-facts097-superseded-control",
                 "requirementId": "next",
                 "subject": {
-                  "type": "approval-subject",
-                  "id": "subject-approval-facts097-superseded-control"
+                  "type": "invoice",
+                  "id": "i"
                 }
               }
             }

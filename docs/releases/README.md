@@ -26,6 +26,11 @@ context-and-subject scope through record, evaluation, lifecycle mutation, and
 reuse; validate excluded evidence; and keep Decision identity unique across all
 Requirements in that context.
 
+Conformance cases and consumer guidance now distinguish valid same-scope
+unrelated Requirements from foreign context or subject evidence, exercise
+cross-Requirement Decision-ID uniqueness and scoped lifecycle failures, and
+retain complete history observations on the new negative controls.
+
 ## FinKore Core 2.0 — 2026-10-04
 
 Incompatible major release completing the financial-contract remediation with

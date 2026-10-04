@@ -74,7 +74,7 @@
     {
       "id": "approval.decision.cross-subject-reference-001",
       "spec": "approvals/decisions",
-      "requirements": ["APPROVAL-DECISION-013", "APPROVAL-ERROR-006"],
+      "requirements": ["APPROVAL-DECISION-013", "APPROVAL-ERROR-005"],
       "description": "Rejects a Decision whose matching Requirement identifier and facts refer to a different subject and preserves history.",
       "operation": "approval.decision.record",
       "input": {
@@ -89,12 +89,14 @@
     {
       "id": "approval.decision.cross-context-reference-001",
       "spec": "approvals/decisions",
-      "requirements": ["APPROVAL-DECISION-013", "APPROVAL-ERROR-006"],
+      "requirements": ["APPROVAL-DECISION-013", "APPROVAL-ERROR-005"],
       "description": "Rejects reuse of an otherwise matching Decision from another approval context.",
       "operation": "approval.requirement.evaluate",
       "input": {
         "requirement": {"contextId": "ctx-current", "id": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}, "eligibleActors": ["alice"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED"},
         "decisions": [{"decisionId": "decision-a", "requirementId": "finance-review", "requirementRef": {"contextId": "ctx-foreign", "requirementId": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}}, "subjectFacts": {"revision": "7"}, "outcome": "APPROVED", "actor": {"id": "alice"}, "decidedAt": "2026-09-01T12:00:00Z"}],
+        "currentSubjectFacts": {"revision": "7"},
+        "relevantFactPaths": ["revision"],
         "observeHistory": true
       },
       "expected": {"status": "error", "error": {"code": "FINKORE_APPROVAL_INVALID_DECISION"}, "observations": {"history": [{"decisionId": "decision-a", "requirementId": "finance-review", "requirementRef": {"contextId": "ctx-foreign", "requirementId": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}}, "subjectFacts": {"revision": "7"}, "outcome": "APPROVED", "actor": {"id": "alice"}, "decidedAt": "2026-09-01T12:00:00Z"}]}},
@@ -102,9 +104,45 @@
       "guardsAgainst": ["cross-context-decision-satisfies-requirement", "foreign-history-rebound"]
     },
     {
+      "id": "approval.requirement.foreign-subject-history-001",
+      "spec": "approvals/decisions",
+      "requirements": ["APPROVAL-DECISION-013", "APPROVAL-ERROR-005"],
+      "description": "Rejects collection evaluation over an otherwise matching Decision whose scoped subject identity differs, even when Requirement identifiers and facts match.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {"contextId": "ctx-subject-history", "id": "finance-review", "subject": {"type": "invoice", "id": "inv-current"}, "eligibleActors": ["alice"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED"},
+        "decisions": [{"decisionId": "decision-a", "requirementId": "finance-review", "requirementRef": {"contextId": "ctx-subject-history", "requirementId": "finance-review", "subject": {"type": "invoice", "id": "inv-foreign"}}, "subjectFacts": {"revision": "7"}, "outcome": "APPROVED", "actor": {"id": "alice"}, "decidedAt": "2026-09-01T12:00:00Z"}],
+        "currentSubjectFacts": {"revision": "7"},
+        "relevantFactPaths": ["revision"],
+        "observeHistory": true
+      },
+      "expected": {"status": "error", "error": {"code": "FINKORE_APPROVAL_INVALID_DECISION"}, "observations": {"history": [{"decisionId": "decision-a", "requirementId": "finance-review", "requirementRef": {"contextId": "ctx-subject-history", "requirementId": "finance-review", "subject": {"type": "invoice", "id": "inv-foreign"}}, "subjectFacts": {"revision": "7"}, "outcome": "APPROVED", "actor": {"id": "alice"}, "decidedAt": "2026-09-01T12:00:00Z"}]}},
+      "pairedControl": "approval.requirement.approved-001",
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["foreign-subject-history-filtered-as-unrelated", "facts-used-as-subject-identity", "bare-requirement-id-used-as-scope"]
+    },
+    {
+      "id": "approval.requirement.foreign-subject-type-history-001",
+      "spec": "approvals/decisions",
+      "requirements": ["APPROVAL-DECISION-013", "APPROVAL-ERROR-005"],
+      "description": "Rejects collection evaluation when the subject identifier matches but the scoped subject type differs.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {"contextId": "ctx-subject-type-history", "id": "finance-review", "subject": {"type": "invoice", "id": "42"}, "eligibleActors": ["alice"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED"},
+        "decisions": [{"decisionId": "decision-a", "requirementId": "finance-review", "requirementRef": {"contextId": "ctx-subject-type-history", "requirementId": "finance-review", "subject": {"type": "expense", "id": "42"}}, "subjectFacts": {"revision": "7"}, "outcome": "APPROVED", "actor": {"id": "alice"}, "decidedAt": "2026-09-01T12:00:00Z"}],
+        "currentSubjectFacts": {"revision": "7"},
+        "relevantFactPaths": ["revision"],
+        "observeHistory": true
+      },
+      "expected": {"status": "error", "error": {"code": "FINKORE_APPROVAL_INVALID_DECISION"}, "observations": {"history": [{"decisionId": "decision-a", "requirementId": "finance-review", "requirementRef": {"contextId": "ctx-subject-type-history", "requirementId": "finance-review", "subject": {"type": "expense", "id": "42"}}, "subjectFacts": {"revision": "7"}, "outcome": "APPROVED", "actor": {"id": "alice"}, "decidedAt": "2026-09-01T12:00:00Z"}]}},
+      "pairedControl": "approval.requirement.approved-001",
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["foreign-subject-type-history-filtered-as-unrelated", "subject-id-alone-used-as-identity", "bare-requirement-id-used-as-scope"]
+    },
+    {
       "id": "approval.decision.cross-subject-type-reference-001",
       "spec": "approvals/decisions",
-      "requirements": ["APPROVAL-DECISION-013", "APPROVAL-ERROR-006"],
+      "requirements": ["APPROVAL-DECISION-013", "APPROVAL-ERROR-005"],
       "description": "Rejects a scoped reference whose subject identity string matches but whose subject type differs.",
       "operation": "approval.decision.record",
       "input": {
@@ -119,17 +157,17 @@
     {
       "id": "approval.decision.duplicate-identity-001",
       "spec": "approvals/decisions",
-      "requirements": ["APPROVAL-DECISION-014", "APPROVAL-ERROR-006"],
-      "description": "Rejects a duplicate Decision identity within one context even when tuple values differ.",
+      "requirements": ["APPROVAL-DECISION-014", "APPROVAL-ERROR-005"],
+      "description": "Rejects a duplicate Decision identity within one context even when the Decisions identify different Requirements and their tuple values differ.",
       "operation": "approval.decision.record",
       "input": {
         "requirement": {"contextId": "ctx-inv-42", "id": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}, "eligibleActors": ["alice"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED"},
-        "history": [{"decisionId": "decision-1", "requirementId": "finance-review", "requirementRef": {"contextId": "ctx-inv-42", "requirementId": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}}, "subjectFacts": {"revision": "1"}, "outcome": "APPROVED", "actor": {"id": "alice"}, "decidedAt": "2026-09-01T12:00:00Z"}],
+        "history": [{"decisionId": "decision-1", "requirementId": "manager-review", "requirementRef": {"contextId": "ctx-inv-42", "requirementId": "manager-review", "subject": {"type": "invoice", "id": "inv-42"}}, "subjectFacts": {"revision": "1"}, "outcome": "APPROVED", "actor": {"id": "alice"}, "decidedAt": "2026-09-01T12:00:00Z"}],
         "decision": {"decisionId": "decision-1", "requirementId": "finance-review", "requirementRef": {"contextId": "ctx-inv-42", "requirementId": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}}, "subjectFacts": {"revision": "2"}, "outcome": "REJECTED", "actor": {"id": "alice"}, "decidedAt": "2026-09-02T12:00:00Z"}
       },
-      "expected": {"status": "error", "error": {"code": "FINKORE_APPROVAL_INVALID_DECISION"}, "observations": {"history": [{"decisionId": "decision-1", "requirementId": "finance-review", "requirementRef": {"contextId": "ctx-inv-42", "requirementId": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}}, "subjectFacts": {"revision": "1"}, "outcome": "APPROVED", "actor": {"id": "alice"}, "decidedAt": "2026-09-01T12:00:00Z"}]}},
+      "expected": {"status": "error", "error": {"code": "FINKORE_APPROVAL_INVALID_DECISION"}, "observations": {"history": [{"decisionId": "decision-1", "requirementId": "manager-review", "requirementRef": {"contextId": "ctx-inv-42", "requirementId": "manager-review", "subject": {"type": "invoice", "id": "inv-42"}}, "subjectFacts": {"revision": "1"}, "outcome": "APPROVED", "actor": {"id": "alice"}, "decidedAt": "2026-09-01T12:00:00Z"}]}},
       "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
-      "guardsAgainst": ["duplicate-decision-identity-accepted", "failed-record-mutates-history"]
+      "guardsAgainst": ["duplicate-decision-identity-accepted-across-requirements", "failed-record-mutates-history"]
     },
     {
       "id": "approval.validity.equal-tuples-selective-withdrawal-001",
@@ -171,6 +209,37 @@
       ], "lifecycle": [{"type": "SUPERSEDED", "decisionRef": {"contextId": "ctx-inv-42", "decisionId": "decision-old"}, "successorDecisionRef": {"contextId": "ctx-inv-42", "decisionId": "decision-new"}, "actor": {"id": "controller"}, "recordedAt": "2026-09-02T12:00:00Z"}]}},
       "tags": ["positive", "boundary", "invariant", "mutation-sensitive"],
       "guardsAgainst": ["timestamp-used-as-decision-identity", "supersession-targets-first-tuple"]
+    },
+    {
+      "id": "approval.validity.foreign-context-withdrawal-reference-001",
+      "spec": "approvals/validity",
+      "requirements": ["APPROVAL-VALIDITY-017", "APPROVAL-ERROR-006"],
+      "description": "Rejects a withdrawal reference from another approval context even when its Decision identity exists locally, preserving both histories.",
+      "operation": "approval.decision.withdraw",
+      "input": {
+        "requirement": {"contextId": "ctx-withdraw-current", "id": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}, "eligibleActors": ["alice"], "approvedOutcome": "APPROVED", "rejectedOutcome": "REJECTED"},
+        "history": {"history": [{"decisionId": "decision-a", "requirementId": "finance-review", "requirementRef": {"contextId": "ctx-withdraw-current", "requirementId": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}}, "subjectFacts": {}, "outcome": "APPROVED", "actor": {"id": "alice"}, "decidedAt": "2026-09-01T12:00:00Z"}], "lifecycle": []},
+        "withdrawal": {"decisionRef": {"contextId": "ctx-withdraw-foreign", "decisionId": "decision-a"}, "actor": {"id": "controller"}, "recordedAt": "2026-09-02T12:00:00Z"}
+      },
+      "expected": {"status": "error", "error": {"code": "FINKORE_APPROVAL_INVALID_DECISION"}, "observations": {"history": [{"decisionId": "decision-a", "requirementId": "finance-review", "requirementRef": {"contextId": "ctx-withdraw-current", "requirementId": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}}, "subjectFacts": {}, "outcome": "APPROVED", "actor": {"id": "alice"}, "decidedAt": "2026-09-01T12:00:00Z"}], "lifecycle": []}},
+      "pairedControl": "approval.validity.equal-tuples-selective-withdrawal-001",
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["foreign-context-lifecycle-reference-rebound", "decision-id-used-without-context", "failed-withdrawal-mutates-history"]
+    },
+    {
+      "id": "approval.validity.foreign-subject-requirement-supersession-001",
+      "spec": "approvals/validity",
+      "requirements": ["APPROVAL-VALIDITY-014", "APPROVAL-VALIDITY-017", "APPROVAL-ERROR-006"],
+      "description": "Rejects Requirement supersession whose successor reference leaves the history subject scope, preserving both histories.",
+      "operation": "approval.requirement.supersede",
+      "input": {
+        "history": [],
+        "supersession": {"requirementRef": {"contextId": "ctx-requirement-supersession", "requirementId": "finance-review", "subject": {"type": "invoice", "id": "inv-42"}}, "successorRequirementRef": {"contextId": "ctx-requirement-supersession", "requirementId": "controller-review", "subject": {"type": "invoice", "id": "inv-43"}}, "actor": {"id": "controller"}, "recordedAt": "2026-09-02T12:00:00Z"}
+      },
+      "expected": {"status": "error", "error": {"code": "FINKORE_APPROVAL_INVALID_DECISION"}, "observations": {"history": [], "lifecycle": []}},
+      "pairedControl": "approval.validity.requirement-supersession-preserves-history-001",
+      "tags": ["negative", "boundary", "invariant", "mutation-sensitive"],
+      "guardsAgainst": ["requirement-supersession-crosses-subject", "bare-requirement-id-used-as-lifecycle-scope", "failed-supersession-mutates-history"]
     },
     {
       "id": "approval.validity.legacy-tuple-reference-rejected-001",

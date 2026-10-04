@@ -507,38 +507,38 @@ Repair the four B2 cases according to M2's accepted rule:
 | [approvals/construction-evaluation-regressions.json](../conformance/approvals/construction-evaluation-regressions.json) | `approval.boundary096.excluded-context-unrelated-001` |
 | [approvals/corrections-098.json](../conformance/approvals/corrections-098.json) | `approval.eligibility.unrelated-history-not-misclassified-001` |
 
-- [ ] **M3.1 Correct the intended associations.** For cases retained as valid
+- [x] **M3.1 Correct the intended associations.** For cases retained as valid
   unrelated-Requirement controls, replace synthetic foreign subjects with the
   evaluated subject and keep the different Requirement ID. Align all scoped
   lifecycle references and observations. If M2 rejects that population, retire
   or replace cases explicitly rather than silently discarding their obligations.
-- [ ] **M3.2 Cover each population.** Publish positive and negative controls for
+- [x] **M3.2 Cover each population.** Publish positive and negative controls for
   same-scope matching Decisions, permitted unrelated Requirements, a foreign
   subject ID, a foreign subject type, a foreign context, and malformed unrelated
   evidence. Include equal facts/bare IDs across scopes so those shortcuts fail.
   Expected errors come from the reviewed specification.
-- [ ] **M3.3 Preserve complete evaluation coverage.** Include unrelated evidence
+- [x] **M3.3 Preserve complete evaluation coverage.** Include unrelated evidence
   with an Actor outside the evaluated Requirement's eligibility and with an
   expiration but no evaluation instant, wherever M2 permits that population.
   Matching Decisions still require the existing eligibility/context checks.
   Use decisive-outcome controls with malformed evidence before and after a
   valid Decision to detect premature return.
-- [ ] **M3.4 Preserve lifecycle and identity controls.** Review supersession
+- [x] **M3.4 Preserve lifecycle and identity controls.** Review supersession
   without approval transfer, malformed/unresolved/foreign lifecycle references,
   duplicate Decision IDs across Requirements in one context, and distinct IDs
   for equal Actor/timestamp tuples. Retain unchanged Decision and lifecycle
   observations on failed non-mutating operations.
-- [ ] **M3.5 Update discovery and traceability.** Add new files to the manifest
+- [x] **M3.5 Update discovery and traceability.** Add new files to the manifest
   only when needed. Ensure unique stable IDs, valid requirements, controls that
   resolve through the manifest, and accurate coverage classifications. Recompute
   totals from the active inventory; do not copy historical counts into the new
   release summary or label untested cases as financially executed.
-- [ ] **M3.6 Synchronize public guidance.** Update Approval fixture definitions,
+- [x] **M3.6 Synchronize public guidance.** Update Approval fixture definitions,
   Agentic scope notes, implementation and consumer guidance, and examples affected
   by M2. Approval operations remain conformance-local. Review relevant effects,
   errors, and safety statements for consistency; preserve unchanged canonical
   operation contracts and describe any accepted supersession when applicable.
-- [ ] **M3.7 Keep verification domain-neutral.** Assess whether existing schema
+- [x] **M3.7 Keep verification domain-neutral.** Assess whether existing schema
   or reference checks need an update. Any maintained check must validate artifact
   structure or metadata, not evaluate Approval outcomes. Add meaningful tool
   tests only if tool behavior changes; do not build a financial runner to close
@@ -547,6 +547,61 @@ Repair the four B2 cases according to M2's accepted rule:
 **M3 exit:** Every acceptance expectation follows M2. No valid unrelated case
 uses a foreign subject accidentally, no malformed evidence escapes validation,
 and specification, traceability, Agentic notes, and consumer guidance agree.
+
+### M3 completion record — completed 2026-10-04
+
+The four named B2 cases now use the evaluated Requirement's exact subject while
+retaining a different Requirement identity, their existing outcomes, and their
+intended eligibility, expiration-context, and no-transfer observations. The
+manifest-wide scope review also repaired the malformed-unrelated control so its
+missing `subjectFacts` remains the sole structural defect, plus four valid
+Requirement-supersession histories whose successor reference previously used a
+synthetic foreign subject. Decision and lifecycle evidence in every successful
+affected case now stays within one context and exact subject.
+
+The published population controls cover:
+
+- matching Decisions in the evaluated Requirement's scope;
+- structurally valid same-scope Decisions for another Requirement;
+- same-scope unrelated evidence with an ineligible Actor and with expiration
+  but no evaluation instant;
+- foreign context with equal Requirement identity, subject, and facts;
+- foreign subject identity with equal context, Requirement identity, and facts;
+- foreign subject type with equal context, Requirement identity, subject ID,
+  and facts; and
+- malformed unrelated evidence after a decisive matching Decision, together
+  with existing malformed-before-valid and malformed-after-valid controls.
+
+Four new vectors in the existing `approvals/stronger-contract.json` file cover
+collection-level foreign subject ID and type, a foreign-context withdrawal
+reference, and a foreign-subject Requirement-supersession reference. The latter
+two observe unchanged Decision and lifecycle histories. The existing duplicate-
+Decision-identity case now uses two Requirements in one context, while the
+equal-tuple controls retain distinct identities. Existing missing, malformed,
+duplicate, already-used, and tuple-reference lifecycle controls remain intact.
+
+The cross-context, cross-subject, cross-subject-type, and duplicate-identity
+record/evaluation cases now reference **APPROVAL-ERROR-005**, which owns failure
+preservation for non-lifecycle Approval operations. The new lifecycle failures
+reference **APPROVAL-ERROR-006**. Traceability was regenerated from the active
+manifest mapping and now records 1,822 vectors in 47 files, 447 requirements,
+and 35 operation identifiers. No manifest, schema, format version, requirement
+ID, portable error, or operation identifier changed.
+
+Approval fixture definitions, conformance conventions, Agentic scope notes,
+implementation guidance, consumer claim guidance, mutation-sensitive review
+notes, and Unreleased notes now state the M2 population and selection rule.
+Approval labels remain conformance-local; no runner, registry, transport,
+implementation, or Agentic Approval operation was introduced. Existing schema
+and repository tools already validate the required artifact structure and
+references, so M3 required no domain logic or tool-test change.
+
+Verification used Node `v24.15.0`. `npm ci --no-audit` installed the five
+locked maintenance dependencies, and `npm run verify` passed: 30 tool tests,
+47 manifest files, 1,822 vectors, 447 requirement references, 20 canonical
+Agentic operations, documentation links, architecture, and licensing. The
+stable-publication gate remains reserved for M5 after removal of this active
+plan.
 
 ## M4 Review the integrated contract
 
