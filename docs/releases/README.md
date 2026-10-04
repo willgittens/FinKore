@@ -9,6 +9,23 @@ artifacts, and their verification results. Those records are preserved as
 history and are not claims about the current repository's supported surface or
 current execution evidence.
 
+## Unreleased
+
+Clarifies the existing Core 2.0 Approval history boundary as a patch-compatible
+correction, provisionally Core 2.0.1. One immutable approval context and exact
+subject may contain Decisions for several Requirement identities. Every member
+is structurally validated; exact Requirement identity selects eligibility,
+effectiveness, and outcome evidence. Foreign-context or foreign-subject evidence
+remains `FINKORE_APPROVAL_INVALID_DECISION`, and unrelated same-scope evidence
+does not acquire the evaluated Requirement's eligibility or expiration-context
+rules. Required input shape, success results, portable errors, history
+preservation, and failure atomicity are unchanged.
+
+Consumers need no history rewrite or evidence relabeling. They must preserve one
+context-and-subject scope through record, evaluation, lifecycle mutation, and
+reuse; validate excluded evidence; and keep Decision identity unique across all
+Requirements in that context.
+
 ## FinKore Core 2.0 — 2026-10-04
 
 Incompatible major release completing the financial-contract remediation with

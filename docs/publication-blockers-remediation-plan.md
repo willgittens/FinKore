@@ -376,36 +376,36 @@ foreign-subject or foreign-context reuse. It is a proposal, not an adopted rule.
 | Malformed unrelated Decision within the permitted scope | Reject; unrelated status never exempts structural validation. |
 | Duplicate Decision ID within one context, including across Requirements | Reject under existing Decision-identity uniqueness. |
 
-- [ ] **M2.1 Compare boundary alternatives.** Review the recommended population
+- [x] **M2.1 Compare boundary alternatives.** Review the recommended population
   against a history limited to only the evaluated Requirement. Explain the
   effect on existing unrelated-history obligations, retained histories,
   expiration context, and subject/context isolation. Select one rule from the
   domain contract, not from whichever fixture is easier to preserve.
-- [ ] **M2.2 Define each operation boundary.** Separate the candidate's exact
+- [x] **M2.2 Define each operation boundary.** Separate the candidate's exact
   association in record and single-Decision evaluation from population checks
   and selection in collection evaluation. Specify whether retained record
   histories can contain other Requirements and how scope is checked at
   import/reuse, withdrawal, and supersession. Do not add an import operation or
   an absent Requirement registry.
-- [ ] **M2.3 Define validation obligations.** State which checks apply to every
+- [x] **M2.3 Define validation obligations.** State which checks apply to every
   supplied Decision and lifecycle record, including excluded members, and
   which checks apply only to the evaluated Requirement. Preserve existing
   eligibility checks on its expired, stale, withdrawn, or superseded Decisions;
   do not invent another Requirement's eligibility rule. Prevent early outcomes
   from bypassing required validation. Define only the error priority needed by
   the boundary; do not imply a total order of unrelated failures.
-- [ ] **M2.4 Review lifecycle scope.** Retain scoped Decision references,
+- [x] **M2.4 Review lifecycle scope.** Retain scoped Decision references,
   unique resolution, immutable original Decisions, and Requirement-supersession
   behavior that does not transfer approval to a successor. Specify how related
   history members fit the chosen population without inferring identity from
   facts, bare IDs, Actor/timestamp tuples, or timestamp order.
-- [ ] **M2.5 Write the owning normative change.** Update Approval Decisions and
+- [x] **M2.5 Write the owning normative change.** Update Approval Decisions and
   Validity before changing derived expectations. Preserve unchanged requirement
   meanings. For materially different replacements, assign unused IDs, preserve
   continuing obligations, retire obsolete references, and record the sunset.
   Review CoreDoc alignment without broadening its foundation or altering
   historical governance fields during clarification.
-- [ ] **M2.6 Decide compatibility and migration.** Compare the old and proposed
+- [x] **M2.6 Decide compatibility and migration.** Compare the old and proposed
   contract for success/failure, result, error, shape, and atomicity. Record the
   conclusion in this active plan and concise Unreleased notes. If incompatible,
   select a major release and describe consumer changes to history population,
@@ -415,6 +415,86 @@ foreign-subject or foreign-context reuse. It is a proposal, not an adopted rule.
 **M2 exit:** Reviewed specification text gives a single scope rule for each
 operation boundary, explains unrelated evidence, and has an explicit version
 classification. Any remaining observable ambiguity blocks M3 expectations.
+
+### M2 completion record — completed 2026-10-04
+
+M2 adopts one immutable Decision-history scope per approval `contextId` and
+exact subject reference. A history in that scope may retain Decisions for more
+than one Requirement. Exact Requirement identity selects the Decisions that
+receive the evaluated Requirement's eligibility, fact or revision,
+expiration-context, effectiveness, and outcome rules. A Decision for another
+Requirement in the same scope is unrelated evidence: its complete structure is
+validated, but no absent eligibility rule or Requirement registry is invented
+for it. A foreign context or subject is invalid scoped evidence, not unrelated
+evidence that can be filtered out.
+
+The rejected alternative was one history per Requirement identity. That model
+would make **APPROVAL-DECISION-012**'s explicit unrelated-Requirement handling
+unreachable, prevent record and reuse boundaries from retaining otherwise valid
+same-subject history, and split lifecycle evidence that already preserves
+Requirement supersession without transferring approval. It would also turn a
+same-scope different-Requirement member into an association failure even though
+the existing contract requires structural validation without applying the
+evaluated Requirement's eligibility rule. The selected context-and-subject
+population instead preserves that obligation while keeping the isolation rule
+in **APPROVAL-DECISION-013** meaningful.
+
+The operation boundary is now explicit:
+
+| Boundary | Adopted rule |
+| --- | --- |
+| Candidate record | The candidate exactly matches the supplied Requirement. Retained history may contain other Requirements only in the same context and subject. |
+| Single-Decision evaluation | The Decision exactly matches the supplied Requirement; there is no unrelated-member population at this boundary. |
+| Requirement collection evaluation | Every member shares the evaluated context and subject. Exact Requirement identity selects eligibility, effectiveness, and outcome evidence. |
+| History reuse | All Decision and lifecycle members remain in their original single scope; reuse cannot merge scopes or relabel evidence. |
+| Withdrawal | A supplied Requirement exactly matches the uniquely resolved target Decision. Other same-scope evidence is retained. |
+| Decision supersession | Target and successor resolve uniquely in one context-and-subject scope. They may identify different Requirements, but approval does not transfer. |
+| Requirement supersession | Target and successor use the same context and exact subject with distinct Requirement identities. Existing Decisions keep their original association. |
+
+All supplied Decision structure, scoped references, Decision-identity
+uniqueness, retained fact value support, and forbidden current-effectiveness
+assertions are validated before selection. All lifecycle discriminators,
+references, relationships, and local order are also validated, including for
+members later excluded from current effectiveness. Only exact-Requirement
+members receive that Requirement's eligibility rule and fact or revision
+comparison. Required expiration context still applies to every exact-Requirement
+Decision currently considered under **APPROVAL-VALIDITY-013**, including before
+a decisive outcome, but not solely because an unrelated or lifecycle-excluded
+Decision has an expiration. Existing portable errors apply at their defined
+boundaries; M2 introduces no total priority among unrelated failures.
+
+The compatibility comparison is:
+
+| Dimension | M2 conclusion |
+| --- | --- |
+| Required input and output shape | Unchanged; no member, envelope, operation, registry, or transport was added. |
+| Success and failure boundary | The coherent Core 2.0 rule in **APPROVAL-DECISION-012** already requires same-scope unrelated Decisions not to affect the evaluated Requirement. M2 narrows the conflicting evaluation wording in **APPROVAL-DECISION-013** while retaining its context-and-subject isolation. |
+| Result | Unchanged: permitted unrelated evidence contributes no outcome; foreign-scope evidence fails. |
+| Portable error | Unchanged: invalid structure or scope uses `FINKORE_APPROVAL_INVALID_DECISION`, exact-Requirement ineligibility uses `FINKORE_APPROVAL_INELIGIBLE_ACTOR`, and missing or malformed required expiration context uses `FINKORE_APPROVAL_INVALID_CONTEXT`. |
+| Mutation and atomicity | Unchanged: committed Decision and lifecycle history is append-only and all specified failures preserve both histories. |
+
+This is a patch-compatible correction, provisionally Core 2.0.1, rather than a
+new behavior surface. **APPROVAL-DECISION-013** retains its published identifier
+because its owning meaning remains scoped identity and foreign-scope rejection;
+the edit resolves its overbroad collection-evaluation sentence against the
+already-published unrelated-evidence obligation. No requirement, vector,
+portable-error, or operation identifier is added, replaced, retired, or
+reused. CoreDoc's Approval integrity, attribution, identity, determinism, and
+rejected-action obligations remain aligned and require no change.
+
+Consumers need no history rewrite or evidence relabeling. They preserve the
+original context and subject, validate all retained evidence, select exact
+Requirement identity only for Requirement-specific evaluation, and keep
+Decision identity unique across Requirements in one context. The four B2
+fixtures and all other derived acceptance and public-guidance changes remain
+untouched for M3; this milestone establishes their owning normative rule first.
+
+Verification used Node `v24.15.0`. `npm ci --no-audit` installed the five
+locked maintenance dependencies, and `npm run verify` passed: 30 tool tests,
+47 manifest files, 1,818 vectors, 447 requirement references, 20 canonical
+Agentic operations, documentation links, architecture, and licensing. The
+stable-publication gate remains reserved for M5 after removal of this active
+plan.
 
 ## M3 Synchronize Approval acceptance artifacts
 
