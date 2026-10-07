@@ -1,77 +1,300 @@
 <!doctype html>
+<!-- SPDX-License-Identifier: MPL-2.0 -->
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Documentation | FinKore</title>
-    <meta name="description" content="An index of the FinKore specification, conformance artifacts, and consumer guidance." />
-    <style>
-      :root { color-scheme: light dark; font-family: system-ui, sans-serif; line-height: 1.6; }
-      body { max-width: 60rem; margin: 0 auto; padding: 2rem 1.25rem; }
-      header, footer { border-bottom: 1px solid #888; padding-bottom: 1rem; }
-      h1 { line-height: 1.2; }
-      h2 { margin-top: 2rem; }
-      li { margin-bottom: .75rem; }
-      a { color: #1763a6; text-underline-offset: .2em; }
-      a:focus-visible { outline: 3px solid currentColor; outline-offset: 4px; }
-      .skip { position: absolute; left: -10000px; }
-      .skip:focus { position: static; }
-      footer { border-top: 1px solid #888; border-bottom: 0; margin-top: 3rem; padding-top: 1rem; }
-      @media (prefers-color-scheme: dark) { a { color: #8fcaff; } }
-    </style>
+    <title>FinKore — Financial behavior, made explicit.</title>
+    <meta name="description" content="An open-source, language-agnostic foundation and reference for recurring financial software behavior. Know the rule before you write the code." />
+    <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
-    <a class="skip" href="#content">Skip to documentation</a>
-    <header>
-      <a href="../README.md">FinKore project overview</a>
-      <h1>FinKore documentation</h1>
-      <p>FinKore defines portable financial behavior for Money, Workflow, Audit,
-        Approvals, and Financial Entities. FinKore Core 2.0.2 is stable within
-        the scope defined by the specification.</p>
-      <p>The repository publishes specifications, acceptance artifacts, and
-        maintenance tools. Consumers own financial implementations and execution.</p>
-    </header>
-    <main id="content">
-      <section aria-labelledby="contract">
-        <h2 id="contract">Read the contract</h2>
-        <ul>
-          <li><a href="../docs/coreDoc/core-doc.md">CoreDoc</a> — foundation-level financial obligations.</li>
-          <li><a href="../spec/README.md">Specification</a> — normative behavior and domain boundaries.</li>
-          <li><a href="../spec/conventions.md">Conventions</a> — compatibility, stable identifiers, portable values, and errors.</li>
-          <li><a href="../spec/glossary.md">Glossary</a> — shared domain terminology.</li>
-        </ul>
-        <nav aria-label="Domain specifications">
-          <ul>
-            <li><a href="../spec/money/README.md">Money</a></li>
-            <li><a href="../spec/workflow/README.md">Workflow</a></li>
-            <li><a href="../spec/audit/README.md">Audit</a></li>
-            <li><a href="../spec/approvals/README.md">Approvals</a></li>
-            <li><a href="../spec/entities/README.md">Financial Entities</a></li>
+    <header class="site-header">
+      <div class="container header-layout">
+        <a class="brand" href="#" aria-label="FinKore home">
+          <span class="brand-mark" aria-hidden="true">F<span>.</span></span>
+          <span>FinKore</span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <ul class="nav-list">
+            <li><a href="#">Why FinKore</a></li>
+            <li><a href="#">The Standard</a></li>
+            <li><a href="#">The Foundation</a></li>
+            <li><a href="#">Domains</a></li>
+            <li><a href="#">CoreDoc</a></li>
+            <li><a href="#">Documentation</a></li>
+            <li><a class="nav-github" href="#">GitHub <span aria-hidden="true">↗</span></a></li>
           </ul>
         </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <p class="eyebrow"><span class="accent-marker" aria-hidden="true"></span>A reference for financial software</p>
+          <div class="hero-layout">
+            <div class="hero-copy">
+              <h1>Financial behavior,<br />made explicit<span class="accent">.</span></h1>
+              <p class="hero-description">
+                Financial software keeps solving the same foundational problems.
+                FinKore is an open-source, language-agnostic foundation and
+                reference that makes those recurring rules explicit.
+              </p>
+              <p class="hero-principle">Know the rule before you write the code.</p>
+              <div class="actions">
+                <a class="button button-primary" href="#">Explore the standard <span aria-hidden="true">↗</span></a>
+                <a class="button button-secondary" href="#">Read the CoreDoc <span aria-hidden="true">↗</span></a>
+              </div>
+            </div>
+            <aside class="question-card" aria-label="Start with the rule">
+              <p class="eyebrow">A better first question</p>
+              <p class="old-question">“How should we<br />implement this?”</p>
+              <span class="question-divider" aria-hidden="true">↓</span>
+              <p class="new-question">“What does<br />the rule say?”</p>
+              <p class="question-note">Make the behavior clear.<br />Then choose how to build it.</p>
+            </aside>
+          </div>
+          <div class="hero-footnote">
+            <p>Define once. <strong>Build many times.</strong></p>
+            <p>A shared behavioral contract. Your implementation.</p>
+          </div>
+        </div>
       </section>
-      <section aria-labelledby="use">
-        <h2 id="use">Implement and evaluate</h2>
-        <ul>
-          <li><a href="../docs/implementation-guide.md">Implementation guide</a> — build consumer-owned implementations from the specification.</li>
-          <li><a href="../conformance/README.md">Conformance artifacts</a> — manifest, schemas, and portable acceptance cases.</li>
-          <li><a href="../conformance/consumer-guide.md">Consumer guide</a> — discovery, evaluation, reporting, and conformance claims.</li>
-          <li><a href="../conformance/operations.md">Fixture operation contracts</a> — inputs, observations, and failure interpretation.</li>
-          <li><a href="../conformance/traceability.md">Requirement traceability</a> — published coverage and its limitations.</li>
-          <li><a href="../agentic/README.md">Agentic Contract</a> — canonical operation semantics and safety metadata.</li>
-        </ul>
+
+      <section class="section problem">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">01 / The recurring problem</p>
+            <h2>Financial CRUD<br />isn't ordinary CRUD.</h2>
+            <p class="section-intro">The simple part is storing a record. The harder part is defining what its value, state, and history actually mean.</p>
+          </div>
+          <div class="problem-grid">
+            <article class="problem-item">
+              <p class="item-number" aria-hidden="true">01</p>
+              <h3>An amount looks like a number.</h3>
+              <p>Until currencies, precision, rounding, and allocation determine whether its value is preserved.</p>
+            </article>
+            <article class="problem-item">
+              <p class="item-number" aria-hidden="true">02</p>
+              <h3>An approval looks like a status.</h3>
+              <p>Until the facts that justified the decision change, and you need to know whether it still applies.</p>
+            </article>
+            <article class="problem-item">
+              <p class="item-number" aria-hidden="true">03</p>
+              <h3>An audit trail looks like a list.</h3>
+              <p>Until someone needs to establish what happened, who acted, and which original facts were preserved.</p>
+            </article>
+            <article class="problem-item">
+              <p class="item-number" aria-hidden="true">04</p>
+              <h3>A workflow looks like a few states.</h3>
+              <p>Until a rejected transition leaves a partial change, or a new definition changes the meaning of an old instance.</p>
+            </article>
+          </div>
+          <div class="reinvention">
+            <p class="eyebrow">The familiar cycle</p>
+            <ol class="cycle">
+              <li>Build</li>
+              <li>Discover edge cases</li>
+              <li>Fix</li>
+              <li>Document</li>
+              <li>Rebuild elsewhere</li>
+            </ol>
+            <p>The rules end up scattered across code, tests, documentation, and history. The next team rediscovers them.</p>
+          </div>
+        </div>
       </section>
-      <section aria-labelledby="contribute">
-        <h2 id="contribute">Contribute and verify</h2>
-        <ul>
-          <li><a href="../CONTRIBUTING.md">Contributing</a> — coordinated changes and compatibility review.</li>
-          <li><a href="../docs/tools/README.md">Developer tools</a> — local artifact verification and supported Node setup.</li>
-          <li><a href="../docs/releases/README.md">Release notes</a> — concise release history.</li>
-        </ul>
-        <p>Repository checks validate published artifacts. They do not execute
-          financial operations or establish that an external implementation conforms.</p>
+
+      <section class="section belief">
+        <div class="container belief-layout">
+          <div>
+            <p class="eyebrow">02 / The boundary</p>
+            <h2>Your product may be unique.<br /><span class="muted">Your financial rules<br />don't have to be.</span></h2>
+          </div>
+          <div class="belief-copy">
+            <p class="lead">Your business logic stays yours.</p>
+            <p>Your application owns product policy, thresholds, permissions, UX, APIs, storage, and architecture.</p>
+            <p>FinKore focuses on the recurring financial behavior underneath those decisions: what should happen, what should fail, and what must remain observable.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section pillars">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">03 / Two ideas. One foundation.</p>
+            <h2>Know the rule. Build on it.</h2>
+          </div>
+          <div class="pillar-grid">
+            <article class="pillar-card standard-card">
+              <p class="eyebrow">Look it up</p>
+              <h3>The Standard<span class="accent">.</span></h3>
+              <p class="pillar-statement">Defines what should happen.</p>
+              <p>Explicit rules, shared definitions, and normative specifications. Requirements connect to documented acceptance cases, so behavior can be inspected and tested.</p>
+              <ul class="concept-list" aria-label="The Standard includes">
+                <li>Rules &amp; definitions</li>
+                <li>Specifications</li>
+                <li>Documentation</li>
+                <li>Acceptance cases</li>
+              </ul>
+              <a class="text-link" href="#">Explore the standard <span aria-hidden="true">↗</span></a>
+            </article>
+            <article class="pillar-card foundation-card">
+              <p class="eyebrow">Build on it</p>
+              <h3>The Foundation<span class="accent">.</span></h3>
+              <p class="pillar-statement">Makes those rules reusable.</p>
+              <p>Shared behavioral primitives, portable implementation contracts, and conformance artifacts. Build in your own language and architecture against the same defined behavior.</p>
+              <ul class="concept-list" aria-label="The Foundation includes">
+                <li>Behavioral building blocks</li>
+                <li>Portable contracts</li>
+                <li>Conformance artifacts</li>
+                <li>Consumer-owned implementations</li>
+              </ul>
+              <a class="text-link" href="#">Explore the foundation <span aria-hidden="true">↗</span></a>
+            </article>
+          </div>
+          <div class="pillar-summary">
+            <p>The Standard defines. The Foundation makes it reusable.</p>
+            <p>The repository publishes the contract and acceptance artifacts. You supply the financial implementation.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section domains">
+        <div class="container">
+          <div class="section-heading heading-layout">
+            <div>
+              <p class="eyebrow">04 / FinKore Core domains</p>
+              <h2>The recurring foundations.</h2>
+            </div>
+            <p class="section-intro">Organized around financial behavior:<br />values, decisions, state, identity, and history.</p>
+          </div>
+          <div class="domain-grid">
+            <article class="domain-card">
+              <p class="eyebrow">01 / Value</p>
+              <h3><a href="#">Money <span aria-hidden="true">↗</span></a></h3>
+              <p>Exact amounts and currencies. Explicit arithmetic, rounding, allocation, and portable serialization.</p>
+            </article>
+            <article class="domain-card">
+              <p class="eyebrow">02 / State</p>
+              <h3><a href="#">Workflow <span aria-hidden="true">↗</span></a></h3>
+              <p>Declared lifecycle states, permitted transitions, guards, and unchanged state after rejection.</p>
+            </article>
+            <article class="domain-card">
+              <p class="eyebrow">03 / History</p>
+              <h3><a href="#">Audit <span aria-hidden="true">↗</span></a></h3>
+              <p>Attributable, append-only logical history. Events, changes, evidence relationships, and declared redaction.</p>
+            </article>
+            <article class="domain-card">
+              <p class="eyebrow">04 / Decisions</p>
+              <h3><a href="#">Approvals <span aria-hidden="true">↗</span></a></h3>
+              <p>Required business decisions, their factual basis, current validity, and declared combinations.</p>
+            </article>
+            <article class="domain-card">
+              <p class="eyebrow">05 / Identity</p>
+              <h3><a href="#">Financial Entities <span aria-hidden="true">↗</span></a></h3>
+              <p>Stable identity over time. Lifecycle rules, permitted changes, validation, revisions, and evidence-preserving evolution.</p>
+            </article>
+          </div>
+          <p class="scope-note">FinKore Core 2.0.2 stable. Concrete invoice, expense, ledger, payment, and tax models remain outside the current Core scope.</p>
+        </div>
+      </section>
+
+      <section class="section how-it-works">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">05 / From principles to implementation</p>
+            <h2>One contract.<br />Your way to build it.</h2>
+            <p class="section-intro">Start with financial meaning. Follow the defined behavior into your own implementation.</p>
+          </div>
+          <ol class="layer-list">
+            <li>
+              <span class="layer-number" aria-hidden="true">01</span>
+              <div><h3>CoreDoc</h3><p>Foundation-level financial obligations, principles, and the rationale behind them.</p></div>
+              <span class="layer-kind">Principles</span>
+            </li>
+            <li>
+              <span class="layer-number" aria-hidden="true">02</span>
+              <div><h3>Specification</h3><p>Precise normative behavior: values, results, failures, and invariants with stable requirement IDs.</p></div>
+              <span class="layer-kind">Rules</span>
+            </li>
+            <li>
+              <span class="layer-number" aria-hidden="true">03</span>
+              <div><h3>Conformance</h3><p>Portable inputs and expected observations, traced to the requirements they exercise.</p></div>
+              <span class="layer-kind">Acceptance cases</span>
+            </li>
+            <li class="consumer-layer">
+              <span class="layer-number" aria-hidden="true">04</span>
+              <div><h3>Implementation</h3><p>You implement the behavior and execute the cases in your chosen language and architecture.</p></div>
+              <span class="layer-kind">Consumer-owned</span>
+            </li>
+          </ol>
+          <p class="scope-note">The Agentic Contract also describes canonical operation semantics for machine clients. Implementations, execution tools, and transports remain consumer-owned.</p>
+        </div>
+      </section>
+
+      <section class="section evidence">
+        <div class="container evidence-layout">
+          <div class="evidence-copy">
+            <p class="eyebrow">06 / Inspectable by design</p>
+            <h2>Show the logic.<br /><span class="muted">Don't sell the magic.</span></h2>
+            <p>Look for the requirement, the acceptance case, and the connection between them.</p>
+            <ul class="evidence-list">
+              <li>Explicit specifications and stable requirement IDs</li>
+              <li>Portable cases with observable expected outcomes</li>
+              <li>Traceability and documented coverage limitations</li>
+            </ul>
+            <p class="evidence-limit">Acceptance cases provide bounded evidence. They do not establish exhaustive correctness, production readiness, or regulatory compliance.</p>
+          </div>
+          <figure class="rule-card">
+            <figcaption class="eyebrow">A rule you can trace / Money</figcaption>
+            <p class="requirement-id">MONEY-ARITHMETIC-001</p>
+            <blockquote>Addition and subtraction MUST require compatible currencies.</blockquote>
+            <dl class="rule-observation">
+              <div><dt>Acceptance case</dt><dd><code>money.add.currency-mismatch-001</code></dd></div>
+              <div><dt>Input</dt><dd>10.00 EUR + 5.00 USD</dd></div>
+              <div><dt>Expected error</dt><dd><code>FINKORE_MONEY_CURRENCY_MISMATCH</code></dd></div>
+              <div><dt>Expected state</dt><dd>Both operands unchanged.</dd></div>
+            </dl>
+            <p class="rule-note">An explicit failure, tied to an explicit rule.</p>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section open-source">
+        <div class="container open-source-layout">
+          <div>
+            <p class="eyebrow">07 / Open source</p>
+            <h2>Open to inspection.<br />Open to improvement.</h2>
+          </div>
+          <div class="open-source-copy">
+            <p class="lead">Inspect the rules. Challenge them.<br />Improve them. Build on them.</p>
+            <p>FinKore's specifications, conformance artifacts, and repository tooling are open source under the Mozilla Public License 2.0 (MPL-2.0). The license text controls.</p>
+            <a class="text-link" href="#">View on GitHub <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section final-cta">
+        <div class="container">
+          <p class="eyebrow">Start with the rule</p>
+          <h2>Know the rule before<br />you write the code<span class="accent">.</span></h2>
+          <p>Build on it instead of building it again.</p>
+          <div class="actions">
+            <a class="button button-primary" href="#">Read the CoreDoc <span aria-hidden="true">↗</span></a>
+            <a class="button button-secondary" href="#">Explore the specification <span aria-hidden="true">↗</span></a>
+            <a class="text-link" href="#">View GitHub <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
       </section>
     </main>
-    <footer><p>This index links to documentation in the same checkout.</p></footer>
+
+    <footer class="site-footer">
+      <div class="container footer-layout">
+        <a class="brand" href="#" aria-label="FinKore home">FinKore<span class="accent" aria-hidden="true">.</span></a>
+        <p>Financial behavior, made explicit.</p>
+        <p>Open source · MPL-2.0</p>
+      </div>
+    </footer>
   </body>
 </html>
