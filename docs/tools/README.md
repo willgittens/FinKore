@@ -124,14 +124,16 @@ interactive controls. Only the exact deferred script tag for
 buttons targeting `example-slides` are accepted. Inline handlers, other scripts,
 remote links, and forms remain outside this reviewed profile.
 
-The carousel displays authored illustrations linked to existing requirements
-and acceptance cases; it does not load or execute financial behavior. It waits
+The carousel displays authored illustrations based on published acceptance
+cases; it does not load or execute financial behavior. It waits
 at least eight seconds between automatic changes and restarts that interval
 after manual navigation. Rotation pauses while the card is hovered, focused,
-expanded, offscreen, or in a hidden document. Reduced-motion preferences disable
+offscreen, or in a hidden document. Reduced-motion preferences disable
 automatic rotation by default and remove the transition animation. A visible
 control lets the reader pause or enable rotation. Without JavaScript, the first
-example and its sources remain readable, and carousel controls stay hidden.
+example and its CoreDoc link remain readable, and carousel controls stay hidden.
+Each example keeps two visible resource blocks: an explanatory article marked
+as coming soon (without an unwired link), and the relevant CoreDoc principle.
 
 Review the rendered index for layout, keyboard navigation, manual cycling,
 timer resets, pause conditions, and reduced motion. These static publication

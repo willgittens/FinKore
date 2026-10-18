@@ -25,7 +25,7 @@
 
   function schedule() {
     window.clearTimeout(timer)
-    if (paused || hovered || focused || !visible || document.hidden || cards[index].querySelector('details[open]')) return
+    if (paused || hovered || focused || !visible || document.hidden) return
     timer = window.setTimeout(() => show(index + 1), interval)
   }
 
@@ -35,9 +35,7 @@
   }
 
   function show(next, manual = false, direction = 1) {
-    const previous = cards[index]
     index = (next + cards.length) % cards.length
-    previous.querySelectorAll('details[open]').forEach(detail => { detail.open = false })
     cards.forEach((card, position) => {
       card.hidden = position !== index
       card.inert = position !== index
@@ -79,7 +77,6 @@
     focused = carousel.contains(event.relatedTarget)
     schedule()
   })
-  carousel.querySelectorAll('details').forEach(detail => detail.addEventListener('toggle', schedule))
   document.addEventListener('visibilitychange', schedule)
   motion.addEventListener('change', event => {
     if (event.matches) paused = true
