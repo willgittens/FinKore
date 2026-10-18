@@ -116,12 +116,26 @@ status. The only removed-rule exceptions are one concise retirement paragraph
 in release history and the designated adversarial JSON fixture under tool tests.
 Test and validator source files themselves are scanned.
 
-The retained Learn profile is a static local documentation index. The gate
-checks local HTML destinations, Markdown and HTML fragments, placeholders,
-duplicate anchors, and unsupported interactive controls. Remote links, scripts,
-and forms require a separately reviewed profile before publication. Review the
-rendered index for readable layout and keyboard navigation as well; these
-static checks do not execute a browser or establish general HTML correctness.
+The retained Learn profile is a local documentation index with one presentation
+enhancement: the examples carousel. The gate checks local HTML destinations,
+Markdown and HTML fragments, placeholders, duplicate anchors, and unsupported
+interactive controls. Only the exact deferred script tag for
+`js/examples.js` in `learn/index.html` and its `previous`, `next`, and `toggle`
+buttons targeting `example-slides` are accepted. Inline handlers, other scripts,
+remote links, and forms remain outside this reviewed profile.
+
+The carousel displays authored illustrations linked to existing requirements
+and acceptance cases; it does not load or execute financial behavior. It waits
+at least eight seconds between automatic changes and restarts that interval
+after manual navigation. Rotation pauses while the card is hovered, focused,
+expanded, offscreen, or in a hidden document. Reduced-motion preferences disable
+automatic rotation by default and remove the transition animation. A visible
+control lets the reader pause or enable rotation. Without JavaScript, the first
+example and its sources remain readable, and carousel controls stay hidden.
+
+Review the rendered index for layout, keyboard navigation, manual cycling,
+timer resets, pause conditions, and reduced motion. These static publication
+checks do not execute a browser or establish general HTML correctness.
 
 The scan omits only root checkout state (`.git`, `.tools`, `node_modules`,
 `.npm-cache`, `coverage`, `dist`, and `reports`). Do not include that state in a

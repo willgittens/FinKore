@@ -124,3 +124,41 @@ test('ignores only local checkout state and supports a release without the optio
   rmSync(join(root, 'learn'), { recursive: true })
   assert.equal(validateReleaseContent(root).htmlLinkCount, 0)
 })
+
+test('accepts only the declared local Learn carousel script and its controls', (t) => {
+  const root = fixture(t)
+  const script = '<script src="js/examples.js" defer></script>'
+  const controls = ['toggle', 'previous', 'next'].map(action =>
+    `<button type="button" data-carousel-action="${action}" aria-controls="example-slides">${action}</button>`).join('')
+  const page = `<h1>FinKore Core 2.0.2 stable</h1><div id="example-slides">Authored examples</div>${controls}${script}`
+  put(root, 'learn/js/examples.js', '// Presentation only.\n')
+  put(root, 'learn/index.html', page)
+  assert.equal(run(root).status, 0)
+  assert.equal(validateReleaseContent(root).htmlLinkCount, 1)
+
+  for (const invalid of [
+    page.replace(script, '<script>document.title = "inline"</script>'),
+    page.replace(script, '<script src="js/other.js" defer></script>'),
+    page.replace(script, '<script src="https://example.org/examples.js" defer></script>'),
+    page + script,
+    page.replace(script, ''),
+    page.replace('id="example-slides"', 'id="other"'),
+    page.replace('data-carousel-action="next"', 'data-carousel-action="submit"'),
+    page.replace('type="button"', 'type="submit"'),
+    page.replace('aria-controls="example-slides"', 'aria-controls="other"'),
+    page.replace('type="button"', 'type="button" onclick="alert(1)"'),
+    page + '<button type="button">Unwired control</button>',
+    page + '<form><input type="search"></form>',
+  ]) {
+    put(root, 'learn/index.html', invalid)
+    const result = run(root)
+    assert.equal(result.status, 1, invalid)
+    assert.match(result.error, /interactive HTML is outside/, invalid)
+  }
+  put(root, 'learn/index.html', page)
+  put(root, 'learn/other.html', page)
+  assert.match(run(root).error, /learn\/other.html: interactive HTML is outside/)
+  rmSync(join(root, 'learn/other.html'))
+  rmSync(join(root, 'learn/js/examples.js'))
+  assert.match(run(root).error, /broken or escaping HTML link/)
+})

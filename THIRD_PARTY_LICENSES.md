@@ -16,6 +16,15 @@ No project-owned vendored third-party source files or assets were identified dur
 
 The repository contains npm dependencies under `node_modules/` and package-lock metadata. Those dependencies are third-party material and retain their own license declarations, including MIT-licensed dependencies where applicable.
 
+## Learn Typography
+
+The Learn page bundles the unmodified Manrope variable font in
+[learn/fonts/manrope-variable.ttf](./learn/fonts/manrope-variable.ttf), sourced
+from the [Google Fonts Manrope directory](https://github.com/google/fonts/tree/main/ofl/manrope).
+Copyright 2018 The Manrope Project Authors. The font is distributed under the
+SIL Open Font License 1.1; the original copyright and license are retained in
+[learn/fonts/OFL.txt](./learn/fonts/OFL.txt). The page loads this font locally.
+
 ## Requires Legal/License Review
 
 No release-blocking third-party license issue was identified from repository evidence in this audit. This is not a full legal compliance opinion.

@@ -68,9 +68,27 @@ function htmlAttributes(text, names) {
 }
 
 function checkHtml(root, path, text, errors) {
-  // The retained Learn surface is a static local index, not an application.
-  if (/<(?:script|form|input|button|select|textarea)\b|\son\w+\s*=/i.test(text)) {
-    errors.push(`${path}: interactive HTML is outside the supported static-index profile`)
+  // The sole presentation enhancement is the local Learn examples carousel.
+  // Keep inline/other scripts and unrelated controls outside this profile.
+  const markup = text.replace(/<!--[\s\S]*?-->/g, '')
+  const carouselScript = '<script src="js/examples.js" defer></script>'
+  const scripts = [...markup.matchAll(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi)]
+  const carouselEnabled = path === 'learn/index.html' && scripts.length === 1 &&
+    scripts[0][0] === carouselScript && htmlAttributes(markup, new Set(['id'])).includes('example-slides')
+  let unsupported = markup
+  if (carouselEnabled) {
+    unsupported = unsupported.replace(carouselScript, '').replace(/<button\b[^>]*>/gi, (tag) => {
+      const types = htmlAttributes(tag, new Set(['type']))
+      const actions = htmlAttributes(tag, new Set(['data-carousel-action']))
+      const targets = htmlAttributes(tag, new Set(['aria-controls']))
+      const allowed = types.length === 1 && types[0] === 'button' &&
+        actions.length === 1 && ['previous', 'next', 'toggle'].includes(actions[0]) &&
+        targets.length === 1 && targets[0] === 'example-slides'
+      return allowed ? '' : tag
+    })
+  }
+  if (/<(?:script|form|input|button|select|textarea)\b/i.test(unsupported) || /\son\w+\s*=/i.test(markup)) {
+    errors.push(`${path}: interactive HTML is outside the supported Learn profile`)
   }
   if (/\b(?:TODO|TBD)\b|suggested structure|this section should grow|Version\s+0\.1\.0/i.test(plain(text))) {
     errors.push(`${path}: unfinished or ambiguous HTML content`)
