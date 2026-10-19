@@ -16,12 +16,14 @@
     "architecture:check": "node docs/tools/check-architecture.js",
     "node:check": "node docs/tools/check-node-version.js",
     "traceability:check": "node docs/tools/check-traceability.js",
-    "docs:check": "node docs/tools/check-doc-links.js && node docs/tools/check-traceability.js",
+    "docs:check": "node docs/tools/check-doc-links.js && node docs/tools/check-traceability.js && npm run learn:check",
     "license:check": "node docs/tools/check-license.js",
     "release:check": "node docs/tools/check-release-content.js",
     "tools:test": "node --test --test-isolation=none docs/tools/test/*.test.js",
     "dependencies:audit": "npm audit",
     "check": "npm run node:check && npm run architecture:check && npm run conformance:check && npm run agentic:check && npm run tools:test && npm run docs:check && npm run license:check && git diff --check",
-    "verify": "npm run check"
+    "verify": "npm run check",
+    "learn:build": "node docs/tools/build-learn-coredoc.js",
+    "learn:check": "node docs/tools/build-learn-coredoc.js --check"
   }
 }

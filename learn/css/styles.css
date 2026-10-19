@@ -823,6 +823,46 @@ code {
   text-align: center;
 }
 
+/* The governing document comes first; the diagram follows the same order on mobile. */
+.how-flow {
+  margin-top: 3rem;
+}
+
+.how-flow svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: inherit;
+}
+
+.how-flow .flow-narrow {
+  display: none;
+}
+
+.flow-shadow { fill: var(--shadow-ink); }
+.flow-node { fill: var(--surface); stroke: var(--dark); stroke-width: 2; }
+.flow-node-entry { fill: var(--lime); }
+.flow-step { fill: var(--accent); font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.6px; }
+.flow-icon { fill: none; stroke: var(--dark); stroke-width: 1.8; stroke-linecap: square; stroke-linejoin: miter; }
+.flow-title { fill: var(--ink); font-size: 27px; font-weight: 750; letter-spacing: -0.8px; }
+.flow-copy { fill: var(--muted); font-size: 14px; }
+.flow-arrow { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: square; stroke-linejoin: miter; }
+
+.how-flow figcaption {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.how-flow + .resource-list { margin-top: 2rem; }
+
+@media (max-width: 56rem) {
+  .how-flow { max-width: 25rem; margin-inline: auto; }
+  .how-flow .flow-wide { display: none; }
+  .how-flow .flow-narrow { display: block; }
+}
+
 /* Three concrete artifacts: each has its own link and reading purpose. */
 
 .section {

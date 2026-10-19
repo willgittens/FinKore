@@ -13,6 +13,7 @@ financial-domain behavior.
 | `check-doc-links.js` | Validate local Markdown paths and fragments plus known CoreDoc requirement prefixes, IDs, abbreviations, and ranges. | `npm run docs:check` |
 | `check-traceability.js` | Cross-check specification requirements, modalities, permitted coverage classifications, per-domain/total inventories, COVERED/PARTIAL evidence, vector metadata, and Agentic references. | `npm run traceability:check`, `npm run docs:check` |
 | `check-license.js` | Validate license metadata, source headers, and repository license text. | `npm run license:check` |
+| `build-learn-coredoc.js` | Generate the CoreDoc reader and home index, or check that they match the canonical Markdown without writing files. | `npm run learn:build`, `npm run learn:check` |
 | `check-release-content.js` | Inspect a proposed stable publication tree for obsolete artifacts, coherent Core status, and static HTML content and links. | `npm run release:check` |
 
 ## Supported Node setup
@@ -116,13 +117,17 @@ status. The only removed-rule exceptions are one concise retirement paragraph
 in release history and the designated adversarial JSON fixture under tool tests.
 Test and validator source files themselves are scanned.
 
-The retained Learn profile is a local documentation index with one presentation
-enhancement: the examples carousel. The gate checks local HTML destinations,
+The retained Learn profile includes a home index and a generated CoreDoc reader.
+Scripted presentation is limited to the examples carousel and closing the mobile
+CoreDoc index after selecting a link. Native `details` elements provide the
+CoreDoc index, mobile navigation and rule history. The gate checks local HTML destinations,
 Markdown and HTML fragments, placeholders, duplicate anchors, and unsupported
 interactive controls. Only the exact deferred script tag for
 `js/examples.js` in `learn/index.html` and its `previous`, `next`, and `toggle`
-buttons targeting `example-slides` are accepted. Inline handlers, other scripts,
-remote links, and forms remain outside this reviewed profile.
+buttons targeting `example-slides` are accepted. Inline handlers, arbitrary scripts,
+remote links, and forms remain outside this reviewed profile. The reader also
+permits the exact deferred `js/coredoc.js` script when `core-mobile-index` exists;
+it closes that native disclosure on link activation and adds no new controls.
 
 The carousel displays authored illustrations based on published acceptance
 cases; it does not load or execute financial behavior. It waits
@@ -132,8 +137,26 @@ offscreen, or in a hidden document. Reduced-motion preferences disable
 automatic rotation by default and remove the transition animation. A visible
 control lets the reader pause or enable rotation. Without JavaScript, the first
 example and its CoreDoc link remain readable, and carousel controls stay hidden.
-Each example keeps two visible resource blocks: an explanatory article marked
-as coming soon (without an unwired link), and the relevant CoreDoc principle.
+Each example keeps two visible resource blocks: the relevant rule in the internal
+CoreDoc reader first, then an explanatory article marked as coming soon (without
+an unwired link).
+
+The reader at [learn/coredoc.html](../../learn/coredoc.html) and the marked CoreDoc
+index block in [learn/index.html](../../learn/index.html) are generated from
+[CoreDoc](../coreDoc/core-doc.md). Run `npm run learn:build` after changing the
+canonical document or the renderer. Do not edit generated content directly.
+The renderer supports the document's current Markdown structure and rejects
+unsupported block structures. It preserves rule wording, identifiers, governance
+metadata and specification references; it does not define financial behavior.
+`npm run learn:check`, included in `npm run docs:check` and `npm run verify`,
+compares both outputs with the source without writing files. The release gate
+also checks synchronization before allowing historical rule metadata in the
+reader. Changes to either generated output or its source require regeneration.
+
+Review CoreDoc discovery and reading at desktop and mobile widths, including
+native disclosure keyboard behavior, direct rule links, previous/next navigation,
+source references and no-JavaScript access. The five principles and detailed-rule
+count describe CoreDoc; the specification requirement count is a separate level.
 
 Review the rendered index for layout, keyboard navigation, manual cycling,
 timer resets, pause conditions, and reduced motion. These static publication

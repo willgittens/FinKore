@@ -9,6 +9,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { dirname, extname, join, relative, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { markdownAnchors } from './check-doc-links.js'
+import { buildLearnCoreDoc } from './build-learn-coredoc.js'
 
 const LOCAL_STATE = new Set(['.git', '.tools', 'node_modules', '.npm-cache', 'coverage', 'dist', 'reports'])
 const NEGATIVE_FIXTURE = 'docs/tools/test/fixtures/release-content-negative.json'
@@ -68,14 +69,17 @@ function htmlAttributes(text, names) {
 }
 
 function checkHtml(root, path, text, errors) {
-  // The sole presentation enhancement is the local Learn examples carousel.
+  // Only the declared carousel and mobile CoreDoc disclosure scripts are allowed.
   // Keep inline/other scripts and unrelated controls outside this profile.
   const markup = text.replace(/<!--[\s\S]*?-->/g, '')
   const carouselScript = '<script src="js/examples.js" defer></script>'
   const scripts = [...markup.matchAll(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi)]
   const carouselEnabled = path === 'learn/index.html' && scripts.length === 1 &&
     scripts[0][0] === carouselScript && htmlAttributes(markup, new Set(['id'])).includes('example-slides')
-  let unsupported = markup
+  const readerScript = '<script src="js/coredoc.js" defer></script>'
+  const readerEnabled = path === 'learn/coredoc.html' && scripts.length === 1 &&
+    scripts[0][0] === readerScript && htmlAttributes(markup, new Set(['id'])).includes('core-mobile-index')
+  let unsupported = readerEnabled ? markup.replace(readerScript, '') : markup
   if (carouselEnabled) {
     unsupported = unsupported.replace(carouselScript, '').replace(/<button\b[^>]*>/gi, (tag) => {
       const types = htmlAttributes(tag, new Set(['type']))
@@ -153,6 +157,12 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
   }
   if (!existsSync(root) || !statSync(root).isDirectory()) throw new Error(`Release content check failed: missing release tree: ${root}`)
   walk(root)
+  // The generated reader must match its canonical source before historical
+  // governance dates can be excluded from current-status checks below.
+  if (files.has('learn/coredoc.html')) {
+    try { buildLearnCoreDoc(root, { check: true }) }
+    catch (error) { errors.push('learn/coredoc.html: ' + error.message) }
+  }
   for (const path of [...REQUIRED, ...DOMAINS.map((domain) => `spec/${domain}/README.md`)]) {
     if (!files.has(path)) errors.push(`${path}: required publication document is missing`)
   }
@@ -172,10 +182,11 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
     if (FREEZE_REFERENCE.test(freezeText)) errors.push(`${path}: retired freeze definition or reference is forbidden`)
     if (!currentDocument(path)) continue
     const current = path.startsWith('docs/coreDoc/') ? text.split('\n').filter((line) =>
-      !/^\*\*(?:Introduced|Last updated|Last updated on):\*\*/.test(line)).join('\n') : text
+      !/^\*\*(?:Introduced|Last updated|Last updated on):\*\*/.test(line)).join('\n') :
+      path === 'learn/coredoc.html' ? text.replace(/<p class="core-governance"><strong>(?:Introduced|Last updated|Last updated on):<\/strong>[^<]*<\/p>/g, '') : text
     const normalized = plain(decodeEntities(current))
     if (hasStaleCoreStatus(normalized)) errors.push(`${path}: stale or contradictory Core status in current content`)
-    if ((REQUIRED.includes(path) || path.startsWith('spec/') || path === 'learn/index.html') && !STABLE.test(normalized)) {
+    if ((REQUIRED.includes(path) || path.startsWith('spec/') || path === 'learn/index.html' || path === 'learn/coredoc.html') && !STABLE.test(normalized)) {
       errors.push(`${path}: missing explicit FinKore Core ${TARGET_CORE_VERSION} stable declaration`)
     }
     if (path === 'docs/coreDoc/core-doc.md') {

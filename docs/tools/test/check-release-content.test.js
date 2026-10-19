@@ -162,3 +162,27 @@ test('accepts only the declared local Learn carousel script and its controls', (
   rmSync(join(root, 'learn/js/examples.js'))
   assert.match(run(root).error, /broken or escaping HTML link/)
 })
+
+test('rejects an unsynchronized CoreDoc reader even when historical metadata is marked', t => {
+  const root = fixture(t)
+  put(root, 'docs/coreDoc/core-doc.md', readFileSync(new URL('../../coreDoc/core-doc.md', import.meta.url), 'utf8'))
+  put(root, 'learn/coredoc.html', '<h1>FinKore Core 2.0.2 stable</h1><p class="core-governance"><strong>Introduced:</strong> Draft 0.4</p>')
+  assert.match(run(root).error, /learn\/coredoc.html:/)
+  assert.match(run(root).error, /generated CoreDoc index markers/)
+})
+
+test('limits the CoreDoc reader enhancement to its exact deferred local script and target', t => {
+  const root = fixture(t)
+  const script = '<script src="js/coredoc.js" defer></script>'
+  const page = '<h1>FinKore Core 2.0.2 stable</h1><details id="core-mobile-index"><summary>Browse</summary></details>' + script
+  put(root, 'learn/js/coredoc.js', '// presentation only\n')
+  put(root, 'learn/coredoc.html', page)
+  // Synchronization still rejects this incomplete reader; the exact script is permitted.
+  assert.doesNotMatch(run(root).error, /interactive HTML/)
+  for (const variant of [page.replace(' defer', ''), page + script, page.replace('js/coredoc.js', 'js/other.js'), page.replace('core-mobile-index', 'other-index'), page.replace('</details>', '</details><button>Other action</button>')]) {
+    put(root, 'learn/coredoc.html', variant)
+    assert.match(run(root).error, /interactive HTML/)
+  }
+  put(root, 'learn/index.html', page)
+  assert.match(run(root).error, /learn\/index.html: interactive HTML/)
+})

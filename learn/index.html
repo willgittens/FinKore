@@ -5,9 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#f6f7f1" />
-    <title>FinKore — A shared rulebook for financial software.</title>
-    <meta name="description" content="FinKore is an open-source specification for financial software behavior. Explore rules for money, approvals, workflows, audit history, and identity. Implement them in your own stack." />
+    <title>FinKore — Define once. Build many times.</title>
+    <meta name="description" content="A foundation for financial software. Define once. Build many times. Make recurring financial behavior explicit, testable, and reusable." />
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/coredoc.css" />
     <script src="js/examples.js" defer></script>
   </head>
   <body id="top">
@@ -20,7 +21,7 @@
         </a>
         <nav aria-label="Primary navigation">
           <ul class="nav-list">
-            <li><a href="#how-it-works">How it works</a></li>
+            <li><a href="#core-explorer">CoreDoc</a></li>
             <li><a href="#domains">Domains</a></li>
             <li><a class="nav-start" href="#start">Start reading <span aria-hidden="true">↗</span></a></li>
           </ul>
@@ -33,13 +34,13 @@
         <div class="container">
           <div class="hero-layout">
             <div class="hero-copy">
-              <p class="eyebrow"><span class="accent-marker" aria-hidden="true"></span>Open-source specification</p>
-              <h1 id="hero-title">A shared rulebook for <span>financial software.</span></h1>
-              <p class="hero-description">FinKore defines how money, approvals, and financial records should behave — so your team can build on explicit, consistent rules.</p>
-              <p class="hero-ownership">You choose the language and architecture.<br />You build the implementation.</p>
+              <p class="eyebrow"><span class="accent-marker" aria-hidden="true"></span>Financial behavior, made explicit</p>
+              <h1 id="hero-title">Define once. <span>Build many times.</span></h1>
+              <p class="hero-description">FinKore is an open-source foundation for financial software. It makes recurring financial behavior explicit, testable, and reusable across products and implementations.</p>
+              <p class="hero-ownership">Know the rule before you write the code.<br />Build on it instead of building it again.</p>
               <div class="actions">
-                <a class="button" href="../spec/README.md">Explore the specification <span aria-hidden="true">↗</span></a>
-                <a class="text-link" href="#how-it-works">How it works <span aria-hidden="true">↓</span></a>
+                <a class="button" href="#core-explorer">Look up the rules <span aria-hidden="true">↗</span></a>
+                <a class="text-link" href="#how-it-works">See the foundation <span aria-hidden="true">↓</span></a>
               </div>
             </div>
 
@@ -48,7 +49,7 @@
               <div class="example-stage" id="example-slides">
                 <article class="example-card" role="group" aria-roledescription="slide" aria-label="1 of 6: Currency compatibility">
                   <div class="example-caption"><span class="eyebrow">Examples from 447 rules</span><span class="example-domain">Money</span></div>
-                  <h2>Can you add these amounts?</h2>
+                  <h2>Is adding money just adding numbers?</h2>
                   <div class="amounts" role="img" aria-label="10.00 EUR plus 5.00 USD">
                     <div class="amount" aria-hidden="true"><span>10.00</span><span class="currency">EUR</span></div>
                     <span class="operator" aria-hidden="true">+</span>
@@ -58,13 +59,13 @@
                     <span class="result-mark" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="m9 9 6 6m0-6-6 6" /></svg></span>
                     <div><p class="result-title">Addition rejected. Currencies differ.</p><p>Both original amounts stay unchanged.</p></div>
                   </div>
-                  <p class="example-explanation">FinKore makes the expected outcome explicit, including what happens when an operation fails.</p>
+                  <p class="example-explanation">Adding money requires compatible currencies. A rejected addition must preserve both original amounts.</p>
                   <!-- Illustration of published case money.add.currency-mismatch-001; no operation is executed here. -->
                   <div class="example-details" role="group" aria-label="Explore this rule">
-                    <a class="example-resource example-resource-link" href="../docs/coreDoc/core-doc.md#monetary-integrity">
+                    <a class="example-resource example-resource-link" href="coredoc.html#core-001-3">
                       <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 14h8m-8 3h5" /></svg></span><span>CoreDoc</span></div>
                       <p>Monetary integrity</p>
-                      <span class="example-resource-action">Read the principle <span aria-hidden="true">↗</span></span>
+                      <span class="example-resource-action">Read the rule <span aria-hidden="true">↗</span></span>
                     </a>
                     <div class="example-resource example-resource-upcoming">
                       <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v15M3 4h5a4 4 0 0 1 4 2 4 4 0 0 1 4-2h5v15h-5a4 4 0 0 0-4 2 4 4 0 0 0-4-2H3Z" /></svg></span><span>Article</span></div>
@@ -88,10 +89,10 @@
                   <p class="example-explanation">At a tie, HALF_EVEN selects the nearest value whose last retained digit is even.</p>
                   <!-- Illustration of published case money.round.half-even.tie-even-down-001; no operation is executed here. -->
                   <div class="example-details" role="group" aria-label="Explore this rule">
-                    <a class="example-resource example-resource-link" href="../docs/coreDoc/core-doc.md#monetary-integrity">
+                    <a class="example-resource example-resource-link" href="coredoc.html#core-001-2">
                       <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 14h8m-8 3h5" /></svg></span><span>CoreDoc</span></div>
                       <p>Monetary integrity</p>
-                      <span class="example-resource-action">Read the principle <span aria-hidden="true">↗</span></span>
+                      <span class="example-resource-action">Read the rule <span aria-hidden="true">↗</span></span>
                     </a>
                     <div class="example-resource example-resource-upcoming">
                       <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v15M3 4h5a4 4 0 0 1 4 2 4 4 0 0 1 4-2h5v15h-5a4 4 0 0 0-4 2 4 4 0 0 0-4-2H3Z" /></svg></span><span>Article</span></div>
@@ -115,10 +116,10 @@
                   <p class="example-explanation">This workflow requires DRAFT → SUBMITTED first. It declares no direct path to APPROVED.</p>
                   <!-- Illustration of published case workflow.transition.undeclared-001; no operation is executed here. -->
                   <div class="example-details" role="group" aria-label="Explore this rule">
-                    <a class="example-resource example-resource-link" href="../docs/coreDoc/core-doc.md#controlled-financial-state">
+                    <a class="example-resource example-resource-link" href="coredoc.html#core-002-1">
                       <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 14h8m-8 3h5" /></svg></span><span>CoreDoc</span></div>
                       <p>Controlled financial state</p>
-                      <span class="example-resource-action">Read the principle <span aria-hidden="true">↗</span></span>
+                      <span class="example-resource-action">Read the rule <span aria-hidden="true">↗</span></span>
                     </a>
                     <div class="example-resource example-resource-upcoming">
                       <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v15M3 4h5a4 4 0 0 1 4 2 4 4 0 0 1 4-2h5v15h-5a4 4 0 0 0-4 2 4 4 0 0 0-4-2H3Z" /></svg></span><span>Article</span></div>
@@ -142,10 +143,10 @@
                   <p class="example-explanation">Revision is a declared relevant fact here. Approval of revision 3 does not cover revision 4.</p>
                   <!-- Illustration of published case approval.validity.stale-revision-not-effective-001; no operation is executed here. -->
                   <div class="example-details" role="group" aria-label="Explore this rule">
-                    <a class="example-resource example-resource-link" href="../docs/coreDoc/core-doc.md#approval-integrity">
+                    <a class="example-resource example-resource-link" href="coredoc.html#core-004-3">
                       <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 14h8m-8 3h5" /></svg></span><span>CoreDoc</span></div>
                       <p>Approval integrity</p>
-                      <span class="example-resource-action">Read the principle <span aria-hidden="true">↗</span></span>
+                      <span class="example-resource-action">Read the rule <span aria-hidden="true">↗</span></span>
                     </a>
                     <div class="example-resource example-resource-upcoming">
                       <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v15M3 4h5a4 4 0 0 1 4 2 4 4 0 0 1 4-2h5v15h-5a4 4 0 0 0-4 2 4 4 0 0 0-4-2H3Z" /></svg></span><span>Article</span></div>
@@ -169,10 +170,10 @@
                   <p class="example-explanation">An event identity can be committed only once. Resubmitting it cannot overwrite the original.</p>
                   <!-- Illustration of published case audit.event.duplicate-identity-001; no operation is executed here. -->
                   <div class="example-details" role="group" aria-label="Explore this rule">
-                    <a class="example-resource example-resource-link" href="../docs/coreDoc/core-doc.md#financial-history-and-evolution">
+                    <a class="example-resource example-resource-link" href="coredoc.html#core-003-2">
                       <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 14h8m-8 3h5" /></svg></span><span>CoreDoc</span></div>
                       <p>Financial history and evolution</p>
-                      <span class="example-resource-action">Read the principle <span aria-hidden="true">↗</span></span>
+                      <span class="example-resource-action">Read the rule <span aria-hidden="true">↗</span></span>
                     </a>
                     <div class="example-resource example-resource-upcoming">
                       <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v15M3 4h5a4 4 0 0 1 4 2 4 4 0 0 1 4-2h5v15h-5a4 4 0 0 0-4 2 4 4 0 0 0-4-2H3Z" /></svg></span><span>Article</span></div>
@@ -196,10 +197,10 @@
                   <p class="example-explanation">This workflow permits DRAFT → FINAL. The state changes; the identity and data stay intact.</p>
                   <!-- Illustration of published case entity.transition.success-identity-stable-001; no operation is executed here. -->
                   <div class="example-details" role="group" aria-label="Explore this rule">
-                    <a class="example-resource example-resource-link" href="../docs/coreDoc/core-doc.md#identifiable-and-determinable-financial-meaning">
+                    <a class="example-resource example-resource-link" href="coredoc.html#core-005-1">
                       <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 14h8m-8 3h5" /></svg></span><span>CoreDoc</span></div>
                       <p>Stable financial identity</p>
-                      <span class="example-resource-action">Read the principle <span aria-hidden="true">↗</span></span>
+                      <span class="example-resource-action">Read the rule <span aria-hidden="true">↗</span></span>
                     </a>
                     <div class="example-resource example-resource-upcoming">
                       <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v15M3 4h5a4 4 0 0 1 4 2 4 4 0 0 1 4-2h5v15h-5a4 4 0 0 0-4 2 4 4 0 0 0-4-2H3Z" /></svg></span><span>Article</span></div>
@@ -222,9 +223,9 @@
           </div>
           <div class="hero-note">
             <header class="video-intro">
-              <p class="eyebrow">Meet FinKore</p>
-              <h2>FinKore, explained.</h2>
-              <p>An introduction for teams building and reviewing financial systems.</p>
+              <p class="eyebrow">The idea behind FinKore</p>
+              <h2>Why rebuild the same foundations?</h2>
+              <p>Build, discover edge cases, fix, document, then rebuild elsewhere. FinKore exists to reduce that repetition.</p>
               <a href="../spec/README.md#status"><span class="status-dot" aria-hidden="true"></span>FinKore Core 2.0.2 stable</a>
             </header>
             <figure class="video-preview">
@@ -245,34 +246,132 @@
       <section class="section" id="how-it-works" aria-labelledby="how-title">
         <div class="container overview-layout">
           <div class="section-heading">
-            <p class="eyebrow">How it works</p>
-            <h2 id="how-title">The rules are shared.<br />The implementation is yours.</h2>
-            <p>Rounding an amount, rejecting a transition, preserving a decision: small details carry financial meaning. FinKore documents them before they become assumptions in your code.</p>
-            <p class="ownership-note">The repository provides specifications and acceptance artifacts. Your team owns the code, business policy, and execution of the cases.</p>
+            <p class="eyebrow">The standard and the foundation</p>
+            <h2 id="how-title">Your product may be unique.<br />Your financial rules don't have to be.</h2>
+            <p>Every repository change starts with a CoreDoc review. Confirm the governing principle before deciding what needs to change.</p>
+            <p class="ownership-note">Changes to financial behavior flow from CoreDoc to specifications to conformance cases. Your team owns the implementation and execution of those cases.</p>
           </div>
+          <figure class="how-flow">
+            <svg class="flow-wide" viewBox="0 0 1120 208" role="img" aria-labelledby="flow-wide-title flow-wide-description">
+              <title id="flow-wide-title">CoreDoc → Specifications → Conformance</title>
+              <desc id="flow-wide-description">Start every repository change by reviewing CoreDoc. Refine financial behavior in the specifications, then describe its acceptance cases in conformance.</desc>
+              <g transform="translate(10 12)">
+                <rect class="flow-shadow" x="6" y="6" width="300" height="172" />
+                <rect class="flow-node flow-node-entry" width="300" height="172" />
+                <text class="flow-step" x="22" y="30">01 · START HERE</text>
+                <g class="flow-icon" transform="translate(22 51)"><path d="M16 6v25M3 5h6a9 9 0 0 1 7 3 9 9 0 0 1 7-3h6v23h-6a9 9 0 0 0-7 3 9 9 0 0 0-7-3H3Z" /></g>
+                <text class="flow-title" x="22" y="119">CoreDoc</text>
+                <text class="flow-copy" x="22" y="147">Review the financial principle.</text>
+              </g>
+              <g transform="translate(410 12)">
+                <rect class="flow-shadow" x="6" y="6" width="300" height="172" />
+                <rect class="flow-node" width="300" height="172" />
+                <text class="flow-step" x="22" y="30">02 · DEFINE THE BEHAVIOR</text>
+                <g class="flow-icon" transform="translate(22 51)"><path d="M20 3H6v28h23V12Zm0 0v9h9M11 18h13m-13 6h10" /></g>
+                <text class="flow-title" x="22" y="119">Specifications</text>
+                <text class="flow-copy" x="22" y="147">Make the rule precise.</text>
+              </g>
+              <g transform="translate(810 12)">
+                <rect class="flow-shadow" x="6" y="6" width="300" height="172" />
+                <rect class="flow-node" width="300" height="172" />
+                <text class="flow-step" x="22" y="30">03 · DEFINE THE CASES</text>
+                <g class="flow-icon" transform="translate(22 51)"><path d="M12 7h17M12 17h17M12 27h17M2 6l3 3 5-6M2 16l3 3 5-6M2 26l3 3 5-6" /></g>
+                <text class="flow-title" x="22" y="119">Conformance</text>
+                <text class="flow-copy" x="22" y="147">State the expected observations.</text>
+              </g>
+              <path class="flow-arrow" d="M334 98h51m-12-12 12 12-12 12M734 98h51m-12-12 12 12-12 12" />
+            </svg>
+            <svg class="flow-narrow" viewBox="0 0 328 688" role="img" aria-labelledby="flow-narrow-title flow-narrow-description">
+              <title id="flow-narrow-title">CoreDoc → Specifications → Conformance</title>
+              <desc id="flow-narrow-description">Read top to bottom: review the CoreDoc principle first, refine the specification, then describe the conformance cases.</desc>
+              <g transform="translate(10 12)">
+                <rect class="flow-shadow" x="6" y="6" width="300" height="172" />
+                <rect class="flow-node flow-node-entry" width="300" height="172" />
+                <text class="flow-step" x="22" y="30">01 · START HERE</text>
+                <g class="flow-icon" transform="translate(22 51)"><path d="M16 6v25M3 5h6a9 9 0 0 1 7 3 9 9 0 0 1 7-3h6v23h-6a9 9 0 0 0-7 3 9 9 0 0 0-7-3H3Z" /></g>
+                <text class="flow-title" x="22" y="119">CoreDoc</text>
+                <text class="flow-copy" x="22" y="147">Review the financial principle.</text>
+              </g>
+              <g transform="translate(10 256)">
+                <rect class="flow-shadow" x="6" y="6" width="300" height="172" />
+                <rect class="flow-node" width="300" height="172" />
+                <text class="flow-step" x="22" y="30">02 · DEFINE THE BEHAVIOR</text>
+                <g class="flow-icon" transform="translate(22 51)"><path d="M20 3H6v28h23V12Zm0 0v9h9M11 18h13m-13 6h10" /></g>
+                <text class="flow-title" x="22" y="119">Specifications</text>
+                <text class="flow-copy" x="22" y="147">Make the rule precise.</text>
+              </g>
+              <g transform="translate(10 500)">
+                <rect class="flow-shadow" x="6" y="6" width="300" height="172" />
+                <rect class="flow-node" width="300" height="172" />
+                <text class="flow-step" x="22" y="30">03 · DEFINE THE CASES</text>
+                <g class="flow-icon" transform="translate(22 51)"><path d="M12 7h17M12 17h17M12 27h17M2 6l3 3 5-6M2 16l3 3 5-6M2 26l3 3 5-6" /></g>
+                <text class="flow-title" x="22" y="119">Conformance</text>
+                <text class="flow-copy" x="22" y="147">State the expected observations.</text>
+              </g>
+              <path class="flow-arrow" d="M160 205v30m-12-12 12 12 12-12M160 449v30m-12-12 12 12 12-12" />
+            </svg>
+            <figcaption>CoreDoc is the entry point. Specifications and acceptance cases follow its financial obligations.</figcaption>
+          </figure>
           <ol class="resource-list">
             <li>
               <span class="resource-number" aria-hidden="true">01</span>
-              <div><h3><a href="../spec/README.md">Read the behavior <span aria-hidden="true">↗</span></a></h3><p>The specification defines expected results, failures, and what must remain unchanged.</p><span class="resource-kind">Specification</span></div>
+              <div><h3><a href="coredoc.html">Start with the principle <span aria-hidden="true">↗</span></a></h3><p>Review the obligation and its boundaries. If a change affects the foundation, update CoreDoc before refining behavior.</p><span class="resource-kind">CoreDoc · Foundation</span></div>
             </li>
             <li>
               <span class="resource-number" aria-hidden="true">02</span>
-              <div><h3><a href="../conformance/README.md">Check against concrete cases <span aria-hidden="true">↗</span></a></h3><p>Portable inputs and expected outcomes help you assess your implementation against the rules.</p><span class="resource-kind">Conformance artifacts</span></div>
+              <div><h3><a href="../spec/README.md">Define the behavior <span aria-hidden="true">↗</span></a></h3><p>Refine the principle into explicit requirements, failures, and invariants. Keep the specification aligned with CoreDoc.</p><span class="resource-kind">Specifications · Contract</span></div>
             </li>
             <li>
               <span class="resource-number" aria-hidden="true">03</span>
-              <div><h3><a href="../agentic/README.md">Connect machine clients <span aria-hidden="true">↗</span></a></h3><p>Operation descriptions give agents and other clients the same defined inputs, outputs, errors, and effects. You provide the integration.</p><span class="resource-kind">Agentic Contract</span></div>
+              <div><h3><a href="../conformance/README.md">Make the rule verifiable <span aria-hidden="true">↗</span></a></h3><p>Publish acceptance inputs and expected observations linked to the requirements. Consumers run the cases against their implementations.</p><span class="resource-kind">Conformance · Acceptance cases</span></div>
             </li>
           </ol>
         </div>
       </section>
 
+      <!-- BEGIN GENERATED COREDOC INDEX -->
+      <section class="section core-explorer" id="core-explorer" aria-labelledby="core-explorer-title">
+        <div class="container core-explorer-layout">
+          <div class="section-heading">
+            <p class="eyebrow">Explore the CoreDoc</p>
+            <h2 id="core-explorer-title">Know the principle.<br />Explore the rule.</h2>
+            <p>Start with the question in front of you. Open a principle, choose a rule, and read its reasoning here on the site.</p>
+            <p class="core-index-count">5 principles <span aria-hidden="true">·</span> 19 foundational rules</p>
+            <p class="core-index-note">These are the CoreDoc foundations. The domain specifications refine them into the requirements illustrated above.</p>
+            <a class="text-link" href="coredoc.html">Read the complete CoreDoc <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="core-index-list">
+            <details class="core-index-item">
+              <summary><span class="core-index-number">CORE-001</span><span class="core-index-title">Monetary Integrity<span class="core-index-question">How do amounts retain their value and currency through calculation?</span></span><span class="core-index-toggle" aria-hidden="true">+</span></summary>
+              <div class="core-index-body"><a class="core-principle-link" href="coredoc.html#monetary-integrity">Read the principle <span aria-hidden="true">↗</span></a><ol><li><a href="coredoc.html#core-001-1"><span>CORE-001.1</span>Amount and currency are inseparable<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-001-2"><span>CORE-001.2</span>Exact calculation and explicit rounding<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-001-3"><span>CORE-001.3</span>Incompatible currencies are not combined or compared<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-001-4"><span>CORE-001.4</span>Allocation conserves the source value<span aria-hidden="true">→</span></a></li></ol></div>
+            </details>
+            <details class="core-index-item">
+              <summary><span class="core-index-number">CORE-002</span><span class="core-index-title">Controlled Financial State<span class="core-index-question">Which changes are permitted, and what happens when a change is rejected?</span></span><span class="core-index-toggle" aria-hidden="true">+</span></summary>
+              <div class="core-index-body"><a class="core-principle-link" href="coredoc.html#controlled-financial-state">Read the principle <span aria-hidden="true">↗</span></a><ol><li><a href="coredoc.html#core-002-1"><span>CORE-002.1</span>Lifecycle changes require a declared valid transition<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-002-2"><span>CORE-002.2</span>Validation is complete, fact-based, and non-mutating<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-002-3"><span>CORE-002.3</span>Rejected actions have no partial financial effect<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-002-4"><span>CORE-002.4</span>Mutability is declared by state and field<span aria-hidden="true">→</span></a></li></ol></div>
+            </details>
+            <details class="core-index-item">
+              <summary><span class="core-index-number">CORE-003</span><span class="core-index-title">Financial History and Evolution<span class="core-index-question">How are original facts preserved when later actions change their effect?</span></span><span class="core-index-toggle" aria-hidden="true">+</span></summary>
+              <div class="core-index-body"><a class="core-principle-link" href="coredoc.html#financial-history-and-evolution">Read the principle <span aria-hidden="true">↗</span></a><ol><li><a href="coredoc.html#core-003-1"><span>CORE-003.1</span>A committed event preserves essential evidence<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-003-2"><span>CORE-003.2</span>Committed history is not destructively rewritten<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-003-3"><span>CORE-003.3</span>Corrections and related evolution preserve original facts<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-003-4"><span>CORE-003.4</span>Redaction preserves evidence of history<span aria-hidden="true">→</span></a></li></ol></div>
+            </details>
+            <details class="core-index-item">
+              <summary><span class="core-index-number">CORE-004</span><span class="core-index-title">Approval Integrity<span class="core-index-question">What was approved, by whom, and does that approval still apply?</span></span><span class="core-index-toggle" aria-hidden="true">+</span></summary>
+              <div class="core-index-body"><a class="core-principle-link" href="coredoc.html#approval-integrity">Read the principle <span aria-hidden="true">↗</span></a><ol><li><a href="coredoc.html#core-004-1"><span>CORE-004.1</span>Approval requirements state subject, eligibility, and outcome<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-004-2"><span>CORE-004.2</span>Missing facts do not create an approval exemption<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-004-3"><span>CORE-004.3</span>Decisions remain tied to their facts and history<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-004-4"><span>CORE-004.4</span>Chain status follows declared requirements and decisions<span aria-hidden="true">→</span></a></li></ol></div>
+            </details>
+            <details class="core-index-item">
+              <summary><span class="core-index-number">CORE-005</span><span class="core-index-title">Identifiable and Determinable Financial Meaning<span class="core-index-question">Can a reviewer identify the subject, distinguish conditions, and reproduce the outcome?</span></span><span class="core-index-toggle" aria-hidden="true">+</span></summary>
+              <div class="core-index-body"><a class="core-principle-link" href="coredoc.html#identifiable-and-determinable-financial-meaning">Read the principle <span aria-hidden="true">↗</span></a><ol><li><a href="coredoc.html#core-005-1"><span>CORE-005.1</span>Continuing financial subjects retain stable identity<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-005-2"><span>CORE-005.2</span>Materially distinct conditions remain distinguishable<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-005-3"><span>CORE-005.3</span>Evaluation follows declared facts and context<span aria-hidden="true">→</span></a></li></ol></div>
+            </details>
+          </div>
+        </div>
+      </section>
+      <!-- END GENERATED COREDOC INDEX -->
+
       <section class="section domains" id="domains" aria-labelledby="domains-title">
         <div class="container domains-layout">
           <div class="section-heading">
-            <p class="eyebrow">What it covers</p>
-            <h2 id="domains-title">Five domains.<br />Familiar questions.</h2>
-            <p>Start with the part of your system you need to make predictable.</p>
+            <p class="eyebrow">Recurring financial problems</p>
+            <h2 id="domains-title">Five domains.<br />One shared foundation.</h2>
+            <p>Different products face the same questions about amounts, state, decisions, history, and identity. Consult the rule before implementing it.</p>
             <p class="scope-note">The current Core covers these foundations. Ledger posting, tax, FX sourcing, reconciliation, and settlement remain outside its scope.</p>
           </div>
           <ul class="domain-list">
@@ -288,13 +387,13 @@
       <section class="start-section" id="start" aria-labelledby="start-title">
         <div class="container start-panel">
           <div class="start-heading">
-            <p class="eyebrow">Start reading</p>
-            <h2 id="start-title">From understanding<br />to implementation.</h2>
-            <p>Choose the reading path that fits your work.</p>
+            <p class="eyebrow">From rule to implementation</p>
+            <h2 id="start-title">Build on it.<br />Instead of building it again.</h2>
+            <p>Bring your product's unique logic. Reuse the financial rules beneath it.</p>
           </div>
           <div class="reading-paths">
-            <a href="../docs/coreDoc/core-doc.md"><span class="eyebrow">Understand the principles</span><h3>Read the CoreDoc <span aria-hidden="true">↗</span></h3><p>The financial obligations behind the rules, and why they matter.</p></a>
-            <a href="../docs/implementation-guide.md"><span class="eyebrow">Build with the contract</span><h3>Implementation guide <span aria-hidden="true">↗</span></h3><p>How to use the specifications and acceptance cases in your own stack.</p></a>
+            <a href="coredoc.html"><span class="eyebrow">Look it up</span><h3>Read the CoreDoc <span aria-hidden="true">↗</span></h3><p>Understand why money, identity, history, and approvals need explicit rules.</p></a>
+            <a href="../docs/implementation-guide.md"><span class="eyebrow">Build on it</span><h3>Implementation guide <span aria-hidden="true">↗</span></h3><p>Choose a domain, implement its rules, and check the results against the acceptance cases.</p></a>
           </div>
         </div>
       </section>
