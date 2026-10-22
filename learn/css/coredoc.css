@@ -1,17 +1,12 @@
 /* SPDX-License-Identifier: MPL-2.0 */
 /* CoreDoc discovery and reading share the home page's palette and hard shadows. */
 .core-explorer, .founder {
-  --ink: #f5f8ef;
-  --muted: #bdcfc2;
-  --accent: #d4ee94;
-  --line: #365348;
-  --surface: #1d3830;
-  background: var(--dark);
+  background: var(--paper);
   color: var(--ink);
 }
 .core-explorer-layout, .founder-layout { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(3rem, 7vw, 7rem); align-items: start; }
-.core-explorer .eyebrow, .founder .eyebrow { color: var(--lime); }
-.core-explorer :focus-visible, .founder :focus-visible { outline-color: var(--lime); }
+.core-explorer .eyebrow, .founder .eyebrow { color: var(--accent); }
+.core-explorer :focus-visible, .founder :focus-visible { outline-color: var(--accent); }
 .core-explorer .section-heading > .core-index-count { color: var(--ink); font-weight: 750; font-size: 1rem; }
 .core-explorer .section-heading > .core-index-note { font-size: 0.8125rem; }
 .core-explorer .text-link { margin-top: 1.25rem; }
@@ -19,13 +14,13 @@
 .core-index-item { border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow-control); }
 .core-index-item summary { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr) 1rem; align-items: start; gap: 1rem; padding: 1.25rem; cursor: pointer; list-style: none; }
 .core-index-item summary::-webkit-details-marker, .core-mobile-index > summary::-webkit-details-marker { display: none; }
-.core-index-item:hover, .core-index-item[open] { border-color: #92b273; }
-.core-index-item summary:hover { background: #28473b; }
-.core-index-item[open] > summary { background: #28473b; border-bottom: 1px solid var(--line); }
-.core-index-number { padding-top: 0.15rem; color: #a0bb9f; font: 0.7rem/1.5 var(--mono); }
+.core-index-item:hover, .core-index-item[open] { border-color: var(--accent); }
+.core-index-item summary:hover { background: var(--paper); }
+.core-index-item[open] > summary { background: var(--paper); border-bottom: 1px solid var(--line); }
+.core-index-number { padding-top: 0.15rem; color: var(--accent); font: 0.7rem/1.5 var(--mono); }
 .core-index-title { font-size: 1rem; line-height: 1.4; font-weight: 750; }
 .core-index-question { display: block; margin-top: 0.5rem; color: var(--muted); font-size: 0.8125rem; line-height: 1.6; font-weight: 400; }
-.core-index-toggle { color: var(--lime); font: 1.3rem/1 var(--mono); }
+.core-index-toggle { color: var(--accent); font: 1.3rem/1 var(--mono); }
 .core-index-item[open] .core-index-toggle { transform: rotate(45deg); }
 .core-index-body { padding: 1.25rem; }
 .core-principle-link { display: inline-block; margin-bottom: 0.9rem; color: var(--accent); font-size: 0.8125rem; font-weight: 700; }

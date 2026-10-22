@@ -219,7 +219,7 @@ h3 {
 
 .hero {
   padding-top: clamp(3rem, 6vw, 5rem);
-  background: radial-gradient(ellipse at 88% 14%, #dce9cdad, transparent 44%), var(--paper);
+  background: var(--paper);
 }
 
 .hero-layout {
@@ -494,7 +494,67 @@ code {
   font-size: 0.8125rem;
 }
 
-/* The founder profile shares the CoreDoc section's grid and dark palette. */
+/* Dark sections alternate with the hero, CoreDoc index, and founder profile. */
+.licensing, #how-it-works {
+  --ink: #f5f8ef;
+  --muted: #bdcfc2;
+  --accent: #d4ee94;
+  --line: #365348;
+  --surface: #1d3830;
+  background: var(--dark);
+  color: var(--ink);
+}
+
+.licensing :focus-visible, #how-it-works :focus-visible {
+  outline-color: var(--accent);
+}
+
+.licensing-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: clamp(2.5rem, 7vw, 7rem);
+}
+
+.licensing .eyebrow {
+  margin-bottom: 1.25rem;
+  color: var(--accent);
+}
+
+.licensing h2 {
+  max-width: 20ch;
+}
+
+.licensing-description {
+  max-width: 48ch;
+  margin-top: 1.5rem;
+  font-size: 1.0625rem;
+  color: var(--muted);
+}
+
+.licensing-copy > .button {
+  margin-top: 1.75rem;
+}
+
+.licensing-benefits {
+  display: grid;
+  gap: 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.licensing-benefits li {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.licensing-benefits p {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* The founder profile shares the CoreDoc section's grid and light palette. */
 .founder {
   border-top: 1px solid var(--line);
 }
@@ -529,7 +589,7 @@ code {
 }
 
 .founder-initials {
-  color: var(--lime);
+  color: var(--accent);
   font-size: clamp(3.5rem, 6vw, 5rem);
   font-weight: 750;
   line-height: 1;
@@ -565,7 +625,7 @@ code {
 .founder-quote {
   margin: 1.75rem 0 0;
   padding: 1.25rem;
-  border-left: 3px solid var(--lime);
+  border-left: 3px solid var(--accent);
   background: var(--surface);
   font-size: 1rem;
 }
@@ -598,10 +658,10 @@ code {
 }
 
 .flow-shadow { fill: var(--shadow-ink); }
-.flow-node { fill: var(--surface); stroke: var(--dark); stroke-width: 2; }
-.flow-node-entry { fill: var(--lime); }
+.flow-node { fill: var(--surface); stroke: var(--line); stroke-width: 2; }
+.flow-node-entry { stroke: var(--accent); }
 .flow-step { fill: var(--accent); font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: 0.6px; }
-.flow-icon { fill: none; stroke: var(--dark); stroke-width: 1.8; stroke-linecap: square; stroke-linejoin: miter; }
+.flow-icon { fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: square; stroke-linejoin: miter; }
 .flow-title { fill: var(--ink); font-size: 27px; font-weight: 750; letter-spacing: -0.8px; }
 .flow-copy { fill: var(--muted); font-size: 14px; }
 .flow-arrow { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: square; stroke-linejoin: miter; }
@@ -614,7 +674,7 @@ code {
   padding: 0.75rem 1rem;
   border: 1px solid var(--line);
   border-left: 3px solid var(--accent);
-  background: var(--lime);
+  background: var(--surface);
   color: var(--ink);
   font-size: 0.8125rem;
   line-height: 1.5;
@@ -757,14 +817,14 @@ code {
   gap: 3rem;
   margin-top: 1rem;
   padding: clamp(1.5rem, 4vw, 3.5rem);
-  border: 2px solid var(--dark);
+  border: 2px solid var(--line);
   border-radius: 0;
-  background: #e5efcf;
+  background: var(--surface);
   box-shadow: var(--shadow-panel);
 }
 
 .start-panel .eyebrow, .start-panel p:not(.eyebrow) {
-  color: #475d40;
+  color: var(--muted);
 }
 
 .start-heading h2 {
@@ -784,9 +844,9 @@ code {
 .reading-paths a {
   display: block;
   padding: 1.15rem;
-  border: 1px solid var(--dark);
+  border: 1px solid var(--line);
   border-radius: 0;
-  background: #f7faef;
+  background: var(--dark);
   text-decoration: none;
   transition: border-color 160ms ease, background-color 160ms ease;
   box-shadow: var(--shadow-control);
@@ -807,9 +867,9 @@ code {
 }
 
 .reading-paths a:hover {
-  color: var(--dark);
-  border-color: #628747;
-  background: white;
+  color: var(--ink);
+  border-color: var(--accent);
+  background: var(--surface);
 }
 
 .reading-paths a:hover h3 {
@@ -862,6 +922,10 @@ code {
 }
 
 @media (max-width: 56rem) {
+  .licensing-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .resource-list {
     gap: 0.75rem;
   }
