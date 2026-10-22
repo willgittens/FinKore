@@ -22,7 +22,6 @@
         <nav aria-label="Primary navigation">
           <ul class="nav-list">
             <li><a href="#core-explorer">CoreDoc</a></li>
-            <li><a href="#domains">Domains</a></li>
             <li><a class="nav-start" href="#start">Start reading <span aria-hidden="true">↗</span></a></li>
           </ul>
         </nav>
@@ -246,10 +245,8 @@
       <section class="section" id="how-it-works" aria-labelledby="how-title">
         <div class="container overview-layout">
           <div class="section-heading">
-            <p class="eyebrow">The standard and the foundation</p>
             <h2 id="how-title">Your product may be unique.<br />Your financial rules don't have to be.</h2>
-            <p>Every repository change starts with a CoreDoc review. Confirm the governing principle before deciding what needs to change.</p>
-            <p class="ownership-note">Changes to financial behavior flow from CoreDoc to specifications to conformance cases. Your team owns the implementation and execution of those cases.</p>
+            <p class="section-subtitle">Handling amounts, approving changes, preserving history: the same questions recur across financial products. FinKore makes those rules explicit, so your team can build on a shared reference instead of defining them from scratch.</p>
           </div>
           <figure class="how-flow">
             <svg class="flow-wide" viewBox="0 0 1120 208" role="img" aria-labelledby="flow-wide-title flow-wide-description">
@@ -310,22 +307,22 @@
               </g>
               <path class="flow-arrow" d="M160 205v30m-12-12 12 12 12-12M160 449v30m-12-12 12 12 12-12" />
             </svg>
-            <figcaption>CoreDoc is the entry point. Specifications and acceptance cases follow its financial obligations.</figcaption>
+            <figcaption>
+              <span class="how-note-icon" aria-hidden="true">i</span>
+              <span><strong>CoreDoc is the entry point.</strong> Specifications and acceptance cases follow its financial obligations.</span>
+            </figcaption>
           </figure>
-          <ol class="resource-list">
-            <li>
-              <span class="resource-number" aria-hidden="true">01</span>
-              <div><h3><a href="coredoc.html">Start with the principle <span aria-hidden="true">↗</span></a></h3><p>Review the obligation and its boundaries. If a change affects the foundation, update CoreDoc before refining behavior.</p><span class="resource-kind">CoreDoc · Foundation</span></div>
-            </li>
-            <li>
-              <span class="resource-number" aria-hidden="true">02</span>
-              <div><h3><a href="../spec/README.md">Define the behavior <span aria-hidden="true">↗</span></a></h3><p>Refine the principle into explicit requirements, failures, and invariants. Keep the specification aligned with CoreDoc.</p><span class="resource-kind">Specifications · Contract</span></div>
-            </li>
-            <li>
-              <span class="resource-number" aria-hidden="true">03</span>
-              <div><h3><a href="../conformance/README.md">Make the rule verifiable <span aria-hidden="true">↗</span></a></h3><p>Publish acceptance inputs and expected observations linked to the requirements. Consumers run the cases against their implementations.</p><span class="resource-kind">Conformance · Acceptance cases</span></div>
-            </li>
-          </ol>
+          <div class="start-panel" id="start">
+            <div class="start-heading">
+              <p class="eyebrow">From rule to implementation</p>
+              <h2 id="start-title">Build on it.<br />Instead of building it again.</h2>
+              <p>Bring your product's unique logic. Reuse the financial rules beneath it.</p>
+            </div>
+            <div class="reading-paths">
+              <a href="coredoc.html"><span class="eyebrow">Look it up</span><h3>Read the CoreDoc <span aria-hidden="true">↗</span></h3><p>Understand why money, identity, history, and approvals need explicit rules.</p></a>
+              <a href="../docs/implementation-guide.md"><span class="eyebrow">Build on it</span><h3>Implementation guide <span aria-hidden="true">↗</span></h3><p>Choose a domain, implement its rules, and check the results against the acceptance cases.</p></a>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -366,37 +363,6 @@
       </section>
       <!-- END GENERATED COREDOC INDEX -->
 
-      <section class="section domains" id="domains" aria-labelledby="domains-title">
-        <div class="container domains-layout">
-          <div class="section-heading">
-            <p class="eyebrow">Recurring financial problems</p>
-            <h2 id="domains-title">Five domains.<br />One shared foundation.</h2>
-            <p>Different products face the same questions about amounts, state, decisions, history, and identity. Consult the rule before implementing it.</p>
-            <p class="scope-note">The current Core covers these foundations. Ledger posting, tax, FX sourcing, reconciliation, and settlement remain outside its scope.</p>
-          </div>
-          <ul class="domain-list">
-            <li><a href="../spec/money/README.md"><div><h3>Money</h3><p>How should amounts, currencies, and rounding behave?</p></div><span aria-hidden="true">↗</span></a></li>
-            <li><a href="../spec/workflow/README.md"><div><h3>Workflow</h3><p>Which state changes are allowed, and what happens if one fails?</p></div><span aria-hidden="true">↗</span></a></li>
-            <li><a href="../spec/audit/README.md"><div><h3>Audit</h3><p>What happened, who acted, and how is history preserved?</p></div><span aria-hidden="true">↗</span></a></li>
-            <li><a href="../spec/approvals/README.md"><div><h3>Approvals</h3><p>What was approved, and does that decision still apply?</p></div><span aria-hidden="true">↗</span></a></li>
-            <li><a href="../spec/entities/README.md"><div><h3>Financial Entities</h3><p>How does a record keep its identity as it changes?</p></div><span aria-hidden="true">↗</span></a></li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="start-section" id="start" aria-labelledby="start-title">
-        <div class="container start-panel">
-          <div class="start-heading">
-            <p class="eyebrow">From rule to implementation</p>
-            <h2 id="start-title">Build on it.<br />Instead of building it again.</h2>
-            <p>Bring your product's unique logic. Reuse the financial rules beneath it.</p>
-          </div>
-          <div class="reading-paths">
-            <a href="coredoc.html"><span class="eyebrow">Look it up</span><h3>Read the CoreDoc <span aria-hidden="true">↗</span></h3><p>Understand why money, identity, history, and approvals need explicit rules.</p></a>
-            <a href="../docs/implementation-guide.md"><span class="eyebrow">Build on it</span><h3>Implementation guide <span aria-hidden="true">↗</span></h3><p>Choose a domain, implement its rules, and check the results against the acceptance cases.</p></a>
-          </div>
-        </div>
-      </section>
     </main>
 
     <footer class="site-footer">

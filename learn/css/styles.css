@@ -849,10 +849,32 @@ code {
 .flow-arrow { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: square; stroke-linejoin: miter; }
 
 .how-flow figcaption {
-  margin-top: 0.75rem;
-  color: var(--muted);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  background: var(--lime);
+  color: var(--ink);
   font-size: 0.8125rem;
-  text-align: center;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.how-note-icon {
+  display: grid;
+  flex: 0 0 1.125rem;
+  place-items: center;
+  height: 1.125rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .how-flow + .resource-list { margin-top: 2rem; }
@@ -869,20 +891,10 @@ code {
   padding-block: clamp(3.5rem, 7vw, 6rem);
 }
 
-.overview-layout .section-heading {
-  display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: 0 4rem;
-  align-items: start;
-}
-
-.overview-layout .section-heading > .eyebrow {
-  grid-column: 1 / -1;
-}
-
 .overview-layout .section-heading h2 {
-  grid-row: 2 / 4;
-  max-width: 20ch;
+  width: 100%;
+  max-width: none;
+  margin-top: 0;
 }
 
 .section-heading h2 {
@@ -896,13 +908,13 @@ code {
   font-size: 0.9375rem;
 }
 
-.section-heading .ownership-note {
-  padding-left: 1.15rem;
-  border-left: 3px solid #9cba8a;
-  font-size: 0.8125rem;
+.overview-layout .section-heading > .section-subtitle {
+  width: 100%;
+  max-width: none;
+  font-size: 1.125rem;
 }
 
-.resource-list, .domain-list {
+.resource-list {
   padding: 0;
   list-style: none;
 }
@@ -979,93 +991,13 @@ code {
   color: var(--muted);
 }
 
-/* Dark domain rows provide a clear visual break without expanding the content. */
-
-.domains {
-  --muted: #bdcfc2;
-  --accent: #d4ee94;
-  background: var(--dark);
-  color: #f5f8ef;
-}
-
-.domains-layout {
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: clamp(3rem, 7vw, 7rem);
-}
-
-.domains .eyebrow {
-  color: var(--lime);
-}
-
-.domains :focus-visible {
-  outline-color: var(--lime);
-}
-
-.section-heading .scope-note {
-  margin-top: 2.5rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid #ffffff26;
-  font-size: 0.75rem;
-}
-
-.domain-list {
-  display: grid;
-  gap: 0.65rem;
-  counter-reset: domain;
-}
-
-.domain-list li {
-  counter-increment: domain;
-}
-
-.domain-list a {
-  display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.25rem;
-  border: 1px solid #365348;
-  border-radius: 0;
-  background: #1d3830;
-  text-decoration: none;
-  transition: background-color 160ms ease, border-color 160ms ease;
-  box-shadow: var(--shadow-control);
-}
-
-.domain-list a::before {
-  content: "0" counter(domain);
-  color: #a0bb9f;
-  font-family: var(--mono);
-  font-size: 0.75rem;
-}
-
-.domain-list a:hover {
-  background: #28473b;
-  border-color: #92b273;
-}
-
-.domain-list p {
-  margin-top: 0.4rem;
-  color: var(--muted);
-  font-size: 0.8125rem;
-}
-
-.domain-list a > span {
-  color: var(--lime);
-  font-size: 1.15rem;
-}
-
-/* Closing paths stay practical and visually distinct from the dark domains. */
-
-.start-section {
-  padding-block: clamp(3rem, 6vw, 5rem);
-}
+/* Reading paths follow the diagram within the overview section. */
 
 .start-panel {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
+  margin-top: 1rem;
   padding: clamp(1.5rem, 4vw, 3.5rem);
   border: 2px solid var(--dark);
   border-radius: 0;
@@ -1164,10 +1096,6 @@ code {
     gap: 2rem;
   }
 
-  .overview-layout .section-heading, .domains-layout {
-    gap: 0 2.5rem;
-  }
-
   .resource-list {
     gap: 0.75rem;
   }
@@ -1193,7 +1121,7 @@ code {
     padding: 1rem;
   }
 
-  .hero-layout, .overview-layout .section-heading, .resource-list, .domains-layout, .start-panel {
+  .hero-layout, .resource-list, .start-panel {
     grid-template-columns: minmax(0, 1fr);
     gap: 2.5rem;
   }
@@ -1225,14 +1153,6 @@ code {
     border-radius: 0;
   }
 
-  .overview-layout .section-heading {
-    gap: 0;
-  }
-
-  .overview-layout .section-heading h2 {
-    grid-row: auto;
-  }
-
   .resource-list {
     gap: 1rem;
     margin-top: 2rem;
@@ -1243,10 +1163,6 @@ code {
     grid-template-columns: 2.65rem minmax(0, 1fr);
     gap: 1rem;
     padding: 1.25rem;
-  }
-
-  .section-heading .scope-note {
-    margin-top: 1.25rem;
   }
 
   .footer-layout nav {
@@ -1290,15 +1206,6 @@ code {
     left: 0.75rem;
   }
 
-  .domain-list a {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.75rem;
-    padding: 1rem;
-  }
-
-  .domain-list a::before {
-    display: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
