@@ -168,7 +168,7 @@ export function renderHomeIndex(doc) {
             <h2 id="core-explorer-title">Know the principle.<br />Explore the rule.</h2>
             <p>Start with the question in front of you. Open a principle, choose a rule, and read its reasoning here on the site.</p>
             <p class="core-index-count">${doc.principles.length} principles <span aria-hidden="true">·</span> ${doc.rules.length} foundational rules</p>
-            <p class="core-index-note">These are the CoreDoc foundations. The domain specifications refine them into the requirements illustrated above.</p>
+            <p class="core-index-note">These are the CoreDoc foundations. The domain specifications refine them into precise requirements.</p>
             <a class="text-link" href="coredoc.html">Read the complete CoreDoc <span aria-hidden="true">↗</span></a>
           </div>
           <div class="core-index-list">

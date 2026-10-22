@@ -69,28 +69,14 @@ function htmlAttributes(text, names) {
 }
 
 function checkHtml(root, path, text, errors) {
-  // Only the declared carousel and mobile CoreDoc disclosure scripts are allowed.
+  // Only the declared mobile CoreDoc disclosure script is allowed.
   // Keep inline/other scripts and unrelated controls outside this profile.
   const markup = text.replace(/<!--[\s\S]*?-->/g, '')
-  const carouselScript = '<script src="js/examples.js" defer></script>'
   const scripts = [...markup.matchAll(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi)]
-  const carouselEnabled = path === 'learn/index.html' && scripts.length === 1 &&
-    scripts[0][0] === carouselScript && htmlAttributes(markup, new Set(['id'])).includes('example-slides')
   const readerScript = '<script src="js/coredoc.js" defer></script>'
   const readerEnabled = path === 'learn/coredoc.html' && scripts.length === 1 &&
     scripts[0][0] === readerScript && htmlAttributes(markup, new Set(['id'])).includes('core-mobile-index')
-  let unsupported = readerEnabled ? markup.replace(readerScript, '') : markup
-  if (carouselEnabled) {
-    unsupported = unsupported.replace(carouselScript, '').replace(/<button\b[^>]*>/gi, (tag) => {
-      const types = htmlAttributes(tag, new Set(['type']))
-      const actions = htmlAttributes(tag, new Set(['data-carousel-action']))
-      const targets = htmlAttributes(tag, new Set(['aria-controls']))
-      const allowed = types.length === 1 && types[0] === 'button' &&
-        actions.length === 1 && ['previous', 'next', 'toggle'].includes(actions[0]) &&
-        targets.length === 1 && targets[0] === 'example-slides'
-      return allowed ? '' : tag
-    })
-  }
+  const unsupported = readerEnabled ? markup.replace(readerScript, '') : markup
   if (/<(?:script|form|input|button|select|textarea)\b/i.test(unsupported) || /\son\w+\s*=/i.test(markup)) {
     errors.push(`${path}: interactive HTML is outside the supported Learn profile`)
   }

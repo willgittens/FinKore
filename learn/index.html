@@ -9,7 +9,6 @@
     <meta name="description" content="A foundation for financial software. Define once. Build many times. Make recurring financial behavior explicit, testable, and reusable." />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/coredoc.css" />
-    <script src="js/examples.js" defer></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -41,192 +40,9 @@
                 <a class="button" href="#core-explorer">Look up the rules <span aria-hidden="true">↗</span></a>
                 <a class="text-link" href="#how-it-works">See the foundation <span aria-hidden="true">↓</span></a>
               </div>
+              <a class="hero-status" href="../spec/README.md#status"><span class="status-dot" aria-hidden="true"></span>FinKore Core 2.0.2 stable</a>
             </div>
 
-            <!-- Rule total: 447 normative requirements in FinKore Core 2.0.2; keep aligned with conformance/traceability.md. -->
-            <div class="example examples" id="examples" role="region" aria-roledescription="carousel" aria-label="Financial behavior examples">
-              <div class="example-stage" id="example-slides">
-                <article class="example-card" role="group" aria-roledescription="slide" aria-label="1 of 6: Currency compatibility">
-                  <div class="example-caption"><span class="eyebrow">Examples from 447 rules</span><span class="example-domain">Money</span></div>
-                  <h2>Is adding money just adding numbers?</h2>
-                  <div class="amounts" role="img" aria-label="10.00 EUR plus 5.00 USD">
-                    <div class="amount" aria-hidden="true"><span>10.00</span><span class="currency">EUR</span></div>
-                    <span class="operator" aria-hidden="true">+</span>
-                    <div class="amount" aria-hidden="true"><span>5.00</span><span class="currency currency-other">USD</span></div>
-                  </div>
-                  <div class="example-result">
-                    <span class="result-mark" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="m9 9 6 6m0-6-6 6" /></svg></span>
-                    <div><p class="result-title">Addition rejected. Currencies differ.</p><p>Both original amounts stay unchanged.</p></div>
-                  </div>
-                  <p class="example-explanation">Adding money requires compatible currencies. A rejected addition must preserve both original amounts.</p>
-                  <!-- Illustration of published case money.add.currency-mismatch-001; no operation is executed here. -->
-                  <div class="example-details" role="group" aria-label="Explore this rule">
-                    <a class="example-resource example-resource-link" href="coredoc.html#core-001-3">
-                      <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 14h8m-8 3h5" /></svg></span><span>CoreDoc</span></div>
-                      <p>Monetary integrity</p>
-                      <span class="example-resource-action">Read the rule <span aria-hidden="true">↗</span></span>
-                    </a>
-                    <div class="example-resource example-resource-upcoming">
-                      <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v15M3 4h5a4 4 0 0 1 4 2 4 4 0 0 1 4-2h5v15h-5a4 4 0 0 0-4 2 4 4 0 0 0-4-2H3Z" /></svg></span><span>Article</span></div>
-                      <p>Why currencies cannot be mixed</p>
-                      <span class="example-resource-status">Coming soon</span>
-                    </div>
-                  </div>
-                </article>
-                <article class="example-card" role="group" aria-roledescription="slide" aria-label="2 of 6: Explicit rounding" hidden inert>
-                  <div class="example-caption"><span class="eyebrow">Examples from 447 rules</span><span class="example-domain">Rounding</span></div>
-                  <h2>Which rounding rule applies?</h2>
-                  <div class="amounts" role="img" aria-label="10.005 EUR rounds to 10.00 EUR using HALF_EVEN at scale 2">
-                    <div class="amount" aria-hidden="true"><span>10.005</span><span class="currency">EUR</span></div>
-                    <span class="operator" aria-hidden="true">→</span>
-                    <div class="amount" aria-hidden="true"><span>10.00</span><span class="currency">EUR</span></div>
-                  </div>
-                  <div class="example-result example-result-success">
-                    <span class="result-mark" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="m7.5 12 3 3 6-6" /></svg></span>
-                    <div><p class="result-title">Rounding applied. HALF_EVEN, scale 2.</p><p>The original 10.005 EUR stays unchanged.</p></div>
-                  </div>
-                  <p class="example-explanation">At a tie, HALF_EVEN selects the nearest value whose last retained digit is even.</p>
-                  <!-- Illustration of published case money.round.half-even.tie-even-down-001; no operation is executed here. -->
-                  <div class="example-details" role="group" aria-label="Explore this rule">
-                    <a class="example-resource example-resource-link" href="coredoc.html#core-001-2">
-                      <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 14h8m-8 3h5" /></svg></span><span>CoreDoc</span></div>
-                      <p>Monetary integrity</p>
-                      <span class="example-resource-action">Read the rule <span aria-hidden="true">↗</span></span>
-                    </a>
-                    <div class="example-resource example-resource-upcoming">
-                      <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v15M3 4h5a4 4 0 0 1 4 2 4 4 0 0 1 4-2h5v15h-5a4 4 0 0 0-4 2 4 4 0 0 0-4-2H3Z" /></svg></span><span>Article</span></div>
-                      <p>Why rounding needs an explicit rule</p>
-                      <span class="example-resource-status">Coming soon</span>
-                    </div>
-                  </div>
-                </article>
-                <article class="example-card" role="group" aria-roledescription="slide" aria-label="3 of 6: Workflow transitions" hidden inert>
-                  <div class="example-caption"><span class="eyebrow">Examples from 447 rules</span><span class="example-domain">Workflow</span></div>
-                  <h2>Can a record skip a required step?</h2>
-                  <div class="amounts workflow-example" role="img" aria-label="An undeclared direct transition from DRAFT to APPROVED is requested">
-                    <div class="amount" aria-hidden="true"><span>DRAFT</span><span class="currency">Current state</span></div>
-                    <span class="operator" aria-hidden="true">→</span>
-                    <div class="amount" aria-hidden="true"><span>APPROVED</span><span class="currency currency-other">Requested</span></div>
-                  </div>
-                  <div class="example-result">
-                    <span class="result-mark" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3" /></svg></span>
-                    <div><p class="result-title">Transition blocked. No direct path.</p><p>The record remains in DRAFT.</p></div>
-                  </div>
-                  <p class="example-explanation">This workflow requires DRAFT → SUBMITTED first. It declares no direct path to APPROVED.</p>
-                  <!-- Illustration of published case workflow.transition.undeclared-001; no operation is executed here. -->
-                  <div class="example-details" role="group" aria-label="Explore this rule">
-                    <a class="example-resource example-resource-link" href="coredoc.html#core-002-1">
-                      <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 14h8m-8 3h5" /></svg></span><span>CoreDoc</span></div>
-                      <p>Controlled financial state</p>
-                      <span class="example-resource-action">Read the rule <span aria-hidden="true">↗</span></span>
-                    </a>
-                    <div class="example-resource example-resource-upcoming">
-                      <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v15M3 4h5a4 4 0 0 1 4 2 4 4 0 0 1 4-2h5v15h-5a4 4 0 0 0-4 2 4 4 0 0 0-4-2H3Z" /></svg></span><span>Article</span></div>
-                      <p>Why a workflow cannot skip a step</p>
-                      <span class="example-resource-status">Coming soon</span>
-                    </div>
-                  </div>
-                </article>
-                <article class="example-card" role="group" aria-roledescription="slide" aria-label="4 of 6: Approval after a revision change" hidden inert>
-                  <div class="example-caption"><span class="eyebrow">Examples from 447 rules</span><span class="example-domain">Approvals</span></div>
-                  <h2>Does an old approval still apply?</h2>
-                  <div class="amounts workflow-example" role="img" aria-label="Revision 3 was approved; revision 4 is now being evaluated">
-                    <div class="amount" aria-hidden="true"><span>REV 3</span><span class="currency">Approved</span></div>
-                    <span class="operator" aria-hidden="true">→</span>
-                    <div class="amount" aria-hidden="true"><span>REV 4</span><span class="currency currency-other">Current</span></div>
-                  </div>
-                  <div class="example-result">
-                    <span class="result-mark" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg></span>
-                    <div><p class="result-title">Approval pending. Revision changed.</p><p>The earlier decision stays in history.</p></div>
-                  </div>
-                  <p class="example-explanation">Revision is a declared relevant fact here. Approval of revision 3 does not cover revision 4.</p>
-                  <!-- Illustration of published case approval.validity.stale-revision-not-effective-001; no operation is executed here. -->
-                  <div class="example-details" role="group" aria-label="Explore this rule">
-                    <a class="example-resource example-resource-link" href="coredoc.html#core-004-3">
-                      <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 14h8m-8 3h5" /></svg></span><span>CoreDoc</span></div>
-                      <p>Approval integrity</p>
-                      <span class="example-resource-action">Read the rule <span aria-hidden="true">↗</span></span>
-                    </a>
-                    <div class="example-resource example-resource-upcoming">
-                      <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v15M3 4h5a4 4 0 0 1 4 2 4 4 0 0 1 4-2h5v15h-5a4 4 0 0 0-4 2 4 4 0 0 0-4-2H3Z" /></svg></span><span>Article</span></div>
-                      <p>Why approval stays tied to its facts</p>
-                      <span class="example-resource-status">Coming soon</span>
-                    </div>
-                  </div>
-                </article>
-                <article class="example-card" role="group" aria-roledescription="slide" aria-label="5 of 6: Duplicate audit event" hidden inert>
-                  <div class="example-caption"><span class="eyebrow">Examples from 447 rules</span><span class="example-domain">Audit</span></div>
-                  <h2>Can the same event be recorded twice?</h2>
-                  <div class="amounts workflow-example" role="img" aria-label="Event evt-1042 is already recorded and is submitted again">
-                    <div class="amount" aria-hidden="true"><span>evt-1042</span><span class="currency">Recorded</span></div>
-                    <span class="operator" aria-hidden="true">+</span>
-                    <div class="amount" aria-hidden="true"><span>evt-1042</span><span class="currency currency-other">Submitted</span></div>
-                  </div>
-                  <div class="example-result">
-                    <span class="result-mark" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" /><path d="m9 9 6 6m0-6-6 6" /></svg></span>
-                    <div><p class="result-title">Duplicate rejected. History preserved.</p><p>The original event remains unchanged.</p></div>
-                  </div>
-                  <p class="example-explanation">An event identity can be committed only once. Resubmitting it cannot overwrite the original.</p>
-                  <!-- Illustration of published case audit.event.duplicate-identity-001; no operation is executed here. -->
-                  <div class="example-details" role="group" aria-label="Explore this rule">
-                    <a class="example-resource example-resource-link" href="coredoc.html#core-003-2">
-                      <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 14h8m-8 3h5" /></svg></span><span>CoreDoc</span></div>
-                      <p>Financial history and evolution</p>
-                      <span class="example-resource-action">Read the rule <span aria-hidden="true">↗</span></span>
-                    </a>
-                    <div class="example-resource example-resource-upcoming">
-                      <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v15M3 4h5a4 4 0 0 1 4 2 4 4 0 0 1 4-2h5v15h-5a4 4 0 0 0-4 2 4 4 0 0 0-4-2H3Z" /></svg></span><span>Article</span></div>
-                      <p>Why history cannot be overwritten</p>
-                      <span class="example-resource-status">Coming soon</span>
-                    </div>
-                  </div>
-                </article>
-                <article class="example-card" role="group" aria-roledescription="slide" aria-label="6 of 6: Stable identity through a state change" hidden inert>
-                  <div class="example-caption"><span class="eyebrow">Examples from 447 rules</span><span class="example-domain">Entities</span></div>
-                  <h2>New state. Does the identity change?</h2>
-                  <div class="amounts workflow-example" role="img" aria-label="Invoice inv-42 moves from DRAFT to FINAL and keeps the same identity">
-                    <div class="amount" aria-hidden="true"><span>inv-42</span><span class="currency">DRAFT</span></div>
-                    <span class="operator" aria-hidden="true">→</span>
-                    <div class="amount" aria-hidden="true"><span>inv-42</span><span class="currency">FINAL</span></div>
-                  </div>
-                  <div class="example-result example-result-success">
-                    <span class="result-mark" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6Z" /><path d="m8.5 12 2.5 2.5 4.5-5" /></svg></span>
-                    <div><p class="result-title">State updated. Identity preserved.</p><p>Invoice inv-42 remains the same entity.</p></div>
-                  </div>
-                  <p class="example-explanation">This workflow permits DRAFT → FINAL. The state changes; the identity and data stay intact.</p>
-                  <!-- Illustration of published case entity.transition.success-identity-stable-001; no operation is executed here. -->
-                  <div class="example-details" role="group" aria-label="Explore this rule">
-                    <a class="example-resource example-resource-link" href="coredoc.html#core-005-1">
-                      <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 14h8m-8 3h5" /></svg></span><span>CoreDoc</span></div>
-                      <p>Stable financial identity</p>
-                      <span class="example-resource-action">Read the rule <span aria-hidden="true">↗</span></span>
-                    </a>
-                    <div class="example-resource example-resource-upcoming">
-                      <div class="example-resource-heading"><span class="example-resource-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v15M3 4h5a4 4 0 0 1 4 2 4 4 0 0 1 4-2h5v15h-5a4 4 0 0 0-4 2 4 4 0 0 0-4-2H3Z" /></svg></span><span>Article</span></div>
-                      <p>Why identity survives a state change</p>
-                      <span class="example-resource-status">Coming soon</span>
-                    </div>
-                  </div>
-                </article>
-              </div>
-              <div class="example-controls" hidden>
-                <button type="button" data-carousel-action="toggle" aria-controls="example-slides" aria-label="Pause automatic examples">Pause</button>
-                <span class="example-count" aria-hidden="true">01 / 06</span>
-                <div class="example-navigation">
-                  <button type="button" data-carousel-action="previous" aria-controls="example-slides" aria-label="Previous example">←</button>
-                  <button type="button" data-carousel-action="next" aria-controls="example-slides" aria-label="Next example">→</button>
-                </div>
-              </div>
-              <p class="visually-hidden" data-carousel-status aria-live="polite" aria-atomic="true"></p>
-            </div>
-          </div>
-          <div class="hero-note">
-            <header class="video-intro">
-              <p class="eyebrow">The idea behind FinKore</p>
-              <h2>Why rebuild the same foundations?</h2>
-              <p>Build, discover edge cases, fix, document, then rebuild elsewhere. FinKore exists to reduce that repetition.</p>
-              <a href="../spec/README.md#status"><span class="status-dot" aria-hidden="true"></span>FinKore Core 2.0.2 stable</a>
-            </header>
             <figure class="video-preview">
               <div class="video-frame">
                 <!-- Replace .video-placeholder with the real video embed, using a descriptive title and lazy loading. -->
@@ -236,11 +52,55 @@
                   <p class="video-tagline" aria-hidden="true">Financial behavior,<br /><em>made explicit.</em></p>
                 </div>
               </div>
-              <figcaption>Introduction video <span aria-hidden="true">·</span> Coming soon</figcaption>
+              <figcaption class="video-intro">
+                <div class="video-caption-heading">
+                  <span class="eyebrow">Introduction video</span>
+                  <span class="video-status">Coming soon</span>
+                </div>
+                <h2>Why rebuild the same foundations?</h2>
+                <p>Build, discover edge cases, fix, document, then rebuild elsewhere. FinKore exists to reduce that repetition.</p>
+              </figcaption>
             </figure>
           </div>
         </div>
       </section>
+
+      <!-- BEGIN GENERATED COREDOC INDEX -->
+      <section class="section core-explorer" id="core-explorer" aria-labelledby="core-explorer-title">
+        <div class="container core-explorer-layout">
+          <div class="section-heading">
+            <p class="eyebrow">Explore the CoreDoc</p>
+            <h2 id="core-explorer-title">Know the principle.<br />Explore the rule.</h2>
+            <p>Start with the question in front of you. Open a principle, choose a rule, and read its reasoning here on the site.</p>
+            <p class="core-index-count">5 principles <span aria-hidden="true">·</span> 19 foundational rules</p>
+            <p class="core-index-note">These are the CoreDoc foundations. The domain specifications refine them into precise requirements.</p>
+            <a class="text-link" href="coredoc.html">Read the complete CoreDoc <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="core-index-list">
+            <details class="core-index-item">
+              <summary><span class="core-index-number">CORE-001</span><span class="core-index-title">Monetary Integrity<span class="core-index-question">How do amounts retain their value and currency through calculation?</span></span><span class="core-index-toggle" aria-hidden="true">+</span></summary>
+              <div class="core-index-body"><a class="core-principle-link" href="coredoc.html#monetary-integrity">Read the principle <span aria-hidden="true">↗</span></a><ol><li><a href="coredoc.html#core-001-1"><span>CORE-001.1</span>Amount and currency are inseparable<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-001-2"><span>CORE-001.2</span>Exact calculation and explicit rounding<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-001-3"><span>CORE-001.3</span>Incompatible currencies are not combined or compared<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-001-4"><span>CORE-001.4</span>Allocation conserves the source value<span aria-hidden="true">→</span></a></li></ol></div>
+            </details>
+            <details class="core-index-item">
+              <summary><span class="core-index-number">CORE-002</span><span class="core-index-title">Controlled Financial State<span class="core-index-question">Which changes are permitted, and what happens when a change is rejected?</span></span><span class="core-index-toggle" aria-hidden="true">+</span></summary>
+              <div class="core-index-body"><a class="core-principle-link" href="coredoc.html#controlled-financial-state">Read the principle <span aria-hidden="true">↗</span></a><ol><li><a href="coredoc.html#core-002-1"><span>CORE-002.1</span>Lifecycle changes require a declared valid transition<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-002-2"><span>CORE-002.2</span>Validation is complete, fact-based, and non-mutating<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-002-3"><span>CORE-002.3</span>Rejected actions have no partial financial effect<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-002-4"><span>CORE-002.4</span>Mutability is declared by state and field<span aria-hidden="true">→</span></a></li></ol></div>
+            </details>
+            <details class="core-index-item">
+              <summary><span class="core-index-number">CORE-003</span><span class="core-index-title">Financial History and Evolution<span class="core-index-question">How are original facts preserved when later actions change their effect?</span></span><span class="core-index-toggle" aria-hidden="true">+</span></summary>
+              <div class="core-index-body"><a class="core-principle-link" href="coredoc.html#financial-history-and-evolution">Read the principle <span aria-hidden="true">↗</span></a><ol><li><a href="coredoc.html#core-003-1"><span>CORE-003.1</span>A committed event preserves essential evidence<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-003-2"><span>CORE-003.2</span>Committed history is not destructively rewritten<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-003-3"><span>CORE-003.3</span>Corrections and related evolution preserve original facts<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-003-4"><span>CORE-003.4</span>Redaction preserves evidence of history<span aria-hidden="true">→</span></a></li></ol></div>
+            </details>
+            <details class="core-index-item">
+              <summary><span class="core-index-number">CORE-004</span><span class="core-index-title">Approval Integrity<span class="core-index-question">What was approved, by whom, and does that approval still apply?</span></span><span class="core-index-toggle" aria-hidden="true">+</span></summary>
+              <div class="core-index-body"><a class="core-principle-link" href="coredoc.html#approval-integrity">Read the principle <span aria-hidden="true">↗</span></a><ol><li><a href="coredoc.html#core-004-1"><span>CORE-004.1</span>Approval requirements state subject, eligibility, and outcome<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-004-2"><span>CORE-004.2</span>Missing facts do not create an approval exemption<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-004-3"><span>CORE-004.3</span>Decisions remain tied to their facts and history<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-004-4"><span>CORE-004.4</span>Chain status follows declared requirements and decisions<span aria-hidden="true">→</span></a></li></ol></div>
+            </details>
+            <details class="core-index-item">
+              <summary><span class="core-index-number">CORE-005</span><span class="core-index-title">Identifiable and Determinable Financial Meaning<span class="core-index-question">Can a reviewer identify the subject, distinguish conditions, and reproduce the outcome?</span></span><span class="core-index-toggle" aria-hidden="true">+</span></summary>
+              <div class="core-index-body"><a class="core-principle-link" href="coredoc.html#identifiable-and-determinable-financial-meaning">Read the principle <span aria-hidden="true">↗</span></a><ol><li><a href="coredoc.html#core-005-1"><span>CORE-005.1</span>Continuing financial subjects retain stable identity<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-005-2"><span>CORE-005.2</span>Materially distinct conditions remain distinguishable<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-005-3"><span>CORE-005.3</span>Evaluation follows declared facts and context<span aria-hidden="true">→</span></a></li></ol></div>
+            </details>
+          </div>
+        </div>
+      </section>
+      <!-- END GENERATED COREDOC INDEX -->
 
       <section class="section" id="how-it-works" aria-labelledby="how-title">
         <div class="container overview-layout">
@@ -325,43 +185,6 @@
           </div>
         </div>
       </section>
-
-      <!-- BEGIN GENERATED COREDOC INDEX -->
-      <section class="section core-explorer" id="core-explorer" aria-labelledby="core-explorer-title">
-        <div class="container core-explorer-layout">
-          <div class="section-heading">
-            <p class="eyebrow">Explore the CoreDoc</p>
-            <h2 id="core-explorer-title">Know the principle.<br />Explore the rule.</h2>
-            <p>Start with the question in front of you. Open a principle, choose a rule, and read its reasoning here on the site.</p>
-            <p class="core-index-count">5 principles <span aria-hidden="true">·</span> 19 foundational rules</p>
-            <p class="core-index-note">These are the CoreDoc foundations. The domain specifications refine them into the requirements illustrated above.</p>
-            <a class="text-link" href="coredoc.html">Read the complete CoreDoc <span aria-hidden="true">↗</span></a>
-          </div>
-          <div class="core-index-list">
-            <details class="core-index-item">
-              <summary><span class="core-index-number">CORE-001</span><span class="core-index-title">Monetary Integrity<span class="core-index-question">How do amounts retain their value and currency through calculation?</span></span><span class="core-index-toggle" aria-hidden="true">+</span></summary>
-              <div class="core-index-body"><a class="core-principle-link" href="coredoc.html#monetary-integrity">Read the principle <span aria-hidden="true">↗</span></a><ol><li><a href="coredoc.html#core-001-1"><span>CORE-001.1</span>Amount and currency are inseparable<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-001-2"><span>CORE-001.2</span>Exact calculation and explicit rounding<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-001-3"><span>CORE-001.3</span>Incompatible currencies are not combined or compared<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-001-4"><span>CORE-001.4</span>Allocation conserves the source value<span aria-hidden="true">→</span></a></li></ol></div>
-            </details>
-            <details class="core-index-item">
-              <summary><span class="core-index-number">CORE-002</span><span class="core-index-title">Controlled Financial State<span class="core-index-question">Which changes are permitted, and what happens when a change is rejected?</span></span><span class="core-index-toggle" aria-hidden="true">+</span></summary>
-              <div class="core-index-body"><a class="core-principle-link" href="coredoc.html#controlled-financial-state">Read the principle <span aria-hidden="true">↗</span></a><ol><li><a href="coredoc.html#core-002-1"><span>CORE-002.1</span>Lifecycle changes require a declared valid transition<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-002-2"><span>CORE-002.2</span>Validation is complete, fact-based, and non-mutating<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-002-3"><span>CORE-002.3</span>Rejected actions have no partial financial effect<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-002-4"><span>CORE-002.4</span>Mutability is declared by state and field<span aria-hidden="true">→</span></a></li></ol></div>
-            </details>
-            <details class="core-index-item">
-              <summary><span class="core-index-number">CORE-003</span><span class="core-index-title">Financial History and Evolution<span class="core-index-question">How are original facts preserved when later actions change their effect?</span></span><span class="core-index-toggle" aria-hidden="true">+</span></summary>
-              <div class="core-index-body"><a class="core-principle-link" href="coredoc.html#financial-history-and-evolution">Read the principle <span aria-hidden="true">↗</span></a><ol><li><a href="coredoc.html#core-003-1"><span>CORE-003.1</span>A committed event preserves essential evidence<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-003-2"><span>CORE-003.2</span>Committed history is not destructively rewritten<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-003-3"><span>CORE-003.3</span>Corrections and related evolution preserve original facts<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-003-4"><span>CORE-003.4</span>Redaction preserves evidence of history<span aria-hidden="true">→</span></a></li></ol></div>
-            </details>
-            <details class="core-index-item">
-              <summary><span class="core-index-number">CORE-004</span><span class="core-index-title">Approval Integrity<span class="core-index-question">What was approved, by whom, and does that approval still apply?</span></span><span class="core-index-toggle" aria-hidden="true">+</span></summary>
-              <div class="core-index-body"><a class="core-principle-link" href="coredoc.html#approval-integrity">Read the principle <span aria-hidden="true">↗</span></a><ol><li><a href="coredoc.html#core-004-1"><span>CORE-004.1</span>Approval requirements state subject, eligibility, and outcome<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-004-2"><span>CORE-004.2</span>Missing facts do not create an approval exemption<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-004-3"><span>CORE-004.3</span>Decisions remain tied to their facts and history<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-004-4"><span>CORE-004.4</span>Chain status follows declared requirements and decisions<span aria-hidden="true">→</span></a></li></ol></div>
-            </details>
-            <details class="core-index-item">
-              <summary><span class="core-index-number">CORE-005</span><span class="core-index-title">Identifiable and Determinable Financial Meaning<span class="core-index-question">Can a reviewer identify the subject, distinguish conditions, and reproduce the outcome?</span></span><span class="core-index-toggle" aria-hidden="true">+</span></summary>
-              <div class="core-index-body"><a class="core-principle-link" href="coredoc.html#identifiable-and-determinable-financial-meaning">Read the principle <span aria-hidden="true">↗</span></a><ol><li><a href="coredoc.html#core-005-1"><span>CORE-005.1</span>Continuing financial subjects retain stable identity<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-005-2"><span>CORE-005.2</span>Materially distinct conditions remain distinguishable<span aria-hidden="true">→</span></a></li><li><a href="coredoc.html#core-005-3"><span>CORE-005.3</span>Evaluation follows declared facts and context<span aria-hidden="true">→</span></a></li></ol></div>
-            </details>
-          </div>
-        </div>
-      </section>
-      <!-- END GENERATED COREDOC INDEX -->
 
     </main>
 
