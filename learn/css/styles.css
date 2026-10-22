@@ -494,6 +494,93 @@ code {
   font-size: 0.8125rem;
 }
 
+/* The founder profile shares the CoreDoc section's grid and dark palette. */
+.founder {
+  border-top: 1px solid var(--line);
+}
+
+.founder-profile, .founder-content {
+  min-width: 0;
+}
+
+.founder-portrait {
+  width: min(100%, 20rem);
+  margin-top: 2rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.founder-portrait-placeholder, .founder-portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.founder-portrait-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.founder-initials {
+  color: var(--lime);
+  font-size: clamp(3.5rem, 6vw, 5rem);
+  font-weight: 750;
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.founder-portrait-label {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+}
+
+.founder-identity h3 {
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+}
+
+.founder-identity p {
+  margin-top: 0.5rem;
+  color: var(--accent);
+  font-size: 0.875rem;
+}
+
+.founder-bio {
+  margin-top: 1.5rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.founder-bio p + p {
+  margin-top: 1rem;
+}
+
+.founder-quote {
+  margin: 1.75rem 0 0;
+  padding: 1.25rem;
+  border-left: 3px solid var(--lime);
+  background: var(--surface);
+  font-size: 1rem;
+}
+
+.founder-link {
+  max-width: 100%;
+  margin-top: 1.5rem;
+}
+
+.founder-link svg {
+  flex: 0 0 1.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
 /* The governing document comes first; the diagram follows the same order on mobile. */
 .how-flow {
   margin-top: 3rem;
@@ -816,6 +903,10 @@ code {
 
   .hero-description, .section-heading > p:not(.eyebrow) {
     max-width: 48ch;
+  }
+
+  .founder-portrait {
+    width: min(100%, 16rem);
   }
 
   .resource-list {

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 /**
- * Checks a proposed stable release tree for publication content and local HTML links.
+ * Checks a proposed stable release tree for publication content and HTML link boundaries.
  *
  * This developer tool reads files without changing them or using the network.
  * It does not define or execute financial behavior or establish conformance.
@@ -68,6 +68,18 @@ function htmlAttributes(text, names) {
   return attributes
 }
 
+function isFounderProfileLink(path, tag, href) {
+  if (path !== 'learn/index.html' || !/^<a\b/i.test(tag) ||
+      href !== 'https://www.linkedin.com/in/will-gittens/') return false
+  const targets = htmlAttributes(tag, new Set(['target']))
+  const relationships = htmlAttributes(tag, new Set(['rel']))
+  const tokens = relationships.length === 1 ? relationships[0].split(/\s+/) : []
+  return htmlAttributes(tag, new Set(['href'])).length === 1 &&
+    htmlAttributes(tag, new Set(['src'])).length === 0 &&
+    targets.length === 1 && targets[0] === '_blank' &&
+    tokens.includes('noopener') && tokens.includes('noreferrer')
+}
+
 function checkHtml(root, path, text, errors) {
   // Only the declared mobile CoreDoc disclosure script is allowed.
   // Keep inline/other scripts and unrelated controls outside this profile.
@@ -86,8 +98,11 @@ function checkHtml(root, path, text, errors) {
   const ids = htmlAttributes(text, new Set(['id']))
   if (new Set(ids).size !== ids.length) errors.push(`${path}: duplicate HTML anchor`)
   let count = 0
-  for (const href of htmlAttributes(text, new Set(['href', 'src']))) {
+  const links = [...markup.matchAll(/<[a-z][^>]*>/gi)].flatMap(([tag]) =>
+    htmlAttributes(tag, new Set(['href', 'src'])).map(href => ({ tag, href })))
+  for (const { tag, href } of links) {
     count += 1
+    if (isFounderProfileLink(path, tag, href)) continue
     if (!href || href === '#' || /^[a-z][a-z0-9+.-]*:|^\/\//i.test(href)) {
       errors.push(`${path}: HTML link must name a local destination: ${href || '(empty)'}`)
       continue
@@ -189,7 +204,7 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
 export function runReleaseContentCli(repositoryRoot = process.cwd(), output = console) {
   try {
     const result = validateReleaseContent(repositoryRoot)
-    output.log(`FinKore Core ${TARGET_CORE_VERSION} release content check passed: ${result.fileCount} text files, ${result.htmlLinkCount} local HTML links. Financial behavior was not executed.`)
+    output.log(`FinKore Core ${TARGET_CORE_VERSION} release content check passed: ${result.fileCount} text files, ${result.htmlLinkCount} HTML links. Financial behavior was not executed.`)
     return 0
   } catch (error) {
     output.error(error instanceof Error ? error.message : String(error))

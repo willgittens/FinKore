@@ -124,8 +124,14 @@ presentation is limited to closing the mobile CoreDoc index after selecting a
 link. Native `details` elements provide the CoreDoc index, mobile navigation and
 rule history. The gate checks local HTML destinations, Markdown and HTML
 fragments, placeholders, duplicate anchors, and unsupported interactive controls.
-Inline handlers, home-page scripts, playback buttons, remote links, and forms
-remain outside this reviewed profile. The reader permits the exact deferred
+Inline handlers, home-page scripts, playback buttons, and forms remain outside
+this reviewed profile. Remote resources and links are rejected except for the
+homepage founder CTA to `https://www.linkedin.com/in/will-gittens/`, which must
+use `target="_blank"` and `rel="noopener noreferrer"`. The checker validates
+that destination and its attributes without contacting LinkedIn. The founder
+section uses the CoreDoc section's palette and responsive grid; its initials
+portrait placeholder can be replaced with a local image in the marked area.
+The reader permits the exact deferred
 `js/coredoc.js` script when `core-mobile-index` exists; it closes that native
 disclosure on link activation and adds no new controls.
 

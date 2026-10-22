@@ -158,6 +158,38 @@ test('accepts a static Learn video preview and rejects scripts and unsupported c
   rmSync(join(root, 'learn/other.html'))
 })
 
+test('permits only the homepage founder profile destination with the required new-tab attributes', t => {
+  const root = fixture(t)
+  const link = '<a href="https://www.linkedin.com/in/will-gittens/" target="_blank" rel="noopener noreferrer">Connect with Will on LinkedIn</a>'
+  const page = `<h1>FinKore Core 2.0.2 stable</h1><section id="founder">${link}</section>`
+  put(root, 'learn/index.html', page)
+  assert.equal(run(root).status, 0)
+  assert.equal(validateReleaseContent(root).htmlLinkCount, 1)
+
+  for (const invalid of [
+    page.replace(' target="_blank"', ''),
+    page.replace('target="_blank"', 'target="_self"'),
+    page.replace('target="_blank"', 'target="_blank" target="_self"'),
+    page.replace(' rel="noopener noreferrer"', ''),
+    page.replace('noopener noreferrer', 'noopener'),
+    page.replace('noopener noreferrer', 'noreferrer'),
+    page.replace('rel="noopener noreferrer"', 'rel="noopener noreferrer" rel="opener"'),
+    page.replace('/in/will-gittens/', '/in/another-person/'),
+    page.replace('https://www.linkedin.com', 'http://www.linkedin.com'),
+    page.replace('https://www.linkedin.com', 'https://www.linkedin.com.example.org'),
+    page.replace('<a href=', '<img src='),
+    page.replace('target="_blank"', 'target="_blank" src="https://www.linkedin.com/in/will-gittens/"'),
+  ]) {
+    put(root, 'learn/index.html', invalid)
+    const result = run(root)
+    assert.equal(result.status, 1, invalid)
+    assert.match(result.error, /HTML link must name a local destination/, invalid)
+  }
+  put(root, 'learn/index.html', page)
+  put(root, 'learn/other.html', page)
+  assert.match(run(root).error, /learn\/other.html: HTML link must name a local destination/)
+})
+
 test('rejects an unsynchronized CoreDoc reader even when historical metadata is marked', t => {
   const root = fixture(t)
   put(root, 'docs/coreDoc/core-doc.md', readFileSync(new URL('../../coreDoc/core-doc.md', import.meta.url), 'utf8'))
