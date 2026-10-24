@@ -18,12 +18,13 @@ The repository contains npm dependencies under `node_modules/` and package-lock 
 
 ## Learn Typography
 
-The Learn page bundles the unmodified Manrope variable font in
-[learn/fonts/manrope-variable.ttf](./learn/fonts/manrope-variable.ttf), sourced
-from the [Google Fonts Manrope directory](https://github.com/google/fonts/tree/main/ofl/manrope).
-Copyright 2018 The Manrope Project Authors. The font is distributed under the
-SIL Open Font License 1.1; the original copyright and license are retained in
-[learn/fonts/OFL.txt](./learn/fonts/OFL.txt). The page loads this font locally.
+The Learn home page and CoreDoc reader bundle the unmodified Aspekta variable
+font in [learn/fonts/aspekta-variable.woff2](./learn/fonts/aspekta-variable.woff2),
+sourced from the [Aspekta repository](https://github.com/ivodolenc/aspekta/tree/cd08efde1a0484c3626818ac59a6933e59f71531/packages/fonts/variable).
+Copyright (c) 2025 Ivo Dolenc, with Reserved Font Name "Aspekta". The font is
+distributed under the SIL Open Font License 1.1; the original copyright and
+license are retained in [learn/fonts/OFL.txt](./learn/fonts/OFL.txt).
+Both pages load this font locally without a font CDN.
 
 ## Requires Legal/License Review
 

@@ -1,12 +1,12 @@
 /* SPDX-License-Identifier: MPL-2.0 */
 
-/* Local typography: Manrope is distributed with its original OFL notice. */
+/* Local typography: Aspekta is distributed with its original OFL notice. */
 
 @font-face {
-  font-family: "Manrope";
-  src: url("../fonts/manrope-variable.ttf") format("truetype");
+  font-family: "Aspekta";
+  src: url("../fonts/aspekta-variable.woff2") format("woff2");
   font-style: normal;
-  font-weight: 200 800;
+  font-weight: 100 900;
   font-display: swap;
 }
 
@@ -22,17 +22,27 @@ body, h1, h2, h3, p, ul, ol, figure {
 
 :root {
   color-scheme: light;
-  --paper: #f6f7f1;
-  --surface: #ffffff;
-  --ink: #182c28;
-  --muted: #556560;
-  --accent: #2c6855;
-  --line: #d6ded4;
-  --dark: #152c27;
-  --lime: #d4ee94;
+  --black: #1e1e1e;
+  --black-soft: #4d4d4d;
+  --blue: #2020ff;
+  --blue-hover: #4b4bff;
+  --blue-tint: #f0f0ff;
+  --orange: #ff3b1f;
+  --orange-light: #ff9e91;
+  --gray: #959595;
+  --gray-light: #d9d9d9;
+  --white: #ffffff;
+  --paper: var(--white);
+  --surface: #f5f5f5;
+  --ink: var(--black);
+  --muted: var(--black-soft);
+  --accent: var(--blue);
+  --line: var(--gray-light);
+  --dark: var(--black);
+  --font-sans: "Aspekta", "Segoe UI", Arial, sans-serif;
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   /* Crisp, offset shadows keep depth consistent across panels and controls. */
-  --shadow-ink: #0b211b;
+  --shadow-ink: var(--black);
   --shadow-control: 3px 3px 0 var(--shadow-ink);
   --shadow-card: 6px 6px 0 var(--shadow-ink);
   --shadow-panel: 10px 10px 0 var(--shadow-ink);
@@ -47,7 +57,7 @@ html {
 body {
   background: var(--paper);
   color: var(--ink);
-  font-family: "Manrope", "Segoe UI", Arial, sans-serif;
+  font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
@@ -64,17 +74,17 @@ a:hover {
 }
 
 :focus-visible {
-  outline: 3px solid #216aab;
+  outline: 3px solid var(--blue);
   outline-offset: 5px;
 }
 
 ::selection {
-  background: var(--lime);
-  color: var(--ink);
+  background: var(--blue);
+  color: var(--white);
 }
 
 h1, h2, h3 {
-  font-weight: 750;
+  font-weight: 700;
   line-height: 1.15;
   text-wrap: balance;
 }
@@ -83,17 +93,17 @@ h1 {
   max-width: 14ch;
   font-size: clamp(3rem, 5.1vw, 4.6rem);
   line-height: 1.08;
-  letter-spacing: -0.065em;
+  letter-spacing: -0.045em;
 }
 
 h2 {
   font-size: clamp(2rem, 3.5vw, 3rem);
-  letter-spacing: -0.055em;
+  letter-spacing: -0.04em;
 }
 
 h3 {
   font-size: 1.12rem;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.02em;
 }
 
 .container {
@@ -103,7 +113,7 @@ h3 {
 
 .eyebrow {
   color: var(--muted);
-  font-family: var(--mono);
+  font-family: var(--font-sans);
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -175,7 +185,7 @@ h3 {
 }
 
 .brand-mark span {
-  color: var(--lime);
+  color: var(--orange);
 }
 
 .nav-list {
@@ -200,26 +210,26 @@ h3 {
 
 .nav-list .nav-start {
   padding-inline: 1rem;
-  border: 1px solid var(--dark);
+  border: 1px solid var(--blue);
   border-radius: 0;
-  background: var(--dark);
+  background: var(--blue);
   color: white;
-  box-shadow: 3px 3px 0 #85a477;
+  box-shadow: var(--shadow-control);
   transition: background-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
 }
 
 .nav-list .nav-start:hover {
-  background: #2c4c40;
+  background: var(--blue-hover);
   text-decoration: none;
   transform: translate(-2px, -2px);
-  box-shadow: 5px 5px 0 #85a477;
+  box-shadow: 5px 5px 0 var(--shadow-ink);
 }
 
 /* The opening pairs the financial foundation message with its introduction video. */
 
 .hero {
   padding-top: clamp(3rem, 6vw, 5rem);
-  background: var(--paper);
+  background: var(--dark);
 }
 
 .hero-layout {
@@ -241,6 +251,7 @@ h3 {
 
 .hero-copy h1 > span {
   display: block;
+  color: var(--orange);
 }
 
 .hero-copy > .eyebrow {
@@ -251,8 +262,8 @@ h3 {
   margin-bottom: 1.5rem;
   border: 1px solid var(--accent);
   border-radius: 0;
-  background: #edf3e5;
-  color: #34573c;
+  background: var(--surface);
+  color: var(--accent);
 }
 
 .accent-marker {
@@ -300,17 +311,17 @@ h1 > span {
 
 .button {
   padding: 0.75rem 1.15rem;
-  border: 2px solid var(--dark);
+  border: 2px solid var(--blue);
   border-radius: 0;
-  background: var(--lime);
-  color: var(--dark);
+  background: var(--blue);
+  color: var(--white);
   box-shadow: var(--shadow-control);
   transition: background-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
 }
 
 .button:hover {
-  background: #e3f5b8;
-  color: var(--dark);
+  background: var(--blue-hover);
+  color: var(--white);
   transform: translate(-2px, -2px);
   box-shadow: 5px 5px 0 var(--shadow-ink);
 }
@@ -351,17 +362,17 @@ code {
   width: 100%;
   padding: clamp(0.875rem, 1.8vw, 1.5rem);
   border: 2px solid var(--shadow-ink);
-  background: var(--dark);
-  color: #f5f8ef;
+  background: var(--surface);
+  color: var(--white);
   box-shadow: var(--shadow-panel);
 }
 
 .video-frame {
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border: 1px solid #6c8f70;
+  border: 1px solid var(--blue-hover);
   border-radius: 0;
-  background: #234d3f;
+  background: var(--blue);
 }
 
 .video-frame > iframe, .video-frame > video, .video-placeholder {
@@ -380,9 +391,9 @@ code {
   justify-content: center;
   gap: clamp(0.6rem, 1.5vw, 1.25rem);
   padding: 1rem;
-  color: #f5f8ef;
-  background: radial-gradient(circle at 50% 40%, #63805555, transparent 65%), radial-gradient(#d4ee9429 1px, transparent 1px), #234d3f;
-  background-size: auto, 24px 24px, auto;
+  color: var(--white);
+  background: radial-gradient(#ffffff26 1px, transparent 1px), var(--blue);
+  background-size: 24px 24px;
 }
 
 .video-placeholder::before, .video-placeholder::after {
@@ -391,7 +402,7 @@ code {
   z-index: -1;
   width: 70%;
   aspect-ratio: 1;
-  border: 1px solid #d4ee9426;
+  border: 1px solid #ffffff33;
   border-radius: 0;
   transform: rotate(-25deg);
   pointer-events: none;
@@ -417,7 +428,7 @@ code {
 }
 
 .video-wordmark > span {
-  color: var(--lime);
+  color: var(--orange-light);
 }
 
 /* Decorative play mark: no interactive player is implied by this mockup. */
@@ -428,9 +439,9 @@ code {
   flex-shrink: 0;
   width: clamp(2.5rem, 4.5vw, 4rem);
   aspect-ratio: 1;
-  border: 1px solid #e2f6b7;
+  border: 1px solid var(--orange);
   border-radius: 0;
-  background: var(--lime);
+  background: var(--orange);
   box-shadow: var(--shadow-card);
 }
 
@@ -453,8 +464,12 @@ code {
 }
 
 .video-tagline em {
-  color: var(--lime);
+  color: var(--white);
   font-style: normal;
+  text-decoration: underline;
+  text-decoration-color: var(--orange);
+  text-decoration-thickness: 0.07em;
+  text-underline-offset: 0.15em;
 }
 
 .video-preview figcaption {
@@ -470,14 +485,14 @@ code {
 }
 
 .video-caption-heading .eyebrow {
-  color: var(--lime);
+  color: var(--orange-light);
 }
 
 .video-status {
   padding: 0.2rem 0.5rem;
-  border: 1px solid #6c8f70;
-  color: #c2d2c6;
-  font-family: var(--mono);
+  border: 1px solid var(--gray);
+  color: var(--gray-light);
+  font-family: var(--font-sans);
   font-size: 0.65rem;
 }
 
@@ -490,23 +505,28 @@ code {
 
 .video-intro p {
   margin-top: 0.65rem;
-  color: #c2d2c6;
+  color: var(--gray-light);
   font-size: 0.8125rem;
 }
 
-/* Dark sections alternate with the hero, CoreDoc index, and founder profile. */
-.licensing, #how-it-works {
-  --ink: #f5f8ef;
-  --muted: #bdcfc2;
-  --accent: #d4ee94;
-  --line: #365348;
-  --surface: #1d3830;
+/* The opening is dark; licensing and the foundation overview are light. */
+.hero, .core-explorer, .founder {
+  --ink: var(--white);
+  --muted: var(--gray-light);
+  --accent: var(--orange-light);
+  --line: var(--black-soft);
+  --surface: #2b2b2b;
   background: var(--dark);
   color: var(--ink);
 }
 
-.licensing :focus-visible, #how-it-works :focus-visible {
+.hero :focus-visible, .core-explorer :focus-visible, .founder :focus-visible {
   outline-color: var(--accent);
+}
+
+.licensing, #how-it-works {
+  background: var(--paper);
+  color: var(--ink);
 }
 
 .licensing-layout {
@@ -554,7 +574,7 @@ code {
   color: var(--muted);
 }
 
-/* The founder profile shares the CoreDoc section's grid and light palette. */
+/* The founder profile shares the CoreDoc section's grid and dark palette. */
 .founder {
   border-top: 1px solid var(--line);
 }
@@ -760,24 +780,24 @@ code {
   place-items: center;
   width: 2.65rem;
   height: 2.65rem;
-  border: 1px solid #c3d4b5;
+  border: 1px solid var(--line);
   border-radius: 0;
-  background: #edf4e3;
+  background: var(--blue-tint);
   color: var(--accent);
   font-family: var(--mono);
   font-size: 0.875rem;
 }
 
 .resource-list li:nth-child(2) .resource-number {
-  background: #f9efe1;
-  color: #805522;
-  border-color: #e5d4b9;
+  background: var(--orange-light);
+  color: var(--black);
+  border-color: var(--orange);
 }
 
 .resource-list li:nth-child(3) .resource-number {
-  background: #e9eff5;
-  color: #375b73;
-  border-color: #c7d6e1;
+  background: var(--surface);
+  color: var(--black-soft);
+  border-color: var(--line);
 }
 
 .resource-list h3 a {
@@ -846,7 +866,7 @@ code {
   padding: 1.15rem;
   border: 1px solid var(--line);
   border-radius: 0;
-  background: var(--dark);
+  background: var(--paper);
   text-decoration: none;
   transition: border-color 160ms ease, background-color 160ms ease;
   box-shadow: var(--shadow-control);

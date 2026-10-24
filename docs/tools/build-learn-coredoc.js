@@ -116,7 +116,7 @@ export function renderReader(doc) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#f6f7f1" />
+  <meta name="theme-color" content="#ffffff" />
   <title>CoreDoc — FinKore financial principles and rules</title>
   <meta name="description" content="Read the ${doc.principles.length} principles and ${doc.rules.length} foundational rules of ${escape(doc.version)}. Explore obligations, reasoning, interpretation, and boundaries." />
   <link rel="stylesheet" href="css/styles.css" />
