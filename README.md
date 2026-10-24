@@ -167,3 +167,12 @@ against their own implementations.
 
 See [Developer Tools](./docs/tools/README.md) for Node setup, individual checks,
 the separate `npm run dependencies:audit` review, and stable publication checks.
+
+## Partners
+
+<!-- Use width="200" for every partner logo and preserve its original aspect ratio. -->
+<p>
+  <a href="https://savoiabarker.com/" target="_blank" rel="noopener noreferrer">
+    <img src="./learn/img/SavoiaBarker.png" alt="Savoia Barker" width="300" />
+  </a>
+</p>
