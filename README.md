@@ -1,372 +1,171 @@
-# FinKore
+<p align="center">
+  <img src="./learn/img/Finkore.png" alt="FinKore" width="480" />
+</p>
 
-> **Financial behavior, made explicit.**
+# FinKore
 
 **Define once. Build many times.**
 
-Financial software shouldn't have to reinvent the same foundations over and
-over again.
+FinKore is an open-source, language-agnostic specification that makes recurring
+financial behavior explicit, testable, and reusable across products and
+implementations. It defines how **Money, Workflow, Audit, Approvals, and
+Financial Entities** behave, how they fail, and what evidence they preserve.
 
-FinKore is an open-source, language-agnostic specification for recurring
-financial software behavior.
+The repository publishes the specification, portable acceptance cases, and an
+Agentic Contract for machine clients. You use these artifacts to build and
+evaluate an implementation in your own language and stack.
 
-It defines how common financial foundations such as **Money, Workflow, Audit,
-Approvals, and Financial Entities** should behave, fail, and remain observable
-across implementations.
+**[FinKore Core 2.0.2 stable](./spec/README.md#status)**
 
-FinKore is not a SaaS, an ERP, a payment platform, or another framework.
+[Explore the introduction](./learn/index.html) ·
+[Read the CoreDoc](./docs/coreDoc/core-doc.md) ·
+[Build an implementation](./docs/implementation-guide.md)
 
-It is a reference and contract for financial behavior.
+## Why rebuild the same foundations?
 
-**Know the rule before you write the code.**
+**CRUD is easy. Financial CRUD isn't.**
 
----
+An amount needs a currency, exact calculation, and explicit rounding. An
+approval needs to remain tied to the facts that justified it. A rejected
+workflow transition must preserve the state it was meant to change. An audit
+trail must retain enough evidence to explain what happened.
 
-## Financial CRUD isn't ordinary CRUD
+These questions recur across financial products, yet their answers often live
+inside application code, framework defaults, and decisions that are difficult
+to recover. Teams build, discover edge cases, fix, document, then repeat the
+work elsewhere.
 
-A monetary amount looks like a number until currencies, precision, rounding,
-allocation, and serialization begin to matter.
-
-An approval looks like a status until the facts that justified it change.
-
-An audit trail looks like a list until someone needs to reconstruct exactly
-what happened.
-
-A workflow looks like a state machine until terminal states, failed transitions,
-imports, and historical definitions become financially significant.
-
-These problems appear again and again in financial software.
-
-Yet teams repeatedly solve them inside application code, internal abstractions,
-tests, documentation, and historical decisions.
-
-The result is familiar:
-
-**Build → discover edge cases → fix → document → rebuild somewhere else.**
-
-FinKore exists to make those recurring rules explicit before they become
-another implementation detail.
-
----
+FinKore brings those rules into a shared, inspectable contract. Your team can
+understand the expected behavior before writing code and check its results
+against portable acceptance cases afterward.
 
 ## Your product may be unique. Your financial rules don't have to be.
 
-FinKore does not replace your business logic.
+FinKore is intended for engineers, architects, and financial-domain reviewers
+working on banks, fintechs, SaaS platforms, ERPs, and other financial systems.
+It provides a common reference for discussing behavior across teams and
+implementations.
 
-Your application still decides what makes your product different:
-
-| Your application decides | FinKore makes explicit |
+| FinKore makes explicit | Your application decides |
 | --- | --- |
-| Business policies, thresholds, permissions, and user experience | How declared financial rules behave and fail |
-| Storage, transport, framework, and API design | Observable values, errors, invariants, and mutation effects |
-| Which domains and operations exist in your product | Stable requirements and operation identifiers for the selected FinKore scope |
+| Observable values, results, errors, and invariants | Language, framework, API, storage, and deployment |
+| How declared lifecycle and approval rules behave | Business policies, thresholds, permissions, and user experience |
+| Stable requirements and portable acceptance cases | Which FinKore domains to implement and how to integrate them |
 
-FinKore sits underneath those decisions.
+This repository maintains the contract and its maintenance tools. Financial
+implementations, integrations, and conformance execution belong to consumers;
+there is no installable financial library, hosted service, or Conformance
+Runner here.
 
-It turns recurring financial problems into:
+Ledger posting, tax, FX sourcing, reconciliation, settlement, and concrete
+accounting models remain outside the current Core scope. See the
+[specification scope](./spec/README.md#scope-discipline-non-normative) for the
+boundaries.
 
-- explicit specifications
-- stable rules and identifiers
-- portable acceptance cases
-- observable failure semantics
-- reusable implementation contracts
+## What the Core covers
 
-The goal is simple:
+Choose the domain that addresses the question in front of you:
 
-> **Don't rediscover the rule every time you implement it.**
-
----
-
-## The Standard and the Foundation
-
-FinKore combines two ideas.
-
-### The Standard
-
-**The Standard defines what should happen.**
-
-Rules are written explicitly, documented, identified, and connected to portable
-acceptance cases.
-
-Instead of asking:
-
-> How should we implement this?
-
-FinKore aims to make the first question:
-
-> What does the rule say?
-
-### The Foundation
-
-**The Foundation makes those rules reusable.**
-
-Implementations can use different languages, frameworks, APIs, storage systems,
-and architectures while preserving the same observable financial behavior.
-
-The Standard defines.
-
-The Foundation enables reuse.
-
-**Know the rule. Build on it.**
-
----
-
-## What FinKore makes explicit
-
-The FinKore Core `2.0.2` stable normative baseline currently covers:
-
-| Domain | Defined behavior |
+| Domain | Questions it answers |
 | --- | --- |
-| [Money](./spec/money/README.md) | Exact amounts and currencies; arithmetic, comparison, rates, allocation, rounding, and serialization |
-| [Workflow](./spec/workflow/README.md) | Lifecycle states and permitted transitions; guards, terminal behavior, definition versions, imports, and conflict checks |
-| [Audit](./spec/audit/README.md) | Attributable, append-only history; events, changes, relationships, redaction, and portable failures |
-| [Approvals](./spec/approvals/README.md) | Required business decisions; conditions, validity, lifecycle history, chains, and bounded composition |
-| [Financial Entities](./spec/entities/README.md) | Stable identity over time; lifecycle, mutability, validation, revisions, imports, and evidence-backed evolution |
+| [Money](./spec/money/README.md) | How do amounts retain their currency and exact value through arithmetic, rounding, allocation, and serialization? |
+| [Workflow](./spec/workflow/README.md) | Which lifecycle changes are permitted, and what happens when a transition is rejected? |
+| [Audit](./spec/audit/README.md) | What happened, who acted, and how is committed history preserved? |
+| [Approvals](./spec/approvals/README.md) | What was approved, under which conditions, and does that decision still apply? |
+| [Financial Entities](./spec/entities/README.md) | How does a financial subject retain its identity through validation, revisions, and permitted change? |
 
-For example:
+Each domain defines observable behavior independently of implementation
+architecture. Together, they provide foundations your application can compose
+for its own financial use cases.
 
-- **Money** defines deterministic allocation remainder behavior.
-- **Workflow** defines terminal-state failures and unchanged state.
-- **Approvals** binds decisions to the relevant facts that justified them.
-- **Audit** preserves committed logical history.
-- **Financial Entities** defines how identity and permitted change evolve over time.
+## From financial principle to implementation
 
-These outcomes should not depend on a framework default or whichever service
-happened to implement them first.
-
----
-
-## What FinKore is not
-
-FinKore deliberately does not attempt to become an entire financial platform.
-
-The Core does not define:
-
-- an ERP
-- an accounting application
-- a payment platform
-- a ledger
-- a persistence layer
-- an authorization system
-- a user interface
-- a hosted service
-- an agent runtime
-
-Ledger posting, tax, FX sourcing, reconciliation, settlement, and other concrete
-accounting domains remain outside the current Core scope.
-
-FinKore defines the financial behavior that belongs at the foundation.
-
-Your product remains yours.
-
----
-
-## Start with the rule, not the implementation
-
-The best place to start is [CoreDoc](./docs/coreDoc/core-doc.md).
-
-CoreDoc explains the financial principles behind the specification and why they
-exist.
-
-From there, choose a domain and follow its rules independently.
-
-The specifications use normative language deliberately:
-
-- **MUST** / **MUST NOT** define obligations.
-- **SHOULD** / **SHOULD NOT** define recommendations.
-- **MAY** defines permission.
-- CoreDoc additionally uses **SHALL** / **SHALL NOT** for obligations.
-
-Stable requirement identifiers such as:
+Start with the reason a rule exists, then follow it to its precise requirements
+and acceptance cases:
 
 ```text
-MONEY-ARITHMETIC-001
+CoreDoc — financial principles and obligations
+   ↓
+Specification — precise behavior and stable requirement IDs
+   ├── Conformance artifacts — portable inputs and expected observations
+   └── Agentic Contract — canonical operation semantics for machine clients
+                     ↓
+       Consumer-owned implementations and integrations
 ```
 
-connect financial rules to their acceptance cases and supporting artifacts.
+[CoreDoc](./docs/coreDoc/core-doc.md) states the foundation-level financial
+obligations. The [specification](./spec/README.md) refines them into requirements,
+invariants, and portable errors. Normative terms such as **MUST**, **SHOULD**,
+and **MAY** distinguish obligations, recommendations, and permissions; see the
+[conventions](./spec/conventions.md#normative-language) for their meaning.
 
-Examples explain behavior, but the normative specification remains the contract.
+[Conformance artifacts](./conformance/README.md) connect those requirements to
+portable acceptance cases, including failure, boundary, and mutation-sensitive
+cases. Stable IDs such as `MONEY-ARITHMETIC-001` let you trace a rule to its
+supporting evidence. The [manifest](./conformance/manifest.json) is the only
+entry point for discovering vector files.
 
-See:
+The [Agentic Contract](./agentic/README.md) describes canonical operations such
+as `finkore.money.add`: their inputs, outputs, errors, effects, and safety
+properties. Consumers provide executable integrations and authorization
+infrastructure. The specification remains authoritative for financial behavior.
 
-- [CoreDoc](./docs/coreDoc/core-doc.md)
-- [Specification index](./spec/README.md)
-- [Glossary](./spec/glossary.md)
-- [Conventions](./spec/conventions.md#normative-language)
-- [Documentation](./learn/index.html)
+## Start reading or building
 
----
-
-## One contract. Different implementations.
-
-FinKore is language-agnostic by design.
-
-This repository publishes the financial contract and the tools used to maintain
-and verify it.
-
-It does **not** publish an installable financial implementation.
-
-You choose:
-
-- programming language
-- framework
-- API design
-- storage
-- runtime
-- deployment model
-
-The behavior defined by the selected FinKore scope should remain portable
-between them.
-
-| When you want to… | Start here |
+| If you want to… | Start here |
 | --- | --- |
-| Build an implementation | [Implementation guide](./docs/implementation-guide.md) |
-| Check behavior against portable acceptance cases | [Conformance artifacts](./conformance/README.md) and [consumer guide](./conformance/consumer-guide.md) |
-| Find cases for a requirement and understand coverage limits | [Requirement traceability](./conformance/traceability.md) |
-| Expose canonical operations to agents or machine clients | [Agentic Contract](./agentic/README.md) |
+| Get an overview of the project | [Learn introduction](./learn/index.html) |
+| Understand the financial principles | [CoreDoc](./docs/coreDoc/core-doc.md) or its [web reader](./learn/coredoc.html) |
+| Find a precise rule | [Specification index](./spec/README.md) and [glossary](./spec/glossary.md) |
+| Implement a domain in your codebase | [Implementation guide](./docs/implementation-guide.md) |
+| Evaluate your implementation against acceptance cases | [Conformance consumer guide](./conformance/consumer-guide.md) |
+| Find evidence for a requirement and understand coverage limits | [Requirement traceability](./conformance/traceability.md) |
+| Integrate agents or other machine clients | [Agentic Contract](./agentic/README.md) |
 
-The relationship is:
+You can begin with one domain. Read its rules, implement the selected scope,
+and use the published cases alongside your own evidence to evaluate the
+result. Consumers own invocation, observation, comparison, and reporting.
+Acceptance cases provide bounded evidence; their existence alone does not
+establish that an implementation conforms or that its behavior is exhaustively
+tested.
 
-```text
-CoreDoc
-   ↓
-Specification
-   ↓
-Conformance
-   ↓
-Implementation
-```
+## Build on FinKore. Keep your product yours.
 
-CoreDoc provides the principles.
+FinKore's project-owned materials are open source under the **Mozilla Public
+License 2.0 (MPL-2.0)**, unless a file states otherwise. Commercial and
+proprietary use is permitted subject to the license terms.
 
-`/spec` defines the normative behavior.
+See [Licensing](./LICENSING.md) for the distinction between implementing the
+specified behavior and copying or modifying covered repository files. The
+[license text](./LICENSE) controls.
 
-Conformance vectors provide portable inputs and expected observations.
+## Contributing
 
-Agentic metadata describes canonical `finkore.*` operations.
+Contributions start with a financial domain problem and CoreDoc alignment.
+Changes to behavior should connect specification requirements to conformance
+cases, traceability, and Agentic metadata where applicable. If the specification
+is silent, raise the gap before choosing new semantics.
 
-Implementations and transports remain yours.
+See [Contributing](./CONTRIBUTING.md) for the workflow and
+[Contributor Licensing](./docs/governance/contributor-licensing.md) for the
+contribution terms. Published history is in the
+[release notes](./docs/releases/README.md).
 
----
+### Verify repository changes
 
-## Show the logic. Don't sell the magic.
-
-FinKore is built around explicit behavior rather than hidden abstractions.
-
-A financial rule should be possible to:
-
-- inspect
-- explain
-- identify
-- test
-- trace
-- reproduce
-
-That is also why the project avoids claiming universal financial correctness.
-
-Specifications and acceptance cases provide bounded, inspectable evidence.
-
-They do not by themselves establish exhaustive financial correctness,
-production readiness, legal compliance, or regulatory suitability.
-
-Known limits are documented alongside specification rules, in
-[traceability](./conformance/traceability.md), and in the Agentic Contract.
-
----
-
-## Verify the repository
-
-The maintained Node tooling verifies the published FinKore artifacts themselves.
-
-Node:
-
-```text
->=24.11.0 <25
-```
-
-Run:
+The maintenance tools require **Node `>=24.11.0 <25`**. From the repository
+root, run:
 
 ```bash
 npm ci --no-audit
 npm run verify
 ```
 
-Verification checks:
+After dependency installation, verification runs locally. It checks schemas,
+vector structure, requirement traceability, Agentic consistency, repository
+architecture, tool tests, documentation links, and licensing. These checks
+validate the published artifacts; consumers execute financial operations
+against their own implementations.
 
-- artifact schemas
-- conformance vectors
-- requirement traceability
-- Agentic consistency
-- repository architecture
-- tooling tests
-- documentation links
-- licensing consistency
-
-After dependencies are installed, verification runs locally.
-
-This verifies the FinKore artifacts.
-
-Conformance of an external financial implementation remains the responsibility
-of the implementation and its execution environment.
-
-See [Developer Tools](./docs/tools/README.md) for setup, individual commands,
-publication checks, and the separate network-backed:
-
-```bash
-npm run dependencies:audit
-```
-
----
-
-## Contributing
-
-FinKore contributions should begin with **financial behavior**, not API design.
-
-Before introducing an abstraction, ask:
-
-> What financial rule are we trying to make explicit?
-
-Normative changes should connect, where applicable, to:
-
-- stable requirement IDs
-- specification rules
-- conformance cases
-- traceability
-- Agentic metadata
-
-Do not infer new financial semantics from an implementation, fixture, or
-framework behavior when the specification is silent.
-
-See:
-
-- [CONTRIBUTING.md](./CONTRIBUTING.md)
-- [Contributor Licensing](./docs/governance/contributor-licensing.md)
-
----
-
-## Releases and evidence
-
-[Release notes](./docs/releases/README.md) summarize published FinKore history.
-
-Detailed development history remains available through Git.
-
-Specifications, tests, conformance artifacts, and repository verification exist
-to make the project's claims inspectable.
-
-**Show the logic. Don't sell the magic.**
-
----
-
-## License
-
-FinKore is open source under the Mozilla Public License 2.0 (`MPL-2.0`).
-
-It may be used in commercial and proprietary systems subject to the license
-terms.
-
-See:
-
-- [LICENSE](./LICENSE)
-- [LICENSING.md](./LICENSING.md)
-
-The license text controls.
+See [Developer Tools](./docs/tools/README.md) for Node setup, individual checks,
+the separate `npm run dependencies:audit` review, and stable publication checks.
