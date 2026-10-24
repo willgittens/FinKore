@@ -170,6 +170,9 @@ the separate `npm run dependencies:audit` review, and stable publication checks.
 
 ## Partners
 
+No project grows without great partners. My special thanks to those who
+supported FinKore at key stages of its journey.
+
 <!-- Use width="200" for every partner logo and preserve its original aspect ratio. -->
 <p>
   <a href="https://savoiabarker.com/" target="_blank" rel="noopener noreferrer">
