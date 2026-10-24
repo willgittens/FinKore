@@ -15,9 +15,7 @@ The repository publishes the specification, portable acceptance cases, and an
 Agentic Contract for machine clients. You use these artifacts to build and
 evaluate an implementation in your own language and stack.
 
-**[FinKore Core 2.0.2 stable](./spec/README.md#status)**
-
-[Explore the introduction](./learn/index.html) ·
+<a href="https://finkore.dev" target="_blank" rel="noopener noreferrer">https://finkore.dev</a> ·
 [Read the CoreDoc](./docs/coreDoc/core-doc.md) ·
 [Build an implementation](./docs/implementation-guide.md)
 
