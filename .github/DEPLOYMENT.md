@@ -47,14 +47,20 @@ Configure these **Environment Variables** manually:
 | --- | --- |
 | `FTP_SERVER_DIR` | Exact existing destination directory, as seen by the hosting account. No default. |
 | `FTP_ALLOW_ACCOUNT_ROOT` | Optional; defaults to disabled. Set exactly `true` only after confirming that the account is restricted to the site's publication directory and `/` is that virtual root. |
-| `FTP_PROTOCOL` | `sftp` (preferred) or `ftps` (explicit FTP over TLS). No default or plain FTP fallback. |
-| `FTP_PORT` | Optional integer from 1 through 65535; defaults to 22 for SFTP or 21 for explicit FTPS. |
-| `FTP_HOST_KEY` | Required for SFTP: trusted OpenSSH public host key as `algorithm base64-key`, without hostname or comment. Not a private key or fingerprint. Unused for FTPS. |
+| `FTP_PORT` | Optional integer from 1 through 65535; defaults to 21 for FTP/explicit FTPS or 22 for SFTP. |
+| `FTP_HOST_KEY` | Required only if switching to SFTP: trusted OpenSSH public host key as `algorithm base64-key`, without hostname or comment. Not a private key or fingerprint. Unused for FTP/FTPS. |
 
-The repository does not identify the server's supported protocol. Confirm it
-with the hosting provider before configuring these variables. SFTP and FTPS
-are different protocols; changing the port does not convert one into the other.
-Implicit FTPS is not supported by this workflow.
+The workflow explicitly sets `FTP_PROTOCOL: ftp` for plain FTP, with TLS
+negotiation disabled for both control and data connections. Usernames, passwords,
+directory listings, and files travel without encryption. `FTP_HOST` can be
+`185.166.188.109` or `ftp.finkore.dev`; omit the `ftp://` prefix. Use port `21`.
+An Environment Variable named `FTP_PROTOCOL` is not read by this workflow.
+
+The transfer code also supports `ftps` (explicit TLS) and `sftp`; selecting one
+requires editing the workflow's `FTP_PROTOCOL` value and configuring its port
+and trust requirements. These modes never fall back to plain FTP. SFTP and
+FTPS are different protocols; changing the port does not convert one into the
+other. Implicit FTPS is not supported by this workflow.
 
 For `FTP_SERVER_DIR`, obtain the exact publication path from the host. Absolute
 and account-relative paths are supported. `/` is blocked by default; an empty
@@ -106,8 +112,9 @@ Host-key changes require deliberate verification and a manual variable update.
 For FTPS, the server must support explicit AUTH TLS with a certificate trusted
 by the Ubuntu system CA store and matching `FTP_HOST`. Certificate and hostname
 checks are mandatory; control, directory listing, and file transfers use TLS.
-Self-signed, expired, and mismatched certificates are not accepted. No insecure
-fallback or custom trust exception is configured.
+Self-signed, expired, and mismatched certificates are not accepted in FTPS mode.
+These TLS checks do not apply to the currently selected plain FTP mode, which
+does not authenticate the server cryptographically.
 
 Set **Deployment branches and tags → Selected branches and tags** to permit
 only the **branch `main`**, with no tag or PR-ref rule. Retain the protected
@@ -174,8 +181,9 @@ A failed transfer exits nonzero and never reports success.
 
 After merging this workflow change into `main`, start a new manual run with
 **diagnose_only** enabled. This uses the same Environment, credentials, protocol,
-server verification, destination guard, and client as deployment. It forces a
-connection/login, accesses `FTP_SERVER_DIR`, and lists that directory. It sends
+destination guard, and client as deployment, including server verification when
+FTPS or SFTP is selected. It forces a connection/login, accesses `FTP_SERVER_DIR`,
+and lists that directory. It sends
 no upload, mkdir, rename or deletion commands. A diagnostic pass confirms login,
 directory access and listing; it does not prove write permission or HTTP health.
 
@@ -188,16 +196,18 @@ directory access and listing; it does not prove write permission or HTTP health.
 | `SSH_HOST_KEY_FAILED` | Confirm the configured public host key through a trusted provider channel. |
 | `AUTHENTICATION_FAILED` | Login/password for the selected protocol, account status, and provider restrictions. |
 | `DIRECTORY_ACCESS_FAILED` | The destination path as seen by this account and its access permissions. |
-| `DATA_CONNECTION_FAILED`, `READ_ACCESS_FAILED` | Directory-listing access and passive FTPS data connections. |
+| `DATA_CONNECTION_FAILED`, `READ_ACCESS_FAILED` | Directory-listing access and passive FTP/FTPS data connections. |
 | `WRITE_ACCESS_FAILED`, `STORAGE_LIMIT` | On an upload run, check write permissions, existing file types, disk/inode quota and hosting restrictions. |
 
 Phases are `LOGIN`, `DIRECTORY`, `LISTING`, `CREATE_DIRECTORIES`, and `UPLOAD`.
 SFTP's login phase includes access to the initial directory. A read-only run
 never reaches the two write phases. Keep **diagnose_only** enabled until the
 connection and listing work. For local comparison, use FileZilla with the same
-host/account and **Require explicit FTP over TLS** when testing FTPS. Check login
-and listing without uploading, and do not bypass certificate warnings. If local
-access succeeds but the Actions test fails, investigate runner IP restrictions
+host/account and **Only use plain FTP** for the current FTP configuration, or
+**Require explicit FTP over TLS** when testing FTPS. TLS/SSH diagnostic codes
+apply only when the corresponding encrypted protocol is selected. Check login
+and listing without uploading, and do not bypass certificate warnings in FTPS
+mode. If local access succeeds but the Actions test fails, investigate runner IP restrictions
 and networking. Share only the fixed code and phase, not raw logs or credentials.
 
 There are no PR deployment triggers, `pull_request_target`, artifact uploads,

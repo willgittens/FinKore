@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
     inputs:
       diagnose_only:
-        description: 'Test the secure connection and directory listing without uploading files'
+        description: 'Test the connection and directory listing without uploading files'
         type: boolean
         default: true
         required: true
@@ -87,7 +87,7 @@ jobs:
           ref: ${{ github.sha }}
           persist-credentials: false
 
-      - name: Install the secure transfer client
+      - name: Install the transfer client
         run: |
           sudo apt-get update -qq
           sudo apt-get install --no-install-recommends -y lftp openssh-client ca-certificates
@@ -100,7 +100,8 @@ jobs:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_SERVER_DIR: ${{ vars.FTP_SERVER_DIR }}
           FTP_ALLOW_ACCOUNT_ROOT: true
-          FTP_PROTOCOL: ${{ vars.FTP_PROTOCOL }}
+          # Plain FTP selected explicitly; credentials and files are not encrypted.
+          FTP_PROTOCOL: ftp
           FTP_PORT: ${{ vars.FTP_PORT }}
           FTP_HOST_KEY: ${{ vars.FTP_HOST_KEY }}
         shell: python3 {0}
@@ -142,9 +143,9 @@ jobs:
               if 'connection refused' in text:
                   return 'CONNECTION_REFUSED', 'Check FTP_HOST, FTP_PORT, server availability and firewall/IP restrictions.'
               if 'timed out' in text or 'timeout' in text:
-                  return 'CONNECTION_TIMEOUT', 'Check network/firewall access. During listing or upload, also check passive FTPS data connections.'
+                  return 'CONNECTION_TIMEOUT', 'Check network/firewall access. During listing or upload, also check passive FTP/FTPS data connections.'
               if any(term in text for term in ('425 ', '426 ', 'data connection', 'passive mode')):
-                  return 'DATA_CONNECTION_FAILED', 'The data connection failed. Check passive FTPS ports, firewall/NAT and provider restrictions.'
+                  return 'DATA_CONNECTION_FAILED', 'The data connection failed. Check passive FTP/FTPS ports, firewall/NAT and provider restrictions.'
               if any(term in text for term in ('quota exceeded', 'no space left', 'disk full', '552 ')):
                   return 'STORAGE_LIMIT', 'Check hosting disk space, inode limits and account quota.'
               if '550' in text or 'permission denied' in text or 'no such file' in text or 'access failed' in text:
@@ -155,7 +156,7 @@ jobs:
                   return 'READ_ACCESS_FAILED', 'Check directory listing permissions and hosting account restrictions.'
               if 'tls' in text or 'ssl' in text:
                   return 'TLS_NEGOTIATION_FAILED', 'Check explicit FTPS support, TLS compatibility and the provider certificate configuration.'
-              return 'CLIENT_FAILURE', 'The cause could not be classified safely. Check hosting-side logs or reproduce with FileZilla using required TLS; never publish raw credential-bearing logs.'
+              return 'CLIENT_FAILURE', 'The cause could not be classified safely. Check hosting-side logs or reproduce with FileZilla using the selected protocol; never publish raw credential-bearing logs.'
 
           diagnose_only = os.environ.get('DIAGNOSE_ONLY', 'false') == 'true'
           require(os.environ.get('GITHUB_REF') == 'refs/heads/main' and
@@ -169,7 +170,7 @@ jobs:
           require(all(not any(ord(c) < 32 or ord(c) == 127 for c in value)
                       for value in settings.values()), 'Deployment settings must not contain control characters.')
           protocol = settings['FTP_PROTOCOL']
-          require(protocol in ('sftp', 'ftps'), 'FTP_PROTOCOL must be sftp or ftps (explicit TLS); plain FTP is forbidden.')
+          require(protocol in ('ftp', 'sftp', 'ftps'), 'FTP_PROTOCOL must be ftp, sftp or ftps (explicit TLS).')
           port_text = settings['FTP_PORT'] or ('22' if protocol == 'sftp' else '21')
           require(port_text.isascii() and port_text.isdigit() and 1 <= int(port_text) <= 65535,
                   'FTP_PORT must be an integer between 1 and 65535.')
@@ -254,7 +255,7 @@ jobs:
                   ])
                   commands += ['set sftp:auto-confirm no', 'set sftp:connect-program ' + quote(ssh)]
                   scheme = 'sftp'
-              else:
+              elif protocol == 'ftps':
                   commands += [
                       'set ssl:verify-certificate yes', 'set ssl:check-hostname yes',
                       'set ftp:ssl-force yes', 'set ftp:ssl-auth TLS', 'set ftp:ssl-use-ccc no',
@@ -262,11 +263,18 @@ jobs:
                   ]
                   # Explicit FTPS starts with FTP AUTH TLS; ssl-force prevents cleartext login.
                   scheme = 'ftp'
+              else:
+                  # Plain FTP is intentional, not an automatic fallback from FTPS.
+                  commands += [
+                      'set ftp:ssl-allow no', 'set ftp:ssl-force no',
+                      'set ftp:ssl-protect-data no', 'set ftp:ssl-protect-list no',
+                  ]
+                  scheme = 'ftp'
               commands += [
                   'echo FINKORE_PHASE_LOGIN',
                   'open --user ' + quote(settings['FTP_USERNAME']) + ' --env-password ' +
                       quote(f'{scheme}://{url_host}:{int(port_text)}'),
-                  'quote NOOP' if protocol == 'ftps' else 'cls -d .',
+                  'cls -d .' if protocol == 'sftp' else 'quote NOOP',
                   'echo FINKORE_PHASE_DIRECTORY',
                   'cd ' + quote(destination),
               ]
