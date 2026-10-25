@@ -17,7 +17,7 @@ function fixture(t) {
   const root = mkdtempSync(join(tmpdir(), 'finkore-learn-pages-'))
   t.after(() => rmSync(root, { recursive: true, force: true }))
   for (const page of LEARN_PAGES) put(root, page.source, readFileSync(new URL(page.source, repository), 'utf8'))
-  put(root, 'learn/index.html', '<h1>Keep this content</h1><a href="../LICENSING.md">License</a><a href="../spec/README.md#status">Spec</a><a href="../conformance/README.md">Cases</a>')
+  put(root, 'learn/index.html', '<h1>Keep this content</h1><nav aria-label="Primary navigation"><a href="#start">Start reading</a></nav><a href="../LICENSING.md">License</a><a href="../spec/README.md#status">Spec</a><a href="../conformance/README.md">Cases</a>')
   return root
 }
 
@@ -47,12 +47,13 @@ test('preserves code, ordered list continuations, inline wording, tables and hea
   }
 })
 
-test('generates all five canonical documents deterministically and checks drift without writing', t => {
+test('generates all six canonical documents deterministically and checks drift without writing', t => {
   const root = fixture(t)
   assert.throws(() => buildLearnPages(root, { check: true }), /out of date/)
-  assert.deepEqual(buildLearnPages(root), { pages: 5 })
+  assert.deepEqual(buildLearnPages(root), { pages: 6 })
   const home = readFileSync(join(root, 'learn/index.html'), 'utf8')
   assert.match(home, /Keep this content/)
+  assert.match(home, /Where to start<\/a>[\s\S]*?CoreDoc<\/a>[\s\S]*?Github Project/)
   assert.match(home, /href="licensing.html"/)
   assert.match(home, /href="..\/spec\/README.md#status"/)
   assert.match(home, /href="..\/conformance\/README.md"/)
@@ -64,6 +65,7 @@ test('generates all five canonical documents deterministically and checks drift 
     assert.match(html, /<details class="learn-document-index">/)
     assert.match(html, new RegExp(`href="../${page.source}"`))
     assert.doesNotMatch(html, /<script|<button|<form/)
+    assert.match(html, /Where to start<\/a>[\s\S]*?CoreDoc<\/a>[\s\S]*?Github Project/)
     buildLearnPages(root)
     assert.equal(readFileSync(join(root, page.output), 'utf8'), html)
     for (const [path, original, changed] of [[page.output, html, html + '\n'], [page.source, source, source + '\nAn editorial addition.\n']]) {

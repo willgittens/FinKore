@@ -10,6 +10,7 @@ import { posix, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 export const LEARN_PAGES = [
+  { source: 'docs/where-to-start.md', output: 'learn/where-to-start.html', label: 'Where to start', description: 'Understand FinKore, choose your starting point, and work through your first domain slice.' },
   { source: 'README.md', output: 'learn/about.html', label: 'About the project', description: 'What FinKore defines, who it serves, and where to start reading or building.' },
   { source: 'LICENSING.md', output: 'learn/licensing.html', label: 'Licensing', description: 'The project licensing policy, covered materials, and consumer-owned implementations.' },
   { source: 'CONTRIBUTING.md', output: 'learn/contributing.html', label: 'Contribute', description: 'How to propose, review, and verify contributions to the FinKore contract.' },
@@ -18,6 +19,18 @@ export const LEARN_PAGES = [
 ]
 const destinations = new Map(LEARN_PAGES.map(page => [page.source, page.output]))
 destinations.set('docs/coreDoc/core-doc.md', 'learn/coredoc.html')
+export const GITHUB_PROJECT_URL = 'https://github.com/willgittens/FinKore'
+
+export function renderLearnNavigation({ home = false, current } = {}) {
+  return `<nav aria-label="Primary navigation">
+        <ul class="nav-list">
+          <li><a href="where-to-start.html"${current === 'start' ? ' aria-current="page"' : ''}>Where to start</a></li>
+          <li><a href="${home ? '#core-explorer' : 'coredoc.html'}"${current === 'coredoc' ? ' aria-current="page"' : ''}>CoreDoc</a></li>
+          <li><a class="nav-start" href="${GITHUB_PROJECT_URL}" target="_blank" rel="noopener noreferrer">Github Project <span aria-hidden="true">↗</span></a></li>
+        </ul>
+      </nav>`
+}
+
 const escapeHtml = text => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;')
 
 // Only the converted documents are redirected. Specs, conformance and other
@@ -158,7 +171,7 @@ export function renderLearnPage(page, markdown) {
   <header class="site-header">
     <div class="container header-layout">
       <a class="brand" href="index.html" aria-label="FinKore home"><img class="brand-logo" src="img/Finkore-Logo.png" alt="FinKore" width="1013" height="226" decoding="async" /></a>
-      <nav aria-label="Primary navigation"><ul class="nav-list"><li><a href="index.html#core-explorer">CoreDoc</a></li><li><a class="nav-start" href="index.html#start">Start reading <span aria-hidden="true">↗</span></a></li></ul></nav>
+      ${renderLearnNavigation({ current: page.output === 'learn/where-to-start.html' ? 'start' : undefined })}
     </div>
   </header>
   <main id="main">
@@ -192,7 +205,7 @@ ${doc.html.replace(/<h1\b[^>]*>[\s\S]*?<\/h1>\n?/, '')}
 export function buildLearnPages(root = process.cwd(), { check = false } = {}) {
   const outputs = LEARN_PAGES.map(page => [page.output, renderLearnPage(page, readFileSync(resolve(root, page.source), 'utf8'))])
   const home = readFileSync(resolve(root, 'learn/index.html'), 'utf8')
-  const nextHome = home.replace(/href="([^"]+)"/g, (match, href) => {
+  const nextHome = home.replace(/<nav aria-label="Primary navigation">[\s\S]*?<\/nav>/, renderLearnNavigation({ home: true })).replace(/href="([^"]+)"/g, (match, href) => {
     if (/^[a-z][a-z0-9+.-]*:|^#|^\//i.test(href)) return match
     const target = posix.normalize(posix.join('learn', href.split('#')[0]))
     return destinations.has(target) ? `href="${escapeHtml(learnLink('learn/index.html', href))}"` : match

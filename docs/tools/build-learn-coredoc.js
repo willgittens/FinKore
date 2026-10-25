@@ -8,7 +8,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve, posix } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { learnLink } from './build-learn-pages.js'
+import { learnLink, renderLearnNavigation } from './build-learn-pages.js'
 
 const SOURCE = 'docs/coreDoc/core-doc.md'
 const READER = 'learn/coredoc.html'
@@ -131,12 +131,7 @@ export function renderReader(doc) {
       <a class="brand" href="index.html" aria-label="FinKore home">
         <img class="brand-logo" src="img/Finkore-Logo.png" alt="FinKore" width="1013" height="226" decoding="async" />
       </a>
-      <nav aria-label="Primary navigation">
-        <ul class="nav-list">
-          <li><a href="index.html#core-explorer">CoreDoc</a></li>
-          <li><a class="nav-start" href="index.html#start">Start reading <span aria-hidden="true">↗</span></a></li>
-        </ul>
-      </nav>
+      ${renderLearnNavigation({ current: 'coredoc' })}
     </div>
   </header>
   <main id="main">

@@ -10,7 +10,7 @@ import { dirname, extname, join, relative, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { markdownAnchors } from './check-doc-links.js'
 import { buildLearnCoreDoc } from './build-learn-coredoc.js'
-import { LEARN_PAGES, renderLearnPage, buildLearnPages } from './build-learn-pages.js'
+import { LEARN_PAGES, renderLearnPage, buildLearnPages, GITHUB_PROJECT_URL } from './build-learn-pages.js'
 
 const LOCAL_STATE = new Set(['.git', '.tools', 'node_modules', '.npm-cache', 'coverage', 'dist', 'reports'])
 const NEGATIVE_FIXTURE = 'docs/tools/test/fixtures/release-content-negative.json'
@@ -69,13 +69,16 @@ function htmlAttributes(text, names) {
   return attributes
 }
 
+const navigationPages = new Set(['learn/index.html', 'learn/coredoc.html', ...LEARN_PAGES.map(page => page.output)])
+
 function isAllowedExternalLink(path, tag, href) {
   const destinations = {
     'learn/index.html': ['https://www.linkedin.com/in/will-gittens/', 'https://savoiabarker.com/'],
     'learn/about.html': ['https://finkore.dev', 'https://savoiabarker.com/'],
     'learn/licensing.html': ['https://www.mozilla.org/en-US/MPL/2.0/FAQ/'],
   }
-  if (!/^<a\b/i.test(tag) || !destinations[path]?.includes(href)) return false
+  const projectLink = navigationPages.has(path) && href === GITHUB_PROJECT_URL
+  if (!/^<a\b/i.test(tag) || !(projectLink || destinations[path]?.includes(href))) return false
   const targets = htmlAttributes(tag, new Set(['target']))
   const relationships = htmlAttributes(tag, new Set(['rel']))
   const tokens = relationships.length === 1 ? relationships[0].split(/\s+/) : []

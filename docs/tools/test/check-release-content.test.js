@@ -245,3 +245,26 @@ test('limits the CoreDoc reader enhancement to its exact deferred local script a
   put(root, 'learn/index.html', page)
   assert.match(run(root).error, /learn\/index.html: interactive HTML/)
 })
+
+
+test('permits the official GitHub project link only on known Learn pages with safe new-tab attributes', t => {
+  const root = fixture(t)
+  const link = '<a class="nav-start" href="https://github.com/willgittens/FinKore" target="_blank" rel="noopener noreferrer">Github Project</a>'
+  const page = `<h1>FinKore Core 2.0.2 stable</h1>${link}`
+  put(root, 'learn/index.html', page)
+  assert.equal(run(root).status, 0)
+  for (const invalid of [
+    page.replace('github.com/willgittens/FinKore', 'github.com/another-person/FinKore'),
+    page.replace('https://github.com', 'http://github.com'),
+    page.replace('target="_blank"', 'target="_self"'),
+    page.replace('rel="noopener noreferrer"', 'rel="opener"'),
+    page.replace('target="_blank"', 'target="_blank" target="_self"'),
+    page.replace('href="https:', 'src="https:'),
+  ]) {
+    put(root, 'learn/index.html', invalid)
+    assert.match(run(root).error, /HTML link must name a local destination/)
+  }
+  put(root, 'learn/index.html', page)
+  put(root, 'learn/other.html', page)
+  assert.match(run(root).error, /learn\/other.html: HTML link must name a local destination/)
+})
