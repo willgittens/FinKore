@@ -71,7 +71,7 @@ jobs:
     if: github.repository == 'willgittens/FinKore' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    environment: Production
+    environment: production
     permissions:
       contents: read
     steps:
@@ -122,7 +122,7 @@ jobs:
               'FTP_HOST', 'FTP_USERNAME', 'FTP_PASSWORD', 'FTP_SERVER_DIR',
               'FTP_PROTOCOL', 'FTP_PORT', 'FTP_HOST_KEY')}
           for name in ('FTP_HOST', 'FTP_USERNAME', 'FTP_PASSWORD', 'FTP_SERVER_DIR', 'FTP_PROTOCOL'):
-              require(bool(settings[name]), f'Configure {name} in GitHub Settings > Environments > production.')
+              require(bool(settings[name]), f'Configure {name} in GitHub Settings > Environments > Production.')
           require(all(not any(ord(c) < 32 or ord(c) == 127 for c in value)
                       for value in settings.values()), 'Deployment settings must not contain control characters.')
           protocol = settings['FTP_PROTOCOL']
