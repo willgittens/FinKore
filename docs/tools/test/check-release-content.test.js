@@ -24,7 +24,7 @@ function fixture(t) {
   put(root, 'conformance/manifest.json', JSON.stringify({ finkoreConformance: '0.1' }))
   put(root, 'conformance/vector.schema.json', JSON.stringify({ finkoreVectorFile: '0.1' }))
   put(root, 'conformance/example.json', JSON.stringify({ vectors: [{ id: 'entity.boundary097.control-001' }] }))
-  put(root, 'learn/index.html', '<h1 id="start">FinKore Core 2.0.2 stable</h1><a href="#start">Start</a><a href="../spec/README.md#contract">Spec</a><a href=../README.md>Home</a>')
+  put(root, 'learn/index.html', '<h1 id="start">FinKore Core 2.0.2 stable</h1><a href="#start">Start</a><a href="https://github.com/willgittens/FinKore/blob/main/spec/README.md#contract" target="_blank" rel="noopener noreferrer">Spec</a><a href="https://github.com/willgittens/FinKore/blob/main/README.md" target="_blank" rel="noopener noreferrer">Home</a>')
   return root
 }
 function run(root) {
@@ -269,7 +269,7 @@ test('permits the official GitHub project link only on known Learn pages with sa
   assert.match(run(root).error, /learn\/other.html: HTML link must name a local destination/)
 })
 
-test('validates official GitHub Markdown links and fragments against the local tree', t => {
+test('validates official GitHub file links and fragments against the local tree', t => {
   const root = fixture(t)
   const url = 'https://github.com/willgittens/FinKore/blob/main/spec/README.md#contract'
   const page = `<h1>FinKore Core 2.0.2 stable</h1><a href="${url}" target="_blank" rel="noopener noreferrer">Specification</a>`
@@ -278,12 +278,16 @@ test('validates official GitHub Markdown links and fragments against the local t
   for (const invalid of [
     page.replace('/willgittens/', '/another-person/'),
     page.replace('/blob/main/', '/blob/other/'),
-    page.replace('.md#contract', '.json'),
     page.replace('target="_blank"', 'target="_self"'),
     page.replace('rel="noopener noreferrer"', 'rel="opener"'),
   ]) {
     put(root, 'learn/index.html', invalid)
     assert.match(run(root).error, /HTML link must name a local destination/)
+  }
+  for (const file of ['LICENSE', 'conformance/manifest.json', '.github/CODEOWNERS']) {
+    put(root, file, file.endsWith('.json') ? '{"finkoreConformance":"0.1"}' : 'Repository file\n')
+    put(root, 'learn/index.html', page.replace('spec/README.md#contract', file))
+    assert.equal(run(root).status, 0, file)
   }
   for (const [invalid, diagnostic] of [
     [page.replace('spec/README.md', 'spec/missing.md'), /broken or escaping HTML link/],
@@ -292,5 +296,14 @@ test('validates official GitHub Markdown links and fragments against the local t
   ]) {
     put(root, 'learn/index.html', invalid)
     assert.match(run(root).error, diagnostic)
+  }
+})
+
+
+test('rejects links outside the published Learn directory even when files exist', t => {
+  const root = fixture(t)
+  for (const href of ['../README.md', '../spec/README.md', '%2e%2e/README.md']) {
+    put(root, 'learn/index.html', `<h1>FinKore Core 2.0.2 stable</h1><a href="${href}">Repository file</a>`)
+    assert.match(run(root).error, /HTML link escapes the Learn site root/)
   }
 })

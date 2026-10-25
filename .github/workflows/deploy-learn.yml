@@ -1,0 +1,251 @@
+# SPDX-License-Identifier: MPL-2.0
+# Verifies committed Learn content, then uploads its files to configured hosting.
+# Writes only temporary staging and the remote site; defines no financial behavior.
+name: Deploy FinKore Learn
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "learn/**"
+      - ".github/workflows/deploy-learn.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-learn
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Validate Learn deployment
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Require the upstream main branch
+        run: |
+          if [ "$GITHUB_REF" != refs/heads/main ] || [ "$GITHUB_REPOSITORY" != willgittens/FinKore ]; then
+            echo '::error::Production deployment requires willgittens/FinKore on refs/heads/main.'
+            exit 1
+          fi
+
+      - name: Check out the deployment commit
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Verify and regenerate the committed site
+        run: |
+          npm ci --no-audit
+          npm run verify
+          npm run learn:build
+          git diff --exit-code -- learn/
+
+      - name: Summarize validation
+        if: always()
+        env:
+          RESULT: ${{ job.status }}
+        run: |
+          {
+            echo '## Learn deployment validation'
+            echo "Commit: $GITHUB_SHA"
+            echo 'Source: learn/'
+            echo "Result: $RESULT"
+            echo 'Production transfer requires successful validation of this commit.'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  deploy:
+    name: Deploy Learn to production
+    needs: verify
+    if: github.repository == 'willgittens/FinKore' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    permissions:
+      contents: read
+    steps:
+      - name: Check out the verified commit
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Install the secure transfer client
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install --no-install-recommends -y lftp openssh-client ca-certificates
+
+      - name: Validate configuration and upload Learn contents
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_SERVER_DIR: ${{ vars.FTP_SERVER_DIR }}
+          FTP_PROTOCOL: ${{ vars.FTP_PROTOCOL }}
+          FTP_PORT: ${{ vars.FTP_PORT }}
+          FTP_HOST_KEY: ${{ vars.FTP_HOST_KEY }}
+        shell: python3 {0}
+        run: |
+          import ipaddress
+          import os
+          from pathlib import Path
+          import re
+          import shlex
+          import shutil
+          import subprocess
+          import tempfile
+
+          def require(condition, message):
+              if not condition:
+                  print(f"::error::{message}", flush=True)
+                  raise SystemExit(1)
+
+          def quote(value):
+              # lftp quoting, not shell quoting. Credentials never enter argv.
+              return '"' + value.replace('\\', '\\\\').replace('"', '\\"') + '"'
+
+          require(os.environ.get('GITHUB_REF') == 'refs/heads/main' and
+                  os.environ.get('GITHUB_REPOSITORY') == 'willgittens/FinKore',
+                  'Production deployment requires the upstream main branch.')
+          settings = {name: os.environ.get(name, '') for name in (
+              'FTP_HOST', 'FTP_USERNAME', 'FTP_PASSWORD', 'FTP_SERVER_DIR',
+              'FTP_PROTOCOL', 'FTP_PORT', 'FTP_HOST_KEY')}
+          for name in ('FTP_HOST', 'FTP_USERNAME', 'FTP_PASSWORD', 'FTP_SERVER_DIR', 'FTP_PROTOCOL'):
+              require(bool(settings[name]), f'Configure {name} in GitHub Settings > Environments > production.')
+          require(all(not any(ord(c) < 32 or ord(c) == 127 for c in value)
+                      for value in settings.values()), 'Deployment settings must not contain control characters.')
+          protocol = settings['FTP_PROTOCOL']
+          require(protocol in ('sftp', 'ftps'), 'FTP_PROTOCOL must be sftp or ftps (explicit TLS); plain FTP is forbidden.')
+          port_text = settings['FTP_PORT'] or ('22' if protocol == 'sftp' else '21')
+          require(port_text.isascii() and port_text.isdigit() and 1 <= int(port_text) <= 65535,
+                  'FTP_PORT must be an integer between 1 and 65535.')
+          destination = settings['FTP_SERVER_DIR'].rstrip('/')
+          components = destination.lstrip('/').split('/')
+          require(bool(destination) and '//' not in settings['FTP_SERVER_DIR'] and
+                  all(part not in ('', '.', '..') and re.fullmatch(r'[A-Za-z0-9_. -]+', part)
+                      and part == part.strip() and not part.startswith('-') for part in components),
+                  'FTP_SERVER_DIR must name a non-root directory using letters, digits, spaces, _, -, . and /; no traversal.')
+          host = settings['FTP_HOST']
+          try:
+              address = ipaddress.ip_address(host)
+              url_host = f'[{host}]' if address.version == 6 else host
+          except ValueError:
+              require(bool(re.fullmatch(r'[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?', host)),
+                      'FTP_HOST must be a hostname or IP address, without a scheme, port or path.')
+              url_host = host
+          require(bool(re.fullmatch(r'[A-Za-z0-9_.@+-]+', settings['FTP_USERNAME'])),
+                  'FTP_USERNAME contains unsupported characters; use a dedicated hosting login.')
+
+          source = Path('learn').resolve()
+          require(source.is_dir() and (source / 'index.html').is_file() and
+                  (source / 'index.html').stat().st_size > 0, 'learn/ must contain a non-empty index.html.')
+          tracked = subprocess.run(['git', 'ls-files', '-z', '--', 'learn/'],
+                                   check=True, capture_output=True).stdout.decode().split('\0')
+          excluded_dirs = {'.git', '.github', '.ssh', '.aws', '.tools', '.npm-cache',
+                           'node_modules', '__pycache__', 'tmp', 'temp', '.cache'}
+          excluded_names = {'.npmrc', '.netrc', '.git-credentials', '.gitignore', '.gitattributes', '.DS_Store'}
+          excluded_suffixes = ('.key', '.pem', '.p12', '.pfx', '.ppk', '.log', '.tmp', '.temp', '.bak', '.swp', '~')
+          with tempfile.TemporaryDirectory(prefix='learn-deploy-', dir=os.environ['RUNNER_TEMP']) as temporary:
+              temporary = Path(temporary)
+              staging = temporary / 'site'
+              staging.mkdir()
+              files = []
+              directories = set()
+              for name in filter(None, tracked):
+                  path = Path(name)
+                  relative = path.relative_to('learn')
+                  if (set(relative.parts) & excluded_dirs or path.name in excluded_names or
+                          any(part.startswith('.env') for part in relative.parts) or
+                          path.name.endswith(excluded_suffixes)):
+                      continue
+                  require(not any(part.is_symlink() for part in (path, *path.parents)) and
+                          path.resolve().is_relative_to(source) and path.is_file(),
+                          'Learn deployment refuses symlinks and files outside learn/.')
+                  require(not any(ord(c) < 32 or ord(c) == 127 for c in str(relative)),
+                          'Learn filenames must not contain control characters.')
+                  target = staging / relative
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  shutil.copy2(path, target)
+                  files.append(relative)
+                  directories.update(parent for parent in relative.parents if parent != Path('.'))
+              require(bool(files) and (staging / 'index.html').is_file(), 'No publishable Learn content remains after exclusions.')
+              commands = [
+                  'set cmd:fail-exit yes', 'set cmd:save-cwd-history no',
+                  'set cmd:save-rl-history no', 'set bmk:save-passwords no',
+                  'set cmd:verify-path yes', 'set net:max-retries 2', 'set net:timeout 30',
+                  'set xfer:use-temp-file no',
+              ]
+              if protocol == 'sftp':
+                  key = settings['FTP_HOST_KEY']
+                  require(bool(re.fullmatch(r'(ssh-ed25519|ssh-rsa|ecdsa-sha2-nistp(?:256|384|521)) [A-Za-z0-9+/]+={0,3}', key)),
+                          'For SFTP, configure FTP_HOST_KEY as a trusted OpenSSH public host key: algorithm base64-key.')
+                  known_hosts = temporary / 'known_hosts'
+                  known_hosts.write_text('finkore-production ' + key + '\n')
+                  known_hosts.chmod(0o600)
+                  valid_key = subprocess.run(['ssh-keygen', '-l', '-f', str(known_hosts)], capture_output=True)
+                  require(valid_key.returncode == 0, 'FTP_HOST_KEY is not a valid OpenSSH host key.')
+                  ssh = shlex.join([
+                      'ssh', '-a', '-x', '-F', '/dev/null',
+                      '-oStrictHostKeyChecking=yes', '-oUpdateHostKeys=no',
+                      '-oGlobalKnownHostsFile=/dev/null', f'-oUserKnownHostsFile={known_hosts}',
+                      '-oHostKeyAlias=finkore-production', '-oConnectTimeout=30',
+                      '-oNumberOfPasswordPrompts=1', '-oPreferredAuthentications=password,keyboard-interactive',
+                  ])
+                  commands += ['set sftp:auto-confirm no', 'set sftp:connect-program ' + quote(ssh)]
+                  scheme = 'sftp'
+              else:
+                  commands += [
+                      'set ssl:verify-certificate yes', 'set ssl:check-hostname yes',
+                      'set ftp:ssl-force yes', 'set ftp:ssl-auth TLS', 'set ftp:ssl-use-ccc no',
+                      'set ftp:ssl-protect-data yes', 'set ftp:ssl-protect-list yes',
+                  ]
+                  # Explicit FTPS starts with FTP AUTH TLS; ssl-force prevents cleartext login.
+                  scheme = 'ftp'
+              commands += [
+                  'open --user ' + quote(settings['FTP_USERNAME']) + ' --env-password ' +
+                      quote(f'{scheme}://{url_host}:{int(port_text)}'),
+                  'cd ' + quote(destination),
+              ]
+              # Explicit mkdir/put commands never request remote deletion, including
+              # file/directory conflicts that a mirror client might otherwise replace.
+              commands += ['mkdir -p ' + quote('./' + path.as_posix())
+                           for path in sorted(directories, key=lambda path: (len(path.parts), str(path)))]
+              commands += ['put ' + quote(str(staging / path)) + ' -o ' + quote('./' + path.as_posix())
+                           for path in files]
+              commands.append('exit')
+              client_env = {key: value for key, value in os.environ.items() if not key.startswith('FTP_')}
+              client_env.update(LFTP_PASSWORD=settings['FTP_PASSWORD'], LFTP_HOME=str(temporary))
+              print(f"Deployment started: commit {os.environ['GITHUB_SHA']}; source learn/; {len(files)} files; {protocol}.", flush=True)
+              try:
+                  result = subprocess.run(['lftp', '--norc'], input='\n'.join(commands) + '\n',
+                                          text=True, capture_output=True, env=client_env, timeout=600)
+              except (OSError, subprocess.TimeoutExpired):
+                  require(False, 'Secure transfer could not complete. Check client availability and hosting connectivity; remote files may be partially updated.')
+              # Do not emit client output: server diagnostics can repeat credentials or URLs.
+              require(result.returncode == 0,
+                      'Secure transfer failed. Check authentication, protocol/port, host identity, directory access and hosting logs; remote files may be partially updated.')
+              print('Deployment completed successfully.', flush=True)
+
+      - name: Summarize deployment
+        if: always()
+        env:
+          RESULT: ${{ job.status }}
+        run: |
+          {
+            echo '## FinKore Learn deployment'
+            echo "Commit: $GITHUB_SHA"
+            echo 'Source: learn/ contents (no enclosing learn directory)'
+            echo "Result: $RESULT"
+            echo 'No remote cleanup or deletion is requested. Transfers are not an atomic site release.'
+          } >> "$GITHUB_STEP_SUMMARY"

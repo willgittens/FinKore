@@ -152,6 +152,8 @@ link. Native `details` elements provide the CoreDoc index, mobile navigation and
 rule history. The other document readers use native `details` for their mobile
 indexes and load no scripts. The gate checks local HTML destinations, Markdown
 and HTML fragments, placeholders, duplicate anchors, and unsupported interactive controls.
+CoreDoc rule headings retain their source Markdown fragments alongside the
+reader's shorter rule permalinks.
 Inline handlers, home-page scripts, playback buttons, and forms remain outside
 this reviewed profile. Remote resources are rejected. External links are limited
 to the homepage founder CTA to `https://www.linkedin.com/in/will-gittens/`, the homepage and
@@ -171,12 +173,16 @@ link retains the highlighted button style and opens the official repository at
 `https://github.com/willgittens/FinKore` in a new tab with
 `rel="noopener noreferrer"`. The release checker permits this exact external
 destination only on the known Learn pages.
-Markdown file links on these pages use
+Repository file links on these pages use
 `https://github.com/willgittens/FinKore/blob/main/` with the repository-relative
 path and original fragment. They open in a new tab with the same safe link
-attributes. The checker validates their file paths and Markdown fragments
-against the local tree without contacting GitHub; other repositories, branches,
-and non-Markdown GitHub file links remain outside this allowance.
+attributes. This includes Markdown, JSON artifacts, `LICENSE`, and `CODEOWNERS`.
+The checker validates their file paths and any fragments against the local tree
+without contacting GitHub; other repositories and branches remain outside this
+allowance. Local HTML links must stay inside `learn/`, which is the published
+site root at `https://finkore.dev/`. Relative navigation and asset paths also
+support serving the directory under a URL prefix. CSS font paths are relative
+to their stylesheet.
 The reader permits the exact deferred
 `js/coredoc.js` script when `core-mobile-index` exists; it closes that native
 disclosure on link activation and adds no new controls.
@@ -209,8 +215,8 @@ to their HTML readers, including from the home page and CoreDoc; each reader
 also offers its Markdown source on GitHub. Markdown destinations without a
 local HTML reader, including specifications, conformance guidance, Agentic
 documentation, governance, and tool guidance, link to the corresponding file on
-GitHub's `main` branch. Non-Markdown repository references keep their existing
-destinations. The readers cover the introductory guide and the
+GitHub's `main` branch. Other repository files outside `learn/` also use GitHub
+links so the site does not depend on parent directories being published. The readers cover the introductory guide and the
 documents linked directly by the home page and CoreDoc; they do not recursively
 publish the repository.
 

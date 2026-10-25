@@ -20,7 +20,7 @@ export const LEARN_PAGES = [
 const destinations = new Map(LEARN_PAGES.map(page => [page.source, page.output]))
 destinations.set('docs/coreDoc/core-doc.md', 'learn/coredoc.html')
 export const GITHUB_PROJECT_URL = 'https://github.com/willgittens/FinKore'
-export const GITHUB_MARKDOWN_BASE_URL = `${GITHUB_PROJECT_URL}/blob/main/`
+export const GITHUB_FILE_BASE_URL = `${GITHUB_PROJECT_URL}/blob/main/`
 
 export function renderLearnNavigation({ home = false, current } = {}) {
   return `<nav aria-label="Primary navigation">
@@ -34,8 +34,8 @@ export function renderLearnNavigation({ home = false, current } = {}) {
 
 const escapeHtml = text => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;')
 
-// Keep converted readers local; link other Markdown documents to GitHub.
-// Non-Markdown repository references retain their destinations and fragments.
+// Learn is the published site root. Keep readers and assets inside it local;
+// link repository files outside Learn to GitHub, preserving fragments.
 export function learnLink(source, href) {
   if (/^https:\/\/[^\\\s"'<>]+$/.test(href)) return href
   if (/^[a-z][a-z0-9+.-]*:|^\/|[\\\s]/i.test(href)) throw new Error(`Unsupported Learn link: ${href}`)
@@ -44,7 +44,7 @@ export function learnLink(source, href) {
   const target = posix.normalize(posix.join(posix.dirname(source), path))
   if (target === '..' || target.startsWith('../')) throw new Error(`Escaping Learn link: ${href}`)
   const destination = destinations.has(target) ? posix.relative('learn', destinations.get(target)) :
-    target.endsWith('.md') ? GITHUB_MARKDOWN_BASE_URL + target : posix.relative('learn', target)
+    target.startsWith('learn/') ? posix.relative('learn', target) : GITHUB_FILE_BASE_URL + target
   return destination + (fragment === undefined ? '' : `#${fragment}`)
 }
 const linkAttributes = (source, href) => {
@@ -185,7 +185,7 @@ export function renderLearnPage(page, markdown) {
       <p class="eyebrow">${escapeHtml(page.label)}</p>
       <h1 id="${escapeHtml(doc.titleId)}">${escapeHtml(doc.title)}</h1>
       <p class="core-reader-lead">${escapeHtml(page.description)}</p>
-      <div class="actions"><a class="text-link" href="${GITHUB_MARKDOWN_BASE_URL}${page.source}" target="_blank" rel="noopener noreferrer">View Markdown source <span aria-hidden="true">↗</span></a></div>
+      <div class="actions"><a class="text-link" href="${GITHUB_FILE_BASE_URL}${page.source}" target="_blank" rel="noopener noreferrer">View Markdown source <span aria-hidden="true">↗</span></a></div>
       <nav class="learn-document-links" aria-label="Learn documents">${LEARN_PAGES.map(p => `<a href="${posix.basename(p.output)}"${p === page ? ' aria-current="page"' : ''}>${escapeHtml(p.label)}</a>`).join('')}<a href="coredoc.html">CoreDoc</a></nav>
     </header>
     <div class="container core-reader-layout">
@@ -201,7 +201,7 @@ ${doc.html.replace(/<h1\b[^>]*>[\s\S]*?<\/h1>\n?/, '')}
   </main>
   <footer class="site-footer"><div class="container footer-layout">
     <a class="brand" href="index.html">FinKore<span class="accent" aria-hidden="true">.</span></a><p>Financial behavior, made explicit.</p>
-    <nav aria-label="Project resources"><a href="about.html">About the project</a><a href="contributing.html">Contribute</a><a href="../LICENSE">MPL-2.0</a></nav>
+    <nav aria-label="Project resources"><a href="about.html">About the project</a><a href="contributing.html">Contribute</a><a href="${GITHUB_FILE_BASE_URL}LICENSE" target="_blank" rel="noopener noreferrer">MPL-2.0</a></nav>
   </div></footer>
 </body>
 </html>
@@ -213,8 +213,7 @@ export function buildLearnPages(root = process.cwd(), { check = false } = {}) {
   const home = readFileSync(resolve(root, 'learn/index.html'), 'utf8')
   const nextHome = home.replace(/<nav aria-label="Primary navigation">[\s\S]*?<\/nav>/, renderLearnNavigation({ home: true })).replace(/href="([^"]+)"/g, (match, href) => {
     if (/^[a-z][a-z0-9+.-]*:|^#|^\//i.test(href)) return match
-    const target = posix.normalize(posix.join('learn', href.split('#')[0]))
-    return destinations.has(target) || target.endsWith('.md') ? linkAttributes('learn/index.html', href) : match
+    return learnLink('learn/index.html', href) !== href ? linkAttributes('learn/index.html', href) : match
   })
   outputs.push(['learn/index.html', nextHome])
   if (check) {

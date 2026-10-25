@@ -69,7 +69,7 @@
 <p class="core-governance"><strong>Last updated:</strong> Draft 0.4</p>
 <p class="core-governance"><strong>Last updated on:</strong> 2026-09-12</p></details></header>
           <article class="core-rule" tabindex="-1" id="core-001-1" aria-labelledby="core-001-1-title">
-            <header><p class="eyebrow">CORE-001.1</p><h3 id="core-001-1-title">Amount and currency are inseparable</h3><a class="core-permalink" href="#core-001-1" aria-label="Direct link to CORE-001.1">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0011-amount-and-currency-are-inseparable"><p class="eyebrow">CORE-001.1</p><h3 id="core-001-1-title">Amount and currency are inseparable</h3><a class="core-permalink" href="#core-001-1" aria-label="Direct link to CORE-001.1">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>A monetary value SHALL contain an exact base-10 amount and a currency. An amount SHALL NOT be interpreted as monetary value without its currency.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>The same number has different financial meaning in different currencies. Treating currency as display-only can misstate a balance or transaction.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>Currency identifies the monetary unit; it does not supply an exchange rate. Negative and zero amounts retain ordinary numeric meaning unless a consuming domain declares a business restriction.</p></section>
@@ -81,7 +81,7 @@
             <nav class="core-rule-navigation" aria-label="Reading navigation for CORE-001.1"><a href="#top"><span>← CoreDoc</span>Back to the overview</a><a href="#core-001-2"><span>Next rule · CORE-001.2 →</span>Exact calculation and explicit rounding</a></nav>
           </article>
           <article class="core-rule" tabindex="-1" id="core-001-2" aria-labelledby="core-001-2-title">
-            <header><p class="eyebrow">CORE-001.2</p><h3 id="core-001-2-title">Exact calculation and explicit rounding</h3><a class="core-permalink" href="#core-001-2" aria-label="Direct link to CORE-001.2">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0012-exact-calculation-and-explicit-rounding"><p class="eyebrow">CORE-001.2</p><h3 id="core-001-2-title">Exact calculation and explicit rounding</h3><a class="core-permalink" href="#core-001-2" aria-label="Direct link to CORE-001.2">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>Where a monetary calculation has an exactly representable result, it SHALL preserve that result. Precision reduction SHALL use a declared rounding rule and SHALL NOT select a rounding method or target scale implicitly.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>Undeclared rounding changes financial value without an accountable policy decision. Exact calculation identifies where rounding was intentionally applied.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>A rounding rule identifies both target scale and mode. A currency&#39;s customary minor-unit scale is not, by itself, a rounding instruction.</p></section>
@@ -93,7 +93,7 @@
             <nav class="core-rule-navigation" aria-label="Reading navigation for CORE-001.2"><a href="#core-001-1"><span>← Previous rule · CORE-001.1</span>Amount and currency are inseparable</a><a href="#core-001-3"><span>Next rule · CORE-001.3 →</span>Incompatible currencies are not combined or compared</a></nav>
           </article>
           <article class="core-rule" tabindex="-1" id="core-001-3" aria-labelledby="core-001-3-title">
-            <header><p class="eyebrow">CORE-001.3</p><h3 id="core-001-3-title">Incompatible currencies are not combined or compared</h3><a class="core-permalink" href="#core-001-3" aria-label="Direct link to CORE-001.3">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0013-incompatible-currencies-are-not-combined-or-compared"><p class="eyebrow">CORE-001.3</p><h3 id="core-001-3-title">Incompatible currencies are not combined or compared</h3><a class="core-permalink" href="#core-001-3" aria-label="Direct link to CORE-001.3">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>Monetary amounts SHALL be added, subtracted, ordered, or treated as numerically equal only when their currencies are compatible. Conversion SHALL be explicit; incompatibility SHALL NOT be silently resolved.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>Combining EUR and USD without a stated conversion basis produces a number with no reliable financial interpretation.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>In the current Money specification, compatibility requires the same ISO 4217 currency identifier. A mismatch is a rejected domain outcome, not zero or equal.</p></section>
@@ -105,7 +105,7 @@
             <nav class="core-rule-navigation" aria-label="Reading navigation for CORE-001.3"><a href="#core-001-2"><span>← Previous rule · CORE-001.2</span>Exact calculation and explicit rounding</a><a href="#core-001-4"><span>Next rule · CORE-001.4 →</span>Allocation conserves the source value</a></nav>
           </article>
           <article class="core-rule" tabindex="-1" id="core-001-4" aria-labelledby="core-001-4-title">
-            <header><p class="eyebrow">CORE-001.4</p><h3 id="core-001-4-title">Allocation conserves the source value</h3><a class="core-permalink" href="#core-001-4" aria-label="Direct link to CORE-001.4">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0014-allocation-conserves-the-source-value"><p class="eyebrow">CORE-001.4</p><h3 id="core-001-4-title">Allocation conserves the source value</h3><a class="core-permalink" href="#core-001-4" aria-label="Direct link to CORE-001.4">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>An allocation SHALL preserve the source currency and return results whose exact sum equals the source amount. It SHALL NOT drop, duplicate, create, or destroy allocation units.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>An unexplained residual between a cost or payment and its assignments prevents reconciliation.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>The allocation scale and method are declared inputs. The declared result order governs distribution of an indivisible remainder.</p></section>
@@ -122,7 +122,7 @@
 <p class="core-governance"><strong>Last updated:</strong> Draft 0.4</p>
 <p class="core-governance"><strong>Last updated on:</strong> 2026-09-10</p></details></header>
           <article class="core-rule" tabindex="-1" id="core-002-1" aria-labelledby="core-002-1-title">
-            <header><p class="eyebrow">CORE-002.1</p><h3 id="core-002-1-title">Lifecycle changes require a declared valid transition</h3><a class="core-permalink" href="#core-002-1" aria-label="Direct link to CORE-002.1">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0021-lifecycle-changes-require-a-declared-valid-transition"><p class="eyebrow">CORE-002.1</p><h3 id="core-002-1-title">Lifecycle changes require a declared valid transition</h3><a class="core-permalink" href="#core-002-1" aria-label="Direct link to CORE-002.1">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>Where a financial subject has a lifecycle, it SHALL have one declared current state. Its state SHALL change only through a declared transition from that state after all applicable conditions have passed.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>Lifecycle status can determine whether a financial action is permitted or final. An undeclared shortcut, including an assumed reverse transition, weakens control.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>Each lifecycle declares its initial state, directed transitions, and terminal states. Labels such as “posted” or “final” do not independently establish effect.</p></section>
@@ -134,7 +134,7 @@
             <nav class="core-rule-navigation" aria-label="Reading navigation for CORE-002.1"><a href="#core-001-4"><span>← Previous rule · CORE-001.4</span>Allocation conserves the source value</a><a href="#core-002-2"><span>Next rule · CORE-002.2 →</span>Validation is complete, fact-based, and non-mutating</a></nav>
           </article>
           <article class="core-rule" tabindex="-1" id="core-002-2" aria-labelledby="core-002-2-title">
-            <header><p class="eyebrow">CORE-002.2</p><h3 id="core-002-2-title">Validation is complete, fact-based, and non-mutating</h3><a class="core-permalink" href="#core-002-2" aria-label="Direct link to CORE-002.2">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0022-validation-is-complete-fact-based-and-non-mutating"><p class="eyebrow">CORE-002.2</p><h3 id="core-002-2-title">Validation is complete, fact-based, and non-mutating</h3><a class="core-permalink" href="#core-002-2" aria-label="Direct link to CORE-002.2">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>A proposed financial change SHALL be evaluated against the complete proposed result and declared relevant facts before it becomes observable. Validation or transition-condition evaluation SHALL NOT itself alter domain data.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>Controls spanning several facts fail if each fact is assessed alone. State changed while checking a condition obscures the difference between attempt and success.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>All applicable conditions must pass. For the same declared facts, a condition has the same result unless it identifies an external fact on which it depends.</p></section>
@@ -146,7 +146,7 @@
             <nav class="core-rule-navigation" aria-label="Reading navigation for CORE-002.2"><a href="#core-002-1"><span>← Previous rule · CORE-002.1</span>Lifecycle changes require a declared valid transition</a><a href="#core-002-3"><span>Next rule · CORE-002.3 →</span>Rejected actions have no partial financial effect</a></nav>
           </article>
           <article class="core-rule" tabindex="-1" id="core-002-3" aria-labelledby="core-002-3-title">
-            <header><p class="eyebrow">CORE-002.3</p><h3 id="core-002-3-title">Rejected actions have no partial financial effect</h3><a class="core-permalink" href="#core-002-3" aria-label="Direct link to CORE-002.3">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0023-rejected-actions-have-no-partial-financial-effect"><p class="eyebrow">CORE-002.3</p><h3 id="core-002-3-title">Rejected actions have no partial financial effect</h3><a class="core-permalink" href="#core-002-3" aria-label="Direct link to CORE-002.3">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>A rejected financial action SHALL leave relevant observable financial state, financial data, and committed history unchanged, unless a governing rule expressly defines another failure effect.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>A partly recognised failed change can create an unapproved balance, status, relationship, or audit trail that cannot be reconciled with the reported outcome.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>This includes rejected transitions, entity mutations, audit appends and relationships, and evolution requests where the relevant specification defines non-mutation on failure.</p></section>
@@ -158,7 +158,7 @@
             <nav class="core-rule-navigation" aria-label="Reading navigation for CORE-002.3"><a href="#core-002-2"><span>← Previous rule · CORE-002.2</span>Validation is complete, fact-based, and non-mutating</a><a href="#core-002-4"><span>Next rule · CORE-002.4 →</span>Mutability is declared by state and field</a></nav>
           </article>
           <article class="core-rule" tabindex="-1" id="core-002-4" aria-labelledby="core-002-4-title">
-            <header><p class="eyebrow">CORE-002.4</p><h3 id="core-002-4-title">Mutability is declared by state and field</h3><a class="core-permalink" href="#core-002-4" aria-label="Direct link to CORE-002.4">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0024-mutability-is-declared-by-state-and-field"><p class="eyebrow">CORE-002.4</p><h3 id="core-002-4-title">Mutability is declared by state and field</h3><a class="core-permalink" href="#core-002-4" aria-label="Direct link to CORE-002.4">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>For a subject with state-dependent mutability, the governing domain SHALL declare which fields may change in each state. A change targeting an immutable field SHALL be rejected.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>“Final” status alone is too vague to determine what can still change. Unrestricted change to protected facts can detach a record from approval and history evidence.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>Financial fields and operational metadata may have different rules, but a permitted exception must be expressly identified and meet audit requirements.</p></section>
@@ -175,7 +175,7 @@
 <p class="core-governance"><strong>Last updated:</strong> Draft 0.4</p>
 <p class="core-governance"><strong>Last updated on:</strong> 2026-09-10</p></details></header>
           <article class="core-rule" tabindex="-1" id="core-003-1" aria-labelledby="core-003-1-title">
-            <header><p class="eyebrow">CORE-003.1</p><h3 id="core-003-1-title">A committed event preserves essential evidence</h3><a class="core-permalink" href="#core-003-1" aria-label="Direct link to CORE-003.1">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0031-a-committed-event-preserves-essential-evidence"><p class="eyebrow">CORE-003.1</p><h3 id="core-003-1-title">A committed event preserves essential evidence</h3><a class="core-permalink" href="#core-003-1" aria-label="Direct link to CORE-003.1">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>A committed financial event SHALL preserve a stable event identity, declared event type, affected financial subject, and unambiguous occurrence time. It SHALL identify the responsible actor when known.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>Without these facts, a reviewer cannot determine what occurred, what it affected, when it took effect, or who was accountable.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>Event type is declared domain meaning, not an inference from a technical action or label. An unknown or absent actor shall not be represented as an invented one.</p></section>
@@ -187,7 +187,7 @@
             <nav class="core-rule-navigation" aria-label="Reading navigation for CORE-003.1"><a href="#core-002-4"><span>← Previous rule · CORE-002.4</span>Mutability is declared by state and field</a><a href="#core-003-2"><span>Next rule · CORE-003.2 →</span>Committed history is not destructively rewritten</a></nav>
           </article>
           <article class="core-rule" tabindex="-1" id="core-003-2" aria-labelledby="core-003-2-title">
-            <header><p class="eyebrow">CORE-003.2</p><h3 id="core-003-2-title">Committed history is not destructively rewritten</h3><a class="core-permalink" href="#core-003-2" aria-label="Direct link to CORE-003.2">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0032-committed-history-is-not-destructively-rewritten"><p class="eyebrow">CORE-003.2</p><h3 id="core-003-2-title">Committed history is not destructively rewritten</h3><a class="core-permalink" href="#core-003-2" aria-label="Direct link to CORE-003.2">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>A committed financial-history event and an explicitly recorded ordering relationship SHALL NOT be replaced, modified, removed, or silently reordered.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>History cannot support reconstruction, investigation, or accountability if past events can disappear or change without trace.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>Resubmitting an existing event identity is rejected rather than creating another committed instance. Arbitrary storage or retrieval order is not evidence of financial sequence when order was not explicitly recorded.</p></section>
@@ -199,7 +199,7 @@
             <nav class="core-rule-navigation" aria-label="Reading navigation for CORE-003.2"><a href="#core-003-1"><span>← Previous rule · CORE-003.1</span>A committed event preserves essential evidence</a><a href="#core-003-3"><span>Next rule · CORE-003.3 →</span>Corrections and related evolution preserve original facts</a></nav>
           </article>
           <article class="core-rule" tabindex="-1" id="core-003-3" aria-labelledby="core-003-3-title">
-            <header><p class="eyebrow">CORE-003.3</p><h3 id="core-003-3-title">Corrections and related evolution preserve original facts</h3><a class="core-permalink" href="#core-003-3" aria-label="Direct link to CORE-003.3">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0033-corrections-and-related-evolution-preserve-original-facts"><p class="eyebrow">CORE-003.3</p><h3 id="core-003-3-title">Corrections and related evolution preserve original facts</h3><a class="core-permalink" href="#core-003-3" aria-label="Direct link to CORE-003.3">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>A correction, reversal, void, or supersession SHALL preserve a verifiable relationship to the affected original subject or event. It SHALL NOT erase or rewrite original financial facts or history, and these concepts SHALL NOT be silently treated as interchangeable.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>These actions can have different financial effects. A reviewer must distinguish a correction from a reversal or void and reconstruct both original and later facts.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>Eligibility and detailed consequences are declared by the composing domain or lifecycle policy, not inferred from state or display labels.</p></section>
@@ -211,7 +211,7 @@
             <nav class="core-rule-navigation" aria-label="Reading navigation for CORE-003.3"><a href="#core-003-2"><span>← Previous rule · CORE-003.2</span>Committed history is not destructively rewritten</a><a href="#core-003-4"><span>Next rule · CORE-003.4 →</span>Redaction preserves evidence of history</a></nav>
           </article>
           <article class="core-rule" tabindex="-1" id="core-003-4" aria-labelledby="core-003-4-title">
-            <header><p class="eyebrow">CORE-003.4</p><h3 id="core-003-4-title">Redaction preserves evidence of history</h3><a class="core-permalink" href="#core-003-4" aria-label="Direct link to CORE-003.4">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0034-redaction-preserves-evidence-of-history"><p class="eyebrow">CORE-003.4</p><h3 id="core-003-4-title">Redaction preserves evidence of history</h3><a class="core-permalink" href="#core-003-4" aria-label="Direct link to CORE-003.4">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>Financial-history content MAY be redacted only under identified policy or authority. Redaction SHALL remain distinguishable from original absence and preserve the event identity, type, affected subject, occurrence time, actor attribution, and recorded relationships needed to evidence the event.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>Confidentiality can be necessary, but deleting evidence of an event makes its history unreconstructible. A reviewer must know that a value was withheld.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>Redaction of committed logical history produces an event evidencing that redaction. Access-time masking may supplement it but is not source-event mutation.</p></section>
@@ -228,7 +228,7 @@
 <p class="core-governance"><strong>Last updated:</strong> Draft 0.4</p>
 <p class="core-governance"><strong>Last updated on:</strong> 2026-09-10</p></details></header>
           <article class="core-rule" tabindex="-1" id="core-004-1" aria-labelledby="core-004-1-title">
-            <header><p class="eyebrow">CORE-004.1</p><h3 id="core-004-1-title">Approval requirements state subject, eligibility, and outcome</h3><a class="core-permalink" href="#core-004-1" aria-label="Direct link to CORE-004.1">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0041-approval-requirements-state-subject-eligibility-and-outcome"><p class="eyebrow">CORE-004.1</p><h3 id="core-004-1-title">Approval requirements state subject, eligibility, and outcome</h3><a class="core-permalink" href="#core-004-1" aria-label="Direct link to CORE-004.1">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>An approval requirement SHALL identify the subject requiring approval, eligible decision-maker or eligibility rule, and the outcome that satisfies or rejects it. Eligibility SHALL be evaluated independently from technical ability to submit a request.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>Technical permission is not evidence that appropriate business approval was given. Declared eligibility and outcome criteria make the control testable.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>A requirement may be conditional, but retains stable identity in its approval context. A decision-maker must meet the requirement at evaluation time.</p></section>
@@ -240,7 +240,7 @@
             <nav class="core-rule-navigation" aria-label="Reading navigation for CORE-004.1"><a href="#core-003-4"><span>← Previous rule · CORE-003.4</span>Redaction preserves evidence of history</a><a href="#core-004-2"><span>Next rule · CORE-004.2 →</span>Missing facts do not create an approval exemption</a></nav>
           </article>
           <article class="core-rule" tabindex="-1" id="core-004-2" aria-labelledby="core-004-2-title">
-            <header><p class="eyebrow">CORE-004.2</p><h3 id="core-004-2-title">Missing facts do not create an approval exemption</h3><a class="core-permalink" href="#core-004-2" aria-label="Direct link to CORE-004.2">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0042-missing-facts-do-not-create-an-approval-exemption"><p class="eyebrow">CORE-004.2</p><h3 id="core-004-2-title">Missing facts do not create an approval exemption</h3><a class="core-permalink" href="#core-004-2" aria-label="Direct link to CORE-004.2">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>An approval condition SHALL be evaluated against identified domain facts. If a required fact is absent, the requirement SHALL fail or remain unresolved; it SHALL NOT be silently treated as not applicable.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>Treating missing information as an exemption can bypass a control when its assessment information is unavailable.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>For the same condition and facts, applicability is deterministic. Presentation state and unspecified authorization policy are not implicit approval inputs.</p></section>
@@ -252,7 +252,7 @@
             <nav class="core-rule-navigation" aria-label="Reading navigation for CORE-004.2"><a href="#core-004-1"><span>← Previous rule · CORE-004.1</span>Approval requirements state subject, eligibility, and outcome</a><a href="#core-004-3"><span>Next rule · CORE-004.3 →</span>Decisions remain tied to their facts and history</a></nav>
           </article>
           <article class="core-rule" tabindex="-1" id="core-004-3" aria-labelledby="core-004-3-title">
-            <header><p class="eyebrow">CORE-004.3</p><h3 id="core-004-3-title">Decisions remain tied to their facts and history</h3><a class="core-permalink" href="#core-004-3" aria-label="Direct link to CORE-004.3">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0043-decisions-remain-tied-to-their-facts-and-history"><p class="eyebrow">CORE-004.3</p><h3 id="core-004-3-title">Decisions remain tied to their facts and history</h3><a class="core-permalink" href="#core-004-3" aria-label="Direct link to CORE-004.3">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>An approval decision SHALL identify its requirement, deciding actor, outcome, time, and relevant subject facts or state. It SHALL NOT be assumed valid after relevant facts change, and a committed decision SHALL NOT be overwritten or removed from logical approval history.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>Approval is meaningful only in relation to what was approved. Preserving the decision and factual basis shows whether later change needs fresh consideration.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>The application or a higher-level policy determines which changed facts are relevant or material. Portable decisions are approved and rejected. Current FinKore Approval validity rules define withdrawal, expiration, and supersession as lifecycle evidence that affects current effectiveness without rewriting the committed Decision.</p></section>
@@ -264,7 +264,7 @@
             <nav class="core-rule-navigation" aria-label="Reading navigation for CORE-004.3"><a href="#core-004-2"><span>← Previous rule · CORE-004.2</span>Missing facts do not create an approval exemption</a><a href="#core-004-4"><span>Next rule · CORE-004.4 →</span>Chain status follows declared requirements and decisions</a></nav>
           </article>
           <article class="core-rule" tabindex="-1" id="core-004-4" aria-labelledby="core-004-4-title">
-            <header><p class="eyebrow">CORE-004.4</p><h3 id="core-004-4-title">Chain status follows declared requirements and decisions</h3><a class="core-permalink" href="#core-004-4" aria-label="Direct link to CORE-004.4">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0044-chain-status-follows-declared-requirements-and-decisions"><p class="eyebrow">CORE-004.4</p><h3 id="core-004-4-title">Chain status follows declared requirements and decisions</h3><a class="core-permalink" href="#core-004-4" aria-label="Direct link to CORE-004.4">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>An approval chain SHALL declare whether its applicable requirements are sequential or unordered. It SHALL be approved only when every applicable requirement is approved; it SHALL remain pending while an applicable requirement is pending unless an effective rejection determines the declared outcome.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>A chain that appears complete before every required approval is effective permits a financial action without its intended control.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>A sequential chain does not activate a later requirement before its predecessor is satisfied. An unordered chain is not silently treated as sequential.</p></section>
@@ -281,7 +281,7 @@
 <p class="core-governance"><strong>Last updated:</strong> Draft 0.4</p>
 <p class="core-governance"><strong>Last updated on:</strong> 2026-09-10</p></details></header>
           <article class="core-rule" tabindex="-1" id="core-005-1" aria-labelledby="core-005-1-title">
-            <header><p class="eyebrow">CORE-005.1</p><h3 id="core-005-1-title">Continuing financial subjects retain stable identity</h3><a class="core-permalink" href="#core-005-1" aria-label="Direct link to CORE-005.1">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0051-continuing-financial-subjects-retain-stable-identity"><p class="eyebrow">CORE-005.1</p><h3 id="core-005-1-title">Continuing financial subjects retain stable identity</h3><a class="core-permalink" href="#core-005-1" aria-label="Direct link to CORE-005.1">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>A continuing financial subject SHALL have an identifier unique within its declared scope and stable throughout its lifecycle. Distinct subjects SHALL NOT share that identifier within the same scope.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>Stable identity connects state, approvals, corrections, evidence, and accountability over time. A mutable or reusable display number cannot do so.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>Identifiers are opaque: their format does not establish mutable financial facts. Import or migration preserves identity or records an explicit continuity mapping.</p></section>
@@ -293,7 +293,7 @@
             <nav class="core-rule-navigation" aria-label="Reading navigation for CORE-005.1"><a href="#core-004-4"><span>← Previous rule · CORE-004.4</span>Chain status follows declared requirements and decisions</a><a href="#core-005-2"><span>Next rule · CORE-005.2 →</span>Materially distinct conditions remain distinguishable</a></nav>
           </article>
           <article class="core-rule" tabindex="-1" id="core-005-2" aria-labelledby="core-005-2-title">
-            <header><p class="eyebrow">CORE-005.2</p><h3 id="core-005-2-title">Materially distinct conditions remain distinguishable</h3><a class="core-permalink" href="#core-005-2" aria-label="Direct link to CORE-005.2">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0052-materially-distinct-conditions-remain-distinguishable"><p class="eyebrow">CORE-005.2</p><h3 id="core-005-2-title">Materially distinct conditions remain distinguishable</h3><a class="core-permalink" href="#core-005-2" aria-label="Direct link to CORE-005.2">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>Where the governing domain gives materially different meaning to absence, an explicit null, an unknown actor, a redacted value, a pending approval, a rejected approval, a not-applicable requirement, or zero monetary amount, those conditions SHALL remain distinguishable.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>Collapsing these conditions can turn missing evidence into an exemption, hide a redaction, misattribute an action, or turn an absent value into zero.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>The rule applies only to distinctions made material by the governing domain. It does not make every representational difference a financial distinction.</p></section>
@@ -305,7 +305,7 @@
             <nav class="core-rule-navigation" aria-label="Reading navigation for CORE-005.2"><a href="#core-005-1"><span>← Previous rule · CORE-005.1</span>Continuing financial subjects retain stable identity</a><a href="#core-005-3"><span>Next rule · CORE-005.3 →</span>Evaluation follows declared facts and context</a></nav>
           </article>
           <article class="core-rule" tabindex="-1" id="core-005-3" aria-labelledby="core-005-3-title">
-            <header><p class="eyebrow">CORE-005.3</p><h3 id="core-005-3-title">Evaluation follows declared facts and context</h3><a class="core-permalink" href="#core-005-3" aria-label="Direct link to CORE-005.3">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="core-0053-evaluation-follows-declared-facts-and-context"><p class="eyebrow">CORE-005.3</p><h3 id="core-005-3-title">Evaluation follows declared facts and context</h3><a class="core-permalink" href="#core-005-3" aria-label="Direct link to CORE-005.3">Link to this rule <span aria-hidden="true">#</span></a></header>
             <section class="core-rule-section core-rule-statement"><h4>Rule</h4><p>For the same declared inputs, financial state, and relevant context, a financial evaluation SHALL produce the same observable outcome. A dependency on an external fact SHALL be identified when it affects that outcome.</p></section>
             <section class="core-rule-section"><h4>Why this matters</h4><p>Reconciliation, challenge, and audit require reproducible outcomes from their stated basis. Hidden dependence prevents that review.</p></section>
             <section class="core-rule-section"><h4>Interpretation</h4><p>This covers rounding, allocation, approval conditions and chains, and workflow guards. It does not make external facts impermissible; it requires their relevance to be stated.</p></section>
@@ -339,7 +339,7 @@
     <div class="container footer-layout">
       <a class="brand" href="#top">FinKore<span class="accent" aria-hidden="true">.</span></a>
       <p>Financial behavior, made explicit.</p>
-      <nav aria-label="Project resources"><a href="about.html">About the project</a><a href="contributing.html">Contribute</a><a href="../LICENSE">MPL-2.0</a></nav>
+      <nav aria-label="Project resources"><a href="about.html">About the project</a><a href="contributing.html">Contribute</a><a href="https://github.com/willgittens/FinKore/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MPL-2.0</a></nav>
     </div>
   </footer>
 </body>
