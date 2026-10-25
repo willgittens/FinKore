@@ -8,7 +8,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve, posix } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { learnLink, renderLearnNavigation } from './build-learn-pages.js'
+import { GITHUB_MARKDOWN_BASE_URL, learnLink, renderLearnNavigation } from './build-learn-pages.js'
 
 const SOURCE = 'docs/coreDoc/core-doc.md'
 const READER = 'learn/coredoc.html'
@@ -37,7 +37,8 @@ function inline(text) {
     else if (token.startsWith('**')) output += `<strong>${escape(token.slice(2, -2))}</strong>`
     else {
       const [, label, href] = token.match(/^\[([^\]]+)\]\(([^)]+)\)$/)
-      output += `<a href="${escape(link(href))}">${inline(label)}</a>`
+      const destination = link(href)
+      output += `<a href="${escape(destination)}"${destination.startsWith('https://') ? ' target="_blank" rel="noopener noreferrer"' : ''}>${inline(label)}</a>`
     }
     last = match.index + token.length
   }
@@ -140,7 +141,7 @@ export function renderReader(doc) {
       <h1>FinKore CoreDoc<span class="accent">.</span></h1>
       <p class="core-reader-lead">${doc.principles.length} principles. ${doc.rules.length} foundational rules. Start with a question and follow the reasoning.</p>
       <p class="core-version">${escape(doc.status)} <span aria-hidden="true">·</span> Document date: ${escape(doc.date)}</p>
-      <div class="actions"><a class="button" href="#${anchor(doc.rules[0].id)}">Start with the first rule <span aria-hidden="true">↓</span></a><a class="text-link" href="../docs/coreDoc/core-doc.md">View Markdown source <span aria-hidden="true">↗</span></a></div>
+      <div class="actions"><a class="button" href="#${anchor(doc.rules[0].id)}">Start with the first rule <span aria-hidden="true">↓</span></a><a class="text-link" href="${GITHUB_MARKDOWN_BASE_URL}${SOURCE}" target="_blank" rel="noopener noreferrer">View Markdown source <span aria-hidden="true">↗</span></a></div>
     </header>
     <div class="container core-reader-layout">
       <aside class="core-sidebar"><nav aria-label="CoreDoc table of contents"><p class="eyebrow">On this page</p>${nav}</nav></aside>

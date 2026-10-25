@@ -28,11 +28,6 @@ export function validateRepositoryArchitecture(repositoryRoot = process.cwd()) {
     if (existsSync(join(root, removedRoot))) errors.push(`removed repository root still exists: ${removedRoot}`)
   }
 
-  const workflowRoot = join(root, '.github', 'workflows')
-  if (existsSync(workflowRoot) && filesUnder(workflowRoot).length > 0) {
-    errors.push('GitHub Actions workflows are not permitted; verification is local')
-  }
-
   const packagePath = join(root, 'package.json')
   const packageJson = JSON.parse(readFileSync(packagePath, 'utf8'))
   if (Object.hasOwn(packageJson, 'workspaces')) errors.push('root package must not declare implementation or runner workspaces')

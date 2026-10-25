@@ -25,6 +25,51 @@ Run `npm run dependencies:audit` as a separate network-backed dependency review
 when the release or maintenance task requires one. Neither artifact validation
 nor dependency review is financial conformance execution.
 
+## Open contributions and maintainer authority
+
+Anyone may fork FinKore, open Issues, participate in Discussions, propose
+modifications, review and challenge specifications, and submit Pull Requests.
+Lead maintainer `@willgittens` retains final integration authority.
+
+[CODEOWNERS](.github/CODEOWNERS) assigns repository-wide review ownership to
+`@willgittens`. It documents responsibility and requests reviews; it does not
+grant or restrict merge permissions. Potentially exploitable technical or
+financial specification defects must follow the [Security Policy](SECURITY.md)
+for private reporting rather than public Issues or Discussions.
+
+### Manual GitHub configuration
+
+The maintainer must configure these settings in GitHub; repository files do not
+activate Rulesets or change access permissions:
+
+1. Under Settings → Collaborators and any applicable organization access
+   settings, verify that only `@willgittens` has administrative or merge
+   authority. Review direct access, inherited roles, installed Apps, deploy
+   keys, and automation that can write to `main`. Community participation does
+   not require upstream write access.
+2. Under Settings → Rules → Rulesets, create or activate a branch Ruleset
+   targeting `main`. Require a Pull Request and the exact status check
+   **Verify repository** from GitHub Actions after its first successful run.
+   Block force pushes and branch deletion. Keep the approval count at zero
+   and code-owner approval disabled so the sole maintainer can merge their own
+   Pull Requests. Give this verification Ruleset no bypass actors.
+3. If additional upstream writers are introduced, use a separate `main`
+   Ruleset with **Restrict updates**, allowing only the lead maintainer's role
+   to bypass it **for Pull Requests only**. Verify that the bypass role contains
+   only `@willgittens`. Keep this restriction separate from the verification
+   Ruleset so it does not bypass CI. Reassess access if that role gains members.
+4. Under Settings → Actions → General, permit the workflow and its two official
+   actions, retain a read-only workflow token, and keep write tokens and secrets
+   unavailable to fork PR workflows. Review fork-workflow approval settings.
+5. Under Settings → Advanced Security, confirm Private Vulnerability Reporting
+   is enabled and the repository's Security → Advisories page offers **Report a
+   vulnerability**. If unavailable, follow the fallback in the Security Policy
+   before considering private reporting operational.
+6. Once these files are on `main`, check that GitHub recognizes
+   `.github/CODEOWNERS` without errors and shows `@willgittens` as owner for a
+   specification file and the workflow. Review requests use the base branch's
+   CODEOWNERS; authors do not receive requests to review their own PRs.
+
 ## Compatibility and coordinated review
 
 Use the [specification compatibility policy](spec/conventions.md#compatibility-policy)

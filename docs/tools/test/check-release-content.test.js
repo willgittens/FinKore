@@ -268,3 +268,29 @@ test('permits the official GitHub project link only on known Learn pages with sa
   put(root, 'learn/other.html', page)
   assert.match(run(root).error, /learn\/other.html: HTML link must name a local destination/)
 })
+
+test('validates official GitHub Markdown links and fragments against the local tree', t => {
+  const root = fixture(t)
+  const url = 'https://github.com/willgittens/FinKore/blob/main/spec/README.md#contract'
+  const page = `<h1>FinKore Core 2.0.2 stable</h1><a href="${url}" target="_blank" rel="noopener noreferrer">Specification</a>`
+  put(root, 'learn/index.html', page)
+  assert.equal(run(root).status, 0)
+  for (const invalid of [
+    page.replace('/willgittens/', '/another-person/'),
+    page.replace('/blob/main/', '/blob/other/'),
+    page.replace('.md#contract', '.json'),
+    page.replace('target="_blank"', 'target="_self"'),
+    page.replace('rel="noopener noreferrer"', 'rel="opener"'),
+  ]) {
+    put(root, 'learn/index.html', invalid)
+    assert.match(run(root).error, /HTML link must name a local destination/)
+  }
+  for (const [invalid, diagnostic] of [
+    [page.replace('spec/README.md', 'spec/missing.md'), /broken or escaping HTML link/],
+    [page.replace('#contract', '#missing'), /missing HTML link fragment/],
+    [page.replace('spec/README.md', '%2e%2e/outside.md'), /broken or escaping HTML link/],
+  ]) {
+    put(root, 'learn/index.html', invalid)
+    assert.match(run(root).error, diagnostic)
+  }
+})

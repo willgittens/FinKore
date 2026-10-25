@@ -5,7 +5,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import test from 'node:test'
-import { LEARN_PAGES, buildLearnPages, learnLink, renderLearnMarkdown, renderLearnPage } from '../build-learn-pages.js'
+import { LEARN_PAGES, GITHUB_MARKDOWN_BASE_URL, buildLearnPages, learnLink, renderLearnMarkdown, renderLearnPage } from '../build-learn-pages.js'
 import { validateReleaseContent } from '../check-release-content.js'
 
 const repository = new URL('../../../', import.meta.url)
@@ -21,14 +21,16 @@ function fixture(t) {
   return root
 }
 
-test('routes converted documents and preserves deferred and repository links with their fragments', () => {
+test('keeps readers local and routes Markdown files to GitHub with their fragments', () => {
   assert.equal(learnLink('docs/implementation-guide.md', 'coreDoc/core-doc.md'), 'coredoc.html')
   assert.equal(learnLink('README.md', './docs/releases/README.md#draft-01'), 'releases.html#draft-01')
   assert.equal(learnLink('docs/coreDoc/core-doc.md', '../releases/README.md'), 'releases.html')
   assert.equal(learnLink('README.md', './LICENSING.md'), 'licensing.html')
-  assert.equal(learnLink('README.md', './spec/money/README.md#scope'), '../spec/money/README.md#scope')
-  assert.equal(learnLink('README.md', './conformance/README.md'), '../conformance/README.md')
-  assert.equal(learnLink('README.md', './agentic/README.md'), '../agentic/README.md')
+  assert.equal(learnLink('README.md', './spec/money/README.md#scope'), GITHUB_MARKDOWN_BASE_URL + 'spec/money/README.md#scope')
+  assert.equal(learnLink('README.md', './conformance/README.md'), GITHUB_MARKDOWN_BASE_URL + 'conformance/README.md')
+  assert.equal(learnLink('README.md', './agentic/README.md'), GITHUB_MARKDOWN_BASE_URL + 'agentic/README.md')
+  assert.equal(learnLink('docs/coreDoc/core-doc.md', '../../spec/money/rounding.md'), GITHUB_MARKDOWN_BASE_URL + 'spec/money/rounding.md')
+  assert.equal(learnLink('README.md', './conformance/manifest.json'), '../conformance/manifest.json')
   assert.equal(learnLink('README.md', './LICENSE'), '../LICENSE')
   assert.equal(learnLink('README.md', '#local'), '#local')
   for (const href of ['javascript:alert', '../../../outside.md', '/etc/passwd', 'https://example.org/" onclick="bad']) {
@@ -41,6 +43,8 @@ test('preserves code, ordered list continuations, inline wording, tables and hea
   assert.match(doc.html, /<ol><li>Read <a href="coredoc.html">CoreDoc<\/a>\. Keep <strong>exact <code>values<\/code><\/strong>\.<\/li><li>Observe\.<\/li><\/ol>/)
   assert.match(doc.html, /<td>&lt;b&gt; &amp; value<\/td>/)
   assert.match(doc.html, /<pre><code class="language-text">x &lt; y\n\nkeep blank lines<\/code><\/pre>/)
+  const external = renderLearnMarkdown('# Guide\n\n[Rule](spec/money/rounding.md#requirements)', 'README.md')
+  assert.ok(external.html.includes(`href="${GITHUB_MARKDOWN_BASE_URL}spec/money/rounding.md#requirements" target="_blank" rel="noopener noreferrer"`))
   assert.deepEqual(doc.headings.map(h => h.id), ['a-question', 'a-question-1'])
   for (const malformed of ['# Title\n\n```text\nunclosed', '# Title\n\n| A | B |\n| --- |\n| x | y |', '# Title\n\n> unsupported', '# Title\n\n<script>unsafe</script>']) {
     assert.throws(() => renderLearnMarkdown(malformed, 'README.md'), /Unclosed|Unsupported/)
@@ -55,15 +59,16 @@ test('generates all six canonical documents deterministically and checks drift w
   assert.match(home, /Keep this content/)
   assert.match(home, /Where to start<\/a>[\s\S]*?CoreDoc<\/a>[\s\S]*?Github Project/)
   assert.match(home, /href="licensing.html"/)
-  assert.match(home, /href="..\/spec\/README.md#status"/)
-  assert.match(home, /href="..\/conformance\/README.md"/)
+  assert.ok(home.includes(`href="${GITHUB_MARKDOWN_BASE_URL}spec/README.md#status" target="_blank" rel="noopener noreferrer"`))
+  assert.ok(home.includes(`href="${GITHUB_MARKDOWN_BASE_URL}conformance/README.md" target="_blank" rel="noopener noreferrer"`))
   for (const page of LEARN_PAGES) {
     const source = readFileSync(join(root, page.source), 'utf8')
     const html = readFileSync(join(root, page.output), 'utf8')
     assert.equal(html, renderLearnPage(page, source))
     assert.match(html, /aria-label="Table of contents"/)
     assert.match(html, /<details class="learn-document-index">/)
-    assert.match(html, new RegExp(`href="../${page.source}"`))
+    assert.ok(html.includes(`href="${GITHUB_MARKDOWN_BASE_URL}${page.source}" target="_blank" rel="noopener noreferrer"`))
+    assert.doesNotMatch(html, /href="(?!https:\/\/)[^"]*\.md(?:#[^"]*)?"/)
     assert.doesNotMatch(html, /<script|<button|<form/)
     assert.match(html, /Where to start<\/a>[\s\S]*?CoreDoc<\/a>[\s\S]*?Github Project/)
     buildLearnPages(root)
