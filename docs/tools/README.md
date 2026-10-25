@@ -1,14 +1,14 @@
 # Developer Tools
 
-These scripts support local artifact and documentation verification. They are
-not part of the FinKore financial contract and MUST NOT define or execute
-financial-domain behavior.
+These scripts support artifact and documentation verification locally and in
+CI. They are not part of the FinKore financial contract and MUST NOT define or
+execute financial-domain behavior.
 
 | Tool | Purpose | Package command |
 | --- | --- | --- |
 | `validate-conformance.js` | Validate the manifest, declared paths, vector JSON Schema, vector files, global vector ID uniqueness, declared portable error codes, and paired-control references among manifest-listed vectors. | `npm run conformance:check` |
 | `check-agentic.js` | Cross-check canonical operations, required descriptor content, allowed registry effect values, specification requirements, portable errors, and manifest vector use. | `npm run agentic:check` |
-| `check-architecture.js` | Enforce specification-only repository boundaries and local-only verification. | `npm run architecture:check` |
+| `check-architecture.js` | Enforce specification-only repository boundaries and developer-tool headers. | `npm run architecture:check` |
 | `check-node-version.js` | Validate the Node runtime used by repository-local tools. | `npm run node:check` |
 | `check-doc-links.js` | Validate local Markdown paths and fragments plus known CoreDoc requirement prefixes, IDs, abbreviations, and ranges. | `npm run docs:check` |
 | `check-traceability.js` | Cross-check specification requirements, modalities, permitted coverage classifications, per-domain/total inventories, COVERED/PARTIAL evidence, vector metadata, and Agentic references. | `npm run traceability:check`, `npm run docs:check` |
@@ -85,6 +85,31 @@ descriptors, invalid effect values, incorrect traceability totals/modalities,
 unsupported classifications, invalid PARTIAL evidence, unknown CoreDoc prefixes
 or IDs, and missing Markdown fragments. A rejected adversarial fixture must fail
 with the intended diagnostic; a crash is not a passing validator result.
+
+## GitHub Actions verification
+
+[The Verify workflow](../../.github/workflows/verify.yml) runs on Pull Requests
+into `main`, pushes to `main`, and manual dispatch. Its stable job ID is `verify`
+and its exact required status check name is **Verify repository**. It uses an
+Ubuntu runner, Node 24 (validated against `package.json`), lockfile-based npm
+caching, `npm ci --no-audit`, and `npm run verify`. Superseded PR runs are
+cancelled, and the job has a 15-minute timeout.
+
+The workflow uses GitHub-maintained checkout and Node setup actions pinned to
+commit SHAs. Checkout does not persist credentials. The repository token has
+only `contents: read`; no repository secrets are passed to contributor code,
+and the workflow uses `pull_request`, never `pull_request_target`.
+
+`npm run verify` already covers the Node version, architecture, conformance
+schemas and vectors, Agentic consistency, maintenance-tool tests, specification
+requirement traceability, Markdown links, generated Learn synchronization,
+licenses, and whitespace checks. There is no maintained TypeScript compilation
+or financial implementation test gate. Dependency advisory review and stable
+publication checks remain separate, as described here; ordinary CI does not
+publish or certify consumer implementations.
+
+Repository settings and the single-maintainer merge policy are documented in
+[Contributing](../../CONTRIBUTING.md#manual-github-configuration).
 
 ## Stable publication gate
 

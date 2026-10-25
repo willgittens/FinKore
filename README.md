@@ -4,38 +4,53 @@
 
 # FinKore
 
+**CRUD is easy. Financial CRUD isn't.**
+
+Financial applications repeatedly face the same questions: How should money be
+rounded? When is an approval no longer valid? What must happen when an operation
+fails? Different answers can change amounts, invalidate controls, or lose the
+evidence needed to explain a transaction.
+
+These are recurring financial foundations, yet teams keep defining and
+implementing them differently across products, services, and programming languages.
+
+**FinKore exists so we don't have to keep reinventing those foundations.**
+
+FinKore is an open-source, language-independent specification that defines how
+fundamental financial operations behave, how they fail, and how consumers can
+verify their results. It covers **Money, Workflow, Audit, Approvals, and
+Financial Entities** through three layers:
+
+**CoreDoc → Specifications → Conformance**
+
+Financial principles become precise technical requirements. Those requirements
+become portable acceptance cases. Developers use them to build and evaluate
+their own implementations, in their own languages and architectures. The
+Agentic Contract describes the same operations for machine clients.
+
+**No SaaS. No mandatory framework. No vendor lock-in.**
+
+Your product and implementation remain yours. The financial foundation becomes
+something we can define, verify, and improve together.
+
 **Define once. Build many times.**
 
-FinKore is an open-source, language-agnostic specification that makes recurring
-financial behavior explicit, testable, and reusable across products and
-implementations. It defines how **Money, Workflow, Audit, Approvals, and
-Financial Entities** behave, how they fail, and what evidence they preserve.
+## What do you actually get?
 
-The repository publishes the specification, portable acceptance cases, and an
-Agentic Contract for machine clients. You use these artifacts to build and
-evaluate an implementation in your own language and stack.
+| FinKore provides | FinKore does not provide |
+| --- | --- |
+| Documented financial rules | A ready-made financial application |
+| Stable, verifiable technical requirements | A mandatory architecture |
+| Portable conformance cases | A financial implementation or Conformance Runner |
+| Operation contracts for machine clients | An executable agent integration or hosted AI service |
+| Open specifications and maintenance tools | A SaaS platform or installable financial library |
+
+Consumers implement the selected domains and own invocation, observation,
+comparison, reporting, and application security.
 
 <a href="https://finkore.dev" target="_blank" rel="noopener noreferrer">https://finkore.dev</a> ·
 [Read the CoreDoc](./docs/coreDoc/core-doc.md) ·
 [Build an implementation](./docs/implementation-guide.md)
-
-## Why rebuild the same foundations?
-
-**CRUD is easy. Financial CRUD isn't.**
-
-An amount needs a currency, exact calculation, and explicit rounding. An
-approval needs to remain tied to the facts that justified it. A rejected
-workflow transition must preserve the state it was meant to change. An audit
-trail must retain enough evidence to explain what happened.
-
-These questions recur across financial products, yet their answers often live
-inside application code, framework defaults, and decisions that are difficult
-to recover. Teams build, discover edge cases, fix, document, then repeat the
-work elsewhere.
-
-FinKore brings those rules into a shared, inspectable contract. Your team can
-understand the expected behavior before writing code and check its results
-against portable acceptance cases afterward.
 
 ## Your product may be unique. Your financial rules don't have to be.
 
@@ -49,11 +64,6 @@ implementations.
 | Observable values, results, errors, and invariants | Language, framework, API, storage, and deployment |
 | How declared lifecycle and approval rules behave | Business policies, thresholds, permissions, and user experience |
 | Stable requirements and portable acceptance cases | Which FinKore domains to implement and how to integrate them |
-
-This repository maintains the contract and its maintenance tools. Financial
-implementations, integrations, and conformance execution belong to consumers;
-there is no installable financial library, hosted service, or Conformance
-Runner here.
 
 Ledger posting, tax, FX sourcing, reconciliation, settlement, and concrete
 accounting models remain outside the current Core scope. See the
@@ -108,6 +118,29 @@ as `finkore.money.add`: their inputs, outputs, errors, effects, and safety
 properties. Consumers provide executable integrations and authorization
 infrastructure. The specification remains authoritative for financial behavior.
 
+### Concrete example: rounding a monetary amount
+
+**CoreDoc → Specification → Conformance → Consumer Implementation**
+
+[CoreDoc CORE-001.2](./docs/coreDoc/core-doc.md#core-0012-exact-calculation-and-explicit-rounding)
+requires a declared rule when reducing precision. The
+[Money rounding specification](./spec/money/rounding.md) makes the target scale
+and mode explicit (`MONEY-ROUNDING-001`) and defines the portable modes
+(`MONEY-ROUNDING-003`).
+
+The [rounding vectors](./conformance/money/rounding.json), discovered through the
+[manifest](./conformance/manifest.json), include these two cases for
+`finkore.money.round` at scale 2:
+
+| Vector ID | Input | Mode | Expected value |
+| --- | --- | --- | --- |
+| `money.round.half-up.tie-positive-001` | `10.005 EUR` | `HALF_UP` | `10.01 EUR` |
+| `money.round.half-even.tie-even-down-001` | `10.005 EUR` | `HALF_EVEN` | `10.00 EUR` |
+
+A consumer could implement this behavior in TypeScript, Java, or Go and compare
+its observations with these cases. FinKore supplies the rules and expected
+observations; consumers supply the implementation and execution.
+
 ## Start reading or building
 
 | If you want to… | Start here |
@@ -144,6 +177,11 @@ Changes to behavior should connect specification requirements to conformance
 cases, traceability, and Agentic metadata where applicable. If the specification
 is silent, raise the gap before choosing new semantics.
 
+Anyone may fork the repository, open Issues, participate in Discussions, review
+and challenge specifications, and submit Pull Requests. Lead maintainer
+`@willgittens` retains final integration authority. Report potentially
+exploitable issues privately through the [Security Policy](./SECURITY.md).
+
 See [Contributing](./CONTRIBUTING.md) for the workflow and
 [Contributor Licensing](./docs/governance/contributor-licensing.md) for the
 contribution terms. Published history is in the
@@ -159,8 +197,8 @@ npm ci --no-audit
 npm run verify
 ```
 
-After dependency installation, verification runs locally. It checks schemas,
-vector structure, requirement traceability, Agentic consistency, repository
+The same verification command runs locally and in GitHub Actions. It checks
+schemas, vector structure, requirement traceability, Agentic consistency, repository
 architecture, tool tests, documentation links, and licensing. These checks
 validate the published artifacts; consumers execute financial operations
 against their own implementations.

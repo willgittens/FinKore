@@ -35,7 +35,7 @@
       <nav class="learn-document-links" aria-label="Learn documents"><a href="where-to-start.html">Where to start</a><a href="about.html" aria-current="page">About the project</a><a href="licensing.html">Licensing</a><a href="contributing.html">Contribute</a><a href="implementation-guide.html">Implementation guide</a><a href="releases.html">Release notes</a><a href="coredoc.html">CoreDoc</a></nav>
     </header>
     <div class="container core-reader-layout">
-      <aside class="core-sidebar"><nav aria-label="Table of contents"><p class="eyebrow">On this page</p><a class="core-nav-intro" href="#why-rebuild-the-same-foundations">Why rebuild the same foundations?</a>
+      <aside class="core-sidebar"><nav aria-label="Table of contents"><p class="eyebrow">On this page</p><a class="core-nav-intro" href="#what-do-you-actually-get">What do you actually get?</a>
 <a class="core-nav-intro" href="#your-product-may-be-unique-your-financial-rules-dont-have-to-be">Your product may be unique. Your financial rules don&#39;t have to be.</a>
 <a class="core-nav-intro" href="#what-the-core-covers">What the Core covers</a>
 <a class="core-nav-intro" href="#from-financial-principle-to-implementation">From financial principle to implementation</a>
@@ -44,7 +44,7 @@
 <a class="core-nav-intro" href="#contributing">Contributing</a>
 <a class="core-nav-intro" href="#partners">Partners</a></nav></aside>
       <div class="core-reader-content">
-        <details class="learn-document-index"><summary>On this page</summary><nav aria-label="Mobile table of contents"><a class="core-nav-intro" href="#why-rebuild-the-same-foundations">Why rebuild the same foundations?</a>
+        <details class="learn-document-index"><summary>On this page</summary><nav aria-label="Mobile table of contents"><a class="core-nav-intro" href="#what-do-you-actually-get">What do you actually get?</a>
 <a class="core-nav-intro" href="#your-product-may-be-unique-your-financial-rules-dont-have-to-be">Your product may be unique. Your financial rules don&#39;t have to be.</a>
 <a class="core-nav-intro" href="#what-the-core-covers">What the Core covers</a>
 <a class="core-nav-intro" href="#from-financial-principle-to-implementation">From financial principle to implementation</a>
@@ -54,19 +54,23 @@
 <a class="core-nav-intro" href="#partners">Partners</a></nav></details>
         <article class="core-prose learn-document-prose" aria-label="FinKore">
 <p><img class="learn-document-image" src="img/Finkore.png" alt="FinKore" width="480" loading="lazy" decoding="async" /></p>
-<p><strong>Define once. Build many times.</strong></p>
-<p>FinKore is an open-source, language-agnostic specification that makes recurring financial behavior explicit, testable, and reusable across products and implementations. It defines how <strong>Money, Workflow, Audit, Approvals, and Financial Entities</strong> behave, how they fail, and what evidence they preserve.</p>
-<p>The repository publishes the specification, portable acceptance cases, and an Agentic Contract for machine clients. You use these artifacts to build and evaluate an implementation in your own language and stack.</p>
-<p><a href="https://finkore.dev" target="_blank" rel="noopener noreferrer">https://finkore.dev</a> · <a href="coredoc.html">Read the CoreDoc</a> · <a href="implementation-guide.html">Build an implementation</a></p>
-<h2 id="why-rebuild-the-same-foundations">Why rebuild the same foundations?</h2>
 <p><strong>CRUD is easy. Financial CRUD isn&#39;t.</strong></p>
-<p>An amount needs a currency, exact calculation, and explicit rounding. An approval needs to remain tied to the facts that justified it. A rejected workflow transition must preserve the state it was meant to change. An audit trail must retain enough evidence to explain what happened.</p>
-<p>These questions recur across financial products, yet their answers often live inside application code, framework defaults, and decisions that are difficult to recover. Teams build, discover edge cases, fix, document, then repeat the work elsewhere.</p>
-<p>FinKore brings those rules into a shared, inspectable contract. Your team can understand the expected behavior before writing code and check its results against portable acceptance cases afterward.</p>
+<p>Financial applications repeatedly face the same questions: How should money be rounded? When is an approval no longer valid? What must happen when an operation fails? Different answers can change amounts, invalidate controls, or lose the evidence needed to explain a transaction.</p>
+<p>These are recurring financial foundations, yet teams keep defining and implementing them differently across products, services, and programming languages.</p>
+<p><strong>FinKore exists so we don&#39;t have to keep reinventing those foundations.</strong></p>
+<p>FinKore is an open-source, language-independent specification that defines how fundamental financial operations behave, how they fail, and how consumers can verify their results. It covers <strong>Money, Workflow, Audit, Approvals, and Financial Entities</strong> through three layers:</p>
+<p><strong>CoreDoc → Specifications → Conformance</strong></p>
+<p>Financial principles become precise technical requirements. Those requirements become portable acceptance cases. Developers use them to build and evaluate their own implementations, in their own languages and architectures. The Agentic Contract describes the same operations for machine clients.</p>
+<p><strong>No SaaS. No mandatory framework. No vendor lock-in.</strong></p>
+<p>Your product and implementation remain yours. The financial foundation becomes something we can define, verify, and improve together.</p>
+<p><strong>Define once. Build many times.</strong></p>
+<h2 id="what-do-you-actually-get">What do you actually get?</h2>
+<div class="core-table"><table><thead><tr><th scope="col">FinKore provides</th><th scope="col">FinKore does not provide</th></tr></thead><tbody><tr><td>Documented financial rules</td><td>A ready-made financial application</td></tr><tr><td>Stable, verifiable technical requirements</td><td>A mandatory architecture</td></tr><tr><td>Portable conformance cases</td><td>A financial implementation or Conformance Runner</td></tr><tr><td>Operation contracts for machine clients</td><td>An executable agent integration or hosted AI service</td></tr><tr><td>Open specifications and maintenance tools</td><td>A SaaS platform or installable financial library</td></tr></tbody></table></div>
+<p>Consumers implement the selected domains and own invocation, observation, comparison, reporting, and application security.</p>
+<p><a href="https://finkore.dev" target="_blank" rel="noopener noreferrer">https://finkore.dev</a> · <a href="coredoc.html">Read the CoreDoc</a> · <a href="implementation-guide.html">Build an implementation</a></p>
 <h2 id="your-product-may-be-unique-your-financial-rules-dont-have-to-be">Your product may be unique. Your financial rules don&#39;t have to be.</h2>
 <p>FinKore is intended for engineers, architects, and financial-domain reviewers working on banks, fintechs, SaaS platforms, ERPs, and other financial systems. It provides a common reference for discussing behavior across teams and implementations.</p>
 <div class="core-table"><table><thead><tr><th scope="col">FinKore makes explicit</th><th scope="col">Your application decides</th></tr></thead><tbody><tr><td>Observable values, results, errors, and invariants</td><td>Language, framework, API, storage, and deployment</td></tr><tr><td>How declared lifecycle and approval rules behave</td><td>Business policies, thresholds, permissions, and user experience</td></tr><tr><td>Stable requirements and portable acceptance cases</td><td>Which FinKore domains to implement and how to integrate them</td></tr></tbody></table></div>
-<p>This repository maintains the contract and its maintenance tools. Financial implementations, integrations, and conformance execution belong to consumers; there is no installable financial library, hosted service, or Conformance Runner here.</p>
 <p>Ledger posting, tax, FX sourcing, reconciliation, settlement, and concrete accounting models remain outside the current Core scope. See the <a href="../spec/README.md#scope-discipline-non-normative">specification scope</a> for the boundaries.</p>
 <h2 id="what-the-core-covers">What the Core covers</h2>
 <p>Choose the domain that addresses the question in front of you:</p>
@@ -84,6 +88,12 @@ Specification — precise behavior and stable requirement IDs
 <p><a href="coredoc.html">CoreDoc</a> states the foundation-level financial obligations. The <a href="../spec/README.md">specification</a> refines them into requirements, invariants, and portable errors. Normative terms such as <strong>MUST</strong>, <strong>SHOULD</strong>, and <strong>MAY</strong> distinguish obligations, recommendations, and permissions; see the <a href="../spec/conventions.md#normative-language">conventions</a> for their meaning.</p>
 <p><a href="../conformance/README.md">Conformance artifacts</a> connect those requirements to portable acceptance cases, including failure, boundary, and mutation-sensitive cases. Stable IDs such as <code>MONEY-ARITHMETIC-001</code> let you trace a rule to its supporting evidence. The <a href="../conformance/manifest.json">manifest</a> is the only entry point for discovering vector files.</p>
 <p>The <a href="../agentic/README.md">Agentic Contract</a> describes canonical operations such as <code>finkore.money.add</code>: their inputs, outputs, errors, effects, and safety properties. Consumers provide executable integrations and authorization infrastructure. The specification remains authoritative for financial behavior.</p>
+<h3 id="concrete-example-rounding-a-monetary-amount">Concrete example: rounding a monetary amount</h3>
+<p><strong>CoreDoc → Specification → Conformance → Consumer Implementation</strong></p>
+<p><a href="coredoc.html#core-0012-exact-calculation-and-explicit-rounding">CoreDoc CORE-001.2</a> requires a declared rule when reducing precision. The <a href="../spec/money/rounding.md">Money rounding specification</a> makes the target scale and mode explicit (<code>MONEY-ROUNDING-001</code>) and defines the portable modes (<code>MONEY-ROUNDING-003</code>).</p>
+<p>The <a href="../conformance/money/rounding.json">rounding vectors</a>, discovered through the <a href="../conformance/manifest.json">manifest</a>, include these two cases for <code>finkore.money.round</code> at scale 2:</p>
+<div class="core-table"><table><thead><tr><th scope="col">Vector ID</th><th scope="col">Input</th><th scope="col">Mode</th><th scope="col">Expected value</th></tr></thead><tbody><tr><td><code>money.round.half-up.tie-positive-001</code></td><td><code>10.005 EUR</code></td><td><code>HALF_UP</code></td><td><code>10.01 EUR</code></td></tr><tr><td><code>money.round.half-even.tie-even-down-001</code></td><td><code>10.005 EUR</code></td><td><code>HALF_EVEN</code></td><td><code>10.00 EUR</code></td></tr></tbody></table></div>
+<p>A consumer could implement this behavior in TypeScript, Java, or Go and compare its observations with these cases. FinKore supplies the rules and expected observations; consumers supply the implementation and execution.</p>
 <h2 id="start-reading-or-building">Start reading or building</h2>
 <div class="core-table"><table><thead><tr><th scope="col">If you want to…</th><th scope="col">Start here</th></tr></thead><tbody><tr><td>Get an overview of the project</td><td><a href="index.html">Learn introduction</a></td></tr><tr><td>Understand the financial principles</td><td><a href="coredoc.html">CoreDoc</a> or its <a href="coredoc.html">web reader</a></td></tr><tr><td>Find a precise rule</td><td><a href="../spec/README.md">Specification index</a> and <a href="../spec/glossary.md">glossary</a></td></tr><tr><td>Implement a domain in your codebase</td><td><a href="implementation-guide.html">Implementation guide</a></td></tr><tr><td>Evaluate your implementation against acceptance cases</td><td><a href="../conformance/consumer-guide.md">Conformance consumer guide</a></td></tr><tr><td>Find evidence for a requirement and understand coverage limits</td><td><a href="../conformance/traceability.md">Requirement traceability</a></td></tr><tr><td>Integrate agents or other machine clients</td><td><a href="../agentic/README.md">Agentic Contract</a></td></tr></tbody></table></div>
 <p>You can begin with one domain. Read its rules, implement the selected scope, and use the published cases alongside your own evidence to evaluate the result. Consumers own invocation, observation, comparison, and reporting. Acceptance cases provide bounded evidence; their existence alone does not establish that an implementation conforms or that its behavior is exhaustively tested.</p>
@@ -92,12 +102,13 @@ Specification — precise behavior and stable requirement IDs
 <p>See <a href="licensing.html">Licensing</a> for the distinction between implementing the specified behavior and copying or modifying covered repository files. The <a href="../LICENSE">license text</a> controls.</p>
 <h2 id="contributing">Contributing</h2>
 <p>Contributions start with a financial domain problem and CoreDoc alignment. Changes to behavior should connect specification requirements to conformance cases, traceability, and Agentic metadata where applicable. If the specification is silent, raise the gap before choosing new semantics.</p>
+<p>Anyone may fork the repository, open Issues, participate in Discussions, review and challenge specifications, and submit Pull Requests. Lead maintainer <code>@willgittens</code> retains final integration authority. Report potentially exploitable issues privately through the <a href="../SECURITY.md">Security Policy</a>.</p>
 <p>See <a href="contributing.html">Contributing</a> for the workflow and <a href="../docs/governance/contributor-licensing.md">Contributor Licensing</a> for the contribution terms. Published history is in the <a href="releases.html">release notes</a>.</p>
 <h3 id="verify-repository-changes">Verify repository changes</h3>
 <p>The maintenance tools require <strong>Node <code>&gt;=24.11.0 &lt;25</code></strong>. From the repository root, run:</p>
 <pre><code class="language-bash">npm ci --no-audit
 npm run verify</code></pre>
-<p>After dependency installation, verification runs locally. It checks schemas, vector structure, requirement traceability, Agentic consistency, repository architecture, tool tests, documentation links, and licensing. These checks validate the published artifacts; consumers execute financial operations against their own implementations.</p>
+<p>The same verification command runs locally and in GitHub Actions. It checks schemas, vector structure, requirement traceability, Agentic consistency, repository architecture, tool tests, documentation links, and licensing. These checks validate the published artifacts; consumers execute financial operations against their own implementations.</p>
 <p>See <a href="../docs/tools/README.md">Developer Tools</a> for Node setup, individual checks, the separate <code>npm run dependencies:audit</code> review, and stable publication checks.</p>
 <h2 id="partners">Partners</h2>
 <p>No project grows without great partners. My special thanks to those who supported FinKore at key stages of its journey.</p>
