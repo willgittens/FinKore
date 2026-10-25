@@ -1,0 +1,19 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+/* Markdown document readers reuse CoreDoc's layout and responsive palette. */
+.learn-document-links { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; margin-top: 1.5rem; font-size: 0.8125rem; }
+.learn-document-links [aria-current="page"] { color: var(--accent); font-weight: 750; }
+.learn-document-prose { padding: clamp(1rem, 3vw, 2rem); border: 1px solid var(--dark); background: var(--surface); box-shadow: var(--shadow-control); }
+.learn-document .core-reader-heading h1 { font-size: clamp(2rem, 4vw, 3rem); max-width: none; overflow-wrap: anywhere; }
+.learn-document-prose h2 { padding-top: 1rem; border-top: 1px solid var(--line); }
+.learn-document-prose h3 { font-size: 1.15rem; }
+.learn-document-prose ul, .learn-document-prose ol { padding-left: 1.5rem; margin-top: 1rem; }
+.learn-document-prose li + li { margin-top: 0.5rem; }
+.learn-document-prose pre { white-space: pre; }
+.learn-document-prose .learn-document-image { max-width: 100%; height: auto; }
+.learn-document-prose [id] { scroll-margin-top: calc(var(--site-header-height) + 1.5rem); }
+.learn-document-index { display: none; }
+@media (max-width: 48rem) {
+  .learn-document-index { display: block; margin-bottom: 1.5rem; padding: 1rem; border: 1px solid var(--dark); background: var(--surface); box-shadow: var(--shadow-control); }
+  .learn-document-index summary { cursor: pointer; font-size: 0.8125rem; font-weight: 750; }
+  .learn-document-index nav { margin-top: 1rem; }
+}

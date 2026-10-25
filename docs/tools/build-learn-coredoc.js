@@ -8,6 +8,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve, posix } from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { learnLink } from './build-learn-pages.js'
 
 const SOURCE = 'docs/coreDoc/core-doc.md'
 const READER = 'learn/coredoc.html'
@@ -23,7 +24,7 @@ function link(href) {
   if (/^[a-z][a-z0-9+.-]*:|^\/|[\\\s]/i.test(href)) throw new Error(`Unsupported CoreDoc link: ${href}`)
   const target = posix.normalize(posix.join('docs/coreDoc', href))
   if (target.startsWith('../')) throw new Error(`Escaping CoreDoc link: ${href}`)
-  return posix.relative('learn', target)
+  return learnLink(SOURCE, href)
 }
 
 function inline(text) {
@@ -169,7 +170,7 @@ ${r.sections.map((s, i) => `            <section class="core-rule-section${i ===
     <div class="container footer-layout">
       <a class="brand" href="#top">FinKore<span class="accent" aria-hidden="true">.</span></a>
       <p>Financial behavior, made explicit.</p>
-      <nav aria-label="Project resources"><a href="../README.md">About the project</a><a href="../CONTRIBUTING.md">Contribute</a><a href="../LICENSE">MPL-2.0</a></nav>
+      <nav aria-label="Project resources"><a href="about.html">About the project</a><a href="contributing.html">Contribute</a><a href="../LICENSE">MPL-2.0</a></nav>
     </div>
   </footer>
 </body>

@@ -10,6 +10,7 @@ import { dirname, extname, join, relative, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { markdownAnchors } from './check-doc-links.js'
 import { buildLearnCoreDoc } from './build-learn-coredoc.js'
+import { LEARN_PAGES, renderLearnPage, buildLearnPages } from './build-learn-pages.js'
 
 const LOCAL_STATE = new Set(['.git', '.tools', 'node_modules', '.npm-cache', 'coverage', 'dist', 'reports'])
 const NEGATIVE_FIXTURE = 'docs/tools/test/fixtures/release-content-negative.json'
@@ -68,9 +69,13 @@ function htmlAttributes(text, names) {
   return attributes
 }
 
-function isHomepageExternalLink(path, tag, href) {
-  if (path !== 'learn/index.html' || !/^<a\b/i.test(tag) ||
-      !['https://www.linkedin.com/in/will-gittens/', 'https://savoiabarker.com/'].includes(href)) return false
+function isAllowedExternalLink(path, tag, href) {
+  const destinations = {
+    'learn/index.html': ['https://www.linkedin.com/in/will-gittens/', 'https://savoiabarker.com/'],
+    'learn/about.html': ['https://finkore.dev', 'https://savoiabarker.com/'],
+    'learn/licensing.html': ['https://www.mozilla.org/en-US/MPL/2.0/FAQ/'],
+  }
+  if (!/^<a\b/i.test(tag) || !destinations[path]?.includes(href)) return false
   const targets = htmlAttributes(tag, new Set(['target']))
   const relationships = htmlAttributes(tag, new Set(['rel']))
   const tokens = relationships.length === 1 ? relationships[0].split(/\s+/) : []
@@ -102,7 +107,7 @@ function checkHtml(root, path, text, errors) {
     htmlAttributes(tag, new Set(['href', 'src'])).map(href => ({ tag, href })))
   for (const { tag, href } of links) {
     count += 1
-    if (isHomepageExternalLink(path, tag, href)) continue
+    if (isAllowedExternalLink(path, tag, href)) continue
     if (!href || href === '#' || /^[a-z][a-z0-9+.-]*:|^\/\//i.test(href)) {
       errors.push(`${path}: HTML link must name a local destination: ${href || '(empty)'}`)
       continue
@@ -164,6 +169,18 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
     try { buildLearnCoreDoc(root, { check: true }) }
     catch (error) { errors.push('learn/coredoc.html: ' + error.message) }
   }
+  // Historical HTML receives the source document's content policy only after
+  // exact generation is verified. HTML links and controls are always checked.
+  const synchronizedPages = new Map()
+  if (LEARN_PAGES.some(page => files.has(page.output))) {
+    try { buildLearnPages(root, { check: true }) }
+    catch (error) { errors.push('learn: ' + error.message) }
+    for (const page of LEARN_PAGES.filter(page => files.has(page.output))) {
+      try {
+        if (files.get(page.output) === renderLearnPage(page, files.get(page.source) ?? '')) synchronizedPages.set(page.output, page.source)
+      } catch (error) { errors.push(`${page.output}: ${error.message}`) }
+    }
+  }
   for (const path of [...REQUIRED, ...DOMAINS.map((domain) => `spec/${domain}/README.md`)]) {
     if (!files.has(path)) errors.push(`${path}: required publication document is missing`)
   }
@@ -175,16 +192,19 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
       errors.push(`${path}: copied planning content is forbidden`)
     }
     if (SUPPLEMENT_REFERENCE.test(text)) errors.push(`${path}: historical supplement reference or dependency is forbidden`)
-    const paragraphs = text.split(/\n\s*\n/)
-    if (path === 'docs/releases/README.md' && paragraphs.filter(retirementNote).length > 1) {
+    const sourcePath = synchronizedPages.get(path) ?? path
+    const policyText = synchronizedPages.has(path) ? files.get(sourcePath) : text
+    const paragraphs = policyText.split(/\n\s*\n/)
+    if (sourcePath === 'docs/releases/README.md' && paragraphs.filter(retirementNote).length > 1) {
       errors.push(`${path}: retain only one concise retirement note`)
     }
-    const freezeText = path === 'docs/releases/README.md' ? paragraphs.filter((p) => !retirementNote(p)).join('\n\n') : text
+    const freezeText = sourcePath === 'docs/releases/README.md' ? paragraphs.filter((p) => !retirementNote(p)).join('\n\n') : policyText
     if (FREEZE_REFERENCE.test(freezeText)) errors.push(`${path}: retired freeze definition or reference is forbidden`)
-    if (!currentDocument(path)) continue
+    if (/\.html?$/i.test(path)) htmlLinkCount += checkHtml(root, path, text, errors)
+    if (!currentDocument(sourcePath)) continue
     const current = path.startsWith('docs/coreDoc/') ? text.split('\n').filter((line) =>
       !/^\*\*(?:Introduced|Last updated|Last updated on):\*\*/.test(line)).join('\n') :
-      path === 'learn/coredoc.html' ? text.replace(/<p class="core-governance"><strong>(?:Introduced|Last updated|Last updated on):<\/strong>[^<]*<\/p>/g, '') : text
+      path === 'learn/coredoc.html' ? text.replace(/<p class="core-governance"><strong>(?:Introduced|Last updated|Last updated on):<\/strong>[^<]*<\/p>/g, '') : policyText
     const normalized = plain(decodeEntities(current))
     if (hasStaleCoreStatus(normalized)) errors.push(`${path}: stale or contradictory Core status in current content`)
     if ((REQUIRED.includes(path) || path.startsWith('spec/') || path === 'learn/index.html' || path === 'learn/coredoc.html') && !STABLE.test(normalized)) {
@@ -195,7 +215,6 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
       const status = new RegExp(`^\\*\\*Status:\\*\\* FinKore Core ${escapedTarget} (?:is )?stable\\b`, 'mi')
       if (!version.test(text) || !status.test(text)) errors.push(`${path}: CoreDoc version/status fields must declare the stable ${TARGET_CORE_VERSION} baseline`)
     }
-    if (/\.html?$/i.test(path)) htmlLinkCount += checkHtml(root, path, text, errors)
   }
   if (errors.length) throw new Error(`Release content check failed:\n${errors.map((error) => `- ${error}`).join('\n')}`)
   return { fileCount: files.size, htmlLinkCount }

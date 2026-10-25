@@ -89,6 +89,7 @@ for (const path of repositoryFiles().filter((file) => /\.(?:ts|js)$/.test(file))
 
 const allowedMitPaths = new Set([
   'LICENSING.md',
+  'learn/licensing.html', // Derived policy; npm run learn:check enforces source synchronization.
   'THIRD_PARTY_LICENSES.md',
   'docs/decisions/ADR-0001-mpl-2-license.md',
   'docs/governance/license-history.md',
