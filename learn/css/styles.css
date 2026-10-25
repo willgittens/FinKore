@@ -171,6 +171,13 @@ h3 {
   text-decoration: none;
 }
 
+.brand-logo {
+  display: block;
+  width: 10rem;
+  max-width: 100%;
+  height: auto;
+}
+
 .brand-mark {
   display: grid;
   grid-auto-flow: column;
@@ -509,8 +516,8 @@ code {
   font-size: 0.8125rem;
 }
 
-/* The opening is dark; licensing and the foundation overview are light. */
-.hero, .core-explorer, .founder {
+/* Dark sections share a palette; licensing, overview and founder stay light. */
+.hero, .core-explorer, .partners, .site-footer {
   --ink: var(--white);
   --muted: var(--gray-light);
   --accent: var(--orange-light);
@@ -520,11 +527,11 @@ code {
   color: var(--ink);
 }
 
-.hero :focus-visible, .core-explorer :focus-visible, .founder :focus-visible {
+.hero :focus-visible, .core-explorer :focus-visible, .partners :focus-visible, .site-footer :focus-visible {
   outline-color: var(--accent);
 }
 
-.licensing, #how-it-works {
+.licensing, #how-it-works, .founder {
   background: var(--paper);
   color: var(--ink);
 }
@@ -574,7 +581,50 @@ code {
   color: var(--muted);
 }
 
-/* The founder profile shares the CoreDoc section's grid and dark palette. */
+/* Transparent partner logos sit directly on the dark section background. */
+.partners-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.5rem;
+}
+
+.partners .section-heading h2, .partners .section-heading > p:not(.eyebrow) {
+  width: 100%;
+  max-width: none;
+}
+
+.partners .eyebrow {
+  color: var(--accent);
+}
+
+.partner-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.partner-list li {
+  max-width: 100%;
+}
+
+.partner-card {
+  display: block;
+}
+
+.partner-card:hover {
+  opacity: 0.8;
+}
+
+.partner-card img {
+  display: block;
+  width: 300px;
+  max-width: 100%;
+  height: auto;
+}
+
+/* The founder profile uses the shared responsive grid on a light background. */
 .founder {
   border-top: 1px solid var(--line);
 }

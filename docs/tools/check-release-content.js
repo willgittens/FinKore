@@ -68,9 +68,9 @@ function htmlAttributes(text, names) {
   return attributes
 }
 
-function isFounderProfileLink(path, tag, href) {
+function isHomepageExternalLink(path, tag, href) {
   if (path !== 'learn/index.html' || !/^<a\b/i.test(tag) ||
-      href !== 'https://www.linkedin.com/in/will-gittens/') return false
+      !['https://www.linkedin.com/in/will-gittens/', 'https://savoiabarker.com/'].includes(href)) return false
   const targets = htmlAttributes(tag, new Set(['target']))
   const relationships = htmlAttributes(tag, new Set(['rel']))
   const tokens = relationships.length === 1 ? relationships[0].split(/\s+/) : []
@@ -102,7 +102,7 @@ function checkHtml(root, path, text, errors) {
     htmlAttributes(tag, new Set(['href', 'src'])).map(href => ({ tag, href })))
   for (const { tag, href } of links) {
     count += 1
-    if (isFounderProfileLink(path, tag, href)) continue
+    if (isHomepageExternalLink(path, tag, href)) continue
     if (!href || href === '#' || /^[a-z][a-z0-9+.-]*:|^\/\//i.test(href)) {
       errors.push(`${path}: HTML link must name a local destination: ${href || '(empty)'}`)
       continue

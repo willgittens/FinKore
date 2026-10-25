@@ -125,7 +125,19 @@ export function renderReader(doc) {
 </head>
 <body id="top" class="core-reader">
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header"><div class="container header-layout"><a class="brand" href="index.html" aria-label="FinKore home"><span class="brand-mark" aria-hidden="true">F<span>.</span></span><span>FinKore</span></a><nav aria-label="Primary navigation"><ul class="nav-list"><li><a href="index.html#core-explorer">Home index</a></li><li><a href="#about">About CoreDoc</a></li></ul></nav></div></header>
+  <header class="site-header">
+    <div class="container header-layout">
+      <a class="brand" href="index.html" aria-label="FinKore home">
+        <img class="brand-logo" src="img/Finkore-Logo.png" alt="FinKore" width="1013" height="226" decoding="async" />
+      </a>
+      <nav aria-label="Primary navigation">
+        <ul class="nav-list">
+          <li><a href="index.html#core-explorer">CoreDoc</a></li>
+          <li><a class="nav-start" href="index.html#start">Start reading <span aria-hidden="true">↗</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
   <main id="main">
     <header class="container core-reader-heading">
       <p class="eyebrow">The principles behind the rules</p>
@@ -153,7 +165,13 @@ ${r.sections.map((s, i) => `            <section class="core-rule-section${i ===
       </div>
     </div>
   </main>
-  <footer class="site-footer"><div class="container footer-layout"><a class="brand" href="index.html">FinKore<span class="accent" aria-hidden="true">.</span></a><p>Financial behavior, made explicit.</p><nav aria-label="Project resources"><a href="index.html#core-explorer">Explore the CoreDoc</a><a href="../docs/coreDoc/core-doc.md">Canonical source</a><a href="../LICENSE">MPL-2.0</a></nav></div></footer>
+  <footer class="site-footer">
+    <div class="container footer-layout">
+      <a class="brand" href="#top">FinKore<span class="accent" aria-hidden="true">.</span></a>
+      <p>Financial behavior, made explicit.</p>
+      <nav aria-label="Project resources"><a href="../README.md">About the project</a><a href="../CONTRIBUTING.md">Contribute</a><a href="../LICENSE">MPL-2.0</a></nav>
+    </div>
+  </footer>
 </body>
 </html>
 `

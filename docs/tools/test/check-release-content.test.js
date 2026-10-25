@@ -190,6 +190,38 @@ test('permits only the homepage founder profile destination with the required ne
   assert.match(run(root).error, /learn\/other.html: HTML link must name a local destination/)
 })
 
+test('permits the homepage partner destination while rejecting other remote links and resources', t => {
+  const root = fixture(t)
+  const link = '<a href="https://savoiabarker.com/" target="_blank" rel="noopener noreferrer">Savoia Barker</a>'
+  const page = `<h1>FinKore Core 2.0.2 stable</h1><section id="partners">${link}</section>`
+  put(root, 'learn/index.html', page)
+  assert.equal(run(root).status, 0)
+  assert.equal(validateReleaseContent(root).htmlLinkCount, 1)
+
+  for (const invalid of [
+    page.replace(' target="_blank"', ''),
+    page.replace('target="_blank"', 'target="_self"'),
+    page.replace('target="_blank"', 'target="_blank" target="_self"'),
+    page.replace(' rel="noopener noreferrer"', ''),
+    page.replace('noopener noreferrer', 'noopener'),
+    page.replace('noopener noreferrer', 'noreferrer'),
+    page.replace('rel="noopener noreferrer"', 'rel="noopener noreferrer" rel="opener"'),
+    page.replace('https://savoiabarker.com/', 'http://savoiabarker.com/'),
+    page.replace('https://savoiabarker.com/', 'https://savoiabarker.com.example.org/'),
+    page.replace('https://savoiabarker.com/', 'https://savoiabarker.com/other'),
+    page.replace('<a href=', '<img src='),
+    page.replace('target="_blank"', 'target="_blank" src="https://savoiabarker.com/"'),
+  ]) {
+    put(root, 'learn/index.html', invalid)
+    const result = run(root)
+    assert.equal(result.status, 1, invalid)
+    assert.match(result.error, /HTML link must name a local destination/, invalid)
+  }
+  put(root, 'learn/index.html', page)
+  put(root, 'learn/other.html', page)
+  assert.match(run(root).error, /learn\/other.html: HTML link must name a local destination/)
+})
+
 test('rejects an unsynchronized CoreDoc reader even when historical metadata is marked', t => {
   const root = fixture(t)
   put(root, 'docs/coreDoc/core-doc.md', readFileSync(new URL('../../coreDoc/core-doc.md', import.meta.url), 'utf8'))

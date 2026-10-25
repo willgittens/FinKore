@@ -126,11 +126,15 @@ rule history. The gate checks local HTML destinations, Markdown and HTML
 fragments, placeholders, duplicate anchors, and unsupported interactive controls.
 Inline handlers, home-page scripts, playback buttons, and forms remain outside
 this reviewed profile. Remote resources and links are rejected except for the
-homepage founder CTA to `https://www.linkedin.com/in/will-gittens/`, which must
-use `target="_blank"` and `rel="noopener noreferrer"`. The checker validates
-that destination and its attributes without contacting LinkedIn. The founder
-section uses the CoreDoc section's palette and responsive grid; its initials
-portrait placeholder can be replaced with a local image in the marked area.
+homepage founder CTA to `https://www.linkedin.com/in/will-gittens/` and partner
+link to `https://savoiabarker.com/`. Both must use `target="_blank"` and
+`rel="noopener noreferrer"`. The checker validates these destinations and their
+attributes without contacting either website. The dark Partners section follows
+the README's acknowledgments and links, displaying transparent local logos
+directly on the dark background.
+The founder section uses a light palette and responsive grid, with a local
+portrait of Will Gittens. Both Learn pages share the header's local FinKore logo
+and navigation, and the dark footer's project resource links.
 The reader permits the exact deferred
 `js/coredoc.js` script when `core-mobile-index` exists; it closes that native
 disclosure on link activation and adds no new controls.
