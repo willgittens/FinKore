@@ -92,6 +92,7 @@ jobs:
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_SERVER_DIR: ${{ vars.FTP_SERVER_DIR }}
+          FTP_ALLOW_ACCOUNT_ROOT: true
           FTP_PROTOCOL: ${{ vars.FTP_PROTOCOL }}
           FTP_PORT: ${{ vars.FTP_PORT }}
           FTP_HOST_KEY: ${{ vars.FTP_HOST_KEY }}
@@ -120,7 +121,7 @@ jobs:
                   'Production deployment requires the upstream main branch.')
           settings = {name: os.environ.get(name, '') for name in (
               'FTP_HOST', 'FTP_USERNAME', 'FTP_PASSWORD', 'FTP_SERVER_DIR',
-              'FTP_PROTOCOL', 'FTP_PORT', 'FTP_HOST_KEY')}
+              'FTP_PROTOCOL', 'FTP_PORT', 'FTP_HOST_KEY', 'FTP_ALLOW_ACCOUNT_ROOT')}
           for name in ('FTP_HOST', 'FTP_USERNAME', 'FTP_PASSWORD', 'FTP_SERVER_DIR', 'FTP_PROTOCOL'):
               require(bool(settings[name]), f'Configure {name} in GitHub Settings > Environments > Production.')
           require(all(not any(ord(c) < 32 or ord(c) == 127 for c in value)
@@ -130,12 +131,19 @@ jobs:
           port_text = settings['FTP_PORT'] or ('22' if protocol == 'sftp' else '21')
           require(port_text.isascii() and port_text.isdigit() and 1 <= int(port_text) <= 65535,
                   'FTP_PORT must be an integer between 1 and 65535.')
-          destination = settings['FTP_SERVER_DIR'].rstrip('/')
-          components = destination.lstrip('/').split('/')
-          require(bool(destination) and '//' not in settings['FTP_SERVER_DIR'] and
-                  all(part not in ('', '.', '..') and re.fullmatch(r'[A-Za-z0-9_. -]+', part)
-                      and part == part.strip() and not part.startswith('-') for part in components),
-                  'FTP_SERVER_DIR must name a non-root directory using letters, digits, spaces, _, -, . and /; no traversal.')
+          require(settings['FTP_ALLOW_ACCOUNT_ROOT'] in ('', 'false', 'true'),
+                  'FTP_ALLOW_ACCOUNT_ROOT must be true or false; omission keeps account-root uploads disabled.')
+          if settings['FTP_SERVER_DIR'] == '/':
+              require(settings['FTP_ALLOW_ACCOUNT_ROOT'] == 'true',
+                      'FTP_SERVER_DIR=/ requires FTP_ALLOW_ACCOUNT_ROOT=true after confirming the account is restricted to the intended site directory.')
+              destination = '/'
+          else:
+              destination = settings['FTP_SERVER_DIR'].rstrip('/')
+              components = destination.lstrip('/').split('/')
+              require(bool(destination) and '//' not in settings['FTP_SERVER_DIR'] and
+                      all(part not in ('', '.', '..') and re.fullmatch(r'[A-Za-z0-9_. -]+', part)
+                          and part == part.strip() and not part.startswith('-') for part in components),
+                      'FTP_SERVER_DIR must name a non-root directory using letters, digits, spaces, _, -, . and /; no traversal.')
           host = settings['FTP_HOST']
           try:
               address = ipaddress.ip_address(host)
