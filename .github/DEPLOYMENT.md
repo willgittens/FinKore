@@ -46,6 +46,7 @@ Configure these **Environment Variables** manually:
 | Variable | Required configuration |
 | --- | --- |
 | `FTP_SERVER_DIR` | Exact existing destination directory, as seen by the hosting account. No default. |
+| `FTP_ALLOW_ACCOUNT_ROOT` | Optional; defaults to disabled. Set exactly `true` only after confirming that the account is restricted to the site's publication directory and `/` is that virtual root. |
 | `FTP_PROTOCOL` | `sftp` (preferred) or `ftps` (explicit FTP over TLS). No default or plain FTP fallback. |
 | `FTP_PORT` | Optional integer from 1 through 65535; defaults to 22 for SFTP or 21 for explicit FTPS. |
 | `FTP_HOST_KEY` | Required for SFTP: trusted OpenSSH public host key as `algorithm base64-key`, without hostname or comment. Not a private key or fingerprint. Unused for FTPS. |
@@ -56,14 +57,44 @@ are different protocols; changing the port does not convert one into the other.
 Implicit FTPS is not supported by this workflow.
 
 For `FTP_SERVER_DIR`, obtain the exact publication path from the host. Absolute
-and account-relative paths are supported; neither `/`, an empty value, `.`,
-`..`, repeated separators, nor traversal components are accepted. Each path
+and account-relative paths are supported. `/` is blocked by default; an empty
+value, `.`, `..`, repeated separators, and traversal components are always
+rejected, including when account-root uploads are enabled. Each non-root path
 component may contain letters, digits, spaces, `_`, `-`, and `.`, with no leading
 hyphen or surrounding whitespace. A trailing slash is accepted and removed
 before use. The directory must already exist; it is used only as the upload
 destination. Do not enter a URL. Verify it does not resolve through a server
 symlink to an unintended location. Restrict or jail the deployment account to
 the intended publication directory and grant only the necessary file access.
+
+### FTP accounts whose publication directory is `/`
+
+A hosting account can expose its assigned website folder as a virtual `/`.
+If that is the provider-confirmed configuration, `/public_html` or the host's
+full filesystem path may not be accessible through that login. Do not use `.`
+or traversal sequences to bypass the guard, or create an extra directory merely
+to satisfy it.
+
+Confirm in the hosting panel that the deployment account is restricted to the
+exact publication folder for `finkore.dev`, with no access to other sites or
+the hosting account's broader home directory. Then configure these two
+**Environment Variables** in the existing production Environment:
+
+```text
+FTP_SERVER_DIR=/
+FTP_ALLOW_ACCOUNT_ROOT=true
+```
+
+The opt-in permits only the literal `/`; it does not supply a default destination
+or weaken protocol, authentication, source-file, or traversal checks. The
+workflow cannot prove the server-side account restriction: this variable records
+the maintainer's explicit confirmation. Leave it unset or `false` for other
+accounts. Never enable it for an unrestricted account or an operating-system
+root directory.
+
+Hostinger documents how to [restrict an additional FTP account to a specific folder](https://www.hostinger.com/support/1583246-how-to-create-additional-ftp-accounts-in-hostinger/).
+Use that restriction if the current account can access more than the intended
+publication directory; the workflow does not create or change hosting accounts.
 
 For SFTP, obtain the public host key from the provider or an independently
 trusted administrator. Supported key types are Ed25519, RSA, and NIST ECDSA.
