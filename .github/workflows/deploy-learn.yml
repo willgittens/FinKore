@@ -11,6 +11,12 @@ on:
       - "learn/**"
       - ".github/workflows/deploy-learn.yml"
   workflow_dispatch:
+    inputs:
+      diagnose_only:
+        description: 'Test the secure connection and directory listing without uploading files'
+        type: boolean
+        default: true
+        required: true
 
 permissions:
   contents: read
@@ -86,8 +92,9 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install --no-install-recommends -y lftp openssh-client ca-certificates
 
-      - name: Validate configuration and upload Learn contents
+      - name: Diagnose connection or upload Learn contents
         env:
+          DIAGNOSE_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.diagnose_only }}
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
@@ -116,6 +123,41 @@ jobs:
               # lftp quoting, not shell quoting. Credentials never enter argv.
               return '"' + value.replace('\\', '\\\\').replace('"', '\\"') + '"'
 
+          def explain_failure(output, phase):
+              # Classify privately captured output; never emit server-supplied text.
+              text = output.lower()
+              if 'host key verification failed' in text or 'remote host identification has changed' in text:
+                  return 'SSH_HOST_KEY_FAILED', 'Verify FTP_HOST_KEY with the hosting provider; do not disable host-key checks.'
+              if ('certificate' in text or 'hostname' in text) and any(term in text for term in ('does not match', "doesn't match", 'hostname mismatch', 'name mismatch')):
+                  return 'TLS_HOSTNAME_MISMATCH', 'FTP_HOST must match the FTP server certificate. Ask the provider for the correct TLS hostname.'
+              if 'certificate' in text:
+                  return 'TLS_CERTIFICATE_FAILED', 'The certificate could not be verified. Check its hostname, expiration and trusted chain with the provider.'
+              if ('server does not support or allow ssl' in text or
+                      ('auth tls' in text and any(term in text for term in ('500', '502', 'not supported', 'not understood')))):
+                  return 'FTPS_NOT_SUPPORTED', 'The endpoint rejected AUTH TLS. Confirm explicit FTPS support or use verified SFTP; changing the protocol label does not enable TLS.'
+              if any(term in text for term in ('login failed', 'login incorrect', 'authentication failed', '530', 'permission denied (')):
+                  return 'AUTHENTICATION_FAILED', 'Verify the username/password for this exact protocol and account, plus any account or IP restrictions.'
+              if any(term in text for term in ('name or service not known', 'temporary failure in name resolution', 'nodename nor servname', 'name resolution', 'no such host')):
+                  return 'DNS_FAILED', 'Check FTP_HOST and its DNS resolution from the runner.'
+              if 'connection refused' in text:
+                  return 'CONNECTION_REFUSED', 'Check FTP_HOST, FTP_PORT, server availability and firewall/IP restrictions.'
+              if 'timed out' in text or 'timeout' in text:
+                  return 'CONNECTION_TIMEOUT', 'Check network/firewall access. During listing or upload, also check passive FTPS data connections.'
+              if any(term in text for term in ('425 ', '426 ', 'data connection', 'passive mode')):
+                  return 'DATA_CONNECTION_FAILED', 'The data connection failed. Check passive FTPS ports, firewall/NAT and provider restrictions.'
+              if any(term in text for term in ('quota exceeded', 'no space left', 'disk full', '552 ')):
+                  return 'STORAGE_LIMIT', 'Check hosting disk space, inode limits and account quota.'
+              if '550' in text or 'permission denied' in text or 'no such file' in text or 'access failed' in text:
+                  if phase == 'DIRECTORY':
+                      return 'DIRECTORY_ACCESS_FAILED', 'Check FTP_SERVER_DIR as seen by this account and its directory traversal permissions.'
+                  if phase in ('CREATE_DIRECTORIES', 'UPLOAD'):
+                      return 'WRITE_ACCESS_FAILED', 'Check write permissions, existing file/directory type conflicts and hosting restrictions.'
+                  return 'READ_ACCESS_FAILED', 'Check directory listing permissions and hosting account restrictions.'
+              if 'tls' in text or 'ssl' in text:
+                  return 'TLS_NEGOTIATION_FAILED', 'Check explicit FTPS support, TLS compatibility and the provider certificate configuration.'
+              return 'CLIENT_FAILURE', 'The cause could not be classified safely. Check hosting-side logs or reproduce with FileZilla using required TLS; never publish raw credential-bearing logs.'
+
+          diagnose_only = os.environ.get('DIAGNOSE_ONLY', 'false') == 'true'
           require(os.environ.get('GITHUB_REF') == 'refs/heads/main' and
                   os.environ.get('GITHUB_REPOSITORY') == 'willgittens/FinKore',
                   'Production deployment requires the upstream main branch.')
@@ -221,39 +263,66 @@ jobs:
                   # Explicit FTPS starts with FTP AUTH TLS; ssl-force prevents cleartext login.
                   scheme = 'ftp'
               commands += [
+                  'echo FINKORE_PHASE_LOGIN',
                   'open --user ' + quote(settings['FTP_USERNAME']) + ' --env-password ' +
                       quote(f'{scheme}://{url_host}:{int(port_text)}'),
+                  'quote NOOP' if protocol == 'ftps' else 'cls -d .',
+                  'echo FINKORE_PHASE_DIRECTORY',
                   'cd ' + quote(destination),
               ]
-              # Explicit mkdir/put commands never request remote deletion, including
-              # file/directory conflicts that a mirror client might otherwise replace.
-              commands += ['mkdir -p ' + quote('./' + path.as_posix())
-                           for path in sorted(directories, key=lambda path: (len(path.parts), str(path)))]
-              commands += ['put ' + quote(str(staging / path)) + ' -o ' + quote('./' + path.as_posix())
-                           for path in files]
+              if diagnose_only:
+                  commands += ['echo FINKORE_PHASE_LISTING', 'cls -1']
+              else:
+                  # Explicit mkdir/put commands never request remote deletion, including
+                  # file/directory conflicts that a mirror client might otherwise replace.
+                  commands += ['echo FINKORE_PHASE_CREATE_DIRECTORIES']
+                  commands += ['mkdir -p ' + quote('./' + path.as_posix())
+                               for path in sorted(directories, key=lambda path: (len(path.parts), str(path)))]
+                  commands += ['echo FINKORE_PHASE_UPLOAD']
+                  commands += ['put ' + quote(str(staging / path)) + ' -o ' + quote('./' + path.as_posix())
+                               for path in files]
+              commands.append('echo FINKORE_PHASE_COMPLETE')
               commands.append('exit')
               client_env = {key: value for key, value in os.environ.items() if not key.startswith('FTP_')}
               client_env.update(LFTP_PASSWORD=settings['FTP_PASSWORD'], LFTP_HOME=str(temporary))
-              print(f"Deployment started: commit {os.environ['GITHUB_SHA']}; source learn/; {len(files)} files; {protocol}.", flush=True)
+              mode = 'Read-only diagnostic' if diagnose_only else 'Deployment'
+              print(f"{mode} started: commit {os.environ['GITHUB_SHA']}; source learn/; {len(files)} files; {protocol}.", flush=True)
               try:
                   result = subprocess.run(['lftp', '--norc'], input='\n'.join(commands) + '\n',
                                           text=True, capture_output=True, env=client_env, timeout=600)
-              except (OSError, subprocess.TimeoutExpired):
-                  require(False, 'Secure transfer could not complete. Check client availability and hosting connectivity; remote files may be partially updated.')
-              # Do not emit client output: server diagnostics can repeat credentials or URLs.
-              require(result.returncode == 0,
-                      'Secure transfer failed. Check authentication, protocol/port, host identity, directory access and hosting logs; remote files may be partially updated.')
-              print('Deployment completed successfully.', flush=True)
+              except OSError:
+                  require(False, 'CLIENT_START_FAILED: the transfer client could not start; check the client installation.')
+              except subprocess.TimeoutExpired as error:
+                  partial = error.stdout or ''
+                  if isinstance(partial, bytes):
+                      partial = partial.decode(errors='replace')
+                  result = subprocess.CompletedProcess(['lftp'], 124, partial, 'Client timeout')
+              phases = re.findall(r'^FINKORE_PHASE_(LOGIN|DIRECTORY|LISTING|CREATE_DIRECTORIES|UPLOAD|COMPLETE)\s*$', result.stdout, re.MULTILINE)
+              phase = phases[-1] if phases else 'CLIENT_START'
+              if result.returncode != 0:
+                  code, hint = explain_failure(result.stdout + '\n' + result.stderr, phase)
+                  message = f'{code}; phase={phase}; client exit={result.returncode}. {hint}'
+                  if not diagnose_only:
+                      message += ' Remote files may be partially updated.'
+                  if os.environ.get('GITHUB_STEP_SUMMARY'):
+                      with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+                          summary.write(f'\n{mode} failed: **{code}**, phase **{phase}**. {hint}\n')
+                  require(False, message)
+              require(phase == 'COMPLETE', 'The client did not confirm completion; inspect hosting-side logs.')
+              print('Diagnostic passed: login, destination access and listing succeeded. No remote files were written; write permission was not tested.'
+                    if diagnose_only else 'Deployment completed successfully.', flush=True)
 
       - name: Summarize deployment
         if: always()
         env:
           RESULT: ${{ job.status }}
+          DIAGNOSE_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.diagnose_only }}
         run: |
           {
             echo '## FinKore Learn deployment'
             echo "Commit: $GITHUB_SHA"
             echo 'Source: learn/ contents (no enclosing learn directory)'
             echo "Result: $RESULT"
+            echo "Read-only diagnostic: $DIAGNOSE_ONLY"
             echo 'No remote cleanup or deletion is requested. Transfers are not an atomic site release.'
           } >> "$GITHUB_STEP_SUMMARY"

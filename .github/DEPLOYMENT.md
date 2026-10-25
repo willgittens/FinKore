@@ -154,16 +154,51 @@ or restore content through the host's separately managed backup process.
 ## Manual deployment and failures
 
 Open **Actions → Deploy FinKore Learn → Run workflow**, choose **main**, and run.
+The **diagnose_only** checkbox defaults to enabled for manual runs: leave it
+enabled to test the connection without changing remote files. Clear it for an
+actual upload. Push-triggered runs still upload after successful validation.
 Do not run a production transfer from a development checkout. No deployment was
 performed while preparing this workflow.
 
 Inspect the validation and deployment jobs and their job summaries. Logs show
 the commit SHA, `learn/` source, transfer start/completion, and result. Missing or
-unsafe settings fail before connection. Client diagnostics are deliberately
-withheld because they can repeat secrets or credential-bearing URLs. For a
-transfer failure, verify the configured protocol, port, trusted server identity,
-directory permissions, and hosting-side logs without pasting credentials into
-Issues or logs. A failed transfer exits nonzero and never reports success.
+unsafe settings fail before connection. Raw client diagnostics are deliberately
+withheld because they can repeat secrets, remote filenames or credential-bearing
+URLs. Failures instead report a fixed diagnostic code, the last attempted phase,
+and a client exit status in both logs and the job summary. Classification is
+best-effort guidance, not proof of a unique cause. Unknown errors remain
+`CLIENT_FAILURE`; check hosting-side logs without publishing credentials.
+A failed transfer exits nonzero and never reports success.
+
+### Read-only connection diagnosis
+
+After merging this workflow change into `main`, start a new manual run with
+**diagnose_only** enabled. This uses the same Environment, credentials, protocol,
+server verification, destination guard, and client as deployment. It forces a
+connection/login, accesses `FTP_SERVER_DIR`, and lists that directory. It sends
+no upload, mkdir, rename or deletion commands. A diagnostic pass confirms login,
+directory access and listing; it does not prove write permission or HTTP health.
+
+| Code | What to check |
+| --- | --- |
+| `DNS_FAILED`, `CONNECTION_REFUSED`, `CONNECTION_TIMEOUT` | Hostname, port, server availability, firewall and runner IP restrictions. A listing timeout can involve passive data ports. |
+| `FTPS_NOT_SUPPORTED` | The endpoint rejected or does not offer explicit TLS. Confirm provider support; do not relabel plain FTP as FTPS or disable TLS checks. |
+| `TLS_HOSTNAME_MISMATCH` | Use the FTP hostname matching the provider's certificate. An IP address or the website domain may identify a different certificate. |
+| `TLS_CERTIFICATE_FAILED`, `TLS_NEGOTIATION_FAILED` | Certificate chain, expiration, hostname, and TLS compatibility. FileZilla accepting an untrusted certificate does not establish trusted verification. |
+| `SSH_HOST_KEY_FAILED` | Confirm the configured public host key through a trusted provider channel. |
+| `AUTHENTICATION_FAILED` | Login/password for the selected protocol, account status, and provider restrictions. |
+| `DIRECTORY_ACCESS_FAILED` | The destination path as seen by this account and its access permissions. |
+| `DATA_CONNECTION_FAILED`, `READ_ACCESS_FAILED` | Directory-listing access and passive FTPS data connections. |
+| `WRITE_ACCESS_FAILED`, `STORAGE_LIMIT` | On an upload run, check write permissions, existing file types, disk/inode quota and hosting restrictions. |
+
+Phases are `LOGIN`, `DIRECTORY`, `LISTING`, `CREATE_DIRECTORIES`, and `UPLOAD`.
+SFTP's login phase includes access to the initial directory. A read-only run
+never reaches the two write phases. Keep **diagnose_only** enabled until the
+connection and listing work. For local comparison, use FileZilla with the same
+host/account and **Require explicit FTP over TLS** when testing FTPS. Check login
+and listing without uploading, and do not bypass certificate warnings. If local
+access succeeds but the Actions test fails, investigate runner IP restrictions
+and networking. Share only the fixed code and phase, not raw logs or credentials.
 
 There are no PR deployment triggers, `pull_request_target`, artifact uploads,
 or secrets in command-line arguments. Secrets enter only the transfer step's
