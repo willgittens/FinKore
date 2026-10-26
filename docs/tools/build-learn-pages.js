@@ -162,6 +162,7 @@ export function renderLearnPage(page, markdown) {
   <meta name="theme-color" content="#ffffff" />
   <title>${escapeHtml(page.label)} — FinKore</title>
   <meta name="description" content="${escapeHtml(page.description)}" />
+  <link rel="icon" type="image/png" href="img/Finkore_Favicon.png" />
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/coredoc.css" />
   <link rel="stylesheet" href="css/documents.css" />
