@@ -284,8 +284,12 @@ jobs:
                   # Explicit mkdir/put commands never request remote deletion, including
                   # file/directory conflicts that a mirror client might otherwise replace.
                   commands += ['echo FINKORE_PHASE_CREATE_DIRECTORIES']
-                  commands += ['mkdir -p ' + quote('./' + path.as_posix())
-                               for path in sorted(directories, key=lambda path: (len(path.parts), str(path)))]
+                  # FTP mkdir -p can fail for an existing directory. Probe in a
+                  # subshell so cd cannot change the upload destination. Parents
+                  # come first; a failed probe and mkdir still stop the transfer.
+                  for path in sorted(directories, key=lambda path: (len(path.parts), str(path))):
+                      remote = quote('./' + path.as_posix())
+                      commands.append('(cd ' + remote + ') || mkdir ' + remote)
                   commands += ['echo FINKORE_PHASE_UPLOAD']
                   commands += ['put ' + quote(str(staging / path)) + ' -o ' + quote('./' + path.as_posix())
                                for path in files]

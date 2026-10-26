@@ -139,9 +139,16 @@ are excluded. Nothing from `.github/` or outside `learn/` is uploaded. Staging
 and host-key files are removed on normal completion or failure; the hosted
 runner is disposable.
 
-The client creates required subdirectories and uploads each selected file to
-its exact relative destination. It overwrites matching file contents and
-requests no remote deletion, mirror, or cleanup operation. File/directory type
+The client checks access to required subdirectories before attempting to create
+them, processing parents before children. Existing accessible directories are
+reused without a creation request; FTP servers can reject `mkdir -p` for a
+directory that already exists. Each access check keeps the upload destination
+unchanged. If access and creation both fail, the transfer stops before uploading
+files.
+
+The client uploads each selected file to its exact relative destination. It
+overwrites matching file contents and requests no remote deletion, mirror, or
+cleanup operation. File/directory type
 conflicts fail rather than replacing existing remote content. Unrelated remote
 files and files removed from Git remain on the server; the maintainer must
 review any desired cleanup separately.
