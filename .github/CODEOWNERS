@@ -1,0 +1,5 @@
+# Lead maintainer owns review of all files, including CoreDoc, spec,
+# conformance, Agentic metadata, workflows, and governance documents.
+# Community contributions are welcome; final integration authority belongs
+# to @willgittens. Merge permissions are configured in GitHub, not here.
+* @willgittens

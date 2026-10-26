@@ -111,8 +111,8 @@
     },
     {
       "name": "missing Markdown anchor",
-      "path": "learn/extra.html",
-      "content": "<a href='../spec/README.md#missing'>Missing</a>",
+      "path": "learn/index.html",
+      "content": "<a href='https://github.com/willgittens/FinKore/blob/main/spec/README.md#missing' target='_blank' rel='noopener noreferrer'>Missing</a>",
       "diagnostic": "missing HTML link fragment"
     },
     {

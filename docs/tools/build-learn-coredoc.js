@@ -8,7 +8,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve, posix } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { learnLink, renderLearnNavigation, renderLearnOpenGraph } from './build-learn-pages.js'
+import { GITHUB_FILE_BASE_URL, learnLink, renderLearnNavigation, renderLearnOpenGraph } from './build-learn-pages.js'
 
 const SOURCE = 'docs/coreDoc/core-doc.md'
 const READER = 'learn/coredoc.html'
@@ -37,7 +37,8 @@ function inline(text) {
     else if (token.startsWith('**')) output += `<strong>${escape(token.slice(2, -2))}</strong>`
     else {
       const [, label, href] = token.match(/^\[([^\]]+)\]\(([^)]+)\)$/)
-      output += `<a href="${escape(link(href))}">${inline(label)}</a>`
+      const destination = link(href)
+      output += `<a href="${escape(destination)}"${destination.startsWith('https://') ? ' target="_blank" rel="noopener noreferrer"' : ''}>${inline(label)}</a>`
     }
     last = match.index + token.length
   }
@@ -143,7 +144,7 @@ export function renderReader(doc) {
       <h1>FinKore CoreDoc<span class="accent">.</span></h1>
       <p class="core-reader-lead">${doc.principles.length} principles. ${doc.rules.length} foundational rules. Start with a question and follow the reasoning.</p>
       <p class="core-version">${escape(doc.status)} <span aria-hidden="true">·</span> Document date: ${escape(doc.date)}</p>
-      <div class="actions"><a class="button" href="#${anchor(doc.rules[0].id)}">Start with the first rule <span aria-hidden="true">↓</span></a><a class="text-link" href="../docs/coreDoc/core-doc.md">View Markdown source <span aria-hidden="true">↗</span></a></div>
+      <div class="actions"><a class="button" href="#${anchor(doc.rules[0].id)}">Start with the first rule <span aria-hidden="true">↓</span></a><a class="text-link" href="${GITHUB_FILE_BASE_URL}${SOURCE}" target="_blank" rel="noopener noreferrer">View Markdown source <span aria-hidden="true">↗</span></a></div>
     </header>
     <div class="container core-reader-layout">
       <aside class="core-sidebar"><nav aria-label="CoreDoc table of contents"><p class="eyebrow">On this page</p>${nav}</nav></aside>
@@ -153,7 +154,7 @@ export function renderReader(doc) {
 ${doc.principles.map(p => `        <section class="core-principle" id="${p.anchor}" aria-labelledby="${anchor(p.id)}">
           <header class="core-principle-heading"><p class="eyebrow">${p.id} <span aria-hidden="true">·</span> ${p.rules.length} rules</p><h2 id="${anchor(p.id)}">${escape(p.title)}</h2>${renderMarkdown(p.content)}${history(p)}</header>
 ${p.rules.map(r => `          <article class="core-rule" tabindex="-1" id="${anchor(r.id)}" aria-labelledby="${anchor(r.id)}-title">
-            <header><p class="eyebrow">${r.id}</p><h3 id="${anchor(r.id)}-title">${escape(r.title)}</h3><a class="core-permalink" href="#${anchor(r.id)}" aria-label="Direct link to ${r.id}">Link to this rule <span aria-hidden="true">#</span></a></header>
+            <header id="${slug(`${r.id} — ${r.title}`)}"><p class="eyebrow">${r.id}</p><h3 id="${anchor(r.id)}-title">${escape(r.title)}</h3><a class="core-permalink" href="#${anchor(r.id)}" aria-label="Direct link to ${r.id}">Link to this rule <span aria-hidden="true">#</span></a></header>
 ${r.sections.map((s, i) => `            <section class="core-rule-section${i === 0 ? ' core-rule-statement' : ''}"><h4>${escape(s.title)}</h4>${renderMarkdown(s.body)}</section>`).join('\n')}
             ${history(r)}
             ${ruleNavigation(doc, r)}
@@ -168,7 +169,7 @@ ${r.sections.map((s, i) => `            <section class="core-rule-section${i ===
     <div class="container footer-layout">
       <a class="brand" href="#top">FinKore<span class="accent" aria-hidden="true">.</span></a>
       <p>Financial behavior, made explicit.</p>
-      <nav aria-label="Project resources"><a href="about.html">About the project</a><a href="contributing.html">Contribute</a><a href="../LICENSE">MPL-2.0</a></nav>
+      <nav aria-label="Project resources"><a href="about.html">About the project</a><a href="contributing.html">Contribute</a><a href="${GITHUB_FILE_BASE_URL}LICENSE" target="_blank" rel="noopener noreferrer">MPL-2.0</a></nav>
     </div>
   </footer>
 </body>

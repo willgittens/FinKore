@@ -22,25 +22,25 @@ function fixture(packageJson = {}) {
   return root
 }
 
-test('accepts specification-only structure and documented local tools', () => {
-  assert.deepEqual(validateRepositoryArchitecture(fixture()), { toolCount: 1 })
+test('accepts specification-only structure, documented tools, and artifact CI', () => {
+  const root = fixture()
+  mkdirSync(join(root, '.github/workflows'), { recursive: true })
+  writeFileSync(join(root, '.github/workflows/verify.yml'), 'name: Verify\njobs: {}\n')
+  assert.deepEqual(validateRepositoryArchitecture(root), { toolCount: 1 })
 })
 
-test('rejects removed roots, workspace/package references, and hosted workflows', () => {
+test('rejects removed roots and workspace/package references', () => {
   const root = fixture({
     workspaces: ['runner'],
     scripts: { old: 'node runner/cli.js' },
     dependencies: { '@finkore/conformance-runner': '1.0.0' },
   })
   mkdirSync(join(root, 'runner'))
-  mkdirSync(join(root, '.github/workflows'), { recursive: true })
-  writeFileSync(join(root, '.github/workflows/check.yml'), 'name: forbidden')
   assert.throws(() => validateRepositoryArchitecture(root), (error) => {
     assert.match(error.message, /removed repository root/)
     assert.match(error.message, /workspaces/)
     assert.match(error.message, /package script/)
     assert.match(error.message, /removed maintained package/)
-    assert.match(error.message, /GitHub Actions/)
     return true
   })
 })

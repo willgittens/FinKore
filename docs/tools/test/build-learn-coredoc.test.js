@@ -30,8 +30,11 @@ test('renders every canonical principle and rule with unchanged obligations and 
   for (const id of [...source.matchAll(/^### (CORE-\d{3}\.\d+)/gm)].map(m => m[1])) {
     assert.equal(html.split(`id="${id.toLowerCase().replace('.', '-')}"`).length - 1, 1, id)
   }
-  assert.match(html, /href="\.\.\/spec\/money\/representation.md"/)
+  assert.ok(html.includes('href="https://github.com/willgittens/FinKore/blob/main/spec/money/representation.md" target="_blank" rel="noopener noreferrer"'))
+  assert.ok(html.includes('href="https://github.com/willgittens/FinKore/blob/main/docs/coreDoc/core-doc.md" target="_blank" rel="noopener noreferrer"'))
+  assert.doesNotMatch(html, /(?:href|src)="\.\.\//)
   assert.match(html, /href="#core-002-1"/)
+  assert.match(html, /<header id="core-0012-exact-calculation-and-explicit-rounding">/)
   assert.match(html, /<script src="js\/coredoc.js" defer><\/script>/)
   assert.doesNotMatch(html, /<button\b/)
 })

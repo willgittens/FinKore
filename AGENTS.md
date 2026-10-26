@@ -86,8 +86,12 @@ architecture, documentation, and licensing. They must remain domain-neutral and
 must not calculate financial outcomes or implement a FinKore operation.
 
 Each executable tool must begin with a comment explaining its purpose, effects,
-and that it does not define financial behavior. Verification runs locally; do
-not add GitHub Actions.
+and that it does not define financial behavior. Verification runs locally and
+in `.github/workflows/verify.yml` using the same `npm run verify` command.
+Verification jobs validate repository artifacts; they must not execute financial
+behavior, publish releases, or receive repository secrets. The separate Learn
+deployment workflow may publish only `learn/` from `main`, with hosting secrets
+restricted to its `production` Environment deployment job.
 
 ## Source-of-truth order
 

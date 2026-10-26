@@ -10,7 +10,7 @@ import { dirname, extname, join, relative, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { markdownAnchors } from './check-doc-links.js'
 import { buildLearnCoreDoc } from './build-learn-coredoc.js'
-import { LEARN_PAGES, renderLearnPage, buildLearnPages, GITHUB_PROJECT_URL } from './build-learn-pages.js'
+import { LEARN_PAGES, renderLearnPage, buildLearnPages, GITHUB_PROJECT_URL, GITHUB_FILE_BASE_URL } from './build-learn-pages.js'
 
 const LOCAL_STATE = new Set(['.git', '.tools', 'node_modules', '.npm-cache', 'coverage', 'dist', 'reports'])
 const NEGATIVE_FIXTURE = 'docs/tools/test/fixtures/release-content-negative.json'
@@ -78,7 +78,9 @@ function isAllowedExternalLink(path, tag, href) {
     'learn/licensing.html': ['https://www.mozilla.org/en-US/MPL/2.0/FAQ/'],
   }
   const projectLink = navigationPages.has(path) && href === GITHUB_PROJECT_URL
-  if (!/^<a\b/i.test(tag) || !(projectLink || destinations[path]?.includes(href))) return false
+  const fileLink = navigationPages.has(path) && href.startsWith(GITHUB_FILE_BASE_URL) &&
+    /^[^?#]+(?:#[^?]*)?$/.test(href.slice(GITHUB_FILE_BASE_URL.length))
+  if (!/^<a\b/i.test(tag) || !(projectLink || fileLink || destinations[path]?.includes(href))) return false
   const targets = htmlAttributes(tag, new Set(['target']))
   const relationships = htmlAttributes(tag, new Set(['rel']))
   const tokens = relationships.length === 1 ? relationships[0].split(/\s+/) : []
@@ -110,14 +112,18 @@ function checkHtml(root, path, text, errors) {
     htmlAttributes(tag, new Set(['href', 'src'])).map(href => ({ tag, href })))
   for (const { tag, href } of links) {
     count += 1
-    if (isAllowedExternalLink(path, tag, href)) continue
-    if (!href || href === '#' || /^[a-z][a-z0-9+.-]*:|^\/\//i.test(href)) {
+    const allowedExternal = isAllowedExternalLink(path, tag, href)
+    if (allowedExternal && !href.startsWith(GITHUB_FILE_BASE_URL)) continue
+    // Validate GitHub file paths and fragments against the local release
+    // tree, keeping this publication check deterministic and offline.
+    const destination = allowedExternal ? `${relative(dirname(path), '.')}/${href.slice(GITHUB_FILE_BASE_URL.length)}` : href
+    if (!destination || destination === '#' || /^[a-z][a-z0-9+.-]*:|^\/\//i.test(destination)) {
       errors.push(`${path}: HTML link must name a local destination: ${href || '(empty)'}`)
       continue
     }
     let target, fragment
     try {
-      const [rawPath, rawFragment] = href.split('#')
+      const [rawPath, rawFragment] = destination.split('#')
       target = rawPath ? resolve(dirname(join(root, path)), decodeURIComponent(rawPath.split('?')[0])) : join(root, path)
       fragment = rawFragment === undefined ? undefined : decodeURIComponent(rawFragment)
     } catch {
@@ -127,6 +133,10 @@ function checkHtml(root, path, text, errors) {
     const local = relative(root, target)
     if (local.startsWith('..') || !existsSync(target) || !statSync(target).isFile()) {
       errors.push(`${path}: broken or escaping HTML link: ${href}`)
+      continue
+    }
+    if (!allowedExternal && path.startsWith('learn/') && relative(join(root, 'learn'), target).startsWith('..')) {
+      errors.push(`${path}: HTML link escapes the Learn site root: ${href}`)
       continue
     }
     if (fragment) {
