@@ -33,6 +33,20 @@ export function renderLearnNavigation({ home = false, current } = {}) {
 
 const escapeHtml = text => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;')
 
+export function renderLearnOpenGraph({ title, description, path }) {
+  const url = new URL(path, 'https://finkore.dev/').href
+  return `<meta property="og:type" content="website" />
+  <meta property="og:site_name" content="FinKore" />
+  <meta property="og:title" content="${escapeHtml(title)}" />
+  <meta property="og:description" content="${escapeHtml(description)}" />
+  <meta property="og:url" content="${escapeHtml(url)}" />
+  <meta property="og:image" content="https://finkore.dev/img/imageOpenGraph.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="FinKore — Define once. Build many times." />`
+}
+
 // Only the converted documents are redirected. Specs, conformance and other
 // repository references retain their original destinations and fragments.
 export function learnLink(source, href) {
@@ -162,6 +176,7 @@ export function renderLearnPage(page, markdown) {
   <meta name="theme-color" content="#ffffff" />
   <title>${escapeHtml(page.label)} — FinKore</title>
   <meta name="description" content="${escapeHtml(page.description)}" />
+  ${renderLearnOpenGraph({ title: `${page.label} — FinKore`, description: page.description, path: posix.basename(page.output) })}
   <link rel="icon" type="image/png" href="img/Finkore_Favicon.png" />
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/coredoc.css" />
