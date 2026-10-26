@@ -107,7 +107,7 @@ test('publication accepts synchronized release history but rejects changed histo
   writeFileSync(join(root, page.output), html)
   const aboutPath = join(root, 'learn/about.html')
   const about = readFileSync(aboutPath, 'utf8')
-  for (const changed of [about.replace('https://finkore.dev', 'https://example.org'), about.replace('target="_blank"', 'target="_self"')]) {
+  for (const changed of [about.replace('href="https://finkore.dev"', 'href="https://example.org"'), about.replace('target="_blank"', 'target="_self"')]) {
     writeFileSync(aboutPath, changed)
     assert.match(diagnostics(), /learn\/about.html: HTML link must name a local destination/)
   }
