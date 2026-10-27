@@ -832,9 +832,13 @@ code {
   padding-block: 0.5rem;
 }
 
-/* Layout changes preserve reading order when the hero stacks. */
+/* Simplify the header and show the artwork first when the hero stacks. */
 
 @media (max-width: 60rem) {
+  .site-header .brand {
+    display: none;
+  }
+
   .hero-layout {
     grid-template-columns: minmax(0, 1fr);
     gap: 3rem;
@@ -844,6 +848,10 @@ code {
     width: 100%;
     max-width: 44rem;
     justify-self: center;
+  }
+
+  .hero-artwork {
+    order: -1;
   }
 }
 
@@ -918,10 +926,6 @@ code {
 }
 
 @media (max-width: 30rem) {
-  :root {
-    --site-header-height: 7.625rem;
-  }
-
   .site-header nav {
     width: 100%;
   }
