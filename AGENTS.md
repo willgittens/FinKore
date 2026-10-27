@@ -3,7 +3,7 @@
 ## Project overview
 
 FinKore is an open-source, language-agnostic specification for predictable,
-auditable, and portable financial domain behavior.
+auditable, and portable financial domain behavior. 
 
 Core idea:
 
