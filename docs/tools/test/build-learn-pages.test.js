@@ -54,6 +54,28 @@ test('preserves code, ordered list continuations, inline wording, tables and hea
   }
 })
 
+test('renders GitHub theme logos as one light-surface image and rejects unsafe or incomplete pairs', () => {
+  const markup = `<p align="center">
+  <img src="./learn/img/Finkore.png#gh-light-mode-only"
+       alt="FinKore" width="480" />
+  <img src="./learn/img/Finkore_White.png#gh-dark-mode-only"
+       alt="FinKore" width="480" />
+</p>`
+  const render = content => renderLearnMarkdown(`# Guide\n\n${content}`, 'README.md').html
+  const html = render(markup)
+  assert.match(html, /src="img\/Finkore\.png" alt="FinKore" width="480"/)
+  assert.equal([...html.matchAll(/<img\b/g)].length, 1)
+  assert.doesNotMatch(html, /gh-(?:light|dark)-mode-only|Finkore_White/)
+  for (const invalid of [
+    markup.replace('./learn/img/Finkore_White.png', 'javascript:alert(1)'),
+    markup.replace('gh-dark-mode-only', 'gh-light-mode-only'),
+    markup.replace('alt="FinKore"', 'alt="Different logo"'),
+    markup.replace('</p>', '<script>unsafe</script>\n</p>'),
+  ]) {
+    assert.throws(() => render(invalid), /Unsupported Learn/)
+  }
+})
+
 test('generates all six canonical documents deterministically and checks drift without writing', t => {
   const root = fixture(t)
   assert.throws(() => buildLearnPages(root, { check: true }), /out of date/)
