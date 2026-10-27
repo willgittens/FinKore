@@ -150,7 +150,13 @@ export function renderLearnMarkdown(markdown, source) {
       const raw = []
       for (i++; i < lines.length && lines[i] !== '</p>'; i++) raw.push(lines[i].trim())
       if (i === lines.length) throw new Error(`Unclosed Learn image paragraph: ${source}`)
-      const content = raw.join(' ')
+      let content = raw.join(' ')
+      const themePair = content.match(/^<img src="([^"]+)#gh-light-mode-only" alt="([^"]+)" width="(\d+)" \/> <img src="([^"]+)#gh-dark-mode-only" alt="\2" width="\3" \/>$/)
+      if (themePair) {
+        // Learn's document surface is light; GitHub's theme markers do not apply.
+        learnLink(source, themePair[4])
+        content = `<img src="${themePair[1]}" alt="${themePair[2]}" width="${themePair[3]}" />`
+      }
       const image = /<img src="([^"]+)" alt="([^"]+)" width="(\d+)" \/>/
       const match = content.match(image)
       const wrapper = content.replace(image, '').trim()

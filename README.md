@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="./learn/img/Finkore.png" alt="FinKore" width="480" />
+  <img src="./learn/img/Finkore.png#gh-light-mode-only"
+       alt="FinKore" width="480" />
+  <img src="./learn/img/Finkore_White.png#gh-dark-mode-only"
+       alt="FinKore" width="480" />
 </p>
 
 # FinKore
