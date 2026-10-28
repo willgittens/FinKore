@@ -13,11 +13,19 @@ pushes. It also supports manual dispatch. Other source changes alone do not
 trigger it: regenerate and commit Learn outputs when changing their sources.
 
 The validation job requires `willgittens/FinKore` and `refs/heads/main`, then
-runs `npm ci --no-audit`, `npm run verify`, and `npm run learn:build` with Node
-24. It checks that regeneration leaves `learn/` unchanged. Stale committed
-outputs or a failed build block deployment. This job has no production secrets.
+runs `npm ci --no-audit` and `npm run verify` with Node 24. Verification includes
+`npm run learn:check`, which compares the committed pages with their canonical
+sources using the committed CSS cache version without writing files. The job
+also checks that validation leaves `learn/` unchanged. Stale committed outputs
+or failed verification block deployment. This job has no production secrets.
 The deployment does not wait for the separate Verify workflow: it enforces the
 same authoritative verification command itself.
+
+Run `npm run learn:build` before committing changes to Learn sources, CSS, or
+renderers. Each build deliberately creates a fresh CSS cache version and changes
+the generated HTML, even when the source content is unchanged. Deployment
+validates and uploads that committed version; it does not run a fresh build and
+then require the output to match the previous build byte for byte.
 
 Only after validation succeeds does the deployment job enter the `production`
 Environment. Both checkouts use the same event commit SHA, never an unmerged

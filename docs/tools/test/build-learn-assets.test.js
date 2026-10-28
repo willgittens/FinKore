@@ -67,6 +67,36 @@ test('checks reject absent, malformed and mixed CSS versions without modifying o
   assert.throws(() => readLearnAssetVersion(root), /CSS build version/)
 })
 
+test('deployment validation preserves the committed CSS version and rejects stale HTML without rebuilding it', t => {
+  const root = fixture(t)
+  run(root, 'learn:build')
+  const built = snapshot(root)
+  const version = readLearnAssetVersion(root)
+  const workflow = readFileSync(new URL('.github/workflows/deploy-learn.yml', repository), 'utf8')
+  const validation = workflow.match(/      - name: Verify the committed site\n        run: \|\n((?:          .+\n)+)/)?.[1]
+  assert.ok(validation, 'The deployment must validate the committed site')
+  assert.match(validation, /npm run verify/)
+  assert.match(validation, /git diff --exit-code -- learn\//)
+  // The enclosing suite runs the full checks. This isolated fixture exercises
+  // Learn validation only and skips dependency installation to stay local.
+  const packagePath = join(root, 'package.json')
+  const metadata = JSON.parse(readFileSync(packagePath, 'utf8'))
+  metadata.scripts.verify = 'npm run learn:check'
+  writeFileSync(packagePath, JSON.stringify(metadata))
+  execFileSync('git', ['init', '--quiet', root], { stdio: 'pipe' })
+  execFileSync('git', ['add', '.'], { cwd: root, stdio: 'pipe' })
+  const commands = validation.split('\n').map(line => line.trim()).filter(line => line && !line.startsWith('npm ci ')).join('\n')
+  const validate = () => execFileSync('sh', ['-ec', commands], { cwd: root, stdio: 'pipe' })
+  validate()
+  assert.equal(readLearnAssetVersion(root), version)
+  assert.deepEqual(snapshot(root), built)
+  const stale = built[2] + '\n'
+  writeFileSync(join(root, pages[2]), stale)
+  assert.throws(validate, /Learn pages are out of date/)
+  assert.equal(readFileSync(join(root, pages[2]), 'utf8'), stale)
+  assert.equal(readLearnAssetVersion(root), version)
+})
+
 test('replaces an old stylesheet query once and preserves non-CSS references', () => {
   const version = '00000000-0000-4000-8000-000000000001'
   const other = '<link rel="icon" href="img/icon.png" /><a href="css/styles.css">Source</a><script src="js/coredoc.js" defer></script>'

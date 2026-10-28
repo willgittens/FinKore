@@ -213,8 +213,11 @@ and six document readers receives the same `?v=<build identifier>` query.
 The home page's `css/styles.css` URL retains that identifier; the renderers use
 it to generate the remaining URLs. Build the site after CSS-only changes too,
 and publish the complete `learn/` output, including the HTML and CSS together.
-The Learn deployment workflow already invokes this build before verification
-and upload, so each deployment receives fresh CSS URLs.
+The Learn deployment workflow validates the committed output through
+`npm run verify`, including `npm run learn:check`, and uploads that same version.
+Run the full build before committing Learn changes. Deployment validation does
+not run a fresh build, because its intentionally new cache identifier would
+change the committed HTML. See [deployment guidance](../../.github/DEPLOYMENT.md#triggers-and-verification).
 
 `npm run learn:check`, `npm run verify`, and `npm run release:check` read the
 existing identifier without creating a new one or modifying files. Generation
