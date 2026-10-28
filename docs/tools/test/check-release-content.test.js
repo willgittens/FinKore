@@ -300,6 +300,23 @@ test('validates official GitHub file links and fragments against the local tree'
 })
 
 
+test('accepts versioned local CSS while retaining missing, escaping and remote asset checks', t => {
+  const root = fixture(t)
+  const version = '00000000-0000-4000-8000-000000000001'
+  const page = `<h1>FinKore Core 2.0.2 stable</h1><link rel="stylesheet" href="css/styles.css?v=${version}" />`
+  put(root, 'learn/css/styles.css', 'body { color: black; }\n')
+  put(root, 'learn/index.html', page)
+  assert.equal(run(root).status, 0)
+  for (const [path, diagnostic] of [
+    ['css/missing.css', /broken or escaping HTML link/],
+    ['../README.md', /HTML link escapes the Learn site root/],
+    ['https://example.org/styles.css', /HTML link must name a local destination/],
+  ]) {
+    put(root, 'learn/index.html', page.replace('css/styles.css', path))
+    assert.match(run(root).error, diagnostic)
+  }
+})
+
 test('rejects links outside the published Learn directory even when files exist', t => {
   const root = fixture(t)
   for (const href of ['../README.md', '../spec/README.md', '%2e%2e/README.md']) {

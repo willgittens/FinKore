@@ -7,6 +7,7 @@ import { dirname, join } from 'node:path'
 import test from 'node:test'
 import { LEARN_PAGES, GITHUB_FILE_BASE_URL, buildLearnPages, learnLink, renderLearnMarkdown, renderLearnPage } from '../build-learn-pages.js'
 import { validateReleaseContent } from '../check-release-content.js'
+import { readLearnAssetVersion, refreshLearnAssetVersion } from '../build-learn-assets.js'
 
 const repository = new URL('../../../', import.meta.url)
 function put(root, path, content) {
@@ -17,7 +18,8 @@ function fixture(t) {
   const root = mkdtempSync(join(tmpdir(), 'finkore-learn-pages-'))
   t.after(() => rmSync(root, { recursive: true, force: true }))
   for (const page of LEARN_PAGES) put(root, page.source, readFileSync(new URL(page.source, repository), 'utf8'))
-  put(root, 'learn/index.html', '<h1>Keep this content</h1><nav aria-label="Primary navigation"><a href="#start">Start reading</a></nav><a href="../LICENSING.md">License</a><a href="../spec/README.md#status">Spec</a><a href="../conformance/README.md">Cases</a><a href="../LICENSE">Full license</a>')
+  put(root, 'learn/index.html', '<h1>Keep this content</h1><link rel="stylesheet" href="css/styles.css" /><nav aria-label="Primary navigation"><a href="#start">Start reading</a></nav><a href="../LICENSING.md">License</a><a href="../spec/README.md#status">Spec</a><a href="../conformance/README.md">Cases</a><a href="../LICENSE">Full license</a>')
+  refreshLearnAssetVersion(root)
   return root
 }
 
@@ -91,7 +93,7 @@ test('generates all six canonical documents deterministically and checks drift w
   for (const page of LEARN_PAGES) {
     const source = readFileSync(join(root, page.source), 'utf8')
     const html = readFileSync(join(root, page.output), 'utf8')
-    assert.equal(html, renderLearnPage(page, source))
+    assert.equal(html, renderLearnPage(page, source, readLearnAssetVersion(root)))
     assert.match(html, /aria-label="Table of contents"/)
     assert.match(html, /<details class="learn-document-index">/)
     assert.ok(html.includes(`href="${GITHUB_FILE_BASE_URL}${page.source}" target="_blank" rel="noopener noreferrer"`))
