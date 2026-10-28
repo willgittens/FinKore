@@ -9,6 +9,10 @@
 
 **CRUD is easy. Financial CRUD isn't.**
 
+**FinKore Core 2.0.2 stable.** See the [specification status](./spec/README.md#status)
+and [release notes](./docs/releases/README.md). Core versions are separate from
+conformance format versions and the private maintenance package version.
+
 Financial applications repeatedly face the same questions: How should money be
 rounded? When is an approval no longer valid? What must happen when an operation
 fails? Different answers can change amounts, invalidate controls, or lose the
@@ -155,6 +159,7 @@ observations; consumers supply the implementation and execution.
 | Evaluate your implementation against acceptance cases | [Conformance consumer guide](./conformance/consumer-guide.md) |
 | Find evidence for a requirement and understand coverage limits | [Requirement traceability](./conformance/traceability.md) |
 | Integrate agents or other machine clients | [Agentic Contract](./agentic/README.md) |
+| Make a first contribution | [Contributor workflow](./CONTRIBUTING.md#make-your-first-contribution) |
 
 You can begin with one domain. Read its rules, implement the selected scope,
 and use the published cases alongside your own evidence to evaluate the
@@ -175,7 +180,12 @@ specified behavior and copying or modifying covered repository files. The
 
 ## Contributing
 
-Contributions start with a financial domain problem and CoreDoc alignment.
+Useful first contributions include clearer documentation, requirement reviews,
+reports of specification gaps, portable acceptance cases, and maintenance-tool
+improvements. Follow the [first-contribution workflow](./CONTRIBUTING.md#make-your-first-contribution)
+to choose a problem, validate the change, and submit a Pull Request.
+
+Financial behavior proposals start with a domain problem and CoreDoc alignment.
 Changes to behavior should connect specification requirements to conformance
 cases, traceability, and Agentic metadata where applicable. If the specification
 is silent, raise the gap before choosing new semantics.

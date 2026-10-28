@@ -49,6 +49,7 @@
       <aside class="core-sidebar"><nav aria-label="Table of contents"><p class="eyebrow">On this page</p><a class="core-nav-intro" href="#understand-what-you-are-adopting">Understand what you are adopting</a>
 <a class="core-nav-intro" href="#choose-your-starting-point">Choose your starting point</a>
 <a class="core-nav-intro" href="#follow-the-contract-from-principle-to-evidence">Follow the contract from principle to evidence</a>
+<a class="core-nav-intro" href="#walk-through-one-rounding-case">Walk through one rounding case</a>
 <a class="core-nav-intro" href="#pick-one-domain-that-matches-your-problem">Pick one domain that matches your problem</a>
 <a class="core-nav-intro" href="#build-your-first-slice">Build your first slice</a>
 <a class="core-nav-intro" href="#when-a-rule-is-unclear">When a rule is unclear</a>
@@ -57,6 +58,7 @@
         <details class="learn-document-index"><summary>On this page</summary><nav aria-label="Mobile table of contents"><a class="core-nav-intro" href="#understand-what-you-are-adopting">Understand what you are adopting</a>
 <a class="core-nav-intro" href="#choose-your-starting-point">Choose your starting point</a>
 <a class="core-nav-intro" href="#follow-the-contract-from-principle-to-evidence">Follow the contract from principle to evidence</a>
+<a class="core-nav-intro" href="#walk-through-one-rounding-case">Walk through one rounding case</a>
 <a class="core-nav-intro" href="#pick-one-domain-that-matches-your-problem">Pick one domain that matches your problem</a>
 <a class="core-nav-intro" href="#build-your-first-slice">Build your first slice</a>
 <a class="core-nav-intro" href="#when-a-rule-is-unclear">When a rule is unclear</a>
@@ -75,6 +77,54 @@
 <p>The <a href="https://github.com/willgittens/FinKore/blob/main/spec/README.md" target="_blank" rel="noopener noreferrer">domain specifications</a> turn those obligations into precise requirements, invariants, and portable errors. They are authoritative for financial behavior.</p>
 <p>The <a href="https://github.com/willgittens/FinKore/blob/main/conformance/README.md" target="_blank" rel="noopener noreferrer">conformance artifacts</a> connect requirements to portable inputs and expected observations. They help you evaluate your own implementation; publishing a case does not mean it has been executed or prove that an implementation conforms.</p>
 <p>The <a href="https://github.com/willgittens/FinKore/blob/main/agentic/README.md" target="_blank" rel="noopener noreferrer">Agentic Contract</a> describes canonical operation semantics for machine clients. Your integration provides execution and authorization infrastructure while preserving the specification&#39;s behavior.</p>
+<h2 id="walk-through-one-rounding-case">Walk through one rounding case</h2>
+<p>The <a href="about.html#concrete-example-rounding-a-monetary-amount">README example</a> starts with <code>10.005 EUR</code> rounded to scale 2. Follow that same amount from its financial obligation to a published expected observation. This walkthrough illustrates the existing contract; it adds no rounding policy to your product.</p>
+<h3 id="1-read-the-obligation-and-requirements">1. Read the obligation and requirements</h3>
+<p><a href="coredoc.html#core-0012-exact-calculation-and-explicit-rounding">CORE-001.2</a> requires exact calculation and a declared rule when reducing precision. A currency&#39;s customary minor-unit scale is not itself a rounding instruction.</p>
+<p>In <a href="https://github.com/willgittens/FinKore/blob/main/spec/money/rounding.md#requirements" target="_blank" rel="noopener noreferrer">Money Rounding</a>, <code>MONEY-ROUNDING-001</code> requires an explicit target scale and mode. <code>MONEY-ROUNDING-003</code> defines the supported modes. At a tie, <code>HALF_UP</code> selects the nearest candidate farther from zero; <code>HALF_EVEN</code> selects the nearest candidate whose last retained digit is even. For <code>10.005 EUR</code> at scale 2, those rules give different results.</p>
+<h3 id="2-discover-the-existing-cases">2. Discover the existing cases</h3>
+<p>Open <a href="https://github.com/willgittens/FinKore/blob/main/conformance/manifest.json" target="_blank" rel="noopener noreferrer">conformance/manifest.json</a>, find the suite whose <code>id</code> is <code>money</code>, and follow its <code>vectorFiles</code> entry <code>./money/rounding.json</code>, resolved relative to the manifest directory. In that declared file, locate these stable IDs:</p>
+<div class="core-table"><table><thead><tr><th scope="col">Vector ID</th><th scope="col">Mode</th><th scope="col">Expected amount</th><th scope="col">Currency</th></tr></thead><tbody><tr><td><code>money.round.half-up.tie-positive-001</code></td><td><code>HALF_UP</code></td><td><code>10.01</code></td><td><code>EUR</code></td></tr><tr><td><code>money.round.half-even.tie-even-down-001</code></td><td><code>HALF_EVEN</code></td><td><code>10.00</code></td><td><code>EUR</code></td></tr></tbody></table></div>
+<p>Both cases supply <code>10.005 EUR</code> and <code>scale: 2</code>. Discover files only through the manifest; do not enumerate the Money directory. The <a href="https://github.com/willgittens/FinKore/blob/main/conformance/traceability.md" target="_blank" rel="noopener noreferrer">traceability index</a> connects requirements to their published cases and coverage limits.</p>
+<h3 id="3-read-the-request-and-complete-expected-observation">3. Read the request and complete expected observation</h3>
+<p>This excerpt copies the relevant fields of <code>money.round.half-up.tie-positive-001</code> from the manifest-listed file:</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;money.round.half-up.tie-positive-001&quot;,
+  &quot;requirements&quot;: [
+    &quot;MONEY-ROUNDING-002&quot;,
+    &quot;MONEY-ROUNDING-003&quot;,
+    &quot;MONEY-ROUNDING-008&quot;
+  ],
+  &quot;operation&quot;: &quot;finkore.money.round&quot;,
+  &quot;input&quot;: {
+    &quot;value&quot;: {
+      &quot;amount&quot;: &quot;10.005&quot;,
+      &quot;currency&quot;: &quot;EUR&quot;
+    },
+    &quot;scale&quot;: 2,
+    &quot;mode&quot;: &quot;HALF_UP&quot;
+  },
+  &quot;expected&quot;: {
+    &quot;status&quot;: &quot;success&quot;,
+    &quot;value&quot;: {
+      &quot;amount&quot;: &quot;10.01&quot;,
+      &quot;currency&quot;: &quot;EUR&quot;
+    },
+    &quot;observations&quot;: {
+      &quot;operand&quot;: {
+        &quot;amount&quot;: &quot;10.005&quot;,
+        &quot;currency&quot;: &quot;EUR&quot;
+      }
+    }
+  }
+}</code></pre>
+<div class="core-table"><table><thead><tr><th scope="col">Field</th><th scope="col">What to look for</th></tr></thead><tbody><tr><td><code>id</code></td><td>The stable case identity used to report an evaluation.</td></tr><tr><td><code>requirements</code></td><td>This case exercises determinism (<code>MONEY-ROUNDING-002</code>), portable mode semantics (<code>MONEY-ROUNDING-003</code>), and currency preservation (<code>MONEY-ROUNDING-008</code>). The explicit request is also governed by <code>MONEY-ROUNDING-001</code>; that ID is not listed by this particular case.</td></tr><tr><td><code>operation</code></td><td>The canonical behavior to map to your own API: <code>finkore.money.round</code>.</td></tr><tr><td><code>input</code></td><td>The exact decimal amount, currency, explicit target scale, and mode to supply.</td></tr><tr><td><code>expected.value</code></td><td>The resulting amount and currency, with exactly two fractional digits for this explicit scale.</td></tr><tr><td><code>expected.observations.operand</code></td><td>The unchanged source Money to observe after the operation.</td></tr></tbody></table></div>
+<p>The complete vector also includes <code>spec</code>, a description, tags, and defect intent. The <a href="https://github.com/willgittens/FinKore/blob/main/conformance/operations.md#money-operations" target="_blank" rel="noopener noreferrer">operation contract</a> and <a href="https://github.com/willgittens/FinKore/blob/main/agentic/operations.md#finkoremoneyround" target="_blank" rel="noopener noreferrer">Agentic descriptor</a> explain the portable boundary; the fixture shape does not prescribe your production API.</p>
+<h3 id="4-compare-your-implementations-observations">4. Compare your implementation&#39;s observations</h3>
+<p>In your own environment, map the operation to your implementation and supply the case&#39;s <code>input</code>. Preserve exact decimal semantics when parsing <code>&quot;10.005&quot;</code>; do not convert it to approximate binary floating point or infer a policy from <code>EUR</code>.</p>
+<p>Normalize the actual result according to the <a href="https://github.com/willgittens/FinKore/blob/main/conformance/consumer-guide.md#expected-observation" target="_blank" rel="noopener noreferrer">consumer guide</a>, then compare the whole observation with <code>expected</code>: success status, <code>10.01 EUR</code> at scale 2, and the unchanged <code>10.005 EUR</code> operand. Derive the observation from the actual result and retained source, independently of <code>expected</code>.</p>
+<p>Repeat with <code>money.round.half-even.tie-even-down-001</code>, which supplies <code>HALF_EVEN</code> and expects <code>10.00 EUR</code> with the same unchanged operand. These two cases expose substitution of one tie-breaking mode for the other. Compare exact decimals and the required presentation scale; an approximate tolerance is not a Money comparison rule.</p>
+<p>FinKore publishes these expectations. Your team supplies the implementation, invocation, observation, comparison, and reporting tools. Reading the example or running repository artifact checks does not execute either case. Two cases also do not establish conformance to all Money requirements: continue with the <a href="implementation-guide.html#recommended-workflow">implementation workflow</a> to define your scope, select the related success and failure cases, and collect your own execution evidence.</p>
 <h2 id="pick-one-domain-that-matches-your-problem">Pick one domain that matches your problem</h2>
 <div class="core-table"><table><thead><tr><th scope="col">Domain</th><th scope="col">A useful starting question</th></tr></thead><tbody><tr><td>Money</td><td>How should monetary values retain their currency and exact amount through calculation?</td></tr><tr><td>Workflow</td><td>Which lifecycle changes are permitted, and what must remain unchanged after rejection?</td></tr><tr><td>Audit</td><td>What evidence must be preserved to explain an action and its history?</td></tr><tr><td>Approvals</td><td>What was approved, for which subject, and does the decision still apply?</td></tr><tr><td>Financial Entities</td><td>How does a financial subject retain its identity through validation and permitted change?</td></tr></tbody></table></div>
 <p>Use the <a href="https://github.com/willgittens/FinKore/blob/main/spec/README.md" target="_blank" rel="noopener noreferrer">specification index</a> to find the selected domain. For example, if you need monetary values, begin with Money&#39;s representation and arithmetic requirements before adding rounding or allocation to your scope. Your product decides its language, API, storage, and business policies.</p>

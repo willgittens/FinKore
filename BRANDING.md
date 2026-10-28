@@ -12,14 +12,21 @@ This is primarily a communication guide, not a visual design guide.
 
 ## 1. What FinKore Is
 
-FinKore is a foundation and reference for financial software behavior.
+FinKore is an open-source, language-independent specification and reference for
+financial software behavior.
 
 It transforms recurring financial problems into:
 
-- explicit specifications
-- defined rules
-- tested implementations
-- reusable building blocks
+- explicit financial specifications and stable, verifiable requirements
+- portable acceptance cases and requirement traceability
+- an Agentic Contract describing canonical operations for machine clients
+- maintenance tools that validate the published artifacts
+
+Teams reuse the rules and acceptance evidence in their own products. Consumers
+choose their language and architecture, implement the behavior, and own
+invocation, observation, comparison, and reporting. The repository publishes the
+contract; it does not maintain a financial implementation, installable financial
+library, Conformance Runner, or executable service.
 
 FinKore exists underneath product-specific business logic.
 
@@ -33,8 +40,10 @@ teams repeatedly implement themselves:
 - workflows
 - audit
 - financial entities
-- validations
-- other recurring financial behavior
+- validation within the Financial Entities domain
+
+Keep examples within the published Core scope. A recurring problem is not, by
+itself, a supported FinKore domain.
 
 FinKore should not be presented primarily as:
 
@@ -69,11 +78,9 @@ complex consequences.
 
 FinKore exists to reduce this reinvention.
 
-The primary competitor is not another library.
-
-It is the engineering instinct:
-
-> "We'll build it ourselves."
+The recurring cost is rediscovering the rules and their edge cases independently
+for every implementation. Consumer-owned implementation remains part of adoption;
+the shared contract reduces the need to invent the financial semantics again.
 
 FinKore should move the user from:
 
@@ -85,7 +92,7 @@ toward:
 
 and then:
 
-> "How does FinKore implement it?"
+> "Which acceptance cases describe it, and how will we evaluate our implementation?"
 
 ---
 
@@ -141,7 +148,7 @@ It is about:
 - specifications
 - definitions
 - documentation
-- tests
+- portable acceptance cases
 - knowledge
 - correctness
 
@@ -154,22 +161,23 @@ financial behavior from scratch.
 
 ### The Foundation
 
-The Foundation makes that knowledge reusable.
+The Foundation makes that knowledge reusable across consumer implementations.
 
 It is about:
 
-- primitives
-- building blocks
-- implementations
-- infrastructure
-- reuse
+- shared requirements and portable errors
+- deterministic inputs and expected observations
+- traceability from rules to acceptance evidence
+- canonical operation metadata for machine clients
+- consumer-owned implementation and evaluation
 
 The desired behavior is:
 
 BUILD ON IT.
 
-The Standard defines.
-The Foundation implements.
+The Standard defines the financial obligations.
+The Foundation supplies a shared contract and acceptance artifacts.
+Consumers implement and execute the behavior in their own environments.
 
 Together:
 
@@ -183,7 +191,7 @@ FinKore turns financial behavior from:
 
 Hidden → Explicit
 Implicit → Defined
-Fragmented → Tested
+Fragmented → Traceable
 Repeated → Reusable
 
 This transformation should appear repeatedly across website communication.
@@ -224,8 +232,9 @@ Prefer concrete consequences over abstract promises.
 
 Do not claim what cannot be demonstrated.
 
-Specifications, tests, documentation and observable behavior are stronger
-than adjectives.
+Specifications, acceptance cases, documentation and observed implementation
+results are stronger than adjectives. Distinguish published expectations from
+results obtained by executing cases against a named consumer implementation.
 
 ### Calm
 
@@ -269,14 +278,18 @@ Whenever possible, explain:
 2. why the problem exists
 3. the rule
 4. how the rule is made explicit
-5. how FinKore verifies it
-6. how engineers can reuse it
+5. which acceptance cases and traceability describe it
+6. how engineers implement and evaluate it in their own environment
+
+Repository verification checks artifact structure, references, and consistency.
+It does not execute financial operations or prove that a consumer implementation
+conforms. Finite acceptance cases provide bounded evidence, not exhaustive proof.
 
 Prefer evidence over promises.
 
 Prefer:
 
-"Defined by a specification and verified by conformance tests."
+"Defined by a specification, with portable acceptance cases for consumer evaluation."
 
 over:
 
@@ -292,7 +305,7 @@ over:
 
 Prefer:
 
-"Money operations reject invalid precision."
+"Rounding declares both a target scale and a mode."
 
 over:
 
@@ -312,8 +325,8 @@ Prefer vocabulary from this semantic territory:
 - primitive
 - foundation
 - correctness
-- test
-- proof
+- acceptance case
+- evidence
 - explicit
 - reusable
 - financial behavior
@@ -350,7 +363,8 @@ Avoid unsupported claims such as:
 
 "FinKore guarantees financial correctness."
 
-Instead explain what is actually defined, tested and verifiable.
+Instead explain what is defined, which artifacts are validated, and what
+execution evidence a consumer has actually obtained.
 
 Avoid making FinKore sound like a bank, payment provider, ledger platform,
 financial SaaS or fintech application.
@@ -384,10 +398,10 @@ Show that the behavior can be explicitly defined.
 ### 4. Show the evidence
 
 Specifications.
-Tests.
+Portable acceptance cases.
 Documentation.
-Conformance.
-Implementation.
+Requirement traceability.
+Consumer execution results, when available and explicitly scoped.
 
 ### 5. Introduce FinKore
 
@@ -427,7 +441,7 @@ This audience values:
 
 - rigor
 - documentation
-- proof
+- evidence
 - practitioners
 - transparency
 
@@ -451,7 +465,7 @@ When generating a page, communicate ideas roughly in this order:
 3. The explicit rule or behavior
 4. The Standard
 5. The Foundation
-6. Evidence: specification, tests, documentation
+6. Evidence: specification, acceptance cases, traceability
 7. Reuse
 8. Implementation details
 
@@ -494,7 +508,9 @@ Before finalizing any FinKore copy, ask:
 - Are we showing the logic?
 - Are we avoiding hype?
 - Does FinKore appear as a foundation/reference rather than another tool?
-- Does the reader understand why rebuilding this from scratch is unnecessary?
+- Does the reader understand which rules and acceptance artifacts they can reuse?
+- Is consumer ownership of implementation and execution clear?
+- Are artifact validation and observed implementation results distinguished?
 
 If not, rewrite it.
 
