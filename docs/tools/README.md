@@ -14,6 +14,7 @@ execute financial-domain behavior.
 | `check-traceability.js` | Cross-check specification requirements, modalities, permitted coverage classifications, per-domain/total inventories, COVERED/PARTIAL evidence, vector metadata, and Agentic references. | `npm run traceability:check`, `npm run docs:check` |
 | `check-license.js` | Validate license metadata, source headers, and repository license text. | `npm run license:check` |
 | `build-learn-coredoc.js`, `build-learn-pages.js` | Generate the CoreDoc reader, home index and linked document readers, or check that they match canonical Markdown without writing files. | `npm run learn:build`, `npm run learn:check` |
+| `build-learn-assets.js` | Refresh the shared CSS cache version in the home page before generating the Learn readers. | First step of `npm run learn:build` |
 | `check-release-content.js` | Inspect a proposed stable publication tree for obsolete artifacts, coherent Core status, and static HTML content and links. | `npm run release:check` |
 
 ## Supported Node setup
@@ -205,6 +206,22 @@ npm run verify
 a marked generated CoreDoc index. Edit that index through CoreDoc or its renderer;
 do not edit the generated block directly. The document readers listed below are
 generated in full from their Markdown sources and renderers.
+
+Each `npm run learn:build` creates a fresh CSS cache identifier, even when the
+CSS content has not changed. Every stylesheet URL on the home page, CoreDoc,
+and six document readers receives the same `?v=<build identifier>` query.
+The home page's `css/styles.css` URL retains that identifier; the renderers use
+it to generate the remaining URLs. Build the site after CSS-only changes too,
+and publish the complete `learn/` output, including the HTML and CSS together.
+The Learn deployment workflow already invokes this build before verification
+and upload, so each deployment receives fresh CSS URLs.
+
+`npm run learn:check`, `npm run verify`, and `npm run release:check` read the
+existing identifier without creating a new one or modifying files. Generation
+is deterministic for a fixed identifier and canonical source. Missing or mixed
+versions in the maintained pages fail synchronization checks; rerun the full
+`npm run learn:build` command to repair them. Include the changed CSS URLs in
+the same PR as the sources and assets.
 
 The reader at [learn/coredoc.html](../../learn/coredoc.html) and the marked CoreDoc
 index block in [learn/index.html](../../learn/index.html) are generated from

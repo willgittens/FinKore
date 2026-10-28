@@ -79,7 +79,9 @@ npm run verify
 ```
 
 Review the generated diff before submitting it with the source. For changes
-that do not affect Learn sources or renderers, omit `npm run learn:build`.
+that do not affect Learn sources, CSS, or renderers, omit `npm run learn:build`.
+Each full build refreshes the CSS cache version across all Learn pages; include
+those generated URL changes when submitting a CSS-only update too.
 See [editing Learn pages](docs/tools/README.md#editing-learn-pages) for details.
 
 The same `npm run verify` command runs locally and in GitHub Actions. It checks

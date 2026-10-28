@@ -23,7 +23,7 @@
     "dependencies:audit": "npm audit",
     "check": "npm run node:check && npm run architecture:check && npm run conformance:check && npm run agentic:check && npm run tools:test && npm run docs:check && npm run license:check && git diff --check",
     "verify": "npm run check",
-    "learn:build": "node docs/tools/build-learn-coredoc.js && node docs/tools/build-learn-pages.js",
+    "learn:build": "node docs/tools/build-learn-assets.js && node docs/tools/build-learn-coredoc.js && node docs/tools/build-learn-pages.js",
     "learn:check": "node docs/tools/build-learn-coredoc.js --check && node docs/tools/build-learn-pages.js --check"
   }
 }

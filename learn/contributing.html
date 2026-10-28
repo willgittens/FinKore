@@ -19,9 +19,9 @@
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="FinKore — Define once. Build many times." />
   <link rel="icon" type="image/png" href="img/Finkore_Favicon.png" />
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="css/coredoc.css" />
-  <link rel="stylesheet" href="css/documents.css" />
+  <link rel="stylesheet" href="css/styles.css?v=248a3323-66df-4b14-b509-1845d1343260" />
+  <link rel="stylesheet" href="css/coredoc.css?v=248a3323-66df-4b14-b509-1845d1343260" />
+  <link rel="stylesheet" href="css/documents.css?v=248a3323-66df-4b14-b509-1845d1343260" />
 </head>
 <body id="top" class="core-reader learn-document">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -77,7 +77,7 @@ npm run learn:build
 git diff --check
 git diff
 npm run verify</code></pre>
-<p>Review the generated diff before submitting it with the source. For changes that do not affect Learn sources or renderers, omit <code>npm run learn:build</code>. See <a href="https://github.com/willgittens/FinKore/blob/main/docs/tools/README.md#editing-learn-pages" target="_blank" rel="noopener noreferrer">editing Learn pages</a> for details.</p>
+<p>Review the generated diff before submitting it with the source. For changes that do not affect Learn sources, CSS, or renderers, omit <code>npm run learn:build</code>. Each full build refreshes the CSS cache version across all Learn pages; include those generated URL changes when submitting a CSS-only update too. See <a href="https://github.com/willgittens/FinKore/blob/main/docs/tools/README.md#editing-learn-pages" target="_blank" rel="noopener noreferrer">editing Learn pages</a> for details.</p>
 <p>The same <code>npm run verify</code> command runs locally and in GitHub Actions. It checks published artifacts and maintenance tools; it does not execute financial operations against a consumer implementation. Run <code>npm run dependencies:audit</code> as a separate network-backed dependency review when the release or maintenance task requires one.</p>
 <h3 id="editorial-fixes-and-behavior-proposals">Editorial fixes and behavior proposals</h3>
 <p>An editorial correction improves wording or navigation while preserving every observable result, stable identifier, and CoreDoc evolution field. Follow SPEC-COMPATIBILITY-011 and synchronize any affected Learn readers.</p>

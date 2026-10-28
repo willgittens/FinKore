@@ -11,6 +11,7 @@ import { pathToFileURL } from 'node:url'
 import { markdownAnchors } from './check-doc-links.js'
 import { buildLearnCoreDoc } from './build-learn-coredoc.js'
 import { LEARN_PAGES, renderLearnPage, buildLearnPages, GITHUB_PROJECT_URL, GITHUB_FILE_BASE_URL } from './build-learn-pages.js'
+import { readLearnAssetVersion } from './build-learn-assets.js'
 
 const LOCAL_STATE = new Set(['.git', '.tools', 'node_modules', '.npm-cache', 'coverage', 'dist', 'reports'])
 const NEGATIVE_FIXTURE = 'docs/tools/test/fixtures/release-content-negative.json'
@@ -190,7 +191,7 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
     catch (error) { errors.push('learn: ' + error.message) }
     for (const page of LEARN_PAGES.filter(page => files.has(page.output))) {
       try {
-        if (files.get(page.output) === renderLearnPage(page, files.get(page.source) ?? '')) synchronizedPages.set(page.output, page.source)
+        if (files.get(page.output) === renderLearnPage(page, files.get(page.source) ?? '', readLearnAssetVersion(root))) synchronizedPages.set(page.output, page.source)
       } catch (error) { errors.push(`${page.output}: ${error.message}`) }
     }
   }

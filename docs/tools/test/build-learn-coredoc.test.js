@@ -6,9 +6,10 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import test from 'node:test'
 import { buildLearnCoreDoc, parseCoreDoc, renderReader, renderMarkdown } from '../build-learn-coredoc.js'
+import { refreshLearnAssetVersion } from '../build-learn-assets.js'
 
 const source = readFileSync(new URL('../../coreDoc/core-doc.md', import.meta.url), 'utf8')
-const home = '<h1>Unrelated home content</h1>\n<!-- BEGIN GENERATED COREDOC INDEX -->\n<!-- END GENERATED COREDOC INDEX -->\n<footer>Keep this footer</footer>\n'
+const home = '<h1>Unrelated home content</h1>\n<link rel="stylesheet" href="css/styles.css" />\n<!-- BEGIN GENERATED COREDOC INDEX -->\n<!-- END GENERATED COREDOC INDEX -->\n<footer>Keep this footer</footer>\n'
 function fixture(t) {
   const root = mkdtempSync(join(tmpdir(), 'finkore-coredoc-'))
   t.after(() => rmSync(root, { recursive: true, force: true }))
@@ -16,6 +17,7 @@ function fixture(t) {
   mkdirSync(join(root, 'learn'))
   writeFileSync(join(root, 'docs/coreDoc/core-doc.md'), source)
   writeFileSync(join(root, 'learn/index.html'), home)
+  refreshLearnAssetVersion(root)
   return root
 }
 
@@ -23,7 +25,7 @@ test('renders every canonical principle and rule with unchanged obligations and 
   const doc = parseCoreDoc(source)
   assert.equal(doc.principles.length, (source.match(/^## CORE-/gm) ?? []).length)
   assert.equal(doc.rules.length, (source.match(/^### CORE-/gm) ?? []).length)
-  const html = renderReader(doc)
+  const html = renderReader(doc, '00000000-0000-4000-8000-000000000001')
   assert.match(html, /A monetary value SHALL contain an exact base-10 amount and a currency/)
   assert.match(html, /<strong>Introduced:<\/strong> Draft 0\.4/)
   assert.match(html, /<strong>Last updated on:<\/strong> 2026-09-12/)
