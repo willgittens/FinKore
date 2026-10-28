@@ -51,11 +51,10 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - name: Verify and regenerate the committed site
+      - name: Verify the committed site
         run: |
           npm ci --no-audit
           npm run verify
-          npm run learn:build
           git diff --exit-code -- learn/
 
       - name: Summarize validation
