@@ -291,6 +291,7 @@ h1 > span {
 }
 
 .hero-ownership {
+  max-width: 38rem;
   margin-top: 1.25rem;
   font-size: 0.875rem;
   font-weight: 600;
@@ -629,6 +630,57 @@ code {
   .how-flow .flow-narrow { display: block; }
 }
 
+/* A published rounding example introduces the contract before its artifacts. */
+
+.rounding-example {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: 2rem;
+  margin-top: 2rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 2px solid var(--dark);
+  background: var(--blue-tint);
+}
+
+.rounding-example h3 {
+  margin-top: 0.75rem;
+  font-size: 1.5rem;
+}
+
+.rounding-example p:not(.eyebrow) {
+  margin-top: 1rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.rounding-example .text-link {
+  justify-content: flex-start;
+  margin-top: 0.75rem;
+}
+
+.rounding-example table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+.rounding-example caption {
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+.rounding-example th, .rounding-example td {
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.rounding-example table code {
+  white-space: nowrap;
+}
+
 /* Three concrete artifacts: each has its own link and reading purpose. */
 
 .section {
@@ -725,6 +777,12 @@ code {
   margin-top: 0.65rem;
   color: var(--muted);
   font-size: 0.875rem;
+}
+
+.artifact-note {
+  margin-top: 2rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
 }
 
 .resource-kind {
@@ -856,7 +914,7 @@ code {
 }
 
 @media (max-width: 56rem) {
-  .licensing-layout {
+  .licensing-layout, .rounding-example {
     grid-template-columns: minmax(0, 1fr);
   }
 

@@ -49,6 +49,122 @@ The [Agentic Contract](../agentic/README.md) describes canonical operation
 semantics for machine clients. Your integration provides execution and
 authorization infrastructure while preserving the specification's behavior.
 
+## Walk through one rounding case
+
+The [README example](../README.md#concrete-example-rounding-a-monetary-amount)
+starts with `10.005 EUR` rounded to scale 2. Follow that same amount from its
+financial obligation to a published expected observation. This walkthrough
+illustrates the existing contract; it adds no rounding policy to your product.
+
+### 1. Read the obligation and requirements
+
+[CORE-001.2](coreDoc/core-doc.md#core-0012-exact-calculation-and-explicit-rounding)
+requires exact calculation and a declared rule when reducing precision. A
+currency's customary minor-unit scale is not itself a rounding instruction.
+
+In [Money Rounding](../spec/money/rounding.md#requirements),
+`MONEY-ROUNDING-001` requires an explicit target scale and mode.
+`MONEY-ROUNDING-003` defines the supported modes. At a tie, `HALF_UP` selects the
+nearest candidate farther from zero; `HALF_EVEN` selects the nearest candidate
+whose last retained digit is even. For `10.005 EUR` at scale 2, those rules give
+different results.
+
+### 2. Discover the existing cases
+
+Open [conformance/manifest.json](../conformance/manifest.json), find the suite
+whose `id` is `money`, and follow its `vectorFiles` entry
+`./money/rounding.json`, resolved relative to the manifest directory. In that
+declared file, locate these stable IDs:
+
+| Vector ID | Mode | Expected amount | Currency |
+| --- | --- | --- | --- |
+| `money.round.half-up.tie-positive-001` | `HALF_UP` | `10.01` | `EUR` |
+| `money.round.half-even.tie-even-down-001` | `HALF_EVEN` | `10.00` | `EUR` |
+
+Both cases supply `10.005 EUR` and `scale: 2`. Discover files only through the
+manifest; do not enumerate the Money directory. The
+[traceability index](../conformance/traceability.md) connects requirements to
+their published cases and coverage limits.
+
+### 3. Read the request and complete expected observation
+
+This excerpt copies the relevant fields of
+`money.round.half-up.tie-positive-001` from the manifest-listed file:
+
+```json
+{
+  "id": "money.round.half-up.tie-positive-001",
+  "requirements": [
+    "MONEY-ROUNDING-002",
+    "MONEY-ROUNDING-003",
+    "MONEY-ROUNDING-008"
+  ],
+  "operation": "finkore.money.round",
+  "input": {
+    "value": {
+      "amount": "10.005",
+      "currency": "EUR"
+    },
+    "scale": 2,
+    "mode": "HALF_UP"
+  },
+  "expected": {
+    "status": "success",
+    "value": {
+      "amount": "10.01",
+      "currency": "EUR"
+    },
+    "observations": {
+      "operand": {
+        "amount": "10.005",
+        "currency": "EUR"
+      }
+    }
+  }
+}
+```
+
+| Field | What to look for |
+| --- | --- |
+| `id` | The stable case identity used to report an evaluation. |
+| `requirements` | This case exercises determinism (`MONEY-ROUNDING-002`), portable mode semantics (`MONEY-ROUNDING-003`), and currency preservation (`MONEY-ROUNDING-008`). The explicit request is also governed by `MONEY-ROUNDING-001`; that ID is not listed by this particular case. |
+| `operation` | The canonical behavior to map to your own API: `finkore.money.round`. |
+| `input` | The exact decimal amount, currency, explicit target scale, and mode to supply. |
+| `expected.value` | The resulting amount and currency, with exactly two fractional digits for this explicit scale. |
+| `expected.observations.operand` | The unchanged source Money to observe after the operation. |
+
+The complete vector also includes `spec`, a description, tags, and defect intent.
+The [operation contract](../conformance/operations.md#money-operations) and
+[Agentic descriptor](../agentic/operations.md#finkoremoneyround) explain the
+portable boundary; the fixture shape does not prescribe your production API.
+
+### 4. Compare your implementation's observations
+
+In your own environment, map the operation to your implementation and supply
+the case's `input`. Preserve exact decimal semantics when parsing `"10.005"`;
+do not convert it to approximate binary floating point or infer a policy from
+`EUR`.
+
+Normalize the actual result according to the
+[consumer guide](../conformance/consumer-guide.md#expected-observation), then
+compare the whole observation with `expected`: success status, `10.01 EUR` at
+scale 2, and the unchanged `10.005 EUR` operand. Derive the observation from the
+actual result and retained source, independently of `expected`.
+
+Repeat with `money.round.half-even.tie-even-down-001`, which supplies
+`HALF_EVEN` and expects `10.00 EUR` with the same unchanged operand. These two
+cases expose substitution of one tie-breaking mode for the other. Compare exact
+decimals and the required presentation scale; an approximate tolerance is not a
+Money comparison rule.
+
+FinKore publishes these expectations. Your team supplies the implementation,
+invocation, observation, comparison, and reporting tools. Reading the example
+or running repository artifact checks does not execute either case. Two cases
+also do not establish conformance to all Money requirements: continue with the
+[implementation workflow](implementation-guide.md#recommended-workflow) to
+define your scope, select the related success and failure cases, and collect
+your own execution evidence.
+
 ## Pick one domain that matches your problem
 
 | Domain | A useful starting question |
