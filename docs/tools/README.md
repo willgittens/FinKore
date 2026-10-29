@@ -262,7 +262,9 @@ documents linked directly by the home page and CoreDoc; they do not recursively
 publish the repository.
 
 The document renderer preserves headings and fragments, paragraphs, lists,
-tables, fenced code and the README's local images and website links. Unsupported
+tables, fenced code, paragraph-only blockquotes and the README's local images
+and website links. Quote lines must use an explicit `>` marker; nested quotes
+and other block structures inside quotes are unsupported. Unsupported
 block forms fail generation. Regenerate with `npm run learn:build` after changing
 any of these sources or their renderer. The publication check requires exact
 source synchronization before treating generated release notes as historical

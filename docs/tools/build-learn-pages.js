@@ -132,6 +132,18 @@ export function renderLearnMarkdown(markdown, source) {
       blocks.push(`<div class="core-table"><table><thead><tr>${rows[0].map(cell => `<th scope="col">${inline(cell, source)}</th>`).join('')}</tr></thead><tbody>${rows.slice(2).map(row => `<tr>${row.map(cell => `<td>${inline(cell, source)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`)
       continue
     }
+    if (/^>(?: |$)/.test(line)) {
+      const paragraphs = [], paragraph = []
+      while (i < lines.length && /^>(?: |$)/.test(lines[i])) {
+        const text = lines[i++].replace(/^> ?/, '')
+        if (/^(?:>|#{1,6} |\d+\. |[-*] |\||```| {4})/.test(text)) throw new Error(`Unsupported Learn blockquote in ${source}: ${text}`)
+        if (text.trim()) paragraph.push(text)
+        else if (paragraph.length) paragraphs.push(paragraph.splice(0).join(' '))
+      }
+      if (paragraph.length) paragraphs.push(paragraph.join(' '))
+      blocks.push(`<blockquote>${paragraphs.map(text => `<p>${inline(text, source)}</p>`).join('')}</blockquote>`)
+      continue
+    }
     const list = line.match(/^(\d+\.|-) (.+)$/)
     if (list) {
       const ordered = list[1] !== '-', items = []
@@ -167,7 +179,7 @@ export function renderLearnMarkdown(markdown, source) {
       i++; continue
     }
     const paragraph = []
-    do { paragraph.push(lines[i++]) } while (i < lines.length && lines[i].trim() && !/^(?:#{1,6} |\d+\. |- |\||```|<!--)/.test(lines[i]))
+    do { paragraph.push(lines[i++]) } while (i < lines.length && lines[i].trim() && !/^(?:#{1,6} |\d+\. |- |\||```|<!--|>)/.test(lines[i]))
     let text = paragraph.join(' ')
     // Preserve README's canonical website link using the same safe link renderer.
     text = text.replace(/<a href="(https:\/\/finkore\.dev)" target="_blank" rel="noopener noreferrer">https:\/\/finkore\.dev<\/a>/g, '[$1]($1)')
