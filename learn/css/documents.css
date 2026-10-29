@@ -9,6 +9,8 @@
 .learn-document-prose ul, .learn-document-prose ol { padding-left: 1.5rem; margin-top: 1rem; }
 .learn-document-prose li + li { margin-top: 0.5rem; }
 .learn-document-prose pre { white-space: pre; }
+.learn-document-prose blockquote { margin: 1.5rem 0; padding: 1rem 1.25rem; border: 1px solid var(--line); border-left-width: 3px; background: #ececec; color: var(--muted); font-size: 0.8125rem; }
+.learn-document-prose blockquote > p:first-child { margin-top: 0; }
 .learn-document-prose .learn-document-image { max-width: 100%; height: auto; }
 .learn-document-prose [id] { scroll-margin-top: calc(var(--site-header-height) + 1.5rem); }
 .learn-document-index { display: none; }

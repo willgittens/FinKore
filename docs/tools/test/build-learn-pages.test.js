@@ -51,8 +51,24 @@ test('preserves code, ordered list continuations, inline wording, tables and hea
   const external = renderLearnMarkdown('# Guide\n\n[Rule](spec/money/rounding.md#requirements)', 'README.md')
   assert.ok(external.html.includes(`href="${GITHUB_FILE_BASE_URL}spec/money/rounding.md#requirements" target="_blank" rel="noopener noreferrer"`))
   assert.deepEqual(doc.headings.map(h => h.id), ['a-question', 'a-question-1'])
-  for (const malformed of ['# Title\n\n```text\nunclosed', '# Title\n\n| A | B |\n| --- |\n| x | y |', '# Title\n\n> unsupported', '# Title\n\n<script>unsafe</script>']) {
+  for (const malformed of ['# Title\n\n```text\nunclosed', '# Title\n\n| A | B |\n| --- |\n| x | y |', '# Title\n\n> > unsupported', '# Title\n\n<script>unsafe</script>']) {
     assert.throws(() => renderLearnMarkdown(malformed, 'README.md'), /Unclosed|Unsupported/)
+  }
+})
+
+test('renders paragraph blockquotes with safe inline content and preserves surrounding blocks', () => {
+  const render = content => renderLearnMarkdown(`# Guide\n\n${content}`, 'README.md')
+  const doc = render('Before.\n> FinKore Core 2.0.2 stable.\n> See [status](./spec/README.md#status).\n>\n> Keep **format `versions`** separate.\n\nAfter.\n\n## Next step\n')
+  assert.match(doc.html, /<p>Before\.<\/p>\n<blockquote><p>FinKore Core 2\.0\.2 stable\. See /)
+  assert.ok(doc.html.includes(`href="${GITHUB_FILE_BASE_URL}spec/README.md#status" target="_blank" rel="noopener noreferrer"`))
+  assert.match(doc.html, /<p>Keep <strong>format <code>versions<\/code><\/strong> separate\.<\/p><\/blockquote>\n<p>After\.<\/p>/)
+  assert.deepEqual(doc.headings.map(h => h.id), ['next-step'])
+  assert.match(render('> <script>unsafe</script> & value').html, /&lt;script&gt;unsafe&lt;\/script&gt; &amp; value/)
+  for (const href of ['javascript:alert', '../../../outside.md']) {
+    assert.throws(() => render(`> [unsafe](${href})`), /Unsupported|Escaping/)
+  }
+  for (const content of ['> > Nested', '> ## Heading', '> - List', '> 1. List', '> ```text', '> | Table |', '>     Indented code']) {
+    assert.throws(() => render(content), /Unsupported Learn blockquote/)
   }
 })
 

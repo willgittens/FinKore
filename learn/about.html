@@ -19,9 +19,9 @@
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="FinKore — Define once. Build many times." />
   <link rel="icon" type="image/png" href="img/Finkore_Favicon.png" />
-  <link rel="stylesheet" href="css/styles.css?v=248a3323-66df-4b14-b509-1845d1343260" />
-  <link rel="stylesheet" href="css/coredoc.css?v=248a3323-66df-4b14-b509-1845d1343260" />
-  <link rel="stylesheet" href="css/documents.css?v=248a3323-66df-4b14-b509-1845d1343260" />
+  <link rel="stylesheet" href="css/styles.css?v=3d27682d-9013-4574-ab84-2d0f954c3e59" />
+  <link rel="stylesheet" href="css/coredoc.css?v=3d27682d-9013-4574-ab84-2d0f954c3e59" />
+  <link rel="stylesheet" href="css/documents.css?v=3d27682d-9013-4574-ab84-2d0f954c3e59" />
 </head>
 <body id="top" class="core-reader learn-document">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -64,22 +64,21 @@
 <a class="core-nav-intro" href="#contributing">Contributing</a>
 <a class="core-nav-intro" href="#partners">Partners</a></nav></details>
         <article class="core-prose learn-document-prose" aria-label="FinKore">
+<blockquote><p>FinKore Core 2.0.2 stable. See the <a href="https://github.com/willgittens/FinKore/blob/main/spec/README.md#status" target="_blank" rel="noopener noreferrer">specification status</a> and <a href="releases.html">release notes</a>.</p></blockquote>
 <p><img class="learn-document-image" src="img/Finkore.png" alt="FinKore" width="480" loading="lazy" decoding="async" /></p>
 <p><strong>CRUD is easy. Financial CRUD isn&#39;t.</strong></p>
-<p><strong>FinKore Core 2.0.2 stable.</strong> See the <a href="https://github.com/willgittens/FinKore/blob/main/spec/README.md#status" target="_blank" rel="noopener noreferrer">specification status</a> and <a href="releases.html">release notes</a>. Core versions are separate from conformance format versions and the private maintenance package version.</p>
 <p>Financial applications repeatedly face the same questions: How should money be rounded? When is an approval no longer valid? What must happen when an operation fails? Different answers can change amounts, invalidate controls, or lose the evidence needed to explain a transaction.</p>
-<p>These are recurring financial foundations, yet teams keep defining and implementing them differently across products, services, and programming languages.</p>
-<p><strong>FinKore exists so we don&#39;t have to keep reinventing those foundations.</strong></p>
-<p>FinKore is an open-source, language-independent specification that defines how fundamental financial operations behave, how they fail, and how consumers can verify their results. It covers <strong>Money, Workflow, Audit, Approvals, and Financial Entities</strong> through three layers:</p>
+<p>FinKore gives teams a shared foundation for answering those questions. It is an open-source, language-independent specification that defines how fundamental financial operations behave, how they fail, and how consumers can verify their results. It covers <strong>Money, Workflow, Audit, Approvals, and Financial Entities</strong> through three layers:</p>
 <p><strong>CoreDoc → Specifications → Conformance</strong></p>
 <p>Financial principles become precise technical requirements. Those requirements become portable acceptance cases. Developers use them to build and evaluate their own implementations, in their own languages and architectures. The Agentic Contract describes the same operations for machine clients.</p>
-<p><strong>No SaaS. No mandatory framework. No vendor lock-in.</strong></p>
-<p>Your product and implementation remain yours. The financial foundation becomes something we can define, verify, and improve together.</p>
+<p>Your team chooses the language, architecture, and tools. Your product and implementation remain yours, while the financial foundation becomes something we can define, verify, and improve together.</p>
 <p><strong>Define once. Build many times.</strong></p>
+<p><a href="https://finkore.dev" target="_blank" rel="noopener noreferrer">https://finkore.dev</a></p>
+<p><a href="coredoc.html">Read the CoreDoc</a></p>
+<p><a href="implementation-guide.html">Build an implementation</a></p>
 <h2 id="what-do-you-actually-get">What do you actually get?</h2>
 <div class="core-table"><table><thead><tr><th scope="col">FinKore provides</th><th scope="col">FinKore does not provide</th></tr></thead><tbody><tr><td>Documented financial rules</td><td>A ready-made financial application</td></tr><tr><td>Stable, verifiable technical requirements</td><td>A mandatory architecture</td></tr><tr><td>Portable conformance cases</td><td>A financial implementation or Conformance Runner</td></tr><tr><td>Operation contracts for machine clients</td><td>An executable agent integration or hosted AI service</td></tr><tr><td>Open specifications and maintenance tools</td><td>A SaaS platform or installable financial library</td></tr></tbody></table></div>
 <p>Consumers implement the selected domains and own invocation, observation, comparison, reporting, and application security.</p>
-<p><a href="https://finkore.dev" target="_blank" rel="noopener noreferrer">https://finkore.dev</a> · <a href="coredoc.html">Read the CoreDoc</a> · <a href="implementation-guide.html">Build an implementation</a></p>
 <h2 id="your-product-may-be-unique-your-financial-rules-dont-have-to-be">Your product may be unique. Your financial rules don&#39;t have to be.</h2>
 <p>FinKore is intended for engineers, architects, and financial-domain reviewers working on banks, fintechs, SaaS platforms, ERPs, and other financial systems. It provides a common reference for discussing behavior across teams and implementations.</p>
 <div class="core-table"><table><thead><tr><th scope="col">FinKore makes explicit</th><th scope="col">Your application decides</th></tr></thead><tbody><tr><td>Observable values, results, errors, and invariants</td><td>Language, framework, API, storage, and deployment</td></tr><tr><td>How declared lifecycle and approval rules behave</td><td>Business policies, thresholds, permissions, and user experience</td></tr><tr><td>Stable requirements and portable acceptance cases</td><td>Which FinKore domains to implement and how to integrate them</td></tr></tbody></table></div>
@@ -108,12 +107,15 @@ Specification — precise behavior and stable requirement IDs
 <p>A consumer could implement this behavior in TypeScript, Java, or Go and compare its observations with these cases. FinKore supplies the rules and expected observations; consumers supply the implementation and execution.</p>
 <h2 id="start-reading-or-building">Start reading or building</h2>
 <div class="core-table"><table><thead><tr><th scope="col">If you want to…</th><th scope="col">Start here</th></tr></thead><tbody><tr><td>Get an overview of the project</td><td><a href="index.html">Learn introduction</a></td></tr><tr><td>Understand the financial principles</td><td><a href="coredoc.html">CoreDoc</a> or its <a href="coredoc.html">web reader</a></td></tr><tr><td>Find a precise rule</td><td><a href="https://github.com/willgittens/FinKore/blob/main/spec/README.md" target="_blank" rel="noopener noreferrer">Specification index</a> and <a href="https://github.com/willgittens/FinKore/blob/main/spec/glossary.md" target="_blank" rel="noopener noreferrer">glossary</a></td></tr><tr><td>Implement a domain in your codebase</td><td><a href="implementation-guide.html">Implementation guide</a></td></tr><tr><td>Evaluate your implementation against acceptance cases</td><td><a href="https://github.com/willgittens/FinKore/blob/main/conformance/consumer-guide.md" target="_blank" rel="noopener noreferrer">Conformance consumer guide</a></td></tr><tr><td>Find evidence for a requirement and understand coverage limits</td><td><a href="https://github.com/willgittens/FinKore/blob/main/conformance/traceability.md" target="_blank" rel="noopener noreferrer">Requirement traceability</a></td></tr><tr><td>Integrate agents or other machine clients</td><td><a href="https://github.com/willgittens/FinKore/blob/main/agentic/README.md" target="_blank" rel="noopener noreferrer">Agentic Contract</a></td></tr><tr><td>Make a first contribution</td><td><a href="contributing.html#make-your-first-contribution">Contributor workflow</a></td></tr></tbody></table></div>
-<p>You can begin with one domain. Read its rules, implement the selected scope, and use the published cases alongside your own evidence to evaluate the result. Consumers own invocation, observation, comparison, and reporting. Acceptance cases provide bounded evidence; their existence alone does not establish that an implementation conforms or that its behavior is exhaustively tested.</p>
+<p>You can begin with one domain. Read its rules, implement the selected scope, and use the published cases alongside your own evidence to evaluate the result. Consumers own invocation, observation, comparison, and reporting.</p>
+<p>Acceptance cases provide bounded evidence; their existence alone does not establish that an implementation conforms or that its behavior is exhaustively tested.</p>
 <h2 id="build-on-finkore-keep-your-product-yours">Build on FinKore. Keep your product yours.</h2>
 <p>FinKore&#39;s project-owned materials are open source under the <strong>Mozilla Public License 2.0 (MPL-2.0)</strong>, unless a file states otherwise. Commercial and proprietary use is permitted subject to the license terms.</p>
 <p>See <a href="licensing.html">Licensing</a> for the distinction between implementing the specified behavior and copying or modifying covered repository files. The <a href="https://github.com/willgittens/FinKore/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">license text</a> controls.</p>
 <h2 id="contributing">Contributing</h2>
-<p>Useful first contributions include clearer documentation, requirement reviews, reports of specification gaps, portable acceptance cases, and maintenance-tool improvements. Follow the <a href="contributing.html#make-your-first-contribution">first-contribution workflow</a> to choose a problem, validate the change, and submit a Pull Request.</p>
+<p>Useful first contributions include:</p>
+<ul><li>Clarifying documentation or reviewing an existing requirement.</li><li>Reporting a specification gap or adding a portable acceptance case.</li><li>Improving repository maintenance tools.</li></ul>
+<p>Follow the <a href="contributing.html#make-your-first-contribution">first-contribution workflow</a> to choose a problem, validate the change, and submit a Pull Request.</p>
 <p>Financial behavior proposals start with a domain problem and CoreDoc alignment. Changes to behavior should connect specification requirements to conformance cases, traceability, and Agentic metadata where applicable. If the specification is silent, raise the gap before choosing new semantics.</p>
 <p>Anyone may fork the repository, open Issues, participate in Discussions, review and challenge specifications, and submit Pull Requests. Lead maintainer <code>@willgittens</code> retains final integration authority. Report potentially exploitable issues privately through the <a href="https://github.com/willgittens/FinKore/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer">Security Policy</a>.</p>
 <p>See <a href="contributing.html">Contributing</a> for the workflow and <a href="https://github.com/willgittens/FinKore/blob/main/docs/governance/contributor-licensing.md" target="_blank" rel="noopener noreferrer">Contributor Licensing</a> for the contribution terms. Published history is in the <a href="releases.html">release notes</a>.</p>

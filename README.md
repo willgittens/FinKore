@@ -1,3 +1,6 @@
+> FinKore Core 2.0.2 stable. See the [specification status](./spec/README.md#status)
+> and [release notes](./docs/releases/README.md).
+
 <p align="center">
   <img src="./learn/img/Finkore.png#gh-light-mode-only"
        alt="FinKore" width="480" />
@@ -9,24 +12,16 @@
 
 **CRUD is easy. Financial CRUD isn't.**
 
-**FinKore Core 2.0.2 stable.** See the [specification status](./spec/README.md#status)
-and [release notes](./docs/releases/README.md). Core versions are separate from
-conformance format versions and the private maintenance package version.
-
 Financial applications repeatedly face the same questions: How should money be
 rounded? When is an approval no longer valid? What must happen when an operation
 fails? Different answers can change amounts, invalidate controls, or lose the
 evidence needed to explain a transaction.
 
-These are recurring financial foundations, yet teams keep defining and
-implementing them differently across products, services, and programming languages.
-
-**FinKore exists so we don't have to keep reinventing those foundations.**
-
-FinKore is an open-source, language-independent specification that defines how
-fundamental financial operations behave, how they fail, and how consumers can
-verify their results. It covers **Money, Workflow, Audit, Approvals, and
-Financial Entities** through three layers:
+FinKore gives teams a shared foundation for answering those questions. It is an
+open-source, language-independent specification that defines how fundamental
+financial operations behave, how they fail, and how consumers can verify their
+results. It covers **Money, Workflow, Audit, Approvals, and Financial Entities**
+through three layers:
 
 **CoreDoc → Specifications → Conformance**
 
@@ -35,12 +30,17 @@ become portable acceptance cases. Developers use them to build and evaluate
 their own implementations, in their own languages and architectures. The
 Agentic Contract describes the same operations for machine clients.
 
-**No SaaS. No mandatory framework. No vendor lock-in.**
-
-Your product and implementation remain yours. The financial foundation becomes
-something we can define, verify, and improve together.
+Your team chooses the language, architecture, and tools. Your product and
+implementation remain yours, while the financial foundation becomes something
+we can define, verify, and improve together.
 
 **Define once. Build many times.**
+
+<a href="https://finkore.dev" target="_blank" rel="noopener noreferrer">https://finkore.dev</a>
+
+[Read the CoreDoc](./docs/coreDoc/core-doc.md)
+
+[Build an implementation](./docs/implementation-guide.md)
 
 ## What do you actually get?
 
@@ -54,10 +54,6 @@ something we can define, verify, and improve together.
 
 Consumers implement the selected domains and own invocation, observation,
 comparison, reporting, and application security.
-
-<a href="https://finkore.dev" target="_blank" rel="noopener noreferrer">https://finkore.dev</a> ·
-[Read the CoreDoc](./docs/coreDoc/core-doc.md) ·
-[Build an implementation](./docs/implementation-guide.md)
 
 ## Your product may be unique. Your financial rules don't have to be.
 
@@ -164,6 +160,7 @@ observations; consumers supply the implementation and execution.
 You can begin with one domain. Read its rules, implement the selected scope,
 and use the published cases alongside your own evidence to evaluate the
 result. Consumers own invocation, observation, comparison, and reporting.
+
 Acceptance cases provide bounded evidence; their existence alone does not
 establish that an implementation conforms or that its behavior is exhaustively
 tested.
@@ -180,9 +177,13 @@ specified behavior and copying or modifying covered repository files. The
 
 ## Contributing
 
-Useful first contributions include clearer documentation, requirement reviews,
-reports of specification gaps, portable acceptance cases, and maintenance-tool
-improvements. Follow the [first-contribution workflow](./CONTRIBUTING.md#make-your-first-contribution)
+Useful first contributions include:
+
+- Clarifying documentation or reviewing an existing requirement.
+- Reporting a specification gap or adding a portable acceptance case.
+- Improving repository maintenance tools.
+
+Follow the [first-contribution workflow](./CONTRIBUTING.md#make-your-first-contribution)
 to choose a problem, validate the change, and submit a Pull Request.
 
 Financial behavior proposals start with a domain problem and CoreDoc alignment.
