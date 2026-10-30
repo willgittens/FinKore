@@ -240,7 +240,7 @@ ${doc.html.replace(/<h1\b[^>]*>[\s\S]*?<\/h1>\n?/, '')}
     </div>
   </main>
   <footer class="site-footer"><div class="container footer-layout">
-    <a class="brand" href="index.html">FinKore<span class="accent" aria-hidden="true">.</span></a><p>Financial behavior, made explicit.</p>
+    <a class="brand" href="index.html"><img class="brand-logo" src="img/Finkore_White.png" alt="FinKore" width="1021" height="293" loading="lazy" decoding="async" /></a><p>Financial behavior, made explicit.</p>
     <nav aria-label="Project resources"><a href="about.html">About the project</a><a href="contributing.html">Contribute</a><a href="${GITHUB_FILE_BASE_URL}LICENSE" target="_blank" rel="noopener noreferrer">MPL-2.0</a></nav>
   </div></footer>
 </body>
