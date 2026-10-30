@@ -18,6 +18,8 @@ export const LEARN_PAGES = [
   { source: 'docs/implementation-guide.md', output: 'learn/implementation-guide.html', label: 'Implementation guide', description: 'Guidance for implementing the portable contract in your own language and stack.' },
   { source: 'docs/releases/README.md', output: 'learn/releases.html', label: 'Release notes', description: 'Published release history. Earlier entries describe historical repository capabilities.' },
 ]
+// Editorial HTML keeps its own content; the build shares navigation and CSS versions.
+export const LEARN_EDITORIAL_PAGES = ['learn/index.html', 'learn/network.html']
 const destinations = new Map(LEARN_PAGES.map(page => [page.source, page.output]))
 destinations.set('docs/coreDoc/core-doc.md', 'learn/coredoc.html')
 export const GITHUB_PROJECT_URL = 'https://github.com/willgittens/FinKore'
@@ -28,6 +30,7 @@ export function renderLearnNavigation({ home = false, current } = {}) {
         <ul class="nav-list">
           <li><a href="where-to-start.html"${current === 'start' ? ' aria-current="page"' : ''}>Where to start</a></li>
           <li><a href="${home ? '#core-explorer' : 'coredoc.html'}"${current === 'coredoc' ? ' aria-current="page"' : ''}>CoreDoc</a></li>
+          <li><a href="network.html"${current === 'network' ? ' aria-current="page"' : ''}>Join the Network</a></li>
           <li><a class="nav-start" href="${GITHUB_PROJECT_URL}" target="_blank" rel="noopener noreferrer">Github Project <span aria-hidden="true">↗</span></a></li>
         </ul>
       </nav>`
@@ -248,12 +251,14 @@ ${doc.html.replace(/<h1\b[^>]*>[\s\S]*?<\/h1>\n?/, '')}
 export function buildLearnPages(root = process.cwd(), { check = false } = {}) {
   const assetVersion = readLearnAssetVersion(root)
   const outputs = LEARN_PAGES.map(page => [page.output, renderLearnPage(page, readFileSync(resolve(root, page.source), 'utf8'), assetVersion)])
-  const home = readFileSync(resolve(root, 'learn/index.html'), 'utf8')
-  const nextHome = home.replace(/<nav aria-label="Primary navigation">[\s\S]*?<\/nav>/, renderLearnNavigation({ home: true })).replace(/href="([^"]+)"/g, (match, href) => {
-    if (/^[a-z][a-z0-9+.-]*:|^#|^\//i.test(href)) return match
-    return learnLink('learn/index.html', href) !== href ? linkAttributes('learn/index.html', href) : match
-  })
-  outputs.push(['learn/index.html', nextHome])
+  for (const path of LEARN_EDITORIAL_PAGES) {
+    const html = readFileSync(resolve(root, path), 'utf8')
+    const next = html.replace(/<nav aria-label="Primary navigation">[\s\S]*?<\/nav>/, renderLearnNavigation({ home: path === 'learn/index.html', current: path === 'learn/network.html' ? 'network' : undefined })).replace(/href="([^"]+)"/g, (match, href) => {
+      if (/^[a-z][a-z0-9+.-]*:|^#|^\//i.test(href)) return match
+      return learnLink(path, href) !== href ? linkAttributes(path, href) : match
+    })
+    outputs.push([path, versionLearnStylesheets(next, assetVersion)])
+  }
   if (check) {
     const stale = outputs.filter(([path, html]) => !existsSync(resolve(root, path)) || readFileSync(resolve(root, path), 'utf8') !== html).map(([path]) => path)
     if (stale.length) throw new Error(`Learn pages are out of date: ${stale.join(', ')}. Run npm run learn:build and review the generated changes.`)

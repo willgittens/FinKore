@@ -33,6 +33,26 @@ function run(root) {
   return { status, output: out.join('\n'), error: errors.join('\n') }
 }
 
+test('allows Network discussion links only on that page with safe new-tab attributes', t => {
+  const root = fixture(t)
+  const href = 'https://github.com/willgittens/FinKore/discussions'
+  const page = `<h1>FinKore Network</h1><a href="${href}" target="_blank" rel="noopener noreferrer">Discuss</a>`
+  put(root, 'learn/network.html', page)
+  assert.equal(run(root).status, 0)
+  for (const invalid of [
+    page.replace('target="_blank"', 'target="_self"'),
+    page.replace('noopener noreferrer', 'noopener'),
+    page.replace(href, href + '/new'),
+    page.replace('/willgittens/', '/another-owner/'),
+  ]) {
+    put(root, 'learn/network.html', invalid)
+    assert.match(run(root).error, /HTML link must name a local destination/)
+  }
+  put(root, 'learn/network.html', page)
+  put(root, 'learn/other.html', page)
+  assert.match(run(root).error, /learn\/other.html: HTML link must name a local destination/)
+})
+
 test('accepts stable publication while preserving format versions, vector IDs, release history and CoreDoc evolution metadata', (t) => {
   const root = fixture(t)
   put(root, 'docs/tools/check-release-content.js', readFileSync(new URL('../check-release-content.js', import.meta.url), 'utf8'))
