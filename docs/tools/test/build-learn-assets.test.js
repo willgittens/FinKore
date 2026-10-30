@@ -10,11 +10,11 @@ import { LEARN_PAGES } from '../build-learn-pages.js'
 import { readLearnAssetVersion, versionLearnStylesheets } from '../build-learn-assets.js'
 
 const repository = new URL('../../../', import.meta.url)
-const pages = ['learn/index.html', 'learn/coredoc.html', ...LEARN_PAGES.map(page => page.output)]
+const pages = ['learn/index.html', 'learn/coredoc.html', ...LEARN_PAGES.map(page => page.output), 'learn/network.html']
 function fixture(t) {
   const root = mkdtempSync(join(tmpdir(), 'finkore-learn-assets-'))
   t.after(() => rmSync(root, { recursive: true, force: true }))
-  const sources = ['package.json', 'learn/index.html', 'docs/coreDoc/core-doc.md', ...LEARN_PAGES.map(page => page.source),
+  const sources = ['package.json', 'learn/index.html', 'learn/network.html', 'docs/coreDoc/core-doc.md', ...LEARN_PAGES.map(page => page.source),
     'docs/tools/build-learn-assets.js', 'docs/tools/build-learn-coredoc.js', 'docs/tools/build-learn-pages.js']
   for (const path of sources) {
     mkdirSync(dirname(join(root, path)), { recursive: true })
@@ -36,7 +36,7 @@ test('each full build changes every page CSS URL, even with unchanged sources; c
   assert.notEqual(secondVersion, firstVersion)
   for (const [i, html] of second.entries()) {
     const urls = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map(match => match[1])
-    assert.equal(urls.length, i < 2 ? 2 : 3, pages[i])
+    assert.equal(urls.length, i < 2 || pages[i] === 'learn/network.html' ? 2 : 3, pages[i])
     for (const url of urls) assert.ok(url.endsWith(`?v=${secondVersion}`), `${pages[i]}: ${url}`)
     assert.equal(html.replaceAll(secondVersion, ''), first[i].replaceAll(firstVersion, ''), pages[i])
   }

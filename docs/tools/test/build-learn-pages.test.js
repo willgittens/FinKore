@@ -19,6 +19,7 @@ function fixture(t) {
   t.after(() => rmSync(root, { recursive: true, force: true }))
   for (const page of LEARN_PAGES) put(root, page.source, readFileSync(new URL(page.source, repository), 'utf8'))
   put(root, 'learn/index.html', '<h1>Keep this content</h1><link rel="stylesheet" href="css/styles.css" /><nav aria-label="Primary navigation"><a href="#start">Start reading</a></nav><a href="../LICENSING.md">License</a><a href="../spec/README.md#status">Spec</a><a href="../conformance/README.md">Cases</a><a href="../LICENSE">Full license</a>')
+  put(root, 'learn/network.html', readFileSync(new URL('learn/network.html', repository), 'utf8'))
   refreshLearnAssetVersion(root)
   return root
 }
@@ -101,6 +102,7 @@ test('generates all six canonical documents deterministically and checks drift w
   const home = readFileSync(join(root, 'learn/index.html'), 'utf8')
   assert.match(home, /Keep this content/)
   assert.match(home, /Where to start<\/a>[\s\S]*?CoreDoc<\/a>[\s\S]*?Github Project/)
+  assert.match(home, /href="network.html">Join the Network<\/a>/)
   assert.match(home, /href="licensing.html"/)
   assert.ok(home.includes(`href="${GITHUB_FILE_BASE_URL}spec/README.md#status" target="_blank" rel="noopener noreferrer"`))
   assert.ok(home.includes(`href="${GITHUB_FILE_BASE_URL}conformance/README.md" target="_blank" rel="noopener noreferrer"`))
@@ -126,6 +128,18 @@ test('generates all six canonical documents deterministically and checks drift w
     }
   }
   buildLearnPages(root, { check: true })
+  const networkPath = join(root, 'learn/network.html')
+  const network = readFileSync(networkPath, 'utf8')
+  assert.match(network, /href="network.html" aria-current="page">Join the Network<\/a>/)
+  const originalNetwork = readFileSync(new URL('learn/network.html', repository), 'utf8')
+  assert.equal(network.match(/<main\b[\s\S]*?<\/main>/)[0], originalNetwork.match(/<main\b[\s\S]*?<\/main>/)[0])
+  for (const staleNetwork of [network.replace('aria-current="page"', ''), network.replace(/network.css\?v=[^"]+/, 'network.css?v=invalid')]) {
+    writeFileSync(networkPath, staleNetwork)
+    assert.throws(() => buildLearnPages(root, { check: true }), /learn\/network.html/)
+    assert.equal(readFileSync(networkPath, 'utf8'), staleNetwork)
+    buildLearnPages(root)
+    assert.equal(readFileSync(networkPath, 'utf8'), network)
+  }
   writeFileSync(join(root, 'learn/index.html'), home.replace('licensing.html', '../LICENSING.md'))
   assert.throws(() => buildLearnPages(root, { check: true }), /learn\/index.html/)
 })

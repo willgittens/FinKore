@@ -143,8 +143,9 @@ status. The only removed-rule exceptions are one concise retirement paragraph
 in release history and the designated adversarial JSON fixture under tool tests.
 Test and validator source files themselves are scanned.
 
-The retained Learn profile includes a home index, a generated CoreDoc reader,
-and six generated document readers for getting started, the project overview,
+The retained Learn profile includes a home index, an editorial Network landing
+page, a generated CoreDoc reader, and six generated document readers for getting
+started, the project overview,
 licensing, contributing, implementation guidance, and release notes.
 The home index pairs its introductory text with the local `learn/img/Finkore.png`
 logo directly over the hero background. It loads no scripts. Scripted
@@ -160,7 +161,11 @@ this reviewed profile. Remote resources are rejected. External links are limited
 to the homepage founder CTA to `https://www.linkedin.com/in/will-gittens/`, the homepage and
 project overview partner link to `https://savoiabarker.com/`, the project
 overview link to `https://finkore.dev`, and the licensing reader link to the
-official Mozilla FAQ at `https://www.mozilla.org/en-US/MPL/2.0/FAQ/`. All must use
+official Mozilla FAQ at `https://www.mozilla.org/en-US/MPL/2.0/FAQ/`. The Network
+page additionally permits the exact official discussion destination
+`https://github.com/willgittens/FinKore/discussions` for interest and exploratory
+conversations. It does not permit arbitrary discussion URLs or other repositories.
+All must use
 `target="_blank"` and
 `rel="noopener noreferrer"`. The checker validates these destinations and their
 attributes without contacting those websites. The dark Partners section follows
@@ -168,8 +173,9 @@ the README's acknowledgments and links, displaying transparent local logos
 directly on the dark background.
 The founder section uses a light palette and responsive grid, with a local
 portrait of Will Gittens. All Learn pages share the header's local FinKore logo
-and navigation, and the dark footer's project resource links. The primary
-navigation follows this order: Where to start, CoreDoc, Github Project. The last
+and navigation, and the dark footer's project resource links. The footer uses
+the local `learn/img/Finkore_White.png` logo on its dark background. The primary
+navigation follows this order: Where to start, CoreDoc, Join the Network, Github Project. The last
 link retains the highlighted button style and opens the official repository at
 `https://github.com/willgittens/FinKore` in a new tab with
 `rel="noopener noreferrer"`. The release checker permits this exact external
@@ -204,12 +210,19 @@ npm run verify
 
 `learn/index.html` has editorial content maintained directly in HTML, alongside
 a marked generated CoreDoc index. Edit that index through CoreDoc or its renderer;
-do not edit the generated block directly. The document readers listed below are
-generated in full from their Markdown sources and renderers.
+do not edit the generated block directly. `learn/network.html` also has editorial
+content maintained directly in HTML, with page-specific styles in
+`learn/css/network.css`.
+The page introduces the four Network initiatives and labels proposed activities
+and funding status explicitly. Its participation CTAs use the existing
+contribution guide and the official GitHub Discussions, not a registration or
+funding application system. The build synchronizes navigation and stylesheet
+versions on both editorial pages while preserving their content. The document
+readers listed below are generated in full from their Markdown sources and renderers.
 
 Each `npm run learn:build` creates a fresh CSS cache identifier, even when the
-CSS content has not changed. Every stylesheet URL on the home page, CoreDoc,
-and six document readers receives the same `?v=<build identifier>` query.
+CSS content has not changed. Every stylesheet URL on the home page, Network,
+CoreDoc, and six document readers receives the same `?v=<build identifier>` query.
 The home page's `css/styles.css` URL retains that identifier; the renderers use
 it to generate the remaining URLs. Build the site after CSS-only changes too,
 and publish the complete `learn/` output, including the HTML and CSS together.

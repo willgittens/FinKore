@@ -10,7 +10,7 @@ import { dirname, extname, join, relative, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { markdownAnchors } from './check-doc-links.js'
 import { buildLearnCoreDoc } from './build-learn-coredoc.js'
-import { LEARN_PAGES, renderLearnPage, buildLearnPages, GITHUB_PROJECT_URL, GITHUB_FILE_BASE_URL } from './build-learn-pages.js'
+import { LEARN_PAGES, LEARN_EDITORIAL_PAGES, renderLearnPage, buildLearnPages, GITHUB_PROJECT_URL, GITHUB_FILE_BASE_URL } from './build-learn-pages.js'
 import { readLearnAssetVersion } from './build-learn-assets.js'
 
 const LOCAL_STATE = new Set(['.git', '.tools', 'node_modules', '.npm-cache', 'coverage', 'dist', 'reports'])
@@ -70,13 +70,14 @@ function htmlAttributes(text, names) {
   return attributes
 }
 
-const navigationPages = new Set(['learn/index.html', 'learn/coredoc.html', ...LEARN_PAGES.map(page => page.output)])
+const navigationPages = new Set([...LEARN_EDITORIAL_PAGES, 'learn/coredoc.html', ...LEARN_PAGES.map(page => page.output)])
 
 function isAllowedExternalLink(path, tag, href) {
   const destinations = {
     'learn/index.html': ['https://www.linkedin.com/in/will-gittens/', 'https://savoiabarker.com/'],
     'learn/about.html': ['https://finkore.dev', 'https://savoiabarker.com/'],
     'learn/licensing.html': ['https://www.mozilla.org/en-US/MPL/2.0/FAQ/'],
+    'learn/network.html': [`${GITHUB_PROJECT_URL}/discussions`],
   }
   const projectLink = navigationPages.has(path) && href === GITHUB_PROJECT_URL
   const fileLink = navigationPages.has(path) && href.startsWith(GITHUB_FILE_BASE_URL) &&
