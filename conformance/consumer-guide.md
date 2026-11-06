@@ -180,7 +180,9 @@ alongside the mapping row:
 - Local guard cases illustrate supplied-fact evaluation, but no vector directly
   maps the external-dependency declaration requirement. Consumer review explains
   the existing dependency obligation without closing its missing portable
-  authoring representation.
+  authoring representation. The [guard dependency guidance](../spec/workflow/guards.md#external-dependency-declarations-non-normative)
+  distinguishes consumer-authored declarations, supplied values, and supporting
+  evidence; its review prompts add no required claim fields or declaration errors.
 - Approval association cases compare supplied evidence. They cannot establish
   that externally scoped history was never relabeled across subjects or
   contexts; the existing native/integration evidence addresses that boundary.

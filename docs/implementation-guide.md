@@ -113,6 +113,13 @@ Pass time, facts, policy, and expected state explicitly when the specification
 makes them relevant. Serialize timestamps as unambiguous instants where
 required.
 
+For Workflow guards, distinguish a supplied fact from the external dependency
+that produced it. The current contract leaves dependency declarations
+consumer-authored; its portable authoring representation remains undefined.
+See [guard dependency guidance](../spec/workflow/guards.md#external-dependency-declarations-non-normative)
+for the existing obligation, review prompts, and coverage limit. A local
+fact-equality case does not prove external provenance or repeatable sourcing.
+
 ## Domain details
 
 These notes highlight implementation boundaries that are easy to miss. Read

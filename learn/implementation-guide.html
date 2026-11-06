@@ -19,9 +19,9 @@
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="FinKore — Define once. Build many times." />
   <link rel="icon" type="image/png" href="img/Finkore_Favicon.png" />
-  <link rel="stylesheet" href="css/styles.css?v=495ec656-6605-4843-bedd-c8f3196ec666" />
-  <link rel="stylesheet" href="css/coredoc.css?v=495ec656-6605-4843-bedd-c8f3196ec666" />
-  <link rel="stylesheet" href="css/documents.css?v=495ec656-6605-4843-bedd-c8f3196ec666" />
+  <link rel="stylesheet" href="css/styles.css?v=61d451c7-7211-4486-8c9a-7289f58e25bb" />
+  <link rel="stylesheet" href="css/coredoc.css?v=61d451c7-7211-4486-8c9a-7289f58e25bb" />
+  <link rel="stylesheet" href="css/documents.css?v=61d451c7-7211-4486-8c9a-7289f58e25bb" />
 </head>
 <body id="top" class="core-reader learn-document">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -97,6 +97,7 @@
 <h2 id="deterministic-context">Deterministic context</h2>
 <p>Conformance-observable behavior must not depend on wall-clock time, host timezone, locale, network calls, external FX providers, filesystem order, database incidental order, uncontrolled randomness, or process identity.</p>
 <p>Pass time, facts, policy, and expected state explicitly when the specification makes them relevant. Serialize timestamps as unambiguous instants where required.</p>
+<p>For Workflow guards, distinguish a supplied fact from the external dependency that produced it. The current contract leaves dependency declarations consumer-authored; its portable authoring representation remains undefined. See <a href="https://github.com/willgittens/FinKore/blob/main/spec/workflow/guards.md#external-dependency-declarations-non-normative" target="_blank" rel="noopener noreferrer">guard dependency guidance</a> for the existing obligation, review prompts, and coverage limit. A local fact-equality case does not prove external provenance or repeatable sourcing.</p>
 <h2 id="domain-details">Domain details</h2>
 <p>These notes highlight implementation boundaries that are easy to miss. Read them alongside the owning specifications for the domains you implement.</p>
 <h3 id="approval-history-and-scoped-identity">Approval history and scoped identity</h3>
