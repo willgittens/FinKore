@@ -46,10 +46,18 @@ schema publication and format-version compatibility assessment.
 
 The repository command `npm run conformance:check` performs these schema and
 discovery checks plus global vector-ID uniqueness, declared portable-error
-validation, and paired-control reference validation against manifest-listed
+validation, documented operation/error association checks, and paired-control
+reference validation against manifest-listed
 vectors. A `pairedControl` must identify a vector discovered through the same
 manifest; files outside that discovery do not supply controls. These checks do
 not invoke financial operations.
+
+The [error association metadata](operations.md#error-association-checks) supplies
+necessary consistency checks for repository maintenance, not an exhaustive
+operation error catalog. It preserves input-validation and composed-domain
+errors that a non-exhaustive Agentic descriptor may not enumerate. The checks
+do not select error precedence, verify financial outcomes, or require consumers
+to implement another validation protocol. `/spec` remains authoritative.
 
 ## Vector request
 

@@ -26,7 +26,8 @@ where additional consumer evidence is needed.
 - [`conventions.md`](conventions.md) — fixture interpretation, exact comparison,
   operation labels, and consumer-owned evaluation obligations.
 - [`operations.md`](operations.md) — current request, result, omission/null,
-  error, and post-state contract for all manifest operation labels.
+  error, and post-state contract for all manifest operation labels, plus
+  specification-derived error association metadata used by repository checks.
 - [`traceability.md`](traceability.md) — requirement coverage, known limits,
   mutation intent, and coverage limitations.
 - [`consumer-guide.md`](consumer-guide.md) — discovery, execution outcomes,
