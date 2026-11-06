@@ -38,6 +38,13 @@ vectors, five partially covered, and 79 not directly testable by portable
 vectors. Coverage means an acceptance case exists; it is not a current execution
 result and is not proof of exhaustive correctness.
 
+The five `PARTIAL` entries describe different boundaries: an optional parser
+choice, a missing guard-dependency declaration representation, Approval history
+association outside isolated JSON, and two diagnostic recommendations. Their
+[individual explanations](traceability.md#interpreting-the-five-partial-requirements)
+preserve existing MUST, SHOULD, and MAY meanings and case applicability. The
+label alone does not mean an implementation has failed a mandatory requirement.
+
 ## Scope and discovery
 
 A consumer-owned tool must load only files listed by `manifest.json`, resolve

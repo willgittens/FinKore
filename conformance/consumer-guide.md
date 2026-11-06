@@ -167,9 +167,34 @@ coverage, partial coverage, or no directly testable portable observation.
 
 `COVERED` means one or more published vectors exercise the requirement. It does
 not mean that this repository executed those vectors, that an implementation
-passed them, or that finite cases exhaust the requirement. Requirements marked
-`PARTIAL` or `NOT DIRECTLY TESTABLE` retain their written limitation and require
-additional consumer-owned evidence where applicable.
+passed them, or that finite cases exhaust the requirement.
+
+`PARTIAL` describes limited portable coverage, not one uniform kind of missing
+mandatory test. Read the owning requirement's modality and the
+[five PARTIAL explanations](traceability.md#interpreting-the-five-partial-requirements)
+alongside the mapping row:
+
+- The Money unknown-member case covers an optional acceptance branch. A strict
+  parser follows the existing applicability declaration rather than inventing
+  a portable rejection code or treating that case as a failed obligation.
+- Local guard cases illustrate supplied-fact evaluation, but no vector directly
+  maps the external-dependency declaration requirement. Consumer review explains
+  the existing dependency obligation without closing its missing portable
+  authoring representation.
+- Approval association cases compare supplied evidence. They cannot establish
+  that externally scoped history was never relabeled across subjects or
+  contexts; the existing native/integration evidence addresses that boundary.
+- Entity violation identifiers and domain paths are separate recommendations.
+  Their diagnostic observations retain the existing justified-exception process.
+  Required validation failure and unchanged complete Entity observations remain
+  independently applicable.
+
+`NOT DIRECTLY TESTABLE` retains its written reason for lacking a directly mapped
+portable observation. Additional consumer-owned evidence for either label
+follows the owning obligation and existing claim rules where applicable.
+Coverage labels introduce no new exclusions, reporting fields, evidence
+protocol, or changes to MUST, SHOULD, and MAY. Completing consumer evidence does
+not rewrite the repository's coverage classification.
 
 ## Making a conformance claim
 

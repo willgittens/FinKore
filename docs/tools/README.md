@@ -105,6 +105,15 @@ unsupported classifications, invalid PARTIAL evidence, unknown CoreDoc prefixes
 or IDs, and missing Markdown fragments. A rejected adversarial fixture must fail
 with the intended diagnostic; a crash is not a passing validator result.
 
+Traceability checks retain the existing coverage vocabulary and compare each
+row's modality with `/spec`. A PARTIAL row indexes its directly mapped vectors
+when present, or supplies a written rationale when no direct mapping exists.
+The [PARTIAL explanations](../../conformance/traceability.md#interpreting-the-five-partial-requirements)
+distinguish optional choices, recommendations, native evidence, and the missing
+guard-dependency declaration representation. The checker validates metadata;
+it does not decide semantic adequacy, require an optional parser branch, waive
+a mandatory obligation, or promote coverage from consumer execution evidence.
+
 ## GitHub Actions verification
 
 [The Verify workflow](../../.github/workflows/verify.yml) runs on Pull Requests
