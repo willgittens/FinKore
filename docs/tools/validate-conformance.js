@@ -3,8 +3,9 @@
  * Validates the published conformance manifest and vector files as data.
  *
  * This developer tool reads repository artifacts without changing them. It
- * validates syntax, declared paths, the published JSON Schema, and globally
- * unique vector identifiers. It does not define or execute financial behavior.
+ * validates syntax, declared paths, the published JSON Schema, globally unique
+ * vector identifiers, and documented error associations. It does not define or
+ * execute financial behavior.
  */
 import { readFileSync } from 'node:fs'
 import { dirname, join, relative, resolve, sep } from 'node:path'
@@ -13,6 +14,7 @@ import Ajv2020 from 'ajv/dist/2020.js'
 
 const SUITE_ID = /^[a-z][a-z0-9-]*$/
 const PORTABLE_ERROR = /^FINKORE_[A-Z]+(?:_[A-Z]+)+$/
+const OPERATION = /^[a-z]+(?:\.[a-z]+)+$/
 
 export class ArtifactValidationError extends Error {
   constructor(message, path, cause) {
@@ -91,7 +93,7 @@ function schemaFailure(validate, path) {
   return new ArtifactValidationError(`Vector file does not satisfy its declared schema: ${details}`, path)
 }
 
-function collectPortableErrorCodes(repositoryRoot) {
+function collectPortableErrors(repositoryRoot) {
   const conventionsPath = join(repositoryRoot, 'spec', 'conventions.md')
   let text
   try {
@@ -103,26 +105,86 @@ function collectPortableErrorCodes(repositoryRoot) {
   if (section === undefined) {
     throw new ArtifactValidationError('Specification conventions contain no Error Codes section', conventionsPath)
   }
-  const codes = new Set()
+  const codes = new Map()
   for (const line of section.split('\n')) {
-    const match = line.match(/^\|[^|]*\|\s*`(FINKORE_[A-Z0-9_]+)`\s*\|/)
+    const match = line.match(/^\|\s*([^|]+?)\s*\|\s*`(FINKORE_[A-Z0-9_]+)`\s*\|/)
     if (match === null) continue
-    if (!PORTABLE_ERROR.test(match[1])) {
-      throw new ArtifactValidationError(`Malformed portable error declaration: ${match[1]}`, conventionsPath)
+    const [, catalog, code] = match
+    if (!PORTABLE_ERROR.test(code)) {
+      throw new ArtifactValidationError(`Malformed portable error declaration: ${code}`, conventionsPath)
     }
-    if (codes.has(match[1])) {
-      throw new ArtifactValidationError(`Duplicate portable error declaration: ${match[1]}`, conventionsPath)
+    if (codes.has(code)) {
+      throw new ArtifactValidationError(`Duplicate portable error declaration: ${code}`, conventionsPath)
     }
-    codes.add(match[1])
+    codes.set(code, catalog.trim())
   }
   if (codes.size === 0) throw new ArtifactValidationError('Portable error catalog declares no codes', conventionsPath)
   return codes
 }
 
-function validateExpectedError(candidate, label, portableErrors, path) {
+function collectOperationErrorAssociations(repositoryRoot, portableErrors) {
+  const path = join(repositoryRoot, 'conformance', 'operations.md')
+  let text
+  try {
+    text = readFileSync(path, 'utf8')
+  } catch (error) {
+    throw new ArtifactValidationError(`Cannot read operation error associations: ${path}`, path, error)
+  }
+  const section = text.match(/(?:^|\n)## Error association checks\n(?<body>[\s\S]*?)(?=\n## |$)/)?.groups?.body
+  if (section === undefined) throw new ArtifactValidationError('Operation contracts contain no Error association checks section', path)
+  const catalogs = new Set(portableErrors.values())
+  const associations = new Map()
+  function tokens(cell, label, pattern) {
+    const values = [...cell.matchAll(/`([^`]+)`/g)].map((match) => match[1])
+    if (values.length === 0 || cell.replace(/`[^`]+`/g, '').replace(/[,\s]/g, '') !== '' ||
+        new Set(values).size !== values.length || (pattern !== undefined && values.some((value) => !pattern.test(value)))) {
+      throw new ArtifactValidationError(`Invalid ${label} in operation error associations: ${cell}`, path)
+    }
+    return values
+  }
+  for (const line of section.split('\n').filter((line) => line.startsWith('|'))) {
+    const cells = line.split('|').slice(1, -1).map((cell) => cell.trim())
+    if (cells[0] === 'Operation labels' || cells.every((cell) => /^-+$/.test(cell))) continue
+    if (!line.endsWith('|') || cells.length !== 4 || cells[3].length === 0) {
+      throw new ArtifactValidationError(`Malformed operation error association row: ${line}`, path)
+    }
+    const operations = tokens(cells[0], 'operation labels', OPERATION)
+    const allowedCatalogs = new Set(tokens(cells[1], 'permitted catalogs'))
+    const excludedErrors = new Set(cells[2] === 'none' ? [] : tokens(cells[2], 'excluded errors', PORTABLE_ERROR))
+    for (const catalog of allowedCatalogs) {
+      if (!catalogs.has(catalog)) throw new ArtifactValidationError(`Operation error association references unknown catalog: ${catalog}`, path)
+    }
+    for (const code of excludedErrors) {
+      if (!portableErrors.has(code)) throw new ArtifactValidationError(`Operation error association excludes undeclared portable error: ${code}`, path)
+      if (!allowedCatalogs.has(portableErrors.get(code))) throw new ArtifactValidationError(`Excluded error is outside permitted catalogs: ${code}`, path)
+    }
+    for (const operation of operations) {
+      if (associations.has(operation)) throw new ArtifactValidationError(`Duplicate operation error association: ${operation}`, path)
+      associations.set(operation, { allowedCatalogs, excludedErrors })
+    }
+  }
+  if (associations.size === 0) throw new ArtifactValidationError('Operation contracts contain no operation error associations', path)
+  const operations = new Set([...text.replace(section, '').matchAll(/^\| `([a-z]+(?:\.[a-z]+)+)` \|/gm)].map((match) => match[1]))
+  for (const operation of associations.keys()) {
+    if (!operations.has(operation)) throw new ArtifactValidationError(`Error association references operation absent from operation contracts: ${operation}`, path)
+  }
+  for (const operation of operations) {
+    if (!associations.has(operation)) throw new ArtifactValidationError(`Operation contract lacks error association: ${operation}`, path)
+  }
+  return associations
+}
+
+function validateExpectedError(candidate, label, portableErrors, associations, path) {
   const code = candidate?.expected?.error?.code
   if (code !== undefined && !portableErrors.has(code)) {
     throw new ArtifactValidationError(`${label} references undeclared portable error: ${code}`, path)
+  }
+  const association = associations.get(candidate.operation)
+  if (association === undefined) {
+    throw new ArtifactValidationError(`${label} has no documented error association for operation: ${candidate.operation}`, path)
+  }
+  if (code !== undefined && (!association.allowedCatalogs.has(portableErrors.get(code)) || association.excludedErrors.has(code))) {
+    throw new ArtifactValidationError(`${label} references portable error ${code} not associated with operation ${candidate.operation}`, path)
   }
 }
 
@@ -168,9 +230,10 @@ export function validateConformance(manifestPath = 'conformance/manifest.json', 
     }
   }
 
-  const portableErrors = collectPortableErrorCodes(resolvedRepositoryRoot)
+  const portableErrors = collectPortableErrors(resolvedRepositoryRoot)
+  const associations = collectOperationErrorAssociations(resolvedRepositoryRoot, portableErrors)
   for (const { vector, path } of vectors) {
-    validateExpectedError(vector, `Vector ${vector.id}`, portableErrors, path)
+    validateExpectedError(vector, `Vector ${vector.id}`, portableErrors, associations, path)
     if (vector.pairedControl !== undefined && !vectorIds.has(vector.pairedControl)) {
       throw new ArtifactValidationError(`Vector ${vector.id} references unknown pairedControl: ${vector.pairedControl}`, path)
     }

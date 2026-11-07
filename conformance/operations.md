@@ -35,6 +35,53 @@ Absent, null, empty, and redacted values remain distinct. The error codes presen
 in current vectors are not an exhaustive replacement for the owning
 specification's error contract or precedence rules.
 
+## Error association checks
+
+This table is non-normative maintenance metadata derived from the linked
+specifications. It is the single source for the repository validator's
+operation/error association checks; it adds no member to manifest or vector
+format `0.1`. Catalog names refer to the explicit Domain column of the
+[consolidated error catalog](../spec/conventions.md#error-codes), never to a
+code's spelling or an operation's prefix.
+
+For each operation, the validator checks catalog membership and rejects the
+explicitly excluded existing codes below. These are necessary consistency
+checks, not exhaustive error lists or a determination that an error applies to
+a particular input. Unlisted errors in a permitted catalog are not rejected by
+this check. In particular, known Agentic errors do not form a closed allowlist:
+Money input-validation errors still apply, and Entity composition preserves
+primary errors from its underlying domains under ENTITY-ERROR-004 and
+ENTITY-EVOLUTION-027. The broad Entity rows intentionally do not decide which
+underlying failure is primary or reachable in a particular fixture.
+
+The exclusions distinguish existing operation categories: currency compatibility
+checks, division by a scalar, explicit rounding, and allocation. They do not
+evaluate amounts, guards, policies, error precedence, or unchanged state. New
+catalogs, associations, and exclusions need specification review; expected
+results in current vectors cannot establish them. The global undeclared-error
+check still applies independently.
+
+| Operation labels | Permitted error catalogs | Excluded existing errors | Governing specification |
+| --- | --- | --- | --- |
+| `finkore.money.add`, `finkore.money.subtract`, `finkore.money.compare` | `Money` | `FINKORE_MONEY_DIVISION_BY_ZERO`, `FINKORE_MONEY_ROUNDING_REQUIRED`, `FINKORE_MONEY_INVALID_ROUNDING`, `FINKORE_MONEY_INVALID_ALLOCATION` | [Arithmetic](../spec/money/arithmetic.md), [comparison](../spec/money/comparison.md), and [errors](../spec/money/errors.md). |
+| `finkore.money.negate`, `finkore.money.multiply` | `Money` | `FINKORE_MONEY_CURRENCY_MISMATCH`, `FINKORE_MONEY_DIVISION_BY_ZERO`, `FINKORE_MONEY_ROUNDING_REQUIRED`, `FINKORE_MONEY_INVALID_ROUNDING`, `FINKORE_MONEY_INVALID_ALLOCATION` | [Arithmetic](../spec/money/arithmetic.md) and [errors](../spec/money/errors.md). |
+| `finkore.money.divide` | `Money` | `FINKORE_MONEY_CURRENCY_MISMATCH`, `FINKORE_MONEY_INVALID_ALLOCATION` | [Arithmetic](../spec/money/arithmetic.md) and [errors](../spec/money/errors.md). |
+| `finkore.money.round` | `Money` | `FINKORE_MONEY_CURRENCY_MISMATCH`, `FINKORE_MONEY_DIVISION_BY_ZERO`, `FINKORE_MONEY_INVALID_ALLOCATION` | [Rounding](../spec/money/rounding.md) and [errors](../spec/money/errors.md). |
+| `finkore.money.applyrate` | `Money` | `FINKORE_MONEY_CURRENCY_MISMATCH`, `FINKORE_MONEY_DIVISION_BY_ZERO`, `FINKORE_MONEY_INVALID_ALLOCATION` | [Rates](../spec/money/rates.md) and [errors](../spec/money/errors.md). |
+| `finkore.money.allocate` | `Money` | `FINKORE_MONEY_CURRENCY_MISMATCH`, `FINKORE_MONEY_DIVISION_BY_ZERO`, `FINKORE_MONEY_INVALID_ROUNDING` | [Allocation](../spec/money/allocation.md) and [errors](../spec/money/errors.md). |
+| `money.deserialize` | `Money` | `FINKORE_MONEY_CURRENCY_MISMATCH`, `FINKORE_MONEY_DIVISION_BY_ZERO`, `FINKORE_MONEY_ROUNDING_REQUIRED`, `FINKORE_MONEY_INVALID_ROUNDING`, `FINKORE_MONEY_INVALID_ALLOCATION` | [Serialization](../spec/money/serialization.md) and [errors](../spec/money/errors.md). |
+| `money.serialize` | `Money` | `FINKORE_MONEY_CURRENCY_MISMATCH`, `FINKORE_MONEY_DIVISION_BY_ZERO`, `FINKORE_MONEY_INVALID_ALLOCATION` | [Serialization](../spec/money/serialization.md), including its optional native presentation-scale boundary. |
+| `workflow.create`, `workflow.import`, `finkore.workflow.transition` | `Workflow` | none | [Workflow errors](../spec/workflow/errors.md), [states](../spec/workflow/states.md), and [import](../spec/workflow/import.md). |
+| `finkore.audit.append` | `Audit` | `FINKORE_AUDIT_REDACTION_INVALID` | [Audit errors](../spec/audit/errors.md), [append-only history](../spec/audit/append-only.md), and [redaction](../spec/audit/redaction.md). Append does not perform redaction. |
+| `finkore.audit.replace`, `finkore.audit.remove`, `audit.redact` | `Audit` | none | [Append-only history](../spec/audit/append-only.md), [redaction](../spec/audit/redaction.md), and [errors](../spec/audit/errors.md). |
+| `approval.requirement.evaluate`, `approval.requirement.supersede`, `approval.decision.record`, `approval.decision.evaluate`, `approval.decision.withdraw`, `approval.decision.supersede`, `approval.condition.evaluate`, `approval.chain.evaluate`, `approval.composition.evaluate` | `Approval` | none | [Approval errors](../spec/approvals/errors.md), [conditions](../spec/approvals/conditions.md), and [validity](../spec/approvals/validity.md). |
+| `finkore.entity.create`, `finkore.entity.mutate`, `finkore.entity.transition`, `entity.import`, `finkore.entity.evolution.correct`, `finkore.entity.evolution.reverse`, `finkore.entity.evolution.void`, `finkore.entity.evolution.supersede` | `Entity`, `Workflow`, `Money`, `Approval`, `Audit` | none | [Entity errors](../spec/entities/errors.md) and [evolution](../spec/entities/evolution.md) preserve primary underlying-domain errors. |
+
+The published schema already closes file, vector, expected-result, and error
+envelopes. Logical `input`, success values, and requested observations remain
+operation-specific data; this maintenance table does not introduce new payload
+schemas or reject malformed domain inputs used by negative cases.
+
 ## Money operations
 
 Money operands use the normative `{ "amount": string, "currency": string }`

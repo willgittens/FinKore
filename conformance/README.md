@@ -26,7 +26,8 @@ where additional consumer evidence is needed.
 - [`conventions.md`](conventions.md) — fixture interpretation, exact comparison,
   operation labels, and consumer-owned evaluation obligations.
 - [`operations.md`](operations.md) — current request, result, omission/null,
-  error, and post-state contract for all manifest operation labels.
+  error, and post-state contract for all manifest operation labels, plus
+  specification-derived error association metadata used by repository checks.
 - [`traceability.md`](traceability.md) — requirement coverage, known limits,
   mutation intent, and coverage limitations.
 - [`consumer-guide.md`](consumer-guide.md) — discovery, execution outcomes,
@@ -36,6 +37,13 @@ Traceability currently records 447 requirements: 363 covered by portable
 vectors, five partially covered, and 79 not directly testable by portable
 vectors. Coverage means an acceptance case exists; it is not a current execution
 result and is not proof of exhaustive correctness.
+
+The five `PARTIAL` entries describe different boundaries: an optional parser
+choice, a missing guard-dependency declaration representation, Approval history
+association outside isolated JSON, and two diagnostic recommendations. Their
+[individual explanations](traceability.md#interpreting-the-five-partial-requirements)
+preserve existing MUST, SHOULD, and MAY meanings and case applicability. The
+label alone does not mean an implementation has failed a mandatory requirement.
 
 ## Scope and discovery
 

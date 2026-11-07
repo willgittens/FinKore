@@ -6,7 +6,7 @@ execute financial-domain behavior.
 
 | Tool | Purpose | Package command |
 | --- | --- | --- |
-| `validate-conformance.js` | Validate the manifest, declared paths, vector JSON Schema, vector files, global vector ID uniqueness, declared portable error codes, and paired-control references among manifest-listed vectors. | `npm run conformance:check` |
+| `validate-conformance.js` | Validate the manifest, declared paths, vector JSON Schema, vector files, global vector ID uniqueness, declared portable errors and documented operation/error associations, and paired-control references among manifest-listed vectors. | `npm run conformance:check` |
 | `check-agentic.js` | Cross-check canonical operations, required descriptor content, allowed registry effect values, specification requirements, portable errors, and manifest vector use. | `npm run agentic:check` |
 | `check-architecture.js` | Enforce specification-only repository boundaries and developer-tool headers. | `npm run architecture:check` |
 | `check-node-version.js` | Validate the Node runtime used by repository-local tools. | `npm run node:check` |
@@ -75,17 +75,44 @@ The manifest is the only vector discovery entry point. Paired-control references
 must resolve to manifest-listed vectors, including controls in other declared
 files. Unlisted files neither contribute vector counts nor supply controls.
 
+Operation/error association metadata lives in the existing
+[operation contracts](../../conformance/operations.md#error-association-checks).
+The validator reads each code's explicit catalog from the specification's
+consolidated error table, then checks permitted catalogs and finite exclusions
+for the operation. It rejects unknown catalogs/codes, duplicate or missing
+operation associations, and unsupported expected-error associations. It never
+infers a catalog from a code or operation prefix, treats a non-exhaustive
+Agentic descriptor as a closed allowlist, or calculates which failure is primary.
+Entity composition retains the documented underlying-domain error associations.
+Passing these necessary checks does not prove that an expected error is correct
+for its input. Same-catalog errors not explicitly excluded remain a review concern.
+
+These checks add no manifest/vector members or payload schemas. The published
+schema continues to reject malformed result envelopes while allowing deliberately
+invalid domain inputs in negative cases. Changes to the association metadata
+need review against `/spec`; current vectors cannot define new associations.
+
 `npm run check` is deterministic and local. It validates repository structure,
 published artifact syntax, stable identifiers, requirement traceability,
 Agentic metadata, documentation links, and licensing. It does not require
 Python, Java, a financial implementation, an adapter, or a runner.
 
 The permanent tool tests include valid controls and negative CLI-result checks
-for undeclared vector errors, missing paired controls, incomplete Agentic
+for undeclared or unsupported operation errors, malformed association metadata,
+missing paired controls, incomplete Agentic
 descriptors, invalid effect values, incorrect traceability totals/modalities,
 unsupported classifications, invalid PARTIAL evidence, unknown CoreDoc prefixes
 or IDs, and missing Markdown fragments. A rejected adversarial fixture must fail
 with the intended diagnostic; a crash is not a passing validator result.
+
+Traceability checks retain the existing coverage vocabulary and compare each
+row's modality with `/spec`. A PARTIAL row indexes its directly mapped vectors
+when present, or supplies a written rationale when no direct mapping exists.
+The [PARTIAL explanations](../../conformance/traceability.md#interpreting-the-five-partial-requirements)
+distinguish optional choices, recommendations, native evidence, and the missing
+guard-dependency declaration representation. The checker validates metadata;
+it does not decide semantic adequacy, require an optional parser branch, waive
+a mandatory obligation, or promote coverage from consumer execution evidence.
 
 ## GitHub Actions verification
 
