@@ -9,6 +9,18 @@ artifacts, and their verification results. Those records are preserved as
 history and are not claims about the current repository's supported surface or
 current execution evidence.
 
+## Unreleased
+
+Expanded non-normative Approval examples distinguish invalid selectors, omitted
+current facts, and explicit null; Entity evolution guidance links duplicate and
+stale-Revision controls. One new Approval regression requires the existing
+`FINKORE_APPROVAL_INVALID_DECISION` error and unchanged Decision history when a
+valid selector is supplied without current facts. The working suite contains
+1,823 vectors in 47 files. Requirements, portable errors, operation contracts,
+and formats are unchanged; consumers need no data migration and should include
+the additional case when evaluating this working-tree revision. Requested
+financial-domain and engineering reviews remain pending.
+
 ## FinKore Core 2.0.2 — 2026-10-04
 
 Compatible conformance corrections preserve committed Decision identities in
