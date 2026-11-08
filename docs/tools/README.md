@@ -10,7 +10,7 @@ execute financial-domain behavior.
 | `check-agentic.js` | Cross-check canonical operations, required descriptor content, allowed registry effect values, specification requirements, portable errors, and manifest vector use. | `npm run agentic:check` |
 | `check-architecture.js` | Enforce specification-only repository boundaries and developer-tool headers. | `npm run architecture:check` |
 | `check-node-version.js` | Validate the Node runtime used by repository-local tools. | `npm run node:check` |
-| `check-doc-links.js` | Validate local Markdown paths and fragments plus known CoreDoc requirement prefixes, IDs, abbreviations, and ranges. | `npm run docs:check` |
+| `check-doc-links.js` | Validate local Markdown paths and fragments, CoreDoc specification references, and specification IDs, abbreviations, and ranges in selected current documentation. | `npm run docs:check` |
 | `check-traceability.js` | Cross-check specification requirements, modalities, permitted coverage classifications, per-domain/total inventories, COVERED/PARTIAL evidence, vector metadata, and Agentic references. | `npm run traceability:check`, `npm run docs:check` |
 | `check-license.js` | Validate license metadata, source headers, and repository license text. | `npm run license:check` |
 | `build-learn-coredoc.js`, `build-learn-pages.js` | Generate the CoreDoc reader, home index and linked document readers, or check that they match canonical Markdown without writing files. | `npm run learn:build`, `npm run learn:check` |
@@ -122,7 +122,8 @@ for undeclared or unsupported operation errors, malformed association metadata,
 missing paired controls, incomplete Agentic
 descriptors, invalid effect values, incorrect traceability totals/modalities,
 unsupported classifications, invalid PARTIAL evidence, unknown CoreDoc prefixes
-or IDs, and missing Markdown fragments. A rejected adversarial fixture must fail
+or IDs, undefined current-document references and range members, literal/history
+boundaries, and missing Markdown fragments. A rejected adversarial fixture must fail
 with the intended diagnostic; a crash is not a passing validator result.
 
 Traceability checks retain the existing coverage vocabulary and compare each
@@ -133,6 +134,46 @@ distinguish optional choices, recommendations, native evidence, and the missing
 guard-dependency declaration representation. The checker validates metadata;
 it does not decide semantic adequacy, require an optional parser branch, waive
 a mandatory obligation, or promote coverage from consumer execution evidence.
+
+## Specification requirement references
+
+The documentation checker validates specification IDs in Markdown under `spec/`,
+`conformance/`, and `agentic/`, plus root `README.md`, `CONTRIBUTING.md`,
+`docs/implementation-guide.md`, and `docs/where-to-start.md`. This bounded
+selection does not depend on working plans. Release notes, other documentation
+such as future proposals or governance history, generated HTML, tool source,
+and JSON fixture data are outside this additional reference check. Existing
+Markdown path/fragment checks retain their wider scope; conformance and Agentic
+checks remain independent.
+
+Definitions come only from specification list clauses with a bold stable ID,
+an em dash or hyphen, and an uppercase normative keyword (`MUST`, `SHOULD`, or
+`MAY`). A reference in explanatory prose, a literal example, or another tree
+cannot create an active requirement or reinstate a retired ID. The checker
+reports undefined full IDs, including invented prefixes, with source path and
+line number. Foundation `CORE-*` IDs are outside this specification inventory;
+the existing CoreDoc-to-specification check continues separately.
+
+The selected prose, table rows, inline code, and Markdown link labels support:
+
+- Full uppercase domain/topic IDs ending in three digits, such as
+  `MONEY-ARITHMETIC-001`; single-label references such as `SHA-256` are not IDs.
+- Adjacent abbreviated lists such as `MONEY-ARITHMETIC-001, -002, and -007`,
+  including `and`, `or`, and slash forms such as `WORKFLOW-VERSION-003/009`.
+- Inclusive ranges using `to`, `through`, a spaced hyphen, or an en/em dash, with a
+  full or abbreviated endpoint: `MONEY-ARITHMETIC-001 through -003` or
+  `MONEY-ARITHMETIC-001`–`-003`. Every interior ID must exist; descending and
+  cross-prefix ranges fail.
+
+Hard-wrapped lists and ranges retain context within one paragraph, list item,
+or table row. Context does not carry across blank lines, headings, new list
+items, or table rows. Unconnected negative numbers are not abbreviated IDs.
+Fenced backtick/tilde blocks, four-space/tab-indented literal lines, HTML
+comments, and inline link destinations are excluded. Put deliberate invalid
+ID samples and fixture payloads in literal blocks; a heading such as "Invalid
+examples" alone does not exempt active reference text. Inline-code references
+remain checked. This is a bounded reference syntax check, not a complete
+Markdown parser, financial-semantic review, or compatibility approval.
 
 ## GitHub Actions verification
 

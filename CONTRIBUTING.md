@@ -96,6 +96,13 @@ An editorial correction improves wording or navigation while preserving every
 observable result, stable identifier, and CoreDoc evolution field. Follow
 SPEC-COMPATIBILITY-011 and synchronize any affected Learn readers.
 
+Specification IDs in current specifications, conformance/Agentic guidance, and
+selected contributor/consumer guides are checked against normative definitions.
+Keep deliberate invalid-ID examples in literal code blocks and keep historical
+or proposed requirements clearly separate from current references. See the
+[reference-check scope and syntax](docs/tools/README.md#specification-requirement-references);
+passing it does not establish that the cited requirement explains an outcome.
+
 A behavior proposal begins with the domain problem and CoreDoc alignment. State
 the inputs, current requirement, expected observation, and financial or control
 impact. If the result is undefined, report the gap rather than choosing semantics

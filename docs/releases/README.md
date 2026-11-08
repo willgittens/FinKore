@@ -21,6 +21,11 @@ and formats are unchanged; consumers need no data migration and should include
 the additional case when evaluating this working-tree revision. Requested
 financial-domain and engineering reviews remain pending.
 
+Documentation validation now checks specification IDs, abbreviated lists, and
+range members in selected current guidance against normative definitions,
+keeping literal examples and historical or proposed material outside that
+additional check.
+
 ## FinKore Core 2.0.2 — 2026-10-04
 
 Compatible conformance corrections preserve committed Decision identities in
