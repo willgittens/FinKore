@@ -75,6 +75,26 @@ The manifest is the only vector discovery entry point. Paired-control references
 must resolve to manifest-listed vectors, including controls in other declared
 files. Unlisted files neither contribute vector counts nor supply controls.
 
+Schema and vector paths are checked against the manifest directory both
+lexically and after resolving filesystem links. Only regular-file destinations
+inside that real root are read as JSON. External file or directory symlinks are
+rejected before their JSON contents are read; missing, broken, and non-file
+destinations have path diagnostics, while unreadable JSON files retain read-error
+diagnostics. Internal links are accepted during development when their final
+destinations stay inside the root. A checkout accessed through a directory
+alias is compared against its resolved root consistently.
+
+Documentation checks likewise compare local link destinations by directory
+containment rather than string prefix, so a sibling named `repo-sibling` is
+outside a root named `repo`. Percent-decoded paths and real symlink destinations
+receive the same checks. Discovered Markdown source files are checked before
+reading, and referenced Markdown fragments are read only from contained targets.
+Valid internal file/directory links and links to the repository root remain
+accepted. External URLs are not fetched. These checks inspect the filesystem
+observed during validation; they are repository-maintenance checks, not a general
+filesystem sandbox. The separate stable-publication gate still rejects every
+symlink in a proposed release tree, including internal links.
+
 Operation/error association metadata lives in the existing
 [operation contracts](../../conformance/operations.md#error-association-checks).
 The validator reads each code's explicit catalog from the specification's

@@ -1,16 +1,23 @@
 // SPDX-License-Identifier: MPL-2.0
 /**
- * Validates local Markdown links and CoreDoc references to specification IDs.
+ * Validates repository-contained Markdown sources, local link destinations,
+ * fragments, and CoreDoc references to specification IDs.
  *
  * This developer tool reads repository documentation without changing it and
  * contains no financial-domain behavior.
  */
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
-import { dirname, extname, join, normalize, resolve } from 'node:path'
+import { readdirSync, readFileSync, realpathSync, statSync } from 'node:fs'
+import { dirname, extname, isAbsolute, join, normalize, relative, resolve, sep } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 let root = process.cwd()
+let realRoot
 const ignoredDirectories = new Set(['.git', 'node_modules', 'dist', 'coverage', 'reports', '.tools'])
+
+function within(base, path) {
+  const relation = relative(base, path)
+  return relation !== '..' && !relation.startsWith(`..${sep}`) && !isAbsolute(relation)
+}
 
 function walk(directory) {
   const entries = readdirSync(directory, { withFileTypes: true })
@@ -18,7 +25,16 @@ function walk(directory) {
     if (ignoredDirectories.has(entry.name)) return []
     const path = join(directory, entry.name)
     if (entry.isDirectory()) return walk(path)
-    return extname(entry.name) === '.md' ? [path] : []
+    if (extname(entry.name) !== '.md') return []
+    let realTarget
+    try {
+      realTarget = realpathSync(path)
+    } catch (error) {
+      throw new Error(`Cannot resolve Markdown source: ${path}`, { cause: error })
+    }
+    if (!within(realRoot, realTarget)) throw new Error(`Markdown source outside repository after resolving symlinks: ${path}`)
+    if (!statSync(realTarget).isFile()) throw new Error(`Markdown source is not a regular file: ${path}`)
+    return [path]
   })
 }
 
@@ -136,12 +152,25 @@ function checkMarkdownLinks() {
       const local = localLinkTarget(file, target)
       if (local === undefined) continue
       const { path, fragment } = local
-      if (!path.startsWith(root) || !existsSync(path)) failures.push(`${file}: ${target}`)
-      else if (!statSync(path).isFile() && !statSync(path).isDirectory()) failures.push(`${file}: ${target}`)
-      else if (fragment !== undefined && fragment.length > 0 && statSync(path).isFile() && extname(path) === '.md') {
-        const anchors = anchorCache.get(path) ?? markdownAnchors(path)
-        anchorCache.set(path, anchors)
-        if (!anchors.has(fragment)) failures.push(`${file}: ${target} (missing fragment)`)
+      if (!within(root, path)) {
+        failures.push(`${file}: ${target} (outside repository)`)
+        continue
+      }
+      try {
+        const realTarget = realpathSync(path)
+        if (!within(realRoot, realTarget)) {
+          failures.push(`${file}: ${target} (outside repository after resolving symlinks)`)
+          continue
+        }
+        const stats = statSync(realTarget)
+        if (!stats.isFile() && !stats.isDirectory()) failures.push(`${file}: ${target}`)
+        else if (fragment !== undefined && fragment.length > 0 && stats.isFile() && extname(path) === '.md') {
+          const anchors = anchorCache.get(realTarget) ?? markdownAnchors(realTarget)
+          anchorCache.set(realTarget, anchors)
+          if (!anchors.has(fragment)) failures.push(`${file}: ${target} (missing fragment)`)
+        }
+      } catch {
+        failures.push(`${file}: ${target}`)
       }
     }
   }
@@ -150,6 +179,7 @@ function checkMarkdownLinks() {
 
 export function validateDocumentation(repositoryRoot = process.cwd()) {
   root = resolve(repositoryRoot)
+  realRoot = realpathSync(root)
   const referenced = checkCoreDocRequirementReferences(collectSpecIds())
   checkMarkdownLinks()
   return { coreDocReferenceCount: referenced }

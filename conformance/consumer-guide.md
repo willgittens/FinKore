@@ -38,6 +38,14 @@ For artifact validation:
 5. Reject duplicate suite IDs, duplicate paths within a suite, and duplicate
    vector IDs across the complete manifest.
 
+The repository-maintenance validator checks schema/vector file containment
+before reading JSON, including the actual destination of filesystem links.
+Development links are accepted when their destinations remain regular files
+inside the manifest directory; external destinations are rejected. The
+separate [stable-publication gate](../docs/tools/README.md#stable-publication-gate)
+rejects all symlinks in a proposed release tree. This tooling policy changes no
+vector members, financial outcomes, or consumer invocation API.
+
 Format `0.1` is closed by the published schema: unknown members at the file,
 vector, expected-result, or error level are validation failures. Consumers must
 not treat them as private extensions. Metadata explicitly named by the schema is

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 /** Tests publication boundaries as data without defining or executing financial behavior. */
 import assert from 'node:assert/strict'
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import test from 'node:test'
@@ -73,6 +73,23 @@ test('rejects each reintroduced artifact, dependency, status and HTML defect wit
     assert.ok(result.error.includes(sample.diagnostic), `${sample.name}: ${result.error}`)
     assert.equal(result.output, '')
   }
+})
+
+test('publication still rejects internal and external symlinks', (t) => {
+  const root = fixture(t)
+  assert.equal(run(root).status, 0)
+  put(root, 'target.txt', 'Internal control.\n')
+  symlinkSync('./target.txt', join(root, 'internal-link.txt'), 'file')
+  const internal = run(root)
+  assert.equal(internal.status, 1)
+  assert.match(internal.error, /internal-link\.txt: symlinks are not supported/)
+  rmSync(join(root, 'internal-link.txt'))
+  const outside = mkdtempSync(join(tmpdir(), 'finkore-release-symlink-'))
+  t.after(() => rmSync(outside, { recursive: true, force: true }))
+  symlinkSync(outside, join(root, 'external-directory'), 'dir')
+  const external = run(root)
+  assert.equal(external.status, 1)
+  assert.match(external.error, /external-directory: symlinks are not supported/)
 })
 
 test('rejects even an empty planning directory and missing stable publication documents', (t) => {

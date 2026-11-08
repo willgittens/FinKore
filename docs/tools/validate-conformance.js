@@ -3,12 +3,12 @@
  * Validates the published conformance manifest and vector files as data.
  *
  * This developer tool reads repository artifacts without changing them. It
- * validates syntax, declared paths, the published JSON Schema, globally unique
- * vector identifiers, and documented error associations. It does not define or
- * execute financial behavior.
+ * validates syntax, lexical and real file destinations, the published JSON
+ * Schema, globally unique vector identifiers, and documented error associations.
+ * It does not define or execute financial behavior.
  */
-import { readFileSync } from 'node:fs'
-import { dirname, join, relative, resolve, sep } from 'node:path'
+import { readFileSync, realpathSync, statSync } from 'node:fs'
+import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import Ajv2020 from 'ajv/dist/2020.js'
 
@@ -74,11 +74,32 @@ export function validateManifest(value, source = 'manifest') {
 
 function resolveWithin(root, declaredPath, label) {
   const resolved = resolve(root, declaredPath)
-  const relation = relative(root, resolved)
-  if (relation === '..' || relation.startsWith(`..${sep}`) || relation === '') {
+  function outsideOrRoot(base, path) {
+    const relation = relative(base, path)
+    return relation === '..' || relation.startsWith(`..${sep}`) || relation === '' || isAbsolute(relation)
+  }
+  if (outsideOrRoot(root, resolved)) {
     throw new ArtifactValidationError(`${label} escapes or resolves to the conformance root: ${declaredPath}`, declaredPath)
   }
-  return resolved
+  let realRoot
+  let realTarget
+  try {
+    realRoot = realpathSync(root)
+    realTarget = realpathSync(resolved)
+  } catch (error) {
+    throw new ArtifactValidationError(`Cannot resolve ${label}: ${declaredPath}`, resolved, error)
+  }
+  if (outsideOrRoot(realRoot, realTarget)) {
+    throw new ArtifactValidationError(`${label} escapes or resolves to the conformance root after resolving symlinks: ${declaredPath}`, resolved)
+  }
+  let stats
+  try {
+    stats = statSync(realTarget)
+  } catch (error) {
+    throw new ArtifactValidationError(`Cannot inspect ${label}: ${declaredPath}`, resolved, error)
+  }
+  if (!stats.isFile()) throw new ArtifactValidationError(`${label} is not a regular file: ${declaredPath}`, resolved)
+  return realTarget
 }
 
 function schemaFailure(validate, path) {
