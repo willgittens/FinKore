@@ -19,9 +19,9 @@
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="FinKore — Define once. Build many times." />
   <link rel="icon" type="image/png" href="img/Finkore_Favicon.png" />
-  <link rel="stylesheet" href="css/styles.css?v=3df4c672-f0fc-4e73-87ff-fae3da16a69a" />
-  <link rel="stylesheet" href="css/coredoc.css?v=3df4c672-f0fc-4e73-87ff-fae3da16a69a" />
-  <link rel="stylesheet" href="css/documents.css?v=3df4c672-f0fc-4e73-87ff-fae3da16a69a" />
+  <link rel="stylesheet" href="css/styles.css?v=5d4c2e74-8bd5-4044-8ce8-298632772ceb" />
+  <link rel="stylesheet" href="css/coredoc.css?v=5d4c2e74-8bd5-4044-8ce8-298632772ceb" />
+  <link rel="stylesheet" href="css/documents.css?v=5d4c2e74-8bd5-4044-8ce8-298632772ceb" />
 </head>
 <body id="top" class="core-reader learn-document">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -73,6 +73,8 @@
         <article class="core-prose learn-document-prose" aria-label="Implementing FinKore">
 <p>FinKore defines observable financial behavior without prescribing a language, package layout, public API, framework, or persistence model. Consumer-owned implementations should be idiomatic in their environment while preserving the portable contract.</p>
 <p>Start with one domain slice and its normative requirements. The shared guidance below covers values, errors, atomicity, and deterministic context; <a href="#domain-details">domain details</a> highlights specific boundaries for Approvals, Entities, Audit, and Money. The <a href="#worked-examples">worked examples</a> connect those rules to explicit inputs, operation sequences, and preserved observations.</p>
+<p>Jump to a non-normative worked example:</p>
+<ul><li><a href="#rounding-at-a-declared-boundary">Money: rounding and exact division</a>.</li><li><a href="#approval-effectiveness-after-a-fact-change">Approvals: current effectiveness after fact changes</a>.</li><li><a href="#four-distinct-entity-evolution-requests">Entities: correction, reversal, void, and supersession</a>.</li></ul>
 <h2 id="reading-order">Reading order</h2>
 <ol><li>Read <a href="coredoc.html">CoreDoc</a> for foundation-level obligations.</li><li>Read <a href="https://github.com/willgittens/FinKore/blob/main/spec/conventions.md" target="_blank" rel="noopener noreferrer">Specification Conventions</a> and the <a href="https://github.com/willgittens/FinKore/blob/main/spec/glossary.md" target="_blank" rel="noopener noreferrer">Glossary</a>.</li><li>Read the relevant domain specification under <code>spec/money/</code>, <code>spec/workflow/</code>, <code>spec/audit/</code>, <code>spec/approvals/</code>, or <code>spec/entities/</code>.</li><li>Read <a href="https://github.com/willgittens/FinKore/blob/main/conformance/conventions.md" target="_blank" rel="noopener noreferrer">Conformance Conventions</a>, the <a href="https://github.com/willgittens/FinKore/blob/main/conformance/operations.md" target="_blank" rel="noopener noreferrer">Operation Contracts</a>, the <a href="https://github.com/willgittens/FinKore/blob/main/conformance/consumer-guide.md" target="_blank" rel="noopener noreferrer">Consumer Guide</a>, and <a href="https://github.com/willgittens/FinKore/blob/main/conformance/traceability.md" target="_blank" rel="noopener noreferrer">Traceability</a>.</li><li>Read <a href="https://github.com/willgittens/FinKore/blob/main/agentic/operations.md" target="_blank" rel="noopener noreferrer">Agentic Operations</a> when implementing a canonical <code>finkore.*</code> operation.</li></ol>
 <h2 id="authority-and-boundaries">Authority and boundaries</h2>

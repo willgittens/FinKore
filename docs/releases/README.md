@@ -26,6 +26,9 @@ range members in selected current guidance against normative definitions,
 keeping literal examples and historical or proposed material outside that
 additional check.
 
+The implementation guide now links directly to its Money, Approval, and Entity
+worked examples, using the same static links in Markdown and Learn.
+
 ## FinKore Core 2.0.2 — 2026-10-04
 
 Compatible conformance corrections preserve committed Decision identities in

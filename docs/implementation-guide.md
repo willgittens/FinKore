@@ -11,6 +11,12 @@ below covers values, errors, atomicity, and deterministic context;
 Entities, Audit, and Money. The [worked examples](#worked-examples) connect those
 rules to explicit inputs, operation sequences, and preserved observations.
 
+Jump to a non-normative worked example:
+
+- [Money: rounding and exact division](#rounding-at-a-declared-boundary).
+- [Approvals: current effectiveness after fact changes](#approval-effectiveness-after-a-fact-change).
+- [Entities: correction, reversal, void, and supersession](#four-distinct-entity-evolution-requests).
+
 ## Reading order
 
 1. Read [CoreDoc](coreDoc/core-doc.md) for foundation-level obligations.
