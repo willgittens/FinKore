@@ -11,23 +11,35 @@ current execution evidence.
 
 ## Unreleased
 
-Expanded non-normative Approval examples distinguish invalid selectors, omitted
-current facts, and explicit null; Entity evolution guidance links duplicate and
-stale-Revision controls. One new Approval regression requires the existing
-`FINKORE_APPROVAL_INVALID_DECISION` error and unchanged Decision history when a
-valid selector is supplied without current facts. The working suite contains
-1,823 vectors in 47 files. Requirements, portable errors, operation contracts,
-and formats are unchanged; consumers need no data migration and should include
-the additional case when evaluating this working-tree revision. Requested
-financial-domain and engineering reviews remain pending.
+Preparing the compatible 2.0.3 patch. Financial requirements, portable errors,
+stable identifiers, operation contracts, applicability, and failure atomicity
+are unchanged from tag `2.0.2`. The working contract contains 447 requirements,
+1,823 vectors in 47 files, and 20 canonical operations. Coverage remains 363
+COVERED, five PARTIAL, and 79 NOT DIRECTLY TESTABLE; conformance formats remain
+`0.1` and the private maintenance package remains `0.1.0`.
 
-Documentation validation now checks specification IDs, abbreviated lists, and
-range members in selected current guidance against normative definitions,
-keeping literal examples and historical or proposed material outside that
-additional check.
+Maintenance checks now reject escaping schema/vector and documentation paths,
+validate documented operation/error associations, and check specification IDs
+and ranges in selected current guidance. Non-normative Money, Approval, and
+Entity walkthroughs clarify existing behavior, with direct static Learn links.
+PARTIAL explanations retain their distinct evidence boundaries; external guard
+declarations remain consumer-authored and WORKFLOW-GUARD-004 remains PARTIAL.
+One new regression requires `FINKORE_APPROVAL_INVALID_DECISION` and unchanged
+Decision history for selectors without current facts. Consumers need no data
+migration and should include that case when evaluating this revision.
 
-The implementation guide now links directly to its Money, Approval, and Entity
-worked examples, using the same static links in Markdown and Learn.
+Inherited Learn navigation, Network content, contributor guidance, shared CSS
+cache generation, and deployment of verified committed output are included.
+The locked maintenance graph includes `fast-uri` 3.1.9. A fresh npm registry
+advisory query on 2026-11-08 reported zero vulnerabilities across its five
+dependencies. This is dependency metadata review, not financial execution.
+
+Current declarations identify unpublished preparation; the publication checker
+targets `2.0.3`. On 2026-11-09 the maintainer accepted this release scope with
+the specialist reviews for Issues #11–#13 still pending. Expert Review continues
+without blocking this patch; findings will inform appropriately scoped future
+releases. This is maintainer acceptance, not specialist sign-off. No 2.0.3 stable
+release or publication is recorded here.
 
 ## FinKore Core 2.0.2 — 2026-10-04
 

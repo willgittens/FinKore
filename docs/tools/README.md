@@ -200,6 +200,24 @@ publish or certify consumer implementations.
 Repository settings and the single-maintainer merge policy are documented in
 [Contributing](../../CONTRIBUTING.md#manual-github-configuration).
 
+## Ongoing expert review
+
+The public [Expert Review discussions](https://github.com/willgittens/FinKore/discussions)
+collect specialist feedback on current obligations and possible future domains.
+Unanswered questions do not create a global release gate. Maintainers may accept
+a bounded release with specialist reviews pending, keeping that distinction
+explicit in the release notes or relevant Issue/PR. Record actual review outcomes
+when available; do not claim specialist approval from local verification or
+maintainer acceptance.
+
+Assess each finding against the owning specification and
+[compatibility policy](../../spec/conventions.md#compatibility-policy). Compatible
+clarifications and corrections may enter a patch; additions and incompatible
+changes require their appropriate release scope. A demonstrated blocking defect
+needs resolution or exclusion from the release scope. Deferred questions do not
+authorize new financial behavior. Technical verification and final-tree
+publication checks remain required.
+
 ## Stable publication gate
 
 Run the separate publication check on a proposed release tree:
@@ -217,10 +235,10 @@ prose, including inline scope wording. It reads text and paths without financial
 execution, mutation, or network access.
 
 The publication checker exports the deliberately selected target
-`TARGET_CORE_VERSION`, currently `2.0.2`; maintainers must review and update that
+`TARGET_CORE_VERSION`, currently `2.0.3`; maintainers must review and update that
 value for a later Core release. README, CoreDoc, each specification document,
 conformance and Agentic READMEs, and any retained Learn index must explicitly
-declare `FinKore Core 2.0.2 stable` (or `FinKore Core 2.0.2 is stable`). CoreDoc's
+declare `FinKore Core 2.0.3 stable` (or `FinKore Core 2.0.3 is stable`). CoreDoc's
 version and status fields must agree. Matching every document to an arbitrary
 different version does not satisfy the selected release target.
 For a patch target, unqualified major-minor wording may still describe the
@@ -230,6 +248,31 @@ schema syntax, maintenance-package versions, and stable vector IDs are not Core
 status. The only removed-rule exceptions are one concise retirement paragraph
 in release history and the designated adversarial JSON fixture under tool tests.
 Test and validator source files themselves are scanned.
+
+During preparation, current declarations use
+`FinKore Core 2.0.3 release preparation (unpublished)`. CoreDoc's version and
+document date identify the prepared document, while its status remains
+unpublished. Keep release notes under Unreleased and describe maintainer
+acceptance and pending specialist consultation accurately. The stable gate
+rejects preparation status even beside a stable declaration. Selecting the target
+does not publish the contract.
+
+For the disposable rehearsal, copy every intended tracked file from the actual
+working tree, including modified content, plus any intended new files. Do not
+use an archive of HEAD alone. Exclude temporary plans and references while
+preserving their original files locally. In that copy only, replace the exact
+preparation declaration above with `FinKore Core 2.0.3 stable`, regenerate Learn,
+and run locked installation, ordinary verification, and the stable gate. A
+temporary Git repository with the original HEAD as its comparison baseline
+allows the ordinary whitespace check to inspect the proposed edits too.
+Review the full copied-file inventory; do not omit intended content to pass.
+This rehearsal tests prospective publication metadata; it establishes neither
+maintainer acceptance nor specialist sign-off. Keep a concise outcome in the
+active working plan; do not publish copied plans or separate evidence reports.
+
+After maintainer acceptance of the release scope, finalize the real version/status
+and release entry, remove the last working plan, and repeat the applicable gates
+on the actual final tree before tagging. The rehearsal does not waive that check.
 
 The retained Learn profile includes a home index, an editorial Network landing
 page, a generated CoreDoc reader, and six generated document readers for getting

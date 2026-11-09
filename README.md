@@ -1,4 +1,4 @@
-> FinKore Core 2.0.2 stable. See the [specification status](./spec/README.md#status)
+> FinKore Core 2.0.3 release preparation (unpublished). See the [specification status](./spec/README.md#status)
 > and [release notes](./docs/releases/README.md).
 
 <p align="center">
