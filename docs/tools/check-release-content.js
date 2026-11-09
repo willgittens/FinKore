@@ -82,7 +82,9 @@ function isAllowedExternalLink(path, tag, href) {
   const projectLink = navigationPages.has(path) && href === GITHUB_PROJECT_URL
   const fileLink = navigationPages.has(path) && href.startsWith(GITHUB_FILE_BASE_URL) &&
     /^[^?#]+(?:#[^?]*)?$/.test(href.slice(GITHUB_FILE_BASE_URL.length))
-  if (!/^<a\b/i.test(tag) || !(projectLink || fileLink || destinations[path]?.includes(href))) return false
+  const discussionLink = path === 'learn/network.html' && href.startsWith(`${GITHUB_PROJECT_URL}/discussions/`) &&
+    /^[1-9]\d*$/.test(href.slice(`${GITHUB_PROJECT_URL}/discussions/`.length))
+  if (!/^<a\b/i.test(tag) || !(projectLink || fileLink || discussionLink || destinations[path]?.includes(href))) return false
   const targets = htmlAttributes(tag, new Set(['target']))
   const relationships = htmlAttributes(tag, new Set(['rel']))
   const tokens = relationships.length === 1 ? relationships[0].split(/\s+/) : []
