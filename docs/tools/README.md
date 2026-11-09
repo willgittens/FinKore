@@ -10,7 +10,7 @@ execute financial-domain behavior.
 | `check-agentic.js` | Cross-check canonical operations, required descriptor content, allowed registry effect values, specification requirements, portable errors, and manifest vector use. | `npm run agentic:check` |
 | `check-architecture.js` | Enforce specification-only repository boundaries and developer-tool headers. | `npm run architecture:check` |
 | `check-node-version.js` | Validate the Node runtime used by repository-local tools. | `npm run node:check` |
-| `check-doc-links.js` | Validate local Markdown paths and fragments plus known CoreDoc requirement prefixes, IDs, abbreviations, and ranges. | `npm run docs:check` |
+| `check-doc-links.js` | Validate local Markdown paths and fragments, CoreDoc specification references, and specification IDs, abbreviations, and ranges in selected current documentation. | `npm run docs:check` |
 | `check-traceability.js` | Cross-check specification requirements, modalities, permitted coverage classifications, per-domain/total inventories, COVERED/PARTIAL evidence, vector metadata, and Agentic references. | `npm run traceability:check`, `npm run docs:check` |
 | `check-license.js` | Validate license metadata, source headers, and repository license text. | `npm run license:check` |
 | `build-learn-coredoc.js`, `build-learn-pages.js` | Generate the CoreDoc reader, home index and linked document readers, or check that they match canonical Markdown without writing files. | `npm run learn:build`, `npm run learn:check` |
@@ -75,6 +75,26 @@ The manifest is the only vector discovery entry point. Paired-control references
 must resolve to manifest-listed vectors, including controls in other declared
 files. Unlisted files neither contribute vector counts nor supply controls.
 
+Schema and vector paths are checked against the manifest directory both
+lexically and after resolving filesystem links. Only regular-file destinations
+inside that real root are read as JSON. External file or directory symlinks are
+rejected before their JSON contents are read; missing, broken, and non-file
+destinations have path diagnostics, while unreadable JSON files retain read-error
+diagnostics. Internal links are accepted during development when their final
+destinations stay inside the root. A checkout accessed through a directory
+alias is compared against its resolved root consistently.
+
+Documentation checks likewise compare local link destinations by directory
+containment rather than string prefix, so a sibling named `repo-sibling` is
+outside a root named `repo`. Percent-decoded paths and real symlink destinations
+receive the same checks. Discovered Markdown source files are checked before
+reading, and referenced Markdown fragments are read only from contained targets.
+Valid internal file/directory links and links to the repository root remain
+accepted. External URLs are not fetched. These checks inspect the filesystem
+observed during validation; they are repository-maintenance checks, not a general
+filesystem sandbox. The separate stable-publication gate still rejects every
+symlink in a proposed release tree, including internal links.
+
 Operation/error association metadata lives in the existing
 [operation contracts](../../conformance/operations.md#error-association-checks).
 The validator reads each code's explicit catalog from the specification's
@@ -102,7 +122,8 @@ for undeclared or unsupported operation errors, malformed association metadata,
 missing paired controls, incomplete Agentic
 descriptors, invalid effect values, incorrect traceability totals/modalities,
 unsupported classifications, invalid PARTIAL evidence, unknown CoreDoc prefixes
-or IDs, and missing Markdown fragments. A rejected adversarial fixture must fail
+or IDs, undefined current-document references and range members, literal/history
+boundaries, and missing Markdown fragments. A rejected adversarial fixture must fail
 with the intended diagnostic; a crash is not a passing validator result.
 
 Traceability checks retain the existing coverage vocabulary and compare each
@@ -113,6 +134,46 @@ distinguish optional choices, recommendations, native evidence, and the missing
 guard-dependency declaration representation. The checker validates metadata;
 it does not decide semantic adequacy, require an optional parser branch, waive
 a mandatory obligation, or promote coverage from consumer execution evidence.
+
+## Specification requirement references
+
+The documentation checker validates specification IDs in Markdown under `spec/`,
+`conformance/`, and `agentic/`, plus root `README.md`, `CONTRIBUTING.md`,
+`docs/implementation-guide.md`, and `docs/where-to-start.md`. This bounded
+selection does not depend on working plans. Release notes, other documentation
+such as future proposals or governance history, generated HTML, tool source,
+and JSON fixture data are outside this additional reference check. Existing
+Markdown path/fragment checks retain their wider scope; conformance and Agentic
+checks remain independent.
+
+Definitions come only from specification list clauses with a bold stable ID,
+an em dash or hyphen, and an uppercase normative keyword (`MUST`, `SHOULD`, or
+`MAY`). A reference in explanatory prose, a literal example, or another tree
+cannot create an active requirement or reinstate a retired ID. The checker
+reports undefined full IDs, including invented prefixes, with source path and
+line number. Foundation `CORE-*` IDs are outside this specification inventory;
+the existing CoreDoc-to-specification check continues separately.
+
+The selected prose, table rows, inline code, and Markdown link labels support:
+
+- Full uppercase domain/topic IDs ending in three digits, such as
+  `MONEY-ARITHMETIC-001`; single-label references such as `SHA-256` are not IDs.
+- Adjacent abbreviated lists such as `MONEY-ARITHMETIC-001, -002, and -007`,
+  including `and`, `or`, and slash forms such as `WORKFLOW-VERSION-003/009`.
+- Inclusive ranges using `to`, `through`, a spaced hyphen, or an en/em dash, with a
+  full or abbreviated endpoint: `MONEY-ARITHMETIC-001 through -003` or
+  `MONEY-ARITHMETIC-001`–`-003`. Every interior ID must exist; descending and
+  cross-prefix ranges fail.
+
+Hard-wrapped lists and ranges retain context within one paragraph, list item,
+or table row. Context does not carry across blank lines, headings, new list
+items, or table rows. Unconnected negative numbers are not abbreviated IDs.
+Fenced backtick/tilde blocks, four-space/tab-indented literal lines, HTML
+comments, and inline link destinations are excluded. Put deliberate invalid
+ID samples and fixture payloads in literal blocks; a heading such as "Invalid
+examples" alone does not exempt active reference text. Inline-code references
+remain checked. This is a bounded reference syntax check, not a complete
+Markdown parser, financial-semantic review, or compatibility approval.
 
 ## GitHub Actions verification
 
@@ -139,6 +200,24 @@ publish or certify consumer implementations.
 Repository settings and the single-maintainer merge policy are documented in
 [Contributing](../../CONTRIBUTING.md#manual-github-configuration).
 
+## Ongoing expert review
+
+The public [Expert Review discussions](https://github.com/willgittens/FinKore/discussions)
+collect specialist feedback on current obligations and possible future domains.
+Unanswered questions do not create a global release gate. Maintainers may accept
+a bounded release with specialist reviews pending, keeping that distinction
+explicit in the release notes or relevant Issue/PR. Record actual review outcomes
+when available; do not claim specialist approval from local verification or
+maintainer acceptance.
+
+Assess each finding against the owning specification and
+[compatibility policy](../../spec/conventions.md#compatibility-policy). Compatible
+clarifications and corrections may enter a patch; additions and incompatible
+changes require their appropriate release scope. A demonstrated blocking defect
+needs resolution or exclusion from the release scope. Deferred questions do not
+authorize new financial behavior. Technical verification and final-tree
+publication checks remain required.
+
 ## Stable publication gate
 
 Run the separate publication check on a proposed release tree:
@@ -156,10 +235,10 @@ prose, including inline scope wording. It reads text and paths without financial
 execution, mutation, or network access.
 
 The publication checker exports the deliberately selected target
-`TARGET_CORE_VERSION`, currently `2.0.2`; maintainers must review and update that
+`TARGET_CORE_VERSION`, currently `2.0.3`; maintainers must review and update that
 value for a later Core release. README, CoreDoc, each specification document,
 conformance and Agentic READMEs, and any retained Learn index must explicitly
-declare `FinKore Core 2.0.2 stable` (or `FinKore Core 2.0.2 is stable`). CoreDoc's
+declare `FinKore Core 2.0.3 stable` (or `FinKore Core 2.0.3 is stable`). CoreDoc's
 version and status fields must agree. Matching every document to an arbitrary
 different version does not satisfy the selected release target.
 For a patch target, unqualified major-minor wording may still describe the
@@ -169,6 +248,31 @@ schema syntax, maintenance-package versions, and stable vector IDs are not Core
 status. The only removed-rule exceptions are one concise retirement paragraph
 in release history and the designated adversarial JSON fixture under tool tests.
 Test and validator source files themselves are scanned.
+
+During preparation, current declarations use
+`FinKore Core 2.0.3 release preparation (unpublished)`. CoreDoc's version and
+document date identify the prepared document, while its status remains
+unpublished. Keep release notes under Unreleased and describe maintainer
+acceptance and pending specialist consultation accurately. The stable gate
+rejects preparation status even beside a stable declaration. Selecting the target
+does not publish the contract.
+
+For the disposable rehearsal, copy every intended tracked file from the actual
+working tree, including modified content, plus any intended new files. Do not
+use an archive of HEAD alone. Exclude temporary plans and references while
+preserving their original files locally. In that copy only, replace the exact
+preparation declaration above with `FinKore Core 2.0.3 stable`, regenerate Learn,
+and run locked installation, ordinary verification, and the stable gate. A
+temporary Git repository with the original HEAD as its comparison baseline
+allows the ordinary whitespace check to inspect the proposed edits too.
+Review the full copied-file inventory; do not omit intended content to pass.
+This rehearsal tests prospective publication metadata; it establishes neither
+maintainer acceptance nor specialist sign-off. Keep a concise outcome in the
+active working plan; do not publish copied plans or separate evidence reports.
+
+After maintainer acceptance of the release scope, finalize the real version/status
+and release entry, remove the last working plan, and repeat the applicable gates
+on the actual final tree before tagging. The rehearsal does not waive that check.
 
 The retained Learn profile includes a home index, an editorial Network landing
 page, a generated CoreDoc reader, and six generated document readers for getting

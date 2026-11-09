@@ -96,6 +96,13 @@ An editorial correction improves wording or navigation while preserving every
 observable result, stable identifier, and CoreDoc evolution field. Follow
 SPEC-COMPATIBILITY-011 and synchronize any affected Learn readers.
 
+Specification IDs in current specifications, conformance/Agentic guidance, and
+selected contributor/consumer guides are checked against normative definitions.
+Keep deliberate invalid-ID examples in literal code blocks and keep historical
+or proposed requirements clearly separate from current references. See the
+[reference-check scope and syntax](docs/tools/README.md#specification-requirement-references);
+passing it does not establish that the cited requirement explains an outcome.
+
 A behavior proposal begins with the domain problem and CoreDoc alignment. State
 the inputs, current requirement, expected observation, and financial or control
 impact. If the result is undefined, report the gap rather than choosing semantics
@@ -113,6 +120,17 @@ Lead maintainer `@willgittens` retains final integration authority.
 grant or restrict merge permissions. Potentially exploitable technical or
 financial specification defects must follow the [Security Policy](SECURITY.md)
 for private reporting rather than public Issues or Discussions.
+
+Expert Review is an ongoing consultation. Unanswered questions and pending
+specialist opinions do not by themselves block development or a release. The
+maintainer may accept a bounded release scope while keeping those reviews
+pending and recording any known limitations. Maintainer acceptance must not be
+described as specialist sign-off or certification. See
+[ongoing expert review](docs/tools/README.md#ongoing-expert-review).
+
+Review findings enter subsequent changes through the compatibility policy below.
+A demonstrated blocking defect must be addressed or excluded from the proposed
+release scope; a pending consultation alone is not such a defect.
 
 ## Compatibility and coordinated review
 
@@ -226,8 +244,10 @@ accepting whichever version strings happen to agree across a tree.
 
 ### Stable release procedure
 
-Finish the normative, conformance, Agentic, and documentation reviews before
-tagging. Preserve stable identifiers and CoreDoc evolution metadata, retain
+Obtain maintainer acceptance of the release scope and review its normative,
+conformance, Agentic, and documentation changes before tagging. Ongoing Expert
+Review does not require every consultation question to be answered first.
+Preserve stable identifiers and CoreDoc evolution metadata, retain
 explicit coverage limitations, and resolve any blocking specification gap.
 Review the proposed tracked file list for credentials, generated reports, local
 toolchains, copied development material, and obsolete implementation or package
@@ -240,8 +260,9 @@ and dependency scope with the concise release summary in
 `docs/releases/README.md`. Failed gates block tagging; artifact checks do not
 establish consumer implementation conformance.
 
-Commit the reviewed release tree, then create an annotated `core-<Core version>`
-tag on that commit (for example, `core-2.0.2`). Confirm the tag targets the
+Commit the reviewed release tree, then create an annotated `<Core version>`
+tag on that commit (for example, `2.0.3`, following the published `2.0.2` tag).
+Preserve all existing tag names and targets. Confirm the new tag targets the
 verified commit and that the working tree is clean. Distribute only
 tracked release content, excluding local checkout state. Remote tag publication
 is a separate maintainer action; a local tag does not imply a remote release.

@@ -11,6 +11,12 @@ below covers values, errors, atomicity, and deterministic context;
 Entities, Audit, and Money. The [worked examples](#worked-examples) connect those
 rules to explicit inputs, operation sequences, and preserved observations.
 
+Jump to a non-normative worked example:
+
+- [Money: rounding and exact division](#rounding-at-a-declared-boundary).
+- [Approvals: current effectiveness after fact changes](#approval-effectiveness-after-a-fact-change).
+- [Entities: correction, reversal, void, and supersession](#four-distinct-entity-evolution-requests).
+
 ## Reading order
 
 1. Read [CoreDoc](coreDoc/core-doc.md) for foundation-level obligations.
@@ -300,11 +306,86 @@ rejection under APPROVAL-VALIDITY-003, so the Requirement is `PENDING` in this
 one-Decision example.
 No new Decision or withdrawal is recorded merely by comparing changed facts.
 
-Requirement evaluation may instead omit both current facts and selectors. Here
-that history-only evaluation reports `APPROVED` from the retained evidence,
-without asserting that current facts were checked. Concrete single-Decision
-evaluation requires current facts. Neither operation reconstructs what was
-known at a past instant by changing an evaluation timestamp.
+#### Omitted current facts, null, and invalid selectors
+
+Keep the same `finance-review` Requirement, `ctx-exp-42` context, `expense/exp-42`
+subject, `decision-1`, and explicit evaluation instant. Each row below starts
+independently with that valid evidence, no expiration, and empty lifecycle
+history. Here, "unchanged facts" means the complete original object, including
+`amount` and `memo`. Fixture names `currentSubjectFacts` and `relevantFactPaths`
+illustrate the existing [comparison boundary](../conformance/operations.md#approval-operations);
+they do not prescribe a consumer API.
+
+Every "Error" cell means `FINKORE_APPROVAL_INVALID_DECISION`, with no successful
+effectiveness or Requirement outcome. These errors preserve the supplied
+Decision and lifecycle histories under APPROVAL-VALIDITY-012; they do not
+withdraw the Decision or convert a retained approval into a rejection.
+
+| Current facts | Relevance selector | Single-Decision evaluation | Requirement evaluation |
+| --- | --- | --- | --- |
+| Unchanged facts | Omitted | `EFFECTIVE` | `APPROVED` |
+| Unchanged facts | `["amount"]` | `EFFECTIVE` | `APPROVED` |
+| Unchanged facts | `null` | Error | Error |
+| Unchanged facts | `[]` | Error | Error |
+| Unchanged facts | `[""]` | Error | Error |
+| Unchanged facts | `["amount."]` | Error | Error |
+| Omitted | Omitted | Error | `APPROVED`, history only |
+| Omitted | `["amount"]` | Error | Error |
+| Explicit `null` | Omitted | `INEFFECTIVE` | `PENDING` |
+| Explicit `null` | `["amount"]` | `INEFFECTIVE` | `PENDING` |
+
+APPROVAL-FACT-001 distinguishes omission from an explicitly supplied value.
+History-only Requirement evaluation omits both current facts and selectors and
+makes no current-fact claim. A selector without current facts is invalid; the
+implementation cannot copy the retained facts to fill that absence. Explicit
+null is supplied data: compared with this retained object it differs, while a
+selected `amount` member is unavailable. Neither result is a malformed-selector
+error. A null selector is instead an invalid declaration, not a request for
+whole-fact comparison.
+
+Under APPROVAL-FACT-002, `[""]` has an empty path and `["amount."]` has an empty
+member segment in the fixture's existing dot-separated encoding. Neither is a
+valid selection or a new expression language. These examples do not add a
+priority among unrelated Approval errors.
+
+For a separate expiration variant, add `expiresAt: "2026-09-02T00:00:00Z"` to
+the otherwise valid Decision and retain evaluation at `2026-09-02T12:00:00Z`.
+Unchanged current facts and `["amount"]` now yield `INEFFECTIVE` and `PENDING`.
+Replacing that selector with `null`, `[]`, or `["amount."]` instead yields
+`FINKORE_APPROVAL_INVALID_DECISION` at either boundary: expiration cannot hide
+the invalid declaration under APPROVAL-FACT-001. Evidence remains unchanged
+in both the valid ineffective case and the rejected evaluation.
+
+Existing [evidence regressions](../conformance/approvals/evidence-regressions.json)
+pair `approval.boundary097.decision-selectors-null-001` and
+`approval.boundary097.requirement-selectors-null-001` with the valid
+`approval.boundary097.decision-facts-control-001` and
+`approval.boundary097.requirement-facts-control-001`. The same file includes
+`approval.boundary097.decision-whole-equal-001`,
+`approval.boundary097.requirement-whole-equal-001`,
+`approval.boundary097.decision-current-null-001`, and
+`approval.boundary097.requirement-current-null-001` for the whole-fact and null
+observations. In the [fact/history cases](../conformance/approvals/fact-history-contracts.json),
+`approval.facts097.expired-decision-empty` and
+`approval.facts097.expired-selectors-empty` cover empty lists; the corresponding
+`approval.facts097.expired-decision-trailing` and
+`approval.facts097.expired-selectors-trailing` cover a malformed trailing segment.
+Their valid controls are `approval.facts097.expired-decision-control` and
+`approval.facts097.expired-control`. The additional
+`approval.requirement.selectors-without-current-facts-001` covers a valid
+selector with omitted current facts, paired with
+`approval.boundary097.requirement-facts-control-001`.
+
+Concrete single-Decision evaluation also validates Requirement association,
+eligibility, and any required expiration context under APPROVAL-DECISION-009;
+fact comparison alone cannot replace it. Without lifecycle history it makes
+no lifecycle-aware effectiveness claim. Neither evaluation reconstructs what
+was known at a past instant by changing an evaluation timestamp.
+
+Portable JSON examples do not prove independently owned native fact containers
+under APPROVAL-FACT-004 or immutable external-history association under
+APPROVAL-DECISION-002. Consumers retain those evidence obligations described in
+the [coverage explanations](../conformance/traceability.md#interpreting-the-five-partial-requirements).
 
 Reusing this Decision for subject `expense/exp-99` or another context is
 `FINKORE_APPROVAL_INVALID_DECISION`, even if the Requirement name and facts
@@ -432,7 +513,33 @@ unchanged. Validation of candidate evidence has not committed either history.
 This follows ENTITY-EVOLUTION-023, -027, -033, and -034. With a valid committed
 target restored, the successful Correction is the paired control.
 
-The four success sequences and rejection are illustrated by
+#### Duplicate reversal and stale Revision controls
+
+Two further independent failures use the same identity and preservation rules:
+
+- In `entity.evolution.reversal.duplicate-001`, existing relation
+  `rel-reversal-1` already reverses `invoice/inv-10` at `rev-1`. A second request
+  supplies fresh relation `rel-reversal-2` and matching new Audit evidence, but
+  repeats that source reversal under the bounded fixture's duplicate policy.
+  It fails with `FINKORE_ENTITY_INVALID_MUTATION` under ENTITY-EVOLUTION-014 and
+  -024. The existing relation and both committed Audit Events remain unchanged;
+  no second relation or Event is appended. Source and related observations,
+  Revisions, and currentness are preserved under ENTITY-EVOLUTION-023 and -033.
+  This control does not impose a universal one-reversal policy on every
+  application.
+- In `entity.evolution.stale-revision-001`, the observed source is
+  `invoice/inv-10` at `rev-2`, while the Correction request expects `rev-1` and
+  identifies related Revision `rev-3`. That mismatch uses
+  `FINKORE_ENTITY_STATE_CONFLICT` under ENTITY-EVOLUTION-025. Source `rev-2`,
+  related `rev-3`, their original amounts and States, currentness, empty
+  evolution history, and the committed `evt-original` Audit history remain
+  unchanged. No relation or candidate Audit Event is committed.
+
+These failures do not define retry/replay behavior or precedence among unrelated
+Entity failures. The existing successful Reversal and Correction cases provide
+valid controls; neither rejection becomes another evolution kind.
+
+The four success sequences and rejected requests are illustrated by
 `entity.evolution.correction.audit-001`, `entity.evolution.reversal.audit-001`,
 `entity.evolution.void.audit-001`,
 `entity.evolution.supersession.currentness-001`, and

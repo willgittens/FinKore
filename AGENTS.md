@@ -245,6 +245,13 @@ If a requested artifact requires resolving a deferred issue, report the gap.
 
 ## Documentation synchronization
 
+Expert Review is ongoing consultation, not a blanket prerequisite for development
+or publication. Respect explicit maintainer acceptance of a bounded release scope
+while recording pending specialist reviews honestly. Do not infer specialist
+sign-off from that acceptance. Route subsequent findings through the existing
+specification-first workflow and compatibility policy; technical publication
+gates and demonstrated blocking defects still require resolution.
+
 Tests and documentation are part of the contract. For each meaningful change,
 review whether it requires updates to:
 

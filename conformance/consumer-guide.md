@@ -22,7 +22,7 @@ should also review [Core 2.0 migration](#core-20-migration).
 ## Discovery and validation
 
 Use [manifest.json](manifest.json) as the only discovery entry point for the
-**FinKore Core 2.0.2 stable** suite. Its scope is documented in the
+**FinKore Core 2.0.3 stable** suite. Its scope is documented in the
 [conformance index](README.md#scope-and-discovery); the manifest and vector-file
 format versions remain `0.1`.
 
@@ -37,6 +37,14 @@ For artifact validation:
    [JSON Schema](vector.schema.json).
 5. Reject duplicate suite IDs, duplicate paths within a suite, and duplicate
    vector IDs across the complete manifest.
+
+The repository-maintenance validator checks schema/vector file containment
+before reading JSON, including the actual destination of filesystem links.
+Development links are accepted when their destinations remain regular files
+inside the manifest directory; external destinations are rejected. The
+separate [stable-publication gate](../docs/tools/README.md#stable-publication-gate)
+rejects all symlinks in a proposed release tree. This tooling policy changes no
+vector members, financial outcomes, or consumer invocation API.
 
 Format `0.1` is closed by the published schema: unknown members at the file,
 vector, expected-result, or error level are validation failures. Consumers must

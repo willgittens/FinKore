@@ -17,14 +17,14 @@ const LOCAL_STATE = new Set(['.git', '.tools', 'node_modules', '.npm-cache', 'co
 const NEGATIVE_FIXTURE = 'docs/tools/test/fixtures/release-content-negative.json'
 const REQUIRED = ['README.md', 'docs/coreDoc/core-doc.md', 'spec/README.md', 'conformance/README.md', 'agentic/README.md']
 const DOMAINS = ['money', 'workflow', 'audit', 'approvals', 'entities']
-export const TARGET_CORE_VERSION = '2.0.2'
+export const TARGET_CORE_VERSION = '2.0.3'
 const TARGET_CORE_BASELINE = TARGET_CORE_VERSION.split('.').slice(0, 2).join('.')
 const PLAN_REFERENCE = /docs[/\\]plans\b|\bplan-\d+(?:\.\d+)*\b/i
 const SUPPLEMENT_REFERENCE = /boundary097-cases\.json|readSupplementary[C]ases|SUPPLEMENTARY[_]CASES|manifest\/supplementary/i
 const FREEZE_REFERENCE = /SPEC-FREEZE-\d+|release[\s-]+candidate\s+freeze/i
 const escapedTarget = TARGET_CORE_VERSION.replaceAll('.', '\\.')
 const STABLE = new RegExp(`\\bFinKore Core ${escapedTarget} (?:is )?stable\\b`, 'i')
-const STALE_STATUS = /release[\s-]+candidate|\b\d+\.\d+-rc\b|\bpre[\s-]?1\.0\b|\bDraft \d+\.\d+|\bremains experimental\b|\bpromotion (?:is )?(?:not complete|outstanding)\b|\bnot (?:yet )?stable\b|\bstatus:\s*(?:draft|experimental)\b|\bintended to become\b/i
+const STALE_STATUS = /release[\s-]+candidate|\brelease preparation\b|\b\d+\.\d+-rc\b|\bpre[\s-]?1\.0\b|\bDraft \d+\.\d+|\bremains experimental\b|\bpromotion (?:is )?(?:not complete|outstanding)\b|\bnot (?:yet )?stable\b|\bstatus:\s*(?:draft|experimental)\b|\bintended to become\b/i
 
 function hasStaleCoreStatus(text) {
   if (STALE_STATUS.test(text)) return true

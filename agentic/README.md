@@ -7,7 +7,7 @@ independently of language, framework, or transport.
 
 ## Status
 
-**Documentation contract for FinKore Core 2.0.2 stable.**
+**Documentation contract for FinKore Core 2.0.3 stable.**
 
 The stable registry contains 20 canonical operations with published identifiers
 preserved and the Core 2.0 contract documented. Compatibility is

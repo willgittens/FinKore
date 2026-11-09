@@ -9,6 +9,40 @@ artifacts, and their verification results. Those records are preserved as
 history and are not claims about the current repository's supported surface or
 current execution evidence.
 
+## FinKore Core 2.0.3 — 2026-11-09
+
+Compatible 2.0.3 patch. Financial requirements, portable errors,
+stable identifiers, operation contracts, applicability, and failure atomicity
+are unchanged from tag `2.0.2`. The published contract contains 447 requirements,
+1,823 vectors in 47 files, and 20 canonical operations. Coverage remains 363
+COVERED, five PARTIAL, and 79 NOT DIRECTLY TESTABLE; conformance formats remain
+`0.1` and the private maintenance package remains `0.1.0`.
+
+Maintenance checks now reject escaping schema/vector and documentation paths,
+validate documented operation/error associations, and check specification IDs
+and ranges in selected current guidance. Non-normative Money, Approval, and
+Entity walkthroughs clarify existing behavior, with direct static Learn links.
+PARTIAL explanations retain their distinct evidence boundaries; external guard
+declarations remain consumer-authored and WORKFLOW-GUARD-004 remains PARTIAL.
+One new regression requires `FINKORE_APPROVAL_INVALID_DECISION` and unchanged
+Decision history for selectors without current facts. Consumers need no data
+migration and should include that case when evaluating this revision.
+
+Inherited Learn navigation, Network content, contributor guidance, shared CSS
+cache generation, and deployment of verified committed output are included.
+The locked maintenance graph includes `fast-uri` 3.1.9. A fresh npm registry
+advisory query on 2026-11-09 reported zero vulnerabilities across its five
+dependencies. Locked installation, local verification with 80 maintenance-tool
+tests, and the separate stable-publication gate pass on Node 24.11.1. Learn
+readers pass desktop/mobile layout and keyboard checks. These checks validate
+repository artifacts and dependency metadata, not financial execution or
+external implementation conformance.
+
+On 2026-11-09 the maintainer accepted this release scope with
+the specialist reviews for Issues #11–#13 still pending. Expert Review continues
+without blocking this patch; findings will inform appropriately scoped future
+releases. This is maintainer acceptance, not specialist sign-off.
+
 ## FinKore Core 2.0.2 — 2026-10-04
 
 Compatible conformance corrections preserve committed Decision identities in

@@ -2276,6 +2276,107 @@
         "regression",
         "mutation-sensitive"
       ]
+    },
+    {
+      "id": "approval.requirement.selectors-without-current-facts-001",
+      "spec": "approvals/decisions",
+      "requirements": [
+        "APPROVAL-FACT-001",
+        "APPROVAL-VALIDITY-012",
+        "APPROVAL-ERROR-005"
+      ],
+      "description": "Rejects a valid relevance selector when current facts are omitted, rather than falling back to history-only evaluation or synthesizing current facts; committed Decision history is unchanged.",
+      "operation": "approval.requirement.evaluate",
+      "input": {
+        "requirement": {
+          "id": "review",
+          "subject": {
+            "type": "invoice",
+            "id": "i"
+          },
+          "eligibleActors": [
+            "alice"
+          ],
+          "approvedOutcome": "APPROVED",
+          "rejectedOutcome": "REJECTED",
+          "contextId": "ctx-approval-boundary097-requirement-facts-control-001"
+        },
+        "decisions": [
+          {
+            "requirementId": "review",
+            "actor": {
+              "id": "alice"
+            },
+            "subjectFacts": {
+              "invoice": {
+                "amount": "10"
+              },
+              "memo": "old"
+            },
+            "outcome": "APPROVED",
+            "decidedAt": "2026-09-01T10:00:00Z",
+            "decisionId": "decision-1",
+            "requirementRef": {
+              "contextId": "ctx-approval-boundary097-requirement-facts-control-001",
+              "requirementId": "review",
+              "subject": {
+                "type": "invoice",
+                "id": "i"
+              }
+            }
+          }
+        ],
+        "relevantFactPaths": [
+          "invoice.amount"
+        ],
+        "observeHistory": true
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_APPROVAL_INVALID_DECISION"
+        },
+        "observations": {
+          "history": [
+            {
+              "requirementId": "review",
+              "actor": {
+                "id": "alice"
+              },
+              "subjectFacts": {
+                "invoice": {
+                  "amount": "10"
+                },
+                "memo": "old"
+              },
+              "outcome": "APPROVED",
+              "decidedAt": "2026-09-01T10:00:00Z",
+              "decisionId": "decision-1",
+              "requirementRef": {
+                "contextId": "ctx-approval-boundary097-requirement-facts-control-001",
+                "requirementId": "review",
+                "subject": {
+                  "type": "invoice",
+                  "id": "i"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "invariant",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "pairedControl": "approval.boundary097.requirement-facts-control-001",
+      "guardsAgainst": [
+        "approval-selectors-without-current-facts-accepted",
+        "approval-current-facts-synthesized-from-history",
+        "approval-history-mutated-on-evaluation-error"
+      ]
     }
   ]
 }

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 /** Tests artifact validation only; these cases do not execute or define financial behavior. */
 import assert from 'node:assert/strict'
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { chmodSync, cpSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, symlinkSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import test from 'node:test'
@@ -99,6 +99,119 @@ test('rejects malformed manifests and unsafe declared paths', () => {
     vectorSchema: '../schema.json',
     suites: [{ id: 'example', vectorFiles: ['./suite/vectors.json'] }],
   }).manifestPath), /escapes or resolves/)
+})
+
+test('CLI rejects external schema and vector symlinks before parsing their targets', (t) => {
+  const cases = [
+    { label: 'schema file', path: 'vector.schema.json' },
+    { label: 'schema directory', path: 'schemas', directory: true },
+    { label: 'vector file', path: 'suite/vectors.json' },
+    { label: 'vector directory', path: 'suite', directory: true },
+  ]
+  for (const entry of cases) {
+    const { manifestPath, root } = fixture()
+    const outside = `${root}-outside`
+    mkdirSync(outside)
+    t.after(() => {
+      rmSync(root, { recursive: true, force: true })
+      rmSync(outside, { recursive: true, force: true })
+    })
+    const isSchema = entry.label.startsWith('schema')
+    if (entry.path === 'schemas') {
+      mkdirSync(join(root, entry.path))
+      writeFileSync(join(root, entry.path, 'schema.json'), JSON.stringify(schema))
+      const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
+      manifest.vectorSchema = './schemas/schema.json'
+      writeFileSync(manifestPath, JSON.stringify(manifest))
+    }
+    assert.equal(cliResult(manifestPath, root).status, 0, entry.label)
+    const path = join(root, entry.path)
+    const target = join(outside, 'target')
+    renameSync(path, target)
+    symlinkSync(target, path, entry.directory ? 'dir' : 'file')
+    for (const invalidJson of [false, true]) {
+      if (invalidJson) {
+        const targetFile = entry.directory ? join(target, isSchema ? 'schema.json' : 'vectors.json') : target
+        writeFileSync(targetFile, 'not JSON')
+      }
+      const result = cliResult(manifestPath, root)
+      assert.equal(result.status, 1, entry.label)
+      assert.match(result.message, /escapes or resolves to the conformance root after resolving symlinks/)
+      assert.match(result.message, isSchema ? /Vector schema path/ : /Vector path for suite example/)
+      assert.doesNotMatch(result.message, /Cannot read valid JSON|SyntaxError|TypeError/)
+    }
+  }
+})
+
+test('CLI accepts internal file/directory links and a symlinked checkout root', (t) => {
+  const { manifestPath, root } = fixture()
+  const alias = `${root}-alias`
+  t.after(() => {
+    rmSync(alias, { recursive: true, force: true })
+    rmSync(root, { recursive: true, force: true })
+  })
+  renameSync(join(root, 'vector.schema.json'), join(root, 'retained-schema.json'))
+  symlinkSync('./retained-schema.json', join(root, 'vector.schema.json'), 'file')
+  renameSync(join(root, 'suite'), join(root, 'retained-suite'))
+  symlinkSync('./retained-suite', join(root, 'suite'), 'dir')
+  assert.equal(cliResult(manifestPath, root).status, 0)
+  symlinkSync(root, alias, 'dir')
+  const result = cliResult(join(alias, 'manifest.json'), alias)
+  assert.equal(result.status, 0, result.message)
+  assert.match(result.message, /1 suites, 1 files, 1 vectors/)
+})
+
+test('CLI reports missing, broken, and non-file schema/vector paths without crashing', (t) => {
+  for (const path of ['vector.schema.json', 'suite/vectors.json']) {
+    for (const kind of ['missing', 'broken', 'directory']) {
+      const { manifestPath, root } = fixture()
+      t.after(() => rmSync(root, { recursive: true, force: true }))
+      const target = join(root, path)
+      rmSync(target)
+      if (kind === 'broken') symlinkSync('./missing.json', target, 'file')
+      if (kind === 'directory') mkdirSync(target)
+      const result = cliResult(manifestPath, root)
+      assert.equal(result.status, 1, `${path}: ${kind}`)
+      assert.match(result.message, kind === 'directory' ? /is not a regular file/ : /Cannot resolve Vector/)
+      assert.doesNotMatch(result.message, /TypeError|SyntaxError/)
+    }
+  }
+})
+
+test('CLI preserves read-error diagnostics for an unreadable artifact', (t) => {
+  const { manifestPath, root } = fixture()
+  const path = join(root, 'suite/vectors.json')
+  t.after(() => {
+    chmodSync(path, 0o600)
+    rmSync(root, { recursive: true, force: true })
+  })
+  chmodSync(path, 0)
+  try {
+    readFileSync(path)
+    t.skip('This process can read mode-000 files; unreadability cannot be exercised with these privileges.')
+    return
+  } catch (error) {
+    assert.equal(error.code, 'EACCES')
+  }
+  const result = cliResult(manifestPath, root)
+  assert.equal(result.status, 1)
+  assert.match(result.message, /Cannot read valid JSON for vector file in suite example/)
+})
+
+test('CLI rejects lexical escapes and root targets for schema and vector declarations', (t) => {
+  for (const field of ['vectorSchema', 'vectorFiles']) {
+    for (const path of ['../outside.json', './suite/../../outside.json', '.']) {
+      const { manifestPath, root } = fixture()
+      t.after(() => rmSync(root, { recursive: true, force: true }))
+      const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
+      if (field === 'vectorSchema') manifest.vectorSchema = path
+      else manifest.suites[0].vectorFiles = [path]
+      writeFileSync(manifestPath, JSON.stringify(manifest))
+      const result = cliResult(manifestPath, root)
+      assert.equal(result.status, 1)
+      assert.match(result.message, /escapes or resolves to the conformance root/)
+    }
+  }
 })
 
 test('rejects vector files that fail the published schema', () => {
