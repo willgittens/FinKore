@@ -19,9 +19,9 @@
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="FinKore — Define once. Build many times." />
   <link rel="icon" type="image/png" href="img/Finkore_Favicon.png" />
-  <link rel="stylesheet" href="css/styles.css?v=330fb306-9f0a-4735-90ce-5d09371babb7" />
-  <link rel="stylesheet" href="css/coredoc.css?v=330fb306-9f0a-4735-90ce-5d09371babb7" />
-  <link rel="stylesheet" href="css/documents.css?v=330fb306-9f0a-4735-90ce-5d09371babb7" />
+  <link rel="stylesheet" href="css/styles.css?v=11c19de2-c5e4-40aa-90ef-5c7cf2289ae1" />
+  <link rel="stylesheet" href="css/coredoc.css?v=11c19de2-c5e4-40aa-90ef-5c7cf2289ae1" />
+  <link rel="stylesheet" href="css/documents.css?v=11c19de2-c5e4-40aa-90ef-5c7cf2289ae1" />
 </head>
 <body id="top" class="core-reader learn-document">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -47,7 +47,7 @@
       <nav class="learn-document-links" aria-label="Learn documents"><a href="where-to-start.html">Where to start</a><a href="about.html">About the project</a><a href="licensing.html">Licensing</a><a href="contributing.html">Contribute</a><a href="implementation-guide.html">Implementation guide</a><a href="releases.html" aria-current="page">Release notes</a><a href="coredoc.html">CoreDoc</a></nav>
     </header>
     <div class="container core-reader-layout">
-      <aside class="core-sidebar"><nav aria-label="Table of contents"><p class="eyebrow">On this page</p><a class="core-nav-intro" href="#unreleased">Unreleased</a>
+      <aside class="core-sidebar"><nav aria-label="Table of contents"><p class="eyebrow">On this page</p><a class="core-nav-intro" href="#finkore-core-203-2026-11-09">FinKore Core 2.0.3 — 2026-11-09</a>
 <a class="core-nav-intro" href="#finkore-core-202-2026-10-04">FinKore Core 2.0.2 — 2026-10-04</a>
 <a class="core-nav-intro" href="#finkore-core-201-2026-10-04">FinKore Core 2.0.1 — 2026-10-04</a>
 <a class="core-nav-intro" href="#finkore-core-20-2026-10-04">FinKore Core 2.0 — 2026-10-04</a>
@@ -70,7 +70,7 @@
 <a class="core-nav-intro" href="#draft-02">Draft 0.2</a>
 <a class="core-nav-intro" href="#draft-01">Draft 0.1</a></nav></aside>
       <div class="core-reader-content">
-        <details class="learn-document-index"><summary>On this page</summary><nav aria-label="Mobile table of contents"><a class="core-nav-intro" href="#unreleased">Unreleased</a>
+        <details class="learn-document-index"><summary>On this page</summary><nav aria-label="Mobile table of contents"><a class="core-nav-intro" href="#finkore-core-203-2026-11-09">FinKore Core 2.0.3 — 2026-11-09</a>
 <a class="core-nav-intro" href="#finkore-core-202-2026-10-04">FinKore Core 2.0.2 — 2026-10-04</a>
 <a class="core-nav-intro" href="#finkore-core-201-2026-10-04">FinKore Core 2.0.1 — 2026-10-04</a>
 <a class="core-nav-intro" href="#finkore-core-20-2026-10-04">FinKore Core 2.0 — 2026-10-04</a>
@@ -95,11 +95,11 @@
         <article class="core-prose learn-document-prose" aria-label="FinKore Release Notes">
 <p>This is the complete release history kept in the working tree. Precise financial behavior belongs to <code>/spec</code>; detailed change history remains available in Git.</p>
 <p>Entries before the 0.9.8 repository transition describe historical snapshots that included maintained implementations, a Conformance Runner, package artifacts, and their verification results. Those records are preserved as history and are not claims about the current repository&#39;s supported surface or current execution evidence.</p>
-<h2 id="unreleased">Unreleased</h2>
-<p>Preparing the compatible 2.0.3 patch. Financial requirements, portable errors, stable identifiers, operation contracts, applicability, and failure atomicity are unchanged from tag <code>2.0.2</code>. The working contract contains 447 requirements, 1,823 vectors in 47 files, and 20 canonical operations. Coverage remains 363 COVERED, five PARTIAL, and 79 NOT DIRECTLY TESTABLE; conformance formats remain <code>0.1</code> and the private maintenance package remains <code>0.1.0</code>.</p>
+<h2 id="finkore-core-203-2026-11-09">FinKore Core 2.0.3 — 2026-11-09</h2>
+<p>Compatible 2.0.3 patch. Financial requirements, portable errors, stable identifiers, operation contracts, applicability, and failure atomicity are unchanged from tag <code>2.0.2</code>. The published contract contains 447 requirements, 1,823 vectors in 47 files, and 20 canonical operations. Coverage remains 363 COVERED, five PARTIAL, and 79 NOT DIRECTLY TESTABLE; conformance formats remain <code>0.1</code> and the private maintenance package remains <code>0.1.0</code>.</p>
 <p>Maintenance checks now reject escaping schema/vector and documentation paths, validate documented operation/error associations, and check specification IDs and ranges in selected current guidance. Non-normative Money, Approval, and Entity walkthroughs clarify existing behavior, with direct static Learn links. PARTIAL explanations retain their distinct evidence boundaries; external guard declarations remain consumer-authored and WORKFLOW-GUARD-004 remains PARTIAL. One new regression requires <code>FINKORE_APPROVAL_INVALID_DECISION</code> and unchanged Decision history for selectors without current facts. Consumers need no data migration and should include that case when evaluating this revision.</p>
-<p>Inherited Learn navigation, Network content, contributor guidance, shared CSS cache generation, and deployment of verified committed output are included. The locked maintenance graph includes <code>fast-uri</code> 3.1.9. A fresh npm registry advisory query on 2026-11-08 reported zero vulnerabilities across its five dependencies. This is dependency metadata review, not financial execution.</p>
-<p>Current declarations identify unpublished preparation; the publication checker targets <code>2.0.3</code>. On 2026-11-09 the maintainer accepted this release scope with the specialist reviews for Issues #11–#13 still pending. Expert Review continues without blocking this patch; findings will inform appropriately scoped future releases. This is maintainer acceptance, not specialist sign-off. No 2.0.3 stable release or publication is recorded here.</p>
+<p>Inherited Learn navigation, Network content, contributor guidance, shared CSS cache generation, and deployment of verified committed output are included. The locked maintenance graph includes <code>fast-uri</code> 3.1.9. A fresh npm registry advisory query on 2026-11-09 reported zero vulnerabilities across its five dependencies. Locked installation, local verification with 80 maintenance-tool tests, and the separate stable-publication gate pass on Node 24.11.1. Learn readers pass desktop/mobile layout and keyboard checks. These checks validate repository artifacts and dependency metadata, not financial execution or external implementation conformance.</p>
+<p>On 2026-11-09 the maintainer accepted this release scope with the specialist reviews for Issues #11–#13 still pending. Expert Review continues without blocking this patch; findings will inform appropriately scoped future releases. This is maintainer acceptance, not specialist sign-off.</p>
 <h2 id="finkore-core-202-2026-10-04">FinKore Core 2.0.2 — 2026-10-04</h2>
 <p>Compatible conformance corrections preserve committed Decision identities in eleven rejected Approval record and withdrawal cases and use the documented <code>DECISION_SUPERSEDED</code> lifecycle kind in the equal-instant supersession case. Identity and failure-preservation traceability is explicit, including unchanged lifecycle observations for the rejected withdrawals. Existing normative behavior, portable errors, stable identifiers, and artifact syntax are unchanged; consumers require no history rewrite.</p>
 <p>Consumers claiming Core 2.0.2 conformance must use the corrected expected observations. The contract still contains 447 requirements, 1,822 vectors in 47 files, and 20 canonical Agentic operations. Conformance formats remain <code>0.1</code> and the private maintenance package remains <code>0.1.0</code>.</p>

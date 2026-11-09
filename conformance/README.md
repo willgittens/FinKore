@@ -1,6 +1,6 @@
 # FinKore Conformance Artifacts
 
-This directory contains portable acceptance cases for **FinKore Core 2.0.3 release preparation (unpublished)**.
+This directory contains portable acceptance cases for **FinKore Core 2.0.3 stable**.
 Each case, called a **vector**, describes an input and the expected observable
 result: a value or portable error, plus post-operation state where required.
 Cases include boundaries and plausible defects as well as successful operations.
@@ -52,13 +52,13 @@ paths relative to the manifest, reject unsupported syntax versions, and reject
 duplicate vector IDs. Filesystem traversal order carries no meaning.
 
 [`manifest.json`](manifest.json) is the sole discovery entry point for the
-Core 2.0.3 working artifact set, preserving the Core 2.0 financial behavior.
-The working tree contains six suites, 47 vector
-files, and 1,823 vectors, including an unreleased existing-behavior regression
+Core 2.0.3 published artifact set, preserving the Core 2.0 financial behavior.
+The release contains six suites, 47 vector
+files, and 1,823 vectors, including an additional existing-behavior regression
 for Approval selectors supplied without current facts.
 Core association is documented here because the manifest syntax has no
 Core-version field. The published `2.0.2` tag contains 1,822 vectors; identify
-the exact commit when using the additional working-tree case.
+the exact release or commit when reporting evaluation of the additional case.
 `finkoreConformance` and `finkoreVectorFile` remain `0.1` and version the artifact
 formats, not the FinKore Core release. A claim identifies the exact release or
 commit and manifest as well as the format version. Referenced requirement IDs

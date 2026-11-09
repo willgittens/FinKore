@@ -1,8 +1,8 @@
 # FinKore CoreDoc
 
 **CoreDoc version:** FinKore Core 2.0.3
-**Document date:** 2026-11-08
-**Status:** FinKore Core 2.0.3 release preparation (unpublished)
+**Document date:** 2026-11-09
+**Status:** FinKore Core 2.0.3 stable
 
 ## Purpose
 

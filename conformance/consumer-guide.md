@@ -22,7 +22,7 @@ should also review [Core 2.0 migration](#core-20-migration).
 ## Discovery and validation
 
 Use [manifest.json](manifest.json) as the only discovery entry point for the
-**FinKore Core 2.0.3 release preparation (unpublished)** suite. Its scope is documented in the
+**FinKore Core 2.0.3 stable** suite. Its scope is documented in the
 [conformance index](README.md#scope-and-discovery); the manifest and vector-file
 format versions remain `0.1`.
 

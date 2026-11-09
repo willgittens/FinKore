@@ -2,7 +2,7 @@
 
 ## Status
 
-**FinKore Core 2.0.3 release preparation (unpublished).**
+**FinKore Core 2.0.3 stable.**
 
 ## Terms
 

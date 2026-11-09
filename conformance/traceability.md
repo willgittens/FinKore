@@ -2,7 +2,7 @@
 
 This is the canonical human-readable requirement-to-vector index. Manifest-listed
 vectors remain the primary machine-readable mapping through each vector's
-`requirements` field. The counts and mappings cover the **FinKore Core 2.0.3 release preparation (unpublished)** contract across all domains.
+`requirements` field. The counts and mappings cover the **FinKore Core 2.0.3 stable** contract across all domains.
 
 ## Inventory and coverage
 
