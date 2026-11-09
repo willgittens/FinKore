@@ -36,12 +36,18 @@ function run(root) {
 test('allows Network discussion links only on that page with safe new-tab attributes', t => {
   const root = fixture(t)
   const href = 'https://github.com/willgittens/FinKore/discussions'
-  const page = `<h1>FinKore Network</h1><a href="${href}" target="_blank" rel="noopener noreferrer">Discuss</a>`
+  const link = destination => `<a href="${destination}" target="_blank" rel="noopener noreferrer">Discuss</a>`
+  const page = `<h1>FinKore Network</h1>${[href, ...Array.from({ length: 8 }, (_, index) => `${href}/${32 + index}`)].map(link).join('')}`
   put(root, 'learn/network.html', page)
   assert.equal(run(root).status, 0)
   for (const invalid of [
     page.replace('target="_blank"', 'target="_self"'),
     page.replace('noopener noreferrer', 'noopener'),
+    page.replace('target="_blank"', ''),
+    page.replace('noopener noreferrer', 'noreferrer'),
+    page.replace(`${href}/32`, `${href}/32" href="${href}/33`),
+    page.replace(`${href}/32`, `${href}/32" src="${href}/32`),
+    ...['0', '032', '-32', '32/new', '32?redirect=other', '32#comment', '32abc'].map(id => page.replace(`${href}/32`, `${href}/${id}`)),
     page.replace(href, href + '/new'),
     page.replace('/willgittens/', '/another-owner/'),
   ]) {

@@ -293,9 +293,13 @@ to the homepage founder CTA to `https://www.linkedin.com/in/will-gittens/`, the 
 project overview partner link to `https://savoiabarker.com/`, the project
 overview link to `https://finkore.dev`, and the licensing reader link to the
 official Mozilla FAQ at `https://www.mozilla.org/en-US/MPL/2.0/FAQ/`. The Network
-page additionally permits the exact official discussion destination
-`https://github.com/willgittens/FinKore/discussions` for interest and exploratory
-conversations. It does not permit arbitrary discussion URLs or other repositories.
+page additionally permits the official discussion destination
+`https://github.com/willgittens/FinKore/discussions` and individual discussions
+under that URL with a positive integer ID, including the Expert Review areas.
+Discussion creation routes, query strings, fragments and other repositories
+remain outside this allowance. Published discussion titles and destinations
+must be verified when editing the page; the offline checker does not establish
+that a discussion exists or matches an area.
 All must use
 `target="_blank"` and
 `rel="noopener noreferrer"`. The checker validates these destinations and their
@@ -344,10 +348,13 @@ a marked generated CoreDoc index. Edit that index through CoreDoc or its rendere
 do not edit the generated block directly. `learn/network.html` also has editorial
 content maintained directly in HTML, with page-specific styles in
 `learn/css/network.css`.
-The page introduces the four Network initiatives and labels proposed activities
-and funding status explicitly. Its participation CTAs use the existing
-contribution guide and the official GitHub Discussions, not a registration or
-funding application system. The build synchronizes navigation and stylesheet
+The page introduces Club, Contests, Experts and Angel, and labels proposed
+activities and funding status explicitly. The Experts initiative links to the
+page's permanent `#expert-review` program section, with eight review areas,
+verified GitHub Discussion links and the specification contribution process.
+Expert participation does not imply normative approval or certification. Its
+participation CTAs use the official GitHub Discussions and the existing CoreDoc
+reader. The build synchronizes navigation and stylesheet
 versions on both editorial pages while preserving their content. The document
 readers listed below are generated in full from their Markdown sources and renderers.
 
