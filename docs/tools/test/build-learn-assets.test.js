@@ -36,7 +36,8 @@ test('each full build changes every page CSS URL, even with unchanged sources; c
   assert.notEqual(secondVersion, firstVersion)
   for (const [i, html] of second.entries()) {
     const urls = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map(match => match[1])
-    assert.equal(urls.length, i < 2 || pages[i] === 'learn/network.html' ? 2 : 3, pages[i])
+    const editorial = i < 2 || pages[i] === 'learn/network.html' || LEARN_PAGES.some(page => page.output === pages[i] && page.presentation?.startsWith('legacy-'))
+    assert.equal(urls.length, editorial ? 2 : 3, pages[i])
     for (const url of urls) assert.ok(url.endsWith(`?v=${secondVersion}`), `${pages[i]}: ${url}`)
     assert.equal(html.replaceAll(secondVersion, ''), first[i].replaceAll(firstVersion, ''), pages[i])
   }

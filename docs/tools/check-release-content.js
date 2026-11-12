@@ -78,6 +78,8 @@ function isAllowedExternalLink(path, tag, href) {
     'learn/about.html': ['https://finkore.dev', 'https://savoiabarker.com/'],
     'learn/licensing.html': ['https://www.mozilla.org/en-US/MPL/2.0/FAQ/'],
     'learn/network.html': [`${GITHUB_PROJECT_URL}/discussions`],
+    'learn/legacy.html': [`${GITHUB_PROJECT_URL}/discussions/42`, 'https://finkore.dev/'],
+    'learn/legacy-001-elaine-richardson.html': ['https://www.linkedin.com/in/elainecrichardson/'],
   }
   const projectLink = navigationPages.has(path) && href === GITHUB_PROJECT_URL
   const fileLink = navigationPages.has(path) && href.startsWith(GITHUB_FILE_BASE_URL) &&
