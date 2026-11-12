@@ -29,6 +29,9 @@ test('keeps site readers and assets local and routes repository files to GitHub'
   assert.equal(learnLink('README.md', './docs/releases/README.md#draft-01'), 'releases.html#draft-01')
   assert.equal(learnLink('docs/coreDoc/core-doc.md', '../releases/README.md'), 'releases.html')
   assert.equal(learnLink('README.md', './LICENSING.md'), 'licensing.html')
+  assert.equal(learnLink('README.md', './legacy/README.md'), 'legacy.html')
+  assert.equal(learnLink('legacy/README.md', './interviews/001-elaine-richardson.md'), 'legacy-001-elaine-richardson.html')
+  assert.equal(learnLink('legacy/interviews/001-elaine-richardson.md', '../README.md#interviews'), 'legacy.html#interviews')
   assert.equal(learnLink('README.md', './spec/money/README.md#scope'), GITHUB_FILE_BASE_URL + 'spec/money/README.md#scope')
   assert.equal(learnLink('README.md', './conformance/README.md'), GITHUB_FILE_BASE_URL + 'conformance/README.md')
   assert.equal(learnLink('README.md', './agentic/README.md'), GITHUB_FILE_BASE_URL + 'agentic/README.md')
@@ -73,6 +76,66 @@ test('renders paragraph blockquotes with safe inline content and preserves surro
   }
 })
 
+test('preserves interview emphasis, hard breaks, thematic breaks and safe profile links', () => {
+  const doc = renderLearnMarkdown('# Interview\n\n**Name:** Elaine  \n**Profile:** https://www.linkedin.com/in/example/  \n**Series:** Legacy\n\n*An editorial note with **distinct wording**.*\n\n---\n\n[https://finkore.dev](https://finkore.dev)\n\nSee https://finkore.dev/.', 'legacy/interviews/example.md')
+  assert.match(doc.html, /<strong>Name:<\/strong> Elaine<br \/>\n<strong>Profile:<\/strong> <a href="https:\/\/www.linkedin.com\/in\/example\/" target="_blank" rel="noopener noreferrer">/)
+  assert.match(doc.html, /<em>An editorial note with <strong>distinct wording<\/strong>\.<\/em>/)
+  assert.match(doc.html, /<hr \/>/)
+  assert.match(doc.html, /<p><a href="https:\/\/finkore.dev" target="_blank" rel="noopener noreferrer">https:\/\/finkore.dev<\/a><\/p>/)
+  assert.match(doc.html, /<p>See <a href="https:\/\/finkore.dev\/" target="_blank" rel="noopener noreferrer">https:\/\/finkore.dev\/<\/a>\.<\/p>/)
+  assert.doesNotMatch(doc.html, /<a\b[^>]*>\s*<a\b/)
+  const unsafe = renderLearnMarkdown('# Interview\n\n*<script>unsafe</script>*\n\nhttps://example.org/\"onclick=bad', 'legacy/README.md')
+  assert.doesNotMatch(unsafe.html, /<script| onclick=/)
+  assert.match(unsafe.html, /&lt;script&gt;/)
+  assert.throws(() => renderLearnMarkdown('# Interview\n\n*[Profile](javascript:alert)*', 'legacy/README.md'), /Unsupported/)
+})
+
+test('publishes registered Legacy sources with return links and question navigation, excluding unregistered drafts and the invitation', t => {
+  const root = fixture(t)
+  put(root, 'legacy/interviews/002-draft.md', '# Private draft\n\nUnapproved content.')
+  put(root, 'legacy/INTERVIEW-TEMPLATE.md', 'Invitation only; not a public reader.')
+  buildLearnPages(root)
+  const archive = readFileSync(join(root, 'learn/legacy.html'), 'utf8')
+  const interview = readFileSync(join(root, 'learn/legacy-001-elaine-richardson.html'), 'utf8')
+  assert.match(archive, /href="legacy-001-elaine-richardson.html">Elaine Richardson<\/a>/)
+  assert.match(archive, /href="network.html#legacy"/)
+  assert.match(archive, /<em>Only interviews approved for publication are listed here\.<\/em>/)
+  assert.match(interview, /href="legacy.html#interviews"/)
+  assert.match(interview, /href="#1-first-tell-us[^\"]*"><span>01<\/span>Finding a way into finance/)
+  assert.match(interview, /<strong>Status:<\/strong> Approved by Interviewee on 12\.11\.2026 17:46 Berlin Time/)
+  assert.match(interview, /<em>The interviewee shared additional context[\s\S]+?<\/em>/)
+  assert.match(interview, /not a quotation or paraphrase of the withheld account/)
+  assert.match(interview, /<hr \/>/)
+  assert.doesNotMatch(archive + interview, /class="(?:core-sidebar|learn-document-links|learn-document-prose)"/)
+  assert.match(interview, /aria-label="Interview navigation"/)
+  assert.match(interview, /class="legacy-mobile-index"/)
+  assert.match(archive, /class="legacy-feature"/)
+  assert.equal(LEARN_PAGES.some(page => /002-draft|INTERVIEW-TEMPLATE/.test(page.source)), false)
+  assert.doesNotMatch(archive + interview, /Unapproved content|Invitation only/)
+  const archivePage = LEARN_PAGES.find(page => page.presentation === 'legacy-archive')
+  const source = readFileSync(join(root, archivePage.source), 'utf8')
+  assert.throws(() => renderLearnPage(archivePage, source.replace('migrations,', 'settlement,'), readLearnAssetVersion(root)), /index topics differ/)
+  assert.throws(() => renderLearnPage(archivePage, source.replace('001-elaine-richardson.md', '002-draft.md'), readLearnAssetVersion(root)), /registered interviews/)
+})
+
+test('editorial interview rendering retains every question, response, omission note and anchor from the canonical text', () => {
+  const page = LEARN_PAGES.find(page => page.presentation === 'legacy-interview')
+  const markdown = readFileSync(new URL(page.source, repository), 'utf8')
+  const doc = renderLearnMarkdown(markdown, page.source)
+  const html = renderLearnPage(page, markdown, '00000000-0000-4000-8000-000000000001')
+  const story = html.match(/<article class="legacy-story"[^>]*>([\s\S]*?)<\/article>/)[1]
+  const canonical = doc.html.slice(doc.html.indexOf('<h2'))
+  const normalize = text => text.replace(/<section class="legacy-(?:conversation|question)">|<\/section>/g, '').replace(/>\s+</g, '><').trim()
+  assert.equal(normalize(story), normalize(canonical))
+  const preamble = doc.html.replace(/<h1\b[^>]*>[\s\S]*?<\/h1>\n?/, '').split('<h2')[0]
+  assert.ok(html.includes(preamble))
+  assert.match(html, /id="finkore-legacy-archive-interview-001">Elaine Richardson<\/h1>/)
+  assert.match(html, /New to FinKore\?/)
+  assert.throws(() => renderLearnPage(page, markdown.replace(page.interview.quote, 'Changed response.'), '00000000-0000-4000-8000-000000000001'), /quotation differs/)
+  assert.throws(() => renderLearnPage(page, markdown.replace(page.interview.featureQuote, 'Changed financial excerpt.'), '00000000-0000-4000-8000-000000000001'), /quotation differs/)
+  assert.throws(() => renderLearnPage(page, markdown + '\n### An extra question\n', '00000000-0000-4000-8000-000000000001'), /chapter labels/)
+})
+
 test('renders GitHub theme logos as one light-surface image and rejects unsafe or incomplete pairs', () => {
   const markup = `<p align="center">
   <img src="./learn/img/Finkore.png#gh-light-mode-only"
@@ -95,10 +158,10 @@ test('renders GitHub theme logos as one light-surface image and rejects unsafe o
   }
 })
 
-test('generates all six canonical documents deterministically and checks drift without writing', t => {
+test('generates registered canonical documents deterministically and checks drift without writing', t => {
   const root = fixture(t)
   assert.throws(() => buildLearnPages(root, { check: true }), /out of date/)
-  assert.deepEqual(buildLearnPages(root), { pages: 6 })
+  assert.deepEqual(buildLearnPages(root), { pages: LEARN_PAGES.length })
   const home = readFileSync(join(root, 'learn/index.html'), 'utf8')
   assert.match(home, /Keep this content/)
   assert.match(home, /Where to start<\/a>[\s\S]*?CoreDoc<\/a>[\s\S]*?Github Project/)
@@ -112,8 +175,14 @@ test('generates all six canonical documents deterministically and checks drift w
     const source = readFileSync(join(root, page.source), 'utf8')
     const html = readFileSync(join(root, page.output), 'utf8')
     assert.equal(html, renderLearnPage(page, source, readLearnAssetVersion(root)))
-    assert.match(html, /aria-label="Table of contents"/)
-    assert.match(html, /<details class="learn-document-index">/)
+    if (page.presentation?.startsWith('legacy-')) {
+      assert.match(html, /class="legacy-page /)
+      assert.match(html, /href="css\/legacy.css\?v=/)
+      assert.doesNotMatch(html, /href="css\/(?:coredoc|documents).css/)
+    } else {
+      assert.match(html, /aria-label="Table of contents"/)
+      assert.match(html, /<details class="learn-document-index">/)
+    }
     assert.ok(html.includes(`href="${GITHUB_FILE_BASE_URL}${page.source}" target="_blank" rel="noopener noreferrer"`))
     assert.doesNotMatch(html, /(?:href|src)="\.\.\//)
     assert.doesNotMatch(html, /<script|<button|<form/)
@@ -164,5 +233,15 @@ test('publication accepts synchronized release history but rejects changed histo
   for (const changed of [about.replace('href="https://finkore.dev"', 'href="https://example.org"'), about.replace('target="_blank"', 'target="_self"')]) {
     writeFileSync(aboutPath, changed)
     assert.match(diagnostics(), /learn\/about.html: HTML link must name a local destination/)
+  }
+  assert.doesNotMatch(diagnostics(), /learn\/legacy[^:]*: HTML link must name a local destination/)
+  const interviewPath = join(root, 'learn/legacy-001-elaine-richardson.html')
+  const interview = readFileSync(interviewPath, 'utf8')
+  for (const changed of [
+    interview.replace('href="https://www.linkedin.com/in/elainecrichardson/"', 'href="https://example.org/"'),
+    interview.replace('target="_blank"', 'target="_self"'),
+  ]) {
+    writeFileSync(interviewPath, changed)
+    assert.match(diagnostics(), /learn\/legacy-001-elaine-richardson.html: HTML link must name a local destination/)
   }
 })
