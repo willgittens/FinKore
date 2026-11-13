@@ -1,12 +1,16 @@
-# FinKore Brand & Communication Core
+# FinKore Brand, Visual Identity & Communication Core
 
-This document defines how FinKore should communicate.
+This document defines how FinKore should communicate and apply its visual identity.
 
 Use it as the source of truth when writing website pages, landing pages,
 documentation introductions, product explanations, examples, calls to action,
-and other public-facing content.
+and other public-facing content, and when designing branded materials.
 
-This is primarily a communication guide, not a visual design guide.
+The visual identity guidance is based on the supplied **Visual Identity Guide**
+(`Finkore_MIV.pdf`). Page references below refer to that manual. The manual and
+original brand artwork govern visual construction; the communication guidance
+here preserves FinKore's specification-first positioning and current scope.
+Brand guidance does not define financial behavior or change the published contract.
 
 ---
 
@@ -108,8 +112,10 @@ Financial behavior, made explicit.
 
 ### Core idea
 
-Define once.
-Build many times.
+> Define once. Build many times.
+
+This is also the brand slogan. Use Aspekta when applying it in visual materials
+(manual, p. 23).
 
 ### Core belief
 
@@ -182,6 +188,10 @@ Consumers implement and execute the behavior in their own environments.
 Together:
 
 > Know the rule. Build on it.
+
+These two territories also underpin the monogram: the upper orange element
+represents The Standard, and the lower blue element represents The Foundation
+(manual, p. 4).
 
 ---
 
@@ -497,7 +507,183 @@ not simply from shipping code.
 
 ---
 
-## 15. Final Rule for Generated Content
+## 15. Visual Identity Concept
+
+The visual identity expresses structure, logic, precision, and technical
+credibility (manual, pp. 4–5). The logotype uses a timeless sans-serif design
+with structured curves and angles. The monogram brings The Standard and
+The Foundation together in two distinct geometric elements.
+
+Use **FinKore** in written communication. The lowercase lettering in the logo
+is part of the original artwork; preserve it as supplied.
+
+The visual character should support the voice described above: rigorous,
+contemporary, clear, and approachable.
+
+---
+
+## 16. Color Palette
+
+The manual defines three primary colors and two supporting secondary colors
+(manual, pp. 7–8).
+
+| Color | Palette | HEX | RGB | Pantone for print |
+| --- | --- | --- | --- | --- |
+| Black | Primary | `#1D1D1D` | `29, 29, 29` | Black 6 C |
+| Electric Blue | Primary | `#1925FE` | `25, 37, 254` | 2736 C |
+| Bright Orange | Primary | `#FE3919` | `254, 57, 25` | 172 C |
+| Gray | Secondary | `#969797` | `150, 151, 151` | Cool Gray 7 C |
+| White | Secondary | `#FFFFFF` | `255, 255, 255` | Not specified in the manual |
+
+Black conveys rigor and sophistication. Blue reinforces technological
+precision. Orange adds energy and purposeful emphasis. Gray and white support
+clarity and balance.
+
+Use the RGB values for digital media, including websites, social media, and
+video. Use the specified Pantone versions for printed materials (manual, p. 25).
+The manual does not define CMYK values or a Pantone reference for white; do not
+present inferred conversions as official brand specifications.
+
+---
+
+## 17. Typography
+
+**Aspekta** is the brand typeface (manual, pp. 13–14).
+
+| Use | Typeface | Weight |
+| --- | --- | --- |
+| Titles and headlines | Aspekta | 800 |
+| Body text and supporting copy | Aspekta | 400 |
+| Slogan in visual applications | Aspekta | Follow the supplied composition; no separate weight is specified |
+
+Its geometric precision and clean, structured forms express technical rigor.
+Its contemporary, approachable character keeps communication readable and
+accessible.
+
+Use the original logo artwork for the wordmark. Setting the brand name in
+Aspekta is not a replacement for the logo.
+
+---
+
+## 18. Logo Versions and Integrity
+
+The manual defines two configurations (manual, p. 16):
+
+- **Horizontal logo — primary:** the full brand signature.
+- **Monogram — secondary:** the standalone symbol, selected where appropriate
+  for the application while preserving recognition and legibility.
+
+For single-color applications, use the supplied positive or negative version:
+black on a light background or white on a dark background (manual, pp. 17, 25).
+Choose the version that remains clearly legible on the permitted background.
+
+Preserve the original artwork's colors, layout, proportions, lettering, and
+orientation. The incorrect-use examples prohibit (manual, p. 18):
+
+- changing the logo's colors outside the supplied versions;
+- stretching, compressing, or otherwise distorting it;
+- rotating it;
+- changing the relative proportions or spacing of its elements;
+- replacing or modifying its typography.
+
+The construction grid explains the symbol's diagonal, vertical, and horizontal
+lines and precise curves (manual, p. 22). Use the original artwork rather than
+reconstructing it from that grid or typing an approximation.
+
+---
+
+## 19. Logo Size and Clear Space
+
+### Minimum recommended height
+
+The manual's maximum recommended reduction is **4 mm in height** (manual,
+p. 19). Preserve the aspect ratio when resizing and ensure that the mark remains
+legible in its final medium.
+
+The manual does not specify a separate minimum size in screen pixels. Do not
+present a pixel conversion as an official digital minimum.
+
+### Protection area
+
+The manual recommends, ideally, **at least 70 px of clear space** between the
+logo and surrounding elements (manual, p. 20). Keep this area free of text and
+other competing elements.
+
+Treat 70 px as the manual's stated recommendation. It does not define a
+proportional clear-space formula or a separate print measurement.
+
+---
+
+## 20. Backgrounds and Supporting Graphics
+
+### Logo backgrounds
+
+The manual directs the horizontal logo and monogram to be used on primary
+palette backgrounds or the dedicated brand background. Its illustrated
+applications also explicitly include white (manual, p. 21).
+
+Choose the supplied logo version that preserves legibility. The examples show
+dark lettering on white, light lettering on black, a white monochrome mark on
+blue, and contrasting versions over the brand background. Keep these approved
+applications as the reference when choosing a composition.
+
+### Monogram pattern
+
+The supporting pattern derives from the monogram and communicates structure,
+technical refinement, and precision (manual, p. 10). It may be used at different
+sizes and in different compositions, ideally extending beyond the boundaries
+of the piece.
+
+Use the supplied pattern artwork. Cropping the supporting pattern at the edge
+of a composition is distinct from altering the logo itself.
+
+### Dedicated brand background
+
+The manual supplies a distinctive background with dark areas, blue and orange
+light, and fine linear texture (manual, p. 11). Use that artwork for applications
+calling for the brand background. The manual does not define gradient stops,
+angles, or a procedural recipe for recreating it.
+
+---
+
+## 21. Slogan and Composition
+
+The brand slogan is:
+
+> Define once. Build many times.
+
+Set it in Aspekta for visual identity applications (manual, p. 23). Uppercase
+presentation is shown in the supplied artwork. Preserve the wording and the
+logo's proportions when using a supplied logo-and-slogan composition.
+
+**Financial behavior, made explicit.** remains the positioning essence from
+Section 3. It also appears in the manual's layout examples; use it as supporting
+communication while retaining the defined slogan.
+
+The examples illustrate large presentation layouts, a mobile icon, a laptop
+layout, a watch application, and a full-background brand composition (manual,
+pp. 27–32). They demonstrate visual applications. Their dates, version numbers,
+and device mockups do not establish release status or product capabilities.
+
+---
+
+## 22. Review Before Applying the Identity
+
+Before delivering a branded composition, check:
+
+- Does it use the original horizontal logo or monogram without alteration?
+- Does the selected color or monochrome version suit the permitted background?
+- Are the palette values and RGB/Pantone format appropriate to the medium?
+- Are titles set in Aspekta 800 and supporting text in Aspekta 400?
+- Is the logo legible, with the size and clear-space recommendations respected?
+- Do the pattern and background follow the supplied artwork and examples?
+- If present, does the slogan read "Define once. Build many times." in Aspekta?
+- Does the copy describe the current FinKore contract and available artifacts
+  accurately?
+
+---
+
+## 23. Final Rule for Generated Content
 
 Before finalizing any FinKore copy, ask:
 
