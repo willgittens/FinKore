@@ -53,3 +53,22 @@ on automatic skip decisions.
 This directory's tooling is optional research maintenance, not a financial
 implementation or a repository conformance runner. Do not make normative checks
 or published contract documents depend on these catalogs.
+
+## Research-to-contract comparisons
+
+Maintain `traceability.json` and generated `traceability.md` with
+`python3 research/tools/build_traceability.py` after updating the unified catalog.
+Only `traceability.json`'s `curation` section is editable research curation;
+its `resolved` section and Markdown report are generated. Curate individual
+claims and exact requirement IDs with explanations and scope limits. Preserve
+MUST/SHOULD/MAY distinctions, pending/negative findings, evidence identifiers,
+and the source's actual reading extent. A citation or matching term alone is not
+a semantic relationship. `--check` detects changes without approving them.
+
+The builder may queue new reviews but must not approve them automatically.
+Re-evaluate the source/target relationship before explicitly updating reviewed
+fingerprints. Keep source support, contract coverage, editorial readiness and
+normative acceptance separate. Do not duplicate source quotations or claim that
+an unexecuted vector proves an implementation correct. Only registry-listed
+operations are canonical Agentic operations. Leave CoreDoc, `/spec`,
+`/conformance`, `/agentic`, and `learn/` unchanged during this research stage.

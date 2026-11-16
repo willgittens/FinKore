@@ -1,7 +1,8 @@
 # Ferramentas de pesquisa
 
-A ferramenta Python mantida nesta pasta é `consolidate_research.py`. Ela organiza
-a memória cumulativa das pesquisas, sem chamadas de rede ou download de PDFs.
+As ferramentas Python desta pasta organizam a memória cumulativa das pesquisas
+(`consolidate_research.py`) e sua rastreabilidade (`build_traceability.py`),
+sem chamadas de rede ou download de PDFs.
 Requer Python 3.10+ em Linux/macOS, somente com a biblioteca padrão.
 
 Execute na raiz do repositório:
@@ -31,6 +32,24 @@ python3 research/tools/consolidate_research.py --check
 
 Consulte [research/README.md](../README.md) para formatos, histórico, snapshots,
 identificadores e critérios para reutilizar uma análise anterior.
+
+## Research-to-contract traceability
+
+`build_traceability.py` maintains the non-normative comparison layer, using the
+current unified catalog and read-only FinKore artifacts:
+
+```bash
+python3 research/tools/build_traceability.py
+python3 research/tools/build_traceability.py --check
+python3 research/tools/build_traceability.py --target MONEY-ROUNDING-001
+python3 research/tools/build_traceability.py --finding REV-0001
+```
+
+It preserves the curated section of `research/traceability.json`, generates its
+resolved indexes and `research/traceability.md`, and flags changed comparisons
+for recheck. It does not edit the financial contract, publish Learn pages, or
+approve findings. See [research/README.md](../README.md#research-to-contract-traceability)
+for curation, source scope, and maintenance guidance.
 
 ## Análise das fontes na web
 

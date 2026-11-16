@@ -16,6 +16,8 @@ financial specifications or normative approval.
 | [allFindings.md](allFindings.md) | Human-readable critical review. `--unify-links` can retarget session links to snapshots without changing conclusions or quotations. |
 | [catalog/state.json](catalog/state.json) | Persistent registry of sessions, versions, identities, and redirects. Used to rebuild the four JSON indexes. |
 | `catalog/snapshots/<sha256>.gz` | Immutable, lossless copies of imported files, compressed to avoid duplicating large amounts of raw metadata. These are not PDFs. |
+| [traceability.json](traceability.json) | Curated research-to-contract comparisons, reviewed clause fingerprints, generated contract inventory, and reverse indexes. |
+| [traceability.md](traceability.md) | Human-readable navigation by consideration, requirement, domain, and related discussion. |
 
 ## Update after each session
 
@@ -111,6 +113,74 @@ The index does not promote findings: `pending_validation`, negative dispositions
 author discrepancies, exact quotations, and Reviewer limitations are preserved.
 In `allFindings.json`, `exact_quote` simply copies the quotation from the report;
 the consolidator does not verify it or give it additional authority.
+
+## Research-to-contract traceability
+
+The [traceability view](traceability.md) connects existing REV/EVD/work identities
+to precise CoreDoc and specification requirements. It then attaches published
+conformance and canonical Agentic references. It is a research comparison layer;
+CoreDoc, specifications, Conformance, Agentic, and Learn are read-only inputs.
+No normative document or publication decision depends on this layer.
+
+```bash
+python3 research/tools/build_traceability.py
+python3 research/tools/build_traceability.py --check
+python3 research/tools/build_traceability.py --target MONEY-ROUNDING-001
+python3 research/tools/build_traceability.py --finding REV-0001
+```
+
+Run the consolidator first if source research has changed. The builder requires
+the unified catalog to be current and does not require original manifest folders.
+It uses only local repository artifacts and existing research reviews; it does
+not repeat academic discovery, reopen sources, download papers, or run financial
+behavior. `--repo-root` and `--research-root` support explicit locations.
+
+`traceability.json` separates two kinds of data:
+
+- `curation` contains the deliberate comparisons. Each mapping records a bounded
+  claim, source versus reviewer interpretation, evidence IDs, conditions, Learn
+  angle, contract relationship, and the exact clauses examined. Edit this section
+  only after substantive review. Its fingerprints record what was actually
+  reviewed; do not replace them merely to make a check pass.
+- `resolved` is generated. It contains current clause text/modality, explicit
+  CoreDoc-to-spec references, manifest-listed vectors, published coverage labels,
+  canonical Agentic operations, current source fingerprints, recheck reasons,
+  and indexes by requirement/domain. Do not edit this section or the Markdown
+  view manually.
+
+Contract relationship and evidence role are separate. For example,
+`already_addressed` describes contract scope, while `illustrates_risk` or
+`limits_claim` describes how the source is used. A methodological or architectural
+discussion can be useful without justifying a new financial obligation.
+
+New considerations enter `pending_curation` automatically. Limited and negative
+reviews stay visible. IDs mentioned in a review are listed as **uncurated
+reference candidates**, not accepted links. Word similarity does not approve a
+relationship. `related_findings` compares claims and conditions; it does not
+establish independent studies or duplicate paper identities.
+
+Changes to a reviewed clause, review, evidence quotation, or source readiness
+produce `needs_recheck`; the builder never updates reviewed fingerprints on its
+own. `--check` is read-only and fails for stale generated output or a mapping
+requiring recheck. Lookup options provide a read-only preview of current targets
+and assessments even when a relationship needs re-evaluation.
+
+`reviewed` means a bounded research-to-contract comparison was curated.
+`learn_eligible` means eligible for editorial review, not approved for publication.
+Findings remain `pending_validation`, and normative acceptance is `not_requested`.
+An absent research link does not establish a specification gap. A vector reference
+does not establish executed, exhaustive, or implementation conformance evidence.
+Conformance-local operations are never promoted into the Agentic registry.
+
+Exact quotations, verified attribution, URLs, and page/section locators remain
+in the referenced EVD catalog entries in `allFindings.md` and `allFindings.json`;
+the traceability layer references them without duplicating quotations or claiming
+to have independently verified the original studies.
+
+The [traceability JSON Schema](schemas/traceability.schema.json) versions this
+format separately from FinKore and the cumulative research catalog. Its Python
+tests run with the other research-tool tests below. The CLI checks operational
+invariants without requiring an installed JSON Schema validator.
 
 ## Identity, context, and preserved information
 
