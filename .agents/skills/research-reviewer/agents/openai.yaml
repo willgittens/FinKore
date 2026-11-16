@@ -1,0 +1,4 @@
+interface:
+  display_name: "FinKore Research Reviewer"
+  short_description: "Revisa achados, citações e vínculos com o FinKore"
+  default_prompt: "Use $research-reviewer para revisar os achados dos manifestos existentes, conferir as fontes e o contrato atual do FinKore e atualizar research/allFindings.md com autoria, citações exatas, localizadores e considerações para uso futuro no Learn."

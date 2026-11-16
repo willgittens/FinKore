@@ -10,3 +10,4 @@ reports/
 target/
 __pycache__/
 *.pyc
+research/manifests

@@ -1,0 +1,4 @@
+interface:
+  display_name: "FinKore Research Analyst"
+  short_description: "Investiga fontes web e registra descobertas FinKore"
+  default_prompt: "Use $research-analyst para investigar as publicações do manifesto indicado e atualizar findings.md com regras candidatas, discussões e evidências relacionadas ao FinKore."
