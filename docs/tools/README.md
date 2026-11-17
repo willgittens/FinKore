@@ -426,8 +426,12 @@ source disclosure. Interview readers preserve every question, response,
 editorial note and anchor, with a comfortable reading column, chapter links,
 question headings that wrap naturally across the available width,
 and a native mobile disclosure. Publication metadata remains available in a
-separate disclosure. Editorial introductions, chapter labels and exact pull
-quotes are registered with each interview. Both the archive card's
+separate disclosure. Editorial introductions, chapter labels, an optional local
+`portrait` image path (relative to `learn/`), and exact pull quotes are registered
+with each interview. Interview portraits appear in the heading's first block,
+in a column to the left of the interviewee's information, and stack above it
+on smaller screens. Use square 600 × 600 assets with
+the interviewee's name as alternative text. Both the archive card's
 `featureQuote` and the interview page's `quote` must focus on financial systems,
 financial rules, transactions, or operational risk in finance, using the
 interviewee's original words. They may use the same excerpt or different
