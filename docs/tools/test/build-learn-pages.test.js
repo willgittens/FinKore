@@ -5,7 +5,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import test from 'node:test'
-import { LEARN_PAGES, GITHUB_FILE_BASE_URL, buildLearnPages, learnLink, renderLearnMarkdown, renderLearnPage } from '../build-learn-pages.js'
+import { LEARN_PAGES, LEARN_EDITORIAL_PAGES, GITHUB_FILE_BASE_URL, buildLearnPages, learnLink, renderLearnMarkdown, renderLearnPage } from '../build-learn-pages.js'
 import { validateReleaseContent } from '../check-release-content.js'
 import { readLearnAssetVersion, refreshLearnAssetVersion } from '../build-learn-assets.js'
 
@@ -19,7 +19,7 @@ function fixture(t) {
   t.after(() => rmSync(root, { recursive: true, force: true }))
   for (const page of LEARN_PAGES) put(root, page.source, readFileSync(new URL(page.source, repository), 'utf8'))
   put(root, 'learn/index.html', '<h1>Keep this content</h1><link rel="stylesheet" href="css/styles.css" /><nav aria-label="Primary navigation"><a href="#start">Start reading</a></nav><a href="../LICENSING.md">License</a><a href="../spec/README.md#status">Spec</a><a href="../conformance/README.md">Cases</a><a href="../LICENSE">Full license</a>')
-  put(root, 'learn/network.html', readFileSync(new URL('learn/network.html', repository), 'utf8'))
+  for (const page of LEARN_EDITORIAL_PAGES.filter(page => page !== 'learn/index.html')) put(root, page, readFileSync(new URL(page, repository), 'utf8'))
   refreshLearnAssetVersion(root)
   return root
 }
@@ -136,6 +136,45 @@ test('editorial interview rendering retains every question, response, omission n
   assert.throws(() => renderLearnPage(page, markdown + '\n### An extra question\n', '00000000-0000-4000-8000-000000000001'), /chapter labels/)
 })
 
+test('Research retains attributable findings, scope limits and a separate follow-up queue', () => {
+  const page = LEARN_PAGES.find(page => page.presentation === 'research-archive')
+  const markdown = readFileSync(new URL(page.source, repository), 'utf8')
+  const render = source => renderLearnPage(page, source, '00000000-0000-4000-8000-000000000001')
+  const html = render(markdown)
+  assert.equal([...html.matchAll(/class="research-finding"/g)].length, 23)
+  assert.equal([...html.matchAll(/class="research-topic"/g)].length, 6)
+  assert.match(html, /<a href="research.html" aria-current="page">Research<\/a>/)
+  assert.match(html, /14 considerations need more evidence; 1 is not recommended for reuse/)
+  assert.match(html, /id="rev-0001"[\s\S]*Higher accuracy may be used for internal calculations\./)
+  assert.match(html, /Mikhaylov Bogdan; Omorov Akzholbek; Izripov Iusup/)
+  assert.match(html, /Physical PDF p\. 5; printed p\. 86/)
+  assert.match(html, /HTML §4\.5[\s\S]*PDF page not available/)
+  assert.match(html, /<strong>Reading extent:<\/strong> Selected passages/)
+  assert.match(html, /<strong>Conditions and limits\.<\/strong>/)
+  assert.match(html, /<strong>FinKore benefit\.<\/strong>/)
+  assert.match(html, /class="research-evidence"><summary>Study, source &amp; scope/)
+  assert.doesNotMatch(html, /<article[^>]+id="rev-0003"|<script|<input|<button|(?:href|src)="\.\.\//)
+  assert.throws(() => render(markdown.replace('### REV-0002 —', '### REV-0001 —')), /unique review IDs/)
+  assert.throws(() => render(markdown.replace('- **Location:** Physical PDF p. 5;', '- **Missing locator:** Physical PDF p. 5;')), /Incomplete Research attribution/)
+  assert.throws(() => render(markdown.replace('https://ppublishing.org/media/uploads/journals/article/EJT-4-26_p82-90.pdf', 'javascript:alert')), /Unsupported Learn link/)
+})
+
+test('Experts groups three independent collections and Reviews preserves the existing discussion destinations', t => {
+  const root = fixture(t)
+  buildLearnPages(root)
+  const network = readFileSync(join(root, 'learn/network.html'), 'utf8')
+  const collections = network.match(/<article class="network-card network-experts"[\s\S]*?<\/article>/)[0]
+  for (const path of ['research', 'legacy', 'reviews']) assert.ok(collections.includes(`href="${path}.html"`))
+  assert.match(collections, /id="contributors"/)
+  assert.match(collections, /id="legacy"/)
+  assert.match(collections, /id="expert-review"/)
+  assert.doesNotMatch(network, /Five initiatives|class="section expert-review"/)
+  const reviews = readFileSync(join(root, 'learn/reviews.html'), 'utf8')
+  assert.match(reviews, /<a href="reviews.html" aria-current="page">Reviews<\/a>/)
+  for (let id = 32; id <= 39; id++) assert.ok(reviews.includes(`href="https://github.com/willgittens/FinKore/discussions/${id}"`))
+  assert.match(reviews, /does not automatically constitute normative approval/)
+})
+
 test('renders GitHub theme logos as one light-surface image and rejects unsafe or incomplete pairs', () => {
   const markup = `<p align="center">
   <img src="./learn/img/Finkore.png#gh-light-mode-only"
@@ -175,7 +214,7 @@ test('generates registered canonical documents deterministically and checks drif
     const source = readFileSync(join(root, page.source), 'utf8')
     const html = readFileSync(join(root, page.output), 'utf8')
     assert.equal(html, renderLearnPage(page, source, readLearnAssetVersion(root)))
-    if (page.presentation?.startsWith('legacy-')) {
+    if (page.presentation?.startsWith('legacy-') || page.presentation === 'research-archive') {
       assert.match(html, /class="legacy-page /)
       assert.match(html, /href="css\/legacy.css\?v=/)
       assert.doesNotMatch(html, /href="css\/(?:coredoc|documents).css/)
@@ -243,5 +282,16 @@ test('publication accepts synchronized release history but rejects changed histo
   ]) {
     writeFileSync(interviewPath, changed)
     assert.match(diagnostics(), /learn\/legacy-001-elaine-richardson.html: HTML link must name a local destination/)
+  }
+  const researchPath = join(root, 'learn/research.html')
+  const research = readFileSync(researchPath, 'utf8')
+  assert.doesNotMatch(diagnostics(), /learn\/research.html: HTML link must name a local destination/)
+  assert.doesNotMatch(diagnostics(), /learn\/reviews.html: HTML link must name a local destination/)
+  for (const changed of [
+    research.replace('href="https://ppublishing.org/media/uploads/journals/article/EJT-4-26_p82-90.pdf"', 'href="https://example.org/unreviewed-study.pdf"'),
+    research.replace('target="_blank"', 'target="_self"'),
+  ]) {
+    writeFileSync(researchPath, changed)
+    assert.match(diagnostics(), /learn\/research.html: HTML link must name a local destination/)
   }
 })

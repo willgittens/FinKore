@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MPL-2.0
 /**
- * Generates Learn readers for project documents and approved Legacy interviews.
+ * Generates Learn readers for project documents, curated research and approved interviews.
  * This developer tool reads canonical sources without changing them. Build mode
  * writes derived HTML; check mode writes nothing. It does not define or execute
  * financial behavior.
@@ -18,6 +18,7 @@ export const LEARN_PAGES = [
   { source: 'docs/implementation-guide.md', output: 'learn/implementation-guide.html', label: 'Implementation guide', description: 'Guidance for implementing the portable contract in your own language and stack.' },
   { source: 'docs/releases/README.md', output: 'learn/releases.html', label: 'Release notes', description: 'Published release history. Earlier entries describe historical repository capabilities.' },
   { source: 'legacy/README.md', output: 'learn/legacy.html', label: 'Legacy Archive', description: 'Real stories from the people who built and maintained financial software. Explore the interviews, editorial principles, and ways to share your experience.', presentation: 'legacy-archive' },
+  { source: 'learn/research.md', output: 'learn/research.html', label: 'Research', description: 'Explore attributed academic findings, source quotations, and their carefully bounded relevance to FinKore financial software behavior.', presentation: 'research-archive', documentNavigation: false },
   // Register interviews explicitly after editorial approval; never publish drafts by directory discovery.
   // Archive and interview quotes must preserve the interviewee's words and focus on financial systems, rules, or operational risk.
   { source: 'legacy/interviews/001-elaine-richardson.md', output: 'learn/legacy-001-elaine-richardson.html', label: 'Elaine Richardson — Interview #001', description: 'Elaine Richardson shares her experience with mainframes, COBOL, migrations, error handling, and batch processing. A personal account from the FinKore Legacy Archive.', presentation: 'legacy-interview', documentNavigation: false,
@@ -26,7 +27,7 @@ export const LEARN_PAGES = [
     interview: { name: 'Otilia Borges', number: '002', portrait: 'img/bio-Otilia-Borges.jpg', quote: "When we migrate a system to a modern technology, we must make sure we don't accidentally change its business behavior or compromise the integrity of its rules.", featureQuote: "When we migrate a system to a modern technology, we must make sure we don't accidentally change its business behavior or compromise the integrity of its rules.", introduction: 'From COBOL and Assembler at Banco Bradesco to the Collor Plan and mainframe modernization. Otilia reflects on preserving business rules, operational lessons, and a lifetime of learning.', topics: ['COBOL', 'Mainframes', 'Collor Plan', 'Business rules', 'Legacy modernization', 'Generative AI'], chapters: ['Starting young at Bradesco', 'A weekend during the Collor Plan', 'A counter and a thousand pages', 'Preserving business knowledge', 'Learning how to learn'] } },
 ]
 // Editorial HTML keeps its own content; the build shares navigation and CSS versions.
-export const LEARN_EDITORIAL_PAGES = ['learn/index.html', 'learn/network.html']
+export const LEARN_EDITORIAL_PAGES = ['learn/index.html', 'learn/network.html', 'learn/reviews.html']
 const destinations = new Map(LEARN_PAGES.map(page => [page.source, page.output]))
 destinations.set('docs/coreDoc/core-doc.md', 'learn/coredoc.html')
 export const GITHUB_PROJECT_URL = 'https://github.com/willgittens/FinKore'
@@ -41,6 +42,10 @@ export function renderLearnNavigation({ home = false, current } = {}) {
           <li><a class="nav-start" href="${GITHUB_PROJECT_URL}" target="_blank" rel="noopener noreferrer">Github Project <span aria-hidden="true">↗</span></a></li>
         </ul>
       </nav>`
+}
+
+export function renderExpertsNavigation(current) {
+  return `<nav class="experts-navigation" aria-label="Experts navigation">${[['research', 'Research'], ['legacy', 'Legacy'], ['reviews', 'Reviews']].map(([path, label]) => `<a href="${path}.html"${current === path ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav>`
 }
 
 const escapeHtml = text => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;')
@@ -265,7 +270,8 @@ function renderLegacyArchive(doc) {
     return `<section class="legacy-section legacy-${section.id}"><div class="container">${content}</div></section>`
   }).join('\n')
   return `<header class="legacy-archive-hero"><div class="container">
-    <nav class="legacy-breadcrumb" aria-label="Breadcrumb"><a href="network.html#legacy">FinKore Network</a><span aria-hidden="true">/</span><span>Legacy Archive</span></nav>
+    <nav class="legacy-breadcrumb" aria-label="Breadcrumb"><a href="network.html#legacy">FinKore Experts</a><span aria-hidden="true">/</span><span>Legacy Archive</span></nav>
+    ${renderExpertsNavigation('legacy')}
     <p class="eyebrow">An oral history of financial software</p>
     <div class="legacy-hero-layout"><h1 id="${escapeHtml(doc.titleId)}">The people behind<br /><span>financial software.</span></h1><div><p class="legacy-deck">Real stories from the people who built and maintained financial software.</p><p>Careers, unexpected incidents, difficult decisions, and lessons that deserve to outlive the systems themselves.</p><div class="actions"><a class="button" href="#interviews">Meet the people <span aria-hidden="true">↓</span></a><a class="text-link" href="#share-your-story">Share your story <span aria-hidden="true">↗</span></a></div></div></div>
   </div></header>
@@ -274,6 +280,56 @@ function renderLegacyArchive(doc) {
   ${otherSections}
   <div class="container legacy-source"><details><summary>About the archive source</summary>${storageNote}</details></div>
   ${legacyWelcome()}`
+}
+
+function renderResearchArchive(doc) {
+  const { introduction, sections } = legacySections(doc)
+  const pending = sections.find(section => section.id === 'further-investigation')
+  const method = sections.find(section => section.id === 'reading-the-evidence')
+  const groups = sections.filter(section => !['further-investigation', 'reading-the-evidence'].includes(section.id))
+  if (!pending || !method || !groups.length) throw new Error('Research requires findings, follow-up and evidence guidance')
+  const seen = new Set()
+  const cards = groups.map(group => {
+    const entries = group.body.split(/(?=<h3\b)/).filter(entry => entry.trim())
+    const content = entries.map(entry => {
+      const heading = entry.match(/^<h3 id="[^"]+">(REV-\d{4}) — ([\s\S]*?)<\/h3>/)
+      if (!heading || seen.has(heading[1])) throw new Error('Research findings require unique review IDs')
+      const id = heading[1].toLowerCase()
+      seen.add(heading[1])
+      let body = entry.slice(heading[0].length)
+      const authors = [...body.matchAll(/<li><strong>Authors:<\/strong> ([\s\S]*?)<\/li>/g)].map(match => match[1])
+      const quotes = [...body.matchAll(/<blockquote>[\s\S]*?<\/blockquote>/g)].map(match => match[0])
+      const studies = [...body.matchAll(/<li><strong>Study:<\/strong> ([\s\S]*?)<\/li>/g)].map(match => match[1])
+      const locations = [...body.matchAll(/<li><strong>Location:<\/strong> ([\s\S]*?)<\/li>/g)]
+      const benefit = body.match(/<p><strong>FinKore benefit\.<\/strong> ([\s\S]*?)<\/p>/)?.[0]
+      if (!authors.length || quotes.length !== authors.length || studies.length !== authors.length || locations.length !== authors.length || !benefit || !body.includes('<strong>Conditions and limits.</strong>')) throw new Error(`Incomplete Research attribution or limits: ${heading[1]}`)
+      body = body.replace(benefit, '')
+      for (const quote of quotes) body = body.replace(quote, '')
+      return `<article class="research-finding" id="${id}" aria-labelledby="${id}-title">
+        <header><p class="eyebrow">Research note / ${heading[1].slice(4)}</p><h3 id="${id}-title">${heading[2]}</h3><p class="research-status">Preliminary finding · pending validation</p></header>
+        ${quotes.map((quote, index) => `<figure class="research-quotation">${quote}<figcaption>${authors[index]}<span>${studies[index]}</span></figcaption></figure>`).join('')}
+        <div class="research-benefit">${benefit}</div>
+        <details class="research-evidence"><summary>Study, source &amp; scope <span aria-hidden="true">+</span></summary><div class="research-evidence-body">${body}</div></details>
+      </article>`
+    }).join('\n')
+    return `<section class="research-topic" aria-labelledby="${group.id}"><div class="research-topic-heading"><h2 id="${group.id}">${group.title}</h2><span>${entries.length} ${entries.length === 1 ? 'finding' : 'findings'}</span></div><div class="research-findings-grid">${content}</div></section>`
+  }).join('\n')
+  const waiting = [...pending.body.matchAll(/<td>Needs more evidence<\/td>/g)].length
+  const excluded = [...pending.body.matchAll(/<td>Not recommended for reuse<\/td>/g)].length
+  return `<header class="legacy-archive-hero research-hero"><div class="container">
+    <nav class="legacy-breadcrumb" aria-label="Breadcrumb"><a href="network.html#contributors">FinKore Experts</a><span aria-hidden="true">/</span><span>Research</span></nav>
+    ${renderExpertsNavigation('research')}
+    <p class="eyebrow">FinKore Experts / Research</p>
+    <div class="legacy-hero-layout"><h1 id="${escapeHtml(doc.titleId)}">Research behind<br /><span>the rules.</span></h1><div><p class="legacy-deck">Read the findings.<br />Follow the evidence.</p><p>Explore what published work can contribute to predictable, auditable financial software. Source passages, their context, and their relevance to FinKore, together in one place.</p><div class="actions"><a class="button" href="#findings">Explore the findings <span aria-hidden="true">↓</span></a><a class="text-link" href="#reading-the-evidence">How to read the evidence</a></div></div></div>
+    <dl class="research-overview"><div><dt>Findings to explore</dt><dd>${seen.size}</dd></div><div><dt>Need more evidence</dt><dd>${waiting}</dd></div><div><dt>Not recommended for reuse</dt><dd>${excluded}</dd></div></dl>
+  </div></header>
+  <div class="container research-catalogue" id="findings"><div class="legacy-section-heading"><div><p class="eyebrow">The collection</p><h2>Questions worth investigating.</h2></div><p>Academic evidence.<br />Careful interpretation.</p></div>
+    <nav class="research-topics" aria-label="Research topics">${groups.map(group => `<a href="#${group.id}">${group.title}</a>`).join('')}<a href="#further-investigation">Further investigation</a></nav>
+    <p class="research-intro">Every note is preliminary. A quotation supports a discussion; it does not make the interpretation an accepted FinKore rule.</p>${cards}
+  </div>
+  <section class="legacy-section research-pending"><div class="container"><p class="eyebrow">The open questions</p><h2 id="further-investigation">${pending.title}</h2><details><summary>${waiting} considerations need more evidence; ${excluded} is not recommended for reuse <span aria-hidden="true">+</span></summary><div class="research-evidence-body">${pending.body}</div></details></div></section>
+  <section class="legacy-section legacy-purpose"><div class="container legacy-purpose-layout"><div><p class="eyebrow">From a paper to a discussion</p><h2 id="reading-the-evidence">${method.title}</h2><div class="legacy-prose">${introduction}</div></div><div class="legacy-prose">${method.body}</div></div></section>
+  <section class="legacy-welcome"><div class="container legacy-welcome-layout"><div><p class="eyebrow">New to FinKore?</p><h2>Financial behavior,<br />made explicit.</h2></div><div><p>FinKore is an open-source specification for predictable, auditable, portable financial domain behavior. Research helps us ask better questions about that behavior.</p><p>Explore the foundation, read a practitioner's story, or bring your own expertise to a discussion.</p><div class="actions"><a class="text-link" href="where-to-start.html">Get to know FinKore <span aria-hidden="true">→</span></a><a class="text-link" href="reviews.html">Explore Reviews <span aria-hidden="true">→</span></a></div></div></div></section>`
 }
 
 function renderLegacyInterview(page, markdown, doc) {
@@ -301,6 +357,7 @@ function renderLegacyInterview(page, markdown, doc) {
 }
 
 function renderLegacyPage(page, markdown, doc, assetVersion) {
+  const research = page.presentation === 'research-archive'
   return versionLearnStylesheets(`<!doctype html>
 <!-- SPDX-License-Identifier: MPL-2.0 -->
 <!-- Generated from ${page.source} by npm run learn:build. Do not edit this file directly. -->
@@ -310,11 +367,11 @@ function renderLegacyPage(page, markdown, doc, assetVersion) {
   <meta name="description" content="${escapeHtml(page.description)}" />
   ${renderLearnOpenGraph({ title: `${page.label} — FinKore`, description: page.description, path: posix.basename(page.output) })}
   <link rel="icon" type="image/png" href="img/Finkore_Favicon.png" />
-  <link rel="stylesheet" href="css/styles.css" /><link rel="stylesheet" href="css/legacy.css" />
-</head><body id="top" class="legacy-page ${page.presentation}">
+  <link rel="stylesheet" href="css/styles.css" /><link rel="stylesheet" href="css/legacy.css" />${research ? '\n  <link rel="stylesheet" href="css/research.css" />' : ''}
+</head><body id="top" class="legacy-page ${research ? 'research-page ' : ''}${page.presentation}">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header"><div class="container header-layout"><a class="brand" href="index.html" aria-label="FinKore home"><img class="brand-logo" src="img/Finkore-Logo.png" alt="FinKore" width="1013" height="226" decoding="async" /></a>${renderLearnNavigation()}</div></header>
-  <main id="main">${page.presentation === 'legacy-archive' ? renderLegacyArchive(doc) : renderLegacyInterview(page, markdown, doc)}</main>
+  <main id="main">${research ? renderResearchArchive(doc) : page.presentation === 'legacy-archive' ? renderLegacyArchive(doc) : renderLegacyInterview(page, markdown, doc)}</main>
   <div class="container legacy-colophon"><a href="${GITHUB_FILE_BASE_URL}${page.source}" target="_blank" rel="noopener noreferrer">View Markdown source ↗</a><a href="#top">Back to the top ↑</a></div>
   <footer class="site-footer"><div class="container footer-layout"><a class="brand" href="index.html"><img class="brand-logo" src="img/Finkore_White.png" alt="FinKore" width="1021" height="293" loading="lazy" decoding="async" /></a><p>Financial behavior, made explicit.</p><nav aria-label="Project resources"><a href="about.html">About the project</a><a href="contributing.html">Contribute</a><a href="${GITHUB_FILE_BASE_URL}LICENSE" target="_blank" rel="noopener noreferrer">MPL-2.0</a></nav></div></footer>
 </body></html>`, assetVersion)
@@ -322,7 +379,7 @@ function renderLegacyPage(page, markdown, doc, assetVersion) {
 
 export function renderLearnPage(page, markdown, assetVersion) {
   const doc = renderLearnMarkdown(markdown, page.source)
-  if (page.presentation?.startsWith('legacy-')) return renderLegacyPage(page, markdown, doc, assetVersion)
+  if (page.presentation?.startsWith('legacy-') || page.presentation === 'research-archive') return renderLegacyPage(page, markdown, doc, assetVersion)
   const navigation = doc.headings.filter(h => h.level >= 2 && h.level <= (page.tocDepth ?? 2)).map(h => `<a class="core-nav-intro${h.level === 3 ? ' learn-nav-question' : ''}" href="#${escapeHtml(h.id)}">${escapeHtml(h.title)}</a>`).join('\n')
   return versionLearnStylesheets(`<!doctype html>
 <!-- SPDX-License-Identifier: MPL-2.0 -->
@@ -381,7 +438,7 @@ export function buildLearnPages(root = process.cwd(), { check = false } = {}) {
   const outputs = LEARN_PAGES.map(page => [page.output, renderLearnPage(page, readFileSync(resolve(root, page.source), 'utf8'), assetVersion)])
   for (const path of LEARN_EDITORIAL_PAGES) {
     const html = readFileSync(resolve(root, path), 'utf8')
-    const next = html.replace(/<nav aria-label="Primary navigation">[\s\S]*?<\/nav>/, renderLearnNavigation({ home: path === 'learn/index.html', current: path === 'learn/network.html' ? 'network' : undefined })).replace(/href="([^"]+)"/g, (match, href) => {
+    const next = html.replace(/<nav aria-label="Primary navigation">[\s\S]*?<\/nav>/, renderLearnNavigation({ home: path === 'learn/index.html', current: path === 'learn/network.html' ? 'network' : undefined })).replace(/<nav class="experts-navigation" aria-label="Experts navigation">[\s\S]*?<\/nav>/, renderExpertsNavigation(path === 'learn/reviews.html' ? 'reviews' : undefined)).replace(/href="([^"]+)"/g, (match, href) => {
       if (/^[a-z][a-z0-9+.-]*:|^#|^\//i.test(href)) return match
       return learnLink(path, href) !== href ? linkAttributes(path, href) : match
     })

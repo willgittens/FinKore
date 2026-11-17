@@ -78,6 +78,34 @@ function isAllowedExternalLink(path, tag, href) {
     'learn/about.html': ['https://finkore.dev', 'https://savoiabarker.com/'],
     'learn/licensing.html': ['https://www.mozilla.org/en-US/MPL/2.0/FAQ/'],
     'learn/network.html': [`${GITHUB_PROJECT_URL}/discussions`],
+    'learn/reviews.html': [`${GITHUB_PROJECT_URL}/discussions`],
+    // Exact study destinations from the curated Research collection. New sources
+    // require an editorial review here; this is not an arbitrary external-link rule.
+    'learn/research.html': [
+      'https://acta.uni-obuda.hu/Szivos_Orosz_54.pdf',
+      'https://al-kindipublishers.org/index.php/jcsts/article/download/10816/9602',
+      'https://arxiv.org/pdf/1908.05940v2',
+      'https://arxiv.org/pdf/2306.15975v2',
+      'https://arxiv.org/abs/2306.15975',
+      'https://arxiv.org/pdf/2604.25555',
+      'https://drops.dagstuhl.de/storage/00lipics/lipics-vol333-ecoop2025/LIPIcs.ECOOP.2025.4/LIPIcs.ECOOP.2025.4.pdf',
+      'https://ecsenet.com/index.php/2576-6821/article/download/631/242',
+      'https://iacis.org/iis/2011/36-43_AL2011_1571.pdf',
+      'https://ijefm.co.in/v7i1/Doc/50.pdf',
+      'https://jurnal.ywnr.org/index.php/cfabr/article/download/230/292',
+      'https://msabp.magnascientiapub.com/sites/default/files/fulltext_pdf/MSABP-2026-0060.pdf',
+      'https://ppublishing.org/media/uploads/journals/article/EJT-4-26_p82-90.pdf',
+      'https://pubsonline.informs.org/doi/10.1287/isre.1110.0371',
+      'https://www.ijrai.org/index.php/ijrai/article/view/796',
+      'https://www.ijsr.net/archive/v9i1/SR24926100330.pdf',
+      'https://www.managementpaper.net/archives/2025/vol7issue1/PartN/7-2-178-924.pdf',
+      'https://www.mdpi.com/1911-8074/17/10/445',
+      'https://www.mdpi.com/2078-2489/15/12/778',
+      'https://www.mdpi.com/2079-8954/14/8/990',
+      'https://www.svedbergopen.com/index.php/ijaiml/article/view/529',
+      'https://www.techscience.com/cmc/v89n1/68376/html',
+      'https://www.usenix.org/events/osdi10/tech/full_papers/Ports.pdf',
+    ],
     'learn/legacy.html': [`${GITHUB_PROJECT_URL}/discussions/42`, 'https://finkore.dev/'],
     'learn/legacy-001-elaine-richardson.html': ['https://www.linkedin.com/in/elainecrichardson/'],
     'learn/legacy-002-otilia-borges.html': ['https://www.linkedin.com/in/otilia-borges-33a19a1b/'],
@@ -85,7 +113,7 @@ function isAllowedExternalLink(path, tag, href) {
   const projectLink = navigationPages.has(path) && href === GITHUB_PROJECT_URL
   const fileLink = navigationPages.has(path) && href.startsWith(GITHUB_FILE_BASE_URL) &&
     /^[^?#]+(?:#[^?]*)?$/.test(href.slice(GITHUB_FILE_BASE_URL.length))
-  const discussionLink = path === 'learn/network.html' && href.startsWith(`${GITHUB_PROJECT_URL}/discussions/`) &&
+  const discussionLink = ['learn/network.html', 'learn/reviews.html'].includes(path) && href.startsWith(`${GITHUB_PROJECT_URL}/discussions/`) &&
     /^[1-9]\d*$/.test(href.slice(`${GITHUB_PROJECT_URL}/discussions/`.length))
   if (!/^<a\b/i.test(tag) || !(projectLink || fileLink || discussionLink || destinations[path]?.includes(href))) return false
   const targets = htmlAttributes(tag, new Set(['target']))
