@@ -28,6 +28,7 @@ Interviews are kept as individual Markdown files in `interviews/`.
 | Interview | Engineer | Topics |
 | --- | --- | --- |
 | [#001 — Elaine Richardson](./interviews/001-elaine-richardson.md) | Elaine Richardson | Mainframes, COBOL, migrations, error handling, batch processing |
+| [#002 — Otilia Borges](./interviews/002-otilia-borges.md) | Otilia Borges | COBOL, mainframes, Collor Plan, business rules, legacy modernization, generative AI |
 
 *Only interviews approved for publication are listed here.*
 
