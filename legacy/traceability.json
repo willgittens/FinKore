@@ -52,6 +52,45 @@
           }
         ],
         "source": "legacy/interviews/001-elaine-richardson.md"
+      },
+      {
+        "id": "LEGACY-002",
+        "name": "Otilia Borges",
+        "reader": "learn/legacy-002-otilia-borges.html",
+        "reviewed_source_sha256": "1bfb503b6692ac5b8209afad7def736af54568a4d5c58a185e80b8f63bf3f92b",
+        "sections": [
+          {
+            "disposition": "context_only",
+            "heading": "1. First, tell us a little about yourself! How did your career as a developer start, and how did you end up working with banking or financial systems?",
+            "reason": "Professional history and early banking experience; no financial requirement comparison is asserted.",
+            "role": "public_answer"
+          },
+          {
+            "disposition": "context_only",
+            "heading": "2. Looking back, is there a system, project, or technical challenge you're particularly proud of? I'd love to hear the story behind it.",
+            "reason": "The Collor Plan is a personal historical recollection. The interview does not define current regulatory obligations, account-freeze semantics, currencies, or a portable FinKore operation.",
+            "role": "public_answer"
+          },
+          {
+            "disposition": "context_only",
+            "heading": "3. Do you remember any strange rules, unusual code, or unexpected situations that taught you something important? Especially things that might look unnecessary today but had a very good reason to exist.",
+            "reason": "Printed-report pagination illustrates operational risk. Report layout, delivery to a regulator, line-counter algorithms and institutional identification are outside the compared Core financial behavior.",
+            "role": "public_answer"
+          },
+          {
+            "disposition": "mapped",
+            "heading": "4. Have you ever been involved in replacing or modernizing an old financial system? What were the biggest challenges, and what lessons did you take away?",
+            "reason": "Exact public passages support the bounded comparison of modernization and preservation of declared financial meaning; AI credentials and travel remain biographical context.",
+            "role": "public_answer"
+          },
+          {
+            "disposition": "mapped",
+            "heading": "5. After all these years, what's the one thing you think the next generation of financial software developers should never forget?",
+            "reason": "Selected public passages support comparisons of composing-domain policies and implementation validation. Career advice and future professions are not turned into financial requirements.",
+            "role": "public_answer"
+          }
+        ],
+        "source": "legacy/interviews/002-otilia-borges.md"
       }
     ],
     "mappings": [
@@ -423,6 +462,127 @@
           }
         ],
         "reviewed_on": "2026-11-17"
+      },
+      {
+        "bindings": [
+          {
+            "evidence_role": "supports_rationale",
+            "explanation": "Declared inputs, state and relevant context provide a reproducible financial basis to compare; a cross-implementation migration-equivalence method remains consumer-owned.",
+            "relationship": "application_policy",
+            "reviewed_clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+            "target_id": "CORE-005.3"
+          },
+          {
+            "evidence_role": "limits_claim",
+            "explanation": "Internal Money representation is a MAY freedom conditional on preserving observable semantics. This is a bounded instance of technology freedom, not a claim that arbitrary banking rules or migrations are specified.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "518da37fe4ba8c8c5c402fd459b7983a33e75952bc33632b9dfb761941bad96d",
+            "target_id": "MONEY-REPRESENTATION-006"
+          },
+          {
+            "evidence_role": "illustrates_risk",
+            "explanation": "The Core release policy treats changed success, failure, results, errors, shapes or mutation semantics as behaviorally incompatible. The analogy highlights financial behavior that must be examined; it does not assign a new Core version to a consumer technology migration.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "a02236a52b5578c0fa88578a1b1b2048737d31141f44a8251ebf999548fdf4d6",
+            "target_id": "SPEC-COMPATIBILITY-012"
+          }
+        ],
+        "claim": "Preserve financial meaning while changing implementation technology",
+        "conditions_and_limits": "This is practitioner experience, not a demonstrated equivalence proof or a prescribed migration architecture. CORE-005.3 addresses reproducibility from the same declared inputs, state and context; it does not by itself prove equivalence between an old and a new implementation. MONEY-REPRESENTATION-006 covers Money only. SPEC-COMPATIBILITY-012 classifies changes to the published FinKore contract, not every consumer deployment. The interview does not authorize workflow migration, a universal COBOL-to-Java transformation, AI extraction guarantees, new portable errors, or recovery of undocumented rules by inference.",
+        "curation_status": "reviewed",
+        "evidence": [
+          {
+            "exact_quote": "When we migrate a system to a modern technology, we must make sure we don't accidentally change its business behavior or compromise the integrity of its rules.",
+            "heading": "4. Have you ever been involved in replacing or modernizing an old financial system? What were the biggest challenges, and what lessons did you take away?"
+          },
+          {
+            "exact_quote": "That's why extracting and understanding these rules accurately is so critical. We need to ensure accuracy, traceability, and validation throughout the modernization process.",
+            "heading": "4. Have you ever been involved in replacing or modernizing an old financial system? What were the biggest challenges, and what lessons did you take away?"
+          }
+        ],
+        "id": "LGC-0008",
+        "interpretation": "Otilia distinguishes modernization from translating source syntax. The analyst connects that distinction to documenting the financial observations a replacement must preserve. CoreDoc's reproducibility obligation supplies part of the financial basis; Money's representation freedom is a concrete bounded example, and the compatibility policy identifies observable contract changes that cannot be called editorial.",
+        "interview_id": "LEGACY-002",
+        "learn_angle": "Show how a consumer can identify required before/after financial observations and relevant context before comparing replacement behavior. Separate a technology change that preserves meaning from an intentional contract change; published vectors help specify observations but have not been executed here and are not an exhaustive migration proof.",
+        "related_research": [],
+        "reviewed_on": "2026-11-17"
+      },
+      {
+        "bindings": [
+          {
+            "evidence_role": "limits_claim",
+            "explanation": "Validation considers the complete proposed result and declared relevant facts, while the rule boundaries explicitly leave product-specific business validations undefined by CoreDoc.",
+            "relationship": "application_policy",
+            "reviewed_clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+            "target_id": "CORE-002.2"
+          },
+          {
+            "evidence_role": "supports_rationale",
+            "explanation": "An Entity must satisfy the Structural and Business Validation rules applicable to its current State. Applicability is required; a universal institution- or country-specific rule set is not supplied.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "67470b64c2cbdf4c152ee286536d099d3efaedb83957eec671fa30e55612fc5e",
+            "target_id": "ENTITY-VALIDATION-001"
+          }
+        ],
+        "claim": "Keep institution-specific business rules explicit rather than treating one practice as universal",
+        "conditions_and_limits": "The account does not establish the content or legal validity of any current regulation, nor does it turn a bank-specific rule into FinKore Core. The 1990 Collor Plan and printed-report story are not reconstructed as portable account-freeze or regulator-submission operations. CORE-002.2 governs financial-change validation, not a jurisdictional policy catalog. ENTITY-VALIDATION-001 requires applicable rules to hold without selecting the business rules for every bank, product or country.",
+        "curation_status": "reviewed",
+        "evidence": [
+          {
+            "exact_quote": "One thing I've learned is that every bank operates differently. Each institution has its own business rules, processes, and technologies. And every country has its own regulatory requirements that financial systems must comply with.",
+            "heading": "5. After all these years, what's the one thing you think the next generation of financial software developers should never forget?"
+          }
+        ],
+        "id": "LGC-0009",
+        "interpretation": "Otilia's account separates programming knowledge from the rules of a particular institution and jurisdiction. The analyst relates that distinction to complete validation using declared relevant facts and the Entity's applicable business rules. CoreDoc expressly leaves product-specific validations to the composing domain.",
+        "interview_id": "LEGACY-002",
+        "learn_angle": "Explain the boundary between shared financial obligations and consumer-declared product or jurisdiction rules. Ask which rules and facts apply to the relevant State rather than assuming that one institution supplies a universal policy.",
+        "related_research": [],
+        "reviewed_on": "2026-11-17"
+      },
+      {
+        "bindings": [
+          {
+            "evidence_role": "supports_rationale",
+            "explanation": "Declared inputs, state and context make a financial outcome reproducible and assessable. The connection informs a consumer validation discussion, not a new normative AI-control obligation.",
+            "relationship": "application_policy",
+            "reviewed_clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+            "target_id": "CORE-005.3"
+          },
+          {
+            "evidence_role": "supports_rationale",
+            "explanation": "All applicable MUST and MUST NOT obligations govern an implementation even when a tool generates its code; code-generation success is not evidence that these obligations were satisfied.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "2657b30e103c55ff8cf0c5b81c4328cb449b78a1dc1c3827af996db2a517e784",
+            "target_id": "SPEC-CONFORMANCE-001"
+          },
+          {
+            "evidence_role": "limits_claim",
+            "explanation": "SHOULD and SHOULD NOT obligations retain their recommendation strength and documented-exception rule. The interview cannot promote them to mandatory requirements.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "9a9711bbd5942427f6f0d339711ea9b772d38411acd70f18f027ec42f3cb6b97",
+            "target_id": "SPEC-CONFORMANCE-002"
+          }
+        ],
+        "claim": "Validate generated implementations against explicit financial obligations",
+        "conditions_and_limits": "The quotation concerns developers reviewing generated code; CoreDoc concerns financial evaluations. Their relationship is contextual, not an assertion that CORE-005.3 mandates a developer qualification, AI review process or source-extraction method. SPEC-CONFORMANCE-001 and -002 apply regardless of how code is produced. SHOULD exceptions remain documented recommendations, not automatically mandatory rules. No interview, generated program, repository artifact check or finite test set proves external implementation conformance; consumers own implementation validation and execution evidence.",
+        "curation_status": "reviewed",
+        "evidence": [
+          {
+            "exact_quote": "AI can generate code, automate tasks, and even help modernize complex legacy systems. But if developers don't understand what the AI is producing, how can they validate the results?",
+            "heading": "5. After all these years, what's the one thing you think the next generation of financial software developers should never forget?"
+          },
+          {
+            "exact_quote": "You cannot validate something you don't understand!",
+            "heading": "5. After all these years, what's the one thing you think the next generation of financial software developers should never forget?"
+          }
+        ],
+        "id": "LGC-0010",
+        "interpretation": "Otilia's warning about understanding AI output motivates a bounded distinction: generating code does not demonstrate that its financial behavior satisfies the contract. The analyst links implementation assessment to applicable normative obligations and reproducible evaluations, without turning the career advice into an AI governance requirement.",
+        "interview_id": "LEGACY-002",
+        "learn_angle": "Use AI-assisted modernization to explain why expected outcomes must be grounded in declared requirements, inputs and context. Preserve the distinction between passing artifact validation, evaluating a consumer implementation, and claiming exhaustive correctness.",
+        "related_research": [],
+        "reviewed_on": "2026-11-17"
       }
     ]
   },
@@ -436,6 +596,11 @@
         "LGC-0005",
         "LGC-0006",
         "LGC-0007"
+      ],
+      "LEGACY-002": [
+        "LGC-0008",
+        "LGC-0009",
+        "LGC-0010"
       ]
     },
     "by_target": {
@@ -446,14 +611,17 @@
         "LGC-0001"
       ],
       "CORE-002.2": [
-        "LGC-0005"
+        "LGC-0005",
+        "LGC-0009"
       ],
       "CORE-002.3": [
         "LGC-0002",
         "LGC-0003"
       ],
       "CORE-005.3": [
-        "LGC-0007"
+        "LGC-0007",
+        "LGC-0008",
+        "LGC-0010"
       ],
       "ENTITY-ERROR-002": [
         "LGC-0004"
@@ -465,7 +633,8 @@
         "LGC-0007"
       ],
       "ENTITY-VALIDATION-001": [
-        "LGC-0005"
+        "LGC-0005",
+        "LGC-0009"
       ],
       "ENTITY-VALIDATION-003": [
         "LGC-0005"
@@ -483,7 +652,17 @@
         "LGC-0001"
       ],
       "MONEY-REPRESENTATION-006": [
-        "LGC-0001"
+        "LGC-0001",
+        "LGC-0008"
+      ],
+      "SPEC-COMPATIBILITY-012": [
+        "LGC-0008"
+      ],
+      "SPEC-CONFORMANCE-001": [
+        "LGC-0010"
+      ],
+      "SPEC-CONFORMANCE-002": [
+        "LGC-0010"
       ],
       "SPEC-ERROR-001": [
         "LGC-0004"
@@ -886,7 +1065,7 @@
           "state_mutation": "yes"
         }
       },
-      "repository_revision": "193abdcca4c72975757d29fb58c674c1c74a15e9",
+      "repository_revision": "b432c4e158a5f6493489c2d70acf04acd6343c9a",
       "targets": {
         "AUDIT-APPEND-003": {
           "agentic_operation_ids": [
@@ -1420,6 +1599,68 @@
           "path": "spec/money/representation.md",
           "statement": "An implementation MAY use any internal representation that preserves these observable semantics; this document does not require storage as a decimal string or at a currency's customary minor-unit scale.",
           "title": "MONEY-REPRESENTATION-006",
+          "vector_ids": []
+        },
+        "SPEC-COMPATIBILITY-012": {
+          "agentic_operation_ids": [],
+          "anchor": null,
+          "clause_sha256": "a02236a52b5578c0fa88578a1b1b2048737d31141f44a8251ebf999548fdf4d6",
+          "coredoc_ids": [],
+          "coverage": {
+            "classification": "NOT DIRECTLY TESTABLE",
+            "scope_note": "Behavioral-change classification compares releases rather than one runtime observation.",
+            "source": "conformance/traceability.md"
+          },
+          "id": "SPEC-COMPATIBILITY-012",
+          "layer": "spec",
+          "modalities": [
+            "MUST"
+          ],
+          "path": "spec/conventions.md",
+          "statement": "A release MUST classify as behaviorally incompatible any change that alters whether an existing valid input succeeds, whether an existing invalid input fails, the normalized portable result, the primary portable error code, required input shape, required output shape, mutation semantics, or failure atomicity.",
+          "title": "SPEC-COMPATIBILITY-012",
+          "vector_ids": []
+        },
+        "SPEC-CONFORMANCE-001": {
+          "agentic_operation_ids": [],
+          "anchor": null,
+          "clause_sha256": "2657b30e103c55ff8cf0c5b81c4328cb449b78a1dc1c3827af996db2a517e784",
+          "coredoc_ids": [],
+          "coverage": {
+            "classification": "NOT DIRECTLY TESTABLE",
+            "scope_note": "Whole-implementation conformance is an aggregate judgment, not one vector outcome.",
+            "source": "conformance/traceability.md"
+          },
+          "id": "SPEC-CONFORMANCE-001",
+          "layer": "spec",
+          "modalities": [
+            "MUST",
+            "MUST NOT"
+          ],
+          "path": "spec/conventions.md",
+          "statement": "A conforming implementation MUST satisfy every applicable **MUST** and **MUST NOT** requirement.",
+          "title": "SPEC-CONFORMANCE-001",
+          "vector_ids": []
+        },
+        "SPEC-CONFORMANCE-002": {
+          "agentic_operation_ids": [],
+          "anchor": null,
+          "clause_sha256": "9a9711bbd5942427f6f0d339711ea9b772d38411acd70f18f027ec42f3cb6b97",
+          "coredoc_ids": [],
+          "coverage": {
+            "classification": "NOT DIRECTLY TESTABLE",
+            "scope_note": "Documented exceptions require implementation-level review beyond operation vectors.",
+            "source": "conformance/traceability.md"
+          },
+          "id": "SPEC-CONFORMANCE-002",
+          "layer": "spec",
+          "modalities": [
+            "SHOULD",
+            "SHOULD NOT"
+          ],
+          "path": "spec/conventions.md",
+          "statement": "A conforming implementation SHOULD satisfy every applicable **SHOULD** and **SHOULD NOT** requirement unless it documents a reason for the exception.",
+          "title": "SPEC-CONFORMANCE-002",
           "vector_ids": []
         },
         "SPEC-ERROR-001": {
@@ -3434,16 +3675,17 @@
       }
     },
     "counts": {
-      "editorial_eligible": 7,
-      "interviews": 1,
-      "linked_targets": 23,
-      "mappings": 7,
+      "editorial_eligible": 10,
+      "interviews": 2,
+      "linked_targets": 26,
+      "mappings": 10,
       "statuses": {
-        "reviewed": 7
+        "reviewed": 10
       }
     },
     "inputs": {
       "legacy/interviews/001-elaine-richardson.md": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46",
+      "legacy/interviews/002-otilia-borges.md": "1bfb503b6692ac5b8209afad7def736af54568a4d5c58a185e80b8f63bf3f92b",
       "research/traceability.json": "81153c143f2708421e294eb092c42aad2327227845ad8801b8a1555e1f3edc5d"
     },
     "interviews": [
@@ -3514,6 +3756,59 @@
         "source": "legacy/interviews/001-elaine-richardson.md",
         "source_kind": "practitioner_interview",
         "speaker": "Elaine Richardson",
+        "status": "reviewed"
+      },
+      {
+        "id": "LEGACY-002",
+        "observed_sha256": "1bfb503b6692ac5b8209afad7def736af54568a4d5c58a185e80b8f63bf3f92b",
+        "publication_approval": "Approved for publication — confirmed by the project maintainer on 17.11.2026",
+        "reader": "learn/legacy-002-otilia-borges.html",
+        "recheck_reasons": [],
+        "sections": [
+          {
+            "anchor": "1-first-tell-us-a-little-about-yourself-how-did-your-career-as-a-developer-start-and-how-did-you-end-up-working-with-banking-or-financial-systems",
+            "disposition": "context_only",
+            "heading": "1. First, tell us a little about yourself! How did your career as a developer start, and how did you end up working with banking or financial systems?",
+            "line": 12,
+            "reason": "Professional history and early banking experience; no financial requirement comparison is asserted.",
+            "role": "public_answer"
+          },
+          {
+            "anchor": "2-looking-back-is-there-a-system-project-or-technical-challenge-youre-particularly-proud-of-id-love-to-hear-the-story-behind-it",
+            "disposition": "context_only",
+            "heading": "2. Looking back, is there a system, project, or technical challenge you're particularly proud of? I'd love to hear the story behind it.",
+            "line": 22,
+            "reason": "The Collor Plan is a personal historical recollection. The interview does not define current regulatory obligations, account-freeze semantics, currencies, or a portable FinKore operation.",
+            "role": "public_answer"
+          },
+          {
+            "anchor": "3-do-you-remember-any-strange-rules-unusual-code-or-unexpected-situations-that-taught-you-something-important-especially-things-that-might-look-unnecessary-today-but-had-a-very-good-reason-to-exist",
+            "disposition": "context_only",
+            "heading": "3. Do you remember any strange rules, unusual code, or unexpected situations that taught you something important? Especially things that might look unnecessary today but had a very good reason to exist.",
+            "line": 36,
+            "reason": "Printed-report pagination illustrates operational risk. Report layout, delivery to a regulator, line-counter algorithms and institutional identification are outside the compared Core financial behavior.",
+            "role": "public_answer"
+          },
+          {
+            "anchor": "4-have-you-ever-been-involved-in-replacing-or-modernizing-an-old-financial-system-what-were-the-biggest-challenges-and-what-lessons-did-you-take-away",
+            "disposition": "mapped",
+            "heading": "4. Have you ever been involved in replacing or modernizing an old financial system? What were the biggest challenges, and what lessons did you take away?",
+            "line": 56,
+            "reason": "Exact public passages support the bounded comparison of modernization and preservation of declared financial meaning; AI credentials and travel remain biographical context.",
+            "role": "public_answer"
+          },
+          {
+            "anchor": "5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget",
+            "disposition": "mapped",
+            "heading": "5. After all these years, what's the one thing you think the next generation of financial software developers should never forget?",
+            "line": 86,
+            "reason": "Selected public passages support comparisons of composing-domain policies and implementation validation. Career advice and future professions are not turned into financial requirements.",
+            "role": "public_answer"
+          }
+        ],
+        "source": "legacy/interviews/002-otilia-borges.md",
+        "source_kind": "practitioner_interview",
+        "speaker": "Otilia Borges",
         "status": "reviewed"
       }
     ],
@@ -3749,6 +4044,92 @@
             "relationship": "complements"
           }
         ],
+        "status": "reviewed"
+      },
+      {
+        "editorial_eligible": true,
+        "evidence": [
+          {
+            "exact_quote": "When we migrate a system to a modern technology, we must make sure we don't accidentally change its business behavior or compromise the integrity of its rules.",
+            "heading": "4. Have you ever been involved in replacing or modernizing an old financial system? What were the biggest challenges, and what lessons did you take away?",
+            "line": 72,
+            "reader": "learn/legacy-002-otilia-borges.html",
+            "source": "legacy/interviews/002-otilia-borges.md",
+            "source_anchor": "4-have-you-ever-been-involved-in-replacing-or-modernizing-an-old-financial-system-what-were-the-biggest-challenges-and-what-lessons-did-you-take-away",
+            "speaker": "Otilia Borges",
+            "verified": true
+          },
+          {
+            "exact_quote": "That's why extracting and understanding these rules accurately is so critical. We need to ensure accuracy, traceability, and validation throughout the modernization process.",
+            "heading": "4. Have you ever been involved in replacing or modernizing an old financial system? What were the biggest challenges, and what lessons did you take away?",
+            "line": 70,
+            "reader": "learn/legacy-002-otilia-borges.html",
+            "source": "legacy/interviews/002-otilia-borges.md",
+            "source_anchor": "4-have-you-ever-been-involved-in-replacing-or-modernizing-an-old-financial-system-what-were-the-biggest-challenges-and-what-lessons-did-you-take-away",
+            "speaker": "Otilia Borges",
+            "verified": true
+          }
+        ],
+        "findings_status": "pending_validation",
+        "interview_id": "LEGACY-002",
+        "mapping_id": "LGC-0008",
+        "normative_acceptance": "not_requested",
+        "recheck_reasons": [],
+        "related_research": [],
+        "status": "reviewed"
+      },
+      {
+        "editorial_eligible": true,
+        "evidence": [
+          {
+            "exact_quote": "One thing I've learned is that every bank operates differently. Each institution has its own business rules, processes, and technologies. And every country has its own regulatory requirements that financial systems must comply with.",
+            "heading": "5. After all these years, what's the one thing you think the next generation of financial software developers should never forget?",
+            "line": 92,
+            "reader": "learn/legacy-002-otilia-borges.html",
+            "source": "legacy/interviews/002-otilia-borges.md",
+            "source_anchor": "5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget",
+            "speaker": "Otilia Borges",
+            "verified": true
+          }
+        ],
+        "findings_status": "pending_validation",
+        "interview_id": "LEGACY-002",
+        "mapping_id": "LGC-0009",
+        "normative_acceptance": "not_requested",
+        "recheck_reasons": [],
+        "related_research": [],
+        "status": "reviewed"
+      },
+      {
+        "editorial_eligible": true,
+        "evidence": [
+          {
+            "exact_quote": "AI can generate code, automate tasks, and even help modernize complex legacy systems. But if developers don't understand what the AI is producing, how can they validate the results?",
+            "heading": "5. After all these years, what's the one thing you think the next generation of financial software developers should never forget?",
+            "line": 98,
+            "reader": "learn/legacy-002-otilia-borges.html",
+            "source": "legacy/interviews/002-otilia-borges.md",
+            "source_anchor": "5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget",
+            "speaker": "Otilia Borges",
+            "verified": true
+          },
+          {
+            "exact_quote": "You cannot validate something you don't understand!",
+            "heading": "5. After all these years, what's the one thing you think the next generation of financial software developers should never forget?",
+            "line": 100,
+            "reader": "learn/legacy-002-otilia-borges.html",
+            "source": "legacy/interviews/002-otilia-borges.md",
+            "source_anchor": "5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget",
+            "speaker": "Otilia Borges",
+            "verified": true
+          }
+        ],
+        "findings_status": "pending_validation",
+        "interview_id": "LEGACY-002",
+        "mapping_id": "LGC-0010",
+        "normative_acceptance": "not_requested",
+        "recheck_reasons": [],
+        "related_research": [],
         "status": "reviewed"
       }
     ]

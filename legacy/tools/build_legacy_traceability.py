@@ -88,7 +88,10 @@ def read_interview(repo, item):
     raw = source.read_bytes()
     text = raw.decode("utf-8")
     name = re.search(r"^\*\*Interviewee:\*\*\s*(.+)$", text, re.M)
-    approval = re.search(r"^\*\*Status:\*\* (Approved by Interviewee on .+)$", text, re.M)
+    approval = re.search(
+        r"^\*\*Status:\*\* (Approved by Interviewee on .+|"
+        r"Approved for publication — confirmed by the project maintainer on \d{2}\.\d{2}\.\d{4})$",
+        text, re.M)
     if not approval or not name or name[1].strip() != item["name"] or not reader.is_file():
         raise ValueError("Interview is not an approved, attributed public source: " + item["id"])
     return {"sha256": sha(raw), "approval": approval[1], "text": text, "sections": sections(text)}
@@ -231,7 +234,10 @@ def render(document):
         for section in interview["sections"]:
             lines.append(f"| [{section['heading']}](../{interview['source']}#{section['anchor']}) | "
                          f"`{section['role']}` / `{section['disposition']}` | {section['reason']} |")
-        lines += ["", "The final privacy note is editorial context, not speaker evidence. The withheld follow-up is excluded; its editorial placeholder cannot supply an attributed quotation.", ""]
+        lines += ["", "The final privacy note is editorial context, not speaker evidence."]
+        if any(s["disposition"] == "excluded_confidentiality" for s in interview["sections"]):
+            lines.append("Confidential omissions are excluded; their editorial placeholders cannot supply attributed quotations.")
+        lines.append("")
     lines += ["## Comparisons", ""]
     for item in document["curation"]["mappings"]:
         record = records[item["id"]]

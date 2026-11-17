@@ -4,7 +4,7 @@ Non-normative analyst comparisons of approved public practitioner interviews. Th
 
 Publication approval applies to the interview text, not to these comparisons or future Learn pages. Speaker quotations, analyst interpretations, and editorial omissions remain separate. No private account was consulted or reconstructed.
 
-Baseline: FinKore Core 2.0.3; repository revision `193abdcca4c72975757d29fb58c674c1c74a15e9`. 1 interview(s), 7 comparisons, 23 linked requirements.
+Baseline: FinKore Core 2.0.3; repository revision `b432c4e158a5f6493489c2d70acf04acd6343c9a`. 2 interview(s), 10 comparisons, 26 linked requirements.
 
 ## Interview inventory
 
@@ -22,7 +22,22 @@ Baseline: FinKore Core 2.0.3; repository revision `193abdcca4c72975757d29fb58c67
 | [About the COBOL overflow incident: When that happened, was there any reconciliation or verification process that could detect the financial discrepancy, or was it something someone discovered during production support?](../legacy/interviews/001-elaine-richardson.md#about-the-cobol-overflow-incident-when-that-happened-was-there-any-reconciliation-or-verification-process-that-could-detect-the-financial-discrepancy-or-was-it-something-someone-discovered-during-production-support) | `editorial_only` / `excluded_confidentiality` | Public editorial omission notice only; no speaker answer is available. Do not quote it as Elaine or reconstruct the private account. |
 | [About legacy banking systems: Is there a particular business rule or exception-handling scenario you've encountered that you believe modern developers would probably overlook if they were building a financial system from scratch?](../legacy/interviews/001-elaine-richardson.md#about-legacy-banking-systems-is-there-a-particular-business-rule-or-exception-handling-scenario-youve-encountered-that-you-believe-modern-developers-would-probably-overlook-if-they-were-building-a-financial-system-from-scratch) | `public_answer` / `mapped` | Selected public answer passages support the bounded comparisons below; other anecdotes and opinions are not generalized into requirements. |
 
-The final privacy note is editorial context, not speaker evidence. The withheld follow-up is excluded; its editorial placeholder cannot supply an attributed quotation.
+The final privacy note is editorial context, not speaker evidence.
+Confidential omissions are excluded; their editorial placeholders cannot supply attributed quotations.
+
+### LEGACY-002 — Otilia Borges
+
+[Approved source](../legacy/interviews/002-otilia-borges.md) · [Published reader](../learn/legacy-002-otilia-borges.html). Approved for publication — confirmed by the project maintainer on 17.11.2026. Comparison status: `reviewed`.
+
+| Public section | Treatment | Reason |
+| --- | --- | --- |
+| [1. First, tell us a little about yourself! How did your career as a developer start, and how did you end up working with banking or financial systems?](../legacy/interviews/002-otilia-borges.md#1-first-tell-us-a-little-about-yourself-how-did-your-career-as-a-developer-start-and-how-did-you-end-up-working-with-banking-or-financial-systems) | `public_answer` / `context_only` | Professional history and early banking experience; no financial requirement comparison is asserted. |
+| [2. Looking back, is there a system, project, or technical challenge you're particularly proud of? I'd love to hear the story behind it.](../legacy/interviews/002-otilia-borges.md#2-looking-back-is-there-a-system-project-or-technical-challenge-youre-particularly-proud-of-id-love-to-hear-the-story-behind-it) | `public_answer` / `context_only` | The Collor Plan is a personal historical recollection. The interview does not define current regulatory obligations, account-freeze semantics, currencies, or a portable FinKore operation. |
+| [3. Do you remember any strange rules, unusual code, or unexpected situations that taught you something important? Especially things that might look unnecessary today but had a very good reason to exist.](../legacy/interviews/002-otilia-borges.md#3-do-you-remember-any-strange-rules-unusual-code-or-unexpected-situations-that-taught-you-something-important-especially-things-that-might-look-unnecessary-today-but-had-a-very-good-reason-to-exist) | `public_answer` / `context_only` | Printed-report pagination illustrates operational risk. Report layout, delivery to a regulator, line-counter algorithms and institutional identification are outside the compared Core financial behavior. |
+| [4. Have you ever been involved in replacing or modernizing an old financial system? What were the biggest challenges, and what lessons did you take away?](../legacy/interviews/002-otilia-borges.md#4-have-you-ever-been-involved-in-replacing-or-modernizing-an-old-financial-system-what-were-the-biggest-challenges-and-what-lessons-did-you-take-away) | `public_answer` / `mapped` | Exact public passages support the bounded comparison of modernization and preservation of declared financial meaning; AI credentials and travel remain biographical context. |
+| [5. After all these years, what's the one thing you think the next generation of financial software developers should never forget?](../legacy/interviews/002-otilia-borges.md#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget) | `public_answer` / `mapped` | Selected public passages support comparisons of composing-domain policies and implementation validation. Career advice and future professions are not turned into financial requirements. |
+
+The final privacy note is editorial context, not speaker evidence.
 
 ## Comparisons
 
@@ -207,6 +222,76 @@ Related research discussions (existing assessments are recorded, not revalidated
 - [MAP-0010](../research/traceability.md#map-0010) (`reviewed`, `evidence_ready`), complements: Response speed does not establish that the facts required for a decision are current.
 - [MAP-0035](../research/traceability.md#map-0035) (`reviewed`, `evidence_ready`), complements: Coherence of one snapshot and freshness relative to a business dependency remain separate properties.
 
+<a id="lgc-0008"></a>
+### LGC-0008 — Preserve financial meaning while changing implementation technology
+
+Status: `reviewed`; interpretation: `analyst_inference`; normative acceptance: `not_requested`; finding: `pending_validation`.
+
+> When we migrate a system to a modern technology, we must make sure we don't accidentally change its business behavior or compromise the integrity of its rules.
+
+— Otilia Borges, [4. Have you ever been involved in replacing or modernizing an old financial system? What were the biggest challenges, and what lessons did you take away?](../legacy/interviews/002-otilia-borges.md#4-have-you-ever-been-involved-in-replacing-or-modernizing-an-old-financial-system-what-were-the-biggest-challenges-and-what-lessons-did-you-take-away), source line 72; [reader](../learn/legacy-002-otilia-borges.html#4-have-you-ever-been-involved-in-replacing-or-modernizing-an-old-financial-system-what-were-the-biggest-challenges-and-what-lessons-did-you-take-away).
+
+> That's why extracting and understanding these rules accurately is so critical. We need to ensure accuracy, traceability, and validation throughout the modernization process.
+
+— Otilia Borges, [4. Have you ever been involved in replacing or modernizing an old financial system? What were the biggest challenges, and what lessons did you take away?](../legacy/interviews/002-otilia-borges.md#4-have-you-ever-been-involved-in-replacing-or-modernizing-an-old-financial-system-what-were-the-biggest-challenges-and-what-lessons-did-you-take-away), source line 70; [reader](../learn/legacy-002-otilia-borges.html#4-have-you-ever-been-involved-in-replacing-or-modernizing-an-old-financial-system-what-were-the-biggest-challenges-and-what-lessons-did-you-take-away).
+
+**Analyst interpretation.** Otilia distinguishes modernization from translating source syntax. The analyst connects that distinction to documenting the financial observations a replacement must preserve. CoreDoc's reproducibility obligation supplies part of the financial basis; Money's representation freedom is a concrete bounded example, and the compatibility policy identifies observable contract changes that cannot be called editorial.
+
+**Conditions and limits.** This is practitioner experience, not a demonstrated equivalence proof or a prescribed migration architecture. CORE-005.3 addresses reproducibility from the same declared inputs, state and context; it does not by itself prove equivalence between an old and a new implementation. MONEY-REPRESENTATION-006 covers Money only. SPEC-COMPATIBILITY-012 classifies changes to the published FinKore contract, not every consumer deployment. The interview does not authorize workflow migration, a universal COBOL-to-Java transformation, AI extraction guarantees, new portable errors, or recovery of undocumented rules by inference.
+
+**Potential Learn benefit.** Show how a consumer can identify required before/after financial observations and relevant context before comparing replacement behavior. Separate a technology change that preserves meaning from an intentional contract change; published vectors help specify observations but have not been executed here and are not an exhaustive migration proof.
+
+| Requirement | Relationship / evidence role | Bounded comparison |
+| --- | --- | --- |
+| [CORE-005.3](../docs/coreDoc/core-doc.md#core-0053-evaluation-follows-declared-facts-and-context) | `application_policy` / `supports_rationale` | Declared inputs, state and relevant context provide a reproducible financial basis to compare; a cross-implementation migration-equivalence method remains consumer-owned. |
+| [MONEY-REPRESENTATION-006](../spec/money/representation.md) | `already_addressed` / `limits_claim` | Internal Money representation is a MAY freedom conditional on preserving observable semantics. This is a bounded instance of technology freedom, not a claim that arbitrary banking rules or migrations are specified. |
+| [SPEC-COMPATIBILITY-012](../spec/conventions.md) | `already_addressed` / `illustrates_risk` | The Core release policy treats changed success, failure, results, errors, shapes or mutation semantics as behaviorally incompatible. The analogy highlights financial behavior that must be examined; it does not assign a new Core version to a consumer technology migration. |
+
+<a id="lgc-0009"></a>
+### LGC-0009 — Keep institution-specific business rules explicit rather than treating one practice as universal
+
+Status: `reviewed`; interpretation: `analyst_inference`; normative acceptance: `not_requested`; finding: `pending_validation`.
+
+> One thing I've learned is that every bank operates differently. Each institution has its own business rules, processes, and technologies. And every country has its own regulatory requirements that financial systems must comply with.
+
+— Otilia Borges, [5. After all these years, what's the one thing you think the next generation of financial software developers should never forget?](../legacy/interviews/002-otilia-borges.md#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget), source line 92; [reader](../learn/legacy-002-otilia-borges.html#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget).
+
+**Analyst interpretation.** Otilia's account separates programming knowledge from the rules of a particular institution and jurisdiction. The analyst relates that distinction to complete validation using declared relevant facts and the Entity's applicable business rules. CoreDoc expressly leaves product-specific validations to the composing domain.
+
+**Conditions and limits.** The account does not establish the content or legal validity of any current regulation, nor does it turn a bank-specific rule into FinKore Core. The 1990 Collor Plan and printed-report story are not reconstructed as portable account-freeze or regulator-submission operations. CORE-002.2 governs financial-change validation, not a jurisdictional policy catalog. ENTITY-VALIDATION-001 requires applicable rules to hold without selecting the business rules for every bank, product or country.
+
+**Potential Learn benefit.** Explain the boundary between shared financial obligations and consumer-declared product or jurisdiction rules. Ask which rules and facts apply to the relevant State rather than assuming that one institution supplies a universal policy.
+
+| Requirement | Relationship / evidence role | Bounded comparison |
+| --- | --- | --- |
+| [CORE-002.2](../docs/coreDoc/core-doc.md#core-0022-validation-is-complete-fact-based-and-non-mutating) | `application_policy` / `limits_claim` | Validation considers the complete proposed result and declared relevant facts, while the rule boundaries explicitly leave product-specific business validations undefined by CoreDoc. |
+| [ENTITY-VALIDATION-001](../spec/entities/validation.md) | `already_addressed` / `supports_rationale` | An Entity must satisfy the Structural and Business Validation rules applicable to its current State. Applicability is required; a universal institution- or country-specific rule set is not supplied. |
+
+<a id="lgc-0010"></a>
+### LGC-0010 — Validate generated implementations against explicit financial obligations
+
+Status: `reviewed`; interpretation: `analyst_inference`; normative acceptance: `not_requested`; finding: `pending_validation`.
+
+> AI can generate code, automate tasks, and even help modernize complex legacy systems. But if developers don't understand what the AI is producing, how can they validate the results?
+
+— Otilia Borges, [5. After all these years, what's the one thing you think the next generation of financial software developers should never forget?](../legacy/interviews/002-otilia-borges.md#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget), source line 98; [reader](../learn/legacy-002-otilia-borges.html#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget).
+
+> You cannot validate something you don't understand!
+
+— Otilia Borges, [5. After all these years, what's the one thing you think the next generation of financial software developers should never forget?](../legacy/interviews/002-otilia-borges.md#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget), source line 100; [reader](../learn/legacy-002-otilia-borges.html#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget).
+
+**Analyst interpretation.** Otilia's warning about understanding AI output motivates a bounded distinction: generating code does not demonstrate that its financial behavior satisfies the contract. The analyst links implementation assessment to applicable normative obligations and reproducible evaluations, without turning the career advice into an AI governance requirement.
+
+**Conditions and limits.** The quotation concerns developers reviewing generated code; CoreDoc concerns financial evaluations. Their relationship is contextual, not an assertion that CORE-005.3 mandates a developer qualification, AI review process or source-extraction method. SPEC-CONFORMANCE-001 and -002 apply regardless of how code is produced. SHOULD exceptions remain documented recommendations, not automatically mandatory rules. No interview, generated program, repository artifact check or finite test set proves external implementation conformance; consumers own implementation validation and execution evidence.
+
+**Potential Learn benefit.** Use AI-assisted modernization to explain why expected outcomes must be grounded in declared requirements, inputs and context. Preserve the distinction between passing artifact validation, evaluating a consumer implementation, and claiming exhaustive correctness.
+
+| Requirement | Relationship / evidence role | Bounded comparison |
+| --- | --- | --- |
+| [CORE-005.3](../docs/coreDoc/core-doc.md#core-0053-evaluation-follows-declared-facts-and-context) | `application_policy` / `supports_rationale` | Declared inputs, state and context make a financial outcome reproducible and assessable. The connection informs a consumer validation discussion, not a new normative AI-control obligation. |
+| [SPEC-CONFORMANCE-001](../spec/conventions.md) | `already_addressed` / `supports_rationale` | All applicable MUST and MUST NOT obligations govern an implementation even when a tool generates its code; code-generation success is not evidence that these obligations were satisfied. |
+| [SPEC-CONFORMANCE-002](../spec/conventions.md) | `already_addressed` / `limits_claim` | SHOULD and SHOULD NOT obligations retain their recommendation strength and documented-exception rule. The interview cannot promote them to mandatory requirements. |
+
 ## By requirement
 
 Coverage classifications and canonical operations below come from the published contract index. Vector IDs refer to acceptance artifacts, not executed tests or proof of an implementation. CoreDoc rows can have no direct vector or operation; inspect their explicit Spec references in JSON.
@@ -251,7 +336,7 @@ Vectors: none directly linked.
 
 Canonical operations: none directly linked.
 
-Comparisons: [LGC-0005](#lgc-0005) (reviewed).
+Comparisons: [LGC-0005](#lgc-0005) (reviewed), [LGC-0009](#lgc-0009) (reviewed).
 
 ### CORE-002.3
 
@@ -279,7 +364,7 @@ Vectors: none directly linked.
 
 Canonical operations: none directly linked.
 
-Comparisons: [LGC-0007](#lgc-0007) (reviewed).
+Comparisons: [LGC-0007](#lgc-0007) (reviewed), [LGC-0008](#lgc-0008) (reviewed), [LGC-0010](#lgc-0010) (reviewed).
 
 ### ENTITY-ERROR-002
 
@@ -335,7 +420,7 @@ Vectors: [entity.boundary097.discovery-f9c-522](../conformance/entities/discover
 
 Canonical operations: [finkore.entity.create](../agentic/operations.md), [finkore.entity.evolution.correct](../agentic/operations.md), [finkore.entity.evolution.reverse](../agentic/operations.md), [finkore.entity.evolution.supersede](../agentic/operations.md), [finkore.entity.evolution.void](../agentic/operations.md), [finkore.entity.transition](../agentic/operations.md).
 
-Comparisons: [LGC-0005](#lgc-0005) (reviewed).
+Comparisons: [LGC-0005](#lgc-0005) (reviewed), [LGC-0009](#lgc-0009) (reviewed).
 
 ### ENTITY-VALIDATION-003
 
@@ -419,7 +504,49 @@ Vectors: none directly linked.
 
 Canonical operations: none directly linked.
 
-Comparisons: [LGC-0001](#lgc-0001) (reviewed).
+Comparisons: [LGC-0001](#lgc-0001) (reviewed), [LGC-0008](#lgc-0008) (reviewed).
+
+### SPEC-COMPATIBILITY-012
+
+[spec/conventions.md](../spec/conventions.md); modality: MUST.
+
+A release MUST classify as behaviorally incompatible any change that alters whether an existing valid input succeeds, whether an existing invalid input fails, the normalized portable result, the primary portable error code, required input shape, required output shape, mutation semantics, or failure atomicity.
+
+Coverage: **NOT DIRECTLY TESTABLE** — Behavioral-change classification compares releases rather than one runtime observation.
+
+Vectors: none directly linked.
+
+Canonical operations: none directly linked.
+
+Comparisons: [LGC-0008](#lgc-0008) (reviewed).
+
+### SPEC-CONFORMANCE-001
+
+[spec/conventions.md](../spec/conventions.md); modality: MUST, MUST NOT.
+
+A conforming implementation MUST satisfy every applicable **MUST** and **MUST NOT** requirement.
+
+Coverage: **NOT DIRECTLY TESTABLE** — Whole-implementation conformance is an aggregate judgment, not one vector outcome.
+
+Vectors: none directly linked.
+
+Canonical operations: none directly linked.
+
+Comparisons: [LGC-0010](#lgc-0010) (reviewed).
+
+### SPEC-CONFORMANCE-002
+
+[spec/conventions.md](../spec/conventions.md); modality: SHOULD, SHOULD NOT.
+
+A conforming implementation SHOULD satisfy every applicable **SHOULD** and **SHOULD NOT** requirement unless it documents a reason for the exception.
+
+Coverage: **NOT DIRECTLY TESTABLE** — Documented exceptions require implementation-level review beyond operation vectors.
+
+Vectors: none directly linked.
+
+Canonical operations: none directly linked.
+
+Comparisons: [LGC-0010](#lgc-0010) (reviewed).
 
 ### SPEC-ERROR-001
 

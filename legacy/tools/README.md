@@ -42,7 +42,12 @@ Each section requires an explicit role and disposition. Editorial omission
 notices are not quotations or paraphrases of the omitted answer. Do not consult
 private accounts or Git history to fill those omissions.
 
-Publication consent is recorded from the public interview header. It does not
+Publication consent is recorded verbatim from the public interview header.
+The accepted status forms are `Approved by Interviewee on ...` and
+`Approved for publication — confirmed by the project maintainer on DD.MM.YYYY`.
+The latter records the maintainer's confirmation, without relabeling it as a
+direct statement from the interviewee. Draft and pending statuses are rejected.
+Publication consent does not
 approve the analyst's comparisons, future Learn text, or normative behavior.
 `reviewed` describes a bounded analyst comparison; every finding is still
 `pending_validation`, with normative acceptance `not_requested`.

@@ -116,3 +116,5 @@ Technology will continue to evolve. AI will continue to transform our jobs. But 
 This interview preserves the interviewee's original wording, personal views, and writing style. The financial institution in the printed-report account is not named by the interviewee and is not identified by the archive.
 
 Further changes can be made at the interviewee's request.
+
+For FinKore's non-normative analysis, see [this interview's comparison inventory](../traceability.md#legacy-002-otilia-borges). The comparisons link to [CORE-005.3 — Evaluation follows declared facts and context](../../docs/coreDoc/core-doc.md#core-0053-evaluation-follows-declared-facts-and-context) and [CORE-002.2 — Validation is complete, fact-based, and non-mutating](../../docs/coreDoc/core-doc.md#core-0022-validation-is-complete-fact-based-and-non-mutating). These are analyst interpretations, separate from the interviewee's responses, and do not establish new financial requirements.

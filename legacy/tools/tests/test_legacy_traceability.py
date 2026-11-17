@@ -126,6 +126,35 @@ class LegacyTraceabilityTests(unittest.TestCase):
         with self.assertRaises(OSError):
             self.build()
 
+    def test_maintainer_confirmation_preserves_attribution_and_has_no_omission(self):
+        approval = "Approved for publication — confirmed by the project maintainer on 17.11.2026"
+        self.text = self.text.replace("Approved by Interviewee on 2026-11-17", approval)
+        self.text = self.text.replace("### Withheld answer\n\n*Editorial omission notice.*\n\n", "")
+        interview = self.document["curation"]["interviews"][0]
+        interview["sections"] = interview["sections"][:1]
+        interview["reviewed_source_sha256"] = tool.sha(self.text.encode())
+        self.write(self.source, self.text)
+        self.save()
+        document = self.build()
+        self.build(check=True)
+        self.assertEqual(approval, document["resolved"]["interviews"][0]["publication_approval"])
+        report = (self.repo / "legacy/traceability.md").read_text()
+        self.assertIn(approval, report)
+        self.assertNotIn("Approved by Interviewee", report)
+        self.assertNotIn("Confidential omissions are excluded", report)
+
+    def test_pending_or_incomplete_maintainer_confirmation_is_rejected(self):
+        original = (self.repo / "legacy/traceability.json").read_bytes()
+        for status in ["Draft — pending interviewee approval for publication",
+                       "Approved for publication — pending confirmation by the project maintainer on 17.11.2026",
+                       "Approved for publication — confirmed by the project maintainer on",
+                       "Approved for publication — confirmed by the project maintainer on 17.11.2026 pending review"]:
+            with self.subTest(status=status):
+                self.write(self.source, self.text.replace("Approved by Interviewee on 2026-11-17", status))
+                with self.assertRaisesRegex(ValueError, "not an approved"):
+                    self.build()
+                self.assertEqual(original, (self.repo / "legacy/traceability.json").read_bytes())
+
     def test_unregistered_drafts_are_ignored_and_new_sections_are_unreviewed(self):
         self.write("legacy/interviews/999-draft.md", "Draft with private text.")
         self.write(self.source, self.text + "\n### New question\n\nNot reviewed yet.\n")
