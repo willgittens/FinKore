@@ -32,7 +32,7 @@ test('renders every canonical principle and rule with unchanged obligations and 
   for (const id of [...source.matchAll(/^### (CORE-\d{3}\.\d+)/gm)].map(m => m[1])) {
     assert.equal(html.split(`id="${id.toLowerCase().replace('.', '-')}"`).length - 1, 1, id)
   }
-  assert.ok(html.includes('href="https://github.com/willgittens/FinKore/blob/main/spec/money/representation.md" target="_blank" rel="noopener noreferrer"'))
+  assert.ok(html.includes('href="spec-money-representation.html"'))
   assert.ok(html.includes('href="https://github.com/willgittens/FinKore/blob/main/docs/coreDoc/core-doc.md" target="_blank" rel="noopener noreferrer"'))
   assert.doesNotMatch(html, /(?:href|src)="\.\.\//)
   assert.match(html, /href="#core-002-1"/)

@@ -10,6 +10,7 @@ import { resolve, posix } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { GITHUB_FILE_BASE_URL, learnLink, renderLearnNavigation, renderLearnOpenGraph } from './build-learn-pages.js'
 import { readLearnAssetVersion, versionLearnStylesheets } from './build-learn-assets.js'
+import { loadLearnEvidence, requirementClauses, renderRelatedEvidence } from './learn-evidence.js'
 
 const SOURCE = 'docs/coreDoc/core-doc.md'
 const READER = 'learn/coredoc.html'
@@ -110,8 +111,12 @@ function ruleNavigation(doc, rule) {
   return `<nav class="core-rule-navigation" aria-label="Reading navigation for ${rule.id}">${prev ? `<a href="#${anchor(prev.id)}"><span>← Previous rule · ${prev.id}</span>${escape(prev.title)}</a>` : '<a href="#top"><span>← CoreDoc</span>Back to the overview</a>'}${next ? `<a href="#${anchor(next.id)}"><span>Next rule · ${next.id} →</span>${escape(next.title)}</a>` : '<a href="index.html#core-explorer"><span>Continue exploring →</span>Return to the home index</a>'}</nav>`
 }
 
-export function renderReader(doc, assetVersion) {
+export function renderReader(doc, assetVersion, { evidence, clauses } = {}) {
   const nav = navigation(doc)
+  const related = id => {
+    const html = clauses?.has(id) ? renderRelatedEvidence(id, clauses.get(id), evidence) : ''
+    return html ? '\n            ' + html : ''
+  }
   const description = `Read the ${doc.principles.length} principles and ${doc.rules.length} foundational rules of ${doc.version}. Explore obligations, reasoning, interpretation, and boundaries.`
   return versionLearnStylesheets(`<!doctype html>
 <!-- SPDX-License-Identifier: MPL-2.0 -->
@@ -157,7 +162,7 @@ ${doc.principles.map(p => `        <section class="core-principle" id="${p.ancho
 ${p.rules.map(r => `          <article class="core-rule" tabindex="-1" id="${anchor(r.id)}" aria-labelledby="${anchor(r.id)}-title">
             <header id="${slug(`${r.id} — ${r.title}`)}"><p class="eyebrow">${r.id}</p><h3 id="${anchor(r.id)}-title">${escape(r.title)}</h3><a class="core-permalink" href="#${anchor(r.id)}" aria-label="Direct link to ${r.id}">Link to this rule <span aria-hidden="true">#</span></a></header>
 ${r.sections.map((s, i) => `            <section class="core-rule-section${i === 0 ? ' core-rule-statement' : ''}"><h4>${escape(s.title)}</h4>${renderMarkdown(s.body)}</section>`).join('\n')}
-            ${history(r)}
+            ${history(r)}${related(r.id)}
             ${ruleNavigation(doc, r)}
           </article>`).join('\n')}
         </section>`).join('\n')}
@@ -202,12 +207,13 @@ ${doc.principles.map(p => `            <details class="core-index-item">
 }
 
 export function buildLearnCoreDoc(root = process.cwd(), { check = false } = {}) {
-  const doc = parseCoreDoc(readFileSync(resolve(root, SOURCE), 'utf8'))
+  const source = readFileSync(resolve(root, SOURCE), 'utf8')
+  const doc = parseCoreDoc(source)
   const home = readFileSync(resolve(root, HOME), 'utf8')
   if (home.split(START).length !== 2 || home.split(END).length !== 2 || home.indexOf(END) < home.indexOf(START)) throw new Error('learn/index.html: missing or duplicate generated CoreDoc index markers')
   const assetVersion = readLearnAssetVersion(root)
   const nextHome = versionLearnStylesheets(home.slice(0, home.indexOf(START)) + renderHomeIndex(doc) + home.slice(home.indexOf(END) + END.length), assetVersion)
-  const reader = renderReader(doc, assetVersion)
+  const reader = renderReader(doc, assetVersion, { evidence: loadLearnEvidence(root), clauses: requirementClauses(source, SOURCE) })
   if (check) {
     if (!existsSync(resolve(root, READER)) || readFileSync(resolve(root, READER), 'utf8') !== reader || home !== nextHome) throw new Error('Learn CoreDoc is out of date. Run npm run learn:build and review the generated changes.')
   } else {

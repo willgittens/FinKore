@@ -14,8 +14,8 @@ const pages = ['learn/index.html', 'learn/coredoc.html', ...LEARN_PAGES.map(page
 function fixture(t) {
   const root = mkdtempSync(join(tmpdir(), 'finkore-learn-assets-'))
   t.after(() => rmSync(root, { recursive: true, force: true }))
-  const sources = ['package.json', ...LEARN_EDITORIAL_PAGES, 'docs/coreDoc/core-doc.md', ...LEARN_PAGES.map(page => page.source),
-    'docs/tools/build-learn-assets.js', 'docs/tools/build-learn-coredoc.js', 'docs/tools/build-learn-pages.js']
+  const sources = ['package.json', ...LEARN_EDITORIAL_PAGES, 'docs/coreDoc/core-doc.md', 'learn/related-evidence.json', ...LEARN_PAGES.map(page => page.source),
+    'docs/tools/build-learn-assets.js', 'docs/tools/build-learn-coredoc.js', 'docs/tools/build-learn-pages.js', 'docs/tools/learn-evidence.js', 'docs/tools/learn-specifications.js']
   for (const path of sources) {
     mkdirSync(dirname(join(root, path)), { recursive: true })
     writeFileSync(join(root, path), readFileSync(new URL(path, repository)))

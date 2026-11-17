@@ -9,6 +9,8 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { posix, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { readLearnAssetVersion, versionLearnStylesheets } from './build-learn-assets.js'
+import { SPECIFICATION_PAGES } from './learn-specifications.js'
+import { decorateSpecification, loadLearnEvidence } from './learn-evidence.js'
 
 export const LEARN_PAGES = [
   { source: 'docs/where-to-start.md', output: 'learn/where-to-start.html', label: 'Where to start', description: 'Understand FinKore, choose your starting point, and work through your first domain slice.' },
@@ -19,6 +21,7 @@ export const LEARN_PAGES = [
   { source: 'docs/releases/README.md', output: 'learn/releases.html', label: 'Release notes', description: 'Published release history. Earlier entries describe historical repository capabilities.' },
   { source: 'legacy/README.md', output: 'learn/legacy.html', label: 'Legacy Archive', description: 'Real stories from the people who built and maintained financial software. Explore the interviews, editorial principles, and ways to share your experience.', presentation: 'legacy-archive' },
   { source: 'learn/research.md', output: 'learn/research.html', label: 'Research', description: 'Explore attributed academic findings, source quotations, and their carefully bounded relevance to FinKore financial software behavior.', presentation: 'research-archive', documentNavigation: false },
+  ...SPECIFICATION_PAGES,
   // Register interviews explicitly after editorial approval; never publish drafts by directory discovery.
   // Archive and interview quotes must preserve the interviewee's words and focus on financial systems, rules, or operational risk.
   { source: 'legacy/interviews/001-elaine-richardson.md', output: 'learn/legacy-001-elaine-richardson.html', label: 'Elaine Richardson — Interview #001', description: 'Elaine Richardson shares her experience with mainframes, COBOL, migrations, error handling, and batch processing. A personal account from the FinKore Legacy Archive.', presentation: 'legacy-interview', documentNavigation: false,
@@ -38,6 +41,7 @@ export function renderLearnNavigation({ home = false, current } = {}) {
         <ul class="nav-list">
           <li><a href="where-to-start.html"${current === 'start' ? ' aria-current="page"' : ''}>Where to start</a></li>
           <li><a href="${home ? '#core-explorer' : 'coredoc.html'}"${current === 'coredoc' ? ' aria-current="page"' : ''}>CoreDoc</a></li>
+          <li><a href="specification.html"${current === 'specification' ? ' aria-current="page"' : ''}>Specifications</a></li>
           <li><a href="network.html"${current === 'network' ? ' aria-current="page"' : ''}>Join the Network</a></li>
           <li><a class="nav-start" href="${GITHUB_PROJECT_URL}" target="_blank" rel="noopener noreferrer">Github Project <span aria-hidden="true">↗</span></a></li>
         </ul>
@@ -64,8 +68,8 @@ export function renderLearnOpenGraph({ title, description, path }) {
   <meta property="og:image:alt" content="FinKore — Define once. Build many times." />`
 }
 
-// Only the converted documents are redirected. Specs, conformance and other
-// repository references retain their original destinations and fragments.
+// Only registered readers are redirected. Conformance and other repository
+// references retain their original destinations and fragments.
 // Learn is the published site root. Keep readers and assets inside it local;
 // link repository files outside Learn to GitHub, preserving fragments.
 export function learnLink(source, href) {
@@ -377,7 +381,7 @@ function renderLegacyPage(page, markdown, doc, assetVersion) {
 </body></html>`, assetVersion)
 }
 
-export function renderLearnPage(page, markdown, assetVersion) {
+export function renderLearnPage(page, markdown, assetVersion, { evidence } = {}) {
   const doc = renderLearnMarkdown(markdown, page.source)
   if (page.presentation?.startsWith('legacy-') || page.presentation === 'research-archive') return renderLegacyPage(page, markdown, doc, assetVersion)
   const navigation = doc.headings.filter(h => h.level >= 2 && h.level <= (page.tocDepth ?? 2)).map(h => `<a class="core-nav-intro${h.level === 3 ? ' learn-nav-question' : ''}" href="#${escapeHtml(h.id)}">${escapeHtml(h.title)}</a>`).join('\n')
@@ -402,7 +406,7 @@ export function renderLearnPage(page, markdown, assetVersion) {
   <header class="site-header">
     <div class="container header-layout">
       <a class="brand" href="index.html" aria-label="FinKore home"><img class="brand-logo" src="img/Finkore-Logo.png" alt="FinKore" width="1013" height="226" decoding="async" /></a>
-      ${renderLearnNavigation({ current: page.output === 'learn/where-to-start.html' ? 'start' : undefined })}
+      ${renderLearnNavigation({ current: page.presentation === 'specification' ? 'specification' : page.output === 'learn/where-to-start.html' ? 'start' : undefined })}
     </div>
   </header>
   <main id="main">
@@ -411,14 +415,14 @@ export function renderLearnPage(page, markdown, assetVersion) {
       <h1 id="${escapeHtml(doc.titleId)}">${escapeHtml(doc.title)}</h1>
       <p class="core-reader-lead">${escapeHtml(page.description)}</p>
       <div class="actions"><a class="text-link" href="${GITHUB_FILE_BASE_URL}${page.source}" target="_blank" rel="noopener noreferrer">View Markdown source <span aria-hidden="true">↗</span></a></div>${page.parent ? `\n      <p class="learn-parent"><a class="text-link" href="${escapeHtml(page.parent.href)}">← ${escapeHtml(page.parent.label)}</a></p>` : ''}
-      <nav class="learn-document-links" aria-label="Learn documents">${LEARN_PAGES.filter(p => p.documentNavigation !== false).map(p => `<a href="${posix.basename(p.output)}"${p === page ? ' aria-current="page"' : ''}>${escapeHtml(p.label)}</a>`).join('')}<a href="coredoc.html">CoreDoc</a></nav>
+      <nav class="learn-document-links" aria-label="Learn documents">${LEARN_PAGES.filter(p => p.documentNavigation !== false).map(p => `<a href="${posix.basename(p.output)}"${p === page ? ' aria-current="page"' : ''}>${escapeHtml(p.label)}</a>`).join('')}<a href="coredoc.html">CoreDoc</a></nav>${page.presentation === 'specification' ? `\n      <nav class="learn-document-links spec-domain-links" aria-label="Specification domains">${SPECIFICATION_PAGES.filter(p => /\/README\.md$/.test(p.source)).map(p => `<a href="${posix.basename(p.output)}"${p === page ? ' aria-current="page"' : ''}>${escapeHtml(p.label)}</a>`).join('')}</nav>` : ''}
     </header>
     <div class="container core-reader-layout">
       <aside class="core-sidebar"><nav aria-label="Table of contents"><p class="eyebrow">On this page</p>${navigation}</nav></aside>
       <div class="core-reader-content">
         <details class="learn-document-index"><summary>On this page</summary><nav aria-label="Mobile table of contents">${navigation}</nav></details>
         <article class="core-prose learn-document-prose" aria-label="${escapeHtml(doc.title)}">
-${doc.html.replace(/<h1\b[^>]*>[\s\S]*?<\/h1>\n?/, '')}
+${(page.presentation === 'specification' ? decorateSpecification(doc.html, markdown, page.source, evidence) : doc.html).replace(/<h1\b[^>]*>[\s\S]*?<\/h1>\n?/, '')}
         </article>
         <a class="text-link core-back-top" href="#top">Back to the top ↑</a>
       </div>
@@ -435,7 +439,8 @@ ${doc.html.replace(/<h1\b[^>]*>[\s\S]*?<\/h1>\n?/, '')}
 
 export function buildLearnPages(root = process.cwd(), { check = false } = {}) {
   const assetVersion = readLearnAssetVersion(root)
-  const outputs = LEARN_PAGES.map(page => [page.output, renderLearnPage(page, readFileSync(resolve(root, page.source), 'utf8'), assetVersion)])
+  const evidence = loadLearnEvidence(root)
+  const outputs = LEARN_PAGES.map(page => [page.output, renderLearnPage(page, readFileSync(resolve(root, page.source), 'utf8'), assetVersion, { evidence })])
   for (const path of LEARN_EDITORIAL_PAGES) {
     const html = readFileSync(resolve(root, path), 'utf8')
     const next = html.replace(/<nav aria-label="Primary navigation">[\s\S]*?<\/nav>/, renderLearnNavigation({ home: path === 'learn/index.html', current: path === 'learn/network.html' ? 'network' : undefined })).replace(/<nav class="experts-navigation" aria-label="Experts navigation">[\s\S]*?<\/nav>/, renderExpertsNavigation(path === 'learn/reviews.html' ? 'reviews' : undefined)).replace(/href="([^"]+)"/g, (match, href) => {

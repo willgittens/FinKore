@@ -1,0 +1,61 @@
+// SPDX-License-Identifier: MPL-2.0
+/**
+ * Registers canonical specification readers for Learn. This developer tool reads
+ * explicit publication metadata without changing repository sources. It writes
+ * nothing and does not define or execute financial behavior.
+ */
+const documents = [
+  ["spec/README.md", "specification.html", "FinKore Specification"],
+  ["spec/approvals/README.md", "spec-approvals.html", "Approvals"],
+  ["spec/approvals/chains.md", "spec-approvals-chains.html", "Approval Chains"],
+  ["spec/approvals/composition.md", "spec-approvals-composition.html", "Approval Composition"],
+  ["spec/approvals/conditions.md", "spec-approvals-conditions.html", "Approval Conditions"],
+  ["spec/approvals/decisions.md", "spec-approvals-decisions.html", "Approval Decisions"],
+  ["spec/approvals/errors.md", "spec-approvals-errors.html", "Approval Errors"],
+  ["spec/approvals/requirements.md", "spec-approvals-requirements.html", "Approval Requirements"],
+  ["spec/approvals/validity.md", "spec-approvals-validity.html", "Approval Validity"],
+  ["spec/audit/README.md", "spec-audit.html", "Audit"],
+  ["spec/audit/actors.md", "spec-audit-actors.html", "Audit Actors"],
+  ["spec/audit/append-only.md", "spec-audit-append-only.html", "Append-Only Audit History"],
+  ["spec/audit/changes.md", "spec-audit-changes.html", "Audit Changes"],
+  ["spec/audit/errors.md", "spec-audit-errors.html", "Audit Errors"],
+  ["spec/audit/events.md", "spec-audit-events.html", "Audit Events"],
+  ["spec/audit/redaction.md", "spec-audit-redaction.html", "Audit Redaction"],
+  ["spec/audit/relationships.md", "spec-audit-relationships.html", "Audit Relationships"],
+  ["spec/conventions.md", "spec-conventions.html", "Specification Conventions"],
+  ["spec/entities/README.md", "spec-entities.html", "Financial Entities"],
+  ["spec/entities/errors.md", "spec-entities-errors.html", "Entity Errors"],
+  ["spec/entities/evolution.md", "spec-entities-evolution.html", "Entity Evolution"],
+  ["spec/entities/identity.md", "spec-entities-identity.html", "Entity Identity"],
+  ["spec/entities/import.md", "spec-entities-import.html", "Entity Import"],
+  ["spec/entities/lifecycle.md", "spec-entities-lifecycle.html", "Entity Lifecycle"],
+  ["spec/entities/mutability.md", "spec-entities-mutability.html", "Entity Mutability"],
+  ["spec/entities/revisions.md", "spec-entities-revisions.html", "Entity Revisions"],
+  ["spec/entities/validation.md", "spec-entities-validation.html", "Entity Validation"],
+  ["spec/glossary.md", "spec-glossary.html", "Glossary"],
+  ["spec/money/README.md", "spec-money.html", "Money"],
+  ["spec/money/allocation.md", "spec-money-allocation.html", "Money Allocation"],
+  ["spec/money/arithmetic.md", "spec-money-arithmetic.html", "Money Arithmetic"],
+  ["spec/money/comparison.md", "spec-money-comparison.html", "Money Comparison"],
+  ["spec/money/currency.md", "spec-money-currency.html", "Currency"],
+  ["spec/money/errors.md", "spec-money-errors.html", "Money Errors"],
+  ["spec/money/rates.md", "spec-money-rates.html", "Money Rates"],
+  ["spec/money/representation.md", "spec-money-representation.html", "Money Representation"],
+  ["spec/money/rounding.md", "spec-money-rounding.html", "Money Rounding"],
+  ["spec/money/serialization.md", "spec-money-serialization.html", "Money Serialization"],
+  ["spec/workflow/README.md", "spec-workflow.html", "Workflow"],
+  ["spec/workflow/conflicts.md", "spec-workflow-conflicts.html", "Workflow Conflicts"],
+  ["spec/workflow/errors.md", "spec-workflow-errors.html", "Workflow Errors"],
+  ["spec/workflow/guards.md", "spec-workflow-guards.html", "Workflow Guards"],
+  ["spec/workflow/import.md", "spec-workflow-import.html", "Workflow Import"],
+  ["spec/workflow/states.md", "spec-workflow-states.html", "Workflow States"],
+  ["spec/workflow/terminal-states.md", "spec-workflow-terminal-states.html", "Terminal States"],
+  ["spec/workflow/transitions.md", "spec-workflow-transitions.html", "Workflow Transitions"],
+  ["spec/workflow/versioning.md", "spec-workflow-versioning.html", "Workflow Definition Versioning"],
+]
+
+export const SPECIFICATION_PAGES = documents.map(([source, destination, title]) => ({
+  source, output: `learn/${destination}`, label: source === 'spec/README.md' ? 'Specifications' : title,
+  description: `${title} — FinKore specification text, requirements, and related reading.`,
+  presentation: 'specification', documentNavigation: source === 'spec/README.md',
+}))

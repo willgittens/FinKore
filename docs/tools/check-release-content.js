@@ -11,6 +11,7 @@ import { pathToFileURL } from 'node:url'
 import { markdownAnchors } from './check-doc-links.js'
 import { buildLearnCoreDoc } from './build-learn-coredoc.js'
 import { LEARN_PAGES, LEARN_EDITORIAL_PAGES, renderLearnPage, buildLearnPages, GITHUB_PROJECT_URL, GITHUB_FILE_BASE_URL } from './build-learn-pages.js'
+import { loadLearnEvidence } from './learn-evidence.js'
 import { readLearnAssetVersion } from './build-learn-assets.js'
 
 const LOCAL_STATE = new Set(['.git', '.tools', 'node_modules', '.npm-cache', 'coverage', 'dist', 'reports'])
@@ -221,11 +222,12 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
   // exact generation is verified. HTML links and controls are always checked.
   const synchronizedPages = new Map()
   if (LEARN_PAGES.some(page => files.has(page.output))) {
+    const evidence = loadLearnEvidence(root)
     try { buildLearnPages(root, { check: true }) }
     catch (error) { errors.push('learn: ' + error.message) }
     for (const page of LEARN_PAGES.filter(page => files.has(page.output))) {
       try {
-        if (files.get(page.output) === renderLearnPage(page, files.get(page.source) ?? '', readLearnAssetVersion(root))) synchronizedPages.set(page.output, page.source)
+        if (files.get(page.output) === renderLearnPage(page, files.get(page.source) ?? '', readLearnAssetVersion(root), { evidence })) synchronizedPages.set(page.output, page.source)
       } catch (error) { errors.push(`${page.output}: ${error.message}`) }
     }
   }

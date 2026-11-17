@@ -1000,7 +1000,7 @@ code {
 
 @media (max-width: 30rem) {
   :root {
-    --site-header-height: 8rem;
+    --site-header-height: 12rem;
   }
 
   .site-header nav {
