@@ -1,0 +1,22 @@
+{
+  "valid": [
+    "MIT Computer Science and Artificial Intelligence Laboratory",
+    "Massachusetts Institute of Technology (MIT) - Sloan School of Management",
+    "DSpace@MIT (Massachusetts Institute of Technology)",
+    "The previous checker reported unexpected MIT references in academic metadata."
+  ],
+  "invalid": [
+    "MIT License",
+    "MIT-licensed source code",
+    "This project is licensed under MIT.",
+    "Licensed under the MIT license.",
+    "SPDX-License-Identifier: MIT",
+    "License: MIT",
+    "license=MIT",
+    "{\"license\": \"MIT\"}",
+    "{'license': 'MIT'}",
+    "{\"license\": \"https://opensource.org/licenses/MIT\"}",
+    "@license MIT",
+    "FinKore uses MIT."
+  ]
+}

@@ -47,6 +47,7 @@
 
 .network-split { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: clamp(2rem, 6vw, 6rem); }
 .network-heading h2 { max-width: 24ch; margin-top: 1rem; }
+.network-heading h1 { max-width: 24ch; margin-top: 1rem; font-size: clamp(2.5rem, 4.5vw, 3.5rem); }
 .network-heading > p:not(.eyebrow) { margin-top: 1.25rem; color: var(--muted); }
 .network-prose { color: var(--muted); }
 .network-prose p + p { margin-top: 1rem; }

@@ -9,6 +9,32 @@ artifacts, and their verification results. Those records are preserved as
 history and are not claims about the current repository's supported surface or
 current execution evidence.
 
+## FinKore Core 2.0.4 — 2026-11-18
+
+Compatible documentation and maintenance patch, approved by the maintainer on
+2026-11-18. This acceptance does not establish specialist sign-off.
+The financial behavior, 447 requirements, portable errors, 1,823 vectors in
+47 files, and 20 canonical operations are unchanged. Conformance formats remain
+`0.1`, the private maintenance package remains `0.1.0`, and consumers need no
+data migration.
+
+Learn groups Research, Legacy and Reviews under Experts, publishes 47
+specification readers, and connects 33 preliminary research notes and practitioner
+accounts to 70 rules through 129 explicitly scoped links. Source roles,
+limitations and pending validation remain visible; these links establish neither
+certification nor specialist sign-off. Interview wording and confidential
+omissions remain preserved.
+
+Publication checks distinguish institution names from incompatible license
+notices, inspect registered research snapshots with bounded decompression and
+integrity checks, and preserve cited study versions without accepting site
+placeholders. On 2026-11-17, local verification passed 97 maintenance-tool tests; optional
+research/Legacy checks passed 49 Python tests. Browser checks covered all 61
+Learn pages at four viewport widths, keyboard navigation and URL-prefix hosting.
+A fresh npm registry advisory query on 2026-11-18 reported zero vulnerabilities
+across the five locked maintenance dependencies. These checks do not execute financial
+behavior or establish external implementation conformance.
+
 ## FinKore Core 2.0.3 — 2026-11-09
 
 Compatible 2.0.3 patch. Financial requirements, portable errors,

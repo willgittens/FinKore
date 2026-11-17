@@ -5,9 +5,11 @@
  * This developer tool reads files without changing them or using the network.
  * It does not define or execute financial behavior or establish conformance.
  */
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync, statSync, realpathSync } from 'node:fs'
 import { dirname, extname, join, relative, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { createHash } from 'node:crypto'
+import { gunzipSync } from 'node:zlib'
 import { markdownAnchors } from './check-doc-links.js'
 import { buildLearnCoreDoc } from './build-learn-coredoc.js'
 import { LEARN_PAGES, LEARN_EDITORIAL_PAGES, renderLearnPage, buildLearnPages, GITHUB_PROJECT_URL, GITHUB_FILE_BASE_URL } from './build-learn-pages.js'
@@ -18,7 +20,7 @@ const LOCAL_STATE = new Set(['.git', '.tools', 'node_modules', '.npm-cache', 'co
 const NEGATIVE_FIXTURE = 'docs/tools/test/fixtures/release-content-negative.json'
 const REQUIRED = ['README.md', 'docs/coreDoc/core-doc.md', 'spec/README.md', 'conformance/README.md', 'agentic/README.md']
 const DOMAINS = ['money', 'workflow', 'audit', 'approvals', 'entities']
-export const TARGET_CORE_VERSION = '2.0.3'
+export const TARGET_CORE_VERSION = '2.0.4'
 const TARGET_CORE_BASELINE = TARGET_CORE_VERSION.split('.').slice(0, 2).join('.')
 const PLAN_REFERENCE = /docs[/\\]plans\b|\bplan-\d+(?:\.\d+)*\b/i
 const SUPPLEMENT_REFERENCE = /boundary097-cases\.json|readSupplementary[C]ases|SUPPLEMENTARY[_]CASES|manifest\/supplementary/i
@@ -126,7 +128,7 @@ function isAllowedExternalLink(path, tag, href) {
     tokens.includes('noopener') && tokens.includes('noreferrer')
 }
 
-function checkHtml(root, path, text, errors) {
+function checkHtml(root, path, text, errors, { verifiedResearch = false } = {}) {
   // Only the declared mobile CoreDoc disclosure script is allowed.
   // Keep inline/other scripts and unrelated controls outside this profile.
   const markup = text.replace(/<!--[\s\S]*?-->/g, '')
@@ -138,7 +140,11 @@ function checkHtml(root, path, text, errors) {
   if (/<(?:script|form|input|button|select|textarea)\b/i.test(unsupported) || /\son\w+\s*=/i.test(markup)) {
     errors.push(`${path}: interactive HTML is outside the supported Learn profile`)
   }
-  if (/\b(?:TODO|TBD)\b|suggested structure|this section should grow|Version\s+0\.1\.0/i.test(plain(text))) {
+  // A cited study's version is bibliographic data, not the site's release status.
+  // This narrow exclusion applies only to the version field of the exactly
+  // synchronized Research reader; placeholders elsewhere still fail.
+  const versionText = verifiedResearch ? text.replace(/<li><strong>Version:<\/strong>[\s\S]*?<\/li>/g, '') : text
+  if (/\b(?:TODO|TBD)\b|suggested structure|this section should grow/i.test(plain(text)) || /Version\s+0\.1\.0/i.test(plain(versionText))) {
     errors.push(`${path}: unfinished or ambiguous HTML content`)
   }
   const ids = htmlAttributes(text, new Set(['id']))
@@ -188,6 +194,30 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
   const root = resolve(repositoryRoot)
   const errors = []
   const files = new Map()
+  const snapshots = new Map()
+  // Optional research memory is not required by the financial contract. When
+  // present, inspect its registered snapshots instead of exempting opaque data.
+  const statePath = join(root, 'research/catalog/state.json')
+  if (existsSync(statePath)) {
+    try {
+      if (realpathSync(statePath) !== join(realpathSync(root), 'research/catalog/state.json')) throw new Error('snapshot registry must not traverse a symlink')
+      const state = JSON.parse(readFileSync(statePath, 'utf8'))
+      if (!['1.0.0', '1.1.0'].includes(state.schema_version)) throw new Error('unsupported catalog format')
+      const collect = value => {
+        if (!value || typeof value !== 'object') return
+        if (Object.hasOwn(value, 'snapshot')) {
+          if (value.snapshot !== `catalog/snapshots/${value.sha256}.gz` || !/^[a-f0-9]{64}$/.test(value.sha256) ||
+              !Number.isSafeInteger(value.size_bytes) || value.size_bytes < 1 || value.size_bytes > 64 * 1024 * 1024 ||
+              typeof value.path !== 'string' || !/\.(?:md|json)$/.test(value.path)) throw new Error('invalid snapshot reference')
+          const path = 'research/' + value.snapshot
+          if (snapshots.has(path) && snapshots.get(path).size_bytes !== value.size_bytes) throw new Error('conflicting snapshot references')
+          snapshots.set(path, value)
+        }
+        for (const child of Object.values(value)) collect(child)
+      }
+      collect(state)
+    } catch (error) { errors.push(`research/catalog/state.json: cannot inspect snapshot registry: ${error.message}`) }
+  }
   let htmlLinkCount = 0
   function walk(directory) {
     for (const entry of readdirSync(directory, { withFileTypes: true }).sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0)) {
@@ -203,15 +233,24 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
       }
       if (entry.isDirectory()) { walk(absolute); continue }
       if (!entry.isFile()) continue
-      if (/\.(?:zip|tar|tgz|gz|bz2|xz|7z)$/i.test(path)) errors.push(`${path}: opaque archives cannot be reviewed for copied planning content`)
+      const snapshot = snapshots.get(path)
+      if (/\.(?:zip|tar|tgz|gz|bz2|xz|7z)$/i.test(path) && !snapshot) errors.push(`${path}: opaque archives cannot be reviewed for copied planning content`)
       if (/boundary097-cases\.json$/i.test(path)) errors.push(`${path}: historical case supplement is forbidden`)
-      const buffer = readFileSync(absolute)
+      let buffer = readFileSync(absolute)
+      if (snapshot) {
+        try {
+          buffer = gunzipSync(buffer, { maxOutputLength: 64 * 1024 * 1024 })
+          if (buffer.length !== snapshot.size_bytes || createHash('sha256').update(buffer).digest('hex') !== snapshot.sha256 || buffer.includes(0)) throw new Error('snapshot digest, size or text mismatch')
+          new TextDecoder('utf-8', { fatal: true }).decode(buffer)
+        } catch (error) { errors.push(`${path}: cannot inspect registered snapshot: ${error.message}`); continue }
+      }
       if (buffer.includes(0)) continue
       files.set(path, buffer.toString('utf8'))
     }
   }
   if (!existsSync(root) || !statSync(root).isDirectory()) throw new Error(`Release content check failed: missing release tree: ${root}`)
   walk(root)
+  for (const path of snapshots.keys()) if (!files.has(path)) errors.push(`${path}: registered snapshot is missing or unreadable`)
   // The generated reader must match its canonical source before historical
   // governance dates can be excluded from current-status checks below.
   if (files.has('learn/coredoc.html')) {
@@ -250,7 +289,7 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
     }
     const freezeText = sourcePath === 'docs/releases/README.md' ? paragraphs.filter((p) => !retirementNote(p)).join('\n\n') : policyText
     if (FREEZE_REFERENCE.test(freezeText)) errors.push(`${path}: retired freeze definition or reference is forbidden`)
-    if (/\.html?$/i.test(path)) htmlLinkCount += checkHtml(root, path, text, errors)
+    if (/\.html?$/i.test(path)) htmlLinkCount += checkHtml(root, path, text, errors, { verifiedResearch: path === 'learn/research.html' && synchronizedPages.get(path) === 'learn/research.md' })
     if (!currentDocument(sourcePath)) continue
     const current = path.startsWith('docs/coreDoc/') ? text.split('\n').filter((line) =>
       !/^\*\*(?:Introduced|Last updated|Last updated on):\*\*/.test(line)).join('\n') :

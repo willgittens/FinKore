@@ -285,6 +285,7 @@ test('publication accepts synchronized release history but rejects changed histo
   }
   const researchPath = join(root, 'learn/research.html')
   const research = readFileSync(researchPath, 'utf8')
+  assert.doesNotMatch(diagnostics(), /learn\/research.html: unfinished or ambiguous HTML content/)
   assert.doesNotMatch(diagnostics(), /learn\/research.html: HTML link must name a local destination/)
   assert.doesNotMatch(diagnostics(), /learn\/reviews.html: HTML link must name a local destination/)
   for (const changed of [
@@ -294,4 +295,6 @@ test('publication accepts synchronized release history but rejects changed histo
     writeFileSync(researchPath, changed)
     assert.match(diagnostics(), /learn\/research.html: HTML link must name a local destination/)
   }
+  writeFileSync(researchPath, research + '<p>Version 0.1.0</p>')
+  assert.match(diagnostics(), /learn\/research.html: unfinished or ambiguous HTML content/)
 })

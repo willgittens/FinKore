@@ -56,6 +56,11 @@ The install may require registry access when the npm cache is cold. The
 `--no-audit` option keeps vulnerability lookup separate from installation.
 Once dependencies are present, `npm run check` and its `npm run verify` alias
 are deterministic local checks and do not contact an advisory service.
+License validation checks explicit incompatible notices and metadata, while
+preserving institution names and historical diagnostics in academic records.
+The designated license-negative fixture supplies adversarial notices for tests;
+it is not a project license declaration. Package licenses, the MPL source headers
+and the canonical license text remain independently checked.
 
 Run the network-backed dependency review separately when required:
 
@@ -235,10 +240,10 @@ prose, including inline scope wording. It reads text and paths without financial
 execution, mutation, or network access.
 
 The publication checker exports the deliberately selected target
-`TARGET_CORE_VERSION`, currently `2.0.3`; maintainers must review and update that
+`TARGET_CORE_VERSION`, currently `2.0.4`; maintainers must review and update that
 value for a later Core release. README, CoreDoc, each specification document,
 conformance and Agentic READMEs, and any retained Learn index must explicitly
-declare `FinKore Core 2.0.3 stable` (or `FinKore Core 2.0.3 is stable`). CoreDoc's
+declare `FinKore Core 2.0.4 stable` (or `FinKore Core 2.0.4 is stable`). CoreDoc's
 version and status fields must agree. Matching every document to an arbitrary
 different version does not satisfy the selected release target.
 For a patch target, unqualified major-minor wording may still describe the
@@ -248,9 +253,15 @@ schema syntax, maintenance-package versions, and stable vector IDs are not Core
 status. The only removed-rule exceptions are one concise retirement paragraph
 in release history and the designated adversarial JSON fixture under tool tests.
 Test and validator source files themselves are scanned.
+Optional research snapshots are inspected only when their exact paths, SHA-256
+digests and byte lengths are registered in the research catalog state. The gate
+decompresses them with a 64 MiB bound, checks integrity and UTF-8 text, and scans
+their contents under the same planning/archive rules. Missing, corrupt, binary
+or unregistered archives fail. Historical staging directories are not required,
+and source snapshots are never rewritten to satisfy this gate.
 
 During preparation, current declarations use
-`FinKore Core 2.0.3 release preparation (unpublished)`. CoreDoc's version and
+`FinKore Core 2.0.4 release preparation (unpublished)`. CoreDoc's version and
 document date identify the prepared document, while its status remains
 unpublished. Keep release notes under Unreleased and describe maintainer
 acceptance and pending specialist consultation accurately. The stable gate
@@ -261,7 +272,7 @@ For the disposable rehearsal, copy every intended tracked file from the actual
 working tree, including modified content, plus any intended new files. Do not
 use an archive of HEAD alone. Exclude temporary plans and references while
 preserving their original files locally. In that copy only, replace the exact
-preparation declaration above with `FinKore Core 2.0.3 stable`, regenerate Learn,
+preparation declaration above with `FinKore Core 2.0.4 stable`, regenerate Learn,
 and run locked installation, ordinary verification, and the stable gate. A
 temporary Git repository with the original HEAD as its comparison baseline
 allows the ordinary whitespace check to inspect the proposed edits too.
@@ -274,10 +285,9 @@ After maintainer acceptance of the release scope, finalize the real version/stat
 and release entry, remove the last working plan, and repeat the applicable gates
 on the actual final tree before tagging. The rehearsal does not waive that check.
 
-The retained Learn profile includes a home index, an editorial Network landing
-page, a generated CoreDoc reader, and six generated document readers for getting
-started, the project overview,
-licensing, contributing, implementation guidance, and release notes.
+The retained Learn profile includes the home, Network and Reviews editorial pages,
+the CoreDoc reader, 47 specification readers, Research, the Legacy archive and
+approved interviews, plus the introductory and maintenance document readers.
 The home index pairs its introductory text with the local `learn/img/Finkore.png`
 logo directly over the hero background. It loads no scripts. Scripted
 presentation is limited to closing the mobile CoreDoc index after selecting a
@@ -293,13 +303,17 @@ to the homepage founder CTA to `https://www.linkedin.com/in/will-gittens/`, the 
 project overview partner link to `https://savoiabarker.com/`, the project
 overview link to `https://finkore.dev`, and the licensing reader link to the
 official Mozilla FAQ at `https://www.mozilla.org/en-US/MPL/2.0/FAQ/`. The Network
-page additionally permits the official discussion destination
+and Reviews pages additionally permit the official discussion destination
 `https://github.com/willgittens/FinKore/discussions` and individual discussions
 under that URL with a positive integer ID, including the Expert Review areas.
 Discussion creation routes, query strings, fragments and other repositories
 remain outside this allowance. Published discussion titles and destinations
 must be verified when editing the page; the offline checker does not establish
 that a discussion exists or matches an area.
+Research permits its explicitly registered study destinations. Legacy interview
+readers permit their registered profile links. Cited study versions remain
+bibliographic data only in the exactly synchronized Research reader; this does
+not exempt site placeholders or other unfinished content.
 All must use
 `target="_blank"` and
 `rel="noopener noreferrer"`. The checker validates these destinations and their
@@ -310,7 +324,7 @@ The founder section uses a light palette and responsive grid, with a local
 portrait of Will Gittens. All Learn pages share the header's local FinKore logo
 and navigation, and the dark footer's project resource links. The footer uses
 the local `learn/img/Finkore_White.png` logo on its dark background. The primary
-navigation follows this order: Where to start, CoreDoc, Join the Network, Github Project. The last
+navigation follows this order: Where to start, CoreDoc, Specifications, Join the Network, Github Project. The last
 link retains the highlighted button style and opens the official repository at
 `https://github.com/willgittens/FinKore` in a new tab with
 `rel="noopener noreferrer"`. The release checker permits this exact external
@@ -348,18 +362,14 @@ a marked generated CoreDoc index. Edit that index through CoreDoc or its rendere
 do not edit the generated block directly. `learn/network.html` also has editorial
 content maintained directly in HTML, with page-specific styles in
 `learn/css/network.css`.
-The page leads with the Legacy Archive as its current priority in a full-width
-card, followed by Club, Contests, Experts and Angel. It labels proposed
-activities and funding status explicitly. The Experts initiative links to the
-page's permanent `#expert-review` program section, with eight review areas,
-verified GitHub Discussion links and the specification contribution process.
-Expert participation does not imply normative approval or certification. Its
-participation CTAs use the official GitHub Discussions and the existing CoreDoc
-reader. The build synchronizes navigation and stylesheet
-versions on both editorial pages while preserving their content. The Legacy
-card links to the archive, its first approved interview, and the existing
-participation discussion. Interviews are personal accounts, not normative
-requirements or technical endorsements. The document
+The page leads with Experts, grouping Research, Legacy and Reviews, followed by
+Club, Contests and Angel. It labels proposed activities and funding status
+explicitly. Reviews retains the eight discussion areas on its independent page;
+the existing Network anchors remain entry points to the collections. Expert
+participation does not imply normative approval or certification. The build
+synchronizes navigation and stylesheet versions on all three editorial pages
+while preserving their content. Interviews remain personal accounts, not
+normative requirements or technical endorsements. The document
 readers listed below are generated in full from their Markdown sources and renderers.
 
 Each `npm run learn:build` creates a fresh CSS cache identifier, even when the
