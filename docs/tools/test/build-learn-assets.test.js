@@ -6,16 +6,16 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import test from 'node:test'
-import { LEARN_PAGES } from '../build-learn-pages.js'
+import { LEARN_PAGES, LEARN_EDITORIAL_PAGES } from '../build-learn-pages.js'
 import { readLearnAssetVersion, versionLearnStylesheets } from '../build-learn-assets.js'
 
 const repository = new URL('../../../', import.meta.url)
-const pages = ['learn/index.html', 'learn/coredoc.html', ...LEARN_PAGES.map(page => page.output), 'learn/network.html']
+const pages = ['learn/index.html', 'learn/coredoc.html', ...LEARN_PAGES.map(page => page.output), ...LEARN_EDITORIAL_PAGES.filter(page => page !== 'learn/index.html')]
 function fixture(t) {
   const root = mkdtempSync(join(tmpdir(), 'finkore-learn-assets-'))
   t.after(() => rmSync(root, { recursive: true, force: true }))
-  const sources = ['package.json', 'learn/index.html', 'learn/network.html', 'docs/coreDoc/core-doc.md', ...LEARN_PAGES.map(page => page.source),
-    'docs/tools/build-learn-assets.js', 'docs/tools/build-learn-coredoc.js', 'docs/tools/build-learn-pages.js']
+  const sources = ['package.json', ...LEARN_EDITORIAL_PAGES, 'docs/coreDoc/core-doc.md', 'learn/related-evidence.json', ...LEARN_PAGES.map(page => page.source),
+    'docs/tools/build-learn-assets.js', 'docs/tools/build-learn-coredoc.js', 'docs/tools/build-learn-pages.js', 'docs/tools/learn-evidence.js', 'docs/tools/learn-specifications.js']
   for (const path of sources) {
     mkdirSync(dirname(join(root, path)), { recursive: true })
     writeFileSync(join(root, path), readFileSync(new URL(path, repository)))

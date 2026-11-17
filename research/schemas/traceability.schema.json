@@ -1,0 +1,475 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finkore:research-traceability:1.0.0",
+  "title": "Non-normative research-to-contract traceability",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "curation",
+    "resolved"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "curation": {
+      "type": "object",
+      "required": [
+        "description",
+        "mappings",
+        "related_findings"
+      ],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "mappings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/mapping"
+          }
+        },
+        "related_findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "from",
+              "to",
+              "relationship",
+              "explanation"
+            ],
+            "properties": {
+              "from": {
+                "$ref": "#/$defs/mapId"
+              },
+              "to": {
+                "$ref": "#/$defs/mapId"
+              },
+              "relationship": {
+                "enum": [
+                  "complements",
+                  "contrasts_conditions",
+                  "qualifies"
+                ]
+              },
+              "explanation": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "resolved": {
+      "type": "object",
+      "required": [
+        "contract",
+        "research_sources",
+        "records",
+        "by_target",
+        "unreviewed_by_target",
+        "by_domain",
+        "counts"
+      ],
+      "properties": {
+        "contract": {
+          "type": "object",
+          "required": [
+            "core_version",
+            "repository_revision",
+            "files",
+            "targets",
+            "vectors",
+            "operations"
+          ],
+          "properties": {
+            "core_version": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "repository_revision": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "files": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/hash"
+              }
+            },
+            "targets": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/target"
+              }
+            },
+            "vectors": {
+              "type": "object"
+            },
+            "operations": {
+              "type": "object"
+            }
+          }
+        },
+        "research_sources": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/hash"
+          }
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "mapping_id",
+              "review_id",
+              "status",
+              "recheck_reasons",
+              "normative_acceptance",
+              "research_findings_status",
+              "learn_eligible",
+              "evidence_refs"
+            ],
+            "properties": {
+              "mapping_id": {
+                "$ref": "#/$defs/mapId"
+              },
+              "review_id": {
+                "$ref": "#/$defs/reviewId"
+              },
+              "status": {
+                "enum": [
+                  "reviewed",
+                  "pending_evidence",
+                  "not_recommended",
+                  "pending_curation",
+                  "needs_recheck"
+                ]
+              },
+              "recheck_reasons": {
+                "$ref": "#/$defs/strings"
+              },
+              "normative_acceptance": {
+                "const": "not_requested"
+              },
+              "research_findings_status": {
+                "const": "pending_validation"
+              },
+              "learn_eligible": {
+                "type": "boolean"
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "catalog",
+                    "report"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "pattern": "^EVD-[0-9]{4,}$"
+                    },
+                    "catalog": {
+                      "const": "allFindings.json"
+                    },
+                    "report": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "by_target": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/mapId"
+            }
+          }
+        },
+        "unreviewed_by_target": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/mapId"
+            }
+          }
+        },
+        "by_domain": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/mapId"
+            }
+          }
+        },
+        "counts": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "mapId": {
+      "type": "string",
+      "pattern": "^MAP-[0-9]{4,}$"
+    },
+    "reviewId": {
+      "type": "string",
+      "pattern": "^REV-[0-9]{4,}$"
+    },
+    "strings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "relationship": {
+      "enum": [
+        "already_addressed",
+        "possible_gap",
+        "possible_conflict",
+        "application_policy",
+        "deferred_scope",
+        "outside_scope",
+        "unverified"
+      ]
+    },
+    "target": {
+      "type": "object",
+      "required": [
+        "id",
+        "layer",
+        "title",
+        "path",
+        "anchor",
+        "statement",
+        "clause_sha256",
+        "modalities",
+        "vector_ids",
+        "agentic_operation_ids",
+        "coredoc_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "layer": {
+          "enum": [
+            "coredoc",
+            "spec"
+          ]
+        },
+        "title": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "anchor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "statement": {
+          "type": "string"
+        },
+        "clause_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "modalities": {
+          "$ref": "#/$defs/strings"
+        },
+        "vector_ids": {
+          "$ref": "#/$defs/strings"
+        },
+        "agentic_operation_ids": {
+          "$ref": "#/$defs/strings"
+        },
+        "coredoc_ids": {
+          "$ref": "#/$defs/strings"
+        },
+        "explicit_spec_references": {
+          "$ref": "#/$defs/strings"
+        },
+        "coverage": {
+          "type": "object"
+        }
+      }
+    },
+    "mapping": {
+      "type": "object",
+      "required": [
+        "id",
+        "review_id",
+        "claim",
+        "curation_status",
+        "interpretation",
+        "contract_scope",
+        "evidence_ids",
+        "conditions_and_limits",
+        "learn_angle",
+        "bindings",
+        "checked_source",
+        "reviewed_on"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/mapId"
+        },
+        "review_id": {
+          "$ref": "#/$defs/reviewId"
+        },
+        "claim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "curation_status": {
+          "enum": [
+            "reviewed",
+            "pending_evidence",
+            "not_recommended",
+            "pending_curation"
+          ]
+        },
+        "interpretation": {
+          "enum": [
+            "reviewer_inference",
+            "source_statement",
+            "unverified"
+          ]
+        },
+        "contract_scope": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/relationship"
+          }
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^EVD-[0-9]{4,}$"
+          }
+        },
+        "conditions_and_limits": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "learn_angle": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reviewed_on": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "checked_source": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "review_sha256",
+                "evidence_sha256"
+              ],
+              "properties": {
+                "review_sha256": {
+                  "$ref": "#/$defs/hash"
+                },
+                "evidence_sha256": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/$defs/hash"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "bindings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "target_id",
+              "relationship",
+              "evidence_role",
+              "explanation",
+              "reviewed_clause"
+            ],
+            "properties": {
+              "target_id": {
+                "type": "string"
+              },
+              "relationship": {
+                "$ref": "#/$defs/relationship"
+              },
+              "evidence_role": {
+                "enum": [
+                  "supports_rationale",
+                  "illustrates_risk",
+                  "limits_claim",
+                  "counterpoint",
+                  "context_only"
+                ]
+              },
+              "explanation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reviewed_clause": {
+                "type": "object",
+                "required": [
+                  "sha256",
+                  "statement",
+                  "path"
+                ],
+                "properties": {
+                  "sha256": {
+                    "$ref": "#/$defs/hash"
+                  },
+                  "statement": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

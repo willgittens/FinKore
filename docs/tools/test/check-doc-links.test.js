@@ -9,7 +9,9 @@ import { runDocumentationCli } from '../check-doc-links.js'
 
 function fixture() {
   const root = mkdtempSync(join(tmpdir(), 'finkore-doc-links-'))
-  for (const directory of ['.github', 'spec', 'conformance', 'agentic', 'docs', 'learn', 'legacy']) {
+  // Legacy comparisons link to research discussions and their skill guidance;
+  // keep real destinations rather than stubbing or ignoring documentation links.
+  for (const directory of ['.agents', '.github', 'spec', 'conformance', 'agentic', 'docs', 'learn', 'legacy', 'research']) {
     cpSync(resolve(directory), join(root, directory), { recursive: true })
   }
   for (const file of ['AGENTS.md', 'CONTRIBUTING.md', 'LICENSE', 'LICENSING.md', 'NOTICE.md', 'README.md', 'SECURITY.md', 'THIRD_PARTY_LICENSES.md', 'TRADEMARKS.md']) {

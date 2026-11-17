@@ -80,11 +80,15 @@
 /* A quiet masthead and a generous text column give each interview room to breathe. */
 .legacy-interview-hero { border-bottom: 1px solid var(--legacy-line); }
 .legacy-interview-heading { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.8fr); align-items: center; gap: clamp(2rem, 6vw, 6rem); }
-.legacy-interview-heading h1 { margin-top: 1.25rem; font-size: clamp(3.25rem, 6vw, 5.25rem); }
+.legacy-interview-profile { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: clamp(1rem, 2vw, 2rem); min-width: 0; }
+.legacy-interview-info { min-width: 0; }
+.legacy-interview-info:only-child { grid-column: 1 / -1; }
+.legacy-interview-heading h1 { margin-top: 1.25rem; font-size: clamp(2.5rem, 4vw, 4rem); }
 .legacy-interview-heading .legacy-deck { max-width: 50ch; margin-top: 1.5rem; color: var(--muted); }
 .legacy-byline { margin-top: 1.5rem; color: var(--muted); font-size: 0.75rem; }
 .legacy-byline > span { margin-inline: 0.35rem; }
 .legacy-interview-heading .text-link { margin-top: 1.5rem; }
+.legacy-portrait { display: block; width: clamp(7rem, 12vw, 10rem); max-width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; border: 1px solid var(--legacy-line); background: var(--white); }
 .legacy-pullquote { padding: 1rem 0 1rem 2rem; border-left: 1px solid var(--legacy-line); }
 .legacy-pullquote > span { display: block; height: 4rem; color: var(--accent); font-family: Georgia, 'Times New Roman', serif; font-size: 7rem; line-height: 1; }
 .legacy-pullquote blockquote { margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(1.5rem, 2.6vw, 2rem); line-height: 1.5; }
@@ -143,6 +147,8 @@
   .legacy-reading-layout { padding-top: 2rem; }
   .legacy-story { font-size: 1.0625rem; }
   .legacy-interview-heading h1 { font-size: clamp(2.75rem, 11vw, 4rem); }
+  .legacy-interview-profile { grid-template-columns: minmax(0, 1fr); }
+  .legacy-portrait { width: min(100%, 12rem); }
   .legacy-pullquote { padding-left: 1.25rem; }
   .legacy-record { margin-bottom: 2rem; }
 }

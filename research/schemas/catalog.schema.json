@@ -1,0 +1,641 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finkore:research-catalog:1.1.0",
+  "title": "Non-normative cumulative research memory 1.1.0",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/state"
+    },
+    {
+      "$ref": "#/$defs/publications"
+    },
+    {
+      "$ref": "#/$defs/seen"
+    },
+    {
+      "$ref": "#/$defs/sessions"
+    },
+    {
+      "$ref": "#/$defs/findings"
+    }
+  ],
+  "$defs": {
+    "header": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "generation_id",
+        "updated_at"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.1.0"
+        },
+        "generation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "updated_at": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "strings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "workId": {
+      "type": "string",
+      "pattern": "^work:[0-9a-f-]{36}$"
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "path",
+        "sha256",
+        "snapshot",
+        "size_bytes"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Historical import path only; read snapshot for canonical source bytes."
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "snapshot": {
+          "type": "string",
+          "pattern": "^catalog/snapshots/[0-9a-f]{64}\\.gz$"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "heading": {
+          "type": "string"
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "json_pointer": {
+          "type": "string",
+          "pattern": "^/"
+        }
+      }
+    },
+    "revision": {
+      "type": "object",
+      "required": [
+        "revision_id",
+        "imported_at",
+        "inputs"
+      ],
+      "properties": {
+        "revision_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "imported_at": {
+          "type": "string"
+        },
+        "inputs": {
+          "type": "object",
+          "required": [
+            "manifest.json"
+          ],
+          "properties": {
+            "manifest.json": {
+              "$ref": "#/$defs/source"
+            }
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
+    "sessionState": {
+      "type": "object",
+      "required": [
+        "current_revision",
+        "revisions",
+        "storage_mode"
+      ],
+      "properties": {
+        "current_revision": {
+          "type": "string"
+        },
+        "revisions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/revision"
+          }
+        },
+        "storage_mode": {
+          "const": "unified"
+        },
+        "legacy_source_present": {
+          "type": "boolean",
+          "description": "Historical v1.0 flag; never used as a current filesystem dependency."
+        }
+      }
+    },
+    "state": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/header"
+        }
+      ],
+      "type": "object",
+      "required": [
+        "sessions",
+        "review_revisions",
+        "identities",
+        "redirects"
+      ],
+      "properties": {
+        "sessions": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/sessionState"
+          }
+        },
+        "review_revisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "current_review": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/source"
+            }
+          ]
+        },
+        "redirects": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/workId"
+          }
+        },
+        "identities": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "aliases",
+              "order",
+              "seed"
+            ],
+            "properties": {
+              "aliases": {
+                "$ref": "#/$defs/strings"
+              },
+              "order": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "seed": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "object",
+      "required": [
+        "triage_recorded",
+        "best_reported_reading_extent",
+        "source_text_read",
+        "full_text_reviewed",
+        "review_recorded",
+        "scope"
+      ],
+      "properties": {
+        "triage_recorded": {
+          "type": "boolean"
+        },
+        "best_reported_reading_extent": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_text_read": {
+          "type": "boolean"
+        },
+        "full_text_reviewed": {
+          "type": "boolean"
+        },
+        "review_recorded": {
+          "type": "boolean"
+        },
+        "scope": {
+          "type": "string"
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "skip_initial_triage_for_same_intent",
+        "requires_topic_and_version_check",
+        "eligible_for_deeper_reading",
+        "needs_follow_up"
+      ],
+      "properties": {
+        "skip_initial_triage_for_same_intent": {
+          "type": "boolean"
+        },
+        "requires_topic_and_version_check": {
+          "const": true
+        },
+        "eligible_for_deeper_reading": {
+          "type": "boolean"
+        },
+        "needs_follow_up": {
+          "type": "boolean"
+        }
+      }
+    },
+    "reading": {
+      "type": "object",
+      "required": [
+        "session_id",
+        "publication_id",
+        "local_publication_id",
+        "reading_extent",
+        "source",
+        "is_current",
+        "source_urls",
+        "notes"
+      ],
+      "properties": {
+        "session_id": {
+          "type": "string"
+        },
+        "publication_id": {
+          "type": "string"
+        },
+        "local_publication_id": {
+          "type": "string",
+          "pattern": "^PUB-[0-9]+$"
+        },
+        "reading_extent": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "is_current": {
+          "type": "boolean"
+        },
+        "source_urls": {
+          "$ref": "#/$defs/strings"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "work": {
+      "type": "object",
+      "required": [
+        "work_id",
+        "identifiers",
+        "status",
+        "reading_history",
+        "finding_origins",
+        "review_history",
+        "occurrences",
+        "identity_conflicts"
+      ],
+      "properties": {
+        "work_id": {
+          "$ref": "#/$defs/workId"
+        },
+        "identifiers": {
+          "$ref": "#/$defs/strings"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "repeat_policy": {
+          "$ref": "#/$defs/policy"
+        },
+        "metadata": {
+          "type": "object"
+        },
+        "metadata_variants": {
+          "type": "object"
+        },
+        "metadata_conflicts": {
+          "$ref": "#/$defs/strings"
+        },
+        "identity_conflicts": {
+          "type": "array"
+        },
+        "reading_history": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reading"
+          }
+        },
+        "finding_origins": {
+          "$ref": "#/$defs/strings"
+        },
+        "review_history": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "download_history": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "occurrences": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "session_id",
+              "publication_id",
+              "source",
+              "is_current"
+            ],
+            "properties": {
+              "session_id": {
+                "type": "string"
+              },
+              "publication_id": {
+                "type": "string"
+              },
+              "source": {
+                "$ref": "#/$defs/source"
+              },
+              "is_current": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "publications": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/header"
+        }
+      ],
+      "type": "object",
+      "required": [
+        "kind",
+        "total",
+        "publications",
+        "redirects"
+      ],
+      "properties": {
+        "kind": {
+          "const": "publications"
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "redirects": {
+          "type": "object"
+        },
+        "publications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/work"
+          }
+        }
+      }
+    },
+    "seen": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/header"
+        }
+      ],
+      "type": "object",
+      "required": [
+        "kind",
+        "total",
+        "counts",
+        "works",
+        "redirects"
+      ],
+      "properties": {
+        "kind": {
+          "const": "seen"
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "redirects": {
+          "type": "object"
+        },
+        "works": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/work"
+          }
+        }
+      }
+    },
+    "sessions": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/header"
+        }
+      ],
+      "type": "object",
+      "required": [
+        "kind",
+        "total",
+        "sessions",
+        "warnings"
+      ],
+      "properties": {
+        "kind": {
+          "const": "sessions"
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "warnings": {
+          "$ref": "#/$defs/strings"
+        },
+        "sessions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "session_id",
+              "current_revision",
+              "revisions",
+              "current_manifest_context",
+              "storage_mode",
+              "source_snapshot"
+            ],
+            "properties": {
+              "session_id": {
+                "type": "string"
+              },
+              "current_revision": {
+                "type": "string"
+              },
+              "revisions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "current_manifest_context": {
+                "type": "object"
+              },
+              "storage_mode": {
+                "const": "unified"
+              },
+              "source_snapshot": {
+                "$ref": "#/$defs/source"
+              }
+            }
+          }
+        }
+      }
+    },
+    "findingRecord": {
+      "type": "object",
+      "required": [
+        "work_ids",
+        "source",
+        "is_current",
+        "notes"
+      ],
+      "properties": {
+        "work_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/workId"
+          }
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "is_current": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "exact_quote": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "origin_id": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "origins": {
+          "$ref": "#/$defs/strings"
+        },
+        "assessment": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "progress": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "readiness": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "findings": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/header"
+        }
+      ],
+      "type": "object",
+      "required": [
+        "kind",
+        "findings",
+        "reviews",
+        "evidence",
+        "counts"
+      ],
+      "properties": {
+        "kind": {
+          "const": "findings"
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/findingRecord"
+          }
+        },
+        "reviews": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/findingRecord"
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/findingRecord"
+          }
+        },
+        "counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    }
+  }
+}

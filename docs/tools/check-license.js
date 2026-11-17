@@ -94,6 +94,7 @@ const allowedMitPaths = new Set([
   'docs/decisions/ADR-0001-mpl-2-license.md',
   'docs/governance/license-history.md',
   'docs/tools/check-license.js',
+  'docs/tools/test/fixtures/license-negative.json', // Explicit adversarial input, never a project license declaration.
 ])
 
 for (const path of repositoryFiles()) {
@@ -109,8 +110,11 @@ for (const path of repositoryFiles()) {
   }
 
   const content = readFileSync(path, 'utf8')
-  if (/\bMIT\b|MIT License|License: MIT|license: MIT|"license"\s*:\s*"MIT"/.test(content)) {
-    errors.push(`${path} contains an unexpected MIT reference`)
+  // An institution acronym or a diagnostic mentioning that acronym is not a
+  // license declaration. Retain checks for explicit notices and metadata.
+  const incompatibleNotice = /\bMIT[\s-]+licen[cs](?:e|ed)\b|\b(?:SPDX-License-Identifier|licen[cs]e)["']?\s*[:=]\s*["']?(?:https?:\/\/(?:www\.)?opensource\.org\/licenses\/)?MIT\b|\blicen[cs]ed\s+(?:under|as|using|with)\s+(?:(?:the|an?)\s+)?MIT\b|\b(?:FinKore|project)\s+(?:uses?|is)\s+(?:the\s+)?MIT\b|@license\s+MIT\b/i
+  if (incompatibleNotice.test(content)) {
+    errors.push(`${path} contains an unexpected MIT license declaration`)
   }
 }
 

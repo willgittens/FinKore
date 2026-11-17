@@ -1,4 +1,27 @@
 /* SPDX-License-Identifier: MPL-2.0 */
+
+/* Optional editorial context stays visually separate from normative clauses. */
+.rule-evidence { margin-block: 1.5rem; padding: 0 1rem; border: 1px solid var(--line); background: var(--blue-tint); }
+.rule-evidence > details > summary { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-block: 1rem; font-size: 0.875rem; font-weight: 700; cursor: pointer; list-style: none; }
+.rule-evidence > details > summary::-webkit-details-marker { display: none; }
+.rule-evidence-count { display: block; margin-top: 0.25rem; color: var(--muted); font-size: 0.6875rem; font-weight: 400; }
+.rule-evidence > details > summary > span:last-child { color: var(--accent); font-size: 1.25rem; }
+.rule-evidence > details[open] > summary > span:last-child { transform: rotate(45deg); }
+.rule-evidence .rule-evidence-intro { margin: 0 0 1rem; color: var(--muted); font-size: 0.75rem; }
+.rule-evidence-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; padding-bottom: 1rem; }
+.rule-evidence-card { min-width: 0; padding: 1rem; border: 1px solid var(--line); background: var(--paper); overflow-wrap: anywhere; }
+.rule-evidence-card .rule-evidence-title { margin: 0.75rem 0; font-size: 0.9375rem; font-weight: 700; line-height: 1.4; }
+.rule-evidence-title a { text-decoration: none; }
+.rule-evidence-title a:hover { text-decoration: underline; }
+.rule-evidence-card p { margin: 0.75rem 0; font-size: 0.75rem; line-height: 1.7; }
+.rule-evidence-card .rule-evidence-kind { margin: 0; color: var(--accent); font-size: 0.625rem; font-weight: 650; }
+.rule-evidence-card .rule-evidence-authors { color: var(--muted); font-size: 0.6875rem; }
+.rule-evidence-limits { border-top: 1px solid var(--line); margin-top: 1rem; }
+.rule-evidence-limits summary { padding-top: 0.75rem; font-size: 0.6875rem; cursor: pointer; }
+.rule-evidence-stale { color: var(--muted); font-size: 0.75rem; }
+.learn-document-prose .spec-requirement { margin-block: 1.5rem; padding: 0.75rem 0; border-bottom: 1px solid var(--line); scroll-margin-top: calc(var(--site-header-height) + 1rem); }
+.spec-domain-links { border-top: 1px solid var(--line); padding-top: 1rem; }
+@media (max-width: 48rem) { .rule-evidence-grid { grid-template-columns: minmax(0, 1fr); } }
 /* CoreDoc discovery and reading share the home page's palette and hard shadows. */
 .core-explorer-layout, .founder-layout { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(3rem, 7vw, 7rem); align-items: start; }
 .core-explorer .eyebrow, .founder .eyebrow { color: var(--accent); }

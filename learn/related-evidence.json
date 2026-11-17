@@ -1,0 +1,1651 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Explicit editorial links from unchanged CoreDoc and specification requirements to published preliminary research notes and approved public interviews. Roles and limitations are not endorsements or normative acceptance. No specialist review is inferred.",
+  "sources": [
+    {
+      "id": "MAP-0001",
+      "kind": "research",
+      "title": "Exact monetary meaning does not require a universal currency-wide calculation scale",
+      "authors": [
+        "Mikhaylov Bogdan",
+        "Omorov Akzholbek",
+        "Izripov Iusup"
+      ],
+      "href": "research.html#rev-0001",
+      "limits": "The paper’s common quantum is an application architecture. Applying it everywhere could reduce exact intermediate values prematurely. The reviewer did not validate its equations or worked financial calculations.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0002",
+      "kind": "research",
+      "title": "Idempotent request identity includes content and an explicitly bounded effect",
+      "authors": [
+        "Mikhaylov Bogdan",
+        "Omorov Akzholbek",
+        "Izripov Iusup"
+      ],
+      "href": "research.html#rev-0002",
+      "limits": "Reviewer scenario: a lost response leads to retrying with the same key but a changed amount. Treating this as the same financial instruction can suppress a legitimate change or misidentify the result. Atomic key storage is the paper’s design; a key alone does not coordinate every external effect.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0004",
+      "kind": "research",
+      "title": "Monitoring evidence is not an eligible business approval",
+      "authors": [
+        "Francesca Nyarkoa Kobla",
+        "Jessica Fosua Agyei"
+      ],
+      "href": "research.html#rev-0004",
+      "limits": "A product can combine these controls in one interface, but their evidentiary questions differ. The review is a synthesis, not a causal test of any particular approval implementation.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0006",
+      "kind": "research",
+      "title": "Balanced totals do not establish the validity of an economic event",
+      "authors": [
+        "Mikhaylov Bogdan",
+        "Omorov Akzholbek",
+        "Izripov Iusup"
+      ],
+      "href": "research.html#rev-0006",
+      "limits": "The paper explicitly notes balanced errors but cites Ellerman; the original cited account has not been checked. A reviewer-created duplicate posting can preserve totals, but is not a Core operation or a financial test executed here.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0009",
+      "kind": "research",
+      "title": "Non-significance is not permission to remove a mandatory control",
+      "authors": [
+        "Oladapo Olatinsu",
+        "Cordilia Eke",
+        "Cafriana Christin Bakker",
+        "Parawiyati",
+        "Dyah Ani Pangastuti"
+      ],
+      "href": "research.html#rev-0009",
+      "limits": "The source’s literal “does not affect” wording is stronger than its observational evidence warrants. Failure to cross a significance threshold is not an equivalence test. Positive results in EVD-0006 concern different settings and do not directly refute this study.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0010",
+      "kind": "research",
+      "title": "Fast responses do not establish that the relevant facts are current",
+      "authors": [
+        "Ruth Octaviani P. Wermasubun",
+        "Linjte Kalangi",
+        "Heince R. N. Wokas"
+      ],
+      "href": "research.html#rev-0010",
+      "limits": "The source reports synchronization issues, not a measured stale-snapshot control failure. The financial scenario in the original finding is reviewer-created. Historical reports may intentionally use old observations.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0012",
+      "kind": "research",
+      "title": "Timestamp precedence cannot replace the defined aggregation of effective approvals",
+      "authors": [
+        "Abhilash Katari"
+      ],
+      "href": "research.html#rev-0012",
+      "limits": "The example assumes both opposing Decisions are valid and still effective. Legitimate withdrawal/supersession differs from timestamp overwrite. LWW may still suit a cache or application value whose declared semantics permit it.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0014",
+      "kind": "research",
+      "title": "A changed prediction is a changed fact basis, not necessarily nondeterministic condition evaluation",
+      "authors": [
+        "Bingying Jiang",
+        "Jialei Cao",
+        "Yutong Tan",
+        "Shi Qiu"
+      ],
+      "href": "research.html#rev-0014",
+      "limits": "Reviewer scenario: a later model recomputes a different risk estimate; this does not reproduce the earlier supplied estimate. Whether that estimate is material and retained depends on the declared policy.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0017",
+      "kind": "research",
+      "title": "Authorize the action that is actually executed",
+      "authors": [
+        "Ignacio Peyrano"
+      ],
+      "href": "research.html#rev-0017",
+      "limits": "Binding a human decision to the executed parameters is the reviewer’s application-level inference. The inspected architecture does not prove freedom from time-of-check/time-of-use faults. Not every FinKore action requires a human signature.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0018",
+      "kind": "research",
+      "title": "Observed input still needs the applicable business validation",
+      "authors": [
+        "Mohamed Nofel",
+        "Mahmoud Marzouk",
+        "Hany Elbardan",
+        "Reda Saleh",
+        "Aly Mogahed"
+      ],
+      "href": "research.html#rev-0018",
+      "limits": "This transfer is reviewer inference, not a rule formulated by the authors for FinKore. A sensor’s inventory observation alone does not establish a sale. Cleaning data must not silently invent business facts.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0019",
+      "kind": "research",
+      "title": "Successful import does not authenticate a complete historical record",
+      "authors": [
+        "László Szívós",
+        "István Orosz"
+      ],
+      "href": "research.html#rev-0019",
+      "limits": "A post-migration consistency check can find violated relations but is limited by the predicates and data it covers. Source authentication, omitted history and external reconciliation are separate application responsibilities.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0020",
+      "kind": "research",
+      "title": "Historical reconstruction and recalculation under a new policy differ",
+      "authors": [
+        "Sneha Nallapu"
+      ],
+      "href": "research.html#rev-0020",
+      "limits": "The broader calculation discussion is reviewer inference. Current Workflow requirements prevent silent rebinding; they do not define an execution engine for all historical financial calculations. Regulatory claims were not independently checked.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0022",
+      "kind": "research",
+      "title": "Counting controls does not establish independent assurance",
+      "authors": [
+        "Xue Bai",
+        "Manuel Nunez",
+        "Jayant R. Kalagnanam"
+      ],
+      "href": "research.html#rev-0022",
+      "limits": "The shared-input example is reviewer inference. Correlation modeling in the abstract motivates the question; it does not quantify FinKore risk or prove a universal optimal control policy. A risk model does not waive an applicable MUST.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0024",
+      "kind": "research",
+      "title": "Locally valid states do not imply a global serial order",
+      "authors": [
+        "Tim Soethout",
+        "Tijs van der Storm",
+        "Jurgen J. Vinju"
+      ],
+      "href": "research.html#rev-0024",
+      "limits": "A global serial order is not required for every application. The source intentionally offers weaker isolation with potential throughput benefits; this is not a hidden defect. Financial implications depend on the composing policy.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0025",
+      "kind": "research",
+      "title": "Passing a finite suite has a defined evidential scope",
+      "authors": [
+        "Shipeng Qi",
+        "Heng Lin",
+        "Zhihui Guo",
+        "Gábor Szárnyas",
+        "Bing Tong",
+        "Yan Zhou",
+        "Bin Yang",
+        "Jiansong Zhang",
+        "Zheng Wang",
+        "Youren Shen",
+        "Changyuan Wang",
+        "Parviz Peiravi",
+        "Henry Gabb",
+        "Ben Steer (arXiv author list)"
+      ],
+      "href": "research.html#rev-0025",
+      "limits": "The passage concerns ACID benchmark testing; applying the epistemic limit to FinKore is reviewer inference. Strong cases remain useful. The source’s benchmark requirements do not become FinKore requirements.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0027",
+      "kind": "research",
+      "title": "Changing the representation does not establish equivalent control",
+      "authors": [
+        "Mysore Ramaswamy",
+        "Richard Calvasina",
+        "Eugene Calvasina",
+        "Gerald Calvasina"
+      ],
+      "href": "research.html#rev-0027",
+      "limits": "The transfer to FinKore is reviewer inference. The article’s legal assertions, Just-In-Time process and document package are not verified as current or universal. A syntactically valid message does not itself establish payment eligibility.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0030",
+      "kind": "research",
+      "title": "A correlated score is not an independent conformity test",
+      "authors": [
+        "Kenneth David Strang",
+        "Narasimha Rao Vajjhala"
+      ],
+      "href": "research.html#rev-0030",
+      "limits": "Applying this study to FinKore is reviewer inference. The study does not discredit all ESG measurement or ML, nor demonstrate an actual FinKore violation. Shared measurement processes can explain correlations; alternative model-design explanations remain possible.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0031",
+      "kind": "research",
+      "title": "Producer idempotence does not settle application-effect uniqueness",
+      "authors": [
+        "Jyothirmai Gurramula"
+      ],
+      "href": "research.html#rev-0031",
+      "limits": "The crash-after-effect-before-acknowledgement scenario is reviewer inference. Broker guarantees have a useful defined scope. Application deduplication still needs defined keys, retention, durable recovery and a consistent effect boundary; the abstract does not establish those details.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0032",
+      "kind": "research",
+      "title": "Preventing an invalid state does not guarantee eventual completion",
+      "authors": [
+        "Acep Taryana",
+        "Dieky Adzkiya",
+        "Muhammad Syifa’ul Mufid",
+        "Imam Mukhlash"
+      ],
+      "href": "research.html#rev-0032",
+      "limits": "This is methodological transfer from healthcare, not a financial rule demonstrated by that study. Fairness, resource availability and admissible requests matter. An intentionally terminal state is not a deadlock defect; statistical confidence is not an unconditional proof for arbitrary executions.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0033",
+      "kind": "research",
+      "title": "A proof can establish a property different from the intended rule",
+      "authors": [
+        "Florin Stoica",
+        "Laura Florentina Stoica"
+      ],
+      "href": "research.html#rev-0033",
+      "limits": "A changed ordering example is reviewer inference; the source reports a particular assistant/model interaction. No general LLM error rate or superiority of a prompting strategy is established here. Formulas and figures were not independently inspected visually.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0035",
+      "kind": "research",
+      "title": "Snapshot coherence and freshness are separate properties",
+      "authors": [
+        "Dan R. K. Ports",
+        "Austin T. Clements",
+        "Irene Zhang",
+        "Samuel Madden",
+        "Barbara Liskov"
+      ],
+      "href": "research.html#rev-0035",
+      "limits": "These financial scenarios are reviewer inferences. A consistent snapshot can be appropriate within an application’s bound. TxCache does not remove the database’s anomalies or establish universal safe staleness for financial authorization.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0036",
+      "kind": "research",
+      "title": "Preserving collected traces does not prove capture of required events",
+      "authors": [
+        "Surendra Kumar Valavala"
+      ],
+      "href": "research.html#rev-0036",
+      "limits": "A separate expected workload can test coverage if it is independent of the collector. This is not a mandate to record every request or collect sensitive content indiscriminately. A diagnostic retry trace is not itself a unique financial effect.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "MAP-0039",
+      "kind": "research",
+      "title": "Convergence does not by itself promise permanence after a response",
+      "authors": [
+        "Dina Borrego",
+        "Nuno Preguiça",
+        "Elisa Gonzalez Boix",
+        "Carla Ferreira"
+      ],
+      "href": "research.html#rev-0039",
+      "limits": "An external action triggered by a later-discarded result is reviewer inference. A clearly provisional response may be appropriate. The source explicitly acknowledges the limitation; this review does not declare its framework generally unsuitable or its proofs invalid.",
+      "status": "pending_validation",
+      "publication_path": "learn/research.md",
+      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+    },
+    {
+      "id": "LGC-0001",
+      "kind": "legacy",
+      "title": "Preserve the magnitude of a financial value; do not silently truncate it",
+      "authors": [
+        "Elaine Richardson"
+      ],
+      "href": "legacy-001-elaine-richardson.html#3-do-you-remember-any-strange-rules-unusual-code-or-unexpected-situations-that-taught-you-something-important-especially-things-that-might-look-unnecessary-today-but-had-a-very-good-reason-to-exist",
+      "limits": "This is a personal recollection, not a verified experiment or a universal statement about COBOL. No details from the withheld follow-up are used. Exact representability does not define universal database field capacity. The Open Questions in spec/money/representation.md leave portable precision, scale and overflow limits unresolved: this behavior is not currently defined by FinKore Core. Unsupported amounts already have a portable failure category; this comparison does not set the capacity threshold or introduce an overflow code.",
+      "status": "pending_validation",
+      "publication_path": "legacy/interviews/001-elaine-richardson.md",
+      "publication_sha256": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46"
+    },
+    {
+      "id": "LGC-0002",
+      "kind": "legacy",
+      "title": "Treat overlooked exceptions as failure cases worth making observable",
+      "authors": [
+        "Elaine Richardson"
+      ],
+      "href": "legacy-001-elaine-richardson.html#4-have-you-ever-been-involved-in-replacing-or-modernizing-an-old-financial-system-what-were-the-biggest-challenges-and-what-lessons-did-you-take-away",
+      "limits": "The surrounding prediction about the first day of go-live is personal rhetoric, not a measured rate or universal temporal claim. Only failures already defined by the owning specification can acquire expected observations; a test suite must not invent banking exceptions or imply exhaustive correctness.",
+      "status": "pending_validation",
+      "publication_path": "legacy/interviews/001-elaine-richardson.md",
+      "publication_sha256": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46"
+    },
+    {
+      "id": "LGC-0003",
+      "kind": "legacy",
+      "title": "A deployment rollback plan and a rejected-operation guarantee have different boundaries",
+      "authors": [
+        "Elaine Richardson"
+      ],
+      "href": "legacy-001-elaine-richardson.html#4-have-you-ever-been-involved-in-replacing-or-modernizing-an-old-financial-system-what-were-the-biggest-challenges-and-what-lessons-did-you-take-away",
+      "limits": "The interviewee frames this as advice, not a reported deployment protocol or proof of atomic recovery. Deployment rollback, external compensation, restoration of a committed action and local non-mutation on rejection are distinct. FinKore does not supply a rollback engine, distributed transaction protocol, migration workflow, or concrete reversal accounting effects.",
+      "status": "pending_validation",
+      "publication_path": "legacy/interviews/001-elaine-richardson.md",
+      "publication_sha256": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46"
+    },
+    {
+      "id": "LGC-0004",
+      "kind": "legacy",
+      "title": "Stable portable failures and actionable diagnostics serve different readers",
+      "authors": [
+        "Elaine Richardson"
+      ],
+      "href": "legacy-001-elaine-richardson.html#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget",
+      "limits": "The quote is advice supported by a personal incident, not a FinKore requirement for log content, manuals, localized wording, or an error envelope. SPEC-ERROR-003 permits messages and context (MAY); entity paths and stable violation identifiers are SHOULD obligations. Sensitive financial, personal and implementation data are not automatically safe to include.",
+      "status": "pending_validation",
+      "publication_path": "legacy/interviews/001-elaine-richardson.md",
+      "publication_sha256": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46"
+    },
+    {
+      "id": "LGC-0005",
+      "kind": "legacy",
+      "title": "Validate supplied financial observations without confusing validity with factual truth",
+      "authors": [
+        "Elaine Richardson"
+      ],
+      "href": "legacy-001-elaine-richardson.html#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget",
+      "limits": "Product-specific names, address formats and numeric-field rules must be declared by a composing domain. The anecdote supplies no universal input grammar or guarantee that a validator detects fraud, missing facts, or all bad assumptions. FinKore validates declared conditions against supplied observations; it does not certify their real-world truth.",
+      "status": "pending_validation",
+      "publication_path": "legacy/interviews/001-elaine-richardson.md",
+      "publication_sha256": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46"
+    },
+    {
+      "id": "LGC-0006",
+      "kind": "legacy",
+      "title": "Retrying a batch is not evidence that each economic effect occurs only once",
+      "authors": [
+        "Elaine Richardson"
+      ],
+      "href": "legacy-001-elaine-richardson.html#about-legacy-banking-systems-is-there-a-particular-business-rule-or-exception-handling-scenario-youve-encountered-that-you-believe-modern-developers-would-probably-overlook-if-they-were-building-a-financial-system-from-scratch",
+      "limits": "This is a reported operational tendency, not proof that every retry duplicates payments. A retry after an uncertain outcome, a domain rejection and a new economic instruction are different cases. Concrete payment posting, batch scheduling, reconciliation and distributed effect coordination are outside the current Core contract. No idempotency key scheme, retention period or payment operation is prescribed.",
+      "status": "pending_validation",
+      "publication_path": "legacy/interviews/001-elaine-richardson.md",
+      "publication_sha256": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46"
+    },
+    {
+      "id": "LGC-0007",
+      "kind": "legacy",
+      "title": "Batch dependencies expose a distinction between reproducible facts and fresh facts",
+      "authors": [
+        "Elaine Richardson"
+      ],
+      "href": "legacy-001-elaine-richardson.html#about-legacy-banking-systems-is-there-a-particular-business-rule-or-exception-handling-scenario-youve-encountered-that-you-believe-modern-developers-would-probably-overlook-if-they-were-building-a-financial-system-from-scratch",
+      "limits": "The source supplies no quantitative freshness bound or dependency protocol. WORKFLOW-GUARD-004 does not require always-latest data; ENTITY-IMPORT-007 compares expected values to the supplied observation, not to an independently queried remote system. The interview's suggestion that real-time processing removes these problems is not generalized: distributed real-time systems still require dependency and freshness policies.",
+      "status": "pending_validation",
+      "publication_path": "legacy/interviews/001-elaine-richardson.md",
+      "publication_sha256": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46"
+    },
+    {
+      "id": "LGC-0008",
+      "kind": "legacy",
+      "title": "Preserve financial meaning while changing implementation technology",
+      "authors": [
+        "Otilia Borges"
+      ],
+      "href": "legacy-002-otilia-borges.html#4-have-you-ever-been-involved-in-replacing-or-modernizing-an-old-financial-system-what-were-the-biggest-challenges-and-what-lessons-did-you-take-away",
+      "limits": "This is practitioner experience, not a demonstrated equivalence proof or a prescribed migration architecture. CORE-005.3 addresses reproducibility from the same declared inputs, state and context; it does not by itself prove equivalence between an old and a new implementation. MONEY-REPRESENTATION-006 covers Money only. SPEC-COMPATIBILITY-012 classifies changes to the published FinKore contract, not every consumer deployment. The interview does not authorize workflow migration, a universal COBOL-to-Java transformation, AI extraction guarantees, new portable errors, or recovery of undocumented rules by inference.",
+      "status": "pending_validation",
+      "publication_path": "legacy/interviews/002-otilia-borges.md",
+      "publication_sha256": "1bfb503b6692ac5b8209afad7def736af54568a4d5c58a185e80b8f63bf3f92b"
+    },
+    {
+      "id": "LGC-0009",
+      "kind": "legacy",
+      "title": "Keep institution-specific business rules explicit rather than treating one practice as universal",
+      "authors": [
+        "Otilia Borges"
+      ],
+      "href": "legacy-002-otilia-borges.html#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget",
+      "limits": "The account does not establish the content or legal validity of any current regulation, nor does it turn a bank-specific rule into FinKore Core. The 1990 Collor Plan and printed-report story are not reconstructed as portable account-freeze or regulator-submission operations. CORE-002.2 governs financial-change validation, not a jurisdictional policy catalog. ENTITY-VALIDATION-001 requires applicable rules to hold without selecting the business rules for every bank, product or country.",
+      "status": "pending_validation",
+      "publication_path": "legacy/interviews/002-otilia-borges.md",
+      "publication_sha256": "1bfb503b6692ac5b8209afad7def736af54568a4d5c58a185e80b8f63bf3f92b"
+    },
+    {
+      "id": "LGC-0010",
+      "kind": "legacy",
+      "title": "Validate generated implementations against explicit financial obligations",
+      "authors": [
+        "Otilia Borges"
+      ],
+      "href": "legacy-002-otilia-borges.html#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget",
+      "limits": "The quotation concerns developers reviewing generated code; CoreDoc concerns financial evaluations. Their relationship is contextual, not an assertion that CORE-005.3 mandates a developer qualification, AI review process or source-extraction method. SPEC-CONFORMANCE-001 and -002 apply regardless of how code is produced. SHOULD exceptions remain documented recommendations, not automatically mandatory rules. No interview, generated program, repository artifact check or finite test set proves external implementation conformance; consumers own implementation validation and execution evidence.",
+      "status": "pending_validation",
+      "publication_path": "legacy/interviews/002-otilia-borges.md",
+      "publication_sha256": "1bfb503b6692ac5b8209afad7def736af54568a4d5c58a185e80b8f63bf3f92b"
+    }
+  ],
+  "bindings": [
+    {
+      "source_id": "MAP-0001",
+      "target_id": "CORE-001.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "4317664c45a67fd420616bfc3d41af0321cca216c1c7732e93fbf6497379f37b",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Exact arithmetic and explicit rounding policy are the relevant obligations. The paper’s common currency quantum does not impose a universal calculation scale."
+    },
+    {
+      "source_id": "MAP-0001",
+      "target_id": "MONEY-ROUNDING-001",
+      "target_path": "spec/money/rounding.md",
+      "clause_sha256": "727cf06782a36c844f4c611a74633cd024ce5e399e90eaecd1b0ee131325ac16",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Exact arithmetic and explicit rounding policy are the relevant obligations. The paper’s common currency quantum does not impose a universal calculation scale."
+    },
+    {
+      "source_id": "MAP-0001",
+      "target_id": "MONEY-ROUNDING-004",
+      "target_path": "spec/money/rounding.md",
+      "clause_sha256": "eb358fcf4cf22db3991de119e69075a748ecc4229354905779a1ed383b4331ad",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Exact arithmetic and explicit rounding policy are the relevant obligations. The paper’s common currency quantum does not impose a universal calculation scale."
+    },
+    {
+      "source_id": "MAP-0001",
+      "target_id": "MONEY-ROUNDING-007",
+      "target_path": "spec/money/rounding.md",
+      "clause_sha256": "49f0f58083df0c231f6f4f97330fcb7647e118720074bf1966e492a711b8a834",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Exact arithmetic and explicit rounding policy are the relevant obligations. The paper’s common currency quantum does not impose a universal calculation scale."
+    },
+    {
+      "source_id": "MAP-0001",
+      "target_id": "MONEY-REPRESENTATION-002",
+      "target_path": "spec/money/representation.md",
+      "clause_sha256": "2c78612e5b5b40ab0f46752d6c8c337bbcd095bee60de407fc11582d102114f0",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Exact decimal meaning is portable while representation remains implementation-neutral and a domain rounding policy is permitted, not universally mandated."
+    },
+    {
+      "source_id": "MAP-0001",
+      "target_id": "MONEY-REPRESENTATION-006",
+      "target_path": "spec/money/representation.md",
+      "clause_sha256": "518da37fe4ba8c8c5c402fd459b7983a33e75952bc33632b9dfb761941bad96d",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Exact decimal meaning is portable while representation remains implementation-neutral and a domain rounding policy is permitted, not universally mandated."
+    },
+    {
+      "source_id": "MAP-0001",
+      "target_id": "MONEY-ROUNDING-005",
+      "target_path": "spec/money/rounding.md",
+      "clause_sha256": "e9b004cff4802890fc349fa83ee0175453489cd7ff39f7f319b2fdd591b03bfd",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Exact decimal meaning is portable while representation remains implementation-neutral and a domain rounding policy is permitted, not universally mandated."
+    },
+    {
+      "source_id": "MAP-0002",
+      "target_id": "CORE-002.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "20b537b4b61f75741bc518b9819bb8bd37e300ca2b7058ecd682a83e66028c67",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "These boundaries distinguish non-mutating domain rejection and duplicate-event rejection from a general command-key/retry protocol. The source’s request identity recommendation remains application policy."
+    },
+    {
+      "source_id": "MAP-0002",
+      "target_id": "AUDIT-APPEND-003",
+      "target_path": "spec/audit/append-only.md",
+      "clause_sha256": "aad13fdbc54542bce240677714b6d19506027fa7b43c6cd12d47330d9f30b4a1",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "These boundaries distinguish non-mutating domain rejection and duplicate-event rejection from a general command-key/retry protocol. The source’s request identity recommendation remains application policy."
+    },
+    {
+      "source_id": "MAP-0002",
+      "target_id": "WORKFLOW-CONFLICT-008",
+      "target_path": "spec/workflow/conflicts.md",
+      "clause_sha256": "da97fb1b9b0f1ac599c115336f3e5acb6dbc446a8dcf8749d73d16e572f87dc5",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "These boundaries distinguish non-mutating domain rejection and duplicate-event rejection from a general command-key/retry protocol. The source’s request identity recommendation remains application policy."
+    },
+    {
+      "source_id": "MAP-0004",
+      "target_id": "CORE-004.1",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "670f59e0882a2b9bab0709abfd48b45ea7a32480e13762c16d36ce53a35d797a",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "Pending status and eligible business decision-makers cannot be replaced by monitoring output or technical access. Organizational monitoring and segregation-of-duties policy remain separate."
+    },
+    {
+      "source_id": "MAP-0004",
+      "target_id": "APPROVAL-REQUIREMENT-005",
+      "target_path": "spec/approvals/requirements.md",
+      "clause_sha256": "64edc270ee983cfcfd303dff8c7ec5a0a4ac5444a0f5dae15f003e5ad40be8a4",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "Pending status and eligible business decision-makers cannot be replaced by monitoring output or technical access. Organizational monitoring and segregation-of-duties policy remain separate."
+    },
+    {
+      "source_id": "MAP-0004",
+      "target_id": "APPROVAL-REQUIREMENT-006",
+      "target_path": "spec/approvals/requirements.md",
+      "clause_sha256": "38bd97c1e5f7075bd5a2bd63d84713fbb2bbab5a5234f246d873d2ce768ef789",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "Pending status and eligible business decision-makers cannot be replaced by monitoring output or technical access. Organizational monitoring and segregation-of-duties policy remain separate."
+    },
+    {
+      "source_id": "MAP-0006",
+      "target_id": "CORE-005.1",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "18b9bf8b6f29a2f34bed7dd2330510aeff73ac12995e3ea5d8e1e65242a4b957",
+      "evidence_role": "context_only",
+      "relationship": "application_policy",
+      "explanation": "Stable financial-subject identity is useful context when discussing duplicated economic events. These clauses do not define balanced postings or accounting recognition; the ledger claim remains deferred."
+    },
+    {
+      "source_id": "MAP-0006",
+      "target_id": "ENTITY-IDENTITY-001",
+      "target_path": "spec/entities/identity.md",
+      "clause_sha256": "c26f0463a33e07670b611fe771e65fec139e698b841558bfc6e151a6f282cb2b",
+      "evidence_role": "context_only",
+      "relationship": "application_policy",
+      "explanation": "Stable financial-subject identity is useful context when discussing duplicated economic events. These clauses do not define balanced postings or accounting recognition; the ledger claim remains deferred."
+    },
+    {
+      "source_id": "MAP-0006",
+      "target_id": "ENTITY-IDENTITY-002",
+      "target_path": "spec/entities/identity.md",
+      "clause_sha256": "16c6781c183cfaedfca41bcfb6f0f8503936c75843b3a291983e6e88ef0c7db3",
+      "evidence_role": "context_only",
+      "relationship": "application_policy",
+      "explanation": "Stable financial-subject identity is useful context when discussing duplicated economic events. These clauses do not define balanced postings or accounting recognition; the ledger claim remains deferred."
+    },
+    {
+      "source_id": "MAP-0009",
+      "target_id": "SPEC-CONFORMANCE-001",
+      "target_path": "spec/conventions.md",
+      "clause_sha256": "2657b30e103c55ff8cf0c5b81c4328cb449b78a1dc1c3827af996db2a517e784",
+      "evidence_role": "counterpoint",
+      "relationship": "already_addressed",
+      "explanation": "Applicable obligations are not waived by a questionnaire significance result. The study is a criticized methodological example, not accepted proof that controls have no effect. MUST and SHOULD retain distinct force."
+    },
+    {
+      "source_id": "MAP-0009",
+      "target_id": "SPEC-CONFORMANCE-002",
+      "target_path": "spec/conventions.md",
+      "clause_sha256": "9a9711bbd5942427f6f0d339711ea9b772d38411acd70f18f027ec42f3cb6b97",
+      "evidence_role": "counterpoint",
+      "relationship": "already_addressed",
+      "explanation": "Applicable obligations are not waived by a questionnaire significance result. The study is a criticized methodological example, not accepted proof that controls have no effect. MUST and SHOULD retain distinct force."
+    },
+    {
+      "source_id": "MAP-0009",
+      "target_id": "CORE-002.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+      "evidence_role": "counterpoint",
+      "relationship": "already_addressed",
+      "explanation": "Applicable obligations are not waived by a questionnaire significance result. The study is a criticized methodological example, not accepted proof that controls have no effect. MUST and SHOULD retain distinct force."
+    },
+    {
+      "source_id": "MAP-0010",
+      "target_id": "CORE-005.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+      "evidence_role": "illustrates_risk",
+      "relationship": "application_policy",
+      "explanation": "Explicit dependencies and comparisons against supplied observations do not guarantee freshness of remote facts. The reported synchronization issue motivates a conditional application risk, not a Core age limit."
+    },
+    {
+      "source_id": "MAP-0010",
+      "target_id": "WORKFLOW-GUARD-004",
+      "target_path": "spec/workflow/guards.md",
+      "clause_sha256": "a4c46a512eed807f514a58d5d2a2ea7b723b7ba63d9413459092936d467737a2",
+      "evidence_role": "illustrates_risk",
+      "relationship": "application_policy",
+      "explanation": "Explicit dependencies and comparisons against supplied observations do not guarantee freshness of remote facts. The reported synchronization issue motivates a conditional application risk, not a Core age limit."
+    },
+    {
+      "source_id": "MAP-0010",
+      "target_id": "ENTITY-IMPORT-007",
+      "target_path": "spec/entities/import.md",
+      "clause_sha256": "ec015b91b3a16aeb591c26a2623a4386f46eb369d88d98d3084fe89a60a66546",
+      "evidence_role": "illustrates_risk",
+      "relationship": "application_policy",
+      "explanation": "Explicit dependencies and comparisons against supplied observations do not guarantee freshness of remote facts. The reported synchronization issue motivates a conditional application risk, not a Core age limit."
+    },
+    {
+      "source_id": "MAP-0012",
+      "target_id": "CORE-004.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "4ee8d0bdbc31496c3c51ac20cdd63015dd24da36c6d4b52fb54aff71711fa1f4",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "When opposing decisions remain valid and effective, defined aggregation and preserved history govern the result. A later timestamp alone is neither withdrawal nor supersession; LWW is not universally prohibited."
+    },
+    {
+      "source_id": "MAP-0012",
+      "target_id": "APPROVAL-REQUIREMENT-008",
+      "target_path": "spec/approvals/requirements.md",
+      "clause_sha256": "906b1a7e91d7fe2f0f8bf96a0cbe5794585c31325e4c3e01c237c6061afd6364",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "When opposing decisions remain valid and effective, defined aggregation and preserved history govern the result. A later timestamp alone is neither withdrawal nor supersession; LWW is not universally prohibited."
+    },
+    {
+      "source_id": "MAP-0012",
+      "target_id": "AUDIT-APPEND-001",
+      "target_path": "spec/audit/append-only.md",
+      "clause_sha256": "0277e8070031b09a1410b7c6e2dcc861490f5be09d2a563f11e7ca87df146600",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "When opposing decisions remain valid and effective, defined aggregation and preserved history govern the result. A later timestamp alone is neither withdrawal nor supersession; LWW is not universally prohibited."
+    },
+    {
+      "source_id": "MAP-0014",
+      "target_id": "CORE-005.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Deterministic evaluation concerns the declared fact basis. A changed prediction changes that basis; the source does not demonstrate a FinKore violation or prohibit adaptive models."
+    },
+    {
+      "source_id": "MAP-0014",
+      "target_id": "APPROVAL-CONDITION-005",
+      "target_path": "spec/approvals/conditions.md",
+      "clause_sha256": "28763afaaae76338701797091b497d1f7e5bc1aa56259f113fbe44dbab887594",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Deterministic evaluation concerns the declared fact basis. A changed prediction changes that basis; the source does not demonstrate a FinKore violation or prohibit adaptive models."
+    },
+    {
+      "source_id": "MAP-0014",
+      "target_id": "WORKFLOW-GUARD-004",
+      "target_path": "spec/workflow/guards.md",
+      "clause_sha256": "a4c46a512eed807f514a58d5d2a2ea7b723b7ba63d9413459092936d467737a2",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Deterministic evaluation concerns the declared fact basis. A changed prediction changes that basis; the source does not demonstrate a FinKore violation or prohibit adaptive models."
+    },
+    {
+      "source_id": "MAP-0014",
+      "target_id": "APPROVAL-CONDITION-003",
+      "target_path": "spec/approvals/conditions.md",
+      "clause_sha256": "d6dbd236f13713e2a1dc353ce410f9dcbaad0770e476404bbca761cd99374bfd",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Retention of facts and condition version is a SHOULD recommendation here. It must not be rewritten as a universal model-version retention MUST."
+    },
+    {
+      "source_id": "MAP-0017",
+      "target_id": "CORE-004.1",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "670f59e0882a2b9bab0709abfd48b45ea7a32480e13762c16d36ce53a35d797a",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "Approval scope and relevant subject facts delimit decision applicability. Binding an external tool execution to its approved parameters is a reviewer inference; no universal human signature or gateway architecture follows."
+    },
+    {
+      "source_id": "MAP-0017",
+      "target_id": "CORE-004.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "4ee8d0bdbc31496c3c51ac20cdd63015dd24da36c6d4b52fb54aff71711fa1f4",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "Approval scope and relevant subject facts delimit decision applicability. Binding an external tool execution to its approved parameters is a reviewer inference; no universal human signature or gateway architecture follows."
+    },
+    {
+      "source_id": "MAP-0017",
+      "target_id": "APPROVAL-DECISION-002",
+      "target_path": "spec/approvals/decisions.md",
+      "clause_sha256": "40c9127520772f0015450e2f04d24b08ec95015838319227c756f3c9523d88a8",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "Approval scope and relevant subject facts delimit decision applicability. Binding an external tool execution to its approved parameters is a reviewer inference; no universal human signature or gateway architecture follows."
+    },
+    {
+      "source_id": "MAP-0017",
+      "target_id": "APPROVAL-DECISION-003",
+      "target_path": "spec/approvals/decisions.md",
+      "clause_sha256": "6b242243c0c4d91dd6ec0b382a9ebf29a8f7e02c3e0611f528b148b7c7a170fc",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "Approval scope and relevant subject facts delimit decision applicability. Binding an external tool execution to its approved parameters is a reviewer inference; no universal human signature or gateway architecture follows."
+    },
+    {
+      "source_id": "MAP-0017",
+      "target_id": "APPROVAL-VALIDITY-003",
+      "target_path": "spec/approvals/validity.md",
+      "clause_sha256": "dd8d2c4c02c6b3db39969a56d2a592dd27229853bce01266fda99888513929dc",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "Approval scope and relevant subject facts delimit decision applicability. Binding an external tool execution to its approved parameters is a reviewer inference; no universal human signature or gateway architecture follows."
+    },
+    {
+      "source_id": "MAP-0018",
+      "target_id": "CORE-002.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Declared structural/business validation applies to the complete supplied result, including import. The proposed sensor pipeline motivates that boundary without certifying fact truth, accounting recognition, IoT, blockchain or XBRL."
+    },
+    {
+      "source_id": "MAP-0018",
+      "target_id": "ENTITY-VALIDATION-001",
+      "target_path": "spec/entities/validation.md",
+      "clause_sha256": "67470b64c2cbdf4c152ee286536d099d3efaedb83957eec671fa30e55612fc5e",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Declared structural/business validation applies to the complete supplied result, including import. The proposed sensor pipeline motivates that boundary without certifying fact truth, accounting recognition, IoT, blockchain or XBRL."
+    },
+    {
+      "source_id": "MAP-0018",
+      "target_id": "ENTITY-VALIDATION-002",
+      "target_path": "spec/entities/validation.md",
+      "clause_sha256": "4536efe20db6098dd074ac2bbb3b4154017ce799e0fc2362832d06245f9229c4",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Declared structural/business validation applies to the complete supplied result, including import. The proposed sensor pipeline motivates that boundary without certifying fact truth, accounting recognition, IoT, blockchain or XBRL."
+    },
+    {
+      "source_id": "MAP-0018",
+      "target_id": "ENTITY-VALIDATION-003",
+      "target_path": "spec/entities/validation.md",
+      "clause_sha256": "757f760fbd5f87e758a85b73796b52517dde52a9bcd7c3b70c865b05e33f10e2",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Declared structural/business validation applies to the complete supplied result, including import. The proposed sensor pipeline motivates that boundary without certifying fact truth, accounting recognition, IoT, blockchain or XBRL."
+    },
+    {
+      "source_id": "MAP-0018",
+      "target_id": "ENTITY-IMPORT-002",
+      "target_path": "spec/entities/import.md",
+      "clause_sha256": "a37d5bb2e4615cee95abfb202d44c34ce012fe4bb2c60ac054f087f5abd15479",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Declared structural/business validation applies to the complete supplied result, including import. The proposed sensor pipeline motivates that boundary without certifying fact truth, accounting recognition, IoT, blockchain or XBRL."
+    },
+    {
+      "source_id": "MAP-0019",
+      "target_id": "CORE-005.1",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "18b9bf8b6f29a2f34bed7dd2330510aeff73ac12995e3ea5d8e1e65242a4b957",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Validation preserves the supplied observation and history; empty supplied history is not historical completeness, and Workflow import creates no transition or Audit evidence. Legacy authentication/reconciliation remains separate."
+    },
+    {
+      "source_id": "MAP-0019",
+      "target_id": "CORE-003.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "99a4c08eb469182dabdee30b7c634917f5de2d98a14aad425ee276da806d9e9e",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Validation preserves the supplied observation and history; empty supplied history is not historical completeness, and Workflow import creates no transition or Audit evidence. Legacy authentication/reconciliation remains separate."
+    },
+    {
+      "source_id": "MAP-0019",
+      "target_id": "ENTITY-IMPORT-002",
+      "target_path": "spec/entities/import.md",
+      "clause_sha256": "a37d5bb2e4615cee95abfb202d44c34ce012fe4bb2c60ac054f087f5abd15479",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Validation preserves the supplied observation and history; empty supplied history is not historical completeness, and Workflow import creates no transition or Audit evidence. Legacy authentication/reconciliation remains separate."
+    },
+    {
+      "source_id": "MAP-0019",
+      "target_id": "ENTITY-IMPORT-006",
+      "target_path": "spec/entities/import.md",
+      "clause_sha256": "6960f7a4951ed01315979dbe95143ef7b426f33d0c18b07e2c7cd228c43177bf",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Validation preserves the supplied observation and history; empty supplied history is not historical completeness, and Workflow import creates no transition or Audit evidence. Legacy authentication/reconciliation remains separate."
+    },
+    {
+      "source_id": "MAP-0019",
+      "target_id": "ENTITY-IMPORT-012",
+      "target_path": "spec/entities/import.md",
+      "clause_sha256": "5e3356fe5634cd285192df34ba02b29f790b073e1a6a854203fdc648b2edc681",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Validation preserves the supplied observation and history; empty supplied history is not historical completeness, and Workflow import creates no transition or Audit evidence. Legacy authentication/reconciliation remains separate."
+    },
+    {
+      "source_id": "MAP-0019",
+      "target_id": "WORKFLOW-IMPORT-005",
+      "target_path": "spec/workflow/import.md",
+      "clause_sha256": "4d9d6e34e5797613e14d26eb186f5602323e919d00215ee39f27b9426301e56b",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Validation preserves the supplied observation and history; empty supplied history is not historical completeness, and Workflow import creates no transition or Audit evidence. Legacy authentication/reconciliation remains separate."
+    },
+    {
+      "source_id": "MAP-0020",
+      "target_id": "WORKFLOW-VERSION-003",
+      "target_path": "spec/workflow/versioning.md",
+      "clause_sha256": "f5104cdb336c2e84bbaa4bf6aea7a837a49ec1fb798b5d6343c3381724e62e93",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Immutable definition identity and lifecycle binding keep an instance under its governing version. The paper motivates distinguishing reconstruction from a new-policy comparison; it does not establish a general replay engine or migration authority."
+    },
+    {
+      "source_id": "MAP-0020",
+      "target_id": "WORKFLOW-VERSION-008",
+      "target_path": "spec/workflow/versioning.md",
+      "clause_sha256": "a84c4d85978cddbb6790cccc73405f3f1e5db817c6fe34c22c28c286a1d482f7",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Immutable definition identity and lifecycle binding keep an instance under its governing version. The paper motivates distinguishing reconstruction from a new-policy comparison; it does not establish a general replay engine or migration authority."
+    },
+    {
+      "source_id": "MAP-0020",
+      "target_id": "WORKFLOW-VERSION-009",
+      "target_path": "spec/workflow/versioning.md",
+      "clause_sha256": "afebdd053672f6fb6c7b2b18486ae92bd0474eb88e13f035d163cc15d81280ad",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Immutable definition identity and lifecycle binding keep an instance under its governing version. The paper motivates distinguishing reconstruction from a new-policy comparison; it does not establish a general replay engine or migration authority."
+    },
+    {
+      "source_id": "MAP-0020",
+      "target_id": "WORKFLOW-VERSION-011",
+      "target_path": "spec/workflow/versioning.md",
+      "clause_sha256": "c5c386cf3d65f56f2efbcd6bb8f0627b5003710c2e7b5c0b02a42627f3dd9672",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Immutable definition identity and lifecycle binding keep an instance under its governing version. The paper motivates distinguishing reconstruction from a new-policy comparison; it does not establish a general replay engine or migration authority."
+    },
+    {
+      "source_id": "MAP-0020",
+      "target_id": "CORE-005.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "explanation": "Declared context is foundation-level context for reproducibility. Retaining and replaying every financial calculation version is a broader application policy, not an obligation introduced by this link."
+    },
+    {
+      "source_id": "MAP-0022",
+      "target_id": "CORE-002.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+      "evidence_role": "context_only",
+      "relationship": "application_policy",
+      "explanation": "The abstract’s correlated-control model motivates asking whether controls share a weak input. These targets supply validation/conformance context, not a numerical risk model, independence theorem or permission to waive MUST obligations."
+    },
+    {
+      "source_id": "MAP-0022",
+      "target_id": "SPEC-CONFORMANCE-001",
+      "target_path": "spec/conventions.md",
+      "clause_sha256": "2657b30e103c55ff8cf0c5b81c4328cb449b78a1dc1c3827af996db2a517e784",
+      "evidence_role": "context_only",
+      "relationship": "application_policy",
+      "explanation": "The abstract’s correlated-control model motivates asking whether controls share a weak input. These targets supply validation/conformance context, not a numerical risk model, independence theorem or permission to waive MUST obligations."
+    },
+    {
+      "source_id": "MAP-0024",
+      "target_id": "CORE-002.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Complete-result validation and supplied conflict preconditions do not establish global serializability. PSAC intentionally has weaker isolation; no universal database isolation level is inferred."
+    },
+    {
+      "source_id": "MAP-0024",
+      "target_id": "ENTITY-VALIDATION-003",
+      "target_path": "spec/entities/validation.md",
+      "clause_sha256": "757f760fbd5f87e758a85b73796b52517dde52a9bcd7c3b70c865b05e33f10e2",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Complete-result validation and supplied conflict preconditions do not establish global serializability. PSAC intentionally has weaker isolation; no universal database isolation level is inferred."
+    },
+    {
+      "source_id": "MAP-0024",
+      "target_id": "WORKFLOW-CONFLICT-008",
+      "target_path": "spec/workflow/conflicts.md",
+      "clause_sha256": "da97fb1b9b0f1ac599c115336f3e5acb6dbc446a8dcf8749d73d16e572f87dc5",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Complete-result validation and supplied conflict preconditions do not establish global serializability. PSAC intentionally has weaker isolation; no universal database isolation level is inferred."
+    },
+    {
+      "source_id": "MAP-0025",
+      "target_id": "SPEC-CONFORMANCE-001",
+      "target_path": "spec/conventions.md",
+      "clause_sha256": "2657b30e103c55ff8cf0c5b81c4328cb449b78a1dc1c3827af996db2a517e784",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Applicable obligations and requirement-to-case references differ from proof over all executions. The benchmark passage motivates a methodological limit; a traced finite suite remains useful and is not implementation execution evidence."
+    },
+    {
+      "source_id": "MAP-0025",
+      "target_id": "SPEC-REQUIREMENT-005",
+      "target_path": "spec/conventions.md",
+      "clause_sha256": "b3f562a3c9f78a772f8faf3aba82bfc7ca4172983c6ccad8338e56eda1efcb2b",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Applicable obligations and requirement-to-case references differ from proof over all executions. The benchmark passage motivates a methodological limit; a traced finite suite remains useful and is not implementation execution evidence."
+    },
+    {
+      "source_id": "MAP-0027",
+      "target_id": "CORE-002.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Changing document representation does not itself satisfy the applicable declared financial predicates or eligibility. The historical voucher example motivates control preservation without mandating procurement rules or a document package."
+    },
+    {
+      "source_id": "MAP-0027",
+      "target_id": "ENTITY-VALIDATION-001",
+      "target_path": "spec/entities/validation.md",
+      "clause_sha256": "67470b64c2cbdf4c152ee286536d099d3efaedb83957eec671fa30e55612fc5e",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Changing document representation does not itself satisfy the applicable declared financial predicates or eligibility. The historical voucher example motivates control preservation without mandating procurement rules or a document package."
+    },
+    {
+      "source_id": "MAP-0027",
+      "target_id": "ENTITY-VALIDATION-002",
+      "target_path": "spec/entities/validation.md",
+      "clause_sha256": "4536efe20db6098dd074ac2bbb3b4154017ce799e0fc2362832d06245f9229c4",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Changing document representation does not itself satisfy the applicable declared financial predicates or eligibility. The historical voucher example motivates control preservation without mandating procurement rules or a document package."
+    },
+    {
+      "source_id": "MAP-0027",
+      "target_id": "ENTITY-VALIDATION-003",
+      "target_path": "spec/entities/validation.md",
+      "clause_sha256": "757f760fbd5f87e758a85b73796b52517dde52a9bcd7c3b70c865b05e33f10e2",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Changing document representation does not itself satisfy the applicable declared financial predicates or eligibility. The historical voucher example motivates control preservation without mandating procurement rules or a document package."
+    },
+    {
+      "source_id": "MAP-0027",
+      "target_id": "APPROVAL-REQUIREMENT-006",
+      "target_path": "spec/approvals/requirements.md",
+      "clause_sha256": "38bd97c1e5f7075bd5a2bd63d84713fbb2bbab5a5234f246d873d2ce768ef789",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Changing document representation does not itself satisfy the applicable declared financial predicates or eligibility. The historical voucher example motivates control preservation without mandating procurement rules or a document package."
+    },
+    {
+      "source_id": "MAP-0030",
+      "target_id": "SPEC-CONFORMANCE-001",
+      "target_path": "spec/conventions.md",
+      "clause_sha256": "2657b30e103c55ff8cf0c5b81c4328cb449b78a1dc1c3827af996db2a517e784",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "A stakeholder score does not establish satisfaction of applicable mandatory or recommended obligations. The single-case ESG study motivates measurement scrutiny, not a universal claim about ESG/ML or a FinKore compliance experiment."
+    },
+    {
+      "source_id": "MAP-0030",
+      "target_id": "SPEC-CONFORMANCE-002",
+      "target_path": "spec/conventions.md",
+      "clause_sha256": "9a9711bbd5942427f6f0d339711ea9b772d38411acd70f18f027ec42f3cb6b97",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "A stakeholder score does not establish satisfaction of applicable mandatory or recommended obligations. The single-case ESG study motivates measurement scrutiny, not a universal claim about ESG/ML or a FinKore compliance experiment."
+    },
+    {
+      "source_id": "MAP-0031",
+      "target_id": "AUDIT-APPEND-003",
+      "target_path": "spec/audit/append-only.md",
+      "clause_sha256": "aad13fdbc54542bce240677714b6d19506027fa7b43c6cd12d47330d9f30b4a1",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Duplicate Audit identity rejection and conflict preconditions have bounded domain meaning. Producer guarantees and application-effect uniqueness need their own scope; no broker protocol, cached result or end-to-end exactly-once guarantee is supplied."
+    },
+    {
+      "source_id": "MAP-0031",
+      "target_id": "WORKFLOW-CONFLICT-008",
+      "target_path": "spec/workflow/conflicts.md",
+      "clause_sha256": "da97fb1b9b0f1ac599c115336f3e5acb6dbc446a8dcf8749d73d16e572f87dc5",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Duplicate Audit identity rejection and conflict preconditions have bounded domain meaning. Producer guarantees and application-effect uniqueness need their own scope; no broker protocol, cached result or end-to-end exactly-once guarantee is supplied."
+    },
+    {
+      "source_id": "MAP-0032",
+      "target_id": "CORE-002.1",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "32a272932fa9304df826b445920827e03c1bb833350956fdf533ce8a56319696",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Valid transitions, intentional terminal states and non-mutating rejection do not establish fairness or per-request eventual completion. The hospital study supplies methodological context, not financial execution evidence or a universal deadline."
+    },
+    {
+      "source_id": "MAP-0032",
+      "target_id": "WORKFLOW-TRANSITION-004",
+      "target_path": "spec/workflow/transitions.md",
+      "clause_sha256": "eff97665a8b25bd81bfba58b6e56e930ab9b308427b24c784c58eafd5e125a0e",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Valid transitions, intentional terminal states and non-mutating rejection do not establish fairness or per-request eventual completion. The hospital study supplies methodological context, not financial execution evidence or a universal deadline."
+    },
+    {
+      "source_id": "MAP-0032",
+      "target_id": "WORKFLOW-TRANSITION-006",
+      "target_path": "spec/workflow/transitions.md",
+      "clause_sha256": "046d87c9b6b212bad1ad4becf7a78e7f2d5d41ee960fd3736a1bbad8543eb984",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Valid transitions, intentional terminal states and non-mutating rejection do not establish fairness or per-request eventual completion. The hospital study supplies methodological context, not financial execution evidence or a universal deadline."
+    },
+    {
+      "source_id": "MAP-0032",
+      "target_id": "WORKFLOW-TRANSITION-007",
+      "target_path": "spec/workflow/transitions.md",
+      "clause_sha256": "6f650d2972e2210138dd4a240e0e3d1f8d80282695e96d4c58e7fb1b1c95b8ce",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Valid transitions, intentional terminal states and non-mutating rejection do not establish fairness or per-request eventual completion. The hospital study supplies methodological context, not financial execution evidence or a universal deadline."
+    },
+    {
+      "source_id": "MAP-0032",
+      "target_id": "WORKFLOW-TERMINAL-001",
+      "target_path": "spec/workflow/terminal-states.md",
+      "clause_sha256": "65df446556a1d1e359c3a52e9412a6932417e630234953b5ecb101d33cd26359",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Valid transitions, intentional terminal states and non-mutating rejection do not establish fairness or per-request eventual completion. The hospital study supplies methodological context, not financial execution evidence or a universal deadline."
+    },
+    {
+      "source_id": "MAP-0032",
+      "target_id": "WORKFLOW-CONFLICT-008",
+      "target_path": "spec/workflow/conflicts.md",
+      "clause_sha256": "da97fb1b9b0f1ac599c115336f3e5acb6dbc446a8dcf8749d73d16e572f87dc5",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Valid transitions, intentional terminal states and non-mutating rejection do not establish fairness or per-request eventual completion. The hospital study supplies methodological context, not financial execution evidence or a universal deadline."
+    },
+    {
+      "source_id": "MAP-0033",
+      "target_id": "WORKFLOW-TRANSITION-004",
+      "target_path": "spec/workflow/transitions.md",
+      "clause_sha256": "eff97665a8b25bd81bfba58b6e56e930ab9b308427b24c784c58eafd5e125a0e",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "A translated property must still describe the applicable guards and intended observation. Requirement references aid review but do not prove translation equivalence. The source’s reported assistant error does not mandate ATL/APEX or measure a general LLM error rate."
+    },
+    {
+      "source_id": "MAP-0033",
+      "target_id": "WORKFLOW-GUARD-001",
+      "target_path": "spec/workflow/guards.md",
+      "clause_sha256": "bda16506619bb1f6bb26793ce875c0f593e1bcc05d0fc0b874149b97aea072dc",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "A translated property must still describe the applicable guards and intended observation. Requirement references aid review but do not prove translation equivalence. The source’s reported assistant error does not mandate ATL/APEX or measure a general LLM error rate."
+    },
+    {
+      "source_id": "MAP-0033",
+      "target_id": "WORKFLOW-GUARD-002",
+      "target_path": "spec/workflow/guards.md",
+      "clause_sha256": "0fc566d6524c0f5857db0da5c8c406d36a25e19ff5ac9639e8567a5d64c44c75",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "A translated property must still describe the applicable guards and intended observation. Requirement references aid review but do not prove translation equivalence. The source’s reported assistant error does not mandate ATL/APEX or measure a general LLM error rate."
+    },
+    {
+      "source_id": "MAP-0033",
+      "target_id": "SPEC-REQUIREMENT-005",
+      "target_path": "spec/conventions.md",
+      "clause_sha256": "b3f562a3c9f78a772f8faf3aba82bfc7ca4172983c6ccad8338e56eda1efcb2b",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "A translated property must still describe the applicable guards and intended observation. Requirement references aid review but do not prove translation equivalence. The source’s reported assistant error does not mandate ATL/APEX or measure a general LLM error rate."
+    },
+    {
+      "source_id": "MAP-0035",
+      "target_id": "CORE-005.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "explanation": "Explicit context and supplied-observation checks do not certify a coherent or sufficiently recent remote snapshot. The cache source distinguishes coherence from age; acceptable age and isolation remain composing-application choices."
+    },
+    {
+      "source_id": "MAP-0035",
+      "target_id": "WORKFLOW-GUARD-004",
+      "target_path": "spec/workflow/guards.md",
+      "clause_sha256": "a4c46a512eed807f514a58d5d2a2ea7b723b7ba63d9413459092936d467737a2",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "explanation": "Explicit context and supplied-observation checks do not certify a coherent or sufficiently recent remote snapshot. The cache source distinguishes coherence from age; acceptable age and isolation remain composing-application choices."
+    },
+    {
+      "source_id": "MAP-0035",
+      "target_id": "WORKFLOW-CONFLICT-008",
+      "target_path": "spec/workflow/conflicts.md",
+      "clause_sha256": "da97fb1b9b0f1ac599c115336f3e5acb6dbc446a8dcf8749d73d16e572f87dc5",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "explanation": "Explicit context and supplied-observation checks do not certify a coherent or sufficiently recent remote snapshot. The cache source distinguishes coherence from age; acceptable age and isolation remain composing-application choices."
+    },
+    {
+      "source_id": "MAP-0035",
+      "target_id": "ENTITY-IMPORT-007",
+      "target_path": "spec/entities/import.md",
+      "clause_sha256": "ec015b91b3a16aeb591c26a2623a4386f46eb369d88d98d3084fe89a60a66546",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "explanation": "Explicit context and supplied-observation checks do not certify a coherent or sufficiently recent remote snapshot. The cache source distinguishes coherence from age; acceptable age and isolation remain composing-application choices."
+    },
+    {
+      "source_id": "MAP-0036",
+      "target_id": "CORE-003.1",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "c83537a4e1a56972adeee898744b596e1f599926848d331ca64403e0aed54bb8",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Domain event identity, complete event fields and preservation of committed records do not demonstrate capture of every required occurrence. The conceptual framework motivates an independent coverage question."
+    },
+    {
+      "source_id": "MAP-0036",
+      "target_id": "AUDIT-EVENT-003",
+      "target_path": "spec/audit/events.md",
+      "clause_sha256": "c05ece41113577e94ba98b503026f0abc34cdbac9411e47557a947a9e3c2b50b",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Domain event identity, complete event fields and preservation of committed records do not demonstrate capture of every required occurrence. The conceptual framework motivates an independent coverage question."
+    },
+    {
+      "source_id": "MAP-0036",
+      "target_id": "AUDIT-EVENT-007",
+      "target_path": "spec/audit/events.md",
+      "clause_sha256": "e15144baff8dee461a5b97e65546a5fb1415a802fa233b4abffc625395c102ea",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Domain event identity, complete event fields and preservation of committed records do not demonstrate capture of every required occurrence. The conceptual framework motivates an independent coverage question."
+    },
+    {
+      "source_id": "MAP-0036",
+      "target_id": "AUDIT-APPEND-001",
+      "target_path": "spec/audit/append-only.md",
+      "clause_sha256": "0277e8070031b09a1410b7c6e2dcc861490f5be09d2a563f11e7ca87df146600",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Domain event identity, complete event fields and preservation of committed records do not demonstrate capture of every required occurrence. The conceptual framework motivates an independent coverage question."
+    },
+    {
+      "source_id": "MAP-0036",
+      "target_id": "ENTITY-AUDIT-001",
+      "target_path": "spec/entities/README.md",
+      "clause_sha256": "8e48416f91d71ed4bab6e2434bb382ac7e7ffc59fbadf9ccf8aca11caa89fc8d",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Core already requires Audit production for identified Entity changes and corresponding atomic evidence for portable evolution. The general coverage question cannot be used to call these existing obligations wholly deferred."
+    },
+    {
+      "source_id": "MAP-0036",
+      "target_id": "ENTITY-AUDIT-002",
+      "target_path": "spec/entities/README.md",
+      "clause_sha256": "a424449c743e91bbf94bc24d4235baac251755f39f5d108cd5f9c2bd8187973b",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Core already requires Audit production for identified Entity changes and corresponding atomic evidence for portable evolution. The general coverage question cannot be used to call these existing obligations wholly deferred."
+    },
+    {
+      "source_id": "MAP-0036",
+      "target_id": "ENTITY-EVOLUTION-029",
+      "target_path": "spec/entities/evolution.md",
+      "clause_sha256": "112301a9f8c395abd7f2383a16f6aded164f5d4d45efc71619d09fc7e985fd22",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Core already requires Audit production for identified Entity changes and corresponding atomic evidence for portable evolution. The general coverage question cannot be used to call these existing obligations wholly deferred."
+    },
+    {
+      "source_id": "MAP-0036",
+      "target_id": "ENTITY-EVOLUTION-033",
+      "target_path": "spec/entities/evolution.md",
+      "clause_sha256": "0cbbbe74cb92d0088ee84131aee9cbc2ae6b35374c396cff83fac6fce022a48e",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Core already requires Audit production for identified Entity changes and corresponding atomic evidence for portable evolution. The general coverage question cannot be used to call these existing obligations wholly deferred."
+    },
+    {
+      "source_id": "MAP-0039",
+      "target_id": "CORE-003.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "b9acdb2fec7191d7c12a7192a212c3d234ccfbbea47769a5f73d20dae4df82d3",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "The source explicitly permits discarding some operations after a response. That tradeoff does not authorize erasing committed history or rewriting preserved source facts; portable reversal requires its declared evidence. Distributed confirmation and concrete accounting consequences remain separate."
+    },
+    {
+      "source_id": "MAP-0039",
+      "target_id": "AUDIT-APPEND-001",
+      "target_path": "spec/audit/append-only.md",
+      "clause_sha256": "0277e8070031b09a1410b7c6e2dcc861490f5be09d2a563f11e7ca87df146600",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "The source explicitly permits discarding some operations after a response. That tradeoff does not authorize erasing committed history or rewriting preserved source facts; portable reversal requires its declared evidence. Distributed confirmation and concrete accounting consequences remain separate."
+    },
+    {
+      "source_id": "MAP-0039",
+      "target_id": "ENTITY-EVOLUTION-011",
+      "target_path": "spec/entities/evolution.md",
+      "clause_sha256": "e433ddc4ebec89b55952ec28d8240a3d178885cb24d0838562bb28c1527ca708",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "The source explicitly permits discarding some operations after a response. That tradeoff does not authorize erasing committed history or rewriting preserved source facts; portable reversal requires its declared evidence. Distributed confirmation and concrete accounting consequences remain separate."
+    },
+    {
+      "source_id": "MAP-0039",
+      "target_id": "ENTITY-EVOLUTION-012",
+      "target_path": "spec/entities/evolution.md",
+      "clause_sha256": "d371a64340ac70e07700bbb5a2c2829f25bf39e6965331d3948e05c3457c8a30",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "The source explicitly permits discarding some operations after a response. That tradeoff does not authorize erasing committed history or rewriting preserved source facts; portable reversal requires its declared evidence. Distributed confirmation and concrete accounting consequences remain separate."
+    },
+    {
+      "source_id": "MAP-0039",
+      "target_id": "ENTITY-EVOLUTION-015",
+      "target_path": "spec/entities/evolution.md",
+      "clause_sha256": "3140930efeba212a8b77210e8224262dae300c134422d13075af54e2ba3d969d",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "The source explicitly permits discarding some operations after a response. That tradeoff does not authorize erasing committed history or rewriting preserved source facts; portable reversal requires its declared evidence. Distributed confirmation and concrete accounting consequences remain separate."
+    },
+    {
+      "source_id": "MAP-0039",
+      "target_id": "ENTITY-EVOLUTION-029",
+      "target_path": "spec/entities/evolution.md",
+      "clause_sha256": "112301a9f8c395abd7f2383a16f6aded164f5d4d45efc71619d09fc7e985fd22",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "The source explicitly permits discarding some operations after a response. That tradeoff does not authorize erasing committed history or rewriting preserved source facts; portable reversal requires its declared evidence. Distributed confirmation and concrete accounting consequences remain separate."
+    },
+    {
+      "source_id": "MAP-0039",
+      "target_id": "ENTITY-EVOLUTION-033",
+      "target_path": "spec/entities/evolution.md",
+      "clause_sha256": "0cbbbe74cb92d0088ee84131aee9cbc2ae6b35374c396cff83fac6fce022a48e",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "The source explicitly permits discarding some operations after a response. That tradeoff does not authorize erasing committed history or rewriting preserved source facts; portable reversal requires its declared evidence. Distributed confirmation and concrete accounting consequences remain separate."
+    },
+    {
+      "source_id": "MAP-0039",
+      "target_id": "WORKFLOW-CONFLICT-008",
+      "target_path": "spec/workflow/conflicts.md",
+      "clause_sha256": "da97fb1b9b0f1ac599c115336f3e5acb6dbc446a8dcf8749d73d16e572f87dc5",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "The source explicitly permits discarding some operations after a response. That tradeoff does not authorize erasing committed history or rewriting preserved source facts; portable reversal requires its declared evidence. Distributed confirmation and concrete accounting consequences remain separate."
+    },
+    {
+      "source_id": "LGC-0001",
+      "target_id": "CORE-001.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "4317664c45a67fd420616bfc3d41af0321cca216c1c7732e93fbf6497379f37b",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "An exactly representable monetary result must be preserved; losing significant digits is not an implicit rounding policy."
+    },
+    {
+      "source_id": "LGC-0001",
+      "target_id": "MONEY-REPRESENTATION-002",
+      "target_path": "spec/money/representation.md",
+      "clause_sha256": "2c78612e5b5b40ab0f46752d6c8c337bbcd095bee60de407fc11582d102114f0",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "Finite exact base-10 amounts supply the relevant value-preservation boundary, not a storage-column format."
+    },
+    {
+      "source_id": "LGC-0001",
+      "target_id": "MONEY-REPRESENTATION-006",
+      "target_path": "spec/money/representation.md",
+      "clause_sha256": "518da37fe4ba8c8c5c402fd459b7983a33e75952bc33632b9dfb761941bad96d",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "explanation": "Internal storage choices remain consumer choices only while observable semantics are preserved."
+    },
+    {
+      "source_id": "LGC-0001",
+      "target_id": "MONEY-ERROR-001",
+      "target_path": "spec/money/errors.md",
+      "clause_sha256": "d8e3d3276b8fae765ae89d519d5fd4c0f620dfa021636750bcfe97dc10cf14ac",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Unsupported amounts fail without a Money result; the interview does not establish a portable supported-range threshold."
+    },
+    {
+      "source_id": "LGC-0002",
+      "target_id": "CORE-002.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "20b537b4b61f75741bc518b9819bb8bd37e300ca2b7058ecd682a83e66028c67",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "A rejected financial action preserves relevant observable financial state unless a governing rule explicitly defines another failure effect."
+    },
+    {
+      "source_id": "LGC-0002",
+      "target_id": "MONEY-ERROR-007",
+      "target_path": "spec/money/errors.md",
+      "clause_sha256": "76588f7f0ed4dadb35156308be1d073b52a5bf8fe37ea7ab7152ac12d873f459",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "Failed Money operations preserve every operand; negative acceptance artifacts can inspect before/after values."
+    },
+    {
+      "source_id": "LGC-0002",
+      "target_id": "WORKFLOW-TRANSITION-006",
+      "target_path": "spec/workflow/transitions.md",
+      "clause_sha256": "046d87c9b6b212bad1ad4becf7a78e7f2d5d41ee960fd3736a1bbad8543eb984",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "A rejected Transition leaves current State unchanged; this is a bounded example rather than a general promise of operational recovery."
+    },
+    {
+      "source_id": "LGC-0003",
+      "target_id": "CORE-002.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "20b537b4b61f75741bc518b9819bb8bd37e300ca2b7058ecd682a83e66028c67",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "explanation": "Non-mutation on rejection does not restore a deployment or undo previously committed external effects."
+    },
+    {
+      "source_id": "LGC-0003",
+      "target_id": "WORKFLOW-TRANSITION-007",
+      "target_path": "spec/workflow/transitions.md",
+      "clause_sha256": "6f650d2972e2210138dd4a240e0e3d1f8d80282695e96d4c58e7fb1b1c95b8ce",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "explanation": "One observable domain transition does not specify database isolation, deployment recovery, or distributed atomic commit."
+    },
+    {
+      "source_id": "LGC-0003",
+      "target_id": "WORKFLOW-CONFLICT-008",
+      "target_path": "spec/workflow/conflicts.md",
+      "clause_sha256": "da97fb1b9b0f1ac599c115336f3e5acb6dbc446a8dcf8749d73d16e572f87dc5",
+      "evidence_role": "limits_claim",
+      "relationship": "deferred_scope",
+      "explanation": "Workflow preconditions explicitly do not provide distributed coordination or transaction isolation."
+    },
+    {
+      "source_id": "LGC-0004",
+      "target_id": "SPEC-ERROR-001",
+      "target_path": "spec/conventions.md",
+      "clause_sha256": "a494519432325bdfaa7cbd6cc18997d502c90896c11f30818b5d31121e56ad4b",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "A stable category makes a domain failure recognizable across consumer environments."
+    },
+    {
+      "source_id": "LGC-0004",
+      "target_id": "SPEC-ERROR-002",
+      "target_path": "spec/conventions.md",
+      "clause_sha256": "58e84801731d81a77b9170a88c80cbf7baf3f41d1260c0a0950b0d4475edd128",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "The portable code must not embed localized prose or implementation details; diagnostics are separate."
+    },
+    {
+      "source_id": "LGC-0004",
+      "target_id": "SPEC-ERROR-003",
+      "target_path": "spec/conventions.md",
+      "clause_sha256": "a32a4f4aba39f36467a15b94637ceef74d8b9c9c0d81a501de443b5ade2f46e0",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Human-readable messages and structured context are permitted, not universally required."
+    },
+    {
+      "source_id": "LGC-0004",
+      "target_id": "SPEC-ERROR-005",
+      "target_path": "spec/conventions.md",
+      "clause_sha256": "558f08314fea8bc997866865398c8f2e8598935bc1e3c397492f281a489bd44f",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Additional details must not expose sensitive information by default, even when troubleshooting is difficult."
+    },
+    {
+      "source_id": "LGC-0004",
+      "target_id": "ENTITY-ERROR-002",
+      "target_path": "spec/entities/errors.md",
+      "clause_sha256": "6ec3fe40473e4eebad7e1b08710b36ca60160c78b193198318b0e685c4ef9d15",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Stable violation identifiers are SHOULD-level guidance; do not promote them into a universal MUST."
+    },
+    {
+      "source_id": "LGC-0004",
+      "target_id": "ENTITY-VALIDATION-005",
+      "target_path": "spec/entities/validation.md",
+      "clause_sha256": "56a62016303b1aa91f5f5498d43fe3296c81bcf21066fba673afabf5da71a52a",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Relevant domain paths are SHOULD-level guidance; preserve published coverage limitations."
+    },
+    {
+      "source_id": "LGC-0005",
+      "target_id": "CORE-002.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Evaluate the complete proposed result and declared relevant facts before a change becomes observable."
+    },
+    {
+      "source_id": "LGC-0005",
+      "target_id": "ENTITY-VALIDATION-001",
+      "target_path": "spec/entities/validation.md",
+      "clause_sha256": "67470b64c2cbdf4c152ee286536d099d3efaedb83957eec671fa30e55612fc5e",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "All structural and business rules applicable to the current State apply, not an assumed universal application schema."
+    },
+    {
+      "source_id": "LGC-0005",
+      "target_id": "ENTITY-VALIDATION-003",
+      "target_path": "spec/entities/validation.md",
+      "clause_sha256": "757f760fbd5f87e758a85b73796b52517dde52a9bcd7c3b70c865b05e33f10e2",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Cross-field rules inspect the complete proposed domain result."
+    },
+    {
+      "source_id": "LGC-0005",
+      "target_id": "ENTITY-IMPORT-002",
+      "target_path": "spec/entities/import.md",
+      "clause_sha256": "a37d5bb2e4615cee95abfb202d44c34ce012fe4bb2c60ac054f087f5abd15479",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Import validates the complete supplied observation and must not bypass declared validators simply because no Mutation is proposed."
+    },
+    {
+      "source_id": "LGC-0006",
+      "target_id": "AUDIT-APPEND-003",
+      "target_path": "spec/audit/append-only.md",
+      "clause_sha256": "aad13fdbc54542bce240677714b6d19506027fa7b43c6cd12d47330d9f30b4a1",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Rejecting an already committed Audit Event identity prevents another committed event for that identity; it does not deduplicate a payment instruction."
+    },
+    {
+      "source_id": "LGC-0006",
+      "target_id": "WORKFLOW-CONFLICT-008",
+      "target_path": "spec/workflow/conflicts.md",
+      "clause_sha256": "da97fb1b9b0f1ac599c115336f3e5acb6dbc446a8dcf8749d73d16e572f87dc5",
+      "evidence_role": "limits_claim",
+      "relationship": "deferred_scope",
+      "explanation": "Local expected-state/revision checks are not locks or distributed coordination for concurrent batch work."
+    },
+    {
+      "source_id": "LGC-0007",
+      "target_id": "CORE-005.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Relevant external-fact dependencies must be identified for reproducible evaluation; this does not define a data-age policy."
+    },
+    {
+      "source_id": "LGC-0007",
+      "target_id": "WORKFLOW-GUARD-004",
+      "target_path": "spec/workflow/guards.md",
+      "clause_sha256": "a4c46a512eed807f514a58d5d2a2ea7b723b7ba63d9413459092936d467737a2",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "A guard is deterministic for the same declared facts or identifies external dependencies. Retain the published PARTIAL coverage note."
+    },
+    {
+      "source_id": "LGC-0007",
+      "target_id": "ENTITY-IMPORT-007",
+      "target_path": "spec/entities/import.md",
+      "clause_sha256": "ec015b91b3a16aeb591c26a2623a4386f46eb369d88d98d3084fe89a60a66546",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "explanation": "Expected state/revision/conflict values are checked against the supplied observation; passing those checks does not establish remote freshness."
+    },
+    {
+      "source_id": "LGC-0008",
+      "target_id": "CORE-005.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+      "evidence_role": "supports_rationale",
+      "relationship": "application_policy",
+      "explanation": "Declared inputs, state and relevant context provide a reproducible financial basis to compare; a cross-implementation migration-equivalence method remains consumer-owned."
+    },
+    {
+      "source_id": "LGC-0008",
+      "target_id": "MONEY-REPRESENTATION-006",
+      "target_path": "spec/money/representation.md",
+      "clause_sha256": "518da37fe4ba8c8c5c402fd459b7983a33e75952bc33632b9dfb761941bad96d",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "Internal Money representation is a MAY freedom conditional on preserving observable semantics. This is a bounded instance of technology freedom, not a claim that arbitrary banking rules or migrations are specified."
+    },
+    {
+      "source_id": "LGC-0008",
+      "target_id": "SPEC-COMPATIBILITY-012",
+      "target_path": "spec/conventions.md",
+      "clause_sha256": "a02236a52b5578c0fa88578a1b1b2048737d31141f44a8251ebf999548fdf4d6",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "The Core release policy treats changed success, failure, results, errors, shapes or mutation semantics as behaviorally incompatible. The analogy highlights financial behavior that must be examined; it does not assign a new Core version to a consumer technology migration."
+    },
+    {
+      "source_id": "LGC-0009",
+      "target_id": "CORE-002.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "explanation": "Validation considers the complete proposed result and declared relevant facts, while the rule boundaries explicitly leave product-specific business validations undefined by CoreDoc."
+    },
+    {
+      "source_id": "LGC-0009",
+      "target_id": "ENTITY-VALIDATION-001",
+      "target_path": "spec/entities/validation.md",
+      "clause_sha256": "67470b64c2cbdf4c152ee286536d099d3efaedb83957eec671fa30e55612fc5e",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "An Entity must satisfy the Structural and Business Validation rules applicable to its current State. Applicability is required; a universal institution- or country-specific rule set is not supplied."
+    },
+    {
+      "source_id": "LGC-0010",
+      "target_id": "CORE-005.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+      "evidence_role": "supports_rationale",
+      "relationship": "application_policy",
+      "explanation": "Declared inputs, state and context make a financial outcome reproducible and assessable. The connection informs a consumer validation discussion, not a new normative AI-control obligation."
+    },
+    {
+      "source_id": "LGC-0010",
+      "target_id": "SPEC-CONFORMANCE-001",
+      "target_path": "spec/conventions.md",
+      "clause_sha256": "2657b30e103c55ff8cf0c5b81c4328cb449b78a1dc1c3827af996db2a517e784",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "All applicable MUST and MUST NOT obligations govern an implementation even when a tool generates its code; code-generation success is not evidence that these obligations were satisfied."
+    },
+    {
+      "source_id": "LGC-0010",
+      "target_id": "SPEC-CONFORMANCE-002",
+      "target_path": "spec/conventions.md",
+      "clause_sha256": "9a9711bbd5942427f6f0d339711ea9b772d38411acd70f18f027ec42f3cb6b97",
+      "evidence_role": "limits_claim",
+      "relationship": "already_addressed",
+      "explanation": "SHOULD and SHOULD NOT obligations retain their recommendation strength and documented-exception rule. The interview cannot promote them to mandatory requirements."
+    }
+  ]
+}

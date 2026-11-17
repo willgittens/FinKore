@@ -261,7 +261,7 @@ and dependency scope with the concise release summary in
 establish consumer implementation conformance.
 
 Commit the reviewed release tree, then create an annotated `<Core version>`
-tag on that commit (for example, `2.0.3`, following the published `2.0.2` tag).
+tag on that commit (for example, `2.0.4`, following the published `2.0.3` tag).
 Preserve all existing tag names and targets. Confirm the new tag targets the
 verified commit and that the working tree is clean. Distribute only
 tracked release content, excluding local checkout state. Remote tag publication

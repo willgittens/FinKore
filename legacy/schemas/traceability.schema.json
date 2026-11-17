@@ -1,0 +1,748 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finkore:legacy-traceability:1.0.0",
+  "title": "Non-normative public Legacy interview comparisons",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "curation",
+    "resolved"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "curation": {
+      "type": "object",
+      "required": [
+        "description",
+        "interviews",
+        "mappings"
+      ],
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "interviews": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "source",
+              "reader",
+              "name",
+              "reviewed_source_sha256",
+              "sections"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^LEGACY-[0-9]{3}$"
+              },
+              "source": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reader": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reviewed_source_sha256": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "sections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "heading",
+                    "role",
+                    "disposition",
+                    "reason"
+                  ],
+                  "properties": {
+                    "heading": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "role": {
+                      "enum": [
+                        "public_answer",
+                        "editorial_only",
+                        "unreviewed"
+                      ]
+                    },
+                    "disposition": {
+                      "enum": [
+                        "mapped",
+                        "context_only",
+                        "excluded_confidentiality",
+                        "pending_curation"
+                      ]
+                    },
+                    "reason": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              }
+            },
+            "additionalProperties": false
+          },
+          "minItems": 0
+        },
+        "mappings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "interview_id",
+              "claim",
+              "curation_status",
+              "interpretation",
+              "conditions_and_limits",
+              "learn_angle",
+              "reviewed_on",
+              "evidence",
+              "bindings",
+              "related_research"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^LGC-[0-9]{4}$"
+              },
+              "interview_id": {
+                "type": "string",
+                "pattern": "^LEGACY-[0-9]{3}$"
+              },
+              "claim": {
+                "type": "string",
+                "minLength": 1
+              },
+              "curation_status": {
+                "enum": [
+                  "reviewed",
+                  "pending_curation",
+                  "not_recommended"
+                ]
+              },
+              "interpretation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "conditions_and_limits": {
+                "type": "string",
+                "minLength": 1
+              },
+              "learn_angle": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reviewed_on": {
+                "type": "string",
+                "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "heading",
+                    "exact_quote"
+                  ],
+                  "properties": {
+                    "heading": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "exact_quote": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              },
+              "bindings": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "target_id",
+                    "relationship",
+                    "evidence_role",
+                    "explanation",
+                    "reviewed_clause_sha256"
+                  ],
+                  "properties": {
+                    "target_id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "relationship": {
+                      "enum": [
+                        "already_addressed",
+                        "application_policy",
+                        "deferred_scope",
+                        "possible_gap",
+                        "outside_scope"
+                      ]
+                    },
+                    "evidence_role": {
+                      "enum": [
+                        "illustrates_risk",
+                        "limits_claim",
+                        "context_only",
+                        "supports_rationale",
+                        "counterpoint"
+                      ]
+                    },
+                    "explanation": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "reviewed_clause_sha256": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              },
+              "related_research": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "mapping_id",
+                    "relationship",
+                    "explanation",
+                    "reviewed_curation_sha256"
+                  ],
+                  "properties": {
+                    "mapping_id": {
+                      "type": "string",
+                      "pattern": "^MAP-[0-9]{4}$"
+                    },
+                    "relationship": {
+                      "enum": [
+                        "complements",
+                        "contrasts_conditions",
+                        "qualifies"
+                      ]
+                    },
+                    "explanation": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "reviewed_curation_sha256": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "minItems": 0
+              }
+            },
+            "additionalProperties": false
+          },
+          "minItems": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "resolved": {
+      "anyOf": [
+        {
+          "type": "object",
+          "required": [
+            "contract",
+            "inputs",
+            "interviews",
+            "records",
+            "by_target",
+            "by_interview",
+            "counts"
+          ],
+          "properties": {
+            "contract": {
+              "type": "object",
+              "required": [
+                "core_version",
+                "repository_revision",
+                "files",
+                "targets",
+                "vectors",
+                "operations"
+              ],
+              "properties": {
+                "core_version": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "repository_revision": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "files": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/$defs/hash"
+                  }
+                },
+                "targets": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "$ref": "#/$defs/target"
+                  }
+                },
+                "vectors": {
+                  "type": "object"
+                },
+                "operations": {
+                  "type": "object"
+                }
+              }
+            },
+            "inputs": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "interviews": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "source_kind",
+                  "source",
+                  "reader",
+                  "speaker",
+                  "publication_approval",
+                  "observed_sha256",
+                  "status",
+                  "recheck_reasons",
+                  "sections"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^LEGACY-[0-9]{3}$"
+                  },
+                  "source_kind": {
+                    "const": "practitioner_interview"
+                  },
+                  "source": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "reader": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "speaker": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "publication_approval": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "observed_sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  },
+                  "status": {
+                    "enum": [
+                      "reviewed",
+                      "needs_recheck"
+                    ]
+                  },
+                  "recheck_reasons": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minItems": 0
+                  },
+                  "sections": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "heading",
+                        "role",
+                        "disposition",
+                        "reason",
+                        "line",
+                        "anchor"
+                      ],
+                      "properties": {
+                        "heading": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "role": {
+                          "enum": [
+                            "public_answer",
+                            "editorial_only",
+                            "unreviewed"
+                          ]
+                        },
+                        "disposition": {
+                          "enum": [
+                            "mapped",
+                            "context_only",
+                            "excluded_confidentiality",
+                            "pending_curation"
+                          ]
+                        },
+                        "reason": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "line": {
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "anchor": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "minItems": 0
+                  }
+                },
+                "additionalProperties": false
+              },
+              "minItems": 0
+            },
+            "records": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "mapping_id",
+                  "interview_id",
+                  "status",
+                  "recheck_reasons",
+                  "evidence",
+                  "related_research",
+                  "findings_status",
+                  "normative_acceptance",
+                  "editorial_eligible"
+                ],
+                "properties": {
+                  "mapping_id": {
+                    "type": "string",
+                    "pattern": "^LGC-[0-9]{4}$"
+                  },
+                  "interview_id": {
+                    "type": "string",
+                    "pattern": "^LEGACY-[0-9]{3}$"
+                  },
+                  "status": {
+                    "enum": [
+                      "reviewed",
+                      "pending_curation",
+                      "not_recommended",
+                      "needs_recheck"
+                    ]
+                  },
+                  "recheck_reasons": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minItems": 0
+                  },
+                  "evidence": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "heading",
+                        "exact_quote",
+                        "verified",
+                        "line",
+                        "source",
+                        "speaker",
+                        "source_anchor",
+                        "reader"
+                      ],
+                      "properties": {
+                        "heading": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "exact_quote": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "verified": {
+                          "type": "boolean"
+                        },
+                        "line": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ],
+                          "minimum": 1
+                        },
+                        "source": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "speaker": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "source_anchor": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "reader": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "minItems": 1
+                  },
+                  "related_research": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "mapping_id",
+                        "relationship",
+                        "explanation",
+                        "recorded_status",
+                        "recorded_readiness",
+                        "freshness"
+                      ],
+                      "properties": {
+                        "mapping_id": {
+                          "type": "string",
+                          "pattern": "^MAP-[0-9]{4}$"
+                        },
+                        "relationship": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "explanation": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "recorded_status": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "recorded_readiness": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "freshness": {
+                          "const": "not_revalidated_here"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "minItems": 0
+                  },
+                  "findings_status": {
+                    "const": "pending_validation"
+                  },
+                  "normative_acceptance": {
+                    "const": "not_requested"
+                  },
+                  "editorial_eligible": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "minItems": 0
+            },
+            "by_target": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^LGC-[0-9]{4}$"
+                },
+                "minItems": 0
+              }
+            },
+            "by_interview": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^LGC-[0-9]{4}$"
+                },
+                "minItems": 0
+              }
+            },
+            "counts": {
+              "type": "object",
+              "required": [
+                "interviews",
+                "mappings",
+                "linked_targets",
+                "statuses",
+                "editorial_eligible"
+              ],
+              "properties": {
+                "interviews": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "mappings": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "linked_targets": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "statuses": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "editorial_eligible": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "strings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "target": {
+      "type": "object",
+      "required": [
+        "id",
+        "layer",
+        "title",
+        "path",
+        "anchor",
+        "statement",
+        "clause_sha256",
+        "modalities",
+        "vector_ids",
+        "agentic_operation_ids",
+        "coredoc_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "layer": {
+          "enum": [
+            "coredoc",
+            "spec"
+          ]
+        },
+        "title": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "anchor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "statement": {
+          "type": "string"
+        },
+        "clause_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "modalities": {
+          "$ref": "#/$defs/strings"
+        },
+        "vector_ids": {
+          "$ref": "#/$defs/strings"
+        },
+        "agentic_operation_ids": {
+          "$ref": "#/$defs/strings"
+        },
+        "coredoc_ids": {
+          "$ref": "#/$defs/strings"
+        },
+        "explicit_spec_references": {
+          "$ref": "#/$defs/strings"
+        },
+        "coverage": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}
