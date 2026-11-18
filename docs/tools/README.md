@@ -140,6 +140,15 @@ guard-dependency declaration representation. The checker validates metadata;
 it does not decide semantic adequacy, require an optional parser branch, waive
 a mandatory obligation, or promote coverage from consumer execution evidence.
 
+### Optional Code Evidence maintenance
+
+The non-normative [Code Evidence catalog](../../code-evidence/README.md) has
+separate commands: `npm run code-evidence:build` renders its listing,
+`npm run code-evidence:check` validates local metadata and synchronization, and
+`npm run code-evidence:test` exercises metadata safeguards. These commands make
+no network calls and execute no financial behavior. They are independent of
+contract verification and do not publish a Learn page.
+
 ## Specification requirement references
 
 The documentation checker validates specification IDs in Markdown under `spec/`,
@@ -492,10 +501,11 @@ remain unchanged. Newly added specification files require an explicit registry
 entry before they become Learn readers.
 
 `learn/related-evidence.json` is optional editorial publication data, versioned
-as `1.0.0`. It links existing reviewed comparisons to already published Research
-notes and approved public interviews. It is independent of the research catalog
-at build time; neither Python nor original manifests are required. The contract
-readers can be generated without this optional index.
+as `1.1.0` (the reader also accepts `1.0.0`). It links selected comparisons to
+published Research notes, approved public interviews and pinned Code Evidence
+analyses. It is independent of discovery catalogs at build time; neither Python
+nor original manifests are required. The contract readers can be generated without
+this optional index.
 
 Each `sources` entry preserves the existing `MAP-*` or `LGC-*` comparison ID,
 kind (`research` or `legacy`), title, attributed authors, local reader/fragment,
@@ -504,6 +514,29 @@ SHA-256. Each `bindings` entry identifies one exact requirement, its owning path
 reviewed clause SHA-256, semantic relationship, evidence role and explanation.
 Bindings are explicit editorial decisions; matching vocabulary never creates one.
 
+The `code` source kind additionally preserves the `CE-FINDING-*` ID, project,
+repository, GitHub owner (not an inferred author), selected version, full commit
+SHA and function names with commit-pinned file/line links. Its publication is the
+existing `code-evidence/analyses/CE-REPO-*/CE-EDITION-*.md` record, linked through
+GitHub; the source hash covers that record. Its reading extent is
+`selected_code_and_tests`, execution status is `not_executed`, and validation
+remains pending. This format does not represent later runtime execution evidence.
+
+Code bindings currently target CoreDoc rules only. The “Who does it this way?”
+cards group the explicit `implementation_relationship`: `same_approach`,
+`partial_match`, `different_policy`, or `related_control`. A match is bounded by
+its stated path, inputs and policy; it requires a supporting rationale and
+`already_addressed` relationship, never whole-library conformance. Other groups
+preserve disagreements and future-domain questions instead of presenting them as
+endorsements. A finding without a justified current-rule comparison stays in the
+analysis catalog. Shared design ancestry is not independent confirmation.
+
+Only registered, current code sources permit their exact upstream function URLs
+on the CoreDoc reader. The publication gate still rejects unregistered destinations,
+unpinned branches, unsafe new-tab attributes and upstream links on other pages.
+Function names and URLs must also occur in the fingerprinted analysis. This guards
+publication consistency; it is not independent verification of upstream behavior.
+
 The “Evidence & context” disclosures show whether a source supports the rationale,
 illustrates a risk, clarifies a boundary, supplies context or offers a counterpoint.
 They do not imply certification, independent validation or specialist sign-off.
@@ -511,9 +544,9 @@ Multiple passages from one study remain separate notes, not independent evidence
 No completed expert review is inferred from the existence of a Reviews discussion.
 Requirements without curated sources receive no endorsement or automatic link.
 
-Before adding or changing a binding, inspect the approved source, published note,
-current CoreDoc/Spec clause and the existing research/Legacy comparison, including
-its limitations. Only publish reviewed, editorially eligible comparisons. Copy
+Before adding or changing a binding, inspect the eligible source, published note
+or pinned analysis, current CoreDoc/Spec clause and the existing comparison,
+including its limitations. Only publish reviewed, editorially eligible comparisons. Copy
 their explicitly reviewed fingerprints; do not refresh hashes as a substitute
 for semantic review. Update the publication fingerprint only after reviewing the
 new publication text. Every finding remains `pending_validation`.

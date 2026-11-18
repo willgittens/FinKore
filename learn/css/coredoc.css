@@ -22,6 +22,23 @@
 .learn-document-prose .spec-requirement { margin-block: 1.5rem; padding: 0.75rem 0; border-bottom: 1px solid var(--line); scroll-margin-top: calc(var(--site-header-height) + 1rem); }
 .spec-domain-links { border-top: 1px solid var(--line); padding-top: 1rem; }
 @media (max-width: 48rem) { .rule-evidence-grid { grid-template-columns: minmax(0, 1fr); } }
+/* Curated implementation comparisons preserve their source and policy limits. */
+.rule-evidence > .rule-implementations > summary { font-size: 1rem; }
+.rule-implementations .rule-evidence-count { font-size: 0.875rem; }
+.rule-evidence .rule-implementations .rule-evidence-intro { font-size: 1rem; line-height: 1.65; }
+.code-evidence-group { margin-block: 1.25rem; }
+.code-evidence-group > h4 { margin: 0 0 0.75rem; font-size: 1rem; line-height: 1.4; }
+.rule-implementations .rule-evidence-card p { font-size: 1rem; line-height: 1.65; }
+.rule-implementations .rule-evidence-card .rule-evidence-kind,
+.rule-implementations .rule-evidence-card .code-evidence-repository,
+.rule-implementations .rule-evidence-card .code-evidence-status { font-size: 0.875rem; }
+.rule-implementations .rule-evidence-title { margin: 0.75rem 0; font-size: 1.125rem; }
+.rule-implementations .rule-evidence-title > span { display: block; margin-top: 0.25rem; color: var(--muted); font-size: 0.875rem; font-weight: 400; }
+.rule-implementations .code-evidence-status { color: var(--accent); }
+.rule-implementations .rule-evidence-limits summary { font-size: 0.875rem; }
+.code-evidence-functions { padding-left: 1.25rem; }
+.code-evidence-functions li { margin-block: 0.625rem; font-size: 0.875rem; }
+.code-evidence-functions code { white-space: normal; overflow-wrap: anywhere; }
 /* CoreDoc discovery and reading share the home page's palette and hard shadows. */
 .core-explorer-layout, .founder-layout { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(3rem, 7vw, 7rem); align-items: start; }
 .core-explorer .eyebrow, .founder .eyebrow { color: var(--accent); }
