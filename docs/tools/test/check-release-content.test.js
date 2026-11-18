@@ -61,6 +61,40 @@ test('allows Network discussion links only on that page with safe new-tab attrib
   assert.match(run(root).error, /learn\/other.html: HTML link must name a local destination/)
 })
 
+test('upstream code links require a current registered source, the CoreDoc page and safe attributes', t => {
+  const root = fixture(t)
+  const data = JSON.parse(readFileSync(new URL('../../../learn/related-evidence.json', import.meta.url), 'utf8'))
+  const source = data.sources.find(source => source.kind === 'code')
+  const index = { schema_version: '1.1.0', sources: [source], bindings: [] }
+  const publication = readFileSync(new URL(`../../../${source.publication_path}`, import.meta.url), 'utf8')
+  put(root, source.publication_path, publication)
+  put(root, 'learn/related-evidence.json', JSON.stringify(index))
+  const href = source.functions[0].href
+  const page = `<h1>FinKore Core 2.0.4 stable</h1><a href="${href}" target="_blank" rel="noopener noreferrer">Function</a>`
+  put(root, 'learn/coredoc.html', page)
+  // This small link fixture is intentionally not a synchronized CoreDoc reader.
+  // Its unrelated generation diagnostic must not mask the external-link policy.
+  assert.doesNotMatch(run(root).error, /HTML link must name a local destination/)
+  for (const invalid of [
+    page.replace(source.commit_sha, 'main'),
+    page.replace(source.commit_sha, 'b'.repeat(40)),
+    page.replace(source.repository, 'another/repository'),
+    page.replace('target="_blank"', 'target="_self"'),
+    page.replace('noopener noreferrer', 'noopener'),
+    page.replace('target="_blank"', ''),
+    page.replace(`href="${href}"`, `href="${href}" href="${href}"`),
+  ]) {
+    put(root, 'learn/coredoc.html', invalid)
+    assert.match(run(root).error, /HTML link must name a local destination/)
+  }
+  put(root, 'learn/coredoc.html', page)
+  put(root, 'learn/other.html', page)
+  assert.match(run(root).error, /learn\/other.html: HTML link must name a local destination/)
+  rmSync(join(root, 'learn/other.html'))
+  put(root, source.publication_path, publication + '\nChanged interpretation.\n')
+  assert.match(run(root).error, /learn\/coredoc.html: HTML link must name a local destination/)
+})
+
 test('accepts stable publication while preserving format versions, vector IDs, release history and CoreDoc evolution metadata', (t) => {
   assert.equal(TARGET_CORE_VERSION, '2.0.4')
   const root = fixture(t)

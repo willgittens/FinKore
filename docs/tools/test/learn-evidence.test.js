@@ -6,7 +6,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSyn
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import test from 'node:test'
-import { loadLearnEvidence, requirementClauses, renderRelatedEvidence, decorateSpecification } from '../learn-evidence.js'
+import { codeEvidenceDestinations, loadLearnEvidence, requirementClauses, renderRelatedEvidence, decorateSpecification } from '../learn-evidence.js'
 import { SPECIFICATION_PAGES } from '../learn-specifications.js'
 import { renderLearnMarkdown } from '../build-learn-pages.js'
 import { parseCoreDoc, renderReader } from '../build-learn-coredoc.js'
@@ -29,6 +29,94 @@ function fixture(t) {
   save()
   return { root, markdown, clause, data, save }
 }
+
+function codeFixture(t) {
+  const f = fixture(t)
+  const clause = { ...f.clause, path: 'docs/coreDoc/core-doc.md' }
+  const commit = 'a'.repeat(40)
+  const path = 'code-evidence/analyses/CE-REPO-0001/CE-EDITION-0001.md'
+  const href = `https://github.com/example/money/blob/${commit}/src/money.js#L10-L20`
+  const body = `# CE-FINDING-0001\n\n${commit}\n\nMoney.allocate\n\n${href}\n`
+  put(f.root, path, body)
+  f.data.schema_version = '1.1.0'
+  f.data.sources.push({ id: 'CE-FINDING-0001', kind: 'code', title: 'Allocation conserves value', project: 'Example Money', repository: 'example/money', owner: 'example', version: 'v1.2.0', commit_sha: commit, href: `https://github.com/willgittens/FinKore/blob/main/${path}#ce-finding-0001`, publication_path: path, publication_sha256: digest(body), functions: [{ name: 'Money.allocate', href }], reading_extent: 'selected_code_and_tests', execution_status: 'not_executed', limits: 'Only the selected allocation path was read.', status: 'pending_validation' })
+  f.data.bindings.push({ source_id: 'CE-FINDING-0001', target_id: 'CORE-001.4', target_path: clause.path, clause_sha256: clause.sha256, evidence_role: 'supports_rationale', relationship: 'already_addressed', implementation_relationship: 'same_approach', explanation: 'The inspected allocation preserves the total.' })
+  f.save()
+  return { ...f, clause, body, path, href }
+}
+
+test('code cards expose pinned attribution and keep different policies separate from matches', t => {
+  const { root, data, save, clause, href } = codeFixture(t)
+  for (const [kind, label] of [['same_approach', 'Same approach in the inspected path'], ['partial_match', 'Partial match with stated limits'], ['different_policy', 'Different policy'], ['related_control', 'Related control or open question']]) {
+    Object.assign(data.bindings[1], { implementation_relationship: kind, evidence_role: kind === 'same_approach' ? 'supports_rationale' : 'context_only', relationship: kind === 'same_approach' ? 'already_addressed' : 'application_policy' })
+    save()
+    const index = loadLearnEvidence(root)
+    const html = renderRelatedEvidence('CORE-001.4', clause, index)
+    assert.match(html, /Who does it this way\?/)
+    assert.ok(html.includes(label))
+    assert.match(html, /Example Money.*v1\.2\.0/)
+    assert.match(html, /GitHub owner: example/)
+    assert.ok(html.includes(`href="${href}" target="_blank" rel="noopener noreferrer"`))
+    assert.match(html, /Money\.allocate/)
+    assert.match(html, /Read the full analysis/)
+    assert.match(html, /Not executed · Pending validation/)
+    assert.deepEqual([...codeEvidenceDestinations(index)], [href])
+  }
+  data.bindings.push({ ...data.bindings[0], target_id: 'CORE-001.4', target_path: clause.path })
+  save()
+  const html = renderRelatedEvidence('CORE-001.4', clause, loadLearnEvidence(root))
+  assert.match(html, /Evidence &amp; context/)
+  assert.match(html, /Who does it this way\?/)
+  assert.equal([...html.matchAll(/class="rule-evidence-card"/g)].length, 2)
+})
+
+test('stale code publications, missing symbols and changed rules cannot keep comparison cards', t => {
+  const { root, path, data, save, body, clause } = codeFixture(t)
+  for (const replacement of [body + '\nChanged interpretation.', body.replace('Money.allocate', 'Money.other'), null]) {
+    if (replacement === null) rmSync(join(root, path))
+    else put(root, path, replacement)
+    if (replacement?.includes('Money.other')) { data.sources[1].publication_sha256 = digest(replacement); save() }
+    const index = loadLearnEvidence(root)
+    assert.match(renderRelatedEvidence('CORE-001.4', clause, index), /needs review/)
+    assert.equal(codeEvidenceDestinations(index).size, 0)
+  }
+  put(root, path, body)
+  data.sources[1].publication_sha256 = digest(body); save()
+  assert.match(renderRelatedEvidence('CORE-001.4', { ...clause, sha256: 'b'.repeat(64) }, loadLearnEvidence(root)), /needs review/)
+})
+
+test('code metadata rejects unpinned or cross-repository functions and fabricated alignment', t => {
+  const { root, data, save } = codeFixture(t)
+  const original = structuredClone(data)
+  for (const mutate of [
+    d => { d.schema_version = '1.0.0' },
+    d => { d.sources[1].owner = 'invented-author' },
+    d => { d.sources[1].repository = '../money'; d.sources[1].owner = '..'; d.sources[1].functions[0].href = d.sources[1].functions[0].href.replace('example/money', '../money') },
+    d => { d.sources[1].execution_status = 'passed' },
+    d => { d.sources[1].functions[0].href = d.sources[1].functions[0].href.replace('a'.repeat(40), 'main') },
+    d => { d.sources[1].functions[0].href = d.sources[1].functions[0].href.replace('example/money/', 'other/money/') },
+    d => { d.sources[1].functions[0].href = d.sources[1].functions[0].href.replace('src/money.js', '../private.js') },
+    d => { d.sources[1].functions[0].href = d.sources[1].functions[0].href.replace('L10-L20', 'L20-L10') },
+    d => { d.sources[1].functions.push({ ...d.sources[1].functions[0] }) },
+    d => { d.bindings[1].target_path = 'spec/money/allocation.md' },
+    d => { d.bindings[1].implementation_relationship = 'certified' },
+    d => { d.bindings[1].evidence_role = 'counterpoint' },
+  ]) {
+    Object.assign(data, structuredClone(original)); mutate(data); save()
+    assert.throws(() => loadLearnEvidence(root), /Invalid|requires/)
+  }
+})
+
+test('code display text is escaped without turning metadata into executable HTML', t => {
+  const { root, data, save, clause } = codeFixture(t)
+  data.sources[1].project = '<img src=x onerror=alert(1)>'
+  data.bindings[1].explanation = '<script>unsafe</script>'
+  save()
+  const html = renderRelatedEvidence('CORE-001.4', clause, loadLearnEvidence(root))
+  assert.doesNotMatch(html, /<img|<script>/)
+  assert.match(html, /&lt;img/)
+  assert.match(html, /&lt;script&gt;/)
+})
 
 test('public editorial data works without research catalogs and never grants normative acceptance', t => {
   const { root, clause } = fixture(t)

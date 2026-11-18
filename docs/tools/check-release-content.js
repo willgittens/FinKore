@@ -13,7 +13,7 @@ import { gunzipSync } from 'node:zlib'
 import { markdownAnchors } from './check-doc-links.js'
 import { buildLearnCoreDoc } from './build-learn-coredoc.js'
 import { LEARN_PAGES, LEARN_EDITORIAL_PAGES, renderLearnPage, buildLearnPages, GITHUB_PROJECT_URL, GITHUB_FILE_BASE_URL } from './build-learn-pages.js'
-import { loadLearnEvidence } from './learn-evidence.js'
+import { codeEvidenceDestinations, loadLearnEvidence } from './learn-evidence.js'
 import { readLearnAssetVersion } from './build-learn-assets.js'
 
 const LOCAL_STATE = new Set(['.git', '.tools', 'node_modules', '.npm-cache', 'coverage', 'dist', 'reports'])
@@ -75,7 +75,7 @@ function htmlAttributes(text, names) {
 
 const navigationPages = new Set([...LEARN_EDITORIAL_PAGES, 'learn/coredoc.html', ...LEARN_PAGES.map(page => page.output)])
 
-function isAllowedExternalLink(path, tag, href) {
+function isAllowedExternalLink(path, tag, href, codeLinks) {
   const destinations = {
     'learn/index.html': ['https://www.linkedin.com/in/will-gittens/', 'https://savoiabarker.com/'],
     'learn/about.html': ['https://finkore.dev', 'https://savoiabarker.com/'],
@@ -118,7 +118,8 @@ function isAllowedExternalLink(path, tag, href) {
     /^[^?#]+(?:#[^?]*)?$/.test(href.slice(GITHUB_FILE_BASE_URL.length))
   const discussionLink = ['learn/network.html', 'learn/reviews.html'].includes(path) && href.startsWith(`${GITHUB_PROJECT_URL}/discussions/`) &&
     /^[1-9]\d*$/.test(href.slice(`${GITHUB_PROJECT_URL}/discussions/`.length))
-  if (!/^<a\b/i.test(tag) || !(projectLink || fileLink || discussionLink || destinations[path]?.includes(href))) return false
+  const codeLink = path === 'learn/coredoc.html' && codeLinks?.has(href)
+  if (!/^<a\b/i.test(tag) || !(projectLink || fileLink || discussionLink || codeLink || destinations[path]?.includes(href))) return false
   const targets = htmlAttributes(tag, new Set(['target']))
   const relationships = htmlAttributes(tag, new Set(['rel']))
   const tokens = relationships.length === 1 ? relationships[0].split(/\s+/) : []
@@ -128,7 +129,7 @@ function isAllowedExternalLink(path, tag, href) {
     tokens.includes('noopener') && tokens.includes('noreferrer')
 }
 
-function checkHtml(root, path, text, errors, { verifiedResearch = false } = {}) {
+function checkHtml(root, path, text, errors, { verifiedResearch = false, codeLinks } = {}) {
   // Only the declared mobile CoreDoc disclosure script is allowed.
   // Keep inline/other scripts and unrelated controls outside this profile.
   const markup = text.replace(/<!--[\s\S]*?-->/g, '')
@@ -154,7 +155,7 @@ function checkHtml(root, path, text, errors, { verifiedResearch = false } = {}) 
     htmlAttributes(tag, new Set(['href', 'src'])).map(href => ({ tag, href })))
   for (const { tag, href } of links) {
     count += 1
-    const allowedExternal = isAllowedExternalLink(path, tag, href)
+    const allowedExternal = isAllowedExternalLink(path, tag, href, codeLinks)
     if (allowedExternal && !href.startsWith(GITHUB_FILE_BASE_URL)) continue
     // Validate GitHub file paths and fragments against the local release
     // tree, keeping this publication check deterministic and offline.
@@ -250,6 +251,8 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
   }
   if (!existsSync(root) || !statSync(root).isDirectory()) throw new Error(`Release content check failed: missing release tree: ${root}`)
   walk(root)
+  const evidence = loadLearnEvidence(root)
+  const codeLinks = codeEvidenceDestinations(evidence)
   for (const path of snapshots.keys()) if (!files.has(path)) errors.push(`${path}: registered snapshot is missing or unreadable`)
   // The generated reader must match its canonical source before historical
   // governance dates can be excluded from current-status checks below.
@@ -261,7 +264,6 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
   // exact generation is verified. HTML links and controls are always checked.
   const synchronizedPages = new Map()
   if (LEARN_PAGES.some(page => files.has(page.output))) {
-    const evidence = loadLearnEvidence(root)
     try { buildLearnPages(root, { check: true }) }
     catch (error) { errors.push('learn: ' + error.message) }
     for (const page of LEARN_PAGES.filter(page => files.has(page.output))) {
@@ -289,7 +291,7 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
     }
     const freezeText = sourcePath === 'docs/releases/README.md' ? paragraphs.filter((p) => !retirementNote(p)).join('\n\n') : policyText
     if (FREEZE_REFERENCE.test(freezeText)) errors.push(`${path}: retired freeze definition or reference is forbidden`)
-    if (/\.html?$/i.test(path)) htmlLinkCount += checkHtml(root, path, text, errors, { verifiedResearch: path === 'learn/research.html' && synchronizedPages.get(path) === 'learn/research.md' })
+    if (/\.html?$/i.test(path)) htmlLinkCount += checkHtml(root, path, text, errors, { codeLinks, verifiedResearch: path === 'learn/research.html' && synchronizedPages.get(path) === 'learn/research.md' })
     if (!currentDocument(sourcePath)) continue
     const current = path.startsWith('docs/coreDoc/') ? text.split('\n').filter((line) =>
       !/^\*\*(?:Introduced|Last updated|Last updated on):\*\*/.test(line)).join('\n') :

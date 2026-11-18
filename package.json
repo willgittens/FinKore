@@ -11,6 +11,9 @@
     "ajv": "^8.20.0"
   },
   "scripts": {
+    "code-evidence:build": "node code-evidence/tools/catalog.js --write",
+    "code-evidence:check": "node code-evidence/tools/catalog.js --check",
+    "code-evidence:test": "node --test --test-isolation=none code-evidence/tools/test/*.test.js",
     "conformance:check": "node docs/tools/validate-conformance.js",
     "agentic:check": "node docs/tools/check-agentic.js",
     "architecture:check": "node docs/tools/check-architecture.js",

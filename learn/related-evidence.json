@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "description": "Explicit editorial links from unchanged CoreDoc and specification requirements to published preliminary research notes and approved public interviews. Roles and limitations are not endorsements or normative acceptance. No specialist review is inferred.",
   "sources": [
     {
@@ -483,6 +483,468 @@
       "status": "pending_validation",
       "publication_path": "legacy/interviews/002-otilia-borges.md",
       "publication_sha256": "1bfb503b6692ac5b8209afad7def736af54568a4d5c58a185e80b8f63bf3f92b"
+    },
+    {
+      "id": "CE-FINDING-0001",
+      "kind": "code",
+      "title": "Money PHP — Allocation rules",
+      "project": "Money PHP",
+      "repository": "moneyphp/money",
+      "owner": "moneyphp",
+      "version": "v4.9.0",
+      "commit_sha": "d49ee625c6ba79b9d7a228ce153b02fc1032152b",
+      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0001/CE-EDITION-0001.md#ce-finding-0001",
+      "functions": [
+        {
+          "name": "Money\\Money::allocate",
+          "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Money.php#L319-L358"
+        },
+        {
+          "name": "Unnamed closure",
+          "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Money.php#L344-L348"
+        },
+        {
+          "name": "Money\\Money::allocateTo",
+          "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Money.php#L370-L373"
+        },
+        {
+          "name": "Money\\Calculator\\BcMathCalculator::share",
+          "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Calculator/BcMathCalculator.php#L211-L214"
+        },
+        {
+          "name": "Money\\Calculator\\BcMathCalculator::floor",
+          "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Calculator/BcMathCalculator.php#L83-L96"
+        },
+        {
+          "name": "Money\\Money::__construct",
+          "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Money.php#L74-L88"
+        },
+        {
+          "name": "Money\\Calculator\\BcMathCalculator::subtract",
+          "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Calculator/BcMathCalculator.php#L41-L46"
+        },
+        {
+          "name": "Money\\Calculator\\BcMathCalculator::add",
+          "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Calculator/BcMathCalculator.php#L33-L38"
+        },
+        {
+          "name": "Money\\Calculator\\BcMathCalculator::compare",
+          "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Calculator/BcMathCalculator.php#L27-L30"
+        }
+      ],
+      "reading_extent": "selected_code_and_tests",
+      "execution_status": "not_executed",
+      "limits": "Allocation path only. Amount and currency are retained, but largest-fraction recipient selection differs from Core declared-order distribution. BCMath intermediates and float ranking were not executed or exhaustively verified.",
+      "status": "pending_validation",
+      "publication_path": "code-evidence/analyses/CE-REPO-0001/CE-EDITION-0001.md",
+      "publication_sha256": "16d9662e8c1e097be30b7b5772a55ab3d6604fcfec7132b87587d0294eebc8e4"
+    },
+    {
+      "id": "CE-FINDING-0002",
+      "kind": "code",
+      "title": "Brick Money — Ordered allocation in explicit integer steps",
+      "project": "Brick Money",
+      "repository": "brick/money",
+      "owner": "brick",
+      "version": "0.15.2",
+      "commit_sha": "d025eb4a105071028764859d93537d394a147c31",
+      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0002/CE-EDITION-0002.md#ce-finding-0002",
+      "functions": [
+        {
+          "name": "Brick\\Money\\Money::allocate",
+          "href": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/src/Money.php#L544-L573"
+        },
+        {
+          "name": "Brick\\Money\\Money::normalizeRatios",
+          "href": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/src/Money.php#L769-L801"
+        },
+        {
+          "name": "Brick\\Money\\Allocation\\AbstractFloorStrategy::computeFloors",
+          "href": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/src/Allocation/AbstractFloorStrategy.php#L25-L37"
+        },
+        {
+          "name": "Brick\\Money\\Allocation\\AbstractFloorAbsorbStrategy::allocate",
+          "href": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/src/Allocation/AbstractFloorAbsorbStrategy.php#L16-L27"
+        },
+        {
+          "name": "Brick\\Money\\Allocation\\FloorToFirstStrategy::prioritizeIndices",
+          "href": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/src/Allocation/FloorToFirstStrategy.php#L16-L19"
+        }
+      ],
+      "reading_extent": "selected_code_and_tests",
+      "execution_status": "not_executed",
+      "limits": "FloorToFirst strategy, positive integer weights and a fixed context with explicitly matched scale/step. Other strategies, rational/zero-weight inputs and Brick Math internals are not claimed equivalent to Core.",
+      "status": "pending_validation",
+      "publication_path": "code-evidence/analyses/CE-REPO-0002/CE-EDITION-0002.md",
+      "publication_sha256": "47954b444b9a5a7917a9bb03be9c467d0b433464bf4c50b0fba8aabb628182d0"
+    },
+    {
+      "id": "CE-FINDING-0003",
+      "kind": "code",
+      "title": "RubyMoney — Allocation carries residual value through successive splits",
+      "project": "RubyMoney",
+      "repository": "RubyMoney/money",
+      "owner": "RubyMoney",
+      "version": "v7.1.1",
+      "commit_sha": "26e2829c34f165847040a5a40d4d2daa5eb72927",
+      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0003/CE-EDITION-0003.md#ce-finding-0003",
+      "functions": [
+        {
+          "name": "Money::Allocation.generate",
+          "href": "https://github.com/RubyMoney/money/blob/26e2829c34f165847040a5a40d4d2daa5eb72927/lib/money/money/allocation.rb#L24-L70"
+        },
+        {
+          "name": "Money::Allocation.convert_to_big_decimal",
+          "href": "https://github.com/RubyMoney/money/blob/26e2829c34f165847040a5a40d4d2daa5eb72927/lib/money/money/allocation.rb#L78-L86"
+        }
+      ],
+      "reading_extent": "selected_code_and_tests",
+      "execution_status": "not_executed",
+      "limits": "A numeric helper, not a complete Money operation: currency construction is outside the reading. Successive division, numeric types and decimal cutoff affect the result; all-zero weights are replaced with equal weights.",
+      "status": "pending_validation",
+      "publication_path": "code-evidence/analyses/CE-REPO-0003/CE-EDITION-0003.md",
+      "publication_sha256": "c75e50dff9936868fcf679bf7afd4d94d8c18f0f2e15aa905da3fdebdb524b3c"
+    },
+    {
+      "id": "CE-FINDING-0004",
+      "kind": "code",
+      "title": "Joda-Money — Money addition checks currency before combining amounts",
+      "project": "Joda-Money",
+      "repository": "JodaOrg/joda-money",
+      "owner": "JodaOrg",
+      "version": "v2.0.3",
+      "commit_sha": "2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e",
+      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0004/CE-EDITION-0004.md#ce-finding-0004",
+      "functions": [
+        {
+          "name": "org.joda.money.Money.plus",
+          "href": "https://github.com/JodaOrg/joda-money/blob/2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e/src/main/java/org/joda/money/Money.java#L742-L744"
+        },
+        {
+          "name": "org.joda.money.BigMoney.plus",
+          "href": "https://github.com/JodaOrg/joda-money/blob/2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e/src/main/java/org/joda/money/BigMoney.java#L856-L859"
+        },
+        {
+          "name": "org.joda.money.BigMoney.checkCurrencyEqual",
+          "href": "https://github.com/JodaOrg/joda-money/blob/2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e/src/main/java/org/joda/money/BigMoney.java#L808-L814"
+        }
+      ],
+      "reading_extent": "selected_code_and_tests",
+      "execution_status": "not_executed",
+      "limits": "The inspected Money/BigMoney addition path checks currencies. Full ordering, equality, conversion and provider semantics were not assessed. Native exceptions are not portable FinKore error codes.",
+      "status": "pending_validation",
+      "publication_path": "code-evidence/analyses/CE-REPO-0004/CE-EDITION-0004.md",
+      "publication_sha256": "a20a99511b02657b1a2246ae436ef5531d3eccdf4e971bc3c9f1d9e15906d363"
+    },
+    {
+      "id": "CE-FINDING-0005",
+      "kind": "code",
+      "title": "Dinero.js — Allocation prioritizes larger weights for residual units",
+      "project": "Dinero.js",
+      "repository": "dinerojs/dinero.js",
+      "owner": "dinerojs",
+      "version": "v2.0.2",
+      "commit_sha": "cc7df3e6d986445eab42dffc33f8c2d14e4d588a",
+      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0005/CE-EDITION-0005.md#ce-finding-0005",
+      "functions": [
+        {
+          "name": "safeAllocate<TAmount> / returned allocate",
+          "href": "https://github.com/dinerojs/dinero.js/blob/cc7df3e6d986445eab42dffc33f8c2d14e4d588a/packages/dinero.js/src/core/api/allocate.ts#L54-L95"
+        },
+        {
+          "name": "distribute<TAmount> / returned unnamed closure",
+          "href": "https://github.com/dinerojs/dinero.js/blob/cc7df3e6d986445eab42dffc33f8c2d14e4d588a/packages/dinero.js/src/core/utils/distribute.ts#L17-L78"
+        },
+        {
+          "name": "number calculator integerDivide",
+          "href": "https://github.com/dinerojs/dinero.js/blob/cc7df3e6d986445eab42dffc33f8c2d14e4d588a/packages/dinero.js/src/calculator/number/api/integerDivide.ts#L11-L16"
+        }
+      ],
+      "reading_extent": "selected_code_and_tests",
+      "execution_status": "not_executed",
+      "limits": "The safe API and selected number-backend utility were read. Remainder goes to larger weights; zero ratios and scale derivation differ from Core. The no-progress guard is not proof of exact conservation beyond safe number precision.",
+      "status": "pending_validation",
+      "publication_path": "code-evidence/analyses/CE-REPO-0005/CE-EDITION-0005.md",
+      "publication_sha256": "a2445f64155178975bf156c03166c115178f679615a8f222b31df7f50f80fb47"
+    },
+    {
+      "id": "CE-FINDING-0006",
+      "kind": "code",
+      "title": "GoMoney — Signed splitting preserves residual units, except the zero-weight fallback",
+      "project": "GoMoney",
+      "repository": "Rhymond/go-money",
+      "owner": "Rhymond",
+      "version": "v1.0.15",
+      "commit_sha": "b43ce49343a684c955ffb1a4e4165b81db8989b7",
+      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0006/CE-EDITION-0006.md#ce-finding-0006",
+      "functions": [
+        {
+          "name": "money.(*Money).Split",
+          "href": "https://github.com/Rhymond/go-money/blob/b43ce49343a684c955ffb1a4e4165b81db8989b7/money.go#L262-L288"
+        },
+        {
+          "name": "money.(*Money).Allocate",
+          "href": "https://github.com/Rhymond/go-money/blob/b43ce49343a684c955ffb1a4e4165b81db8989b7/money.go#L293-L341"
+        },
+        {
+          "name": "money.(*calculator).allocate",
+          "href": "https://github.com/Rhymond/go-money/blob/b43ce49343a684c955ffb1a4e4165b81db8989b7/calculator.go#L27-L33"
+        }
+      ],
+      "reading_extent": "selected_code_and_tests",
+      "execution_status": "not_executed",
+      "limits": "Signed equal splitting and ratio allocation were read. Equal splitting preserves signed residuals in the selected cases; an all-zero ratio list can return zero amounts for a nonzero source. Fixed-width overflow limits remain unverified.",
+      "status": "pending_validation",
+      "publication_path": "code-evidence/analyses/CE-REPO-0006/CE-EDITION-0006.md",
+      "publication_sha256": "d8411256ca19ef79762de7d2847a772d2a5e020b4e7a5e4956fcf8dae565a30b"
+    },
+    {
+      "id": "CE-FINDING-0007",
+      "kind": "code",
+      "title": "NodaMoney — Context-selected rounding can change a value at construction",
+      "project": "NodaMoney",
+      "repository": "RemyDuijkeren/NodaMoney",
+      "owner": "RemyDuijkeren",
+      "version": "2.10.0",
+      "commit_sha": "1844718cc007b0699ab8aefbbdbcd3f532103708",
+      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0007/CE-EDITION-0007.md#ce-finding-0007",
+      "functions": [
+        {
+          "name": "NodaMoney.Money.Money",
+          "href": "https://github.com/RemyDuijkeren/NodaMoney/blob/1844718cc007b0699ab8aefbbdbcd3f532103708/src/NodaMoney/Money.cs#L38-L75"
+        },
+        {
+          "name": "NodaMoney.Context.StandardRounding.Round (Currency overload)",
+          "href": "https://github.com/RemyDuijkeren/NodaMoney/blob/1844718cc007b0699ab8aefbbdbcd3f532103708/src/NodaMoney/Context/StandardRounding.cs#L13-L31"
+        },
+        {
+          "name": "NodaMoney.Context.StandardRounding.Round (CurrencyInfo overload)",
+          "href": "https://github.com/RemyDuijkeren/NodaMoney/blob/1844718cc007b0699ab8aefbbdbcd3f532103708/src/NodaMoney/Context/StandardRounding.cs#L36-L70"
+        },
+        {
+          "name": "NodaMoney.Context.MoneyContext.Round",
+          "href": "https://github.com/RemyDuijkeren/NodaMoney/blob/1844718cc007b0699ab8aefbbdbcd3f532103708/src/NodaMoney/Context/MoneyContext.cs#L121-L129"
+        }
+      ],
+      "reading_extent": "selected_code_and_tests",
+      "execution_status": "not_executed",
+      "limits": "Constructor and rounding/context paths only. A missing context can select an ambient policy; standard rounding normally derives scale from currency. An expressly declared composing-domain policy is a separate assessment.",
+      "status": "pending_validation",
+      "publication_path": "code-evidence/analyses/CE-REPO-0007/CE-EDITION-0007.md",
+      "publication_sha256": "2237ffce6932e42ea566ae2eedc3b015ede92990cf78c054ce993282f8d53a91"
+    },
+    {
+      "id": "CE-FINDING-0008",
+      "kind": "code",
+      "title": "py-moneyed — Addition is currency-checked, but numeric context remains observable",
+      "project": "py-moneyed",
+      "repository": "py-moneyed/py-moneyed",
+      "owner": "py-moneyed",
+      "version": "v3.0",
+      "commit_sha": "f45c0078b5ca2af098d5d75f2c54295e7196388e",
+      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0008/CE-EDITION-0008.md#ce-finding-0008",
+      "functions": [
+        {
+          "name": "moneyed.classes.Money.__add__",
+          "href": "https://github.com/py-moneyed/py-moneyed/blob/f45c0078b5ca2af098d5d75f2c54295e7196388e/src/moneyed/classes.py#L220-L235"
+        },
+        {
+          "name": "moneyed.classes.Money.__sub__",
+          "href": "https://github.com/py-moneyed/py-moneyed/blob/f45c0078b5ca2af098d5d75f2c54295e7196388e/src/moneyed/classes.py#L237-L241"
+        },
+        {
+          "name": "moneyed.classes.Money.__eq__",
+          "href": "https://github.com/py-moneyed/py-moneyed/blob/f45c0078b5ca2af098d5d75f2c54295e7196388e/src/moneyed/classes.py#L319-L329"
+        }
+      ],
+      "reading_extent": "selected_code_and_tests",
+      "execution_status": "not_executed",
+      "limits": "Addition/subtraction and selected equality/context observations only. Decimal representation alone does not establish unrestricted exactness; native numeric-zero conveniences and equality semantics differ from the portable boundary.",
+      "status": "pending_validation",
+      "publication_path": "code-evidence/analyses/CE-REPO-0008/CE-EDITION-0008.md",
+      "publication_sha256": "ec9246c644aa6761a7bd0563c5e17177471ab62491975719404338eb2b41a47d"
+    },
+    {
+      "id": "CE-FINDING-0009",
+      "kind": "code",
+      "title": "Beancount — Balance assertions use a separate decimal tolerance policy",
+      "project": "Beancount",
+      "repository": "beancount/beancount",
+      "owner": "beancount",
+      "version": "3.2.3",
+      "commit_sha": "eeda2aa2a3204ffb980dab11220b2abde5e80b38",
+      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0009/CE-EDITION-0009.md#ce-finding-0009",
+      "functions": [
+        {
+          "name": "beancount.ops.balance.get_balance_tolerance",
+          "href": "https://github.com/beancount/beancount/blob/eeda2aa2a3204ffb980dab11220b2abde5e80b38/beancount/ops/balance.py#L20-L45"
+        },
+        {
+          "name": "beancount.ops.balance.check",
+          "href": "https://github.com/beancount/beancount/blob/eeda2aa2a3204ffb980dab11220b2abde5e80b38/beancount/ops/balance.py#L48-L185"
+        }
+      ],
+      "reading_extent": "selected_code_and_tests",
+      "execution_status": "not_executed",
+      "limits": "A ledger balance-assertion policy, outside current Core ledger/reconciliation scope. Its decimal tolerance does not redefine exact Money equality or authorize approximate monetary conformance checks.",
+      "status": "pending_validation",
+      "publication_path": "code-evidence/analyses/CE-REPO-0009/CE-EDITION-0009.md",
+      "publication_sha256": "f6fdec7a421bf7d649e1da7019c6ca53eff05dd4b1e4e69e3a12ebc7604e0858"
+    },
+    {
+      "id": "CE-FINDING-0010",
+      "kind": "code",
+      "title": "QuantLib — Interest year fractions depend on day-count and endpoint policy",
+      "project": "QuantLib",
+      "repository": "lballabio/QuantLib",
+      "owner": "lballabio",
+      "version": "v1.44",
+      "commit_sha": "ab4cb476d35f7275834bc05b47d1324403d1823b",
+      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0010/CE-EDITION-0010.md#ce-finding-0010",
+      "functions": [
+        {
+          "name": "QuantLib::Actual360::Impl::dayCount",
+          "href": "https://github.com/lballabio/QuantLib/blob/ab4cb476d35f7275834bc05b47d1324403d1823b/ql/time/daycounters/actual360.hpp#L50-L52"
+        },
+        {
+          "name": "QuantLib::Actual360::Impl::yearFraction",
+          "href": "https://github.com/lballabio/QuantLib/blob/ab4cb476d35f7275834bc05b47d1324403d1823b/ql/time/daycounters/actual360.hpp#L53-L57"
+        },
+        {
+          "name": "QuantLib::Actual360::Actual360",
+          "href": "https://github.com/lballabio/QuantLib/blob/ab4cb476d35f7275834bc05b47d1324403d1823b/ql/time/daycounters/actual360.hpp#L60-L61"
+        }
+      ],
+      "reading_extent": "selected_code_and_tests",
+      "execution_status": "not_executed",
+      "limits": "Actual/360 time fractions and endpoint inclusion only. Interest accrual is outside current Core; Time test tolerances are not exact Money comparison rules. Date internals and a complete interest calculation were not verified.",
+      "status": "pending_validation",
+      "publication_path": "code-evidence/analyses/CE-REPO-0010/CE-EDITION-0010.md",
+      "publication_sha256": "8535843f7c38f2be43f47ebe8eb482b87e8dc3eaa5cb2b71cc89907a900ac114"
+    },
+    {
+      "id": "CE-FINDING-0011",
+      "kind": "code",
+      "title": "Moov ACH — Payment control totals are checked at file and batch levels",
+      "project": "Moov ACH",
+      "repository": "moov-io/ach",
+      "owner": "moov-io",
+      "version": "v1.69.0",
+      "commit_sha": "314f990cf2809d6f9848d0b8df5767eb19b0cf17",
+      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0011/CE-EDITION-0011.md#ce-finding-0011",
+      "functions": [
+        {
+          "name": "ach.(*File).ValidateTotals",
+          "href": "https://github.com/moov-io/ach/blob/314f990cf2809d6f9848d0b8df5767eb19b0cf17/file.go#L1170-L1192"
+        },
+        {
+          "name": "ach.(*File).isFileAmount",
+          "href": "https://github.com/moov-io/ach/blob/314f990cf2809d6f9848d0b8df5767eb19b0cf17/file.go#L1249-L1289"
+        },
+        {
+          "name": "ach.(*Batch).isBatchAmount",
+          "href": "https://github.com/moov-io/ach/blob/314f990cf2809d6f9848d0b8df5767eb19b0cf17/batch.go#L738-L770"
+        },
+        {
+          "name": "ach.(*Batch).calculateBatchAmounts",
+          "href": "https://github.com/moov-io/ach/blob/314f990cf2809d6f9848d0b8df5767eb19b0cf17/batch.go#L772-L787"
+        }
+      ],
+      "reading_extent": "selected_code_and_tests",
+      "execution_status": "not_executed",
+      "limits": "ACH file/batch control validation, not current Core payment semantics or a certification against a Nacha edition. Selected totals checks and assertions do not prove all variants, bounds or settlement behavior.",
+      "status": "pending_validation",
+      "publication_path": "code-evidence/analyses/CE-REPO-0011/CE-EDITION-0011.md",
+      "publication_sha256": "8bc8f17d4e082c82dde270f24320c6cce0b9caf13bddb618b6aa12cf1f859ac7"
+    },
+    {
+      "id": "CE-FINDING-0013",
+      "kind": "code",
+      "title": "Formance Ledger — Reversal swaps posting direction and reverses posting order",
+      "project": "Formance Ledger",
+      "repository": "formancehq/ledger",
+      "owner": "formancehq",
+      "version": "v2.4.18",
+      "commit_sha": "83cd8dc7a66ba02a0418a36ec45663b19e26dcb3",
+      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0013/CE-EDITION-0013.md#ce-finding-0013",
+      "functions": [
+        {
+          "name": "ledger.Transaction.Reverse",
+          "href": "https://github.com/formancehq/ledger/blob/83cd8dc7a66ba02a0418a36ec45663b19e26dcb3/internal/transaction.go#L64-L67"
+        },
+        {
+          "name": "ledger.Postings.Reverse",
+          "href": "https://github.com/formancehq/ledger/blob/83cd8dc7a66ba02a0418a36ec45663b19e26dcb3/internal/posting.go#L37-L50"
+        },
+        {
+          "name": "ledger.Postings.Validate",
+          "href": "https://github.com/formancehq/ledger/blob/83cd8dc7a66ba02a0418a36ec45663b19e26dcb3/internal/posting.go#L52-L72"
+        }
+      ],
+      "reading_extent": "selected_code_and_tests",
+      "execution_status": "not_executed",
+      "limits": "Constructing inverse postings is not persisted reversal. Original-event linkage, one-time eligibility, authorization and committed history were not established. Amount pointers are shallow-copied, so deep ownership is not proven.",
+      "status": "pending_validation",
+      "publication_path": "code-evidence/analyses/CE-REPO-0013/CE-EDITION-0013.md",
+      "publication_sha256": "4c65a5a694d8f8b4fc9be372183599aeaa1a24347b64ed92c2f165410f649d9e"
+    },
+    {
+      "id": "CE-FINDING-0014",
+      "kind": "code",
+      "title": "TigerBeetle — Pending debits consume a configured posted-credit budget",
+      "project": "TigerBeetle",
+      "repository": "tigerbeetle/tigerbeetle",
+      "owner": "tigerbeetle",
+      "version": "0.17.9",
+      "commit_sha": "cc1c06a924e49b11089c521b2209d34c92caaf18",
+      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0014/CE-EDITION-0014.md#ce-finding-0014",
+      "functions": [
+        {
+          "name": "tigerbeetle.Account.debits_exceed_credits",
+          "href": "https://github.com/tigerbeetle/tigerbeetle/blob/cc1c06a924e49b11089c521b2209d34c92caaf18/src/tigerbeetle.zig#L34-L37"
+        },
+        {
+          "name": "tigerbeetle.Account.credits_exceed_debits",
+          "href": "https://github.com/tigerbeetle/tigerbeetle/blob/cc1c06a924e49b11089c521b2209d34c92caaf18/src/tigerbeetle.zig#L39-L42"
+        },
+        {
+          "name": "state_machine.StateMachineType(Storage).create_transfer",
+          "href": "https://github.com/tigerbeetle/tigerbeetle/blob/cc1c06a924e49b11089c521b2209d34c92caaf18/src/state_machine.zig#L3719-L3986"
+        }
+      ],
+      "reading_extent": "selected_code_and_tests",
+      "execution_status": "not_executed",
+      "limits": "Configured account constraints on the normal new-transfer path. Pending/posted counters and pre-insertion guards were read; consensus, persistence atomicity and post/void paths were not audited. Ledger/reservation semantics remain outside Core.",
+      "status": "pending_validation",
+      "publication_path": "code-evidence/analyses/CE-REPO-0014/CE-EDITION-0014.md",
+      "publication_sha256": "d02931dda67fdacfcd8ef4a306c973e21a220d4568e18cf8c7053793b2336096"
+    },
+    {
+      "id": "CE-FINDING-0015",
+      "kind": "code",
+      "title": "ERPNext — Payment allocation is checked against fresh aggregate outstanding amounts",
+      "project": "ERPNext",
+      "repository": "frappe/erpnext",
+      "owner": "frappe",
+      "version": "v16.60.0",
+      "commit_sha": "886ab6ae187244e7f1b852393384ab6019d56264",
+      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0015/CE-EDITION-0015.md#ce-finding-0015",
+      "functions": [
+        {
+          "name": "erpnext.accounts.doctype.payment_entry.payment_entry.PaymentEntry.validate_allocated_amount",
+          "href": "https://github.com/frappe/erpnext/blob/886ab6ae187244e7f1b852393384ab6019d56264/erpnext/accounts/doctype/payment_entry/payment_entry.py#L435-L456"
+        },
+        {
+          "name": "erpnext.accounts.doctype.payment_entry.payment_entry.PaymentEntry.validate_allocated_amount_with_latest_data",
+          "href": "https://github.com/frappe/erpnext/blob/886ab6ae187244e7f1b852393384ab6019d56264/erpnext/accounts/doctype/payment_entry/payment_entry.py#L493-L590"
+        }
+      ],
+      "reading_extent": "selected_code_and_tests",
+      "execution_status": "not_executed",
+      "limits": "Invoice/payment domain context, outside current Core. Selected tests assert aggregate rejection and unchanged invoice outstanding, but were not run. Fresh database reads alone do not establish a race-free validation/commit boundary.",
+      "status": "pending_validation",
+      "publication_path": "code-evidence/analyses/CE-REPO-0015/CE-EDITION-0015.md",
+      "publication_sha256": "9296add713e5def44348a611f4bf9bc5719ce1c1831d36d2ca9c4a61e76e5512"
     }
   ],
   "bindings": [
@@ -1646,6 +2108,206 @@
       "evidence_role": "limits_claim",
       "relationship": "already_addressed",
       "explanation": "SHOULD and SHOULD NOT obligations retain their recommendation strength and documented-exception rule. The interview cannot promote them to mandatory requirements."
+    },
+    {
+      "source_id": "CE-FINDING-0007",
+      "target_id": "CORE-001.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "4317664c45a67fd420616bfc3d41af0321cca216c1c7732e93fbf6497379f37b",
+      "evidence_role": "counterpoint",
+      "relationship": "application_policy",
+      "implementation_relationship": "different_policy",
+      "explanation": "NodaMoney rounds during construction using the selected or ambient context; the standard path can choose currency scale. This contrasts with a generic exact-value boundary and shows why a composing rounding policy must be expressly identified."
+    },
+    {
+      "source_id": "CE-FINDING-0005",
+      "target_id": "CORE-001.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "4317664c45a67fd420616bfc3d41af0321cca216c1c7732e93fbf6497379f37b",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "implementation_relationship": "partial_match",
+      "explanation": "Dinero separates its calculator from money operations. The inspected number path has precision limits and a no-progress guard; choosing a monetary library or calculator does not by itself establish exact arithmetic."
+    },
+    {
+      "source_id": "CE-FINDING-0004",
+      "target_id": "CORE-001.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "15c2b7a30962c5f3322debb4c5758a35fe8c61f40f602a56a0c4a33f8302eff2",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "implementation_relationship": "same_approach",
+      "explanation": "The inspected addition path checks currency compatibility before combining amounts and rejects a mismatch with both currencies identified. This supports the addition control; other comparisons and conversions were not reviewed."
+    },
+    {
+      "source_id": "CE-FINDING-0008",
+      "target_id": "CORE-001.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "15c2b7a30962c5f3322debb4c5758a35fe8c61f40f602a56a0c4a33f8302eff2",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "implementation_relationship": "partial_match",
+      "explanation": "py-moneyed rejects mismatched-currency addition and retains currency in new results. Its native equality returns false for different currencies, so the finding is a partial match rather than evidence for every operation in this rule."
+    },
+    {
+      "source_id": "CE-FINDING-0001",
+      "target_id": "CORE-001.4",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "d474514ff700a8a762ef46b73b6e1b0c10b13109b3e208762fb99088c1a0d310",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "implementation_relationship": "partial_match",
+      "explanation": "Money PHP carries source currency and tracks residual units so successful allocation can conserve the total. It chooses recipients by fractional loss, whereas Core uses declared order; conservation does not settle that policy choice."
+    },
+    {
+      "source_id": "CE-FINDING-0002",
+      "target_id": "CORE-001.4",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "d474514ff700a8a762ef46b73b6e1b0c10b13109b3e208762fb99088c1a0d310",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "implementation_relationship": "same_approach",
+      "explanation": "With FloorToFirst, positive integer weights and an explicitly matched fixed unit context, Brick allocates the source magnitude, assigns remaining steps in order and restores the sign. The selected negative cases exercise the same signed allocation approach."
+    },
+    {
+      "source_id": "CE-FINDING-0003",
+      "target_id": "CORE-001.4",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "d474514ff700a8a762ef46b73b6e1b0c10b13109b3e208762fb99088c1a0d310",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "implementation_relationship": "partial_match",
+      "explanation": "RubyMoney carries the remaining amount through successive splits, with selected tests checking the final sum. This numeric helper does not establish currency preservation, and its algorithm/input domain differs from Core allocation."
+    },
+    {
+      "source_id": "CE-FINDING-0005",
+      "target_id": "CORE-001.4",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "d474514ff700a8a762ef46b73b6e1b0c10b13109b3e208762fb99088c1a0d310",
+      "evidence_role": "counterpoint",
+      "relationship": "application_policy",
+      "implementation_relationship": "different_policy",
+      "explanation": "The inspected Dinero distribution utility gives residual units to larger weights. For 801 units and weights [1, 3], its test expects [200, 601]; Core declared-order allocation gives [201, 600]. Both preserve the total at these small values."
+    },
+    {
+      "source_id": "CE-FINDING-0006",
+      "target_id": "CORE-001.4",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "d474514ff700a8a762ef46b73b6e1b0c10b13109b3e208762fb99088c1a0d310",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "implementation_relationship": "partial_match",
+      "explanation": "GoMoney equal splitting distributes signed residual units to the first positions. Its ratio method also accepts all-zero weights and can return zeros for a nonzero source, so the broader method is not a conservation guarantee."
+    },
+    {
+      "source_id": "CE-FINDING-0011",
+      "target_id": "CORE-002.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+      "evidence_role": "context_only",
+      "relationship": "deferred_scope",
+      "implementation_relationship": "related_control",
+      "explanation": "Moov recomputes file-to-batch and batch-to-entry totals rather than relying on structural acceptance. This payment-domain control illustrates evaluating related values together; it is not an implementation of the bounded Core Entity model."
+    },
+    {
+      "source_id": "CE-FINDING-0014",
+      "target_id": "CORE-002.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+      "evidence_role": "context_only",
+      "relationship": "deferred_scope",
+      "implementation_relationship": "related_control",
+      "explanation": "TigerBeetle includes pending and posted counters in configured account-limit predicates before inserting a new transfer. It illustrates the importance of evaluating the complete relevant state; the ledger formula is outside Core."
+    },
+    {
+      "source_id": "CE-FINDING-0015",
+      "target_id": "CORE-002.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+      "evidence_role": "context_only",
+      "relationship": "deferred_scope",
+      "implementation_relationship": "related_control",
+      "explanation": "ERPNext accumulates duplicate voucher and term references against fresh outstanding data. Its test rejects a combined 200 allocation against an invoice outstanding of 100, even though each individual row could appear acceptable."
+    },
+    {
+      "source_id": "CE-FINDING-0001",
+      "target_id": "CORE-002.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "20b537b4b61f75741bc518b9819bb8bd37e300ca2b7058ecd682a83e66028c67",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "implementation_relationship": "partial_match",
+      "explanation": "The inspected allocation guards and local result construction do not assign to the source Money amount or currency when rejecting invalid ratios. This supports operand preservation in that path, not every observable financial effect in the whole library."
+    },
+    {
+      "source_id": "CE-FINDING-0015",
+      "target_id": "CORE-002.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "20b537b4b61f75741bc518b9819bb8bd37e300ca2b7058ecd682a83e66028c67",
+      "evidence_role": "context_only",
+      "relationship": "deferred_scope",
+      "implementation_relationship": "related_control",
+      "explanation": "The inspected invoice test expects outstanding to remain 100 after an excessive aggregate payment is rejected. This is an application-domain assertion read from source; it does not prove all related state or concurrency behavior."
+    },
+    {
+      "source_id": "CE-FINDING-0013",
+      "target_id": "CORE-003.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "b9acdb2fec7191d7c12a7192a212c3d234ccfbbea47769a5f73d20dae4df82d3",
+      "evidence_role": "context_only",
+      "relationship": "deferred_scope",
+      "implementation_relationship": "related_control",
+      "explanation": "Formance constructs inverse postings in another transaction value. The helper alone establishes neither a verifiable original-event link nor a persisted reversal, making it a useful boundary example for this rule rather than a demonstrated match."
+    },
+    {
+      "source_id": "CE-FINDING-0007",
+      "target_id": "CORE-005.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "implementation_relationship": "partial_match",
+      "explanation": "An omitted NodaMoney context can resolve to a global or thread-local policy and affect the constructed amount. Reproducing the outcome therefore requires identifying the applicable context; ambient lookup alone is not a portable context contract."
+    },
+    {
+      "source_id": "CE-FINDING-0008",
+      "target_id": "CORE-005.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+      "evidence_role": "context_only",
+      "relationship": "deferred_scope",
+      "implementation_relationship": "related_control",
+      "explanation": "The selected py-moneyed rounding test changes its expected result when the active Decimal rounding context changes. This identifies a material numeric dependency, while the full arithmetic context remains unverified."
+    },
+    {
+      "source_id": "CE-FINDING-0009",
+      "target_id": "CORE-005.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+      "evidence_role": "context_only",
+      "relationship": "deferred_scope",
+      "implementation_relationship": "related_control",
+      "explanation": "Beancount balance checks use explicit tolerance or derive it from decimal precision and an option. Those facts change assertion outcomes and must be retained for reproduction; ledger tolerance remains separate from exact Money equality."
+    },
+    {
+      "source_id": "CE-FINDING-0010",
+      "target_id": "CORE-005.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+      "evidence_role": "context_only",
+      "relationship": "deferred_scope",
+      "implementation_relationship": "related_control",
+      "explanation": "QuantLib Actual/360 receives a declared last-day inclusion setting that changes the year fraction. This is a concrete example of material calculation context; Core does not currently define interest day-count conventions."
+    },
+    {
+      "source_id": "CE-FINDING-0015",
+      "target_id": "CORE-005.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+      "evidence_role": "context_only",
+      "relationship": "deferred_scope",
+      "implementation_relationship": "related_control",
+      "explanation": "ERPNext validates against freshly queried outstanding values, party/account facts and configured precision. Those dependencies affect the result; refreshing facts does not alone define a stable snapshot or a concurrency guarantee."
     }
   ]
 }
