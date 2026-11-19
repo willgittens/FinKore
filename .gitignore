@@ -5,7 +5,7 @@ dist/
 coverage/
 .coverage*
 *.egg-info/
-reports/
+/reports/
 .stryker-tmp/
 target/
 __pycache__/
