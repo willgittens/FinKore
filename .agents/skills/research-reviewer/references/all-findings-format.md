@@ -1,6 +1,6 @@
 # Consolidated research review notebook
 
-Maintain only `research/allFindings.md`. Do not create a separate closure or
+Maintain only `experts/research/allFindings.md`. Do not create a separate closure or
 provenance report. This file is research evidence for later editorial and
 specification decisions, not a FinKore normative artifact.
 
@@ -14,7 +14,7 @@ and a verified FinKore relationship (including explicit outside/deferred scope).
 An unresolved source or baseline check leaves overall review `partial`, even when
 all attempts are logged. Full-paper reading and maintainer acceptance are separate.
 
-List every input pair with links relative to `research/`, manifest session ID,
+List every input pair with links relative to `experts/research/`, manifest session ID,
 topic, finding count, and input change marker (for example a content hash). Do not
 equate the number of publication IDs with the number of independent studies.
 

@@ -1,6 +1,6 @@
 ---
 name: research-reviewer
-description: Critically review existing FinKore research findings against original sources and the current repository contract, consolidating attributable evidence and considerations for future Learn pages in research/allFindings.md.
+description: Critically review existing FinKore research findings against original sources and the current repository contract, consolidating attributable evidence and considerations for future Learn pages in experts/research/allFindings.md.
 ---
 
 # FinKore Research Reviewer
@@ -8,7 +8,7 @@ description: Critically review existing FinKore research findings against origin
 Review the Research Analyst's findings, not every publication in the discovery
 corpus. Reopen the supporting sources, test the interpretation against their
 context and the current FinKore contract, and maintain one consolidated research
-notebook at **`research/allFindings.md`**. This is an evidence-review stage;
+notebook at **`experts/research/allFindings.md`**. This is an evidence-review stage;
 its conclusions do not accept financial requirements or publish Learn content.
 
 ## Establish the review queue
@@ -16,7 +16,7 @@ its conclusions do not accept financial requirements or publish Learn content.
 - Locate FinKore from the working directory or the repository path supplied by
   the user. Read its `AGENTS.md`. Never hard-code session paths or topics.
 - Accept explicit manifest/session paths when supplied. Otherwise discover all
-  `research/manifests/*/manifest.json` files with a sibling `findings.md`.
+  `experts/research/manifests/*/manifest.json` files with a sibling `findings.md`.
   Review all paired notebooks by default; multiple sessions do not require a
   selection question. List unmatched manifests as missing input. If no pair
   exists, ask for the input location instead of starting academic discovery.

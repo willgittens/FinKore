@@ -13,11 +13,19 @@ pushes. It also supports manual dispatch. Other source changes alone do not
 trigger it: regenerate and commit Learn outputs when changing their sources.
 
 The validation job requires `willgittens/FinKore` and `refs/heads/main`, then
-runs `npm ci --no-audit` and `npm run verify` with Node 24. Verification includes
+runs `npm ci --no-audit`, `npm run verify`, `npm run learn:evidence:check` and
+`npm run release:check` with Node 24. Ordinary verification includes
 `npm run learn:check`, which compares the committed pages with their canonical
 sources using the committed CSS cache version without writing files. The job
 also checks that validation leaves `learn/` unchanged. Stale committed outputs
-or failed verification block deployment. This job has no production secrets.
+or failed verification block deployment. The separate publication gate also
+checks the complete publication tree and HTML destinations. The evidence export
+check compares the saved selection and unified Experts index with the published
+snapshot when both inputs are present; changed selections or stale inputs block
+deployment without regenerating or approving them. If either optional input is
+absent, the saved snapshot remains independent. These publication checks run no
+Python tools and do not become normative contract prerequisites.
+This job has no production secrets.
 The deployment does not wait for the separate Verify workflow: it enforces the
 same authoritative verification command itself.
 

@@ -11,9 +11,9 @@
     "ajv": "^8.20.0"
   },
   "scripts": {
-    "code-evidence:build": "node code-evidence/tools/catalog.js --write",
-    "code-evidence:check": "node code-evidence/tools/catalog.js --check",
-    "code-evidence:test": "node --test --test-isolation=none code-evidence/tools/test/*.test.js",
+    "code-evidence:build": "node experts/code-evidence/tools/catalog.js --write",
+    "code-evidence:check": "node experts/code-evidence/tools/catalog.js --check",
+    "code-evidence:test": "node --test --test-isolation=none experts/code-evidence/tools/test/*.test.js",
     "conformance:check": "node docs/tools/validate-conformance.js",
     "agentic:check": "node docs/tools/check-agentic.js",
     "architecture:check": "node docs/tools/check-architecture.js",
@@ -26,7 +26,11 @@
     "dependencies:audit": "npm audit",
     "check": "npm run node:check && npm run architecture:check && npm run conformance:check && npm run agentic:check && npm run tools:test && npm run docs:check && npm run license:check && git diff --check",
     "verify": "npm run check",
-    "learn:build": "node docs/tools/build-learn-assets.js && node docs/tools/build-learn-coredoc.js && node docs/tools/build-learn-pages.js",
-    "learn:check": "node docs/tools/build-learn-coredoc.js --check && node docs/tools/build-learn-pages.js --check"
+    "learn:build": "node docs/tools/build-learn-evidence.js && node docs/tools/build-learn-assets.js && node docs/tools/build-learn-coredoc.js && node docs/tools/build-learn-pages.js",
+    "learn:evidence:check": "node docs/tools/build-learn-evidence.js --check",
+    "learn:check": "node docs/tools/build-learn-coredoc.js --check && node docs/tools/build-learn-pages.js --check",
+    "experts:build": "python3 experts/tools/build_expert_traceability.py",
+    "experts:check": "python3 experts/tools/build_expert_traceability.py --check",
+    "experts:test": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s experts/tools/tests -v"
   }
 }

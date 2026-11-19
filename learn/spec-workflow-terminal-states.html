@@ -19,9 +19,9 @@
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="FinKore — Define once. Build many times." />
   <link rel="icon" type="image/png" href="img/Finkore_Favicon.png" />
-  <link rel="stylesheet" href="css/styles.css?v=7fa83ada-18aa-4b8a-b792-ed9ec1d8652d" />
-  <link rel="stylesheet" href="css/coredoc.css?v=7fa83ada-18aa-4b8a-b792-ed9ec1d8652d" />
-  <link rel="stylesheet" href="css/documents.css?v=7fa83ada-18aa-4b8a-b792-ed9ec1d8652d" />
+  <link rel="stylesheet" href="css/styles.css?v=3f85cabe-f234-4f7a-8c8e-619b51be4a97" />
+  <link rel="stylesheet" href="css/coredoc.css?v=3f85cabe-f234-4f7a-8c8e-619b51be4a97" />
+  <link rel="stylesheet" href="css/documents.css?v=3f85cabe-f234-4f7a-8c8e-619b51be4a97" />
 </head>
 <body id="top" class="core-reader learn-document">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -74,7 +74,7 @@
 <h2 id="requirements">Requirements</h2>
 <ul><li class="spec-requirement" id="workflow-terminal-001"><strong>WORKFLOW-TERMINAL-001</strong> — A Workflow definition MUST explicitly identify each terminal State.<aside class="rule-evidence" aria-label="Evidence and context for WORKFLOW-TERMINAL-001"><details>
     <summary><span>Evidence &amp; context<span class="rule-evidence-count">1 research note</span></span><span aria-hidden="true">+</span></summary>
-    <p class="rule-evidence-intro">These sources inform discussion of this rule. Their role and limits are stated separately; a citation is not certification or specialist sign-off. Notes from the same study are not independent confirmation.</p>
+    <p class="rule-evidence-intro">These sources inform discussion of this rule. Their role and limits are stated separately; a citation is not certification or specialist sign-off. Passages from the same study or consultation are not independent confirmation.</p>
     <div class="rule-evidence-grid"><article class="rule-evidence-card"><p class="rule-evidence-kind">Research <span aria-hidden="true">/</span> Clarifies a boundary</p><p class="rule-evidence-title"><a href="research.html#rev-0032">Preventing an invalid state does not guarantee eventual completion <span aria-hidden="true">↗</span></a></p><p class="rule-evidence-authors">Acep Taryana; Dieky Adzkiya; Muhammad Syifa’ul Mufid; Imam Mukhlash</p><p>Valid transitions, intentional terminal states and non-mutating rejection do not establish fairness or per-request eventual completion. The hospital study supplies methodological context, not financial execution evidence or a universal deadline.</p><details class="rule-evidence-limits"><summary>Scope and limitations</summary><p>This is methodological transfer from healthcare, not a financial rule demonstrated by that study. Fairness, resource availability and admissible requests matter. An intentionally terminal state is not a deadlock defect; statistical confidence is not an unconditional proof for arbitrary executions.</p></details></article></div>
   </details></aside></li><li class="spec-requirement" id="workflow-terminal-002"><strong>WORKFLOW-TERMINAL-002</strong> — A terminal State MUST NOT have an outgoing Transition in that Workflow definition.</li><li class="spec-requirement" id="workflow-terminal-003"><strong>WORKFLOW-TERMINAL-003</strong> — A Transition Request from a terminal State MUST fail with <code>FINKORE_WORKFLOW_TERMINAL_STATE</code>.</li><li class="spec-requirement" id="workflow-terminal-004"><strong>WORKFLOW-TERMINAL-004</strong> — Terminal status MUST be determined from the Workflow definition, not inferred from naming.</li></ul>
 <h2 id="invariants">Invariants</h2>

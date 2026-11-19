@@ -156,7 +156,9 @@ observations; consumers supply the implementation and execution.
 | Find evidence for a requirement and understand coverage limits | [Requirement traceability](./conformance/traceability.md) |
 | Integrate agents or other machine clients | [Agentic Contract](./agentic/README.md) |
 | Make a first contribution | [Contributor workflow](./CONTRIBUTING.md#make-your-first-contribution) |
-| Read or share experiences from financial software engineering | [Legacy Archive](./legacy/README.md) |
+| Investigate financial rules in public implementations | [Code Evidence](./experts/code-evidence/README.md) |
+| Explore academic findings and their limitations | [Research catalog](./experts/research/README.md) |
+| Read or share experiences from financial software engineering | [Legacy Archive](./experts/legacy/README.md) |
 
 You can begin with one domain. Read its rules, implement the selected scope,
 and use the published cases alongside your own evidence to evaluate the

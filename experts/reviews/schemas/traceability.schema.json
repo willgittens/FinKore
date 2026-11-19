@@ -1,0 +1,302 @@
+{
+  "$defs": {
+    "binding": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_role": {
+          "enum": [
+            "supports_rationale",
+            "illustrates_risk",
+            "limits_claim",
+            "counterpoint",
+            "context_only"
+          ]
+        },
+        "explanation": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "limits": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "relationship": {
+          "const": "already_addressed"
+        },
+        "reviewed_clause_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "target_id": {
+          "pattern": "^CORE-[0-9]{3}\\.[0-9]+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "target_id",
+        "relationship",
+        "evidence_role",
+        "explanation",
+        "limits",
+        "reviewed_clause_sha256"
+      ],
+      "type": "object"
+    },
+    "evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "question": {
+          "maximum": 99,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "quote": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "question",
+        "quote"
+      ],
+      "type": "object"
+    },
+    "mapping": {
+      "additionalProperties": false,
+      "properties": {
+        "bindings": {
+          "items": {
+            "$ref": "#/$defs/binding"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "claim": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/evidence"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^ER-[0-9]{4}-F[0-9]{2}$",
+          "type": "string"
+        },
+        "report_anchor": {
+          "pattern": "^er-[0-9]{4}-f[0-9]{2}$",
+          "type": "string"
+        },
+        "report_id": {
+          "pattern": "^ER-[0-9]{4}$",
+          "type": "string"
+        },
+        "reviewed_on": {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "report_id",
+        "report_anchor",
+        "claim",
+        "reviewed_on",
+        "evidence",
+        "bindings"
+      ],
+      "type": "object"
+    },
+    "report": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^ER-[0-9]{4}$",
+          "type": "string"
+        },
+        "interview_anchor": {
+          "pattern": "^[a-z][a-z0-9-]+$",
+          "type": "string"
+        },
+        "interview_language": {
+          "pattern": "^[a-z]{2}$",
+          "type": "string"
+        },
+        "original_language": {
+          "pattern": "^[a-z]{2}$",
+          "type": "string"
+        },
+        "path": {
+          "pattern": "^experts/reviews/reports/[a-z0-9-]+\\.md$",
+          "type": "string"
+        },
+        "publication_status": {
+          "enum": [
+            "not_recorded",
+            "authorized"
+          ]
+        },
+        "question_count": {
+          "maximum": 99,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "reviewed_interview_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "reviewed_report_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "scope": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "specialist": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "translation_status": {
+          "enum": [
+            "original",
+            "editorial_translation"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "specialist",
+        "scope",
+        "path",
+        "publication_status",
+        "reviewed_report_sha256",
+        "interview_anchor",
+        "original_language",
+        "interview_language",
+        "translation_status",
+        "question_count",
+        "reviewed_interview_sha256"
+      ],
+      "type": "object"
+    },
+    "resolved": {
+      "additionalProperties": false,
+      "properties": {
+        "by_report": {
+          "additionalProperties": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "type": "object"
+        },
+        "by_target": {
+          "additionalProperties": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "type": "object"
+        },
+        "core_version": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "counts": {
+          "type": "object"
+        },
+        "inputs": {
+          "additionalProperties": {
+            "$ref": "#/$defs/sha256"
+          },
+          "type": "object"
+        },
+        "records": {
+          "items": {
+            "type": "object"
+          },
+          "minItems": 0,
+          "type": "array"
+        },
+        "targets": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "core_version",
+        "inputs",
+        "targets",
+        "records",
+        "by_target",
+        "by_report",
+        "counts"
+      ],
+      "type": "object"
+    },
+    "sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "type": "string"
+    }
+  },
+  "$id": "urn:finkore:reviews:traceability:2.0.0",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "curation": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "mappings": {
+          "items": {
+            "$ref": "#/$defs/mapping"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "reports": {
+          "items": {
+            "$ref": "#/$defs/report"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "description",
+        "reports",
+        "mappings"
+      ],
+      "type": "object"
+    },
+    "resolved": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/resolved"
+        }
+      ]
+    },
+    "schema_version": {
+      "const": "2.0.0"
+    }
+  },
+  "required": [
+    "schema_version",
+    "curation",
+    "resolved"
+  ],
+  "title": "Non-normative Reviews-to-CoreDoc traceability",
+  "type": "object"
+}

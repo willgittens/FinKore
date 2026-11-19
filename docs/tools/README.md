@@ -14,7 +14,8 @@ execute financial-domain behavior.
 | `check-traceability.js` | Cross-check specification requirements, modalities, permitted coverage classifications, per-domain/total inventories, COVERED/PARTIAL evidence, vector metadata, and Agentic references. | `npm run traceability:check`, `npm run docs:check` |
 | `check-license.js` | Validate license metadata, source headers, and repository license text. | `npm run license:check` |
 | `build-learn-coredoc.js`, `build-learn-pages.js` | Generate the CoreDoc reader, home index and linked document readers, or check that they match canonical Markdown without writing files. | `npm run learn:build`, `npm run learn:check` |
-| `build-learn-assets.js` | Refresh the shared CSS cache version in the home page before generating the Learn readers. | First step of `npm run learn:build` |
+| `build-learn-evidence.js` | Export explicitly selected comparisons from the saved unified Experts index into the independent Learn publication snapshot, without approving changed evidence. | `npm run learn:build`, `npm run learn:evidence:check` |
+| `build-learn-assets.js` | Refresh the shared CSS cache version in the home page before generating the Learn readers. | `npm run learn:build` |
 | `check-release-content.js` | Inspect a proposed stable publication tree for obsolete artifacts, coherent Core status, and static HTML content and links. | `npm run release:check` |
 
 ## Supported Node setup
@@ -142,7 +143,7 @@ a mandatory obligation, or promote coverage from consumer execution evidence.
 
 ### Optional Code Evidence maintenance
 
-The non-normative [Code Evidence catalog](../../code-evidence/README.md) has
+The non-normative [Code Evidence catalog](../../experts/code-evidence/README.md) has
 separate commands: `npm run code-evidence:build` renders its listing,
 `npm run code-evidence:check` validates local metadata and synchronization, and
 `npm run code-evidence:test` exercises metadata safeguards. These commands make
@@ -214,7 +215,38 @@ publish or certify consumer implementations.
 Repository settings and the single-maintainer merge policy are documented in
 [Contributing](../../CONTRIBUTING.md#manual-github-configuration).
 
+## Optional unified Experts traceability
+
+The [global Experts index](../../experts/traceability.md#by-rule) combines
+Research, Legacy, Reviews and Code Evidence using one generated comparison model.
+Local curation and specialist source checks remain in their collections; the
+[shared tools](../../experts/tools/README.md) own contract reading, fingerprints,
+file handling and aggregation. Run `npm run experts:build`,
+`npm run experts:check` or `npm run experts:test` separately from normative
+verification. These commands maintain evidence artifacts and do not execute
+financial behavior.
+
+The common view preserves pending and negative assessments, evidence roles,
+source identities, scope limits and distinct publication authorization. Missing
+or invalid collections are explicit, and check mode fails for an incomplete
+index. The global files are generated, not a second manual curation.
+Learn's explicit editorial selection exports comparisons from this saved common
+model; its published readers and ordinary checks retain an independent snapshot.
+Normative verification does not require the global index or Python tools.
+
 ## Ongoing expert review
+
+The [Expert Reviews collection](../../experts/reviews/README.md) records specialist
+reports explaining how operational experience corroborates CoreDoc rationale.
+Its [traceability index](../../experts/reviews/traceability.md) maps reports to
+exact CoreDoc rules and rules back to the source passages, preserving evidence
+roles, limits and reviewed fingerprints. The optional
+[Reviews tool](../../experts/reviews/tools/README.md) detects changed reports,
+embedded interviews, excerpts and clauses without approving them automatically.
+Reports include complete questions and answers, with translations identified
+explicitly. A participant's operational testimony does not establish that they
+reviewed or approved specification clauses. Source registration and analysis
+remain distinct from participant validation and editorial publication on Learn.
 
 The public [Expert Review discussions](https://github.com/willgittens/FinKore/discussions)
 collect specialist feedback on current obligations and possible future domains.
@@ -294,9 +326,10 @@ After maintainer acceptance of the release scope, finalize the real version/stat
 and release entry, remove the last working plan, and repeat the applicable gates
 on the actual final tree before tagging. The rehearsal does not waive that check.
 
-The retained Learn profile includes the home, Network and Reviews editorial pages,
+The retained Learn profile includes the home and Network editorial pages,
 the CoreDoc reader, 47 specification readers, Research, the Legacy archive and
-approved interviews, plus the introductory and maintenance document readers.
+approved interviews, Reviews and explicitly registered specialist reports,
+plus the introductory and maintenance document readers.
 The home index pairs its introductory text with the local `learn/img/Finkore.png`
 logo directly over the hero background. It loads no scripts. Scripted
 presentation is limited to closing the mobile CoreDoc index after selecting a
@@ -376,7 +409,7 @@ Club, Contests and Angel. It labels proposed activities and funding status
 explicitly. Reviews retains the eight discussion areas on its independent page;
 the existing Network anchors remain entry points to the collections. Expert
 participation does not imply normative approval or certification. The build
-synchronizes navigation and stylesheet versions on all three editorial pages
+synchronizes navigation and stylesheet versions on both editorial pages
 while preserving their content. Interviews remain personal accounts, not
 normative requirements or technical endorsements. The document
 readers listed below are generated in full from their Markdown sources and renderers.
@@ -388,13 +421,19 @@ The home page's `css/styles.css` URL retains that identifier; the renderers use
 it to generate the remaining URLs. Build the site after CSS-only changes too,
 and publish the complete `learn/` output, including the HTML and CSS together.
 The Learn deployment workflow validates the committed output through
-`npm run verify`, including `npm run learn:check`, and uploads that same version.
+`npm run verify`, including `npm run learn:check`, followed by
+`npm run learn:evidence:check` and `npm run release:check`, and uploads that same
+version. Publication fails for broken HTML destinations or a changed evidence
+selection that no longer matches its saved snapshot. The evidence export check
+uses the optional saved inputs without executing Python; ordinary contract
+verification remains independent of the global Experts index.
 Run the full build before committing Learn changes. Deployment validation does
 not run a fresh build, because its intentionally new cache identifier would
 change the committed HTML. See [deployment guidance](../../.github/DEPLOYMENT.md#triggers-and-verification).
 
-`npm run learn:check`, `npm run verify`, and `npm run release:check` read the
-existing identifier without creating a new one or modifying files. Generation
+`npm run learn:check`, `npm run learn:evidence:check`, `npm run verify`, and
+`npm run release:check` read the existing identifier without creating a new one
+or modifying files. Generation
 is deterministic for a fixed identifier and canonical source. Missing or mixed
 versions in the maintained pages fail synchronization checks; rerun the full
 `npm run learn:build` command to repair them. Include the changed CSS URLs in
@@ -424,17 +463,19 @@ The additional readers are generated by `build-learn-pages.js`:
 | `CONTRIBUTING.md` | [Contribute](../../learn/contributing.html) |
 | `docs/implementation-guide.md` | [Implementation guide](../../learn/implementation-guide.html) |
 | `docs/releases/README.md` | [Release notes](../../learn/releases.html) |
-| `legacy/README.md` | [Legacy Archive](../../learn/legacy.html) |
+| `experts/legacy/README.md` | [Legacy Archive](../../learn/legacy.html) |
 | `learn/research.md` | [Research](../../learn/research.html) |
+| `learn/reviews.md` | [Reviews](../../learn/reviews.html) |
+| `experts/reviews/reports/001-vandeir-silva.md` | [Vandeir Silva — Specialist report](../../learn/review-001-vandeir-silva.html) |
 | `spec/README.md` and explicitly registered domain documents | [Specifications](../../learn/specification.html) and individual specification readers |
-| `legacy/interviews/001-elaine-richardson.md` | [Elaine Richardson — Interview #001](../../learn/legacy-001-elaine-richardson.html) |
-| `legacy/interviews/002-otilia-borges.md` | [Otilia Borges — Interview #002](../../learn/legacy-002-otilia-borges.html) |
+| `experts/legacy/interviews/001-elaine-richardson.md` | [Elaine Richardson — Interview #001](../../learn/legacy-001-elaine-richardson.html) |
+| `experts/legacy/interviews/002-otilia-borges.md` | [Otilia Borges — Interview #002](../../learn/legacy-002-otilia-borges.html) |
 
 Legacy interviews are registered explicitly in `LEARN_PAGES` after interviewee
-approval and editorial review. Adding a file to `legacy/interviews/` does not
+approval and editorial review. Adding a file to `experts/legacy/interviews/` does not
 publish it automatically. Register each approved source and reader destination,
 update the archive's Markdown index, then run the same `npm run learn:build`
-and `npm run verify` commands. The invitation in `legacy/INTERVIEW-TEMPLATE.md`
+and `npm run verify` commands. The invitation in `experts/legacy/INTERVIEW-TEMPLATE.md`
 is not a published reader. Keep interview wording and confidentiality notes in
 the canonical Markdown; editorial summaries on Network remain separate.
 The archive and interviews use dedicated editorial templates and
@@ -470,9 +511,20 @@ page-specific destinations in `check-release-content.js`.
 Network groups three collections under FinKore Experts, with independent entry
 points at `research.html`, `legacy.html` and `reviews.html`. Existing Network
 anchors `#contributors`, `#legacy` and `#expert-review` remain navigation targets.
-`reviews.html` retains the existing review areas and discussion destinations;
-its editorial content is maintained directly, like Network. The build shares
-primary navigation, Experts navigation and stylesheet versions across these pages.
+`reviews.html` is generated from `learn/reviews.md`, retaining the existing review
+areas and discussion destinations. The build shares primary navigation, Experts
+navigation and stylesheet versions across these pages.
+
+Reviews uses the same archive and reading layout as Legacy, extended by
+`learn/css/reviews.css`. Its report cards link to explicitly registered canonical
+reports in `experts/reviews/reports/`; directory discovery never publishes a draft.
+The report reader preserves the full biography, analysis, scope, translated
+questions and answers, and stable comparison/question anchors. Native contents
+navigation works on desktop and mobile. Editorial names, topics and quotations
+are checked against the index and interview. Register a report, update the
+collection index and review its editorial selection before building. Editorial
+publication does not establish participant authorization or specialist sign-off;
+those source states remain distinct and unchanged.
 
 The Research reader follows Legacy's editorial design. Its canonical publication
 source is `learn/research.md`, an explicitly curated selection from the existing
@@ -500,12 +552,28 @@ ID anchor, such as `spec-money-rounding.html#money-rounding-001`. Source documen
 remain unchanged. Newly added specification files require an explicit registry
 entry before they become Learn readers.
 
-`learn/related-evidence.json` is optional editorial publication data, versioned
-as `1.1.0` (the reader also accepts `1.0.0`). It links selected comparisons to
-published Research notes, approved public interviews and pinned Code Evidence
-analyses. It is independent of discovery catalogs at build time; neither Python
-nor original manifests are required. The contract readers can be generated without
-this optional index.
+`learn/evidence-selection.json` contains explicit publication choices: a unified
+comparison key, its reviewed fingerprint, selected target IDs and presentation
+metadata. `build-learn-evidence.js`, the first step of `npm run learn:build`,
+exports these choices from the saved `experts/traceability.json` into
+`learn/related-evidence.json`. It copies the reviewed binding semantics rather
+than maintaining a second set of explanations. Review the source, comparison,
+limits, participant authorization state and target clauses before recording a
+selection fingerprint; a fresh index is not editorial approval. New comparisons
+are never selected by discovery. Rebuild the optional Experts index with
+`npm run experts:build` when its inputs change, then review affected selections.
+
+The snapshot format is `1.2.0` (the reader also accepts `1.0.0` and `1.1.0`). It
+links published Research notes, approved Legacy interviews, specialist reports
+and pinned Code Evidence analyses. Its sources and bindings are generated; edit
+the selection and collection curation instead. Export rejects changed comparisons,
+source inputs, attribution, publications and selected clauses, without refreshing
+reviewed hashes. `npm run learn:evidence:check` checks this optional export without
+writing. It is separate from `npm run verify` and runs before Learn deployment.
+If the optional selection or global index is absent, the build retains the saved
+snapshot. Neither Python nor original
+discovery manifests are executed. Ordinary `learn:check` validates the readers
+against the snapshot alone; contract readers also work without that snapshot.
 
 Each `sources` entry preserves the existing `MAP-*` or `LGC-*` comparison ID,
 kind (`research` or `legacy`), title, attributed authors, local reader/fragment,
@@ -514,10 +582,17 @@ SHA-256. Each `bindings` entry identifies one exact requirement, its owning path
 reviewed clause SHA-256, semantic relationship, evidence role and explanation.
 Bindings are explicit editorial decisions; matching vocabulary never creates one.
 
+The `review` kind preserves `ER-*-F*` comparison IDs, the `ER-*` report ID,
+specialist attribution, the exact report/anchor destination, original/displayed
+languages, translation status and recorded publication authorization. Review
+bindings currently target CoreDoc rules only. Cards count distinct reports, so
+several passages from the same consultation do not appear as independent reports.
+Publication selection does not change `not_recorded` authorization into consent.
+
 The `code` source kind additionally preserves the `CE-FINDING-*` ID, project,
 repository, GitHub owner (not an inferred author), selected version, full commit
 SHA and function names with commit-pinned file/line links. Its publication is the
-existing `code-evidence/analyses/CE-REPO-*/CE-EDITION-*.md` record, linked through
+existing `experts/code-evidence/analyses/CE-REPO-*/CE-EDITION-*.md` record, linked through
 GitHub; the source hash covers that record. Its reading extent is
 `selected_code_and_tests`, execution status is `not_executed`, and validation
 remains pending. This format does not represent later runtime execution evidence.
@@ -540,7 +615,7 @@ publication consistency; it is not independent verification of upstream behavior
 The “Evidence & context” disclosures show whether a source supports the rationale,
 illustrates a risk, clarifies a boundary, supplies context or offers a counterpoint.
 They do not imply certification, independent validation or specialist sign-off.
-Multiple passages from one study remain separate notes, not independent evidence.
+Multiple passages from one study or consultation are not independent evidence.
 No completed expert review is inferred from the existence of a Reviews discussion.
 Requirements without curated sources receive no endorsement or automatic link.
 

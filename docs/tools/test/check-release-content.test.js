@@ -141,13 +141,13 @@ test('publication inspects registered research snapshots and rejects opaque, cor
   const hash = createHash('sha256').update(contents).digest('hex')
   const snapshot = `catalog/snapshots/${hash}.gz`
   const reference = { path: 'allFindings.md', snapshot, sha256: hash, size_bytes: contents.length }
-  put(root, `research/${snapshot}`, gzipSync(contents))
+  put(root, `experts/research/${snapshot}`, gzipSync(contents))
   assert.match(run(root).error, /opaque archives cannot be reviewed/)
-  put(root, 'research/catalog/state.json', JSON.stringify({ schema_version: '1.1.0', current_review: reference }))
+  put(root, 'experts/research/catalog/state.json', JSON.stringify({ schema_version: '1.1.0', current_review: reference }))
   assert.equal(run(root).status, 0)
-  put(root, `research/${snapshot}`, gzipSync('Different content.'))
+  put(root, `experts/research/${snapshot}`, gzipSync('Different content.'))
   assert.match(run(root).error, /cannot inspect registered snapshot/)
-  rmSync(join(root, `research/${snapshot}`))
+  rmSync(join(root, `experts/research/${snapshot}`))
   assert.match(run(root).error, /registered snapshot is missing/)
 })
 
@@ -156,8 +156,8 @@ test('registered snapshots cannot hide forbidden planning references or invalid 
     const root = fixture(t)
     const hash = createHash('sha256').update(contents).digest('hex')
     const snapshot = `catalog/snapshots/${hash}.gz`
-    put(root, `research/${snapshot}`, gzipSync(contents))
-    put(root, 'research/catalog/state.json', JSON.stringify({ schema_version: '1.1.0', current_review: { path: 'allFindings.md', snapshot, sha256: hash, size_bytes: contents.length } }))
+    put(root, `experts/research/${snapshot}`, gzipSync(contents))
+    put(root, 'experts/research/catalog/state.json', JSON.stringify({ schema_version: '1.1.0', current_review: { path: 'allFindings.md', snapshot, sha256: hash, size_bytes: contents.length } }))
     assert.equal(run(root).status, 1)
     assert.match(run(root).error, /active planning reference|cannot inspect registered snapshot/)
   }

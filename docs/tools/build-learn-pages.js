@@ -19,18 +19,24 @@ export const LEARN_PAGES = [
   { source: 'CONTRIBUTING.md', output: 'learn/contributing.html', label: 'Contribute', description: 'How to propose, review, and verify contributions to the FinKore contract.' },
   { source: 'docs/implementation-guide.md', output: 'learn/implementation-guide.html', label: 'Implementation guide', description: 'Guidance for implementing the portable contract in your own language and stack.' },
   { source: 'docs/releases/README.md', output: 'learn/releases.html', label: 'Release notes', description: 'Published release history. Earlier entries describe historical repository capabilities.' },
-  { source: 'legacy/README.md', output: 'learn/legacy.html', label: 'Legacy Archive', description: 'Real stories from the people who built and maintained financial software. Explore the interviews, editorial principles, and ways to share your experience.', presentation: 'legacy-archive' },
+  { source: 'experts/legacy/README.md', output: 'learn/legacy.html', label: 'Legacy Archive', description: 'Real stories from the people who built and maintained financial software. Explore the interviews, editorial principles, and ways to share your experience.', presentation: 'legacy-archive' },
   { source: 'learn/research.md', output: 'learn/research.html', label: 'Research', description: 'Explore attributed academic findings, source quotations, and their carefully bounded relevance to FinKore financial software behavior.', presentation: 'research-archive', documentNavigation: false },
+  { source: 'learn/reviews.md', output: 'learn/reviews.html', label: 'Expert Reviews', description: 'Explore specialist experience, complete consultations and explicit connections to FinKore financial control principles.', presentation: 'review-archive', documentNavigation: false },
+  { source: 'experts/reviews/reports/001-vandeir-silva.md', output: 'learn/review-001-vandeir-silva.html', label: 'Vandeir Silva — Banking operations and financial control', description: 'Banking operations specialist Vandeir Silva shares his experience of reconciliation, accounting adjustments and approval evidence, with comparisons to FinKore and the complete consultation.', presentation: 'review-report', documentNavigation: false,
+    review: { id: 'ER-0001', name: 'Vandeir Silva', role: 'Banking operations and accounting reconciliation', questions: 22,
+      topics: ['Banking operations', 'Reconciliation', 'Accounting adjustments', 'Approval evidence'],
+      introduction: 'Fourteen years in banking, developed primarily at Banco Santander. Vandeir connects the daily work of investigating discrepancies and preparing adjustments to the financial controls those processes depend on.',
+      quote: 'What identified and linked the cases was the description of the adjustment entry.' } },
   ...SPECIFICATION_PAGES,
   // Register interviews explicitly after editorial approval; never publish drafts by directory discovery.
   // Archive and interview quotes must preserve the interviewee's words and focus on financial systems, rules, or operational risk.
-  { source: 'legacy/interviews/001-elaine-richardson.md', output: 'learn/legacy-001-elaine-richardson.html', label: 'Elaine Richardson — Interview #001', description: 'Elaine Richardson shares her experience with mainframes, COBOL, migrations, error handling, and batch processing. A personal account from the FinKore Legacy Archive.', presentation: 'legacy-interview', documentNavigation: false,
+  { source: 'experts/legacy/interviews/001-elaine-richardson.md', output: 'learn/legacy-001-elaine-richardson.html', label: 'Elaine Richardson — Interview #001', description: 'Elaine Richardson shares her experience with mainframes, COBOL, migrations, error handling, and batch processing. A personal account from the FinKore Legacy Archive.', presentation: 'legacy-interview', documentNavigation: false,
     interview: { name: 'Elaine Richardson', number: '001', portrait: 'img/bio-Elaine-Richardson.jpg', quote: 'Bank’s back-end systems are full of exception handling, covering the exceptions consultants say will “never happen”, but that will happen day 1 of go live, usually with your biggest, most important customer.', featureQuote: 'Bank’s back-end systems are full of exception handling, covering the exceptions consultants say will “never happen”, but that will happen day 1 of go live, usually with your biggest, most important customer.', introduction: 'From a chance opening as a trainee programmer to mainframe migrations and live support. Elaine reflects on a career spent working with the systems people depend on.', topics: ['Mainframes', 'COBOL', 'Migrations', 'Error handling', 'Batch processing'], chapters: ['Finding a way into finance', 'A migration to remember', 'The lessons in unusual code', 'Modernization & recovery', 'What we should never forget', 'A withheld account', 'The dependencies between batch runs'] } },
-  { source: 'legacy/interviews/002-otilia-borges.md', output: 'learn/legacy-002-otilia-borges.html', label: 'Otilia Borges — Interview #002', description: 'Otilia Borges shares her experience with COBOL, mainframes, the Collor Plan, and preserving business rules during legacy modernization. A personal account from the FinKore Legacy Archive.', presentation: 'legacy-interview', documentNavigation: false,
+  { source: 'experts/legacy/interviews/002-otilia-borges.md', output: 'learn/legacy-002-otilia-borges.html', label: 'Otilia Borges — Interview #002', description: 'Otilia Borges shares her experience with COBOL, mainframes, the Collor Plan, and preserving business rules during legacy modernization. A personal account from the FinKore Legacy Archive.', presentation: 'legacy-interview', documentNavigation: false,
     interview: { name: 'Otilia Borges', number: '002', portrait: 'img/bio-Otilia-Borges.jpg', quote: "When we migrate a system to a modern technology, we must make sure we don't accidentally change its business behavior or compromise the integrity of its rules.", featureQuote: "When we migrate a system to a modern technology, we must make sure we don't accidentally change its business behavior or compromise the integrity of its rules.", introduction: 'From COBOL and Assembler at Banco Bradesco to the Collor Plan and mainframe modernization. Otilia reflects on preserving business rules, operational lessons, and a lifetime of learning.', topics: ['COBOL', 'Mainframes', 'Collor Plan', 'Business rules', 'Legacy modernization', 'Generative AI'], chapters: ['Starting young at Bradesco', 'A weekend during the Collor Plan', 'A counter and a thousand pages', 'Preserving business knowledge', 'Learning how to learn'] } },
 ]
 // Editorial HTML keeps its own content; the build shares navigation and CSS versions.
-export const LEARN_EDITORIAL_PAGES = ['learn/index.html', 'learn/network.html', 'learn/reviews.html']
+export const LEARN_EDITORIAL_PAGES = ['learn/index.html', 'learn/network.html']
 const destinations = new Map(LEARN_PAGES.map(page => [page.source, page.output]))
 destinations.set('docs/coreDoc/core-doc.md', 'learn/coredoc.html')
 export const GITHUB_PROJECT_URL = 'https://github.com/willgittens/FinKore'
@@ -113,12 +119,18 @@ function inline(text, source, autolinks = true) {
 
 export function renderLearnMarkdown(markdown, source) {
   const lines = markdown.trim().split('\n')
-  const used = new Map(), headings = []
+  const used = new Set(), counts = new Map(), headings = []
   function headingId(text) {
     const slug = text.toLowerCase().replace(/[`*_~]/g, '').replace(/[^\p{L}\p{N}\s_-]/gu, '').replace(/\s+/g, '-')
-    const number = used.get(slug) ?? 0
-    used.set(slug, number + 1)
-    return slug + (number ? `-${number}` : '')
+    let number = counts.get(slug) ?? 0
+    let id = slug + (number ? `-${number}` : '')
+    while (used.has(id)) {
+      number++
+      id = `${slug}-${number}`
+    }
+    counts.set(slug, number + 1)
+    used.add(id)
+    return id
   }
   const blocks = []
   let title, titleId
@@ -141,6 +153,13 @@ export function renderLearnMarkdown(markdown, source) {
       for (i++; i < lines.length && lines[i] !== '```'; i++) code.push(lines[i])
       if (i === lines.length) throw new Error(`Unclosed Learn code fence: ${source}`)
       blocks.push(`<pre><code${language ? ` class="language-${language}"` : ''}>${escapeHtml(code.join('\n'))}</code></pre>`)
+      i++; continue
+    }
+    const namedAnchor = line.match(/^<a id="([a-z][a-z0-9-]*)"><\/a>$/)
+    if (namedAnchor) {
+      if (used.has(namedAnchor[1])) throw new Error(`Duplicate Learn anchor: ${namedAnchor[1]}`)
+      used.add(namedAnchor[1])
+      blocks.push(`<span id="${namedAnchor[1]}"></span>`)
       i++; continue
     }
     const heading = line.match(/^(#{1,6}) (.+)$/)
@@ -360,8 +379,73 @@ function renderLegacyInterview(page, markdown, doc) {
   </div></div>${legacyWelcome()}`
 }
 
+function renderReviewArchive(doc) {
+  const { introduction, sections } = legacySections(doc)
+  const find = id => {
+    const section = sections.find(section => section.id === id)
+    if (!section) throw new Error(`Missing Reviews section: ${id}`)
+    return section
+  }
+  const rows = find('reports').body.match(/<tbody>([\s\S]*?)<\/tbody>/)?.[1]
+  const cards = [...(rows ?? '').matchAll(/<tr>([\s\S]*?)<\/tr>/g)].map(row => {
+    const cells = [...row[1].matchAll(/<td>([\s\S]*?)<\/td>/g)].map(cell => cell[1])
+    const destination = cells[0]?.match(/href="([^"]+)"/)?.[1]
+    const page = LEARN_PAGES.find(page => page.presentation === 'review-report' && posix.basename(page.output) === destination)
+    if (!page || cells.length !== 3 || cells[1] !== escapeHtml(page.review.name) || cells[2] !== escapeHtml(page.review.topics.join(', '))) throw new Error('Reviews index must reference registered reports, specialist names and topics')
+    const review = page.review
+    const initials = review.name.split(' ').map(part => part[0]).join('')
+    return `<article class="legacy-feature review-feature" aria-labelledby="report-${review.id.toLowerCase()}">
+      <div class="legacy-feature-art review-feature-art" aria-hidden="true"><span>FinKore<br />Expert Reviews</span><span class="legacy-feature-number">${escapeHtml(initials)}</span><span>${escapeHtml(review.id)}<br />Banking operations</span></div>
+      <div class="legacy-feature-copy"><p class="eyebrow">Specialist report / ${escapeHtml(review.id)}</p><h3 id="report-${review.id.toLowerCase()}"><a href="${escapeHtml(destination)}">${cells[1]}</a></h3><p class="review-report-title">${cells[0].replace(/<\/?a\b[^>]*>/g, '')}</p><p class="legacy-feature-intro">${escapeHtml(review.introduction)}</p>${legacyTags(review.topics)}
+      <blockquote><p>“${escapeHtml(review.quote)}”</p><cite>${cells[1]} · From the translated interview</cite></blockquote><a class="button" href="${escapeHtml(destination)}">Read the report</a><p class="review-card-note">Full professional profile · ${review.questions} questions and answers</p></div>
+    </article>`
+  }).join('')
+  if (!cards) throw new Error('Reviews requires an explicitly registered report index')
+  const areas = find('expert-review-areas')
+  const areaAliases = ['accounting', 'audit', 'approvals', 'legal', 'payments', 'tax', 'identity', 'risk']
+  const areaParts = areas.body.split(/(?=<h3\b)/).filter(part => part.trim())
+  if (areaParts.length !== areaAliases.length) throw new Error('Reviews requires the eight consultation areas')
+  const areaCards = areaParts.map((part, index) => `<article class="review-area" id="review-${areaAliases[index]}-title">${part}</article>`).join('')
+  const section = (id, extraClass = '', alias = '') => {
+    const item = find(id)
+    return `<section class="legacy-section ${extraClass}"><div class="container"><h2 id="${item.id}">${alias ? `<span id="${alias}"></span>` : ''}${item.title}</h2><div class="legacy-prose">${item.body}</div></div></section>`
+  }
+  return `<header class="legacy-archive-hero"><div class="container">
+    <nav class="legacy-breadcrumb" aria-label="Breadcrumb"><a href="network.html#expert-review">FinKore Experts</a><span aria-hidden="true">/</span><span>Reviews</span></nav>${renderExpertsNavigation('reviews')}
+    <p class="eyebrow">Specialist experience / Financial controls</p><div class="legacy-hero-layout"><h1 id="${escapeHtml(doc.titleId)}">Experience that<br /><span>explains the rules.</span></h1><div><p class="legacy-deck">Professional experience, connected to the financial principles it helps explain.</p><p>Meet the specialists, follow the comparisons and read the complete conversations.</p><div class="actions"><a class="button" href="#reports">Explore the reports</a><a class="text-link" href="#expert-review-areas-title">Contribute your expertise</a></div></div></div>
+  </div></header>
+  <section class="legacy-section legacy-catalogue"><div class="container"><div class="legacy-section-heading"><div><p class="eyebrow">The collection</p><h2 id="reports">From practice to principle.</h2></div><p>Professional context.<br />Explicit connections. Complete interviews.</p></div>${cards}</div></section>
+  <section id="expert-review" class="legacy-section legacy-purpose"><div class="container legacy-purpose-layout"><div><p class="eyebrow">FinKore Expert Review Program</p><h2 id="why-expert-consultation-matters"><span id="expert-review-title"></span>${find('why-expert-consultation-matters').title}</h2><div class="legacy-prose">${introduction}</div></div><div class="legacy-prose">${find('why-expert-consultation-matters').body}</div></div></section>
+  <section class="legacy-section"><div class="container"><p class="eyebrow">Bring your perspective</p><h2 id="${areas.id}"><span id="expert-review-areas-title"></span>${areas.title}</h2><div class="review-areas-grid">${areaCards}</div></div></section>
+  ${section('how-the-expert-review-program-works', 'review-process', 'expert-review-process-title')}
+  ${section('contribute-your-experience', 'legacy-share-your-story')}
+  ${section('reading-the-comparisons', 'review-method')}`
+}
+
+function renderReviewReport(page, markdown, doc) {
+  const review = page.review
+  const interview = markdown.split('<a id="interview"></a>')[1]
+  const questions = [...(interview ?? '').matchAll(/<a id="(er-\d{4}-q\d{2})"><\/a>\s*### ([^\n]+)/g)]
+  if (!markdown.startsWith(`# ${review.id} — `) || markdown.match(/^\*\*Specialist:\*\* ([^·\n]+)/m)?.[1].trim() !== review.name || !interview?.includes(review.quote)) throw new Error(`Review editorial name or quotation differs from its source: ${page.source}`)
+  if (questions.length !== review.questions || questions.some((question, index) => question[1] !== `${review.id.toLowerCase()}-q${String(index + 1).padStart(2, '0')}`)) throw new Error('Review must retain its complete, sequential interview')
+  const navigation = doc.headings.filter(heading => heading.level === 2).map(heading => `<a href="#${heading.id === 'interview-1' ? 'interview' : escapeHtml(heading.id)}">${escapeHtml(heading.title)}</a>`).join('')
+  const questionLinks = questions.map(question => `<a href="#${question[1]}">${escapeHtml(question[2])}</a>`).join('')
+  const contents = `${navigation}<details class="review-question-index"><summary>All ${review.questions} questions</summary>${questionLinks}</details>`
+  const title = doc.title.replace(`${review.id} — `, '')
+  const start = doc.headings.find(heading => heading.level === 2)?.id
+  const body = doc.html.replace(/<h1\b[^>]*>[\s\S]*?<\/h1>\n?/, '')
+  return `<header class="legacy-interview-hero"><div class="container">
+    <nav class="legacy-breadcrumb" aria-label="Breadcrumb"><a href="reviews.html#reports">Back to Reviews</a><span aria-hidden="true">/</span><span>${escapeHtml(review.id)}</span></nav>${renderExpertsNavigation('reviews')}
+    <div class="review-report-heading"><p class="eyebrow">FinKore Expert Reviews / ${escapeHtml(review.id)}</p><h1 id="${escapeHtml(doc.titleId)}">${escapeHtml(title)}</h1><p class="review-specialist">${escapeHtml(review.name)}<span>${escapeHtml(review.role)}</span></p><p class="legacy-deck">${escapeHtml(review.introduction)}</p>${legacyTags(review.topics)}<div class="actions"><a class="button" href="#${escapeHtml(start)}">Read the report</a><a class="text-link" href="#interview">Read the complete interview</a></div></div>
+  </div></header>
+  <div class="container legacy-reading-layout"><aside class="legacy-chapters"><p class="eyebrow">In this report</p><nav aria-label="Report navigation">${contents}</nav><a class="legacy-all-interviews" href="reviews.html#reports">All specialist reports</a></aside>
+  <div class="legacy-reading-main"><details class="legacy-mobile-index"><summary>In this report</summary><nav aria-label="Mobile report navigation">${contents}</nav></details><article class="legacy-story review-story" aria-label="${escapeHtml(doc.title)}">${body}</article><div class="legacy-reading-end"><p class="eyebrow">Continue exploring</p><h2>Follow the principle behind the experience.</h2><div class="actions"><a class="button" href="coredoc.html">Explore CoreDoc</a><a class="text-link" href="reviews.html#reports">Back to Reviews</a></div></div></div></div>`
+}
+
 function renderLegacyPage(page, markdown, doc, assetVersion) {
   const research = page.presentation === 'research-archive'
+  const reviews = page.presentation.startsWith('review-')
+  const content = research ? renderResearchArchive(doc) : page.presentation === 'review-archive' ? renderReviewArchive(doc) : page.presentation === 'review-report' ? renderReviewReport(page, markdown, doc) : page.presentation === 'legacy-archive' ? renderLegacyArchive(doc) : renderLegacyInterview(page, markdown, doc)
   return versionLearnStylesheets(`<!doctype html>
 <!-- SPDX-License-Identifier: MPL-2.0 -->
 <!-- Generated from ${page.source} by npm run learn:build. Do not edit this file directly. -->
@@ -371,11 +455,11 @@ function renderLegacyPage(page, markdown, doc, assetVersion) {
   <meta name="description" content="${escapeHtml(page.description)}" />
   ${renderLearnOpenGraph({ title: `${page.label} — FinKore`, description: page.description, path: posix.basename(page.output) })}
   <link rel="icon" type="image/png" href="img/Finkore_Favicon.png" />
-  <link rel="stylesheet" href="css/styles.css" /><link rel="stylesheet" href="css/legacy.css" />${research ? '\n  <link rel="stylesheet" href="css/research.css" />' : ''}
+  <link rel="stylesheet" href="css/styles.css" /><link rel="stylesheet" href="css/legacy.css" />${research ? '\n  <link rel="stylesheet" href="css/research.css" />' : ''}${reviews ? '\n  <link rel="stylesheet" href="css/reviews.css" />' : ''}
 </head><body id="top" class="legacy-page ${research ? 'research-page ' : ''}${page.presentation}">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header"><div class="container header-layout"><a class="brand" href="index.html" aria-label="FinKore home"><img class="brand-logo" src="img/Finkore-Logo.png" alt="FinKore" width="1013" height="226" decoding="async" /></a>${renderLearnNavigation()}</div></header>
-  <main id="main">${research ? renderResearchArchive(doc) : page.presentation === 'legacy-archive' ? renderLegacyArchive(doc) : renderLegacyInterview(page, markdown, doc)}</main>
+  <main id="main">${content}</main>
   <div class="container legacy-colophon"><a href="${GITHUB_FILE_BASE_URL}${page.source}" target="_blank" rel="noopener noreferrer">View Markdown source ↗</a><a href="#top">Back to the top ↑</a></div>
   <footer class="site-footer"><div class="container footer-layout"><a class="brand" href="index.html"><img class="brand-logo" src="img/Finkore_White.png" alt="FinKore" width="1021" height="293" loading="lazy" decoding="async" /></a><p>Financial behavior, made explicit.</p><nav aria-label="Project resources"><a href="about.html">About the project</a><a href="contributing.html">Contribute</a><a href="${GITHUB_FILE_BASE_URL}LICENSE" target="_blank" rel="noopener noreferrer">MPL-2.0</a></nav></div></footer>
 </body></html>`, assetVersion)
@@ -383,7 +467,7 @@ function renderLegacyPage(page, markdown, doc, assetVersion) {
 
 export function renderLearnPage(page, markdown, assetVersion, { evidence } = {}) {
   const doc = renderLearnMarkdown(markdown, page.source)
-  if (page.presentation?.startsWith('legacy-') || page.presentation === 'research-archive') return renderLegacyPage(page, markdown, doc, assetVersion)
+  if (page.presentation?.startsWith('legacy-') || page.presentation?.startsWith('review-') || page.presentation === 'research-archive') return renderLegacyPage(page, markdown, doc, assetVersion)
   const navigation = doc.headings.filter(h => h.level >= 2 && h.level <= (page.tocDepth ?? 2)).map(h => `<a class="core-nav-intro${h.level === 3 ? ' learn-nav-question' : ''}" href="#${escapeHtml(h.id)}">${escapeHtml(h.title)}</a>`).join('\n')
   return versionLearnStylesheets(`<!doctype html>
 <!-- SPDX-License-Identifier: MPL-2.0 -->

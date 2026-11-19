@@ -29,9 +29,9 @@ test('keeps site readers and assets local and routes repository files to GitHub'
   assert.equal(learnLink('README.md', './docs/releases/README.md#draft-01'), 'releases.html#draft-01')
   assert.equal(learnLink('docs/coreDoc/core-doc.md', '../releases/README.md'), 'releases.html')
   assert.equal(learnLink('README.md', './LICENSING.md'), 'licensing.html')
-  assert.equal(learnLink('README.md', './legacy/README.md'), 'legacy.html')
-  assert.equal(learnLink('legacy/README.md', './interviews/001-elaine-richardson.md'), 'legacy-001-elaine-richardson.html')
-  assert.equal(learnLink('legacy/interviews/001-elaine-richardson.md', '../README.md#interviews'), 'legacy.html#interviews')
+  assert.equal(learnLink('README.md', './experts/legacy/README.md'), 'legacy.html')
+  assert.equal(learnLink('experts/legacy/README.md', './interviews/001-elaine-richardson.md'), 'legacy-001-elaine-richardson.html')
+  assert.equal(learnLink('experts/legacy/interviews/001-elaine-richardson.md', '../README.md#interviews'), 'legacy.html#interviews')
   assert.equal(learnLink('README.md', './spec/money/README.md#scope'), 'spec-money.html#scope')
   assert.equal(learnLink('README.md', './conformance/README.md'), GITHUB_FILE_BASE_URL + 'conformance/README.md')
   assert.equal(learnLink('README.md', './agentic/README.md'), GITHUB_FILE_BASE_URL + 'agentic/README.md')
@@ -77,23 +77,23 @@ test('renders paragraph blockquotes with safe inline content and preserves surro
 })
 
 test('preserves interview emphasis, hard breaks, thematic breaks and safe profile links', () => {
-  const doc = renderLearnMarkdown('# Interview\n\n**Name:** Elaine  \n**Profile:** https://www.linkedin.com/in/example/  \n**Series:** Legacy\n\n*An editorial note with **distinct wording**.*\n\n---\n\n[https://finkore.dev](https://finkore.dev)\n\nSee https://finkore.dev/.', 'legacy/interviews/example.md')
+  const doc = renderLearnMarkdown('# Interview\n\n**Name:** Elaine  \n**Profile:** https://www.linkedin.com/in/example/  \n**Series:** Legacy\n\n*An editorial note with **distinct wording**.*\n\n---\n\n[https://finkore.dev](https://finkore.dev)\n\nSee https://finkore.dev/.', 'experts/legacy/interviews/example.md')
   assert.match(doc.html, /<strong>Name:<\/strong> Elaine<br \/>\n<strong>Profile:<\/strong> <a href="https:\/\/www.linkedin.com\/in\/example\/" target="_blank" rel="noopener noreferrer">/)
   assert.match(doc.html, /<em>An editorial note with <strong>distinct wording<\/strong>\.<\/em>/)
   assert.match(doc.html, /<hr \/>/)
   assert.match(doc.html, /<p><a href="https:\/\/finkore.dev" target="_blank" rel="noopener noreferrer">https:\/\/finkore.dev<\/a><\/p>/)
   assert.match(doc.html, /<p>See <a href="https:\/\/finkore.dev\/" target="_blank" rel="noopener noreferrer">https:\/\/finkore.dev\/<\/a>\.<\/p>/)
   assert.doesNotMatch(doc.html, /<a\b[^>]*>\s*<a\b/)
-  const unsafe = renderLearnMarkdown('# Interview\n\n*<script>unsafe</script>*\n\nhttps://example.org/\"onclick=bad', 'legacy/README.md')
+  const unsafe = renderLearnMarkdown('# Interview\n\n*<script>unsafe</script>*\n\nhttps://example.org/\"onclick=bad', 'experts/legacy/README.md')
   assert.doesNotMatch(unsafe.html, /<script| onclick=/)
   assert.match(unsafe.html, /&lt;script&gt;/)
-  assert.throws(() => renderLearnMarkdown('# Interview\n\n*[Profile](javascript:alert)*', 'legacy/README.md'), /Unsupported/)
+  assert.throws(() => renderLearnMarkdown('# Interview\n\n*[Profile](javascript:alert)*', 'experts/legacy/README.md'), /Unsupported/)
 })
 
 test('publishes registered Legacy sources with return links and question navigation, excluding unregistered drafts and the invitation', t => {
   const root = fixture(t)
-  put(root, 'legacy/interviews/002-draft.md', '# Private draft\n\nUnapproved content.')
-  put(root, 'legacy/INTERVIEW-TEMPLATE.md', 'Invitation only; not a public reader.')
+  put(root, 'experts/legacy/interviews/002-draft.md', '# Private draft\n\nUnapproved content.')
+  put(root, 'experts/legacy/INTERVIEW-TEMPLATE.md', 'Invitation only; not a public reader.')
   buildLearnPages(root)
   const archive = readFileSync(join(root, 'learn/legacy.html'), 'utf8')
   const interview = readFileSync(join(root, 'learn/legacy-001-elaine-richardson.html'), 'utf8')
@@ -159,6 +159,58 @@ test('Research retains attributable findings, scope limits and a separate follow
   assert.throws(() => render(markdown.replace('https://ppublishing.org/media/uploads/journals/article/EJT-4-26_p82-90.pdf', 'javascript:alert')), /Unsupported Learn link/)
 })
 
+test('Reviews publishes registered reports with their complete canonical interview and comparison anchors', t => {
+  const root = fixture(t)
+  put(root, 'experts/reviews/reports/002-draft.md', '# Unregistered specialist draft\n\nPrivate response.')
+  buildLearnPages(root)
+  const archive = readFileSync(join(root, 'learn/reviews.html'), 'utf8')
+  const page = LEARN_PAGES.find(page => page.presentation === 'review-report')
+  const markdown = readFileSync(join(root, page.source), 'utf8')
+  const html = readFileSync(join(root, page.output), 'utf8')
+  const canonical = renderLearnMarkdown(markdown, page.source).html.replace(/<h1\b[^>]*>[\s\S]*?<\/h1>\n?/, '')
+  const story = html.match(/<article class="legacy-story review-story"[^>]*>([\s\S]*?)<\/article>/)[1]
+  assert.equal(story, canonical)
+  assert.match(archive, /href="review-001-vandeir-silva.html">Vandeir Silva/)
+  assert.match(html, /href="reviews.html#reports"/)
+  assert.match(html, /Mobile report navigation/)
+  assert.match(html, /translation[\s\S]*Portuguese/i)
+  for (let number = 1; number <= 22; number++) assert.ok(html.includes(`id="er-0001-q${String(number).padStart(2, '0')}"`))
+  for (let number = 1; number <= 12; number++) assert.ok(html.includes(`id="er-0001-f${String(number).padStart(2, '0')}"`))
+  for (const area of ['accounting', 'audit', 'approvals', 'legal', 'payments', 'tax', 'identity', 'risk']) assert.ok(archive.includes(`id="review-${area}-title"`))
+  assert.doesNotMatch(archive + html, /Unregistered specialist draft|Private response/)
+  const render = text => renderLearnPage(page, text, readLearnAssetVersion(root))
+  assert.throws(() => render(markdown.replace('**Specialist:** Vandeir Silva', '**Specialist:** Someone Else')), /name or quotation differs/)
+  assert.throws(() => render(markdown.replaceAll(page.review.quote, 'Changed interview excerpt.')), /name or quotation differs/)
+  assert.throws(() => render(markdown.replace('er-0001-q22', 'er-0001-q23')), /complete, sequential interview/)
+  const index = LEARN_PAGES.find(page => page.presentation === 'review-archive')
+  const source = readFileSync(join(root, index.source), 'utf8')
+  assert.throws(() => renderLearnPage(index, source.replace('001-vandeir-silva.md', '002-draft.md'), readLearnAssetVersion(root)), /registered reports/)
+})
+
+test('stable source anchors render safely and cannot duplicate an existing destination', () => {
+  const source = '# Report\n\n<a id="interview"></a>\n## Interview\n\n<a id="er-0001-q01"></a>\n### First question\n\nAnswer.'
+  const doc = renderLearnMarkdown(source, 'experts/reviews/reports/example.md')
+  assert.match(doc.html, /<span id="interview"><\/span>\n<h2 id="interview-1">/)
+  assert.match(doc.html, /<span id="er-0001-q01"><\/span>/)
+  assert.throws(() => renderLearnMarkdown(source + '\n\n<a id="interview"></a>', 'example.md'), /Duplicate Learn anchor/)
+  assert.throws(() => renderLearnMarkdown('# Report\n\n<a id="safe" onclick="bad"></a>', 'example.md'), /Unsupported Learn block/)
+})
+
+test('heading suffixes avoid explicit anchors and previously generated IDs', () => {
+  for (const [body, expected] of [
+    ['<a id="interview-1"></a>\n## Interview\n\n## Interview', ['report', 'interview-1', 'interview', 'interview-2']],
+    ['<a id="interview"></a>\n<a id="interview-1"></a>\n## Interview\n\n## Interview', ['report', 'interview', 'interview-1', 'interview-2', 'interview-3']],
+    ['## Topic\n\n## Topic\n\n## Topic-1\n\n## Topic', ['report', 'topic', 'topic-1', 'topic-1-1', 'topic-2']],
+  ]) {
+    const doc = renderLearnMarkdown(`# Report\n\n${body}`, 'example.md')
+    const ids = [...doc.html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1])
+    assert.deepEqual(ids, expected)
+    assert.equal(new Set(ids).size, ids.length)
+    for (const heading of doc.headings) assert.ok(ids.includes(heading.id))
+  }
+  assert.throws(() => renderLearnMarkdown('# Report\n\n## Topic\n\n## Topic\n\n<a id="topic-1"></a>', 'example.md'), /Duplicate Learn anchor: topic-1/)
+})
+
 test('Experts groups three independent collections and Reviews preserves the existing discussion destinations', t => {
   const root = fixture(t)
   buildLearnPages(root)
@@ -214,7 +266,7 @@ test('generates registered canonical documents deterministically and checks drif
     const source = readFileSync(join(root, page.source), 'utf8')
     const html = readFileSync(join(root, page.output), 'utf8')
     assert.equal(html, renderLearnPage(page, source, readLearnAssetVersion(root)))
-    if (page.presentation?.startsWith('legacy-') || page.presentation === 'research-archive') {
+    if (page.presentation?.startsWith('legacy-') || page.presentation?.startsWith('review-') || page.presentation === 'research-archive') {
       assert.match(html, /class="legacy-page /)
       assert.match(html, /href="css\/legacy.css\?v=/)
       assert.doesNotMatch(html, /href="css\/(?:coredoc|documents).css/)

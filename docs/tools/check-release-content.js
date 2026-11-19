@@ -198,10 +198,10 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
   const snapshots = new Map()
   // Optional research memory is not required by the financial contract. When
   // present, inspect its registered snapshots instead of exempting opaque data.
-  const statePath = join(root, 'research/catalog/state.json')
+  const statePath = join(root, 'experts/research/catalog/state.json')
   if (existsSync(statePath)) {
     try {
-      if (realpathSync(statePath) !== join(realpathSync(root), 'research/catalog/state.json')) throw new Error('snapshot registry must not traverse a symlink')
+      if (realpathSync(statePath) !== join(realpathSync(root), 'experts/research/catalog/state.json')) throw new Error('snapshot registry must not traverse a symlink')
       const state = JSON.parse(readFileSync(statePath, 'utf8'))
       if (!['1.0.0', '1.1.0'].includes(state.schema_version)) throw new Error('unsupported catalog format')
       const collect = value => {
@@ -210,14 +210,14 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
           if (value.snapshot !== `catalog/snapshots/${value.sha256}.gz` || !/^[a-f0-9]{64}$/.test(value.sha256) ||
               !Number.isSafeInteger(value.size_bytes) || value.size_bytes < 1 || value.size_bytes > 64 * 1024 * 1024 ||
               typeof value.path !== 'string' || !/\.(?:md|json)$/.test(value.path)) throw new Error('invalid snapshot reference')
-          const path = 'research/' + value.snapshot
+          const path = 'experts/research/' + value.snapshot
           if (snapshots.has(path) && snapshots.get(path).size_bytes !== value.size_bytes) throw new Error('conflicting snapshot references')
           snapshots.set(path, value)
         }
         for (const child of Object.values(value)) collect(child)
       }
       collect(state)
-    } catch (error) { errors.push(`research/catalog/state.json: cannot inspect snapshot registry: ${error.message}`) }
+    } catch (error) { errors.push(`experts/research/catalog/state.json: cannot inspect snapshot registry: ${error.message}`) }
   }
   let htmlLinkCount = 0
   function walk(directory) {
