@@ -8,7 +8,7 @@ It makes no network calls and does not define or execute financial behavior.
 
 Use Python 3.10+ and the repository's supported Node toolchain with locked
 dependencies installed. The CLI uses the installed Ajv to validate the local
-schema. The shared research contract reader supplies current CoreDoc clauses
+schema. The shared Experts contract reader supplies current CoreDoc clauses
 and their fingerprints; academic catalogs are not required.
 
 Run from the repository root:
@@ -112,3 +112,7 @@ selection, exclusion of question and analyst text, source and clause changes,
 complete numbering, explicit translations, duplicate and unsafe references,
 read-only checks, withheld excerpts and interrupted output. They do not execute
 financial cases.
+
+The [global Experts index](../../traceability.md#by-rule) exports these comparisons
+in the common model while preserving embedded-answer and translation checks.
+See [shared commands](../../tools/README.md) for cross-collection builds and lookups.

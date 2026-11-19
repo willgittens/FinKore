@@ -214,6 +214,24 @@ publish or certify consumer implementations.
 Repository settings and the single-maintainer merge policy are documented in
 [Contributing](../../CONTRIBUTING.md#manual-github-configuration).
 
+## Optional unified Experts traceability
+
+The [global Experts index](../../experts/traceability.md#by-rule) combines
+Research, Legacy, Reviews and Code Evidence using one generated comparison model.
+Local curation and specialist source checks remain in their collections; the
+[shared tools](../../experts/tools/README.md) own contract reading, fingerprints,
+file handling and aggregation. Run `npm run experts:build`,
+`npm run experts:check` or `npm run experts:test` separately from normative
+verification. These commands maintain evidence artifacts and do not execute
+financial behavior.
+
+The common view preserves pending and negative assessments, evidence roles,
+source identities, scope limits and distinct publication authorization. Missing
+or invalid collections are explicit, and check mode fails for an incomplete
+index. The global files are generated, not a second manual curation.
+Code Evidence's existing comparisons now have local curation; the current
+Learn publication snapshot and its editorial selection remain unchanged.
+
 ## Ongoing expert review
 
 The [Expert Reviews collection](../../experts/reviews/README.md) records specialist

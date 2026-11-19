@@ -45,6 +45,17 @@ function codeFixture(t) {
   return { ...f, clause, body, path, href }
 }
 
+test('explicit evidence data receives the same validation without a publication index', t => {
+  const { root, data } = codeFixture(t)
+  rmSync(join(root, 'learn/related-evidence.json'))
+  assert.equal(loadLearnEvidence(root).sources.size, 0)
+  const index = loadLearnEvidence(root, data)
+  assert.equal(index.sources.get('CE-FINDING-0001').current, true)
+  data.sources[1].commit_sha = 'main'
+  assert.throws(() => loadLearnEvidence(root, data), /Invalid Code Evidence/)
+  assert.throws(() => loadLearnEvidence(root, null), /Unsupported Learn evidence format/)
+})
+
 test('code cards expose pinned attribution and keep different policies separate from matches', t => {
   const { root, data, save, clause, href } = codeFixture(t)
   for (const [kind, label] of [['same_approach', 'Same approach in the inspected path'], ['partial_match', 'Partial match with stated limits'], ['different_policy', 'Different policy'], ['related_control', 'Related control or open question']]) {

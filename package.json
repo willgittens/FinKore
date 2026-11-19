@@ -27,6 +27,9 @@
     "check": "npm run node:check && npm run architecture:check && npm run conformance:check && npm run agentic:check && npm run tools:test && npm run docs:check && npm run license:check && git diff --check",
     "verify": "npm run check",
     "learn:build": "node docs/tools/build-learn-assets.js && node docs/tools/build-learn-coredoc.js && node docs/tools/build-learn-pages.js",
-    "learn:check": "node docs/tools/build-learn-coredoc.js --check && node docs/tools/build-learn-pages.js --check"
+    "learn:check": "node docs/tools/build-learn-coredoc.js --check && node docs/tools/build-learn-pages.js --check",
+    "experts:build": "python3 experts/tools/build_expert_traceability.py",
+    "experts:check": "python3 experts/tools/build_expert_traceability.py --check",
+    "experts:test": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s experts/tools/tests -v"
   }
 }

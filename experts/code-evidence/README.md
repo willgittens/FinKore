@@ -53,6 +53,14 @@ and behavior are unchanged.
 
 ## Comparisons beside CoreDoc rules
 
+The local [traceability index](traceability.md) and its
+[editable curation](traceability.json) preserve the explicit comparisons used by
+the [global Experts index](../traceability.md#by-rule). The initial curation
+retains the existing published records without changing their reviewed source
+or clause fingerprints. Use the [shared Experts commands](../tools/README.md)
+to rebuild or check it. Discovering or reading another repository does not
+create a comparison automatically.
+
 The optional [Learn evidence index](../../learn/related-evidence.json) publishes 20
 explicit comparisons from 14 findings beside seven current CoreDoc rules.
 “Who does it this way?” cards show project, selected version, GitHub owner,

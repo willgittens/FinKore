@@ -6,35 +6,21 @@
 import argparse
 import json
 import re
-import subprocess
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO / "experts/research/tools"))
-from build_traceability import read_contract, sha, slug, target_link
-from consolidate_research import atomic_write, encoded, inside
+sys.path.insert(0, str(REPO / "experts/tools"))
+from expert_common import (atomic_write, encoded, inside, read_contract, sha, slug,
+                           target_link, validate_schema as validate_local_schema)
 
 VERSION = "1.0.0"
 SCHEMA = Path(__file__).resolve().parents[1] / "schemas/traceability.schema.json"
 
 
 def validate_schema(document):
-    """Reuse the repository's installed Ajv; never fetch a schema or dependency."""
-    script = """
-import Ajv from 'ajv/dist/2020.js';
-import { readFileSync } from 'node:fs';
-const validate = new Ajv({allErrors:true}).compile(JSON.parse(readFileSync(process.argv[1], 'utf8')));
-if (!validate(JSON.parse(readFileSync(0, 'utf8')))) {
-  console.error(JSON.stringify(validate.errors)); process.exit(1);
-}
-"""
-    result = subprocess.run(["node", "--input-type=module", "-e", script, str(SCHEMA)],
-                            input=encoded(document), stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=REPO)
-    if result.returncode:
-        raise ValueError("Legacy schema validation failed (install repository dependencies with npm ci --no-audit): "
-                         + result.stderr.decode("utf-8", errors="replace"))
+    validate_local_schema(document, SCHEMA, REPO, "Legacy")
 
 
 def sections(text):

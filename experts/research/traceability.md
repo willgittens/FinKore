@@ -2,7 +2,7 @@
 
 This is a non-normative research index. Source statements, reviewer inferences, contract scope, and editorial readiness remain separate. No rule is accepted or changed here. Academic sources were not reopened by this indexing stage.
 
-Baseline: FinKore Core 2.0.4; repository revision `beabbf9d7fc16878d4d1dff212e153bb30704494`. 38 considerations; 61 explicitly linked targets; 23 eligible for editorial review. Status counts: not_recommended: 1, pending_evidence: 14, reviewed: 23.
+Baseline: FinKore Core 2.0.4; repository revision `ba16f0d726bdf46adac8b58a5641d9872f7fd8ef`. 38 considerations; 61 explicitly linked targets; 23 eligible for editorial review. Status counts: not_recommended: 1, pending_evidence: 14, reviewed: 23.
 
 All original findings remain `pending_validation`. A reviewed mapping is a bounded comparison with current text, not specialist sign-off or evidence that FinKore historically adopted a paper's argument. `learn_eligible` permits editorial consideration only.
 

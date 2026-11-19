@@ -55,7 +55,7 @@ approve the analyst's comparisons, future Learn text, or normative behavior.
 automatically. A contextual or limiting binding is not an assertion that FinKore
 already covers the operational problem.
 
-The builder reuses the [research contract reader](../../research/tools/build_traceability.py).
+The builder reuses the [shared Experts contract reader](../../tools/expert_common.py).
 Requirements and their MUST/SHOULD/MAY distinctions come from CoreDoc and Specs;
 vectors come only from `conformance/manifest.json`; coverage classifications and
 limits come from the published traceability table; canonical operations come
@@ -104,3 +104,8 @@ Do not run concurrent builds or edit the curation during a build.
 This workflow leaves interviews, the Legacy archive page, Learn pages, CoreDoc,
 Specs, Conformance and Agentic unchanged. No normative document or publication
 gate depends on these optional indexes.
+
+The [global Experts index](../../traceability.md#by-rule) combines these explicit
+comparisons with Research, Reviews and Code Evidence. Its
+[shared build/check commands](../../tools/README.md) preserve this collection's
+source validation, consent checks and local curation.

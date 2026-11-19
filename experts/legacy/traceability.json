@@ -1065,7 +1065,7 @@
           "state_mutation": "yes"
         }
       },
-      "repository_revision": "beabbf9d7fc16878d4d1dff212e153bb30704494",
+      "repository_revision": "ba16f0d726bdf46adac8b58a5641d9872f7fd8ef",
       "targets": {
         "AUDIT-APPEND-003": {
           "agentic_operation_ids": [
@@ -3686,7 +3686,7 @@
     "inputs": {
       "experts/legacy/interviews/001-elaine-richardson.md": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46",
       "experts/legacy/interviews/002-otilia-borges.md": "bcc27cced4b94883d64514784a9bec37fc3163c3ce0af23f2b144a7010dee192",
-      "experts/research/traceability.json": "f9e4d759bfd42404425af521f756514e4b832e3b87cee569ad84c845782dec07"
+      "experts/research/traceability.json": "5c6f1b41aeff2cac3fdff151d4ee1f19c9f63b9960923e77fe1fc1949d6e7089"
     },
     "interviews": [
       {

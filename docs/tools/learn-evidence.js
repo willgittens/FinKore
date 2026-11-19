@@ -80,12 +80,14 @@ function contained(root, path) {
   return resolve(root, path)
 }
 
-export function loadLearnEvidence(root) {
+export function loadLearnEvidence(root, suppliedData) {
   const path = resolve(root, 'learn/related-evidence.json')
   const index = { sources: new Map(), byTarget: new Map() }
-  if (!existsSync(path)) return index // Contract readers also work without research.
-  const data = JSON.parse(readFileSync(contained(root, 'learn/related-evidence.json'), 'utf8'))
-  if (!['1.0.0', '1.1.0'].includes(data.schema_version) || !Array.isArray(data.sources) || !Array.isArray(data.bindings)) throw new Error('Unsupported Learn evidence format')
+  if (suppliedData === undefined && !existsSync(path)) return index // Contract readers also work without research.
+  const data = suppliedData === undefined
+    ? JSON.parse(readFileSync(contained(root, 'learn/related-evidence.json'), 'utf8'))
+    : suppliedData
+  if (!data || !['1.0.0', '1.1.0'].includes(data.schema_version) || !Array.isArray(data.sources) || !Array.isArray(data.bindings)) throw new Error('Unsupported Learn evidence format')
   for (const source of data.sources) {
     if (index.sources.has(source.id) || !['research', 'legacy', 'code'].includes(source.kind) ||
         !text(source.title) || !text(source.limits) || source.status !== 'pending_validation' ||

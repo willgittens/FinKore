@@ -8,15 +8,17 @@ import copy
 import gzip
 import hashlib
 import json
-import os
 import re
-import tempfile
+import sys
 import uuid
 from collections import defaultdict
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import unquote
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools"))
+from expert_common import atomic_write, encoded, inside
 
 VERSION = "1.1.0"
 MANIFEST_VERSION = "1.0.0"
@@ -31,10 +33,6 @@ FIELDS = ("title", "abstract", "doi", "publication_year", "publication_date", "a
 
 def digest(data):
     return hashlib.sha256(data).hexdigest()
-
-
-def encoded(value):
-    return (json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode("utf-8")
 
 
 def token(value):
@@ -78,29 +76,6 @@ def identifiers(publication):
     if len(dois) > 1:
         return {primary}, sorted(values)  # Do not spread inconsistent identity assertions.
     return values, []
-
-
-def inside(root, path):
-    resolved = path.resolve()
-    if not resolved.is_relative_to(root.resolve()):
-        raise ValueError(f"Path escapes research directory: {path}")
-    return resolved
-
-
-def atomic_write(path, data):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    if path.exists() and path.read_bytes() == data:
-        return
-    fd, name = tempfile.mkstemp(prefix=".tmp-", dir=path.parent)
-    try:
-        with os.fdopen(fd, "wb") as stream:
-            stream.write(data)
-            stream.flush()
-            os.fsync(stream.fileno())
-        os.replace(name, path)
-    finally:
-        if os.path.exists(name):
-            os.unlink(name)
 
 
 @contextmanager

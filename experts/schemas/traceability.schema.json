@@ -1,0 +1,424 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finkore:experts:traceability:1.0.0",
+  "title": "Generated non-normative cross-collection evidence index",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "core_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "current",
+        "incomplete"
+      ]
+    },
+    "collections": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "research": {
+          "$ref": "#/$defs/collection"
+        },
+        "legacy": {
+          "$ref": "#/$defs/collection"
+        },
+        "reviews": {
+          "$ref": "#/$defs/collection"
+        },
+        "code-evidence": {
+          "$ref": "#/$defs/collection"
+        }
+      },
+      "required": [
+        "research",
+        "legacy",
+        "reviews",
+        "code-evidence"
+      ]
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/record"
+      },
+      "minItems": 0
+    },
+    "targets": {
+      "type": "object"
+    },
+    "by_target": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1
+      }
+    },
+    "by_collection": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1
+      }
+    },
+    "by_source": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1
+      }
+    },
+    "counts": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "core_version",
+    "status",
+    "collections",
+    "inputs",
+    "records",
+    "targets",
+    "by_target",
+    "by_collection",
+    "by_source",
+    "counts"
+  ],
+  "$defs": {
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "anchor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "path",
+        "anchor",
+        "label"
+      ]
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "target_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reviewed_clause_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "current_clause_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "relationship": {
+          "enum": [
+            "already_addressed",
+            "possible_gap",
+            "possible_conflict",
+            "application_policy",
+            "deferred_scope",
+            "outside_scope",
+            "unverified"
+          ]
+        },
+        "evidence_role": {
+          "enum": [
+            "supports_rationale",
+            "illustrates_risk",
+            "limits_claim",
+            "counterpoint",
+            "context_only"
+          ]
+        },
+        "explanation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "limits": {
+          "type": "string",
+          "minLength": 1
+        },
+        "implementation_relationship": {
+          "enum": [
+            "same_approach",
+            "partial_match",
+            "different_policy",
+            "related_control"
+          ]
+        }
+      },
+      "required": [
+        "target_id",
+        "target_path",
+        "reviewed_clause_sha256",
+        "current_clause_sha256",
+        "relationship",
+        "evidence_role",
+        "explanation",
+        "limits"
+      ]
+    },
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "collection": {
+          "enum": [
+            "research",
+            "legacy",
+            "reviews",
+            "code-evidence"
+          ]
+        },
+        "claim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "local_index": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "anchor": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "path",
+            "anchor"
+          ]
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "enum": [
+                "academic_review",
+                "practitioner_interview",
+                "specialist_consultation",
+                "pinned_code_analysis"
+              ]
+            },
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "groups": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1
+            },
+            "references": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/location"
+              },
+              "minItems": 0
+            },
+            "reviewed_fingerprints": {
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "observed_fingerprints": {
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "details": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "kind",
+            "id",
+            "groups",
+            "references",
+            "reviewed_fingerprints",
+            "observed_fingerprints",
+            "details"
+          ]
+        },
+        "assessment": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "curation": {
+              "enum": [
+                "reviewed",
+                "pending_evidence",
+                "not_recommended",
+                "pending_curation"
+              ]
+            },
+            "freshness": {
+              "enum": [
+                "current",
+                "needs_recheck"
+              ]
+            },
+            "independent_validation": {
+              "const": "pending_validation"
+            },
+            "publication_authorization": {
+              "enum": [
+                "authorized",
+                "not_recorded"
+              ]
+            },
+            "editorial_eligible": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "recheck_reasons": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 0
+            }
+          },
+          "required": [
+            "curation",
+            "freshness",
+            "independent_validation",
+            "publication_authorization",
+            "editorial_eligible",
+            "recheck_reasons"
+          ]
+        },
+        "bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/binding"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "key",
+        "id",
+        "collection",
+        "claim",
+        "local_index",
+        "source",
+        "assessment",
+        "bindings"
+      ]
+    },
+    "collection": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "index": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "current",
+            "stale",
+            "unavailable",
+            "invalid",
+            "needs_recheck"
+          ]
+        },
+        "format_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "index",
+        "status",
+        "format_version",
+        "errors"
+      ]
+    }
+  }
+}

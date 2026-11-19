@@ -85,3 +85,11 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s experts/research/tools
 
 Os testes usam dados sintéticos e diretórios temporários, sem chamadas de rede
 ou execução de comportamento financeiro.
+
+## Índice unificado de Experts
+
+O [índice global](../../traceability.md#by-rule) reúne comparações de todas as
+coleções sem substituir a curadoria da pesquisa. O leitor do contrato e as
+funções de arquivos e fingerprints ficam em [experts/tools](../../tools/README.md).
+Os comandos globais reutilizam a validação do catálogo, preservam avaliações
+pendentes e negativas e não importam nem aprovam novas observações.

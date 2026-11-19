@@ -86,6 +86,12 @@ Non-normative expert evidence is grouped under `experts/code-evidence`,
 collection's local instructions, source records, stable identifiers, and review limitations.
 Moving or publishing evidence does not accept a financial requirement.
 
+The global `experts/traceability.json` and Markdown view are generated from
+collection-local curation. Shared evidence tools live in `experts/tools`;
+source-specific validators remain in force. Preserve curation, freshness,
+independent validation and publication authorization as separate states.
+Do not hand-edit the global index or make normative verification depend on it.
+
 ### `/docs/tools`
 
 Repository-maintenance tools validate published artifacts, traceability,
