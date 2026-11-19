@@ -216,6 +216,18 @@ Repository settings and the single-maintainer merge policy are documented in
 
 ## Ongoing expert review
 
+The [Expert Reviews collection](../../experts/reviews/README.md) records specialist
+reports explaining how operational experience corroborates CoreDoc rationale.
+Its [traceability index](../../experts/reviews/traceability.md) maps reports to
+exact CoreDoc rules and rules back to the source passages, preserving evidence
+roles, limits and reviewed fingerprints. The optional
+[Reviews tool](../../experts/reviews/tools/README.md) detects changed reports,
+embedded interviews, excerpts and clauses without approving them automatically.
+Reports include complete questions and answers, with translations identified
+explicitly. A participant's operational testimony does not establish that they
+reviewed or approved specification clauses. Source registration and analysis
+remain distinct from participant validation and editorial publication on Learn.
+
 The public [Expert Review discussions](https://github.com/willgittens/FinKore/discussions)
 collect specialist feedback on current obligations and possible future domains.
 Unanswered questions do not create a global release gate. Maintainers may accept

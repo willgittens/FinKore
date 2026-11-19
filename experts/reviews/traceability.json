@@ -1,0 +1,906 @@
+{
+  "curation": {
+    "description": "Analyst comparisons between operational experience and the purpose of existing CoreDoc rules. Source answers are embedded in each report; translation is identified explicitly. Contextual corroboration remains pending_validation and does not imply specialist normative approval.",
+    "mappings": [
+      {
+        "bindings": [
+          {
+            "evidence_role": "supports_rationale",
+            "explanation": "Distinguishing local completion from the customer-facing effect supports declaring the meaning and conditions of a state.",
+            "limits": "The account does not define FinKore transitions or universal payment-finality criteria. Settlement remains outside the Core scope.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "32a272932fa9304df826b445920827e03c1bb833350956fdf533ce8a56319696",
+            "target_id": "CORE-002.1"
+          }
+        ],
+        "claim": "Completion has meaning within a declared scope",
+        "evidence": [
+          {
+            "question": 10,
+            "quote": "The customer's actual resolution, whether in a current account, credit card, remittance to another institution or remittance to the Federal Revenue Service, was the responsibility of other partner departments."
+          }
+        ],
+        "id": "ER-0001-F01",
+        "report_anchor": "er-0001-f01",
+        "report_id": "ER-0001",
+        "reviewed_on": "2026-11-19"
+      },
+      {
+        "bindings": [
+          {
+            "evidence_role": "illustrates_risk",
+            "explanation": "Initial confirmation without remittance illustrates the risk of recognizing a result before evaluating eligibility against the relevant facts.",
+            "limits": "The amount and channel policy belongs to the product. The technical cause and prior existence of the rule were not verified by inspecting the system.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+            "target_id": "CORE-002.2"
+          }
+        ],
+        "claim": "Relevant conditions must be checked before a result becomes observable",
+        "evidence": [
+          {
+            "question": 4,
+            "quote": "The amount was not remitted because of a system failure: the system had not been configured to accept a standalone payment document for such a large amount."
+          }
+        ],
+        "id": "ER-0001-F02",
+        "report_anchor": "er-0001-f02",
+        "report_id": "ER-0001",
+        "reviewed_on": "2026-11-19"
+      },
+      {
+        "bindings": [
+          {
+            "evidence_role": "illustrates_risk",
+            "explanation": "Investigating differences after failures illustrates the cost of partial effects and the reason a domain rejection must preserve its specified state.",
+            "limits": "No FinKore rejection or violation was established. The rule does not guarantee distributed atomicity or generic handling of communication failures.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "20b537b4b61f75741bc518b9819bb8bd37e300ca2b7058ecd682a83e66028c67",
+            "target_id": "CORE-002.3"
+          }
+        ],
+        "claim": "Later recovery does not replace preservation on rejection",
+        "evidence": [
+          {
+            "question": 9,
+            "quote": "When an attempt to resolve an issue failed, the accounting balances and account ledger obtained the next day made it possible to identify balances from earlier movements."
+          }
+        ],
+        "id": "ER-0001-F03",
+        "report_anchor": "er-0001-f03",
+        "report_id": "ER-0001",
+        "reviewed_on": "2026-11-19"
+      },
+      {
+        "bindings": [
+          {
+            "evidence_role": "supports_rationale",
+            "explanation": "Reconstructing attempts and remittances supports the practical value of stable subjects to which evidence can be associated.",
+            "limits": "The bank identifier model was not examined. Entity and Audit Event identities do not establish economic deduplication or an idempotency protocol.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "18b9bf8b6f29a2f34bed7dd2330510aeff73ac12995e3ea5d8e1e65242a4b957",
+            "target_id": "CORE-005.1"
+          }
+        ],
+        "claim": "Identity connects evidence and distinguishes operations",
+        "evidence": [
+          {
+            "question": 12,
+            "quote": "In those cases, we checked the teller journal, the document's numeric payment code and the remittance system to establish how many times the amount had been remitted."
+          }
+        ],
+        "id": "ER-0001-F04",
+        "report_anchor": "er-0001-f04",
+        "report_id": "ER-0001",
+        "reviewed_on": "2026-11-19"
+      },
+      {
+        "bindings": [
+          {
+            "evidence_role": "supports_rationale",
+            "explanation": "Resolution through another movement, together with the distinctions in answer 13, supports preserving the origin and making the later action explicit.",
+            "limits": "Institutional terms do not automatically map to Correction, Reversal, Void or Supersession. The Core does not define concrete accounting postings.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "b9acdb2fec7191d7c12a7192a212c3d234ccfbbea47769a5f73d20dae4df82d3",
+            "target_id": "CORE-003.3"
+          }
+        ],
+        "claim": "Distinct evolution needs declared meaning and a link to the earlier fact",
+        "evidence": [
+          {
+            "question": 16,
+            "quote": "However, when an inconsistency or failure was identified, an accounting reversal entry was made: an inverse adjustment respecting the accounting accounts and cost centers involved."
+          }
+        ],
+        "id": "ER-0001-F05",
+        "report_anchor": "er-0001-f05",
+        "report_id": "ER-0001",
+        "reviewed_on": "2026-11-19"
+      },
+      {
+        "bindings": [
+          {
+            "evidence_role": "supports_rationale",
+            "explanation": "Using a description to relate the outstanding item to its resolution supports the practical need for a verifiable link to the original.",
+            "limits": "The answer does not establish additional identifiers or a portable immutable relationship. Free text evidences the need; it does not demonstrate that every requirement was implemented.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "b9acdb2fec7191d7c12a7192a212c3d234ccfbbea47769a5f73d20dae4df82d3",
+            "target_id": "CORE-003.3"
+          }
+        ],
+        "claim": "An adjustment needs to remain linked to its original",
+        "evidence": [
+          {
+            "question": 14,
+            "quote": "What identified and linked the cases was the description of the adjustment entry."
+          }
+        ],
+        "id": "ER-0001-F06",
+        "report_anchor": "er-0001-f06",
+        "report_id": "ER-0001",
+        "reviewed_on": "2026-11-19"
+      },
+      {
+        "bindings": [
+          {
+            "evidence_role": "supports_rationale",
+            "explanation": "The batch presented to management illustrates a decision about an identified subject and financial content, distinct from technical access to a system.",
+            "limits": "Eligibility policy and the subject model were not examined. The account does not determine per-item approval, quorum or a universal chain.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "670f59e0882a2b9bab0709abfd48b45ea7a32480e13762c16d36ce53a35d797a",
+            "target_id": "CORE-004.1"
+          },
+          {
+            "evidence_role": "supports_rationale",
+            "explanation": "The accounts, amounts and descriptions presented for approval support associating a decision with what was actually decided.",
+            "limits": "Answer 16 concerns entries already processed and does not document changes between approval and execution. It does not demonstrate revalidation after facts change or immutable preservation of the complete decision.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "4ee8d0bdbc31496c3c51ac20cdd63015dd24da36c6d4b52fb54aff71711fa1f4",
+            "target_id": "CORE-004.3"
+          }
+        ],
+        "claim": "Approval has an identifiable subject and financial content",
+        "evidence": [
+          {
+            "question": 15,
+            "quote": "I prepared a single file containing all the accounting adjustments, identifying the accounts involved, cost centers, amounts and descriptions."
+          }
+        ],
+        "id": "ER-0001-F07",
+        "report_anchor": "er-0001-f07",
+        "report_id": "ER-0001",
+        "reviewed_on": "2026-11-19"
+      },
+      {
+        "bindings": [
+          {
+            "evidence_role": "supports_rationale",
+            "explanation": "Recording responsible people, times and adjustment information supports attributing and reconstructing financial events.",
+            "limits": "The answer does not demonstrate every portable field, stable identities or immutable history. Automated execution must not be attributed by inference to the human approver.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "c83537a4e1a56972adeee898744b596e1f599926848d331ca64403e0aed54bb8",
+            "target_id": "CORE-003.1"
+          }
+        ],
+        "claim": "Attribution supports reconstruction of requests and authorizations",
+        "evidence": [
+          {
+            "question": 17,
+            "quote": "who requested it and when, as well as who authorized it and when."
+          }
+        ],
+        "id": "ER-0001-F09",
+        "report_anchor": "er-0001-f09",
+        "report_id": "ER-0001",
+        "reviewed_on": "2026-11-19"
+      },
+      {
+        "bindings": [
+          {
+            "evidence_role": "supports_rationale",
+            "explanation": "Consulting external evidence to explain the discrepancy supports identifying facts relevant to an outcome rather than inferring them from authorization or a local balance.",
+            "limits": "The account does not demonstrate determinism of a FinKore evaluation. A consistent evaluation does not certify the material truth of external information or establish exception policy.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+            "target_id": "CORE-005.3"
+          }
+        ],
+        "claim": "Evaluations need to identify relevant external facts",
+        "evidence": [
+          {
+            "question": 19,
+            "quote": "The cash transport company sent us the cash transport document, or GTV. After that, the branch employee recorded the outflow of funds, resolving the outstanding item."
+          }
+        ],
+        "id": "ER-0001-F11",
+        "report_anchor": "er-0001-f11",
+        "report_id": "ER-0001",
+        "reviewed_on": "2026-11-19"
+      }
+    ],
+    "reports": [
+      {
+        "id": "ER-0001",
+        "interview_anchor": "interview",
+        "interview_language": "en",
+        "original_language": "pt",
+        "path": "experts/reviews/reports/001-vandeir-silva.md",
+        "publication_status": "not_recorded",
+        "question_count": 22,
+        "reviewed_interview_sha256": "cb458f5e1d008b19c94ae4a157b6d525b7f61294a70608fa71eb0f09f50351f3",
+        "reviewed_report_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+        "scope": "Banking operations, temporary and bridge accounts, investigation of outstanding items and preparation of accounting adjustments",
+        "specialist": "Vandeir Silva",
+        "translation_status": "editorial_translation"
+      }
+    ]
+  },
+  "resolved": {
+    "by_report": {
+      "ER-0001": [
+        "ER-0001-F01",
+        "ER-0001-F02",
+        "ER-0001-F03",
+        "ER-0001-F04",
+        "ER-0001-F05",
+        "ER-0001-F06",
+        "ER-0001-F07",
+        "ER-0001-F09",
+        "ER-0001-F11"
+      ]
+    },
+    "by_target": {
+      "CORE-002.1": [
+        "ER-0001-F01"
+      ],
+      "CORE-002.2": [
+        "ER-0001-F02"
+      ],
+      "CORE-002.3": [
+        "ER-0001-F03"
+      ],
+      "CORE-003.1": [
+        "ER-0001-F09"
+      ],
+      "CORE-003.3": [
+        "ER-0001-F05",
+        "ER-0001-F06"
+      ],
+      "CORE-004.1": [
+        "ER-0001-F07"
+      ],
+      "CORE-004.3": [
+        "ER-0001-F07"
+      ],
+      "CORE-005.1": [
+        "ER-0001-F04"
+      ],
+      "CORE-005.3": [
+        "ER-0001-F11"
+      ]
+    },
+    "core_version": "FinKore Core 2.0.4",
+    "counts": {
+      "bindings": 10,
+      "comparisons": 9,
+      "coredoc_rules": 9,
+      "reports": 1,
+      "statuses": {
+        "reviewed": 9
+      }
+    },
+    "inputs": {
+      "experts/reviews/reports/001-vandeir-silva.md": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c"
+    },
+    "records": [
+      {
+        "bindings": [
+          {
+            "current_clause_sha256": "32a272932fa9304df826b445920827e03c1bb833350956fdf533ce8a56319696",
+            "evidence_role": "supports_rationale",
+            "explanation": "Distinguishing local completion from the customer-facing effect supports declaring the meaning and conditions of a state.",
+            "limits": "The account does not define FinKore transitions or universal payment-finality criteria. Settlement remains outside the Core scope.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "32a272932fa9304df826b445920827e03c1bb833350956fdf533ce8a56319696",
+            "target_id": "CORE-002.1",
+            "target_path": "docs/coreDoc/core-doc.md"
+          }
+        ],
+        "claim": "Completion has meaning within a declared scope",
+        "evidence": [
+          {
+            "question": 10,
+            "quote": "The customer's actual resolution, whether in a current account, credit card, remittance to another institution or remittance to the Federal Revenue Service, was the responsibility of other partner departments."
+          }
+        ],
+        "id": "ER-0001-F01",
+        "independent_validation": "pending_validation",
+        "interview_anchor": "interview",
+        "publication_status": "not_recorded",
+        "quotes_verified": true,
+        "recheck_reasons": [],
+        "report_anchor": "er-0001-f01",
+        "report_id": "ER-0001",
+        "report_path": "experts/reviews/reports/001-vandeir-silva.md",
+        "report_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+        "reviewed_on": "2026-11-19",
+        "status": "reviewed",
+        "translation_status": "editorial_translation"
+      },
+      {
+        "bindings": [
+          {
+            "current_clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+            "evidence_role": "illustrates_risk",
+            "explanation": "Initial confirmation without remittance illustrates the risk of recognizing a result before evaluating eligibility against the relevant facts.",
+            "limits": "The amount and channel policy belongs to the product. The technical cause and prior existence of the rule were not verified by inspecting the system.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+            "target_id": "CORE-002.2",
+            "target_path": "docs/coreDoc/core-doc.md"
+          }
+        ],
+        "claim": "Relevant conditions must be checked before a result becomes observable",
+        "evidence": [
+          {
+            "question": 4,
+            "quote": "The amount was not remitted because of a system failure: the system had not been configured to accept a standalone payment document for such a large amount."
+          }
+        ],
+        "id": "ER-0001-F02",
+        "independent_validation": "pending_validation",
+        "interview_anchor": "interview",
+        "publication_status": "not_recorded",
+        "quotes_verified": true,
+        "recheck_reasons": [],
+        "report_anchor": "er-0001-f02",
+        "report_id": "ER-0001",
+        "report_path": "experts/reviews/reports/001-vandeir-silva.md",
+        "report_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+        "reviewed_on": "2026-11-19",
+        "status": "reviewed",
+        "translation_status": "editorial_translation"
+      },
+      {
+        "bindings": [
+          {
+            "current_clause_sha256": "20b537b4b61f75741bc518b9819bb8bd37e300ca2b7058ecd682a83e66028c67",
+            "evidence_role": "illustrates_risk",
+            "explanation": "Investigating differences after failures illustrates the cost of partial effects and the reason a domain rejection must preserve its specified state.",
+            "limits": "No FinKore rejection or violation was established. The rule does not guarantee distributed atomicity or generic handling of communication failures.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "20b537b4b61f75741bc518b9819bb8bd37e300ca2b7058ecd682a83e66028c67",
+            "target_id": "CORE-002.3",
+            "target_path": "docs/coreDoc/core-doc.md"
+          }
+        ],
+        "claim": "Later recovery does not replace preservation on rejection",
+        "evidence": [
+          {
+            "question": 9,
+            "quote": "When an attempt to resolve an issue failed, the accounting balances and account ledger obtained the next day made it possible to identify balances from earlier movements."
+          }
+        ],
+        "id": "ER-0001-F03",
+        "independent_validation": "pending_validation",
+        "interview_anchor": "interview",
+        "publication_status": "not_recorded",
+        "quotes_verified": true,
+        "recheck_reasons": [],
+        "report_anchor": "er-0001-f03",
+        "report_id": "ER-0001",
+        "report_path": "experts/reviews/reports/001-vandeir-silva.md",
+        "report_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+        "reviewed_on": "2026-11-19",
+        "status": "reviewed",
+        "translation_status": "editorial_translation"
+      },
+      {
+        "bindings": [
+          {
+            "current_clause_sha256": "18b9bf8b6f29a2f34bed7dd2330510aeff73ac12995e3ea5d8e1e65242a4b957",
+            "evidence_role": "supports_rationale",
+            "explanation": "Reconstructing attempts and remittances supports the practical value of stable subjects to which evidence can be associated.",
+            "limits": "The bank identifier model was not examined. Entity and Audit Event identities do not establish economic deduplication or an idempotency protocol.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "18b9bf8b6f29a2f34bed7dd2330510aeff73ac12995e3ea5d8e1e65242a4b957",
+            "target_id": "CORE-005.1",
+            "target_path": "docs/coreDoc/core-doc.md"
+          }
+        ],
+        "claim": "Identity connects evidence and distinguishes operations",
+        "evidence": [
+          {
+            "question": 12,
+            "quote": "In those cases, we checked the teller journal, the document's numeric payment code and the remittance system to establish how many times the amount had been remitted."
+          }
+        ],
+        "id": "ER-0001-F04",
+        "independent_validation": "pending_validation",
+        "interview_anchor": "interview",
+        "publication_status": "not_recorded",
+        "quotes_verified": true,
+        "recheck_reasons": [],
+        "report_anchor": "er-0001-f04",
+        "report_id": "ER-0001",
+        "report_path": "experts/reviews/reports/001-vandeir-silva.md",
+        "report_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+        "reviewed_on": "2026-11-19",
+        "status": "reviewed",
+        "translation_status": "editorial_translation"
+      },
+      {
+        "bindings": [
+          {
+            "current_clause_sha256": "b9acdb2fec7191d7c12a7192a212c3d234ccfbbea47769a5f73d20dae4df82d3",
+            "evidence_role": "supports_rationale",
+            "explanation": "Resolution through another movement, together with the distinctions in answer 13, supports preserving the origin and making the later action explicit.",
+            "limits": "Institutional terms do not automatically map to Correction, Reversal, Void or Supersession. The Core does not define concrete accounting postings.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "b9acdb2fec7191d7c12a7192a212c3d234ccfbbea47769a5f73d20dae4df82d3",
+            "target_id": "CORE-003.3",
+            "target_path": "docs/coreDoc/core-doc.md"
+          }
+        ],
+        "claim": "Distinct evolution needs declared meaning and a link to the earlier fact",
+        "evidence": [
+          {
+            "question": 16,
+            "quote": "However, when an inconsistency or failure was identified, an accounting reversal entry was made: an inverse adjustment respecting the accounting accounts and cost centers involved."
+          }
+        ],
+        "id": "ER-0001-F05",
+        "independent_validation": "pending_validation",
+        "interview_anchor": "interview",
+        "publication_status": "not_recorded",
+        "quotes_verified": true,
+        "recheck_reasons": [],
+        "report_anchor": "er-0001-f05",
+        "report_id": "ER-0001",
+        "report_path": "experts/reviews/reports/001-vandeir-silva.md",
+        "report_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+        "reviewed_on": "2026-11-19",
+        "status": "reviewed",
+        "translation_status": "editorial_translation"
+      },
+      {
+        "bindings": [
+          {
+            "current_clause_sha256": "b9acdb2fec7191d7c12a7192a212c3d234ccfbbea47769a5f73d20dae4df82d3",
+            "evidence_role": "supports_rationale",
+            "explanation": "Using a description to relate the outstanding item to its resolution supports the practical need for a verifiable link to the original.",
+            "limits": "The answer does not establish additional identifiers or a portable immutable relationship. Free text evidences the need; it does not demonstrate that every requirement was implemented.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "b9acdb2fec7191d7c12a7192a212c3d234ccfbbea47769a5f73d20dae4df82d3",
+            "target_id": "CORE-003.3",
+            "target_path": "docs/coreDoc/core-doc.md"
+          }
+        ],
+        "claim": "An adjustment needs to remain linked to its original",
+        "evidence": [
+          {
+            "question": 14,
+            "quote": "What identified and linked the cases was the description of the adjustment entry."
+          }
+        ],
+        "id": "ER-0001-F06",
+        "independent_validation": "pending_validation",
+        "interview_anchor": "interview",
+        "publication_status": "not_recorded",
+        "quotes_verified": true,
+        "recheck_reasons": [],
+        "report_anchor": "er-0001-f06",
+        "report_id": "ER-0001",
+        "report_path": "experts/reviews/reports/001-vandeir-silva.md",
+        "report_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+        "reviewed_on": "2026-11-19",
+        "status": "reviewed",
+        "translation_status": "editorial_translation"
+      },
+      {
+        "bindings": [
+          {
+            "current_clause_sha256": "670f59e0882a2b9bab0709abfd48b45ea7a32480e13762c16d36ce53a35d797a",
+            "evidence_role": "supports_rationale",
+            "explanation": "The batch presented to management illustrates a decision about an identified subject and financial content, distinct from technical access to a system.",
+            "limits": "Eligibility policy and the subject model were not examined. The account does not determine per-item approval, quorum or a universal chain.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "670f59e0882a2b9bab0709abfd48b45ea7a32480e13762c16d36ce53a35d797a",
+            "target_id": "CORE-004.1",
+            "target_path": "docs/coreDoc/core-doc.md"
+          },
+          {
+            "current_clause_sha256": "4ee8d0bdbc31496c3c51ac20cdd63015dd24da36c6d4b52fb54aff71711fa1f4",
+            "evidence_role": "supports_rationale",
+            "explanation": "The accounts, amounts and descriptions presented for approval support associating a decision with what was actually decided.",
+            "limits": "Answer 16 concerns entries already processed and does not document changes between approval and execution. It does not demonstrate revalidation after facts change or immutable preservation of the complete decision.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "4ee8d0bdbc31496c3c51ac20cdd63015dd24da36c6d4b52fb54aff71711fa1f4",
+            "target_id": "CORE-004.3",
+            "target_path": "docs/coreDoc/core-doc.md"
+          }
+        ],
+        "claim": "Approval has an identifiable subject and financial content",
+        "evidence": [
+          {
+            "question": 15,
+            "quote": "I prepared a single file containing all the accounting adjustments, identifying the accounts involved, cost centers, amounts and descriptions."
+          }
+        ],
+        "id": "ER-0001-F07",
+        "independent_validation": "pending_validation",
+        "interview_anchor": "interview",
+        "publication_status": "not_recorded",
+        "quotes_verified": true,
+        "recheck_reasons": [],
+        "report_anchor": "er-0001-f07",
+        "report_id": "ER-0001",
+        "report_path": "experts/reviews/reports/001-vandeir-silva.md",
+        "report_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+        "reviewed_on": "2026-11-19",
+        "status": "reviewed",
+        "translation_status": "editorial_translation"
+      },
+      {
+        "bindings": [
+          {
+            "current_clause_sha256": "c83537a4e1a56972adeee898744b596e1f599926848d331ca64403e0aed54bb8",
+            "evidence_role": "supports_rationale",
+            "explanation": "Recording responsible people, times and adjustment information supports attributing and reconstructing financial events.",
+            "limits": "The answer does not demonstrate every portable field, stable identities or immutable history. Automated execution must not be attributed by inference to the human approver.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "c83537a4e1a56972adeee898744b596e1f599926848d331ca64403e0aed54bb8",
+            "target_id": "CORE-003.1",
+            "target_path": "docs/coreDoc/core-doc.md"
+          }
+        ],
+        "claim": "Attribution supports reconstruction of requests and authorizations",
+        "evidence": [
+          {
+            "question": 17,
+            "quote": "who requested it and when, as well as who authorized it and when."
+          }
+        ],
+        "id": "ER-0001-F09",
+        "independent_validation": "pending_validation",
+        "interview_anchor": "interview",
+        "publication_status": "not_recorded",
+        "quotes_verified": true,
+        "recheck_reasons": [],
+        "report_anchor": "er-0001-f09",
+        "report_id": "ER-0001",
+        "report_path": "experts/reviews/reports/001-vandeir-silva.md",
+        "report_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+        "reviewed_on": "2026-11-19",
+        "status": "reviewed",
+        "translation_status": "editorial_translation"
+      },
+      {
+        "bindings": [
+          {
+            "current_clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+            "evidence_role": "supports_rationale",
+            "explanation": "Consulting external evidence to explain the discrepancy supports identifying facts relevant to an outcome rather than inferring them from authorization or a local balance.",
+            "limits": "The account does not demonstrate determinism of a FinKore evaluation. A consistent evaluation does not certify the material truth of external information or establish exception policy.",
+            "relationship": "already_addressed",
+            "reviewed_clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+            "target_id": "CORE-005.3",
+            "target_path": "docs/coreDoc/core-doc.md"
+          }
+        ],
+        "claim": "Evaluations need to identify relevant external facts",
+        "evidence": [
+          {
+            "question": 19,
+            "quote": "The cash transport company sent us the cash transport document, or GTV. After that, the branch employee recorded the outflow of funds, resolving the outstanding item."
+          }
+        ],
+        "id": "ER-0001-F11",
+        "independent_validation": "pending_validation",
+        "interview_anchor": "interview",
+        "publication_status": "not_recorded",
+        "quotes_verified": true,
+        "recheck_reasons": [],
+        "report_anchor": "er-0001-f11",
+        "report_id": "ER-0001",
+        "report_path": "experts/reviews/reports/001-vandeir-silva.md",
+        "report_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+        "reviewed_on": "2026-11-19",
+        "status": "reviewed",
+        "translation_status": "editorial_translation"
+      }
+    ],
+    "targets": {
+      "CORE-002.1": {
+        "agentic_operation_ids": [],
+        "anchor": "core-0021-lifecycle-changes-require-a-declared-valid-transition",
+        "clause_sha256": "32a272932fa9304df826b445920827e03c1bb833350956fdf533ce8a56319696",
+        "coredoc_ids": [],
+        "explicit_spec_references": [
+          "ENTITY-LIFECYCLE-001",
+          "ENTITY-LIFECYCLE-002",
+          "ENTITY-LIFECYCLE-003",
+          "ENTITY-LIFECYCLE-004",
+          "ENTITY-LIFECYCLE-005",
+          "ENTITY-LIFECYCLE-006",
+          "WORKFLOW-STATES-002",
+          "WORKFLOW-STATES-004",
+          "WORKFLOW-STATES-007",
+          "WORKFLOW-STATES-009",
+          "WORKFLOW-TERMINAL-001",
+          "WORKFLOW-TERMINAL-002",
+          "WORKFLOW-TERMINAL-003",
+          "WORKFLOW-TERMINAL-004",
+          "WORKFLOW-TRANSITION-001",
+          "WORKFLOW-TRANSITION-002",
+          "WORKFLOW-TRANSITION-003",
+          "WORKFLOW-TRANSITION-004",
+          "WORKFLOW-TRANSITION-005"
+        ],
+        "id": "CORE-002.1",
+        "layer": "coredoc",
+        "modalities": [
+          "SHALL"
+        ],
+        "path": "docs/coreDoc/core-doc.md",
+        "statement": "Where a financial subject has a lifecycle, it SHALL have one declared current state. Its state SHALL change only through a declared transition from that state after all applicable conditions have passed.",
+        "title": "Lifecycle changes require a declared valid transition",
+        "vector_ids": []
+      },
+      "CORE-002.2": {
+        "agentic_operation_ids": [],
+        "anchor": "core-0022-validation-is-complete-fact-based-and-non-mutating",
+        "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+        "coredoc_ids": [],
+        "explicit_spec_references": [
+          "ENTITY-VALIDATION-001",
+          "ENTITY-VALIDATION-002",
+          "ENTITY-VALIDATION-003",
+          "ENTITY-VALIDATION-006",
+          "WORKFLOW-GUARD-001",
+          "WORKFLOW-GUARD-002",
+          "WORKFLOW-GUARD-003",
+          "WORKFLOW-GUARD-004",
+          "WORKFLOW-GUARD-005",
+          "WORKFLOW-GUARD-006"
+        ],
+        "id": "CORE-002.2",
+        "layer": "coredoc",
+        "modalities": [
+          "SHALL",
+          "SHALL NOT"
+        ],
+        "path": "docs/coreDoc/core-doc.md",
+        "statement": "A proposed financial change SHALL be evaluated against the complete proposed result and declared relevant facts before it becomes observable. Validation or transition-condition evaluation SHALL NOT itself alter domain data.",
+        "title": "Validation is complete, fact-based, and non-mutating",
+        "vector_ids": []
+      },
+      "CORE-002.3": {
+        "agentic_operation_ids": [],
+        "anchor": "core-0023-rejected-actions-have-no-partial-financial-effect",
+        "clause_sha256": "20b537b4b61f75741bc518b9819bb8bd37e300ca2b7058ecd682a83e66028c67",
+        "coredoc_ids": [],
+        "explicit_spec_references": [
+          "AUDIT-ERROR-001",
+          "AUDIT-RELATIONSHIP-012",
+          "ENTITY-EVOLUTION-023",
+          "ENTITY-EVOLUTION-024",
+          "ENTITY-EVOLUTION-025",
+          "ENTITY-MUTABILITY-004",
+          "WORKFLOW-TRANSITION-006",
+          "WORKFLOW-TRANSITION-007"
+        ],
+        "id": "CORE-002.3",
+        "layer": "coredoc",
+        "modalities": [
+          "SHALL"
+        ],
+        "path": "docs/coreDoc/core-doc.md",
+        "statement": "A rejected financial action SHALL leave relevant observable financial state, financial data, and committed history unchanged, unless a governing rule expressly defines another failure effect.",
+        "title": "Rejected actions have no partial financial effect",
+        "vector_ids": []
+      },
+      "CORE-003.1": {
+        "agentic_operation_ids": [],
+        "anchor": "core-0031-a-committed-event-preserves-essential-evidence",
+        "clause_sha256": "c83537a4e1a56972adeee898744b596e1f599926848d331ca64403e0aed54bb8",
+        "coredoc_ids": [],
+        "explicit_spec_references": [
+          "AUDIT-ACTOR-001",
+          "AUDIT-ACTOR-002",
+          "AUDIT-ACTOR-003",
+          "AUDIT-ACTOR-004",
+          "AUDIT-EVENT-001",
+          "AUDIT-EVENT-002",
+          "AUDIT-EVENT-003",
+          "AUDIT-EVENT-004",
+          "AUDIT-EVENT-005",
+          "AUDIT-EVENT-006",
+          "AUDIT-EVENT-007",
+          "AUDIT-EVENT-008"
+        ],
+        "id": "CORE-003.1",
+        "layer": "coredoc",
+        "modalities": [
+          "SHALL"
+        ],
+        "path": "docs/coreDoc/core-doc.md",
+        "statement": "A committed financial event SHALL preserve a stable event identity, declared event type, affected financial subject, and unambiguous occurrence time. It SHALL identify the responsible actor when known.",
+        "title": "A committed event preserves essential evidence",
+        "vector_ids": []
+      },
+      "CORE-003.3": {
+        "agentic_operation_ids": [],
+        "anchor": "core-0033-corrections-and-related-evolution-preserve-original-facts",
+        "clause_sha256": "b9acdb2fec7191d7c12a7192a212c3d234ccfbbea47769a5f73d20dae4df82d3",
+        "coredoc_ids": [],
+        "explicit_spec_references": [
+          "AUDIT-RELATIONSHIP-001",
+          "AUDIT-RELATIONSHIP-002",
+          "AUDIT-RELATIONSHIP-003",
+          "AUDIT-RELATIONSHIP-004",
+          "AUDIT-RELATIONSHIP-005",
+          "AUDIT-RELATIONSHIP-006",
+          "AUDIT-RELATIONSHIP-007",
+          "AUDIT-RELATIONSHIP-008",
+          "AUDIT-RELATIONSHIP-009",
+          "AUDIT-RELATIONSHIP-010",
+          "AUDIT-RELATIONSHIP-011",
+          "AUDIT-RELATIONSHIP-012",
+          "AUDIT-RELATIONSHIP-013",
+          "ENTITY-EVOLUTION-004",
+          "ENTITY-EVOLUTION-006",
+          "ENTITY-EVOLUTION-008",
+          "ENTITY-EVOLUTION-009",
+          "ENTITY-EVOLUTION-010",
+          "ENTITY-EVOLUTION-011",
+          "ENTITY-EVOLUTION-012",
+          "ENTITY-EVOLUTION-013",
+          "ENTITY-EVOLUTION-014",
+          "ENTITY-EVOLUTION-015",
+          "ENTITY-EVOLUTION-016",
+          "ENTITY-EVOLUTION-017",
+          "ENTITY-EVOLUTION-018",
+          "ENTITY-EVOLUTION-019",
+          "ENTITY-EVOLUTION-020",
+          "ENTITY-EVOLUTION-021",
+          "ENTITY-EVOLUTION-022",
+          "ENTITY-EVOLUTION-023"
+        ],
+        "id": "CORE-003.3",
+        "layer": "coredoc",
+        "modalities": [
+          "SHALL",
+          "SHALL NOT"
+        ],
+        "path": "docs/coreDoc/core-doc.md",
+        "statement": "A correction, reversal, void, or supersession SHALL preserve a verifiable relationship to the affected original subject or event. It SHALL NOT erase or rewrite original financial facts or history, and these concepts SHALL NOT be silently treated as interchangeable.",
+        "title": "Corrections and related evolution preserve original facts",
+        "vector_ids": []
+      },
+      "CORE-004.1": {
+        "agentic_operation_ids": [],
+        "anchor": "core-0041-approval-requirements-state-subject-eligibility-and-outcome",
+        "clause_sha256": "670f59e0882a2b9bab0709abfd48b45ea7a32480e13762c16d36ce53a35d797a",
+        "coredoc_ids": [],
+        "explicit_spec_references": [
+          "APPROVAL-DECISION-004",
+          "APPROVAL-DECISION-012",
+          "APPROVAL-REQUIREMENT-001",
+          "APPROVAL-REQUIREMENT-002",
+          "APPROVAL-REQUIREMENT-003",
+          "APPROVAL-REQUIREMENT-004",
+          "APPROVAL-REQUIREMENT-005",
+          "APPROVAL-REQUIREMENT-006",
+          "APPROVAL-REQUIREMENT-007"
+        ],
+        "id": "CORE-004.1",
+        "layer": "coredoc",
+        "modalities": [
+          "SHALL"
+        ],
+        "path": "docs/coreDoc/core-doc.md",
+        "statement": "An approval requirement SHALL identify the subject requiring approval, eligible decision-maker or eligibility rule, and the outcome that satisfies or rejects it. Eligibility SHALL be evaluated independently from technical ability to submit a request.",
+        "title": "Approval requirements state subject, eligibility, and outcome",
+        "vector_ids": []
+      },
+      "CORE-004.3": {
+        "agentic_operation_ids": [],
+        "anchor": "core-0043-decisions-remain-tied-to-their-facts-and-history",
+        "clause_sha256": "4ee8d0bdbc31496c3c51ac20cdd63015dd24da36c6d4b52fb54aff71711fa1f4",
+        "coredoc_ids": [],
+        "explicit_spec_references": [
+          "APPROVAL-CONDITION-003",
+          "APPROVAL-DECISION-001",
+          "APPROVAL-DECISION-002",
+          "APPROVAL-DECISION-003",
+          "APPROVAL-DECISION-004",
+          "APPROVAL-DECISION-005",
+          "APPROVAL-DECISION-006",
+          "APPROVAL-DECISION-007",
+          "APPROVAL-DECISION-008",
+          "APPROVAL-DECISION-012",
+          "APPROVAL-VALIDITY-001",
+          "APPROVAL-VALIDITY-002",
+          "APPROVAL-VALIDITY-003",
+          "APPROVAL-VALIDITY-004",
+          "APPROVAL-VALIDITY-005",
+          "APPROVAL-VALIDITY-006",
+          "APPROVAL-VALIDITY-007",
+          "APPROVAL-VALIDITY-008",
+          "APPROVAL-VALIDITY-009",
+          "APPROVAL-VALIDITY-010",
+          "APPROVAL-VALIDITY-011",
+          "APPROVAL-VALIDITY-012",
+          "APPROVAL-VALIDITY-013",
+          "APPROVAL-VALIDITY-014",
+          "APPROVAL-VALIDITY-015",
+          "APPROVAL-VALIDITY-016"
+        ],
+        "id": "CORE-004.3",
+        "layer": "coredoc",
+        "modalities": [
+          "SHALL",
+          "SHALL NOT"
+        ],
+        "path": "docs/coreDoc/core-doc.md",
+        "statement": "An approval decision SHALL identify its requirement, deciding actor, outcome, time, and relevant subject facts or state. It SHALL NOT be assumed valid after relevant facts change, and a committed decision SHALL NOT be overwritten or removed from logical approval history.",
+        "title": "Decisions remain tied to their facts and history",
+        "vector_ids": []
+      },
+      "CORE-005.1": {
+        "agentic_operation_ids": [],
+        "anchor": "core-0051-continuing-financial-subjects-retain-stable-identity",
+        "clause_sha256": "18b9bf8b6f29a2f34bed7dd2330510aeff73ac12995e3ea5d8e1e65242a4b957",
+        "coredoc_ids": [],
+        "explicit_spec_references": [
+          "AUDIT-ACTOR-001",
+          "AUDIT-ACTOR-002",
+          "AUDIT-ACTOR-003",
+          "AUDIT-EVENT-004",
+          "ENTITY-IDENTITY-001",
+          "ENTITY-IDENTITY-002",
+          "ENTITY-IDENTITY-003",
+          "ENTITY-IDENTITY-004",
+          "ENTITY-IDENTITY-005",
+          "ENTITY-IDENTITY-006"
+        ],
+        "id": "CORE-005.1",
+        "layer": "coredoc",
+        "modalities": [
+          "SHALL",
+          "SHALL NOT"
+        ],
+        "path": "docs/coreDoc/core-doc.md",
+        "statement": "A continuing financial subject SHALL have an identifier unique within its declared scope and stable throughout its lifecycle. Distinct subjects SHALL NOT share that identifier within the same scope.",
+        "title": "Continuing financial subjects retain stable identity",
+        "vector_ids": []
+      },
+      "CORE-005.3": {
+        "agentic_operation_ids": [],
+        "anchor": "core-0053-evaluation-follows-declared-facts-and-context",
+        "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+        "coredoc_ids": [],
+        "explicit_spec_references": [
+          "APPROVAL-CHAIN-008",
+          "APPROVAL-CONDITION-005",
+          "AUDIT-APPEND-006",
+          "MONEY-ALLOCATION-012",
+          "MONEY-ROUNDING-002",
+          "WORKFLOW-GUARD-004",
+          "WORKFLOW-GUARD-006"
+        ],
+        "id": "CORE-005.3",
+        "layer": "coredoc",
+        "modalities": [
+          "SHALL"
+        ],
+        "path": "docs/coreDoc/core-doc.md",
+        "statement": "For the same declared inputs, financial state, and relevant context, a financial evaluation SHALL produce the same observable outcome. A dependency on an external fact SHALL be identified when it affects that outcome.",
+        "title": "Evaluation follows declared facts and context",
+        "vector_ids": []
+      }
+    }
+  },
+  "schema_version": "2.0.0"
+}

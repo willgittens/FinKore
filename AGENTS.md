@@ -82,8 +82,8 @@ metadata; do not alter them during editorial scope cleanup.
 ### `/experts`
 
 Non-normative expert evidence is grouped under `experts/code-evidence`,
-`experts/legacy`, and `experts/research`. Preserve each collection's local
-instructions, source records, stable identifiers, and review limitations.
+`experts/legacy`, `experts/research`, and `experts/reviews`. Preserve each
+collection's local instructions, source records, stable identifiers, and review limitations.
 Moving or publishing evidence does not accept a financial requirement.
 
 ### `/docs/tools`
