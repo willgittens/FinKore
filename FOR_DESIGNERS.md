@@ -23,7 +23,7 @@ Read with these questions in mind; you do not need to master the technical docum
 | [Project overview](./README.md) and [Where to start](./docs/where-to-start.md) | The problem we solve, who it is for, and what people can use today. |
 | [Current home page](./learn/index.html) | Where the explanation, hierarchy, and navigation paths could be clearer. |
 | [Network](./learn/network.html) | How people, knowledge, and initiatives contribute to the project's goal. |
-| [Legacy Archive](./legacy/README.md) and [its reading page](./learn/legacy.html) | The human value of the archive and how to discover interviews. |
+| [Legacy Archive](experts/legacy/README.md) and [its reading page](./learn/legacy.html) | The human value of the archive and how to discover interviews. |
 | [Elaine Richardson's interview](./learn/legacy-001-elaine-richardson.html) | What reading a long story on a phone should feel like. |
 | [Publishing tools](./docs/tools/README.md#editing-learn-pages) | How content and pages are maintained and generated today. |
 
@@ -147,7 +147,7 @@ understand the entire Network page.
 Treat interviews as editorial content with value of their own. The presentation
 should show who the person is, which topics appear, and why the story is worth
 reading. Preserve the interviewee's voice and distinguish quotations, summaries,
-and editorial notes. The [archive's principles](./legacy/README.md#editorial-principles)
+and editorial notes. The [archive's principles](experts/legacy/README.md#editorial-principles)
 continue to apply.
 
 Think through the whole journey: discovering a story, opening the interview,
@@ -213,7 +213,7 @@ tables, code, quotations, and interviews of different lengths.
 | Home and Network | Editorial content in `learn/index.html` and `learn/network.html`. | Preserve generated areas and shared synchronization of navigation and CSS versions. |
 | CoreDoc | `docs/coreDoc/core-doc.md`. | Work on the template and styles; preserve source wording, identifiers, metadata, and links. |
 | Documentation pages | Markdown registered with the generators. | Use components that continue to work after pages are regenerated. |
-| Archive and interviews | `legacy/README.md` and approved interviews in `legacy/interviews/`. | Evolve editorial templates and presentation metadata without duplicating responses. |
+| Archive and interviews | `experts/legacy/README.md` and approved interviews in `experts/legacy/interviews/`. | Evolve editorial templates and presentation metadata without duplicating responses. |
 
 Interviews are explicitly registered in `LEARN_PAGES`, in the
 [build-learn-pages.js](./docs/tools/build-learn-pages.js) generator, after

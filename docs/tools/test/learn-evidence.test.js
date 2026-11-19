@@ -34,7 +34,7 @@ function codeFixture(t) {
   const f = fixture(t)
   const clause = { ...f.clause, path: 'docs/coreDoc/core-doc.md' }
   const commit = 'a'.repeat(40)
-  const path = 'code-evidence/analyses/CE-REPO-0001/CE-EDITION-0001.md'
+  const path = 'experts/code-evidence/analyses/CE-REPO-0001/CE-EDITION-0001.md'
   const href = `https://github.com/example/money/blob/${commit}/src/money.js#L10-L20`
   const body = `# CE-FINDING-0001\n\n${commit}\n\nMoney.allocate\n\n${href}\n`
   put(f.root, path, body)
@@ -145,7 +145,7 @@ test('changed publication or clause suppresses its card without refreshing revie
 
 test('missing publication hides evidence while valid sources remain available', t => {
   const { root, data, save, clause } = fixture(t)
-  data.sources.push({ ...data.sources[0], id: 'LGC-0002', kind: 'legacy', publication_path: 'legacy/interviews/001-missing.md', href: 'legacy-001-missing.html#question' })
+  data.sources.push({ ...data.sources[0], id: 'LGC-0002', kind: 'legacy', publication_path: 'experts/legacy/interviews/001-missing.md', href: 'legacy-001-missing.html#question' })
   data.bindings.push({ ...data.bindings[0], source_id: 'LGC-0002' })
   save()
   const html = renderRelatedEvidence('MONEY-ROUNDING-001', clause, loadLearnEvidence(root))

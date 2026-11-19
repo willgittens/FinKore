@@ -79,6 +79,13 @@ obligations and must not silently contradict them. CoreDoc fields such as
 `Introduced`, `Last updated`, and `Last updated on` are normative governance
 metadata; do not alter them during editorial scope cleanup.
 
+### `/experts`
+
+Non-normative expert evidence is grouped under `experts/code-evidence`,
+`experts/legacy`, and `experts/research`. Preserve each collection's local
+instructions, source records, stable identifiers, and review limitations.
+Moving or publishing evidence does not accept a financial requirement.
+
 ### `/docs/tools`
 
 Repository-maintenance tools validate published artifacts, traceability,

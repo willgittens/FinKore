@@ -15,7 +15,7 @@
       "limits": "The paper’s common quantum is an application architecture. Applying it everywhere could reduce exact intermediate values prematurely. The reviewer did not validate its equations or worked financial calculations.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0002",
@@ -30,7 +30,7 @@
       "limits": "Reviewer scenario: a lost response leads to retrying with the same key but a changed amount. Treating this as the same financial instruction can suppress a legitimate change or misidentify the result. Atomic key storage is the paper’s design; a key alone does not coordinate every external effect.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0004",
@@ -44,7 +44,7 @@
       "limits": "A product can combine these controls in one interface, but their evidentiary questions differ. The review is a synthesis, not a causal test of any particular approval implementation.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0006",
@@ -59,7 +59,7 @@
       "limits": "The paper explicitly notes balanced errors but cites Ellerman; the original cited account has not been checked. A reviewer-created duplicate posting can preserve totals, but is not a Core operation or a financial test executed here.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0009",
@@ -76,7 +76,7 @@
       "limits": "The source’s literal “does not affect” wording is stronger than its observational evidence warrants. Failure to cross a significance threshold is not an equivalence test. Positive results in EVD-0006 concern different settings and do not directly refute this study.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0010",
@@ -91,7 +91,7 @@
       "limits": "The source reports synchronization issues, not a measured stale-snapshot control failure. The financial scenario in the original finding is reviewer-created. Historical reports may intentionally use old observations.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0012",
@@ -104,7 +104,7 @@
       "limits": "The example assumes both opposing Decisions are valid and still effective. Legitimate withdrawal/supersession differs from timestamp overwrite. LWW may still suit a cache or application value whose declared semantics permit it.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0014",
@@ -120,7 +120,7 @@
       "limits": "Reviewer scenario: a later model recomputes a different risk estimate; this does not reproduce the earlier supplied estimate. Whether that estimate is material and retained depends on the declared policy.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0017",
@@ -133,7 +133,7 @@
       "limits": "Binding a human decision to the executed parameters is the reviewer’s application-level inference. The inspected architecture does not prove freedom from time-of-check/time-of-use faults. Not every FinKore action requires a human signature.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0018",
@@ -150,7 +150,7 @@
       "limits": "This transfer is reviewer inference, not a rule formulated by the authors for FinKore. A sensor’s inventory observation alone does not establish a sale. Cleaning data must not silently invent business facts.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0019",
@@ -164,7 +164,7 @@
       "limits": "A post-migration consistency check can find violated relations but is limited by the predicates and data it covers. Source authentication, omitted history and external reconciliation are separate application responsibilities.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0020",
@@ -177,7 +177,7 @@
       "limits": "The broader calculation discussion is reviewer inference. Current Workflow requirements prevent silent rebinding; they do not define an execution engine for all historical financial calculations. Regulatory claims were not independently checked.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0022",
@@ -192,7 +192,7 @@
       "limits": "The shared-input example is reviewer inference. Correlation modeling in the abstract motivates the question; it does not quantify FinKore risk or prove a universal optimal control policy. A risk model does not waive an applicable MUST.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0024",
@@ -207,7 +207,7 @@
       "limits": "A global serial order is not required for every application. The source intentionally offers weaker isolation with potential throughput benefits; this is not a hidden defect. Financial implications depend on the composing policy.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0025",
@@ -233,7 +233,7 @@
       "limits": "The passage concerns ACID benchmark testing; applying the epistemic limit to FinKore is reviewer inference. Strong cases remain useful. The source’s benchmark requirements do not become FinKore requirements.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0027",
@@ -249,7 +249,7 @@
       "limits": "The transfer to FinKore is reviewer inference. The article’s legal assertions, Just-In-Time process and document package are not verified as current or universal. A syntactically valid message does not itself establish payment eligibility.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0030",
@@ -263,7 +263,7 @@
       "limits": "Applying this study to FinKore is reviewer inference. The study does not discredit all ESG measurement or ML, nor demonstrate an actual FinKore violation. Shared measurement processes can explain correlations; alternative model-design explanations remain possible.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0031",
@@ -276,7 +276,7 @@
       "limits": "The crash-after-effect-before-acknowledgement scenario is reviewer inference. Broker guarantees have a useful defined scope. Application deduplication still needs defined keys, retention, durable recovery and a consistent effect boundary; the abstract does not establish those details.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0032",
@@ -292,7 +292,7 @@
       "limits": "This is methodological transfer from healthcare, not a financial rule demonstrated by that study. Fairness, resource availability and admissible requests matter. An intentionally terminal state is not a deadlock defect; statistical confidence is not an unconditional proof for arbitrary executions.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0033",
@@ -306,7 +306,7 @@
       "limits": "A changed ordering example is reviewer inference; the source reports a particular assistant/model interaction. No general LLM error rate or superiority of a prompting strategy is established here. Formulas and figures were not independently inspected visually.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0035",
@@ -323,7 +323,7 @@
       "limits": "These financial scenarios are reviewer inferences. A consistent snapshot can be appropriate within an application’s bound. TxCache does not remove the database’s anomalies or establish universal safe staleness for financial authorization.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0036",
@@ -336,7 +336,7 @@
       "limits": "A separate expected workload can test coverage if it is independent of the collector. This is not a mandate to record every request or collect sensitive content indiscriminately. A diagnostic retry trace is not itself a unique financial effect.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "MAP-0039",
@@ -352,7 +352,7 @@
       "limits": "An external action triggered by a later-discarded result is reviewer inference. A clearly provisional response may be appropriate. The source explicitly acknowledges the limitation; this review does not declare its framework generally unsuitable or its proofs invalid.",
       "status": "pending_validation",
       "publication_path": "learn/research.md",
-      "publication_sha256": "7bde6f07be645720082be97872a155ba695a37bd9b5bd5b05e726184bf8e6aba"
+      "publication_sha256": "0c2948ec11374cc057d04fe0ba96b5e11f515ae9ae483aa1179ac6be5b4cc6e6"
     },
     {
       "id": "LGC-0001",
@@ -364,7 +364,7 @@
       "href": "legacy-001-elaine-richardson.html#3-do-you-remember-any-strange-rules-unusual-code-or-unexpected-situations-that-taught-you-something-important-especially-things-that-might-look-unnecessary-today-but-had-a-very-good-reason-to-exist",
       "limits": "This is a personal recollection, not a verified experiment or a universal statement about COBOL. No details from the withheld follow-up are used. Exact representability does not define universal database field capacity. The Open Questions in spec/money/representation.md leave portable precision, scale and overflow limits unresolved: this behavior is not currently defined by FinKore Core. Unsupported amounts already have a portable failure category; this comparison does not set the capacity threshold or introduce an overflow code.",
       "status": "pending_validation",
-      "publication_path": "legacy/interviews/001-elaine-richardson.md",
+      "publication_path": "experts/legacy/interviews/001-elaine-richardson.md",
       "publication_sha256": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46"
     },
     {
@@ -377,7 +377,7 @@
       "href": "legacy-001-elaine-richardson.html#4-have-you-ever-been-involved-in-replacing-or-modernizing-an-old-financial-system-what-were-the-biggest-challenges-and-what-lessons-did-you-take-away",
       "limits": "The surrounding prediction about the first day of go-live is personal rhetoric, not a measured rate or universal temporal claim. Only failures already defined by the owning specification can acquire expected observations; a test suite must not invent banking exceptions or imply exhaustive correctness.",
       "status": "pending_validation",
-      "publication_path": "legacy/interviews/001-elaine-richardson.md",
+      "publication_path": "experts/legacy/interviews/001-elaine-richardson.md",
       "publication_sha256": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46"
     },
     {
@@ -390,7 +390,7 @@
       "href": "legacy-001-elaine-richardson.html#4-have-you-ever-been-involved-in-replacing-or-modernizing-an-old-financial-system-what-were-the-biggest-challenges-and-what-lessons-did-you-take-away",
       "limits": "The interviewee frames this as advice, not a reported deployment protocol or proof of atomic recovery. Deployment rollback, external compensation, restoration of a committed action and local non-mutation on rejection are distinct. FinKore does not supply a rollback engine, distributed transaction protocol, migration workflow, or concrete reversal accounting effects.",
       "status": "pending_validation",
-      "publication_path": "legacy/interviews/001-elaine-richardson.md",
+      "publication_path": "experts/legacy/interviews/001-elaine-richardson.md",
       "publication_sha256": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46"
     },
     {
@@ -403,7 +403,7 @@
       "href": "legacy-001-elaine-richardson.html#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget",
       "limits": "The quote is advice supported by a personal incident, not a FinKore requirement for log content, manuals, localized wording, or an error envelope. SPEC-ERROR-003 permits messages and context (MAY); entity paths and stable violation identifiers are SHOULD obligations. Sensitive financial, personal and implementation data are not automatically safe to include.",
       "status": "pending_validation",
-      "publication_path": "legacy/interviews/001-elaine-richardson.md",
+      "publication_path": "experts/legacy/interviews/001-elaine-richardson.md",
       "publication_sha256": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46"
     },
     {
@@ -416,7 +416,7 @@
       "href": "legacy-001-elaine-richardson.html#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget",
       "limits": "Product-specific names, address formats and numeric-field rules must be declared by a composing domain. The anecdote supplies no universal input grammar or guarantee that a validator detects fraud, missing facts, or all bad assumptions. FinKore validates declared conditions against supplied observations; it does not certify their real-world truth.",
       "status": "pending_validation",
-      "publication_path": "legacy/interviews/001-elaine-richardson.md",
+      "publication_path": "experts/legacy/interviews/001-elaine-richardson.md",
       "publication_sha256": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46"
     },
     {
@@ -429,7 +429,7 @@
       "href": "legacy-001-elaine-richardson.html#about-legacy-banking-systems-is-there-a-particular-business-rule-or-exception-handling-scenario-youve-encountered-that-you-believe-modern-developers-would-probably-overlook-if-they-were-building-a-financial-system-from-scratch",
       "limits": "This is a reported operational tendency, not proof that every retry duplicates payments. A retry after an uncertain outcome, a domain rejection and a new economic instruction are different cases. Concrete payment posting, batch scheduling, reconciliation and distributed effect coordination are outside the current Core contract. No idempotency key scheme, retention period or payment operation is prescribed.",
       "status": "pending_validation",
-      "publication_path": "legacy/interviews/001-elaine-richardson.md",
+      "publication_path": "experts/legacy/interviews/001-elaine-richardson.md",
       "publication_sha256": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46"
     },
     {
@@ -442,7 +442,7 @@
       "href": "legacy-001-elaine-richardson.html#about-legacy-banking-systems-is-there-a-particular-business-rule-or-exception-handling-scenario-youve-encountered-that-you-believe-modern-developers-would-probably-overlook-if-they-were-building-a-financial-system-from-scratch",
       "limits": "The source supplies no quantitative freshness bound or dependency protocol. WORKFLOW-GUARD-004 does not require always-latest data; ENTITY-IMPORT-007 compares expected values to the supplied observation, not to an independently queried remote system. The interview's suggestion that real-time processing removes these problems is not generalized: distributed real-time systems still require dependency and freshness policies.",
       "status": "pending_validation",
-      "publication_path": "legacy/interviews/001-elaine-richardson.md",
+      "publication_path": "experts/legacy/interviews/001-elaine-richardson.md",
       "publication_sha256": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46"
     },
     {
@@ -455,8 +455,8 @@
       "href": "legacy-002-otilia-borges.html#4-have-you-ever-been-involved-in-replacing-or-modernizing-an-old-financial-system-what-were-the-biggest-challenges-and-what-lessons-did-you-take-away",
       "limits": "This is practitioner experience, not a demonstrated equivalence proof or a prescribed migration architecture. CORE-005.3 addresses reproducibility from the same declared inputs, state and context; it does not by itself prove equivalence between an old and a new implementation. MONEY-REPRESENTATION-006 covers Money only. SPEC-COMPATIBILITY-012 classifies changes to the published FinKore contract, not every consumer deployment. The interview does not authorize workflow migration, a universal COBOL-to-Java transformation, AI extraction guarantees, new portable errors, or recovery of undocumented rules by inference.",
       "status": "pending_validation",
-      "publication_path": "legacy/interviews/002-otilia-borges.md",
-      "publication_sha256": "1bfb503b6692ac5b8209afad7def736af54568a4d5c58a185e80b8f63bf3f92b"
+      "publication_path": "experts/legacy/interviews/002-otilia-borges.md",
+      "publication_sha256": "bcc27cced4b94883d64514784a9bec37fc3163c3ce0af23f2b144a7010dee192"
     },
     {
       "id": "LGC-0009",
@@ -468,8 +468,8 @@
       "href": "legacy-002-otilia-borges.html#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget",
       "limits": "The account does not establish the content or legal validity of any current regulation, nor does it turn a bank-specific rule into FinKore Core. The 1990 Collor Plan and printed-report story are not reconstructed as portable account-freeze or regulator-submission operations. CORE-002.2 governs financial-change validation, not a jurisdictional policy catalog. ENTITY-VALIDATION-001 requires applicable rules to hold without selecting the business rules for every bank, product or country.",
       "status": "pending_validation",
-      "publication_path": "legacy/interviews/002-otilia-borges.md",
-      "publication_sha256": "1bfb503b6692ac5b8209afad7def736af54568a4d5c58a185e80b8f63bf3f92b"
+      "publication_path": "experts/legacy/interviews/002-otilia-borges.md",
+      "publication_sha256": "bcc27cced4b94883d64514784a9bec37fc3163c3ce0af23f2b144a7010dee192"
     },
     {
       "id": "LGC-0010",
@@ -481,8 +481,8 @@
       "href": "legacy-002-otilia-borges.html#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget",
       "limits": "The quotation concerns developers reviewing generated code; CoreDoc concerns financial evaluations. Their relationship is contextual, not an assertion that CORE-005.3 mandates a developer qualification, AI review process or source-extraction method. SPEC-CONFORMANCE-001 and -002 apply regardless of how code is produced. SHOULD exceptions remain documented recommendations, not automatically mandatory rules. No interview, generated program, repository artifact check or finite test set proves external implementation conformance; consumers own implementation validation and execution evidence.",
       "status": "pending_validation",
-      "publication_path": "legacy/interviews/002-otilia-borges.md",
-      "publication_sha256": "1bfb503b6692ac5b8209afad7def736af54568a4d5c58a185e80b8f63bf3f92b"
+      "publication_path": "experts/legacy/interviews/002-otilia-borges.md",
+      "publication_sha256": "bcc27cced4b94883d64514784a9bec37fc3163c3ce0af23f2b144a7010dee192"
     },
     {
       "id": "CE-FINDING-0001",
@@ -493,7 +493,7 @@
       "owner": "moneyphp",
       "version": "v4.9.0",
       "commit_sha": "d49ee625c6ba79b9d7a228ce153b02fc1032152b",
-      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0001/CE-EDITION-0001.md#ce-finding-0001",
+      "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0001/CE-EDITION-0001.md#ce-finding-0001",
       "functions": [
         {
           "name": "Money\\Money::allocate",
@@ -536,8 +536,8 @@
       "execution_status": "not_executed",
       "limits": "Allocation path only. Amount and currency are retained, but largest-fraction recipient selection differs from Core declared-order distribution. BCMath intermediates and float ranking were not executed or exhaustively verified.",
       "status": "pending_validation",
-      "publication_path": "code-evidence/analyses/CE-REPO-0001/CE-EDITION-0001.md",
-      "publication_sha256": "16d9662e8c1e097be30b7b5772a55ab3d6604fcfec7132b87587d0294eebc8e4"
+      "publication_path": "experts/code-evidence/analyses/CE-REPO-0001/CE-EDITION-0001.md",
+      "publication_sha256": "48d63b872dd78691ea4553b876ac1453cacd3ae1e07683dc22b67513a8825413"
     },
     {
       "id": "CE-FINDING-0002",
@@ -548,7 +548,7 @@
       "owner": "brick",
       "version": "0.15.2",
       "commit_sha": "d025eb4a105071028764859d93537d394a147c31",
-      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0002/CE-EDITION-0002.md#ce-finding-0002",
+      "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0002/CE-EDITION-0002.md#ce-finding-0002",
       "functions": [
         {
           "name": "Brick\\Money\\Money::allocate",
@@ -575,8 +575,8 @@
       "execution_status": "not_executed",
       "limits": "FloorToFirst strategy, positive integer weights and a fixed context with explicitly matched scale/step. Other strategies, rational/zero-weight inputs and Brick Math internals are not claimed equivalent to Core.",
       "status": "pending_validation",
-      "publication_path": "code-evidence/analyses/CE-REPO-0002/CE-EDITION-0002.md",
-      "publication_sha256": "47954b444b9a5a7917a9bb03be9c467d0b433464bf4c50b0fba8aabb628182d0"
+      "publication_path": "experts/code-evidence/analyses/CE-REPO-0002/CE-EDITION-0002.md",
+      "publication_sha256": "eb2b002832356a0cf82e839a9a55cdfe2d92f34eacaa2a2f0fe278c91fad1c3e"
     },
     {
       "id": "CE-FINDING-0003",
@@ -587,7 +587,7 @@
       "owner": "RubyMoney",
       "version": "v7.1.1",
       "commit_sha": "26e2829c34f165847040a5a40d4d2daa5eb72927",
-      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0003/CE-EDITION-0003.md#ce-finding-0003",
+      "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0003/CE-EDITION-0003.md#ce-finding-0003",
       "functions": [
         {
           "name": "Money::Allocation.generate",
@@ -602,8 +602,8 @@
       "execution_status": "not_executed",
       "limits": "A numeric helper, not a complete Money operation: currency construction is outside the reading. Successive division, numeric types and decimal cutoff affect the result; all-zero weights are replaced with equal weights.",
       "status": "pending_validation",
-      "publication_path": "code-evidence/analyses/CE-REPO-0003/CE-EDITION-0003.md",
-      "publication_sha256": "c75e50dff9936868fcf679bf7afd4d94d8c18f0f2e15aa905da3fdebdb524b3c"
+      "publication_path": "experts/code-evidence/analyses/CE-REPO-0003/CE-EDITION-0003.md",
+      "publication_sha256": "864c3fa60a0f52f920b9a29d1e673f281e1fb3be53c04e64b0b69de44346b43a"
     },
     {
       "id": "CE-FINDING-0004",
@@ -614,7 +614,7 @@
       "owner": "JodaOrg",
       "version": "v2.0.3",
       "commit_sha": "2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e",
-      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0004/CE-EDITION-0004.md#ce-finding-0004",
+      "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0004/CE-EDITION-0004.md#ce-finding-0004",
       "functions": [
         {
           "name": "org.joda.money.Money.plus",
@@ -633,8 +633,8 @@
       "execution_status": "not_executed",
       "limits": "The inspected Money/BigMoney addition path checks currencies. Full ordering, equality, conversion and provider semantics were not assessed. Native exceptions are not portable FinKore error codes.",
       "status": "pending_validation",
-      "publication_path": "code-evidence/analyses/CE-REPO-0004/CE-EDITION-0004.md",
-      "publication_sha256": "a20a99511b02657b1a2246ae436ef5531d3eccdf4e971bc3c9f1d9e15906d363"
+      "publication_path": "experts/code-evidence/analyses/CE-REPO-0004/CE-EDITION-0004.md",
+      "publication_sha256": "98dcac1cabfd5a1d920f7a4d23d97eafa424e2cbc588ec3958d655cffe940a2e"
     },
     {
       "id": "CE-FINDING-0005",
@@ -645,7 +645,7 @@
       "owner": "dinerojs",
       "version": "v2.0.2",
       "commit_sha": "cc7df3e6d986445eab42dffc33f8c2d14e4d588a",
-      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0005/CE-EDITION-0005.md#ce-finding-0005",
+      "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0005/CE-EDITION-0005.md#ce-finding-0005",
       "functions": [
         {
           "name": "safeAllocate<TAmount> / returned allocate",
@@ -664,8 +664,8 @@
       "execution_status": "not_executed",
       "limits": "The safe API and selected number-backend utility were read. Remainder goes to larger weights; zero ratios and scale derivation differ from Core. The no-progress guard is not proof of exact conservation beyond safe number precision.",
       "status": "pending_validation",
-      "publication_path": "code-evidence/analyses/CE-REPO-0005/CE-EDITION-0005.md",
-      "publication_sha256": "a2445f64155178975bf156c03166c115178f679615a8f222b31df7f50f80fb47"
+      "publication_path": "experts/code-evidence/analyses/CE-REPO-0005/CE-EDITION-0005.md",
+      "publication_sha256": "ccb8bb7f8a9647b82e9bdee832723ced6a2241bc9ae6d5ca94328efc3b8fbbbc"
     },
     {
       "id": "CE-FINDING-0006",
@@ -676,7 +676,7 @@
       "owner": "Rhymond",
       "version": "v1.0.15",
       "commit_sha": "b43ce49343a684c955ffb1a4e4165b81db8989b7",
-      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0006/CE-EDITION-0006.md#ce-finding-0006",
+      "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0006/CE-EDITION-0006.md#ce-finding-0006",
       "functions": [
         {
           "name": "money.(*Money).Split",
@@ -695,8 +695,8 @@
       "execution_status": "not_executed",
       "limits": "Signed equal splitting and ratio allocation were read. Equal splitting preserves signed residuals in the selected cases; an all-zero ratio list can return zero amounts for a nonzero source. Fixed-width overflow limits remain unverified.",
       "status": "pending_validation",
-      "publication_path": "code-evidence/analyses/CE-REPO-0006/CE-EDITION-0006.md",
-      "publication_sha256": "d8411256ca19ef79762de7d2847a772d2a5e020b4e7a5e4956fcf8dae565a30b"
+      "publication_path": "experts/code-evidence/analyses/CE-REPO-0006/CE-EDITION-0006.md",
+      "publication_sha256": "1d01b3a989305e29cc098e13f7608985344d7b4ec8acde7be44ab65a22173254"
     },
     {
       "id": "CE-FINDING-0007",
@@ -707,7 +707,7 @@
       "owner": "RemyDuijkeren",
       "version": "2.10.0",
       "commit_sha": "1844718cc007b0699ab8aefbbdbcd3f532103708",
-      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0007/CE-EDITION-0007.md#ce-finding-0007",
+      "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0007/CE-EDITION-0007.md#ce-finding-0007",
       "functions": [
         {
           "name": "NodaMoney.Money.Money",
@@ -730,8 +730,8 @@
       "execution_status": "not_executed",
       "limits": "Constructor and rounding/context paths only. A missing context can select an ambient policy; standard rounding normally derives scale from currency. An expressly declared composing-domain policy is a separate assessment.",
       "status": "pending_validation",
-      "publication_path": "code-evidence/analyses/CE-REPO-0007/CE-EDITION-0007.md",
-      "publication_sha256": "2237ffce6932e42ea566ae2eedc3b015ede92990cf78c054ce993282f8d53a91"
+      "publication_path": "experts/code-evidence/analyses/CE-REPO-0007/CE-EDITION-0007.md",
+      "publication_sha256": "27bbf9e0349c699df8004fcfa01082604da9bfa5561dcc35b719c250a35796f5"
     },
     {
       "id": "CE-FINDING-0008",
@@ -742,7 +742,7 @@
       "owner": "py-moneyed",
       "version": "v3.0",
       "commit_sha": "f45c0078b5ca2af098d5d75f2c54295e7196388e",
-      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0008/CE-EDITION-0008.md#ce-finding-0008",
+      "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0008/CE-EDITION-0008.md#ce-finding-0008",
       "functions": [
         {
           "name": "moneyed.classes.Money.__add__",
@@ -761,8 +761,8 @@
       "execution_status": "not_executed",
       "limits": "Addition/subtraction and selected equality/context observations only. Decimal representation alone does not establish unrestricted exactness; native numeric-zero conveniences and equality semantics differ from the portable boundary.",
       "status": "pending_validation",
-      "publication_path": "code-evidence/analyses/CE-REPO-0008/CE-EDITION-0008.md",
-      "publication_sha256": "ec9246c644aa6761a7bd0563c5e17177471ab62491975719404338eb2b41a47d"
+      "publication_path": "experts/code-evidence/analyses/CE-REPO-0008/CE-EDITION-0008.md",
+      "publication_sha256": "b844e8a1404e4766bb2c278082604d70c075ad04eb144848138de2ebca366071"
     },
     {
       "id": "CE-FINDING-0009",
@@ -773,7 +773,7 @@
       "owner": "beancount",
       "version": "3.2.3",
       "commit_sha": "eeda2aa2a3204ffb980dab11220b2abde5e80b38",
-      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0009/CE-EDITION-0009.md#ce-finding-0009",
+      "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0009/CE-EDITION-0009.md#ce-finding-0009",
       "functions": [
         {
           "name": "beancount.ops.balance.get_balance_tolerance",
@@ -788,8 +788,8 @@
       "execution_status": "not_executed",
       "limits": "A ledger balance-assertion policy, outside current Core ledger/reconciliation scope. Its decimal tolerance does not redefine exact Money equality or authorize approximate monetary conformance checks.",
       "status": "pending_validation",
-      "publication_path": "code-evidence/analyses/CE-REPO-0009/CE-EDITION-0009.md",
-      "publication_sha256": "f6fdec7a421bf7d649e1da7019c6ca53eff05dd4b1e4e69e3a12ebc7604e0858"
+      "publication_path": "experts/code-evidence/analyses/CE-REPO-0009/CE-EDITION-0009.md",
+      "publication_sha256": "2c9df1b1e2068f68fb25afbcb33ee17b6f275c94011247fb2c092ab25fcf76c1"
     },
     {
       "id": "CE-FINDING-0010",
@@ -800,7 +800,7 @@
       "owner": "lballabio",
       "version": "v1.44",
       "commit_sha": "ab4cb476d35f7275834bc05b47d1324403d1823b",
-      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0010/CE-EDITION-0010.md#ce-finding-0010",
+      "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0010/CE-EDITION-0010.md#ce-finding-0010",
       "functions": [
         {
           "name": "QuantLib::Actual360::Impl::dayCount",
@@ -819,8 +819,8 @@
       "execution_status": "not_executed",
       "limits": "Actual/360 time fractions and endpoint inclusion only. Interest accrual is outside current Core; Time test tolerances are not exact Money comparison rules. Date internals and a complete interest calculation were not verified.",
       "status": "pending_validation",
-      "publication_path": "code-evidence/analyses/CE-REPO-0010/CE-EDITION-0010.md",
-      "publication_sha256": "8535843f7c38f2be43f47ebe8eb482b87e8dc3eaa5cb2b71cc89907a900ac114"
+      "publication_path": "experts/code-evidence/analyses/CE-REPO-0010/CE-EDITION-0010.md",
+      "publication_sha256": "89c26561fb9a72c51af0440b9b6456552ca6122b4d46cf27b8d01e5063ce60a4"
     },
     {
       "id": "CE-FINDING-0011",
@@ -831,7 +831,7 @@
       "owner": "moov-io",
       "version": "v1.69.0",
       "commit_sha": "314f990cf2809d6f9848d0b8df5767eb19b0cf17",
-      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0011/CE-EDITION-0011.md#ce-finding-0011",
+      "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0011/CE-EDITION-0011.md#ce-finding-0011",
       "functions": [
         {
           "name": "ach.(*File).ValidateTotals",
@@ -854,8 +854,8 @@
       "execution_status": "not_executed",
       "limits": "ACH file/batch control validation, not current Core payment semantics or a certification against a Nacha edition. Selected totals checks and assertions do not prove all variants, bounds or settlement behavior.",
       "status": "pending_validation",
-      "publication_path": "code-evidence/analyses/CE-REPO-0011/CE-EDITION-0011.md",
-      "publication_sha256": "8bc8f17d4e082c82dde270f24320c6cce0b9caf13bddb618b6aa12cf1f859ac7"
+      "publication_path": "experts/code-evidence/analyses/CE-REPO-0011/CE-EDITION-0011.md",
+      "publication_sha256": "ba3b6edecf248f781afc801b78a9b8f65e33324720537b00c9678c7c44a58e27"
     },
     {
       "id": "CE-FINDING-0013",
@@ -866,7 +866,7 @@
       "owner": "formancehq",
       "version": "v2.4.18",
       "commit_sha": "83cd8dc7a66ba02a0418a36ec45663b19e26dcb3",
-      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0013/CE-EDITION-0013.md#ce-finding-0013",
+      "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0013/CE-EDITION-0013.md#ce-finding-0013",
       "functions": [
         {
           "name": "ledger.Transaction.Reverse",
@@ -885,8 +885,8 @@
       "execution_status": "not_executed",
       "limits": "Constructing inverse postings is not persisted reversal. Original-event linkage, one-time eligibility, authorization and committed history were not established. Amount pointers are shallow-copied, so deep ownership is not proven.",
       "status": "pending_validation",
-      "publication_path": "code-evidence/analyses/CE-REPO-0013/CE-EDITION-0013.md",
-      "publication_sha256": "4c65a5a694d8f8b4fc9be372183599aeaa1a24347b64ed92c2f165410f649d9e"
+      "publication_path": "experts/code-evidence/analyses/CE-REPO-0013/CE-EDITION-0013.md",
+      "publication_sha256": "3b51e4d38153a722c90db5b55cd845d6ddfb4f60fa7c2bb7597aefab9fc031ba"
     },
     {
       "id": "CE-FINDING-0014",
@@ -897,7 +897,7 @@
       "owner": "tigerbeetle",
       "version": "0.17.9",
       "commit_sha": "cc1c06a924e49b11089c521b2209d34c92caaf18",
-      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0014/CE-EDITION-0014.md#ce-finding-0014",
+      "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0014/CE-EDITION-0014.md#ce-finding-0014",
       "functions": [
         {
           "name": "tigerbeetle.Account.debits_exceed_credits",
@@ -916,8 +916,8 @@
       "execution_status": "not_executed",
       "limits": "Configured account constraints on the normal new-transfer path. Pending/posted counters and pre-insertion guards were read; consensus, persistence atomicity and post/void paths were not audited. Ledger/reservation semantics remain outside Core.",
       "status": "pending_validation",
-      "publication_path": "code-evidence/analyses/CE-REPO-0014/CE-EDITION-0014.md",
-      "publication_sha256": "d02931dda67fdacfcd8ef4a306c973e21a220d4568e18cf8c7053793b2336096"
+      "publication_path": "experts/code-evidence/analyses/CE-REPO-0014/CE-EDITION-0014.md",
+      "publication_sha256": "471165b794a6fbb4d9cacf9f6734fa5567e6e5ba9956df1448ab860640ea3395"
     },
     {
       "id": "CE-FINDING-0015",
@@ -928,7 +928,7 @@
       "owner": "frappe",
       "version": "v16.60.0",
       "commit_sha": "886ab6ae187244e7f1b852393384ab6019d56264",
-      "href": "https://github.com/willgittens/FinKore/blob/main/code-evidence/analyses/CE-REPO-0015/CE-EDITION-0015.md#ce-finding-0015",
+      "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0015/CE-EDITION-0015.md#ce-finding-0015",
       "functions": [
         {
           "name": "erpnext.accounts.doctype.payment_entry.payment_entry.PaymentEntry.validate_allocated_amount",
@@ -943,8 +943,8 @@
       "execution_status": "not_executed",
       "limits": "Invoice/payment domain context, outside current Core. Selected tests assert aggregate rejection and unchanged invoice outstanding, but were not run. Fresh database reads alone do not establish a race-free validation/commit boundary.",
       "status": "pending_validation",
-      "publication_path": "code-evidence/analyses/CE-REPO-0015/CE-EDITION-0015.md",
-      "publication_sha256": "9296add713e5def44348a611f4bf9bc5719ce1c1831d36d2ca9c4a61e76e5512"
+      "publication_path": "experts/code-evidence/analyses/CE-REPO-0015/CE-EDITION-0015.md",
+      "publication_sha256": "4b7a1a540f00d7889bb8a52287288061dc6ee916c7a57a5ca264d1983861aded"
     }
   ],
   "bindings": [

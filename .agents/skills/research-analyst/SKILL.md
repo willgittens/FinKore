@@ -15,7 +15,7 @@ approval of normative changes.
 
 - Accept a manifest file or directory supplied by the user. Otherwise use the
   session clearly identified in the conversation. If none is identified, inspect
-  `research/manifests/`; select the only session, or ask which to use when several
+  `experts/research/manifests/`; select the only session, or ask which to use when several
   exist. Never hard-code a session, topic, or research question.
 - Read `manifest.json`, `queries.json` when present, and existing `findings.md`.
   Preserve the original research intent. Discovery summaries and relevance scores

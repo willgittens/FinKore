@@ -28,7 +28,7 @@ const codeRelationships = new Map([
 const text = value => typeof value === 'string' && value.trim().length > 0
 
 function validateCodeSource(source) {
-  const path = /^code-evidence\/analyses\/(CE-REPO-\d{4})\/(CE-EDITION-\d{4})\.md$/
+  const path = /^experts\/code-evidence\/analyses\/(CE-REPO-\d{4})\/(CE-EDITION-\d{4})\.md$/
   if (!/^CE-FINDING-\d{4}$/.test(source.id) || !path.test(source.publication_path) ||
       source.href !== `${projectBase}${source.publication_path}#${source.id.toLowerCase()}` ||
       !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(source.repository) ||
@@ -96,7 +96,7 @@ export function loadLearnEvidence(root) {
     } else {
       if (!/^(?:MAP|LGC)-\d{4}$/.test(source.id) || !Array.isArray(source.authors) || !source.authors.length || source.authors.some(author => !text(author))) throw new Error('Invalid Learn evidence attribution')
       const allowed = source.kind === 'research' ? /^research\.html#rev-\d{4}$/ : /^legacy-\d{3}-[a-z0-9-]+\.html#[a-z0-9-]+$/
-      const publication = source.kind === 'research' ? /^learn\/research\.md$/ : /^legacy\/interviews\/\d{3}-[a-z0-9-]+\.md$/
+      const publication = source.kind === 'research' ? /^learn\/research\.md$/ : /^experts\/legacy\/interviews\/\d{3}-[a-z0-9-]+\.md$/
       if (!allowed.test(source.href) || !publication.test(source.publication_path) || !source.id.startsWith(source.kind === 'research' ? 'MAP-' : 'LGC-')) throw new Error('Unsupported Learn evidence destination')
     }
     let current = false
