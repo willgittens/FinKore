@@ -43,14 +43,20 @@ export const GITHUB_PROJECT_URL = 'https://github.com/willgittens/FinKore'
 export const GITHUB_FILE_BASE_URL = `${GITHUB_PROJECT_URL}/blob/main/`
 
 export function renderLearnNavigation({ home = false, current } = {}) {
-  return `<nav aria-label="Primary navigation">
-        <ul class="nav-list">
+  const links = `
           <li><a href="where-to-start.html"${current === 'start' ? ' aria-current="page"' : ''}>Where to start</a></li>
           <li><a href="${home ? '#core-explorer' : 'coredoc.html'}"${current === 'coredoc' ? ' aria-current="page"' : ''}>CoreDoc</a></li>
           <li><a href="specification.html"${current === 'specification' ? ' aria-current="page"' : ''}>Specifications</a></li>
           <li><a href="network.html"${current === 'network' ? ' aria-current="page"' : ''}>Join the Network</a></li>
-          <li><a class="nav-start" href="${GITHUB_PROJECT_URL}" target="_blank" rel="noopener noreferrer">Github Project <span aria-hidden="true">↗</span></a></li>
+          <li><a class="nav-start" href="${GITHUB_PROJECT_URL}" target="_blank" rel="noopener noreferrer">Github Project <span aria-hidden="true">↗</span></a></li>`
+  return `<nav aria-label="Primary navigation">
+        <ul class="nav-list nav-desktop">${links}
         </ul>
+        <details class="nav-mobile">
+          <summary class="nav-toggle"><span class="nav-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span><span class="nav-toggle-label">Menu</span></summary>
+          <ul class="nav-list">${links}
+          </ul>
+        </details>
       </nav>`
 }
 

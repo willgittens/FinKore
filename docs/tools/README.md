@@ -364,7 +364,13 @@ the README's acknowledgments and links, displaying transparent local logos
 directly on the dark background.
 The founder section uses a light palette and responsive grid, with a local
 portrait of Will Gittens. All Learn pages share the header's local FinKore logo
-and navigation, and the dark footer's project resource links. The footer uses
+and navigation, and the dark footer's project resource links. The header keeps
+the logo visible at every width. At widths up to 68rem, the links collapse into
+a native `details` menu with a hamburger summary and a scrollable dropdown.
+The mobile header stays the same compact height across editorial and reader
+pages; the dropdown overlays the content without moving it. Desktop and mobile
+link lists come from the same renderer, and only the matching layout is shown.
+The disclosure works with touch and keyboard without JavaScript. The footer uses
 the local `learn/img/Finkore_White.png` logo on its dark background. The primary
 navigation follows this order: Where to start, CoreDoc, Specifications, Join the Network, Github Project. The last
 link retains the highlighted button style and opens the official repository at

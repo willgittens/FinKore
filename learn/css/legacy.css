@@ -132,7 +132,6 @@
   .legacy-feature-art { min-height: 24rem; }
 }
 @media (max-width: 48rem) {
-  .legacy-page .brand { display: inline-flex; }
   .legacy-breadcrumb { margin-bottom: 2rem; }
   .legacy-section-heading { align-items: start; flex-direction: column; gap: 1rem; }
   .legacy-feature, .legacy-purpose-layout, .legacy-welcome-layout, .legacy-principles > div, .legacy-reading-layout, .legacy-the-five-questions ol { grid-template-columns: minmax(0, 1fr); }
